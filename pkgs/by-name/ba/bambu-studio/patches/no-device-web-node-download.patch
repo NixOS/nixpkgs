@@ -2,7 +2,7 @@ diff --git a/src/slic3r/GUI/DeviceWeb/CMakeLists.txt b/src/slic3r/GUI/DeviceWeb/
 index bb65ab0..06684d4 100644
 --- a/src/slic3r/GUI/DeviceWeb/CMakeLists.txt
 +++ b/src/slic3r/GUI/DeviceWeb/CMakeLists.txt
-@@ -3,225 +3,11 @@
+@@ -3,246 +3,11 @@
  # date -- 2025.01.01
  # status -- Building
  
@@ -47,21 +47,36 @@ index bb65ab0..06684d4 100644
 -        set(NODE_EXEC "node")
 -        set(PNPM_EXEC_NAME "pnpm")
 -    else()
--        set(NODE_URL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz")
--        set(NODE_ARCHIVE_NAME "node-v${NODE_VERSION}-linux-x64.tar.xz")
--        set(NODE_BIN_DIR "node-v${NODE_VERSION}-linux-x64/bin")
--        set(NODE_EXEC "node")
--        set(NODE_HASH "88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a")
+-        if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+-            set(NODE_URL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-arm64.tar.xz")
+-            set(NODE_ARCHIVE_NAME "node-v${NODE_VERSION}-linux-arm64.tar.xz")
+-            set(NODE_BIN_DIR "node-v${NODE_VERSION}-linux-arm64/bin")
+-            set(NODE_EXEC "node")
+-            set(NODE_HASH "e9e1930fd321a470e29bb68f30318bf58e3ecb4acb4f1533fb19c58328a091fe")
 -
--        set(PNPM_URL "https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-x64")
--        set(PNPM_EXEC_NAME "pnpm")
--        set(PNPM_HASH "eb2dc1f109bca046ce734d062c8dd8f34db2b58a115992f9b086456efd7b2305")
+-            set(PNPM_URL "https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-arm64")
+-            set(PNPM_EXEC_NAME "pnpm")
+-            set(PNPM_HASH "c2f9e9d42d81f9f40a0f895513d014a08d5ecb0abc9e15c426ecfde6f492706b")
+-        else()
+-            set(NODE_URL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz")
+-            set(NODE_ARCHIVE_NAME "node-v${NODE_VERSION}-linux-x64.tar.xz")
+-            set(NODE_BIN_DIR "node-v${NODE_VERSION}-linux-x64/bin")
+-            set(NODE_EXEC "node")
+-            set(NODE_HASH "88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a")
+-
+-            set(PNPM_URL "https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-x64")
+-            set(PNPM_EXEC_NAME "pnpm")
+-            set(PNPM_HASH "eb2dc1f109bca046ce734d062c8dd8f34db2b58a115992f9b086456efd7b2305")
+-        endif()
 -    endif()
 -
 -    # 定义最终的可执行文件路径
 -    set(NODE_EXECUTABLE "${NODE_CACHE_DIR}/${NODE_BIN_DIR}/${NODE_EXEC}")
 -    # pnpm 放到 node 同目录，这样执行 pnpm 时 PATH 中天然能找到 node
 -    set(PNPM_EXECUTABLE "${NODE_CACHE_DIR}/${NODE_BIN_DIR}/${PNPM_EXEC_NAME}")
+-
+-    message(STATUS "Checking for node binary at ${NODE_EXECUTABLE}")
+-    message(STATUS "Checking for pnpm binary ${PNPM_EXECUTABLE}")
 -
 -    # ============ Node.js 下载 + 解压 ============
 -    if(NOT EXISTS "${NODE_EXECUTABLE}")
@@ -211,11 +226,17 @@ index bb65ab0..06684d4 100644
 -
 -add_custom_command(
 -    OUTPUT "${DEVICE_PAGE_BUILD_STAMP}"
--    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" "PNPM_STORE_DIR=${PNPM_STORE_DIR}" ${PNPM_EXECUTABLE} install
--    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" "PNPM_STORE_DIR=${PNPM_STORE_DIR}" ${PNPM_EXECUTABLE} run build
+-    COMMAND echo "Running PNPM install"
+-    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" ${PNPM_EXECUTABLE} install --store-dir ${PNPM_STORE_DIR}
+-    COMMAND echo "Running PNPM run build"
+-    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" ${PNPM_EXECUTABLE} run build
+-    COMMAND echo "Removing page target directory"
 -    COMMAND ${CMAKE_COMMAND} -E remove_directory "${DEVICE_PAGE_TARGET_DIR}"
+-    COMMAND echo "Creating page target directory"
 -    COMMAND ${CMAKE_COMMAND} -E make_directory "${DEVICE_PAGE_TARGET_DIR}"
+-    COMMAND echo "Copying directory to target"
 -    COMMAND ${CMAKE_COMMAND} -E copy_directory "${DEVICE_PAGE_DIST_DIR}" "${DEVICE_PAGE_TARGET_DIR}"
+-    COMMAND echo "Create device page stamp file"
 -    COMMAND ${CMAKE_COMMAND} -E touch "${DEVICE_PAGE_BUILD_STAMP}"
 -    DEPENDS ${DEVICE_PAGE_BUILD_INPUTS}
 -    WORKING_DIRECTORY ${DEVICE_PAGE_SRC_DIR}
