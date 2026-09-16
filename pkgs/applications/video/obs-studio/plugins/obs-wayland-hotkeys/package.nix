@@ -5,7 +5,7 @@
   cmake,
   obs-studio,
   pkg-config,
-  qtbase,
+  qt6,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttr: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttr: {
 
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
 
   dontWrapQtApps = true;
