@@ -152,6 +152,27 @@
   "module-services-rnsd-quickstart": [
     "index.html#module-services-rnsd-quickstart"
   ],
+  "module-services-stalwart": [
+    "index.html#module-services-stalwart"
+  ],
+  "module-services-stalwart-databases": [
+    "index.html#module-services-stalwart-databases"
+  ],
+  "module-services-stalwart-provision": [
+    "index.html#module-services-stalwart-provision"
+  ],
+  "module-services-stalwart-proxying": [
+    "index.html#module-services-stalwart-proxying"
+  ],
+  "module-services-stalwart-recovery": [
+    "index.html#module-services-stalwart-recovery"
+  ],
+  "module-services-stalwart-upgrading": [
+    "index.html#module-services-stalwart-upgrading"
+  ],
+  "module-services-stalwart-usage": [
+    "index.html#module-services-stalwart-usage"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
