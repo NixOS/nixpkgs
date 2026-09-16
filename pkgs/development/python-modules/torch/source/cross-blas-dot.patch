@@ -1,0 +1,34 @@
+--- a/cmake/BLAS_ABI.cmake
++++ b/cmake/BLAS_ABI.cmake
+@@ -2,7 +2,7 @@
+ # Push host architecture when cross-compiling otherwise check would fail
+ # when cross-compiling for arm64 on x86_64
+ cmake_push_check_state(RESET)
+-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND CMAKE_OSX_ARCHITECTURES MATCHES "^(x86_64|arm64)$")
++if(NOT CMAKE_CROSSCOMPILING AND CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND CMAKE_OSX_ARCHITECTURES MATCHES "^(x86_64|arm64)$")
+   list(APPEND CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+ endif()
+
+@@ -14,7 +14,21 @@
+     SET(BLAS_F2C FALSE)
+   endif()
+
+-  if("$ENV{PYTORCH_BLAS_USE_CBLAS_DOT}" STREQUAL "ON")
++  if(NOT DEFINED ENV{PYTORCH_BLAS_USE_CBLAS_DOT})
++    # CBLAS has a fixed return convention, so availability only needs a link test.
++    include(CheckFunctionExists)
++    block(PROPAGATE BLAS_USE_CBLAS_DOT)
++      set(CMAKE_TRY_COMPILE_TARGET_TYPE EXECUTABLE)
++      set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
++      set(BLAS_USE_CBLAS_DOT TRUE)
++      foreach(_cblas_dot IN ITEMS cblas_sdot cblas_cdotu_sub cblas_zdotu_sub cblas_cdotc_sub cblas_zdotc_sub)
++        check_function_exists(${_cblas_dot} BLAS_HAS_${_cblas_dot})
++        if(NOT BLAS_HAS_${_cblas_dot})
++          set(BLAS_USE_CBLAS_DOT FALSE)
++        endif()
++      endforeach()
++    endblock()
++  elseif("$ENV{PYTORCH_BLAS_USE_CBLAS_DOT}" STREQUAL "ON")
+     SET(BLAS_USE_CBLAS_DOT TRUE)
+   else()
+     SET(BLAS_USE_CBLAS_DOT FALSE)

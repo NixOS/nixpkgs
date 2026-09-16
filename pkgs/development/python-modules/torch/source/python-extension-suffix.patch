@@ -1,0 +1,25 @@
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -306,6 +306,7 @@
+         CMake.defines(
+             args,
+             Python_EXECUTABLE=sys.executable,
++            TORCH_PYTHON_EXTENSION_SUFFIX=sysconfig.get_config_var("EXT_SUFFIX"),
+             TORCH_BUILD_VERSION=version,
+             **build_options,
+         )
+--- a/torch/CMakeLists.txt
++++ b/torch/CMakeLists.txt
+@@ -447,6 +447,12 @@
+ # same code path.
+ if(BUILD_PYTHON AND NOT BUILD_LIBTORCH_WHL)
+   Python_add_library(_C MODULE WITH_SOABI "${TORCH_SRC_DIR}/csrc/stub.c")
++  # The build interpreter can carry the target's sysconfig when cross compiling.
++  # Use the same suffix as setup.py's package_data, rather than FindPython's
++  # interpreter-derived SOABI, which may be empty for a cross build.
++  if(TORCH_PYTHON_EXTENSION_SUFFIX)
++    set_target_properties(_C PROPERTIES SUFFIX "${TORCH_PYTHON_EXTENSION_SUFFIX}")
++  endif()
+   target_link_libraries(_C PRIVATE torch_python)
+   set_target_properties(_C PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/torch"

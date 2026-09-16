@@ -1,0 +1,22 @@
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -7,8 +7,9 @@
+ import multiprocessing
+ import os
+ import platform
+ import re
++import shlex
+ import shutil
+ import sys
+ import sysconfig
+ from pathlib import Path
+@@ -332,8 +333,9 @@
+         # may not be passed correctly.
+         # Reference:
+         # 1. https://cmake.org/cmake/help/latest/manual/cmake.1.html#synopsis
+         # 2. https://stackoverflow.com/a/27169347
++        args.extend(shlex.split(my_env.get("CMAKE_ARGS", "")))
+         args.append(base_dir)
+         self.run(args, env=my_env)
+
+     def build(self, my_env: dict[str, str]) -> None:
