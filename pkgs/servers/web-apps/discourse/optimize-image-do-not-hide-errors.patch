@@ -1,0 +1,13 @@
+diff --git a/app/models/optimized_image.rb b/app/models/optimized_image.rb
+index 35f563403e0..ef559d5a83c 100644
+--- a/app/models/optimized_image.rb
++++ b/app/models/optimized_image.rb
+@@ -362,7 +362,7 @@ class OptimizedImage < ActiveRecord::Base
+       if e.message =~ /\A(?:convert|magick):([^`]+)/
+         error << $1
+       else
+-        error << " unknown reason"
++        error << e.full_message(highlight: false)
+       end
+ 
+       Discourse.warn(

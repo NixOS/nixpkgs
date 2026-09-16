@@ -1,0 +1,28 @@
+diff --git a/app/models/optimized_image.rb b/app/models/optimized_image.rb
+index 35f563403e0..ef559d5a83c 100644
+--- a/app/models/optimized_image.rb
++++ b/app/models/optimized_image.rb
+@@ -362,7 +362,7 @@ class OptimizedImage < ActiveRecord::Base
+       if e.message =~ /\A(?:convert|magick):([^`]+)/
+         error << $1
+       else
+-        error << " unknown reason"
++        error << e.full_message(highlight: false)
+       end
+ 
+       Discourse.warn(
+diff --git a/lib/image_magick.rb b/lib/image_magick.rb
+index 1a4c33a9cee..84458bbfa26 100644
+--- a/lib/image_magick.rb
++++ b/lib/image_magick.rb
+@@ -63,8 +63,8 @@ module ImageMagick
+             "MALLOC_ARENA_MAX" => "2",
+           },
+           unsetenv_others: true,
+-          read: [*Discourse::SafeExec.default_read_paths, *asset_read_paths, *read],
+-          write: [scratch, *write],
++          read: [*Discourse::SafeExec.default_read_paths, *asset_read_paths, Pathname.new(*read).realpath],
++          write: [scratch, Pathname.new(*write).realpath],
+           execute: Discourse::SafeExec.default_execute_paths,
+           timeout: timeout || DEFAULT_TIMEOUT,
+           rlimits: RLIMITS,
