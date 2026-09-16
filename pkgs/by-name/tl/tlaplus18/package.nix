@@ -9,10 +9,15 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlaplus";
   version = "1.8.0";
+  version-contrib = "202601200755";
 
   src = fetchurl {
     url = "https://github.com/tlaplus/tlaplus/releases/download/v${finalAttrs.version}/tla2tools.jar";
-    sha256 = "sha256-OXgpd1xuyvhveunlybBi/N6jnxtp/J8Kmp8PYX3eSZ4=";
+    sha256 = "sha256-I4G9fTqK8pbh9gEtBJ/xPYUAa9FnDm9bFVX0u1v3nL8=";
+  };
+  src-contrib = fetchurl {
+    url = "https://github.com/tlaplus/CommunityModules/releases/download/${finalAttrs.version-contrib}/CommunityModules-deps.jar";
+    sha256 = "sha256-W3u22U6hzP3SYRcWuBQwII9wm0k657Tzn6fLhqYCky4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/share/java $out/bin
     cp $src $out/share/java/tla2tools.jar
+    cp ${finalAttrs.src-contrib} $out/share/java/CommunityModules-deps.jar
 
     makeWrapper ${jre}/bin/java $out/bin/tlc \
       --add-flags "-XX:+UseParallelGC -cp $out/share/java/tla2tools.jar tlc2.TLC"
