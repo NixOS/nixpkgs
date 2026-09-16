@@ -2,11 +2,9 @@
   lib,
   bash,
   bash-completion,
-  bridge-utils,
   coreutils,
   curl,
   darwin,
-  dbus,
   dnsmasq,
   docutils,
   fetchFromGitLab,
@@ -26,7 +24,6 @@
   openssh,
   passt,
   perl,
-  perlPackages,
   polkit,
   pkg-config,
   pmutils,
@@ -61,8 +58,6 @@
   util-linux ? null,
 
   # Darwin
-  gmp,
-  libiconv,
   qemu,
 
   # Options
@@ -86,7 +81,6 @@ let
       dnsmasq
     ]
     ++ lib.optionals isLinux [
-      bridge-utils
       dmidecode
       dnsmasq
       iproute2
@@ -154,10 +148,6 @@ stdenv.mkDerivation rec {
     done
 
   ''
-  + ''
-    substituteInPlace meson.build \
-      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
-  ''
   + lib.optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
@@ -212,7 +202,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     perl
-    perlPackages.XMLXPath
   ]
   ++ lib.optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
@@ -222,7 +211,6 @@ stdenv.mkDerivation rec {
     bash
     bash-completion
     curl
-    dbus
     glib
     gnutls
     libpcap
@@ -244,14 +232,9 @@ stdenv.mkDerivation rec {
     libtirpc
     lvm2
     numactl
-    numad
     parted
     systemd
     util-linux
-  ]
-  ++ lib.optionals isDarwin [
-    gmp
-    libiconv
   ]
   ++ lib.optionals enableCeph [ ceph ]
   ++ lib.optionals enableGlusterfs [ glusterfs ]
