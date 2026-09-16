@@ -26,11 +26,21 @@ let
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
+    if [ -f "${cfg.secretKeyFile}" ]; then
+      SECRET_KEY=$(cat "${cfg.secretKeyFile}")
+    fi
     # UID is a read-only shell variable
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
     exec ${pkgs.util-linux}/bin/nsenter \
       -t $mainpid -m -S $uid -G $gid --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
+  '';
+
+  start = pkgs.writeShellScript "start" ''
+    if [ -z "''${CREDENTIALS_DIRECTORY}/tandoor_secret_key" ]; then
+      export SECRET_KEY=$(cat "''${CREDENTIALS_DIRECTORY}/tandoor_secret_key")
+    fi
+    ${pkg.python.pkgs.gunicorn}/bin/gunicorn recipes.wsgi
   '';
 in
 {
@@ -79,6 +89,12 @@ in
       example = {
         ENABLE_SIGNUP = "1";
       };
+    };
+
+    secretKeyFile = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to file containing the secret key.";
+      example = "config.age.secrets.tandoor-secret-key.path";
     };
 
     user = lib.mkOption {
@@ -130,7 +146,7 @@ in
 
       serviceConfig = {
         ExecStart = ''
-          ${pkg.python.pkgs.gunicorn}/bin/gunicorn recipes.wsgi
+          ${start}
         '';
         Restart = "on-failure";
 
@@ -142,6 +158,7 @@ in
         ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
         WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
+        LoadCredential = "tandoor_secret_key:${cfg.secretKeyFile}";
 
         BindReadOnlyPaths = [
           "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
