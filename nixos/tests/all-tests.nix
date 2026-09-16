@@ -1241,6 +1241,7 @@ in
   nebula.connectivity = runTest ./nebula/connectivity.nix;
   nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
+  netatalk = runTest ./netatalk.nix;
   netbird = runTest ./netbird.nix;
   netbird-relay = runTest ./netbird-relay.nix;
   netbox = runTest ./web-apps/netbox/default.nix;
