@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   # fool make into thinking pregenerated targets are up to date
   preBuild = lib.optionalString (gpr2kbdir == null) ''
     touch .build/kb/{*.adb,*.ads,collect_kb}
+    chmod +x .build/kb/collect_kb
   '';
 
   propagatedBuildInputs = [

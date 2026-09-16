@@ -176,6 +176,8 @@ optionals noSysDirs (
   is13 && langAda && stdenv.targetPlatform.isDarwin
 ) ./13/gnat13-aarch64-darwin-trampoline.patch
 
+++ optional (langAda && stdenv.targetPlatform.isDarwin) ./gnat-darwin-trampoline.patch
+
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
   url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-2-corngood@gmail.com/raw";
