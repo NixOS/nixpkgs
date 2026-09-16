@@ -48,6 +48,23 @@ let
   dinit = machine "dinit";
   runit = machine "runit";
   s6 = machine "s6";
+  dinitCompat = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      baseServices
+      {
+        system.initSystem = "dinit";
+        system.systemdCompatibility.enable = true;
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      }
+    ];
+  }).config;
 in
 # default: systemd backend, exactly as before
 assert default.systemd.units ? "web.service";
@@ -72,5 +89,11 @@ assert !(runit.systemd.units ? "web.service");
 assert s6.system.build.s6Services.outPath != "";
 assert s6.system.build.s6RcDb.outPath != "";
 assert !(s6.systemd.units ? "web.service");
+
+# systemd compatibility layer (opt-in) with a non-systemd backend
+assert dinitCompat.system.build.systemdCompatibilityLayer.outPath != "";
+assert dinitCompat.environment.systemPackages != [ ];
+assert dinitCompat.environment.etc ? "dinit.d/systemd-compat";
+assert builtins.match ".*systemd-compat-dbus.*" dinitCompat.environment.etc."dinit.d/systemd-compat".text != null;
 
 "ok"

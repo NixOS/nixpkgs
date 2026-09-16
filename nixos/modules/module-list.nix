@@ -2043,6 +2043,7 @@
   ./system/service/dinit/system.nix
   ./system/service/runit/system.nix
   ./system/service/s6/system.nix
+  ./system/service/systemd-compat.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
