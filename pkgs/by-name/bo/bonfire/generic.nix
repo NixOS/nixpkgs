@@ -6,7 +6,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchYarnDeps,
   fetchgit,
   just,
   lib,
@@ -19,7 +18,6 @@
   rustPlatform,
   stdenv,
   writeShellApplication,
-  yarn,
   yarn-berry_4,
   yarnConfigHook,
 
@@ -245,35 +243,11 @@ beamPkgs.mixRelease (
           };
         };
 
-        yarnOfflineCaches =
-          lib.genAttrs
-            (lib.filter (pname: lib.hasAttr pname finalAttrs.mixNixDeps) [
-              "iconify_ex"
-            ])
-            (pname: {
-              package = fetchYarnDeps {
-                name = "${pname}-yarn-deps";
-                yarnLock = "${finalAttrs.mixNixDeps.${pname}}/src/assets/yarn.lock";
-                hash = lib.readFile (
-                  extensions/. + "/${finalAttrs.env.FLAVOUR}/deps/${pname}/yarnOfflineCache.hash"
-                );
-              };
-              updateScript = writeShellApplication {
-                name = "${pname}-update";
-                runtimeInputs = [ nurl ];
-                text = ''
-                  set -eux
-                  mkdir -p "pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}/"
-                  nurl --hash --expr 'let pkgs = import ./. {}; in
-                    pkgs.bonfire-${finalAttrs.env.FLAVOUR}.yarnOfflineCaches.${pname}.package
-                  ' >'pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}/yarnOfflineCache.hash'
-                '';
-              };
-            });
         yarn-berry = yarn-berry_4;
         yarnBerryOfflineCaches =
           lib.genAttrs
             (lib.filter (pname: finalAttrs.mixNixDeps ? "${pname}") [
+              "iconify_ex"
               "bonfire_editor_milkdown"
               "bonfire_geolocate"
               "bonfire_ui_common"
@@ -345,7 +319,6 @@ beamPkgs.mixRelease (
                   # can be used by the packages in yarn's caches.
                   [
                     finalAttrs.mixNixDeps
-                    finalAttrs.passthru.yarnOfflineCaches
                     finalAttrs.passthru.yarnBerryOfflineCaches
                   ]
 
@@ -790,13 +763,11 @@ beamPkgs.mixRelease (
 
       nativeBuildInputs = [
         finalAttrs.passthru.yarn-berry.yarnBerryConfigHook
-        yarnConfigHook
         nodejs
       ];
 
-      # Explanation: to run `yarnConfigHook` and `yarnBerryConfigHook`
+      # Explanation: to run `yarnBerryConfigHook`
       # multiple times manually in `preBuild`.
-      dontYarnInstallDeps = true;
       dontYarnBerryInstallDeps = true;
 
       patches = [
@@ -854,20 +825,6 @@ beamPkgs.mixRelease (
         ''
           mkdir -p deps
         ''
-        # Explanation: those yarn assets are not real libraries,
-        # they can only be built in bonfire-app.
-        # Explanation(correctness): /src is used instead of .src to be sure to have any patch applied.
-        (lib.concatMapStringsSep "\n" (dep: ''
-          rm -rf deps/${dep}
-          cp --no-preserve=mode -r \
-            ${finalAttrs.mixNixDeps.${dep}}/src \
-            deps/${dep}
-          pushd deps/${dep}/assets
-          yarnOfflineCache="${finalAttrs.passthru.yarnOfflineCaches.${dep}.package}" \
-          PATH="${lib.makeBinPath [ yarn ]}:$PATH" \
-          yarnConfigHook
-          popd
-        '') (lib.attrNames finalAttrs.passthru.yarnOfflineCaches))
 
         # Explanation: same but for yarn-berry assets.
         # Note that /src is used instead of .src to be sure to have any patch applied,
