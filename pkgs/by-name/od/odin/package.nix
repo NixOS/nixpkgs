@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-07a";
+  version = "dev-2026-09";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-sjL6mj2zfUVpiwkooTTBCVkPRoPWR7ci/hb9TYF+J/I=";
+    hash = "sha256-wJm7J1DU9XxUGrh4AKqHtDJEzxSSVKqOVKWEhckl94Q=";
   };
 
   patches = [
@@ -77,9 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --set-default ODIN_ROOT $out/share
 
-    make -C "$out/share/vendor/cgltf/src/"
-    make -C "$out/share/vendor/stb/src/"
-    make -C "$out/share/vendor/miniaudio/src/"
+    patchShebangs $out/share/vendor/
+
+    $out/share/vendor/cgltf/src/build_cgltf.sh
+    $out/share/vendor/stb/src/build_stb.sh
+    $out/share/vendor/miniaudio/src/build_miniaudio.sh
+    $out/share/vendor/kb_text_shape/src/build_unix.sh
 
     runHook postInstall
   '';

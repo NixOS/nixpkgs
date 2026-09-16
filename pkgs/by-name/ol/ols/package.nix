@@ -8,14 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ols";
-  version = "dev-2026-06";
+  version = "dev-2026-08";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
     tag = finalAttrs.version;
-    hash = "sha256-BqLaPVntNzK5N3lffjn4umLhqSM0bOcAVgzk+f13BKM=";
+    hash = "sha256-dRMDb5RO0yCSOcLeDXk1nkAXaj1mqliuhktpKq4XwUI=";
   };
+
+  patches = [
+    ./temp-fix-asm-syntax.diff
+  ];
 
   postPatch = ''
     substituteInPlace build.sh \
