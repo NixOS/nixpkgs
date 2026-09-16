@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.7.2";
+  version = "3.7.3";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-A7cIXfhWRSKMZJC2u/2ows5TlNDNcYQAX1UKgSJaxKo=";
+    hash = "sha256-Tmpn+4/xN2V3r8JKJshCo0ewA06r9x7xPQOCscW8Bec=";
   };
 
   patches = [
