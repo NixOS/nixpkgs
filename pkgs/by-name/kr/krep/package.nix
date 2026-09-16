@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krep";
-  version = "3.0.2";
+  version = "3.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "davidesantangelo";
     repo = "krep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nmu4wL0g5hTRACwn7Roi31uGDA+oBlY+0P/SCWLcVtc=";
+    hash = "sha256-Aswyc1TDHRfFYutFpKnIbs/1puYeztVgowqbi+D4J0Q=";
   };
 
   makeFlags = [
