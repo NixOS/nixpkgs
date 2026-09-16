@@ -9,17 +9,6 @@
 
 let
   root = rootDir;
-  nixosLib = import (root + "/nixos/lib") { };
-  lib = import (root + "/lib");
-  pkgs = import (root + "/pkgs/top-level") {
-    inherit lib;
-    localSystem = {
-      system = "x86_64-linux";
-    };
-    config = { };
-    overlays = [ ];
-  };
-
   testServices = {
     web = {
       process = {
@@ -81,22 +70,24 @@ let
 
   evalConfig = import (root + "/nixos/lib/eval-config.nix");
 
-  evalBackend = be: (evalConfig {
-    system = "x86_64-linux";
-    modules = [
-      {
-        system.initSystem = be;
-        system.services = testServices;
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
+  evalBackend =
+    be:
+    (evalConfig {
+      system = "x86_64-linux";
+      modules = [
+        {
+          system.initSystem = be;
+          system.services = testServices;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
 in
 let
   dinit = evalBackend "dinit";
@@ -106,11 +97,14 @@ in
 assert builtins.match ".*type = scripted.*" dinit.environment.etc."dinit.d/web".text != null;
 assert builtins.match ".*restart = on-failure.*" dinit.environment.etc."dinit.d/web".text != null;
 assert builtins.match ".*after: db.*" dinit.environment.etc."dinit.d/web".text != null;
-assert builtins.match ".*working-dir = /var/lib/web.*" dinit.environment.etc."dinit.d/web".text != null;
+assert
+  builtins.match ".*working-dir = /var/lib/web.*" dinit.environment.etc."dinit.d/web".text != null;
 assert builtins.match ".*env = FOO=bar.*" dinit.environment.etc."dinit.d/web".text != null;
 # non-root user -> setpriv wrapper is deployed and referenced
 assert dinit.environment.etc ? "dinit.d/scripts/web";
-assert builtins.match ".*command = /etc/dinit.d/scripts/web.*" dinit.environment.etc."dinit.d/web".text != null;
+assert
+  builtins.match ".*command = /etc/dinit.d/scripts/web.*" dinit.environment.etc."dinit.d/web".text
+  != null;
 # nested sibling dependency resolves to the absolute name
 assert builtins.match ".*after: web-log.*" dinit.environment.etc."dinit.d/web-api".text != null;
 # lifecycle + restart + signals
@@ -119,7 +113,8 @@ assert builtins.match ".*restart = true.*" dinit.environment.etc."dinit.d/db".te
 assert builtins.match ".*term-signal = HUP.*" dinit.environment.etc."dinit.d/db".text != null;
 assert builtins.match ".*start-timeout = 10.*" dinit.environment.etc."dinit.d/db".text != null;
 assert builtins.match ".*stop-timeout = 20.*" dinit.environment.etc."dinit.d/db".text != null;
-assert builtins.match ".*ready-notification = pipefd:4.*" dinit.environment.etc."dinit.d/db".text != null;
+assert
+  builtins.match ".*ready-notification = pipefd:4.*" dinit.environment.etc."dinit.d/db".text != null;
 assert builtins.match ".*depends-on: net.*" dinit.environment.etc."dinit.d/db".text != null;
 assert builtins.match ".*waits-for: dbg.*" dinit.environment.etc."dinit.d/db".text != null;
 # configData lands under the backend's config directory
@@ -127,25 +122,30 @@ assert dinit.environment.etc ? "dinit/system-services/web/web.conf";
 
 # runit
 # oneshot: single exec (via chpst for the nobody user), no restart loop
-assert builtins.match ".*chpst -u nobody /bin/web.*" runit.environment.etc."runit/services/web/run".text != null;
+assert
+  builtins.match ".*chpst -u nobody /bin/web.*" runit.environment.etc."runit/services/web/run".text
+  != null;
 assert builtins.match ".*while true.*" runit.environment.etc."runit/services/web/run".text == null;
 # simple + always: supervised loop with restart delay
-assert builtins.match ".*while true; do.*" runit.environment.etc."runit/services/db/run".text != null;
+assert
+  builtins.match ".*while true; do.*" runit.environment.etc."runit/services/db/run".text != null;
 assert builtins.match ".*exec /bin/db.*" runit.environment.etc."runit/services/db/run".text != null;
 assert builtins.match ".*sleep 5.*" runit.environment.etc."runit/services/db/run".text != null;
 # never: single exec, no loop
-assert builtins.match ".*exec /bin/net.*" runit.environment.etc."runit/services/net/run".text != null;
+assert
+  builtins.match ".*exec /bin/net.*" runit.environment.etc."runit/services/net/run".text != null;
 assert builtins.match ".*while true.*" runit.environment.etc."runit/services/net/run".text == null;
 assert runit.environment.etc ? "runit/services/web/down";
 assert runit.system.build.runitBootScript.outPath != "";
-assert runit.system.build.runitBootOrder == [
-  "dbg"
-  "net"
-  "db"
-  "web"
-  "web-log"
-  "web-api"
-];
+assert
+  runit.system.build.runitBootOrder == [
+    "dbg"
+    "net"
+    "db"
+    "web"
+    "web-log"
+    "web-api"
+  ];
 # disabled services generate nothing
 assert !(runit.environment.etc ? "runit/services/disabled");
 assert !(runit.environment.etc ? "runit/services/disabled-sub");

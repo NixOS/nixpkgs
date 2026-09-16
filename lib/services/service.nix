@@ -169,7 +169,9 @@ in
     environment = mkOption {
       type = types.attrsOf types.str;
       default = { };
-      example = { FOO = "bar"; };
+      example = {
+        FOO = "bar";
+      };
       description = ''
         Environment variables set for the service process.
         Each service manager maps these to its own mechanism (e.g. systemd

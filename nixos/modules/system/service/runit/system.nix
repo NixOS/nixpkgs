@@ -34,26 +34,33 @@ let
     concatStringsSep
     listToAttrs
     mapAttrsToList
-    mkOption
     nameValuePair
     optional
-    removePrefix
-    types
     ;
-  
-  inherit (lib.services.backend) configDataPathModule dash flattenServices topoSort;
+
+  inherit (lib.services.backend)
+    dash
+    flattenServices
+    topoSort
+    ;
 
   shell = "${pkgs.runtimeShell}";
 
-  allServices = listToAttrs (map (r: {
-      name = r.name;
-      value = r;
-    }) (lib.filter (r: r.name != "") (
-      flattenServices "" "" {
-        enable = true;
-        services = config.system.services;
-      }
-    )));
+  allServices = listToAttrs (
+    map
+      (r: {
+        name = r.name;
+        value = r;
+      })
+      (
+        lib.filter (r: r.name != "") (
+          flattenServices "" "" {
+            enable = true;
+            services = config.system.services;
+          }
+        )
+      )
+  );
 
   depName = parentPrefix: dep: dash parentPrefix dep;
 
@@ -134,11 +141,14 @@ let
   '';
 
   configDataFiles = concatLists (
-    map (entry: mapAttrsToList (file: cfg: nameValuePair (
-          "runit/system-services/${entry.name}/${cfg.name}"
-        ) {
+    map (
+      entry:
+      mapAttrsToList (
+        file: cfg:
+        nameValuePair "runit/system-services/${entry.name}/${cfg.name}" {
           source = cfg.source;
-        }) (lib.filterAttrs (file: cfg: cfg.enable) (entry.service.configData or { }))
+        }
+      ) (lib.filterAttrs (file: cfg: cfg.enable) (entry.service.configData or { }))
     ) (attrValues allServices)
   );
 in
@@ -159,13 +169,19 @@ in
     );
 
     environment.etc = listToAttrs (
-      (mapAttrsToList (name: entry: nameValuePair "runit/services/${name}/run" {
+      (mapAttrsToList (
+        name: entry:
+        nameValuePair "runit/services/${name}/run" {
           text = runScript entry;
           mode = "0555";
-        }) allServices)
-      ++ (map (name: nameValuePair "runit/services/${name}/down" {
+        }
+      ) allServices)
+      ++ (map (
+        name:
+        nameValuePair "runit/services/${name}/down" {
           text = "";
-        }) (builtins.attrNames allServices))
+        }
+      ) (builtins.attrNames allServices))
       ++ configDataFiles
     );
 

@@ -5,7 +5,7 @@ into a Nix store overlay:
 
 ```nix
 pkgs.foreignPackages {
-  url  = "https://repo.example.com/foo_1.0_amd64.deb";
+  url = "https://repo.example.com/foo_1.0_amd64.deb";
   hash = "sha256-...";
 }
 ```

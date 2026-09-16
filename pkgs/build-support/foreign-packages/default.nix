@@ -44,23 +44,26 @@
 }:
 
 let
-  inherit (lib) hasSuffix optionalString;
+  inherit (lib) optionalString;
 
   bb = "${busybox}/bin/busybox"; # static busybox: /bin/sh + applets in the chroot
-  toolsBins = lib.concatMapStringsSep "\n" (p: ''ln -sfn ${p}/bin/* "$out/usr/bin/" 2>/dev/null || true'') [
-    coreutils
-    findutils
-    gnused
-    gnugrep
-    gawk
-  ];
+  toolsBins =
+    lib.concatMapStringsSep "\n" (p: ''ln -sfn ${p}/bin/* "$out/usr/bin/" 2>/dev/null || true'')
+      [
+        coreutils
+        findutils
+        gnused
+        gnugrep
+        gawk
+      ];
 
-  detectFmt = u:
-    if (builtins.match ".*\\.deb$" u != null) then
+  detectFmt =
+    u:
+    if (match ".*\\.deb$" u != null) then
       "deb"
-    else if (builtins.match ".*\\.rpm$" u != null) then
+    else if (match ".*\\.rpm$" u != null) then
       "rpm"
-    else if (builtins.match ".*\\.pkg\\.tar\\..*" u != null) then
+    else if (match ".*\\.pkg\\.tar\\..*" u != null) then
       "pkgtar"
     else
       throw "foreign-packages: cannot detect the package format from URL '${u}'; set `format`.";
@@ -78,7 +81,13 @@ in
 let
   pkgSrc = if src != null then src else fetchurl { inherit url hash; };
   fmt = if format != null then format else detectFmt (toString url);
-  baseName = if name != null then name else if url != null then builtins.baseNameOf url else src.name or (builtins.baseNameOf (toString src));
+  baseName =
+    if name != null then
+      name
+    else if url != null then
+      baseNameOf url
+    else
+      src.name or (baseNameOf (toString src));
 in
 stdenv.mkDerivation {
   pname = "foreign-${baseName}";
@@ -151,9 +160,15 @@ stdenv.mkDerivation {
     cat > "$out/tmp/postinstall.sh" <<'POSTEOF'
     #!/bin/sh
     export PATH="/bin:/usr/bin:/sbin:/usr/sbin:$PATH"
-    ${optionalString (fmt == "deb") ''[ -e /tmp/postinst ] && sh /tmp/postinst configure 0 >/dev/null 2>&1 || true''}
-    ${optionalString (fmt == "rpm") ''[ -e /tmp/rpm-post.sh ] && sh /tmp/rpm-post.sh >/dev/null 2>&1 || true''}
-    ${optionalString (fmt == "pkgtar") ''[ -e /.INSTALL ] && sh ./.INSTALL post_install "$(awk '/^pkgver =/{print $3; exit}' .PKGINFO)" >/dev/null 2>&1 || true''}
+    ${optionalString (
+      fmt == "deb"
+    ) "[ -e /tmp/postinst ] && sh /tmp/postinst configure 0 >/dev/null 2>&1 || true"}
+    ${optionalString (
+      fmt == "rpm"
+    ) "[ -e /tmp/rpm-post.sh ] && sh /tmp/rpm-post.sh >/dev/null 2>&1 || true"}
+    ${optionalString (fmt == "pkgtar")
+      ''[ -e /.INSTALL ] && sh ./.INSTALL post_install "$(awk '/^pkgver =/{print $3; exit}' .PKGINFO)" >/dev/null 2>&1 || true''
+    }
     ${optionalString (postInstall != null) postInstall}
     POSTEOF
     chmod +x "$out/tmp/postinstall.sh"

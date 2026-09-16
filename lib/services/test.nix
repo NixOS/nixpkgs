@@ -375,28 +375,32 @@ let
         s = exampleEval.config.services.fullFeatured;
       in
       s.enable == true
-      && s.dependencies == {
-        after = [ "dep-a" ];
-        before = [ "dep-b" ];
-        requires = [ "dep-c" ];
-        wants = [ "dep-d" ];
-      }
-      && s.runtime == {
-        user = "nobody";
-        group = "nogroup";
-        workingDirectory = "/tmp";
-      }
-      && s.environment == {
-        FOO = "bar";
-      }
+      &&
+        s.dependencies == {
+          after = [ "dep-a" ];
+          before = [ "dep-b" ];
+          requires = [ "dep-c" ];
+          wants = [ "dep-d" ];
+        }
+      &&
+        s.runtime == {
+          user = "nobody";
+          group = "nogroup";
+          workingDirectory = "/tmp";
+        }
+      &&
+        s.environment == {
+          FOO = "bar";
+        }
       && s.process.type == "oneshot"
       && s.process.stopSignal == "SIGUSR1"
       && s.process.startTimeout == 10
       && s.process.stopTimeout == 20
-      && s.restart == {
-        policy = "on-failure";
-        delay = 2;
-      };
+      &&
+        s.restart == {
+          policy = "on-failure";
+          delay = 2;
+        };
 
     # Unset options fall back to the documented defaults.
     assert
@@ -404,26 +408,29 @@ let
         s = exampleEval.config.services.service1;
       in
       s.enable == true
-      && s.dependencies == {
-        after = [ ];
-        before = [ ];
-        requires = [ ];
-        wants = [ ];
-      }
-      && s.runtime == {
-        user = "root";
-        group = "root";
-        workingDirectory = null;
-      }
+      &&
+        s.dependencies == {
+          after = [ ];
+          before = [ ];
+          requires = [ ];
+          wants = [ ];
+        }
+      &&
+        s.runtime == {
+          user = "root";
+          group = "root";
+          workingDirectory = null;
+        }
       && s.environment == { }
       && s.process.type == "simple"
       && s.process.stopSignal == null
       && s.process.startTimeout == null
       && s.process.stopTimeout == null
-      && s.restart == {
-        policy = "always";
-        delay = 5;
-      };
+      &&
+        s.restart == {
+          policy = "always";
+          delay = 5;
+        };
 
     "ok";
 

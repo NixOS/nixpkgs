@@ -18,63 +18,68 @@ let
   fhs = config.system.fhsCompatibility;
 
   # The Nixpkgs package set built with an alternate libc (musl or LLVM).
-  alternateLibcPkgs = nixpkgsSource: nixpkgsLib: import (nixpkgsSource + "/pkgs/top-level") {
-    lib = nixpkgsLib;
-    localSystem = {
-      system = pkgs.stdenv.hostPlatform.system;
-      libc = libc.family;
+  alternateLibcPkgs =
+    nixpkgsSource: nixpkgsLib:
+    import (nixpkgsSource + "/pkgs/top-level") {
+      lib = nixpkgsLib;
+      localSystem = {
+        system = pkgs.stdenv.hostPlatform.system;
+        libc = libc.family;
+      };
+      config = { };
+      overlays = [ ];
     };
-    config = { };
-    overlays = [ ];
-  };
 
   # /nix/store/<hash>-fhs-rootfs: the FHS-compatible root view. bin/sbin hold
   # symlinks to every binary of the system packages, lib/lib64 and usr
   # counterparts point into the glibc library output. Conventional software
   # that expects a dynamic linker (ld-linux), /bin and /usr can then be
   # pointed here with activation symlinks at the real root.
-  fhsRootfs = pkgs.runCommand "fhs-rootfs" {
-    binEnv = pkgs.buildEnv {
-      name = "fhs-bin";
-      paths = config.environment.systemPackages;
-      pathsToLink = [ "/bin" ];
-      ignoreCollisions = true;
-    };
-    libSrc = "${pkgs.glibc}/lib";
-    shell = pkgs.stdenv.shell;
-  } ''
-    mkdir -p $out/{bin,lib,usr/bin,usr/lib}
-    for f in $binEnv/bin/*; do
-      n="$(basename "$f")"
-      ln -s "$f" "$out/bin/$n"
-      ln -s "$f" "$out/usr/bin/$n"
-    done
-    for f in $libSrc/*; do
-      n="$(basename "$f")"
-      ln -s "$f" "$out/lib/$n"
-      ln -s "$f" "$out/usr/lib/$n"
-    done
-    ln -s "$libSrc" "$out/lib64"
-    ln -s "$libSrc" "$out/usr/lib64"
-    ln -s "$out/bin" "$out/sbin"
-    ln -s "$out/usr/bin" "$out/usr/sbin"
-    ${lib.optionalString (config.system.foreignPackages != [ ]) ''
-      for p in ${lib.concatStringsSep " " (map toString config.system.foreignPackages)}; do
-        [ -d "$p" ] || continue
-        while IFS= read -r f; do
-          rel="''${f#$p/}"
-          case "$rel" in
-            nix/*|proc/*|dev/*|tmp/*) continue ;;
-          esac
-          # only files unique to the rootfs are merged
-          [ -e "$out/$rel" ] && continue
-          mkdir -p "$out/$(dirname "$rel")"
-          ln -s "$f" "$out/$rel"
-        done < <(cd "$p" && find . -mindepth 1 \( -type f -o -type l \) )
-      done
-    ''}
-    # /bin/sh is provided by the shell in the system packages (bashInteractive)
-  '';
+  fhsRootfs =
+    pkgs.runCommand "fhs-rootfs"
+      {
+        binEnv = pkgs.buildEnv {
+          name = "fhs-bin";
+          paths = config.environment.systemPackages;
+          pathsToLink = [ "/bin" ];
+          ignoreCollisions = true;
+        };
+        libSrc = "${pkgs.glibc}/lib";
+        shell = pkgs.stdenv.shell;
+      }
+      ''
+        mkdir -p $out/{bin,lib,usr/bin,usr/lib}
+        for f in $binEnv/bin/*; do
+          n="$(basename "$f")"
+          ln -s "$f" "$out/bin/$n"
+          ln -s "$f" "$out/usr/bin/$n"
+        done
+        for f in $libSrc/*; do
+          n="$(basename "$f")"
+          ln -s "$f" "$out/lib/$n"
+          ln -s "$f" "$out/usr/lib/$n"
+        done
+        ln -s "$libSrc" "$out/lib64"
+        ln -s "$libSrc" "$out/usr/lib64"
+        ln -s "$out/bin" "$out/sbin"
+        ln -s "$out/usr/bin" "$out/usr/sbin"
+        ${lib.optionalString (config.system.foreignPackages != [ ]) ''
+          for p in ${lib.concatStringsSep " " (map toString config.system.foreignPackages)}; do
+            [ -d "$p" ] || continue
+            while IFS= read -r f; do
+              rel="''${f#$p/}"
+              case "$rel" in
+                nix/*|proc/*|dev/*|tmp/*) continue ;;
+              esac
+              # only files unique to the rootfs are merged
+              [ -e "$out/$rel" ] && continue
+              mkdir -p "$out/$(dirname "$rel")"
+              ln -s "$f" "$out/$rel"
+            done < <(cd "$p" && find . -mindepth 1 \( -type f -o -type l \) )
+          done
+        ''}
+        # /bin/sh is provided by the shell in the system packages (bashInteractive)
+      '';
 in
 {
   _class = "nixos";
@@ -123,9 +128,9 @@ in
         };
 
         localBuild = lib.mkEnableOption ''
-          building the whole system locally against the chosen libc family
-          (sets `nixpkgs.localSystem.libc`, overriding dependency evaluation
-          in exchange for a fully locally-built configuration)
+          using the locally evaluated Nixpkgs package set (the system's own
+          `pkgs`) as the alternate-libc set, instead of pulling an imported
+          musl/LLVM package set from the binary caches
         '';
       };
     };
@@ -137,7 +142,8 @@ in
       binary caches (hydra) directly. If a package is not available for the
       alternate libc, the glibc build is used instead and the glibc ABI is
       preserved for it (see the plan: pull what hydra has, fall back to
-      glibc). Set `localBuild` to build everything locally instead.
+      glibc). Set `localBuild` to use the locally evaluated package set
+      instead.
     '';
   };
 
@@ -169,14 +175,15 @@ in
     (lib.mkIf (libc.family != "glibc") {
       # No dependency override: the evaluated system stays glibc-based.
       system.build.libc = libc.family;
-      system.build.alternateLibcPkgs = alternateLibcPkgs pkgs.path lib;
+      system.build.alternateLibcPkgs = lib.mkDefault (alternateLibcPkgs pkgs.path lib);
     })
 
     (lib.mkIf (libc.family != "glibc" && libc.localBuild) {
-      # User asked to build the musl/LLVM libc versions locally: this DOES
-      # override dependency evaluation, and only then.
-      nixpkgs.localSystem.libc = libc.family;
-      system.build.libc = libc.family;
+      # Local build: the system's own (locally evaluated) package set is used
+      # as the alternate-libc set. A whole-system libc swap should be done at
+      # the top level with nixpkgs.localSystem.hostPlatform etc.; defining
+      # nixpkgs.* options here would break nested evaluations that do not
+      # declare them (e.g. containers).
       system.build.alternateLibcPkgs = pkgs;
     })
 
@@ -193,4 +200,5 @@ in
         done
       '';
     })
-  ];}
+  ];
+}

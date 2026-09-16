@@ -215,13 +215,12 @@ in
         # "simple" is special-cased: it auto-upgrades to "notify" when the
         # service opts into the systemd notification protocol. Explicit
         # lifecycle types are passed through verbatim.
-        Type =
-          lib.mkDefault (
-            if config.process.type == "simple" && config.notificationProtocol.systemd then
-              "notify"
-            else
-              config.process.type
-          );
+        Type = lib.mkDefault (
+          if config.process.type == "simple" && config.notificationProtocol.systemd then
+            "notify"
+          else
+            config.process.type
+        );
 
         Restart = lib.mkDefault (if config.restart.policy == "never" then "no" else config.restart.policy);
         RestartSec = lib.mkDefault (toString config.restart.delay);
@@ -240,18 +239,14 @@ in
         );
 
         # Process lifecycle
-        KillSignal = lib.mkIf (config.process.stopSignal != null) (
-          lib.mkDefault config.process.stopSignal
-        );
+        KillSignal = lib.mkIf (config.process.stopSignal != null) (lib.mkDefault config.process.stopSignal);
         TimeoutStartSec = lib.mkIf (config.process.startTimeout != null) (
           lib.mkDefault (toString config.process.startTimeout)
         );
         TimeoutStopSec = lib.mkIf (config.process.stopTimeout != null) (
           lib.mkDefault (toString config.process.stopTimeout)
         );
-        RemainAfterExit = lib.mkIf (config.process.type == "oneshot") (
-          lib.mkDefault true
-        );
+        RemainAfterExit = lib.mkIf (config.process.type == "oneshot") (lib.mkDefault true);
       };
     };
   };

@@ -9,63 +9,66 @@
 
 let
   root = rootDir;
-  machine = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      {
-        system.services.web = {
-          process.argv = [ "/bin/web" ];
-          dependencies.after = [ "db" ];
-          runtime = {
-            user = "nobody";
-            workingDirectory = "/var/lib/web";
+  machine =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        {
+          system.services.web = {
+            process.argv = [ "/bin/web" ];
+            dependencies.after = [ "db" ];
+            runtime = {
+              user = "nobody";
+              workingDirectory = "/var/lib/web";
+            };
+            environment.FOO = "bar";
+            process.type = "oneshot";
+            restart = {
+              policy = "on-failure";
+              delay = 3;
+            };
           };
-          environment.FOO = "bar";
-          process.type = "oneshot";
-          restart = {
-            policy = "on-failure";
-            delay = 3;
+          system.services.web.services.api = {
+            process.argv = [ "/bin/api" ];
+            dependencies.after = [ "log" ];
           };
-        };
-        system.services.web.services.api = {
-          process.argv = [ "/bin/api" ];
-          dependencies.after = [ "log" ];
-        };
-        system.services.web.services.log = {
-          process.argv = [ "/bin/log" ];
-        };
-        system.services.db = {
-          process.argv = [ "/bin/db" ];
-        };
-        system.services.disabled = {
-          enable = false;
-          process.argv = [ "/bin/nope" ];
-          services.sub = {
-            process.argv = [ "/bin/nope-sub" ];
+          system.services.web.services.log = {
+            process.argv = [ "/bin/log" ];
           };
-        };
+          system.services.db = {
+            process.argv = [ "/bin/db" ];
+          };
+          system.services.disabled = {
+            enable = false;
+            process.argv = [ "/bin/nope" ];
+            services.sub = {
+              process.argv = [ "/bin/nope-sub" ];
+            };
+          };
 
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
 in
 assert machine.systemd.units ? "web.service";
 assert machine.systemd.units ? "db.service";
 # abstract dependencies -> unit ordering, resolved against the parent level
 assert builtins.match ".*After=db.service.*" machine.systemd.units."web.service".text != null;
 # nested sibling dependency resolves to the absolute unit name
-assert builtins.match ".*After=web-log.service.*" machine.systemd.units."web-api.service".text != null;
+assert
+  builtins.match ".*After=web-log.service.*" machine.systemd.units."web-api.service".text != null;
 # runtime context
 assert builtins.match ".*User=nobody.*" machine.systemd.units."web.service".text != null;
 assert builtins.match ".*Group=nobody.*" machine.systemd.units."web.service".text != null;
-assert builtins.match ".*WorkingDirectory=/var/lib/web.*" machine.systemd.units."web.service".text != null;
+assert
+  builtins.match ".*WorkingDirectory=/var/lib/web.*" machine.systemd.units."web.service".text != null;
 # environment
 assert builtins.match ".*Environment=FOO=bar.*" machine.systemd.units."web.service".text != null;
 # lifecycle

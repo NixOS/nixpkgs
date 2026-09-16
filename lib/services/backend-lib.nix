@@ -9,22 +9,24 @@
 let
   inherit (lib)
     concatLists
-    concatMapStrings
     filter
-    genList
-    length
     mapAttrsToList
     mkOption
     types
-    unique
     ;
 in
 rec {
   # Joins service names the same way the systemd backend does:
   # "" + "foo" == "foo", "foo" + "" == "foo", "foo" + "bar" == "foo-bar".
   # Sub-services are prefixed with the dashed name of their parent level.
-  dash = before: after:
-    if after == "" then before else if before == "" then after else "${before}-${after}";
+  dash =
+    before: after:
+    if after == "" then
+      before
+    else if before == "" then
+      after
+    else
+      "${before}-${after}";
 
   /**
     Flattens the recursive service tree into a list of records:
@@ -40,13 +42,19 @@ rec {
 
     Type: (String -> String -> service -> list { ... })
   */
-  flattenServices = parentPrefix: prefix: service:
-    if !service.enable then [ ] else
-      [ { name = prefix; inherit parentPrefix service; } ]
+  flattenServices =
+    parentPrefix: prefix: service:
+    if !service.enable then
+      [ ]
+    else
+      [
+        {
+          name = prefix;
+          inherit parentPrefix service;
+        }
+      ]
       ++ concatLists (
-        mapAttrsToList (
-          subName: sub: flattenServices prefix (dash prefix subName) sub
-        ) service.services
+        mapAttrsToList (subName: sub: flattenServices prefix (dash prefix subName) sub) service.services
       );
 
   /**
@@ -98,9 +106,11 @@ rec {
 
     Type: (a -> List a) -> List a -> List a
   */
-  topoSort = edges: nodes:
+  topoSort =
+    edges: nodes:
     let
-      step = acc: rest:
+      step =
+        acc: rest:
         if rest == [ ] then
           acc
         else

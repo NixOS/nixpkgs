@@ -29,63 +29,62 @@ let
   # Each entry maps a backend name to: the package providing the control
   # tool, the tool path, and command templates. Unit names are matched
   # without their type suffix.
-  backend = {
-    dinit = rec {
-      package = pkgs.dinit;
-      ctl = "${package}/bin/dinitctl";
-      stop = name: "${ctl} stop ${name}";
-      start = name: "${ctl} start ${name}";
-      restart = name: "${ctl} restart ${name}";
-      status = name: "${ctl} status ${name}";
-      reboot = "${package}/bin/shutdown -r now";
-      poweroff = "${package}/bin/shutdown -p now";
-      logs = name: ''
-        echo "dinit logs service (dinitctl show ${name}; catlog via dinitctl)" >&2
-        ${ctl} show ${name} || true
-      '';
-    };
-    runit = rec {
-      package = pkgs.runit;
-      ctl = "${package}/bin/sv";
-      stop = name: "${ctl} down /etc/runit/services/${name}";
-      start = name: "${ctl} up /etc/runit/services/${name}";
-      restart = name: "${ctl} restart /etc/runit/services/${name}";
-      status = name: "${ctl} status /etc/runit/services/${name}";
-      reboot = "${pkgs.busybox}/bin/reboot";
-      poweroff = "${pkgs.busybox}/bin/poweroff";
-      logs = name: ''
-        echo "runit logs for ${name}: svlogd output under /etc/runit/services/${name}/log" >&2
-      '';
-    };
-    s6 = rec {
-      package = pkgs.s6-rc;
-      ctl = "${package}/bin/s6-rc";
-      stop = name: "${ctl} -d change ${name}";
-      start = name: "${ctl} -u change ${name}";
-      restart = name: "${ctl} -d change ${name} && ${ctl} -u change ${name}";
-      status = name: "${pkgs.s6}/bin/s6-svstat /run/service/${name}";
-      reboot = "${pkgs.s6-linux-init}/bin/s6-reboot";
-      poweroff = "${pkgs.s6-linux-init}/bin/s6-poweroff";
-      logs = name: ''
-        echo "s6 logs for ${name}: s6-log sink, consult the service's log/current" >&2
-      '';
-    };
-  }.${initSystem};
-
+  backend =
+    {
+      dinit = rec {
+        package = pkgs.dinit;
+        ctl = "${package}/bin/dinitctl";
+        stop = name: "${ctl} stop ${name}";
+        start = name: "${ctl} start ${name}";
+        restart = name: "${ctl} restart ${name}";
+        status = name: "${ctl} status ${name}";
+        reboot = "${package}/bin/shutdown -r now";
+        poweroff = "${package}/bin/shutdown -p now";
+        logs = name: ''
+          echo "dinit logs service (dinitctl show ${name}; catlog via dinitctl)" >&2
+          ${ctl} show ${name} || true
+        '';
+      };
+      runit = rec {
+        package = pkgs.runit;
+        ctl = "${package}/bin/sv";
+        stop = name: "${ctl} down /etc/runit/services/${name}";
+        start = name: "${ctl} up /etc/runit/services/${name}";
+        restart = name: "${ctl} restart /etc/runit/services/${name}";
+        status = name: "${ctl} status /etc/runit/services/${name}";
+        reboot = "${pkgs.busybox}/bin/reboot";
+        poweroff = "${pkgs.busybox}/bin/poweroff";
+        logs = name: ''
+          echo "runit logs for ${name}: svlogd output under /etc/runit/services/${name}/log" >&2
+        '';
+      };
+      s6 = rec {
+        package = pkgs.s6-rc;
+        ctl = "${package}/bin/s6-rc";
+        stop = name: "${ctl} -d change ${name}";
+        start = name: "${ctl} -u change ${name}";
+        restart = name: "${ctl} -d change ${name} && ${ctl} -u change ${name}";
+        status = name: "${pkgs.s6}/bin/s6-svstat /run/service/${name}";
+        reboot = "${pkgs.s6-linux-init}/bin/s6-reboot";
+        poweroff = "${pkgs.s6-linux-init}/bin/s6-poweroff";
+        logs = name: ''
+          echo "s6 logs for ${name}: s6-log sink, consult the service's log/current" >&2
+        '';
+      };
+    }
+    .${initSystem};
 
   shims = pkgs.runCommand "systemd-compat-layer" { } (
     let
-      tool =
-        name: body:
-        ''
-          mkdir -p $out/bin
-          cat > $out/bin/${name} <<'SHIMEOF'
-          #!${pkgs.runtimeShell}
-          # NixOS systemd compatibility shim for the ${initSystem} backend.
-          ${body}
-          SHIMEOF
-          chmod +x $out/bin/${name}
-        '';
+      tool = name: body: ''
+        mkdir -p $out/bin
+        cat > $out/bin/${name} <<'SHIMEOF'
+        #!${pkgs.runtimeShell}
+        # NixOS systemd compatibility shim for the ${initSystem} backend.
+        ${body}
+        SHIMEOF
+        chmod +x $out/bin/${name}
+      '';
     in
     ''
       ${tool "systemctl" ''

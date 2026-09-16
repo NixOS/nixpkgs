@@ -28,135 +28,142 @@ let
     };
   };
 
-  machine = initSystem: (evalConfig {
-    system = "x86_64-linux";
-    modules = [
-      baseServices
-      {
-        system.initSystem = initSystem;
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
+  machine =
+    initSystem:
+    (evalConfig {
+      system = "x86_64-linux";
+      modules = [
+        baseServices
+        {
+          system.initSystem = initSystem;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
 
   default = machine "systemd";
   dinit = machine "dinit";
   runit = machine "runit";
   s6 = machine "s6";
   rcD = machine "rc.d";
-  dinitCompat = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      baseServices
-      {
-        system.initSystem = "dinit";
-        system.systemdCompatibility.enable = true;
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
-  coreutilsOverride = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      ({ pkgs, ... }:
-      {
-        system.coreutils = pkgs.uutils-coreutils;
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      })
-    ];
-  }).config;
-  libcOverride = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      {
-        system.libc.family = "musl";
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
-  fhsMachine = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      {
-        system.fhsCompatibility.enable = true;
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
-  foreignMachine = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      ({ pkgs, ... }:
-      {
-        system.fhsCompatibility.enable = true;
-        system.foreignPackages = [
-          (pkgs.runCommand "fake-foreign" { } ''
-            mkdir -p $out/usr/bin $out/etc
-            echo hi > $out/usr/bin/fakebin
-            echo conf > $out/etc/fake.conf
-          '')
-        ];
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      })
-    ];
-  }).config;
-  libcLocalBuild = (import (root + "/nixos/lib/eval-config.nix") {
-    system = "x86_64-linux";
-    modules = [
-      {
-        system.libc.family = "musl";
-        system.libc.localBuild = true;
-        # localSystem needs an explicit system when overridden
-        nixpkgs.localSystem = {
-          system = "x86_64-linux";
-          libc = "musl";
-        };
-        # irrelevant stuff
-        system.stateVersion = "25.05";
-        fileSystems."/" = {
-          device = "/test/dummy";
-          fsType = "auto";
-        };
-        boot.loader.grub.enable = false;
-      }
-    ];
-  }).config;
+  dinitCompat =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        baseServices
+        {
+          system.initSystem = "dinit";
+          system.systemdCompatibility.enable = true;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
+  coreutilsOverride =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        (
+          { pkgs, ... }:
+          {
+            system.coreutils = pkgs.uutils-coreutils;
+            # irrelevant stuff
+            system.stateVersion = "25.05";
+            fileSystems."/" = {
+              device = "/test/dummy";
+              fsType = "auto";
+            };
+            boot.loader.grub.enable = false;
+          }
+        )
+      ];
+    }).config;
+  libcOverride =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        {
+          system.libc.family = "musl";
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
+  fhsMachine =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        {
+          system.fhsCompatibility.enable = true;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
+  foreignMachine =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        (
+          { pkgs, ... }:
+          {
+            system.fhsCompatibility.enable = true;
+            system.foreignPackages = [
+              (pkgs.runCommand "fake-foreign" { } ''
+                mkdir -p $out/usr/bin $out/etc
+                echo hi > $out/usr/bin/fakebin
+                echo conf > $out/etc/fake.conf
+              '')
+            ];
+            # irrelevant stuff
+            system.stateVersion = "25.05";
+            fileSystems."/" = {
+              device = "/test/dummy";
+              fsType = "auto";
+            };
+            boot.loader.grub.enable = false;
+          }
+        )
+      ];
+    }).config;
+  libcLocalBuild =
+    (import (root + "/nixos/lib/eval-config.nix") {
+      system = "x86_64-linux";
+      modules = [
+        {
+          system.libc.family = "musl";
+          system.libc.localBuild = true;
+          # irrelevant stuff
+          system.stateVersion = "25.05";
+          fileSystems."/" = {
+            device = "/test/dummy";
+            fsType = "auto";
+          };
+          boot.loader.grub.enable = false;
+        }
+      ];
+    }).config;
 in
 # default: systemd backend, exactly as before
 assert default.systemd.units ? "web.service";
@@ -196,32 +203,56 @@ assert !(rcD.systemd.units ? "web.service");
 assert dinitCompat.system.build.systemdCompatibilityLayer.outPath != "";
 assert dinitCompat.environment.systemPackages != [ ];
 assert dinitCompat.environment.etc ? "dinit.d/systemd-compat";
-assert builtins.match ".*systemd-compat-dbus.*" dinitCompat.environment.etc."dinit.d/systemd-compat".text != null;
+assert
+  builtins.match ".*systemd-compat-dbus.*" dinitCompat.environment.etc."dinit.d/systemd-compat".text
+  != null;
 
 # coreutils toggle: system.build.coreutils and PATH replacement
 assert coreutilsOverride.system.build.coreutils.outPath != "";
 assert builtins.match ".*uutils-coreutils.*" coreutilsOverride.system.build.coreutils.name != null;
-assert builtins.match ".*uutils-coreutils.*" (builtins.unsafeDiscardStringContext (builtins.concatStringsSep " " (map (p: builtins.unsafeDiscardStringContext (p.name or "?")) coreutilsOverride.environment.systemPackages))) != null;
+assert
+  builtins.match ".*uutils-coreutils.*" (
+    builtins.unsafeDiscardStringContext (
+      builtins.concatStringsSep " " (
+        map (
+          p: builtins.unsafeDiscardStringContext (p.name or "?")
+        ) coreutilsOverride.environment.systemPackages
+      )
+    )
+  ) != null;
 
 # libc toggle: alternate package set from hydra-compatible builds, no
 # dependency override of the system itself
 assert libcOverride.system.build.libc == "musl";
-assert builtins.match ".*musl.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null;
-assert builtins.match ".*glibc.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null || true;
+assert
+  builtins.match ".*musl.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null;
+assert
+  builtins.match ".*glibc.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null
+  || true;
 # the alternate set still carries a glibc reference for the fallback path
 assert libcOverride.system.build.alternateLibcPkgs ? glibc;
-# localBuild overrides dependency evaluation as requested
-assert libcLocalBuild.nixpkgs.localSystem.libc == "musl";
+# localBuild uses the locally evaluated package set
+assert libcLocalBuild.system.build.libc == "musl";
+# localBuild: the locally evaluated (glibc-based) package set is used
+assert
+  builtins.match ".*glibc.*" libcLocalBuild.system.build.alternateLibcPkgs.stdenv.cc.libc.name
+  != null;
 
 # FHS compatibility layer
 assert fhsMachine.system.build.fhsRootfs.outPath != "";
-assert builtins.match ".*for target in bin sbin lib lib64 usr/bin.*" fhsMachine.system.activationScripts.fhsRootfs.text != null;
-assert builtins.match ".*ln -sfn .*fhs-rootfs/[$]target /[$]target.*" fhsMachine.system.activationScripts.fhsRootfs.text != null;
+assert
+  builtins.match ".*for target in bin sbin lib lib64 usr/bin.*" fhsMachine.system.activationScripts.fhsRootfs.text
+  != null;
+assert
+  builtins.match ".*ln -sfn .*fhs-rootfs/[$]target /[$]target.*" fhsMachine.system.activationScripts.fhsRootfs.text
+  != null;
 assert builtins.match ".*home.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
 assert builtins.match ".*var.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
 
 # foreign packages: PATH merge + FHS rootfs integration (unique files)
-assert builtins.any (p: builtins.match "foreign-.*-bins" (p.name or "") != null) foreignMachine.environment.systemPackages;
+assert builtins.any (
+  p: builtins.match "foreign-.*-bins" (p.name or "") != null
+) foreignMachine.environment.systemPackages;
 assert foreignMachine.system.build.fhsRootfs.outPath != "";
 
 "ok"

@@ -26,14 +26,17 @@ let
 
   # Merge /usr/bin and /bin of each overlay into a normal package so the
   # binaries appear on the system PATH.
-  binPackages = map (p: pkgs.runCommand "foreign-${p.name}-bins" { } ''
-    mkdir -p $out/bin
-    ln -sfn ${p}/usr/bin/* $out/bin/ 2>/dev/null || true
-    ln -sfn ${p}/bin/* $out/bin/ 2>/dev/null || true
-    for l in $out/bin/*; do
-      [ -L "$l" ] || rm -f "$l"
-    done
-  '') fkgs;
+  binPackages = map (
+    p:
+    pkgs.runCommand "foreign-${p.name}-bins" { } ''
+      mkdir -p $out/bin
+      ln -sfn ${p}/usr/bin/* $out/bin/ 2>/dev/null || true
+      ln -sfn ${p}/bin/* $out/bin/ 2>/dev/null || true
+      for l in $out/bin/*; do
+        [ -L "$l" ] || rm -f "$l"
+      done
+    ''
+  ) fkgs;
 in
 {
   _class = "nixos";
