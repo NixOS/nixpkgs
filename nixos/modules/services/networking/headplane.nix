@@ -27,7 +27,18 @@ let
   agentSettings = cfg.settings.integration.agent;
   settings = cfg.settings // {
     integration = cfg.settings.integration // {
-      agent = if agentSettings == null || !agentSettings.enabled then null else agentSettings;
+      # The agent only matters when enabled; drop it otherwise so it does not
+      # leak a disabled block into the generated config.
+      agent = lib.optionalAttrs agentSettings.enabled agentSettings;
+    };
+    # OIDC leaves (issuer, client_id, ...) have no default, so only include the
+    # block when OIDC is actually enabled; otherwise forcing the config would
+    # error on the undefined required leaves.
+    oidc = lib.optionalAttrs cfg.settings.oidc.enabled cfg.settings.oidc;
+    # proxy_auth only matters when enabled; drop it otherwise so it does not
+    # leak a disabled block into the generated config.
+    server = cfg.settings.server // {
+      proxy_auth = lib.optionalAttrs cfg.settings.server.proxy_auth.enabled cfg.settings.server.proxy_auth;
     };
   };
   settingsFile = settingsFormat.generate "headplane-config.yaml" (filterSettings settings);
@@ -120,91 +131,80 @@ in
               example = "/var/lib/headplane";
             };
 
-            proxy_auth = mkOption {
-              type = types.nullOr (
-                types.submodule {
-                  options = {
-                    enabled = mkEnableOption ''
-                      delegating Headplane authentication to a trusted reverse proxy
-                      instead of logging in through Headplane directly. Identity
-                      headers are only trusted on requests whose client IP matches
-                      `allowed_cidrs`; all Headscale API calls then use
-                      `headscale.api_key_path`
-                    '';
-
-                    allowed_cidrs = mkOption {
-                      type = types.listOf types.str;
-                      default = [
-                        "127.0.0.1/32"
-                        "::1/128"
-                      ];
-                      description = ''
-                        Client CIDRs allowed to authenticate via the configured proxy
-                        headers.
-                      '';
-                      example = [ "10.0.0.0/8" ];
-                    };
-
-                    trusted_proxy_cidrs = mkOption {
-                      type = types.listOf types.str;
-                      default = [
-                        "127.0.0.1/32"
-                        "::1/128"
-                      ];
-                      description = ''
-                        Direct proxy CIDRs trusted to supply `ip_header`.
-                      '';
-                      example = [ "127.0.0.1/32" ];
-                    };
-
-                    ip_header = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = ''
-                        Header containing the original client IP, such as
-                        `X-Forwarded-For` or `X-Real-IP`. Only read when the direct
-                        socket peer matches `trusted_proxy_cidrs`.
-                      '';
-                      example = "X-Forwarded-For";
-                    };
-
-                    user_header = mkOption {
-                      type = types.str;
-                      default = "Remote-User";
-                      description = ''
-                        Header containing the stable authenticated user identity.
-                      '';
-                      example = "Remote-User";
-                    };
-
-                    email_header = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = "Optional header containing the authenticated user's email address.";
-                      example = "Remote-Email";
-                    };
-
-                    name_header = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = "Optional header containing the authenticated user's display name.";
-                      example = "Remote-Name";
-                    };
-
-                    picture_header = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = "Optional header containing the authenticated user's profile picture URL.";
-                      example = "Remote-Picture";
-                    };
-                  };
-                }
-              );
-              default = null;
-              description = ''
-                Delegate Headplane authentication to a trusted reverse proxy. See the
-                upstream [Proxy Authentication docs](https://github.com/tale/headplane/blob/main/docs/features/proxy-auth.md).
+            proxy_auth = {
+              enabled = mkEnableOption ''
+                delegating Headplane authentication to a trusted reverse proxy
+                instead of logging in through Headplane directly. Identity
+                headers are only trusted on requests whose client IP matches
+                `allowed_cidrs`; all Headscale API calls then use
+                `headscale.api_key_path`
               '';
+
+              allowed_cidrs = mkOption {
+                type = types.listOf types.str;
+                default = [
+                  "127.0.0.1/32"
+                  "::1/128"
+                ];
+                description = ''
+                  Client CIDRs allowed to authenticate via the configured proxy
+                  headers.
+                '';
+                example = [ "10.0.0.0/8" ];
+              };
+
+              trusted_proxy_cidrs = mkOption {
+                type = types.listOf types.str;
+                default = [
+                  "127.0.0.1/32"
+                  "::1/128"
+                ];
+                description = ''
+                  Direct proxy CIDRs trusted to supply `ip_header`.
+                '';
+                example = [ "127.0.0.1/32" ];
+              };
+
+              ip_header = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = ''
+                  Header containing the original client IP, such as
+                  `X-Forwarded-For` or `X-Real-IP`. Only read when the direct
+                  socket peer matches `trusted_proxy_cidrs`.
+                '';
+                example = "X-Forwarded-For";
+              };
+
+              user_header = mkOption {
+                type = types.str;
+                default = "Remote-User";
+                description = ''
+                  Header containing the stable authenticated user identity.
+                '';
+                example = "Remote-User";
+              };
+
+              email_header = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Optional header containing the authenticated user's email address.";
+                example = "Remote-Email";
+              };
+
+              name_header = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Optional header containing the authenticated user's display name.";
+                example = "Remote-Name";
+              };
+
+              picture_header = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Optional header containing the authenticated user's profile picture URL.";
+                example = "Remote-Picture";
+              };
             };
           };
 
@@ -283,59 +283,51 @@ in
 
           # Integration configurations for Headplane to interact with Headscale.
           integration = {
-            agent = mkOption {
-              type = types.nullOr (
-                types.submodule {
-                  options = {
-                    enabled = mkOption {
-                      type = types.bool;
-                      default = false;
-                      description = ''
-                        The Headplane agent allows retrieving information about nodes.
-                        This allows the UI to display version, OS, and connectivity data.
-                        You will see the Headplane agent in your Tailnet as a node when it connects.
-                      '';
-                    };
+            agent = {
+              enabled = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  The Headplane agent allows retrieving information about nodes.
+                  This allows the UI to display version, OS, and connectivity data.
+                  You will see the Headplane agent in your Tailnet as a node when it connects.
+                '';
+              };
 
-                    executable_path = mkOption {
-                      type = types.path;
-                      readOnly = true;
-                      default = "${cfg.agent.package}/bin/hp_agent";
-                      defaultText = lib.literalExpression ''"''${config.services.headplane.agent.package}/bin/hp_agent"'';
-                      description = ''
-                        Path to the headplane agent binary.
-                      '';
-                    };
+              executable_path = mkOption {
+                type = types.path;
+                readOnly = true;
+                default = "${cfg.agent.package}/bin/hp_agent";
+                defaultText = lib.literalExpression ''"''${config.services.headplane.agent.package}/bin/hp_agent"'';
+                description = ''
+                  Path to the headplane agent binary.
+                '';
+              };
 
-                    host_name = mkOption {
-                      type = types.str;
-                      default = "headplane-agent";
-                      description = "Optionally change the name of the agent in the Tailnet.";
-                    };
+              host_name = mkOption {
+                type = types.str;
+                default = "headplane-agent";
+                description = "Optionally change the name of the agent in the Tailnet.";
+              };
 
-                    cache_ttl = mkOption {
-                      type = types.ints.positive;
-                      default = 180000;
-                      description = ''
-                        How long to cache agent information (in milliseconds).
-                        If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
-                      '';
-                    };
+              cache_ttl = mkOption {
+                type = types.ints.positive;
+                default = 180000;
+                description = ''
+                  How long to cache agent information (in milliseconds).
+                  If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
+                '';
+              };
 
-                    work_dir = mkOption {
-                      type = types.path;
-                      default = "/var/lib/headplane/agent";
-                      description = ''
-                        Do not change this unless you are running a custom deployment.
-                        The work_dir represents where the agent will store its data to be able to automatically reauthenticate with your Tailnet.
-                        It needs to be writable by the user running the Headplane process.
-                      '';
-                    };
-                  };
-                }
-              );
-              default = null;
-              description = "Agent configuration for the Headplane agent.";
+              work_dir = mkOption {
+                type = types.path;
+                default = "/var/lib/headplane/agent";
+                description = ''
+                  Do not change this unless you are running a custom deployment.
+                  The work_dir represents where the agent will store its data to be able to automatically reauthenticate with your Tailnet.
+                  It needs to be writable by the user running the Headplane process.
+                '';
+              };
             };
 
             proc = {
@@ -352,120 +344,112 @@ in
             };
           };
 
-          oidc = mkOption {
-            type = types.nullOr (
-              types.submodule {
-                options = {
-                  enabled = mkOption {
-                    type = types.bool;
-                    default = true;
-                    description = ''
-                      Explicitly control OIDC availability.
-                      Set to false to define OIDC config without enabling it.
+          oidc = {
+            enabled = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Explicitly control OIDC availability.
+                Set to false to define OIDC config without enabling it.
                     '';
-                  };
+            };
 
-                  issuer = mkOption {
-                    type = types.str;
-                    description = "URL to OpenID issuer.";
-                    example = "https://provider.example.com/issuer-url";
-                  };
+            issuer = mkOption {
+              type = types.str;
+              description = "URL to OpenID issuer.";
+              example = "https://provider.example.com/issuer-url";
+            };
 
-                  client_id = mkOption {
-                    type = types.str;
-                    description = "The client ID for the OIDC client.";
-                    example = "your-client-id";
-                  };
+            client_id = mkOption {
+              type = types.str;
+              description = "The client ID for the OIDC client.";
+              example = "your-client-id";
+            };
 
-                  client_secret_path = mkOption {
-                    type = types.nullOr types.path;
-                    default = null;
-                    description = ''
-                      Path to a file containing the OIDC client secret.
-                    '';
-                    example = lib.literalExpression "config.sops.secrets.oidc_client_secret.path";
-                  };
+            client_secret_path = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                Path to a file containing the OIDC client secret.
+              '';
+              example = lib.literalExpression "config.sops.secrets.oidc_client_secret.path";
+            };
 
-                  disable_api_key_login = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = "Whether to disable API key login.";
-                  };
+            disable_api_key_login = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether to disable API key login.";
+            };
 
-                  token_endpoint_auth_method = mkOption {
-                    type = types.nullOr (
-                      types.enum [
-                        "client_secret_post"
-                        "client_secret_basic"
-                        "client_secret_jwt"
-                      ]
-                    );
-                    default = null;
-                    description = ''
-                      The token endpoint authentication method.
-                      If not set, Headplane will auto-detect the best method
-                      and fall back to client_secret_basic.
-                    '';
-                  };
+            token_endpoint_auth_method = mkOption {
+              type = types.nullOr (
+                types.enum [
+                  "client_secret_post"
+                  "client_secret_basic"
+                  "client_secret_jwt"
+                ]
+              );
+              default = null;
+              description = ''
+                The token endpoint authentication method.
+                If not set, Headplane will auto-detect the best method
+                and fall back to client_secret_basic.
+              '';
+            };
 
-                  use_pkce = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = ''
-                      Whether to use PKCE when authenticating users.
-                      Your OIDC provider must support PKCE and it must be enabled on the client.
-                    '';
-                  };
+            use_pkce = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to use PKCE when authenticating users.
+                Your OIDC provider must support PKCE and it must be enabled on the client.
+              '';
+            };
 
-                  profile_picture_source = mkOption {
-                    type = types.enum [
-                      "oidc"
-                      "gravatar"
-                    ];
-                    default = "oidc";
-                    description = "Source for user profile pictures.";
-                  };
+            profile_picture_source = mkOption {
+              type = types.enum [
+                "oidc"
+                "gravatar"
+              ];
+              default = "oidc";
+              description = "Source for user profile pictures.";
+            };
 
-                  scope = mkOption {
-                    type = types.str;
-                    default = "openid email profile";
-                    description = "OIDC scope to request.";
-                  };
+            scope = mkOption {
+              type = types.str;
+              default = "openid email profile";
+              description = "OIDC scope to request.";
+            };
 
-                  extra_params = mkOption {
-                    type = types.nullOr (types.attrsOf types.str);
-                    default = null;
-                    description = "Extra parameters to send to the OIDC provider.";
-                    example = {
-                      prompt = "consent";
-                    };
-                  };
+            extra_params = mkOption {
+              type = types.nullOr (types.attrsOf types.str);
+              default = null;
+              description = "Extra parameters to send to the OIDC provider.";
+              example = {
+                prompt = "consent";
+              };
+            };
 
-                  authorization_endpoint = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
-                    description = "Custom authorization endpoint URL.";
-                    example = "https://provider.example.com/authorize";
-                  };
+            authorization_endpoint = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Custom authorization endpoint URL.";
+              example = "https://provider.example.com/authorize";
+            };
 
-                  token_endpoint = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
-                    description = "Custom token endpoint URL.";
-                    example = "https://provider.example.com/token";
-                  };
+            token_endpoint = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Custom token endpoint URL.";
+              example = "https://provider.example.com/token";
+            };
 
-                  userinfo_endpoint = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
-                    description = "Custom userinfo endpoint URL.";
-                    example = "https://provider.example.com/userinfo";
-                  };
-                };
-              }
-            );
-            default = null;
-            description = "OIDC Configuration for authentication.";
+            userinfo_endpoint = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Custom userinfo endpoint URL.";
+              example = "https://provider.example.com/userinfo";
+            };
           };
         };
       };
@@ -497,7 +481,7 @@ in
         '';
       }
       {
-        assertion = cfg.settings.oidc == null || cfg.settings.headscale.api_key_path != null;
+        assertion = !cfg.settings.oidc.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set
           when services.headplane.settings.oidc is non-null.
@@ -506,15 +490,14 @@ in
       }
       {
         assertion =
-          agentSettings == null || !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
+          !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set when the agent is enabled.
         '';
       }
       {
         assertion =
-          cfg.settings.server.proxy_auth == null
-          || !cfg.settings.server.proxy_auth.enabled
+          !cfg.settings.server.proxy_auth.enabled
           || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set
@@ -524,6 +507,27 @@ in
         '';
       }
     ];
+
+    warnings = lib.optional (
+      !cfg.settings.oidc.enabled
+      && lib.any (p: p cfg.settings.oidc) [
+        # `issuer` and `client_id` have no default and error when unset, so
+        # guard the read; success means the user set them.
+        (o: (builtins.tryEval o.issuer).success)
+        (o: (builtins.tryEval o.client_id).success)
+        # The remaining predefined leaves default to `null` and are always
+        # readable; a non-null value means the user set them.
+        (o: o.client_secret_path != null)
+        (o: o.authorization_endpoint != null)
+        (o: o.token_endpoint != null)
+        (o: o.userinfo_endpoint != null)
+      ]
+    ) ''
+      services.headplane.settings.oidc.enable is now `false` by default. You have
+      set OIDC-related options under services.headplane.settings.oidc, but OIDC
+      will stay disabled until you explicitly set
+      `services.headplane.settings.oidc.enable = true`.
+    '';
 
     environment = {
       systemPackages = [ cfg.package ];
