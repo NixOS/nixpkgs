@@ -6,13 +6,13 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-orgs";
-  version = "0.175";
+  version = "0.180";
 
   src = fetchFromGitHub {
     owner = "p2-inc";
     repo = "keycloak-orgs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TKej3VjDLn3GJ8UPFyAzMQmMIZfktzcrK/CDWRqHuS4=";
+    hash = "sha256-M9adZ3oNf4ZcPgSVT++66ltznCc2vJM+eOrYrUk9qI4=";
   };
 
   mvnHash = "sha256-kU9nmiu/hWJaEfQzdVKC/IIWqZarRPpOqDP/bJQIIEY=";
