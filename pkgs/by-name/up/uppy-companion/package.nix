@@ -52,19 +52,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/packages/@uppy
-    mkdir $out/bin
-    mv packages/@uppy/companion $out/lib/packages/@uppy/companion
-    # Remove extra files
-    rm -rf $out/lib/packages/@uppy/companion/{*.md,LICENSE,Makefile,.*ignore,infra/,output/,test/,__mocks__/,*/json}
-    # Remove dev dependencies
-    rm -rf $out/lib/packages/@uppy/companion/node_modules/{.bin,webpack*,update*,tyepscript,jest*,eslint*,{@,}esbuild,{@,}rollup,terser,@types,execa,http-proxy,nock,supertest,vite*}
+    export yarnTmpDir=$(mktemp -d)
+    export yarnPack=$yarnTmpDir/yarn-pack.tgz
 
-    # Link final binary
-    ln -s $out/lib/packages/@uppy/companion/bin/companion $out/bin/companion
+    mkdir -p $out/lib/node_modules/@uppy/companion $out/bin
 
-    patchShebangs $out/bin/companion
+    pushd packages/@uppy/companion
 
+    yarn pack -o $yarnPack
+    tar xvf $yarnPack -C $out/lib/node_modules/@uppy/companion --strip-components 1 package/
+
+    rm -rf node_modules
+    yarn workspaces focus --production
+    find node_modules -maxdepth 1 -type d -empty -delete
+    cp -r node_modules $out/lib/node_modules/@uppy/companion/node_modules
+    popd
+
+    ln -s $out/lib/node_modules/@uppy/companion/bin/companion $out/bin/companion
     runHook postInstall
   '';
 
