@@ -240,29 +240,25 @@ in
                   mkdir -vp "$INSTANCE_DIR"
                   cd "$INSTANCE_DIR"
 
-                  # force reregistration on changed token or labels
-                  export TOKEN_HASH_FILE="$INSTANCE_DIR/.token-hash"
-                  export TOKEN_HASH_CURRENT="$(printf '%s' "$TOKEN" | sha256sum | cut -d' ' -f1)"
-                  export TOKEN_HASH_STORED="$(cat "$TOKEN_HASH_FILE" 2>/dev/null || echo "")"
-                  export LABELS_FILE="$INSTANCE_DIR/.labels"
-                  export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
-                  export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
+                  REGISTER_ARGS=( "--instance=${escapeShellArg instance.url}" \
+                      "--token=$TOKEN" \
+                      "--name=${escapeShellArg instance.name}" \
+                      "--labels=${escapeShellArg (concatStringsSep "," instance.labels)}" \
+                      "--config=${configFile}" )
 
-                  if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ] || [ "$TOKEN_HASH_CURRENT" != "$TOKEN_HASH_STORED" ]; then
+                  # force re-registration on changed args
+                  REGISTER_ARGS_HASH_CURRENT="$(printf '%s' "''${REGISTER_ARGS[@]}" | sha256sum | cut -d' ' -f1)"]
+                  REGISTER_ARGS_HASH_FILE="$INSTANCE_DIR/.args-hash"
+                  REGISTER_ARGS_HASH_STORED="$(cat $REGISTER_ARGS_HASH_FILE 2>/dev/null || echo "")"
+
+                  if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$REGISTER_ARGS_HASH_CURRENT" != "$REGISTER_ARGS_HASH_STORED" ]; then
                     # remove existing registration file, so that changing the token or labels forces a re-registration
                     rm -v "$INSTANCE_DIR/.runner" || true
 
                     # perform the registration
-                    ${getExe cfg.package} register --no-interactive \
-                      --instance ${escapeShellArg instance.url} \
-                      --token "$TOKEN" \
-                      --name ${escapeShellArg instance.name} \
-                      --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
-                      --config ${configFile}
-
+                    ${getExe cfg.package} register --no-interactive ''${REGISTER_ARGS[@]}
                     # and write back the configured labels and token hash
-                    printf '%s' "$TOKEN_HASH_CURRENT" > "$TOKEN_HASH_FILE"
-                    echo "$LABELS_WANTED" > "$LABELS_FILE"
+                    printf '%s' "$REGISTER_ARGS_HASH_CURRENT" > "$REGISTER_ARGS_HASH_FILE"
                   fi
 
                 '')
