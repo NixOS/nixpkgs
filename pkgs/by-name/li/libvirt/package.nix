@@ -1,18 +1,23 @@
 {
+  # Nix helpers
+  fetchFromGitLab,
   lib,
+  nixosTests,
+  replaceVars,
+  runtimeShell,
+  stdenv,
+  writeScript,
+  writeShellApplication,
+
+  # Build and runtime dependencies
   bash,
   bash-completion,
-  coreutils,
   curl,
-  darwin,
-  dnsmasq,
   docutils,
-  fetchFromGitLab,
   gettext,
   glib,
   gnutls,
-  iproute2,
-  iptables,
+  json_c,
   libpcap,
   libssh2,
   libtasn1,
@@ -20,32 +25,18 @@
   libxslt,
   makeWrapper,
   meson,
-  nftables,
   ninja,
-  openssh,
-  passt,
   perl,
-  polkit,
   pkg-config,
-  pmutils,
   python3,
   readline,
   rpcsvc-proto,
-  runtimeShell,
-  stdenv,
-  replaceVars,
-  json_c,
-  writeScript,
-  writeShellApplication,
-  nixosTests,
 
-  # Linux
+  # Build and runtime dependencies, Linux
   acl ? null,
   attr ? null,
   audit ? null,
-  dmidecode ? null,
   fuse3 ? null,
-  kmod ? null,
   libapparmor ? null,
   libcap_ng ? null,
   libnl ? null,
@@ -53,12 +44,30 @@
   libtirpc ? null,
   lvm2 ? null,
   numactl ? null,
-  numad ? null,
   parted ? null,
   systemd ? null,
   util-linux ? null,
 
-  # Darwin
+  # Build and runtime dependencies, Darwin
+  darwin,
+
+  # Runtime dependencies
+  dnsmasq,
+
+  # Runtime dependencies, Linux
+  coreutils,
+  dmidecode ? null,
+  iproute2,
+  iptables,
+  kmod ? null,
+  nftables,
+  numad ? null,
+  openssh,
+  passt,
+  pmutils,
+  polkit,
+
+  # Runtime dependencies, Darwin
   qemu,
 
   # Options
