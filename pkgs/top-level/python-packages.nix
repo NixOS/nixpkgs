@@ -13289,6 +13289,8 @@ self: super: with self; {
 
   pdbfixer = callPackage ../development/python-modules/pdbfixer { };
 
+  pdf-inspector = callPackage ../development/python-modules/pdf-inspector { };
+
   pdf-oxide = callPackage ../development/python-modules/pdf-oxide { };
 
   pdf2docx = callPackage ../development/python-modules/pdf2docx { };
