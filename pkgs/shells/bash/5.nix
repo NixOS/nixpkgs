@@ -91,14 +91,30 @@ lib.warnIf (withDocs != null)
 
     patchFlags = [ "-p0" ];
 
-    patches = upstreamPatches ++ [
-      # Enable PGRP_PIPE independently of the kernel of the build machine.
-      # This doesn't seem to be upstreamed despite such a mention of in https://github.com/NixOS/nixpkgs/pull/77196,
-      # which originally introduced the patch
-      # Some related discussion can be found in
-      # https://lists.gnu.org/archive/html/bug-bash/2015-05/msg00071.html
-      ./pgrp-pipe-5.patch
-    ];
+    patches =
+      upstreamPatches
+      ++ [
+        # Enable PGRP_PIPE independently of the kernel of the build machine.
+        # This doesn't seem to be upstreamed despite such a mention of in https://github.com/NixOS/nixpkgs/pull/77196,
+        # which originally introduced the patch
+        # Some related discussion can be found in
+        # https://lists.gnu.org/archive/html/bug-bash/2015-05/msg00071.html
+        ./pgrp-pipe-5.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Backport of upstream devel commit 03e7298d1eb7f7163cda94ee23dcfa983152a540:
+        # macOS can throttle the capacity of new pipes to 512 bytes, which makes
+        # pipe-backed here-documents block. Remove once the fix ships in an
+        # official bash 5.3 patch.
+        # https://lists.gnu.org/archive/html/bug-bash/2026-06/msg00126.html
+        ./darwin-heredoc-pipesize-dynamic.patch
+      ];
+
+    # The patch touches configure.ac as well, so refresh the generated configure
+    # to keep make from trying to regenerate it with autoconf.
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      touch configure
+    '';
 
     configureFlags = [
       # At least on Linux bash memory allocator has pathological performance
