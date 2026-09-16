@@ -271,6 +271,24 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  ml = mkAzExtension rec {
+    pname = "ml";
+    version = "2.44.0";
+    url = "https://github.com/Azure/azure-cli-extensions/releases/download/ml-${version}/ml-${version}-py3-none-any.whl";
+    hash = "sha256-Aqr208ZKEx4dKFSyS8W0pnU9tI2iJNodIYyE7Y03PMk=";
+    description = "Microsoft Azure Machine Learning Command-Line Tools";
+    propagatedBuildInputs = with python3Packages; [
+      azure-ai-ml
+      azure-identity
+      cryptography
+      docker
+    ];
+    # azure-mgmt-resourcegraph only backs a niche subcommand and is not packaged.
+    pythonRemoveDeps = [ "azure-mgmt-resourcegraph" ];
+    pythonRelaxDeps = true;
+    meta.maintainers = with lib.maintainers; [ jfroche ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.7";
