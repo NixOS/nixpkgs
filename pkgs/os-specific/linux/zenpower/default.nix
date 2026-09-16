@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "zenpower5";
-  version = "0.5.0-unstable-2026-01-07";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mattkeenan";
