@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   fetchpatch2,
   expat,
   fontconfig,
@@ -30,14 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "skia";
   # Version from https://skia.googlesource.com/skia/+/refs/heads/main/RELEASE_NOTES.md
   # or https://chromiumdash.appspot.com/releases
-  # plus date of the tip of the corresponding chrome/m$version branch
-  version = "144-unstable-2025-12-02";
+  # plus the date of the selected commit on the corresponding chrome/m$version branch
+  version = "148-unstable-2026-04-14";
 
-  src = fetchgit {
-    url = "https://skia.googlesource.com/skia.git";
-    # Tip of the chrome/m$version branch
-    rev = "ee20d565acb08dece4a32e3f209cdd41119015ca";
-    hash = "sha256-0LiFK/8873gei70iVhNGRlcFeGIp7tjDEfxTBz1LYv8=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "skia";
+    # Revision used by Ladybird's vcpkg baseline:
+    # https://github.com/microsoft/vcpkg/blob/7f3781e19cc7d4e4882a4caec01668c6f7b5c163/ports/skia/portfile.cmake
+    rev = "e7c90ecca9444fe09598f1630ab7cee2c0ee027a";
+    hash = "sha256-2+fxWqkNBStoN6l5Y3xMqkwvh69sCU6A//wz8fMnmjY=";
   };
 
   patches = [
@@ -120,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals enableVulkan [
       "skia_use_vulkan=true"
+      "extra_cflags+=[\"-DSK_USE_EXTERNAL_VULKAN_HEADERS\"]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "skia_use_fontconfig=true"
