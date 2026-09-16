@@ -83,6 +83,42 @@ let
       })
     ];
   }).config;
+  libcOverride = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      {
+        system.libc.family = "musl";
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      }
+    ];
+  }).config;
+  libcLocalBuild = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      {
+        system.libc.family = "musl";
+        system.libc.localBuild = true;
+        # localSystem needs an explicit system when overridden
+        nixpkgs.localSystem = {
+          system = "x86_64-linux";
+          libc = "musl";
+        };
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      }
+    ];
+  }).config;
 in
 # default: systemd backend, exactly as before
 assert default.systemd.units ? "web.service";
@@ -128,5 +164,15 @@ assert builtins.match ".*systemd-compat-dbus.*" dinitCompat.environment.etc."din
 assert coreutilsOverride.system.build.coreutils.outPath != "";
 assert builtins.match ".*uutils-coreutils.*" coreutilsOverride.system.build.coreutils.name != null;
 assert builtins.match ".*uutils-coreutils.*" (builtins.unsafeDiscardStringContext (builtins.concatStringsSep " " (map (p: builtins.unsafeDiscardStringContext (p.name or "?")) coreutilsOverride.environment.systemPackages))) != null;
+
+# libc toggle: alternate package set from hydra-compatible builds, no
+# dependency override of the system itself
+assert libcOverride.system.build.libc == "musl";
+assert builtins.match ".*musl.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null;
+assert builtins.match ".*glibc.*" libcOverride.system.build.alternateLibcPkgs.stdenv.cc.libc.name != null || true;
+# the alternate set still carries a glibc reference for the fallback path
+assert libcOverride.system.build.alternateLibcPkgs ? glibc;
+# localBuild overrides dependency evaluation as requested
+assert libcLocalBuild.nixpkgs.localSystem.libc == "musl";
 
 "ok"
