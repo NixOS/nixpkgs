@@ -65,14 +65,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.98.0";
+  version = "1.100.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-eMquDSSlBo//huXXiys/F36O18VDjv7U1OUe7DrKhus=";
+    hash = "sha256-tJZyZKaicIs+frpOEk3x5x6I4ZC3MTZ3HaCcPoFt/dA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -89,7 +89,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-iwgIclG8BGeHDNtm686w2Rxe+9ddvBrz1sMfOBeuKK0=";
+    hash = "sha256-BSYMyX6ZzfDEPB1UxQ2kapgjzvDyK0NZlTl1g3NsH0Q=";
   };
 
   postPatch = ''
@@ -197,7 +197,7 @@ buildPythonPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
   };
