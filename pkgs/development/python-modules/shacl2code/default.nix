@@ -67,6 +67,8 @@ buildPythonPackage (finalAttrs: {
     "tests/test_rust.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Convert SHACL model to code bindings";
     homepage = "https://github.com/JPEWdev/shacl2code";
