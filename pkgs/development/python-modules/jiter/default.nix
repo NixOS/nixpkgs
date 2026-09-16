@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jiter";
-  version = "0.12.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "jiter";
     tag = "v${version}";
-    hash = "sha256-d87RUXKEmZXxVQZnAvjwRKSP6F3Z+kXxg/LdY2l9B+k=";
+    hash = "sha256-EpAMw7cdPg0cux6MAoe0iWmBy5vI07QAShk0avTbpW0=";
   };
 
   postPatch = ''
