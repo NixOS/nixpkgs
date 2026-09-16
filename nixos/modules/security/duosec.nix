@@ -229,7 +229,7 @@ in
       '';
     };
 
-    systemd.services.pam-duo = lib.mkIf cfg.ssh.enable {
+    systemd.services.pam-duo = lib.mkIf cfg.pam.enable {
       wantedBy = [ "sysinit.target" ];
       before = [
         "sysinit.target"
