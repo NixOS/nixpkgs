@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfoundry${lib.optionalString withGtk "-gtk"}";
-  version = "1.2.beta";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/foundry/${lib.versions.majorMinor finalAttrs.version}/foundry-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XkYayf+EJUpGstiPsGVDgvRkrzqHmH8bZIRnXILcOJI=";
+    hash = "sha256-fIaqeQyJUga2aMnxjCGo9dIAeL2bJx+Yd2lNMelWSzQ=";
   };
 
   patches = [
