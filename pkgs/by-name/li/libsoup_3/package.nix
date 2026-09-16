@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   glib,
   meson,
   ninja,
@@ -38,39 +37,6 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-Tmpn+4/xN2V3r8JKJshCo0ewA06r9x7xPQOCscW8Bec=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2026-15711.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/60aa1ce2bdc7bb5da33be9062f50bcec7db67fca.patch";
-      hash = "sha256-13fU7zuzkb7wIH3BxylBaVyw6s/X6f4/ji9yYqYIcVg=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-12549.patch"; # Also: CVE-2026-77014, CVE-2026-77680
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/550.patch";
-      hash = "sha256-Dpd1qyJlIqNp6MzqyCKQ6anQr887e4J3CAGXEyzQOYU=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-15713.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/24fb645fa949ece7d7e10363b77cf2d5fa2c2469.patch";
-      hash = "sha256-TdWCOo2QnCnTbV0dPk4iGnNuwZO+LKSH1YFp2XAenwY=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-15712.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/3a6fb56a0cba42d11f5fd1db6dedcc7c2e92757b.patch";
-      hash = "sha256-IPYr77720+LOi3fp+x2M4MTKOm62As0dh8lZ5hKsuTU=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-15714.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/79a52cadc490360e249cc2b23038d532b44dbf23.patch";
-      hash = "sha256-p5J1QlfU+/be5YVahVTKt2QsxlRttrf62AYOa1QrwEo=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-85534.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/5f656cd97b8a6f4a5b8b7a30efb7c2cc8ef498fb.patch";
-      hash = "sha256-DD5HO+ZCn9Q/lVWWG9WnTBSeOe37Y3GD4dvsP4YuCLI=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
