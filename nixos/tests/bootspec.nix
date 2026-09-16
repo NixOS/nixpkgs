@@ -49,6 +49,8 @@ in
   grub = makeTest {
     name = "grub-with-bootspec";
     meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+    # NixOS VM tests cannot run on darwin.
+    meta.platforms = pkgs.lib.platforms.linux;
 
     nodes.machine = {
       imports = [
@@ -69,6 +71,8 @@ in
   legacy-boot = makeTest {
     name = "legacy-boot-with-bootspec";
     meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+    # NixOS VM tests cannot run on darwin.
+    meta.platforms = pkgs.lib.platforms.linux;
 
     nodes.machine = {
       imports = [
