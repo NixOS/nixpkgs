@@ -12,7 +12,7 @@
   python3Packages,
   docbook-xsl-nons,
   docbook_xml_dtd_42,
-  libgcrypt,
+  gnutls,
   gobject-introspection,
   buildPackages,
   withIntrospection ?
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libgcrypt
+    gnutls
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ]
   ++ lib.optionals abrmdSupport [ tpm2-abrmd ];
@@ -123,11 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ];
 
-  mesonFlags = [
+  mesonFlags =  [
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonBool "tpm2" withTpm2Tss)
     (lib.mesonOption "bashcompdir" "share/bash-completion/completions")
+    (lib.mesonOption "crypto" "gnutls")
   ]
   # interactive test environment relies on dbus-run-session
   ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
