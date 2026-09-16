@@ -183,7 +183,7 @@ beamPkgs.mixRelease (
                       else
                         originalCargoLock
                     } \
-                      'pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${finalBeam.env.beamModuleName}/Cargo.lock'
+                      'pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${finalBeam.env.beamModuleName}/Cargo.lock'
                   '';
                 };
             };
@@ -272,17 +272,17 @@ beamPkgs.mixRelease (
                 ];
                 text = ''
                   set -eux
-                  mkdir -p "pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}/"
-                  touch "pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}"/{yarnBerryOfflineCache.hash,missingHashes.json}
+                  mkdir -p "pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}/"
+                  touch "pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}"/{yarnBerryOfflineCache.hash,missingHashes.json}
                   nix -L --extra-experimental-features "nix-command" build --no-link -f . \
                     "bonfire-${finalAttrs.env.FLAVOUR}.mixNixDeps.${pname}.src"
                   yarnLock=$(nix -L --extra-experimental-features "nix-command" eval --raw -f . \
                     "bonfire-${finalAttrs.env.FLAVOUR}.yarnBerryOfflineCaches.${pname}.package.yarnLock")
                   yarn-berry-fetcher missing-hashes "$yarnLock" \
-                    >"pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}/missingHashes.json"
+                    >"pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}/missingHashes.json"
                   nurl --expr "let pkgs = import ./. {}; in
                     pkgs.bonfire-${finalAttrs.env.FLAVOUR}.yarnBerryOfflineCaches.${pname}.package
-                  " --hash >"pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/${pname}/yarnBerryOfflineCache.hash"
+                  " --hash >"pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}/yarnBerryOfflineCache.hash"
                 '';
               };
 
@@ -582,11 +582,11 @@ beamPkgs.mixRelease (
                             name = "ex_cldr-update";
                             runtimeInputs = [ nurl ];
                             text = ''
-                              mkdir -p pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/ex_cldr/
+                              mkdir -p pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/ex_cldr/
                               nurl --hash --expr 'let pkgs = import ./. {}; in
                                 pkgs.bonfire-${finalAttrs.env.FLAVOUR}.mixNixDeps.ex_cldr.src.overrideAttrs (previousMixPkg:
                                   { nativeBuildInputs = previousMixPkg.nativeBuildInputs or [] ++ [ pkgs.cacert ]; })
-                              ' >pkgs/by-name/bo/bonfire-${finalAttrs.env.FLAVOUR}/deps/ex_cldr/fetchFromGitHub.hash
+                              ' >pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/ex_cldr/fetchFromGitHub.hash
                             '';
                           };
                         };
