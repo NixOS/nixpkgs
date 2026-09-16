@@ -1,3 +1,7 @@
+# Update deprecated SQLAlchemy API calls for 2.0 compatibility:
+# - db.engine.execute() -> db.session.scalar()
+# - case() syntax fix (remove square brackets)
+# - autoload=True removed (use autoload_with= instead)
 --- a/liberaforms/models/user.py
 +++ b/liberaforms/models/user.py
 @@ -538,7 +538,7 @@
