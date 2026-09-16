@@ -97,9 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
   ];
 
+  installTargets = if translationSupport then "install" else "install_no_locale";
+
+  preBuild = if translationSupport then "" else "buildFlagsArray+=(all_no_locale)";
+
   doCheck = true;
   preCheck = ''
-    substituteInPlace Makefile --replace "PYTHONPATH=$(shell pwd)" "PYTHONPATH=$PYTHONPATH:$(shell pwd)"
     export PYTEST="py.test"
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
