@@ -14,6 +14,7 @@
   iproute2,
   iptables,
   libpcap,
+  libssh2,
   libtasn1,
   libxml2,
   libxslt,
@@ -209,6 +210,7 @@ stdenv.mkDerivation rec {
     glib
     gnutls
     libpcap
+    libssh2
     libtasn1
     libxml2
     python3
