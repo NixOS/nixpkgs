@@ -7,7 +7,7 @@ let
   escapeVersion = builtins.replaceStrings [ "." ] [ "_" ];
   packages = lib.mapAttrs' (version: value: {
     name = "papermc-${escapeVersion version}";
-    value = callPackage ./derivation.nix { inherit (value) version hash; };
+    value = callPackage ./derivation.nix { inherit (value) version hash url; };
   }) versions;
 in
 lib.recurseIntoAttrs (

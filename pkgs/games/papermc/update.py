@@ -8,12 +8,15 @@ import json
 
 import requests
 
+HEADER = "User-Agent: nixpkgs/1.0.0 https://github.com/nixos/nixpkgs"
+
 
 class Version:
     def __init__(self, name: str):
         self.name: str = name
         self.hash: str | None = None
         self.build_number: int | None = None
+        self.url: str | None = None
 
     @property
     def full_name(self):
@@ -27,7 +30,7 @@ class Version:
 
 
 class VersionManager:
-    def __init__(self, base_url: str = "https://api.papermc.io/v2/projects/paper"):
+    def __init__(self, base_url: str = "https://fill.papermc.io/v3/projects/paper"):
         self.versions: list[Version] = []
         self.base_url: str = base_url
 
@@ -36,7 +39,8 @@ class VersionManager:
         Fetch all versions after given minor release
         """
 
-        response = requests.get(self.base_url)
+        url = f"{self.base_url}/versions"
+        response = requests.get(url, headers=HEADER)
 
         try:
             response.raise_for_status()
@@ -45,19 +49,23 @@ class VersionManager:
             print(e)
             return
 
-        # we only want versions that are no pre-releases
-        release_versions = filter(
-            lambda v_name: all(s not in v_name for s in ["pre", "rc"]), response.json()["versions"])
+
+        release_versions = response.json()["versions"][::-1]
 
         for version_name in release_versions:
+            version_id = version_name["version"]["id"]
+
+            # we only want versions that are not pre-releases
+            if ("pre" in version_id) or ("rc" in version_id):
+                continue
 
             # split version string, convert to list ot int
-            version_split = version_name.split(".")
+            version_split = version_id.split(".")
             version_split = list(map(int, version_split))
 
             # check if version is higher than 1.<not_before_sub_version>
             if (version_split[0] > 1) or (version_split[0] == 1 and version_split[1] >= not_before_minor_version):
-                self.versions.append(Version(version_name))
+                self.versions.append(Version(version_id))
 
     def fetch_latest_version_builds(self):
         """
@@ -65,8 +73,8 @@ class VersionManager:
         """
 
         for version in self.versions:
-            url = f"{self.base_url}/versions/{version.name}"
-            response = requests.get(url)
+            url = f"{self.base_url}/versions/{version.name}/builds/latest"
+            response = requests.get(url, headers=HEADER)
 
             # check that we've got a good response
             try:
@@ -76,26 +84,45 @@ class VersionManager:
                 print(e)
                 return
 
-            # the highest build in response.json()['builds']:
-            latest_build = response.json()['builds'][-1]
+            # the latest build from the api
+            latest_build = response.json()['id']
             version.build_number = latest_build
+            # Grab the url from the api
+            version.url = response.json()['downloads']['server:default']['url']
 
     def generate_version_hashes(self):
         """
-        Generate and set the hashes for all registered versions (versions will are downloaded to memory)
+        Fetch and set the hashes for all registered versions (versions are downloaded to memory)
         """
 
+        print("Fetching version hashes")
         for version in self.versions:
-            url = f"{self.base_url}/versions/{version.name}/builds/{version.build_number}/downloads/paper-{version.full_name}.jar"
-            version.hash = self.download_and_generate_sha256_hash(url)
+            url = f"{self.base_url}/versions/{version.name}/builds/{version.build_number}"
+            response = requests.get(url, headers=HEADER)
+
+            # check that we've got a good response
+            try:
+                response.raise_for_status()
+
+            except requests.exceptions.HTTPError as e:
+                print(e)
+                return
+            hex_hash = response.json()["downloads"]["server:default"]["checksums"]["sha256"]
+            raw_bytes = bytes.fromhex(hex_hash)
+
+            base64_encoded = base64.b64encode(raw_bytes).decode('utf-8')
+
+            version.hash  = f"sha256-{base64_encoded}"
+
 
     def versions_to_json(self):
         return json.dumps(
-            {version.name: {'hash': version.hash, 'version': version.full_name}
+            {version.name: {'hash': version.hash, 'version': version.full_name, 'url': version.url}
                 for version in self.versions},
             indent=4
         )
 
+    @staticmethod
     def find_version_json() -> str:
         """
         Find the versions.json file in the same directory as this script
@@ -108,39 +135,6 @@ class VersionManager:
         with open(file_name, 'w') as f:
             f.write(self.versions_to_json() + "\n")
 
-    @staticmethod
-    def download_and_generate_sha256_hash(url: str) -> str | None:
-        """
-        Fetch the tarball from the given URL.
-        Then generate a sha256 hash of the tarball.
-        """
-
-        try:
-            # Download the file from the URL
-            response = requests.get(url)
-            response.raise_for_status()
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-            return None
-
-        # Create a new SHA-256 hash object
-        sha256_hash = hashlib.sha256()
-
-        # Update the hash object with chunks of the downloaded content
-        for byte_block in response.iter_content(4096):
-            sha256_hash.update(byte_block)
-
-        # Get the hexadecimal representation of the hash
-        hash_value = sha256_hash.digest()
-
-        # Encode the hash value in base64
-        base64_hash = base64.b64encode(hash_value).decode('utf-8')
-
-        # Format it as "sha256-{base64_hash}"
-        sri_representation = f"sha256-{base64_hash}"
-
-        return sri_representation
 
 
 if __name__ == '__main__':
