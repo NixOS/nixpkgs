@@ -78,6 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
   # libgcc_s.so.1 for the retained typst-gather and deno_dom binaries
   ++ lib.optionals stdenv.hostPlatform.isLinux [ (stdenv.cc.cc.libgcc or null) ];
 
+  # Patches quarto to use older API's from pandoc 3.7
+  # Quarto upstream is built against, and expects pandoc 3.8+ .
+  patches = lib.optionals (lib.versionOlder pandoc.version "3.8") [
+    ./older-pandoc-compat.patch
+  ];
+
   dontStrip = true;
 
   preFixup = ''
