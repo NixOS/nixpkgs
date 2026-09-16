@@ -7,7 +7,7 @@
   libinput,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "fusuma";
   gemdir = ./.;
   exes = [ "fusuma" ];
@@ -24,7 +24,7 @@ bundlerApp rec {
       }
   '';
 
-  passthru.updateScript = bundlerUpdateScript pname;
+  passthru.updateScript = bundlerUpdateScript "fusuma";
 
   meta = {
     description = "Multitouch gestures with libinput driver on X11, Linux";
