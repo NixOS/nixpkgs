@@ -2967,6 +2967,7 @@ with pkgs;
     pnpm_10_29_2
     pnpm_10
     pnpm_11
+    pnpm_12
     ;
   pnpm = pnpm_11;
 

@@ -5,4 +5,5 @@
   pnpm-workspaces = lib.recurseIntoAttrs (callPackage ./pnpm-workspaces { });
   pnpm_11_v3 = callPackage ./pnpm_11_v3 { };
   pnpm_11_v4 = callPackage ./pnpm_11_v4 { };
+  pnpm_12_v4 = callPackage ./pnpm_12_v4 { };
 }
