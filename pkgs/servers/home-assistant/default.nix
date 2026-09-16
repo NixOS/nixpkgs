@@ -470,9 +470,6 @@ python3Packages.buildPythonApplication rec {
     "tests/util/test_package.py::test_check_package_fragment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "tests/test_test_fixtures.py::test_evict_faked_translations"
-    "tests/helpers/test_backup.py::test_async_get_manager"
-    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
   ];
 
   preCheck = ''
