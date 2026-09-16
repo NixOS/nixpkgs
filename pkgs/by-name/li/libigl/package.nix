@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libigl";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "libigl";
     repo = "libigl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uef7aTF2U3iPVAWDGRIsH0YV0l/w8VxtYFPYVkuC1dI=";
+    hash = "sha256-/+wE3ZgqHWdLMaZZE/j7unrx10nd6sh9+JF5P0HB8i4=";
   };
 
   # We could also properly use CMake, but we would have to heavily patch it

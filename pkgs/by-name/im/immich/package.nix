@@ -109,13 +109,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ufdMwERs1h+m2usMHztZicRXpI20BM+2PeOLBArXw1Y=";
+    hash = "sha256-napG+EMZbbbeq7R8FtnuDsDwdpxItkwTVWztnw07DfA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
