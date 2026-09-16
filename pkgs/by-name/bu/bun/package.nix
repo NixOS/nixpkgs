@@ -14,6 +14,7 @@
   cctools,
   darwin,
   rcodesign,
+  callPackages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -66,6 +67,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    inherit (callPackages ./hooks { bun = finalAttrs.finalPackage; })
+      prefetch-bun-deps
+      fetchDeps
+      configHook
+      ;
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
@@ -118,6 +124,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       thilobillerbeck
       cdmistman
       diogomdp
+      eveeifyeve
     ];
     platforms = builtins.attrNames finalAttrs.passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:
