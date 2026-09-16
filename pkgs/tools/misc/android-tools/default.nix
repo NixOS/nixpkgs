@@ -7,7 +7,9 @@
   pkg-config,
   perl,
   python3,
-  protobuf,
+  # fails to build with protobuf_36
+  # FIXME: unpin when upstream is fixed
+  protobuf_35,
   zlib,
   gtest,
   brotli,
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     perl
   ];
   buildInputs = [
-    protobuf
+    protobuf_35
     zlib
     gtest
     brotli

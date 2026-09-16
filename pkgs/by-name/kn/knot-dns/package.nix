@@ -23,8 +23,8 @@
   xdp-tools,
   fstrm,
   protobufc,
-  sphinx,
   autoreconfHook,
+  tzdata,
   nixosTests,
   knot-resolver_5,
   knot-resolver-manager_6,
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.5.8";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://knot-dns.nic.cz/release/knot-${finalAttrs.version}.tar.xz";
-    sha256 = "4197c902feccf32475b254c7ddaa1ac123700e3895f50b80103ffeb8352a2807";
+    sha256 = "922894f04a2835131a24c3b3edcbf761273c1b37d3dc4e46d6923ee3856af130";
   };
 
   outputs = [
@@ -62,12 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./runtime-deps.patch
   ];
 
-  # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
     protobufc # dnstap support
     autoreconfHook
-    sphinx
+    tzdata # tests/contrib/test_time
   ];
   buildInputs = [
     gnutls

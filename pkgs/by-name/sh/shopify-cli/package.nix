@@ -19,20 +19,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = "4.6.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "shopify";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-c+fp/ml5x4CLmpkTxAZrB/zqaDWuG3cgrjNdmuvHdKY=";
+    hash = "sha256-I/VkGxyvlJpUHumxhkTFyj8owa7DVKdlK/aj8shDb7w=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-091Zp3bzAYdZzOElCz9WqdkuRfz1T6BFBCj4EfegQ4g=";
+    hash = "sha256-YGC4oHoWhmQ9snEGV7pjjLm3aICpx1+NBBNRevNQry8=";
   };
 
   nativeBuildInputs = [

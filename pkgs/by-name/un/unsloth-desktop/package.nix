@@ -3,12 +3,14 @@
   stdenv,
   cacert,
   buildFHSEnv,
+  nix-update-script,
   fetchurl,
   dpkg,
+  glib-networking,
 }:
 
 let
-  version = "0.1.804-beta";
+  version = "0.1.808-beta";
 
   unsloth-desktop-unwrapped = stdenv.mkDerivation {
     pname = "unsloth-desktop-unwrapped";
@@ -16,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/unslothai/unsloth/releases/download/v${version}/Unsloth-Desktop-Ubuntu.deb";
-      hash = "sha256-DrHbR7pGeTtvlPIDZD0SPO6pUf792Rskd1x1ANMmpfw=";
+      hash = "sha256-cyKUax4L5foIOT6RyOeGnbH72kpLFKjWtYv0cJszkLw=";
     };
 
     nativeBuildInputs = [ dpkg ];
@@ -60,11 +62,15 @@ buildFHSEnv {
       libnghttp2
       nodejs_24
       cacert
+      gcc
+      pciutils
     ];
 
   profile = ''
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
     export WEBKIT_DISABLE_DMABUF_RENDERER=1
+    export CC=gcc
   '';
 
   runScript = "${unsloth-desktop-unwrapped}/usr/bin/unsloth-studio";
@@ -78,7 +84,13 @@ buildFHSEnv {
       $out/share/icons/hicolor/128x128/apps/unsloth-studio.png
   '';
 
-  passthru = { inherit unsloth-desktop-unwrapped; };
+  passthru = {
+    inherit unsloth-desktop-unwrapped;
+    updateScript = nix-update-script {
+      attrPath = "unsloth-desktop.unsloth-desktop-unwrapped";
+      extraArgs = [ "--version=unstable" ];
+    };
+  };
 
   meta = {
     description = "Desktop application for running and training AI models locally";

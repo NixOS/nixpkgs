@@ -7,14 +7,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "terminal-space-program";
-  version = "0.38.1";
+  version = "0.40.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jasonfen";
     repo = "terminal-space-program";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G9yUzzREgu1OK44NbSs9teS+yP8dRZIV8gvATklc804=";
+    hash = "sha256-ZdSzBlw1x4Z1JjvvddGretcbFPEnfyg/pFuUJO93Xxo=";
   };
 
   vendorHash = "sha256-5bhIP7It6rqOFvXRBUIP6/nGz4X+dzm3/BjVeo3nw4I=";

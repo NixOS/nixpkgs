@@ -7,21 +7,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "ffuf";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "ffuf";
     repo = "ffuf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xN7FxxxIpkaGlfBgs0RwEPlzo/HLMfioC6MAMVP2su8=";
+    hash = "sha256-bnxpfomvih4/SVs7aqVICsW9AML/E8LODP+peg7x64M=";
   };
 
   vendorHash = "sha256-SrC6Q7RKf+gwjJbxSZkWARw+kRtkwVv1UJshc/TkNdc=";
 
   ldflags = [
     "-s"
-    "-X github.com/ffuf/ffuf/v${(lib.versions.major finalAttrs.version)}/pkg/ffuf.VERSION=${finalAttrs.version}"
-    "-X github.com/ffuf/ffuf/v${(lib.versions.major finalAttrs.version)}/pkg/ffuf.VERSION_APPENDIX="
+    "-X=github.com/ffuf/ffuf/v${(lib.versions.major finalAttrs.version)}/pkg/ffuf.VERSION=${finalAttrs.version}"
+    "-X=github.com/ffuf/ffuf/v${(lib.versions.major finalAttrs.version)}/pkg/ffuf.VERSION_APPENDIX="
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -29,6 +29,11 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = "-V";
+
+  checkFlags = [
+    # These integration tests require a local server
+    "-skip=^(TestE2E_JSONOutput|TestE2E_DefaultMatcher|TestE2E_MatcherSuppressesDefault)$"
+  ];
 
   meta = {
     description = "Tool for web fuzzing";

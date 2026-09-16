@@ -16,21 +16,25 @@
 
 buildPythonPackage rec {
   pname = "bgutil-ytdlp-pot-provider";
-  version = "1.3.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brainicism";
     repo = "bgutil-ytdlp-pot-provider";
     tag = version;
-    hash = "sha256-dhpataQ1HSCRPnm4k3K/NMaQPQdNrx8C4q855l7kbbQ=";
+    hash = "sha256-mmcRzTLzdjI/zHArUMPkhQ4uKmYhabiG7RpvH4IBxjc=";
   };
+
+  postPatch = ''
+    cp README.md plugin/README.md
+  '';
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     src = src + "/server";
-    npmDepsFetcherVersion = 2;
-    hash = "sha256-Qwwi6W+Oeu6ZeLmZP5vEfAKOJyivbULR5mlk7tcVIE8=";
+    npmDepsFetcherVersion = 3;
+    hash = "sha256-1yrRJQ53v4LxzEsc6VODrKgzCdELyMCVfwyCLZSzWek=";
   };
 
   npmRoot = "server";

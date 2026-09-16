@@ -58,6 +58,20 @@ let
         {
           inherit version src sourceRoot;
 
+          # Account for divergences with the main `tokenizers` derivation:
+          postPatch = "";
+          disabledTests = [
+            # PermissionError: [Errno 13] Permission denied: 'tests/data/small.txt'
+            "TestUnigram"
+
+            # huggingface_hub.errors.LocalEntryNotFoundError: An error happened while trying to
+            # locate the file on the Hub and we cannot find the requested files in the local cache.
+            # Please check your connection and try again or make sure your Internet connection is on.
+            "TestAsyncTokenizer"
+            "TestTokenizer"
+            "TestTrainFromIterators"
+          ];
+
           cargoDeps = rustPlatform.fetchCargoVendor {
             inherit (oldAttrs) pname;
             inherit version src sourceRoot;

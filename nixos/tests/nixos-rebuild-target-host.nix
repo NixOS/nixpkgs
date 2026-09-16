@@ -5,7 +5,9 @@
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
   #        make it a _small package instead, then remove pkgsReadOnly = false;.
   node.pkgsReadOnly = false;
-
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
   nodes = {
     deployer =
       { lib, pkgs, ... }:

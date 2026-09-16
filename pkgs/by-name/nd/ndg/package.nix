@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ndg";
-  version = "2.9.0";
+  version = "2.10.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "feel-co";
     repo = "ndg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-be9NxraQyoB4wLjiPHxpmklfJYuB+Qs/x69P395I1Fk=";
+    hash = "sha256-tgZeZOK8rpaN0QiUtWQTMrd04kWRT+EV6MdNUzZUy/4=";
   };
 
-  cargoHash = "sha256-N0em5kNY94sdPv3Fcpprk09yx1yKo8GZMWND/FJSSIw=";
+  cargoHash = "sha256-lB/GmlFaXLfmwRMgSvFtgrsl+GFMGlUGF8SnDCD3o1I=";
 
   nativeBuildInputs = [ installShellFiles ];
 

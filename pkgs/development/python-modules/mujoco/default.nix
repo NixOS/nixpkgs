@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-OLs+r0JRk3qF1Ysl9VsWeSlxVbxPTpZEkNH9n0L4v5M=";
+    hash = "sha256-U5F11dsl0Z7BRRcPomR4SmJsXssif3jRh341oKeVX2k=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -86,11 +86,20 @@ buildPythonPackage (finalAttrs: {
       in
       ''
         ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
-        ${lib.getExe perl} -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
+      ''
+      # In 3.13.0, lodepng moved from simulate/CMakeLists.txt to
+      # cmake/third_party_deps/lodepng.cmake and uses fetchpackage (same-line args)
+      + ''
+        ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO[^\n]*\n[^\n]*GIT_TAG[^\n]*\n//g" mujoco/cmake/third_party_deps/lodepng.cmake
 
         build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps
-        ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+      ''
+      # lodepng needs a custom CMakeLists.txt copied into its source dir by FindOrFetch, so it must
+      # be writable
+      + ''
+        cp -r ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+        chmod -R +w $build/_deps/lodepng-src
         ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
         ln -s ${mujoco.pin.abseil-cpp} $build/_deps/abseil-cpp-src
       ''

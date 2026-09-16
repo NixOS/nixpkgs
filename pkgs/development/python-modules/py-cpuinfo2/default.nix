@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-cpuinfo2";
-  version = "10.1.0";
+  version = "10.1.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "akx";
     repo = "py-cpuinfo2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pNesRzR2LynC/if95SZH+47sW6WOJ9soXCyX8TQrpso=";
+    hash = "sha256-7w5d8TEfNeSuS7CSaHolOuHri948v6JccIPtIbQr77o=";
   };
 
   build-system = [ hatchling ];

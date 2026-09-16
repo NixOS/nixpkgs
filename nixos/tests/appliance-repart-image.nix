@@ -46,6 +46,8 @@ in
       };
 
       image.repart = {
+        enable = true;
+
         name = "appliance-gpt-image";
         # OVMF does not work with the default repart sector size of 4096
         sectorSize = 512;
@@ -90,7 +92,16 @@ in
               Minimize = "guess";
             };
           };
-        };
+        }
+        // (lib.genAttrs [ "squashfs" "erofs" "btrfs" "xfs" "swap" "empty" ] (fsType: {
+          repartConfig = {
+            Type = "linux-generic";
+            Format = fsType;
+
+            SizeMinBytes = "10M";
+            SizeMaxBytes = "10M";
+          };
+        }));
       };
     };
 

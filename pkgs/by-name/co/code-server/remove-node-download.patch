@@ -20,11 +20,10 @@
  			...web
  		);
  
-@@ -515,7 +511,6 @@
+@@ -658,6 +654,5 @@
  
  			const packageTasks: task.Task[] = [
  				compileNativeExtensionsBuildTask,
--				gulp.task(`node-${platform}-${arch}`) as task.Task,
+-				task.task(`node-${platform}-${arch}`) as task.Task,
  				util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
  				packageTask(type, platform, arch, sourceFolderName, destinationFolderName),
- 				copyCopilotNativeDepsTaskREH(platform, arch, destinationFolderName)

@@ -18,13 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-+Vwrc3l8SgNBpCp7PEPvtglUxBMNCCrTSP1A2lVLToU=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace man/Makefile.in \
-      --replace-fail \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
-  '';
-
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
@@ -73,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.gpl3Plus;
 
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      booxter
+      raskin
+    ];
     platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
 })

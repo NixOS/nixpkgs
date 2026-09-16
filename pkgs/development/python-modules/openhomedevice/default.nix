@@ -9,16 +9,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openhomedevice";
-  version = "2.3.1";
+  version = "2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bazwilliams";
     repo = "openhomedevice";
-    tag = version;
-    hash = "sha256-u05aciRFCnqMJRClUMApAPDLpXOKn4wUTLgvR7BVZTA=";
+    tag = finalAttrs.version;
+    hash = "sha256-vAOPsoZoDrsl2KQeZHlh0UC1ay3nnkdfk05xMkpsp3A=";
   };
 
   build-system = [ setuptools ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access Linn Ds and Openhome devices";
     homepage = "https://github.com/bazwilliams/openhomedevice";
-    changelog = "https://github.com/bazwilliams/openhomedevice/releases/tag/${version}";
+    changelog = "https://github.com/bazwilliams/openhomedevice/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

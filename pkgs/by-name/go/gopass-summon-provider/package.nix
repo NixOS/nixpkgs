@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gopass-summon-provider";
-  version = "1.17.0";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-summon-provider";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QBulvVbpJCtQ3ay655ic0J9sPR2JfwFlVPzLXEYX79Q=";
+    hash = "sha256-OWQQXMUKz8EmyowTVRaO8FhskXEGO0asWP7J/Xqd90k=";
   };
 
-  vendorHash = "sha256-QShKZLYF3/uMFb7O2MGfLB2cFVQwlVLF/Bi2f0UuCDA=";
+  vendorHash = "sha256-7wwjPcnAJ/9l8ff2qqqU/Z8l223g0GDogJbf3TwcOaw=";
 
   subPackages = [ "." ];
 

@@ -15,6 +15,7 @@
   libxtst,
   fontconfig,
   libxkbcommon,
+  playerctl,
 }:
 
 let
@@ -34,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "rush-lyrics";
-  version = "6.6.1";
+  version = "6.7.1";
 
   src = fetchFromGitHub {
     owner = "shub39";
     repo = "Rush";
     tag = finalAttrs.version;
-    hash = "sha256-bUsr2JKAXZPNfRoAnbo433ojfioQ6v6IzNCzUaYMqAA=";
+    hash = "sha256-EeONyTVKunOU28im/vtsDLmcSAQr0PclCZXRfqn/A3Y=";
   };
 
   patches = [
@@ -78,9 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/rush-lyrics
     cp -r desktopApp/build/compose/binaries/main/app/Rush/* $out/share/rush-lyrics/
 
-    # Wrap runtime binary to prefix graphics libraries
+    # Wrap runtime binary to prefix graphics libraries and playerctl CLI
     makeWrapper $out/share/rush-lyrics/bin/Rush $out/bin/rush-lyrics \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}" \
+      --prefix PATH : "${lib.makeBinPath [ playerctl ]}"
 
     # Install icon
     install -Dm644 fastlane/metadata/android/en-US/images/icon.png $out/share/icons/hicolor/512x512/apps/rush-lyrics.png

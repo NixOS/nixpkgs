@@ -15,19 +15,19 @@ let
 
   channels = {
     stable = {
-      version = "2.35.6";
+      version = "2.36.5";
       hash = {
-        x86_64-linux = "sha256-l4a3a1iFi/HhQTzFEiPAqWnvOhrkKZzKYguZDt6pQwU=";
-        aarch64-linux = "sha256-zlwfykMFvrxamPjDHJEnl9Hj8aVtQbU/rSAKJgM+I+Y=";
-        aarch64-darwin = "sha256-Cl53iiUTAITpzKL01dFQ8Mmpm3fgghwrwQ5wfXTaooo=";
+        x86_64-linux = "sha256-TovfhiOdKXECexfDbDyWPG2WJODxb/FXoo1gkN8/t3E=";
+        aarch64-linux = "sha256-qJgULdK0Yr4cJ0aRFxcrvS1v/i69peTc6KTiTFgeupU=";
+        aarch64-darwin = "sha256-qoiAdTn4NHBJYTpO6dhO4+fTSQC+0bB8KspcJ9ikokM=";
       };
     };
     mainline = {
-      version = "2.36.3";
+      version = "2.37.1";
       hash = {
-        x86_64-linux = "sha256-3iY/0vfXvfwlyFrK3AtTSeVv23HfuDyUMQN2pwWDYyM=";
-        aarch64-linux = "sha256-mEBiJ6WAb48wWlkYfA7OWRSSvYAZFTLbZr5595DFoKk=";
-        aarch64-darwin = "sha256-31CYBjGdlPkHcne1QPrSCaL7sZ/6DcDiHvC3boK+XS0=";
+        x86_64-linux = "sha256-3GGT5dlUDvwpVYeyQnQ7rGXlOo3QgS+T9h1lQW0xlBM=";
+        aarch64-linux = "sha256-2V1391sZql4LcqGfpuetBK5ArEitSHCmOhLLF7yqB6c=";
+        aarch64-darwin = "sha256-QNcVN9m2b0PR2LiGwlt75iu4f0Fphb2fNJ/JzTnejes=";
       };
     };
   };

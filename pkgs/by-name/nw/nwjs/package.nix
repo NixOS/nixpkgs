@@ -24,7 +24,6 @@
   libuuid,
   libxcb,
   libxkbcommon,
-  makeWrapper,
   libgbm,
   nspr,
   nss,
@@ -49,8 +48,6 @@
 }:
 
 let
-  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
-
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
@@ -102,7 +99,7 @@ let
     ];
   };
 
-  version = "0.102.1";
+  version = "0.115.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -111,19 +108,27 @@ stdenv.mkDerivation {
   src =
     let
       flavor = if sdk then "sdk-" else "";
-    in
-    fetchurl {
-      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
+
+      arch =
+        if stdenv.hostPlatform.is64bit then
+          "x64"
+        else if stdenv.hostPlatform.isAarch64 then
+          "arm64"
+        else
+          throw "nwjs: unsupported architecture.";
+
       # TODO: Write an update script to update all 4 hashes.
       # nixpkgs-update: no auto update
-      hash =
-        {
-          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
-          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
-          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
-          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
-        }
-        ."${flavor + bits}";
+      hashes = {
+        "sdk-arm64" = "sha256-yhAQNZ4eMAZIouD+twxfWPgL91b8pRR7YzVODwu0npg=";
+        "sdk-x64" = "sha256-H1yRI+xR/7+TDQ6xaswrvqhJcObO9ZVm6qXIDT5FTQc=";
+        "arm64" = "sha256-RF2QCVIRKd00heZKyzirCr7ePLjlGza19u8CN4fcxT0=";
+        "x64" = "sha256-XlGTxRWd7jwmCXrgSG8q/0tciW21p8f1wr8a4n8rmNk=";
+      };
+    in
+    fetchurl {
+      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${arch}.tar.gz";
+      hash = hashes."${flavor + arch}";
     };
 
   nativeBuildInputs = [
@@ -168,15 +173,16 @@ stdenv.mkDerivation {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [
-      "i686-linux"
+      "aarch64-linux"
       "x86_64-linux"
     ];
+    changelog = "https://github.com/nwjs/nw.js/blob/nw-v${version}/CHANGELOG.md";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.mikaelfangel ];
+    maintainers = with lib.maintainers; [
+      mikaelfangel
+      eljamm
+    ];
     mainProgram = "nw";
     license = lib.licenses.mit;
-    knownVulnerabilities = [
-      "Uses Chrome 139.0.7258.128, known to have many vulnerabilities."
-    ];
   };
 }

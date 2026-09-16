@@ -5,25 +5,31 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  libayatana-appindicator,
-  webkitgtk_4_1,
-  xdotool,
+  fontconfig,
+  libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
+  wayland,
+  xdg-utils,
   zenity,
   withGui ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
-  version = "0.8.11";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zZ8xltFgdPAfx+jtnnyLzzoC4r/L4oVjt59YemoDtgE=";
+    hash = "sha256-guB9yGT+aliRORJE4iYKB2RAFuQOFkdzI0RCf0Y1pKI=";
   };
 
-  cargoHash = "sha256-zqeWNf1fOGJFvRFU8ABm4s2QCfo4loNCPC1Zj19XE1U=";
+  cargoHash = "sha256-BYKVRD7H2uEE0oxyAn21tb0a6Qkx6nwrImh/Nk8zZDM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,12 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals (withGui && stdenv.hostPlatform.isLinux) [
-    webkitgtk_4_1
-    xdotool
+    fontconfig
   ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
+  buildFeatures = [ "doh" ] ++ lib.optional withGui "gui";
 
   checkFlags = [
     # these want internet access, disable them
@@ -44,14 +49,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-  '';
-
   postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \
-      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xdg-utils
+          zenity
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libx11
+          libxcursor
+          libxi
+          libxkbcommon
+          libxrandr
+          wayland
+        ]
+      }
   '';
 
   meta = {

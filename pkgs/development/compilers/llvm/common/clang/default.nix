@@ -32,12 +32,18 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
-        ''
+        runCommand "clang-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/clang "$out"
+            ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+          ''
       else
         src;
 
@@ -92,6 +98,8 @@ stdenv.mkDerivation (
       libxml2
       libllvm
     ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
@@ -213,6 +221,8 @@ stdenv.mkDerivation (
         enableClangToolsExtra = false;
       };
     };
+
+    __structuredAttrs = true;
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {

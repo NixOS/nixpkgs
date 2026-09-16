@@ -6,17 +6,17 @@
   nixosTests,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "calibre-web";
-  version = "0.6.26-unstable-2026-03-01";
+  version = "0.6.27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
-    # remember changing this back (and changelog below) to tag after new release come out
-    rev = "6157f5027c979aa05f8d97a09f1388ceb3085ac5";
-    hash = "sha256-1ljMsf8Puvq4ELUSi8Vl3T7EHcd7MO3zGgT4j5PYsT0=";
+    tag = finalAttrs.version;
+    hash = "sha256-ULUEQ35R+jI0nCrwYkTvmaUqpi1a/Sjvs5kWHYfTTWY=";
   };
 
   patches = [
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     mv cps src/calibreweb
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'cps = "calibreweb:main"' 'calibre-web = "calibreweb:main"'
+      --replace-fail 'cps = "calibreweb.__main__:main"' 'calibre-web = "calibreweb.__main__:main"'
   '';
 
   build-system = [ python3Packages.setuptools ];
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     iso-639
     lxml
     netifaces-plus
+    nh3
     pycountry
     pypdf
     python-magic
@@ -141,7 +142,7 @@ python3Packages.buildPythonApplication rec {
     "wand"
   ];
 
-  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "calibreweb" ];
 
@@ -153,12 +154,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
-    # revert back to tag based changelog
-    # changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
-    changelog = "https://github.com/janeczku/calibre-web/compare/0.6.26...${src.rev}";
+    changelog = "https://github.com/janeczku/calibre-web/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ juli0604 ];
     mainProgram = "calibre-web";
     platforms = lib.platforms.all;
   };
-}
+})

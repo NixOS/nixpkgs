@@ -684,6 +684,9 @@ let
       nodes =
         let
           commonConfig = {
+            # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+            nix.enable = true;
+
             # builds stuff in the VM, needs more juice
             virtualisation.diskSize = 12 * 1024;
             virtualisation.cores = 8;
@@ -772,7 +775,7 @@ let
                   # Only the out output is included here, which is what is
                   # required to build the NixOS udev rules
                   # See the comment in services/hardware/udev.nix
-                  systemdMinimal.out
+                  systemd.out
 
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download

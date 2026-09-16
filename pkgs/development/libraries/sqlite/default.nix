@@ -27,18 +27,18 @@ let
   archiveVersion = import ./archive-version.nix lib;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
   version = "3.53.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion finalAttrs.version}.zip";
     hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion finalAttrs.version}.zip";
     hash = "sha256-Fo+Zhph2vPTbjZPvoqSDqcgVNlN9AZAMWM110KZ8yic=";
   };
 
@@ -60,7 +60,26 @@ stdenv.mkDerivation rec {
     tcl
   ];
 
-  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  patches = [
+    # Make test failures actually fail the build
+    (fetchpatch {
+      name = "0001-sqlite-testrunner-communicate-test-failure-to-make.patch";
+      url = "https://github.com/sqlite/sqlite/commit/4e4962f6b303688412746b54200ff5402c047aee.patch";
+      includes = [
+        "test/testrunner.tcl"
+      ];
+      hash = "sha256-DLV2ML2zzjd1nEVScDF1sFDdZm1CrOWt5M10rRwXYCY=";
+    })
+
+    # Fix fts3corrupt4.test failure on big-endian
+    # https://sqlite.org/forum/forumpost/40492f69f7
+    # Doesn't seem to have been submitted yet :(
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
+      hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
+    })
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Add a missing `-DBUILD_sqlite` to one place in the makefile
     #
     # TODO(@Ericson2314): drop once a release contains it, and (before that)
@@ -93,6 +112,8 @@ stdenv.mkDerivation rec {
     readline
     ncurses
   ];
+
+  strictDeps = true;
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
@@ -165,7 +186,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $doc/share/doc
     unzip $docsrc
-    mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
+    mv sqlite-doc-${archiveVersion finalAttrs.version} $doc/share/doc/sqlite
   '';
 
   # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
@@ -193,8 +214,12 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
+    changelog = "https://www.sqlite.org/releaselog/${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
@@ -204,6 +229,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" finalAttrs.version;
   };
-}
+})

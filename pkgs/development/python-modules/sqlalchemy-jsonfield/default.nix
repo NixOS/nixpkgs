@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy-jsonfield";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "penguinolog";
     repo = "sqlalchemy_jsonfield";
     tag = finalAttrs.version;
-    hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
+    hash = "sha256-htzWMItAQ1MdOcWHe9le5UofXi5plNpBqOAkgbPxCYI=";
   };
 
   build-system = [

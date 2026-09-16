@@ -112,7 +112,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jojosch
-      adamcstephens
     ];
     mainProgram = "sabnzbd";
   };

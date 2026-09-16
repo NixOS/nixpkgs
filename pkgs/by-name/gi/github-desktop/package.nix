@@ -17,7 +17,7 @@
   nodejs,
   pkg-config,
   python3,
-  typescript,
+  typescript_5,
   zip,
 
   gnome-keyring,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     # desktop-notifications build doesn't pick up tsc from node_modules for some reason
-    typescript
+    typescript_5
     zip
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;

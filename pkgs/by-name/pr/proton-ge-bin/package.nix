@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   steamDisplayName = "GE-Proton";
 
   pname = "proton-ge-bin";
-  version = "GE-Proton11-5";
+  version = "GE-Proton11-6";
 
   inherit (finalAttrs.passthru.variants.${stdenvNoCC.hostPlatform.system}) src toolName;
 
@@ -54,14 +54,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         toolName = "${finalAttrs.version}-x86_64";
         src = fetchzip {
           url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.gz";
-          hash = "sha256-Sbyi5zXMhPIKSotvL5LEZ2dbDoLpXRcCyuY9TsnBnus=";
+          hash = "sha256-rX27DUrrrHtR1cgyr/424m9JPjrdASIisVGv2vWzMAs=";
         };
       };
       "aarch64-linux" = {
         toolName = "${finalAttrs.version}-aarch64";
         src = fetchzip {
           url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}-aarch64.tar.gz";
-          hash = "sha256-fS4N2ip8IvhMfrJsfHnrq+zA/41qJd6kbLQ0+5lZ5uE=";
+          hash = "sha256-sIwM++9FJzpIq4LkYQDL1TIfPFEnaVowrGT/3JPfPZk=";
         };
       };
     };

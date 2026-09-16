@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   makeWrapper,
   pkg-config,
   libxslt,
@@ -30,8 +29,6 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
 }:
 
 assert withDocs -> withIntrospection;
@@ -108,9 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.packaging
     ]))
-  ]
-  ++ lib.optionals withSystemd [
-    systemd
   ]
   ++ lib.optionals useIMobileDevice [
     libimobiledevice

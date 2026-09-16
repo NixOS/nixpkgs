@@ -78,7 +78,9 @@ in
     environment = lib.mkMerge [
       {
         systemPackages = [ cfg.package ];
-        etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
+        etc."xdg/foot/foot.ini" = lib.mkIf (cfg.settings != { }) {
+          source = settingsFormat.generate "foot.ini" cfg.settings;
+        };
       }
       (lib.mkIf cfg.xdg.serverAutostart {
         etc."xdg/autostart/foot-server.desktop".source =
@@ -87,9 +89,9 @@ in
     ];
 
     programs = {
-      foot.settings.main.include = lib.optionals (cfg.theme != null) [
-        "${cfg.package.themes}/share/foot/themes/${cfg.theme}"
-      ];
+      foot.settings.main = lib.mkIf (cfg.theme != null) {
+        include = [ "${cfg.package.themes}/share/foot/themes/${cfg.theme}" ];
+      };
       # https://codeberg.org/dnkl/foot/wiki#user-content-shell-integration
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ". ${./bashrc} # enable shell integration for foot terminal";
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration "source ${./config.fish} # enable shell integration for foot terminal";

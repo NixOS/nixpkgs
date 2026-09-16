@@ -10,20 +10,19 @@
   polkit,
   tpm2-openssl,
   tpm2-tss,
-  nix-update-script,
 }:
 let
-  version = "0.67.3";
+  version = "0.69.2";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/smallstep/step-agent-plugin/releases/download/v${version}/step-agent_${version}_linux_amd64.tar.gz";
-      sha256 = "sha256-sTZ6dNjyRwCWHWROUKCpq1rb8n9lT0cGOUOUpui9NJM=";
+      url = "https://packages.smallstep.com/stable/step-agent/linux/${version}/step-agent_${version}_linux_amd64.tar.gz";
+      sha256 = "sha256-HIIXGIczw6bqVY05mTaCW0JhZNbgHW8cDKSmeUTzSf0=";
     };
 
     aarch64-linux = fetchurl {
-      url = "https://github.com/smallstep/step-agent-plugin/releases/download/v${version}/step-agent_${version}_linux_arm64.tar.gz";
-      sha256 = "sha256-0Vefuc+Xnx8x6Gu+WuS4zTHDIMepY593uFi3JKD+hrk=";
+      url = "https://packages.smallstep.com/stable/step-agent/linux/${version}/step-agent_${version}_linux_arm64.tar.gz";
+      sha256 = "sha256-ENT7vn0YqpMX1SrdFTTo3ZV1aVKl2lqZ8e6vwUqDgk4=";
     };
   };
 in
@@ -58,7 +57,7 @@ stdenvNoCC.mkDerivation {
     }
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "step-agent is an automated certificate management agent plugin for step-cli";

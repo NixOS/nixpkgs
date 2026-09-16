@@ -9,13 +9,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "empire-compiler";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "bc-security";
     repo = "empire-compiler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hquqUEQHdID+2dTWiSkMjcYi4wc6KlSllAD9vUzdH10=";
+    hash = "sha256-k0y7pk79Az4lyXAcFP260T8WgCJSfxfaAtgsytC3wBw=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;

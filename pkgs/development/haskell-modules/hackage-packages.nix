@@ -295221,7 +295221,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) gtksourceview; };
+  ) { gtksourceview = null; };
 
   gtksourceview3 = callPackage (
     {

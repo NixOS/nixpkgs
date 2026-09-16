@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  typescript,
+  typescript_7,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -26,7 +26,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    typescript
+    typescript_7
   ];
 
   buildPhase = ''

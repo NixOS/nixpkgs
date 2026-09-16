@@ -65,6 +65,21 @@ rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change "/usr/lib/libcurl.4.dylib" \
       "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
+
+      # Since 1.98.0 the darwin tarball links LLVM dynamically and ships an
+      # unversioned libLLVM.dylib (rust-lang/rust#157205).
+      # This shadows our nixpkgs-built libLLVM.dylib when we run our own
+      # toolchain, leading to missing symbols.
+      # Rename the dylib that upstream ships to avoid the shadowing, similar
+      # to what upstream already does for linux.
+      if [ -e "$out/lib/libLLVM.dylib" ]; then
+        versioned=libLLVM-rust-bootstrap-${version}.dylib
+        mv "$out/lib/libLLVM.dylib" "$out/lib/$versioned"
+        install_name_tool -id "@rpath/$versioned" "$out/lib/$versioned"
+        find "$out/bin" "$out/lib" -type f \( -perm -0100 -o -name '*.dylib' \) \
+          -exec install_name_tool -change "@rpath/libLLVM.dylib" \
+          "@rpath/$versioned" {} \;
+      fi
     '';
 
     # The strip tool in cctools 973.0.1 and up appears to break rlibs in the

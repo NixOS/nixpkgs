@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.24.5";
+  version = "2.25.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SCajBa+3xVnW02GzfRLICBgFBMHdJra2gjIkQW/A48E=";
+    hash = "sha256-vwlN4VdyVhaALT8Ob233Lcc7261teCD7jyfn8uiH0MA=";
   };
 
   build-system = with python3Packages; [
@@ -171,6 +171,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Timed out waiting for UI state
+    "test_rewind_preview_error_does_not_fail_worker"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError

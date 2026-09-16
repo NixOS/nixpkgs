@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "kristofferR";
   domain = "fellow";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "kristofferR";
     repo = "FellowAiden-HomeAssistant";
     tag = "v${version}";
-    hash = "sha256-M3wSjIBlCGj5p7dz3O2l76TxNcNFFpsB7t30MZvJSvE=";
+    hash = "sha256-DiVEHIPyMzbifydNarOAo4aMoMxoOW5AWRx7tvviPQA=";
   };
 
   passthru.updateScript = unstableGitUpdater { };

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   qt6,
-  ffmpeg_4,
+  ffmpeg_7-headless,
   pkg-config,
 }:
 
@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-eW5sO1gjuwIighnlylJQd9QC+07s1MZX/oPyaHIi/Qs=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     # fix build with Qt 6.10, remove after next release
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_7-headless
     qt6.qtmultimedia
   ];
 

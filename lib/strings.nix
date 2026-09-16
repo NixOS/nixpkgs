@@ -1563,7 +1563,8 @@ rec {
   toUpper = replaceStrings lowerChars upperChars;
 
   /**
-    Converts the first character of a string `s` to upper-case.
+    Converts the first character of a string `s` to upper-case and leaves the
+    remainder lower-case.
 
     # Inputs
 
@@ -1581,8 +1582,8 @@ rec {
     ## `lib.strings.toSentenceCase` usage example
 
     ```nix
-    toSentenceCase "home"
-    => "Home"
+    toSentenceCase "welcome Home"
+    => "Welcome home"
     ```
 
     :::

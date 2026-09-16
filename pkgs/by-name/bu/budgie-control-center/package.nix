@@ -10,7 +10,7 @@
   cups,
   docbook-xsl-nons,
   fontconfig,
-  gcr,
+  gcr_3,
   gdk-pixbuf,
   gettext,
   glib,
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     colord
     colord-gtk
     fontconfig
-    gcr
+    gcr_3
     gdk-pixbuf
     glib
     glib-networking

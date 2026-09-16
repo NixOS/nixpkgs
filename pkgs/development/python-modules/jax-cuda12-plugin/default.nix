@@ -70,9 +70,10 @@ buildPythonPackage {
   # * https://github.com/NixOS/nixpkgs/pull/375186
   # for more info.
   postInstall = ''
-    mkdir -p $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    export BINPATH="$out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin"
+    mkdir -p $BINPATH
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $BINPATH/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $BINPATH/nvlink
   '';
 
   # jax-cuda12-plugin contains shared libraries that open other shared libraries via dlopen
@@ -97,10 +98,33 @@ buildPythonPackage {
     homepage = "https://github.com/jax-ml/jax/tree/main/jax_plugins/cuda";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ natsukium ];
+    teams = [ lib.teams.cuda ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      natsukium
+    ];
     platforms = lib.attrNames platforms;
-    # see CUDA compatibility matrix
-    # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    problems =
+      lib.optionalAttrs (cudaPackages.cudaMajorVersion != "12") {
+        unsupported-cuda-version = {
+          message = ''
+            Incompatible cudaPackages version.
+              - Expected: 12
+              - Got: ${cudaPackages.cudaMajorVersion}
+          '';
+          kind = "broken";
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast cudaPackages.cudnn.version "10.0") {
+        unsupported-cudnn-version = {
+          message = ''
+            cudaPackages.cudnn is too new (${cudaPackages.cudnn.version}).
+
+            See CUDA compatibility matrix
+            https://docs.jax.dev/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
+          '';
+          kind = "broken";
+        };
+      };
   };
 }

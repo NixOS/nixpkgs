@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchurl,
-  nixos,
   testers,
   versionCheckHook,
   hello,
@@ -16,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.12.3";
 
   __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   src = fetchurl {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";

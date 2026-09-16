@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-guppy";
-  version = "0.17.26";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
     tag = "guppy-${finalAttrs.version}";
-    hash = "sha256-y1P8w1nM//72afZeehsj8aQhjylL84FabAxw3iqvx0g=";
+    hash = "sha256-y/5t1Mr0CvT/wNwZ696Uahiei3rpyAF8XOMSbQbh06w=";
   };
 
-  cargoHash = "sha256-Pb0hXjuPoCoGDgoOyiyXG3DZNKRJ1ZIP8w38/KFRYHM=";
+  cargoHash = "sha256-tTX8cGY+6aL8MvZUgfKtMC8d+FKqAOpm5y6O9L3Gr5A=";
 
   nativeBuildInputs = [ pkg-config ];
 

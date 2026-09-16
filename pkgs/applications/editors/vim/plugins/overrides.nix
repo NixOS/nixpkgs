@@ -14,6 +14,8 @@
   yarnConfigHook,
   python3,
   # Misc dependencies
+  notmuch,
+  file,
   charm-freeze,
   code-minimap,
   dailies,
@@ -46,7 +48,7 @@
   stylish-haskell,
   tabnine,
   tmux,
-  typescript,
+  typescript_7,
   typescript-language-server,
   vim,
   which,
@@ -1025,18 +1027,11 @@ assertNoAdditions {
   };
 
   copilot-lua = super.copilot-lua.overrideAttrs {
-    # Avoid copying the bundled 500MB language server into the plugin output.
-    preInstall = ''
-      rm -rf copilot/js
-    '';
-
-    postInstall = ''
-      mkdir -p $target/copilot
-      ln -s ${copilot-language-server}/share/copilot-language-server $target/copilot/js
-
-      substituteInPlace $target/lua/copilot/lsp/nodejs.lua \
-        --replace-fail "copilot/js/language-server.js" "copilot/js/main.js"
-      sed -i 's/version = "[^"]*"/version = "${copilot-language-server.version}"/' $target/lua/copilot/util.lua
+    # Use the packaged language server instead of the runtime installer.
+    postPatch = ''
+      substituteInPlace lua/copilot/config/server.lua \
+        --replace-fail 'custom_server_filepath = nil,' \
+        'custom_server_filepath = "${lib.getExe copilot-language-server}",'
     '';
 
     runtimeDeps = [
@@ -3162,6 +3157,32 @@ assertNoAdditions {
     };
   });
 
+  notmuch-nvim = super.notmuch-nvim.overrideAttrs {
+    checkInputs = [
+      notmuch
+    ];
+
+    # NOTE: for best user experience, consider installing optional handlers to display attachements within neovim. For instance: [ w3m catimg mupdf-headless pandoc zip ]
+    # See https://github.com/yousefakbar/notmuch.nvim/blob/v0.4.0/lua/notmuch/handlers.lua for supported handlers.
+    runtimeDeps = [
+      file
+      notmuch
+    ];
+
+    postPatch =
+      let
+        ext = stdenv.hostPlatform.extensions.sharedLibrary;
+        notmuchLib = "${lib.getLib notmuch}/lib/libnotmuch${ext}";
+      in
+      # bash
+      ''
+        substituteInPlace lua/notmuch/cnotmuch.lua \
+          --replace-fail 'ffi.load("notmuch")' 'ffi.load("${notmuchLib}")'
+      '';
+
+    meta.license = lib.licenses.mit;
+  };
+
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
@@ -4691,7 +4712,7 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/tsc/utils.lua --replace-fail \
       'bin_name = bin_name or "tsc"' \
-      'bin_name = bin_name or "${typescript}/bin/tsc"'
+      'bin_name = bin_name or "${typescript_7}/bin/tsc"'
     '';
 
     # Unit test

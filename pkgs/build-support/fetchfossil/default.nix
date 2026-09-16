@@ -22,6 +22,9 @@ lib.fetchers.withNormalizedHash { } (
       cacert
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     # Envvar docs are hard to find. A link for the future:
     # https://www.fossil-scm.org/index.html/doc/trunk/www/env-opts.md
     impureEnvVars = [ "http_proxy" ];

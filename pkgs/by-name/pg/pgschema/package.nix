@@ -9,19 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "pgschema";
-  version = "1.12.4";
+  version = "1.12.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgplex";
     repo = "pgschema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xURQHIkvEWaYko9RvEhYl1TPqc5ABx9WTMVKuWYGfwE=";
+    hash = "sha256-mT/cdpWPUb6znNRQ3QSl/8U+ZmNcYvidCZTsbIMnn0Y=";
   };
 
   # Adapted from $src/nix/pgschema.nix
   proxyVendor = true;
-  vendorHash = "sha256-3nV7AEsWyEvIbxHetoEsA8PPXJ6ENvU/sz7Wn5aysss=";
+  vendorHash = "sha256-tHz0R2NWxoecWKML8Q71Z0LZDM9DHH+bTHO3K+ekNG8=";
 
   env.CGO_ENABLED = "0";
   ldflags = [

@@ -92,7 +92,7 @@ def _get_system_attr(
     action: Action,
     args: argparse.Namespace,
     flake: Flake | None,
-    build_attr: BuildAttr,
+    build_attr: BuildAttr | None,
     grouped_nix_args: GroupedNixArgs,
 ) -> str:
     match action:
@@ -102,22 +102,24 @@ def _get_system_attr(
                 eval_flags=grouped_nix_args.flake_eval_flags,
             )
             _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
-        case Action.BUILD_IMAGE:
+            return f"config.system.build.images.{args.image_variant}"
+        case Action.BUILD_IMAGE if build_attr:
             variants = nix.get_build_image_variants(
                 build_attr,
                 instantiate_flags=grouped_nix_args.common_flags,
             )
             _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
+            return f"config.system.build.images.{args.image_variant}"
         case Action.BUILD_VM:
-            attr = "config.system.build.vm"
+            if args.specialisation:
+                return f"config.specialisation.{args.specialisation}.configuration.system.build.vm"
+            return "config.system.build.vm"
         case Action.BUILD_VM_WITH_BOOTLOADER:
-            attr = "config.system.build.vmWithBootLoader"
+            if args.specialisation:
+                return f"config.specialisation.{args.specialisation}.configuration.system.build.vmWithBootLoader"
+            return "config.system.build.vmWithBootLoader"
         case _:
-            attr = "config.system.build.toplevel"
-
-    return attr
+            return "config.system.build.toplevel"
 
 
 def _rollback_system(

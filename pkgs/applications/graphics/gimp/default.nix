@@ -57,7 +57,7 @@
   json-glib,
   libmypaint,
   llvmPackages,
-  gexiv2,
+  gexiv2_0_10,
   harfbuzz,
   makeFontsConf,
   mypaint-brushes,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     cairo
     libarchive
-    gexiv2
+    gexiv2_0_10
     harfbuzz
     isocodes
     freetype
@@ -197,7 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
     adwaita-icon-theme
 
-    # for Lua plug-ins
+  ]
+  # for Lua plug-ins; LuaJIT is unavailable on riscv64
+  # https://github.com/LuaJIT/LuaJIT/issues/628
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) [
     (luajit.withPackages (pp: [
       pp.lgi
     ]))
@@ -220,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
     gegl
     cairo
     pango
-    gexiv2
+    gexiv2_0_10
   ];
 
   strictDeps = true;

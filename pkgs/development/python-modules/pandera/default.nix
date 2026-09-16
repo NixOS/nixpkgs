@@ -181,6 +181,8 @@ buildPythonPackage (finalAttrs: {
     "pandera.engines"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";

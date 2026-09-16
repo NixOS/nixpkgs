@@ -1,5 +1,6 @@
 {
   lib,
+  buildPackages,
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
@@ -47,8 +48,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "10621";
-  buildCommit = "c1d0e7a";
+  buildNumber = "10809";
+  buildCommit = "5266f24";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -81,10 +82,12 @@ let
     vulkan-headers
     vulkan-loader
   ];
+
+  buildCc = buildPackages.stdenv.cc;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.3.0";
+  version = "0.4.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -98,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVq7+eUN6NXZuqm7Jwlr4iFDV1PjNzQ6nK9AR2zvZYM=";
+    hash = "sha256-WImZjO3U9EXZUNP/FMpxo8PaTjQW8X2SBTfGwwFlZIM=";
   };
 
   patches = [ ];
@@ -118,6 +121,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # `glslc` is used at build time to compile the shaders
   ++ optionals vulkanSupport [
     shaderc
+  ];
+
+  depsBuildBuild = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # llama-ui-embed under tools/ui needs a host compiler
+    buildCc
   ];
 
   buildInputs =
@@ -185,6 +193,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    (cmakeFeature "HOST_CXX_COMPILER" (lib.getExe' buildCc "${buildCc.targetPrefix}c++"))
   ];
 
   postInstall = optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

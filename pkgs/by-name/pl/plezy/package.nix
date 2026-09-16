@@ -22,18 +22,16 @@
   makeBinaryWrapper,
   runCommand,
   noto-fonts-cjk-sans ? null,
-  use16kPagesizeWorkaround ? false,
 }:
-
 let
   pname = "plezy";
-  version = "2.17.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-lY8uwz+OyrUFuFxRQ+2GuTLwJYigLy/JZYv4R5tRszM=";
+    hash = "sha256-vafKdaMUR6O3QzsPbMc/cW4cPmKxe9nDEe7bfIvfVFA=";
   };
 
   simdutf = fetchurl {
@@ -72,8 +70,8 @@ let
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
-    patches = lib.optionals use16kPagesizeWorkaround [
-      ./16k-font-workaround.patch
+    patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      ./aarch64-linux.patch
     ];
 
     nativeBuildInputs = [
@@ -104,10 +102,9 @@ let
         --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
                        "URL file://${simdutf}"
     ''
-    + lib.optionalString use16kPagesizeWorkaround ''
-      # Opt-in workaround for invisible text on aarch64-linux systems with 16K page size kernels
-      # (e.g. Asahi Linux). Text was invisible; bundling the font as a Dart asset fixed it,
-      # likely related to libflutter_linux_gtk.so being compiled with 4K page alignment only.
+    + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+      # Opt-in workaround for invisible text on aarch64-linux systems. Text was invisible; bundling the font as a Dart asset fixed it,
+      # unknown why.
       install -Dm644 ${noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansCJK-VF.otf.ttc assets/fonts/NotoSans.ttc
     '';
 
@@ -146,7 +143,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-MYuawP8NI5s+261XpEwAjnqvDFYjvCxZVAf84ph7peQ=";
+      hash = "sha256-fT/9DvzPTbX68GPo7MA+iX7jDQjp+jsAfRJ8Y8vxh+I=";
     };
 
     nativeBuildInputs = [

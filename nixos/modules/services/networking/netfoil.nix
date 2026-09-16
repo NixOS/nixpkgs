@@ -254,6 +254,7 @@ in
           wantedBy = [ "sockets.target" ];
           socketConfig = {
             ListenDatagram = "${cfg.listen.ipAddress}:${toString cfg.listen.port}";
+            ListenStream = "${cfg.listen.ipAddress}:${toString cfg.listen.port}";
             Service = "netfoil.service";
           };
         };

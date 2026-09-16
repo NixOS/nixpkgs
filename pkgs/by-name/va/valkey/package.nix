@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "9.1.1";
+  version = "9.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-wGHlPQ2JPxGTaJRJ9Siz3Q3eKdlo5z1tQpSFs9xZMbI=";
+    hash = "sha256-Lq5AqrLKILnsaOdAgWeeukPNF7KerB17R1mUOZjOsUg=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      redis = nixosTests.redis;
+      redis = nixosTests.valkey;
       unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       valkey-python = python3Packages.valkey;
     };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   libiconv,
   nix-update-script,
@@ -11,17 +12,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-psMMF26+nTwdbtPfFFE3fXkatrh9Bp9qMsrdI/FmrDg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PKL495sfkRKjHfN4RroW1dwudJV2JWN7ogB8hyDxj5Y=";
   };
+
+  # https://github.com/simdutf/simdutf/issues/1032
+  # FIXME: remove in next release
+  patches = lib.optionals (stdenv.hostPlatform.isLoongArch64 && finalAttrs.version == "9.1.0") [
+    (fetchpatch2 {
+      url = "https://github.com/simdutf/simdutf/commit/1f8ef080486c31cbd70db21a05a008700eb03aae.patch?full_index=1";
+      hash = "sha256-p1qJFUQ4KhSSLSBIiC9se/TxrWFqywdVKNgh78TkMyE=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    # Enabling C++20 to get atomic support
+    (lib.cmakeFeature "SIMDUTF_CXX_STANDARD" "20")
+    (lib.cmakeBool "SIMDUTF_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "SIMDUTF_ATOMIC_BASE64_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -33,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
+  strictDeps = true;
+
+  doCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
 
@@ -40,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";

@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uzdoom";
-  version = "5.0.0";
+  version = "5.0.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "UZDoom";
     repo = "UZDoom";
     tag = finalAttrs.version;
-    hash = "sha256-iNPpkAV1ED+BRqa2WmB6R0PFaCqpmTWDCZT9USbmZuY=";
+    hash = "sha256-JaAx3HlsHPFDILQrq9rz1FpO7dVsfoJgvCLvNx8+CJ0=";
   };
 
   outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];
@@ -57,8 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     glib
     libGL
+    libsndfile
     libvpx
     libwebp
+    mpg123
     openal
     sdl2-compat
     vulkan-loader
@@ -74,7 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "DYN_MPG123" false)
     (lib.cmakeBool "DYN_OPENAL" false)
+    (lib.cmakeBool "DYN_SNDFILE" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "OPENAL_INCLUDE_DIR" "${openal}/include/AL")
@@ -100,13 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/bin/uzdoom $out/share/games/uzdoom/uzdoom
     makeWrapper $out/share/games/uzdoom/uzdoom $out/bin/uzdoom \
-      --set LD_LIBRARY_PATH ${
-        lib.makeLibraryPath [
-          libsndfile
-          mpg123
-          vulkan-loader
-        ]
-      }
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = {
@@ -121,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Gliczy
       keenanweaver
+      r4v3n6101
     ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "uzdoom";

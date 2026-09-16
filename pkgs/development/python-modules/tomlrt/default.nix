@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tomlrt";
-  version = "2.2.5";
+  version = "2.2.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-8c3MzVL5SCHUZJM6hsYfGt/pkG/iH/Xxz+Ar3e59HCU=";
+    hash = "sha256-tfZZ0Jq/YNIAONrLNH5yC85PmX8iiteruoCMUvBriBU=";
   };
 
   build-system = [ hatchling ];
@@ -28,6 +28,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "A format-preserving TOML reader and writer for Python";
     homepage = "https://github.com/dimbleby/tomlrt";
+    changelog = "https://github.com/dimbleby/tomlrt/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aaronjheng ];
   };

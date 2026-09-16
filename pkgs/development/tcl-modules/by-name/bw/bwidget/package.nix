@@ -5,21 +5,21 @@
   tk,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "bwidget";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tcllib/bwidget-${version}.tar.gz";
-    sha256 = "sha256-61sCvsua+Iv3SldHhd4eMpzzCjZ5EVMJOnkRT6xRw60=";
+    url = "mirror://sourceforge/tcllib/bwidget-${finalAttrs.version}.tar.gz";
+    hash = "sha256-61sCvsua+Iv3SldHhd4eMpzzCjZ5EVMJOnkRT6xRw60=";
   };
 
   dontBuild = true;
   propagatedBuildInputs = [ tk ];
 
   installPhase = ''
-    mkdir -p "$out/lib/bwidget${version}"
-    cp -R *.tcl lang images "$out/lib/bwidget${version}"
+    mkdir -p "$out/lib/bwidget${finalAttrs.version}"
+    cp -R *.tcl lang images "$out/lib/bwidget${finalAttrs.version}"
   '';
 
   meta = {
@@ -29,4 +29,4 @@ mkTclDerivation rec {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
   };
-}
+})

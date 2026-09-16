@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmx";
-  version = "0.8.0";
+  version = "0.8.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neurosnap";
     repo = "zmx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5z7XWEZ+6P4AuzagHQdszr8vWoymbmL8TakVz0N/2DU=";
+    hash = "sha256-0gxaoup7boFMm4NQCQ8mHusX1oS8h/MacFxhSPLi2XM=";
   };
 
   zigDeps = zig.fetchDeps {

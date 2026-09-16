@@ -10,7 +10,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_10,
+  pnpm_11,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -21,7 +21,7 @@
   basePath ? "",
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   sources = lib.importJSON ./sources.json;
 
@@ -47,14 +47,14 @@ let
   # to guarantee compatibility.
   prisma-engines' = prisma-engines_7.overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "7.8.0";
+      version = "7.9.1";
       src = fetchFromGitHub {
         owner = "prisma";
         repo = "prisma-engines";
         tag = finalAttrs.version;
-        hash = "sha256-nquIcOmFz+ikD0x/YEPZ5NVKCFPCdR5MSCHldn+b9jI=";
+        hash = "sha256-bGtVKGoWZc/3s0lhTXksp+6fM/Q461ve/HQsRPxWD0Q=";
       };
-      cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
+      cargoHash = "sha256-zLl2ErsCTXZVShPFLH94GLJ0q2FrMnfnecnfKD7VDL4=";
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         inherit (prevAttrs) pname;
@@ -66,29 +66,28 @@ let
   );
   prisma' =
     (prisma_7.override {
-      pnpm_11 = pnpm_10;
       prisma-engines_7 = prisma-engines';
     }).overrideAttrs
       (
         finalAttrs: prevAttrs: {
-          version = "7.8.0";
+          version = "7.9.1";
           src = fetchFromGitHub {
             owner = "prisma";
             repo = "prisma";
             tag = finalAttrs.version;
-            hash = "sha256-89q5433z54h3oGX+lEYDQykN2mNltGz4+LWlYSE75/E=";
+            hash = "sha256-h89lJbGG2ZkK3Viipsqe8hqTSTZk6vEulaMLPPkgn8c=";
           };
           pnpmDeps = prevAttrs.pnpmDeps.override {
             inherit (finalAttrs) src version;
-            fetcherVersion = 3;
-            hash = "sha256-mrFU5SAF4QuTBJj5TP8tUkYDG4zchttjcQMLtx6OBnI=";
+            fetcherVersion = 4;
+            hash = "sha256-EEfVAdF6QawXV95NUmEL9IqzPqazCz47Y9Hg/F6IybU=";
           };
         }
       );
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.2.0";
+  version = "3.3.1";
 
   nativeBuildInputs = [
     makeWrapper
@@ -102,17 +101,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0nfCcaST06cTg43Rz1rCV8GYYDjQLP+6TrVRJF2/Yuk=";
+    hash = "sha256-LldK8dv3mkgEB9LWzt4X/bfh474G4LWOtJghTo5/n7A=";
   };
 
-  # Umami uses next/font/google, which tries to download from Google Fonts at build time.
-  # Replace that code with a copy of the required font(s) from nixpkgs instead.
   postPatch = ''
+    # Umami uses next/font/google, which tries to download from Google Fonts at build time.
+    # Replace that code with a copy of the required font(s) from nixpkgs instead.
     substituteInPlace ./src/app/layout.tsx \
       --replace-fail "import { Inter } from 'next/font/google';" "import localFont from 'next/font/local';" \
       --replace-fail 'const inter = Inter({' "const inter = localFont({ src: './Inter.ttf',"
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+
+    # Biome executable needs to be patched to run, but we don't need to format code anyway, so just skip it.
+    substituteInPlace ./package.json \
+      --replace-fail ' && biome format --write src/tracker/index.d.ts' '''
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -123,7 +126,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-6ho5xoVdqZdihThL5q8+RhVPfaSwu1y3+p9d8DnfO3o=";
+    hash = "sha256-253jfz20wXwh/8/d7KVEl4jlaj7IURWJrW2/F0FS4BI=";
   };
 
   env.NODE_ENV = "production";

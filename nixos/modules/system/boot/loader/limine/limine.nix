@@ -360,7 +360,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             black, red, green, brown, blue, magenta, cyan, and gray.
           '';
         };
@@ -369,7 +369,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             dark gray, bright red, bright green, yellow, bright blue, bright magenta, bright cyan, and white.
           '';
         };

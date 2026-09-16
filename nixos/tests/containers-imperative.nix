@@ -19,6 +19,7 @@
 
       boot.enableContainers = true;
 
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
       nix.settings.sandbox = false;

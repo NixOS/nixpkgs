@@ -9,19 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "cloudquery";
-  version = "6.41.1";
+  version = "6.42.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cloudquery";
     repo = "cloudquery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7NM9EFkvQRXp0gHvK1/9EhAoPrNf/g0yCXaVtEMGloQ=";
+    hash = "sha256-cwswUZHatYFABjZsIsl2yImXO0Wkkn4QTdCirqA3SsA=";
   };
 
   modRoot = "cli";
 
-  vendorHash = "sha256-uAe+zbRtMfFU1CH5D9wzlO7Sx/ckkziQIxecgwDM+Kk=";
+  vendorHash = "sha256-B4zR2UML2VuxSQBs/1KvoZc7tiMlr/wF3EpiBJge4Y4=";
 
   subPackages = [
     "."

@@ -9,10 +9,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "krep";
   version = "3.0.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "davidesantangelo";
     repo = "krep";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Nmu4wL0g5hTRACwn7Roi31uGDA+oBlY+0P/SCWLcVtc=";
   };
 

@@ -59,12 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" false)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Fix (RiscV) cross-compilation
     # See https://github.com/apache/orc/issues/2334
     (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")

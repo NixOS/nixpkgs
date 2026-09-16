@@ -66,7 +66,7 @@ diff --git a/Modules/CMakeFindJavaCommon.cmake b/Modules/CMakeFindJavaCommon.cma
 index 95ca9b57b6..616295e031 100644
 --- a/Modules/CMakeFindJavaCommon.cmake
 +++ b/Modules/CMakeFindJavaCommon.cmake
-@@ -15,20 +15,6 @@
+@@ -15,21 +15,6 @@ else()
    if(_ENV_JAVA_HOME AND IS_DIRECTORY "${_ENV_JAVA_HOME}")
      set(_JAVA_HOME "${_ENV_JAVA_HOME}")
      set(_JAVA_HOME_EXPLICIT 1)
@@ -77,14 +77,15 @@ index 95ca9b57b6..616295e031 100644
 -        OUTPUT_VARIABLE _CMD_JAVA_HOME
 -        OUTPUT_STRIP_TRAILING_WHITESPACE
 -        ERROR_QUIET
+-        RESULT_VARIABLE _result_java_home
 -      )
--    endif()
+     endif()
 -    if(_CMD_JAVA_HOME AND IS_DIRECTORY "${_CMD_JAVA_HOME}")
 -      set(_JAVA_HOME "${_CMD_JAVA_HOME}")
 -      set(_JAVA_HOME_EXPLICIT 0)
 -    endif()
 -    unset(_CMD_JAVA_HOME)
-   endif()
+-  endif()
    unset(_ENV_JAVA_HOME)
  endif()
 diff --git a/Modules/CMakeFindPackageMode.cmake b/Modules/CMakeFindPackageMode.cmake
@@ -1830,16 +1831,17 @@ diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
 index bdf4155232..588064821d 100644
 --- a/Modules/Platform/UnixPaths.cmake
 +++ b/Modules/Platform/UnixPaths.cmake
-@@ -29,9 +29,6 @@
+@@ -35,10 +35,6 @@ unset(_cmake_running_in_build_tree)
+ # Reminder when adding new locations computed from environment variables
  # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
  # synchronized
- list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
 -  # Standard
 -  /usr/local /usr /
--
-   # CMake install location
-   "${_CMAKE_INSTALL_DIR}"
-   )
+-  )
+ if(_CMAKE_INSTALL_DIR)
+   list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+     # CMake install location
 @@ -49,28 +46,6 @@
  endif()
  _cmake_record_install_prefix()
@@ -1981,13 +1983,15 @@ diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMak
 index e6ab5de99b..158a407c3e 100644
 --- a/Utilities/cmlibarchive/CMakeLists.txt
 +++ b/Utilities/cmlibarchive/CMakeLists.txt
-@@ -39,9 +39,6 @@
+@@ -44,11 +44,6 @@ ENDIF(NOT "${CMAKE_BUILD_TYPE_UPPER}"
         MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO|MINSIZEREL|NONE)\$")
  ENDIF()
  
+-if(0) # XXX(cmake): not needed for build within cmake
 -# On MacOS, prefer MacPorts libraries to system libraries.
 -# I haven't come up with a compelling argument for this to be conditional.
 -list(APPEND CMAKE_PREFIX_PATH /opt/local)
+-endif() # XXX(cmake): end
  # Enable @rpath in the install name.
  # detail in "cmake  --help-policy CMP0042"
  SET(CMAKE_MACOSX_RPATH ON)

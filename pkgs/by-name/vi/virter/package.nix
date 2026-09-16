@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "virter";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "LINBIT";
     repo = "virter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-i0PDZo1vRatOiBdGLhEAy9KIt+bNp94JASKf8HTkhMg=";
+    hash = "sha256-/8fsYadyXUM9N/rDKsv1dNnfngKGC1LyJkSja8Cue0I=";
   };
 
-  vendorHash = "sha256-XOMxe+pG4OB15l+TKuYR2tJPPcPbsnipxHlnDH0XukA=";
+  vendorHash = "sha256-3zl9y8MITJGw3wBhCQgvFcq7hxsSTtUAD0w2B+aSIyM=";
 
   ldflags = [
     "-s"

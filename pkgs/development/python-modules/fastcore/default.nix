@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastcore";
-  version = "2.2.16";
+  version = "2.2.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "fastcore";
     tag = finalAttrs.version;
-    hash = "sha256-MWQl2O5NqxVzWcCU9dewUdh6iT8zFSMDZey/YogJBik=";
+    hash = "sha256-7VQ6Tv1vQL8bed9ODp8a0pf+Smj+6BqLaW0zgqpY9/E=";
   };
 
   build-system = [ setuptools ];

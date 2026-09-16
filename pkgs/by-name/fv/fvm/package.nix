@@ -10,13 +10,13 @@
 
 buildDartApplication (finalAttrs: {
   pname = "fvm";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "conceptadev";
     repo = "fvm";
     tag = finalAttrs.version;
-    hash = "sha256-SAWWKNbE/TyrP5bcIdDeAZa6/3d4D/Ru1PbcPvy9EDo=";
+    hash = "sha256-6NQbcPb8J/xUG289c/51Ck4Ms/ceXq50V0bbWq4iAeU=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

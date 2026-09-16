@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   gitUpdater,
   lib,
   nixosTests,
@@ -112,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     (mesonOption "systemdsystemunitdir" (
       if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
     ))
+    (mesonOption "systemdsystemgeneratordir" (
+      if withSystemd then "${placeholder "out"}/lib/systemd/system-generators" else "no"
+    ))
     # to enable link-local connections
     (mesonOption "udev_dir" "${placeholder "out"}/lib/udev")
     (mesonOption "dbus_conf_dir" "${placeholder "out"}/share/dbus-1/system.d")
@@ -164,6 +168,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes BPF build on powerpc64-linux w/ ELFv1-targeting glibc
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/2529
+    (fetchpatch {
+      name = "0001-networkmanager-bpf-Detect-ELF-ABI-version-on-ppc64.patch";
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/3c28325b9c63386e5313ce006267144e7f63417a.patch";
+      hash = "sha256-SlyeykqL7Y11jEF+5l4aRXY2znHaSBhwV5lcmf88PGc=";
+    })
   ];
 
   nativeBuildInputs = [

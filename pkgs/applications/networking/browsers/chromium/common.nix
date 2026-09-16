@@ -450,7 +450,10 @@ let
 
     patches = [
       ./patches/cross-compile.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "153") [
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
+      # Stopped applying with M153 due to formatting.
       ./patches/no-build-timestamps.patch
     ]
     ++ lib.optionals (packageName == "chromium") [
@@ -589,7 +592,7 @@ let
         hash = "sha256-jR0G9z2R8VGl2tkB3u0368RyWM1J6qYXqNWwKkYd5zU=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "151" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "151" "153" && lib.versionOlder llvmVersion "23") [
       # Revert CL 7911761 to help the patch below to apply cleanly.
       (fetchpatch {
         name = "chromium-151-revert-Fix-is_wasm-compile-for-supersize.patch";
@@ -600,11 +603,15 @@ let
         hash = "sha256-musbcTi2XMnJXW79gG+kr9qcYJZ25fv6MeIeId/nAwI=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "149" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "149" "153" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
       ./patches/chromium-149-llvm-22.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "153" && lib.versionOlder llvmVersion "23") [
+      # Rebased variant of the patch above
+      ./patches/chromium-153-llvm-22.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
       # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
@@ -688,10 +695,44 @@ let
       # by https://github.com/Ahrotahn (ungoogled-chromium, BSD-3-Clause)
       ./patches/ungoogled-chromium-152-crubit.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "152" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "152" "153" && lib.versionOlder llvmVersion "23") [
       # error: unknown argument: '-fno-lifetime-safety-inference'
       # error: unknown argument: '-fno-experimental-lifetime-safety-tu-analysis'
       ./patches/chromium-152-dawn-llvm-22.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "153") [
+      (fetchpatch {
+        name = "chromium-153-revert-DEPS-use-DEPS-provided-python-instead-of-a-system-one.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8160801
+        url = "https://chromium.googlesource.com/chromium/src/+/ce8851b40f37e74adcb7813256930792f35b8039^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        includes = [ ".gn" ];
+        hash = "sha256-xrtu5YhxJtBFlKpQCqRR1BBkJyiN/DW+aUCVB1zZVHI=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "153") [
+      (fetchpatch {
+        name = "chromium-153-revert-Migrate-OpenType-format-check-bindings-to-Crubit.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8244248
+        url = "https://chromium.googlesource.com/chromium/src/+/493e6c3911e33cc356856bafbffc6cf95521266b^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-+5lddQSOJz7XTZanDl3/lqQ7CQhnCVzvUMpxvE3Sz2c=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "153") [
+      (fetchpatch {
+        name = "chromium-153-revert-devtools-frontend-Remove-TSGO-flag.patch";
+        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/8193297
+        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/2691b4ae139d2e7b6244f05139a0b85082c7473c^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/devtools-frontend/src/";
+        revert = true;
+        hash = "sha256-Dip5axpXSJbdGmtS7t81nLCvjRPBSkAuJA4Lo6MFKLw=";
+      })
+
     ];
 
     postPatch =
@@ -967,6 +1008,10 @@ let
       // {
         use_pulseaudio = true;
         link_pulseaudio = true;
+      }
+      // lib.optionalAttrs (chromiumVersionAtLeast "153") {
+        use_typescript_go = false;
+        devtools_use_typescript_go = false;
       }
       // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
       // (extraAttrs.gnFlags or { })

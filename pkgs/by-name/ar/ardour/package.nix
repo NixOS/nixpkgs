@@ -8,7 +8,7 @@
   apple-sdk,
   aubio,
   boost,
-  cairomm,
+  cairomm_1_0,
   cppunit,
   curl,
   darwin,
@@ -49,7 +49,7 @@
   lv2,
   makeWrapper,
   pango,
-  pangomm,
+  pangomm_1_4,
   perl,
   pkg-config,
   python3,
@@ -134,7 +134,7 @@ let
     buildInputs = [
       aubio
       boost
-      cairomm
+      cairomm_1_0
       cppunit
       curl
       ffmpeg
@@ -165,7 +165,7 @@ let
       lrdf
       lv2
       pango
-      pangomm
+      pangomm_1_4
       perl
       python3
       qm-dsp

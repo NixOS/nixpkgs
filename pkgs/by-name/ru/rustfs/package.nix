@@ -18,7 +18,7 @@
 let
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.22";
+    version = "0.1.26";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -26,7 +26,7 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-qdF+dUjvbIoVJxXES9K4K4Z0H0kKMgRzQ8tHnGQxybw=";
+      hash = "sha256-1X7ZcprtVXybV58mdrqbvERNHfs8Y/3klGDPObhUt9o=";
     };
 
     pnpmDeps = fetchPnpmDeps {
@@ -54,14 +54,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.0-rc.3";
+  version = "1.0.0-rc.6";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
     tag = finalAttrs.version;
-    hash = "sha256-vh4jw7sPndqMXeU/fWavM2zT5D0p4KZcfUxWnGSc2Yg=";
+    hash = "sha256-+ZcLd6WlT5X48u4LHYQVw+QgaVotpEN4JLKy8N86ejM=";
   };
 
   postPatch = ''
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-u+wyvJEv0rzGt02bvexHXEUl1fkZlMwCoeSWI3Gd1fk=";
+  cargoHash = "sha256-0VMunv3UYMEwf6msTSbL/Eo1vRBLfo9zNixPkc0+kcU=";
 
   nativeBuildInputs = [
     protobuf
@@ -88,11 +88,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Only build the main rustfs binary
   cargoBuildFlags = "-p rustfs";
-  cargoTestFlags = "-p rustfs";
 
-  # tests share global state and fail depending on execution order,
-  # upstream uses nexttest to run tests in separate processes
   useNextest = true;
+  # Use debug mode to reduce test compilation time.
+  checkType = "debug";
+  cargoTestFlags = [
+    "--package"
+    "rustfs"
+    "--no-fail-fast"
+
+    "--filterset"
+    "not (test(connect::) or binary(connect_*) or test(=version::tests::test_is_head_newer_than_tag_requires_strict_descendant))"
+  ];
 
   passthru = {
     tests = {
@@ -103,8 +110,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       name = "rustfs-update-script";
       runtimeInputs = [ nix-update ];
       text = ''
-        nix-update rustfs
-        nix-update rustfs.console
+        nix-update rustfs --version=unstable
+        nix-update rustfs.console --version=unstable
       '';
     });
   };

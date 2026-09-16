@@ -8,18 +8,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O3rXqg0wSAb4YXxgXqf42oo9sJinZhZ1U6e5WCnvo9I=";
+    hash = "sha256-fnmhA3Et3rF0GgRdV41rdTrBZCh2b8dvRYTATaqDb18=";
   };
 
-  vendorHash = "sha256-8WrGFLIoXmHQmyFGhOjBAFkaYZ1xhx0aldpyZULfAL4=";
+  vendorHash = "sha256-HyDY6tTDvEDQI85Z4SGb11oDPTicnp8TR1sH7n7Bbcg=";
 
   excludedPackages = [
+    # depends on cgo/cuda
+    "cmd/cuobjtest"
+    "cmd/vgwrdma"
+    "rdma"
+
     "plugins/noop"
     "tests/checker"
     "tests/rest_scripts"
@@ -32,8 +37,20 @@ buildGoModule (finalAttrs: {
     "-X main.Version=v${finalAttrs.version}"
   ];
 
-  # requires real s3
-  checkFlags = [ "-skip=^TestIntegration$" ];
+  env.CGO_ENABLED = "0";
+
+  checkFlags =
+    let
+      skippedTests = [
+        # requires real s3
+        "^TestIntegration$"
+
+        # requires extended attributes
+        "^TestObjectPublishLockHonorsContextWhileWaiting$"
+        "/xattr$"
+      ];
+    in
+    [ "-skip=${builtins.concatStringsSep "|" skippedTests}" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

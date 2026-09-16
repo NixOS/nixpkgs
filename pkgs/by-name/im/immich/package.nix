@@ -33,7 +33,7 @@
   pango,
   perl,
   pixman,
-  vips_8_17, # thumbnail generation fails with vips 8.18
+  vips,
   buildPackages,
 }:
 let
@@ -45,12 +45,12 @@ let
       buildPackages.buildGoModule (
         args
         // rec {
-          version = "0.28.1";
+          version = "0.28.2";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             tag = "v${version}";
-            hash = "sha256-V+HKaWGAIs24ynFFIS9fQ0EAJJdNmlAMeL1sgDEAqWM=";
+            hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -77,14 +77,14 @@ let
   # The geodata website is not versioned, so we use the internet archive
   geodata =
     let
-      timestamp = "20260710111330";
+      timestamp = "20260911002105";
       date =
         "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
         + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-Pf5u+bqzF2x1PECxKwZ6dfGiEj1YMlRejTcTI1amMvU=";
+        outputHash = "sha256-zxMbIEFF5MA2qkAbXs4sD4EQFWfCYt8t3AaC0m0LtEY=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -106,29 +106,23 @@ let
         unzip ./cities500.zip -d $out/
         echo "${date}" > $out/geodata-date.txt
       '';
-
-  # Without this thumbnail generation for raw photos fails with
-  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
-  vips' = vips_8_17.overrideAttrs (prev: {
-    mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
-  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C1JG9waQEmIEHWAoghGA0Sr6sa2tW5/1CcXeHRdIbKU=";
+    hash = "sha256-1gaQ6f9Ja5FSis3wKyDUQprbcgs6sFtxNTwgihuxKL0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-sGzB2E3G1B5XOgQIv8bg51IGwJEE8JSIipfmnCUH/yw=";
+    hash = "sha256-N6eaRcJxik1wzGE1H/LnKR1JUcSc8iswPFkIGymOKVA=";
   };
 
   postPatch = ''
@@ -162,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     pixman
     # Required for sharp
-    vips'
+    vips
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
@@ -189,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     # install node_modules and built files in $out
     # upstream uses pnpm deploy to build their docker images
     pnpm --filter immich deploy --prod --no-optional "$packageOut"
+
+    # build sharp from source
+    pnpm --dir "$packageOut/node_modules/sharp" exec npm run build
 
     # remove build artifacts that bloat the closure
     find "$packageOut/node_modules" \( \
@@ -248,6 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-40 # geonames
     ];
     maintainers = with lib.maintainers; [
+      diogotcorreia
       dotlambda
       jvanbruegge
       Scrumplex

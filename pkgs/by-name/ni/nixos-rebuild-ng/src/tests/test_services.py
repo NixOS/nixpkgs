@@ -1,3 +1,4 @@
+import argparse
 import os
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -10,13 +11,63 @@ import nixos_rebuild.services as s
 
 from .helpers import get_qualified_name
 
+grouped_nix_args = n.models.GroupedNixArgs(
+    build_flags={"build": True},
+    common_flags={"common": True},
+    copy_flags={"copy": True},
+    flake_eval_flags={"flake_eval": True},
+    flake_build_flags={"flake_build": True},
+)
+
+
+# TODO: add tests for Action.BUILD_IMAGE
+def test__get_system_attr() -> None:
+    args = argparse.Namespace(specialisation=None)
+    tests = {
+        n.models.Action.BOOT: "config.system.build.toplevel",
+        n.models.Action.BUILD_VM: "config.system.build.vm",
+        n.models.Action.BUILD_VM_WITH_BOOTLOADER: "config.system.build.vmWithBootLoader",
+    }
+    for action, expected_system_attr in tests.items():
+        assert (
+            s._get_system_attr(
+                action=action,
+                args=args,
+                flake=None,
+                build_attr=None,
+                grouped_nix_args=grouped_nix_args,
+            )
+            == expected_system_attr
+        )
+
+    args = argparse.Namespace(specialisation="custom-specialisation")
+    tests = {
+        n.models.Action.BOOT: "config.system.build.toplevel",
+        n.models.Action.BUILD_VM: "config.specialisation.custom-specialisation.configuration.system.build.vm",
+        n.models.Action.BUILD_VM_WITH_BOOTLOADER: "config.specialisation.custom-specialisation.configuration.system.build.vmWithBootLoader",
+    }
+    for action, expected_system_attr in tests.items():
+        assert (
+            s._get_system_attr(
+                action=action,
+                args=args,
+                flake=None,
+                build_attr=None,
+                grouped_nix_args=grouped_nix_args,
+            )
+            == expected_system_attr
+        )
+
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)
 @patch(get_qualified_name(n.nix.run_wrapper, n.nix), autospec=True)
 @patch(get_qualified_name(s.nix.build), autospec=True)
 def test_reexec(
-    mock_build: Mock, mock_run: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
+    mock_build: Mock,
+    mock_run: Mock,
+    mock_execve: Mock,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     mock_run.return_value = CompletedProcess([], 0, stdout="")
 
@@ -25,13 +76,6 @@ def test_reexec(
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    grouped_nix_args = n.models.GroupedNixArgs(
-        build_flags={"build": True},
-        common_flags={"common": True},
-        copy_flags={"copy": True},
-        flake_eval_flags={"flake_eval": True},
-        flake_build_flags={"flake_build": True},
-    )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_has_calls(
         [
@@ -78,13 +122,6 @@ def test_reexec_flake(
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    grouped_nix_args = n.models.GroupedNixArgs(
-        build_flags={"build": True},
-        common_flags={"common": True},
-        copy_flags={"copy": True},
-        flake_eval_flags={"flake_eval": True},
-        flake_build_flags={"flake_build": True},
-    )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_called_once_with(
         s.NIXOS_REBUILD_ATTR,
@@ -124,13 +161,6 @@ def test_reexec_skip_if_already_reexec(mock_build: Mock, mock_execve: Mock) -> N
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    grouped_nix_args = n.models.GroupedNixArgs(
-        build_flags={"build": True},
-        common_flags={"common": True},
-        copy_flags={"copy": True},
-        flake_eval_flags={"flake_eval": True},
-        flake_build_flags={"flake_build": True},
-    )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_not_called()
     mock_execve.assert_not_called()

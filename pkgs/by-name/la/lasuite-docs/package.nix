@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "5.5.0";
+  version = "5.6.1";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-NR4TooBjE9hTZOm830MRtebUtSZFxVsVwswPz1w8k48=";
+    hash = "sha256-4nTE7pjrheas/OdtHCLok8mw0ZhcDL1pL2VFekPgmdI=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-x3zcoOfb5vTBreswjZUcJstbXvbDHBBG/u0N4L7T1uI=";
+      hash = "sha256-Y+E1HhQRdmdQf9kfkL09W/R29oN8wCLNsMBDnNGx6T0=";
     };
 
     nativeBuildInputs = [
@@ -137,6 +137,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       redis
       requests
       sentry-sdk
+      servestatic
       uvicorn
       whitenoise
     ]

@@ -75,15 +75,15 @@ let
         }
     );
   stableVersion = {
-    version = "2026.1.3.8"; # "Android Studio Quail 3 | 2026.1.3 Patch 1"
+    version = "2026.1.4.7"; # "Android Studio Quail 4 | 2026.1.4"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-W9XuXW50exP4L7oyQTgL01jML0qEeBXI6GB1ffE9w18=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.3.8/android-studio-quail3-patch1-linux.tar.gz";
+        sha256Hash = "sha256-S+JACD31raKQl12H1g/CEqPTjU8lihJQmJiFqdvHmYA=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.4.7/android-studio-quail4-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-qnfvaRmyK+UVZtzXlgPDI/fEA/qR3HncQT7tf2oFwEg=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.1.3.8/android-studio-quail3-patch1-mac_arm.dmg";
+        sha256Hash = "sha256-u9F+0KzGic+IAXCDd4U3Zg5KcUgIZ/3odWF/vaAqCuw=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.1.4.7/android-studio-quail4-mac_arm.dmg";
       };
     };
   };

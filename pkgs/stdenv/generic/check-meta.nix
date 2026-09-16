@@ -18,6 +18,7 @@ let
     isFunction
     isString
     length
+    mapAttrsToList
     mutuallyExclusive
     optional
     optionalString
@@ -25,6 +26,7 @@ let
     unsafeGetAttrPos
     warn
     all
+    groupBy
     ;
 
   inherit (lib.lists)
@@ -133,8 +135,6 @@ let
       any (l: !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
-
-  isMarkedBroken = attrs: attrs.meta.broken or false;
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
@@ -450,6 +450,9 @@ let
   #   meta = checkMeta.commonMeta hostPlatform { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
+    let
+      completeMetaProblems' = completeMetaProblems config;
+    in
     hostPlatform:
     let
       hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
@@ -465,6 +468,17 @@ let
       hasOutput = out: elem out outputs;
       maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
+
+      problems = completeMetaProblems' attrs;
+      problemsGroupedByKind = groupBy (p: p.name) (
+        mapAttrsToList (name: problem: {
+          inherit name;
+          inherit problem;
+        }) problems
+      );
+
+      problemsByKind = kind: problemsGroupedByKind.${kind} or [ ];
+      hasProblemKind = kind: (problemsByKind kind) != [ ];
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -591,11 +605,11 @@ let
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
-      broken = isMarkedBroken attrs;
+      broken = hasProblemKind "broken";
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems config attrs;
+      inherit problems;
 
       available =
         validity.valid != "no"

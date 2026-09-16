@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  typescript,
+  typescript_5,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -26,11 +26,11 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    typescript
+    typescript_5
   ];
 
   preBuild = ''
-    ln -s ${typescript}/lib/node_modules/typescript node_modules/typescript
+    ln -s ${typescript_5}/lib/node_modules/typescript node_modules/typescript
   '';
 
   buildPhase = ''
@@ -46,7 +46,7 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
 
   postInstall = ''
-    ln -s ${typescript}/lib/node_modules/typescript \
+    ln -s ${typescript_5}/lib/node_modules/typescript \
       $out/lib/node_modules/vscode-html-languageserver/node_modules/typescript
 
     makeBinaryWrapper ${lib.getExe nodejs} $out/bin/vscode-html-languageserver \

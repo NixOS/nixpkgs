@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-Kq/kLjdDS/NHveeFmoy0PiHLLXviPpU2zf3lcXhx7Sk=";
+    hash = "sha256-pUI9E76LeCzs1Y51YM0z6awTQIj/WumIqJIgrLYKYEQ=";
   };
 
   # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of

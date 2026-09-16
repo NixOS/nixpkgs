@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   replaceVars,
   buildPythonPackage,
   fetchFromGitHub,
@@ -79,6 +80,11 @@ buildPythonPackage (finalAttrs: {
     # however, the tests still need them, so we specify the original dictionary dir
     export OPEN_JTALK_DICT_DIR=_pyopenjtalk/dictionary
   '';
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented
+    "tests/test_tsqyomi_regression.py"
+  ];
 
   pythonImportsCheck = [ "pyopenjtalk" ];
 

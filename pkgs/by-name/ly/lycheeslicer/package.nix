@@ -24,7 +24,10 @@ let
     noDisplay = false;
     exec = "lycheeslicer";
     terminal = false;
-    mimeTypes = [ "model/stl" ];
+    mimeTypes = [
+      "model/stl"
+      "x-scheme-handler/lycheeslicer"
+    ];
     categories = [ "Graphics" ];
     keywords = [
       "STL"

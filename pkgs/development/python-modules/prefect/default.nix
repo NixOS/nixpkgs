@@ -92,7 +92,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.8.4";
+  version = "3.8.5";
   pyproject = true;
 
   # keeps list elements containing spaces intact, which disabledTests below needs
@@ -102,7 +102,7 @@ buildPythonPackage (finalAttrs: {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-o5mYaGuYDBixac99T68niXKoDOENHGfExGhs3vDEONc=";
+    hash = "sha256-ZKPYdsTo/SaptGo3TiBiBZq64JCXPLJFztHg1KVNAPE=";
   };
 
   postPatch = ''

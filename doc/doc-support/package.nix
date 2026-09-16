@@ -176,5 +176,7 @@ stdenvNoCC.mkDerivation (
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };
+
+    meta.license = lib.licenses.mit;
   }
 )
