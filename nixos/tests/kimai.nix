@@ -12,29 +12,8 @@
       };
     };
 
-  # Regression test for `database.socket` actually being used, rather than
-  # silently falling back to a default socket path: Doctrine DBAL's DSN
-  # parser ingests query parameters verbatim (no camelCase/snake_case
-  # normalization), and its PDO MySQL driver only recognizes `unix_socket`,
-  # not `unixSocket`.
-  #
-  # database.host is deliberately left at its "localhost" default rather
-  # than set to an IP: per the MySQL client library's own documented
-  # behaviour, the unix_socket DSN parameter is used *only* when host is
-  # NULL or the literal string "localhost" -- any other host value (e.g.
-  # 127.0.0.1) makes the client use TCP unconditionally and ignore
-  # unix_socket entirely, which would make this test pass or fail for
-  # reasons unrelated to whether the socket parameter was honored (verified
-  # empirically: with skip-networking enabled, host=127.0.0.1 fails
-  # identically regardless of the fix, since TCP is unavailable either way).
-  #
-  # To still force the outcome to depend on the socket param actually being
-  # passed through, we instead make the *default* socket path php would
-  # silently fall back to (if unix_socket were dropped) point at a socket
-  # that doesn't exist -- php.ini's pdo_mysql.default_socket is overridden
-  # per-pool to a bogus path, while MySQL itself keeps listening on the real
-  # default path. skip-networking is also enabled as a belt-and-suspenders
-  # guard against any TCP fallback masking the result.
+  # Use an invalid PDO default socket so the test only passes when
+  # database.socket is propagated as unix_socket.
   containers.socketMachine =
     { ... }:
     {

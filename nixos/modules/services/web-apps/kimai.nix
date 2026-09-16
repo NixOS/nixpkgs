@@ -277,14 +277,7 @@ in
                 dbPort = toString cfg.database.port;
                 dbName = cfg.database.name;
                 dbCharset = cfg.database.charset;
-                # Doctrine DBAL's own DSN parser (Doctrine\DBAL\Tools\DsnParser)
-                # ingests URL query parameters verbatim via PHP's parse_str(),
-                # with no key normalization. Its PDO MySQL driver then only
-                # recognizes $params['unix_socket'] (snake_case) when building
-                # the PDO DSN -- a camelCase "unixSocket" key is silently
-                # ignored and the connection falls back to TCP instead of the
-                # requested socket. See nixos/tests/kimai.nix for a regression
-                # test asserting the socket is actually used.
+                # Doctrine DBAL expects `unix_socket`, not `unixSocket`.
                 dbUnixSocket = if cfg.database.socket != null then "&unix_socket=${cfg.database.socket}" else "";
                 # Note: serverVersion is a shell variable. See below.
                 dbUri =
