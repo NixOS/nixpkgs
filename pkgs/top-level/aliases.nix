@@ -453,6 +453,7 @@ mapAliases {
   buildBowerComponents = throw "buildBowerComponents has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   buildFHSEnvChroot = throw "'buildFHSEnvChroot' is deprecated, please use 'buildFHSEnv'"; # Added 2026-05-21
   buildGo123Module = throw "Go 1.23 is end-of-life, and 'buildGo123Module' has been removed. Please use a newer builder version."; # Added 2025-08-13
+  buildGo125Module = throw "Go 1.25 is end-of-life, and 'buildGo125Module' has been removed. Please use a newer builder version."; # Added 2026-09-15
   buildPlatform = warnAlias "'buildPlatform' has been renamed to/replaced by 'stdenv.buildPlatform'" stdenv.buildPlatform; # Converted to warning 2025-10-28
   buildXenPackage = throw "'buildXenPackage' has been removed as a custom Xen build can now be achieved by simply overriding 'xen'."; # Added 2025-05-12
   bullet-roboschool = throw "'bullet-roboschool' has been removed as its build was broken and it was deprecated with its last update in 2019."; # Added 2025-11-15
@@ -569,6 +570,7 @@ mapAliases {
   claude-code-bin = warnAlias "'claude-code-bin' has been merged into 'claude-code'" claude-code; # Added 2026-04-18
   clearlyU = clearly-u; # Added 2026-02-08
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
+  cliairplay = throw "'cliairplay' has been removed because Music-Assistant switched fully to airplay-cli"; # Added 2026-07-31
   clima = throw "'clima' has been removed, as it has been unmaintained upstream since December 2024, use glow instead"; # Added 2026-01-01
   clipbuzz = throw "clipbuzz has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   clipgrab = throw "'clipgrab' has been removed, as it was unmaintained in nixpkgs since 2022 and depended on vulnerable qt5 webengine."; # Added 2026-02-11
@@ -1060,6 +1062,7 @@ mapAliases {
   go-thumbnailer = throw "'go-thumbnailer' has been renamed to/replaced by 'thud'"; # Converted to throw 2025-10-27
   go-upower-notify = throw "'go-upower-notify' has been renamed to/replaced by 'upower-notify'"; # Converted to throw 2025-10-27
   go_1_23 = throw "Go 1.23 is end-of-life and 'go_1_23' has been removed. Please use a newer Go toolchain."; # Added 2025-08-13
+  go_1_25 = throw "Go 1.25 is end-of-life and 'go_1_25' has been removed. Please use a newer Go toolchain."; # Added 2026-09-14
   gobang = throw "'gobang' has been removed as it is unmaintained upstream. Consider using `lazysql` or `rainfrog` instead."; # added
   godot-export-templates = throw "'godot-export-templates' has been renamed to/replaced by 'godot-export-templates-bin'"; # Converted to throw 2025-10-27
   godot_4-export-templates = throw "'godot_4-export-templates' has been renamed to/replaced by 'godot_4-export-templates-bin'"; # Converted to throw 2025-10-27
@@ -1310,6 +1313,7 @@ mapAliases {
   leaf = throw "'leaf' has been removed as it is unmaintained. Consider using 'fastfetch' instead"; # Added 2026-04-24
   leafnode = throw "'leafnode' has been removed as it is unmaintained and depends on EOL library PCRE. Consider using leafnode1 instead"; # Added 2026-07-30
   ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
+  ledger-autosync = throw "ledger-autosync has been removed because ofxclient was dropped"; # Added 2026-08-14
   ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   lepton = throw "'lepton' has been removed as it is archived upstream and has known vulnerabilities (CVE-2022-4104). Consider using 'lepton-jpeg-util' instead"; # Added 2026-06-29
   lesstif = throw "'lesstif' has been removed due to its being broken and unmaintained upstream. Consider using 'motif' instead."; # Added 2025-06-09
@@ -1380,23 +1384,24 @@ mapAliases {
   libqtdbusmock = warnAlias "'libqtdbusmock' has been renamed to 'libsForQt5.libqtdbusmock'" libsForQt5.libqtdbusmock; # Added 2026-03-10
   libqtdbustest = warnAlias "'libqtdbustest' has been renamed to 'libsForQt5.libqtdbustest'" libsForQt5.libqtdbustest; # Added 2026-03-10
   libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
+  libraop = throw "'libraop' has been removed because Music-Assistant switched fully to airplay-cli"; # Added 2026-07-31
   LibreArp = throw "'LibreArp' has been renamed to/replaced by 'librearp'"; # Converted to throw 2025-10-27
   LibreArp-lv2 = throw "'LibreArp-lv2' has been renamed to/replaced by 'librearp-lv2'"; # Converted to throw 2025-10-27
   ####
   # LibreOffice related aliases
   # Cannot order them usefully due to editorconfig
-  libreoffice-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
+  libreoffice-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   libreoffice-qt6 = libreoffice-qt; # Added 2025-08-30
   libreoffice-qt6-fresh = libreoffice-qt-fresh; # Added 2025-08-30
   libreoffice-qt6-fresh-unwrapped = libreoffice-qt-fresh.unwrapped; # Added 2025-08-30
   libreoffice-qt6-still = libreoffice-qt-still; # Added 2025-08-30
   libreoffice-qt6-still-unwrapped = libreoffice-qt-still.unwrapped; # Added 2025-08-30
   libreoffice-qt6-unwrapped = libreoffice-qt.unwrapped; # Added 2025-08-30
-  libreoffice-qt-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-qt-stable` or just `libreoffice-qt`" libreoffice-qt-stable; # Added 2026-08-11
   libreoffice-qt-fresh-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
-  libreoffice-qt-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-qt-stable` or just `libreoffice-qt`" libreoffice-qt-stable; # Added 2026-08-11
   libreoffice-qt-still-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
-  libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
+  libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   ###
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27

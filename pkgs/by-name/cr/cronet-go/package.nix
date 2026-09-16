@@ -29,15 +29,16 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
   # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
-  version = "150.0.7871.63-2";
+  version = "150.0.7871.63-3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
-    rev = "d9872d6dd0d39cc7e042d1199d736f16fc40cf8c";
+    # NOTE: keep rev for easier overriding
+    rev = "049f2909701ca088c9569f6b303bba5376a2b2ff";
     fetchSubmodules = true;
-    hash = "sha256-b7sOKn5d5BsZa73Jukw25fz3MVWHlQBteXrufWwszUk=";
+    hash = "sha256-705cctVHseRSJuEPFxlTRJJUWsNgZ4y5ZQ9nwhyTqFY=";
   };
 
   patches = [

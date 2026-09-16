@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fixDarwinDylibNames,
   nix-update-script,
 }:
 
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-R/l5zMRB/2/a4Yf6toPBBvJ1SvebWsGeumwW9U6b7So=";
 
   buildFeatures = [ "c-api" ];
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   checkFlags = [
     # called `Result::unwrap()` on an `Err` value: LimitExceeded(ParseMemory)
