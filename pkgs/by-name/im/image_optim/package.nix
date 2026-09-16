@@ -80,8 +80,8 @@ bundlerApp {
     longDescription = ''
       Command line tool and ruby interface to optimize (lossless compress,
       optionally lossy) jpeg, png, gif and svg images using external utilities
-      (advpng, gifsicle, jhead, jpeg-recompress, jpegoptim, jpegrescan,
-      jpegtran, optipng, oxipng, pngcrush, pngout, pngquant, svgo)
+      (advpng, gifsicle, jhead, jpeg-recompress, jpegoptim, jpegtran, optipng,
+      oxipng, pngcrush, pngout, pngquant, svgo)
     '';
     homepage = "https://github.com/toy/image_optim";
     license = lib.licenses.mit;
