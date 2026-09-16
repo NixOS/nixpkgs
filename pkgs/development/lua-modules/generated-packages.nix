@@ -4590,15 +4590,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lzn-auto-require";
-      version = "0.2.0-1";
+      version = "1.0.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lzn-auto-require-0.2.0-1.rockspec";
-          sha256 = "02w8pvyhnlbsz56rhgjql13qkh7fk05ai1qkqvk90a8ni8w48hh3";
+          url = "mirror://luarocks/lzn-auto-require-1.0.0-1.rockspec";
+          sha256 = "1glmbikz8vhwavrqpxibxj31k8x59pl7mr76b9k36nk217g7irln";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/horriblename/lzn-auto-require/archive/v0.2.0.zip";
-        sha256 = "1mgka1mmvpd2gfya898qdbbwrp5rpqds8manjs1s7g5x63xp6b98";
+        url = "https://github.com/horriblename/lzn-auto-require/archive/v1.0.0.zip";
+        sha256 = "07sv61bcg6p1039vbh9fdzdsc3x4fadq5j6c5hv3qf4sdzigpdjh";
       };
 
       disabled = luaOlder "5.1";
@@ -4607,7 +4607,7 @@ final: prev: {
       meta = {
         homepage = "https://github.com/horriblename/lzn-auto-require";
         maintainers = with lib.maintainers; [ mrcjkb ];
-        license = lib.licenses.gpl2Only;
+        license.fullName = "GPL-2.0";
         description = "Auto load optional plugins via lua modules with lz.n";
       };
     }
