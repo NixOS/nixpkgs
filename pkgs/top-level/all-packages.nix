@@ -4542,6 +4542,8 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs { });
 
+  structurizr-lite = callPackage ../tools/graphics/structurizr-lite { };
+
   svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   poetryPlugins = recurseIntoAttrs poetry.plugins;
