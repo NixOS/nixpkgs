@@ -5,12 +5,14 @@
   cmake,
   gfortran,
   mpi,
+  conduit,
   python3Packages,
   ctestCheckHook,
   mpiCheckPhaseHook,
   mpiSupport ? true,
   pythonSupport ? false,
   fortranSupport ? false,
+  withExternalConduit ? false,
 
   # passthru.tests
   testers,
@@ -53,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
           ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
       }
     )
-    ++ lib.optional mpiSupport mpi;
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optional withExternalConduit conduit;
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
@@ -62,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CATALYST_USE_MPI" mpiSupport)
     (lib.cmakeBool "CATALYST_WRAP_PYTHON" pythonSupport)
     (lib.cmakeBool "CATALYST_WRAP_FORTRAN" fortranSupport)
+    (lib.cmakeBool "CATALYST_WITH_EXTERNAL_CONDUIT" withExternalConduit)
     (lib.cmakeBool "CATALYST_BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
@@ -92,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     serial = catalyst.override { mpiSupport = false; };
     fortran = catalyst.override { fortranSupport = true; };
+    withExternalConduit = catalyst.override { withExternalConduit = true; };
   };
 
   meta = {
