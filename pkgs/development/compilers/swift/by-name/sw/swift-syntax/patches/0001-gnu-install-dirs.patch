@@ -1,0 +1,36 @@
+From fa08f0527d1ec76369852dfe8d5d2fd9d3feee8d Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 26 Dec 2025 11:39:45 -0500
+Subject: [PATCH] gnu-install-dirs
+
+---
+ cmake/modules/AddSwiftHostLibrary.cmake | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/modules/AddSwiftHostLibrary.cmake b/cmake/modules/AddSwiftHostLibrary.cmake
+index d2f7bc69..4f89a61d 100644
+--- a/cmake/modules/AddSwiftHostLibrary.cmake
++++ b/cmake/modules/AddSwiftHostLibrary.cmake
+@@ -184,15 +184,15 @@ function(add_swift_syntax_library name)
+     # Install this target
+     install(TARGETS ${target}
+       EXPORT SwiftSyntaxTargets
+-      ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+-      LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+-      RUNTIME DESTINATION bin
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     )
+ 
+     # Install the module files.
+     install(
+       DIRECTORY ${module_base}
+-      DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
++      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+       FILES_MATCHING PATTERN "*.swiftinterface"
+     )
+   else()
+-- 
+2.51.2
+

@@ -87,7 +87,7 @@ let
       description = "Unicode and globalization support library with Apple customizations";
       license = lib.licenses.icu;
       teams = [ lib.teams.darwin ];
-      platforms = lib.platforms.darwin;
+      platforms = lib.platforms.darwin ++ lib.platforms.linux;
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"
@@ -169,8 +169,7 @@ let
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace-fail '${r.from}' '${r.to}'") replacements}
         ''
-        # Create library with everything reexported to provide the same ABI as the system ICU.
-        + lib.optionalString stdenv.hostPlatform.isDarwin (
+        + (
           if stdenv.hostPlatform.isStatic then
             ''
               ${stdenv.cc.targetPrefix}ar qL "$out/lib/libicucore.a" \
@@ -180,20 +179,33 @@ let
                 "$out/lib/libicuio.a"
             ''
           else
-            ''
-              icuVersion=$(basename "$out/share/icu/"*)
-              ${stdenv.cc.targetPrefix}clang -dynamiclib \
-                -L "$out/lib" \
-                -Wl,-reexport-licuuc \
-                -Wl,-reexport-licudata \
-                -Wl,-reexport-licui18n \
-                -Wl,-reexport-licuio \
-                -compatibility_version 1 \
-                -current_version "$icuVersion" \
-                -install_name "$out/lib/libicucore.A.dylib" \
-                -o "$out/lib/libicucore.A.dylib"
-              ln -s libicucore.A.dylib "$out/lib/libicucore.dylib"
-            ''
+            (
+              lib.optionalString stdenv.hostPlatform.isDarwin ''
+                icuVersion=$(basename "$out/share/icu/"*)
+                ${stdenv.cc.targetPrefix}clang -dynamiclib \
+                  -L "$out/lib" \
+                  -Wl,-reexport-licuuc \
+                  -Wl,-reexport-licudata \
+                  -Wl,-reexport-licui18n \
+                  -Wl,-reexport-licuio \
+                  -compatibility_version 1 \
+                  -current_version "$icuVersion" \
+                  -install_name "$out/lib/libicucore.A.dylib" \
+                  -o "$out/lib/libicucore.A.dylib"
+                ln -s libicucore.A.dylib "$out/lib/libicucore.dylib"
+              ''
+              + lib.optionalString stdenv.hostPlatform.isLinux ''
+                ${stdenv.cc.targetPrefix}cc -shared \
+                  -L "$out/lib" \
+                  -Wl,--no-as-needed \
+                  -licuuc \
+                  -licudata \
+                  -licui18n \
+                  -licuio \
+                  -o "$out/lib/libicucore.so.A"
+                ln -s libicucore.so.A "$out/lib/libicucore.so"
+              ''
+            )
         )
       );
 

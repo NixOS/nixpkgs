@@ -91,6 +91,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Strip cbindgen build steps
     find "$cargoDepsCopy" -path "*/ferrous-opencc-*/build.rs" \
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
+
+    # FoundationModels requires macros that are only shipped with Xcode. The 26.x SDK in Nixpkgs does not have them.
+    substituteInPlace src-tauri/build.rs \
+      --replace-fail 'has_foundation_models = framework_path.exists()' ' has_foundation_models = false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
@@ -153,6 +157,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lclang_rt.osx"; # Make sure `__isPlatformVersionAtLeast` is available for runtime version checks.
     SWIFTC = lib.getExe' swift "swiftc"; # Explicit so the Handy build system can avoid xcrun
   };
 

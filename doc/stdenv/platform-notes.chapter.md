@@ -192,6 +192,13 @@ stdenv.mkDerivation {
 }
 ```
 
+### Macro library not available {#sec-darwin-missing-macros}
+
+Some frameworks provide macros that are only shipped with Xcode.
+For example, the AppleIntelligence framework, Swift Data, and SwiftUI (as of the 27.0 SDK).
+A non-free package making these available will be added at a later date.
+Until then, they are unfortunately not available in Nixpkgs.
+
 #### How to use libiconv on Darwin {#sec-darwin-troubleshooting-libiconv}
 
 The libiconv package is included in the SDK by default along with libresolv and libsbuf.
