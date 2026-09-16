@@ -1,7 +1,6 @@
-diff -ruN a/src/constant/kernel.ts b/src/constant/kernel.ts
 --- a/src/constant/kernel.ts
 +++ b/src/constant/kernel.ts
-@@ -300,9 +300,9 @@
+@@ -324,9 +324,9 @@
        'run',
        '--disable-color',
        '-c',
@@ -13,21 +12,20 @@ diff -ruN a/src/constant/kernel.ts b/src/constant/kernel.ts
      ],
    }
  }
-diff -ruN a/src/stores/env.ts b/src/stores/env.ts
 --- a/src/stores/env.ts
 +++ b/src/stores/env.ts
-@@ -15,6 +15,7 @@
+@@ -14,6 +14,7 @@
      appName: '',
      appVersion: '',
      basePath: '',
 +    configPath: '',
      appPath: '',
-     os: '' as OS,
+     os: '' as App.OS,
      arch: '',
-diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
 --- a/src/stores/kernelApi.ts
 +++ b/src/stores/kernelApi.ts
-@@ -271,19 +271,24 @@
+@@ -273,8 +273,12 @@
+ 
    const runCoreProcess = async (isAlpha: boolean) => {
      let stopped = false
 +    const coreWorkingDirectory =
@@ -40,10 +38,7 @@ diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
        getKernelRuntimeArgs(isAlpha),
        undefined,
        async (end) => {
-         stopped = true
-         const logs = await ReadFile(CoreLogFilePath, { Range: '-4096' }).catch((err) => String(err))
-         logs.split('\n').forEach((line) => line && logsStore.recordKernelLog(line))
-         end && logsStore.recordKernelLog(end)
+@@ -285,8 +289,9 @@
          onCoreStopped()
        },
        {
@@ -54,7 +49,6 @@ diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
          Env: getKernelRuntimeEnv(isAlpha),
        },
      )
-diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
 --- a/src/types/app.d.ts
 +++ b/src/types/app.d.ts
 @@ -17,6 +17,7 @@
@@ -65,10 +59,9 @@ diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
      appPath: string
      os: OS
      arch: string
-diff -ruN a/src/views/PluginsView/index.vue b/src/views/PluginsView/index.vue
 --- a/src/views/PluginsView/index.vue
 +++ b/src/views/PluginsView/index.vue
-@@ -37,7 +37,7 @@
+@@ -34,7 +34,7 @@
      label: 'common.openFile',
      handler: async (id: string) => {
        const plugin = pluginsStore.getPluginById(id)
@@ -77,10 +70,9 @@ diff -ruN a/src/views/PluginsView/index.vue b/src/views/PluginsView/index.vue
      },
    },
  ]
-diff -ruN a/src/views/RulesetsView/index.vue b/src/views/RulesetsView/index.vue
 --- a/src/views/RulesetsView/index.vue
 +++ b/src/views/RulesetsView/index.vue
-@@ -27,7 +27,7 @@
+@@ -33,7 +33,7 @@
      label: 'common.openFile',
      handler: async (id: string) => {
        const ruleset = rulesetsStore.getRulesetById(id)
@@ -89,10 +81,9 @@ diff -ruN a/src/views/RulesetsView/index.vue b/src/views/RulesetsView/index.vue
      },
    },
    {
-diff -ruN a/src/utils/helper.ts b/src/utils/helper.ts
 --- a/src/utils/helper.ts
 +++ b/src/utils/helper.ts
-@@ -822,9 +822,21 @@
+@@ -416,9 +416,21 @@
  export const processMagicVariables = (str: string) => {
    const { env } = useEnvStore()
    let result = str
