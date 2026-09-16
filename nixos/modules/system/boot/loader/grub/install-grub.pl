@@ -74,6 +74,7 @@ my $entryOptions = get("entryOptions");
 my $subEntryOptions = get("subEntryOptions");
 my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
+my $keepBootedSystemEntry = get("keepBootedSystemEntry") eq "true";
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $timeoutStyle = get("timeoutStyle");
@@ -566,6 +567,17 @@ $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
 addGeneration("@distroName@", "", $defaultConfig, $entryOptions, 1);
 
+if ($keepBootedSystemEntry && -e "/run/booted-system") {
+    my $link = "/run/booted-system";
+    if (! -e "$link/nixos-version") {
+        warn "skipping unrecognized booted system ‘$link’\n";
+    } else {
+      my $date = strftime("%F", localtime(lstat($link)->mtime));
+      my $version = readFile("$link/nixos-version");
+      addGeneration("@distroName@ - Last Booted", " (booted $date - $version)", $link, $entryOptions, 0);
+    }
+}
+
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
 my $grubBootPath = $grubBoot->path;
@@ -593,10 +605,7 @@ sub addProfile {
             next;
         }
         my $date = strftime("%F", localtime(lstat($link)->mtime));
-        my $version =
-            -e "$link/nixos-version"
-            ? readFile("$link/nixos-version")
-            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+        my $version = readFile("$link/nixos-version");
         addGeneration("@distroName@ - Configuration " . nrFromGen($link), " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
