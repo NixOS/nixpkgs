@@ -1,5 +1,5 @@
 {
-  backendStdenv,
+  redistSystem,
   buildRedist,
   lib,
 }:
@@ -18,8 +18,8 @@ buildRedist (finalAttrs: {
   # systems ship static archives has changed over time: linux-x86_64 always has, linux-sbsa only
   # since 12.6.37, and linux-aarch64 (Jetson) and linux-ppc64le never have.
   ++ lib.optionals (
-    backendStdenv.hostRedistSystem == "linux-x86_64"
-    || (backendStdenv.hostRedistSystem == "linux-sbsa" && lib.versionAtLeast finalAttrs.version "12.6")
+    redistSystem == "linux-x86_64"
+    || (redistSystem == "linux-sbsa" && lib.versionAtLeast finalAttrs.version "12.6")
   ) [ "static" ];
 
   allowFHSReferences = true;

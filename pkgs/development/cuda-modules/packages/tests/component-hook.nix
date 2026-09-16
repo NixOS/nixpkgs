@@ -4,13 +4,54 @@
   cudaComponentHook,
   cudaMajorMinorVersion,
   cuda_nvcc,
+  cuda_profiler_api,
   cudaNamePrefix,
   cudatoolkit,
   lib,
   testers,
+  writeShellScriptBin,
 }:
 let
   inherit (lib) getExe getOutput;
+  # Assertions embedded in strings are not spliced by mkDerivation.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
+  buildBuildNvcc = cuda_nvcc.__spliced.buildBuild or cuda_nvcc;
+  buildTargetNvcc = cuda_nvcc.__spliced.buildTarget or cuda_nvcc;
+  buildCudart = cuda_cudart.__spliced.buildBuild or cuda_cudart;
+  targetCudart = cuda_cudart.__spliced.targetTarget or cuda_cudart;
+  buildComponentHook = cudaComponentHook.__spliced.buildHost or cudaComponentHook;
+  dependencyRoles = [
+    {
+      splice = "buildBuild";
+      offsets = "-1:-1";
+      compiler = true;
+    }
+    {
+      splice = "buildHost";
+      offsets = "-1:0";
+      compiler = true;
+    }
+    {
+      splice = "buildTarget";
+      offsets = "-1:1";
+      compiler = true;
+    }
+    {
+      splice = "hostHost";
+      offsets = "0:0";
+      compiler = false;
+    }
+    {
+      splice = "hostTarget";
+      offsets = "0:1";
+      compiler = false;
+    }
+    {
+      splice = "targetTarget";
+      offsets = "1:1";
+      compiler = false;
+    }
+  ];
   runCommand =
     name: attrs: buildCommand:
     backendStdenv.mkDerivation (
@@ -64,7 +105,7 @@ let
           '';
       expectedBuilderLogEntries = [ message ];
     };
-  cudartInclude = getOutput "include" cuda_cudart;
+  cudartInclude = getOutput cuda_cudart.outputInclude cuda_cudart;
   cudartLib = getOutput "lib" cuda_cudart;
   inactiveCompiler = mkTestComponent {
     componentName = "inactive_nvcc";
@@ -78,14 +119,27 @@ let
   plainDependency = runCommand "${cudaNamePrefix}-tests-component-hook-plain-dependency" { } ''
     touch "$out"
   '';
-  setupHookComponent = mkTestComponent {
-    componentName = "existing_setup_hook";
-    inherit cudaMajorMinorVersion;
-    install = ''
-      mkdir -p "$out/nix-support"
-      echo 'export CUDA_COMPONENT_EXISTING_SETUP_HOOK=preserved' >"$out/nix-support/setup-hook"
-    '';
-  };
+  # stdenv installs setupHook after fixupOutputHooks, and only into dev.
+  # Both outputs must publish components; the dev hook must preserve its
+  # package-specific behavior even when that hook returns early.
+  setupHookComponent =
+    (mkTestComponent {
+      componentName = "existing_setup_hook";
+      inherit cudaMajorMinorVersion;
+      install = ''
+        mkdir -p "$out" "$dev"
+      '';
+    }).overrideAttrs
+      {
+        outputs = [
+          "out"
+          "dev"
+        ];
+        setupHook = builtins.toFile "cuda-component-test-setup-hook.sh" ''
+          export CUDA_COMPONENT_EXISTING_SETUP_HOOK=preserved
+          return 0
+        '';
+      };
   invalidCompiler = mkTestComponent {
     componentName = "invalid_compiler";
     cudaCompilerExecutable = "bin";
@@ -128,7 +182,6 @@ let
     message = "conflicting output cuda_cudart:out";
   };
   assertions = ''
-    expectedHostCompiler="${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++"
 
     assertEqual() {
       local variableName="$1"
@@ -165,8 +218,7 @@ let
       local expected="$3"
       local expectedCount="$4"
       local value="''${!variableName-}"
-      local entry
-      local count=0
+      local entry count=0
       local -a entries=()
 
       IFS="$delimiter" read -r -a entries <<<"$value"
@@ -179,20 +231,19 @@ let
       }
     }
 
-    assertSortedUniqueFile() {
+    assertUniqueFile() {
       local file="$1"
-      local LC_ALL=C
-      local previous=
       local entry
-
+      local -A seen=()
       for entry in $(<"$file"); do
-        if [[ -n "$previous" && ! "$previous" < "$entry" ]]; then
-          echo "$file is not sorted and unique: $previous then $entry" >&2
+        [[ -z ''${seen[$entry]-} ]] || {
+          echo "$file contains a duplicate: $entry" >&2
           exit 1
-        fi
-        previous="$entry"
+        }
+        seen["$entry"]=1
       done
     }
+
   '';
   componentOnly =
     runCommand "${cudaNamePrefix}-tests-component-hook-component-only"
@@ -201,6 +252,11 @@ let
         strictDeps = true;
 
         buildInputs = [ cuda_cudart ];
+        NVCC_PREPEND_FLAGS = [
+          "--library-only"
+          "--untouched"
+        ];
+        dontCompressCudaFatbins = true;
       }
       ''
         ${assertions}
@@ -209,17 +265,38 @@ let
         [[ -z ''${CUDAHOSTCXX-} ]]
         [[ -z ''${NVCC_CCBIN-} ]]
         [[ -z ''${CUDAToolkit_ROOT-} ]]
-        assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}"
-        assertListContains ":" NIX_CUDA_INCLUDE_PATH "${cudartInclude}/include"
-        assertListContains ":" NIX_CUDA_LIBRARY_PATH "${cudartLib}/lib"
+        # A library dependency must not configure NVCC or rewrite its flags.
+        [[ -z ''${NIX_CUDA_DONT_COMPRESS_FATBINS-} ]]
+        [[ ''${#NVCC_PREPEND_FLAGS[@]} == 2 ]]
+        [[ ''${NVCC_PREPEND_FLAGS[1]} == --untouched ]]
+        assertListContains " " NIX_CFLAGS_COMPILE "${cudartInclude}/include"
+        assertListContains " " NIX_LDFLAGS "-L${cudartLib}/lib"
+
+        # The runtime SDK must be usable without an NVCC dependency, including
+        # the CRT headers that CUDA 12 bundles in its compiler archive.
+        cat > runtime.cpp <<'EOF'
+        #include <cuda_runtime.h>
+        int main() {
+          int version;
+          return cudaRuntimeGetVersion(&version) == cudaSuccess ? 0 : 1;
+        }
+        EOF
+        "$CXX" runtime.cpp -lcudart -o runtime
 
         touch "$out"
       '';
+  plainConsumer = backendStdenv.mkDerivation {
+    name = "${cudaNamePrefix}-tests-component-hook-plain-consumer";
+    dontUnpack = true;
+    strictDeps = true;
+    buildInputs = [ cuda_cudart ];
+    installPhase = "mkdir $out";
+  };
   consumerNotComponent =
     runCommand "${cudaNamePrefix}-tests-component-hook-consumer-not-component" { }
       ''
-        [[ ! -e "${componentOnly}/nix-support/cuda-component" ]]
-        [[ ! -e "${componentOnly}/nix-support/setup-hook" ]]
+        [[ ! -e "${plainConsumer}/nix-support/cuda-component" ]]
+        [[ ! -e "${plainConsumer}/nix-support/setup-hook" ]]
         touch "$out"
       '';
   callerOverrides =
@@ -234,6 +311,7 @@ let
           CUDACXX = "/caller/cuda-compiler";
           CUDAHOSTCXX = "/caller/host-compiler";
           CUDAToolkit_ROOT = "/caller/cuda-root";
+          CUDA_BIN_PATH = "/caller/cuda-bin";
         };
         NVCC_PREPEND_FLAGS = [ "--caller-flag" ];
         dontCompressCudaFatbins = true;
@@ -245,10 +323,12 @@ let
         assertEqual CUDAHOSTCXX "/caller/host-compiler"
         assertEqual NVCC_CCBIN "/caller/host-compiler"
         assertEqual CUDAToolkit_ROOT "/caller/cuda-root"
-        assertEqual NIX_CUDA_COMPILER "${getExe cuda_nvcc}"
+        assertEqual CUDA_BIN_PATH "/caller/cuda-bin"
+        assertEqual NIX_CUDA_COMPILER "${getExe buildNvcc}"
         [[ "$(declare -p NVCC_PREPEND_FLAGS)" == "declare -x "* ]]
-        [[ "$NVCC_PREPEND_FLAGS" == "--caller-flag "* ]]
+        [[ "$NVCC_PREPEND_FLAGS" == "--caller-flag" ]]
         [[ "$NVCC_PREPEND_FLAGS" != *"-Xfatbin=-compress-all"* ]]
+        assertEqual NIX_CUDA_DONT_COMPRESS_FATBINS 1
 
         touch "$out"
       '';
@@ -278,18 +358,15 @@ let
       ''
         ${assertions}
 
-        assertEqual CUDACXX "${getExe cuda_nvcc}"
-        assertEqual CUDAHOSTCXX "$expectedHostCompiler"
-        assertEqual NVCC_CCBIN "$expectedHostCompiler"
-        assertListCount ";" NIX_CUDA_COMPONENT_PATH "${cuda_nvcc}" 1
-        assertListCount ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}" 1
+        assertEqual CUDACXX "${getExe buildNvcc}"
+        assertEqual NVCC_CCBIN "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++"
 
         # Non-strict environments flatten dependency roles and collect each
         # dependency once, even though stdenv invokes every registered hook.
         for collectionKey in "''${!_cudaCollectedDependencies[@]}"; do
           [[ "$collectionKey" == /nix/store/* ]]
         done
-        [[ "''${_cudaComponentRegistry["*:*:cuda_nvcc:out"]-}" == "${cuda_nvcc}" ]]
+        [[ "''${_cudaComponentRegistry["*:*:cuda_nvcc:out"]-}" == "${buildNvcc}" ]]
         [[ "''${_cudaComponentRegistry["*:*:cuda_cudart:out"]-}" == "${cuda_cudart}" ]]
 
         touch "$out"
@@ -407,22 +484,20 @@ let
         do
           propagatedInputs="$(<"${propagationProducer.cxxdev}/nix-support/$propagationFile")"
           assertListContains " " propagatedInputs "${cuda_cudart}"
-          assertSortedUniqueFile "${propagationProducer.cxxdev}/nix-support/$propagationFile"
+          assertUniqueFile "${propagationProducer.cxxdev}/nix-support/$propagationFile"
         done
 
         _propagatedBuildHost="$(<"${propagationProducer.cxxdev}/nix-support/propagated-native-build-inputs")"
         _propagatedHostHost="$(<"${propagationProducer.cxxdev}/nix-support/propagated-host-host-deps")"
         _propagatedHostTarget="$(<"${propagationProducer.cxxdev}/nix-support/propagated-build-inputs")"
 
-        assertListContains " " _propagatedBuildHost "${cuda_nvcc}"
+        assertListContains " " _propagatedBuildHost "${buildNvcc}"
         assertListContains " " _propagatedHostTarget "${propagationProducer.dev}"
         assertListCount " " _propagatedHostTarget "${propagationProducer.out}" 0
         assertListCount " " _propagatedHostTarget "${plainDependency}" 1
-        [[ "''${CUDACXX-}" == "${getExe cuda_nvcc}" ]]
-        [[ "''${CUDAHOSTCXX-}" == "$expectedHostCompiler" ]]
-        [[ "''${NVCC_CCBIN-}" == "$expectedHostCompiler" ]]
-        assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}"
-        assertListContains ";" CUDAToolkit_ROOT "${cuda_nvcc}"
+        [[ "''${CUDACXX-}" == "${getExe buildNvcc}" ]]
+        assertEqual NVCC_CCBIN "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++"
+        assertListContains ";" CUDAToolkit_ROOT "${buildNvcc}"
         assertListContains " " _propagatedHostHost "${cuda_cudart}"
         assertListContains " " _propagatedHostHost "${inactiveCompiler}"
         assertListContains " " _propagatedHostTarget "${cuda_cudart}"
@@ -435,22 +510,51 @@ let
         [[ "''${_cudaComponentRegistry["0:1:inactive_nvcc:out"]-}" == "${inactiveCompiler}" ]]
         touch "$out"
       '';
+  # PATH precedence must survive propagation, even when the caller's order
+  # is the opposite of lexicographic store-path order.
+  orderedChoices = lib.sort (a: b: toString a > toString b) [
+    (writeShellScriptBin "cuda-propagation-choice" "echo first")
+    (writeShellScriptBin "cuda-propagation-choice" "echo second")
+  ];
+  orderedProducer =
+    runCommand "${cudaNamePrefix}-ordered-propagation-producer"
+      {
+        outputs = [
+          "out"
+          "cxxdev"
+        ];
+        strictDeps = true;
+        nativeBuildInputs = [ cudaComponentHook ];
+        cudaPropagateDependenciesToOutput = "cxxdev";
+      }
+      ''
+        mkdir -p "$out" "$cxxdev/nix-support"
+        printWords ${lib.escapeShellArgs orderedChoices} > "$cxxdev/nix-support/propagated-native-build-inputs"
+        runHook postFixup
+      '';
+  orderedPropagation =
+    runCommand "${cudaNamePrefix}-ordered-propagation"
+      {
+        strictDeps = true;
+        buildInputs = [ orderedProducer.cxxdev ];
+      }
+      ''
+        test "$(command -v cuda-propagation-choice)" = "${lib.getExe' (builtins.head orderedChoices) "cuda-propagation-choice"}"
+        touch "$out"
+      '';
   aggregate =
     runCommand "${cudaNamePrefix}-tests-component-hook-aggregate"
       {
         __structuredAttrs = true;
         strictDeps = true;
 
-        buildInputs = [ cudatoolkit ];
+        nativeBuildInputs = [ cudatoolkit ];
       }
       ''
         ${assertions}
 
-        assertEqual CUDACXX "${getExe cuda_nvcc}"
-        assertEqual CUDAHOSTCXX "$expectedHostCompiler"
-        assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_nvcc}"
-        assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}"
-        assertListContains ";" CUDAToolkit_ROOT "${cuda_nvcc}"
+        assertEqual CUDACXX "${getExe buildNvcc}"
+        assertListContains ";" CUDAToolkit_ROOT "${buildNvcc}"
 
         touch "$out"
       '';
@@ -479,6 +583,9 @@ runCommand "${cudaNamePrefix}-tests-component-hook"
     buildInputs = [
       inactiveCompiler
       cuda_cudart
+      # Its dev output has no archive payload. buildRedist must create it
+      # before the runpath fixup hooks inspect every declared output.
+      cuda_profiler_api
       setupHookComponent
     ];
     depsTargetTarget = [
@@ -492,6 +599,7 @@ runCommand "${cudaNamePrefix}-tests-component-hook"
         callerOverrides
         nonStrict
         nonStrictPropagation
+        orderedPropagation
         ;
       component-only = componentOnly;
       consumer-not-component = consumerNotComponent;
@@ -526,12 +634,11 @@ runCommand "${cudaNamePrefix}-tests-component-hook"
       source "$metadataPath"
 
       [[ "''${cudaComponentMetadata[compiler]-}" == "bin/nvcc" ]]
-      [[ "''${cudaComponentMetadata[hostCompiler]-}" == "$expectedHostCompiler" ]]
     }
 
     assertComponentSetupHook() {
       local setupHook="$1/nix-support/setup-hook"
-      local collectorStatement="source ${cudaComponentHook}/nix-support/setup-hook"
+      local collectorStatement="source $2/nix-support/setup-hook"
       local firstStatement=
       IFS= read -r firstStatement <"$setupHook"
 
@@ -539,68 +646,74 @@ runCommand "${cudaNamePrefix}-tests-component-hook"
       [[ "$(grep -Fxc "$collectorStatement" "$setupHook")" == 1 ]]
     }
 
-    assertEqual CUDACXX "${getExe cuda_nvcc}"
-    assertEqual CUDAHOSTCXX "$expectedHostCompiler"
-    assertEqual NVCC_CCBIN "$expectedHostCompiler"
-    assertEqual NIX_CUDA_COMPILER "${getExe cuda_nvcc}"
-    assertEqual NIX_CUDA_COMPILER_ROOT "${cuda_nvcc}"
+    assertEqual CUDACXX "${getExe buildNvcc}"
+    assertEqual NVCC_CCBIN "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++"
+    assertEqual NIX_CUDA_COMPILER "${getExe buildNvcc}"
+    assertEqual NIX_CUDA_COMPILER_ROOT "${buildNvcc}"
     assertEqual NIX_CUDA_MAJOR_MINOR_VERSION "${cudaMajorMinorVersion}"
-    assertEqual NIX_CUDA_COMPILER_FOR_BUILD "${getExe cuda_nvcc}"
-    assertEqual NIX_CUDA_COMPILER_ROOT_FOR_BUILD "${cuda_nvcc}"
-    assertEqual NIX_CUDA_COMPILER_FOR_TARGET "${getExe cuda_nvcc}"
-    assertEqual NIX_CUDA_COMPILER_ROOT_FOR_TARGET "${cuda_nvcc}"
+    assertEqual NIX_CUDA_COMPILER_FOR_BUILD "${getExe buildBuildNvcc}"
+    assertEqual NIX_CUDA_COMPILER_ROOT_FOR_BUILD "${buildBuildNvcc}"
+    assertEqual NIX_CUDA_COMPILER_FOR_TARGET "${getExe buildTargetNvcc}"
+    assertEqual NIX_CUDA_COMPILER_ROOT_FOR_TARGET "${buildTargetNvcc}"
 
-    assertComponentMetadata "${cuda_nvcc}" cuda_nvcc out "${cuda_nvcc.version}"
+    assertComponentMetadata "${buildNvcc}" cuda_nvcc out "${cuda_nvcc.version}"
     assertComponentMetadata "${cuda_cudart}" cuda_cudart out "${cuda_cudart.version}"
     assertComponentMetadata "${setupHookComponent}" existing_setup_hook out 1
-    assertCompilerMetadata "${cuda_nvcc}"
-    assertComponentSetupHook "${cuda_nvcc}"
-    assertComponentSetupHook "${cuda_cudart}"
-    assertComponentSetupHook "${setupHookComponent}"
+    assertComponentMetadata "${setupHookComponent.dev}" existing_setup_hook dev 1
+    assertComponentMetadata "${cuda_profiler_api.dev}" cuda_profiler_api dev "${cuda_profiler_api.version}"
+    assertComponentMetadata "${cuda_profiler_api.include}" cuda_profiler_api include "${cuda_profiler_api.version}"
+    assertCompilerMetadata "${buildNvcc}"
+    # buildRedist embeds its own scope's collector; the test component uses
+    # nativeBuildInputs, which selects the BUILD collector automatically.
+    assertComponentSetupHook "${buildNvcc}" "${buildComponentHook}"
+    assertComponentSetupHook "${cuda_cudart}" "${cudaComponentHook}"
+    assertComponentSetupHook "${cuda_profiler_api.dev}" "${cudaComponentHook}"
+    assertComponentSetupHook "${cuda_profiler_api.include}" "${cudaComponentHook}"
+    assertComponentSetupHook "${setupHookComponent}" "${buildComponentHook}"
+    assertComponentSetupHook "${setupHookComponent.dev}" "${buildComponentHook}"
     grep -Fqx \
       'export CUDA_COMPONENT_EXISTING_SETUP_HOOK=preserved' \
-      "${setupHookComponent}/nix-support/setup-hook"
+      "${setupHookComponent.dev}/nix-support/setup-hook"
     assertEqual CUDA_COMPONENT_EXISTING_SETUP_HOOK preserved
 
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_nvcc}"
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}"
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH_FOR_BUILD "${cuda_nvcc}"
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH_FOR_BUILD "${cuda_cudart}"
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH_FOR_TARGET "${cuda_nvcc}"
-    assertListContains ";" NIX_CUDA_COMPONENT_PATH_FOR_TARGET "${cuda_cudart}"
-    assertListContains ":" NIX_CUDA_INCLUDE_PATH_FOR_BUILD "${cudartInclude}/include"
-    assertListContains ":" NIX_CUDA_INCLUDE_PATH "${cudartInclude}/include"
-    assertListContains ":" NIX_CUDA_INCLUDE_PATH_FOR_TARGET "${cudartInclude}/include"
-    assertListContains ":" NIX_CUDA_LIBRARY_PATH_FOR_BUILD "${cudartLib}/lib"
-    assertListContains ":" NIX_CUDA_LIBRARY_PATH "${cudartLib}/lib"
-    assertListContains ":" NIX_CUDA_LIBRARY_PATH_FOR_TARGET "${cudartLib}/lib"
-    assertListCount ";" NIX_CUDA_COMPONENT_PATH "${cuda_nvcc}" 1
-    assertListCount ";" NIX_CUDA_COMPONENT_PATH "${cuda_cudart}" 1
-    assertListCount ";" NIX_CUDA_COMPONENT_PATH_FOR_BUILD "${cuda_cudart}" 1
-    assertListCount ";" NIX_CUDA_COMPONENT_PATH_FOR_TARGET "${cuda_cudart}" 1
+    assertListContains " " NIX_CFLAGS_COMPILE_FOR_BUILD "${getOutput buildCudart.outputInclude buildCudart}/include"
+    assertListContains " " NIX_CFLAGS_COMPILE "${cudartInclude}/include"
+    assertListContains " " NIX_CFLAGS_COMPILE_FOR_TARGET "${getOutput targetCudart.outputInclude targetCudart}/include"
+    assertListContains " " NIX_LDFLAGS_FOR_BUILD "-L${getOutput "lib" buildCudart}/lib"
+    assertListContains " " NIX_LDFLAGS "-L${cudartLib}/lib"
+    assertListContains " " NIX_LDFLAGS_FOR_TARGET "-L${getOutput "lib" targetCudart}/lib"
 
     # Compiler providers that cannot execute on BUILD remain registered for
     # runtime/JIT discovery, but must not be selected as build-time compilers.
-    [[ "''${NIX_CUDA_COMPILER-}" == "${getExe cuda_nvcc}" ]]
+    [[ "''${NIX_CUDA_COMPILER-}" == "${getExe buildNvcc}" ]]
 
     # All six dependency pairs were visited. Libraries project by host role;
     # executable compiler providers are activated only for BUILD-hosted pairs.
-    for dependencyOffsets in -1:-1 -1:0 -1:1 0:0 0:1 1:1; do
-      [[ -n ''${_cudaCollectedDependencies["$dependencyOffsets:${cuda_cudart}"]-} ]]
-      [[ "''${_cudaComponentRegistry["$dependencyOffsets:cuda_cudart:out"]-}" == "${cuda_cudart}" ]]
-    done
-    for dependencyOffsets in -1:-1 -1:0 -1:1; do
-      [[ "''${_cudaComponentRegistry["$dependencyOffsets:cuda_nvcc:out"]-}" == "${cuda_nvcc}" ]]
-    done
-    for dependencyOffsets in 0:0 0:1 1:1; do
-      [[ -n ''${_cudaCollectedDependencies["$dependencyOffsets:${inactiveCompiler}"]-} ]]
-      [[ "''${_cudaComponentRegistry["$dependencyOffsets:inactive_nvcc:out"]-}" == "${inactiveCompiler}" ]]
-    done
+    ${lib.concatMapStrings (
+      {
+        splice,
+        offsets,
+        compiler,
+      }:
+      let
+        component = cuda_cudart.__spliced.${splice} or cuda_cudart;
+        compilerPackage = if compiler then cuda_nvcc.__spliced.${splice} or cuda_nvcc else inactiveCompiler;
+        compilerName = if compiler then "cuda_nvcc" else "inactive_nvcc";
+      in
+      ''
+        [[ -n ''${_cudaCollectedDependencies["${offsets}:${component}"]-} ]]
+        [[ "''${_cudaComponentRegistry["${offsets}:cuda_cudart:out"]-}" == "${component}" ]]
+        [[ -n ''${_cudaCollectedDependencies["${offsets}:${compilerPackage}"]-} ]]
+        [[ "''${_cudaComponentRegistry["${offsets}:${compilerName}:out"]-}" == "${compilerPackage}" ]]
+      ''
+    ) dependencyRoles}
     [[ "''${_cudaComponentRegistry["0:1:existing_setup_hook:out"]-}" == "${setupHookComponent}" ]]
+    [[ "''${_cudaComponentRegistry["0:1:existing_setup_hook:dev"]-}" == "${setupHookComponent.dev}" ]]
 
-    assertEqual CUDAToolkit_ROOT "${cuda_nvcc}"
-    [[ "''${NVCC_PREPEND_FLAGS-}" == *"-I${cudartInclude}/include"* ]]
-    [[ "''${NVCC_PREPEND_FLAGS-}" == *"-Xfatbin=-compress-all"* ]]
+    assertEqual CUDAToolkit_ROOT "${buildNvcc}"
+    # Automatic flags belong to the invoked wrapper, not a global environment
+    # that would leak HOST headers into BUILD compiler invocations.
+    assertEqual NVCC_PREPEND_FLAGS ""
 
     touch "$out"
   ''

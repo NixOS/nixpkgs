@@ -1,5 +1,4 @@
 {
-  backendStdenv,
   buildRedist,
   cudaAtLeast,
   expat,
@@ -8,6 +7,7 @@
   libxcrypt-legacy,
   ncurses,
   python3,
+  stdenv,
 }:
 let
   python3MajorMinorVersion = lib.versions.majorMinor python3.version;
@@ -27,7 +27,7 @@ buildRedist {
     # only needs gmp from 12.0 and on
     lib.optionals (cudaAtLeast "12.0") [ gmp ]
     # aarch64, sbsa needs expat
-    ++ lib.optionals backendStdenv.hostPlatform.isAarch64 [ expat ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ expat ]
     # From 12.5, cuda-gdb comes with Python TUI wrappers
     ++ lib.optionals (cudaAtLeast "12.5") [
       libxcrypt-legacy

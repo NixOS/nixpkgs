@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ]
+  ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
   ++ lib.optionals openclSupport [
     opencl-headers

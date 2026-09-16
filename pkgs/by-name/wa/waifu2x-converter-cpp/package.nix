@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeWrapper
-  ];
+  ]
+  ++ lib.optional cudaSupport cudatoolkit;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"

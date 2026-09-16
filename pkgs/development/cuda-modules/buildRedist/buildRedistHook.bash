@@ -163,7 +163,7 @@ checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
     fi
 
     hasRemoveStubsFromRunpathHook=0
-    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-build-inputs"; then
+    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-native-build-inputs"; then
       hasRemoveStubsFromRunpathHook=1
     fi
 
@@ -198,8 +198,17 @@ checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
 # NOTE: Because _multioutPropagateDev is a postFixup hook, we correct it in preFixup.
 fixupPropagatedBuildOutputsForMultipleOutputs() {
   nixLog "converting propagatedBuildOutputs to a space-separated string"
-  # shellcheck disable=SC2124
-  export propagatedBuildOutputs="${propagatedBuildOutputs[@]}"
+  # Keep the required outputs for out's aggregate interface. The standard hook
+  # receives the same set without its own destination, as with its defaults.
+  declare -ga cudaPropagatedBuildOutputs=()
+  concatTo cudaPropagatedBuildOutputs propagatedBuildOutputs
+  local output
+  local -a devOutputs=()
+  for output in "${cudaPropagatedBuildOutputs[@]}"; do
+    [[ $output == "$outputDev" ]] || devOutputs+=("$output")
+  done
+  unset propagatedBuildOutputs
+  export propagatedBuildOutputs="${devOutputs[*]}"
   return 0
 }
 
@@ -209,6 +218,9 @@ fixupPropagatedBuildOutputsForMultipleOutputs() {
 # and no propagation occurs.
 # NOTE: This must run in postFixup because fixupPhase nukes the propagated dependency files.
 fixupCudaPropagatedBuildOutputsToOut() {
+  # The standard hook already owns propagation when out is the development
+  # output. Avoid duplicate entries, including the single-output case.
+  [[ $outputDev != out ]] || return 0
   local output
 
   # The `out` output should largely be empty save for nix-support/propagated-build-inputs.
@@ -217,7 +229,13 @@ fixupCudaPropagatedBuildOutputsToOut() {
   mkdir -p "${out:?}/nix-support"
 
   # NOTE: We must use printWords to ensure the output is a single line.
-  for output in $propagatedBuildOutputs; do
+  for output in "${cudaPropagatedBuildOutputs[@]}"; do
+    [[ $output != out ]] || continue
+    # When out holds a required payload, dev already propagates it. Do not add
+    # the reverse edge if dev itself holds another required interface.
+    if [[ $output == "$outputDev" && " $propagatedBuildOutputs " == *" out "* ]]; then
+      continue
+    fi
     # Propagate the other components to the out output
     nixLog "adding ${!output:?} to propagatedBuildInputs of ${out:?}"
     printWords "${!output:?}" >>"${out:?}/nix-support/propagated-build-inputs"

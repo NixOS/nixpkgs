@@ -18,10 +18,6 @@ let
     declare -g _cudaComponentHookSourced=1
 
     source ${role}
-    source ${../../../../build-support/setup-hooks/arrayUtilities/isDeclaredArray/isDeclaredArray.bash}
-    source ${../../../../build-support/setup-hooks/arrayUtilities/isDeclaredMap/isDeclaredMap.bash}
-    source ${../../../../build-support/setup-hooks/arrayUtilities/sortArray/sortArray.bash}
-    source ${../../../../build-support/setup-hooks/arrayUtilities/getSortedMapKeys/getSortedMapKeys.bash}
     declare -g _cudaComponentHookPath="@cudaComponentHook@"
     source ${./cuda-component-hook.sh}
   '';

@@ -1,6 +1,6 @@
 {
   _cuda,
-  backendStdenv,
+  cudaConfig,
   buildRedist,
   lib,
   libcublas,
@@ -11,7 +11,7 @@
 buildRedist (
   finalAttrs:
   let
-    inherit (backendStdenv) cudaCapabilities;
+    inherit (cudaConfig) cudaCapabilities;
     cudnnAtLeast = lib.versionAtLeast finalAttrs.version;
     cudnnOlder = lib.versionOlder finalAttrs.version;
   in

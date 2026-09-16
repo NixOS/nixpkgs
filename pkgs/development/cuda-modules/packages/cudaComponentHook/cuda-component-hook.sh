@@ -84,27 +84,6 @@ _cudaResolveCompiler() {
   printf -v "$resultVariable" %s "$resolvedCompiler"
 }
 
-_cudaValidateHostCompiler() {
-  local hostCompiler="$1"
-
-  if [[ $hostCompiler != /* || ! -f $hostCompiler || ! -x $hostCompiler ]]; then
-    _cudaError "host compiler is not an absolute executable file: $hostCompiler"
-    return 1
-  fi
-}
-
-_cudaAddOutputDirectories() {
-  local roleSuffix="$1"
-  local componentPath="$2"
-
-  [[ ! -d "$componentPath/include" ]] ||
-    addToSearchPath "NIX_CUDA_INCLUDE_PATH${roleSuffix}" "$componentPath/include"
-  [[ ! -d "$componentPath/lib" ]] ||
-    addToSearchPath "NIX_CUDA_LIBRARY_PATH${roleSuffix}" "$componentPath/lib"
-  [[ ! -d "$componentPath/lib64" ]] ||
-    addToSearchPath "NIX_CUDA_LIBRARY_PATH${roleSuffix}" "$componentPath/lib64"
-}
-
 _cudaCollectComponent() {
   local componentPath="$1"
   local metadataPath="$componentPath/nix-support/cuda-component"
@@ -133,7 +112,7 @@ _cudaCollectComponent() {
   local key
   for key in "${!cudaComponentMetadata[@]}"; do
     case "$key" in
-      format | component | output | cudaMajorMinorVersion | cudaComponentVersion | compiler | hostCompiler) ;;
+      format | component | output | cudaMajorMinorVersion | cudaComponentVersion | compiler) ;;
       *)
         _cudaError "unknown field \"$key\" in $metadataPath"
         return 1
@@ -147,7 +126,6 @@ _cudaCollectComponent() {
   local cudaMajorMinorVersion="${cudaComponentMetadata[cudaMajorMinorVersion]-}"
   local cudaComponentVersion="${cudaComponentMetadata[cudaComponentVersion]-}"
   local compiler="${cudaComponentMetadata[compiler]-}"
-  local hostCompiler="${cudaComponentMetadata[hostCompiler]-}"
 
   if [[ $format != 3 || -z $component || -z $output || -z $cudaComponentVersion ]]; then
     _cudaError "invalid component metadata in $metadataPath"
@@ -155,31 +133,17 @@ _cudaCollectComponent() {
   fi
   _cudaValidateIdentifier "component name" "$component"
   _cudaValidateIdentifier "output name" "$output"
-  [[ -z $hostCompiler ]] || _cudaValidateHostCompiler "$hostCompiler"
-  if [[ -n $hostCompiler && -z $compiler ]]; then
-    _cudaError "hostCompiler requires compiler in $metadataPath"
-    return 1
-  fi
-
-  local role_post
+  local role_post=
   local compilerPath=
-  if [[ -n $compiler ]]; then
-    # Compilers are tools for producing code for their target platform.
-    if [[ -n ${strictDeps-} ]]; then
+  if [[ -n ${strictDeps-} ]]; then
+    # Compilers produce code for TARGET; headers and libraries describe HOST.
+    if [[ -n $compiler ]]; then
       getTargetRoleEnvHook
     else
-      role_post=
-    fi
-
-    _cudaResolveCompiler "$componentPath" "$compiler" compilerPath
-  else
-    # Headers and libraries are consumed by code for their host platform.
-    if [[ -n ${strictDeps-} ]]; then
       getHostRoleEnvHook
-    else
-      role_post=
     fi
   fi
+  [[ -z $compiler ]] || _cudaResolveCompiler "$componentPath" "$compiler" compilerPath
 
   [[ -z $cudaMajorMinorVersion ]] ||
     _cudaExportUnique \
@@ -202,14 +166,6 @@ _cudaCollectComponent() {
   _cudaComponentRegistry["$componentKey"]="$componentPath"
   nixDebugLog "registered CUDA component $component:$output for dependency role $dependencyRole from $componentPath"
 
-  # The registry includes compiler providers as components. Dependency
-  # propagation still distinguishes host components from native compiler tools.
-  addToSearchPathWithCustomDelimiter \
-    ";" \
-    "NIX_CUDA_COMPONENT_PATH${role_post}" \
-    "$componentPath"
-  _cudaAddOutputDirectories "$role_post" "$componentPath"
-
   # Like cc-wrapper and bintools-wrapper, only expose a compiler as a build
   # tool when its host platform is BUILD and it can therefore execute during
   # this build. Still register compilers carried for HOST or TARGET: they may
@@ -217,8 +173,14 @@ _cudaCollectComponent() {
   if [[ -n $compiler && (-z ${strictDeps-} || $depHostOffset -lt 0) ]]; then
     _cudaExportUnique "NIX_CUDA_COMPILER${role_post}" "$compilerPath" "CUDA compilers"
     _cudaExportUnique "NIX_CUDA_COMPILER_ROOT${role_post}" "$componentPath" "CUDA compiler roots"
-    [[ -z $hostCompiler ]] ||
-      _cudaExportUnique "NIX_CUDA_HOST_COMPILER${role_post}" "$hostCompiler" "CUDA host compilers"
+
+    # Publish discovery defaults while the compiler's role is in scope.
+    # Explicit caller choices remain authoritative.
+    local cudacxxVariable="CUDACXX${role_post}"
+    [[ -n ${!cudacxxVariable-} ]] || export "$cudacxxVariable=$compilerPath"
+    if [[ -z $role_post && -z ${CUDAToolkit_ROOT-} ]]; then
+      export CUDAToolkit_ROOT="$componentPath"
+    fi
   fi
 
   _cudaCollectedDependencies["$collectionKey"]=1
@@ -231,97 +193,6 @@ addEnvHooks -1 _cudaCollectComponent
 addEnvHooks 0 _cudaCollectComponent
 addEnvHooks 1 _cudaCollectComponent
 
-_cudaAppendFlags() {
-  local variableName="$1"
-  shift
-  local currentValue=
-  if isDeclaredArray "$variableName"; then
-    local -n variableReference="$variableName"
-    currentValue="${variableReference[*]}"
-  else
-    currentValue="${!variableName-}"
-  fi
-
-  unset -v "$variableName"
-  export "$variableName=${currentValue}${currentValue:+ }$*"
-}
-
-_cudaFindHostCompiler() {
-  local resultVariable="$1"
-  local compiler="${CXX-}"
-  local compatibleCompiler="${NIX_CUDA_HOST_COMPILER-}"
-  local resolvedCompiler=
-
-  # NVCC's component records the host compiler selected by backendStdenv.
-  # Prefer it for native builds: the consumer's ordinary stdenv compiler may
-  # be newer than NVCC supports. A target-prefixed or absolute CXX denotes a
-  # consumer-selected cross/custom compiler and must take precedence.
-  if [[ -n $compatibleCompiler && $compiler =~ ^(c\+\+|g\+\+|clang\+\+)?$ ]]; then
-    resolvedCompiler="$compatibleCompiler"
-  elif [[ $compiler == /* ]]; then
-    resolvedCompiler="$compiler"
-  elif [[ -n $compiler && -n ${NIX_CC-} && -x ${NIX_CC}/bin/$compiler ]]; then
-    resolvedCompiler="${NIX_CC}/bin/$compiler"
-  elif [[ -n $compiler ]]; then
-    resolvedCompiler="$(type -P -- "$compiler" || true)"
-  fi
-
-  [[ -n $resolvedCompiler ]] || resolvedCompiler="$compatibleCompiler"
-  [[ -z $resolvedCompiler || (-f $resolvedCompiler && -x $resolvedCompiler) ]] ||
-    resolvedCompiler=
-  printf -v "$resultVariable" %s "$resolvedCompiler"
-}
-
-_cudaFinalizeEnvironment() {
-  # FindCUDAToolkit uses CUDAToolkit_ROOT to locate nvcc and then reduces it to
-  # one compiler root. Other component roots belong in the component registry;
-  # their include and library directories reach build systems through the same
-  # compiler and linker search-path mechanisms used elsewhere in stdenv.
-  local path
-  local hostCompiler=
-  local -a paths=()
-  local -a nvccFlags=()
-
-  [[ -n ${CUDAToolkit_ROOT-} || -z ${NIX_CUDA_COMPILER_ROOT-} ]] ||
-    export CUDAToolkit_ROOT="$NIX_CUDA_COMPILER_ROOT"
-
-  if [[ -n ${NIX_CUDA_COMPILER-} ]]; then
-    [[ -n ${CUDACXX-} ]] || export CUDACXX="$NIX_CUDA_COMPILER"
-
-    hostCompiler="${CUDAHOSTCXX-${NVCC_CCBIN-}}"
-    [[ -n $hostCompiler ]] || _cudaFindHostCompiler hostCompiler
-    [[ -n ${CUDAHOSTCXX-} || -z $hostCompiler ]] ||
-      export CUDAHOSTCXX="$hostCompiler"
-    [[ -n ${NVCC_CCBIN-} || -z $hostCompiler ]] ||
-      export NVCC_CCBIN="$hostCompiler"
-
-    nixInfoLog "selected CUDA compiler: $CUDACXX"
-    [[ -z $hostCompiler ]] || nixInfoLog "selected CUDA host compiler: $hostCompiler"
-  fi
-
-  # Direct nvcc and JIT invocations do not necessarily consume cc-wrapper's
-  # include flags, so also expose every active component include directory to
-  # nvcc itself.
-  if [[ -n ${NIX_CUDA_INCLUDE_PATH-} ]]; then
-    IFS=':' read -r -a paths <<<"$NIX_CUDA_INCLUDE_PATH"
-    for path in "${paths[@]}"; do
-      [[ -z $path ]] || nvccFlags+=("-I$path")
-    done
-  fi
-
-  # Large multi-architecture fatbins can otherwise exceed linker size limits.
-  [[ -n ${dontCompressCudaFatbins-} ]] ||
-    nvccFlags+=("-Xfatbin=-compress-all")
-
-  ((${#nvccFlags[@]} == 0)) ||
-    _cudaAppendFlags NVCC_PREPEND_FLAGS "${nvccFlags[@]}"
-}
-
-# Finalize during setup.sh evaluation, after every dependency has been passed
-# to the environment hooks. No configure phase is required, so this also works
-# in nix-shell and nix develop.
-postHooks+=(_cudaFinalizeEnvironment)
-
 _cudaMergePropagatedInputs() {
   local file="$1"
   shift
@@ -332,76 +203,72 @@ _cudaMergePropagatedInputs() {
     read -r -d '' -a existingInputs <"$file" || true
   fi
 
+  local -a mergedInputs=()
   local input
   for input in "${existingInputs[@]}" "$@"; do
-    # getSortedMapKeys consumes this map through a nameref.
-    # shellcheck disable=SC2034
-    [[ -z $input ]] || inputs["$input"]=1
+    [[ -z $input || -n ${inputs[$input]-} ]] && continue
+    inputs["$input"]=1
+    mergedInputs+=("$input")
   done
 
-  local -a sortedInputs=()
-  getSortedMapKeys inputs sortedInputs
-  ((${#sortedInputs[@]} > 0)) || return 0
+  # Dependency order determines search-path precedence. Deduplicate without
+  # reordering the caller's inputs or the dependencies appended by this hook.
+  ((${#mergedInputs[@]} > 0)) || return 0
   mkdir -p "${file%/*}"
-  printWords "${sortedInputs[@]}" >"$file"
+  printWords "${mergedInputs[@]}" >"$file"
 }
 
-_cudaPublishComponentMetadata() {
+_cudaPublishComponents() {
   [[ -n ${cudaPublishComponent-} ]] || return 0
 
-  local componentPath="${prefix:?}"
   local componentName="${cudaComponentName-${pname:?}}"
   local componentVersion="${cudaComponentVersion-${version:?}}"
   _cudaValidateIdentifier "component name" "$componentName"
-  _cudaValidateIdentifier "output name" "${output:?}"
   if [[ -z $componentVersion ]]; then
     _cudaError "cudaComponentVersion is required for $componentName"
     return 1
   fi
-  if [[ -n ${cudaHostCompiler-} && -z ${cudaCompilerExecutable-} ]]; then
-    _cudaError "cudaHostCompiler requires cudaCompilerExecutable"
-    return 1
-  fi
-  [[ -z ${cudaHostCompiler-} ]] || _cudaValidateHostCompiler "$cudaHostCompiler"
-  if [[ -n ${cudaCompilerExecutable-} ]]; then
-    local compilerPath
-    _cudaResolveCompiler "$componentPath" "$cudaCompilerExecutable" compilerPath
-  fi
-
-  local metadataDirectory="$componentPath/nix-support"
-  mkdir -p "$metadataDirectory"
 
   local -A cudaComponentMetadata=(
     [format]=3
     [component]="$componentName"
-    [output]="${output:?}"
     [cudaComponentVersion]="$componentVersion"
   )
   [[ -z ${cudaMajorMinorVersion-} ]] ||
     cudaComponentMetadata[cudaMajorMinorVersion]="$cudaMajorMinorVersion"
   [[ -z ${cudaCompilerExecutable-} ]] ||
     cudaComponentMetadata[compiler]="$cudaCompilerExecutable"
-  [[ -z ${cudaHostCompiler-} ]] ||
-    cudaComponentMetadata[hostCompiler]="$cudaHostCompiler"
 
-  declare -p cudaComponentMetadata >"$metadataDirectory/cuda-component"
-  nixDebugLog "published CUDA component metadata for $componentName:${output:?} in $componentPath"
-}
+  local componentOutputs
+  if [[ -n ${cudaCompilerExecutable-} ]]; then
+    # A compiler describes its TARGET and belongs to outputBin. Its other
+    # outputs may only aggregate the compiler; publishing them as ordinary
+    # HOST components would assign their CUDA version to the wrong role.
+    componentOutputs="${outputBin:?}"
+  else
+    componentOutputs="$(getAllOutputNames)"
+  fi
 
-_cudaInstallComponentSetupHooks() {
-  [[ -n ${cudaPublishComponent-} ]] || return 0
-
-  # Each independently consumable output registers itself using Nixpkgs'
-  # standard setup-hook mechanism. fixupPhase has already installed any
-  # package-specific hook; prepend registration so an early return in that hook
-  # cannot skip the component collector.
+  # Publish each output's metadata and activation together. fixupPhase must
+  # first install any package-specific setup hook; prepend registration so an
+  # early return in that hook cannot skip the component collector.
+  local collectorPath="${_cudaComponentHookPath:?}/nix-support/setup-hook"
   local outputName
-  for outputName in $(getAllOutputNames); do
-    local componentPath="${!outputName}"
-    [[ -f "$componentPath/nix-support/cuda-component" ]] || continue
+  for outputName in $componentOutputs; do
+    _cudaValidateIdentifier "output name" "$outputName"
+    local componentPath="${!outputName:?}"
+    if [[ -n ${cudaCompilerExecutable-} ]]; then
+      local compilerPath
+      _cudaResolveCompiler "$componentPath" "$cudaCompilerExecutable" compilerPath
+    fi
 
-    local setupHookPath="$componentPath/nix-support/setup-hook"
-    local collectorPath="${_cudaComponentHookPath:?}/nix-support/setup-hook"
+    local metadataDirectory="$componentPath/nix-support"
+    mkdir -p "$metadataDirectory"
+    cudaComponentMetadata[output]="$outputName"
+    declare -p cudaComponentMetadata >"$metadataDirectory/cuda-component"
+    nixDebugLog "published CUDA component metadata for $componentName:$outputName in $componentPath"
+
+    local setupHookPath="$metadataDirectory/setup-hook"
     local existingSetupHook=
     if [[ -f $setupHookPath ]]; then
       existingSetupHook="$(<"$setupHookPath")"
@@ -429,11 +296,8 @@ _cudaPropagateComponentDependencies() {
   # it is deterministic when structured attributes store outputs in a map.
   local developmentOutputName="${outputDev:?}"
 
-  local -a dependencyAccumulators=()
-  getSortedMapKeys _cudaPropagationFileByAccumulator dependencyAccumulators
-
   local dependencyAccumulator
-  for dependencyAccumulator in "${dependencyAccumulators[@]}"; do
+  for dependencyAccumulator in "${!_cudaPropagationFileByAccumulator[@]}"; do
     local -n dependencies="$dependencyAccumulator"
     local -a cudaDependencies=()
     local dependency
@@ -460,8 +324,7 @@ _cudaPropagateComponentDependencies() {
   done
 }
 
-fixupOutputHooks+=(_cudaPublishComponentMetadata)
 postFixupHooks+=(
-  _cudaInstallComponentSetupHooks
+  _cudaPublishComponents
   _cudaPropagateComponentDependencies
 )

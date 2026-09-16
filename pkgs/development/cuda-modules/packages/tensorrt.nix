@@ -1,6 +1,8 @@
 {
   _cuda,
-  backendStdenv,
+  cudaConfig,
+  redistSystem,
+  stdenv,
   buildRedist,
   cuda_cudart,
   cudaAtLeast,
@@ -10,7 +12,7 @@
   patchelf,
 }:
 let
-  inherit (backendStdenv) cudaCapabilities hostRedistSystem;
+  inherit (cudaConfig) cudaCapabilities;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep optionalString;
 in
@@ -62,7 +64,7 @@ buildRedist (
 
     preInstall =
       let
-        inherit (backendStdenv.hostPlatform) parsed;
+        inherit (stdenv.hostPlatform) parsed;
         # x86_64-linux-gnu
         targetString = concatStringsSep "-" [
           parsed.cpu.name
@@ -100,7 +102,7 @@ buildRedist (
       '';
 
     autoPatchelfIgnoreMissingDeps =
-      optionals (hostRedistSystem == "linux-aarch64") [
+      optionals (redistSystem == "linux-aarch64") [
         "libnvdla_compiler.so"
       ]
       ++ optionals (tensorrtAtLeast "10.13.3") [
@@ -171,14 +173,13 @@ buildRedist (
           "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
           + " support only CUDA compute capability 8.7 (Jetson Orin) for pre-Thor Jetson devices"
           + " (found ${cudaCapabilitiesJSON})";
-        assertion =
-          tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaCapabilities == [ "8.7" ];
+        assertion = tensorrtAtLeast100 && redistSystem == "linux-aarch64" -> cudaCapabilities == [ "8.7" ];
       }
       {
         message =
           "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
           + " support CUDA 12.4 and newer for pre-Thor Jetson devices (found ${cudaMajorMinorVersion})";
-        assertion = tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaAtLeast "12.4";
+        assertion = tensorrtAtLeast100 && redistSystem == "linux-aarch64" -> cudaAtLeast "12.4";
       }
       {
         message =
