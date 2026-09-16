@@ -601,7 +601,7 @@ in
               For details refer to the [virtiofsd documentation](https://virtio-fs.gitlab.io/virtiofsd/doc/virtiofsd/passthrough/enum.CachePolicy.html).
 
               Effective on Linux hosts only.
-              Ignored when using VirtFS (9P) on non-Linux hosts.
+              Ignored when using VirtFS (9P) (the default on non-Linux hosts).
             '';
           };
         }
