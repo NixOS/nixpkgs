@@ -2037,8 +2037,12 @@
   ./system/boot/zram-as-tmp.nix
   ./system/boot/zswap.nix
   ./system/etc/etc-activation.nix
+  ./system/service/init-system.nix
   ./system/service/systemd/system.nix
   ./system/service/systemd/user.nix
+  ./system/service/dinit/system.nix
+  ./system/service/runit/system.nix
+  ./system/service/s6/system.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix

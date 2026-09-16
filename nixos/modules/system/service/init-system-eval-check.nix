@@ -1,0 +1,76 @@
+# Evaluation test for the system.initSystem toggle.
+# Verifies that
+#   - the default (systemd) translates system.services exactly like before,
+#   - switching to dinit/runit/s6 swaps the backend and no systemd units are
+#     generated for modular services,
+#   - the toggle does not affect existing options (systemd.* remains usable).
+#
+# Run (from the nixpkgs checkout):
+#   nix-instantiate --eval --strict --impure --argstr rootDir "$PWD" \
+#     nixos/modules/system/service/init-system-eval-check.nix
+{ rootDir }:
+
+let
+  root = rootDir;
+  evalConfig = import (root + "/nixos/lib/eval-config.nix");
+
+  baseServices = {
+    system.services.web = {
+      process = {
+        argv = [ "/bin/web" ];
+        type = "oneshot";
+      };
+      dependencies.after = [ "db" ];
+    };
+    system.services.db = {
+      process.argv = [ "/bin/db" ];
+    };
+  };
+
+  machine = initSystem: (evalConfig {
+    system = "x86_64-linux";
+    modules = [
+      baseServices
+      {
+        system.initSystem = initSystem;
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      }
+    ];
+  }).config;
+
+  default = machine "systemd";
+  dinit = machine "dinit";
+  runit = machine "runit";
+  s6 = machine "s6";
+in
+# default: systemd backend, exactly as before
+assert default.systemd.units ? "web.service";
+assert builtins.match ".*After=db.service.*" default.systemd.units."web.service".text != null;
+assert !(default.environment.etc ? "dinit.d/web");
+assert !(default.environment.etc ? "runit/services/web/run");
+
+# dinit
+assert dinit.environment.etc ? "dinit.d/web";
+assert builtins.match ".*after: db.*" dinit.environment.etc."dinit.d/web".text != null;
+assert !(dinit.systemd.units ? "web.service");
+# existing options still work
+assert dinit.systemd.services ? systemd-udevd;
+
+# runit
+assert runit.environment.etc ? "runit/services/web/run";
+assert runit.environment.etc ? "runit/services/web/down";
+assert runit.system.build.runitBootScript.outPath != "";
+assert !(runit.systemd.units ? "web.service");
+
+# s6
+assert s6.system.build.s6Services.outPath != "";
+assert s6.system.build.s6RcDb.outPath != "";
+assert !(s6.systemd.units ? "web.service");
+
+"ok"

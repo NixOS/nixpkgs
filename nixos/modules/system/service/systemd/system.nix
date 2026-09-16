@@ -106,7 +106,7 @@ in
   };
 
   # Second half of the magic: siphon units that were defined in isolation to the system
-  config = {
+  config = lib.mkIf (config.system.initSystem == "systemd") {
 
     assertions = concatLists (
       mapAttrsToList (

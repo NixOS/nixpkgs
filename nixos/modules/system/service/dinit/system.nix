@@ -109,32 +109,17 @@ let
 
   configDataFiles = concatLists (
     map (entry: mapAttrsToList (file: cfg: nameValuePair (
-          removePrefix "/etc/" cfg.path
+          "dinit/system-services/${entry.name}/${cfg.name}"
         ) {
           source = cfg.source;
         }) (lib.filterAttrs (file: cfg: cfg.enable) (entry.service.configData or { }))
     ) (attrValues allServices)
   );
-modularServiceConfiguration = lib.services.configure {
-    serviceManagerPkgs = pkgs;
-    extraRootModules = [
-      (configDataPathModule { baseDir = "/etc/dinit/system-services"; })
-    ];
-  };
 in
 {
   _class = "nixos";
 
-  options.system.services = mkOption {
-    description = ''
-      A collection of NixOS modular services configured as dinit services.
-    '';
-    type = types.attrsOf modularServiceConfiguration.serviceSubmodule;
-    default = { };
-    visible = "shallow";
-  };
-
-  config = {
+  config = lib.mkIf (config.system.initSystem == "dinit") {
     assertions = concatLists (
       mapAttrsToList (
         name: cfg: lib.services.getAssertions (options.system.services.loc ++ [ name ]) cfg

@@ -79,19 +79,23 @@ let
     };
   };
 
-  evalBackend = be: (nixosLib.evalModules {
+  evalConfig = import (root + "/nixos/lib/eval-config.nix");
+
+  evalBackend = be: (evalConfig {
+    system = "x86_64-linux";
     modules = [
-      (root + "/nixos/modules/misc/extra-arguments.nix")
-      (root + "/nixos/modules/misc/assertions.nix")
-      (root + "/nixos/modules/system/etc/etc.nix")
-      (root + "/nixos/modules/system/service/${be}/system.nix")
       {
+        system.initSystem = be;
         system.services = testServices;
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
       }
     ];
-    specialArgs = {
-      inherit pkgs;
-    };
   }).config;
 in
 let
