@@ -43,5 +43,10 @@ buildDunePackage {
 
   meta = mirage-crypto.meta // {
     description = "Elliptic Curve Cryptography with primitives taken from Fiat";
+    knownVulnerabilities = [
+      "CVE-2026-87733" # fixed in 2.2.0
+      "CVE-2026-87736" # fixed in 2.3.0
+      "CVE-2026-87737" # fixed in 2.4.0
+    ];
   };
 }
