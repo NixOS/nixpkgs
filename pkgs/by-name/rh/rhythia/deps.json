@@ -1,0 +1,82 @@
+[
+  {
+    "pname": "DiscordRichPresence",
+    "version": "1.6.1.70",
+    "hash": "sha256-uXTNIWfZU7Gf/JpXQ5ufKA3SQdXYSkg3yLm5yCrBDd8="
+  },
+  {
+    "pname": "Godot.NET.Sdk",
+    "version": "4.6.3",
+    "hash": "sha256-TWIk3G3+mOrwFwoWjgx16x9UGffbGfJc9LelGjQJ/iQ="
+  },
+  {
+    "pname": "Godot.SourceGenerators",
+    "version": "4.6.3",
+    "hash": "sha256-UCpaUy14SMRV82P0PS03bQQ9gZamUDQFeP4eL9qajmE="
+  },
+  {
+    "pname": "GodotSharp",
+    "version": "4.6.3",
+    "hash": "sha256-wzpEESJJm2nMiE95/e//s8Tm4dHs1v4IIpCfYalNDIs="
+  },
+  {
+    "pname": "GodotSharpEditor",
+    "version": "4.6.3",
+    "hash": "sha256-As1H28Wp/L0QtFYkLXY3S+jgLpT3tm7Mh4uYfpU8m3s="
+  },
+  {
+    "pname": "Microsoft.Extensions.Primitives",
+    "version": "5.0.1",
+    "hash": "sha256-e4uoLnUSmON4If9qJh78+4z14IzW9qCu5YkqLdQqWQU="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "Octokit",
+    "version": "14.0.0",
+    "hash": "sha256-pTSI7Tz5VFd4Ydx1laE+VkZfhsl7Rbgw42PBqhyVvyI="
+  },
+  {
+    "pname": "Semver",
+    "version": "3.0.0",
+    "hash": "sha256-nX5ka27GY6pz9S73H6sLSQCrnAyyI9xDVdzrtlMp4BQ="
+  },
+  {
+    "pname": "sqlite-net-pcl",
+    "version": "1.9.172",
+    "hash": "sha256-0PTcOwm4k8bMeLm5+z0iWjy379KYdQXjqkaBGBR20cc="
+  },
+  {
+    "pname": "SQLitePCLRaw.bundle_green",
+    "version": "2.1.2",
+    "hash": "sha256-7858BCblsCoALR11Q7ejjPKHk7johTjWxgndHwUYNws="
+  },
+  {
+    "pname": "SQLitePCLRaw.core",
+    "version": "2.1.2",
+    "hash": "sha256-bbymML2TTQJDKZbYXoiyYJnF6mh/PjKrzDkqWhLaHaY="
+  },
+  {
+    "pname": "SQLitePCLRaw.lib.e_sqlite3",
+    "version": "2.1.2",
+    "hash": "sha256-34lJgnGvODwrjn9WTkkBIg2jzYph/ARi1QSiKedCyUo="
+  },
+  {
+    "pname": "SQLitePCLRaw.provider.e_sqlite3",
+    "version": "2.1.2",
+    "hash": "sha256-e56+FgxEHqV3SGQx0ZAqzlscPxNUPXJ8Ls9rtqET1S4="
+  },
+  {
+    "pname": "Tomlyn",
+    "version": "0.20.0",
+    "hash": "sha256-BGEzKBaxmeHQgr80k8xbTFzpDcMvy+oUsb3vQptQS5E="
+  },
+  {
+    "pname": "Updatum",
+    "version": "1.3.2",
+    "hash": "sha256-eou+7GMaEZZ3wepGSUvi+W6Gp/94uDoKvyGFjWFIUPQ="
+  }
+]
