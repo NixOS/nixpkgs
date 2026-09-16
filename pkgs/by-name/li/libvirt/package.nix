@@ -18,6 +18,7 @@
   glib,
   gnutls,
   json_c,
+  libiscsi,
   libpcap,
   libssh2,
   libtasn1,
@@ -26,6 +27,7 @@
   makeWrapper,
   meson,
   ninja,
+  openiscsi,
   perl,
   pkg-config,
   python3,
@@ -36,7 +38,9 @@
   acl ? null,
   attr ? null,
   audit ? null,
+  ceph,
   fuse3 ? null,
+  glusterfs,
   libapparmor ? null,
   libcap_ng ? null,
   libnl ? null,
@@ -47,6 +51,8 @@
   parted ? null,
   systemd ? null,
   util-linux ? null,
+  xen,
+  zfs,
 
   # Build and runtime dependencies, Darwin
   darwin,
@@ -72,16 +78,10 @@
 
   # Options
   enableCeph ? false,
-  ceph,
   enableGlusterfs ? false,
-  glusterfs,
   enableIscsi ? false,
-  openiscsi,
-  libiscsi,
   enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
-  xen,
   enableZfs ? stdenv.hostPlatform.isLinux,
-  zfs,
 }:
 
 let
