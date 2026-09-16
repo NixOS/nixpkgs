@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     with python3.pkgs;
     [
       arrow
-      chardet
+      chardet_5
       cryptography
       filelock
       google-api-python-client
