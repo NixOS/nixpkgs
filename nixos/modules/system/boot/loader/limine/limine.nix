@@ -259,8 +259,8 @@ in
 
     style = {
       wallpapers = lib.mkOption {
-        default = [ ];
-        example = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
+        default = [ defaultWallpaper ];
+        defaultText = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
         type = lib.types.listOf lib.types.path;
         description = ''
           A list of wallpapers.
@@ -281,7 +281,8 @@ in
       };
 
       backdrop = lib.mkOption {
-        default = null;
+        default = if (cfg.style.wallpapers == [ defaultWallpaper ]) then "2F302F" else null;
+        defaultText = lib.literalExpression "null";
         example = "7EBAE4";
         type = lib.types.nullOr lib.types.str;
         description = ''
@@ -426,13 +427,6 @@ in
   };
 
   config = lib.mkMerge [
-    {
-      boot.loader.limine.style.wallpapers = lib.mkDefault [ defaultWallpaper ];
-    }
-    (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
-      boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
-    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
