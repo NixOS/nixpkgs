@@ -7,17 +7,18 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-podcast";
-  version = "3.0.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Mopidy-Podcast";
-    hash = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
+    pname = "mopidy_podcast";
+    hash = "sha256-EnFMEhJeVjhrwOApgeU92WzYZGraBFTAntmUsc423+o=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [
