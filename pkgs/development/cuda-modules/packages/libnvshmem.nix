@@ -2,7 +2,7 @@
   _cuda,
   autoAddDriverRunpath,
   backendStdenv,
-  buildPackages,
+  callPackage,
   cmake,
   cccl,
   cuda_cudart,
@@ -40,6 +40,9 @@
   withUcx ? true,
 }:
 let
+  # Compiler paths embedded in strings bypass nativeBuildInputs splicing.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
+  isCross = backendStdenv.buildPlatform != backendStdenv.hostPlatform;
   inherit (lib)
     cmakeBool
     cmakeFeature
@@ -47,6 +50,7 @@ let
     getBin
     getDev
     getExe
+    getInclude
     getLib
     licenses
     maintainers
@@ -75,6 +79,8 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ];
 
+  patches = [ ./libnvshmem/cmake-interface.patch ];
+
   nativeBuildInputs = [
     # libnvshmem_host dlopens libcuda.so.1 and libnvidia-ml.so.1 by bare soname
     # (src/host/init/{cudawrap,nvmlwrap}.cpp).
@@ -89,9 +95,9 @@ backendStdenv.mkDerivation (finalAttrs: {
     python3Packages.python
     removeReferencesTo
   ]
-  ++ optionals withMpi [
-    # NOTE: mpi is in nativeBuildInputs because it contains compilers and is only discoverable by CMake
-    # when a nativeBuildInput.
+  ++ optionals (withMpi && !isCross) [
+    # Native FindMPI discovery interrogates the compiler wrappers. Cross builds
+    # instead provide the HOST library and headers without executing its tools.
     mpi
   ];
 
@@ -110,13 +116,28 @@ backendStdenv.mkDerivation (finalAttrs: {
     done
     unset -v cmakeFileToPatch
     unset -v standardName
+
+    # These select CPU definitions and flags for the produced libraries, including
+    # the installed transport template, rather than the machine running CMake.
+    substituteInPlace src/CMakeLists.txt src/device/CMakeLists.txt src/modules/transport/CMakeLists.txt.in \
+      --replace-fail CMAKE_HOST_SYSTEM_PROCESSOR CMAKE_SYSTEM_PROCESSOR
+
+    # ExternalProject does not inherit the parent's cross-compilation settings.
+    # Leave native configuration alone: setting CMAKE_SYSTEM_NAME would make
+    # even a native child project consider itself cross-compiled.
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'if(NOT CMAKE_CUDA_ARCHITECTURES_UNDEFINED)' \
+        'if(CMAKE_CROSSCOMPILING)
+          list(APPEND my_cmake_cache_args
+            -DCMAKE_SYSTEM_NAME:STRING=''${CMAKE_SYSTEM_NAME}
+            -DCMAKE_SYSTEM_PROCESSOR:STRING=''${CMAKE_SYSTEM_PROCESSOR})
+        endif()
+        if(NOT CMAKE_CUDA_ARCHITECTURES_UNDEFINED)'
   '';
 
   enableParallelBuilding = true;
 
   buildInputs = [
-    cccl
-    cuda_cudart
     cuda_nvml_dev
     cuda_nvrtc
     cuda_nvtx
@@ -132,6 +153,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   ++ optionals withNccl [
     nccl
   ]
+  ++ optionals withMpi [
+    mpi
+  ]
   ++ optionals withPmix [
     pmix
   ]
@@ -139,18 +163,24 @@ backendStdenv.mkDerivation (finalAttrs: {
     ucx
   ];
 
+  # Public headers use CUDA types and the exported targets depend on CCCL.
+  propagatedBuildInputs = [
+    cccl
+    cuda_cudart
+  ];
+
   # NOTE: This *must* be an environment variable NVIDIA saw fit to *configure and build CMake projects* while *inside*
   # a CMake build and didn't correctly thread arguments through, so the environment is the only way to get
   # configurations to the nested build.
-  env.CUDA_HOME = (getBin cuda_nvcc).outPath;
+  env.CUDA_HOME = (getBin buildNvcc).outPath;
 
   # https://docs.nvidia.com/nvshmem/release-notes-install-guide/install-guide/nvshmem-install-proc.html#other-distributions
   cmakeFlags = lib.concatLists [
     [
       (cmakeFeature "NVSHMEM_PREFIX" (placeholder "out"))
 
-      (cmakeFeature "CUDA_HOME" (getBin cuda_nvcc).outPath)
-      (cmakeFeature "CMAKE_CUDA_COMPILER" (getExe cuda_nvcc))
+      (cmakeFeature "CUDA_HOME" (getBin buildNvcc).outPath)
+      (cmakeFeature "CMAKE_CUDA_COMPILER" (getExe buildNvcc))
 
       (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
 
@@ -174,9 +204,19 @@ backendStdenv.mkDerivation (finalAttrs: {
     [ (cmakeBool "NVSHMEM_USE_GDRCOPY" withGdrcopy) ]
     (optional withGdrcopy (cmakeFeature "GDRCOPY_HOME" (getDev gdrcopy).outPath))
 
-    # NOTE: Make sure to use mpi from buildPackages to match the spliced version created through nativeBuildInputs.
     [ (cmakeBool "NVSHMEM_MPI_SUPPORT" withMpi) ]
-    (optional withMpi (cmakeFeature "MPI_HOME" (getLib buildPackages.mpi).outPath))
+    (optional withMpi (cmakeFeature "MPI_HOME" (getLib mpi).outPath))
+    # Cross discovery must not require executing HOST compiler wrappers. FindMPI's
+    # explicit metadata path still validates MPI by compiling and linking tests.
+    # NVSHMEM uses the C MPI API from both C and C++, not the old MPI-2 C++ API.
+    (optionals (withMpi && isCross) [
+      (cmakeBool "MPI_CXX_SKIP_MPICXX" true)
+      (cmakeFeature "MPI_C_LIB_NAMES" "mpi")
+      (cmakeFeature "MPI_CXX_LIB_NAMES" "mpi")
+      (cmakeFeature "MPI_mpi_LIBRARY" "${getLib mpi}/lib/libmpi${backendStdenv.hostPlatform.extensions.sharedLibrary}")
+      (cmakeFeature "MPI_C_COMPILER_INCLUDE_DIRS" "${getInclude mpi}/include")
+      (cmakeFeature "MPI_CXX_COMPILER_INCLUDE_DIRS" "${getInclude mpi}/include")
+    ])
 
     # TODO: Doesn't UCX need to be built with some argument when we want to use it with libnvshmem?
     [ (cmakeBool "NVSHMEM_UCX_SUPPORT" withUcx) ]
@@ -232,7 +272,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       nixLog "removing build-time references baked into NVSHMEM_BUILD_VARS"
       remove-references-to ${
         concatMapStringsSep " " (p: ''-t "${p}"'') (
-          [ (getBin cuda_nvcc) ]
+          [ (getBin buildNvcc) ]
           ++ optional withNccl (getDev nccl)
           ++ optional withUcx (getDev ucx)
           ++ optional withLibfabric (getDev libfabric)
@@ -248,6 +288,10 @@ backendStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
+    tests.cmake = callPackage ./tests/nvshmem-cmake.nix {
+      libnvshmem = finalAttrs.finalPackage;
+    };
+
     updateScript = gitUpdater {
       inherit (finalAttrs) pname version;
       rev-prefix = "v";
