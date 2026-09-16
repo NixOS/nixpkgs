@@ -7,21 +7,33 @@
 let
 
   cfg = config.services.hydra;
+  queueRunnerCfg = cfg.queueRunner;
+
+  toml = pkgs.formats.toml { };
 
   baseDir = "/var/lib/hydra";
 
   hydraConf = pkgs.writeScript "hydra.conf" cfg.extraConfig;
 
   hydraEnv = {
-    HYDRA_DBI = cfg.dbi;
+    HYDRA_DATABASE_URL = cfg.dbUrl;
     HYDRA_CONFIG = "${baseDir}/hydra.conf";
     HYDRA_DATA = "${baseDir}";
   };
 
+  # Appends `application_name` so queries can be attributed in pg_stat_activity.
+  # `%` is doubled because the value lands in systemd `Environment=`, where the
+  # percent-encoded socket path (`%2Frun%2Fpostgresql`) would be parsed as a
+  # specifier.
+  dbUrlWithAppName =
+    name:
+    lib.replaceStrings [ "%" ] [ "%%" ] (
+      cfg.dbUrl + (if lib.hasInfix "?" cfg.dbUrl then "&" else "?") + "application_name=${name}"
+    );
+
   env = {
     NIX_REMOTE = "daemon";
     PGPASSFILE = "${baseDir}/pgpass";
-    NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
   }
   // lib.optionalAttrs (cfg.smtpHost != null) {
     EMAIL_SENDER_TRANSPORT = "SMTP";
@@ -40,9 +52,9 @@ let
     }
     // (lib.optionalAttrs cfg.debugServer { DBIC_TRACE = "1"; });
 
-  localDB = "dbi:Pg:dbname=hydra;user=hydra;";
+  localDbUrl = "postgres://hydra@%2Frun%2Fpostgresql:5432/hydra";
 
-  haveLocalDB = cfg.dbi == localDB;
+  haveLocalDB = cfg.dbUrl == localDbUrl;
 
   hydra-package =
     let
@@ -80,6 +92,16 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "hydra" "dbi" ] ''
+      Use `services.hydra.dbUrl`, which takes a postgres:// URL instead of a DBI string.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "hydra" "buildMachinesFiles" ] ''
+      The queue runner no longer reads Nix build machines files. Builders now
+      connect to it via gRPC, see `services.hydra-builder`.
+    '')
+  ];
+
   ###### interface
   options = {
 
@@ -93,21 +115,101 @@ in
         '';
       };
 
-      dbi = lib.mkOption {
+      dbUrl = lib.mkOption {
         type = lib.types.str;
-        default = localDB;
-        example = "dbi:Pg:dbname=hydra;host=postgres.example.org;user=foo;";
+        default = localDbUrl;
+        example = "postgres://foo@postgres.example.org:5432/hydra";
         description = ''
-          The DBI string for Hydra database connection.
+          `postgres://` URL of the Hydra database.
 
-          NOTE: Attempts to set `application_name` will be overridden by
-          `hydra-TYPE` (where TYPE is e.g. `evaluator`, `queue-runner`,
-          etc.) in all hydra services to more easily distinguish where
-          queries are coming from.
+          An `application_name` query parameter is appended per service
+          (e.g. `hydra-evaluator`), so do not set one here.
         '';
       };
 
       package = lib.mkPackageOption pkgs "hydra" { };
+
+      evaluatorPackage = lib.mkPackageOption pkgs "hydra-evaluator" { };
+
+      evaluatorSettings = lib.mkOption {
+        description = ''
+          Settings for the evaluator, written to
+          {file}`/etc/hydra/evaluator.toml`.
+        '';
+        default = { };
+        type = lib.types.submodule {
+          freeformType = toml.type;
+          options = {
+            max_concurrent_evals = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 4;
+              description = "How many jobsets to evaluate at once.";
+            };
+          };
+        };
+      };
+
+      ws = {
+        enable =
+          lib.mkEnableOption "the WebSocket server streaming live build logs to the web interface"
+          // {
+            default = true;
+            example = false;
+          };
+
+        package = lib.mkPackageOption pkgs "hydra-ws" { };
+
+        settings = lib.mkOption {
+          description = ''
+            Settings for the WebSocket server, written to
+            {file}`/etc/hydra/ws.toml`.
+          '';
+          default = { };
+          type = lib.types.submodule {
+            options = {
+              dbUrl = lib.mkOption {
+                type = lib.types.singleLineStr;
+                default = cfg.dbUrl;
+                defaultText = lib.literalExpression "config.services.hydra.dbUrl";
+                description = "PostgreSQL database URL.";
+              };
+
+              maxDbConnections = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 128;
+                description = "Maximum number of PostgreSQL connections.";
+              };
+
+              idleGrace = lib.mkOption {
+                type = lib.types.int;
+                default = 128;
+                description = "Idle grace period in seconds before a log tail is stopped.";
+              };
+
+              hydraDataDir = lib.mkOption {
+                type = lib.types.path;
+                default = baseDir;
+                defaultText = lib.literalExpression ''"${baseDir}"'';
+                description = "Hydra data directory.";
+              };
+            };
+          };
+        };
+
+        bind = {
+          address = lib.mkOption {
+            type = lib.types.singleLineStr;
+            default = "[::1]";
+            description = "Address the WebSocket listener binds to.";
+          };
+
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 9283;
+            description = "Port the WebSocket listener binds to.";
+          };
+        };
+      };
 
       hydraURL = lib.mkOption {
         type = lib.types.str;
@@ -223,17 +325,6 @@ in
         description = "Directory that holds Hydra garbage collector roots.";
       };
 
-      buildMachinesFiles = lib.mkOption {
-        type = lib.types.listOf lib.types.path;
-        default = lib.optional (config.nix.buildMachines != [ ]) "/etc/nix/machines";
-        defaultText = lib.literalExpression ''lib.optional (config.nix.buildMachines != []) "/etc/nix/machines"'';
-        example = [
-          "/etc/nix/machines"
-          "/var/lib/hydra/provisioner/machines"
-        ];
-        description = "List of files containing build machines.";
-      };
-
       useSubstitutes = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -246,6 +337,324 @@ in
           itself, so don't enable this feature unless your active binary caches
           are absolute trustworthy.
         '';
+      };
+
+      queueRunner = {
+        package = lib.mkPackageOption pkgs "hydra-queue-runner" { };
+
+        settings = lib.mkOption {
+          description = ''
+            Reloadable settings for the queue runner, written to
+            {file}`/etc/hydra/queue-runner.toml`.
+          '';
+          default = { };
+          type = lib.types.submodule {
+            options = {
+              hydraDataDir = lib.mkOption {
+                type = lib.types.path;
+                default = baseDir;
+                defaultText = lib.literalExpression ''"${baseDir}"'';
+                description = "Hydra data directory.";
+              };
+
+              dbUrl = lib.mkOption {
+                type = lib.types.singleLineStr;
+                default = cfg.dbUrl;
+                defaultText = lib.literalExpression "config.services.hydra.dbUrl";
+                description = "PostgreSQL database URL.";
+              };
+
+              maxDbConnections = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 128;
+                description = "Maximum number of PostgreSQL connections.";
+              };
+
+              machineSortFn = lib.mkOption {
+                type = lib.types.enum [
+                  "SpeedFactorOnly"
+                  "CpuCoreCountWithSpeedFactor"
+                  "BogomipsWithSpeedFactor"
+                ];
+                default = "SpeedFactorOnly";
+                description = "Function used to sort machines.";
+              };
+
+              machineFreeFn = lib.mkOption {
+                type = lib.types.enum [
+                  "Dynamic"
+                  "DynamicWithMaxJobLimit"
+                  "Static"
+                ];
+                default = "Static";
+                description = ''Function used to determine "idle" machines.'';
+              };
+
+              stepSortFn = lib.mkOption {
+                type = lib.types.enum [
+                  "Legacy"
+                  "WithRdeps"
+                  "WithCriticalPath"
+                ];
+                default = "WithRdeps";
+                description = "Function used to sort steps.";
+              };
+
+              dispatchTriggerTimerInS = lib.mkOption {
+                type = lib.types.int;
+                default = 120;
+                description = ''
+                  Interval in seconds at which the dispatcher is triggered. A
+                  value <= 0 disables the timer, leaving the dispatcher to be
+                  triggered by queue changes only.
+                '';
+              };
+
+              queueTriggerTimerInS = lib.mkOption {
+                type = lib.types.int;
+                default = -1;
+                description = ''
+                  Interval in seconds at which the queue is triggered. A value
+                  <= 0 disables the timer, leaving the queue to be triggered by
+                  PostgreSQL notifications only.
+                '';
+              };
+
+              remoteStoreAddr = lib.mkOption {
+                type = lib.types.listOf lib.types.singleLineStr;
+                default = [ ];
+                description = "Remote store addresses.";
+              };
+
+              useSubstitutes = lib.mkOption {
+                type = lib.types.bool;
+                default = cfg.useSubstitutes;
+                defaultText = lib.literalExpression "config.services.hydra.useSubstitutes";
+                description = "Whether to substitute paths instead of building them.";
+              };
+
+              rootsDir = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
+                default = cfg.gcRootsDir;
+                defaultText = lib.literalExpression "config.services.hydra.gcRootsDir";
+                description = "Directory holding the garbage collector roots.";
+              };
+
+              maxRetries = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 5;
+                description = "Maximum number of retries for a build step.";
+              };
+
+              retryInterval = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 60;
+                description = "Interval in seconds after which a step may be retried.";
+              };
+
+              retryBackoff = lib.mkOption {
+                type = lib.types.float;
+                default = 3.0;
+                description = "Additional backoff on top of {option}`retryInterval`.";
+              };
+
+              maxUnsupportedTimeInS = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 120;
+                description = "Time in seconds after which unsupported steps are aborted.";
+              };
+
+              stopQueueRunAfterInS = lib.mkOption {
+                type = lib.types.int;
+                default = 60;
+                description = ''
+                  Seconds after which a queue run is interrupted early. A value
+                  <= 0 lets queue runs go on for as long as they need.
+                '';
+              };
+
+              maxConcurrentDownloads = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 5;
+                description = ''
+                  Maximum number of concurrent downloads per build. Raising this
+                  raises the queue runner's memory usage.
+                '';
+              };
+
+              concurrentUploadLimit = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 5;
+                description = "Maximum number of concurrent uploads to S3.";
+              };
+
+              tokenPaths = lib.mkOption {
+                type = lib.types.nullOr (lib.types.listOf lib.types.path);
+                default = null;
+                description = "Paths of the accepted authentication tokens.";
+              };
+
+              enableFodChecker = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Whether to enable the fixed-output derivation checker, which
+                  collects FODs in a separate queue and schedules them on
+                  machines advertising the mandatory `FOD` feature.
+                '';
+              };
+
+              usePresignedUploads = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Whether builders upload to S3 themselves instead of the queue
+                  runner. Requires an S3 remote store as well as substitution on
+                  the builders, see {option}`forcedSubstituters`.
+                '';
+              };
+
+              overflowStore = lib.mkOption {
+                default = null;
+                description = ''
+                  Overflow S3 store. Steps referenced only by the listed jobsets
+                  are uploaded there instead of to the default store.
+                '';
+                type = lib.types.nullOr (
+                  lib.types.submodule {
+                    options = {
+                      store = lib.mkOption {
+                        type = lib.types.singleLineStr;
+                        example = "s3://overflow?region=eu-west-1";
+                        description = "S3 store URI of the overflow bucket.";
+                      };
+
+                      jobsets = lib.mkOption {
+                        type = lib.types.listOf lib.types.singleLineStr;
+                        default = [ ];
+                        example = [ "nixpkgs:trunk" ];
+                        description = "Jobsets (`project:jobset`) whose exclusive steps go to the overflow store.";
+                      };
+                    };
+                  }
+                );
+              };
+
+              forcedSubstituters = lib.mkOption {
+                type = lib.types.listOf lib.types.singleLineStr;
+                default = [ ];
+                description = ''
+                  Substituters every builder is required to have. Builders that
+                  do not enable `useSubstitutes` with these substituters are
+                  rejected.
+                '';
+              };
+
+              maxOutputSize = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 0;
+                description = ''
+                  Per-output NAR size limit in bytes. Builds exceeding it fail
+                  with `NarSizeLimitExceeded`. 0 disables the check.
+                '';
+              };
+
+              maxSilentTime = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 3600;
+                description = ''
+                  Default maximum silent time in seconds for builds without
+                  `meta.maxSilent`. Also used as a floor for dependency-only
+                  steps.
+                '';
+              };
+
+              buildTimeout = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 36000;
+                description = ''
+                  Default build timeout in seconds for builds without
+                  `meta.timeout`. Also used as a floor for dependency-only
+                  steps.
+                '';
+              };
+
+              maxLogSize = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 64 * 1024 * 1024;
+                description = ''
+                  Maximum build log size in bytes before a build fails with
+                  `LogLimitExceeded`.
+                '';
+              };
+            };
+          };
+        };
+
+        grpc = {
+          address = lib.mkOption {
+            type = lib.types.singleLineStr;
+            default = "[::1]";
+            description = ''
+              Address the gRPC listener binds to. Must be reachable from
+              machines running {option}`services.hydra-builder`.
+            '';
+          };
+
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 50051;
+            description = "Port the gRPC listener binds to.";
+          };
+        };
+
+        rest = {
+          address = lib.mkOption {
+            type = lib.types.singleLineStr;
+            default = "[::1]";
+            description = "Address the REST listener binds to.";
+          };
+
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = 8080;
+            description = "Port the REST listener binds to.";
+          };
+        };
+
+        mtls = lib.mkOption {
+          default = null;
+          description = "mTLS material used to authenticate builders.";
+          type = lib.types.nullOr (
+            lib.types.submodule {
+              options = {
+                serverCertPath = lib.mkOption {
+                  type = lib.types.path;
+                  description = "Server certificate path.";
+                };
+
+                serverKeyPath = lib.mkOption {
+                  type = lib.types.path;
+                  description = "Server key path.";
+                };
+
+                clientCaCertPath = lib.mkOption {
+                  type = lib.types.path;
+                  description = "Client CA certificate path.";
+                };
+              };
+            }
+          );
+        };
+
+        awsCredentialsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = ''
+            Path to an AWS credentials file, exported as
+            `AWS_SHARED_CREDENTIALS_FILE` to the queue runner.
+          '';
+        };
       };
     };
 
@@ -282,8 +691,14 @@ in
       description = "Hydra queue runner";
       group = "hydra";
       useDefaultShell = true;
-      home = "${baseDir}/queue-runner"; # really only to keep SSH happy
+      home = "${baseDir}/queue-runner";
       uid = config.ids.uids.hydra-queue-runner;
+    };
+
+    users.users.hydra-ws = lib.mkIf cfg.ws.enable {
+      description = "Hydra WebSocket server";
+      group = "hydra";
+      isSystemUser = true;
     };
 
     users.users.hydra-www = {
@@ -336,7 +751,7 @@ in
       requires = lib.optional haveLocalDB "postgresql.target";
       after = lib.optional haveLocalDB "postgresql.target";
       environment = env // {
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-init";
       };
       path = [ pkgs.util-linux ];
       preStart = ''
@@ -404,7 +819,7 @@ in
         pkgs.bzip2
       ];
       environment = serverEnv // {
-        HYDRA_DBI = "${serverEnv.HYDRA_DBI};application_name=hydra-server";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-server";
       };
       restartTriggers = [ hydraConf ];
       serviceConfig = {
@@ -420,36 +835,208 @@ in
     };
 
     systemd.services.hydra-queue-runner = {
+      description = "Hydra queue runner";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "hydra-init.service" ];
+      requires = [
+        "hydra-init.service"
+        "nix-daemon.socket"
+        "hydra-queue-runner-rest.socket"
+        "hydra-queue-runner-grpc.socket"
+      ];
       after = [
         "hydra-init.service"
         "network.target"
       ];
-      path = [
-        config.nix.package
-        hydra-package
-        pkgs.bzip2
-        pkgs.hostname-debian
-        pkgs.openssh
-      ];
-      restartTriggers = [ hydraConf ];
-      environment = env // {
-        PGPASSFILE = "${baseDir}/pgpass-queue-runner"; # grrr
-        IN_SYSTEMD = "1"; # to get log severity levels
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-queue-runner";
+      reloadTriggers = [ config.environment.etc."hydra/queue-runner.toml".source ];
+
+      environment = {
+        NIX_REMOTE = "daemon";
+        RUST_BACKTRACE = "1";
+        # nix-store wants $HOME for its cache dir.
+        HOME = "/run/hydra-queue-runner";
+      }
+      // lib.optionalAttrs (queueRunnerCfg.awsCredentialsFile != null) {
+        AWS_SHARED_CREDENTIALS_FILE = queueRunnerCfg.awsCredentialsFile;
       };
+
       serviceConfig = {
-        ExecStart = "@${hydra-package}/bin/hydra-queue-runner hydra-queue-runner -v";
-        ExecStopPost = "${hydra-package}/bin/hydra-queue-runner --unlock";
-        User = "hydra-queue-runner";
+        Type = "notify";
         Restart = "always";
+        RestartSec = "5s";
         Slice = "system-hydra.slice";
 
-        # Ensure we can get core dumps.
-        LimitCORE = "infinity";
+        # One gRPC stream per builder plus DB pool. 1024 is easily exhausted.
+        LimitNOFILE = 65536;
+
+        ExecStart = lib.escapeShellArgs (
+          [
+            (lib.getExe queueRunnerCfg.package)
+            "--rest-bind"
+            "-"
+            "--grpc-bind"
+            "-"
+            "--config-path"
+            "/etc/hydra/queue-runner.toml"
+          ]
+          ++ lib.optionals (queueRunnerCfg.mtls != null) [
+            "--server-cert-path"
+            queueRunnerCfg.mtls.serverCertPath
+            "--server-key-path"
+            queueRunnerCfg.mtls.serverKeyPath
+            "--client-ca-cert-path"
+            queueRunnerCfg.mtls.clientCaCertPath
+          ]
+        );
+        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
+
+        User = "hydra-queue-runner";
+        Group = "hydra";
+
+        RuntimeDirectory = "hydra-queue-runner";
         WorkingDirectory = "${baseDir}/queue-runner";
+
+        # Created by hydra-init. StateDirectory= would chown ${baseDir}.
+        ReadWritePaths = [
+          "/nix/var/nix/gcroots/"
+          "/nix/var/nix/daemon-socket/socket"
+          "${baseDir}/build-logs/"
+          "${baseDir}/queue-runner/"
+        ]
+        ++ lib.optionals (lib.hasInfix "%2Frun%2Fpostgresql" queueRunnerCfg.settings.dbUrl) [
+          "/run/postgresql/.s.PGSQL.${toString config.services.postgresql.settings.port}"
+        ];
+        ReadOnlyPaths = [ "/nix/" ];
+
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0022";
       };
+    };
+
+    systemd.sockets.hydra-queue-runner-rest = {
+      description = "Hydra queue runner REST socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "${queueRunnerCfg.rest.address}:${toString queueRunnerCfg.rest.port}";
+        FileDescriptorName = "rest";
+        Service = "hydra-queue-runner.service";
+      };
+    };
+
+    systemd.sockets.hydra-queue-runner-grpc = {
+      description = "Hydra queue runner gRPC socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "${queueRunnerCfg.grpc.address}:${toString queueRunnerCfg.grpc.port}";
+        FileDescriptorName = "grpc";
+        Service = "hydra-queue-runner.service";
+      };
+    };
+
+    environment.etc."hydra/queue-runner.toml".source = toml.generate "queue-runner.toml" (
+      lib.filterAttrsRecursive (_: v: v != null) queueRunnerCfg.settings
+    );
+
+    systemd.services.hydra-ws = lib.mkIf cfg.ws.enable {
+      description = "Hydra WebSocket server";
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "hydra-ws.socket" ];
+      after = [
+        "hydra-init.service"
+        "network.target"
+      ];
+      reloadTriggers = [ config.environment.etc."hydra/ws.toml".source ];
+
+      serviceConfig = {
+        Type = "notify";
+        Restart = "always";
+        RestartSec = "5s";
+        Slice = "system-hydra.slice";
+
+        ExecStart = lib.escapeShellArgs [
+          (lib.getExe cfg.ws.package)
+          "--bind"
+          "-"
+          "--config-path"
+          "/etc/hydra/ws.toml"
+        ];
+
+        User = "hydra-ws";
+        Group = "hydra";
+
+        RuntimeDirectory = "hydra-ws";
+
+        ReadOnlyPaths = [ "${baseDir}/build-logs/" ];
+        ReadWritePaths = lib.optionals (lib.hasInfix "%2Frun%2Fpostgresql" cfg.ws.settings.dbUrl) [
+          "/run/postgresql/.s.PGSQL.${toString config.services.postgresql.settings.port}"
+        ];
+
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0022";
+      };
+    };
+
+    systemd.sockets.hydra-ws = lib.mkIf cfg.ws.enable {
+      description = "Hydra WebSocket socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "${cfg.ws.bind.address}:${toString cfg.ws.bind.port}";
+        FileDescriptorName = "ws";
+        Service = "hydra-ws.service";
+      };
+    };
+
+    environment.etc."hydra/ws.toml" = lib.mkIf cfg.ws.enable {
+      source = toml.generate "ws.toml" (lib.filterAttrsRecursive (_: v: v != null) cfg.ws.settings);
     };
 
     systemd.services.hydra-evaluator = {
@@ -461,17 +1048,31 @@ in
         "network.target"
         "network-online.target"
       ];
-      path = with pkgs; [
-        hostname-debian
-        hydra-package
-        jq
+      path = [
+        pkgs.hostname-debian
+        pkgs.jq
+        hydra-package # hydra-eval-jobset
       ];
-      restartTriggers = [ hydraConf ];
+      restartTriggers = [
+        hydraConf
+        config.environment.etc."hydra/evaluator.toml".source
+      ];
       environment = env // {
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-evaluator";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
       };
       serviceConfig = {
-        ExecStart = "@${hydra-package}/bin/hydra-evaluator hydra-evaluator";
+        ExecStart = lib.escapeShellArgs [
+          "@${lib.getExe cfg.evaluatorPackage}"
+          "hydra-evaluator"
+          "--config-path"
+          "/etc/hydra/evaluator.toml"
+        ];
+        ExecStopPost = lib.escapeShellArgs [
+          (lib.getExe cfg.evaluatorPackage)
+          "--config-path"
+          "/etc/hydra/evaluator.toml"
+          "--unlock"
+        ];
         User = "hydra";
         Restart = "always";
         WorkingDirectory = baseDir;
@@ -479,11 +1080,14 @@ in
       };
     };
 
+    environment.etc."hydra/evaluator.toml".source =
+      toml.generate "evaluator.toml" cfg.evaluatorSettings;
+
     systemd.services.hydra-update-gc-roots = {
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
       environment = env // {
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-update-gc-roots";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-update-gc-roots";
       };
       serviceConfig = {
         ExecStart = "@${hydra-package}/bin/hydra-update-gc-roots hydra-update-gc-roots";
@@ -497,7 +1101,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "hydra-init.service" ];
       environment = env // {
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-send-stats";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-send-stats";
       };
       serviceConfig = {
         ExecStart = "@${hydra-package}/bin/hydra-send-stats hydra-send-stats";
@@ -514,7 +1118,7 @@ in
       path = [ pkgs.zstd ];
       environment = env // {
         PGPASSFILE = "${baseDir}/pgpass-queue-runner";
-        HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-notify";
+        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-notify";
       };
       serviceConfig = {
         ExecStart = "@${hydra-package}/bin/hydra-notify hydra-notify";
@@ -567,12 +1171,17 @@ in
 
     services.postgresql.enable = lib.mkIf haveLocalDB true;
 
-    services.postgresql.identMap = lib.optionalString haveLocalDB ''
-      hydra hydra hydra
-      hydra hydra-queue-runner hydra
-      hydra hydra-www hydra
-      hydra root hydra
-    '';
+    services.postgresql.identMap = lib.optionalString haveLocalDB (
+      ''
+        hydra hydra hydra
+        hydra hydra-queue-runner hydra
+        hydra hydra-www hydra
+        hydra root hydra
+      ''
+      + lib.optionalString cfg.ws.enable ''
+        hydra hydra-ws hydra
+      ''
+    );
 
     services.postgresql.authentication = lib.optionalString haveLocalDB ''
       local all hydra peer map=hydra
