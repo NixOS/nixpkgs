@@ -33,9 +33,11 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.sessionVariables.XDG_DATA_DIRS = [
-      "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}"
-    ];
-    environment.variables.GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
+    environment.sessionVariables = {
+      XDG_DATA_DIRS = [
+        "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}"
+      ];
+      GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
+    };
   };
 }
