@@ -25,6 +25,7 @@ ghidra.buildGhidraExtension (finalAttrs: {
     # The vendored-in dependency does not work for us because maven
     # needs to download dependencies while building.
     ./local-binary-file-toolkit.patch
+    ./ghidra-12.1.3.patch
   ];
 
   postPatch = ''
