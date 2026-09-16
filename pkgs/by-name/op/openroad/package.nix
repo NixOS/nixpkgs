@@ -16,6 +16,7 @@
   pkg-config,
   swig,
   versionCheckHook,
+  nix-update-script,
 
   # buildInputs
   boost,
@@ -43,14 +44,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openroad";
-  version = "26Q2";
+  version = "26Q3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-dB9PfPlp6vZ9+Th8LJE65BW9YeuUL0G4JtjzQxg6UpQ=";
+    hash = "sha256-jElAb8mM2lhGwa8wTONfQgs7esL9p1beAReJXAWns9o=";
   };
 
   nativeBuildInputs = [
@@ -59,10 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     flex
     gitMinimal
-    gtest
     libsForQt5.wrapQtAppsHook
     pkg-config
+    # Also needed as a build-time interpreter: CMake's find_package(Python)
+    # (via the vendored third-party/slang-elab) needs python3 on PATH under
+    # strictDeps, in addition to the libpython/headers pulled in via buildInputs.
+    python3
     swig
+    # tclsh is invoked directly to run etc/TclEncode.tcl at build time, in
+    # addition to the libtcl/headers pulled in via buildInputs.
+    tcl
   ];
 
   buildInputs = [
@@ -72,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     clp
     cudd
     eigen
+    # FlexLexer.h is needed at compile time in addition to the flex tool
+    # itself (in nativeBuildInputs) for code generation.
+    flex
     glpk
+    gtest
     lcov
     lemon-graph
     libjpeg
@@ -104,31 +118,29 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 1;
       extraPrefix = "src/sta/";
     })
-    # Feature-test std::from_chars to fix aarch64-darwin build where
-    # libcxx marks from_chars unavailable (macOS 26.0).
-    # https://github.com/The-OpenROAD-Project/OpenSTA/commit/a5921d1ca
-    (fetchpatch {
-      url = "https://github.com/The-OpenROAD-Project/OpenSTA/commit/a5921d1ca964971ada83be2c7c65bb84504fe179.patch";
-      hash = "sha256-j9BneXSIya/euYiol16swmrFkXTDZNTQwq3tPFkCLH0=";
-      stripLen = 1;
-      extraPrefix = "src/sta/";
-    })
-    # Replace deprecated sprintf with snprintf in Logger::error.
-    # macOS Apple SDK 14.4+ marks sprintf as deprecated, breaking -Werror builds.
-    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/10127
-    (fetchpatch {
-      url = "https://github.com/The-OpenROAD-Project/OpenROAD/commit/2a9191bc5b2841a0c357886a2a1bc3ac0fe5271a.patch";
-      hash = "sha256-lxFZvybfG0Qpg1TyKdfZhKLYI3DSCYDE54ta6EnDBDo=";
-    })
   ];
 
   postPatch = ''
     patchShebangs etc/
+    # New in 26Q3: src/web's CMakeLists.txt invokes these scripts directly
+    # as build steps (not just at runtime) to embed web/report assets.
+    patchShebangs src/web/src/
 
     # Disable CutGTests because it misses core manager implementation
     # and fails under strict Nix linking. Filed as issue #9563.
     if [ -f src/cut/test/cpp/CMakeLists.txt ]; then
       echo "" > src/cut/test/cpp/CMakeLists.txt
+    fi
+
+    # OpenROAD vendors its own slang copy (third-party/slang-elab), separate
+    # from nixpkgs' sv-lang_10 -- same fmt 12 fmt::format/fmt/core.h vs.
+    # fmt/format.h split as sv-lang_10 (see its own package.nix comment for
+    # the full explanation), same fix.
+    if [ -d third-party/slang-elab/third_party/slang ]; then
+      grep -rl '#include <fmt/core.h>' \
+        --include='*.h' --include='*.cpp' \
+        third-party/slang-elab/third_party/slang | \
+        xargs sed -i 's|#include <fmt/core.h>|#include <fmt/format.h>|'
     fi
   ''
 
@@ -157,7 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED -Wno-error=deprecated-declarations")
   ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ yosys ]}"
+  ];
 
   # Some tests are unstable on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -175,14 +192,16 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "-version";
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
     license = lib.licenses.bsd3;
     mainProgram = "openroad";
-    maintainers = with lib.maintainers; [
-      hzeller
-    ];
+    maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
