@@ -112,11 +112,13 @@ Return test result, a list of values.  Each is non-nil if the test passes."
      ;; Run the non-batch test and return test result.
      (eval-in-non-batch-emacs `(,test-name)))))
 
-(defmacro define-with-packages-non-batch-ert-test (test-name)
+(defmacro define-with-packages-non-batch-ert-test (test-name &optional expected-result)
   "See `with-packages--run-non-batch-test' for how the test is run."
-  (declare (indent 1) (debug (symbolp)))
+  (declare (indent 1) (debug (symbolp &optional form)))
   (cl-check-type test-name symbol)
   `(ert-deftest ,test-name ()
+     ,@(when expected-result
+         `(:expected-result ,expected-result))
      (should (stringp with-packages-non-batch-emacs-socket))
      (should (file-readable-p with-packages-non-batch-emacs-socket))
      (let ((test-result (with-packages--run-non-batch-test (quote ,test-name))))
@@ -153,6 +155,12 @@ Return test result, a list of values.  Each is non-nil if the test passes."
                                       nil
                                       t)))))))
 
+(defun with-packages-fonts-of-requested-packages-are-available ()
+  (let ((frame (make-frame-on-display (getenv "DISPLAY"))))
+    (unwind-protect
+        (list (member "Hack" (font-family-list frame)))
+      (delete-frame frame))))
+
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
@@ -177,6 +185,10 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
   with-packages-early-default-is-loaded-before-default
   with-packages-unwrapped-site-start-is-loaded-quietly
   with-packages-no-jit-native-comp)
+
+(define-with-packages-non-batch-ert-test
+  with-packages-fonts-of-requested-packages-are-available
+  (if (eq system-type 'darwin) :failed :passed))
 
 (provide 'with-packages)
 
