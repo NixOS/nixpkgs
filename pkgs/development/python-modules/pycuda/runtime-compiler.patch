@@ -1,0 +1,8 @@
+--- a/pycuda/compiler.py
++++ b/pycuda/compiler.py
+@@ -489,4 +489,2 @@ class DynamicModule(CudaModule):
+             if libdir is None:
+-                nvcc_path = _find_nvcc_on_path()
+-                if nvcc_path is not None:
+-                    libdir = join(os.path.dirname(nvcc_path), "..", "lib64")
++                libdir = "@cudaLibraryDir@"
