@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-gnome";
-  version = "51.rc";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/xdg-desktop-portal-gnome/${lib.versions.major finalAttrs.version}/xdg-desktop-portal-gnome-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Enw1nxA1T994vNqUZZc+Ibs1Co+7Ifk472EYHqkGzyc=";
+    hash = "sha256-7CKLMFCRtknBbGkOECqh1m/BDpg0iI1R5BGRPILBQw0=";
   };
 
   nativeBuildInputs = [
