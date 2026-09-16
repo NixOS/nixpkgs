@@ -17,9 +17,9 @@ let
           location = builtins.unsafeGetAttrPos name set;
         }
       ]
-      ++ lib.optionals (builtins.length prefix == 0 && builtins.isAttrs set.${name}) (
-        libDefPos (prefix ++ [ name ]) set.${name}
-      )
+      ++ lib.optionals (
+        builtins.length prefix == 0 && (lib.tryEval (builtins.isAttrs set.${name})).value
+      ) (libDefPos (prefix ++ [ name ]) set.${name})
     ) (builtins.attrNames set);
 
   libset =
