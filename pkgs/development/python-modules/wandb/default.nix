@@ -251,6 +251,9 @@ buildPythonPackage (finalAttrs: {
     xxhash
   ];
 
+  # wandb only imports SeverityNumber, which is available in release-26.05's 1.34.0.
+  pythonRelaxDeps = [ "opentelemetry-api" ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
@@ -307,6 +310,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
+
+    # The optional sandbox extra requires cwsandbox >= 1.0, but release-26.05 has 0.23.
+    "tests/unit_tests/test_sandbox"
 
     # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
     "tests/unit_tests/test_analytics/test_sentry.py"
