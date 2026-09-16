@@ -59,8 +59,8 @@
     openorbisColor: str = "#306082"
 
     # Based on terminal-emulators.nix' check_for_pink
-    def check_for_color(color: str) -> Callable[[bool], bool]:
-        def check_for_color_retry(final=False) -> bool:
+    def check_for_color(color: str) -> Callable[[float | None], bool]:
+        def check_for_color_retry(_remaining: float | None) -> bool:
             with tempfile.NamedTemporaryFile() as tmpin:
                 machine.send_monitor_command("screendump {}".format(tmpin.name))
 
@@ -83,7 +83,7 @@
     with subtest("running example works"):
         # Ensure that chosen openorbis logo colour isn't present already
         assert (
-            check_for_color(openorbisColor)(True) == False
+            check_for_color(openorbisColor)(None) == False
         ), "openorbisColor {} was present on the screen before we launched anything!".format(openorbisColor)
 
         machine.succeed("shadps4 /etc/openorbis-sample-packages/OpenOrbis-PNG-Sample/uroot/eboot.bin >&2 &")
