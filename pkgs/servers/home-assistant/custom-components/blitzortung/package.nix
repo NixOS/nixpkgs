@@ -10,13 +10,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "mrk-its";
   domain = "blitzortung";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "mrk-its";
     repo = "homeassistant-blitzortung";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8/KIPOmQdaaSFFrjliBBNjboPx8ewzG9/W/grBuex6s=";
+    hash = "sha256-CjO1SeArDYMZyHDNxGGhS26leUEgrpRYiXEWKYdeA7o=";
   };
 
   dependencies = [

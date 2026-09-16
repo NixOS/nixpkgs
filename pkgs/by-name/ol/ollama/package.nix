@@ -111,12 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b10630";
+  llamaCppVersion = "b10760";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = llamaCppVersion;
-    hash = "sha256-h7D/vn/tu2DyzvqhJauWJ+a2TMcjnW527Gv28YrB80I=";
+    hash = "sha256-+WI/1TAJWG1m9ttS2RO43C+1oL/5xpZTaHn7vQh4+kc=";
   };
 
   wrapperOptions = [
@@ -152,16 +152,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-63Zjqaw+c+8ppShhy4vnJofjG1WzVLIUq7JgO+4eehY=";
+    hash = "sha256-s8jFSGo8BJDxe4gSaruJ66JeDnyTBJ0x3dQ5KxWbuTU=";
   };
 
-  vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
+  vendorHash = "sha256-RxmV/VgCydZRGfhWoxDUo3lw8ujCnfQiB1o7PcIikLw=";
   proxyVendor = true;
 
   env =
@@ -225,11 +225,11 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
-    if [[ ${llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
-      echo "llama-cpp version mismatch, expected ${llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+    if [[ ${finalAttrs.passthru.llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${finalAttrs.passthru.llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
       exit 1
     fi
-    cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
+    cp -r ${finalAttrs.passthru.llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
@@ -383,9 +383,10 @@ goBuild (finalAttrs: {
       service-rocm = nixosTests.ollama-rocm;
       service-vulkan = nixosTests.ollama-vulkan;
     };
-    updateScript = ./update.sh;
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
+  // lib.optionalAttrs (!rocmRequested && !cudaRequested && !vulkanRequested) {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description =

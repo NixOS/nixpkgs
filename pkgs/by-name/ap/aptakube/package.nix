@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation (
     sources = {
       aarch64-darwin = {
         name = "Aptakube_${finalAttrs.version}_universal.dmg";
-        hash = "sha256-SgkLQ4dHEja58EDTHs6qi7CGw6mT3tKPNQxS2LKDHn0=";
+        hash = "sha256-HMLxQnZsXRUjR/O0OEVfvKVTZyy9X9/3OZ6j1yWyIKA=";
       };
       x86_64-linux = {
         name = "aptakube_${finalAttrs.version}_amd64.deb";
-        hash = "sha256-I0QkI/utkEck3WiDt9NtN5zwqfPX2GJCx4PUzLnCE58=";
+        hash = "sha256-IFLft9ee9jxTq4xzvFVX45u2x5QCLxAtKfLgbIOMsF8=";
       };
     };
 
@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "aptakube";
-    version = "1.19.3";
+    version = "1.19.6";
 
     __structuredAttrs = true;
     strictDeps = true;

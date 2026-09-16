@@ -66,29 +66,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2606.0";
+  version = "8.2608.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JXSz8waOaVXrlO9WQ+K2pbhYXMjqp3IJ/1y8Hi5fceU=";
+    hash = "sha256-49YMg0BSaMQi+V/ux0BFWhzEuRHQC9hCTV0ScrxQmxo=";
   };
 
   patches = [
-    # Remove with rsyslog 8.2608.0 or newer.
+    # Remove with the first rsyslog release containing this fix.
     (fetchpatch {
-      name = "CVE-2026-19654.patch";
-      url = "https://github.com/rsyslog/rsyslog/commit/f7f774228273730ba1075f4cd457ae78303a8f08.patch";
-      hash = "sha256-ww8Ade2eKrQygJduLMPFjxd/fmBnpQ4ePLEzHffPy90=";
-    })
-
-    # Fix imjournal invalidation reopen busy-loop.
-    # Remove with rsyslog 8.2608.0 or newer.
-    # https://github.com/rsyslog/rsyslog/pull/7384
-    (fetchpatch {
-      name = "imjournal-invalidation-reopen-busy-loop.patch";
-      url = "https://github.com/rsyslog/rsyslog/commit/383f80f21f16c3c94e7d7a57b0a5af12cdac9d75.patch";
-      excludes = [ "ChangeLog" ];
-      hash = "sha256-RlhXoK+dAPBN2wu4V7GoFw/d+uWQzO7+nUkW5+z7QJY=";
+      name = "CVE-2026-78002.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/667e3f61aec5ee02c5c2ee6f0f8accf6fe4301a9.patch";
+      hash = "sha256-QsxOJCvr6VBbLbXzednwgvCfisSvNm6zfxPaMFxXVT0=";
     })
   ];
 

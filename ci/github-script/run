@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --import ./run
+#!/usr/bin/env node
 import { execSync } from 'node:child_process'
 import { closeSync, mkdtempSync, openSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -112,7 +112,7 @@ program
   .argument('<repo>', 'Name of the GitHub repository to run on (Example: nixpkgs)')
   .argument('<pr>', 'Number of the Pull Request to run on')
   .action(async (owner, repo, pr, options) => {
-    const checkTargetBranch = (await import('./check-target-branch.ts')).default
+    const checkTargetBranch = (await import('./check-target-branch.ts')).checkTargetBranch
     await run(checkTargetBranch, owner, repo, pr, options)
   })
 

@@ -6,28 +6,20 @@
   openmp,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vid.stab";
-  version = "1.1.1-unstable-2025-08-21";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "georgmartius";
     repo = "vid.stab";
-    rev = "4bd81e3cdd778e2e0edc591f14bba158ec40cfa1";
-    hash = "sha256-imSy1ywpGWbghP65NoPgUJBJmHUY5OsLWmIXk6Q1MQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8YyIBYp3/tThQBrnZsiusKyhP2kO0qAsxTwy9mVQiRk=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
-
-  # Fix the build with CMake 4.
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        'cmake_minimum_required (VERSION 2.8.5)' \
-        'cmake_minimum_required (VERSION 3.10)'
-  '';
 
   meta = {
     description = "Video stabilization library";
@@ -36,4 +28,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

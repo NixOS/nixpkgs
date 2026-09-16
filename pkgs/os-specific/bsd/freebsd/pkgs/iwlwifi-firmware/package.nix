@@ -49,7 +49,6 @@ mkDerivation rec {
 
   meta = {
     description = "Intel Wifi Firmware for FreeBSD";
-    platforms = lib.platforms.freebsd;
     license = linux-firmware.meta.license;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   rsync,
   ocamlPackages,
   dune,
@@ -15,6 +16,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://abella-prover.org/distributions/abella-${finalAttrs.version}.tar.gz";
     hash = "sha256-80b/RUpE3KRY0Qu8eeTxAbk6mwGG6jVTPOP0qFjyj2M=";
   };
+
+  patches = [
+    # Compatibility with OCaml 5.5
+    (fetchpatch {
+      url = "https://github.com/abella-prover/abella/commit/85dd329c03bf8866975ca0ea7278553d64f8d17f.patch";
+      includes = [ "src/*.ml" ];
+      hash = "sha256-adS2QGwqhLjiZo/Q4KUbpJVp8D/eNy/Ux17/nY3XMh4=";
+    })
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;

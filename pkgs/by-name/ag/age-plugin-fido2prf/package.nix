@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "age-plugin-fido2prf";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "typage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JGEn1xIzfLyoCWd/aRRG08Z/OoviEyZF+tGEfcj9DXw=";
+    hash = "sha256-vwE4u7xMHe0pGY/18ZbIAnoMyFyWlIbVbpQH4ZIbgZ8=";
   };
 
   srcRoot = "${finalAttrs.src}/fido2prf/cmd/age-plugin-fido2prf";

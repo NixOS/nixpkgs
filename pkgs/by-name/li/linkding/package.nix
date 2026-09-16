@@ -14,7 +14,7 @@
   uwsgi,
 }:
 let
-  version = "1.46.2";
+  version = "1.47.0";
 
   python = python3.override {
     self = python;
@@ -77,7 +77,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "sissbruecker";
     repo = "linkding";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d/APoPxlrsvBqWGOSYLzLPfCgZd4PRPNh/zxcFnvCRA=";
+    hash = "sha256-TvcUD4GHQCjIk3nxGi/X82NECTsecUiK/axITrsNyVM=";
   };
 
   __structuredAttrs = true;
@@ -121,7 +121,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     pname = "${finalAttrs.pname}-ui";
     src = finalAttrs.src;
 
-    npmDepsHash = "sha256-XBrB2TaQe9I5bglsQ2BZLHAopx4DTkCjCCTD9vTfpgU=";
+    npmDepsHash = "sha256-bSDQLo/gNRikY1EqQn3XizH2xnTVNz5H6ox+4w8PVFs=";
 
     installPhase = ''
       runHook preInstall
@@ -294,6 +294,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/sissbruecker/linkding/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      iedame
       squat
     ];
     platforms = lib.platforms.linux;

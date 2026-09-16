@@ -19,7 +19,7 @@ assert lib.assertMsg (
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   # NOTE: also update cronet-go
-  version = "1.13.19";
+  version = "1.14.1";
 
   __structuredAttrs = true;
 
@@ -28,10 +28,10 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXl4fW7iwWylxFBdipU2fKM4yYtfPjI/Hv/19XxkuXA=";
+    hash = "sha256-Ce1eukO8ERZEKUoqwcJEJIZcO6VcG/cRnfCdg4FCYJw=";
   };
 
-  vendorHash = "sha256-nNFqDOvM8bwCRNG399dU24XO+mmal+YAE7EoPghUaZo=";
+  vendorHash = "sha256-ttkDc8vRomNMNwqrZcGuvS0/M7Yqrpkz/h8wO5IVRQ4=";
 
   tags = [
     "with_gvisor"
@@ -44,6 +44,10 @@ buildGoModule (finalAttrs: {
     "with_tailscale"
     "with_ccm"
     "with_ocm"
+    "with_cloudflared"
+    "with_usbip"
+    "with_openvpn"
+    "with_openconnect"
     "badlinkname"
     "tfogo_checklinkname0"
   ]
@@ -71,7 +75,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
-    "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
+    "-X=runtime.godebugDefault=multipathtcp=0,tlssha1=1"
     "-checklinkname=0"
   ];
 

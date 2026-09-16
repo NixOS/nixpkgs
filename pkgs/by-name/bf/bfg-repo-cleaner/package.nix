@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       beautiful (can use Scala instead of bash to script customizations).
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.changlinli ];
     mainProgram = "bfg";
     platforms = lib.platforms.unix;

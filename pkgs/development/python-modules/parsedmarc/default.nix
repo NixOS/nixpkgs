@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
@@ -31,6 +32,8 @@
   xmltodict,
 
   # test
+  iana-etc,
+  libredirect,
   pytestCheckHook,
 }:
 
@@ -42,14 +45,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
-  version = "10.4.3";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = finalAttrs.version;
-    hash = "sha256-q5Zc0iWDBuuYfesmB2r8BeE32EmVsFPiChnXLEwX+SE=";
+    hash = "sha256-tPGpYIKIi5TK5t4vwo/bUpVfgq4UhYW0IAn5sFYexrs=";
   };
 
   postPatch = ''
@@ -95,11 +98,15 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '';
+
   disabledTests = [
     # contacts DNS servers at 1.1.1.1 and 8.8.8.8
     "test_general_dns_settings_with_defaults"
-    "testErrorRaisedAfterRetriesExhausted"
-    "testTransientErrorIsRetried"
     # AssertionError
     "testWithoutAssumeUtcNaiveIsLocal"
   ];

@@ -12,22 +12,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-7832RechlKoDV42/82+OKoNBo+wzfB8kpTzLX1sL5mY=";
+          hash = "sha256-Uym2S4NN78yUDQdg1qFednfYT5K6AkQfBOmDp3fFGoc=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-P8GUuAMrt0OTAqti3dDY738QmzJapNMxBUaTJj0TN+U=";
+          hash = "sha256-tB6Z/rXYYLo/SsPLQiaQZ6KUJZhh+aiYaBMpJz0wbtk=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-3sSd5bDC2ECDpCQKS5QOO3GBMWfhOFe6uOIfeZyUhLA=";
+          hash = "sha256-IicI0BbpGBDw+tGFlbefXA1iSPQZNLj/n0nv6zEGkHA=";
         };
       };
     in
     {
       publisher = "kilocode";
       name = "Kilo-Code";
-      version = "7.4.16";
+      version = "7.6.2";
     }
     // sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system ${stdenv.hostPlatform.system}");

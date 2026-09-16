@@ -180,6 +180,8 @@ stdenv.mkDerivation {
       ;
   };
 
+  __structuredAttrs = true;
+
   meta =
     let
       pkg-config_ = optionalAttrs (pkg-config != null) pkg-config;

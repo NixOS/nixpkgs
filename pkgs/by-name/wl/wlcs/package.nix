@@ -38,8 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner # needed by cmake
   ];
 
-  # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE =
+    # https://github.com/canonical/wlcs/issues/462
+    "-Wno-error=deprecated-declarations "
+    # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
+    + lib.optionalString stdenv.cc.isGNU " -Wno-error=maybe-uninitialized";
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

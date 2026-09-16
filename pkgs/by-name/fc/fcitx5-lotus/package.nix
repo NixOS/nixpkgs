@@ -11,6 +11,7 @@
   hicolor-icon-theme,
   kdePackages,
   libinput,
+  librsvg,
   libx11,
   nix-update-script,
   pkg-config,
@@ -30,14 +31,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.2";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-TflLGUtQBYVjJ6a/vTJa7a3HyVKxb6s9Rzh6FyT4010=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOIs8nLSF93xDIU7v8Wldyw+Zs5NEMJqZA/42TN4oYM=";
     fetchSubmodules = true;
+  };
+
+  vendorDir = finalAttrs.passthru."go-modules";
+
+  passthru = {
+    "go-modules" =
+      (buildGoModule {
+        pname = "fcitx5-lotus-go-modules";
+        inherit (finalAttrs) version src;
+        modRoot = "bamboo";
+        vendorHash = "sha256-CNDYjxDfqh9nGs5vlpb/7qXZeNtkvegC5nPvBOZcDrc=";
+      }).goModules;
+
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [
@@ -46,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
+    librsvg
     pkg-config
     qt6.wrapQtAppsHook
   ];
@@ -58,21 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     pythonEnv
     qt6.qtbase
+    qt6.qtsvg
     udev
   ];
 
   strictDeps = true;
+
   __structuredAttrs = true;
 
   dontWrapQtApps = true;
-
-  vendorDir =
-    (buildGoModule {
-      pname = "fcitx5-lotus-go-modules";
-      inherit (finalAttrs) version src;
-      modRoot = "bamboo";
-      vendorHash = "sha256-HjVMGil4bNMTFifxFYtHELdkeKhrumHGrde4msbxvJc=";
-    }).goModules;
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -90,6 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace server/lotus-server.cpp \
       --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
                      '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
+
+    substituteInPlace src/lotus-engine.cpp \
+      --replace-fail '/usr/share/icons/hicolor' '/run/current-system/sw/share/icons/hicolor'
+
+    substituteInPlace settings-gui/i18n.py \
+      --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
+
+    substituteInPlace settings-gui/ui/pages/dict_editor.py \
+      --replace-fail '"/usr/share/fcitx5/lotus/vietnamese.cm.dict"' '"'"$out"'/share/fcitx5/lotus/vietnamese.cm.dict"'
   '';
 
   postInstall = ''
@@ -103,10 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     patchShebangs $out/share/fcitx5-lotus/settings-gui
-    wrapQtApp $out/bin/fcitx5-lotus-settings
+    wrapQtApp $out/bin/fcitx5-lotus-settings \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Vietnamese input method engine for Fcitx5";
@@ -115,7 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ imcvampire ];
+    maintainers = with lib.maintainers; [
+      imcvampire
+      justanoobcoder
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,4 +1,4 @@
-const { classify, split } = require('../supportedBranches.js')
+import { classify, split } from './supportedBranches.js'
 
 type TargetBranchPolicyFacts = {
   base: string
@@ -23,7 +23,13 @@ type TargetBranchPolicyResult = {
   }
 }
 
-function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
+export function getTargetBranchPolicy({
+  base,
+  head,
+}: {
+  base: string
+  head: string
+}) {
   const baseClassification = classify(base)
   const headClassification = classify(head)
   const isPrimaryBase = baseClassification.type.includes('primary')
@@ -42,7 +48,7 @@ function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
   }
 }
 
-function evaluateTargetBranchPolicy({
+export function evaluateTargetBranchPolicy({
   base,
   head,
   maxRebuildCount,
@@ -56,9 +62,12 @@ function evaluateTargetBranchPolicy({
     shouldCheckNixosRebuild,
   } = getTargetBranchPolicy({ base, head })
 
+  // https://github.com/NixOS/nixpkgs/pull/553786#issuecomment-5510286851
+  // kernels-org should go to staging-nixos (or master) and staging-nixos-xx.xx (or release-xx.xx) when backported
   // https://github.com/NixOS/nixpkgs/pull/521157
-  // These should go to master and release-xx.xx when backported
+  // xanmod should go to master and release-xx.xx when backported
   const isExemptKernelUpdate =
+    onlyChangedFile === 'pkgs/os-specific/linux/kernel/kernels-org.json' ||
     onlyChangedFile === 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
 
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
@@ -105,5 +114,3 @@ function evaluateTargetBranchPolicy({
     shouldSkipDevelopmentMerge ? 'skip-development-merge' : 'dismiss',
   )
 }
-
-module.exports = { evaluateTargetBranchPolicy, getTargetBranchPolicy }

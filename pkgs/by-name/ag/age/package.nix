@@ -18,16 +18,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "age";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qs/q3zQYV0PukABBPf/aU5V1oOhw95NG6K301VYJk8A=";
+    hash = "sha256-A1VUzovKWxwelSc9/xofBwTfbRil9t75fRavb5p2JlA=";
   };
 
-  vendorHash = "sha256-iVDkYXXR2pXlUVywPgVRNMORxOOEhAmzpSM0xqSQMSQ=";
+  vendorHash = "sha256-cNh9U7OjoxewskX/+Ezln+U7p44g2h+Zx1dVKAaK6Ww=";
 
   ldflags = [
     "-s"

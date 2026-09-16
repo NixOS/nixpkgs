@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dblab";
-  version = "0.48.1";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "danvergara";
     repo = "dblab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6TNczWq7EAMNo1z2zIpLG9TshSuvQ5S+QOI2XH3S/ik=";
+    hash = "sha256-cOUWl7ZWQ7iuOg3+eyKGq2jl6BVLlRmnMrftcY6H05E=";
   };
 
   vendorHash = "sha256-nFgwoX2GxjRdqXcocTvz7L0NA+kN1+67uTpler8di/E=";

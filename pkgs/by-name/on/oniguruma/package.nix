@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/kkos/oniguruma/releases/download/v${finalAttrs.version}/onig-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Klz8WuJZ5Ol/hraN//wVLNr/6U4gYLdwy4JyONdp/AU=";
+    hash = "sha256-Klz8WuJZ5Ol/hraN//wVLNr/6U4gYLdwy4JyONdp/AU=";
   };
 
   outputs = [
@@ -23,7 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   outputBin = "dev"; # onig-config
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  strictDeps = true;
+
   configureFlags = [ "--enable-posix-api=yes" ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/kkos/oniguruma";

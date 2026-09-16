@@ -46,7 +46,6 @@
   withUI ? false,
   withTesserocr ? false,
   withRapidocr ? false,
-  withCPU ? false,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -104,8 +103,7 @@ buildPythonPackage (finalAttrs: {
   ++ uvicorn.optional-dependencies.standard
   ++ lib.optionals withUI finalAttrs.passthru.optional-dependencies.ui
   ++ lib.optionals withTesserocr finalAttrs.passthru.optional-dependencies.tesserocr
-  ++ lib.optionals withRapidocr finalAttrs.passthru.optional-dependencies.rapidocr
-  ++ lib.optionals withCPU finalAttrs.passthru.optional-dependencies.cpu;
+  ++ lib.optionals withRapidocr finalAttrs.passthru.optional-dependencies.rapidocr;
 
   optional-dependencies = {
     ui = [

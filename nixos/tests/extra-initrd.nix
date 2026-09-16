@@ -1,7 +1,4 @@
-{
-  runTest,
-  ...
-}:
+{ runTest }:
 let
   common =
     { config, pkgs, ... }:

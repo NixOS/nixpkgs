@@ -8,6 +8,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-io";
   version = "1.3.4";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://trunk.io/releases/launcher/${finalAttrs.version}/trunk";
     hash = "sha256-ifvdjHtjZJ7rFHlBV1e4mJA8BB5ztJt4Ao29ZOyjCHo=";
@@ -18,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/bin/trunk
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

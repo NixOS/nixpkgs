@@ -39,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-UNBpVB2H+xr0ijdlfK/Hrh6k3lhRSqHkthjWp/WZsaQ=";
   };
 
+  patches = [
+    # https://github.com/postlund/pyatv/pull/2909
+    ./fix-test-fixtures-for-newer-zeroconf-versions.diff
+  ];
+
   pythonRelaxDeps = [
     "aiohttp"
     "async_timeout"
@@ -81,15 +86,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.12") [
-      # https://github.com/postlund/pyatv/issues/2365
-      "test_simple_dispatch"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
-      "test_stream_retransmission"
-    ];
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+    "test_stream_retransmission"
+  ];
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox

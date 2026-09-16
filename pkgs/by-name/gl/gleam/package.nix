@@ -30,12 +30,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    beamPackages.erlang
   ];
 
   nativeCheckInputs = [
     # used by several tests
     git
+
+    # erlang runtime is used for integration tests
+    beamPackages.erlang
 
     # js runtimes used for integration tests
     nodejs

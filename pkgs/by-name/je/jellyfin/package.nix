@@ -15,13 +15,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
-  version = "10.11.11"; # ensure that jellyfin-web has matching version
+  version = "12.0"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HCs4ZsutVoVH+bBZANjpPeMyV8e63Yemjg9DSr0R9zg=";
+    hash = "sha256-z40crHV4vH27vDQBFcM58tQ5JW8wtIW3w981Rpp5h1E=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,8 @@ buildDotnetModule (finalAttrs: {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [

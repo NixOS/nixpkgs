@@ -11,19 +11,18 @@
   aiohttp,
   music-assistant-models,
   orjson,
-
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "music-assistant-client";
-  version = "1.4.3";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M14H28TABXwJrr3OjcWyvNufEItXeJLfEL78anGLj7o=";
+    hash = "sha256-8EsLeRtPH/YZyl8uKyzA1L5n+6lkGAFqYipVbaW4sSg=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

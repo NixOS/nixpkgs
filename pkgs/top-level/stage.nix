@@ -320,15 +320,36 @@ let
     if config.attrPathsDisallowedForInternalUse == [ ] then
       { }
     else
+      let
+        # Abort only when this derivation, or one of its `outputs`, is instantiated.
+        # That is, when a `drvPath`, `outPath`, or `shellPath` is evaluated.
+        # Not to be confused with `lib.warnOnInstantiate`, which warns on much more than just instantiation.
+        abortOnInstantiate =
+          msg: drv:
+          let
+            paths = lib.filter (name: drv ? ${name}) [
+              "drvPath"
+              "outPath"
+              "shellPath"
+            ];
+          in
+          drv
+          // lib.genAttrs paths (name: abort msg drv.${name})
+          // lib.genAttrs (drv.outputs or [ ]) (name: abortOnInstantiate msg drv.${name})
+          // {
+            ${if lib.isFunction (drv.override or null) then "override" else null} =
+              args: abortOnInstantiate msg (drv.override args);
+            ${if lib.isFunction (drv.overrideAttrs or null) then "overrideAttrs" else null} =
+              args: abortOnInstantiate msg (drv.overrideAttrs args);
+          };
+      in
       lib.updateManyAttrsByPath (map (
         { attrPath, reason }:
         {
           path = attrPath;
-          update =
-            _:
-            abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
-              lib.optionalString (reason != null) ", because ${reason}"
-            }";
+          update = abortOnInstantiate "${lib.showAttrPath attrPath} is disallowed from being used within Nixpkgs${
+            lib.optionalString (reason != null) ", because ${reason}"
+          }";
         }
       ) config.attrPathsDisallowedForInternalUse) prev;
 

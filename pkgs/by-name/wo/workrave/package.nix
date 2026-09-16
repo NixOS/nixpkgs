@@ -20,9 +20,9 @@
   gtkmm3,
   atk,
   pango,
-  pangomm,
+  pangomm_1_4,
   cairo,
-  cairomm,
+  cairomm_1_0,
   dbus,
   dbus-glib,
   gst_all_1,
@@ -65,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     atk
     pango
-    pangomm
+    pangomm_1_4
     cairo
-    cairomm
+    cairomm_1_0
     dbus
     dbus-glib
     gst_all_1.gstreamer

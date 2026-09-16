@@ -1,98 +1,101 @@
 {
   alsa-lib,
-  cargo-tauri,
+  autoPatchelfHook,
   clang,
+  cmake,
   fetchFromGitHub,
-  fetchNpmDeps,
-  glib-networking,
+  fontconfig,
+  freetype,
   lib,
-  libappindicator,
-  libayatana-appindicator,
+  libglvnd,
+  libjack2,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
   llvmPackages,
   makeWrapper,
+  nasm,
   nix-update-script,
-  nodejs,
-  npmHooks,
-  openssl,
-  pipewire, # pw-metadata for bit-perfect sample rate queries
+  pipewire, # pw-metadata/pw-dump for bit-perfect sample rate queries and DAC detection
   pkg-config,
   pulseaudio, # pactl for PipeWire device enumeration and sink routing
   rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
+  vulkan-loader,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qbz";
-  version = "1.2.15";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "vicrodh";
     repo = "qbz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G7wR5HV0qwlrCPmKTv68+EeDTTyCAvvmPr7GDhrwTaA=";
+    hash = "sha256-zseGL7IcH/fdc4TDVwU3Tml1X6wCvSaYCji5D5RxAuA=";
   };
 
-  cargoHash = "sha256-nF3hoKn6NA5uuRLgKit83Yxqrc0r+/IaI+xFjrw+oG8=";
-  cargoRoot = "src-tauri";
+  cargoHash = "sha256-FPDyn61rO/hW9gEUU/yo+mXhnamwwXU1mj3wGQpHA3o=";
+  cargoRoot = "crates";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  tauriBuildFlags = [ "--no-sign" ];
-
-  npmDeps = fetchNpmDeps {
-    name = "qbz-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    hash = "sha256-RIR3erHN27fU9tTNQdUK0/5QDS9Dgd+O03PfqlYfRcM=";
-  };
-
-  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
-
   nativeBuildInputs = [
-    cargo-tauri.hook
-    clang
     makeWrapper
-    nodejs
-    npmHooks.npmConfigHook
     pkg-config
-    wrapGAppsHook3
+    autoPatchelfHook
   ];
 
   buildInputs = [
     alsa-lib
-    libappindicator
-    openssl
-    webkitgtk_4_1
+    fontconfig
+    freetype
+    libjack2
   ];
 
+  runtimeDependencies = [
+    libglvnd
+    libxkbcommon
+    libx11
+    libxcursor
+    libxi
+    vulkan-loader
+    wayland
+  ];
+
+  # The generated Slint UI module is a single very large compilation unit;
+  # running the test profile on top of the build doubles wall time and memory
+  # for no packaging value. Engine crates are tested in upstream CI.
   doCheck = false;
 
   postInstall = ''
-    gappsWrapperArgs+=(
+    wrapProgram $out/bin/qbz \
       --prefix PATH : ${
         lib.makeBinPath [
           pulseaudio
           pipewire
         ]
       }
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libappindicator
-          libayatana-appindicator
-        ]
-      }
-      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
-    )
+
+    install -Dm644 $src/packaging/linux/qbz.desktop \
+      $out/share/applications/qbz.desktop
+    for size in 32 48 64 128 256 512; do
+      install -Dm644 $src/packaging/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/qbz.png
+    done
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A native, full-featured hi-fi Qobuz desktop player for Linux, with fast, bit-perfect audio playback";
+    description = "Native, full-featured hi-fi Qobuz desktop player for Linux, with fast, bit-perfect audio playback";
     homepage = "https://qbz.lol";
     changelog = "https://github.com/vicrodh/qbz/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felixsinger
+      vicrodh
+      fpletz
     ];
     mainProgram = "qbz";
     platforms = lib.platforms.linux;

@@ -8,13 +8,13 @@ let
   orioledb-postgres = postgresql_18.overrideAttrs (
     finalAttrs: oldAttrs: {
       pname = "orioledb-postgres";
-      version = "18.1";
+      version = "18.2";
 
       src = fetchFromGitHub {
         owner = "orioledb";
         repo = "postgres";
-        tag = "patches18_1";
-        hash = "sha256-TCpmTa9R+a+rrTRSNkfhBDaVto1RtKf1R+qnepw9bV0=";
+        tag = "patches18_2";
+        hash = "sha256-n/Bl48D20evMo9c0PwdSCvdICDd3Z41OCJEuP3MJ8B4=";
       };
 
       # Configure extracts the patch version from the git tag. This

@@ -133,15 +133,6 @@ let
         doCheck = false; # no tests
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
       plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
         version = "4.15.16";
         src = fetchFromGitHub {
@@ -180,17 +171,6 @@ let
           "test_async_add_tasks"
           "test_send_heartbeat"
         ];
-      });
-
-      # Pinned due to API changes >0.3.5.3
-      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.5.3";
-        src = fetchFromGitHub {
-          owner = "MatsNl";
-          repo = "pyatag";
-          rev = version;
-          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
       });
 
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
@@ -240,6 +220,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -270,7 +251,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.8.3";
+  hassVersion = "2026.9.2";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -291,13 +272,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-bM4YYwV4MNKnVe+1Gzh2DIY2LE2IvGexP/F0RR0R7Y0=";
+    hash = "sha256-JBGydiQydkIDPl1HybR7OK8Y1iuqht3olOlzY1tz/KQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-f1zG2rBz4hKJ0lhMqk25Xp5INWgs6bEisF7vEQV7UPg=";
+    hash = "sha256-CnnNTxNkK+pO0YczaZiRoNplH2s74fzCv7XEWdxvd+E=";
   };
 
   build-system = with python3Packages; [
@@ -372,6 +353,7 @@ python3Packages.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    gazetteer-matcher
     ha-ffmpeg
     hass-nabucasa
     hassil
@@ -386,6 +368,7 @@ python3Packages.buildPythonApplication rec {
     orjson
     packaging
     pillow
+    probatio
     propcache
     psutil-home-assistant
     pyjwt
@@ -490,10 +473,6 @@ python3Packages.buildPythonApplication rec {
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
     "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
-    # various failing after python-updates
-    "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
-    "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
-    "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
   ];
 
   preCheck = ''

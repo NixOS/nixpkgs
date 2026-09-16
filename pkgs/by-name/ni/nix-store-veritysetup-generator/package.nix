@@ -8,23 +8,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-store-veritysetup-generator";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "nix-store-veritysetup-generator";
-    rev = finalAttrs.version;
-    hash = "sha256-4VIPyhvPKRlEgX7roUMIyhSBqfrWPbbsdhyccxH8EIM=";
+    tag = finalAttrs.version;
+    hash = "sha256-xZNUqbI6a+RJfaJXBQYf5pAJNIiQdJ1PybeDR0TAfjk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
 
-  cargoHash = "sha256-nL9GiluLV12J/Kwkq2gAYmOWtPr6sG4ELoLj3UCgDtg=";
+  cargoHash = "sha256-ZTTHeScm4bSWfKHNgmfsxuBS6zTgn7OpFGiBYo0vcfY=";
 
-  env = {
-    SYSTEMD_VERITYSETUP_PATH = "${systemd}/lib/systemd/systemd-veritysetup";
-    SYSTEMD_ESCAPE_PATH = "${systemd}/bin/systemd-escape";
-  };
+  nativeCheckInputs = [
+    systemd
+  ];
 
   # Use a fake path in tests so that they are not dependent on specific Nix
   # Store paths and thus don't break on different Nixpkgs invocations. This is
@@ -42,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Systemd unit generator for a verity protected Nix Store";
     homepage = "https://github.com/nikstur/nix-store-veritysetup-generator";
+    changelog = "https://github.com/nikstur/nix-store-veritysetup-generator/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "nix-store-veritysetup-generator";

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "realm";
-  version = "2.9.4";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gnsFqWhJOMKUaSWfRmHBksw3uWFP0smRhEbPLriEmlk=";
+    hash = "sha256-P7jyVe6KNe1evan2qRtpA99ZKbgF1Zz7DiRxi1+h7WI=";
   };
 
-  cargoHash = "sha256-b/cG6fGoAdhvmZXSQv/QkY3QKiMT7YcfEGohZSbk0q8=";
+  cargoHash = "sha256-kuoYEGn419LtJRGoWzlvgclkjW0zh94XX6OvCsa5Hfc=";
 
   nativeBuildInputs = [
     cmake

@@ -46,7 +46,8 @@ stdenv.mkDerivation {
 
     cp -r ./* "$out/share/trilium-server/"
 
-    rm $out/share/trilium-server/node_modules/better-sqlite3/prebuilds/linuxmusl-x64.node
+    # Unused musl prebuilds confuse autoPatchelfHook (glibc-only).
+    rm -f "$out/share/trilium-server/node_modules/better-sqlite3/prebuilds"/linuxmusl-*.node
 
     makeWrapper "$out/share/trilium-server/node/bin/node" "$out/bin/trilium-server" \
       --chdir "$out/share/trilium-server" \

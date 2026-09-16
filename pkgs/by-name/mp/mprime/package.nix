@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "31.04b02";
 
   src = fetchzip {
-    url = "https://download.mersenne.ca/gimps/v31/31.04/p95v${
+    url = "https://www.mersenne.org/download/software/v31/31.04/p95v${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
     hash = "sha256-W8ic709bgm9KbVxe1fvIEC8J8LrwwMfAajX1bKhv6EM=";

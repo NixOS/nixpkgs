@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "protobuf";
-  version = "7.35.1";
+  version = "7.36.1";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-zhFaJv4MOaLCmXPZFNMn5RamRVRkSJ/jzR5RobNU+Bo=";
+    hash = "sha256-0PZHDwziuE4/6uotS4FjeLN7pNSqCKJ0MFNz3pPi1SQ=";
   };
 
   build-system = [ setuptools ];

@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
 
       # Vendored/incorporated libs
-      apsl20
+      asl20
       llvm-exception
       lib.licenses.boost
       bsd2

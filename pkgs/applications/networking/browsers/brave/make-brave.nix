@@ -2,7 +2,7 @@
   pname,
   version,
   # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
-  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # the corresponding upstream `{ url, sha256 }` record. Encoding the per-system
   # sources as data rather than positional arguments lets channel-specific
   # package.nix files drop platforms that upstream hasn't published yet.
   archives,
@@ -71,7 +71,7 @@
   libxcb,
   zlib,
   # Darwin dependencies
-  unzip,
+  undmg,
   makeWrapper,
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
@@ -189,11 +189,14 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchurl { inherit (archive) url hash; };
+  src = fetchurl { inherit (archive) url sha256; };
+
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = stdenv.hostPlatform.isDarwin;
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs =
@@ -204,7 +207,7 @@ stdenv.mkDerivation {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      unzip
+      undmg
       makeWrapper
     ];
 
@@ -309,7 +312,7 @@ stdenv.mkDerivation {
     $out/opt/brave.com/${optName}/brave --version
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
 
   meta = {
     homepage = homepage;

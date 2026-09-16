@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scaleway-core";
-  version = "2.11.0";
+  version = "2.12.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scaleway";
     repo = "scaleway-sdk-python";
     tag = finalAttrs.version;
-    hash = "sha256-v/dN0vLXr+vCobcrH9E6wXS61qMHsESHyL5BEpsJPkM=";
+    hash = "sha256-JvlCCy0RrOUGuwWcWqQdvRfCVtooNvkjpIBxb6NPOSY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";

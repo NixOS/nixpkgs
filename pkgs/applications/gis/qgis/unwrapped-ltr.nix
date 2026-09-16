@@ -85,7 +85,7 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.44.12";
+  version = "3.44.14";
   pname = "qgis-ltr-unwrapped";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
@@ -93,7 +93,7 @@ mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-G/7Tnr9u6VgbQFCmGqeqXap0081mFW4UOYix8nM+/co=";
+    hash = "sha256-v2BmgSgBgzoeJgypnJ47bTxZzt7kbBc/QmJrmWxZCYI=";
   };
 
   passthru = {
@@ -185,7 +185,7 @@ mkDerivation rec {
     "-DQGIS_MACAPP_BUNDLE=0" # Don't copy Qt into bundle; we fix paths in postFixup
     "-DSQLITE3_INCLUDE_DIR=${sqlite.dev}/include" # FindSqlite3.cmake incorrectly assumes framework
   ]
-  ++ lib.optional withServer [
+  ++ lib.optionals withServer [
     "-DWITH_SERVER=True"
     "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
   ]

@@ -101,36 +101,40 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "custom-threading-model.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
-      hash = "sha256-f0XAim3uzHnUx5lm/xO00IqBHu4YUEHF2WY+c0yCF6Y=";
-      includes = [
-        "config/*"
-        "libstdc++-v3/acinclude.m4"
-      ];
-    })
-    (getVersionFile "libstdcxx/force-regular-dirs.patch")
+  patches =
+    # A backport of a commit that is in the GCC 16 release branch already.
+    lib.optionals (lib.versionOlder release_version "16") [
+      (fetchpatch {
+        name = "custom-threading-model.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
+        hash = "sha256-f0XAim3uzHnUx5lm/xO00IqBHu4YUEHF2WY+c0yCF6Y=";
+        includes = [
+          "config/*"
+          "libstdc++-v3/acinclude.m4"
+        ];
+      })
+    ]
+    ++ [
+      (getVersionFile "libstdcxx/force-regular-dirs.patch")
 
-    # From the posting to gcc-patches, which covers every component that links
-    # libbacktrace. Take only this component's non-generated files: the
-    # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
-    # slightly different from the one the patch was made against.
-    (fetchpatch {
-      name = "system-libbacktrace.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
-      includes = [
-        "config/libbacktrace.m4"
-        "libstdc++-v3/acinclude.m4"
-        "libstdc++-v3/src/Makefile.am"
-        "libstdc++-v3/src/c++23/Makefile.am"
-        "libstdc++-v3/src/c++23/stacktrace.cc"
-        "libstdc++-v3/src/experimental/Makefile.am"
-      ];
-      hash = "sha256-qcs5N+KgBs2FScqGUZRYbAKkI2oDnm+G/ZN9RCAgZpw=";
-    })
-  ];
+      # From the posting to gcc-patches, which covers every component that links
+      # libbacktrace. Take only this component's non-generated files: the
+      # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
+      # slightly different from the one the patch was made against.
+      (fetchpatch {
+        name = "system-libbacktrace.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
+        includes = [
+          "config/libbacktrace.m4"
+          "libstdc++-v3/acinclude.m4"
+          "libstdc++-v3/src/Makefile.am"
+          "libstdc++-v3/src/c++23/Makefile.am"
+          "libstdc++-v3/src/c++23/stacktrace.cc"
+          "libstdc++-v3/src/experimental/Makefile.am"
+        ];
+        hash = "sha256-qcs5N+KgBs2FScqGUZRYbAKkI2oDnm+G/ZN9RCAgZpw=";
+      })
+    ];
 
   postUnpack = ''
     mkdir -p ./build

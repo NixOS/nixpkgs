@@ -25,13 +25,14 @@
   # dependencies
   click,
   opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
   packaging,
   platformdirs,
   protobuf,
   pydantic,
   pyyaml,
   requests,
-  sentry-sdk,
   setproctitle,
   typing-extensions,
   xxhash,
@@ -73,6 +74,7 @@
   responses,
   scikit-learn,
   soundfile,
+  sweeps,
   tenacity,
   torch,
   torchvision,
@@ -80,12 +82,12 @@
 }:
 
 let
-  version = "0.29.0";
+  version = "0.30.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-5YkJB5uS9GalNKL+MPf5GVQX/jgWM62nxMVmdnzOXGs=";
+    hash = "sha256-4ccIM8bXbz8IkZeMBdr5zqoG7IxwwW8lb/VKIOOJWeE=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -95,7 +97,7 @@ let
 
     sourceRoot = "${src.name}/xpu";
 
-    cargoHash = "sha256-YKuXtttLam4NmJsJPQH8sFbj1Qs5Gc2uoFJEvTYxkew=";
+    cargoHash = "sha256-arb96ajbju/CeAglgvTjD5/omrEpigEORjXVAVSSV2Q=";
 
     checkFlags = [
       # fails in sandbox
@@ -239,13 +241,14 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     click
     opentelemetry-api
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-sdk
     packaging
     platformdirs
     protobuf
     pydantic
     pyyaml
     requests
-    sentry-sdk
     setproctitle
     typing-extensions
     xxhash
@@ -291,11 +294,12 @@ buildPythonPackage (finalAttrs: {
     responses
     scikit-learn
     soundfile
+    sweeps
     tenacity
-    versionCheckHook
     torch
     torchvision
     tqdm
+    versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -307,9 +311,6 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
-
-    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
-    "tests/unit_tests/test_analytics/test_sentry.py"
 
     # Server connection times out under load
     "tests/unit_tests/test_wandb_login.py"

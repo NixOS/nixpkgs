@@ -117,7 +117,6 @@ rustPlatform.buildRustPackage {
       jk
       ryan4yin
       xrelkd
-      yvnth
     ];
     mainProgram = "just";
   };

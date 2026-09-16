@@ -16,19 +16,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa-unwrapped";
-  version = "2.18.4";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-Rz0H6dpeTnKHRnmBUZicjgzRSrcpamuGDJRw/lqD/7k=";
+    hash = "sha256-T3VtyPmPz9u4sS9tgQxyks2w7VFLuyTjThDYFapiPOc=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoHash = "sha256-w3poeQsJf6s8uqqZtigJNHqnO0fpD7T4zyY3WzdE6Bo=";
+  cargoHash = "sha256-Uxi/ujhtRK8TbRZTj7cQB9P7hD5Qao7K2rqeNXWLhXQ=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
@@ -99,12 +99,12 @@ rustPlatform.buildRustPackage rec {
     # wrapped similarly to `firefoxRuntime`, and these passthru variables are
     # read when `wrapFirefox` wraps this derivation too.
     inherit (firefoxRuntime)
-      ffmpegSupport
-      gssSupport
-      alsaSupport
-      pipewireSupport
-      sndioSupport
-      jackSupport
+      withALSA
+      withFFmpeg
+      withGSSAPI
+      withJACK
+      withPipewire
+      withSndio
       ;
   };
 

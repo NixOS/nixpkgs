@@ -29,13 +29,14 @@
   pillow,
   polars,
   psutil,
+  pytest-xdist,
   pytestCheckHook,
   tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "10.0.0";
+  version = "11.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s97gITRZ7NLYQyBPd3vbn7mNB8By0CKbg4uEIL7gLkc=";
+    hash = "sha256-+EHbyo+YLqp6TyUBWEbKRy44NUrRZjalRzjtVnaBDOk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -55,7 +56,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-geWpbEa5xywjA2RAEmhrsu0miOmfmNHHaNdJwAPjnVM=";
+    hash = "sha256-HtKqj7KcTrV1P4wi7wy24NwcSUgARrfht7uohh/JXnY=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -118,6 +119,7 @@ buildPythonPackage (finalAttrs: {
     pillow
     polars
     psutil
+    pytest-xdist
     pytestCheckHook
     tqdm
   ]

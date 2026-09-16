@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "buzz-cli";
-  version = "0.1.0-unstable-2026-08-27";
+  version = "0.1.0-unstable-2026-09-02";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
   strictDeps = true;
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "block";
     repo = "buzz";
-    rev = "0808ab485c39c3c12ef02af2188c65a5145eb99d";
-    hash = "sha256-+vYRX6yZmyWxtpcaQj62ujmcG2uwo3fdaX5Oo6Q1jEE=";
+    rev = "47d068e2109d077414cbf2f4f1c927f6d051037a";
+    hash = "sha256-sLIyStOy330KzzVF9QnIn27loT5QXCRz0U4NN9bxU40=";
   };
 
-  cargoHash = "sha256-y067FJWvsJAe6mvtnLPSW1YK0/gcBrKuZX45OCO8/2U=";
+  cargoHash = "sha256-q8FUmTHnPfy/Ub+TNs3UK3exOoX1GdZGwHkH5pDteKE=";
   cargoBuildFlags = [ "--package=buzz-cli" ];
   cargoTestFlags = [ "--package=buzz-cli" ];
 

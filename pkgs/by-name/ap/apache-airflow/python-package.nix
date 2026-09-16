@@ -115,7 +115,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-bKdZ4Y+enrXYuSpJ85eFHl2EM+QfZsMTGqQZ9yLfGEc=";
+        hash = "sha256-dn8DRI2uRlc5FKNiP2nL1RlZOs7NSH+66qHyUKP5KBc=";
       };
 
       buildPhase = ''
@@ -148,7 +148,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-Ye8jRs9jgsf3YUd3JPldEcTzQFmgS4cvkOVP6tuZw+8=";
+        hash = "sha256-KcWxcWPhtoZIfa1DZdIjTDik28cTk86HQnCBg8e2xWg=";
       };
 
       buildPhase = ''
@@ -179,6 +179,8 @@ buildPythonPackage (
         version = providers.${provider}.version;
         pyproject = true;
 
+        dontCheckPythonMetadata = true;
+
         inherit src;
         sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
@@ -196,9 +198,11 @@ buildPythonPackage (
       };
 
     taskSdk = buildPythonPackage {
-      pname = "task-sdk";
+      pname = "apache-airflow-task-sdk";
       inherit src version;
       pyproject = true;
+
+      dontCheckPythonMetadata = true;
 
       sourceRoot = "${src.name}/task-sdk";
 
@@ -252,6 +256,8 @@ buildPythonPackage (
       pname = "apache-airflow-core";
       inherit src version;
       pyproject = true;
+
+      dontCheckPythonMetadata = true;
 
       sourceRoot = "${src.name}/airflow-core";
 
@@ -347,12 +353,15 @@ buildPythonPackage (
       ]
       ++ (map buildProvider requiredProviders);
 
-      pythonRelaxDeps = [ "starlette" ];
+      pythonRelaxDeps = [
+        "starlette"
+        "fastapi"
+      ];
     };
   in
   {
     pname = "apache-airflow";
-    version = "3.3.0";
+    version = "3.3.1";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -361,7 +370,7 @@ buildPythonPackage (
       owner = "apache";
       repo = "airflow";
       tag = finalAttrs.version;
-      hash = "sha256-1DRaJCJ488BKUOEFaFMGnZjS2yxBx4pwHvIP67juu54=";
+      hash = "sha256-ezEeO14GdaD7ZAl5VCiiIqkyoccHQ76QrThA3NeGP78=";
     };
 
     pyproject = true;

@@ -1,5 +1,5 @@
 // @ts-nocheck
-module.exports = async ({ github, context, targetSha }) => {
+export default async ({ github, context, targetSha }) => {
   const { content, encoding } = (
     await github.rest.repos.getContent({
       ...context.repo,

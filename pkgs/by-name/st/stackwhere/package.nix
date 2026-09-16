@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "stackwhere";
-  version = "0.3.2";
+  version = "0.4.0";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "cilium";
     repo = "stackwhere";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g1CnWA8WNRHaGXMm+Ksi3AnkFJCy9/bjQbhYjrOlu1M=";
+    hash = "sha256-Ofg0ibDG7QI5eESvKl1U8SNq8567aSo79/Iiuj2UaoM=";
   };
 
   vendorHash = "sha256-J2X1uTkRtmdmo8Fxxql6Nu84F6MarWHFTopavUPL+RU=";

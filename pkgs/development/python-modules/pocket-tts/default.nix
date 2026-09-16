@@ -7,7 +7,6 @@
   hatchling,
 
   # dependencies
-  beartype,
   einops,
   fastapi,
   huggingface-hub,
@@ -30,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/8MLr8Z1UDqrS5DBVPdsKOKO2XCFjk8aK+CXY1lYjRQ=";
+    hash = "sha256-ilCoDUw9UfW4olLdzQp+YdlHtHYmFlLxnhbntDeGiK0=";
   };
 
   build-system = [
@@ -46,7 +45,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    beartype
     einops
     fastapi
     huggingface-hub

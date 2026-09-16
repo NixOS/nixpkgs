@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.4";
+  version = "1.99.6";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-gVRaM4pnQlfwRKYVsXk4wO79FgNJ60QBn0X2QZE+8a4=";
+    hash = "sha256-VvkIVODMV9iQiYlMxgUS/Q3xhQ5TMwU5GkuiI09xG+Y=";
   };
 
   outputs = [
@@ -49,11 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDocumentation [
     "doc"
-  ];
-
-  patches = [
-    # https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/626
-    ./1501-Re-enable-Suru-style-in-Qt6.patch
   ];
 
   postPatch = ''

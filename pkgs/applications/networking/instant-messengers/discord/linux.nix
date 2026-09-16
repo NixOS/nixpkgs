@@ -285,7 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
     exec = binaryName;
     icon = pname;
     inherit desktopName;
-    genericName = meta.description;
+    comment = meta.description;
+    genericName = "Instant Messenger";
     categories = [
       "Network"
       "InstantMessaging"

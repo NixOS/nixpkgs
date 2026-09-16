@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -45,7 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-htFgvXYgxQXV2U3F+tXEoaTb0udc2H1aHsIg5E8nRL8=";
   };
 
+  patches = [
+    # Mir 2.29 compat, remove when version > 0.10.1
+    (fetchpatch {
+      name = "0001-miracle-wm-remove-legacy-mir-optional-usage.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/a4d7b21e0d25667cd270d7ff52f8dccc2a217796.patch";
+      hash = "sha256-XBbYSuXUOS9Gbs/LwxbbTAVsFuH8xLj8VhoCAjmCDfQ=";
+    })
+  ];
+
+  # Mir 2.29 compat, remove when version > 0.10.1 (97a40cd8879898062b2cf7b5d1f5252ffc3b8dce is more than just a compat change)
   postPatch = ''
+    substituteInPlace src/policy.{cpp,h} \
+      --replace-fail 'handle_raise_window' 'handle_activate_window'
+  ''
+  + ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'DESTINATION lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
       --replace-fail '-march=native' '# -march=native'

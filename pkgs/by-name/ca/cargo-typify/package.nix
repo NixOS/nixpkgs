@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ym3xPMn36+Y8dnImmuegjwrARPzozhwI+qhDCXmFsHg=";
+    hash = "sha256-1JnNNapIg0uholQkgnqU+KQ1q1SCF0MJmrO8XybxBzw=";
   };
 
-  cargoHash = "sha256-3hh4M5cqwLDHcHI+YGKXQOeTXGcVTec+xk+mZcVp0IU=";
+  cargoHash = "sha256-tH6Unl9mFUmpIiDoHp7ZUwaKAK8QEWGf2ldKbcyBET0=";
 
   nativeBuildInputs = [
     rustfmt
@@ -45,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/cargo-typify \
       --set RUSTFMT "${lib.getExe rustfmt}"
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "JSON Schema to Rust type converter";

@@ -3,24 +3,31 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sumtypes";
   version = "0.1a6";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "radix";
     repo = "sumtypes";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-qwQyFKVnGEqHUqFmUSnHVvedsp2peM6rJZcS90paLOo=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  build-system = [ setuptools ];
+
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "sumtypes" ];
 
   meta = {
     description = "Algebraic data types for Python";
@@ -28,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NieDzejkob ];
   };
-}
+})

@@ -102,7 +102,10 @@
   withKvazaar ? withFullDeps, # HEVC encoding
   withLadspa ? withFullDeps, # LADSPA audio filtering
   withLc3 ? withFullDeps && lib.versionAtLeast version "7.1", # LC3 de/encoding
-  withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1", # LCEVC decoding
+  withLcevcdec ?
+    withFullDeps
+    && lib.versionAtLeast version "7.1"
+    && lib.meta.availableOn stdenv.hostPlatform lcevcdec, # LCEVC decoding
   withLcms2 ? withFullDeps, # ICC profile support via lcms2
   withLzma ? withHeadlessDeps, # xz-utils
   withMetal ? false, # Unfree and requires manual downloading of files
@@ -468,7 +471,7 @@ stdenv.mkDerivation (
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
       ]
-      ++ optionals (lib.versionAtLeast version "8.1.2" && stdenv.hostPlatform.isLoongArch64) [
+      ++ optionals (lib.versionAtLeast version "8.1.2") [
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/23825 (merged, but not backported to 8.1.x or 9.0.x)
         # As git.ffmpeg.org deploys Anubis, we cannot fetch this patch reliably from there.
         # So instead, we fetch it from Debian.

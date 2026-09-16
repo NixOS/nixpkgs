@@ -19,6 +19,7 @@
   libpng,
   makeWrapper,
   binutils,
+  vixl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     jdk17
@@ -67,12 +69,20 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
     zlib
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ vixl ];
 
   makeFlags = [
     "____LIBDIR=lib"
     "____PREFIX=${placeholder "out"}"
     "____INSTALL_ETC=${placeholder "out"}/etc"
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
+    "HOST_CC=${stdenv.cc.targetPrefix}cc"
+    "HOST_CXX=${stdenv.cc.targetPrefix}c++"
+    "HOST_AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "C_INCLUDE_PATH=${vixl}/include"
   ];
 
   postFixup = ''
@@ -86,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/android_translation_layer/art_standalone";
     # No license specified yet
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [ onny ];
   };
 })

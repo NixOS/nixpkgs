@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
-  version = "8.4.0";
+  version = "8.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S3PdQMG3tz4UDKuteiWXxU4Ord+efGNzQ4DRAWeOZ3U=";
+    hash = "sha256-VrgMLYi8ZBoAflEqM37pP0V8/ud0/OF3bK6OVPWSrbE=";
   };
 
   build-system = [

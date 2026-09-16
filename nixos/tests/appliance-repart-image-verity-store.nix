@@ -27,6 +27,8 @@
       };
 
       image.repart = {
+        enable = true;
+
         verityStore = {
           enable = true;
           # by default the module works with systemd-boot, for simplicity this test directly boots the UKI

@@ -6,7 +6,7 @@
   symlinkJoin,
 }:
 let
-  version = "5.2.0";
+  version = "5.4.0";
 
   common = {
     inherit version;
@@ -15,7 +15,7 @@ let
       owner = "NordSecurity";
       repo = "nordvpn-linux";
       tag = version;
-      hash = "sha256-F7iw856HVLbOz97j9sMkVwyZl0ZDwID1Tf0YwtdvZsU=";
+      hash = "sha256-m3evkWYrXtgXJu7dt1mFKPVkcnrn5g3udZWafb4lFcM=";
     };
 
     # rec so that changelog can reference homepage
@@ -23,7 +23,9 @@ let
       homepage = "https://github.com/NordSecurity/nordvpn-linux";
       changelog = "${homepage}/releases/tag/${version}";
       license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ different-error ];
+      maintainers = with lib.maintainers; [
+        novalkun
+      ];
       platforms = lib.platforms.linux;
     };
 
@@ -38,6 +40,7 @@ in
 symlinkJoin {
   pname = "nordvpn";
   inherit version;
+  inherit (common) src;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -50,7 +53,14 @@ symlinkJoin {
   passthru = {
     cli = callPackage ./cli.nix common;
     gui = callPackage ./gui.nix common;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "cli"
+        "--subpackage"
+        "gui"
+      ];
+    };
   };
 
   meta = common.meta // {

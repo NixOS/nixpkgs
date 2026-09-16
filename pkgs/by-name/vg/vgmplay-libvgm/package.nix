@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.52.0-unstable-2026-06-07";
+  version = "0.52.0-unstable-2026-08-24";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "01f8136fd5602a0041504d8e2ea15d46fc71b4ba";
-    hash = "sha256-1fQgRgJC8wxON3ir8ru5wxVkcIIjMSMftYksHbRxln8=";
+    rev = "4208caf6b48a323db660f23f920c09dd4fff8957";
+    hash = "sha256-0imOV2Yb16V/BOM+Ajj3q8S3Lun3V7MRU1dREbEOEnY=";
   };
 
   # We don't want text files in bindir

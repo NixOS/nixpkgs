@@ -10,7 +10,6 @@
   pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  typescript,
   versionCheckHook,
 }:
 
@@ -32,7 +31,6 @@ let
       nodejs
       pnpmConfigHook
       pnpm_11
-      typescript
     ];
 
     sourceRoot = "${src.name}/web";

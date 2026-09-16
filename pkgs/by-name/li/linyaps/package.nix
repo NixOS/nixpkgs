@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-xxcJH1cl+iLr4+FmmhpL6ZUIGAqlO25iQ4GOlb1QKDs=";
+    hash = "sha256-Mo2/aWYJFR/MxUMnali8BXd9A3lSJieOL6jgfmCu3Dk=";
   };
 
   patches = [

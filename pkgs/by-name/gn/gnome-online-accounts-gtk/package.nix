@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    mainProgram = "gnome-online-accounts-gtk";
     description = "Online accounts configuration utility";
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
     license = lib.licenses.gpl3Plus;

@@ -84,7 +84,6 @@ let
           }
         }
       '';
-      __structuredAttrs = true;
     };
     checkPhase = ''
       printf "%s" "$expectScript" | ${lib.getExe pkgs.buildPackages.expect} -f -

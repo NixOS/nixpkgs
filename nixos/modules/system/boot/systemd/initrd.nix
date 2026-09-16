@@ -772,7 +772,10 @@ in
       ];
 
       services.initrd-nixos-activation = lib.mkIf (!config.system.nixos-init.enable) {
-        after = [ "initrd-switch-root.target" ];
+        after = [
+          "initrd-find-nixos-closure.service"
+          "initrd-switch-root.target"
+        ];
         requiredBy = [ "initrd-switch-root.service" ];
         before = [ "initrd-switch-root.service" ];
         unitConfig.DefaultDependencies = false;

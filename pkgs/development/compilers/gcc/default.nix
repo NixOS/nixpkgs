@@ -320,6 +320,8 @@ pipe
         depsTargetTarget
         ;
 
+      strictDeps = true;
+
       preConfigure = (callFile ./common/pre-configure.nix { }) + ''
         ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
       '';

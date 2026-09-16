@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   zig_0_15,
+  installAgentSkills,
   installShellFiles,
   cctools,
   xcbuild,
@@ -12,7 +13,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
-  version = "0.8.2";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -20,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "herdrdev";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sEGIN3dLZasaHob3EHscWBCIQHflMQVchYmzgsETDk4=";
+    hash = "sha256-SUYF4bbaYwNgoe498VoCUzuLPcjBLQXR0o0DWjjoSnI=";
   };
 
-  cargoHash = "sha256-4VThqPwYYEsGvaOKjBeL6XAC5bnNWB6oUMWP/uXc/UQ=";
+  cargoHash = "sha256-CW/SF/cAPDv47gS5B7XbVZEE6LC9F1a2I1TLTJ4AWdw=";
 
   zigDeps = zig_0_15.fetchDeps {
     inherit (finalAttrs) pname version;
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     zig_0_15.hook
+    installAgentSkills
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -55,11 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = ''
-    mkdir --parents "$out"/share/herdr/skills/herdr
-    "$out"/bin/herdr --skill > "$_"/SKILL.md
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd herdr \
       --bash <("$out/bin/herdr" completion bash) \
       --fish <("$out/bin/herdr" completion fish) \

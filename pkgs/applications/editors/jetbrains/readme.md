@@ -56,13 +56,15 @@ Any comments or other manual changes between these markers will be removed when 
  - Add it to `default.nix`
 
 ### TODO:
- - move PyCharm overrides to a common place outside of `default.nix`
- - package `patchSharedLibs` from `default.nix` as a hook
- - cleanup this TODO list, especially the following points, which have been here since 2023
+ - get rid of remaining `overrideAttrs` in IDE drvs:
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655348886
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655305961
+ - cleanup this TODO list, especially the following points, which (mostly) have been here since 2023
  - replace `libxcrypt-legacy` with `libxcrypt` when supported
  - make `jetbrains-remote-dev.patch` cleaner
  - is extraLdPath needed for IDEA?
  - from source builds:
+   - switch to Bazel builds, see https://github.com/NixOS/nixpkgs/pull/531637
    - remove timestamps in output `.jar` of `jps-bootstrap`
    - automated update scripts
    - fetch `.jar`s from stuff built in nixpkgs when available

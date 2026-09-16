@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  smlnj,
+  smlnj-legacy,
 }:
 
 stdenv.mkDerivation {
@@ -16,18 +16,18 @@ stdenv.mkDerivation {
     sha256 = "0slrwcxglp0sdbp6wr65cdkl5wcap2i0fqxbwqfi1q3cpb6ph6hq";
   };
 
-  buildInputs = [ smlnj ];
+  buildInputs = [ smlnj-legacy ];
 
   # (can also build with MLton)
   buildPhase = ''
-    export SMLNJ_HOME=${smlnj}
+    export SMLNJ_HOME=${smlnj-legacy}
     sml < main-export.sml
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp .heap* $out/bin/
-    ./.mkexec ${smlnj}/bin/sml $out/bin celf
+    ./.mkexec ${smlnj-legacy}/bin/sml $out/bin celf
   '';
 
   meta = {

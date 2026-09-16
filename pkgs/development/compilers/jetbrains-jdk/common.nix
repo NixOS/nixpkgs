@@ -223,11 +223,11 @@ jdk.overrideAttrs (oldAttrs: {
       your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (jdk.meta) license platforms mainProgram;
+    inherit (jdk.meta) license mainProgram;
     maintainers = with lib.maintainers; [
       aoli-al
     ];
 
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

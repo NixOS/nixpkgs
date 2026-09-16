@@ -33,13 +33,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "10.0.2";
+  version = "10.0.3";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xUqPVI6pX0Chltq4Yt/J2HMv+zQ+IKI6kAbZrkd0wY4=";
+    hash = "sha256-qSxEdgHT8jVLWhx23w+VrT0IvJa8RjbzhCs6rvFBkTM=";
   };
 
   strictDeps = true;
@@ -78,15 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     ncurses
     zlib
-  ];
-
-  # remove in next release
-  patches = [
-    (fetchpatch2 {
-      name = "fix-use-after-free-in-seat-remove-video.patch";
-      url = "https://github.com/kmscon/kmscon/commit/eb353401f56c21cc602a738c3edaece30e5639d6.patch?full_index=1";
-      hash = "sha256-NbuRfwBHK7AMlBOrzZYp4bbpOeTTEwh+uYtWBzQo2fs=";
-    })
   ];
 
   outputs = [

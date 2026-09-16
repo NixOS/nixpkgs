@@ -29,7 +29,7 @@
   gtksourceviewmm,
   gtkspell3,
   gtkspellmm,
-  cairomm,
+  cairomm_1_0,
   kdePackages,
   qt6Packages,
   withQt6 ? false,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     tesseract
     poppler
     doxygen
-    cairomm
+    cairomm_1_0
     gtkmm3
     gtksourceview3
     gtksourceviewmm

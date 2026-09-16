@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "6.5.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EG8AmnLqqml7oGeeNqLLpnmMj6/KVAJOKuTjCUoor4s=";
+    hash = "sha256-Xv/9HUdTloQNuUcgTeprcomZFzZEoYaWt9DdYNg++LI=";
   };
 
   patches = [ ./folder-color.patch ];

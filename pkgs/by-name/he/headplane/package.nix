@@ -13,14 +13,14 @@
 }:
 let
   pname = "headplane";
-  version = "0.7.0";
-  goVendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
-  pnpmDepsHash = "sha256-OBerkCnB/QL5HGYp2kehzFYEIKSuqpBt0dTFHIypc00=";
+  version = "0.7.1";
+  goVendorHash = "sha256-Q5lRDbx7bg3WsrF+ukVPl7rTSJcqKFhYM9lWtqfiIw4=";
+  pnpmDepsHash = "sha256-2W/BTqarSlTMKIByB106xsyitRtK2bIeWeVKe2P96j8=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-UMAGsrG2xfpgWlsDhf4aWJKoOrUbruucDNOhCJcYmQQ=";
+    hash = "sha256-hRM+TTAKUxonJF3YHHvz9fpZeRo1kUpe7gHVyZy6sDc=";
   };
 
   headplaneSshWasm = buildGoModule {
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Feature-complete Web UI for Headscale";
     homepage = "https://github.com/tale/headplane";
-    changelog = "https://github.com/tale/headplane/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tale/headplane/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       igor-ramazanov

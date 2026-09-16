@@ -3,12 +3,11 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  wrapQtAppsHook,
   python3,
   zbar,
   secp256k1,
   enableQt ? true,
-  qtwayland,
+  qt5,
 }:
 
 let
@@ -60,7 +59,7 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum_ltc/tests
   '';
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -156,7 +155,7 @@ python3.pkgs.buildPythonApplication {
     pyaes
     pycryptodomex
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
   enabledTestPaths = [ "electrum_ltc/tests" ];
 

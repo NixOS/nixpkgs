@@ -1,0 +1,34 @@
+diff --git a/qrenderdoc/CMakeLists.txt b/qrenderdoc/CMakeLists.txt
+index 218c1ab..039fe4e 100644
+--- a/qrenderdoc/CMakeLists.txt
++++ b/qrenderdoc/CMakeLists.txt
+@@ -159,29 +159,9 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS "3.24")
+     cmake_policy(SET CMP0135 NEW)
+ endif()
+ 
+-CHECK_INCLUDE_FILE(pcre.h PCRE_HEADER)
+-
+ set(PCRE_PREFIX_PATH "")
+ 
+-if(PCRE_HEADER)
+-    message(STATUS "pcre library is found, using it as-is")
+-
+     add_custom_target(local_pcre)
+-else()
+-    message(STATUS "pcre header is not found! building pcre locally")
+-    
+-    # fetch pcre if missing
+-    ExternalProject_Add(local_pcre
+-        # using an URL to a zip directly so we don't clone the history etc
+-        URL ${RENDERDOC_PCRE_PACKAGE}
+-        BUILD_IN_SOURCE 1
+-        CONFIGURE_COMMAND autoreconf -f -v > /dev/null 2>&1
+-        COMMAND CC=${SWIG_CONFIGURE_CC} CXX=${SWIG_CONFIGURE_CXX} CFLAGS=-fPIC CXXFLAGS=-fPIC ${SET_SYSTEM_PATH_COMMAND} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared > /dev/null
+-        BUILD_COMMAND ${GENERATOR_MAKE} ${GENERATOR_MAKE_PARAMS} > /dev/null 2>&1
+-        INSTALL_COMMAND ${GENERATOR_MAKE} install > /dev/null 2>&1)
+-
+-    set(PCRE_PREFIX_PATH "--with-pcre-prefix=${CMAKE_BINARY_DIR}")
+-endif()
+ 
+ # Compile our custom SWIG that will do scoped/strong enum classes
+ ExternalProject_Add(custom_swig

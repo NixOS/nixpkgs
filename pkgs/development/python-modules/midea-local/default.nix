@@ -11,19 +11,20 @@
   pycryptodome,
   platformdirs,
   typing-extensions,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "10.1.0";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aCQsA9N6s4r2x466DNTUFqxRP4dfXZBSD9rrC9Bvrb4=";
+    hash = "sha256-9Yx3i/zZvVqZrlsbLxkWWFAITFnwOAaaiBoFfjaYbKw=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +40,10 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "midealocal" ];
 

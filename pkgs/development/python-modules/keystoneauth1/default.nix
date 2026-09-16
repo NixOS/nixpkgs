@@ -17,7 +17,7 @@
   requests-kerberos,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   stevedore,
   testresources,
   testtools,
@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.15.0";
+  version = "5.17.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ziys39Ao5lvSP/QD1lcuv6s7AG1tLd46qFwmNnWp+7U=";
+    hash = "sha256-gjWazCDHVPyyKBjgkOL+pkfkxcETemrdtJhOn7pwirM=";
   };
 
   build-system = [ setuptools ];
@@ -63,15 +63,11 @@ buildPythonPackage rec {
     oslo-utils
     pycodestyle
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testtools
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "keystoneauth1" ];
 

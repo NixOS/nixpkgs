@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ping-exporter";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "ping_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YbdODBKXvBNtIt+Hqu/xA52p5TZGhcVbqZfTcmyyV+Y=";
+    hash = "sha256-r9+cx5mU3aW9Yf7LoRm1G8izFt3D4gMOlLGuNo4L5z0=";
   };
 
-  vendorHash = "sha256-mZ29jH1572VDLOJb/x3FCI2Q6xVjJ3Ghy/ay343kA3Y=";
+  vendorHash = "sha256-JKkvg09rtnc4CCUoZ5+NZEVcHh5nLFvkhaBQS4IksF4=";
 
   meta = {
     description = "Prometheus exporter for ICMP echo requests";

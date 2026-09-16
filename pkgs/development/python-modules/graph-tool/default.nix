@@ -5,7 +5,7 @@
   stdenv,
 
   boost191,
-  cairomm,
+  cairomm_1_0,
   cgal,
   expat,
   fontconfig,
@@ -94,7 +94,7 @@ buildPythonPackage (finalAttrs: {
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   buildInputs = [
     boost'
-    cairomm
+    cairomm_1_0
     cgal
     expat
     mpfr

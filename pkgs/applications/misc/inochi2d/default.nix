@@ -36,7 +36,7 @@ in
     patches = [
       # Upstream asks that we change the bug tracker URL to not point to the upstream bug tracker
       (replaceVars ./support-url.patch {
-        assignees = "TomaSajt"; # should be a comma separated list of the github usernames of the maintainers
+        assignees = "TomaSajt"; # should be a comma-separated list of the github usernames of the maintainers
       })
       # Change how duplicate locales differentiate themselves (the store paths were too long)
       ./translations.patch

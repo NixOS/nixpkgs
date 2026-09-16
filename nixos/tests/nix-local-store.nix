@@ -7,6 +7,8 @@
       experimental-features = [ "nix-command" ];
       log-lines = 26;
     };
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
     # Easiest way to get a file onto the machine
     environment.etc."test.nix".text = ''
       derivation {

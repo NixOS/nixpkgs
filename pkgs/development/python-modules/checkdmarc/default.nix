@@ -1,12 +1,16 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   dnspython,
   expiringdict,
   fetchFromGitHub,
   hatchling,
+  httpx,
+  iana-etc,
   importlib-resources,
+  libredirect,
   pem,
   publicsuffixlist,
   pyleri,
@@ -19,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.17.5";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-jwsAemOqJzMpQXliesr+wntAXjVoo/1rFr+1SSqqeRY=";
+    hash = "sha256-yyyaA0gLnRpyf1MueHWd67kzXDMOJYd5CHzAG/mBIA0=";
   };
 
   pythonRelaxDeps = [
@@ -41,6 +45,7 @@ buildPythonPackage (finalAttrs: {
     cryptography
     dnspython
     expiringdict
+    httpx
     importlib-resources
     pem
     publicsuffixlist
@@ -49,26 +54,39 @@ buildPythonPackage (finalAttrs: {
     requests
     timeout-decorator
     xmltodict
-  ];
+  ]
+  ++ dnspython.optional-dependencies.doh;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    httpx
+    pytestCheckHook
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   pythonImportsCheck = [ "checkdmarc" ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '';
 
   disabledTests = [
     # Tests require network access
     "testBIMI"
+    "testCheckSoaDelegatedChildZoneLive"
+    "testCheckSoaFallsBackToBaseDomainLive"
     "testDMARCPctLessThan100Warning"
-    "testSPFMissingARecord"
-    "testSPFMissingMXRecord"
-    "testSplitSPFRecord"
-    "testTooManySPFDNSLookups"
-    "testTooManySPFVoidDNSLookups"
     "testDNSSEC"
     "testDnssecFalseWhenNoKey"
     "testGetDnskeyCache"
     "testIncludeMissingSPF"
     "testKnownGood"
+    "testSPFMissingARecord"
+    "testSPFMissingMXRecord"
+    "testSplitSPFRecord"
+    "testTooManySPFDNSLookups"
+    "testTooManySPFVoidDNSLookups"
   ];
 
   meta = {

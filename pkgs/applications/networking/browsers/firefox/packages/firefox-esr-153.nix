@@ -8,11 +8,11 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "153.1.0esr";
+  version = "153.3.0esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "0e5be18878a1bb8575d4ff03b499a092663fcd1779a05b59b82a8b663a3d7047cf3d6f971faeb3d1262f83b23022a703a2033e8ea38bcbd9c85f44bdd35d86c1";
+    sha512 = "56a5e092f0aba91febf01d227e8068520513f632d09c5ffbad4cbb2de307d9066425f353a1b7fcf5648733e02a9b17cfc9aaed5e39d7562a6b143b1c9827a668";
   };
 
   meta = {
@@ -25,6 +25,19 @@ buildMozillaMach rec {
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    identifiers = {
+      cpeParts = {
+        product = "firefox";
+        sw_edition = "esr";
+        update = "*";
+        vendor = "mozilla";
+        version = lib.removeSuffix "esr" version;
+      };
+      purlParts = {
+        type = "generic";
+        spec = "firefox@${lib.removeSuffix "esr" version}";
+      };
+    };
   };
   tests = {
     inherit (nixosTests) firefox-esr-153;

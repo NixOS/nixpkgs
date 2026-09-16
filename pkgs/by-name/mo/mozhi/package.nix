@@ -6,13 +6,13 @@
 }:
 buildGoModule {
   pname = "mozhi";
-  version = "0-unstable-2026-06-11";
+  version = "0-unstable-2026-08-30";
 
   src = fetchFromCodeberg {
     owner = "aryak";
     repo = "mozhi";
-    rev = "095c73f04bc24f51dcb4a0155a5f10f87f768a8c";
-    hash = "sha256-c792IEMToojcLgsCpMizsszVwymZldvRVP9eWuEO5sY=";
+    rev = "ad53459f38e995eabdb5fd10352b0a2f57c278a2";
+    hash = "sha256-Zn+3McD+uGO+Vk88gbq7sqU7OahWZmtwuHxwvMIM/gw=";
   };
 
   vendorHash = "sha256-ZFbgq/zeBTK6wb5VHHyTNrq8RuNhWTy8PyA1mZcbKYc=";

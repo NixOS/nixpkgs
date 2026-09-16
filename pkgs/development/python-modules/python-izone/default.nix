@@ -7,20 +7,23 @@
   pytest-aio,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
   hatchling,
   hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.3.9";
+  version = "1.3.10";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
     tag = "v${version}";
-    hash = "sha256-4A89HG1Zlw9Cx/1I+DiJzLiOMBeINWQ1eSQ856favgU=";
+    hash = "sha256-X5yH3mzevCq4hO1IikfcvXmk9rTfL3jiMaf7mACZ+k0=";
   };
 
   build-system = [

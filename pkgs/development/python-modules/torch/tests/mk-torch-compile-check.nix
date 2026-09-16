@@ -24,6 +24,14 @@ cudaPackages.writeGpuTestPython
       "PATH"
       ":"
       "${lib.getBin stdenv.cc}/bin"
+    ]
+    # Inductor compiles its generated C++ with `-g1`, which makes clang spawn `dsymutil`.
+    # The bintools wrapper does not re-export it, so take it from the unwrapped cctools.
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--suffix"
+      "PATH"
+      ":"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin"
     ];
   }
   ''

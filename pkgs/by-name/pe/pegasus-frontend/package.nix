@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation {
   pname = "pegasus-frontend";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2026-07-18";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "54362976fd4c6260e755178d97e9db51f7a896af";
+    rev = "6b322063a036db60cba5810fda82a3ce38f1e62f";
     fetchSubmodules = true;
-    hash = "sha256-DqtkvDg0oQL9hGB+6rNXe3sDBywvnqy9N31xfyl6nbI=";
+    hash = "sha256-HsOli+iU9DjTrFSjBENiIURCXQcazB9QWrti7VszNvE=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,10 @@ stdenv.mkDerivation {
     mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tengkuizdihar ];
+    maintainers = with lib.maintainers; [
+      tengkuizdihar
+      irgolic
+    ];
     platforms = lib.platforms.linux;
   };
 }

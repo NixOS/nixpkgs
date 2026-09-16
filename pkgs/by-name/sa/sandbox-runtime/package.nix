@@ -17,7 +17,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sandbox-runtime";
-  version = "0.0.74";
+  version = "0.0.76";
 
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
     owner = "anthropic-experimental";
     repo = "sandbox-runtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZWRIA+Ez6nBJ3fUp0Xmzh6Ce0Ls0i2tBK0t/9hnga4=";
+    hash = "sha256-NXr4OuTsHl8oD8oyzwlNuDoZOy2zNh6tWEr7q4KYKwI=";
   };
 
   postPatch =
@@ -37,7 +37,7 @@ buildNpmPackage (finalAttrs: {
 
   strictDeps = true;
 
-  npmDepsHash = "sha256-C6czchG+kdb9ZQS+pRJ/ntY83vajykurfDuvRZAvmSc=";
+  npmDepsHash = "sha256-r49lP4aD7kAG7azGH3MAvXnVu2LwlpyToDMmErzdunw=";
 
   postFixup =
     let

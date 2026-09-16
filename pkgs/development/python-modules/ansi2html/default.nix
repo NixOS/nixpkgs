@@ -3,25 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  setuptools,
   setuptools-scm,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.9.3";
+  version = "1.9.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GQs/xl8FRf7GRCUn+PVRMZSUEP6XwVrEKkQfHpZyb1c=";
+    hash = "sha256-rhfpLx1srA5n02fgf7C6iiPayPGT/F16jIpQ/l3dlaQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
-    wheel
   ];
 
   preCheck = "export PATH=$PATH:$out/bin";

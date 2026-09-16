@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchurl,
   lib,
+  patchelf,
   python,
   pythonAtLeast,
   stdenv,
@@ -69,6 +70,13 @@ buildPythonPackage {
     # TODO: npu-intel
     # TODO: npu-sdk
   };
+
+  preFixup = ''
+    while IFS= read -r -d "" so; do
+      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2630 libopenvino.so "$so"
+      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2630 libopenvino_tensorflow_lite_frontend.so "$so"
+    done < <(find "$out" -type f \( -name '*.so' -o -name '*.so.*' \) -print0)
+  '';
 
   autoPatchelfIgnoreMissingDeps = [
     # Qualcomm Neural Network SDK

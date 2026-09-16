@@ -30,7 +30,7 @@
 }:
 stdenv.mkDerivation {
   pname = "umbriel";
-  version = "0-unstable-2026-08-25";
+  version = "0-unstable-2026-09-13";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -39,9 +39,8 @@ stdenv.mkDerivation {
     owner = "noctalia-dev";
     repo = "umbriel";
     # No tagged releases yet
-    rev = "af351dfa7564eaa0e73d215d057eb0b209cba057";
-    fetchSubmodules = true;
-    hash = "sha256-y/ofPV9De3qxrLsmmAUs4fX/ZaNBquqvm6VvnnNXXhA=";
+    rev = "11c0c99b85c5aa579224cf0d2302f4f7356ac5c4";
+    hash = "sha256-Ot18ZKFwRSPzyXhSkDhLOI8nAXfeoFPuB04Jk5DkzV4=";
   };
 
   nativeBuildInputs = [

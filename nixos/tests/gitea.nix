@@ -1,5 +1,5 @@
 {
-  pkgs,
+  gitea,
   lib,
   runTest,
   ...
@@ -28,10 +28,18 @@ let
   ];
   makeGiteaTest =
     type:
-    lib.nameValuePair type (runTest {
-      name = "${pkgs.gitea.pname}-${type}";
+    runTest {
+      imports = [
+        module
+      ];
+      name = "${gitea.pname}-${type}";
+      nodes.server.services.gitea.settings.database = { inherit type; };
+    };
+  module =
+    { config, ... }:
+    {
       meta = {
-        inherit (pkgs.gitea.meta) maintainers;
+        inherit (gitea.meta) maintainers;
       };
 
       nodes = {
@@ -42,7 +50,6 @@ let
             services = {
               gitea = {
                 enable = true;
-                database = { inherit type; };
                 package = pkgs.gitea;
                 metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
                 settings = {
@@ -51,17 +58,6 @@ let
                   metrics.ENABLED = true;
                   service.DISABLE_REGISTRATION = true;
                 };
-              };
-
-              gitea-actions-runner.instances."test" = {
-                enable = true;
-                name = "ci";
-                url = "http://localhost:3000";
-                labels = [
-                  # don't require docker/podman
-                  "native:host"
-                ];
-                tokenFile = "/var/lib/gitea/runner_token";
               };
 
               openssh.enable = true;
@@ -81,7 +77,7 @@ let
 
       testScript =
         let
-          inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+          inherit (import ./ssh-keys.nix config.node.pkgs) snakeOilPrivateKey snakeOilPublicKey;
         in
         /* python */ ''
           GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
@@ -109,7 +105,7 @@ let
 
           server.succeed(
               "su -l gitea -c 'gpg --homedir /var/lib/gitea/data/home/.gnupg "
-              + "--import ${toString (pkgs.writeText "gitea.key" signingPrivateKey)}'"
+              + "--import ${toString (config.node.pkgs.writeText "gitea.key" signingPrivateKey)}'"
           )
 
           assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
@@ -160,15 +156,8 @@ let
                              + '-H "Authorization: Bearer fakesecret" '
                              + 'http://localhost:3000/metrics '
                              + '| grep gitea_accesses')
-
-          with subtest("Testing runner registration"):
-              server.succeed(
-                  "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/gitea/runner_token"
-              )
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
         '';
-    });
+    };
 in
 
-lib.listToAttrs (map makeGiteaTest supportedDbTypes)
+lib.genAttrs supportedDbTypes makeGiteaTest

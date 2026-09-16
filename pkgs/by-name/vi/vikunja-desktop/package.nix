@@ -3,10 +3,12 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   darwin,
   pnpm_10,
   pnpmConfigHook,
   nodejs,
+  perl,
   electron,
   nix-update-script,
   fetchFromGitHub,
@@ -16,12 +18,12 @@
 
 let
   executableName = "vikunja-desktop";
-  version = "2.3.0";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-bdHiSFaN0vNQMhy6GPlpoFeYrk2CLvO7E30d8J/9GC0=";
+    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -37,19 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      patches
       ;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-2jyb5BYEkopZCbS19flUgCopiJWngyFxkXsyMuOpJEU=";
+    hash = "sha256-RpME/0lU8i+D8erEkTfA0cXrEs8LRZvNdfU8e3X366Y=";
   };
-
-  patches = [
-    # pnpm 10.29.3 changed `pnpm ls --json`; older electron-builder omits runtime deps.
-    # This patch was generated from the v2.3.0 lockfile with pnpm_10, using the
-    # electron-builder 26.15.3 version already present in upstream main.
-    ./electron-builder-26.15.3.patch
-  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -58,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
+    perl
     pnpm_10
     pnpmConfigHook
     vikunja.passthru.frontend
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
@@ -71,7 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     sed -i "s/\$${version}/${version}/g" package.json
     sed -i "s/\"version\": \".*\"/\"version\": \"${version}\"/" package.json
-    ln -s '${vikunja.passthru.frontend}' frontend
+    cp -r '${vikunja.passthru.frontend}' frontend
+    chmod -R u+w frontend
+
+    # Replicates step 2 of upstream's desktop/build.js: the desktop CSP is
+    # script-src 'self', which blocks the inline window.API_URL script in index.html.
+    perl -0pi -e 's|<script>(?:(?!</script>).)*?window\.API_URL(?:(?!</script>).)*?</script>|<script src="/api-url.js"></script>|s' frontend/index.html
+    echo "window.API_URL = '''" > frontend/api-url.js
 
     electronDist="${electron.dist}"
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -121,26 +123,26 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Do not attempt generating a tarball for vikunja-frontend again.
-  distPhase = ''
-    true
-  '';
-
   passthru.updateScript = nix-update-script { };
 
-  # The desktop item properties should be kept in sync with data from upstream:
-  desktopItem = makeDesktopItem {
-    name = "vikunja-desktop";
-    exec = executableName;
-    icon = "vikunja";
-    desktopName = "Vikunja Desktop";
-    genericName = "To-Do list app";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "ProjectManagement"
-      "Office"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vikunja-desktop";
+      exec = "${executableName} %U";
+      icon = "vikunja-desktop";
+      terminal = false;
+      desktopName = "Vikunja Desktop";
+      genericName = "To-Do list app";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "ProjectManagement"
+        "Office"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/vikunja-desktop"
+      ];
+    })
+  ];
 
   meta = {
     description = "Desktop App of the Vikunja to-do list app";

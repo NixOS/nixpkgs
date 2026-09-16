@@ -1,16 +1,7 @@
---- a/.yarnrc.yml
-+++ b/.yarnrc.yml
-@@ -12,3 +12,8 @@ npmPreapprovedPackages:
- npmAuditIgnoreAdvisories:
-   - "1113517" # GHSA-mw96-cpmx-2vgc rollup <2.80.0 path traversal (workbox-build, build-time)
-   - "1113686" # GHSA-5c6j-r48x-rmvq serialize-javascript RCE (@rollup/plugin-terser, build-time)
-+
-+approvedGitRepositories:
-+  - "**"
-+
-+enableScripts: true
---- a/yarn.lock
-+++ b/yarn.lock
+diff --git i/yarn.lock w/yarn.lock
+index 5cd3bbfbc..b9401d3fd 100644
+--- i/yarn.lock
++++ w/yarn.lock
 @@ -2,7 +2,7 @@
  # Manual changes might be lost - proceed with caution!
  

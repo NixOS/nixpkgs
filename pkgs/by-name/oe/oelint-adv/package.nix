@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "oelint-adv";
-  version = "9.11.0";
+  version = "9.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
     tag = finalAttrs.version;
-    hash = "sha256-7B8R5EEiEvUg5ZYSstggx6D60w3ZCZMGifVhS2kydYk=";
+    hash = "sha256-iV/AOn8qy9e5z5PLbeZeeMfipKJ3ezOv61SXBT0iLeI=";
   };
 
   postPatch = ''

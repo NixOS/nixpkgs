@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  gexiv2,
+  gexiv2_0_10,
   gobject-introspection,
   gtk3,
   hicolor-icon-theme,
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_10
     gtk3
     hicolor-icon-theme
     libnotify

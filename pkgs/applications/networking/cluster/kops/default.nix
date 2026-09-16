@@ -1,9 +1,4 @@
 {
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
   callPackage,
 }:
 let

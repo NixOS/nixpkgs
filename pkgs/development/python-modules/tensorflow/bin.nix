@@ -107,6 +107,12 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optional (!isPy3k) mock;
 
+  # Don't set RTLD_GLOBAL by removing file only meant to ship in static builds.
+  # https://github.com/tensorflow/tensorflow/commit/5720ab7845de0b2a2e2f5fdf547d2515d39a20b9
+  postInstall = ''
+    rm $out/${python.sitePackages}/tensorflow/python/pywrap_dlopen_global_flags.py
+  '';
+
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
 

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "energyid-webhooks";
-  version = "0.0.15";
+  version = "0.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnergieID";
     repo = "energyid-webhooks-py";
     tag = "v${version}";
-    hash = "sha256-Izcib/HUNCZjeayq1F2u/+1swRmfbKiU5dut39Tcr1g=";
+    hash = "sha256-5Oh9OLMVgAqVoGKtBYDL9BvKYEzqXySZChIDmllVaqo=";
   };
 
   build-system = [

@@ -113,6 +113,8 @@ let
           inherit (pkgs.llvmPackages) llvm;
         };
 
+        base32 = callPackage ../development/ocaml-modules/base32 { };
+
         base64 = callPackage ../development/ocaml-modules/base64 { };
 
         batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -248,6 +250,8 @@ let
         cascade = callPackage ../development/ocaml-modules/cascade { };
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
+
+        cborl = callPackage ../development/ocaml-modules/cborl { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -601,6 +605,8 @@ let
         eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
         eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
+
+        eris = callPackage ../development/ocaml-modules/eris { };
 
         erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
@@ -1047,6 +1053,8 @@ let
         junit_alcotest = callPackage ../development/ocaml-modules/junit/alcotest.nix { };
         junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };
 
+        jws = callPackage ../development/ocaml-modules/jws { };
+
         jwto = callPackage ../development/ocaml-modules/jwto { };
 
         ### K ###
@@ -1056,6 +1064,8 @@ let
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
           cmdliner = cmdliner_1;
         };
+
+        kapla = callPackage ../development/ocaml-modules/kapla { };
 
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
@@ -1385,6 +1395,8 @@ let
 
         mmap = callPackage ../development/ocaml-modules/mmap { };
 
+        monocypher = callPackage ../development/ocaml-modules/monocypher { };
+
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
         mopsa = callPackage ../development/ocaml-modules/mopsa {
@@ -1690,7 +1702,11 @@ let
 
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
 
-        oxenstored = callPackage ../development/ocaml-modules/oxenstored { };
+        oxenstored = callPackage ../development/ocaml-modules/oxenstored {
+          xen = pkgs.xen.override {
+            ocamlPackages = self;
+          };
+        };
 
         ### P ###
 
@@ -2190,6 +2206,8 @@ let
 
         twt = callPackage ../development/ocaml-modules/twt { };
 
+        typegist = callPackage ../development/ocaml-modules/typegist { };
+
         type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
@@ -2422,7 +2440,7 @@ rec {
 
   ocamlPackages_latest = ocamlPackages_5_5;
 
-  ocamlPackages = ocamlPackages_5_4;
+  ocamlPackages = ocamlPackages_5_5;
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

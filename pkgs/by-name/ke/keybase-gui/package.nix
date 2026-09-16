@@ -163,5 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    knownVulnerabilities = [
+      "Uses Electron 28, EOL on 05 Dec 2023. Has many known CVEs"
+    ];
   };
 })

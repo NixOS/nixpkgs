@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.12.0";
+  version = "2.14.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,8 +21,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5nBR3PRTGTWXfPhXVrkWCkQsz0fF492GnYyJJTQFs7I=";
+    hash = "sha256-sInr0zOw2efjbcr5+clzNodODCnzwVH36vOD+LJY0IM=";
   };
+
+  postPatch =
+    # The fake `ssh` client used by the ssh tests has a `/usr/bin/env` shebang
+    ''
+      patchShebangs tests/data/unit_tests/ssh/ssh
+    '';
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -105,6 +111,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Compares the artifacts published to harlequin.sh with the source checkout
     "tests/unit_tests/test_publish_artifacts.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "SQL IDE for Your Terminal";

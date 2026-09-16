@@ -10,7 +10,7 @@ branch="main"
 commit=$(curl -s "https://api.github.com/repos/$owner/$repo/branches/$branch" | jq -r .commit.sha)
 date=$(curl -s "https://api.github.com/repos/$owner/$repo/commits/$commit" | jq -r .commit.committer.date | cut -d'T' -f1)
 
-current_version=$(nix-instantiate --eval -A ironcalc.version 2>/dev/null | tr -d '"' || echo "0.0.0")
+current_version=$(nix-instantiate --eval --raw -A ironcalc.version)
 base_version=$(echo "$current_version" | sed -E 's/-unstable-.*//')
 new_version="$base_version-unstable-$date"
 

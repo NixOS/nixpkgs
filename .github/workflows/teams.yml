@@ -38,7 +38,7 @@ jobs:
             maintainers/github-teams.json
 
       - name: Install dependencies
-        run: npm ci --package-lock-only=false bottleneck
+        run: npm ci --package-lock-only=false --no-audit bottleneck
         working-directory: ci/github-script
 
       - name: Synchronise teams
@@ -46,7 +46,8 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
-            require('./ci/github-script/get-teams.js')({
+            const { default: getTeams } = await import('${{ github.workspace }}/ci/github-script/get-teams.js')
+            await getTeams({
               github,
               context,
               core,
@@ -78,4 +79,3 @@ jobs:
             This is an automated PR to sync the GitHub teams with access to this repository to the `lib.teams` list.
 
             This PR can be merged without taking any further action.
-

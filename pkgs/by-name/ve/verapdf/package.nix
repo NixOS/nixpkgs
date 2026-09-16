@@ -100,9 +100,8 @@ maven.buildMavenPackage rec {
     changelog = "https://github.com/veraPDF/veraPDF-library/blob/${src.tag}/RELEASENOTES.md";
     description = "Command line and GUI industry supported PDF/A and PDF/UA Validation";
     homepage = "https://github.com/veraPDF/veraPDF-apps";
-    license = [
+    license = lib.licenses.OR [
       lib.licenses.gpl3Plus
-      # or
       lib.licenses.mpl20
     ];
     maintainers = [

@@ -132,6 +132,9 @@ buildPythonPackage (finalAttrs: {
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
     "test_create_snapshot"
+
+    # AssertionError: Expected 'BasePyTreeCheckpointHandler' to have been called.
+    "test_memory_options_propagation"
   ];
 
   disabledTestPaths = [

@@ -1,4 +1,13 @@
 {
+  "module-services-netbird-relay": [
+    "index.html#module-services-netbird-relay"
+  ],
+  "module-services-netbird-relay-quickstart": [
+    "index.html#module-services-netbird-relay-quickstart"
+  ],
+  "module-services-netbird-relay-tls": [
+    "index.html#module-services-netbird-relay-tls"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
@@ -67,6 +76,18 @@
   ],
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
+  ],
+  "module-services-cliproxyapi": [
+    "index.html#module-services-cliproxyapi"
+  ],
+  "module-services-cliproxyapi-authentication": [
+    "index.html#module-services-cliproxyapi-authentication"
+  ],
+  "module-services-cliproxyapi-authentication-cli": [
+    "index.html#module-services-cliproxyapi-authentication-cli"
+  ],
+  "module-services-cliproxyapi-authentication-management-api": [
+    "index.html#module-services-cliproxyapi-authentication-management-api"
   ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"

@@ -18,11 +18,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/httpcats/releases/download/v${finalAttrs.version}/httpcats-${finalAttrs.version}.tbz";
-    hash = "sha256-5BymoyJS5JykTnSee0HhSKzbHkb8j6COuY7tZtGDGh0=";
+    hash = "sha256-n0InZn+7jaDbf3WaMACdh3DPMfkfewmkcXQAVfR81rg=";
   };
 
   propagatedBuildInputs = [

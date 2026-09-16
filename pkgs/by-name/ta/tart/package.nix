@@ -14,11 +14,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.36.0";
+  version = "2.37.0";
 
   src = fetchurl {
     url = "https://github.com/openai/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    hash = "sha256-xyqKuNeKZJih5CaIsaHsbFEs5GyjWjo74TDD3hRAx+g=";
+    hash = "sha256-1TF1LE2tXUIUrH/1QM78JkffH8ojONQT08AXVPVLNWs=";
   };
   sourceRoot = ".";
 

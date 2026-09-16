@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -27,25 +27,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.34.6";
+  version = "2.37.10";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-xB5ChOrcno5rCjWYrGtdNrqkwBtMeYCqml8xfrUAgEM=";
+    hash = "sha256-cEWwXiyBLiZ8MgH5OKe0+hgd9ooYZTDQIuS4Dq0nKos=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-35nNgdoQwZlIZCzlWxC5eLKdyXAWWyBoIaa1B9zPEfY=";
+    hash = "sha256-T1axKjZT1I8NjXFV8hAKSYa+zCl/Fpyzz2DGM+cmkLQ=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    CI=true pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod -w
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar

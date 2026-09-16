@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wrapQtAppsHook,
   python3,
   zbar,
   secp256k1,
   enableQt ? true,
-  qtwayland,
+  qt5,
 }:
 
 let
@@ -43,8 +42,8 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
   };
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
-  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
+  nativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qt5.qtwayland;
 
   propagatedBuildInputs =
     with python3.pkgs;

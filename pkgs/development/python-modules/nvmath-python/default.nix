@@ -42,7 +42,6 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
   '';
 
   build-system = [
-    cudaPackages_13_1.cudatoolkit
     cython
     setuptools
     tomli
@@ -56,11 +55,11 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
   ];
 
   nativeBuildInputs = [
-    cudaPackages_13_1.cudatoolkit
+    cudaPackages_13_1.cuda_nvcc
   ];
 
   buildInputs = [
-    cudaPackages_13_1.cudatoolkit
+    cudaPackages_13_1.cuda_cudart
   ];
 
   pythonImportsCheck = [
@@ -72,7 +71,10 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
     homepage = "https://pypi.org/project/nvmath-python";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ eljamm ];
-    teams = with lib.teams; [ ngi ];
+    teams = with lib.teams; [
+      cuda
+      ngi
+    ];
     broken = !cudaSupport;
   };
 })
