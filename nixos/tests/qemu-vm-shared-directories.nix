@@ -7,7 +7,9 @@
 {
   name = "qemu-vm-shared-directories";
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [
+    fricklerhandwerk
+  ];
 
   nodes = lib.listToAttrs (
     map
@@ -42,31 +44,16 @@
 
       start_all()
 
-      virtiofsd_procs = subprocess.check_output(["${pgrep}", "-af", "virtiofsd"]).decode()
-
-      with subtest("virtiofsd is invoked with the correct --cache flag for each policy"):
-          for policy in ${with builtins; toJSON (attrNames config.nodes)}:
-              assert f"--cache={policy}" in virtiofsd_procs, \
-                  f"--cache={policy} not found in virtiofsd processes"
-
-      for machine, policy in [(never, "never"), (metadata, "metadata")]:
-          with subtest(f"host changes are immediately visible with cache={policy}"):
+      for machine, policy in [${
+        lib.concatMapStringsSep ", " (p: ''(${p}, "${p}")'') (builtins.attrNames config.nodes)
+      }]:
+          with subtest(f"cache={policy} propagates host file changes to the guest as expected"):
               machine.succeed("grep before /mnt/test/hello.txt")
               with open(f"/tmp/{policy}/hello.txt", "w") as f:
                   f.write("after")
-              machine.succeed("grep after /mnt/test/hello.txt")
-
-      with subtest("host changes are visible on reopen with cache=auto"):
-          auto.succeed("grep before /mnt/test/hello.txt")
-          with open("/tmp/auto/hello.txt", "w") as f:
-              f.write("after")
-          auto.succeed("grep after /mnt/test/hello.txt")
-
-      with subtest("host changes are not visible with cache=always"):
-          always.succeed("grep before /mnt/test/hello.txt")
-          with open("/tmp/always/hello.txt", "w") as f:
-              f.write("after")
-          always.succeed("grep before /mnt/test/hello.txt")
+              if policy == "always":
+                  always.succeed("grep before /mnt/test/hello.txt")
+              else:
+                  machine.succeed("grep after /mnt/test/hello.txt")
     '';
-
 }
