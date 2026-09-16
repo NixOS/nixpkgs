@@ -69,13 +69,13 @@ let
 in
 
 buildPythonPackage (finalAttrs: {
-  version = "3.11.1";
+  version = "3.11.2";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-aWR9tXRpQceT1uRFpM00kyP/uH2cyVjCrYSmWbSDLTA=";
+    hash = "sha256-zsWWMWZA8rOUuPDaoOphqOroLQF7YgufICvvuXKlnqQ=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
