@@ -14,7 +14,7 @@ assert cudaSupport -> cudaPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
-  version = "2025.12.0";
+  version = "2026.07.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LLNL";
     repo = "umpire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9lGI5SKpDIIzZvsG/yKopfXS1PuHOQB9bwSuML2Xh/8=";
+    hash = "sha256-68gqyP+VCX9EkFpxpf8hZBK158jWX2wpNDIm6J2+fnI=";
     fetchSubmodules = true;
   };
 
