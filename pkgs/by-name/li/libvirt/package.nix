@@ -94,6 +94,7 @@ let
       passt
       pmutils
       systemd
+      util-linux
     ]
     ++ lib.optionals enableIscsi [
       libiscsi
@@ -139,13 +140,6 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
-
-  ''
-  + lib.optionalString isLinux ''
-    for binary in mount umount mkfs; do
-      substituteInPlace meson.build \
-        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
-    done
 
   ''
   + lib.optionalString isLinux ''
