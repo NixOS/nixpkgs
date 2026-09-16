@@ -1,38 +1,55 @@
 {
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
+ "https://plugins.gradle.org/m2/org": {
+  "beryx#badass-runtime-plugin/2.0.1": {
+   "jar": "sha256-qc8YDAVtxs/vU2XOjloPJml5eJr7CUdlERPRyqm2UhQ=",
+   "module": "sha256-Y1r26XwZhilpzegxJvdwltB8i536+fk+x2sQYCukbcY=",
+   "pom": "sha256-l6xBsi4rPVcN9UXfSjFHmkVqH5O0bMl27Jo/WdHw/Ak="
+  },
+  "beryx/runtime#org.beryx.runtime.gradle.plugin/2.0.1": {
+   "pom": "sha256-Jm5jyHX+OFPIobK4qpMSMU2uK+ceihR2Z/mSnRwc1tQ="
+  },
+  "slf4j#slf4j-api/1.7.32": {
+   "jar": "sha256-NiT4R0wa9G11+YvAl9eGSjI8gbOAiqQ2iabhxgHAJ74=",
+   "pom": "sha256-ABzeWzxrqRBwQlz+ny5pXkrri8KQotTNllMRJ6skT+U="
+  },
+  "slf4j#slf4j-parent/1.7.32": {
+   "pom": "sha256-WrNJ0PTHvAjtDvH02ThssZQKL01vFSFQ4W277MC4PHA="
+  }
+ },
  "https://repo.maven.apache.org/maven2": {
-  "com/badlogicgames/gdx#gdx-backend-lwjgl3/1.12.1": {
-   "jar": "sha256-B3OwjHfBoHcJPFlyy4u2WJuRe4ZF/+tKh7gKsDg41o0=",
-   "module": "sha256-9O7d2ip5+E6OiwN47WWxC8XqSX/mT+b0iDioCRTTyqc=",
-   "pom": "sha256-IRSihaCUPC2d0QzB0MVDoOWM1DXjcisTYtnaaxR9SRo="
+  "com/badlogicgames/gdx#gdx-backend-lwjgl3/1.14.0": {
+   "jar": "sha256-3pV68nyhyv+3eO2hqNMbmDXcc/AEcB0WduyjOWMHICA=",
+   "module": "sha256-GJYW7PSrxbXLJMt1Xwc+IsogkUv4ojCdFdJ/fnpoyOU=",
+   "pom": "sha256-S+xaAWtXxkg0Rruzr4XV0V9f4gedhSpnTcVLMOWd9pY="
   },
-  "com/badlogicgames/gdx#gdx-freetype-platform/1.12.1": {
-   "pom": "sha256-cAGFUunqi4o21kDX8V86OT6aMmXjJUqyMHLHhUWLBm4="
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.14.0": {
+   "pom": "sha256-qQmd0nb4AW2O5i/+TUneaeGohmjS2crXrGc7PvSbKM0="
   },
-  "com/badlogicgames/gdx#gdx-freetype-platform/1.12.1/natives-desktop": {
-   "jar": "sha256-1g5ZN21QWpk+yLogowR3rwaQKx4pJ/8uN17/2/Ql2UE="
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.14.0/natives-desktop": {
+   "jar": "sha256-SFwrJdkZBLlBQ0Bm+BAgBpJHMMLCONBIcq5goC63Ofc="
   },
-  "com/badlogicgames/gdx#gdx-freetype/1.12.1": {
-   "jar": "sha256-rbjskAa7YdrW0pdslaHeGN5eGmUULRilgH0OUkyL8WU=",
-   "module": "sha256-HG9UGDxQFjSvGqLrKEkE7YnVvqtURs7FyqWwunHdXKE=",
-   "pom": "sha256-pLaMZBcEufzo+xszIlcUPJSYJJQg1uY6rm7tb6fHyT8="
+  "com/badlogicgames/gdx#gdx-freetype/1.14.0": {
+   "jar": "sha256-Pr/nUymeEYNLyIzzxMDCzIucJDWsA+VgsKh2QlZYK7Q=",
+   "module": "sha256-fUf8X7lgc5I5ddUqrgMuACcJ144JKU/wOK6K3R7W44A=",
+   "pom": "sha256-Rtq9qlQ6ZRDgUGOMNmphRdkGkbIaBiEf+rSbICMyQiw="
   },
-  "com/badlogicgames/gdx#gdx-jnigen-loader/2.3.1": {
-   "jar": "sha256-ZJDdoiWmHHYCwnu+xOSBE3/1lfjOCy3bpBTww0Bq7mA=",
-   "module": "sha256-nNWFK9nlHTbRJxrypGzZfOwk5XEHblQTbsmtNxhGua8=",
-   "pom": "sha256-7e2XZPzSpbw8peeAUEHppiAZ+ovkNLWZ8D1JR+KkQng="
+  "com/badlogicgames/gdx#gdx-jnigen-loader/2.5.2": {
+   "jar": "sha256-34HyPP1nhcUtNeEI7qo5MPVZ1NJ3CmEC51ynv6b58no=",
+   "module": "sha256-jwtii5G9Ez24XxUuFZMprPf0tmeDvR32AcNZfcJRIiQ=",
+   "pom": "sha256-i0dgu2bbPz+ZuEBj7z6ZDWOhzZx81XSlatf07kvRdoc="
   },
-  "com/badlogicgames/gdx#gdx-platform/1.12.1": {
-   "pom": "sha256-bZhlcVVYfr/+qIAG20v12CgcyUetGduKZP28TnOzkZc="
+  "com/badlogicgames/gdx#gdx-platform/1.14.0": {
+   "pom": "sha256-2Ps74A82eRr6thqFkeVCr7qkkQEHoFdUnMlwBu2NoRs="
   },
-  "com/badlogicgames/gdx#gdx-platform/1.12.1/natives-desktop": {
-   "jar": "sha256-P+utqUwiNjYQkXufuMJLD55h4+bGnHO9DTUDhYTA4e0="
+  "com/badlogicgames/gdx#gdx-platform/1.14.0/natives-desktop": {
+   "jar": "sha256-qKjJzM9endUYJWs8315raJpdaWoU4EYK9bDLxR218vE="
   },
-  "com/badlogicgames/gdx#gdx/1.12.1": {
-   "jar": "sha256-jTIJ6UghH96c2swrAfrO0yPlSKpS73jlx2CEWoh0aXA=",
-   "module": "sha256-7Th6fCSDcEBGAyOsXYZIZwKAPw88K1h448x4If03n6o=",
-   "pom": "sha256-Qg9vfLMYtQsglKsHYme67w6bBlI0yHqWCqkvtCEYpZY="
+  "com/badlogicgames/gdx#gdx/1.14.0": {
+   "jar": "sha256-owWJXpFfxfWUg95dOZokoMpi/hFQFf/oIQw249ZPgSY=",
+   "module": "sha256-xJCoyufsdrraEiLaEyJl5fqyyyzc3q51IXrIhkmUWyU=",
+   "pom": "sha256-CiUFNinRwfRgZMN7orOC0MRmQstKTssVF3jbNXEKmgw="
   },
   "com/badlogicgames/gdx-controllers#gdx-controllers-core/2.2.4": {
    "jar": "sha256-BNpnYnsaNkbvjyFMkdKWdCp8BVl9vCFnqqsJy9zHdHA=",
