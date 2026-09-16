@@ -6771,9 +6771,9 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
 
-  apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
-  apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
-  apple-sdk_26 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "26"; };
+  apple-sdk_14 = apple-sdk.override { darwinSdkMajorVersion = "14"; };
+  apple-sdk_15 = apple-sdk.override { darwinSdkMajorVersion = "15"; };
+  apple-sdk_26 = apple-sdk.override { darwinSdkMajorVersion = "26"; };
 
   darwinMinVersionHook =
     deploymentTarget:
