@@ -10659,6 +10659,11 @@
     githubId = 104577296;
     name = "Nwachukwu Goodness";
   };
+  goose121 = {
+    name = "Morgan Hager";
+    github = "goose121";
+    githubId = 7730389;
+  };
   gordon-bp = {
     email = "gordy@hanakano.com";
     github = "Gordon-BP";
