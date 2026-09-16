@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.11";
+  version = "3.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-+94oo6IYnRR4jnR60C3WNjesK6Tk6jND3xsYyx6sw0U=";
+    hash = "sha256-vVS9UK1p+abOiyzKbfHSharrMsZ8dIGXf79UUqYa03o=";
   };
 
   build-system = [ setuptools-scm ];
