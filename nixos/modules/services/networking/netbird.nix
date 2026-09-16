@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    attrNames
     attrValues
     concatLists
     concatStringsSep
@@ -807,7 +808,8 @@ in
                 ]
               )
             }:$PATH"
-            export ${toShellVars client.environment}
+            ${toShellVars client.environment}
+            export ${concatStringsSep " " (attrNames client.environment)}
 
             # merge /etc/${client.dir.baseName}/config.d' into "$NB_CONFIG"
             {
