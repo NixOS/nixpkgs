@@ -41,11 +41,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "51.rc";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FNWFwPpQmgifUqlWIZkswvn+xPvWDUpseUt/lOc7vQw=";
+    hash = "sha256-q68zV2RiAwxlu5Y6VjAKd4bn11g08ckKnf/ahzg1wz0=";
   };
 
   patches = [
