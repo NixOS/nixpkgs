@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop";
-  version = "51.alpha";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major finalAttrs.version}/gnome-desktop-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-ik0JYY/siP/xVJ5bgKxBd276zLjWXbP7dzRbU5SBmTI=";
+    sha256 = "sha256-nr658XadPDEMrq3ZIas0yPJkuSk3dAUYs7yFmleaaRI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
