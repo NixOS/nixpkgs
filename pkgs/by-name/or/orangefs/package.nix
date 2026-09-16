@@ -12,15 +12,18 @@
   perl,
   tcsh,
   nixosTests,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orangefs";
   version = "2.9.8";
 
-  src = fetchurl {
-    url = "http://download.orangefs.org/current/source/orangefs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WJ97bEyOqblrYUJ/kAWtC+JYy0NwK0fZ8wTIEoyiXjA=";
+  src = fetchFromGitHub {
+    repo = "orangefs";
+    owner = "waltligon";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-Lq1BqIxZh2RTG/Tfc5nvMtdJxq7CTbMurUctQ5+6O74=";
   };
 
   patches = [
@@ -55,8 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     # perl interpreter needs to be fixed or build fails
     patchShebangs ./src/apps/admin/pvfs2-genconfig
 
-    # symlink points to a location in /usr
-    rm ./src/client/webpack/ltmain.sh
   '';
 
   configureFlags = [
