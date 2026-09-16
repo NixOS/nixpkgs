@@ -191,6 +191,8 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (archive) url sha256; };
 
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
+
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
