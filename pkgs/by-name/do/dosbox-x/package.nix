@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
+  writers,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
@@ -28,26 +28,24 @@
   zlib,
 }:
 
+let
+  check-dosbox-conf = writers.writeText "check-dosbox.conf" ''
+    [autoexec]
+    MOUNT C .
+
+    VER > C:\BLUB
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.08.02";
+  version = "2026.08.31";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-zipg/eTz/k6IQeUovgpZ/ezOJNEjSQwHpkpGYOtdpS0=";
+    hash = "sha256-RYnepkAHwLOQFBXNZSPkH4L9bi3BkVC2RKd+YReGMqU=";
   };
-
-  patches = [
-    # https://github.com/joncampbell123/dosbox-x/issues/6446
-    # Remove when version > 2026.08.02
-    (fetchpatch {
-      name = "0001-dosbox-x-Fix-FFmpeg-9-compat.patch";
-      url = "https://github.com/joncampbell123/dosbox-x/commit/18062c0ffb33db35fa52ce937ce25223140c0293.patch";
-      hash = "sha256-S6DMmofFBloZFut0M3ZVAV/awG8Af9xjO2AcfVusOdg=";
-    })
-  ];
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
   # iconutil is unavailable, replace with png2icns from libicns
@@ -121,6 +119,26 @@ stdenv.mkDerivation (finalAttrs: {
       mv $out/bin/dosbox-x $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
+
+  # Can't personally check Darwin anymore
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    env \
+      SDL_AUDIODRIVER=dummy \
+      SDL_VIDEODRIVER=dummy \
+      $out/bin/dosbox-x \
+        -nopromptfolder -nogui \
+        -exit \
+        -machine pc98 \
+        -conf ${check-dosbox-conf}
+
+    grep -q 'Reported DOS version' BLUB
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
