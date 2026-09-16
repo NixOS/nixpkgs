@@ -101,7 +101,7 @@ in
               default = null;
               example = "%c";
               description = ''
-                Format string for clock in top right corner (see strftime specification).
+                Format string for clock in top right corner (see {manpage}`strftime(3)`).
                 If null, the clock won't be shown.
               '';
             };
@@ -113,7 +113,7 @@ in
               description = ''
                 Custom sessions directory.
                 You can specify multiple directories,
-                e.g. /etc/ly/custom-sessions:/run/current-system/sw/share/ly/custom-sessions
+                e.g. {file}`/etc/ly/custom-sessions:/run/current-system/sw/share/ly/custom-sessions`
               '';
             };
 
@@ -122,7 +122,7 @@ in
               default = "en";
               description = ''
                 Active language.
-                Available languages can be found in https://codeberg.org/fairyglade/ly/src/branch/master/res/lang.
+                Available languages can be found in <https://codeberg.org/fairyglade/ly/src/branch/master/res/lang>.
               '';
             };
 
