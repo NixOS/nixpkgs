@@ -39,6 +39,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenvNoCC.hostPlatform.isDarwin;
     description = "Icon theme for the Kanagawa colour palette";
     homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
     license = lib.licenses.gpl3Only;

@@ -5,6 +5,7 @@
   fetchFromGitLab,
   pkg-config,
   icu,
+  stdenv, # for meta.broken
 }:
 let
   codeParserBindings = callPackage ./code-parser.nix { };
@@ -57,6 +58,8 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Indexes Git repositories into Elasticsearch for GitLab";
     homepage = "https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer";
     mainProgram = "gitlab-elasticsearch-indexer";

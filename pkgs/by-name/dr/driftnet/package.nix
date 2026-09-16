@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
     changelog = "https://github.com/deiv/driftnet/releases/tag/v${finalAttrs.version}";
