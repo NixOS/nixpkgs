@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "pprof";
-  version = "0-unstable-2026-03-02";
+  version = "0-unstable-2026-09-03";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "a15ffb7f9dccb95074ad153aef0f1fcbb01e61e3";
-    hash = "sha256-l+D7wbu+Nu8ePmDvhfDgOnu8jcn6mH9Wt3aUPOK+LsM=";
+    rev = "d6c3cb2f37ec22719bbaf5eb031d9a46635cb5b2";
+    hash = "sha256-2LflblPAds0JRZZPvxW986cgXCMV+R3qikLt9w+9vU0=";
   };
 
   nativeCheckInputs = [
@@ -51,6 +51,9 @@ buildGoModule {
       This is not an official Google product.
     '';
     mainProgram = "pprof";
-    maintainers = with lib.maintainers; [ hzeller ];
+    maintainers = with lib.maintainers; [
+      hzeller
+      lromor
+    ];
   };
 }
