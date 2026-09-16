@@ -799,6 +799,12 @@ beamPkgs.mixRelease (
       dontYarnInstallDeps = true;
       dontYarnBerryInstallDeps = true;
 
+      patches = [
+        # Issue: https://github.com/bonfire-networks/bonfire-app/issues/2144
+        # Patch: https://github.com/bonfire-networks/bonfire-app/pull/2240
+        patches/2240.patch
+      ];
+
       postConfigure = lib.concatStringsSep "\n" [
         # Explanation: bonfire_ui_common & co. look like Elixir libraries,
         # but can only be built correctly inside bonfire-app.
