@@ -57,15 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  # The @napi-rs/canvas dependency ships prebuilt binaries for every
-  # platform, including an Android arm64 build that links liblog.so from
-  # the Android NDK. Android arm64 is AArch64, so on aarch64-linux this
-  # binary matches the build target and autoPatchelfHook tries to patch it,
-  # unlike on x86_64-linux where it is skipped for an architecture
-  # mismatch. The binary is never used on any Linux host, so ignore its
-  # otherwise unsatisfiable dependency.
-  autoPatchelfIgnoreMissingDeps = [ "liblog.so" ];
-
   buildPhase = ''
     runHook preBuild
 
@@ -84,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/codex-security"
     cp -r bin dist _bundled_plugin node_modules package.json LICENSE README.md \
       "$out/lib/codex-security/"
+
+    find "$out/lib/codex-security/node_modules" -name "*.android*" -delete
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/codex-security" \
       --add-flags "$out/lib/codex-security/bin/codex-security.mjs" \
