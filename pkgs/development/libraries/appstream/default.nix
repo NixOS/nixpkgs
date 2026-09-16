@@ -2,8 +2,8 @@
   lib,
   stdenv,
   buildPackages,
-  replaceVars,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   mesonEmulatorHook,
   appstream,
@@ -18,7 +18,6 @@
   libxslt,
   libstemmer,
   glib,
-  xapian,
   libxml2,
   libxmlb,
   libfyaml,
@@ -28,10 +27,10 @@
   vala,
   curl,
   cairo,
-  gdk-pixbuf,
   pango,
-  librsvg,
   bash-completion,
+  vips,
+  wayland,
   systemdLibs,
   nixosTests,
   testers,
@@ -43,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.1.3";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -55,13 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z9HmTYOjglki+ID7GPMf3jGLOAkxLqJd4+GsIR3W3u4=";
+    hash = "sha256-HQIZbBhkWS8jhakMI3DmMP7Qi83JUnIqGJ2N3ddEWIE=";
   };
 
   patches = [
-    # Fix hardcoded paths
-    (replaceVars ./fix-paths.patch {
-      libstemmer_includedir = "${lib.getDev libstemmer}/include";
+    (fetchpatch {
+      name = "no-absolute-libstemmer-paths.patch";
+      url = "https://github.com/ximion/appstream/commit/832c929031a124be07f6044d027ad2d8c35806d9.patch";
+      hash = "sha256-uYOCE75jVy4euHZT2Xk/HdsOf1hGwkpZ8Fhtm7VKaIE=";
     })
 
     # Allow installing installed tests to a separate output.
@@ -103,16 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
     libblake3
     libstemmer
     glib
-    xapian
     libxml2
     libxmlb
     libfyaml
     curl
     cairo
-    gdk-pixbuf
     pango
-    librsvg
     bash-completion
+    vips
+    wayland
   ]
   ++ lib.optionals withSystemd [
     systemdLibs
