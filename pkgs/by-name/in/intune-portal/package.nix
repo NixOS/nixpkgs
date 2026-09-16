@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a opt/microsoft/intune/bin/* $out/bin/
     cp -a usr/share $out
+    cp -a opt/microsoft/intune/share/* $out/share/
     cp -a lib $out
     mkdir -p $out/lib/security
     cp -a ./usr/lib/x86_64-linux-gnu/security/pam_intune.so $out/lib/security/
