@@ -1165,6 +1165,7 @@
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/anubis.nix
+  ./services/networking/apollo.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atalkd.nix
