@@ -128,6 +128,11 @@ let
 
     declare -a extraFlags
 
+    # Add bind mounts to extraFlags array
+    while IFS= read -r flag; do
+      [[ -n "$flag" ]] && extraFlags+=("$flag")
+    done <<< "''${EXTRA_NSPAWN_BIND_MOUNTS-}"
+
     if [[ "''${PRIVATE_NETWORK-}" = 1 ]]; then
       extraFlags+=("--private-network")
     fi
@@ -402,12 +407,12 @@ let
   mkBindFlag =
     d:
     let
-      flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
+      flagName = if d.isReadOnly then "--bind-ro=" else "--bind=";
       mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
     in
-    flagPrefix + mountstr;
+    flagName + mountstr;
 
-  mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
+  mkBindFlags = bs: map mkBindFlag (lib.attrValues bs);
 
   networkOptions = {
     hostBridge = mkOption {
@@ -1095,8 +1100,12 @@ in
                   postStart = postStartScript containerConfig;
                   serviceConfig = serviceDirectives containerConfig;
                   unitConfig.RequiresMountsFor =
+                    let
+                      # Escape spaces for systemd's RequiresMountsFor which is space-separated
+                      escapePath = path: lib.strings.escapeC [ " " ] path;
+                    in
                     lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
-                    ++ map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
+                    ++ map (d: escapePath (if d.hostPath != null then d.hostPath else d.mountPoint)) (
                       builtins.attrValues cfg.bindMounts
                     );
                   environment.root =
@@ -1179,10 +1188,8 @@ in
                 ${optionalString cfg.autoStart ''
                   AUTO_START=1
                 ''}
-                EXTRA_NSPAWN_FLAGS="${
-                  mkBindFlags cfg.bindMounts
-                  + optionalString (cfg.extraFlags != [ ]) (" " + concatStringsSep " " cfg.extraFlags)
-                }"
+                EXTRA_NSPAWN_BIND_MOUNTS="${concatStringsSep "\n" (mkBindFlags cfg.bindMounts)}"
+                EXTRA_NSPAWN_FLAGS="${optionalString (cfg.extraFlags != [ ]) (concatStringsSep " " cfg.extraFlags)}"
               '';
             }
           ) config.containers;
