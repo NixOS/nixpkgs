@@ -19,7 +19,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pyopenjtalk-plus";
-  version = "0.4.1.post9";
+  version = "0.4.1-post9";
   pyproject = true;
 
   src = fetchFromGitHub {
