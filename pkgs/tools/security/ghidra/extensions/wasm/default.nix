@@ -13,7 +13,7 @@ buildGhidraExtension (finalAttrs: {
     owner = "nneonneo";
     repo = "ghidra-wasm-plugin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2JNenzUac/OpjQ+fN1MkP8E2KIT1Ifn+C/18buSpqrE=";
+    hash = "sha256-7/5TR273Sqqr03lE7qpOJUnwTzdr3BzKk+6GhhdOfo8=";
   };
 
   nativeBuildInputs = [ ant ];
@@ -36,6 +36,6 @@ buildGhidraExtension (finalAttrs: {
     changelog = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.BonusPlay ];
-    broken = true; # Until updated to support 12.1.2
+    broken = true; # Until updated to support 12.1.3
   };
 })
