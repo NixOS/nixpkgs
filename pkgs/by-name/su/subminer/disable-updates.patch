@@ -1,0 +1,84 @@
+diff --git a/src/main/runtime/tray-runtime.ts b/src/main/runtime/tray-runtime.ts
+index b490435..393900f 100644
+--- a/src/main/runtime/tray-runtime.ts
++++ b/src/main/runtime/tray-runtime.ts
+@@ -132,10 +132,6 @@ export function buildTrayMenuTemplateRuntime(handlers: TrayMenuActionHandlers):
+       label: 'Configure AniList',
+       click: handlers.openAnilistSetup,
+     },
+-    {
+-      label: 'Check for Updates',
+-      click: handlers.checkForUpdates,
+-    },
+     { type: 'separator' },
+     {
+       label: 'Quit',
+diff --git a/src/main/runtime/update/update-service.ts b/src/main/runtime/update/update-service.ts
+index 1fcd50e..89ad322 100644
+--- a/src/main/runtime/update/update-service.ts
++++ b/src/main/runtime/update/update-service.ts
+@@ -212,27 +212,14 @@ export function createUpdateService(deps: UpdateServiceDeps) {
+   }
+
+   return {
+-    checkForUpdates(request: UpdateCheckRequest): Promise<UpdateCheckResult> {
+-      const key = getInFlightKey(request);
+-      const inFlight = inFlightBySource.get(key);
+-      if (inFlight) return inFlight;
+-      const nextInFlight = runCheck(request).finally(() => {
+-        inFlightBySource.delete(key);
+-      });
+-      inFlightBySource.set(key, nextInFlight);
+-      return nextInFlight;
++    checkForUpdates(_request: UpdateCheckRequest): Promise<UpdateCheckResult> {
++      return Promise.resolve({ status: 'skipped' });
+     },
+-    startAutomaticChecks(options: { startupDelayMs?: number; pollIntervalMs?: number } = {}): void {
+-      const setTimeoutFn = deps.setTimeout ?? setTimeout;
+-      const setIntervalFn = deps.setInterval ?? setInterval;
+-      const startupDelayMs = options.startupDelayMs ?? 15_000;
+-      const pollIntervalMs = options.pollIntervalMs ?? 60 * 60 * 1000;
+-      setTimeoutFn(() => {
+-        void this.checkForUpdates({ source: 'automatic' });
+-      }, startupDelayMs);
+-      setIntervalFn(() => {
+-        void this.checkForUpdates({ source: 'automatic' });
+-      }, pollIntervalMs);
++    startAutomaticChecks(_options: {
++      startupDelayMs?: number;
++      pollIntervalMs?: number;
++    } = {}): void {
++      // Updates are managed by Nix.
+     },
+   };
+ }
++
+diff --git a/src/main.ts b/src/main.ts
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -5575,16 +5575,3 @@
+       },
+       handleOverlayNotificationAction: (notificationId, actionId, noteId) => {
+-        if (
+-          notificationId === UPDATE_AVAILABLE_NOTIFICATION_ID &&
+-          actionId === INSTALL_UPDATE_ACTION_ID
+-        ) {
+-          void getUpdateService()
+-            .checkForUpdates({
+-              source: 'manual',
+-              installWhenAvailable: true,
+-            })
+-            .catch((error) => {
+-              logger.warn('Failed to install update from overlay notification action:', error);
+-            });
+-        }
+         if (actionId === OPEN_ANKI_CARD_ACTION_ID && noteId !== undefined) {
+@@ -6113,8 +6113,2 @@
+ runAndApplyStartupState();
+-void app.whenReady().then(() => {
+-  if (!shouldStartAutomaticUpdateChecks(appState.initialArgs)) {
+-    return;
+-  }
+-  getUpdateService().startAutomaticChecks();
+-});
+ const startupModeFlags = getStartupModeFlags(appState.initialArgs);
