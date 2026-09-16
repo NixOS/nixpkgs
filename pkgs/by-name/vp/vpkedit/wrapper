@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# Modified version of the wrapper found at
+# https://github.com/underscorejoser/VPKEdit/blob/a80172e6be76ba269980610c67d5326768c13441/install/linux/wrapper.in
+# licensed under the MIT License
+
+set -eu
+
+VPKEDIT_ROOT=$(dirname "$0")/..
+
+if [ -c /dev/nvidia0 ] && [ -z "${QT_QPA_PLATFORM+x}" ]; then
+    export QT_QPA_PLATFORM=xcb
+elif [ -n "${WAYLAND_DISPLAY:-}" ]; then
+    # Prevent X11 access just in case
+    unset -v DISPLAY
+fi
+
+exec $VPKEDIT_ROOT/bin/VPKEdit "$@"
