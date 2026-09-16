@@ -1,0 +1,11 @@
+[package]
+name = "custom-sparse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Two registries (regA, regC) both publish `hello@1.0.0` with different
+# content; the second one is consumed through a rename.
+hello = { version = "1.0.0", registry = "regA" }
+hello-alt = { package = "hello", version = "1.0.0", registry = "regC" }
+prefixed = { version = "1.0.0", registry = "regB" }

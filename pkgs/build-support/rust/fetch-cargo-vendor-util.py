@@ -62,29 +62,104 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
     return checksum
 
 
-def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
-    # TODO: support other registries
-    #       maybe fetch config.json from the registry root and get the dl key
-    #       See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-    if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
-        raise Exception("Only the default crates.io registry is supported.")
+CRATES_IO_SOURCES = [
+    "registry+https://github.com/rust-lang/crates.io-index",
+    "sparse+https://index.crates.io/",
+]
 
+registry_config_cache: dict[str, dict[str, Any]] = {}
+
+
+def get_registry_config(session: requests.Session, index_url: str) -> dict[str, Any]:
+    if index_url not in registry_config_cache:
+        url = f"{index_url.rstrip("/")}/config.json"
+
+        response = session.get(url)
+        if not response.ok:
+            raise Exception(f"Failed to fetch registry config from {url}. Status code: {response.status_code}")
+
+        try:
+            config = response.json()
+        except ValueError as e:
+            raise Exception(f"Failed to parse registry config from {url}.") from e
+
+        if not isinstance(config, dict) or not isinstance(config.get("dl"), str):
+            raise Exception(f"Registry config from {url} is missing a valid `dl` key.")
+
+        registry_config_cache[index_url] = config
+
+    return registry_config_cache[index_url]
+
+
+def make_dep_path(dep_name: str, prefix_only: bool) -> str:
+    # Mirrors cargo_util::registry::make_dep_path from cargo.
+    (slash, name) = ("", "") if prefix_only else ("/", dep_name)
+    if len(dep_name) == 1:
+        return f"1{slash}{name}"
+    if len(dep_name) == 2:
+        return f"2{slash}{name}"
+    if len(dep_name) == 3:
+        return f"3/{dep_name[:1]}{slash}{name}"
+    return f"{dep_name[:2]}/{dep_name[2:4]}{slash}{name}"
+
+
+def registry_slug(source: str) -> str:
+    # Filesystem-safe, unique directory name per registry source, so that
+    # tarballs of the same crate name/version from different registries
+    # don't collide.
+    return re.sub(r"[^A-Za-z0-9._-]", "_", source)
+
+
+def tarball_relpath(source: str, filename: str) -> Path:
+    # crates.io sources keep the historical flat `tarballs/` layout, so that
+    # existing cargoHash values (hash of the staging output) stay valid.
+    if source in CRATES_IO_SOURCES:
+        return Path("tarballs") / filename
+    return Path("tarballs") / registry_slug(source) / filename
+
+
+def get_download_url_for_tarball(session: requests.Session, pkg: dict[str, Any]) -> str:
     # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
     # rate limit on the API servers.
-    return f"https://static.crates.io/crates/{pkg["name"]}/{pkg["version"]}/download"
+    if pkg["source"] in CRATES_IO_SOURCES:
+        return f"https://static.crates.io/crates/{pkg["name"]}/{pkg["version"]}/download"
+
+    # See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+    if pkg["source"].startswith("sparse+"):
+        index_url = pkg["source"][len("sparse+"):]
+        config = get_registry_config(session, index_url)
+
+        dl = config["dl"]
+        if "{sha256-checksum}" in dl:
+            raise Exception(f"Registry config from {index_url} uses the unsupported `{{sha256-checksum}}` download URL template.")
+
+        # Mirrors cargo's behavior: if any marker is present they are all
+        # substituted, otherwise `/{crate}/{version}/download` is appended.
+        if any(marker in dl for marker in ("{crate}", "{version}", "{prefix}", "{lowerprefix}")):
+            prefix = make_dep_path(pkg["name"], prefix_only=True)
+            return (
+                dl.replace("{crate}", pkg["name"])
+                .replace("{version}", pkg["version"])
+                .replace("{prefix}", prefix)
+                .replace("{lowerprefix}", prefix.lower())
+            )
+        return f"{dl.rstrip("/")}/{pkg["name"]}/{pkg["version"]}/download"
+
+    raise Exception(f"Only the default crates.io registry and sparse registries are supported. Can't process source: {pkg["source"]}.")
 
 
 def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
 
-    url = get_download_url_for_tarball(pkg)
+    url = get_download_url_for_tarball(session, pkg)
     filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
 
     # TODO: allow legacy checksum specification, see importCargoLock for example
     #       also, don't forget about the other usage of the checksum
     expected_checksum = pkg["checksum"]
 
-    tarball_out_dir = out_dir / "tarballs" / filename
-    eprint(f"Fetching {url} -> tarballs/{filename}")
+    tarball_out_dir = out_dir / tarball_relpath(pkg["source"], filename)
+    eprint(f"Fetching {url} -> {tarball_out_dir.relative_to(out_dir)}")
+    tarball_out_dir.parent.mkdir(parents=True, exist_ok=True)
 
     calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
 
@@ -142,7 +217,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
         if source.startswith("git+"):
             git_packages.append(pkg)
-        elif source.startswith("registry+"):
+        elif source.startswith("registry+") or source.startswith("sparse+"):
             registry_packages.append(pkg)
         else:
             raise Exception(f"Can't process source: {source}.")
@@ -277,7 +352,14 @@ def make_git_source_selector(source_info: GitSourceInfo) -> dict[str, str]:
 
 
 def make_registry_source_selector(source: str) -> dict[str, str]:
-    registry = source[9:] if source.startswith("registry+") else source
+    if source.startswith("registry+"):
+        registry = source[len("registry+"):]
+    elif source.startswith("sparse+"):
+        # cargo expects the `sparse+` prefix to be retained for source replacement
+        registry = source
+    else:
+        raise Exception(f"Can't process source: {source}.")
+
     selector = {}
     selector["registry"] = registry
     return selector
@@ -393,10 +475,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
         elif source.startswith("registry+") or source.startswith("sparse+"):
             filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
 
-            # TODO: change this when non-crates-io registries are supported
-            dir_name = "tarballs"
-
-            tarball_path = vendor_staging_dir / dir_name / filename
+            tarball_path = vendor_staging_dir / tarball_relpath(source, filename)
 
             extract_crate_tarball_contents(tarball_path, crate_out_dir)
 
