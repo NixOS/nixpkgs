@@ -1,0 +1,50 @@
+From 258c919591e2aa16fded26c637c8130a27c9feab Mon Sep 17 00:00:00 2001
+From: Seth Flynn <getchoo@tuta.io>
+Date: Wed, 5 Mar 2025 17:10:20 -0500
+Subject: [PATCH 4/5] build: add dbus as dependency for nfd_portal
+
+---
+ config/linux/build.xml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 4500d23c0..829ce2b1d 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -307,9 +307,17 @@
+         </build>
+         <build module="nfd" suffix="_portal" simple="true" linker="g++" if:true="${binding.nfd}">
+             <beforeCompile>
++                <local name="dbus-cflags"/>
++                <local name="dbus-libflags"/>
+                 <local name="glib-cflags"/>
+                 <local name="glib-libflags"/>
+                 <local name="stderr"/>
++                <exec outputproperty="dbus-cflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="dbus-cflags">
++                    <arg line="--cflags dbus-1"/>
++                </exec>
++                <exec outputproperty="dbus-libflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="dbus-libflags">
++                    <arg line="--libs dbus-1"/>
++                </exec>
+                 <exec outputproperty="glib-cflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="glib-cflags">
+                     <arg line="--cflags glib-2.0"/>
+                 </exec>
+@@ -317,6 +325,7 @@
+                     <arg line="--libs glib-2.0"/>
+                 </exec>
+                 <compile lang="c++">
++                    <arg line="${dbus-cflags}"/>
+                     <arg line="${glib-cflags}"/>
+                     <arg value="-I${src.main.rel}/include"/>
+                     <fileset dir="." includes="${src.main}/nfd_portal.cpp"/>
+@@ -326,6 +335,7 @@
+                 <arg value="-I${src.main.rel}/include"/>
+             </source>
+             <link>
++                <arg line="${dbus-libflags}"/>
+                 <arg line="${glib-libflags}"/>
+             </link>
+         </build>
+-- 
+2.48.1
+
