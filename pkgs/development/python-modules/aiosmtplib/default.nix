@@ -39,6 +39,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "aiosmtplib" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
