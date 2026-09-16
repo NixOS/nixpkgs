@@ -36,16 +36,16 @@ buildGo127Module (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "silo";
-  version = "2026-09-03T13-18-01Z";
+  version = "2026-09-16T00-00-00Z";
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "silo";
     tag = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-VweJo3kHv/wdViNlh/B11qxevpOktkj/knkudHr7qQg=";
+    hash = "sha256-M9sBb2pFY00kYCUBk2ctWEM4xraEXdGcaEgvzQna+9w=";
   };
 
-  vendorHash = "sha256-YaZzqV6OL+kft8DcUxhxWlH02nF/Od1l0kdiJSrF8as=";
+  vendorHash = "sha256-STpltATG8UVhJMuUn3NeNOpHLv3jBdtyheB0jQ28qjY=";
 
   subPackages = [ "." ];
 
