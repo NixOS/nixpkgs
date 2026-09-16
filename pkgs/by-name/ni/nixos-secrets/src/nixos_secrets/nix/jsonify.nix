@@ -6,7 +6,7 @@
 # - evaluated NixOS configurations (the options will be extracted from the
 #   respective NixOS module)
 # - evaluated secrets configurations (the script will then be a NO-OP), i.e.
-#   objects already matching the secrets schema (TODO: document this)
+#   objects already matching the secrets schema (../secrets-config.schema.json)
 #
 # Note that this file is *not* a Nix(OS) module! This will automatically be
 # evaluated by the secrets CLI.
@@ -23,8 +23,9 @@
 #
 # People who want to write custom Nix(OS)-modules for use with the secrets CLI
 # should write an accompanying `jsonify`-esque function, and pass its output to
-# the CLI. As long as the output matches the secrets configuration schema (TODO:
-# document that), this function will leave said output untouched and let the
+# the CLI. As long as the output matches the secrets configuration schema
+# (../secrets-config.schema.json), this function will leave said output
+# untouched and let the
 # CLI do its thing.
 {
   configuration,
