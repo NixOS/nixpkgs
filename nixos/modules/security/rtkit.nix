@@ -39,8 +39,7 @@ in
   config = lib.mkIf cfg.enable {
     security.polkit.enable = true;
 
-    # To make polkit pickup rtkit policies
-    environment.systemPackages = [ cfg.package ];
+    security.polkit.packages = [ cfg.package ];
 
     services.dbus.packages = [ cfg.package ];
 

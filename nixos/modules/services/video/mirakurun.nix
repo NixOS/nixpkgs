@@ -134,7 +134,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ mirakurun ] ++ optional cfg.allowSmartCardAccess polkitRule;
+    environment.systemPackages = [ mirakurun ];
     environment.etc = {
       "mirakurun/server.yml".source = settingsFmt.generate "server.yml" cfg.serverSettings;
       "mirakurun/tuners.yml" = mkIf (cfg.tunerSettings != null) {
@@ -150,6 +150,8 @@ in
         group = groupname;
       };
     };
+
+    security.polkit.packages = lib.mkIf cfg.allowSmartCardAccess [ polkitRule ];
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = mkIf (cfg.port != null) [ cfg.port ];
