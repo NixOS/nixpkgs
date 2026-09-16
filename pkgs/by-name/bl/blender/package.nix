@@ -86,6 +86,12 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
+  level-zero,
+  intel-compute-runtime,
+  intel-llvm,
+  intel-graphics-compiler,
+  oneapiSupport ? false,
+  opencl-headers,
 }:
 
 let
@@ -120,6 +126,9 @@ in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "5.2.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     name = "source";
@@ -158,6 +167,10 @@ stdenv'.mkDerivation (finalAttrs: {
   + (lib.optionalString rocmSupport ''
     substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
     substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+  '')
+  + (lib.optionalString oneapiSupport ''
+    substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
+      --replace-fail ''\'''${cycles_kernel_runtime_lib_target_path}' '"''${CMAKE_INSTALL_LIBDIR}"'
   '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -177,7 +190,8 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
+    (lib.cmakeBool "WITH_CYCLES_ONEAPI_BINARIES" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
@@ -204,6 +218,13 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
+  ]
+  ++ lib.optionals oneapiSupport [
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
+    (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
+    (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
@@ -236,17 +257,15 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm.dev
     makeWrapper
+    pkg-config
     python3Packages.wrapPython
+    python3
   ]
+  ++ lib.optional oneapiSupport addDriverRunpath
   ++ lib.optionals cudaSupport [
     addDriverRunpath
     cudaPackages.cuda_nvcc
-  ]
-  ++ lib.optionals waylandSupport [
-    pkg-config
-    wayland-scanner
   ];
 
   buildInputs = [
@@ -283,13 +302,18 @@ stdenv'.mkDerivation (finalAttrs: {
     openxr-loader
     potrace
     pugixml
-    python3
     python3Packages.materialx
     python3Packages.openshadinglanguage
     rubberband
     zlib
     zstd
   ]
+  ++ lib.optionals oneapiSupport [
+    intel-compute-runtime
+    intel-llvm
+    opencl-headers
+  ]
+  ++ lib.optional (!oneapiSupport) llvmPackages.llvm
   ++ lib.optional embreeSupport embree
   ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
@@ -325,6 +349,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland
     wayland-protocols
+    wayland-scanner
   ]
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optional spaceNavSupport libspnav
@@ -370,10 +395,10 @@ stdenv'.mkDerivation (finalAttrs: {
         --add-flags '--python-use-system-env'
     '';
 
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
+  # Set RUNPATH so that libs in /run/opengl-driver(-32)/lib can be
   # found. See the explanation in libglvnd.
   postFixup =
-    lib.optionalString cudaSupport ''
+    lib.optionalString (cudaSupport || oneapiSupport) ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         addDriverRunpath "$program"
       done
