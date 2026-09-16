@@ -67,6 +67,22 @@ let
       }
     ];
   }).config;
+  coreutilsOverride = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      ({ pkgs, ... }:
+      {
+        system.coreutils = pkgs.uutils-coreutils;
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      })
+    ];
+  }).config;
 in
 # default: systemd backend, exactly as before
 assert default.systemd.units ? "web.service";
@@ -107,5 +123,10 @@ assert dinitCompat.system.build.systemdCompatibilityLayer.outPath != "";
 assert dinitCompat.environment.systemPackages != [ ];
 assert dinitCompat.environment.etc ? "dinit.d/systemd-compat";
 assert builtins.match ".*systemd-compat-dbus.*" dinitCompat.environment.etc."dinit.d/systemd-compat".text != null;
+
+# coreutils toggle: system.build.coreutils and PATH replacement
+assert coreutilsOverride.system.build.coreutils.outPath != "";
+assert builtins.match ".*uutils-coreutils.*" coreutilsOverride.system.build.coreutils.name != null;
+assert builtins.match ".*uutils-coreutils.*" (builtins.unsafeDiscardStringContext (builtins.concatStringsSep " " (map (p: builtins.unsafeDiscardStringContext (p.name or "?")) coreutilsOverride.environment.systemPackages))) != null;
 
 "ok"
