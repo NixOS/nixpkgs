@@ -1,35 +1,32 @@
 {
   lib,
   python3Packages,
-  fw-ectool,
+  framework-tool,
+  frameworkToolPackage ? framework-tool,
   fetchFromGitHub,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "fw-fanctrl";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TamtamHero";
     repo = "fw-fanctrl";
     tag = "v${version}";
-    hash = "sha256-lwuBbyJnWUAXkKemhsdx73fAzO2QX2n81az074hGkzI=";
+    hash = "sha256-UFjKzCQ5QBw6t7LZ3d2Nk1G8WcsuuLkZkEkx0Sf6ndw=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
   dependencies = [ python3Packages.jsonschema ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ fw-ectool ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ frameworkToolPackage ]}" ];
 
   postInstall = ''
     mkdir -p $out/share/fw-fanctrl
     install -m 644 $src/src/fw_fanctrl/_resources/config.json $out/share/fw-fanctrl/config.json
-    install -m 755 $src/services/system-sleep/fw-fanctrl-suspend $out/share/fw-fanctrl/fw-fanctrl-suspend
-    patchShebangs --build $out/share/fw-fanctrl/fw-fanctrl-suspend
-    substituteInPlace $out/share/fw-fanctrl/fw-fanctrl-suspend \
-      --replace-fail '"%PYTHON_SCRIPT_INSTALLATION_PATH%"' $out/bin/fw-fanctrl
   '';
 
   meta = {
