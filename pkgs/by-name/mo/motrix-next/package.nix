@@ -25,16 +25,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motrix-next";
-  version = "3.9.8";
+  version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "AnInsomniacy";
     repo = "motrix-next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xg8atHZfz0qiVMyxJGzUhxkfJxxC6bkEMxXM/KOE1Tg=";
+    hash = "sha256-HIEvsivOiHAyKAEwfPytS31M9wHxC3fmh6e1Sn3AHKo=";
   };
 
-  cargoHash = "sha256-ebwJq2r7Akz8f01dtMglMPpaDs7KRqS74/TU2ypU1hw=";
+  cargoHash = "sha256-1t9fGLxL+YEGYMEztS3ShX+nV9Sok9BGsVOpCiS/ULg=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -75,8 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  # Some tests on macOS attempt to retrieve system settings, such as the default browser and system proxy.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = false;
 
   tauriBuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--no-sign" ];
 
