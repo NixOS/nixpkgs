@@ -50,6 +50,18 @@ export emacsWithPackages_siteLisp=@wrapperSiteLisp@
 export EMACSNATIVELOADPATH="${newNativeLoadPath[*]}"
 export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 
+if [[ -n $XDG_DATA_DIRS ]]
+then
+    export XDG_DATA_DIRS="@wrapperSiteData@:$XDG_DATA_DIRS"
+else
+    export XDG_DATA_DIRS="@wrapperSiteData@"
+fi
+
+if [[ @withFontconfig@ == true ]]
+then
+    export FONTCONFIG_FILE=@wrapperFontconfigFile@
+fi
+
 export emacsWithPackages_invocationDirectory=@wrapperInvocationDirectory@
 export emacsWithPackages_invocationName=@wrapperInvocationName@
 

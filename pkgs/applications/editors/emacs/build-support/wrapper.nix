@@ -33,6 +33,7 @@
 {
   lib,
   lndir,
+  makeFontsConf,
   makeBinaryWrapper,
   runCommand,
 }:
@@ -41,6 +42,7 @@ let
   inherit (self) emacs;
   withNativeCompilation = emacs.withNativeCompilation or false;
   withTreeSitter = emacs.withTreeSitter or false;
+  withFontconfig = !emacs.stdenv.hostPlatform.isDarwin;
 in
 packagesFun: # packages explicitly requested by the user
 let
@@ -94,6 +96,7 @@ let
         }
         mkdir -p $out/bin
         mkdir -p $out/share/emacs/site-lisp
+        mkdir -p $out/share/fonts
         ${lib.optionalString withNativeCompilation ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
@@ -131,6 +134,7 @@ let
         linkEmacsPackage() {
           linkPath "$1" "bin" "bin"
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
+          linkPath "$1" "share/fonts" "share/fonts"
           ${lib.optionalString withNativeCompilation ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
           ''}
@@ -193,6 +197,13 @@ let
         ''}
       '';
 
+  fontconfigFile =
+    if withFontconfig then
+      makeFontsConf {
+        fontDirectories = [ "${deps}/share/fonts" ];
+      }
+    else
+      "";
 in
 runCommand (lib.appendToName "with-packages" emacs).name
   {
@@ -220,6 +231,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
@@ -246,6 +260,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
