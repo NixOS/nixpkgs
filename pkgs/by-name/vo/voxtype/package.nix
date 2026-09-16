@@ -17,10 +17,12 @@
   alsa-lib,
   dotool,
   libnotify,
+  libxkbcommon,
   openssl,
   pciutils,
   wl-clipboard,
   wtype,
+  ydotool,
   which,
   xclip,
   xdotool,
@@ -32,15 +34,23 @@
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  wayland,
 
   onnxSupport ? false,
   onnxruntime,
+
+  osdGtk4Support ? false,
+  osdNativeSupport ? false,
+
+  wrapGAppsHook4,
+  gtk4-layer-shell,
 
   waylandSupport ? stdenv.hostPlatform.isLinux,
   waylandRuntimePackages ? [
     dotool
     wl-clipboard
     wtype
+    ydotool
   ],
 
   x11Support ? stdenv.hostPlatform.isLinux,
@@ -73,6 +83,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "paraformer"
       "dolphin"
       "omnilingual"
+      "cohere"
+      "onnx-load-dynamic"
+    ]
+    ++ lib.optionals osdGtk4Support [
+      "osd-gtk4"
+    ]
+    ++ lib.optionals osdNativeSupport [
+      "osd-native"
     ];
 
   nativeBuildInputs = [
@@ -87,6 +105,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     shaderc
     vulkan-headers
     vulkan-loader
+  ]
+  ++ lib.optionals osdGtk4Support [
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -99,6 +120,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals onnxSupport [
     onnxruntime
+  ]
+  ++ lib.optionals osdGtk4Support [
+    gtk4-layer-shell
+  ]
+  ++ lib.optionals osdNativeSupport [
+    libxkbcommon
   ];
 
   env = {
@@ -128,6 +155,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       $out/share/voxtype/default-config.toml
 
     wrapProgram $out/bin/voxtype \
+      --prefix PATH : "$out/bin" \
       --prefix PATH : ${
         (lib.makeBinPath (
           [
@@ -146,6 +174,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --set ORT_DYLIB_PATH "${lib.getLib onnxruntime}/lib/libonnxruntime.so" \
         --prefix LD_LIBRARY_PATH : "${lib.getLib onnxruntime}/lib"
       ''}
+  ''
+  + lib.optionalString osdNativeSupport ''
+    wrapProgram $out/bin/voxtype-osd-native \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          vulkan-loader
+          wayland
+        ]
+      }"
   ''
   + lib.optionalString installManPages ''
     installManPage target/debug/build/voxtype-*/out/man/*
