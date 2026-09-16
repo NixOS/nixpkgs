@@ -102,9 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  postInstallCheck = ''
-    versionCheckProgram="$out/bin/zerocode" versionCheckHook
-  '';
+  versionCheckProgram = "${placeholder "out"}/bin/zerocode";
 
   passthru.updateScript = nix-update-script { };
 
