@@ -322,6 +322,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./cmake-args.patch
     ./python-extension-suffix.patch
     ./wheel-tensorpipe-metadata.patch
+    # Resolve reduction dtype before dispatch and keep wider accumulators
+    # separate from explicit result dtypes on both CPU and CUDA.
+    ./sparse-csr-reduction-dtypes.patch
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     ./cross-blas-dot.patch
@@ -805,9 +808,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests {
-      inherit rocmSupport cudaSupport;
-    };
+    tests =
+      callPackage ../tests {
+        inherit rocmSupport cudaSupport;
+      }
+      // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        csrReductions = (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+          name = "torch-csr-reductions";
+          libraries = [ finalAttrs.finalPackage ];
+        } (builtins.readFile ../tests/csr-reductions.py);
+      };
   };
 
   meta = {
