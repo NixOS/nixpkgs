@@ -70,7 +70,12 @@ let
 
   getSupportedReleases =
     let
-      desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
+      # Driver compatibility archives are tied to a CUDA minor release, while
+      # other redistributables commonly provide one variant for a whole major.
+      desiredCudaVariants = [
+        "cuda${cudaMajorMinorVersion}"
+        (_mkCudaVariant cudaMajorVersion)
+      ];
     in
     release:
     # Always show preference to the "source", then "linux-all" redistSystem if they are available, as they are
@@ -89,11 +94,14 @@ let
       in
       foldlAttrs (
         acc: name: value:
+        let
+          cudaVariant = findFirst (variant: hasAttr variant value) null desiredCudaVariants;
+        in
         acc
         # If the value is an attribute, and when hasCudaVariants is true it has the relevant CUDA variant,
         # then add it to the set.
-        // optionalAttrs (isAttrs value && (hasCudaVariants -> hasAttr desiredCudaVariant value)) {
-          ${name} = value.${desiredCudaVariant} or value;
+        // optionalAttrs (isAttrs value && (hasCudaVariants -> cudaVariant != null)) {
+          ${name} = if hasCudaVariants then value.${cudaVariant} else value;
         }
       ) { } release;
 
