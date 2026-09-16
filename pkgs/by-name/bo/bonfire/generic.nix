@@ -36,12 +36,12 @@ beamPkgs.mixRelease (
     finalAttrs = {
       pname = "bonfire-${finalAttrs.env.FLAVOUR}";
       inherit (finalAttrs.passthru.beamPackages) erlang elixir;
-      version = "1.0.7-beta.4";
+      version = "1.0.8-beta.9";
       src = fetchFromGitHub {
         owner = "bonfire-networks";
         repo = "bonfire-app";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-YuO6uqYcJwhzFdn47VY55xwwNJ0mvsnuuML6z43N3W8=";
+        hash = "sha256-I2jrwgR4m3BNZ6aeBvxVi5lehwBfHPHbSmyQc6VDYBY=";
       };
       __structuredAttrs = true;
       strictDeps = true;

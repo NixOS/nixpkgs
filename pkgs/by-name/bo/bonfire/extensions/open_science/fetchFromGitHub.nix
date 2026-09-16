@@ -2,6 +2,6 @@
 fetchFromGitHub {
   owner = "bonfire-networks";
   repo = "open_science";
-  rev = "39c15d0efae5150a31ebe735fa30111e560ad703";
-  hash = "sha256-5sMq114uQIDg5+8YembvbsoJshP83MMyuJapwJ4aA94=";
+  rev = "9d2d651076960afa4ae2611d81300432f157cb9f";
+  hash = "sha256-FDLSvvU76yF1KNfNMqd5e+1VJY+taNkEkQppy9hva0s=";
 }
