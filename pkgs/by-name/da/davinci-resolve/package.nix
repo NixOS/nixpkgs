@@ -80,7 +80,7 @@ let
               if studioVariant then
                 "sha256-D5RjUukwKMpULrDfMJOPsPWW9FxhQ/IUMh76u5JLytA="
               else
-                "sha256-bQ4Yag4xfIF9Fs0UVKaYFhObMsAof5n+Sy4osw35a9g=";
+                "sha256-+3SB32EHpH9/0hM3h8CrO6f7V4ZAmxUFh3P8m6QDeO0=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
