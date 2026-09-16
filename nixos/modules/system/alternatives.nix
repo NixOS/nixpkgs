@@ -15,6 +15,7 @@
 let
   coreutils' = config.system.coreutils;
   libc = config.system.libc;
+  fhs = config.system.fhsCompatibility;
 
   # The Nixpkgs package set built with an alternate libc (musl or LLVM).
   alternateLibcPkgs = nixpkgsSource: nixpkgsLib: import (nixpkgsSource + "/pkgs/top-level") {
@@ -26,6 +27,39 @@ let
     config = { };
     overlays = [ ];
   };
+
+  # /nix/store/<hash>-fhs-rootfs: the FHS-compatible root view. bin/sbin hold
+  # symlinks to every binary of the system packages, lib/lib64 and usr
+  # counterparts point into the glibc library output. Conventional software
+  # that expects a dynamic linker (ld-linux), /bin and /usr can then be
+  # pointed here with activation symlinks at the real root.
+  fhsRootfs = pkgs.runCommand "fhs-rootfs" {
+    binEnv = pkgs.buildEnv {
+      name = "fhs-bin";
+      paths = config.environment.systemPackages;
+      pathsToLink = [ "/bin" ];
+      ignoreCollisions = true;
+    };
+    libSrc = "${pkgs.glibc}/lib";
+    shell = pkgs.stdenv.shell;
+  } ''
+    mkdir -p $out/{bin,lib,usr/bin,usr/lib}
+    for f in $binEnv/bin/*; do
+      n="$(basename "$f")"
+      ln -s "$f" "$out/bin/$n"
+      ln -s "$f" "$out/usr/bin/$n"
+    done
+    for f in $libSrc/*; do
+      n="$(basename "$f")"
+      ln -s "$f" "$out/lib/$n"
+      ln -s "$f" "$out/usr/lib/$n"
+    done
+    ln -s "$libSrc" "$out/lib64"
+    ln -s "$libSrc" "$out/usr/lib64"
+    ln -s "$out/bin" "$out/sbin"
+    ln -s "$out/usr/bin" "$out/usr/sbin"
+    # /bin/sh is provided by the shell in the system packages (bashInteractive)
+  '';
 in
 {
   _class = "nixos";
@@ -92,6 +126,24 @@ in
     '';
   };
 
+  options.system.fhsCompatibility = lib.mkOption {
+    type = lib.types.submodule {
+      options.enable = lib.mkEnableOption ''
+        the FHS compatibility layer: a generated rootfs at
+        `system.build.fhsRootfs` mirroring /bin, /sbin, /lib, /lib64 and
+        /usr with symlinks into the Nix store, plus activation symlinks at
+        the real root pointing into it
+      '';
+    };
+    default = { };
+    description = ''
+      Compatibility layer for conventional Linux software that expects a
+      regular filesystem hierarchy (dynamic linker in /lib64, /bin and /usr
+      on PATH). Folders that Nix should not manage (/home, /var, /proc,
+      /sys, /dev, ...) are not touched.
+    '';
+  };
+
   config = lib.mkMerge [
     (lib.mkIf (coreutils' != null) {
       environment.systemPackages = [ coreutils' ];
@@ -111,5 +163,19 @@ in
       nixpkgs.localSystem.libc = libc.family;
       system.build.libc = libc.family;
       system.build.alternateLibcPkgs = pkgs;
+    })
+
+    (lib.mkIf fhs.enable {
+      system.build.fhsRootfs = fhsRootfs;
+
+      # Point the real /bin, /sbin, /lib, /lib64, /usr/* at the generated
+      # rootfs, mirroring what a conventional FHS system has at /. Only this
+      # set of directories is touched; folders Nix must not manage (/home,
+      # /var, /proc, /sys, /dev, ...) are left alone.
+      system.activationScripts.fhsRootfs = lib.stringAfter [ "specialfs" ] ''
+        for target in bin sbin lib lib64 usr/bin usr/sbin usr/lib usr/lib64; do
+          ln -sfn ${fhsRootfs}/$target /$target
+        done
+      '';
     })
   ];}

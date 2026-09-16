@@ -98,6 +98,21 @@ let
       }
     ];
   }).config;
+  fhsMachine = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      {
+        system.fhsCompatibility.enable = true;
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      }
+    ];
+  }).config;
   libcLocalBuild = (import (root + "/nixos/lib/eval-config.nix") {
     system = "x86_64-linux";
     modules = [
@@ -174,5 +189,12 @@ assert builtins.match ".*glibc.*" libcOverride.system.build.alternateLibcPkgs.st
 assert libcOverride.system.build.alternateLibcPkgs ? glibc;
 # localBuild overrides dependency evaluation as requested
 assert libcLocalBuild.nixpkgs.localSystem.libc == "musl";
+
+# FHS compatibility layer
+assert fhsMachine.system.build.fhsRootfs.outPath != "";
+assert builtins.match ".*for target in bin sbin lib lib64 usr/bin.*" fhsMachine.system.activationScripts.fhsRootfs.text != null;
+assert builtins.match ".*ln -sfn .*fhs-rootfs/[$]target /[$]target.*" fhsMachine.system.activationScripts.fhsRootfs.text != null;
+assert builtins.match ".*home.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
+assert builtins.match ".*var.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
 
 "ok"
