@@ -32,8 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Yi1nVvWmFzlXxHN01BeeGc9YRqrRoVXTqehisOrGWS0=";
 
-  separateDebugInfo = true;
+  # Only default feature is systemd
+  buildNoDefaultFeatures = !useSystemd;
 
+  separateDebugInfo = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -50,9 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ]
   ++ lib.optional useSystemd systemd;
-
-  # Only default feature is systemd
-  buildNoDefaultFeatures = !useSystemd;
 
   makeFlags = [
     "prefix=${placeholder "out"}"
