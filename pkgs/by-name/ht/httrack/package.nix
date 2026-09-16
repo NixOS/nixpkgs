@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.50.1";
+  version = "3.50.2";
   pname = "httrack";
 
   src = fetchFromGitHub {
     owner = "xroche";
     repo = "httrack";
     tag = finalAttrs.version;
-    hash = "sha256-n3myEvrlICMMLvI6YHKw8BIryHZzCyadIpZylpHM9M4=";
+    hash = "sha256-hvR0k8u5p9rnQRgOoZZ7NRSGKU0VJGAvj/EUxB/alG4=";
     fetchSubmodules = true;
   };
 
