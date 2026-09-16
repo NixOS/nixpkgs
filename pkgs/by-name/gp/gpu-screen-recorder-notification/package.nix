@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-notification";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-notification";
     tag = finalAttrs.version;
-    hash = "sha256-rGredPrTda6/3pG4+0k6fHr4fRSVCRvTC/+sRFytrWo=";
+    hash = "sha256-UmK9aDVsWgMZx9dCA0LFLmY0NLmhwh3O2VgztUzvPOs=";
   };
 
   nativeBuildInputs = [

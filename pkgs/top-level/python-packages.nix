@@ -10926,6 +10926,8 @@ self: super: with self; {
 
   mizani = callPackage ../development/python-modules/mizani { };
 
+  mjviser = callPackage ../development/python-modules/mjviser { };
+
   mkdocs = callPackage ../development/python-modules/mkdocs { };
 
   mkdocs-autolinks-plugin = callPackage ../development/python-modules/mkdocs-autolinks-plugin { };
@@ -11324,6 +11326,8 @@ self: super: with self; {
   mujoco = callPackage ../development/python-modules/mujoco { inherit (pkgs) mujoco; };
 
   mujoco-mjx = callPackage ../development/python-modules/mujoco-mjx { mujoco-main = pkgs.mujoco; };
+
+  mujoco-warp = callPackage ../development/python-modules/mujoco-warp { };
 
   mujson = callPackage ../development/python-modules/mujson { };
 
@@ -18344,6 +18348,8 @@ self: super: with self; {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsl-rl-lib = callPackage ../development/python-modules/rsl-rl-lib { };
+
   rsskey = callPackage ../development/python-modules/rsskey { };
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
@@ -20961,6 +20967,8 @@ self: super: with self; {
   torchprofile = callPackage ../development/python-modules/torchprofile { };
 
   torchrl = callPackage ../development/python-modules/torchrl { };
+
+  torchrunx = callPackage ../development/python-modules/torchrunx { };
 
   torchsde = callPackage ../development/python-modules/torchsde { };
 

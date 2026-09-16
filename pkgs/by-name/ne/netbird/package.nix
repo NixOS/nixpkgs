@@ -196,18 +196,22 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = component.versionCheckProgramArg or "version";
 
   passthru = {
-    tests = lib.attrsets.optionalAttrs (componentName == "client") {
-      nixos = nixosTests.netbird;
-      inherit
-        # make sure child packages are built by `ofborg`
-        netbird-management
-        netbird-relay
-        netbird-signal
-        netbird-ui
-        netbird-upload
-        netbird-proxy
-        ;
-    };
+    tests =
+      lib.attrsets.optionalAttrs (componentName == "client") {
+        nixos = nixosTests.netbird;
+        inherit
+          # make sure child packages are built by `ofborg`
+          netbird-management
+          netbird-relay
+          netbird-signal
+          netbird-ui
+          netbird-upload
+          netbird-proxy
+          ;
+      }
+      // lib.attrsets.optionalAttrs (componentName == "relay") {
+        nixos = nixosTests.netbird-relay;
+      };
     updateScript = nix-update-script { };
   };
 
