@@ -4,23 +4,25 @@
   fetchFromGitHub,
   opusfile,
   libogg,
+  libvorbis,
   SDL2,
   openal,
   freetype,
   libjpeg,
   curl,
   makeWrapper,
+  bc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iortcw-sp";
-  version = "1.51c";
+  version = "1.51c-unstable-2024-05-26";
 
   src = fetchFromGitHub {
     owner = "iortcw";
     repo = "iortcw";
-    tag = finalAttrs.version;
-    hash = "sha256-3F8JAEuPydufXqeOGwYCX0M8pEVRyFZAu2TUFxZ+vDw=";
+    rev = "438e7d413b5f7277187c35b032eb0ef9093ae778";
+    hash = "sha256-ME8b6drkZek0GJ3YPT5E5YW+aTHGAKLRPsE7hM3f8bE=";
   };
 
   strictDeps = true;
@@ -31,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace code/tools/lcc/src/{c.h,init.c,simp.c,stmt.c} \
       --replace-fail 'constexpr' 'const_expr'
+    substituteInPlace Makefile \
+      --replace-fail "gcc" "cc"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+       --replace-fail "-framework SDL2" "-lSDL2"
   '';
 
   enableParallelBuilding = true;
@@ -49,13 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     opusfile
     libogg
+    libvorbis
     SDL2
     freetype
     libjpeg
     openal
     curl
   ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    bc
+  ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
@@ -67,17 +79,36 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  postInstall = ''
-    for i in `find $out/opt/iortcw -maxdepth 1 -type f -executable`; do
-      makeWrapper $i $out/bin/`basename $i` --chdir "$out/opt/iortcw"
-    done
-  '';
+  postInstall =
+    let
+      arch =
+        if stdenv.hostPlatform.isx86_64 then
+          "x86_64"
+        else if stdenv.hostPlatform.isAarch64 then
+          if stdenv.hostPlatform.isDarwin then "arm64" else "aarch64"
+        else
+          throw "Unsupported architecture";
+    in
+    ''
+      cd "$out/opt/iortcw"
+      mkdir -p "$out/bin"
+
+      for name in ${lib.escapeShellArgs finalAttrs.passthru.executables}; do
+        makeWrapper "$out/opt/iortcw/$name.${arch}" "$out/bin/$name" \
+          --chdir "$out/opt/iortcw"
+      done
+    '';
+
+  passthru.executables = [ "iowolfsp" ];
 
   meta = {
     description = "Single player version of game engine for Return to Castle Wolfenstein";
-    homepage = finalAttrs.src.meta.homepage;
+    homepage = "https://github.com/iortcw/iortcw";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rjpcasalino ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
+      r4v3n6101
+      rjpcasalino
+    ];
   };
 })
