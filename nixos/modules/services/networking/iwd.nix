@@ -21,12 +21,11 @@ let
   ini = pkgs.formats.ini { };
   isNetworkManagerBackend =
     config.networking.networkmanager.enable && (config.networking.networkmanager.wifi.backend == "iwd");
-  defaults =
-    optionalAttrs isNetworkManagerBackend {
-      # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
-      # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
-      DriverQuirks.DefaultInterface = "?*";
-    };
+  defaults = optionalAttrs isNetworkManagerBackend {
+    # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
+    # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
+    DriverQuirks.DefaultInterface = "?*";
+  };
   configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
 
 in
