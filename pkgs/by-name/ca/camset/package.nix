@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication {
     rev = "b813ba9b1d29f2d46fad268df67bf3615a324f3e";
     hash = "sha256-vTF3MJQi9fZZDlbEj5800H22GGWOte3+KZCpSnsSTaQ=";
   };
+  patches = [
+    # remove when https://github.com/azeam/camset/pull/30 merged
+    ./fix-numpy-2.3.patch
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
