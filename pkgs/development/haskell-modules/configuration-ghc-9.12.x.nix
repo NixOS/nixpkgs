@@ -60,7 +60,7 @@ with haskellLib;
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      haskellLib.doDistribute self.terminfo_0_4_1_7;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -69,64 +69,9 @@ with haskellLib;
   Win32 = null;
 
   #
-  # Hand pick versions that are compatible with ghc 9.12 and base 4.21
-  #
-
-  extensions = doDistribute self.extensions_0_1_1_0;
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
-
-  #
   # Jailbreaks
   #
 
-  large-generics = doJailbreak super.large-generics; # base <4.20
-  cpphs = overrideCabal (drv: {
-    # jail break manually the conditional dependencies
-    postPatch = ''
-      sed -i 's/time >=1.5 \&\& <1.13/time >=1.5 \&\& <=1.14/g' cpphs.cabal
-    '';
-  }) super.cpphs;
-  cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
-  ghc-exactprint_1_12_0_0 = addBuildDepends [
-    # cabal2nix drops conditional block: impl (ghc >= 9.12)
-    self.Diff
-    self.extra
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_12_0_0;
-  timezone-series = doJailbreak super.timezone-series; # time <1.14
-  timezone-olson = doJailbreak super.timezone-olson; # time <1.14
-  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
   decimal-literals = doJailbreak super.decimal-literals; # base <4.21
   matrix-client = doJailbreak super.matrix-client; # time <1.13
-  patat = doJailbreak super.patat; # time <1.13
-  puresat = doJailbreak super.puresat; # base <4.21
-  dbus = doJailbreak super.dbus; # template-haskell <2.23
-  xmobar = doJailbreak super.xmobar; # base <4.21
-
-  #
-  # Test suite issues
-  #
-
-  relude = dontCheck super.relude;
-
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
-  generic-lens = dontCheck super.generic-lens;
-
-  # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
-  alex = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export alex_datadir="$(pwd)/data"
-    '';
-  }) super.alex;
-
-  # https://github.com/sjakobi/newtype-generics/pull/28/files
-  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
-
-  # Test failure because of GHC bug:
-  #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
-  #   https://github.com/sol/interpolate/issues/20
-  interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
 }
