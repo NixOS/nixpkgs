@@ -301,6 +301,11 @@ buildPythonPackage (finalAttrs: {
 
     # tries to reach huggingface.co despite the "mocked" name (dns error)
     "tests/datasets/test_common_crawl_mocked.py"
+
+    # Regression from the pyiceberg 0.12.0 bump: https://github.com/NixOS/nixpkgs/pull/560480
+    #   AssertionError: assert result is None
+    "test_type_promotion_float_to_double"
+    "test_type_promotion_int_to_long"
   ];
 
   disabledTests = [
