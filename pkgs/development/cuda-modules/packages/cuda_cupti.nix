@@ -1,6 +1,8 @@
 {
   redistSystem,
   buildRedist,
+  callPackage,
+  cuda_cudart,
   lib,
 }:
 buildRedist (finalAttrs: {
@@ -23,6 +25,15 @@ buildRedist (finalAttrs: {
   ) [ "static" ];
 
   allowFHSReferences = true;
+
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [ "cupti.h" ];
+    libraries = [ "cupti" ];
+    symbols = [ "cuptiGetVersion" ];
+  };
 
   meta = {
     description = "C-based interface for creating profiling and tracing tools designed for CUDA applications";

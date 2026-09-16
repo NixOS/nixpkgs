@@ -2,6 +2,8 @@
   _cuda,
   cudaConfig,
   buildRedist,
+  callPackage,
+  cuda_cudart,
   lib,
   libcublas,
   cuda_nvrtc,
@@ -34,6 +36,15 @@ buildRedist (
       (lib.getLib libcublas)
       zlib
     ];
+
+    propagatedBuildInputs = [ cuda_cudart ];
+
+    passthru.tests.headers = callPackage ./tests/public-headers.nix {
+      package = finalAttrs.finalPackage;
+      headers = [ "cudnn.h" ];
+      libraries = [ "cudnn" ];
+      symbols = [ "cudnnGetVersion" ];
+    };
 
     # Tell autoPatchelf about runtime dependencies. *_infer* libraries only
     # exist in CuDNN 8.

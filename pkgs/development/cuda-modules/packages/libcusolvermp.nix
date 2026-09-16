@@ -1,12 +1,13 @@
 {
   _cuda,
   buildRedist,
+  callPackage,
   cuda_cudart,
-  libcublas,
+  lib,
   libcusolver,
   nccl,
 }:
-buildRedist {
+buildRedist (finalAttrs: {
   redistName = "cusolvermp";
   pname = "libcusolvermp";
 
@@ -17,12 +18,18 @@ buildRedist {
     "lib"
   ];
 
-  buildInputs = [
-    cuda_cudart
-    libcublas
+  propagatedBuildInputs = [
     libcusolver
     nccl
   ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [ "cusolverMp.h" ];
+    libraries = [ "cusolverMp" ];
+    symbols = [ "cusolverMpGetVersion" ];
+    driverLibraries = [ "${lib.getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs/libcuda.so" ];
+  };
 
   autoPatchelfIgnoreMissingDeps = [
     # Needs to be dynamically loaded as it depends on the hardware
@@ -37,4 +44,4 @@ buildRedist {
     '';
     homepage = "https://developer.nvidia.com/cusolver";
   };
-}
+})
