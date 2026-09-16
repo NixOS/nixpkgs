@@ -24,13 +24,13 @@ assert lib.asserts.assertOneOf "ocaml-solo5's ocaml version" ocaml.version [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml-solo5";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-solo5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xUF98MPhjv9yRWoRDx2uIkCr2Furz1qUJexIxnHhI4=";
+    hash = "sha256-ZbJoh3HHjD7XNvGK1Ehdu/uEoPFtRgVNNz8vtT7zaXI=";
   };
 
   strictDeps = true;
