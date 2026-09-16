@@ -26,16 +26,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.7.9";
+  version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MAUJl0vzr2daWbpTYI5t5scvfujKdLFvuSze6h1knYo=";
+    hash = "sha256-LVzgyaY7v44tzzcRcAdWFEa7DZfzYnZvI8k4tiDHB3Q=";
   };
 
-  cargoHash = "sha256-SZOByNnSerZo9KWbaNFo1yJ314JCfIcge6gbNgkSL6w=";
+  cargoHash = "sha256-b1xwzpqef9WHhcXIgzb/eIhNrsXuNskQAIRti8wdgMQ=";
 
   env = {
     PROTOC = lib.getExe protobuf;
