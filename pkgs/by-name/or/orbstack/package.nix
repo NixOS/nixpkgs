@@ -20,13 +20,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-fKd4aPOg19n1ez+YYVqtMMxZ0jzIS7/xP3iEbfC0k9Q=";
   };
 
-  # -snld prevents "ERROR: Dangerous symbolic link path was ignored"
-  # -xr'!*:com.apple.*' prevents macOS extended attributes (e.g. macl or
-  # quarantine) being turned into real files when extracting an APFS .dmg
-  # (e.g. Info.plist:com.apple.macl or Info.plist:com.apple.quarantine).
-  # These bogus files corrupt the .app bundle and prevent it from launching.
-  unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
-
   nativeBuildInputs = [
     _7zz
     installShellFiles
