@@ -9,13 +9,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-common";
   # nixpkgs-update: no auto update
-  version = "0.12.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hKCIPZlLPyH7D3Derk2onyqTzWGUtCx+f2+EKtAKlwA=";
+    hash = "sha256-m3CZwGUDnI+DIrxMPGpjVszZ0UI2aSQ18afbscafW6o=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
         "promise_test_multiple_waiters"
         # Flaky test https://github.com/NixOS/nixpkgs/issues/443233
         "test_memory_usage_maxrss"
+        # Broken upstream test https://github.com/NixOS/nixpkgs/pull/565568#issuecomment-5802423215
+        "test_file_path_read_from_offset_direct_io"
       ];
     in
     ''
