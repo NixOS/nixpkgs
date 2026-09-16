@@ -50,6 +50,8 @@ in
       "lldb/backport-ParseTrieEntries-fixes.patch" = [ { path = ./patches; } ];
       # Update backport of the Darwin triple changes for macOS 27.
       "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
+      # Backport support for arm64e.x1, the new cpu subtype for A20 and M6
+      "llvm/backport-minimal-arm64e_x1-support.patch" = [ { path = ./patches; } ];
     };
 }).overrideScope
   (
