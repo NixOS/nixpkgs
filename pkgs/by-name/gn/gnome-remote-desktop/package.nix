@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-remote-desktop";
-  version = "51.rc";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major finalAttrs.version}/gnome-remote-desktop-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zwHxTzXfB86OikRj+xC8ELpoV+J4KRF6RQ/qQpIDrm8=";
+    hash = "sha256-x5VLNNpXZiiOoZtWAmQhycH+LCPvN55X7CCdwM8T3ys=";
   };
 
   nativeBuildInputs = [
