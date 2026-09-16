@@ -169,6 +169,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://wezterm.org";
     license = lib.licenses.mit;
     mainProgram = "wezterm";
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      yvnth
+    ];
   };
 })
