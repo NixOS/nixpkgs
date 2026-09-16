@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -36,7 +35,6 @@
   lz4,
   openssl,
   libucontext,
-  libgcrypt,
   libidn2,
   curl,
   zlib,
@@ -102,7 +100,6 @@
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
-  withGcrypt ? true,
   withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
@@ -187,7 +184,7 @@ assert withHomed -> withPam;
 assert withHomed -> withOpenSSL;
 assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
-assert withImportd -> (withGcrypt || withOpenSSL);
+assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
@@ -204,13 +201,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.2";
+  version = "262-rc2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w0Fxx+zYBs806whyaKBytGwSgn89ARdukAm6Hp+XlQQ=";
+    hash = "sha256-GE5moxRfcgPJDKpWIN18aR1jQsgoJI13dU4GYpprcN8=";
   };
 
   # PATCH POLICY
@@ -235,21 +232,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0003-add-rootprefix-to-lookup-dir-paths.patch
-    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
-    # Remove this with v262
-    # Fixes an issue for switch-to-configuration
-    (fetchpatch {
-      name = "postpone-d-bus-queue-dispatch.patch";
-      url = "https://github.com/systemd/systemd/commit/266b3e50218e2b27cd67d2371c165bf53ad3bf00.patch";
-      hash = "sha256-dEEzZUqicnmgDuXVBV1y0BxzgKbb6Q47Dmxj+O71bFE=";
-    })
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0001-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0002-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0003-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
@@ -343,9 +328,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     libucontext
-  ]
-  ++ lib.optionals withGcrypt [
-    libgcrypt
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -510,7 +492,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "acl" withAcl)
     (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "apparmor" withApparmor)
-    (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
     (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
