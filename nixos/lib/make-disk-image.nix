@@ -287,11 +287,13 @@ let
           print
       '';
       "legacy+boot" = ''
+        bootStartMiB=1MiB
+        bootEndMiB=$(getBootEndMiB $bootStartMiB)
         parted --script $diskImage -- \
           mklabel msdos \
-          mkpart primary fat32 1MiB $bootSizeMiB \
+          mkpart primary fat32 $bootStartMiB $bootEndMiB \
           set 1 boot on \
-          mkpart primary ext4 $bootSizeMiB 100% \
+          mkpart primary ext4 $bootEndMiB 100% \
           print
       '';
       "legacy+gpt" = ''
@@ -312,12 +314,14 @@ let
         ''}
       '';
       efi = ''
+        bootStartMiB=8MiB
+        bootEndMiB=$(getBootEndMiB $bootStartMiB)
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart ESP fat32 8MiB $bootSizeMiB \
+          mkpart ESP fat32 $bootStartMiB $bootEndMiB \
           set 1 boot on \
           align-check optimal 1 \
-          mkpart primary ext4 $bootSizeMiB 100% \
+          mkpart primary ext4 $bootEndMiB 100% \
           align-check optimal 2 \
           print
         ${lib.optionalString deterministic ''
@@ -329,15 +333,17 @@ let
         ''}
       '';
       efixbootldr = ''
+        bootStartMiB=100MiB
+        bootEndMiB=$(getBootEndMiB $bootStartMiB)
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart ESP fat32 8MiB 100MiB \
+          mkpart ESP fat32 8MiB $bootStartMiB \
           set 1 boot on \
           align-check optimal 1 \
-          mkpart BOOT fat32 100MiB $bootSizeMiB \
+          mkpart BOOT fat32 $bootStartMiB $bootEndMiB \
           set 2 bls_boot on \
           align-check optimal 2 \
-          mkpart ROOT ext4 $bootSizeMiB 100% \
+          mkpart ROOT ext4 $bootEndMiB 100% \
           align-check optimal 3 \
           print
         ${lib.optionalString deterministic ''
@@ -350,14 +356,16 @@ let
         ''}
       '';
       hybrid = ''
+        bootStartMiB=8MiB
+        bootEndMiB=$(getBootEndMiB $bootStartMiB)
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart ESP fat32 8MiB $bootSizeMiB \
+          mkpart ESP fat32 $bootStartMiB $bootEndMiB \
           set 1 boot on \
           align-check optimal 1 \
           mkpart no-fs 0 1024KiB \
           set 2 bios_grub on \
-          mkpart primary ext4 $bootSizeMiB 100% \
+          mkpart primary ext4 $bootEndMiB 100% \
           align-check optimal 3 \
           print
         ${lib.optionalString deterministic ''
@@ -528,7 +536,10 @@ let
     diskImage=nixos.raw
 
     bootSize=$(round_to_nearest $(numfmt --from=iec '${bootSize}') $mebibyte)
-    bootSizeMiB=$(( bootSize / 1024 / 1024 ))MiB
+    getBootEndMiB() {
+      local bootStart="$(numfmt --from=auto "''${1%B}")"
+      printf "%dMiB" $(((bootStart + bootSize) / 1024 / 1024))
+    }
 
     ${
       if diskSize == "auto" then
