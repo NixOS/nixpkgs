@@ -1,0 +1,10 @@
+diff --git a/plugins/platform/linux/auth-helper/CMakeLists.txt b/plugins/platform/linux/auth-helper/CMakeLists.txt
+index 46840492c..d09b2d529 100644
+--- a/plugins/platform/linux/auth-helper/CMakeLists.txt
++++ b/plugins/platform/linux/auth-helper/CMakeLists.txt
+@@ -11,4 +11,4 @@ set_default_target_properties(veyon-auth-helper)
+ target_include_directories(veyon-auth-helper PRIVATE ${PAM_INCLUDE_DIR})
+ target_link_libraries(veyon-auth-helper PRIVATE ${PAM_LIBRARY} Qt${QT_MAJOR_VERSION}::Core)
+ 
+-install(TARGETS veyon-auth-helper RUNTIME DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE SETUID GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install(TARGETS veyon-auth-helper RUNTIME DESTINATION bin)
