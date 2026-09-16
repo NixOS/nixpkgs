@@ -54,6 +54,8 @@ let
       };
 
       meta = {
+        # last successful hydra build on darwin was in 2025
+        broken = lib.versionOlder version "11" && stdenv.hostPlatform.isDarwin;
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
