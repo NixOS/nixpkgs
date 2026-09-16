@@ -112,6 +112,8 @@ in
               url = "https://chrome-infra-packages.appspot.com/client?platform=${stdenv-constants.platform}&version=git_revision:${cipdCommit}";
               hash = cipdHashes.${stdenv-constants.platform};
             };
+            strictDeps = true;
+            __structuredAttrs = true;
           }
           ''
             mkdir --parents $out/bin
@@ -149,10 +151,15 @@ in
 
   vpython =
     pythonPkg:
-    runCommand "vpython3" { } ''
-      mkdir --parents $out/bin
-      ln --symbolic ${pythonPkg}/bin/python $out/bin/vpython3
-    '';
+    runCommand "vpython3"
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      ''
+        mkdir --parents $out/bin
+        ln --symbolic ${pythonPkg}/bin/python $out/bin/vpython3
+      '';
 
   xcode-select = writeShellScriptBin "xcode-select" ''
     echo ${darwin.xcode}/Contents/Developer

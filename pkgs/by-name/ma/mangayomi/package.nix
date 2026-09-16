@@ -150,9 +150,12 @@ flutter344.buildFlutterApplication {
     install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/mangayomi/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/mangayomi/lib"
+  ];
 
   passthru = {
     inherit rustDep;

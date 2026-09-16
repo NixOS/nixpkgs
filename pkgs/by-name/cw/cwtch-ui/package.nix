@@ -10,19 +10,16 @@
   yq-go,
   dart,
 }:
+flutter329.buildFlutterApplication (finalAttrs: {
+  pname = "cwtch-ui";
 
-let
   version = "1.16.3";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w1bIT9EIwpmJ4fkOGKo6iI3HdkcYgrGlW0xeecpUn7g=";
   };
-in
-flutter329.buildFlutterApplication {
-  pname = "cwtch-ui";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -30,7 +27,7 @@ flutter329.buildFlutterApplication {
 
   flutterBuildFlags = [
     "--dart-define"
-    "BUILD_VER=${version}"
+    "BUILD_VER=${finalAttrs.version}"
     "--dart-define"
     "BUILD_DATE=1980-01-01-00:00"
   ];
@@ -38,7 +35,12 @@ flutter329.buildFlutterApplication {
   # These things are added to LD_LIBRARY_PATH, but not PATH
   runtimeDependencies = [ cwtch ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ tor ]}";
+  extraWrapProgramArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tor ])
+  ];
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -50,7 +52,7 @@ flutter329.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -86,4 +88,4 @@ flutter329.buildFlutterApplication {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.gmacon ];
   };
-}
+})

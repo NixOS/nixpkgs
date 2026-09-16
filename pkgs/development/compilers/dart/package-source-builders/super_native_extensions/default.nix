@@ -77,6 +77,8 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -92,4 +94,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 }

@@ -29,6 +29,8 @@ in
     yq
   ];
 
+  strictDeps = true;
+
   __structuredAttrs = true;
 })
   ''

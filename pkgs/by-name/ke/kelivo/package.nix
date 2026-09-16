@@ -15,9 +15,6 @@ flutter344.buildFlutterApplication (finalAttrs: {
   pname = "kelivo";
   version = "1.2.3";
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Chevey339";
     repo = "kelivo";
@@ -26,9 +23,6 @@ flutter344.buildFlutterApplication (finalAttrs: {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  # Under `__structuredAttrs = true`, passAsFile leaves pubspecLockFilePath empty.
-  env.pubspecLockFilePath = "./pubspec.lock.json";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -41,9 +35,12 @@ flutter344.buildFlutterApplication (finalAttrs: {
     libayatana-appindicator
   ];
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/kelivo/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/kelivo/lib"
+  ];
 
   postInstall = ''
     install -Dm644 assets/app_icon.png $out/share/icons/hicolor/1024x1024/apps/kelivo.png

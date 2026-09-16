@@ -27,8 +27,8 @@ buildPythonApplication {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "authenticator-helper" "yubioath-flutter-helper" \
-      --replace "0.1.0" "${version}"
+      --replace-fail "authenticator-helper" "yubioath-flutter-helper" \
+      --replace-fail "0.1.0" "${version}"
   '';
 
   postInstall = ''
@@ -43,4 +43,6 @@ buildPythonApplication {
     zxing-cpp
     pillow
   ];
+
+  __structuredAttrs = true;
 }
