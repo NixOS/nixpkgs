@@ -1,23 +1,23 @@
-diff --git i/package-lock.json w/package-lock.json
-index 294a466..424d557 100644
---- i/package-lock.json
-+++ w/package-lock.json
+diff --git a/package-lock.json b/package-lock.json
+index d96d168..99249d7 100644
+--- a/package-lock.json
++++ b/package-lock.json
 @@ -1,12 +1,12 @@
  {
    "name": "coc-yaml",
--  "version": "1.9.0",
-+  "version": "1.9.1",
+-  "version": "1.9.1",
++  "version": "1.9.3",
    "lockfileVersion": 3,
    "requires": true,
    "packages": {
      "": {
        "name": "coc-yaml",
--      "version": "1.9.0",
-+      "version": "1.9.1",
+-      "version": "1.9.1",
++      "version": "1.9.3",
        "license": "MIT",
        "dependencies": {
          "prettier": "2.0.5"
-@@ -27,6 +27,8 @@
+@@ -28,6 +28,8 @@
      },
      "node_modules/@chemzqm/tsconfig": {
        "version": "0.0.3",
@@ -26,7 +26,7 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "MIT"
      },
-@@ -464,6 +466,8 @@
+@@ -779,6 +781,8 @@
      },
      "node_modules/ansi-styles": {
        "version": "6.1.0",
@@ -35,7 +35,7 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "MIT",
        "engines": {
-@@ -533,6 +537,8 @@
+@@ -921,6 +925,8 @@
      },
      "node_modules/fs-extra": {
        "version": "10.0.0",
@@ -44,7 +44,7 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "MIT",
        "dependencies": {
-@@ -546,11 +552,15 @@
+@@ -947,6 +953,8 @@
      },
      "node_modules/graceful-fs": {
        "version": "4.2.9",
@@ -53,6 +53,8 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "ISC"
      },
+@@ -985,6 +993,8 @@
+     },
      "node_modules/jsonfile": {
        "version": "6.1.0",
 +      "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
@@ -60,7 +62,7 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "MIT",
        "dependencies": {
-@@ -562,6 +572,8 @@
+@@ -1033,6 +1043,8 @@
      },
      "node_modules/prettier": {
        "version": "2.0.5",
@@ -69,7 +71,7 @@ index 294a466..424d557 100644
        "license": "MIT",
        "bin": {
          "prettier": "bin-prettier.js"
-@@ -572,6 +584,8 @@
+@@ -1064,6 +1076,8 @@
      },
      "node_modules/request-light": {
        "version": "0.5.7",
@@ -78,7 +80,7 @@ index 294a466..424d557 100644
        "dev": true,
        "license": "MIT"
      },
-@@ -591,6 +605,8 @@
+@@ -1171,6 +1185,8 @@
      },
      "node_modules/universalify": {
        "version": "2.0.0",
