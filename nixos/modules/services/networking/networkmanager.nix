@@ -547,6 +547,14 @@ in
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
+      {
+        assertion = !(cfg.dns == "dnsmasq" && config.services.dnsmasq.enable);
+        message = ''
+          You cannot use `services.dnsmasq` and `networking.networkmanager.dns = "dnsmasq"`,
+          because NetworkManager will spawn its own instance of dnsmasq, which
+          will conflict with the systemd unit created by `services.dnsmasq`.
+        '';
+      }
     ];
 
     hardware.wirelessRegulatoryDatabase = true;
