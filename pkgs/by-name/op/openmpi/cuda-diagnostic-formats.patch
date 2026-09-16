@@ -1,0 +1,59 @@
+Match CUDA accelerator help formats to the arguments supplied by callers.
+
+The host-register diagnostic consumed a nonexistent fifth argument as a
+string; this could print arbitrary bytes or crash while reporting a recoverable
+registration failure. Preserve that failure and its fallback, with correctly
+typed byte counts and device addresses throughout the same diagnostic family.
+
+--- a/opal/mca/accelerator/cuda/help-accelerator-cuda.txt
++++ b/opal/mca/accelerator/cuda/help-accelerator-cuda.txt
+@@ -47,19 +47,18 @@
+       mpi_common_cuda_warning to 0.
+ #
+ [cuMemHostRegister during init failed]
+-The call to cuMemHostRegister(%p, %d, 0) failed.
++The call to cuMemHostRegister(%p, %zu, 0) failed.
+   Host:  %s
+   cuMemHostRegister return value:  %d
+   Registration cache:  %s
+ #
+ [cuMemHostRegister failed]
+-The call to cuMemHostRegister(%p, %d, 0) failed.
++The call to cuMemHostRegister(%p, %zu, 0) failed.
+   Host:  %s
+   cuMemHostRegister return value:  %d
+-  Registration cache:  %s
+ #
+ [cuMemHostUnregister failed]
+-The call to cuMemHostRegister(%p) failed.
++The call to cuMemHostUnregister(%p) failed.
+   Host:  %s
+   cuMemHostUnregister return value:  %d
+ #
+@@ -115,7 +114,7 @@
+ [cuMemcpyAsync failed]
+ The call to cuMemcpyAsync failed. This is a unrecoverable error and will
+ cause the program to abort.
+-  cuMemcpyAsync(%p, %p, %d) returned value %d
++  cuMemcpyAsync(%p, %p, %zu) returned value %d
+ Check the cuda.h file for what the return value means.
+ #
+ [cuEventCreate failed]
+--- a/opal/mca/accelerator/cuda/accelerator_cuda.c
++++ b/opal/mca/accelerator/cuda/accelerator_cuda.c
+@@ -662,13 +662,13 @@
+     }
+     result = cuMemcpyAsync(tmp, (CUdeviceptr) src, size, opal_accelerator_cuda_memcpy_stream);
+     if (OPAL_UNLIKELY(CUDA_SUCCESS != result)) {
+-        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, tmp, src, size,
++        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, (void *) (uintptr_t) tmp, src, size,
+                        result);
+         return OPAL_ERROR;
+     }
+     result = cuMemcpyAsync((CUdeviceptr) dest, tmp, size, opal_accelerator_cuda_memcpy_stream);
+     if (OPAL_UNLIKELY(CUDA_SUCCESS != result)) {
+-        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, dest, tmp,
++        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, dest, (void *) (uintptr_t) tmp,
+                        size, result);
+         return OPAL_ERROR;
+     }
