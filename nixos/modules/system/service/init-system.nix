@@ -24,6 +24,7 @@
       "dinit"
       "runit"
       "s6"
+      "rc.d"
     ];
     default = "systemd";
     description = ''

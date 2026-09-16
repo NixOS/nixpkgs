@@ -21,6 +21,7 @@ let
         type = "oneshot";
       };
       dependencies.after = [ "db" ];
+      runtime.user = "nobody";
     };
     system.services.db = {
       process.argv = [ "/bin/db" ];
@@ -48,6 +49,7 @@ let
   dinit = machine "dinit";
   runit = machine "runit";
   s6 = machine "s6";
+  rcD = machine "rc.d";
   dinitCompat = (import (root + "/nixos/lib/eval-config.nix") {
     system = "x86_64-linux";
     modules = [
@@ -89,6 +91,16 @@ assert !(runit.systemd.units ? "web.service");
 assert s6.system.build.s6Services.outPath != "";
 assert s6.system.build.s6RcDb.outPath != "";
 assert !(s6.systemd.units ? "web.service");
+
+# rc.d
+assert rcD.environment.etc ? "rc.d/web";
+assert builtins.match ".*# PROVIDE: web.*" rcD.environment.etc."rc.d/web".text != null;
+assert builtins.match ".*# REQUIRE: db.*" rcD.environment.etc."rc.d/web".text != null;
+assert builtins.match ".*command_user=\"nobody\".*" rcD.environment.etc."rc.d/web".text != null;
+assert rcD.environment.etc ? "rc.conf.d/web";
+assert rcD.environment.etc."rc.conf.d/web".text == "web_enable=\"YES\"\n";
+assert rcD.system.build.freebsdRcScripts.outPath != "";
+assert !(rcD.systemd.units ? "web.service");
 
 # systemd compatibility layer (opt-in) with a non-systemd backend
 assert dinitCompat.system.build.systemdCompatibilityLayer.outPath != "";

@@ -119,14 +119,18 @@ with the abstract API:
 - **Sandboxing**: s6 has no native sandbox; same `bubblewrap` wrapper
   approach as dinit
 
-## FreeBSD rc.d (future work, step 6)
+## FreeBSD rc.d (partially implemented, step 6)
 
-Not part of this step; noted here so the backend contract anticipates it:
-`rc.d` scripts use `REQUIRE`/`BEFORE`/`PROVIDE` keywords, `rc.conf` variables,
-and `service(8)`. The abstract `dependencies.*` options map onto
-`REQUIRE`/`BEFORE`; `process.argv` becomes `command=`, `command_args=`,
-`required_files=`; `runtime.user` becomes `user=`. A future `rc.d` backend
-consumes the same API.
+`nixos/modules/system/service/freebsd/rc-d/system.nix` is implemented: it
+translates `system.services` into rc.d scripts (`/etc/rc.d/<name>`, with
+PROVIDE/REQUIRE/BEFORE), `rc.conf.d` enable entries, and configData under
+`/etc/freebsd/system-services/`. `dependencies.*` map to REQUIRE/BEFORE,
+`process.argv` becomes `command`, `runtime.user` becomes `command_user`.
+Selectable via `system.initSystem = "rc.d"`.
+
+Still future work (out of scope for the Linux NixOS tree): the FreeBSD kernel
+as a NixOS kernel, the BSD userland as the system userland, and jails support.
+The rc.d backend gives the service-translation half of that story.
 
 ## Backend directory layout (proposal, step 3)
 
