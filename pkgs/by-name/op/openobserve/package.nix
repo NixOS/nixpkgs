@@ -30,6 +30,7 @@ let
     description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
     mainProgram = "openobserve";
     maintainers = with lib.maintainers; [
+      EpicEric
       happysalada
       kashw2
     ];
