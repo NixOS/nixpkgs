@@ -1,0 +1,20 @@
+From: Sergei Volkov <taranarmo@gmail.com>
+Subject: [PATCH] csl: create unversioned libatomic.so symlink
+
+Base.Linking in Julia links package images using -latomic. When
+USE_BINARYBUILDER_CSL=0, copy_csl copies libatomic.so.1 but doesn't
+create the unversioned libatomic.so symlink, causing lld to fail
+when precompiling packages.
+
+--- a/deps/csl.mk
++++ b/deps/csl.mk
+@@ -140,6 +140,9 @@ else
+ install-csl: $(build_shlibdir)/libgcc_s.$(SHLIB_EXT)
+ $(build_shlibdir)/libgcc_s.$(SHLIB_EXT): $(build_shlibdir)/$(call versioned_libname,libgcc_s,1)
+ 	ln -sf $(call versioned_libname,libgcc_s,1) $@
++install-csl: $(build_shlibdir)/libatomic.$(SHLIB_EXT)
++$(build_shlibdir)/libatomic.$(SHLIB_EXT): $(build_shlibdir)/$(call versioned_libname,libatomic,1)
++	ln -sf $(call versioned_libname,libatomic,1) $@
+ # These are static gcc runtime libraries / objects for linking pkgimages
+ $(eval $(call copy_csl_static,libgcc.a))
+ $(eval $(call copy_csl_static,crti.o))
