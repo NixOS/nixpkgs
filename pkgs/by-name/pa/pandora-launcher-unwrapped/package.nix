@@ -51,11 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
-
     imagemagick
     patchelf
-    pkg-config
   ];
 
   buildInputs = [
@@ -82,22 +83,46 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoVendorDir = "vendor"; # everything is vendored in-tree
   dontCargoSetupPostUnpack = true;
 
-  desktopItems = lib.singleton (makeDesktopItem {
-    name = "com.moulberry.pandoralauncher";
-    desktopName = "Pandora Launcher";
-    genericName = "Unofficial Minecraft Launcher";
-    exec = "pandora_launcher";
-    icon = "pandora_launcher";
-  });
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+    (makeDesktopItem {
+      name = "com.moulberry.pandoralauncher";
+      desktopName = "Pandora Launcher";
+      genericName = "Unofficial Minecraft Launcher";
+      exec = "pandora_launcher";
+      icon = "pandora_launcher";
+    })
+  ];
 
-  postInstall = ''
-    for size in 16 24 32 48 64 128 256; do
-      geometry="$size"x"$size"
-      mkdir -p "$out/share/icons/hicolor/$geometry/apps"
-      magick package/windows.svg -resize "$geometry" \
-        "$out/share/icons/hicolor/$geometry/apps/pandora_launcher.png"
-    done
-  '';
+  infoPlist = lib.generators.toPlist { escape = true; } {
+    CFBundleDevelopmentRegion = "en";
+    CFBundleDisplayName = "Pandora Launcher";
+    CFBundleExecutable = "pandora_launcher";
+    CFBundleIconFile = "mac.icns";
+    CFBundleIdentifier = "com.moulberry.pandoralauncher";
+    CFBundleInfoDictionaryVersion = "6.0";
+    CFBundleName = "Pandora Launcher";
+    CFBundlePackageType = "APPL";
+    CFBundleShortVersionString = finalAttrs.version;
+    CFBundleVersion = finalAttrs.version;
+    NSHighResolutionCapable = true;
+    NSMicrophoneUsageDescription = "A Minecraft mod wants to access your microphone.";
+  };
+
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications/PandoraLauncher.app/Contents/{MacOS,Resources}
+      cp package/mac.icns $out/Applications/PandoraLauncher.app/Contents/Resources/
+      printf '%s' ${lib.escapeShellArg finalAttrs.infoPlist} > $out/Applications/PandoraLauncher.app/Contents/Info.plist
+      ln -s $out/bin/pandora_launcher $out/Applications/PandoraLauncher.app/Contents/MacOS/pandora_launcher
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      for size in 16 24 32 48 64 128 256; do
+        geometry="$size"x"$size"
+        mkdir -p "$out/share/icons/hicolor/$geometry/apps"
+        magick package/windows.svg -resize "$geometry" \
+          "$out/share/icons/hicolor/$geometry/apps/pandora_launcher.png"
+      done
+    '';
 
   doInstallCheck = true;
 
