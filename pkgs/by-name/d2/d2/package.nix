@@ -1,22 +1,12 @@
 {
   lib,
-  stdenv,
   buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   git,
   testers,
   d2,
-  libdrm,
-  libgbm,
-  makeWrapper,
-  playwright-driver,
-  withImageSupport ? lib.meta.availableOn stdenv.hostPlatform libdrm,
 }:
-
-assert lib.assertMsg (
-  withImageSupport -> lib.meta.availableOn stdenv.hostPlatform libdrm
-) "d2: withImageSupport is not supported on ${stdenv.hostPlatform.system} (requires libdrm)";
 
 buildGo127Module (finalAttrs: {
   pname = "d2";
@@ -47,26 +37,12 @@ buildGo127Module (finalAttrs: {
     "-X github.com/d2lang/d2/lib/version.Version=v${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-  ];
-
-  # playwright-drivers.browsers pulls down ~2GB+ for Webkit, Chrome, Firefox etc
-  buildInputs = lib.optionals withImageSupport [
-    libgbm
-    playwright-driver.browsers
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
   postInstall = ''
     installManPage ci/release/template/man/d2.1
-  ''
-  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-  + lib.optionalString withImageSupport ''
-    wrapProgram $out/bin/d2 \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   preCheck = ''
