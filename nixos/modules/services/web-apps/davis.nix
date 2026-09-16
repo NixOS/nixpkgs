@@ -349,10 +349,7 @@ in
               # specifically the dummy hostname which is overridden by the host query parameter
               then
                 "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
-              # note: Doctrine's PDO MySQL driver only recognizes the query
-              # parameter as `unix_socket`, not `socket` -- the latter is
-              # silently ignored and the connection falls back to TCP. See
-              # Doctrine\DBAL\Driver\PDO\MySQL\Driver::constructPdoDsn().
+              # Doctrine DBAL expects `unix_socket`, not `socket`.
               else if mysqlLocal then
                 "mysql://${user}@localhost/${db.name}?unix_socket=/run/mysqld/mysqld.sock"
               else

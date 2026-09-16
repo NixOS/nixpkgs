@@ -52,25 +52,17 @@
       };
     };
 
-  # Regression test for the MySQL branch of DATABASE_URL actually connecting
-  # through the local unix socket, rather than silently falling back to TCP:
-  # Doctrine DBAL's PDO MySQL driver only recognizes the query parameter
-  # `unix_socket`, not `socket`. MySQL has no TCP listener at all here, so a
-  # successful request is only possible if davis is actually using the
-  # socket.
+  # Use a deliberately invalid PDO default socket so this test only passes
+  # when Davis supplies the MySQL unix_socket explicitly.
   nodes.machine3 =
-    { config, ... }:
+    { lib, ... }:
     {
-      virtualisation = {
-        memorySize = 512;
-      };
+      virtualisation.memorySize = 512;
 
       services.davis = {
         enable = true;
         hostname = "davis.example.com";
-        database = {
-          driver = "mysql";
-        };
+        database.driver = "mysql";
         mail = {
           dsnFile = "${pkgs.writeText "davisMailDns" "smtp://username:password@example.com:25"}";
           inviteFromAddress = "dav@example.com";
@@ -79,6 +71,11 @@
         appSecretFile = "${pkgs.writeText "davisAppSecret" "52882ef142066e09ab99ce816ba72522e789505caba224"}";
         adminPasswordFile = "${pkgs.writeText "davisAdminPass" "nixos"}";
       };
+
+      services.phpfpm.pools.davis.phpOptions = lib.mkAfter ''
+        pdo_mysql.default_socket = /run/mysqld/does-not-exist.sock
+      '';
+
       services.mysql.settings.mysqld.skip-networking = true;
     };
 
