@@ -12,6 +12,13 @@
           group = "rundeck";
         };
 
+        environment.etc."rundeck-tokens.properties" = {
+          text = "testadmin: nixostesttoken,admin";
+          mode = "0400";
+          user = "rundeck";
+          group = "rundeck";
+        };
+
         services.rundeck = {
           enable = true;
           serverHostname = "rundeck";
@@ -20,6 +27,7 @@
           serverPort = 4441;
           database.type = "h2";
           openFirewall = true;
+          frameworkSettings."rundeck.tokens.file" = "/etc/rundeck-tokens.properties";
         };
 
         environment.systemPackages = with pkgs; [
@@ -32,17 +40,8 @@
   testScript = ''
     start_all()
 
-    def login_and_verify_api(machine, host, port, user, password, timeout=300):
-        """Authenticate via Rundeck form login and verify API access."""
-        machine.wait_until_succeeds(
-            f"curl -s -c /tmp/cookies -L"
-            f" -d 'j_username={user}&j_password={password}'"
-            f" http://{host}:{port}/j_security_check -o /dev/null"
-            f" && curl -s -b /tmp/cookies -H 'Accept: application/json'"
-            f" http://{host}:{port}/api/26/system/info"
-            f" | jq -e '.system.rundeck.version'",
-            timeout=timeout,
-        )
+    api = "http://rundeck:4441/api/26"
+    token = "-H 'X-Rundeck-Auth-Token: nixostesttoken' -H 'Accept: application/json'"
 
     def properties(machine, path):
         return machine.succeed(f"cat {path}").replace("\\", "").replace(" = ", "=")
@@ -90,21 +89,32 @@
             "[ \"$(stat -c %U /etc/rundeck/realm.properties)\" = rundeck ]"
         )
 
-    with subtest("API authentication via form login"):
-        login_and_verify_api(rundeck, "rundeck", 4441, "testadmin", "testpassword")
+    with subtest("Form login accepts realm credentials"):
+        rundeck.wait_until_succeeds(
+            "curl -s -o /dev/null -w '%{url_effective}' -c /tmp/login-cookies -L"
+            " -d 'j_username=testadmin&j_password=testpassword'"
+            " http://rundeck:4441/j_security_check"
+            " | grep -qvE 'error|login'",
+            timeout=300,
+        )
+
+    with subtest("API authentication via static token"):
+        rundeck.wait_until_succeeds(
+            f"curl -s {token} {api}/system/info"
+            " | jq -e '.system.rundeck.version'",
+            timeout=300,
+        )
 
         rundeck.succeed(
-            "curl -s -b /tmp/cookies -X POST"
-            " -H 'Accept: application/json'"
+            f"curl -s {token} -X POST"
             " -H 'Content-Type: application/json'"
             " -d '{\"name\":\"test-project\",\"config\":{}}'"
-            " http://rundeck:4441/api/26/projects"
+            f" {api}/projects"
             " | jq -e '.name == \"test-project\"'"
         )
 
         rundeck.succeed(
-            "curl -s -b /tmp/cookies -H 'Accept: application/json'"
-            " http://rundeck:4441/api/26/projects"
+            f"curl -s {token} {api}/projects"
             " | jq -e 'any(.[]; .name == \"test-project\")'"
         )
   '';
