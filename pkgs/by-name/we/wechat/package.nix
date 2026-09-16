@@ -41,20 +41,21 @@ let
           hash = "sha256-45zrtADGKikIfN+BQRMR74Pnmr4VHfXShamWEnOTdOk=";
         };
       };
-    # use https://web.archive.org/save to archive the Linux versions
-    # add `if_` at the end of timestamps to avoid toolbar insertion
-    # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine
+
+    # the wechat official website does not provide downloads for previous versions
+    # https://github.com/Rodert/wechat-linux-versions this project automatically fetches wechat downloads
+    # and archive them with github releases
     aarch64-linux = {
       version = "4.1.1.8";
       src = fetchurl {
-        url = "https://web.archive.org/web/20260818044444if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+        url = "https://github.com/Rodert/wechat-linux-versions/releases/download/v4.1.1.8/WeChatLinux_arm64.AppImage";
         hash = "sha256-RLHhac3wSS1C9rx3GsA07Tp1EzxSf2LLBMyPtrECnUY=";
       };
     };
     x86_64-linux = {
       version = "4.1.1.8";
       src = fetchurl {
-        url = "https://web.archive.org/web/20260818044436if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
+        url = "https://github.com/Rodert/wechat-linux-versions/releases/download/v4.1.1.8/WeChatLinux_x86_64.AppImage";
         hash = "sha256-RX26ArkbAxzdRBLu4HT7v/udnQax5Q/Bgi00hw4RSZA=";
       };
     };
