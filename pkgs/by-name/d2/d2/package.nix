@@ -1,64 +1,48 @@
 {
   lib,
-  stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   git,
   testers,
   d2,
-  libdrm,
-  libgbm,
-  makeWrapper,
-  playwright-driver,
-  withImageSupport ? lib.meta.availableOn stdenv.hostPlatform libdrm,
 }:
 
-assert lib.assertMsg (
-  withImageSupport -> lib.meta.availableOn stdenv.hostPlatform libdrm
-) "d2: withImageSupport is not supported on ${stdenv.hostPlatform.system} (requires libdrm)";
-
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "d2";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4RYKm8wq+KxzLQbd3sIEZLTy7xBtlWhJCHfggvkktXo=";
+    hash = "sha256-HhCktLU43Y/uje038axwO7tNqO353mV/JID223sBtd8=";
   };
 
-  vendorHash = "sha256-4IhAb3UeqSGX9jTdhWonf7lEBhUlUrrVt31NyfSoQF8=";
+  # d2renderers/d2raster's TestRasterPackageHasNoIOCapabilities shells out to
+  # `go list -mod=readonly -deps`, which bypasses the vendor directory and needs
+  # a populated module cache.
+  proxyVendor = true;
+  vendorHash = "sha256-6rrFjboeJ2Qln5TxbsJKmyTclIh1gz1X91g5IFjbMKo=";
 
-  excludedPackages = [ "./e2etests" ];
+  excludedPackages = [
+    "./ci"
+    "./e2etests"
+    "./e2etests-cli"
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X oss.terrastruct.com/d2/lib/version.Version=v${finalAttrs.version}"
+    "-X github.com/d2lang/d2/lib/version.Version=v${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-  ];
-
-  # playwright-drivers.browsers pulls down ~2GB+ for Webkit, Chrome, Firefox etc
-  buildInputs = lib.optionals withImageSupport [
-    libgbm
-    playwright-driver.browsers
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
   postInstall = ''
     installManPage ci/release/template/man/d2.1
-  ''
-  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-  + lib.optionalString withImageSupport ''
-    wrapProgram $out/bin/d2 \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   preCheck = ''
