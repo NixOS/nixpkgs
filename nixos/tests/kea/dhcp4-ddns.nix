@@ -12,7 +12,7 @@
 {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  name = "kea";
+  name = "dhcp4-ddns";
 
   containers = {
     router =
