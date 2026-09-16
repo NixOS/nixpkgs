@@ -1320,7 +1320,7 @@ unpackPhase() {
     local -a dirsBefore=()
     local dirBefore
     for i in *; do
-        if [ -d "$i" ]; then
+        if [ -d "$i" ] && [ ! -L "$i" ]; then
             dirsBefore+=("$i")
         fi
     done
@@ -1339,7 +1339,7 @@ unpackPhase() {
         runOneHook setSourceRoot
     elif [ -z "$sourceRoot" ]; then
         for i in *; do
-            if [ -d "$i" ]; then
+            if [ -d "$i" ] && [ ! -L "$i" ]; then
                 for dirBefore in "${dirsBefore[@]}"; do
                     if [ "$i" = "$dirBefore" ]; then
                         continue 2
