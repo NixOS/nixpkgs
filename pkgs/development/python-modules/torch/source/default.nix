@@ -322,6 +322,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./cmake-args.patch
     ./python-extension-suffix.patch
     ./wheel-tensorpipe-metadata.patch
+    ./nnpack-psimd-array-contracts.patch
     # Resolve reduction dtype before dispatch and keep wider accumulators
     # separate from explicit result dtypes on both CPU and CUDA.
     ./sparse-csr-reduction-dtypes.patch
@@ -811,6 +812,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     tests =
       callPackage ../tests {
         inherit rocmSupport cudaSupport;
+      }
+      // {
+        nnpackPSIMD = buildPackages.callPackage ../tests/nnpack-psimd.nix {
+          inherit (finalAttrs) src;
+          nnpackPatch = ./nnpack-psimd-array-contracts.patch;
+        };
       }
       // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
         csrReductions = (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
