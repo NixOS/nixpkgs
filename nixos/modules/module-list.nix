@@ -1965,6 +1965,7 @@
   ./services/x11/xscreensaver.nix
   ./services/x11/xserver.nix
   ./system/alternatives.nix
+  ./system/foreign-packages.nix
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/bootspec.nix

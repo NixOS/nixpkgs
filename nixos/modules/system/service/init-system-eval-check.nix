@@ -113,6 +113,29 @@ let
       }
     ];
   }).config;
+  foreignMachine = (import (root + "/nixos/lib/eval-config.nix") {
+    system = "x86_64-linux";
+    modules = [
+      ({ pkgs, ... }:
+      {
+        system.fhsCompatibility.enable = true;
+        system.foreignPackages = [
+          (pkgs.runCommand "fake-foreign" { } ''
+            mkdir -p $out/usr/bin $out/etc
+            echo hi > $out/usr/bin/fakebin
+            echo conf > $out/etc/fake.conf
+          '')
+        ];
+        # irrelevant stuff
+        system.stateVersion = "25.05";
+        fileSystems."/" = {
+          device = "/test/dummy";
+          fsType = "auto";
+        };
+        boot.loader.grub.enable = false;
+      })
+    ];
+  }).config;
   libcLocalBuild = (import (root + "/nixos/lib/eval-config.nix") {
     system = "x86_64-linux";
     modules = [
@@ -196,5 +219,9 @@ assert builtins.match ".*for target in bin sbin lib lib64 usr/bin.*" fhsMachine.
 assert builtins.match ".*ln -sfn .*fhs-rootfs/[$]target /[$]target.*" fhsMachine.system.activationScripts.fhsRootfs.text != null;
 assert builtins.match ".*home.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
 assert builtins.match ".*var.*" fhsMachine.system.activationScripts.fhsRootfs.text == null;
+
+# foreign packages: PATH merge + FHS rootfs integration (unique files)
+assert builtins.any (p: builtins.match "foreign-.*-bins" (p.name or "") != null) foreignMachine.environment.systemPackages;
+assert foreignMachine.system.build.fhsRootfs.outPath != "";
 
 "ok"

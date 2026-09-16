@@ -58,6 +58,21 @@ let
     ln -s "$libSrc" "$out/usr/lib64"
     ln -s "$out/bin" "$out/sbin"
     ln -s "$out/usr/bin" "$out/usr/sbin"
+    ${lib.optionalString (config.system.foreignPackages != [ ]) ''
+      for p in ${lib.concatStringsSep " " (map toString config.system.foreignPackages)}; do
+        [ -d "$p" ] || continue
+        while IFS= read -r f; do
+          rel="''${f#$p/}"
+          case "$rel" in
+            nix/*|proc/*|dev/*|tmp/*) continue ;;
+          esac
+          # only files unique to the rootfs are merged
+          [ -e "$out/$rel" ] && continue
+          mkdir -p "$out/$(dirname "$rel")"
+          ln -s "$f" "$out/$rel"
+        done < <(cd "$p" && find . -mindepth 1 \( -type f -o -type l \) )
+      done
+    ''}
     # /bin/sh is provided by the shell in the system packages (bashInteractive)
   '';
 in
