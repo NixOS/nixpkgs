@@ -6774,6 +6774,7 @@ with pkgs;
   apple-sdk_14 = apple-sdk.override { darwinSdkMajorVersion = "14"; };
   apple-sdk_15 = apple-sdk.override { darwinSdkMajorVersion = "15"; };
   apple-sdk_26 = apple-sdk.override { darwinSdkMajorVersion = "26"; };
+  apple-sdk_27 = apple-sdk.override { darwinSdkMajorVersion = "27"; };
 
   darwinMinVersionHook =
     deploymentTarget:
