@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.10.beta.1";
+  version = "1.10.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libadwaita/${lib.versions.majorMinor finalAttrs.version}/libadwaita-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rthyFmnYqg1nPmZkivhg0K8fow4+q1Mlko6Rd8skRTQ=";
+    hash = "sha256-sb9WI5Jp0QGmORrUVTyRDv+cxhcLgDkWQFR372CmbIQ=";
   };
 
   depsBuildBuild = [
