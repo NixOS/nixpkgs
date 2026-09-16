@@ -2443,6 +2443,8 @@ self: super: with self; {
 
   biothings-client = callPackage ../development/python-modules/biothings-client { };
 
+  bioutils = callPackage ../development/python-modules/bioutils { };
+
   bip-utils = callPackage ../development/python-modules/bip-utils { };
 
   bip32 = callPackage ../development/python-modules/bip32 { };
