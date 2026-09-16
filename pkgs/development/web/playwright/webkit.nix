@@ -32,6 +32,7 @@
   libgcrypt,
   libgpg-error,
   libjpeg8,
+  libmanette,
   libopus,
   libpng,
   libsoup_3,
@@ -167,6 +168,7 @@ let
       libgcrypt
       libgpg-error
       libjpeg8
+      libmanette
       libopus
       libpng
       libsoup_3
