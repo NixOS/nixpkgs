@@ -17,7 +17,9 @@
   wrapBintoolsWith,
   ...
 }@args:
-
+let
+  inherit (stdenv.hostPlatform) useLLVM;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   inherit version;
@@ -33,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    (lib.getDev llvmPackages.llvm.dev)
     ninja
   ]
+  ++ lib.optional useLLVM (lib.getDev llvmPackages.llvm)
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # provides xcode-select, which is required for SDK detection
     xcbuild
@@ -58,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "ZIG_TARGET_MCPU" "baseline")
     # always link against static build of LLVM
     (lib.cmakeBool "ZIG_STATIC_LLVM" true)
+    # use Zig's CMake logic to find the target libraries
+    (lib.cmakeBool "ZIG_USE_LLVM_CONFIG" useLLVM)
   ];
 
   outputs = [
@@ -88,6 +92,17 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       substituteInPlace lib/std/zig/system.zig \
         --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
+    ''
+    # Add missing libraries needed by LLVM.
+    + lib.optionalString (lib.versionAtLeast finalAttrs.version "0.16") ''
+      substituteInPlace cmake/Findllvm.cmake \
+        --replace-fail \
+          '  FIND_AND_ADD_LLVM_LIB(LLVMExtensions)' \
+          $'  FIND_AND_ADD_LLVM_LIB(LLVMExtensions)\n  FIND_AND_ADD_LLVM_LIB(Polly)\n  FIND_AND_ADD_LLVM_LIB(PollyISL)'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'find_package(lld 21)' \
+          $'find_package(lld 21)\n\nif(NOT ZIG_USE_LLVM_CONFIG)\n  list(APPEND LLVM_LIBRARIES -lrt -ldl -lm -lz -lxml2)\nendif()'
     ''
     # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
     # location, which does not work in the darwin sandbox.
