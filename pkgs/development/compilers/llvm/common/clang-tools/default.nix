@@ -66,9 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests =
     let
       src = writeText "main.cpp" ''
+        #include <assert.h>
         #include <iostream>
 
         int main() {
+          assert(true);
           std::cout << "Hi!";
         }
       '';
@@ -77,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     {
       smokeOk = runCommand "clang-tools-test-smoke-ok" { } ''
         ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
+        touch $out
+      '';
+      smokeOkClangTidy = runCommand "clang-tidy-test-smoke-ok" { } ''
+        ${finalAttrs.finalPackage}/bin/clang-tidy ${src}
         touch $out
       '';
       smokeErr = runCommand "clang-tools-test-smoke-err" { } ''
