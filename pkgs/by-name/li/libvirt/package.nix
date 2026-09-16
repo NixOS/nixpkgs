@@ -15,7 +15,6 @@
   gnutls,
   iproute2,
   iptables,
-  libgcrypt,
   libpcap,
   libtasn1,
   libxml2,
@@ -226,7 +225,6 @@ stdenv.mkDerivation rec {
     dbus
     glib
     gnutls
-    libgcrypt
     libpcap
     libtasn1
     libxml2
