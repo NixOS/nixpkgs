@@ -1461,7 +1461,6 @@ in
   pgadmin4 = runTest ./pgadmin4.nix;
   pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = runTest ./pgbouncer.nix;
-  pghero = runTest ./pghero.nix;
   pgmanage = runTest ./pgmanage.nix;
   pgweb = runTest ./pgweb.nix;
   phosh = runTest ./phosh.nix;
