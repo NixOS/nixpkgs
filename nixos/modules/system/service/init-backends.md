@@ -134,18 +134,32 @@ consumes the same API.
 nixos/modules/system/service/
   dinit/
     system.nix        # translates abstract services -> dinit service files
-    service.nix       # dinit-specific options (per-service)
   runit/
     system.nix
-    service.nix
   s6/
     system.nix
-    service.nix
 ```
 
-Each backend module mirrors `systemd/system.nix`: it declares the portable
-`system.services` (via `lib.services.configure` with its own
-`extraRootModules`), translates `configData` to its own configuration
+Status: **step 3 is implemented** in this tree. Each backend module
+(`dinit/system.nix`, `runit/system.nix`, `s6/system.nix`) declares the
+portable `system.services` (via `lib.services.configure` with its own
+`extraRootModules`), maps `dependencies`, `runtime`, `environment`,
+`restart` and `process.*` onto its format, and exposes `configData` under a
+backend-specific directory. They are opt-in imports that do not change
+anything for existing configurations (systemd remains the default and is
+untouched).
+
+- dinit: `/etc/dinit.d/<name>` service files; non-root services run through
+  a `setpriv` wrapper (`/etc/dinit.d/scripts/<name>`).
+- runit: `/etc/runit/services/<name>` dirs (`run` + `down`); the dependency
+  graph is materialized as `system.build.runitBootScript` starting services
+  with `sv up` in topological order (`system.build.runitBootOrder`).
+- s6: `s6-rc` source service dirs compiled with the real `s6-rc-compile`
+  into `system.build.s6RcDb` (validated end-to-end); restart policies use
+  `finish` scripts (exit code 125 = permanent down).
+
+Each backend module:
+translates `configData` to its own configuration
 directory, and maps `dependencies`/`runtime`/`environment`/`restart`/
 `process.*` onto the backend's format.
 
