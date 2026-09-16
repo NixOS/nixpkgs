@@ -10,14 +10,14 @@
 
 buildGo127Module (finalAttrs: {
   pname = "pokego";
-  version = "0.5.6";
+  version = "0.5.8";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rubiin";
     repo = "pokego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-esUIcW7lJ6WDmu2nWeVg3UdKB5sZ7lT/ffA4FSi0/Go=";
+    hash = "sha256-pZGxE58Jfi7oRkYph36XEFXBsxctJ3wAD8YvjEp6l18=";
   };
 
   vendorHash = "sha256-Ip2GuQDOolMyDvfmXcJRlY2rMp1amS8owkqcNMOR1+Y=";

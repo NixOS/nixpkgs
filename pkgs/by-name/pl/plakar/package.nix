@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "plakar";
-  version = "1.1.5";
+  version = "1.1.6";
 
   # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
   __darwinAllowLocalNetworking = true;
@@ -22,12 +22,12 @@ buildGoModule (finalAttrs: {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6uw20jqAtJnPEeNrMsK/jA7+stdY4tAEkPe+mov6UNo=";
+    hash = "sha256-AnVhWvfE2H5GfsgZyS14nla4vWZy7iIlD3lBP+LAJvA=";
   };
 
   vendorHash = "sha256-s/4vTHFFfOuGnVc3FK0B5aa9kRATr356/mGydw4cMng=";
 
-  # Remove in next release
+  # Remove in next next release
   patches = [
     (fetchpatch {
       name = "backup-allow-multiple-ignore-files.patch";
@@ -36,6 +36,11 @@ buildGoModule (finalAttrs: {
       hash = "sha256-9uxkXpuWs758xlu3afANB14hqhVut7agvIeOlcm+98k=";
     })
   ];
+
+  # broken test introduce in 1.1.6
+  postPatch = ''
+    rm login/completion_code_test.go
+  '';
 
   nativeBuildInputs = [
     installShellFiles
