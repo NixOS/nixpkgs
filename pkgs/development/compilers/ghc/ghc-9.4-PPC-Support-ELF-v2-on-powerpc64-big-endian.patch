@@ -1,0 +1,222 @@
+From 10ed6b3a5c1df4d7e0a58b384ac473e56aaf53cb Mon Sep 17 00:00:00 2001
+From: Peter Trommler <ptrommler@acm.org>
+Date: Thu, 6 Jan 2022 10:52:24 +0100
+Subject: [PATCH] PPC: Support ELF v2 on powerpc64 big-endian
+
+Detect ELF v2 on PowerPC 64-bit systems. Check for `_CALL_ELF`
+preprocessor macro.
+
+Fixes #21191
+
+(Backported onto GHC 9.4)
+---
+ compiler/GHC/CmmToAsm/PPC/CodeGen.hs      | 11 +++++++++--
+ libraries/ghc-boot/GHC/Platform/ArchOS.hs |  3 +--
+ m4/fptools_set_haskell_platform_vars.m4   |  8 +++-----
+ m4/ghc_get_power_abi.m4                   | 19 +++++++++++++++++++
+ rts/AdjustorAsm.S                         | 12 +++++-------
+ rts/StgCRun.c                             |  2 +-
+ rts/StgCRunAsm.S                          | 12 ++++++------
+ rts/adjustor/NativePowerPC.c              |  6 ++----
+ 8 files changed, 46 insertions(+), 27 deletions(-)
+ create mode 100644 m4/ghc_get_power_abi.m4
+
+diff --git a/compiler/GHC/CmmToAsm/PPC/CodeGen.hs b/compiler/GHC/CmmToAsm/PPC/CodeGen.hs
+index 7329b8c4b1..630ffc4081 100644
+--- a/compiler/GHC/CmmToAsm/PPC/CodeGen.hs
++++ b/compiler/GHC/CmmToAsm/PPC/CodeGen.hs
+@@ -1895,8 +1895,15 @@ genCCall' config gcp target dest_regs args
+                          -- "Single precision floating point values
+                          -- are mapped to the second word in a single
+                          -- doubleword"
+-                         GCP64ELF 1      -> stackOffset' + 4
+-                         _               -> stackOffset'
++                         GCP64ELF 1 -> stackOffset' + 4
++                         -- ELF v2 ABI Revision 1.5 Section 2.2.3.3. requires
++                         -- a single-precision floating-point value
++                         -- to be mapped to the least-significant
++                         -- word in a single doubleword.
++                         GCP64ELF 2 -> case platformByteOrder platform of
++                                       BigEndian    -> stackOffset' + 4
++                                       LittleEndian -> stackOffset'
++                         _          -> stackOffset'
+                      | otherwise = stackOffset'
+ 
+                 stackSlot = AddrRegImm sp (ImmInt stackOffset'')
+diff --git a/libraries/ghc-boot/GHC/Platform/ArchOS.hs b/libraries/ghc-boot/GHC/Platform/ArchOS.hs
+index c46371fac0..d43bd76bd9 100644
+--- a/libraries/ghc-boot/GHC/Platform/ArchOS.hs
++++ b/libraries/ghc-boot/GHC/Platform/ArchOS.hs
+@@ -121,8 +121,7 @@ stringEncodeArch = \case
+   ArchX86           -> "i386"
+   ArchX86_64        -> "x86_64"
+   ArchPPC           -> "powerpc"
+-  ArchPPC_64 ELF_V1 -> "powerpc64"
+-  ArchPPC_64 ELF_V2 -> "powerpc64le"
++  ArchPPC_64 _      -> "powerpc64"
+   ArchS390X         -> "s390x"
+   ArchARM ARMv5 _ _ -> "armv5"
+   ArchARM ARMv6 _ _ -> "armv6"
+diff --git a/m4/fptools_set_haskell_platform_vars.m4 b/m4/fptools_set_haskell_platform_vars.m4
+index d067f971cd..2e3e4ae14a 100644
+--- a/m4/fptools_set_haskell_platform_vars.m4
++++ b/m4/fptools_set_haskell_platform_vars.m4
+@@ -14,11 +14,9 @@ AC_DEFUN([FPTOOLS_SET_HASKELL_PLATFORM_VARS_SHELL_FUNCTIONS],
+         powerpc)
+             test -z "[$]2" || eval "[$]2=ArchPPC"
+             ;;
+-        powerpc64)
+-            test -z "[$]2" || eval "[$]2=\"ArchPPC_64 ELF_V1\""
+-            ;;
+-        powerpc64le)
+-            test -z "[$]2" || eval "[$]2=\"ArchPPC_64 ELF_V2\""
++        powerpc64*)
++            GHC_GET_POWER_ABI()
++            test -z "[$]2" || eval "[$]2=\"ArchPPC_64 $POWER_ABI\""
+             ;;
+         s390x)
+             test -z "[$]2" || eval "[$]2=ArchS390X"
+diff --git a/m4/ghc_get_power_abi.m4 b/m4/ghc_get_power_abi.m4
+new file mode 100644
+index 0000000000..f8741a4fa8
+--- /dev/null
++++ b/m4/ghc_get_power_abi.m4
+@@ -0,0 +1,19 @@
++# GHC_GET_POWER_ABI
++# ----------------------------------
++# Get version of the PowerPC ABI
++AC_DEFUN([GHC_GET_POWER_ABI],
++[
++    AC_COMPILE_IFELSE([
++        AC_LANG_PROGRAM(
++            [],
++            [#if defined(_CALL_ELF) && _CALL_ELF == 2
++                 return 0;
++             #else
++                 not ELF v2
++             #endif]
++        )],
++        [POWER_ABI=ELF_V2],
++        [POWER_ABI=ELF_V1])
++
++        AC_SUBST(POWER_ABI)
++])
+diff --git a/rts/AdjustorAsm.S b/rts/AdjustorAsm.S
+index cc2f99df62..d4f875ebad 100644
+--- a/rts/AdjustorAsm.S
++++ b/rts/AdjustorAsm.S
+@@ -2,8 +2,7 @@
+ 
+ /* ******************************** PowerPC ******************************** */
+ 
+-#if defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH)
+-#if !(defined(powerpc_HOST_ARCH) && defined(linux_HOST_OS))
++#if defined(powerpc_HOST_ARCH) && defined(aix_HOST_OS) || defined(powerpc64_HOST_ARCH) && defined(__ELF__) && (!defined(_CALL_ELF) || _CALL_ELF == 1)
+     /* The following code applies, with some differences,
+        to all powerpc platforms except for powerpc32-linux,
+        whose calling convention is annoyingly complex.
+@@ -60,12 +59,12 @@ adjustorCode:
+         /* save the link */
+     mflr    0
+     STORE   0, LINK_SLOT(1)
+-    
++
+         /* set up stack frame */
+     LOAD    12, FRAMESIZE_OFF(2)
+ #if defined(powerpc64_HOST_ARCH)
+     stdux   1, 1, 12
+-#else   
++#else
+     stwux   1, 1, 12
+ #endif /* defined(powerpc64_HOST_ARCH) */
+ 
+@@ -108,7 +107,7 @@ L2:
+     LOAD    12, WPTR_OFF(2)
+     LOAD    0, 0(12)
+         /* The function we're calling will never be a nested function,
+-           so we don't load r11. 
++           so we don't load r11.
+         */
+     mtctr   0
+     LOAD    2, WS(12)
+@@ -118,8 +117,7 @@ L2:
+     LOAD    0, LINK_SLOT(1)
+     mtlr    0
+     blr
+-#endif /* !(defined(powerpc_HOST_ARCH) && defined(linux_HOST_OS)) */
+-#endif /* defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH) */
++#endif
+ 
+ /* mark stack as nonexecutable */
+ #if defined(__linux__) && defined(__ELF__)
+diff --git a/rts/StgCRun.c b/rts/StgCRun.c
+index 4fefc326e5..e05d6b71f8 100644
+--- a/rts/StgCRun.c
++++ b/rts/StgCRun.c
+@@ -670,7 +670,7 @@ StgRunIsImplementedInAssembler(void)
+    Everything is in assembler, so we don't have to deal with GCC...
+    -------------------------------------------------------------------------- */
+ 
+-#if defined(powerpc64_HOST_ARCH)
++#if defined(powerpc64_HOST_ARCH) && (!defined _CALL_ELF || _CALL_ELF == 1)
+ /* 64-bit PowerPC ELF ABI 1.9
+  *
+  * Stack frame organization (see Figure 3-17, ELF ABI 1.9, p 14)
+diff --git a/rts/StgCRunAsm.S b/rts/StgCRunAsm.S
+index aed3241d12..784c42e773 100644
+--- a/rts/StgCRunAsm.S
++++ b/rts/StgCRunAsm.S
+@@ -5,11 +5,11 @@
+  * then functions StgRun/StgReturn are implemented in file StgCRun.c */
+ #if !defined(USE_MINIINTERPRETER)
+ 
+-#if defined(powerpc64le_HOST_ARCH)
+-# if defined(linux_HOST_OS)
+-/* 64-bit PowerPC ELF V2 ABI Revision 1.4
++#if defined(powerpc64le_HOST_ARCH) || defined(powerpc64_HOST_ARCH)
++# if defined(_CALL_ELF) && _CALL_ELF == 2
++/* 64-bit PowerPC ELF V2 ABI Revision 1.5
+  *
+- * Stack frame organization (see Figure 2.18, ELF V2 ABI Revision 1.4, p 31)
++ * Stack frame organization (see Figure 2.18, ELF V2 ABI Revision 1.5, p 34)
+  *
+  * +-> Back Chain (points to the prevoius stack frame)
+  * |   Floating point register save area (f14-f31)
+@@ -68,8 +68,8 @@ StgReturn:
+         b _restfpr_14
+ 
+ 	.section	.note.GNU-stack,"",@progbits
+-# else // linux_HOST_OS
+-# error Only Linux support for power64 little endian right now.
++# else // Not ELF v2
++# error Only ELF v2 supported.
+ # endif
+ 
+ #elif defined(powerpc_HOST_ARCH)
+diff --git a/rts/adjustor/NativePowerPC.c b/rts/adjustor/NativePowerPC.c
+index 6cc4093d63..7ad32fb760 100644
+--- a/rts/adjustor/NativePowerPC.c
++++ b/rts/adjustor/NativePowerPC.c
+@@ -29,8 +29,7 @@ __asm__("obscure_ccall_ret_code:\n\t"
+ extern void obscure_ccall_ret_code(void);
+ #endif /* defined(linux_HOST_OS) */
+ 
+-#if defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH)
+-#if !(defined(powerpc_HOST_ARCH) && defined(linux_HOST_OS))
++#if defined(powerpc_HOST_ARCH) && defined(aix_HOST_OS) || defined(powerpc64_HOST_ARCH) && defined(__ELF__) && (!defined(_CALL_ELF) || _CALL_ELF == 1)
+ 
+ /* !!! !!! WARNING: !!! !!!
+  * This structure is accessed from AdjustorAsm.s
+@@ -50,8 +49,7 @@ typedef struct AdjustorStub {
+     StgInt          extrawords_plus_one;
+ } AdjustorStub;
+ 
+-#endif /* !(defined(powerpc_HOST_ARCH) && defined(linux_HOST_OS)) */
+-#endif /* defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH) */
++#endif
+ 
+ void initAdjustors(void) { }
+ 
+-- 
+2.51.2
+
