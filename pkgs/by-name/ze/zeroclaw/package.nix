@@ -11,6 +11,9 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   versionCheckHook,
+  makeWrapper,
+  which,
+  testers,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-zLj2ItDp8tbldBvFNxlrcoqcE0J5Ce19NDlV+lCu/BY=";
+
+  # zerocode is a separate workspace member and expects the daemon beside it.
+  cargoBuildFlags = [
+    "--package"
+    "zeroclawlabs"
+    "--package"
+    "zerocode"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -49,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     nodejs
     npmHooks.npmConfigHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -65,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     gitMinimal
+    which
   ];
 
   # wiremock tests require socket binding, which is denied in the darwin sandbox
@@ -84,12 +98,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin/web
     cp -r web/dist $out/bin/web/dist
+    wrapProgram $out/bin/zerocode --prefix PATH : ${lib.makeBinPath [ which ]}
   '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.zerocode-version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "zerocode --version";
+  };
 
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";
