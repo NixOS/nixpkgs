@@ -16721,6 +16721,12 @@
     githubId = 918448;
     name = "Anthony Lodi";
   };
+  LodWKobku = {
+    email = "lodwkobku@proton.me";
+    github = "LodWKobku";
+    githubId = 101132529;
+    name = "LodWKobku";
+  };
   logan-barnett = {
     email = "logustus+nixpkgs@gmail.com";
     github = "LoganBarnett";
