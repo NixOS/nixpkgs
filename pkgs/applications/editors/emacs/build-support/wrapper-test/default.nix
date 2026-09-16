@@ -1,9 +1,11 @@
 {
   runCommand,
   emacs,
-  writeText,
+  writeShellApplication,
   cowsay,
+  hack-font,
   replaceVars,
+  xvfb-run,
 }:
 
 let
@@ -14,38 +16,52 @@ let
       version = "0.1.0"; # a dummy value
       turnCompilationWarningToError = true;
     };
-in
-runCommand "test-emacs-withPackages-wrapper"
-  {
-    nativeBuildInputs = [
-      (emacs.pkgs.withPackages (epkgs: [
-        epkgs.dash
-        epkgs.flx-ido
-        (mkEpkg "with-packages" (replaceVars ./with-packages.el {
-          inherit (builtins) storeDir;
-        }) epkgs.melpaBuild)
-        (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
-        (mkEpkg "default" ./default.el epkgs.melpaBuild)
-        cowsay
-        (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
-      ]))
-    ];
-    env = {
+
+  emacsWithPackages = emacs.pkgs.withPackages (epkgs: [
+    epkgs.dash
+    epkgs.flx-ido
+    hack-font
+    (mkEpkg "with-packages" (replaceVars ./with-packages.el {
+      inherit (builtins) storeDir;
+    }) epkgs.melpaBuild)
+    (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
+    (mkEpkg "default" ./default.el epkgs.melpaBuild)
+    cowsay
+    (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
+  ]);
+
+  run-emacs-wrapper-test = writeShellApplication {
+    name = "run-emacs-wrapper-test";
+    runtimeInputs = [ emacsWithPackages ];
+
+    runtimeEnv = {
       # emulate a default NixOS env where INFOPATH is set like this (not ending with a ":")
       INFOPATH = "/fake-info-dir1:/fake-info-dir2";
       EMACS_TEST_VERBOSE = 1; # make ERT output verbose
     };
+
+    text = ''
+      # Give Emacs a HOME to emulate a real user environment.
+      HOME="$PWD"
+
+      nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
+      emacs --daemon="$nonBatchEmacsSocket"
+
+      emacs --batch --load=with-packages \
+        --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
+        --funcall=ert-run-tests-batch-and-exit
+    '';
+  };
+in
+runCommand "test-emacs-withPackages-wrapper"
+  {
+    nativeBuildInputs = [
+      xvfb-run
+      run-emacs-wrapper-test
+    ];
   }
   ''
-    # Give Emacs a HOME to emulate a real user environment.
-    HOME="$PWD"
-
-    nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
-    emacs --daemon="$nonBatchEmacsSocket"
-
-    emacs --batch --load=with-packages \
-      --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
-      --funcall=ert-run-tests-batch-and-exit
-
+    # Some tests, such as the font test, need a graphical frame.
+    xvfb-run -d run-emacs-wrapper-test
     touch $out
   ''
