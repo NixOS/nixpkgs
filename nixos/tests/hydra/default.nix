@@ -21,9 +21,12 @@ in
     machine.wait_for_unit("postgresql.target")
     # test whether the actual hydra daemons are running
     machine.wait_for_unit("hydra-init.service")
-    machine.require_unit_state("hydra-queue-runner.service")
+    machine.wait_for_unit("hydra-queue-runner.service")
     machine.require_unit_state("hydra-evaluator.service")
     machine.require_unit_state("hydra-notify.service")
+    machine.wait_for_open_port(50051)
+    machine.wait_for_unit("hydra-builder.service")
+    machine.wait_for_unit("hydra-ws.service")
 
     machine.succeed("hydra-create-user admin --role admin --password admin")
 
@@ -38,7 +41,7 @@ in
     )
 
     machine.wait_until_succeeds(
-        'journalctl -eu hydra-notify.service -o cat | grep -q "sending mail notification to hydra@localhost"'
+        'journalctl -eu hydra-notify.service -o cat | grep -q "sending mail notification for changed build status to hydra@localhost"'
     )
   '';
 }
