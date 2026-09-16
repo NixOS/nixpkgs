@@ -9,13 +9,14 @@ usage() {
     exit 1
 }
 
-timeout=                # Timeout in centiseconds
-menu=1                  # Enable menu by default
-default=                # Default configuration
-target=/boot            # Target directory
-numGenerations=0        # Number of other generations to include in the menu
+timeout=                        # Timeout in centiseconds
+menu=1                          # Enable menu by default
+default=                        # Default configuration
+target=/boot                    # Target directory
+numGenerations=0                # Number of other generations to include in the menu
+confFile=extlinux/extlinux.conf # Configuration file relative to target directory
 
-while getopts "t:c:d:g:n:r" opt; do
+while getopts "t:c:d:f:g:n:r" opt; do
     case "$opt" in
         t) # U-Boot interprets '0' as infinite
             if [ "$OPTARG" -lt 0 ]; then
@@ -33,6 +34,7 @@ while getopts "t:c:d:g:n:r" opt; do
             ;;
         c) default="$OPTARG" ;;
         d) target="$OPTARG" ;;
+        f) confFile="$OPTARG" ;;
         g) numGenerations="$OPTARG" ;;
         n) dtbName="$OPTARG" ;;
         r) noDeviceTree=1 ;;
@@ -42,8 +44,11 @@ done
 
 [ "$timeout" = "" -o "$default" = "" ] && usage
 
+confDir=$(dirname "$confFile")
+relNixOSDir=$(realpath -m --relative-to="$confDir" nixos)
+
 mkdir -p $target/nixos
-mkdir -p $target/extlinux
+mkdir -p $target/$confDir
 
 # Convert a path to a file in the Nix store such as
 # /nix/store/<hash>-<name>/file to <hash>-<name>-<file>.
@@ -63,7 +68,7 @@ copyToKernelsDir() {
     # kernels or initrd if this script is ever interrupted.
     if ! test -e $dst; then
         local dstTmp=$dst.tmp.$$
-        cp -r $src $dstTmp
+        cp -r $src $dstTmp || rm -f $dstTmp
         mv $dstTmp $dst
     fi
     filesCopied[$dst]=1
@@ -100,8 +105,8 @@ addEntry() {
     else
         echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosLabel)"
     fi
-    echo "  LINUX ../nixos/$(basename $kernel)"
-    echo "  INITRD ../nixos/$(basename $initrd)"
+    echo "  LINUX ${relNixOSDir}/$(basename $kernel)"
+    echo "  INITRD ${relNixOSDir}/$(basename $initrd)"
     echo "  APPEND init=$path/init $extraParams"
 
     if [ -n "$noDeviceTree" ]; then
@@ -111,9 +116,9 @@ addEntry() {
     if [ -d "$dtbDir" ]; then
         # if a dtbName was specified explicitly, use that, else use FDTDIR
         if [ -n "$dtbName" ]; then
-            echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
+            echo "  FDT ${relNixOSDir}/$(basename $dtbs)/${dtbName}"
         else
-            echo "  FDTDIR ../nixos/$(basename $dtbs)"
+            echo "  FDTDIR ${relNixOSDir}/$(basename $dtbs)"
         fi
     else
         if [ -n "$dtbName" ]; then
@@ -123,7 +128,9 @@ addEntry() {
     fi
 }
 
-tmpFile="$target/extlinux/extlinux.conf.tmp.$$"
+tmpFile="$target/$confFile.tmp.$$"
+
+trap "rm -f $tmpFile" EXIT
 
 cat > $tmpFile <<EOF
 # Generated file, all changes will be lost on nixos-rebuild!
@@ -158,7 +165,7 @@ if [ "$numGenerations" -gt 0 ]; then
     done >> $tmpFile
 fi
 
-mv -f $tmpFile $target/extlinux/extlinux.conf
+mv -f $tmpFile $target/$confFile
 
 # Remove obsolete files from $target/nixos.
 for fn in $target/nixos/*; do
