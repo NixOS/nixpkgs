@@ -2,10 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   jinja2,
   jsonschema,
-  nix-update-script,
+
+  # tests
+  addBinToPathHook,
   pyrefly,
   pyright,
   pyshacl,
@@ -20,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "shacl2code";
   version = "1.3.2";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -38,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     jsonschema
     pyrefly
     pyright
@@ -47,10 +53,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     types-jsonschema
   ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
 
   pythonImportsCheck = [ "shacl2code" ];
 
@@ -64,8 +66,6 @@ buildPythonPackage (finalAttrs: {
     "tests/test_python.py"
     "tests/test_rust.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Convert SHACL model to code bindings";
