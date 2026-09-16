@@ -35,12 +35,19 @@
   A derivation that runs a derivation's `unpackPhase` and `patchPhase`, and then copies the result to the output path.
 */
 
-attrs:
+{
+  sourceSuffix ? true,
+  ...
+}@attrs:
 let
   argsToOverride =
     args:
     {
-      name = "${args.name or "${args.pname}-${args.version}"}-source";
+      name =
+        let
+          name = args.name or "${args.pname}-${args.version}";
+        in
+        if sourceSuffix then "${name}-source" else name;
 
       outputs = [ "out" ];
 
