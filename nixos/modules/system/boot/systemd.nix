@@ -893,7 +893,6 @@ in
         # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
         setLoginUid = true;
         pamMount = false;
-        startSession = true;
       };
     };
 

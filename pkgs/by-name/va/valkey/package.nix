@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      redis = nixosTests.valkey;
+      valkey = nixosTests.valkey;
       unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       valkey-python = python3Packages.valkey;
     };

@@ -48,7 +48,6 @@
   ethtool,
   iptables,
   kmod,
-  libgcrypt,
   libndp,
   modemmanager,
   mobile-broadband-provider-info,
@@ -231,7 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gnutls
-    libgcrypt
   ];
 
   nativeInstallCheckInputs = [ udevCheckHook ];
