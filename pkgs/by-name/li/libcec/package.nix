@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  pythonSupport ? false,
+  python3,
+  swig,
   udev,
   libcec_platform,
   withLibraspberrypi ? false,
@@ -29,10 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ];
+  ]
+  ++ lib.optional pythonSupport swig;
   buildInputs = [
     libcec_platform
   ]
+  ++ lib.optional pythonSupport python3
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optional withLibraspberrypi libraspberrypi;
 
