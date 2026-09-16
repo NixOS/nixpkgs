@@ -10,6 +10,7 @@
   libxcvt,
   xwayland,
   libcanberra,
+  libcap,
   libdisplay-info,
   libei,
   libevdev,
@@ -24,6 +25,7 @@ mkKdeDerivation {
   patches = [
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
+    ./plasma-setup-xwayland-path.patch
   ];
 
   postPatch = ''
@@ -39,6 +41,9 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     python3
+
+    # we can't actually have capabilities in the store but it gets mad
+    libcap
   ];
   extraBuildInputs = [
     qtquick3d
@@ -59,6 +64,9 @@ mkKdeDerivation {
     libxcvt
     # we need to provide this so it knows our xwayland supports new features
     xwayland
+
+    # and it needs to be in both because cmake is stupid
+    libcap
   ];
 
   # plugin QML relies on non-global imports
