@@ -16,6 +16,7 @@
   wayland,
   pciutils,
   libGL,
+  vulkan-loader,
   apple-sdk_15,
   fixDarwinDylibNames,
   xcbuild,
@@ -180,6 +181,14 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     runHook postInstall
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Use the Vulkan loader configured to find NixOS graphics drivers.
+    # ANGLE loads it from its own library directory, which is also on the
+    # RPATH of applications linking against ANGLE.
+    ln -sfn ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 \
+      "$out/lib/libvulkan.so.1"
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
