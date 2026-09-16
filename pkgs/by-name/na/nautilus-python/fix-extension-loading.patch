@@ -1,0 +1,108 @@
+diff --git a/meson.build b/meson.build
+index f266c81..4fdd287 100644
+--- a/meson.build
++++ b/meson.build
+@@ -31,6 +31,7 @@ nautilus_extension_dir = libnautilus_extension.get_variable('extensiondir', pkgc
+ 
+ py_so_filename = python3.get_variable('INSTSONAME')
+ python_libpath = python3.get_variable('LIBDIR') / py_so_filename
++python_prefix = python3.get_variable('prefix')
+ 
+ conf = configuration_data()
+ conf.set_quoted('DATADIR', datadir)
+@@ -38,6 +39,7 @@ conf.set('PYGOBJECT_MAJOR_VERSION', pygobject_major_version)
+ conf.set('PYGOBJECT_MINOR_VERSION', pygobject_minor_version)
+ conf.set('PYGOBJECT_MICRO_VERSION', pygobject_micro_version)
+ conf.set_quoted('PYTHON_LIBPATH', python_libpath)
++conf.set_quoted('PYTHON_PREFIX', python_prefix)
+ 
+ configure_file(
+   output: 'config.h',
+@@ -68,5 +70,6 @@ pkg.generate(
+ summary({
+   'PyGObject Version': 'pygobject-3.0',
+   'Python Library': python_libpath,
++  'Python Prefix': python_prefix,
+   'Documentation': get_option('docs'),
+ })
+diff --git a/src/nautilus-python.c b/src/nautilus-python.c
+index d48d71c..0ad1981 100644
+--- a/src/nautilus-python.c
++++ b/src/nautilus-python.c
+@@ -105,7 +105,8 @@ nautilus_python_load_file(GTypeModule *type_module,
+ 
+ static void
+ nautilus_python_load_dir (GTypeModule *module, 
+-                          const char  *dirname) {
++                          const char  *dirname,
++                          GHashTable  *loaded_modules) {
+     GDir *dir;
+     const char *name;
+     gboolean initialized = FALSE;
+@@ -121,6 +122,9 @@ nautilus_python_load_dir (GTypeModule *module,
+             size_t len = strlen (name) - 3;
+             g_autofree char *modulename = g_strndup (name, len);
+ 
++            if (g_hash_table_contains(loaded_modules, modulename))
++                continue;
++
+             if (!initialized) {
+                 PyObject *sys_path, *py_path;
+                 
+@@ -136,9 +140,12 @@ nautilus_python_load_dir (GTypeModule *module,
+                 py_path = PyUnicode_FromString(dirname);
+                 PyList_Insert(sys_path, 0, py_path);
+                 Py_DECREF(py_path);
++
++                initialized = TRUE;
+             }
+ 
+             nautilus_python_load_file(module, modulename);
++            g_hash_table_add(loaded_modules, g_steal_pointer (&modulename));
+         }
+     }    
+ 
+@@ -158,10 +165,19 @@ nautilus_python_init_python (void) {
+     if (!libpython)
+         g_warning("g_module_open libpython failed: %s", g_module_error());
+ 
+-    debug("Py_Initialize");
+-    Py_Initialize();
+-    if (PyErr_Occurred()) {
+-        PyErr_Print();
++    debug("Py_InitializeFromConfig " PYTHON_PREFIX);
++    PyConfig config;
++    PyStatus status;
++
++    PyConfig_InitPythonConfig(&config);
++    PyConfig_SetBytesString(&config, &config.home, PYTHON_PREFIX);
++
++    status = Py_InitializeFromConfig(&config);
++    PyConfig_Clear(&config);
++
++    if (PyStatus_Exception(status)) {
++        g_warning("Py_InitializeFromConfig failed: %s",
++                  status.err_msg != NULL ? status.err_msg : "unknown error");
+         return FALSE;
+     }
+ 
+@@ -246,13 +262,14 @@ nautilus_python_check_all_directories(GTypeModule *module) {
+         temp++;
+     }
+ 
+-    dirs = g_list_first(dirs);
+-    while (dirs != NULL) {
+-        gchar *dir = dirs->data;
+-        nautilus_python_load_dir(module, dir);
+-        dirs = dirs->next;
++    GHashTable *loaded_modules = g_hash_table_new_full(g_str_hash, g_str_equal,
++                                                      g_free, NULL);
++
++    for (GList *l = dirs; l != NULL; l = l->next) {
++        nautilus_python_load_dir(module, l->data, loaded_modules);
+     }
+ 
++    g_hash_table_destroy (loaded_modules);
+     g_list_free_full (dirs, g_free);
+ }
+ 
