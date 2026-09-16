@@ -337,7 +337,7 @@ let
             ${if share.writable then "--writeback" else "--readonly"} \
             --sandbox=none \
             --seccomp=none \
-            --cache=always \
+            ${lib.optionalString (share.cache != null) "--cache=${share.cache} \\"}
             --no-announce-submounts \
             --translate-uid=host:65534:0:1 \
             --translate-gid=host:65534:0:1 \
@@ -584,6 +584,25 @@ in
           };
           options.writable = lib.mkEnableOption "" // {
             description = "Whether the directory is writable on the host and guest.";
+          };
+          options.cache = mkOption {
+            type = types.nullOr (
+              types.enum [
+                "auto"
+                "always"
+                "metadata"
+                "never"
+              ]
+            );
+            default = if useVirtiofs then "always" else null;
+            description = ''
+              Cache policy for the virtiofs daemon.
+
+              For details refer to the [virtiofsd documentation](https://virtio-fs.gitlab.io/virtiofsd/doc/virtiofsd/passthrough/enum.CachePolicy.html).
+
+              Effective on Linux hosts only.
+              Ignored when using VirtFS (9P) (the default on non-Linux hosts).
+            '';
           };
         }
       );
@@ -1157,10 +1176,20 @@ in
         }
       ];
 
-    warnings = optional (cfg.directBoot.enable && cfg.useBootLoader) ''
-      You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
-      `useBootLoader` useless. You might want to disable one of those options.
-    '';
+    warnings =
+      lib.optionals (!useVirtiofs) (
+        lib.foldlAttrs (
+          acc: tag: share:
+          acc
+          ++ lib.optional (share.cache != null) ''
+            `virtualisation.sharedDirectories.${tag}.cache` is set but has no effect: virtiofs is only used on Linux hosts.
+          ''
+        ) [ ] cfg.sharedDirectories
+      )
+      ++ optional (cfg.directBoot.enable && cfg.useBootLoader) ''
+        You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
+        `useBootLoader` useless. You might want to disable one of those options.
+      '';
 
     # Install Limine on the bootloader device
     boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
