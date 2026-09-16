@@ -37,28 +37,33 @@ in
       ];
 
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
-
-      kernelParams = [
-        "elevator=noop"
-      ];
     };
 
     environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
 
-    # enable hotadding cpu/memory
-    services.udev.packages = lib.singleton (
-      pkgs.writeTextFile {
+    services.udev.packages = [
+      # enable hotadding cpu/memory
+      (pkgs.writeTextFile {
         name = "hyperv-cpu-and-memory-hotadd-udev-rules";
         destination = "/etc/udev/rules.d/99-hyperv-cpu-and-memory-hotadd.rules";
         text = ''
           # Memory hotadd
-          SUBSYSTEM=="memory", ACTION=="add", DEVPATH=="/devices/system/memory/memory[0-9]*", TEST=="state", ATTR{state}="online"
+          SUBSYSTEM=="memory", ACTION=="add", DEVPATH=="/devices/system/memory/memory[0-9]*", TEST=="state", ATTR{state}=="offline", ATTR{state}="online"
 
           # CPU hotadd
-          SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
+          SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}=="0", ATTR{online}="1"
         '';
-      }
-    );
+      })
+
+      # disable IO scheduler for virtual disks
+      (pkgs.writeTextFile {
+        name = "hyperv-disable-vdisk-scheduler-udev-rules";
+        destination = "/etc/udev/rules.d/99-hyperv-disable-vdisk-scheduler.rules";
+        text = ''
+          SUBSYSTEM=="block", ACTION=="add|change", ENV{DEVTYPE}=="disk", KERNEL=="sd[a-z]*", ATTRS{vendor}=="Msft*", ATTRS{model}=="Virtual Disk*", ATTR{queue/scheduler}="none"
+        '';
+      })
+    ];
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
