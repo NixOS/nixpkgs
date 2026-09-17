@@ -467,6 +467,8 @@ in
       relatedPackages = [
         "nextcloud32"
         "nextcloud33"
+        "nextcloud34"
+        "nextcloud35"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
@@ -1195,7 +1197,7 @@ in
       {
         warnings =
           let
-            latest = 33;
+            latest = 35;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1228,7 +1230,9 @@ in
           ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"))
-          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "34") (upgradeWarning 33 "26.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "35") (upgradeWarning 34 "26.05"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
