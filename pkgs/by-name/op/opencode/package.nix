@@ -110,6 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail \
         'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
         'if (false)'
+    ''
+    # Bun 1.4.x regressed compiled executable code splitting.
+    + ''
+      substituteInPlace packages/opencode/script/build.ts \
+        --replace-fail 'splitting: true,' 'splitting: false,'
     '';
 
   nativeBuildInputs = [
