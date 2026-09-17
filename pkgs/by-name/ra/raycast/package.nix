@@ -9,7 +9,7 @@
   undmg,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
   version = "2.4.1.0";
 
@@ -67,7 +67,10 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Control your tools with a few keystrokes";
-    homepage = "https://raycast.app/";
+    homepage = "https://www.raycast.com";
+    changelog = "https://www.raycast.com/changelog/macos/${
+      lib.replaceString "." "-" (lib.versions.majorMinor finalAttrs.version)
+    }";
     license = lib.licenses.unfree;
     mainProgram = "raycast";
     maintainers = with lib.maintainers; [
@@ -80,4 +83,4 @@ stdenvNoCC.mkDerivation {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
