@@ -45,6 +45,8 @@ rec {
     cp ${source}/assets/search-config-icons.json services/settings/dumps/main/search-config-icons.json
     cp ${source}/assets/2c4b8834-030c-4097-a887-c7506689095c services/settings/dumps/main/search-config-icons
     cp ${source}/assets/2c4b8834-030c-4097-a887-c7506689095c.meta.json services/settings/dumps/main/search-config-icons
+    cp ${source}/assets/marsigner.der toolkit/mozapps/update/updater/release_primary.der
+    cp ${source}/assets/marsigner2.der toolkit/mozapps/update/updater/release_secondary.der
     sed -i '/MOZ_SERVICES_HEALTHREPORT/ s/True/False/' browser/moz.configure
 
     cp ${source}/patches/pref-pane/category-librewolf.svg browser/themes/shared/preferences
@@ -53,9 +55,8 @@ rec {
     cp ${source}/patches/pref-pane/librewolf.js browser/components/preferences
 
     # override firefox version
-    for fn in browser/config/version.txt browser/config/version_display.txt; do
-      echo "${packageVersion}" > "$fn"
-    done
+    echo "${firefox.version}" > browser/config/version.txt
+    echo "${packageVersion}" > browser/config/version_display.txt
 
     echo "patching appstrings.properties"
     find . -path '*/appstrings.properties' -exec sed -i s/Firefox/LibreWolf/ {} \;
