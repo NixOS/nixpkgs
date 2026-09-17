@@ -92,15 +92,6 @@ patchShebangs() {
 
         nixTalkativeLog "Using $pathName to find candidates for new interpreter line: ${!pathName}"
 
-        if [ -z "${!pathName}" ]; then
-            echo "error: $pathName is empty: cannot find candidates for new interpreter line $oldInterpreterLine"
-            if [ -n $strictDeps ] && [ "$pathName" = HOST_PATH ]; then
-                # This is a common side effect of enabling strictDeps, explicitly mention this
-                echo "note: strictDeps are enabled: candidate packages should be added to buildInputs to appear in $pathName"
-            fi
-            return 1
-        fi
-
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
                 arg0=${args%% *}
