@@ -103,12 +103,16 @@ let
 
     cp -r ${../../../doc/release-notes} ./release-notes-nixpkgs
 
+    cp ${./nav.json} nav.json
+
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
-    substituteInPlace ./configuration/configuration.md \
+    substituteInPlace ./nav.json \
       --replace-fail \
-          '@MODULE_CHAPTERS@' \
-          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          '"@MODULE_CHAPTERS@"' \
+          ${escapeShellArg (
+            concatMapStringsSep ",\n" (p: ''{ "file": "${p.value}" }'') config.meta.doc
+          )}
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -200,9 +204,10 @@ rec {
           --script ./highlightjs/loader.js \
           --script ./anchor.min.js \
           --script ./anchor-use.js \
-          --sidebar-depth 2 \
+          --sidebar-depth 3 \
           --header ${./header.html}\
           --no-navheader \
+          --experimental-config nav.json \
           ./manual.md \
           $dst/${common.indexPath}
 
