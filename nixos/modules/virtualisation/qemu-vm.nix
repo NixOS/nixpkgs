@@ -333,7 +333,7 @@ let
         lib.mapAttrsToList (tag: share: ''
           ${lib.getExe hostPkgs.virtiofsd} \
             --socket-path="$NIX_VIRTIOFS_DIR"/"${tag}" \
-            --shared-dir="${share.source}" \
+            --shared-dir="$(readlink -f "${share.source}")" \
             ${if share.writable then "--writeback" else "--readonly"} \
             --sandbox=none \
             --seccomp=none \
