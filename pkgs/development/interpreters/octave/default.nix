@@ -53,8 +53,6 @@
   # - Packages required for building extra packages.
   newScope,
   callPackage,
-  makeSetupHook,
-  makeWrapper,
   # - Build Octave Qt GUI:
   enableQt ? false,
   libsForQt5,
