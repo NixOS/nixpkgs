@@ -55,7 +55,7 @@
   callPackage,
   # - Build Octave Qt GUI:
   enableQt ? false,
-  libsForQt5,
+  qt6Packages,
   libiconv,
 }:
 
@@ -140,9 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals enableQt [
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
-    libsForQt5.qscintilla
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qt5compat
+    qt6Packages.qscintilla
   ]
   ++ lib.optionals enableJava [
     jdk
@@ -165,9 +166,8 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ]
   ++ lib.optionals enableQt [
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qtscript
-    libsForQt5.qttools
+    qt6Packages.wrapQtAppsHook
+    qt6Packages.qttools
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -186,6 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
       F77_INTEGER_8_FLAG = "-fdefault-integer-8";
     };
 
+  # Otherwise `qhelpgenerator` executable is not detected, and Qt support is
+  # not enabled.
+  preConfigure = ''
+    export PATH="$PATH:${qt6Packages.qttools}/libexec"
+  '';
+
   configureFlags = [
     "--with-blas=blas"
     "--with-lapack=lapack"
@@ -193,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableReadline [ "--enable-readline" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-  ++ lib.optionals enableQt [ "--with-qt=5" ];
+  ++ lib.optionals enableQt [ "--with-qt=6" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
