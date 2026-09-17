@@ -51,9 +51,13 @@ let
                   nix_debug "Making wrapper $prg"
                   makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
                     --set-default LUA_PATH ";;" \
-                    --suffix LUA_PATH ';' "$LUA_PATH" \
+                    --suffix LUA_PATH ';' "${
+                      lib.concatMapStringsSep ";" (x: "$out/${x}") lua.pkgs.luaLib.luaPathList
+                    }" \
                     --set-default LUA_CPATH ";;" \
-                    --suffix LUA_CPATH ';' "$LUA_CPATH" \
+                    --suffix LUA_CPATH ';' "${
+                      lib.concatMapStringsSep ";" (x: "$out/${x}") lua.pkgs.luaLib.luaCPathList
+                    }" \
                     ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
               fi
