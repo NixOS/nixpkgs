@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.9.1";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bugsnag";
     repo = "bugsnag-python";
     tag = "v${version}";
-    hash = "sha256-32dq68MCvfQztCwwtGD2qRQfLSEnog+HEtq/Zei0JXI=";
+    hash = "sha256-+ZYtlvkb5J6yOcEQWaB3I6WFyctqXKOFBl4W5o8PkcM=";
   };
 
   build-system = [ setuptools ];
