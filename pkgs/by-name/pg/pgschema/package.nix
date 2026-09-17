@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -9,14 +10,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "pgschema";
-  version = "1.12.3";
+  version = "1.12.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgplex";
     repo = "pgschema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zfG87Uc5bx14zhYnuT3CF+sW5EEQLBRRMyBe57FBHJ4=";
+    hash = "sha256-xURQHIkvEWaYko9RvEhYl1TPqc5ABx9WTMVKuWYGfwE=";
   };
 
   # Adapted from $src/nix/pgschema.nix
@@ -33,11 +34,15 @@ buildGoModule (finalAttrs: {
     "github.com/pgplex/pgschema/internal/postgres.binariesPath=${postgresql}"
   ];
 
+  # Tests fail in sandbox on darwin, with:
+  # Could not create shared memory segment: Cannot allocate memory
+  # Failed system call was shmget(key=18446744072262306125, size=56, 03600)
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--help"; # there is no -v/--version
 
   passthru.updateScript = nix-update-script { };
 
