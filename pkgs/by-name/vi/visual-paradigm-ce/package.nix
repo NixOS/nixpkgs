@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "18.1.20260838";
+  version = "18.1.20260903";
 
   src =
     let
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-y13ASipDQnrN730LOKbudD9sIgiJKEqTJrZ56EPa5QI=";
+      hash = "sha256-QQkeffm88O5axfc1q8ZitXrfupfXiba4xHMS31yxZVc=";
     };
 
   passthru.updateScript = writeScript "update-visual-paradigm-ce" ''

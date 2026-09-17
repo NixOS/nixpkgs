@@ -28,12 +28,13 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,15 +45,8 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-pUI9E76LeCzs1Y51YM0z6awTQIj/WumIqJIgrLYKYEQ=";
+    hash = "sha256-tUHBpMyArqM61X3LqNbQQioD1Fe38bQj9jqkHDojVwU=";
   };
-
-  # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
-  # SciPy 1.18.0 and will be removed in SciPy 1.20.0
-  postPatch = ''
-    substituteInPlace pytensor/link/numba/dispatch/linalg/decomposition/qr.py \
-      --replace-fail "lwork=lwork," ""
-  '';
 
   build-system = [
     setuptools
@@ -60,9 +54,6 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
-  pythonRelaxDeps = [
-    "numba"
-  ];
   dependencies = [
     cons
     etuples

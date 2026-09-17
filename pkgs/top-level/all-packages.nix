@@ -2123,10 +2123,6 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  gpt4all-cuda = gpt4all.override {
-    cudaSupport = true;
-  };
-
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
   grails = callPackage ../development/web/grails { jdk = null; };
@@ -2764,8 +2760,6 @@ with pkgs;
   mpi = openmpi; # this attribute should used to build MPI applications
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
-
-  rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
   rapidgzip = with python3Packages; toPythonApplication rapidgzip;
 
