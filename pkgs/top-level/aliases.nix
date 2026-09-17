@@ -2677,6 +2677,7 @@ mapAliases {
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wasynth = throw "'wasynth' has been removed as it was discontinued upstream."; # Added 2026-09-04
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
+  waveterm = throw "'waveterm' has been removed due to EOL Electron and lack of maintainers in nixpkgs"; # Added 2026-09-17
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   wayv = throw "'wayv' has been removed as it is broken and unmaintained upstream"; # Added 2026-05-05
   wayvr-dashboard = throw "'wayvr-dashboard' and 'wlx-overlay-s' have been merged into a single application. Please switch to 'wayvr'"; # Added 2026-01-09
