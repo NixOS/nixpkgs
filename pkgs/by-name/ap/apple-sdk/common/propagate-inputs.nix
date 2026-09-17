@@ -2,12 +2,10 @@
   lib,
   cups,
   darwin,
-  db,
   libiconv,
   ncurses,
   stdenv,
   stdenvNoCC,
-  xcbuild,
 }:
 
 let
@@ -28,7 +26,11 @@ let
     buildInputs = [ darwin.libresolv ]; # The `configure` script requires libresolv headers.
 
     # CUPS’s configure script fails to find `ar` when cross-compiling.
-    configureFlags = [ "ac_cv_path_AR=${stdenv.cc.targetPrefix}ar" ];
+    configureFlags = [
+      "ac_cv_path_AR=${stdenv.cc.targetPrefix}ar"
+    ]
+    # headers-only install, ios cross-compile cannot find tls libraries.
+    ++ lib.optional stdenv.hostPlatform.isiOS "--with-tls=no";
 
     installTargets = [ "install-headers" ];
 

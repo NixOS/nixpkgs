@@ -27,6 +27,15 @@ let
       inherit sha256;
     }
   );
+
+  isIos = stdenv.hostPlatform.isiOS;
+  iosBelow = v: isIos && lib.versionOlder (stdenv.hostPlatform.darwinMinVersion or "0") v;
+
+  # strchrnul needs iOS 18.4
+  iosCflags = lib.optionalString (iosBelow "18.4") "-Wno-unguarded-availability-new";
+
+  # getentropy is a private API and will be rejected from App Store
+  iosConfigureFlags = lib.optionals isIos [ "ac_cv_func_getentropy=no" ];
 in
 lib.warnIf (withDocs != null)
   ''
@@ -87,7 +96,8 @@ lib.warnIf (withDocs != null)
     # this hack should be removed.
     + lib.optionalString stdenv.cc.isClang ''
       -std=c23
-    '';
+    ''
+    + iosCflags;
 
     patchFlags = [ "-p0" ];
 
@@ -132,7 +142,8 @@ lib.warnIf (withDocs != null)
       # /dev/fd is optional on FreeBSD. we need it to work when built on a system
       # with it and transferred to a system without it! This includes linux cross.
       "bash_cv_dev_fd=absent"
-    ];
+    ]
+    ++ iosConfigureFlags;
 
     strictDeps = true;
     # Note: Bison is needed because the patches above modify parse.y.
