@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "14.1.0",
-    "hash": "sha256-F5cc22t2pPKzVuTgtucwqYiuW3OHGiuB5DiAw5P3q1A="
+    "version": "14.1.2",
+    "hash": "sha256-eKBIjV1K2iaDt29ioY2NmLs7bv8JbUCxe4EtF4+eYqw="
   },
   {
     "pname": "Avalonia",
@@ -136,13 +136,13 @@
   },
   {
     "pname": "Dinah.Core",
-    "version": "11.0.0.1",
-    "hash": "sha256-Gx2t4FJYHgjf99jQ0W7f7MiWW+PhnO2rnOcqNZS4aLc="
+    "version": "11.0.1.1",
+    "hash": "sha256-gsr1DSNh/wOYaW3CgJZDFEjFDEc30XwKr3WoG4WQYUM="
   },
   {
     "pname": "Dinah.EntityFrameworkCore",
-    "version": "11.0.0.1",
-    "hash": "sha256-lQoLY2rXypMS6C2LBHTVYjIyfK395guFG0ln5ylUhW0="
+    "version": "11.0.1.1",
+    "hash": "sha256-wbqRL1dPobNmTTxfHFdqK6cX6QTsRZUDvDXtk1ikMNo="
   },
   {
     "pname": "DocumentFormat.OpenXml",

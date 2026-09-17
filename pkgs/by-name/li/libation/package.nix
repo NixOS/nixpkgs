@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "14.2.0";
+  version = "14.2.2";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-uTVKxMaYhcqWHSx21OIPqX2cIvfnEGiUKk4X1vfAF5s=";
+    hash = "sha256-IP3q8n5Bt3fjujkkFfUa3KhM8O5KA5AVAQJkPbwTHvg=";
   };
 
   sourceRoot = "${src.name}/Source";
