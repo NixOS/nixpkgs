@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    ./trsm-test-version.patch
     (fetchpatch {
       # [PATCH] Drop CMP0037 to fix cmake 4.0 build error
       name = "drop-cmp0037-old.patch";
