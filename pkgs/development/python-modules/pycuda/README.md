@@ -43,3 +43,10 @@ The [CUDA review and archived acceptance evidence](../../cuda-modules/review/REA
 covers CUDA 12.9 and 13.3, native x86_64 and cross-built AArch64 packages: 128
 checks, including 64 GPU updates. This is a focused default-argument regression,
 not exhaustive coverage of managed-memory migration or stream association.
+
+`passthru.tests.curandBuffers` runs `curand-buffer-test.py` with the SDK driver
+stub, without a GPU context. It checks the guarded direction-vector and scramble
+table bindings: valid counts (including repetition beyond 20,000 entries),
+rejected counts and buffer sizes, writable contiguous storage, untouched trailing
+capacity, and release of Python buffer exports. Run this regression only against
+the patched package; its rejected-input cases are not baseline reproductions.
