@@ -4655,6 +4655,13 @@ assertNoAdditions {
     };
   });
 
+  tiny-code-action-nvim = super.tiny-code-action-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # test for optional previewer
+      "tiny-code-action.previewers.snacks"
+    ];
+  };
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
