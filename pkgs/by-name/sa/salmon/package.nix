@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://combine-lab.github.io/salmon";
     downloadPage = "https://github.com/COMBINE-lab/salmon/releases";
     changelog = "https://github.com/COMBINE-lab/salmon/releases/tag/" + "v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
