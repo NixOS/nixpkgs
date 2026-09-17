@@ -122,7 +122,6 @@ stdenv'.mkDerivation (finalAttrs: {
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
-    moveToOutput lib/xml2Conf.sh "$dev"
   ''
   + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
