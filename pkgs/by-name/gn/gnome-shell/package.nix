@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   replaceVars,
   lib,
   stdenv,
@@ -105,12 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
     # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
     ./greeter-logo-size.patch
-
-    # Fixes build: https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/4384
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/877b7dd14fa36a1b3810034bdfd05425be2e1817.patch";
-      hash = "sha256-klScQaVL71eJzmbzMGAKpc5HtnDFc3074MjeMP1ie6Y=";
-    })
   ];
 
   nativeBuildInputs = [
