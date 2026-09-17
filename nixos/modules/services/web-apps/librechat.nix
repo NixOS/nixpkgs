@@ -167,7 +167,55 @@ in
       '';
     };
 
-    enableLocalDB = lib.mkEnableOption "a local mongodb instance";
+    enableLocalDB = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable and configure a local MongoDB instance for LibreChat.
+
+        ::: {.warning}
+        This option is deprecated in favor of {option}`services.librechat.localDB.enable`
+        and will be removed in a future release.
+        :::
+      '';
+    };
+
+    localDB = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = cfg.enableLocalDB;
+            defaultText = lib.literalExpression "config.services.librechat.enableLocalDB";
+            example = true;
+            description = ''
+              Whether to enable and configure a local MongoDB instance for LibreChat.
+            '';
+          };
+
+          name = lib.mkOption {
+            type = lib.types.str;
+            default = "test";
+            example = "LibreChat";
+            description = ''
+              Name of the database LibreChat's local MongoDB instance will use.
+
+              This defaults to `test` to match MongoDB's historical fallback behavior when no
+              database name is given in the connection string, so upgrading does not silently
+              move existing installations to a different database. Set this to `LibreChat` (or
+              any other name) if you'd like a properly named database instead; note that MongoDB
+              will not migrate existing data automatically when you change this, see the release
+              notes for a manual migration procedure.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Options for the local MongoDB instance used by LibreChat.
+      '';
+    };
 
     meilisearch = lib.mkOption {
       type = lib.types.submodule {
@@ -191,10 +239,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional cfg.enableLocalDB ''
+      `services.librechat.enableLocalDB` is deprecated and will be removed in a future release.
+      Use `services.librechat.localDB.enable` instead.
+    '';
     assertions = [
       {
         assertion = cfg.env ? MONGO_URI || cfg.credentials ? MONGO_URI;
-        message = "MongoDB is not configured, either set `services.librechat.enableLocalDB = true` or provide your own MongoDB instance by setting `services.librechat.env.MONGO_URI` or `services.credentials.MONGO_URI`.";
+        message = "MongoDB is not configured, either set `services.librechat.localDB.enable = true` or provide your own MongoDB instance by setting `services.librechat.env.MONGO_URI` or `services.credentials.MONGO_URI`.";
       }
       {
         assertion =
@@ -287,8 +339,8 @@ in
 
     users.groups.librechat = lib.mkIf (cfg.user == "librechat") { };
 
-    services.librechat.env.MONGO_URI = lib.mkIf cfg.enableLocalDB "mongodb://localhost:27017";
-    services.mongodb.enable = lib.mkIf cfg.enableLocalDB true;
+    services.librechat.env.MONGO_URI = lib.mkIf cfg.localDB.enable "mongodb://localhost:27017/${cfg.localDB.name}";
+    services.mongodb.enable = lib.mkIf cfg.localDB.enable true;
 
     services.meilisearch.enable = lib.mkIf cfg.meilisearch.enable true;
     services.librechat.env.SEARCH = lib.mkIf cfg.meilisearch.enable true;
