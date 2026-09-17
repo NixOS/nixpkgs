@@ -1964,8 +1964,6 @@
   ./services/x11/xfs.nix
   ./services/x11/xscreensaver.nix
   ./services/x11/xserver.nix
-  ./system/alternatives.nix
-  ./system/foreign-packages.nix
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/bootspec.nix
@@ -1974,6 +1972,7 @@
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
   ./system/activation/top-level.nix
+  ./system/alternatives.nix
   ./system/boot/binfmt.nix
   ./system/boot/clevis-luks-askpass.nix
   ./system/boot/clevis.nix
@@ -2039,14 +2038,15 @@
   ./system/boot/zram-as-tmp.nix
   ./system/boot/zswap.nix
   ./system/etc/etc-activation.nix
-  ./system/service/init-system.nix
-  ./system/service/systemd/system.nix
-  ./system/service/systemd/user.nix
+  ./system/foreign-packages.nix
   ./system/service/dinit/system.nix
+  ./system/service/freebsd/rc-d/system.nix
+  ./system/service/init-system.nix
   ./system/service/runit/system.nix
   ./system/service/s6/system.nix
   ./system/service/systemd-compat.nix
-  ./system/service/freebsd/rc-d/system.nix
+  ./system/service/systemd/system.nix
+  ./system/service/systemd/user.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
