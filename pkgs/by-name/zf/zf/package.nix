@@ -6,6 +6,7 @@
   testers,
   zig_0_15,
   callPackage,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     version = finalAttrs.upstreamVersion;
   };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/natecraddock/zf";
