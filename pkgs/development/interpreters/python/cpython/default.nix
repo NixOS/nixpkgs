@@ -751,9 +751,9 @@ stdenv.mkDerivation (finalAttrs: {
       linkDLLsInfolder $out/lib/python*/lib-dynload/
     '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
+    export HOST_PATH="${lib.makeBinPath [ "$out" ]}''${HOST_PATH+:}$HOST_PATH"
   '';
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
