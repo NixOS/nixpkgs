@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   buildPackages,
+  bashNonInteractive,
   postgresql,
 }:
 
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
   propagatedBuildOutputs = [ ];
+
+  buildInputs = [ bashNonInteractive ];
 
   strictDeps = true;
 
