@@ -14507,6 +14507,8 @@ self: super: with self; {
 
   pybcj = callPackage ../development/python-modules/pybcj { };
 
+  pybedtools = callPackage ../development/python-modules/pybedtools { };
+
   pybids = callPackage ../development/python-modules/pybids { };
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
