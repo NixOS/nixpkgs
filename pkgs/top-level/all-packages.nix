@@ -10027,6 +10027,8 @@ with pkgs;
 
   blas-ilp64 = blas.override { isILP64 = true; };
 
+  globalarrays-ilp64 = globalarrays.override { blas = blas-ilp64; };
+
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
   liblapack = lapack-reference;
