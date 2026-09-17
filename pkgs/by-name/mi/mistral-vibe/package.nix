@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.25.2";
+  version = "2.25.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFlZ8OGiuv23MTRUU4Ii78S0+59HFSe9uH3UaWleCNs=";
+    hash = "sha256-v+Pl15r32DaB/+Yo1zKvMP1iFmC1q111s16KNpWLanI=";
   };
 
   build-system = with python3Packages; [
@@ -31,6 +31,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = true;
+  # Closed-source binary wheel, only needed by the opt-in Unified Harness backend
+  # (`--experimental-harness`), which stays unavailable without it
+  pythonRemoveDeps = [
+    "mistralai-vibe-local-harness"
+  ];
   dependencies =
     with python3Packages;
     [
@@ -74,7 +79,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mdit-py-plugins
       mdurl
       mistralai
-      mistralai-vibe-local-harness
       more-itertools
       opentelemetry-api
       opentelemetry-exporter-otlp-proto-common
@@ -178,6 +182,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Flaky: AssertionError: Timed out waiting for UI state
     "test_incomplete_stream_does_not_retry_ahead_of_queued_prompts"
+
+    # Both writes land in the same coarse filesystem timestamp tick, so the
+    # (device, inode, mtime, size) fingerprint does not change
+    "test_changes_when_file_changes"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Timed out waiting for UI state
@@ -195,6 +203,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # Fails to import the removed `mistralai_vibe_local_harness`
+    "tests/app_server/test_unified_harness_backend_adapter.py"
+
     # All snapshot tests use syrupy 4.8.0, which is not packaged here.
     "tests/snapshots/"
 
@@ -216,6 +227,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # FileNotFoundError: [Errno 2] No such file or directory: 'bash'
     "tests/test_install_script.py"
+
+    # The installer is run with a PATH restricted to /usr/bin:/bin, where the
+    # sandbox provides no `bash`
+    "tests/test_install_script.py"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky: the 0.5s double/triple click chain threshold expires on slow builders
+    "tests/cli/textual_ui/test_chat_input_word_drag.py"
   ];
 
   __darwinAllowLocalNetworking = true;

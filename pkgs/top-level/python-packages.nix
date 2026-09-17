@@ -10944,7 +10944,6 @@ self: super: with self; {
   mistral-inference = callPackage ../development/python-modules/mistral-inference { };
 
   mistralai = callPackage ../development/python-modules/mistralai { };
-  mistralai-vibe-local-harness = callPackage ../development/python-modules/mistralai-vibe-local-harness { };
 
   mistune = callPackage ../development/python-modules/mistune { };
 
