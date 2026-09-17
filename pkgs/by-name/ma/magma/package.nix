@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    ./sparse-free-status.patch
     ./trsm-test-version.patch
     (fetchpatch {
       # [PATCH] Drop CMP0037 to fix cmake 4.0 build error
@@ -141,6 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport [
     # Export the public CUDA component interfaces, not build-only include paths.
     ./cuda-pkg-config.patch
+    # Reuse checked cuSPARSE workspace across symbolic and numeric addition.
+    ./csrgeam2-workspace.patch
+    ./spgemm-resources.patch
+    # Share checked workspace ownership for sparse conversion and transpose.
+    ./csr2csc-workspace.patch
+    # Release conversion scratch arrays and propagate cuSPARSE failures.
+    ./coo2csr-resources.patch
+    # Match dense descriptors to op(A) and release checked temporary resources.
+    ./spmv-spmm-workspace.patch
     # Fixes:
     # error: 'struct cudaDeviceProp' has no member named 'clockRate'
     # Context: https://github.com/icl-utk-edu/magma/issues/61
@@ -414,6 +424,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests =
       lib.optionalAttrs cudaSupport {
+        sparse = callPackage ./tests/sparse.nix {
+          inherit stdenv;
+          magma = finalAttrs.finalPackage;
+        };
         pkg-config = callPackage ./pkg-config-test.nix {
           inherit stdenv;
           magma = finalAttrs.finalPackage;
