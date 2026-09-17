@@ -10,12 +10,12 @@
   cudaMajorVersion,
   cudaNamePrefix,
   fetchurl,
+  gccForLibs,
   lib,
   manifests,
   redistSystem,
   removeStubsFromRunpathHook,
   srcOnly,
-  stdenv,
   stdenvNoCC,
   zstd,
 }:
@@ -320,11 +320,11 @@ extendMkDerivation {
       ++ nativeBuildInputs;
 
       buildInputs = [
-        # Match the C++ runtime used by the rest of Nixpkgs, independently of
-        # which compiler NVCC supports.
+        # NVIDIA's binaries require the GNU runtime independently of the
+        # compiler and C++ runtime selected for source-built packages.
         # NOTE: Not all packages actually need this, but it's easier to just add it than create overrides for nearly all
         # of them.
-        (lib.getLib stdenv.cc.cc)
+        (lib.getLib gccForLibs)
       ]
       ++ buildInputs;
 

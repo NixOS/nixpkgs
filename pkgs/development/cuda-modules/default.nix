@@ -153,10 +153,12 @@ let
           autoPatchelfHook
           fetchurl
           srcOnly
-          stdenv
           stdenvNoCC
           zstd
           ;
+        # GCC's library output is for its TARGET. Select BUILD -> HOST before
+        # taking that output, including when this redist itself is a BUILD tool.
+        inherit (pkgs.pkgsBuildHost) gccForLibs;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
           redistSystem
