@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLIBZIPPP_GNUINSTALLDIRS=ON"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libzip
