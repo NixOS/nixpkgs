@@ -54,6 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aaronjanse
       MayNiklas
+      wrench-exile-legacy
     ];
     mainProgram = "minecraft-server";
   };
