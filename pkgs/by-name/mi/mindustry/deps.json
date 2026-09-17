@@ -2,10 +2,10 @@
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
  "https://jitpack.io/com/github": {
-  "Anuken#rhino/e74ac129d2bff72c1deb536d7d99a0dbb7046d2e": {
-   "jar": "sha256-iRvhgKzqoi/8VMmkiM5ibGULv6e07A98e8QoMB6XROQ=",
-   "module": "sha256-c02sDzu5Z+dMXP2DcCFen9ImCWTtZ2I06uSrrtJ8QIo=",
-   "pom": "sha256-kUrWd9wtr/SN21fjmyInwRN8CSxp2nKfeji3qz1OteA="
+  "Anuken#rhino/32395f942976a6d1d21ec9877664554cd5762306": {
+   "jar": "sha256-FLi9abGTI+nP6mStbPgvue7fXIgUrKqN9EZZ4YHj6rE=",
+   "module": "sha256-4OnGk4UsPE50E7Q9V9suDCsm0RF0SWFNKJoPSPU9r2c=",
+   "pom": "sha256-UukU923dR7GWImrL4fdRbVD/rIci4YvxFNTdSZ35NP4="
   },
   "Anuken#steamworks4j/da41c05b7a2a44c8625ca0ba7d6ca1a2e73f621a": {
    "jar": "sha256-+8oDVVVbQSpioDAUXKm+vqe3YutsioD4eON7bp9JW0k=",
@@ -53,25 +53,25 @@
   "ch/qos/logback#logback-parent/1.4.14": {
    "pom": "sha256-5bddPe8EJ1dkUEoXp8GqHj7jcKWxpUiIS74Vfr3eXv0="
   },
-  "com/badlogicgames/jnigen#jnigen-commons/3.1.1": {
-   "jar": "sha256-GhpDx0Kwd5H1I6LjAGzkysOnyWC60i3qcE0lf5+5Uic=",
-   "module": "sha256-h5TNmSGiisv/kGGm6e7jU3JW26POyMo58eKt7d1zG2E=",
-   "pom": "sha256-lKy0mhhj7cQgfVn6iwc9U1m4PuGhX+eYY0RTlYvaoTQ="
+  "com/badlogicgames/jnigen#jnigen-commons/3.1.2": {
+   "jar": "sha256-DnSM9SIMqQeWvz61JeOohIFW/zC2JB8g/NrozSoY/I0=",
+   "module": "sha256-0XfylGOzkNPCvzxbG0Vm446uZsMr2yu5DX7PraM1TPM=",
+   "pom": "sha256-wsncZ0SMwzKXNVcykrnyA0TYcQXTwpfU9oPC7W/9QhU="
   },
-  "com/badlogicgames/jnigen#jnigen-core/3.1.1": {
-   "jar": "sha256-9sl8HgFko1FKWFPR7+emTKYoXAZis5C6GGEMVRddqOM=",
-   "module": "sha256-arm2LaOD7BF6rY5Iv4bW2e3SP5Gq6TgJhlrO9vkg+AY=",
-   "pom": "sha256-ig4v9L0DMgIIumfHwy+YZbn3dKwvz97+nPdHHT2oOl4="
+  "com/badlogicgames/jnigen#jnigen-core/3.1.2": {
+   "jar": "sha256-qWsuGL/3szIep6tUkgtrsr75NnDqN0MeFbuwXXYtpbU=",
+   "module": "sha256-g/a46oN3csFoVsvvkF72dbtSNIRvJSTfqt8TMJa/7/A=",
+   "pom": "sha256-2QcHJnrte5dI8W5j5/TleEIxQNI7eLtFm1jkJh5r26w="
   },
-  "com/badlogicgames/jnigen#jnigen-generator/3.1.1": {
-   "jar": "sha256-ipB6ZfxDED5WNDk7eq8Cc6Iog9AgkoBbyCGrmvMht4E=",
-   "module": "sha256-l4Y/xRC2r16qspcGcADJsnp2nY2owo56r+SVGEXyc/U=",
-   "pom": "sha256-/MiUlSd0enOtc7FBjbjjVlW/tfTaIF+GjuEq0rmbQlg="
+  "com/badlogicgames/jnigen#jnigen-generator/3.1.2": {
+   "jar": "sha256-T1ThobVCn/xtPvHuLLdSMKhNcwjLopmtRXASgexW4bo=",
+   "module": "sha256-va5brIvJXoPt0xlONHNCJW9xOOLrmRNcjasfcCvrjrA=",
+   "pom": "sha256-tuAk/T9yUIJ0Ue4jjWnXEVY/nrZk4u9RTZqEXugSKgE="
   },
-  "com/badlogicgames/jnigen#jnigen-gradle/3.1.1": {
-   "jar": "sha256-riahTjGeDivvNIIZdnd6hZ8L0a0omdLioDJ4VT6PXEw=",
-   "module": "sha256-Smwq0R4Dlv2f5RdgwERw18Zps62iGewN5bttg6pY8pg=",
-   "pom": "sha256-Yh5nfY9xbZWvlhWI1UFOWJud0YG/KEl7LR75XVf/mV8="
+  "com/badlogicgames/jnigen#jnigen-gradle/3.1.2": {
+   "jar": "sha256-WhpECjrL4ygWsucudyEq/h7sTLWQVsPnn5tPNg9dY1I=",
+   "module": "sha256-8e5D0+ciQ7hiB30I6eOne0g0/plo6m2ug4bFp6Y0Ppo=",
+   "pom": "sha256-OyjiQiUnQdwrmuaIIDg+KMcYyoNbUC7Ohp173HKWOEQ="
   },
   "com/github/javaparser#javaparser-core/3.14.14": {
    "pom": "sha256-70ERyN/Uh+Zp5w1Qzz2z8O3YuTLKvjXmYzuzzuuGpIo="
@@ -80,11 +80,18 @@
    "jar": "sha256-okxPp3mf/gx6mvEdTuzXVwmO1EmPhgZ78otGsr/qGDM=",
    "pom": "sha256-ZiXjSXeLPDEAJopgk6v0RHLl6WYe85nDNHjYdx+Fgu0="
   },
+  "com/github/javaparser#javaparser-core/3.28.2": {
+   "jar": "sha256-tUmaOxxAsWwGcfq+R4yar+qzgWDG/edKbBP0LYZxbs0=",
+   "pom": "sha256-h9KzM9/sloltWknoCpW5LvVy9hDoSCdrReqgYeBbQTI="
+  },
   "com/github/javaparser#javaparser-parent/3.14.14": {
    "pom": "sha256-RwgtW3eLzkmjEnRtUWHJ48yhfYwh2eO+MTF68Io2FDc="
   },
   "com/github/javaparser#javaparser-parent/3.26.3": {
    "pom": "sha256-oQvtmKrkapQj/eE719L60v+wIjz/WY/MjbzA72a7wyg="
+  },
+  "com/github/javaparser#javaparser-parent/3.28.2": {
+   "pom": "sha256-A1jOdbyhpUwUHha38WIelz+hd932T+ArDzjfI61ABUM="
   },
   "com/google/code/findbugs#jsr305/3.0.2": {
    "jar": "sha256-dmrSoHg/JoeWLIrXTO7MOKKLn3Ki0IXuQ4t4E+ko0Mc=",
@@ -348,6 +355,10 @@
   "org/json#json/20230618": {
    "jar": "sha256-cAQAep/Yf+HYb2c7RywDcuW8ULrLckwCmmES18S0pkA=",
    "pom": "sha256-CmVT5rRPYUi1qZu7q1MyudxDngdXpYniQZBgvfsC/Oo="
+  },
+  "org/junit#junit-bom/5.14.4": {
+   "module": "sha256-il6Y0THefXqtse6Iv9htZuYqfC4qQHSjskmLA9I262Q=",
+   "pom": "sha256-Vwbo8poKB/Vu+76koGcHk0FBlLuNJNgUO6Hnh6LzKFY="
   },
   "org/junit#junit-bom/5.7.1": {
    "module": "sha256-mFTjiU1kskhSB+AEa8oHs9QtFp54L0+oyc4imnj67gQ=",

@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.CXXFLAGS = "-std=c++98";
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library containing FFT functions written in OpenCL";
     longDescription = ''
       clFFT is a software library containing FFT functions written in OpenCL.
