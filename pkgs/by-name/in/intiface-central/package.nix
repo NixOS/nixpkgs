@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter338,
+  flutter347,
   corrosion,
   rustPlatform,
   cargo,
@@ -27,13 +27,13 @@ let
 
   pname = "intiface-central";
 
-  version = "3.0.4+40";
+  version = "3.1.1+43";
 
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     tag = "v${version}";
-    hash = "sha256-RMllaThwCp2mRl0ecMtj3z6DC4uhdLqYNPI8lZChmhI=";
+    hash = "sha256-9oej7XjqkFJmmGqfTPpIX1IfofbyAn4HE+mk9KbcqZ8=";
   };
 
   rustDep = rustPlatform.buildRustPackage {
@@ -46,7 +46,7 @@ let
       ln -s ${buttplug} ../../buttplug
     '';
 
-    cargoHash = "sha256-2KmwfvSDIaLvGda/EofUxGPRevv+/UQOUdSPRF2LEJw=";
+    cargoHash = "sha256-21B8pnFxBvxt5DtnfjQpyaNA8Yu3dxgUj7Nb89X0bg0=";
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -68,11 +68,11 @@ let
   buttplug = fetchFromGitHub {
     owner = "buttplugio";
     repo = "buttplug";
-    tag = "intiface_engine_4.0.2";
-    hash = "sha256-4tzGZEsqfCnz/ZX6qNx/Hku6yDK0g6gyep6p6WZGoQk=";
+    tag = "intiface-engine-4.1.0";
+    hash = "sha256-CeOaxJ+0Kf1eBu0XlelQ3Nvq+cstiLBidgF9ms1yD/Q=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit pname version src;
 
   patches = [
