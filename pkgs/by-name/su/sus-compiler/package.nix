@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RbZRKb5o6ojbpcLNq3v25YhRuDbVyHoEzA2Mr77LTPA=";
+    hash = "sha256-Nt7g5vj7TUMd3ugCm/LR8zT0pytyQHxJevD/6S0/6HQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
 

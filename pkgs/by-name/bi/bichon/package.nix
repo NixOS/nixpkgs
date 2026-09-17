@@ -3,7 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   nodejs,
   openssl,
@@ -11,6 +11,9 @@
   versionCheckHook,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_11;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bichon";
   version = "2.0.3";
@@ -27,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     sourceRoot = "${finalAttrs.src.name}/web";
     fetcherVersion = 4;
     hash = "sha256-Ax8z1sjt8v6XOenhw7eRuEEo0huPv9fbcfzqc8RxJEc=";

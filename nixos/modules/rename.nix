@@ -520,6 +520,9 @@ in
     (mkRemovedOptionModule [ "services" "filesender" ] ''
       services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
     '')
+    (mkRemovedOptionModule [ "services" "pghero" ] ''
+      services.pghero has been removed because the (unmaintained) package was removed from Nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "postfixadmin" ] ''
       services.postfixadmin has been removed since it was unmaintained in nixpkgs and the version
       available only supported PHP 8.1 which is EOL.

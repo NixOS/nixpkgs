@@ -5,12 +5,14 @@
   fetchpatch2,
   fetchFromGitHub,
   python,
+  abseil-cpp,
   ada,
   brotli,
   c-ares,
   gtest,
   hdrhistogram_c,
   libffiReal,
+  libhwy,
   libuv,
   lief,
   llhttp,
@@ -137,6 +139,7 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
+  useSharedAbseilAndHighway = lib.versionAtLeast version "26.9";
   useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
   useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
@@ -163,6 +166,10 @@ let
     cares = c-ares;
     http-parser = llhttp;
   }
+  // (lib.optionalAttrs useSharedAbseilAndHighway {
+    abseil = abseil-cpp;
+    highway = libhwy;
+  })
   // (lib.optionalAttrs useSharedAdaAndSimd {
     inherit
       ada
