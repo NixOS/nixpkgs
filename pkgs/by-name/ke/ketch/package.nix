@@ -28,6 +28,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
+  # config user_agent field does not align due to setting version via ldflags, thus skip this test
+  checkFlags = [ "-skip=^TestRegistryConfigCompatibilityGolden$" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
