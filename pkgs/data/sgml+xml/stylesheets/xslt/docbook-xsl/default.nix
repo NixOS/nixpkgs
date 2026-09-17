@@ -5,9 +5,9 @@
   fetchurl,
   fetchpatch,
   findXMLCatalogs,
-  writeScriptBin,
+  writeShellScriptBin,
   ruby,
-  bash,
+  perl,
   withManOptDedupPatch ? false,
 }:
 
@@ -84,10 +84,22 @@ let
           runHook postInstall
         '';
 
-        passthru.dbtoepub = writeScriptBin "dbtoepub" ''
-          #!${bash}/bin/bash
-          exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${finalAttrs.pname}/epub/bin/dbtoepub "$@"
+        preFixup = ''
+          # Don't pull in large dependencies for scripts, but also don't leave them impurely executable
+          # Requires ruby, included in passthru instead
+          chmod a-x $out/share/xml/${finalAttrs.pname}/epub/bin/dbtoepub
+          # Requires perl, included in passthru instead
+          chmod a-x $out/share/xml/${finalAttrs.pname}/fo/pdf2index
         '';
+
+        passthru = {
+          dbtoepub = writeShellScriptBin "dbtoepub" ''
+            exec -a dbtoepub ${lib.getExe ruby} ${self}/share/xml/${finalAttrs.pname}/epub/bin/dbtoepub "$@"
+          '';
+          pdf2index = writeShellScriptBin "pdf2index" ''
+            exec -a pdf2index ${lib.getExe perl} ${self}/share/xml/${finalAttrs.pname}/fo/pdf2index "$@"
+          '';
+        };
 
         __structuredAttrs = true;
 
