@@ -31,6 +31,16 @@
       path = ../22;
     }
   ];
+  "lldb/gnu-install-dirs.patch" = [
+    {
+      before = "23";
+      path = ../18;
+    }
+    {
+      after = "23";
+      path = ../23;
+    }
+  ];
   "llvm/backport-darwin-triple-parsing.patch" = [
     {
       after = "18";

@@ -3,11 +3,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   stdenvNoCC,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "weather-forecast-card";
   version = "1.1.0";

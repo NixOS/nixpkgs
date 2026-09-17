@@ -16,7 +16,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "aurral";
-  version = "2.8.0";
+  version = "2.9.0";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ceo5CHIGa+98XFLazqmAyAV64rzDYqB0gvJ95AKwfUk=";
+    hash = "sha256-pwk+efWL0dfvKiobRmGXgPtvunpRDOVbtxohbJamVqY=";
   };
 
   # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
     ./package.json.patch
   ];
 
-  npmDepsHash = "sha256-Qa/TcKzMEY/w8FWKMiHUeqVB9cMxxWtEwF30y0nndkg=";
+  npmDepsHash = "sha256-NVz5eqDDtMBKiTDl3aX0pHBYGTcYal8lmCf8mbKu31I=";
 
   nodejs = nodejs_26;
 

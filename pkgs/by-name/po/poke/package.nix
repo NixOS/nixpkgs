@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poke";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchurl {
     url = "mirror://gnu/poke/poke-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qEy5F11Q1FpBHySB/QZiuDyzLOUXMWuInPtXCBlXk3M=";
+    hash = "sha256-aHPVmr6CHIERuIYj6nrZ4JCJL6lcdVYmBt2IN04vW48=";
   };
 
   outputs = [

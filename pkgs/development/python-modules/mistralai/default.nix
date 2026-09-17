@@ -21,11 +21,14 @@
   griffe,
   mcp,
   google-auth,
+  msgpack,
   requests,
   websockets,
+  zstandard,
   opentelemetry-exporter-otlp-proto-http,
 
   # tests
+  opentelemetry-instrumentation-httpx,
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
@@ -83,26 +86,31 @@ buildPythonPackage (finalAttrs: {
       opentelemetry-sdk
       opentelemetry-exporter-otlp-proto-http
     ];
+    workflow_payload_compression = [
+      msgpack
+      zstandard
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
+    opentelemetry-instrumentation-httpx
     pytest-asyncio
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
   ++ finalAttrs.passthru.optional-dependencies.gcp
   ++ finalAttrs.passthru.optional-dependencies.realtime
-  ++ finalAttrs.passthru.optional-dependencies.telemetry;
+  ++ finalAttrs.passthru.optional-dependencies.telemetry
+  ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
 
   disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'opentelemetry.instrumentation'
-    "src/mistralai/extra/tests/test_otel_tracing.py"
-    # ModuleNotFoundError: No module named 'msgpack'
-    "src/mistralai/extra/tests/test_workflow_encoding.py"
-    # '062f2cad7f1fee8c3e409b73d431e71b' not found in '00-e5d29cde482d5d796428c10d13e86060-468fe44f7efdb086-01'
-    "src/mistralai/extra/tests/test_traceparent_hook.py::TestTraceparentInjectionHook::test_propagates_sampled_active_span"
+    # Local test servers cannot bind in the Nix sandbox.
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_app_otel_does_not_enable_mistral_span_without_mistral_telemetry"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_concurrent_async_httpx_auto_instrumented_spans_are_genai_children"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_httpx_auto_instrumented_span_is_child_of_genai_span"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestPerInstanceTracerProvider::test_get_telemetry_tracer_dedicated_provider_captures_app_spans"
   ];
 
   meta = {
