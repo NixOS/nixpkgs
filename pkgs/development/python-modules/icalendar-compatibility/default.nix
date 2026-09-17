@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "icalendar-compatibility";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "icalendar_compatibility";
     tag = "v${version}";
-    hash = "sha256-h9rpbltNEPMteicPJ6oC32NsZS8QXQphLbC0Qiu7j5Q=";
+    hash = "sha256-rHx4wuLKSBI3/3ShxtpyyuK+iWULpbzfDN8DCNUryHg=";
   };
 
   # hatch-vcs tries to read the current git commit hash
