@@ -18,10 +18,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-+AT1juS2nHb4TrMoHhQHSCaaY/P0qBYBWo3sKgbSsZU=";
   };
 
-  # undmg can't read the APFS dmg; -snld keeps the .app's symlinks intact.
   nativeBuildInputs = [ _7zz ];
   sourceRoot = ".";
-  unpackCmd = "7zz x -snld $curSrc";
 
   installPhase = ''
     runHook preInstall
