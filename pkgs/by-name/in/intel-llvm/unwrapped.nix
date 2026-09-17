@@ -235,9 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     # so we just let bash handle it.
     # NOTE: We prepend, so that flags we set manually override what the build script does.
     eval "prependToVar cmakeFlags $flags"
-
-    # Remove the install prefix flag
-    cmakeFlags=(''${cmakeFlags[@]/-DCMAKE_INSTALL_PREFIX=$NIX_BUILD_TOP\/source\/build\/install})
   '';
 
   cmakeDir = "llvm";
