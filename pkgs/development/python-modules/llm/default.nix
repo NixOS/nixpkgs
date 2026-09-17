@@ -4,13 +4,13 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
+  httpx2,
   numpy,
+  httpx2-pytest,
   openai,
   pip,
   pluggy,
@@ -22,9 +22,7 @@
   sqlite-migrate,
   cogapp,
   pytest-asyncio,
-  pytest-httpx,
   pytest-recording,
-  sqlite,
   sqlite-utils,
   syrupy,
   llm-echo,
@@ -166,7 +164,7 @@ let
   );
   llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.31.1";
+    version = "0.35";
     pyproject = true;
     __structuredAttrs = true;
 
@@ -176,17 +174,11 @@ let
       owner = "simonw";
       repo = "llm";
       tag = finalAttrs.version;
-      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
+      hash = "sha256-vaoNxU1KIuT7EV9uiCAA7JamtwExONPlnmjioDE3wH8=";
     };
 
     patches = [
       ./001-disable-install-uninstall-commands.patch
-      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
-      ./do-not-commit-inside-content_hash-embeddings.patch
-      (fetchpatch2 {
-        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
-        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
-      })
     ];
 
     postPatch = ''
@@ -197,7 +189,7 @@ let
     dependencies = [
       click-default-group
       condense-json
-      numpy
+      httpx2
       openai
       pip
       pluggy
@@ -206,7 +198,6 @@ let
       python-ulid
       pyyaml
       setuptools # for pkg_resources
-      sqlite-migrate
       sqlite-utils
     ];
 
@@ -214,7 +205,7 @@ let
       cogapp
       numpy
       pytest-asyncio
-      pytest-httpx
+      httpx2-pytest
       pytest-recording
       syrupy
       pytestCheckHook
