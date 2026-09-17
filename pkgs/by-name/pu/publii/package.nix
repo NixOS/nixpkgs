@@ -105,5 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
     ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      "Electron 41 is EOL"
+    ];
   };
 })
