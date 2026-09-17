@@ -11,14 +11,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "1.3.5";
+  version = "1.4.0b1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IJ/Y1y94esoJtGNJBUbwQo5H0s6hGcUDCIfI1RUht1c=";
+    hash = "sha256-RzABlTt1LKdRsmWxxI2kC6dj6Zn2q7LjIwEKZtL+lKM=";
   };
 
   makeCacheWritable = true;
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zIqkJdXeQjvXW9TSKZ2Qs9YwiSdRb7HNhZB9Roauu9Y=";
+    hash = "sha256-KE3DS4TMSunHHYEkLROnFSJHiY0EZtL3jSJ0tZTmtmI=";
     sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
   };
 
