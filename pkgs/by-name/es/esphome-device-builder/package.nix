@@ -4,6 +4,7 @@
   python3Packages,
   fetchFromGitHub,
   gitMinimal,
+  coreutils,
   versionCheckHook,
   esptool,
   esphome,
@@ -32,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "esphome-device-builder";
-  version = "1.12.1";
+  version = "1.14.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder";
     tag = finalAttrs.version;
-    hash = "sha256-vPL2ynVoPIDu66NaWIgmOtOq8NlUl6xeeSezbva7Ztw=";
+    hash = "sha256-G2zY0ilXCAFiSkQvaSN7rdlSBH8WkjKXkkDQqvTfvI0=";
   };
 
   __structuredAttrs = true;
@@ -93,6 +94,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --replace-fail 'shutil.which("git")' '"${lib.getExe gitMinimal}"'
     substituteInPlace tests/test_editor_controller.py \
       --replace-fail 'controller._esphome_cmd = ["esphome"]' 'controller._esphome_cmd = ["${lib.getExe pythonPackages.esphome}"]'
+
+    substituteInPlace tests/helpers/test_orphan_reaper.py \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   # Needed for tests
