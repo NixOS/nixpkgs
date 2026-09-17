@@ -1702,6 +1702,7 @@
   ./services/web-apps/dolibarr.nix
   ./services/web-apps/drasl.nix
   ./services/web-apps/drupal.nix
+  ./services/web-apps/dynacat.nix
   ./services/web-apps/echoip.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
