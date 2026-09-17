@@ -7,6 +7,7 @@
   pkg-config,
   protobuf,
   bzip2,
+  libclang,
   oniguruma,
   sqlite,
   xz,
@@ -21,7 +22,7 @@
 }:
 
 let
-  version = "0.91.5";
+  version = "1.0.1";
   updateScript = gitUpdater {
     rev-prefix = "v";
     ignoredVersions = "rc";
@@ -30,6 +31,7 @@ let
     description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
     mainProgram = "openobserve";
     maintainers = with lib.maintainers; [
+      EpicEric
       happysalada
       kashw2
     ];
@@ -45,7 +47,7 @@ if enableEnterprise then
 
     src = fetchurl {
       url = "https://downloads.openobserve.ai/releases/o2-enterprise/v${finalAttrs.version}/openobserve-ee-v${finalAttrs.version}-linux-amd64-musl.tar.gz";
-      hash = "sha256-DFhK180XeoSDC644kBqBUD35FtdSmQya2VbzxEh4iSM=";
+      hash = "sha256-dcdprmmIIF/8QfrWYkLspFjqTDUuHHE4RFpUPSHIqcA=";
     };
 
     # The tarball is a single flat `openobserve` binary.
@@ -83,30 +85,48 @@ else
   rustPlatform.buildRustPackage (
     finalAttrs:
     let
+      o2Datasource = fetchFromGitHub {
+        owner = "openobserve";
+        repo = "o2-datasource";
+        rev = "7ea74ba2b8eabe5758c81b928a835144dc1f7f60";
+        hash = "sha256-vORes6FEbhijRLTWjEaB+KHOUls2CGBED6WzLF3stnM=";
+      };
+
       web = buildNpmPackage {
         inherit (finalAttrs) src version;
         pname = "openobserve-ui";
 
         sourceRoot = "${finalAttrs.src.name}/web";
 
-        npmDepsHash = "sha256-te8uABzndzLRb6GQVSn33aaleQau2U/xo8LnMynTtx0=";
+        npmDepsHash = "sha256-BXImhtpBpLKresCWdhQIhVu80HmP0WfUcjTFaStkQ4A=";
 
         preBuild = ''
-          # Patch vite config to not open the browser to visualize plugin composition
-          substituteInPlace vite.config.ts \
-            --replace "open: true" "open: false";
+          mkdir -p src/assets/ai-datasource-content/generated
+          cp -r ${o2Datasource}/datasource-ui-content/* src/assets/ai-datasource-content/generated/
+          cat > src/assets/ai-datasource-content/generated/.fetch.json <<EOF
+          {
+            "repo": "https://github.com/openobserve/o2-datasource",
+            "ref": "main",
+            "sha": "${o2Datasource.rev}",
+            "fetchedAt": "1970-01-01T00:00:00.000Z",
+            "count": 0,
+            "slugs": []
+          }
+          EOF
         '';
 
         env = {
           NODE_OPTIONS = "--max-old-space-size=8192";
           # cypress tries to download binaries otherwise
           CYPRESS_INSTALL_BINARY = 0;
+          # Don't fetch o2-datasource via git
+          DS_CONTENT_FORCE = "";
         };
 
         installPhase = ''
           runHook preInstall
           mkdir -p $out/share
-          mv dist $out/share/openobserve-ui
+          cp -R dist $out/share/openobserve-ui
           runHook postInstall
         '';
       };
@@ -119,7 +139,7 @@ else
         owner = "openobserve";
         repo = "openobserve";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-3K6xaXFmhWY0ElqiFgR8mEi0XUVBF/cRNwONqLhniPc=";
+        hash = "sha256-rC4aykzrcMskAtEyW3XJyAYG4H0p+mTe66uyrfZr+3U=";
       };
 
       patches = [
@@ -127,11 +147,22 @@ else
         ./build.rs.patch
       ];
 
+      prePatch = ''
+        # The vendored openobserve/vortex fork declares `readme = "README.md"`
+        # (inherited from the workspace) but ships no per-crate README.md, so
+        # `include_str!(concat!("../", env!("CARGO_PKG_README")))` fails for the
+        # `vortex` crate
+        for crate in "$cargoDepsCopy"/source-git-*/vortex-*/; do
+          [ -d "$crate" ] || continue
+          [ -f "$crate/README.md" ] || touch "$crate/README.md"
+        done
+      '';
+
       preBuild = ''
         cp -r ${web}/share/openobserve-ui web/dist
       '';
 
-      cargoHash = "sha256-PIhHHEP9kJmliOGtom1gDf7wt5C4RicWKgQe0hkW+4M=";
+      cargoHash = "sha256-n1skvBCfALA3I77q0mZvqI71gbt1/q9kiYDXfsKlh0I=";
 
       nativeBuildInputs = [
         pkg-config
@@ -148,6 +179,8 @@ else
       ];
 
       env = {
+        LIBCLANG_PATH = lib.makeLibraryPath [ libclang ];
+
         RUSTONIG_SYSTEM_LIBONIG = true;
         ZSTD_SYS_USE_PKG_CONFIG = true;
 
