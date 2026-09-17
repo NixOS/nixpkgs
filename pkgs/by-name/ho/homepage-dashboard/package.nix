@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAgOUOM97I8iAFIKtQC2ziMPy7ZUE3xvvLbPvwPhSdc=";
+    hash = "sha256-a5BK9ekt78tnfxQRpij+CXJz48MztJNQVKM57NfIX+0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
