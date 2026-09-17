@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cffi,
   fetchFromGitHub,
@@ -14,11 +15,28 @@
 }:
 
 let
+  # Upstream gates the build with platform.system()/machine() on BUILD;
+  # the generated extension also needs a supported HOST architecture.
+  nativeExtensionSupported =
+    lib.all
+      (
+        platform:
+        builtins.elem platform.system [
+          "x86_64-linux"
+          "aarch64-linux"
+          "aarch64-darwin"
+        ]
+      )
+      [
+        stdenv.buildPlatform
+        stdenv.hostPlatform
+      ];
   instrument-hooks = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "instrument-hooks";
-    rev = "b003e5024d61cfb784d6ac6f3ffd7d61bf7b9ec9";
-    hash = "sha256-JTSH4wOpOGJ97iV6sagiRUu8d3sKM2NJRXcB3NmozNQ=";
+    # Match the instrument-hooks submodule in pytest-codspeed's release tag.
+    rev = "b9ddb5bc654b2e6fa13eb18efcd3a45e7ecda0bb";
+    hash = "sha256-BNlixr0E/Im1molVNX2ykHWukLQxnNcva+pbhyhZhQg=";
   };
 in
 
@@ -46,6 +64,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  # The bundled Zig-generated C uses a noreturn attribute placement rejected
+  # by C23. Its C17 _Noreturn spelling works with the emitted declarations.
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  }
+  // lib.optionalAttrs nativeExtensionSupported {
+    PYTEST_CODSPEED_FORCE_EXTENSION_BUILD = "1";
+  };
+
   buildInputs = [ pytest ];
 
   dependencies = [
@@ -66,7 +93,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytest_codspeed" ];
+  pythonImportsCheck = [
+    "pytest_codspeed"
+  ]
+  ++ lib.optional nativeExtensionSupported (
+    # Check the extension itself, not just the fallback-capable Python package.
+    "pytest_codspeed.instruments.hooks.dist_instrument_hooks"
+  );
 
   meta = {
     description = "Pytest plugin to create CodSpeed benchmarks";
