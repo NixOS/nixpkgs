@@ -16,7 +16,7 @@
   coreutils, # needed at runtime by git-filter-branch etc
   openssh,
   pcre2,
-  bash,
+  bashNonInteractive,
   asciidoc,
   texinfo,
   xmlto,
@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib-ng
     expat
     (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv)
-    bash
+    bashNonInteractive
   ]
   ++ lib.optionals pythonSupport [ python3 ]
   ++ lib.optionals perlSupport [ perlPackages.perl ]
