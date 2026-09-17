@@ -16605,6 +16605,11 @@
     githubId = 68576488;
     name = "Zhou Ke";
   };
+  linyiru = {
+    github = "linyiru";
+    githubId = 8616;
+    name = "Lawrence Lin";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
