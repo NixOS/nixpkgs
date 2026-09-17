@@ -4,6 +4,7 @@
   buildNpmPackage,
   callPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   actool,
   makeBinaryWrapper,
@@ -161,6 +162,13 @@ buildNpmPackage (finalAttrs: {
   + ''
     runHook postInstall
   '';
+
+  passthru = {
+    inherit mailspring-app;
+    updateScript = nix-update-script {
+      extraArgs = [ "--subpackage=mailspring-app" ];
+    };
+  };
 
   meta = {
     description = "Beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
