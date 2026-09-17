@@ -1,6 +1,6 @@
 {
-    "release_date": "2026-01-12",
-    "release_label": "13.1.1",
+    "release_date": "2026-04-30",
+    "release_label": "13.1.2",
     "release_product": "cuda",
     "collectx_bringup": {
         "name": "UFM telemetry CollectX Bringup",
@@ -589,24 +589,24 @@
         "name": "CUDA cuBLAS",
         "license": "CUDA Toolkit",
         "license_path": "libcublas/LICENSE.txt",
-        "version": "13.2.1.1",
+        "version": "13.2.2.2",
         "linux-x86_64": {
-            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-13.2.1.1-archive.tar.xz",
-            "sha256": "b1cde2e14d1547f575f61f9b90dc91e9b80991d114971d50d535dd8bd72b5466",
-            "md5": "8bef35503ab216f323ae3dff15bada55",
-            "size": "798288312"
+            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-13.2.2.2-archive.tar.xz",
+            "sha256": "fd2747cbe678120a5beeb5b2a3a9cb07c1b5b9a820a0f6869ea46e53d03b1af2",
+            "md5": "73939d09cba3fe383894293d4539810b",
+            "size": "798274192"
         },
         "linux-sbsa": {
-            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-13.2.1.1-archive.tar.xz",
-            "sha256": "693cc5b991a374bf28917b4e957248e93d86c2d57c92652de2cb7967d1179a71",
-            "md5": "8e67338e0a13ded2db61cfa1fce2fd46",
-            "size": "1005398628"
+            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-13.2.2.2-archive.tar.xz",
+            "sha256": "450bb08a97528a553a89291420cc41dba29917e3820dd9440e18e455a663908c",
+            "md5": "7958155436c837c477fe53236544b99d",
+            "size": "1005318480"
         },
         "windows-x86_64": {
-            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-13.2.1.1-archive.zip",
-            "sha256": "b00be5cda504da494a5f6b72a24f53254f97d4d47e8933ecc3993ad58b6b2ad2",
-            "md5": "da242891250d139f2ed33da156edada2",
-            "size": "384768814"
+            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-13.2.2.2-archive.zip",
+            "sha256": "98db841fedf0ce2f723ec559fdf78bf3704d2691c5f427d2f112d223b28d3782",
+            "md5": "14bffab8e6e15167dcea70da014bb0bf",
+            "size": "384716797"
         }
     },
     "libcufft": {
