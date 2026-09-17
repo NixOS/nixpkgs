@@ -9,6 +9,7 @@
   makeBinaryWrapper,
   shellcheck,
   versionCheckHook,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
@@ -78,6 +79,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for Bash";
