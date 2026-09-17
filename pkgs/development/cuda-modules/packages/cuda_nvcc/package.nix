@@ -57,8 +57,25 @@ buildRedist (finalAttrs: {
     {
       # This restriction concerns NVCC's selected backend, not the compiler
       # packaging the headers or the project's ordinary C++ compiler.
+      # cc-wrapper also uses its libcxx argument for a GNU libstdc++ provider.
       message = "NVCC cannot use libc++ when targeting x86_64-linux";
-      assertion = stdenv.targetPlatform.system == "x86_64-linux" -> cc.libcxx == null;
+      assertion = stdenv.targetPlatform.system == "x86_64-linux" -> !(cc.libcxx.isLLVM or false);
+    }
+    {
+      # These CRT headers reference libc++'s removed std::__promote and do not
+      # match its device math overloads. Check the selected runtime: choosing an
+      # older supported Clang backend deliberately retains that runtime.
+      message = "CUDA 12.9/13.3 NVCC math headers are incompatible with libc++ 21 on aarch64-linux";
+      assertion =
+        !(
+          stdenv.targetPlatform.system == "aarch64-linux"
+          && (cc.libcxx.isLLVM or false)
+          && lib.versions.major cc.libcxx.version == "21"
+          && builtins.elem (lib.versions.majorMinor finalAttrs.version) [
+            "12.9"
+            "13.3"
+          ]
+        );
     }
   ];
 
