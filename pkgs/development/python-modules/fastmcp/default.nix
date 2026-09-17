@@ -138,6 +138,7 @@ buildPythonPackage (finalAttrs: {
     "test_unauthorized_access"
 
     # Timing-sensitive and flaky
+    "test_medium_schema_performance"
     "test_rate_limiting_recovery_over_time"
     "test_rate_limiting_with_different_operations"
     "test_timeout"

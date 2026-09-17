@@ -10240,6 +10240,8 @@ self: super: with self; {
 
   logic2-automation = callPackage ../development/python-modules/logic2-automation { };
 
+  logica = callPackage ../development/python-modules/logica { };
+
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix {
@@ -19454,6 +19456,8 @@ self: super: with self; {
   spdx-python-model = callPackage ../development/python-modules/spdx-python-model { };
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
+
+  spdx3-validate = callPackage ../development/python-modules/spdx3-validate { };
 
   speak2mary = callPackage ../development/python-modules/speak2mary { };
 

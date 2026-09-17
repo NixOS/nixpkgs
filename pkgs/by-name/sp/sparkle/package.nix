@@ -4,7 +4,7 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  pnpm,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -22,6 +22,8 @@
 }:
 
 let
+  pnpm = pnpm_11;
+
   sparkle-service = buildGoModule {
     pname = "sparkle-service";
     version = "0-unstable-2026-08-02";

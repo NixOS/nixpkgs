@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "HUD modification manager for Elite Dangerous";
     homepage = "https://github.com/BlueMystical/EDHM_UI";
     license = [
-      lib.licenses.gpl3Only
+      lib.licenses.gpl3Plus
       {
         shortName = "edhm-custom";
         fullName = "EDHM Custom Restrictive License - Non-redistributable";
