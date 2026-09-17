@@ -5,48 +5,32 @@
 
   # build-system
   hatchling,
-  hatch-fancy-pypi-readme,
+
+  # native build inputs
+  bash,
 
   # dependencies
   anyio,
-  distro,
-  httpx,
+  httpx2,
   jiter,
   pydantic,
   sniffio,
-  tqdm,
   typing-extensions,
 
-  # optional-dependencies (aiohttp)
+  # optional-dependencies
   aiohttp,
-  httpx-aiohttp,
-
-  # optional-dependencies (bedock)
   botocore,
-
-  # optional-dependencies (datalib)
   numpy,
   pandas,
-  pandas-stubs,
-
-  # optional-dependencies (httpx2)
-  httpx2,
-
-  # optional-dependencies (realtime)
-  websockets,
-
-  # optional-dependencies (voice-helpers)
   sounddevice,
+  urllib3,
+  websockets,
 
   # check deps
   pytestCheckHook,
-  dirty-equals,
   inline-snapshot,
-  jsonschema,
   pytest-asyncio,
-  pytest-mock,
   pytest-xdist,
-  respx,
 
   # optional-dependencies toggle
   withAiohttp ? false,
@@ -57,31 +41,36 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "2.53.0";
+  version = "3.14.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XwiSIKjYD07zhx8uIO8wsPWdAASBCJ5KqFUgdk+uaUU=";
+    hash = "sha256-7oFIiENP5d/TAVbkjtsjcsuin+qJ/tmjSdzXgu/qsCE=";
   };
 
-  postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "hatchling==1.27.0" "hatchling"
+    substituteInPlace tests/test_uv_workflows.py --replace-fail "/bin/bash" "${lib.getExe bash}"
+  '';
 
   build-system = [
     hatchling
-    hatch-fancy-pypi-readme
+  ];
+
+  nativeBuildInputs = [
+    bash
   ];
 
   dependencies = [
     anyio
-    distro
-    httpx
+    httpx2
     jiter
     pydantic
     sniffio
-    tqdm
     typing-extensions
   ]
   ++ lib.optionals withAiohttp finalAttrs.passthru.optional-dependencies.aiohttp
@@ -92,20 +81,14 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     aiohttp = [
       aiohttp
-      httpx-aiohttp
     ];
     bedrock = [
       botocore
+      urllib3
     ];
     datalib = [
       numpy
       pandas
-      pandas-stubs
-    ];
-    httpx2 = [
-      anyio
-      httpx
-      httpx2
     ];
     realtime = [
       websockets
@@ -120,23 +103,24 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    dirty-equals
     inline-snapshot
-    jsonschema
     pytest-asyncio
-    pytest-mock
     pytest-xdist
-    respx
   ]
   # including pandas-stubs would cause infinite recursion
   ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
 
   disabledTestPaths = [
-    # Test makes network requests
+    # tests makes network requests
     "tests/api_resources"
-    # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
-    # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
-    "tests/lib/chat/test_completions_streaming.py"
+    "tests/lib/test_fine_tuning_positional_arguments.py"
+    "tests/test_tls_hostname.py"
+
+    # Tests the pypi build system (not relevant in Nix build environment)
+    "tests/test_uv_workflows.py"
+
+    # flaky
+    "tests/lib/test_azure_redirects.py::test_sync_redirect_origin"
   ];
 
   meta = {
@@ -144,6 +128,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.malo ];
+    maintainers = with lib.maintainers; [
+      malo
+      sarahec
+    ];
   };
 })
