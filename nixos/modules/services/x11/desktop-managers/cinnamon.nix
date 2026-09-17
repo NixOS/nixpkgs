@@ -277,6 +277,7 @@ in
           warpinator
 
           # cinnamon xapp
+          xepub
           xviewer
           xreader
           xed-editor
