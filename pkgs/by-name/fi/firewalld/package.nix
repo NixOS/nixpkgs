@@ -43,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.5.1";
+  version = "2.5.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "firewalld";
     repo = "firewalld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fwVRGA8IBwxVc7keo8Yv9qMwv1+PwC6IViD04mQQcug=";
+    hash = "sha256-LKwjponEBNhCtTifeJQQrWP+1vdpaiH1UhriUCAljBE=";
   };
 
   patches = [
