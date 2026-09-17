@@ -1,4 +1,5 @@
 {
+  addDriverRunpath,
   backendCC,
   backendStdenv,
   cmake,
@@ -17,6 +18,7 @@ backendStdenv.mkDerivation {
   name = "${cudaNamePrefix}-tests-nvshmem-cmake";
   strictDeps = true;
   nativeBuildInputs = [
+    addDriverRunpath
     cmake
     cuda_nvcc
     ninja
@@ -61,11 +63,8 @@ backendStdenv.mkDerivation {
       return name[0] == '\0';
     }
     CPP
-    cat > device.cu <<'CUDA'
-    #include <nvshmem.h>
-    __global__ void rank(int *out) { *out = nvshmem_my_pe(); }
-    int main() { return 0; }
-    CUDA
+    # Execute this GPU regression outside the sandbox on the HOST machine.
+    cp ${./nvshmem-device.cu} device.cu
 
     # Keep role-aware CMake discovery, but do not let compiler input flags
     # conceal missing include or library properties on imported targets.
@@ -90,6 +89,9 @@ backendStdenv.mkDerivation {
     cmake "''${args[@]}" -B reject -DREJECT_VERSION=ON
     mkdir -p "$out/bin" "$out/share"
     cp build/{host,device} "$out/bin/"
+    # buildCommand does not run fixupPhase. The executable's static CUDA
+    # runtime dlopens the machine's driver, as in other CUDA sample programs.
+    addDriverRunpath "$out/bin/device"
     cp build/CMakeCache.txt "$out/share/"
     ${lib.optionalString (backendStdenv.buildPlatform.canExecute backendStdenv.hostPlatform) ''
       "$out/bin/host"
