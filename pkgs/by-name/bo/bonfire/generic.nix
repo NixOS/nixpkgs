@@ -842,10 +842,9 @@ beamPkgs.mixRelease (
           popd
         '') (lib.attrNames finalAttrs.passthru.yarnBerryOfflineCaches))
 
-        # Explanation: call lib/mix/tasks/sync_themes.ex
-        # See: justfile#_flavour_install ${finalAttrs.env.FLAVOUR}
+        # See: justfile#prepare-flavour-theme ${finalAttrs.env.FLAVOUR}
         ''
-          mix bonfire.sync_themes
+          sh -x ./prepare-flavour-theme.sh ${finalAttrs.env.FLAVOUR}
         ''
 
         # Explanation: install SQL migrations.
