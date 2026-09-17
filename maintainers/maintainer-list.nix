@@ -15394,6 +15394,11 @@
     githubId = 339354;
     name = "Peter Kolloch";
   };
+  konakonai = {
+    github = "Konakonai";
+    githubId = 215785833;
+    name = "ZhengRong Feng";
+  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
