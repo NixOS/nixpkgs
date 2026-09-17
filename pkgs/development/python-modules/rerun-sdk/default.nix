@@ -67,7 +67,7 @@ buildPythonPackage {
     # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
     # AVX2 / scalar kernels.
     + ''
-      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-9.0.0/src/distance"
+      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-10.0.0/src/distance"
 
       substituteInPlace "$lanceDistance/dot_u8.rs" \
         --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
@@ -137,10 +137,12 @@ buildPythonPackage {
     "test_asset_mode_timeline_type_timestamp_applies_to_index_chunk"
     "test_custom_entity_path_applies_to_every_chunk"
     "test_default_mode_produces_video_stream_chunks"
+    "test_default_timeline_type"
     "test_optimize_only_coarsens_the_readers_gop_partition"
     "test_output_codec_same_as_source_stays_on_the_direct_path"
     "test_stream_mode_chunk_by_gop_false_emits_one_sample_per_chunk"
     "test_stream_mode_chunk_by_gop_true_packs_multiple_samples"
+    "test_timeline_aliases"
     "test_timeline_type_timestamp_produces_timestamp_typed_column"
 
     # ConnectionError: Connection: connecting to server: transport error
@@ -149,6 +151,7 @@ buildPythonPackage {
     "test_roundtrip_parity"
     "test_save_screenshot"
     "test_send_dataframe_roundtrip"
+    "test_server_ephemeral_port"
     "test_server_failed_table_creation_does_not_leak_entry"
     "test_server_version_info"
     "test_server_with_dataset_files"
@@ -176,6 +179,11 @@ buildPythonPackage {
 
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/integration/test_dataloader_video_codecs.py"
+
+    # ValueError: Failed to read a metadata table: Parquet error: Invalid Parquet file. The
+    # LeRobot fixture's .parquet files are Git LFS pointer files, not real binaries (rerun.src is
+    # fetched without fetchLFS).
+    "rerun_py/tests/integration/test_lerobot_reader.py"
 
     # RuntimeError: MCAP error: Bad magic number. The .mcap test assets are
     # Git LFS pointer files, not real binaries (rerun.src is fetched without
