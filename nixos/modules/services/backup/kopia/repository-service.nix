@@ -514,18 +514,22 @@ in
           after = lib.mkIf needsNetwork [ "network-online.target" ];
           environment = {
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+            KOPIA_CACHE_DIRECTORY = "/var/cache/kopia/${name}";
+            KOPIA_LOG_DIR = "/var/log/kopia/${name}";
+            KOPIA_CHECK_FOR_UPDATES = "false";
           };
           serviceConfig = {
             Type = "oneshot";
             User = backup.user;
             StateDirectory = "kopia/${name}";
+            CacheDirectory = "kopia/${name}";
+            LogsDirectory = "kopia/${name}";
             PrivateTmp = true;
             NoNewPrivileges = true;
             ProtectSystem = "strict";
-            ReadWritePaths = [
-              "/var/lib/kopia/${name}"
-            ]
-            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+            ReadWritePaths = lib.optionals (backup.repository ? filesystem) [
+              backup.repository.filesystem.path
+            ];
             RequiresMountsFor = lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
             RemainAfterExit = true;
             ExecStart = startScript;

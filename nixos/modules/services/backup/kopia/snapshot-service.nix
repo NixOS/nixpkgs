@@ -225,6 +225,9 @@ in
             ];
             environment = {
               KOPIA_CONFIG_PATH = "/var/lib/kopia/${backupName}/repository.config";
+              KOPIA_CACHE_DIRECTORY = "/var/cache/kopia/${backupName}";
+              KOPIA_LOG_DIR = "/var/log/kopia/${backupName}";
+              KOPIA_CHECK_FOR_UPDATES = "false";
             };
             restartIfChanged = false;
             preStart = lib.mkIf (snapshot.backupPrepareCommand != null) snapshot.backupPrepareCommand;
@@ -238,13 +241,14 @@ in
               Type = "oneshot";
               User = user;
               StateDirectory = "kopia/${backupName}";
+              CacheDirectory = "kopia/${backupName}";
+              LogsDirectory = "kopia/${backupName}";
               PrivateTmp = true;
               NoNewPrivileges = true;
               ProtectSystem = "strict";
-              ReadWritePaths = [
-                "/var/lib/kopia/${backupName}"
-              ]
-              ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+              ReadWritePaths = lib.optionals (backup.repository ? filesystem) [
+                backup.repository.filesystem.path
+              ];
             }
             // snapshot.extraServiceConfig;
           };

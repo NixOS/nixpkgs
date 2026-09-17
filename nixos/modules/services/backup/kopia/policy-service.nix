@@ -122,13 +122,14 @@ in
             RemainAfterExit = true;
             User = backup.user;
             StateDirectory = "kopia/${name}";
+            CacheDirectory = "kopia/${name}";
+            LogsDirectory = "kopia/${name}";
             PrivateTmp = true;
             NoNewPrivileges = true;
             ProtectSystem = "strict";
-            ReadWritePaths = [
-              "/var/lib/kopia/${name}"
-            ]
-            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+            ReadWritePaths = lib.optionals (backup.repository ? filesystem) [
+              backup.repository.filesystem.path
+            ];
           };
           script = ''
             set -euo pipefail
