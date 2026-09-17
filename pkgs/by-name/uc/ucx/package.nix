@@ -130,6 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
+
   meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";

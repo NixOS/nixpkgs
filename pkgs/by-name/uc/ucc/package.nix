@@ -56,6 +56,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if effectiveStdenv.buildPlatform != effectiveStdenv.hostPlatform then "installFlags" else null} =
+    [ "LIBTOOLFLAGS=--no-finish" ];
+
   # NOTE: We use --replace-quiet because not all Makefile.am files contain /bin/bash.
   postPatch = ''
     for comp in $(find src/components -name Makefile.am); do

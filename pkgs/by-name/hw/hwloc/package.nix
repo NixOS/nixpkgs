@@ -55,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
+
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     if [ -d "${numactl}/lib64" ]; then
       numalibdir="${numactl}/lib64"

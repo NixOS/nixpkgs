@@ -64,6 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
   version = "5.0.10";
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
+
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-Cs7MT8IY5d69vLikHRgsaw8dKTkwFe12OyqR1dc3TMY=";

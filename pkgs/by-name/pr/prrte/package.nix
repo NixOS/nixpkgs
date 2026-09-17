@@ -86,6 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-pmix=${lib.getDev pmix}"
   ];
 
+  # The generated libtool would otherwise try to run HOST ldconfig on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
