@@ -1376,7 +1376,7 @@ in
     meta = {
       homepage = "https://github.com/Subbeh/tmux-tpad";
       description = "Tmux scratchpad plugin";
-      license = lib.licenses.mit;
+      license = lib.licenses.gpl3;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ anned20 ];
     };
