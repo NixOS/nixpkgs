@@ -40,11 +40,11 @@
   gnused,
   gnugrep,
   gawk,
-  glibc,
 }:
 
 let
-  inherit (lib) optionalString;
+
+  inherit (lib) hasSuffix optionalString;
 
   bb = "${busybox}/bin/busybox"; # static busybox: /bin/sh + applets in the chroot
   toolsBins =
@@ -59,11 +59,11 @@ let
 
   detectFmt =
     u:
-    if (match ".*\\.deb$" u != null) then
+    if hasSuffix ".deb" u then
       "deb"
-    else if (match ".*\\.rpm$" u != null) then
+    else if hasSuffix ".rpm" u then
       "rpm"
-    else if (match ".*\\.pkg\\.tar\\..*" u != null) then
+    else if hasSuffix ".pkg.tar.zst" u || hasSuffix ".pkg.tar.xz" u then
       "pkgtar"
     else
       throw "foreign-packages: cannot detect the package format from URL '${u}'; set `format`.";
@@ -80,14 +80,14 @@ in
 
 let
   pkgSrc = if src != null then src else fetchurl { inherit url hash; };
-  fmt = if format != null then format else detectFmt (toString url);
+  fmt = if format != null then format else detectFmt "${url}";
   baseName =
     if name != null then
       name
     else if url != null then
-      baseNameOf url
+      lib.last (lib.splitString "/" url)
     else
-      src.name or (baseNameOf (toString src));
+      src.name or "package";
 in
 stdenv.mkDerivation {
   pname = "foreign-${baseName}";
