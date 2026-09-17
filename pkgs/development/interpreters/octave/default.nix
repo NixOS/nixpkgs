@@ -180,6 +180,14 @@ stdenv.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # When built with Qt support, Qt's platform integration probes Wayland at
+  # startup, which gives a harmless, but slightly spamming error:
+  #
+  #   XDG_RUNTIME_DIR is invalid or not set in the environment
+  preCheck = lib.optionalString enableQt ''
+    export XDG_RUNTIME_DIR=$TMPDIR
+  '';
+
   enableParallelBuilding = true;
 
   env = {
