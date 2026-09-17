@@ -193,13 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    "--with-blas=blas"
-    "--with-lapack=lapack"
-    (if use64BitIdx then "--enable-64" else "--disable-64")
+    (lib.withFeatureAs true "blas" "blas")
+    (lib.withFeatureAs true "lapack" "lapack")
+    (lib.enableFeature use64BitIdx "64")
+    (lib.enableFeature enableReadline "readline")
+    (lib.withFeatureAs enableQt "qt" (lib.versions.major qt6Packages.qtbase.version))
   ]
-  ++ lib.optionals enableReadline [ "--enable-readline" ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-  ++ lib.optionals enableQt [ "--with-qt=6" ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
