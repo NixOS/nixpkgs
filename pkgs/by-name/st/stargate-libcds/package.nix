@@ -17,11 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # Fix 'error: unrecognized command line option' in platforms other than x86
-  env = lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
-    PLAT_FLAGS = toString [
-      "-mfpmath=sse"
-      "-mssse3"
-    ];
+  env = {
+    PLAT_FLAGS = toString (
+      [ ]
+      ++ lib.optional stdenv.hostPlatform.isx86_64 [
+        "-mfpmath=sse"
+        "-mssse3"
+      ]
+    );
   };
 
   patches = [
