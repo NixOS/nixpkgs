@@ -30318,6 +30318,11 @@
     githubId = 10956211;
     name = "Valerio Besozzi";
   };
+  valeninki = {
+    github = "valeninki";
+    githubId = 84045751;
+    name = "valeninki";
+  };
   valeriangalliat = {
     email = "val@codejam.info";
     github = "valeriangalliat";
