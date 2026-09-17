@@ -2131,6 +2131,7 @@ mapAliases {
   proxysql = throw "'proxysql' has been removed because it was unmaintained within nixpkgs"; # Added 2026-09-08
   pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-12
   psi = throw "'psi' has been removed as it depended on EOL qt5 webengine. Consider moving to psi-plus, a somewhat more maintained fork."; # Added 2026-04-15
+  publii = throw "'publii' has been removed due to lack of maintence in nixpkgs and using an EOL Electron"; # Added 2026-09-17
   pulp = throw "'pulp' has been removed because it was unmaintained upstream"; # Added 2025-12-12
   puppet = warnAlias "'puppet' has been replaced by 'openvox'" openvox; # Added 2026-07-07
   purescript-psa = throw "'purescript-psa' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
