@@ -4607,7 +4607,7 @@ final: prev: {
       meta = {
         homepage = "https://github.com/horriblename/lzn-auto-require";
         maintainers = with lib.maintainers; [ mrcjkb ];
-        license.fullName = "GPL-2.0";
+        license = lib.licenses.gpl2Only;
         description = "Auto load optional plugins via lua modules with lz.n";
       };
     }
