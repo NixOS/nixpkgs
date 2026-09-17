@@ -24,6 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
+    local strict=false
     local update=false
 
     while [[ $# -gt 0 ]]; do
@@ -34,6 +35,10 @@ patchShebangs() {
             ;;
         --build)
             pathName=PATH
+            shift
+            ;;
+        --strict)
+            strict=true
             shift
             ;;
         --update)
@@ -83,6 +88,17 @@ patchShebangs() {
             else
                 pathName=PATH
             fi
+        fi
+
+        nixTalkativeLog "Using $pathName to find candidates for new interpreter line: ${!pathName}"
+
+        if [ -z "${!pathName}" ]; then
+            echo "error: $pathName is empty: cannot find candidates for new interpreter line $oldInterpreterLine"
+            if [ -n $strictDeps ] && [ "$pathName" = HOST_PATH ]; then
+                # This is a common side effect of enabling strictDeps, explicitly mention this
+                echo "note: strictDeps are enabled: candidate packages should be added to buildInputs to appear in $pathName"
+            fi
+            return 1
         fi
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
@@ -150,6 +166,17 @@ patchShebangs() {
                 fi
 
                 touch --date "$timestamp" "$f"
+            elif [ -z "$newPath" ]; then
+                if [ "$pathName" = HOST_PATH ] || [ "$strict" = true ]; then
+                    # If we are looking at HOST_PATH, this is a script in the output
+                    # and impurities should be avoided.
+                    # Alternatively, if we force strictness this is an error in any case.
+                    # This is used for example when automatically patching dev output.
+                    echo "error: $f: unable to find replacement for \"$oldInterpreterLine\""
+                    return 1
+                else
+                    echo "warning: $f: unable to find replacement for \"$oldInterpreterLine\""
+                fi
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
@@ -162,7 +189,7 @@ patchShebangsAuto () {
         # example case of this is sdl2-config. Otherwise, we can just
         # use the runtime path (--host).
         if [[ "$output" != out && "$output" = "$outputDev" ]]; then
-            patchShebangs --build "$prefix"
+            patchShebangs --build --strict "$prefix"
         else
             patchShebangs --host "$prefix"
         fi
