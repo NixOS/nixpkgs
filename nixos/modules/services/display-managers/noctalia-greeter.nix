@@ -11,6 +11,7 @@ let
 
   inherit (lib)
     escapeShellArgs
+    getExe
     getExe'
     maintainers
     mkDefault
@@ -25,6 +26,46 @@ let
     listOf
     str
     ;
+
+  cfgAutoLogin = config.services.displayManager.autoLogin;
+  sessionData = config.services.displayManager.sessionData;
+
+  autoLoginCommand =
+    pkgs.runCommand "noctalia-greeter-autologin-command"
+      {
+        nativeBuildInputs = [
+          pkgs.gnugrep
+          pkgs.coreutils
+        ];
+      }
+      ''
+        set -euo pipefail
+
+        session="${sessionData.autologinSession}"
+        sessionFile="${sessionData.desktops}/share/wayland-sessions/$session.desktop"
+
+        if [ -f "$sessionFile" ]; then
+            command="$(grep -m1 '^Exec=' "$sessionFile" | cut -d= -f2- || true)"
+            desktopNames="$(grep -m1 '^DesktopNames=' "$sessionFile" | cut -d= -f2- || true)"
+
+            if [ -n "$command" ]; then
+                envPrefix="env XDG_SESSION_TYPE=wayland"
+
+                if [ -n "$desktopNames" ]; then
+                    desktopNames="''${desktopNames%;}"
+                    desktopNames="''${desktopNames//;/:}"
+
+                    envPrefix="$envPrefix XDG_CURRENT_DESKTOP=$desktopNames XDG_SESSION_DESKTOP=''${desktopNames%%:*}"
+                fi
+
+                printf '%s\n' "$envPrefix $command" >"$out"
+                exit 0
+            fi
+        fi
+
+        echo "noctalia-greeter autologin: could not resolve Exec for session '$session'" >&2
+        exit 1
+      '';
 in
 {
   options.services.displayManager.noctalia-greeter = {
@@ -91,6 +132,13 @@ in
           assertion = (config.users.users.${user} or { }) != { };
           message = "noctalia-greeter: user ${user} does not exist. Please create it before referencing it.";
         }
+        {
+          assertion = cfgAutoLogin.enable -> sessionData.autologinSession != null;
+          message = ''
+            noctalia-greeter auto-login requires services.displayManager.defaultSession to be set,
+            or at least one session in services.displayManager.sessionPackages.
+          '';
+        }
       ];
 
       services.displayManager.noctalia-greeter.settings.cursor = mkIf (cfg.cursorTheme.package != null) {
@@ -116,7 +164,13 @@ in
 
       services.greetd = {
         enable = mkDefault true;
-        settings.default_session.command = mkDefault "${getExe' cfg.package "noctalia-greeter-session"} ${escapeShellArgs cfg.extraArgs}";
+        settings = {
+          default_session.command = mkDefault "${getExe' cfg.package "noctalia-greeter-session"} ${escapeShellArgs cfg.extraArgs}";
+          initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
+            inherit (cfgAutoLogin) user;
+            command = ''${getExe pkgs.bash} -lc "${config.systemd.package}/bin/systemd-cat $(<${autoLoginCommand})"'';
+          };
+        };
       };
 
       security.polkit.enable = mkDefault true;
