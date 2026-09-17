@@ -43,5 +43,8 @@ buildDunePackage (finalAttrs: {
       sternenseemann
       momeemt
     ];
+    knownVulnerabilities = [
+      "CVE-2026-87732" # fixed in 2.2.0
+    ];
   };
 })
