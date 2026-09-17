@@ -25,6 +25,10 @@ stdenvNoCC.mkDerivation {
     foreach(library IN ITEMS cudss cudss_static)
       add_executable(''${library}_consumer main.cpp)
       target_link_libraries(''${library}_consumer PRIVATE ''${library})
+      add_executable(''${library}_solve solve.cpp)
+      # The application itself allocates CUDA buffers; its runtime dependency
+      # is distinct from the solver's exported link requirements above.
+      target_link_libraries(''${library}_solve PRIVATE ''${library} CUDA::cudart_static)
     endforeach()
     CMAKE
     cat > main.cpp <<'CPP'
@@ -41,6 +45,7 @@ stdenvNoCC.mkDerivation {
         || version != CUDSS_VERSION_MAJOR;
     }
     CPP
+    cp ${./libcudss-solve.cpp} solve.cpp
     clean() {
       env -i HOME="$TMPDIR" TMPDIR="$TMPDIR" \
         PATH=${
@@ -62,6 +67,8 @@ stdenvNoCC.mkDerivation {
       ) "-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=${stdenvNoCC.hostPlatform.parsed.cpu.name}"}
     clean ${buildPackages.cmake}/bin/cmake --build build --verbose
     cp build/{cudss,cudss_static}_consumer "$out/"
+    # These require GPU hardware and are run explicitly outside the sandbox.
+    cp build/{cudss,cudss_static}_solve "$out/"
     cp build/CMakeCache.txt "$out/"
     ${lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
       clean "$out/cudss_consumer"
