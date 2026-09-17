@@ -6344,11 +6344,10 @@ with pkgs;
   };
 
   openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+    conf = ../development/libraries/openssl/openssl_legacy.cnf;
   };
 
   inherit (callPackages ../development/libraries/openssl { })
-    openssl_3
     openssl_3_5
     openssl_3_6
     openssl_4_0

@@ -6,7 +6,7 @@
   libuuid,
   libx11,
   curlMinimal,
-  openssl_3,
+  openssl_3_5,
   libsecret,
   webkitgtk_4_1,
   libsoup_3,
@@ -22,18 +22,13 @@
   dbus,
   nixosTests,
 }:
-let
-  curlMinimal_openssl_3 = curlMinimal.override {
-    openssl = openssl_3;
-  };
-in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2607.4-noble";
+  version = "1.2607.4-resolute";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-bBhWI8U+QCynHaXJBtEGsZH7leW2AdavRJE7r5EcG9M=";
+    url = "https://packages.microsoft.com/ubuntu/26.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
+    hash = "sha256-WXgzLH7umvB75obzTGYW+EZ3eE1zxdIJNFNKcaNY04s=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -45,8 +40,8 @@ stdenv.mkDerivation rec {
           stdenv.cc.cc
           libuuid
           libx11
-          curlMinimal_openssl_3
-          openssl_3
+          curlMinimal
+          openssl_3_5
           libsecret
           webkitgtk_4_1
           libsoup_3
