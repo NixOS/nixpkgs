@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/bison/bison-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
+    hash = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
 
   # gnulib relies on --host= to detect iconv() features on musl().
@@ -40,8 +40,19 @@ stdenv.mkDerivation (finalAttrs: {
   # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
   # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
   # cannot add bash to buildInputs due to infinite recursion
-  postFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+  preFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     patchShebangs --build $out/bin/yacc
+    yaccBefore="$(head -n1 $out/bin/yacc)"
+  '';
+
+  postFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    # Sanity check
+    if [ "$(head -n1 $out/bin/yacc)" != "$yaccBefore" ]; then
+        echo "error: interpreter line for $out/bin/yacc changed by automatic patchShebangs"
+        echo "    $yaccBefore"
+        echo "--> $(head -n1 $out/bin/yacc)"
+        false
+    fi
   '';
 
   enableParallelBuilding = true;

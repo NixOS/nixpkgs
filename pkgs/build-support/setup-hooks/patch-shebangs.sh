@@ -24,6 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
+    local strict=false
     local update=false
 
     while [[ $# -gt 0 ]]; do
@@ -34,6 +35,10 @@ patchShebangs() {
             ;;
         --build)
             pathName=PATH
+            shift
+            ;;
+        --strict)
+            strict=true
             shift
             ;;
         --update)
@@ -55,13 +60,6 @@ patchShebangs() {
     done
 
     echo "patching script interpreter paths in $@"
-    local f
-    local oldPath
-    local newPath
-    local arg0
-    local args
-    local oldInterpreterLine
-    local newInterpreterLine
 
     if [[ $# -eq 0 ]]; then
         echo "No arguments supplied to patchShebangs" >&2
@@ -69,6 +67,12 @@ patchShebangs() {
     fi
 
     local f
+    local oldPath
+    local newPath
+    local arg0
+    local args
+    local oldInterpreterLine
+    local newInterpreterLine
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
 
@@ -85,6 +89,8 @@ patchShebangs() {
                 pathName=PATH
             fi
         fi
+
+        nixTalkativeLog "Using $pathName to find candidates for new interpreter line: ${!pathName}"
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
@@ -122,13 +128,16 @@ patchShebangs() {
             if [[ -n "$newPath" && "$newPath" != "$oldPath" ]]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
+                local escapedInterpreterLine
                 escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
+                local timestamp
                 timestamp=$(stat --printf "%y" "$f")
 
                 # Manually create temporary file instead of using sed -i
                 # (sed -i on $out/x creates tmpfile /nix/store/x which fails on macos + sandbox)
+                local tmpFile
                 tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
                 sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
 
@@ -148,6 +157,17 @@ patchShebangs() {
                 fi
 
                 touch --date "$timestamp" "$f"
+            elif [ -z "$newPath" ]; then
+                if [ "$pathName" = HOST_PATH ] || [ "$strict" = true ]; then
+                    # If we are looking at HOST_PATH, this is a script in the output
+                    # and impurities should be avoided.
+                    # Alternatively, if we force strictness this is an error in any case.
+                    # This is used for example when automatically patching dev output.
+                    echo "error: $f: unable to find replacement for \"$oldInterpreterLine\""
+                    return 1
+                else
+                    echo "warning: $f: unable to find replacement for \"$oldInterpreterLine\""
+                fi
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
@@ -160,7 +180,7 @@ patchShebangsAuto () {
         # example case of this is sdl2-config. Otherwise, we can just
         # use the runtime path (--host).
         if [[ "$output" != out && "$output" = "$outputDev" ]]; then
-            patchShebangs --build "$prefix"
+            patchShebangs --build --strict "$prefix"
         else
             patchShebangs --host "$prefix"
         fi

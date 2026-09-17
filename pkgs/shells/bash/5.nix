@@ -154,17 +154,15 @@ lib.warnIf (withDocs != null)
       rm -f $out/lib/bash/Makefile.inc
     '';
 
-    postFixup =
-      if interactive then
-        ''
-          substituteInPlace "$out/bin/bashbug" \
-            --replace '#!/bin/sh' "#!$out/bin/bash"
-        ''
-      # most space is taken by locale data
-      else
-        ''
-          rm -rf "$out/share" "$out/bin/bashbug"
-        '';
+    preFixup = lib.optionalString interactive ''
+      substituteInPlace "$out/bin/bashbug" \
+        --replace-fail '#!/bin/sh' "#!$out/bin/bash"
+    '';
+
+    # most space is taken by locale data
+    postFixup = lib.optionalString (!interactive) ''
+      rm -rf "$out/share" "$out/bin/bashbug"
+    '';
 
     passthru = {
       shellPath = "/bin/bash";

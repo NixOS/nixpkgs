@@ -5,6 +5,8 @@
   libiconv,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
+  writeShellScriptBin,
+  python3,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -106,6 +108,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
+
+  preFixup = ''
+    # Don't pull in large dependencies for scripts, but also don't leave them impurely executable
+    # Requires python, included in passthru instead
+    chmod a-x $out/bin/spit
+  '';
+
+  passthru.spit = writeShellScriptBin "spit" ''
+    exec -a spit ${lib.getExe python3} ${finalAttrs.finalPackage.outPath}/bin/spit "$@"
+  '';
 
   __structuredAttrs = true;
 

@@ -120,9 +120,13 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python3.sitePackages}" "$py/${python3.sitePackages}"
   '';
 
+  preFixup = ''
+    # xml2-config will end up in $dev, so we must patch its shebangs for the build host
+    patchShebangs --build $bin/bin/xml2-config
+  '';
+
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
-    moveToOutput lib/xml2Conf.sh "$dev"
   ''
   + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
