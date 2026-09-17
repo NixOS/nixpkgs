@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.74.0";
+  version = "0.78.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Njfs0kkoNj3VjLd6ziz5WAgI+HLMZ+djqxjbXabEdzg=";
+    hash = "sha256-40ekvTMiIrFW8Fv2P7M/5vGpx3ekKq1kbPXPtXfbRWc=";
   };
-  cargoHash = "sha256-+JLE0hBmsxqDnTwkFRVxphA6HdA/EgkWHIAJiExsxp4=";
+  cargoHash = "sha256-M2jeWx+iWXdxdWf1HURlM6iATr9kGDltdVm5NpcOgyM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "prepare_profile_save_from_patch_updates_existing_user_profile"
       "create_audit_state_creates_session_when_enabled"
 
+      # keystore
+      # needs /usr/bin/touch
+      "load_secrets_sanitizes_path_against_known_outer_caps"
+
       # audit_attestation
       # needs /bin/pwd
       "audit_verify_reports_signed_attestation_with_pinned_public_key"
@@ -60,16 +64,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "corrupt_audit_ledger_downgrades_only_a_clean_exit"
       "corrupt_audit_ledger_is_reported_on_every_run_and_left_untouched"
 
+      # exec_strategy::clone_files
+      # needs /usr/bin/python3
+      "closed_stdio_and_unshare_fallback"
+      "explicit_network_backends_with_af_unix"
+      "fd_churn_signals_and_late_descriptors"
+      "full_cli_supervisor_combined_path"
+      "proxy_and_combined_notifications"
+      "pty_cgroup_write_and_supervisor_inheritance"
+      "tool_gate_with_combined_notifications"
+
       # execution_strategy_run
       # needs /usr/bin/env
       "direct_workdir_overrides_untrusted_host_pwd"
       "direct_workdir_sets_child_pwd_from_uncovered_launch_dir"
       "supervised_workdir_overrides_untrusted_host_pwd"
       "supervised_workdir_sets_child_pwd_from_uncovered_launch_dir"
+      # needs /bin/cat and a bash readable inside the sandbox
+      "command_policies_allows_same_fs_rename_from_child_dir"
+      # needs /bin/cat and /usr/bin/printf
+      "command_policies_allows_immutable_store_shebang_wrapper"
 
       # nono-cli
-      # wants a script `scripts/test-list-aliases.sh`, `git`, and `.git` history
-      "alias_inventory_script_passes"
       # fails to initialize the sandbox under '/build'
       # has also failed due to running on darwin despite testing the linux only
       # landlock sandboxing
@@ -77,14 +93,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # not relevant for us, requires `git`
       "lint_docs_script_passes"
       # want to run `git`
-      "alias_inventory_rejects_marker_missing_field"
-      "alias_inventory_rejects_naked_serde_alias"
-      "alias_inventory_rejects_unapproved_deprecated_module_reach_in"
       "lint_docs_accepts_clean_tree"
       "lint_docs_rejects_quoted_override_deny_outside_allowlist"
       # need /bin/cat
       "granted_path_exits_zero"
       "env_credentials_with_command_policies_non_shim_entry_succeeds"
+      # glob_access_run
+      # need /bin/cat
+      "bypass_protection_glob_requires_paired_allow"
+      "read_glob_grants_read_not_write"
+
+      # symlink_hop_run_linux
+      # need /bin/cat
+      "multi_hop_symlinked_leaf_resolves_through_symlinked_directory"
+
+      # tool_sandbox::linux
+      # needs /usr/bin
+      "outer_exec_gate_does_not_break_same_fs_rename_from_child_dir"
+      # needs /usr/bin/env
+      "outer_exec_gate_rejects_an_env_shebang_target_writable_by_outer_caps"
+
+      # tool_sandbox::policy::intercept_tests
+      # needs /usr/bin/touch
+      "load_command_credential_source_skips_trojan_in_writable_path_dir"
+
+      # url_open
+      # needs /usr/bin/touch
+      "open_url_in_browser_skips_trojan_in_writable_path_dir"
+
+      # wiring
+      # cannot set the setuid bit in the build sandbox
+      "write_file_atomic_strips_setuid_bit"
+
+      # sandbox_state
+      # overrides $TMPDIR with a tempdir it deletes, so parallel tests
+      # calling `tempfile::tempdir()` intermittently get ENOENT
+      "test_validate_accepts_file_when_reading_tmpdir_differs"
 
       # nono-proxy
       # fails to prepare TLS bundle inside build sandbox
@@ -100,6 +144,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
       "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
       "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # needs /bin/cat
+      "proxy_runtime::tests::proxy_credential_capture_backend_runs_provider_protocol"
+      # needs /usr/bin/touch
+      "proxy_runtime::tests::load_command_credential_source_skips_trojan_in_writable_path_dir"
       # panic
       "server::tests::reactive_proxy_auth_retry_answered_after_407"
       "server::tests::test_oauth_capture_routes_activate_intercept"
@@ -119,9 +167,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "sandbox_state::cap_file_validation_tests::test_acceptable_temp_roots_includes_var_folders_on_macos"
       "sandbox_state::cap_file_validation_tests::test_validate_rejects_path_outside_temp"
       # doesn't work inside of the /nix dir, which build-dir is under
-      "deprecated_override_deny_flag_emits_single_warning_on_stderr"
-      "deprecated_override_deny_flag_warning_is_emitted_once_for_multiple_uses"
-      "override_deny_alias_and_bypass_protection_merge_in_argv_order"
       "shell_dry_run_rejects_block_net_with_upstream_proxy"
       "run_launch_plan_rejects_block_net_with_upstream_proxy"
       "why_self_reports_active_profile_deny_before_covering_allow"
@@ -129,7 +174,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # env_vars
       # doesn't work inside of the /nix dir, which build-dir is under
       # Sandbox initialization failed: Refusing to grant '/nix' (source: group:system_read_macos) because it overlaps protected nono state root '/nix/build/nix-<ID>/.home/.nono'.
-      "allow_net_overrides_profile_external_proxy"
+      "allow_net_overrides_profile_upstream_proxy"
       "cli_flag_overrides_env_var"
       "env_nono_allow_comma_separated"
       "env_nono_block_net"
@@ -138,7 +183,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "env_nono_profile"
       "env_nono_upstream_bypass_comma_separated"
       "env_nono_upstream_proxy"
-      "legacy_env_nono_net_block_still_works"
       "environment_allow_vars_bare_star"
       "environment_allow_vars_default_allows_all"
       "environment_allow_vars_prefix_patterns"
@@ -150,6 +194,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "tool_sandbox::macos::tests::daemon_pid_lineage_cache_prunes_dead_entries"
       "tool_sandbox::macos::tests::daemon_pid_lineage_denies_when_helper_names_a_different_pid"
       "tool_sandbox::macos::tests::run_daemon_pid_source_verify_mode_round_trips_candidate_pid"
+      # spawn /bin/sleep, which the darwin build sandbox denies
+      "tool_sandbox::macos::tests::resolve_caller_denies_stale_session_after_pid_reuse"
+      "tool_sandbox::macos::tests::resolve_caller_resolves_ordinary_orphan_via_session_lineage"
+      "tool_sandbox::macos::tests::resolve_caller_session_lineage_uses_launch_caller_for_self_invocation"
+      "tool_sandbox::macos::tests::resolve_url_open_command_resolves_ordinary_orphan_via_session_lineage"
+      "tool_sandbox::macos::tests::session_lineage_evicts_unpinned_entry_whose_leader_pid_was_recycled"
+      "tool_sandbox::macos::tests::session_lineage_re_record_after_eviction_outlives_older_fillers"
+      "tool_sandbox::macos::tests::session_lineage_resolve_refreshes_recency_for_lru_eviction"
+      "tool_sandbox::macos::tests::session_lineage_resolves_entry_recorded_without_an_identity_pin"
+      "tool_sandbox::macos::tests::track_child_records_session_lineage_for_an_already_exited_launcher"
       "env_nono_capability_elevation_accepts_truthy"
       "env_nono_trust_override_accepts_truthy"
       "env_nono_trust_proxy_ca_accepts_truthy"
