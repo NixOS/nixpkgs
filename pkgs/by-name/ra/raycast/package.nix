@@ -75,6 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "raycast";
     maintainers = with lib.maintainers; [
       lovesegfault
+      nyakase
       stepbrobd
       _4evy
     ];
