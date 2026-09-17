@@ -5,9 +5,6 @@
   electron_42,
   lib,
   makeBinaryWrapper,
-  makeDesktopItem,
-  models-dev,
-  nodejs,
   opencode,
   stdenv,
   stdenvNoCC,
@@ -24,35 +21,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit (opencode)
     version
     src
-    node_modules
     patches
     ;
 
-  __structuredAttrs = true;
-  strictDeps = true;
+  bunWorkspaces = [ "./packages/desktop" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
+  };
 
-  # The musl prebuilts ship libc.musl-*.so.1 SONAMEs that autoPatchelfHook can't
-  # resolve on glibc systems. They aren't loaded at runtime on the host libc anyway.
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
-
-  postPatch =
-    # The auto-updater would try to download and run an upstream binary that
-    # isn't patched for Nix. Disable it at source.
-    ''
-      substituteInPlace packages/desktop/src/main/constants.ts \
-        --replace-fail 'app.isPackaged && CHANNEL !== "dev"' 'false'
-    ''
-    +
-    # Relax Bun version check to be a warning instead of an error
-    ''
-      substituteInPlace packages/script/src/index.ts \
-        --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
-                       'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-    '';
+  cargoRoot = "packages/desktop/src-tauri";
+  cargoHash = "sha256-WI48iYdxmizF1YgOQtk05dvrBEMqFjHP9s3+zBFAat0=";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   nativeBuildInputs = [
-    bun
-    nodejs # for patchShebangs node_modules
+    pkg-config
+    cargo-tauri.hook
+    bun.configHook
+    cargo
+    rustc
+    jq
     makeBinaryWrapper
     writableTmpDirAsHomeHook
   ]
@@ -61,26 +54,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
-    (lib.getLib stdenv.cc.cc)
-  ];
-
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    NODE_OPTIONS = "--max-old-space-size=4096";
-    OPENCODE_CHANNEL = "prod";
-    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-    OPENCODE_DISABLE_MODELS_FETCH = true;
-  };
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.node_modules}/. .
-    patchShebangs node_modules
-    patchShebangs packages/*/node_modules
-
-    runHook postConfigure
+  preBuild = ''
+    install -D ${lib.getExe opencode} \
+      packages/desktop/src-tauri/sidecars/opencode-cli-${stdenvNoCC.hostPlatform.rust.rustcTarget}
   '';
 
   preBuild = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
