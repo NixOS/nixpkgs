@@ -4,6 +4,8 @@
   fetchurl,
   unzip,
   autoPatchelfHook,
+  makeBinaryWrapper,
+  cacert,
 }:
 let
   sources = {
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     unzip
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -53,9 +56,14 @@ stdenv.mkDerivation {
     install -m755 agy_acp_server.par $out/bin/agy_acp_server.par
     install -m555 localharness_external $out/bin/localharness_external
 
-    ln -s $out/bin/agy_acp_server.par $out/bin/agy_acp_server
+    ln -s agy_acp_server.par $out/bin/agy_acp_server
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/agy_acp_server.par \
+      --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   meta = {

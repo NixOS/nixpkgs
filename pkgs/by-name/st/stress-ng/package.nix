@@ -9,7 +9,6 @@
   libapparmor,
   libbsd,
   libcap,
-  libgcrypt,
   lksctp-tools,
   zlib,
   libglvnd,
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     judy
     libbsd
-    libgcrypt
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
