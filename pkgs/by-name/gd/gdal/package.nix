@@ -92,6 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8rTCv0Nsb+BhRypwXDY5SWP7Bo1vqJBlm7y6YCOMa2M=";
   };
 
+  patches = [
+    # https://github.com/OSGeo/gdal/pull/15259
+    ./proj-9.9.0-compat.patch
+  ];
+
   nativeBuildInputs = [
     bison
     cmake
