@@ -351,7 +351,7 @@ in
               description = ''
                 Explicitly control OIDC availability.
                 Set to false to define OIDC config without enabling it.
-                    '';
+              '';
             };
 
             issuer = mkOption {
@@ -489,16 +489,13 @@ in
         '';
       }
       {
-        assertion =
-          !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
+        assertion = !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set when the agent is enabled.
         '';
       }
       {
-        assertion =
-          !cfg.settings.server.proxy_auth.enabled
-          || cfg.settings.headscale.api_key_path != null;
+        assertion = !cfg.settings.server.proxy_auth.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set
           when services.headplane.settings.server.proxy_auth.enabled is true.
@@ -508,26 +505,29 @@ in
       }
     ];
 
-    warnings = lib.optional (
-      !cfg.settings.oidc.enabled
-      && lib.any (p: p cfg.settings.oidc) [
-        # `issuer` and `client_id` have no default and error when unset, so
-        # guard the read; success means the user set them.
-        (o: (builtins.tryEval o.issuer).success)
-        (o: (builtins.tryEval o.client_id).success)
-        # The remaining predefined leaves default to `null` and are always
-        # readable; a non-null value means the user set them.
-        (o: o.client_secret_path != null)
-        (o: o.authorization_endpoint != null)
-        (o: o.token_endpoint != null)
-        (o: o.userinfo_endpoint != null)
-      ]
-    ) ''
-      services.headplane.settings.oidc.enable is now `false` by default. You have
-      set OIDC-related options under services.headplane.settings.oidc, but OIDC
-      will stay disabled until you explicitly set
-      `services.headplane.settings.oidc.enable = true`.
-    '';
+    warnings =
+      lib.optional
+        (
+          !cfg.settings.oidc.enabled
+          && lib.any (p: p cfg.settings.oidc) [
+            # `issuer` and `client_id` have no default and error when unset, so
+            # guard the read; success means the user set them.
+            (o: (builtins.tryEval o.issuer).success)
+            (o: (builtins.tryEval o.client_id).success)
+            # The remaining predefined leaves default to `null` and are always
+            # readable; a non-null value means the user set them.
+            (o: o.client_secret_path != null)
+            (o: o.authorization_endpoint != null)
+            (o: o.token_endpoint != null)
+            (o: o.userinfo_endpoint != null)
+          ]
+        )
+        ''
+          services.headplane.settings.oidc.enable is now `false` by default. You have
+          set OIDC-related options under services.headplane.settings.oidc, but OIDC
+          will stay disabled until you explicitly set
+          `services.headplane.settings.oidc.enable = true`.
+        '';
 
     environment = {
       systemPackages = [ cfg.package ];
