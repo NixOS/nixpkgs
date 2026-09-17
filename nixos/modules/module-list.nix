@@ -1861,6 +1861,7 @@
   ./services/web-apps/stump.nix
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
+  ./services/web-apps/t3code.nix
   ./services/web-apps/tabbyapi.nix
   ./services/web-apps/tranquil-pds.nix
   ./services/web-apps/trilium.nix
