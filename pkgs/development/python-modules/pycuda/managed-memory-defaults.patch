@@ -1,0 +1,100 @@
+--- a/src/wrapper/wrap_cudadrv.cpp
++++ b/src/wrapper/wrap_cudadrv.cpp
+@@ -1455,7 +1455,7 @@
+ #if CUDAPP_CUDA_VERSION >= 6000
+   py::def("managed_empty", numpy_empty<managed_allocation>,
+       (py::arg("shape"), py::arg("dtype"), py::arg("order")="C",
+-       py::arg("mem_flags")=0));
++       py::arg("mem_flags")=CU_MEM_ATTACH_GLOBAL));
+ #endif
+ 
+ #if CUDAPP_CUDA_VERSION >= 4000
+--- a/src/cpp/cuda.hpp
++++ b/src/cpp/cuda.hpp
+@@ -1889,7 +1889,7 @@
+   }
+ 
+ #if CUDAPP_CUDA_VERSION >= 6000
+-  inline CUdeviceptr mem_managed_alloc(size_t size, unsigned flags=0)
++  inline CUdeviceptr mem_managed_alloc(size_t size, unsigned flags=CU_MEM_ATTACH_GLOBAL)
+   {
+     CUdeviceptr m_data;
+     CUDAPP_CALL_GUARDED(cuMemAllocManaged, (&m_data, size, flags));
+@@ -2044,7 +2044,7 @@
+   struct managed_allocation : public device_allocation
+   {
+     public:
+-      managed_allocation(size_t bytesize, unsigned flags=0)
++      managed_allocation(size_t bytesize, unsigned flags=CU_MEM_ATTACH_GLOBAL)
+         : device_allocation(mem_managed_alloc(bytesize, flags))
+       { }
+ 
+--- a/pycuda/driver.py
++++ b/pycuda/driver.py
+@@ -778,13 +778,13 @@
+ # {{{ managed numpy arrays (CUDA Unified Memory)
+ 
+ 
+-def managed_zeros(shape, dtype, order="C", mem_flags=0):
++def managed_zeros(shape, dtype, order="C", mem_flags=mem_attach_flags.GLOBAL):
+     result = managed_empty(shape, dtype, order, mem_flags)
+     result.fill(0)
+     return result
+ 
+ 
+-def managed_empty_like(array, mem_flags=0):
++def managed_empty_like(array, mem_flags=mem_attach_flags.GLOBAL):
+     if array.flags.c_contiguous:
+         order = "C"
+     elif array.flags.f_contiguous:
+@@ -795,7 +795,7 @@
+     return managed_empty(array.shape, array.dtype, order, mem_flags)
+ 
+ 
+-def managed_zeros_like(array, mem_flags=0):
++def managed_zeros_like(array, mem_flags=mem_attach_flags.GLOBAL):
+     result = managed_empty_like(array, mem_flags)
+     result.fill(0)
+     return result
+--- a/doc/driver.rst
++++ b/doc/driver.rst
+@@ -1183,11 +1183,12 @@
+ Managed Memory Allocation
+ ~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-.. function:: managed_empty(shape, dtype, order="C", mem_flags=0)
++.. function:: managed_empty(shape, dtype, order="C", mem_flags=mem_attach_flags.GLOBAL)
+ 
+     Allocate a managed :class:`numpy.ndarray` of *shape*, *dtype* and *order*.
+ 
+-    *mem_flags* may be one of the values in :class:`mem_attach_flags`.
++    *mem_flags* must be :attr:`mem_attach_flags.GLOBAL` (the default) or
++    :attr:`mem_attach_flags.HOST`.
+ 
+     For the meaning of the other parameters, please refer to the :mod:`numpy`
+     documentation.
+@@ -1196,7 +1197,7 @@
+ 
+     .. versionadded:: 2014.1
+ 
+-.. function:: managed_zeros(shape, dtype, order="C", mem_flags=0)
++.. function:: managed_zeros(shape, dtype, order="C", mem_flags=mem_attach_flags.GLOBAL)
+ 
+     Like :func:`managed_empty`, but initialized to zero.
+ 
+@@ -1204,13 +1205,13 @@
+ 
+     .. versionadded:: 2014.1
+ 
+-.. function:: managed_empty_like(array, mem_flags=0)
++.. function:: managed_empty_like(array, mem_flags=mem_attach_flags.GLOBAL)
+ 
+     Only available on CUDA 6.0 and newer.
+ 
+     .. versionadded:: 2014.1
+ 
+-.. function:: managed_zeros_like(array, mem_flags=0)
++.. function:: managed_zeros_like(array, mem_flags=mem_attach_flags.GLOBAL)
+ 
+     Only available on CUDA 6.0 and newer.
+ 

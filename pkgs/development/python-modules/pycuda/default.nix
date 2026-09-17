@@ -40,7 +40,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-dZUWFgYougbzLOflY+P1uSFGkdyVKKA+qZ6hBz9OFLo=";
   };
 
-  patches = [ ./runtime-compiler.patch ];
+  patches = [
+    ./runtime-compiler.patch
+    ./managed-memory-defaults.patch
+  ];
   postPatch = ''
     substituteInPlace pycuda/compiler.py \
       --replace-fail 'nvcc="nvcc"' 'nvcc="${lib.getExe' (lib.getOutput jitCompiler.outputBin jitCompiler) "nvcc"}"' \
