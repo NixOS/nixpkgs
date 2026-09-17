@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
+      stepbrobd
     ];
     platforms = lib.platforms.unix;
   };
