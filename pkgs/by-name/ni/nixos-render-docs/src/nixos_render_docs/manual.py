@@ -11,7 +11,7 @@ from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
 from markdown_it.token import Token
 
-from . import md, options
+from . import md, nixdoc, options
 from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import (
     FragmentType,
@@ -637,7 +637,16 @@ class ConfigGroup:
     # id-prefix can only be set on a group, matching the legacy "includes" behavior
     id_prefix: str | None = None
 
-ConfigNode = ConfigLeaf | ConfigGroup
+# a collection expands to one page per group found in a generated data file.
+# 'nixdoc' renders a nixdoc manifest-mode export, other types may follow.
+COLLECTION_TYPES = ('nixdoc',)
+
+@dataclass
+class ConfigCollection:
+    collection: str
+    type: str
+
+ConfigNode = ConfigLeaf | ConfigGroup | ConfigCollection
 
 @dataclass
 class ConfigManifest:
@@ -720,12 +729,26 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         id_prefix = item.get('id-prefix')
         if id_prefix is not None and (not isinstance(id_prefix, str)):
             raise SrcError(src=src, description=f"{where}: 'id-prefix' must be a string when being set")
-        has_file, has_children = 'file' in item, 'children' in item
-        if has_file == has_children:
+        kinds = [k for k in ('file', 'children', 'collection') if k in item]
+        if len(kinds) != 1:
             raise SrcError(
                 src=src,
-                description=f"{where}: must have exactly one of 'file' or 'children'")
-        if has_file:
+                description=f"{where}: must have exactly one of 'file', 'children' or 'collection'")
+        if kinds[0] == 'collection':
+            if not isinstance(item['collection'], str):
+                raise SrcError(src=src, description=f"{where}: 'collection' must be a string")
+            typ = item.get('type')
+            if typ not in COLLECTION_TYPES:
+                raise SrcError(
+                    src=src,
+                    description=f"{where}: 'type' must be one of {list(COLLECTION_TYPES)}, got {typ!r}")
+            # a collection expands to many pages, so a single label or prefix cannot apply
+            if label is not None or id_prefix is not None:
+                raise SrcError(
+                    src=src,
+                    description=f"{where}: a collection accepts neither 'label' nor 'id-prefix'")
+            return ConfigCollection(collection=item['collection'], type=typ)
+        if kinds[0] == 'file':
             if not isinstance(item['file'], str):
                 raise SrcError(src=src, description=f"{where}: 'file' must be a string")
             return ConfigLeaf(file=item['file'], label=label, id_prefix=id_prefix)
@@ -750,13 +773,20 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         tokens[6:6] = [include]
 
     def _build_config_include(self, nodes: list[ConfigNode], config_file: Path, id_prefix: str | None = None) -> Token:
-        included = [self._build_config_item(node, config_file, id_prefix) for node in nodes]
+        included: list[tuple[list[Token], Path]] = []
+        for node in nodes:
+            included += self._build_config_item(node, config_file, id_prefix)
         token = Token('included_page', '', 0, map=[0, 1])
         token.meta['included'] = included
         token.meta['include-args'] = {}
         return token
 
-    def _build_config_item(self, node: ConfigNode, config_file: Path, id_prefix: str | None = None) -> tuple[list[Token], Path]:
+    # one node may expand to several pages, so this returns a list of fragments
+    def _build_config_item(self, node: ConfigNode, config_file: Path,
+                           id_prefix: str | None = None) -> list[tuple[list[Token], Path]]:
+        if isinstance(node, ConfigCollection):
+            return self._build_config_collection(node, config_file)
+
         if isinstance(node, ConfigLeaf):
             path = (config_file.parent / node.file).resolve()
             leaf_src = path.read_text()
@@ -772,7 +802,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 self._base_paths.pop()
             if node.label is not None:
                 fragment[1].meta['toc-label'] = node.label
-            return fragment, path
+            return [(fragment, path)]
 
         # TocEntry._collect_entries reads nav-label and nav-id.
         # it builds the sidebar group from them.
@@ -785,7 +815,25 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         if node.id is not None:
             group.meta['nav-id'] = node.id
 
-        return [group], config_file
+        return [([group], config_file)]
+
+    def _build_config_collection(self, node: ConfigCollection,
+                                 config_file: Path) -> list[tuple[list[Token], Path]]:
+        path = (config_file.parent / node.collection).resolve()
+        try:
+            assert node.type == 'nixdoc', f"unhandled collection type {node.type!r}"
+            sections = nixdoc.render_sections(json.loads(path.read_text()), self._revision)
+        except (OSError, json.JSONDecodeError, nixdoc.NixdocExportError) as e:
+            raise RuntimeError(f"processing {node.type} collection {path}") from e
+        # the export file is the only "location" we can report errors against
+        self._base_paths.append(path)
+        self._current_type.append('page')
+        try:
+            return [(self._parse(src, auto_id_prefix=f"auto-generated-{group_id}"), path)
+                    for group_id, src in sections]
+        finally:
+            self._current_type.pop()
+            self._base_paths.pop()
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
         tokens = super()._parse(src,auto_id_prefix=auto_id_prefix)
@@ -975,7 +1023,11 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--sidebar-depth', default=2, type=int)
     p.add_argument('--experimental-config', type=Path, help="""
 JSON file of the following form
-{ items: [ { file, label? } | { label, children: [...], id? } ], open: [ id, ... ] }
+{ items: [ { file, label? } | { label, children: [...], id? } | { collection, type } ],
+  open: [ id, ... ] }
+
+A collection reads a generated data file and expands to one page per group in it.
+'type' selects the renderer; only 'nixdoc' exists so far.
 
 Files added through this flag prepend '--infile'
 
