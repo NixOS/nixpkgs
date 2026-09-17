@@ -66,7 +66,7 @@ let
       hash = "sha256-dVi4PAOEfIcqgP5ljqvN4X2y4fAuq1p5xDFBUI/YW6I=";
     };
 
-    unpackCmd = "7zz x -bd -osource -xr'!*/Applications' -xr'!*com.apple.provenance' $curSrc";
+    unpackCmd = "7zz x -bd -sns- -snld -osource -xr'!*/Applications' $curSrc";
 
     nativeBuildInputs = [ _7zz ];
 
