@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "graft";
   version = "0.2.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "eonik-ai";
     repo = "graft";
@@ -19,7 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoLock.lockFile = ./Cargo.lock;
-  cargoBuildFlags = [ "--bin" "graft" ];
+  cargoBuildFlags = [
+    "--bin"
+    "graft"
+  ];
   doCheck = false;
 
   nativeBuildInputs = [
