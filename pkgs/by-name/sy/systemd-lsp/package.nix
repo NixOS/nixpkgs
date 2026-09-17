@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-lsp";
   version = "2026.08.03";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "JFryy";
     repo = "systemd-lsp";
@@ -25,6 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-2+JTKSzreTmdUiv++WaG8kVV2hXDn6qeY9Cp7n51MP4=";
 
+  doInstallCheck = true;
+  # Avoid versionCheckHook because upstream names tags differently from the version.
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/${finalAttrs.meta.mainProgram}" --help
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -33,5 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mahyarmirrashed ];
     mainProgram = "systemd-lsp";
+    platforms = with lib.platforms; unix ++ windows;
   };
 })
