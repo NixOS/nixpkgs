@@ -46,6 +46,10 @@ let
       "x86_64-linux"
     ];
     maintainers = [ ];
+    knownVulnerabilities = [
+      "Uses Electron 41.1.0 which is EOL."
+      "CVE-2026-70606"
+    ];
   };
 
   linux = stdenv.mkDerivation {
