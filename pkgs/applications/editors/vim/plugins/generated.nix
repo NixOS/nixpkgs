@@ -13871,6 +13871,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-surround-wk = buildVimPlugin {
+    pname = "nvim-surround-wk";
+    version = "1.0.0-unstable-2026-06-11";
+    src = fetchFromGitHub {
+      owner = "gregorias";
+      repo = "nvim-surround-wk";
+      rev = "d8f4058cab1f0a4805e0e9f7e1415607681265f6";
+      hash = "sha256-41RttsqCI9y3ID7h8tmlcRmNtA9WNjyKp9R7ISLghjQ=";
+    };
+    meta.homepage = "https://github.com/gregorias/nvim-surround-wk/";
+    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-teal-maker = buildVimPlugin {
     pname = "nvim-teal-maker";
     version = "0-unstable-2022-04-09";
