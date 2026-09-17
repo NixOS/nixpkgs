@@ -57,6 +57,10 @@
   enableQt ? false,
   qt6Packages,
   libiconv,
+
+  # tests
+  writableTmpDirAsHomeHook,
+  makeFontsConf,
 }:
 
 let
@@ -172,19 +176,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   enableParallelBuilding = true;
 
-  env =
-    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-      NIX_LDFLAGS = "-lobjc";
-      # https://savannah.gnu.org/bugs/index.php?68042
-      NIX_CFLAGS_COMPILE = "-Wno-format-security";
-    }
-    // lib.optionalAttrs use64BitIdx {
-      # See https://savannah.gnu.org/bugs/?50339
-      F77_INTEGER_8_FLAG = "-fdefault-integer-8";
-    };
+  env = {
+    # gnuplot (invoked by the test suite) requires a fontconfig config
+    # file to exist, or else it errors with "Fontconfig error: Cannot
+    # load default config file: File not found". No fonts are actually
+    # needed to avoid this.
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # gnuplot's degree sign handling requires a UTF-8 locale, or else it
+    # errors with "warning: iconv failed to convert degree sign".
+    # C.UTF-8 is built into glibc itself, so no extra locale-archive
+    # dependency is needed.
+    LC_ALL = "C.UTF-8";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+    NIX_LDFLAGS = "-lobjc";
+    # https://savannah.gnu.org/bugs/index.php?68042
+    NIX_CFLAGS_COMPILE = "-Wno-format-security";
+  }
+  // lib.optionalAttrs use64BitIdx {
+    # See https://savannah.gnu.org/bugs/?50339
+    F77_INTEGER_8_FLAG = "-fdefault-integer-8";
+  };
 
   # Otherwise `qhelpgenerator` executable is not detected, and Qt support is
   # not enabled.
