@@ -35,8 +35,6 @@ lib.makeScope pkgs.newScope (
         inherit (self) elm;
       };
 
-      elm-analyse = callPackage ./packages/elm-analyse { };
-
       elm-doc-preview = callPackage ./packages/elm-doc-preview { };
 
       elm-git-install = callPackage ./packages/elm-git-install { };
@@ -70,6 +68,7 @@ lib.makeScope pkgs.newScope (
       elm-wrap = callPackage ./packages/elm-wrap { };
     }
     // lib.optionalAttrs config.allowAliases {
+      elm-analyse = throw "elmPackages.elm-analyse has not be released since May 2019 so it has been removed."; # Added 2026-09-16
       create-elm-app = throw "'elmPackages.create-elm-app' has not had a release since December 2020, so it was removed."; # Added 2025-11-15
       elm-pages = throw "'elmPackages.elm-pages' has been removed, as it was broken in nixpkgs and was not maintained."; # Added 2025-11-15
     }
