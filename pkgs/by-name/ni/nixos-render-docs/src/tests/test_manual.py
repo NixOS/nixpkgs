@@ -518,3 +518,115 @@ def test_config_id_prefix_fails(tmp_path: Path) -> None:
             {"asserts.md": _NIXDOC_SNIPPET1},
         )
     assert "heading does not have an id" in str(excinfo.value.__cause__)
+
+
+_NIXDOC_EXPORT = {
+    "schemaVersion": 1,
+    "groups": [
+        {"id": "asserts", "description": "assertion functions"},
+        {"id": "attrsets", "description": "attribute set functions"},
+    ],
+    "entries": [
+        {
+            "id": "lib.asserts.assertMsg",
+            "attrPath": "lib.asserts.assertMsg",
+            "description": "Throw if pred is false.\n\n# Inputs\n\n`pred`\n",
+            "groups": ["asserts"],
+            "source": {"file": "lib/asserts.nix", "line": 21},
+        },
+        {
+            "id": "lib.attrsets.mapAttrs-prime",
+            "attrPath": "lib.attrsets.mapAttrs'",
+            "description": "Maps over attrs.",
+            "groups": ["attrsets"],
+            "source": {"file": "lib/attrsets.nix", "line": 42},
+        },
+    ],
+}
+
+
+def _render_with_collection(tmp_path: Path, export: object, **kwargs: object) -> str:
+    return _render_with_config(
+        tmp_path,
+        {"items": [{"collection": "lib-functions.json", "type": "nixdoc"}]},
+        {"lib-functions.json": json.dumps(export)},
+        **kwargs,  # type: ignore[arg-type]
+    )
+
+
+def test_config_collection_renders_one_page_per_group(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    # groups become pages, so their headings sit at the level of a config leaf
+    assert '<h2 id="sec-functions-library-asserts" class="title"' in html
+    assert '<h2 id="sec-functions-library-attrsets" class="title"' in html
+    assert "assertion functions" in html
+    # entries nest below their group
+    assert '<h3 id="function-library-lib.asserts.assertMsg" class="title"' in html
+    assert '<h3 id="function-library-lib.attrsets.mapAttrs-prime" class="title"' in html
+    assert "lib.attrsets.mapAttrs&#x27;" in html
+
+
+def test_config_collection_keeps_group_order(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    ids = [id for id in _heading_ids(html) if id.startswith("sec-functions-library-")]
+    assert ids == ["sec-functions-library-asserts", "sec-functions-library-attrsets"]
+
+
+def test_config_collection_pages_are_sidebar_siblings(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert 'href="#sec-functions-library-asserts"' in html
+    assert 'href="#sec-functions-library-attrsets"' in html
+
+
+def test_config_collection_prefixes_generated_ids_per_group(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    # '# Inputs' in the doc comment has no authored anchor, so it gets one
+    generated = [id for id in _heading_ids(html) if id.startswith("auto-generated-")]
+    assert generated and all(id.startswith("auto-generated-asserts-") for id in generated)
+
+
+def test_config_collection_links_source_to_revision(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert 'href="https://github.com/NixOS/nixpkgs/blob/1.0.0/lib/asserts.nix#L21"' in html
+
+
+def test_config_collection_renders_before_manual(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert html.index("assertion functions") < html.index("Manual body.")
+
+
+def test_config_collection_rejects_unknown_type(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"collection": "lib-functions.json", "type": "options"}]},
+            {"lib-functions.json": json.dumps(_NIXDOC_EXPORT)},
+        )
+    assert "'type' must be one of ['nixdoc']" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_rejects_label_and_id_prefix(tmp_path: Path) -> None:
+    for extra in ({"label": "Library"}, {"id-prefix": "auto-generated"}):
+        with pytest.raises(RuntimeError) as excinfo:
+            _render_with_config(
+                tmp_path,
+                {"items": [{"collection": "lib-functions.json", "type": "nixdoc"} | extra]},
+                {"lib-functions.json": json.dumps(_NIXDOC_EXPORT)},
+            )
+        assert "neither 'label' nor 'id-prefix'" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_excludes_file_and_children(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"collection": "lib-functions.json", "type": "nixdoc", "file": "x.md"}]},
+            {"x.md": "# X {#x}\n\nB.\n"},
+        )
+    assert "exactly one of 'file', 'children' or 'collection'" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_rejects_unsupported_export(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_collection(tmp_path, _NIXDOC_EXPORT | {"schemaVersion": 2})
+    assert "nixdoc collection" in str(excinfo.value.__cause__)
