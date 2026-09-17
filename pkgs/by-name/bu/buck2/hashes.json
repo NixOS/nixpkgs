@@ -1,20 +1,20 @@
 {
   "aarch64-darwin": {
-    "buck2": "sha256-odZQ/iiMmM0XCMk6hO2lvRtQ5PCQ93WeSkjtKXfDNS8=",
-    "rust-project": "sha256-1kI0OHkBV8Cq9YR3T2Fyvn9jk9ZHD9sDD/Zx5eCDk3M=",
-    "starlark_fmt": "sha256-7UX2aCbpR0cJDIEKqm63kWqeXk9UDfy4+NKuWoxh5YM="
+    "buck2": "sha256-qs33yr40ubXcdIZrjc90EM26460tzO9Ft+6YUct4FSg=",
+    "rust-project": "sha256-LEVmWpqV0K+hlYIiOMfSfH5mMqRKJpgRFfP/+hkQSmc=",
+    "starlark_fmt": "sha256-GIRGxFP2VFciaHNNW8eEUBuXWpQQ76Sw8fDohKpPCeI="
   },
   "aarch64-linux": {
-    "buck2": "sha256-935OTtLIOgWqh0vFfC+P64yElBLQkWdLNccion3Ph5o=",
-    "rust-project": "sha256-4zhvmVOM/w+R8VJ74HoNhrkLM4gX6MxrXvHc+Q5Kikg=",
-    "starlark_fmt": "sha256-mwYNYZGYkk7LcbyYEOffDhTF06gFic7h7tnBvFDQKT4="
+    "buck2": "sha256-41AnqOP3Av2fCAB0rGTryA4qD+jWadRtha/DGw7EpGM=",
+    "rust-project": "sha256-LsSNInqfax8KGMTIasFe3V/JBDUDBi3SfkJx96P7AcI=",
+    "starlark_fmt": "sha256-S4w3CS2FhsFFtEKa0rP4pnHHgITcKRhvfC7Wgn2O8XA="
   },
   "x86_64-linux": {
-    "buck2": "sha256-ZcsR/hR5Szrz5zK2Up8scs5OXZKdEeYMAcMfXMuDi6c=",
-    "rust-project": "sha256-oFfEizUVfMsG7Q33HXf3API5INeaLiXEAsIkjLwENoU=",
-    "starlark_fmt": "sha256-u2PbMoFq9jU/Csrbnl5iTdts7d05+BDSgTDG/uO/V44="
+    "buck2": "sha256-Emj84z+2EnMJHdXdjGC2XeFSGjyqNriJg4E+iCt//Yk=",
+    "rust-project": "sha256-0zAHFTCKfC1oa4JUniA9uQSkvONRCRwR57/sYFnG6Ds=",
+    "starlark_fmt": "sha256-cjX6F8LZN9pcUJp1dgSSOaGsqFQ2mGMHXOv5/xgQM8o="
   },
-  "version": "2026-08-22",
-  "preludeGit": "b662bc5f374762afc05e7033d6a0f8d4da462d45",
-  "preludeFod": "sha256-sblbKPjU4t/kK0DyCt16/KW6DqmZaJRA/lXXyE3Ez1k="
+  "version": "2026-09-15",
+  "preludeGit": "4d101dce3482c35b32f9f1e7072b354ae789d256",
+  "preludeFod": "sha256-8G1bao/2jyZj9fc3wSsbzObVD6as5PgWPsbij7p8rGw="
 }
