@@ -2620,6 +2620,8 @@ self: super: with self; {
 
   borb = callPackage ../development/python-modules/borb { };
 
+  borb_2 = callPackage ../development/python-modules/borb/2.nix { };
+
   bork = callPackage ../development/python-modules/bork { };
 
   bosch-alarm-mode2 = callPackage ../development/python-modules/bosch-alarm-mode2 { };
@@ -11205,6 +11207,8 @@ self: super: with self; {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  mosek = callPackage ../development/python-modules/mosek { };
+
   motionblinds = callPackage ../development/python-modules/motionblinds { };
 
   motionblindsble = callPackage ../development/python-modules/motionblindsble { };
@@ -17767,6 +17771,8 @@ self: super: with self; {
   rapidocr = callPackage ../development/python-modules/rapidocr { };
 
   rapidocr-onnxruntime = callPackage ../development/python-modules/rapidocr-onnxruntime { };
+
+  rapidyaml = callPackage ../development/python-modules/rapidyaml { };
 
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 

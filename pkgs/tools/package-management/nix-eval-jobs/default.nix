@@ -11,15 +11,18 @@
   stdenv,
   nixComponents,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-eval-jobs";
-  version = "2.35.3";
+  version = "2.35.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nix-eval-jobs";
-    tag = "v${version}";
-    hash = "sha256-Ig1h/+qL5sj60fWiy44kQkXjapuff7vJXC9N0Ak8EkY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t1FbcjvTWQ1WO3hJNKN+viNXuz4BX9Pte5K4F+IJLDk=";
   };
 
   buildInputs = [
@@ -66,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nix-eval-jobs";
   };
-}
+})

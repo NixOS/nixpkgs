@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.docuum;
+  };
 
   meta = {
     description = "Least recently used (LRU) eviction of Docker images";
