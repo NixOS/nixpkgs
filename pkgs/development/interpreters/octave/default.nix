@@ -199,6 +199,22 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature enableReadline "readline")
     (lib.withFeatureAs enableQt "qt" (lib.versions.major qt6Packages.qtbase.version))
   ]
+  # Ideally octave would have realized by itself that x is irrelevant for
+  # darwin, but from some reason without this flag the build fails with a
+  # compilation error:
+  #
+  #    In file included from libinterp/dldfcn/__init_fltk__.cc:74:
+  #    In file included from /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/fl_draw.H:27:
+  #    In file included from /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/x.H:30:
+  #    /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/mac.H:32:25: error: typedef redefinition with different types ('class FLWindow *' vs 'XID' (aka 'unsigned long'))
+  #       32 | typedef class FLWindow *Window; // pointer to the FLWindow objective-c class
+  #          |                         ^
+  #    /nix/store/mqyaq13d0h4c8hia4bjgpn02by26nb8q-xorgproto-2025.1/include/X11/X.h:96:13: note: previous definition is here
+  #       96 | typedef XID Window;
+  #          |             ^
+  #      CXX      libinterp/dldfcn/__init_gnuplot___la-__init_gnuplot__.lo
+  #    1 error generated.
+  #
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ];
 
   # Keep a copy of the octave tests detailed results in the output
