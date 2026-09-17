@@ -5,7 +5,6 @@
   meson,
   ninja,
   gettext,
-  fetchpatch,
   fetchurl,
   pkg-config,
   gtk4,
@@ -47,13 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
     hash = "sha256-q68zV2RiAwxlu5Y6VjAKd4bn11g08ckKnf/ahzg1wz0=";
   };
-
-  patches = [
-    # Remove when updating to 51.0
-    # Upstream issue: https://gitlab.gnome.org/GNOME/epiphany/-/work_items/2897
-    # Upstream PR: https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/2123
-    ./CVE-2026-18487.patch
-  ];
 
   nativeBuildInputs = [
     blueprint-compiler
