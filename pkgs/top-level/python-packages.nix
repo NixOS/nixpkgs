@@ -6614,6 +6614,8 @@ self: super: with self; {
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
+  ga4gh = callPackage ../development/python-modules/ga4gh { };
+
   galario = toPythonModule (
     pkgs.galario.override {
       enablePython = true;
