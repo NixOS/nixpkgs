@@ -30,7 +30,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  strictDeps = true;
   dontWrapGApps = true;
 
   nativeBuildInputs = [
