@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.8.1";
+  version = "9.9.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OSGeo";
     repo = "PROJ";
     tag = finalAttrs.version;
-    hash = "sha256-sOAxWihgU1TAMWcju5LN4cPenHHoGgd4oYJ4HA3F/Ks=";
+    hash = "sha256-3WJCqH+8MCs/UOmnCqIehLEnkoLCBRCReO05UP2A02A=";
   };
 
   patches = [
