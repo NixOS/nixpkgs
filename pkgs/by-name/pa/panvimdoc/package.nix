@@ -6,6 +6,7 @@
   vim,
   neovim-unwrapped,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -38,6 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Write documentation in pandoc markdown. Generate documentation in vimdoc";
