@@ -241,7 +241,10 @@ let
         priegger
         lukegb
       ];
-      platforms = [ "x86_64-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       mainProgram = "factorio";
     };
   };
