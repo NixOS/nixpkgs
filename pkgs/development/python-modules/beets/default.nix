@@ -114,12 +114,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.13.1";
+  version = "2.14.1";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f25Uv7PRKBFUWah6pvEwwTFjxXKQfmAP2fyTNFJyWB0=";
+    hash = "sha256-elKifMiy0uYPkoIVedqpL7QSjLBKIHz5CIEylVmsTxk=";
   };
   pyproject = true;
 
