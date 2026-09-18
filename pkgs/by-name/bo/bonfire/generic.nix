@@ -251,6 +251,7 @@ beamPkgs.mixRelease (
               "bonfire_editor_milkdown"
               "bonfire_geolocate"
               "bonfire_ui_common"
+              "bonfire_ui_reactions"
             ])
             (pname: {
 
