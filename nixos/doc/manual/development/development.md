@@ -1,3 +1,3 @@
-# Development {#ch-development}
+# Contributing {#ch-development}
 
-This chapter describes how you can modify and extend NixOS.
+These chapters describe how you can modify and extend NixOS.
