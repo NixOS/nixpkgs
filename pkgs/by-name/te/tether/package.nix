@@ -7,21 +7,22 @@
   pkg-config,
   wrapGAppsHook3,
   avahi,
-  bluez,
   gettext,
   glib,
   gtest,
   gtk-layer-shell,
   gtk3,
   libnotify,
+  libsecret,
   nlohmann_json,
   openssl,
+  procps,
   wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tether";
-  version = "0.2.19";
+  version = "0.2.33";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zackb";
     repo = "tether";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3184+dHzgqh+QrdaCCBtQEzNmoJq03rl6wf0FTK1TTc=";
+    hash = "sha256-zgbUHwc9Ud7LZUsUQYuEGQab+8a4W1KePt1+CG7LYOY=";
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '"''${PROJECT_VERSION}-unknown"' '"${finalAttrs.version}"'
+    substituteInPlace packaging/systemd/tetherd.service.in \
+      --replace-fail /usr/bin/pkill ${lib.getExe' procps "pkill"}
   '';
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     gtk3
     libnotify
+    libsecret
     openssl
     wayland
   ];
@@ -59,14 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
+    (lib.cmakeFeature "TETHER_VERSION" finalAttrs.version)
     (lib.cmakeFeature "CHROME_MESSAGING_DIR" "etc/chromium/native-messaging-hosts")
     (lib.cmakeFeature "GOOGLE_CHROME_MESSAGING_DIR" "etc/opt/chrome/native-messaging-hosts")
-    (lib.cmakeFeature "BLUETOOTHD_PATH" "${bluez}/libexec/bluetooth/bluetoothd")
     (lib.cmakeBool "TETHER_BUILD_EXTENSIONS" false)
   ];
 
   doCheck = true;
-  enableParallelChecking = false;
 
   passthru.updateScript = nix-update-script { };
 
