@@ -87,11 +87,15 @@ buildPythonPackage (finalAttrs: {
     "google.cloud.firestore_admin_v1"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-firestore-v(.*)"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "google-cloud-firestore-v(.*)"
+      ];
+    };
   };
 
   meta = {

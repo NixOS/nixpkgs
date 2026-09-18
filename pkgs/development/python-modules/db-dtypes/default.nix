@@ -51,6 +51,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "db_dtypes" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/db-dtypes";
