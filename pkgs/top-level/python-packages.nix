@@ -16002,6 +16002,8 @@ self: super: with self; {
 
   pyregion = callPackage ../development/python-modules/pyregion { };
 
+  pyregrws = callPackage ../development/python-modules/pyregrws { };
+
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
   };
