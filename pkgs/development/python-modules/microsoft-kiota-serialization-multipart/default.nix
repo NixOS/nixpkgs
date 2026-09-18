@@ -38,8 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_serialization_multipart" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-serialization-multipart-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-serialization-multipart-v";
+    };
   };
 
   meta = {
