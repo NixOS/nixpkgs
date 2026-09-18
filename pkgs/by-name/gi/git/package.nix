@@ -491,6 +491,18 @@ stdenv.mkDerivation (finalAttrs: {
     unset flagsArray
   '';
 
+  preFixup =
+    lib.optionalString (!perlSupport) ''
+      # We have impure perl shebangs if we don't support perl,
+      # don't allow them to be executable to avoid surprises.
+      grep --files-with-matches --dereference-recursive -e '^#!.*perl$' $out | xargs chmod a-x
+    ''
+    + lib.optionalString (!pythonSupport) ''
+      # We have impure python shebangs if we don't support python,
+      # don't allow them to be executable to avoid surprises.
+      grep --files-with-matches --dereference-recursive -e '^#!.*python$' $out | xargs chmod a-x
+    '';
+
   ## InstallCheck
 
   doCheck = false;
