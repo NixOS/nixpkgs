@@ -44,7 +44,7 @@ let
   ]
   ++ lib.optional stdenvNoCC.hostPlatform.isLinux partclone;
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "unblob";
   version = "26.6.4";
   pyproject = true;
@@ -52,18 +52,16 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "unblob";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NV4xnTejDW8mTxv0BGB4n+M/bxTMd4GWQQPXhqw5f2Y=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-lEpnpvPwred1KRXxuM1KPxKbIIJUGvR0tmj16QyL5UQ=";
   };
-
-  strictDeps = true;
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
@@ -148,4 +146,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "unblob";
     maintainers = with lib.maintainers; [ vlaci ];
   };
-}
+})
