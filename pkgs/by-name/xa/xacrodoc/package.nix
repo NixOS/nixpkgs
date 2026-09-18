@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "xacrodoc"
   ];
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {
