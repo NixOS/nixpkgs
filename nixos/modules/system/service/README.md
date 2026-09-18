@@ -69,9 +69,8 @@ portable base therefore gained a minimal, init-system-independent option set:
   dependency graph between sibling services. Values are names of services at
   the same nesting level; each backend resolves them to its own mechanism
   (systemd `After=`/`Before=`/`Requires=`/`Wants=`, dinit `depends-on`, a runit
-  dependency graph, rc.d `REQUIRE`). This is what enables step 3 of the
-  project plan (constructing configurations for alternative init systems with
-  proper start ordering).
+  dependency graph, rc.d `REQUIRE`). Backends construct configurations for
+  alternative init systems with proper start ordering from these.
 - **`runtime`** (`user`, `group`, `workingDirectory`): Runtime context of the
   process. `group` defaults to the configured `user`.
 - **`environment`**: Environment variables for the process.

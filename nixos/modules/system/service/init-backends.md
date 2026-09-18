@@ -1,10 +1,8 @@
 # Alternative Init System Backends: What Needs to Be Brought In
 
-Plan for step 2 of the project: what must be added to nixpkgs/NixOS so that
-the abstract service API (step 1) can be translated to init systems other
-than systemd. The goal is not to build these backends yet (that is step 3),
-but to catalogue the required pieces, package gaps, and how each init system
-maps the abstract options.
+What must be added to nixpkgs/NixOS so that the abstract service API can be
+translated to init systems other than systemd: the required pieces, package
+gaps, and how each init system maps the abstract options.
 
 Package attribute names below refer to this nixpkgs checkout.
 
@@ -28,7 +26,7 @@ Every backend needs pieces that NixOS currently gets for free from systemd:
 - `nix-daemon`: a plain long-running service, no systemd dependency
 - TMPFILES equivalent: each backend needs an equivalent mechanism or an
   abstraction (`systemd.tmpfiles.rules` equivalent); s6/dinit/runit can each
-  run a small script; consider a portable `tmpfiles` translation in step 3
+  run a small script; consider a portable `tmpfiles` translation later
 - Logging: s6 has `s6-log`, runit has `svlogd`, dinit relies on external
   loggers. A portable `services.logging` abstraction is a candidate
 
@@ -49,7 +47,7 @@ Requirements and gaps:
   (`PrivateTmp`, `ProtectSystem`, `NoNewPrivileges`, mount namespaces) has no
   dinit equivalent. Wrap service commands with `bubblewrap` (`bwrap`) to
   reconstruct the common sandboxing primitives. A dinit service type
-  "bwrap-wrapped" (or per-service `sandbox` abstract option in step 3) runs
+  "bwrap-wrapped" (or per-service `sandbox` abstract option) runs
   `bwrap --die-with-parent --unshare-* ... argv`
 - **Control groups**: dinit supports cgroups (v2 required). NixOS kernel must
   enable cgroup v2 (already the default on modern kernels) and dinit needs to
@@ -74,11 +72,11 @@ Packages available: `runit`.
 Requirements and gaps:
 
 - **Dependency graph**: runit has no native ordering; the backend must
-  construct it (as the project plan says: "construct a dependency graph and
-  make dependencies start child services"). Approach: generate a
-  `runsvdir`-booted service tree where each service's `run` script starts
-  with a synchronisation step, or generate a boot script under
-  `service/.dependencies` that starts `after`/`requires` services first.
+  construct the dependency graph and start dependencies before their
+  dependents. Approach: generate a `runsvdir`-booted service tree where each
+  service's `run` script starts with a synchronisation step, or generate a
+  boot script under `service/.dependencies` that starts `after`/`requires`
+  services first.
   Candidate structure:
   - every abstract service becomes a directory under `/etc/service/<name>`
   - `dependencies.requires/wants` become `dependencies.d` entries checked by
@@ -119,7 +117,7 @@ with the abstract API:
 - **Sandboxing**: s6 has no native sandbox; same `bubblewrap` wrapper
   approach as dinit
 
-## FreeBSD rc.d (partially implemented, step 6)
+## FreeBSD rc.d (partially implemented)
 
 `nixos/modules/system/service/freebsd/rc-d/system.nix` is implemented: it
 translates `system.services` into rc.d scripts (`/etc/rc.d/<name>`, with
@@ -132,7 +130,7 @@ Still future work (out of scope for the Linux NixOS tree): the FreeBSD kernel
 as a NixOS kernel, the BSD userland as the system userland, and jails support.
 The rc.d backend gives the service-translation half of that story.
 
-## Backend directory layout (proposal, step 3)
+## Backend directory layout
 
 ```
 nixos/modules/system/service/
@@ -144,7 +142,7 @@ nixos/modules/system/service/
     system.nix
 ```
 
-Status: **step 3 is implemented** in this tree. Each backend module
+Status: **implemented**. Each backend module
 (`dinit/system.nix`, `runit/system.nix`, `s6/system.nix`) declares the
 portable `system.services` (via `lib.services.configure` with its own
 `extraRootModules`), maps `dependencies`, `runtime`, `environment`,
@@ -167,7 +165,7 @@ translates `configData` to its own configuration
 directory, and maps `dependencies`/`runtime`/`environment`/`restart`/
 `process.*` onto the backend's format.
 
-## Toggle design (feeds step 4)
+## Toggle design
 
 One option, e.g. `system.initSystem = lib.mkOption { type = enum [
 "systemd" "dinit" "runit" "s6" ]; default = "systemd"; }`, gates which
@@ -175,7 +173,7 @@ backend module is imported (`imports = [ ./${cfg.initSystem}/system.nix ]`).
 All existing NixOS services keep using `systemd.services`; the systemd
 backend remains authoritative for them. Only when a backend other than
 systemd is chosen does the translation of `system.services` switch,
-alongside a migration shim (step 5) that intercepts systemd-facing calls.
+alongside a migration shim that intercepts systemd-facing calls.
 
 ## Package count / build risk summary
 
