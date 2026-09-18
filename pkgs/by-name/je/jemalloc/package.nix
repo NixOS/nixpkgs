@@ -49,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
+
   patches = [
     # -O3 appears to introduce an unreproducibility where
     # `rtree_read.constprop.0` shows up in some builds but
@@ -109,9 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
   # Tries to link test binaries binaries dynamically and fails
   doCheck = !stdenv.hostPlatform.isStatic;
 
+  preFixup = ''
+    # jemalloc-config will end up in $dev, so we must patch its shebangs for the build host
+    patchShebangs --build $bin/bin/jemalloc-config
+  '';
+
+  postFixup = ''
+    moveToOutput bin/jemalloc-config "$dev"
+  '';
+
   doInstallCheck = true;
   installCheckPhase = ''
-    ! grep missing_version_try_git_fetch_tags $out/include/jemalloc/jemalloc.h
+    ! grep missing_version_try_git_fetch_tags $dev/include/jemalloc/jemalloc.h
   '';
 
   # Parallel builds break reproducibility.
