@@ -263,6 +263,15 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         );
 
+      runtimeSetup = ''
+        export NIX_REDIRECTS="/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAROOT/timezone"
+
+        # Citrix invokes the FHS helper path; NixOS supplies the privileged wrapper here.
+        if [ -x /run/wrappers/bin/fusermount3 ]; then
+          NIX_REDIRECTS="$NIX_REDIRECTS:/usr/bin/fusermount3=/run/wrappers/bin/fusermount3"
+        fi
+      '';
+
       # Only the ICA engine needs the top-level client directory on the library
       # path. Leaving it enabled for UI helpers exposes Citrix's session-only
       # libproxy.so to the embedded web stack, which then fails to resolve CGP
@@ -277,7 +286,7 @@ stdenv.mkDerivation (finalAttrs: {
             ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$ICAInstDir/gst-plugins:${gstPluginPath}"''
             ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
-            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
+            "--run ${lib.escapeShellArg runtimeSetup}"
           ]
           ++ lib.optionals (isWfica program) [
             # wfica is an X11 client (it runs under XWayland). On a Wayland
@@ -291,7 +300,7 @@ stdenv.mkDerivation (finalAttrs: {
         );
 
       wrap = program: ''
-        wrapProgram $out/opt/citrix-icaclient/${program} \
+        wrapProgramShell $out/opt/citrix-icaclient/${program} \
           ${wrapperArgs program}
       '';
 
@@ -301,7 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
       makeBinWrapper = program: wrapperName: ''
-        makeWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
+        makeShellWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
           ${wrapperArgs program}
       '';
 

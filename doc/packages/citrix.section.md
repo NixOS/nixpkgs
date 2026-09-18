@@ -16,6 +16,16 @@ To enable it on NixOS:
 }
 ```
 
+For FUSE-based file transfer, enable the privileged helper on NixOS:
+
+```nix
+{
+  programs.fuse.enable = true;
+}
+```
+
+The package uses `/run/wrappers/bin/fusermount3` when it is available.
+
 ## Citrix Self-service {#sec-citrix-selfservice}
 
 The [self-service](https://support.citrix.com/article/CTX200337) is an application for managing Citrix desktops and applications. Please note that this feature only works with at least `citrix_workspace_20_06_0` and later versions.
