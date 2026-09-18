@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "tankerkoenig-card";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "timmaurice";
     repo = "lovelace-tankerkoenig-card";
     tag = finalAttrs.version;
-    hash = "sha256-RhaXF7avYC75j9/4TRkg0fy7OTdU/X0nADwsW9Bb4+o=";
+    hash = "sha256-QTfg9hlbfbT8rRkc6QB/GDzMZI5e1irKBheYj/GLEB8=";
   };
 
-  npmDepsHash = "sha256-OWToUfhL9AvomltUXtBwh1SFCJtPvqz7gFGb4OS1JnU=";
+  npmDepsHash = "sha256-9ndSxbaDuuMlBnMzW0SihYMU9MVvbSX7AaR63+H+cVQ=";
 
   installPhase = ''
     runHook preInstall
