@@ -94,6 +94,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-install-paths.patch
   ];
 
+  # Fix arm computelib ar/ranlib toolchain paths for LTO awareness
+  postPatch = ''
+    substituteInPlace src/plugins/intel_cpu/thirdparty/ComputeLibrary/SConstruct \
+      --replace-fail \
+        "env['AR'] = toolchain_prefix + \"ar\"" \
+        "env['AR'] = \"${lib.getExe' stdenv.cc.cc "gcc-ar"}\"" \
+      --replace-fail \
+        "env['RANLIB'] = toolchain_prefix + \"ranlib\"" \
+        "env['RANLIB'] = \"${lib.getExe' stdenv.cc.cc "gcc-ranlib"}\""
+  '';
+
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -127,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_CPU" true)
     (cmakeBool "ENABLE_INTEL_GPU" true)
     (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
