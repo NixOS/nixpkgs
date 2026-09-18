@@ -6,8 +6,6 @@
 }:
 let
 
-  concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
-
   cfg = config.services.mlmmj;
   stateDir = "/var/lib/mlmmj";
   spoolDir = "/var/spool/mlmmj";
@@ -141,10 +139,10 @@ in
         ];
       };
 
-      extraAliases = concatMapLines (alias cfg.listDomain) cfg.mailLists;
+      extraAliases = lib.concatMapStringsSep "\n" (alias cfg.listDomain) cfg.mailLists;
 
-      virtual = concatMapLines (virtual cfg.listDomain) cfg.mailLists;
-      transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;
+      virtual = lib.concatMapStringsSep "\n" (virtual cfg.listDomain) cfg.mailLists;
+      transport = lib.concatMapStringsSep "\n" (transport cfg.listDomain) cfg.mailLists;
     };
 
     environment.systemPackages = [ pkgs.mlmmj ];
@@ -165,7 +163,7 @@ in
         ExecStart = "${pkgs.mlmmj}/bin/mlmmj-maintd -F -d ${spoolDir}/${cfg.listDomain}";
       };
       preStart = ''
-        ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+        ${lib.concatMapStringsSep "\n" (createList cfg.listDomain) cfg.mailLists}
         ${lib.getExe' config.services.postfix.package "postmap"} /etc/postfix/virtual
         ${lib.getExe' config.services.postfix.package "postmap"} /etc/postfix/transport
       '';
