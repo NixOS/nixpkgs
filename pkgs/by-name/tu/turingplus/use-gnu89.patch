@@ -1,0 +1,13 @@
+--- a/src/cmd/tpc.t
++++ b/src/cmd/tpc.t
+@@ -1342,6 +1342,10 @@ procedure CompileC (cFileName : string, var s : string, var status : int)
+ 	i += 1
+     end if
+ 
++    % Use C standard that allows C++-style comments
++    tArgs(i) := "-std=gnu89"
++    i += 1
++
+     % ignore warnings from C compiler 
+     tArgs(i) := "-w"
+     i += 1

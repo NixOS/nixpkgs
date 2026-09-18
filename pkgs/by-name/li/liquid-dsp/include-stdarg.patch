@@ -1,0 +1,12 @@
+diff --git a/include/liquid.h b/include/liquid.h
+index 290778b50..52d898d07 100644
+--- a/include/liquid.h
++++ b/include/liquid.h
+@@ -34,6 +34,7 @@ extern "C" {
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <time.h>
++#include <stdarg.h>
+ 
+ // compile-time short file path: use __FILE_NAME__ if available (Clang 9+, GCC 12+)
+ #ifdef __FILE_NAME__

@@ -1,0 +1,58 @@
+From 91e2418c37fce511eeaa1d1bb34a0d7a25668d40 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Tue, 20 Jan 2026 15:29:03 +0100
+Subject: [PATCH] Makefile.{dmd,ldc}: Pin C standard to C99
+
+Code is definitely not C23-compatible, and I imagine C99 is *prolly* what this was initially targeting.
+---
+ Makefile.dmd | 4 ++--
+ Makefile.ldc | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile.dmd b/Makefile.dmd
+index 24a1d06..7c1b7c2 100644
+--- a/Makefile.dmd
++++ b/Makefile.dmd
+@@ -3,7 +3,7 @@ COMFLAGS=
+ DLINK=$(COMFLAGS) 
+ VERSION=$(shell cat Version)
+ DFLAGS=$(COMFLAGS) -I./src -J./src/c64 -J./src/font -O
+-CFLAGS=$(COMFLAGS) -O1
++CFLAGS=$(COMFLAGS) -O1 -std=c99
+ CXXFLAGS=-I./src -O3
+ COMPILE.d = $(DC) $(DFLAGS) -c -of$@
+ OUTPUT_OPTION=
+@@ -21,7 +21,7 @@ $(TARGET): $(C64OBJS) $(OBJS) $(CXX_OBJS)
+ 	$(CXX) $(CXXFLAGS) -c $< -o $@
+ 
+ .c.o : $(C_SRCS)
+-	$(CC) -c $< -o $@
++	$(CC) $(CFLAGS) -c $< -o $@
+ 
+ ct: $(C64OBJS) $(CTOBJS)
+ 
+diff --git a/Makefile.ldc b/Makefile.ldc
+index b89077a..a6c4714 100644
+--- a/Makefile.ldc
++++ b/Makefile.ldc
+@@ -6,7 +6,7 @@ LIBS=-L-ldl -L-lstdc++
+ COMFLAGS=-O2
+ VERSION=$(shell cat Version)
+ DFLAGS=$(COMFLAGS) -I./src -J./src/c64 -J./src/font
+-CFLAGS=$(COMFLAGS)
++CFLAGS=$(COMFLAGS) -std=c99
+ CXXFLAGS=$(COMFLAGS) -I./src 
+ COMPILE.d = $(DC) $(DFLAGS) -c
+ DC=ldc2
+@@ -28,7 +28,7 @@ ccutter:$(C64OBJS) $(OBJS) $(CXX_OBJS)
+ 	$(CXX) $(CXXFLAGS) -c $< -o $@
+ 
+ .c.o : $(C_SRCS)
+-	$(CC) -c $< -o $@
++	$(CC) $(CFLAGS) -c $< -o $@
+ 
+ ct: $(C64OBJS) $(CTOBJS)
+ 
+-- 
+2.51.2
+

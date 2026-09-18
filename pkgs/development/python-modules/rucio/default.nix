@@ -1,0 +1,109 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  packaging,
+  setuptools,
+  wheel,
+
+  # dependencies
+  alembic,
+  argcomplete,
+  boto3,
+  dogpile-cache,
+  flask,
+  geoip2,
+  gfal2-python,
+  google-auth,
+  jsonschema,
+  oic,
+  paramiko,
+  prometheus-client,
+  pymemcache,
+  python-dateutil,
+  python-magic,
+  redis,
+  requests,
+  rich,
+  sqlalchemy,
+  statsd,
+  stomp-py,
+  tabulate,
+  typing-extensions,
+  urllib3,
+
+  # tests
+  pytestCheckHook,
+}:
+
+let
+  version = "41.2.2";
+
+  src = fetchFromGitHub {
+    owner = "rucio";
+    repo = "rucio";
+    tag = version;
+    hash = "sha256-XRZirQAWpTDq6WueyyUCHUMhBPEaspjW7rircLM02qk=";
+  };
+in
+buildPythonPackage {
+  pname = "rucio";
+  inherit version src;
+  pyproject = true;
+
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [ "boto" ];
+
+  build-system = [
+    packaging
+    setuptools
+    wheel
+  ];
+
+  dependencies = [
+    alembic
+    argcomplete
+    boto3
+    dogpile-cache
+    flask
+    geoip2
+    gfal2-python # needed for rucio download
+    google-auth
+    jsonschema
+    oic
+    packaging
+    paramiko
+    prometheus-client
+    pymemcache
+    python-dateutil
+    python-magic
+    redis
+    requests
+    rich
+    sqlalchemy
+    statsd
+    stomp-py
+    tabulate
+    typing-extensions
+    urllib3
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  doCheck = false; # needs a rucio.cfg
+
+  pythonImportsCheck = [ "rucio" ];
+
+  meta = {
+    description = "Tool for Scientific Data Management";
+    homepage = "http://rucio.cern.ch/";
+    changelog = "https://github.com/rucio/rucio/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
+  };
+}

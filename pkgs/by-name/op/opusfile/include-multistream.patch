@@ -1,0 +1,12 @@
+diff -Naur a/include/opusfile.h b/include/opusfile.h
+--- a/include/opusfile.h	2014-04-29 19:07:09.000000000 +0200
++++ b/include/opusfile.h	2016-09-05 17:50:15.147553798 +0200
+@@ -107,7 +107,7 @@
+ # include <stdarg.h>
+ # include <stdio.h>
+ # include <ogg/ogg.h>
+-# include <opus_multistream.h>
++# include <opus/opus_multistream.h>
+ 
+ /**@cond PRIVATE*/
+ 

@@ -1,0 +1,35 @@
+diff --git a/src/portable/server/install.rs b/src/portable/server/install.rs
+index feb47f1..157d17a 100644
+--- a/src/portable/server/install.rs
++++ b/src/portable/server/install.rs
+@@ -229,8 +229,16 @@ fn unpack_package(cache_file: &Path, target_dir: &Path) -> anyhow::Result<()> {
+     for entry in arch.entries()? {
+         let mut entry = entry?;
+         let path = entry.path()?;
++        let is_inside_bin = {
++            let mut path_iter = path.iter();
++            path_iter.next(); // discards first path
++            path_iter.as_path().starts_with("bin")
++        };
+         if let Some(path) = build_path(&target_dir, &path)? {
+-            entry.unpack(path)?;
++            entry.unpack(&path)?;
++            if is_inside_bin {
++                nix_patchelf_if_needed(&path);
++            }
+         }
+     }
+     bar.finish_and_clear();
+@@ -244,3 +252,12 @@ fn unlink_cache(cache_file: &Path) {
+         })
+         .ok();
+ }
++
++fn nix_patchelf_if_needed(dest_path: &Path) {
++    let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++        .arg("--set-interpreter")
++        .arg("@dynamicLinker@")
++        .arg(dest_path)
++        .output();
++}
++

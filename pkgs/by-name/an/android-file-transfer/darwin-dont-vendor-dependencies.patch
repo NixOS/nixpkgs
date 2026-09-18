@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 574b354..1a62874 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -254,16 +254,6 @@ endif()
+ 
+ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+ 	set(MACOSX_BUNDLE_LIBS)
+-	if (OPENSSL_FOUND)
+-		list(APPEND MACOSX_BUNDLE_LIBS /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib)
+-	endif()
+-	if (TAGLIB_FOUND)
+-		list(APPEND MACOSX_BUNDLE_LIBS /usr/local/opt/taglib/lib/libtag.2.dylib)
+-	endif()
+-	if (FUSE_FOUND)
+-		list(APPEND MACOSX_BUNDLE_LIBS /usr/local/lib/libosxfuse.2.dylib)
+-	endif()
+-
+ 	set(MACOSX_BUNDLE_LIBS_INSTALL)
+ 	set(MACOSX_BUNDLE_ROOT_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_PROJECT_NAME}.app")
+ 	message(STATUS "bundle root dir: ${MACOSX_BUNDLE_ROOT_DIR}")

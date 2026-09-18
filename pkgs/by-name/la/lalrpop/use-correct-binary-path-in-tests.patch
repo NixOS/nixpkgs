@@ -1,0 +1,13 @@
+diff --git a/lalrpop-test/src/lib.rs b/lalrpop-test/src/lib.rs
+index cb4f2b0..725b0d4 100644
+--- a/lalrpop-test/src/lib.rs
++++ b/lalrpop-test/src/lib.rs
+@@ -1089,7 +1089,7 @@ fn verify_lalrpop_generates_itself() {
+     // Don't remove the .rs file that already exist
+     fs::copy(&grammar_file, &copied_grammar_file).expect("no grammar file found");
+ 
+-    assert!(Command::new("../target/debug/lalrpop")
++    assert!(Command::new("../target/@target_triple@/release/lalrpop")
+         .args([
+             "--force",
+             "--no-whitespace",

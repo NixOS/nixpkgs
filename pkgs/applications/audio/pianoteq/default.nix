@@ -1,0 +1,361 @@
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  curl,
+  freetype,
+  htmlq,
+  jq,
+  libglvnd,
+  librsvg,
+  makeDesktopItem,
+  makeWrapper,
+  p7zip,
+  gnutar,
+  writeShellScript,
+}:
+let
+  versionForFile = v: builtins.replaceStrings [ "." ] [ "" ] v;
+
+  archdirs =
+    if stdenv.hostPlatform.isx86_64 then
+      [
+        "x86-64bit"
+        "amd64"
+      ]
+    else if stdenv.hostPlatform.isAarch64 then
+      [
+        "arm-64bit"
+        "arm"
+      ]
+    else
+      throw "unsupported platform";
+
+  mkPianoteq =
+    {
+      name,
+      mainProgram,
+      startupWMClass,
+      src,
+      version,
+      ...
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      inherit src version;
+
+      pname = "pianoteq-${name}";
+
+      unpackPhase =
+        if lib.hasSuffix ".7z" src then
+          ''
+            ${p7zip}/bin/7z x $src
+          ''
+        else if lib.hasSuffix ".tar.xz" src then
+          ''
+            ${gnutar}/bin/tar -xf $src
+          ''
+        else
+          throw "unexpected file format";
+
+      nativeBuildInputs = [
+        autoPatchelfHook
+        copyDesktopItems
+        makeWrapper
+        librsvg
+      ];
+
+      buildInputs = [
+        (lib.getLib stdenv.cc.cc) # libgcc_s.so.1, libstdc++.so.6
+        alsa-lib # libasound.so.2
+        freetype # libfreetype.so.6
+        libglvnd # libGL.so.1
+      ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          name = finalAttrs.pname;
+          exec = ''"${mainProgram}"'';
+          desktopName = mainProgram;
+          icon = "pianoteq";
+          comment = finalAttrs.meta.description;
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Recorder"
+          ];
+          startupNotify = false;
+          inherit startupWMClass;
+        })
+      ];
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/bin
+        mv -t $out/bin ${builtins.concatStringsSep " " (map (dir: "Pianoteq*/${dir}/*") archdirs)}
+        install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
+        for size in 16 22 32 48 64 128 256; do
+          dir=$out/share/icons/hicolor/"$size"x"$size"/apps
+          mkdir -p $dir
+          rsvg-convert \
+            --keep-aspect-ratio \
+            --width $size \
+            --height $size \
+            --output $dir/pianoteq.png \
+            ${./pianoteq.svg}
+        done
+        runHook postInstall
+      '';
+
+      meta = {
+        homepage = "https://www.modartt.com/pianoteq";
+        description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
+        license = lib.licenses.unfree;
+        inherit mainProgram;
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        maintainers = with lib.maintainers; [
+          mausch
+          ners
+        ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      };
+    });
+
+  fetchWithCurlScript =
+    {
+      name,
+      hash,
+      script,
+      impureEnvVars ? [ ],
+    }:
+    stdenv.mkDerivation {
+      inherit name;
+      builder = writeShellScript "builder.sh" ''
+        curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
+
+        # Curl flags to handle redirects, not use EPSV, handle cookies for
+        # servers to need them during redirects, and work on SSL without a
+        # certificate (this isn't a security problem because we check the
+        # cryptographic hash of the output anyway).
+        curl=(
+            ${curl}/bin/curl
+            --location
+            --max-redirs 20
+            --retry 3
+            --disable-epsv
+            --cookie-jar cookies
+            --insecure
+            --user-agent "curl/$curlVersion Nixpkgs/${lib.trivial.release}"
+            $NIX_CURL_FLAGS
+        )
+
+        ${script}
+
+      '';
+      nativeBuildInputs = [ curl ];
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+
+      impureEnvVars =
+        lib.fetchers.proxyImpureEnvVars
+        ++ impureEnvVars
+        ++ [
+          # This variable allows the user to pass additional options to curl
+          "NIX_CURL_FLAGS"
+        ];
+    };
+
+  fetchPianoteqTrial =
+    { name, hash }:
+    fetchWithCurlScript {
+      inherit name hash;
+      script = ''
+        html=$(
+          "''${curl[@]}" --silent --request GET \
+            --cookie cookies \
+            --header "accept: */*" \
+            'https://www.modartt.com/try?file=${name}'
+        )
+
+        signature="$(echo "$html" | ${htmlq}/bin/htmlq '#download-form' --attribute action | cut -f2 -d'&' | cut -f2 -d=)"
+
+        json=$(
+          "''${curl[@]}" --silent --request POST \
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url", "signature": "'"$signature"'"}' \
+          https://www.modartt.com/api/0/download
+        )
+
+        url=$(echo $json | ${jq}/bin/jq -r .url)
+        if [ "$url" == "null"  ]; then
+          echo "Could not get download URL, open an issue on https://github.com/NixOS/nixpkgs"
+          return 1
+        fi
+        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
+      '';
+    };
+
+  fetchPianoteqWithLogin =
+    { name, hash }:
+    fetchWithCurlScript {
+      inherit name hash;
+
+      impureEnvVars = [
+        "NIX_MODARTT_USERNAME"
+        "NIX_MODARTT_PASSWORD"
+      ];
+
+      script = ''
+        if [ -z "''${NIX_MODARTT_USERNAME}" -o -z "''${NIX_MODARTT_PASSWORD}" ]; then
+          echo "Error: Downloading a personal Pianoteq instance requires the nix building process (nix-daemon in multi user mode) to have the NIX_MODARTT_USERNAME and NIX_MODARTT_PASSWORD env vars set." >&2
+          exit 1
+        fi
+
+        "''${curl[@]}" -s -o /dev/null "https://www.modartt.com/user_area"
+
+        ${jq}/bin/jq -n "{connect: 1, login: \"''${NIX_MODARTT_USERNAME}\", password: \"''${NIX_MODARTT_PASSWORD}\"}" > login.json
+
+        "''${curl[@]}" --silent --request POST \
+          --cookie cookies \
+          --referer "https://www.modartt.com/user_area" \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data @login.json \
+          https://www.modartt.com/api/0/session
+
+        json=$(
+          "''${curl[@]}" --silent --request POST \
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url"}' \
+          https://www.modartt.com/api/0/download
+        )
+
+        url=$(echo $json | ${jq}/bin/jq -r .url)
+        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
+      '';
+    };
+
+  version6 = "6.7.3";
+  version7 = "7.5.4";
+  version8 = "8.4.3";
+  version9 = "9.2.1";
+
+  mkStandard =
+    version: hash:
+    mkPianoteq {
+      name = "standard";
+      mainProgram = "Pianoteq ${lib.versions.major version}";
+      startupWMClass = "Pianoteq";
+      inherit version;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_linux_v${versionForFile version}.7z";
+        inherit hash;
+      };
+    };
+  mkStage =
+    version: hash:
+    mkPianoteq {
+      name = "stage";
+      mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
+      startupWMClass = "Pianoteq STAGE";
+      inherit version;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+        inherit hash;
+      };
+    };
+  mkStandardTrial =
+    version: hash:
+    mkPianoteq {
+      name = "standard-trial";
+      mainProgram = "Pianoteq ${lib.versions.major version}";
+      startupWMClass = "Pianoteq Trial";
+      inherit version;
+      src = fetchPianoteqTrial {
+        name = "pianoteq_linux_trial_v${versionForFile version}.7z";
+        inherit hash;
+      };
+    };
+  mkStageTrial =
+    version: hash:
+    mkPianoteq {
+      name = "stage-trial";
+      mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
+      startupWMClass = "Pianoteq STAGE Trial";
+      inherit version;
+      src = fetchPianoteqTrial {
+        name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
+        inherit hash;
+      };
+    };
+  mkTrial9 =
+    hash:
+    mkPianoteq {
+      name = "trial";
+      version = version9;
+      mainProgram = "Pianoteq 9";
+      startupWMClass = "Pianoteq Trial";
+      src = fetchPianoteqTrial {
+        name = "pianoteq_trial_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
+  mkStage9 =
+    hash:
+    mkPianoteq {
+      name = "stage";
+      version = version9;
+      mainProgram = "Pianoteq 9 STAGE";
+      startupWMClass = "Pianoteq STAGE";
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_setup_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
+  mkStandard9 =
+    hash:
+    mkPianoteq {
+      name = "standard";
+      mainProgram = "Pianoteq 9";
+      startupWMClass = "Pianoteq";
+      version = version9;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_setup_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
+in
+{
+  standard_9 = mkStandard9 "sha256-iIKYmXy7d5mGkONUqR91Qjo7IIGJE9eBN4pCr0+D7no=";
+  trial_9 = mkTrial9 "sha256-QQMLYvn7KW7u4JYeNCqxE+7Yn36bR+bTA2bP2IcQGZg=";
+  stage_9 = mkStage9 "sha256-iIKYmXy7d5mGkONUqR91Qjo7IIGJE9eBN4pCr0+D7no=";
+
+  standard_8 = mkStandard version8 "sha256-72eV+d3jwRZJSs6I4e055ZrR/dvnhwAaM63eZEQAtOg=";
+  stage_8 = mkStage version8 "";
+  standard-trial_8 = mkStandardTrial version8 "sha256-P5f+eZcV/y1+0W85PRvpz9CejLwGYmvRdPcvbXOiITw=";
+  stage-trial_8 = mkStageTrial version8 "sha256-m4lqnRyLTs2/x2w/raE1RQAc2+7kwtmUl0uUgUTC0lE=";
+
+  standard_7 = mkStandard version7 "sha256-TA9CiuT21fQedlMUGz7bNNxYun5ArmRjvIxjOGqXDCs=";
+  stage_7 = mkStage version7 "";
+  standard-trial_7 = mkStandardTrial version7 "sha256-3a3+SKTEhvDtqK5Kg4E6KiLvn5+j6JN6ntIb72u2bdQ=";
+  stage-trial_7 = mkStageTrial version7 "sha256-ybtq+hjnaQxpLxv2KE0ZcbQXtn5DJJsnMwCmh3rlrIc=";
+
+  standard_6 = mkStandard version6 "sha256-u6ZNpmHFVOk+r+6Q8OURSfAi41cxMoDvaEXrTtHEAVY=";
+  stage_6 = mkStage version6 "";
+  standard-trial_6 = mkStandardTrial version6 "sha256-nHTAqosOJqC0VnRw2/xVpZ6y02vvau6CgfNmgiN/AHs=";
+  stage-trial_6 = mkStageTrial version6 "sha256-zrv0c/Mxt1EysR7ZvmxtksXAF5MyXTFMNj4KAdO3QnE=";
+}

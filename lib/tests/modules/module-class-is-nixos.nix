@@ -1,0 +1,4 @@
+{
+  _class = "nixos";
+  config = { };
+}

@@ -1,0 +1,41 @@
+From f404e176e89c5d778363cb0177b44dc1aa5e1fda Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Tue, 5 Nov 2024 12:53:04 +0800
+Subject: [PATCH] Bind Nix Store
+
+---
+ src/core/judgingthread.cpp | 18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
+
+diff --git a/src/core/judgingthread.cpp b/src/core/judgingthread.cpp
+index 7201552..88aee9d 100644
+--- a/src/core/judgingthread.cpp
++++ b/src/core/judgingthread.cpp
+@@ -893,21 +893,9 @@ void JudgingThread::runProgram() {
+ 	auto *runner = new QProcess(this);
+ 	QStringList argumentsList;
+ 
+-	argumentsList << "--ro-bind"
+-	              << "/usr"
+-	              << "/usr";
+-	argumentsList << "--symlink"
+-	              << "/usr/lib"
+-	              << "/lib";
+-	argumentsList << "--symlink"
+-	              << "/usr/lib64"
+-	              << "/lib64";
+-	argumentsList << "--symlink"
+-	              << "/usr/bin"
+-	              << "/bin";
+-	argumentsList << "--symlink"
+-	              << "/usr/sbin"
+-	              << "/sbin";
++	argumentsList << "--bind"
++	              << "/nix/store"
++	              << "/nix/store";
+ 	argumentsList << "--tmpfs"
+ 	              << "/tmp";
+ 
+-- 
+2.46.1
+

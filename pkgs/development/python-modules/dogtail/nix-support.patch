@@ -1,0 +1,35 @@
+--- a/dogtail/distro.py
++++ b/dogtail/distro.py
+@@ -233,6 +233,11 @@
+         PackageDb.__init__(self)
+ 
+ 
++class _NixPackageDb(PackageDb):  # pragma: no cover
++    def __init__(self):
++        PackageDb.__init__(self)
++
++
+ class JhBuildPackageDb(PackageDb):  # pragma: no cover
+     def __init__(self):
+         PackageDb.__init__(self)
+@@ -324,6 +329,11 @@
+         self.packageDb = _SolarisPackageDb()
+ 
+ 
++class Nix(Distro):  # pragma: no cover
++    def __init__(self):
++        self.packageDb = _NixPackageDb()
++
++
+ class JHBuild(Distro):  # pragma: no cover
+     def __init__(self):
+         self.packageDb = JhBuildPackageDb()
+@@ -358,6 +368,8 @@
+     elif os.path.exists("/etc/release") and \
+             re.match(".*Solaris", open("/etc/release").readline()):  # pragma: no cover
+         distro = Solaris()  # pragma: no cover
++    elif os.path.exists("/nix/store"):  # pragma: no cover
++        distro = Nix()  # pragma: no cover
+     elif os.path.exists("/etc/os-release") and \
+             re.match(".*GNOME-Continuous", open("/etc/os-release").readline()):  # pragma: no cover
+         distro = GnomeContinuous()  # pragma: no cover

@@ -1,0 +1,31 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/doc_cmds/blob/main/doc_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('doc_cmds', 'c', version : '@version@')
+add_global_arguments('-D__FBSDID=__RCSID', language : 'c')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+zlib = dependency('zlib')
+
+
+# Binaries
+executable(
+    'makewhatis',
+    dependencies : [ zlib ],
+    install : true,
+    install_dir : get_option('libexecdir'),
+    sources : [ 'makewhatis/makewhatis.c' ],
+)
+install_man('makewhatis/makewhatis.8')
+
+install_data(
+    'makewhatis/makewhatis.local.sh',
+    install_dir : get_option('libexecdir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'makewhatis.local'
+)
+install_man('makewhatis/makewhatis.local.8')

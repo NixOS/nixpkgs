@@ -1,0 +1,19 @@
+When /bin/sh is bash, this code doesn't work right - bash has a "tail call"
+optimization where the last command in a finite script will be run as if with
+exec instead of forking a new shell. rc here expects `pkill -P $$` (kill all
+processes with parent pid == shell) to effectively background a process, but
+instead it kills it!
+
+diff --git a/etc/rc.d/rc.subr b/etc/rc.d/rc.subr
+index 1f872f0ebc8..0c32b00e2ef 100644
+--- a/etc/rc.d/rc.subr
++++ b/etc/rc.d/rc.subr
+@@ -178,7 +178,7 @@ rc_exec() {
+ 		${daemon_execdir:+cd ${daemon_execdir} && } \
+ 		$@ \
+ 		${daemon_logger:+ 2>&1 |
+-			logger -isp ${daemon_logger} -t ${_name}}"
++			logger -isp ${daemon_logger} -t ${_name}}; exit"
+ }
+ 
+ rc_start() {

@@ -1,0 +1,13 @@
+diff --git a/bin_steam.sh b/bin_steam.sh
+index 49f9d8a..48f4379 100755
+--- a/bin_steam.sh
++++ b/bin_steam.sh
+@@ -297,7 +297,7 @@ fi
+ # Leave a copy of the bootstrap tarball in ~/.steam so that Steam can
+ # re-bootstrap itself if required
+ if ! cmp -s "$LAUNCHSTEAMBOOTSTRAPFILE" "$LAUNCHSTEAMDIR/bootstrap.tar.xz"; then
+-    cp "$LAUNCHSTEAMBOOTSTRAPFILE" "$LAUNCHSTEAMDIR/bootstrap.tar.xz"
++    cp -f "$LAUNCHSTEAMBOOTSTRAPFILE" "$LAUNCHSTEAMDIR/bootstrap.tar.xz"
+ fi
+ 
+ # go to the install directory and run the client

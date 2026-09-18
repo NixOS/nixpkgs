@@ -1,0 +1,65 @@
+diff --git a/uvcdynctrl/main.c b/uvcdynctrl/main.c
+index b7befd1..f3a768c 100644
+--- a/uvcdynctrl/main.c
++++ b/uvcdynctrl/main.c
+@@ -674,27 +674,31 @@ get_filename (const char *dir_path, const char *vid)
+ 	printf ( "checking dir: %s \n", dir_path);
+ 	while ((dp = readdir(dir)) != NULL) 
+ 	{
+-		if((dp->d_type == DT_DIR) && (fnmatch("[[:xdigit:]][[:xdigit:]][[:xdigit:]][[:xdigit:]]", dp->d_name, 0) == 0))
++		if((dp->d_type == DT_DIR || dp->d_type == DT_LNK ) && (fnmatch("[[:xdigit:]][[:xdigit:]][[:xdigit:]][[:xdigit:]]", dp->d_name, 0) == 0))
+ 		{
+ 			if( strcasecmp(vid, dp->d_name) != 0)
+ 			{
+ 				/*doesn't match - clean up and move to the next entry*/
+ 				continue;
+ 			}
+-			
++
+ 			char *tmp = path_cat (dir_path, dp->d_name);
+-			printf("found dir: %s \n", dp->d_name);
++
+ 			DIR * subdir = opendir(tmp);
+-			while ((sdp = readdir(subdir)) != NULL) 
++			if ( subdir != NULL )
+ 			{
+-				if( fnmatch("*.xml", sdp->d_name, 0) == 0 )
++				printf("found dir: %s \n", dp->d_name);
++				while ((sdp = readdir(subdir)) != NULL) 
+ 				{
+-					file_list[nf-1] = path_cat (tmp, sdp->d_name);
+-					printf("found: %s \n", file_list[nf-1]);
+-					nf++;
+-					file_list = realloc(file_list,nf*sizeof(file_list));
+-					file_list[nf-1] = NULL;   
+-				} 
++					if( fnmatch("*.xml", sdp->d_name, 0) == 0 )
++					{
++						file_list[nf-1] = path_cat (tmp, sdp->d_name);
++						printf("found: %s \n", file_list[nf-1]);
++						nf++;
++						file_list = realloc(file_list,nf*sizeof(file_list));
++						file_list[nf-1] = NULL;   
++					} 
++				}
+ 			}
+ 			closedir(subdir);
+ 			free (tmp);
+@@ -869,9 +873,15 @@ main (int argc, char **argv)
+ 			pid_set = 1; /*flag pid.xml check*/
+ 			//printf("vid:%s pid:%s\n", vid, pid);
+ 		}
+-		
++
++		const char* dataDir = getenv( "NIX_UVCDYNCTRL_DATA_DIR" );
++		// When unavailable, fallback on data dir specified at build time.
++		if ( !dataDir ) {
++			dataDir = DATA_DIR;
++		}
++
+ 		/* get xml file list from DATA_DIR/vid/ */ 
+-		char **xml_files = get_filename (DATA_DIR, vid);
++		char **xml_files = get_filename (dataDir, vid);
+  
+ 		/*check for pid.xml*/
+ 		char fname[9];

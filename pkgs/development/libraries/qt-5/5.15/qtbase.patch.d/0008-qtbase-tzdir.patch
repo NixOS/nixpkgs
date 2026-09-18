@@ -1,0 +1,64 @@
+From da003b582ee8823b29b1ff5c0aca8e06e7741b94 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Tue, 17 Sep 2019 05:36:25 -0500
+Subject: [PATCH 08/11] qtbase-tzdir
+
+---
+ src/corelib/time/qtimezoneprivate_tz.cpp | 31 +++++++++++++++---------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/src/corelib/time/qtimezoneprivate_tz.cpp b/src/corelib/time/qtimezoneprivate_tz.cpp
+index 01f9a6cce0..910338205a 100644
+--- a/src/corelib/time/qtimezoneprivate_tz.cpp
++++ b/src/corelib/time/qtimezoneprivate_tz.cpp
+@@ -77,7 +77,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
+ // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+ static QTzTimeZoneHash loadTzTimeZones()
+ {
+-    QString path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
++    // Try TZDIR first, in case we're running on NixOS.
++    QString path = QFile::decodeName(qgetenv("TZDIR")) + QStringLiteral("/zone.tab");
++    // Fallback to traditional paths in case we are not on NixOS.
++    if (!QFile::exists(path))
++        path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
+     if (!QFile::exists(path))
+         path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
+ 
+@@ -672,20 +676,23 @@ QTzTimeZoneCacheEntry QTzTimeZoneCache::findEntry(const QByteArray &ianaId)
+         if (!tzif.open(QIODevice::ReadOnly))
+             return ret;
+     } else {
+-        // Open named tz, try modern path first, if fails try legacy path
+-        tzif.setFileName(QLatin1String("/usr/share/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++        // Try TZDIR first, in case we're running on NixOS
++        tzif.setFileName(QFile::decodeName(qgetenv("TZDIR")) + QStringLiteral("/") + QString::fromLocal8Bit(ianaId));
+         if (!tzif.open(QIODevice::ReadOnly)) {
+-            tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++            tzif.setFileName(QLatin1String("/usr/share/zoneinfo/") + QString::fromLocal8Bit(ianaId));
+             if (!tzif.open(QIODevice::ReadOnly)) {
+-                // ianaId may be a POSIX rule, taken from $TZ or /etc/TZ
+-                const QByteArray zoneInfo = ianaId.split(',').at(0);
+-                const char *begin = zoneInfo.constBegin();
+-                if (PosixZone::parse(begin, zoneInfo.constEnd()).hasValidOffset()
+-                    && (begin == zoneInfo.constEnd()
+-                        || PosixZone::parse(begin, zoneInfo.constEnd()).hasValidOffset())) {
+-                    ret.m_posixRule = ianaId;
++                tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++                if (!tzif.open(QIODevice::ReadOnly)) {
++                    // ianaId may be a POSIX rule, taken from $TZ or /etc/TZ
++                    const QByteArray zoneInfo = ianaId.split(',').at(0);
++                    const char *begin = zoneInfo.constBegin();
++                    if (PosixZone::parse(begin, zoneInfo.constEnd()).hasValidOffset()
++                        && (begin == zoneInfo.constEnd()
++                            || PosixZone::parse(begin, zoneInfo.constEnd()).hasValidOffset())) {
++                        ret.m_posixRule = ianaId;
++                    }
++                    return ret;
+                 }
+-                return ret;
+             }
+         }
+     }
+-- 
+2.25.4
+

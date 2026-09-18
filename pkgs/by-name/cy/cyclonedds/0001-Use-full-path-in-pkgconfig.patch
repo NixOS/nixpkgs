@@ -1,0 +1,26 @@
+From 4534f88f676d9a07a227aed7b56255dd84d2b906 Mon Sep 17 00:00:00 2001
+From: Pascal Bach <pascal.bach@nextrem.ch>
+Date: Mon, 3 Oct 2022 22:57:34 +0200
+Subject: [PATCH] Use full path in pkgconfig
+
+Signed-off-by: Pascal Bach <pascal.bach@nextrem.ch>
+---
+ PkgConfig.pc.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/PkgConfig.pc.in b/PkgConfig.pc.in
+index 381e2343..93860ff0 100644
+--- a/PkgConfig.pc.in
++++ b/PkgConfig.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: Eclipse Cyclone DDS library
+-- 
+2.37.3
+

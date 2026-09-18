@@ -1,0 +1,44 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  calceph,
+  withCalceph ? true,
+  cppSupport ? true,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "supernovas";
+  version = "1.6.0";
+
+  src = fetchFromGitHub {
+    owner = "Sigmyne";
+    repo = "supernovas";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sLGl9Lh7bpvxhQ568kmwOMgVxFhH2lDRY/ftX6Oqm2w=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = lib.optionals withCalceph [ calceph ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "ENABLE_CALCEPH" withCalceph)
+    (lib.cmakeBool "BUILD_EXAMPLES" false)
+    (lib.cmakeBool "ENABLE_CPP" cppSupport)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
+
+  meta = {
+    description = "High-performance astrometry library for C/C++";
+    homepage = "https://smithsonian.github.io/SuperNOVAS/";
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ kiranshila ];
+    platforms = lib.platforms.all;
+  };
+})

@@ -1,0 +1,63 @@
+diff --git a/astropy_helpers/tests/test_git_helpers.py b/astropy_helpers/tests/test_git_helpers.py
+index 6b826fc..3fb3a29 100644
+--- a/astropy_helpers/tests/test_git_helpers.py
++++ b/astropy_helpers/tests/test_git_helpers.py
+@@ -1,5 +1,5 @@
+ import glob
+-import imp
++import importlib as imp
+ import os
+ import pkgutil
+ import re
+diff --git a/astropy_helpers/utils.py b/astropy_helpers/utils.py
+index 115c915..0cfc9e3 100644
+--- a/astropy_helpers/utils.py
++++ b/astropy_helpers/utils.py
+@@ -1,12 +1,12 @@
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+ 
+ import contextlib
+-import imp
+ import os
+ import sys
+ import glob
+ 
+ from importlib import machinery as import_machinery
++from importlib import util as importlib_util
+ 
+ 
+ # Note: The following Warning subclasses are simply copies of the Warnings in
+@@ -54,9 +54,9 @@ def get_numpy_include_path():
+     import builtins
+     if hasattr(builtins, '__NUMPY_SETUP__'):
+         del builtins.__NUMPY_SETUP__
+-    import imp
++    import importlib
+     import numpy
+-    imp.reload(numpy)
++    importlib.reload(numpy)
+ 
+     try:
+         numpy_include = numpy.get_include()
+@@ -208,8 +208,6 @@ def import_file(filename, name=None):
+     # generates an underscore-separated name which is more likely to
+     # be unique, and it doesn't really matter because the name isn't
+     # used directly here anyway.
+-    mode = 'r'
+-
+     if name is None:
+         basename = os.path.splitext(filename)[0]
+         name = '_'.join(os.path.relpath(basename).split(os.sep)[1:])
+@@ -221,8 +219,10 @@ def import_file(filename, name=None):
+         loader = import_machinery.SourceFileLoader(name, filename)
+         mod = loader.load_module()
+     else:
+-        with open(filename, mode) as fd:
+-            mod = imp.load_module(name, fd, filename, ('.py', mode, 1))
++        importlib_util
++        spec = importlib_util.spec_from_file_location(name, filename)
++        mod = importlib_util.module_from_spec(spec)
++        spec.loader.exec_module(mod)
+ 
+     return mod
+ 

@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Fabian Groffen <grobian@gentoo.org>
+Date: Tue, 1 Jan 2019 18:00:08 +0100
+Subject: [PATCH 04/19] Fix compatibility with openssl-1.0
+
+Patch-Source: https://github.com/gentoo/gentoo/blob/dce914f2bbf52360f45c90d877857df3c4c2a353/app-arch/xar/files/xar-1.8-openssl-1.1.patch
+--
+lib/hash.c: fix compilation with OpenSSL-1.1+
+
+EVP_MD_CTX has become an anonymous struct now, so can't allocate size
+for it anymore.
+---
+ xar/lib/hash.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/xar/lib/hash.c b/xar/lib/hash.c
+index 66876ad..cb4f6cf 100644
+--- a/xar/lib/hash.c
++++ b/xar/lib/hash.c
+@@ -97,7 +97,7 @@ struct __xar_hash_t {
+ #ifdef __APPLE__
+ 	CCDigestRef digest;
+ #else
+-	EVP_MD_CTX digest;
++	EVP_MD_CTX *digest;
+ 	const EVP_MD *type;
+ #endif
+ 	unsigned int length;
+@@ -118,7 +118,8 @@ xar_hash_t xar_hash_new(const char *digest_name, void *context) {
+ #else
+ 	OpenSSL_add_all_digests();
+ 	HASH_CTX(hash)->type = EVP_get_digestbyname(digest_name);
+-	EVP_DigestInit(&HASH_CTX(hash)->digest, HASH_CTX(hash)->type);
++	HASH_CTX(hash)->digest = EVP_MD_CTX_create();
++	EVP_DigestInit(HASH_CTX(hash)->digest, HASH_CTX(hash)->type);
+ #endif
+ 	
+ 	HASH_CTX(hash)->digest_name = strdup(digest_name);
+@@ -138,7 +139,7 @@ void xar_hash_update(xar_hash_t hash, void *buffer, size_t nbyte) {
+ #ifdef __APPLE__
+ 	CCDigestUpdate(HASH_CTX(hash)->digest, buffer, nbyte);
+ #else
+-	EVP_DigestUpdate(&HASH_CTX(hash)->digest, buffer, nbyte);
++	EVP_DigestUpdate(HASH_CTX(hash)->digest, buffer, nbyte);
+ #endif
+ }
+ 
+@@ -155,7 +156,8 @@ void *xar_hash_finish(xar_hash_t hash, size_t *nbyte) {
+ 	CCDigestFinal(HASH_CTX(hash)->digest, buffer);
+ 	CCDigestDestroy(HASH_CTX(hash)->digest);
+ #else
+-	EVP_DigestFinal(&HASH_CTX(hash)->digest, buffer, &HASH_CTX(hash)->length);
++	EVP_DigestFinal(HASH_CTX(hash)->digest, buffer, &HASH_CTX(hash)->length);
++	EVP_MD_CTX_destroy(HASH_CTX(hash)->digest);
+ #endif
+ 	
+ 	*nbyte = HASH_CTX(hash)->length;
+-- 
+2.44.1
+

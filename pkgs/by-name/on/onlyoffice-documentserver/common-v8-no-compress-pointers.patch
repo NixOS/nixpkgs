@@ -1,0 +1,23 @@
+diff --git a/Common/3dParty/v8/v8.pri b/Common/3dParty/v8/v8.pri
+index 11c7c72d1b..b945146161 100644
+--- a/Common/3dParty/v8/v8.pri
++++ b/Common/3dParty/v8/v8.pri
+@@ -15,7 +15,8 @@ v8_version_89 {
+         isEqual(CORE_BUILDS_PLATFORM_PREFIX, android_x86):CONFIG += build_platform_32
+     }
+ 
+-    !build_platform_32:DEFINES += V8_COMPRESS_POINTERS
++    # seems v8 from nodejs is built without compressed pointers
++    #!build_platform_32:DEFINES += V8_COMPRESS_POINTERS
+ 
+     CORE_V8_PATH_OVERRIDE = $$PWD/../v8_89
+ }
+@@ -57,7 +58,7 @@ core_windows {
+ 
+ core_linux {
+     use_v8_monolith {
+-        LIBS += -L$$CORE_V8_PATH_LIBS -lv8_monolith
++        LIBS += -L$$CORE_V8_PATH_LIBS -lv8
+     } else {
+         SNAPSHOT_LIB=v8_snapshot
+         !exists($$CORE_V8_PATH_LIBS/libv8_snapshot.a) {

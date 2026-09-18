@@ -1,0 +1,6 @@
+libcryptui/3.12.2-8
+build-use-pkg-config-to-detect-gpgme.patch
+daemon-fix-conflicting-return-types.patch
+daemon-port-to-gcr-3.patch
+git_allow-gpg2-2.1.patch
+libcryptui-fix-logic-flaw-in-the-prompt-recipients-d.patch

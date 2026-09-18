@@ -1,0 +1,25 @@
+diff --git a/setup.py b/setup.py
+index e86b1b2..9d34d0d 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,19 +29,7 @@ if sys.version_info < (3, 6):
+ 
+ ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+ 
+-rj_include_dir = './rapidjson/include'
+-
+-for idx, arg in enumerate(sys.argv[:]):
+-    if arg.startswith('--rj-include-dir='):
+-        sys.argv.pop(idx)
+-        rj_include_dir = arg.split('=', 1)[1]
+-        break
+-else:
+-    if not os.path.isdir(os.path.join(ROOT_PATH, 'rapidjson', 'include')):
+-        raise RuntimeError("RapidJSON sources not found: if you cloned the git"
+-                           " repository, you should initialize the rapidjson submodule"
+-                           " as explained in the README.rst; in all other cases you may"
+-                           " want to report the issue.")
++rj_include_dir = '@rapidjson@/include'
+ 
+ with open('version.txt', encoding='utf-8') as f:
+     VERSION = f.read()

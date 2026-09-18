@@ -1,0 +1,60 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 780b802..2f0b489 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -53,14 +53,13 @@ include(GetGitRevisionDescription)
+ include(InstallRequiredSystemLibraries)
+ include(FindPkgConfig)
+ include(ExternalProject)
+-include(BuildLibMPEG2)
+ 
+ use_cxx11( )
+ 
+ PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+ PKG_SEARCH_MODULE(SDL2_TTF REQUIRED SDL2_ttf)
+ PKG_SEARCH_MODULE(SDL2_MIXER REQUIRED SDL2_mixer)
+-build_libmpeg2( )
++PKG_SEARCH_MODULE(MPEG2 REQUIRED libmpeg2)
+ 
+ message(STATUS "Target: ${CMAKE_SYSTEM_NAME} ${CMAKE_TARGET_ARCHITECTURES}")
+ 
+@@ -114,7 +113,6 @@ add_subdirectory(timer)
+ add_subdirectory(video)
+ add_subdirectory(vldp)
+ 
+-add_dependencies( vldp libmpeg2 )
+ add_dependencies( ldp-out vldp )
+ add_dependencies( game vldp )
+ add_dependencies( sound vldp )
+diff --git a/src/vldp/vldp_internal.cpp b/src/vldp/vldp_internal.cpp
+index 16a74cb..2605011 100644
+--- a/src/vldp/vldp_internal.cpp
++++ b/src/vldp/vldp_internal.cpp
+@@ -40,9 +40,9 @@
+ #include <plog/Log.h>
+ 
+ #include <inttypes.h>
+-
++extern "C" {
+ #include <mpeg2.h>
+-
++}
+ #ifdef VLDP_DEBUG
+ #define FRAMELOG "frame_report.txt"
+ #endif
+diff --git a/src/vldp/vldp_internal.h b/src/vldp/vldp_internal.h
+index 88450e9..1ea83ef 100644
+--- a/src/vldp/vldp_internal.h
++++ b/src/vldp/vldp_internal.h
+@@ -26,9 +26,9 @@
+ #define VLDP_INTERNAL_H
+ 
+ #include "vldp.h" // for the VLDP_BOOL definition and SDL.h
+-
++extern "C" {
+ #include <mpeg2.h>
+-
++}
+ // this is which version of the .dat file format we are using
+ #define DAT_VERSION 3
+ 

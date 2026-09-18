@@ -1,0 +1,88 @@
+From cc95494ed527e64fcd1ade7ed7ae44f9e0a6fa8a Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Tue, 9 Sep 2025 15:04:45 -0300
+Subject: [PATCH] remove definitions that conflict with mingw
+
+---
+ winsup/cygwin/fhandler/socket_inet.cc  |  2 ++
+ winsup/cygwin/fhandler/socket_local.cc |  2 ++
+ winsup/cygwin/local_includes/ntdll.h   | 20 --------------------
+ winsup/cygwin/net.cc                   |  2 ++
+ 4 files changed, 6 insertions(+), 20 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/socket_inet.cc b/winsup/cygwin/fhandler/socket_inet.cc
+index 63cc498f1..03681c07b 100644
+--- a/winsup/cygwin/fhandler/socket_inet.cc
++++ b/winsup/cygwin/fhandler/socket_inet.cc
+@@ -20,7 +20,9 @@
+ #undef u_long
+ #define u_long __ms_u_long
+ #include <w32api/ws2tcpip.h>
++#define cmsghdr __ms_cmsghdr
+ #include <w32api/mswsock.h>
++#undef cmsghdr
+ #include <w32api/mstcpip.h>
+ #include <netinet/tcp.h>
+ #include <netinet/udp.h>
+diff --git a/winsup/cygwin/fhandler/socket_local.cc b/winsup/cygwin/fhandler/socket_local.cc
+index e4a88169b..b832d8a84 100644
+--- a/winsup/cygwin/fhandler/socket_local.cc
++++ b/winsup/cygwin/fhandler/socket_local.cc
+@@ -21,7 +21,9 @@
+ #define u_long __ms_u_long
+ #include "ntsecapi.h"
+ #include <w32api/ws2tcpip.h>
++#define cmsghdr __ms_cmsghdr
+ #include <w32api/mswsock.h>
++#undef cmsghdr
+ #include <unistd.h>
+ #include <asm/byteorder.h>
+ #include <sys/socket.h>
+diff --git a/winsup/cygwin/local_includes/ntdll.h b/winsup/cygwin/local_includes/ntdll.h
+index 4497fe53f..bf86a8293 100644
+--- a/winsup/cygwin/local_includes/ntdll.h
++++ b/winsup/cygwin/local_includes/ntdll.h
+@@ -489,26 +489,6 @@ typedef struct _FILE_DISPOSITION_INFORMATION_EX	// 64
+   ULONG Flags;
+ } FILE_DISPOSITION_INFORMATION_EX, *PFILE_DISPOSITION_INFORMATION_EX;
+ 
+-typedef struct _FILE_STAT_INFORMATION		// 68
+-{
+-  LARGE_INTEGER FileId;
+-  LARGE_INTEGER CreationTime;
+-  LARGE_INTEGER LastAccessTime;
+-  LARGE_INTEGER LastWriteTime;
+-  LARGE_INTEGER ChangeTime;
+-  LARGE_INTEGER AllocationSize;
+-  LARGE_INTEGER EndOfFile;
+-  ULONG FileAttributes;
+-  ULONG ReparseTag;
+-  ULONG NumberOfLinks;
+-  ACCESS_MASK EffectiveAccess;
+-} FILE_STAT_INFORMATION, *PFILE_STAT_INFORMATION;
+-
+-typedef struct _FILE_CASE_SENSITIVE_INFORMATION	// 71
+-{
+-  ULONG Flags;
+-} FILE_CASE_SENSITIVE_INFORMATION, *PFILE_CASE_SENSITIVE_INFORMATION;
+-
+ enum {
+   FILE_LINK_REPLACE_IF_EXISTS				= 0x01,
+   FILE_LINK_POSIX_SEMANTICS				= 0x02,
+diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
+index 737e494f8..6a1a0d079 100644
+--- a/winsup/cygwin/net.cc
++++ b/winsup/cygwin/net.cc
+@@ -18,7 +18,9 @@ details. */
+ #undef u_long
+ #define u_long __ms_u_long
+ #include <w32api/ws2tcpip.h>
++#define cmsghdr __ms_cmsghdr
+ #include <w32api/mswsock.h>
++#undef cmsghdr
+ #include <w32api/iphlpapi.h>
+ #define gethostname cygwin_gethostname
+ #include <unistd.h>
+-- 
+2.50.1
+

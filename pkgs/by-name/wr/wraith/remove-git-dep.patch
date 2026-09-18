@@ -1,0 +1,34 @@
+diff --git a/Makefile.in b/Makefile.in
+index 7d8f0cf..b9e60c5 100755
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -18,11 +18,11 @@ CONFIGFILES = build/config.cache build/config.log build/config.status src/config
+ DISTROFILES = README.md LICENSE build doc scripts lib Makefile.in build.sh configure src BSDmakefile
+ EXCLUDES = $(CONFIGFILES) $(STATICMAKEFILES)
+ 
+-COMMIT_FULL 	:= $(shell git log -1 --pretty=format:%H HEAD)
+-COMMIT_SHORT 	:= $(shell git log -1 --pretty=format:%h HEAD)
+-BRANCH 		:= $(shell git branch --no-color | grep "^*" | sed -e 's/^\* //')
+-BUILDTS 	:= $(shell git log -1 --pretty=format:%ct HEAD)
+-VERSION 	:= $(shell git describe --candidates=2)
++COMMIT_FULL 	:= @rev@
++COMMIT_SHORT 	:= @rev-short@
++BRANCH 		:= none
++BUILDTS 	:= $(SOURCE_DATE_EPOCH)
++VERSION 	:= @version@
+ DISTRIB = wraith-$(VERSION)
+ 
+ HELPFILE = doc/help.txt
+diff --git a/configure b/configure
+index 0fb547e..7d605d8 100755
+--- a/configure
++++ b/configure
+@@ -9987,7 +9987,7 @@ ac_config_files="$ac_config_files Makefile lib/Makefile src/Makefile src/buildin
+ 
+ 
+ 
+-GIT_REQUIRED=1
++GIT_REQUIRED=0
+ if [ "$GIT_REQUIRED" = "1" ]; then
+   if ! test -d .git; then
+     echo ""

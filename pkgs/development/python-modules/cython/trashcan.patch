@@ -1,0 +1,354 @@
+From 1b77e35d848340f2c5f4c9b82965c25a0572d48f Mon Sep 17 00:00:00 2001
+From: Jeroen Demeyer <J.Demeyer@UGent.be>
+Date: Thu, 14 Feb 2019 10:02:41 +0100
+Subject: [PATCH] @cython.trashcan directive to enable the Python trashcan for
+ deallocations
+
+---
+ Cython/Compiler/ModuleNode.py   |  10 +++
+ Cython/Compiler/Options.py      |   2 +
+ Cython/Compiler/PyrexTypes.py   |   8 +-
+ Cython/Compiler/Symtab.py       |  18 +++-
+ Cython/Utility/ExtensionTypes.c |  43 ++++++++++
+ tests/run/trashcan.pyx          | 148 ++++++++++++++++++++++++++++++++
+ 6 files changed, 227 insertions(+), 2 deletions(-)
+ create mode 100644 tests/run/trashcan.pyx
+
+diff --git a/Cython/Compiler/ModuleNode.py b/Cython/Compiler/ModuleNode.py
+index 56845330d..3a3e8a956 100644
+--- a/Cython/Compiler/ModuleNode.py
++++ b/Cython/Compiler/ModuleNode.py
+@@ -1443,6 +1443,7 @@ class ModuleNode(Nodes.Node, Nodes.BlockNode):
+ 
+         is_final_type = scope.parent_type.is_final_type
+         needs_gc = scope.needs_gc()
++        needs_trashcan = scope.needs_trashcan()
+ 
+         weakref_slot = scope.lookup_here("__weakref__") if not scope.is_closure_class_scope else None
+         if weakref_slot not in scope.var_entries:
+@@ -1481,6 +1482,11 @@ class ModuleNode(Nodes.Node, Nodes.BlockNode):
+             # running this destructor.
+             code.putln("PyObject_GC_UnTrack(o);")
+ 
++        if needs_trashcan:
++            code.globalstate.use_utility_code(
++                UtilityCode.load_cached("PyTrashcan", "ExtensionTypes.c"))
++            code.putln("__Pyx_TRASHCAN_BEGIN(o, %s)" % slot_func_cname)
++
+         # call the user's __dealloc__
+         self.generate_usr_dealloc_call(scope, code)
+ 
+@@ -1554,6 +1560,10 @@ class ModuleNode(Nodes.Node, Nodes.BlockNode):
+             code.putln("(*Py_TYPE(o)->tp_free)(o);")
+             if freelist_size:
+                 code.putln("}")
++
++        if needs_trashcan:
++            code.putln("__Pyx_TRASHCAN_END")
++
+         code.putln(
+             "}")
+ 
+diff --git a/Cython/Compiler/Options.py b/Cython/Compiler/Options.py
+index d03119fca..05a728135 100644
+--- a/Cython/Compiler/Options.py
++++ b/Cython/Compiler/Options.py
+@@ -319,6 +319,7 @@ directive_types = {
+     'freelist': int,
+     'c_string_type': one_of('bytes', 'bytearray', 'str', 'unicode'),
+     'c_string_encoding': normalise_encoding_name,
++    'trashcan': bool,
+     'cpow': bool
+ }
+ 
+@@ -362,6 +363,7 @@ directive_scopes = {  # defaults to available everywhere
+     'np_pythran': ('module',),
+     'fast_gil': ('module',),
+     'iterable_coroutine': ('module', 'function'),
++    'trashcan' : ('cclass',),
+ }
+ 
+ 
+diff --git a/Cython/Compiler/PyrexTypes.py b/Cython/Compiler/PyrexTypes.py
+index c309bd04b..9231130b5 100644
+--- a/Cython/Compiler/PyrexTypes.py
++++ b/Cython/Compiler/PyrexTypes.py
+@@ -1129,6 +1129,7 @@ class PyObjectType(PyrexType):
+     is_extern = False
+     is_subclassed = False
+     is_gc_simple = False
++    builtin_trashcan = False  # builtin type using trashcan
+ 
+     def __str__(self):
+         return "Python object"
+@@ -1183,10 +1184,14 @@ class PyObjectType(PyrexType):
+ 
+ 
+ builtin_types_that_cannot_create_refcycles = set([
+-    'bool', 'int', 'long', 'float', 'complex',
++    'object', 'bool', 'int', 'long', 'float', 'complex',
+     'bytearray', 'bytes', 'unicode', 'str', 'basestring'
+ ])
+ 
++builtin_types_with_trashcan = set([
++    'dict', 'list', 'set', 'frozenset', 'tuple', 'type',
++])
++
+ 
+ class BuiltinObjectType(PyObjectType):
+     #  objstruct_cname  string           Name of PyObject struct
+@@ -1211,6 +1216,7 @@ class BuiltinObjectType(PyObjectType):
+         self.typeptr_cname = "(&%s)" % cname
+         self.objstruct_cname = objstruct_cname
+         self.is_gc_simple = name in builtin_types_that_cannot_create_refcycles
++        self.builtin_trashcan = name in builtin_types_with_trashcan
+         if name == 'type':
+             # Special case the type type, as many C API calls (and other
+             # libraries) actually expect a PyTypeObject* for type arguments.
+diff --git a/Cython/Compiler/Symtab.py b/Cython/Compiler/Symtab.py
+index 7361a55ae..f0c311ba6 100644
+--- a/Cython/Compiler/Symtab.py
++++ b/Cython/Compiler/Symtab.py
+@@ -2043,7 +2043,7 @@ class PyClassScope(ClassScope):
+ class CClassScope(ClassScope):
+     #  Namespace of an extension type.
+     #
+-    #  parent_type           CClassType
++    #  parent_type           PyExtensionType
+     #  #typeobj_cname        string or None
+     #  #objstruct_cname      string
+     #  method_table_cname    string
+@@ -2087,6 +2087,22 @@ class CClassScope(ClassScope):
+             return not self.parent_type.is_gc_simple
+         return False
+ 
++    def needs_trashcan(self):
++        # If the trashcan directive is explicitly set to False,
++        # unconditionally disable the trashcan.
++        directive = self.directives.get('trashcan')
++        if directive is False:
++            return False
++        # If the directive is set to True and the class has Python-valued
++        # C attributes, then it should use the trashcan in tp_dealloc.
++        if directive and self.has_cyclic_pyobject_attrs:
++            return True
++        # Use the trashcan if the base class uses it
++        base_type = self.parent_type.base_type
++        if base_type and base_type.scope is not None:
++            return base_type.scope.needs_trashcan()
++        return self.parent_type.builtin_trashcan
++
+     def needs_tp_clear(self):
+         """
+         Do we need to generate an implementation for the tp_clear slot? Can
+diff --git a/Cython/Utility/ExtensionTypes.c b/Cython/Utility/ExtensionTypes.c
+index dc187ab49..f359165df 100644
+--- a/Cython/Utility/ExtensionTypes.c
++++ b/Cython/Utility/ExtensionTypes.c
+@@ -119,6 +119,49 @@ static int __Pyx_PyType_Ready(PyTypeObject *t) {
+     return r;
+ }
+ 
++/////////////// PyTrashcan.proto ///////////////
++
++// These macros are taken from https://github.com/python/cpython/pull/11841
++// Unlike the Py_TRASHCAN_SAFE_BEGIN/Py_TRASHCAN_SAFE_END macros, they
++// allow dealing correctly with subclasses.
++
++// This requires CPython version >= 2.7.4
++// (or >= 3.2.4 but we don't support such old Python 3 versions anyway)
++#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x02070400
++#define __Pyx_TRASHCAN_BEGIN_CONDITION(op, cond) \
++    do { \
++        PyThreadState *_tstate = NULL; \
++        // If "cond" is false, then _tstate remains NULL and the deallocator
++        // is run normally without involving the trashcan
++        if (cond) { \
++            _tstate = PyThreadState_GET(); \
++            if (_tstate->trash_delete_nesting >= PyTrash_UNWIND_LEVEL) { \
++                // Store the object (to be deallocated later) and jump past
++                // Py_TRASHCAN_END, skipping the body of the deallocator
++                _PyTrash_thread_deposit_object((PyObject*)(op)); \
++                break; \
++            } \
++            ++_tstate->trash_delete_nesting; \
++        }
++        // The body of the deallocator is here.
++#define __Pyx_TRASHCAN_END \
++        if (_tstate) { \
++            --_tstate->trash_delete_nesting; \
++            if (_tstate->trash_delete_later && _tstate->trash_delete_nesting <= 0) \
++                _PyTrash_thread_destroy_chain(); \
++        } \
++    } while (0);
++
++#define __Pyx_TRASHCAN_BEGIN(op, dealloc) __Pyx_TRASHCAN_BEGIN_CONDITION(op, \
++        Py_TYPE(op)->tp_dealloc == (destructor)(dealloc))
++
++#else
++// The trashcan is a no-op on other Python implementations
++// or old CPython versions
++#define __Pyx_TRASHCAN_BEGIN(op, dealloc)
++#define __Pyx_TRASHCAN_END
++#endif
++
+ /////////////// CallNextTpDealloc.proto ///////////////
+ 
+ static void __Pyx_call_next_tp_dealloc(PyObject* obj, destructor current_tp_dealloc);
+diff --git a/tests/run/trashcan.pyx b/tests/run/trashcan.pyx
+new file mode 100644
+index 000000000..93a501ff8
+--- /dev/null
++++ b/tests/run/trashcan.pyx
+@@ -0,0 +1,148 @@
++# mode: run
++
++cimport cython
++
++
++# Count number of times an object was deallocated twice. This should remain 0.
++cdef int double_deallocations = 0
++def assert_no_double_deallocations():
++    global double_deallocations
++    err = double_deallocations
++    double_deallocations = 0
++    assert not err
++
++
++# Compute x = f(f(f(...(None)...))) nested n times and throw away the result.
++# The real test happens when exiting this function: then a big recursive
++# deallocation of x happens. We are testing two things in the tests below:
++# that Python does not crash and that no double deallocation happens.
++# See also https://github.com/python/cpython/pull/11841
++def recursion_test(f, int n=2**20):
++    x = None
++    cdef int i
++    for i in range(n):
++        x = f(x)
++
++
++@cython.trashcan(True)
++cdef class Recurse:
++    """
++    >>> recursion_test(Recurse)
++    >>> assert_no_double_deallocations()
++    """
++    cdef public attr
++    cdef int deallocated
++
++    def __init__(self, x):
++        self.attr = x
++
++    def __dealloc__(self):
++        # Check that we're not being deallocated twice
++        global double_deallocations
++        double_deallocations += self.deallocated
++        self.deallocated = 1
++
++
++cdef class RecurseSub(Recurse):
++    """
++    >>> recursion_test(RecurseSub)
++    >>> assert_no_double_deallocations()
++    """
++    cdef int subdeallocated
++
++    def __dealloc__(self):
++        # Check that we're not being deallocated twice
++        global double_deallocations
++        double_deallocations += self.subdeallocated
++        self.subdeallocated = 1
++
++
++@cython.freelist(4)
++@cython.trashcan(True)
++cdef class RecurseFreelist:
++    """
++    >>> recursion_test(RecurseFreelist)
++    >>> recursion_test(RecurseFreelist, 1000)
++    >>> assert_no_double_deallocations()
++    """
++    cdef public attr
++    cdef int deallocated
++
++    def __init__(self, x):
++        self.attr = x
++
++    def __dealloc__(self):
++        # Check that we're not being deallocated twice
++        global double_deallocations
++        double_deallocations += self.deallocated
++        self.deallocated = 1
++
++
++# Subclass of list => uses trashcan by default
++# As long as https://github.com/python/cpython/pull/11841 is not fixed,
++# this does lead to double deallocations, so we skip that check.
++cdef class RecurseList(list):
++    """
++    >>> RecurseList(42)
++    [42]
++    >>> recursion_test(RecurseList)
++    """
++    def __init__(self, x):
++        super().__init__((x,))
++
++
++# Some tests where the trashcan is NOT used. When the trashcan is not used
++# in a big recursive deallocation, the __dealloc__s of the base classs are
++# only run after the __dealloc__s of the subclasses.
++# We use this to detect trashcan usage.
++cdef int base_deallocated = 0
++cdef int trashcan_used = 0
++def assert_no_trashcan_used():
++    global base_deallocated, trashcan_used
++    err = trashcan_used
++    trashcan_used = base_deallocated = 0
++    assert not err
++
++
++cdef class Base:
++    def __dealloc__(self):
++        global base_deallocated
++        base_deallocated = 1
++
++
++# Trashcan disabled by default
++cdef class Sub1(Base):
++    """
++    >>> recursion_test(Sub1, 100)
++    >>> assert_no_trashcan_used()
++    """
++    cdef public attr
++
++    def __init__(self, x):
++        self.attr = x
++
++    def __dealloc__(self):
++        global base_deallocated, trashcan_used
++        trashcan_used += base_deallocated
++
++
++@cython.trashcan(True)
++cdef class Middle(Base):
++    cdef public foo
++
++
++# Trashcan disabled explicitly
++@cython.trashcan(False)
++cdef class Sub2(Middle):
++    """
++    >>> recursion_test(Sub2, 1000)
++    >>> assert_no_trashcan_used()
++    """
++    cdef public attr
++
++    def __init__(self, x):
++        self.attr = x
++
++    def __dealloc__(self):
++        global base_deallocated, trashcan_used
++        trashcan_used += base_deallocated
+-- 
+2.39.0
+

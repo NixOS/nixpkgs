@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 2da8f43..1927e60 100644
+--- a/setup.py
++++ b/setup.py
+@@ -34,7 +34,7 @@ def get_version():
+             continue
+         target, = node.targets
+         if isinstance(target, ast.Name) and target.id == '__version__':
+-            return node.value.s
++            return node.value.value
+ 
+ 
+ install_requires = ['setuptools', 'SQLAlchemy >= 0.9.0']

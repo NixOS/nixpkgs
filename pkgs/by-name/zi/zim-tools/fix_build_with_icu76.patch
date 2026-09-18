@@ -1,0 +1,17 @@
+diff --git a/meson.build b/meson.build
+index 344bbaf..ddad570 100644
+--- a/meson.build
++++ b/meson.build
+@@ -17,7 +17,11 @@
+   endif
+ endif
+
+-libzim_dep = dependency('libzim', version:['>=9.2.0', '<10.0.0'], static:static_linkage)
++libzim_dep = [
++  dependency('libzim', version:['>=9.2.0', '<10.0.0'], static:static_linkage),
++  dependency('icu-i18n', static:static_linkage),
++  dependency('icu-uc', static:static_linkage)
++]
+
+ with_xapian_support = compiler.has_header_symbol(
+   'zim/zim.h', 'LIBZIM_WITH_XAPIAN', dependencies: libzim_dep)

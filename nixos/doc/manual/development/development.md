@@ -1,0 +1,3 @@
+# Development {#ch-development}
+
+This chapter describes how you can modify and extend NixOS.

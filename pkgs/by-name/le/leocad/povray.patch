@@ -1,0 +1,72 @@
+From 6e7dd2c763e2cc79db4cd7173921a4e72ce9b95e Mon Sep 17 00:00:00 2001
+From: Elias Probst <mail@eliasprobst.eu>
+Date: Tue, 5 Oct 2021 02:55:18 +0200
+Subject: [PATCH] Don't use configurable POV-ray path.
+
+Once the POV-ray path is configurable, it'll be written to the LeoCAD
+profile, which will break upon the next update of POV-ray which will
+have a different Nix store path.
+
+Signed-off-by: Elias Probst <mail@eliasprobst.eu>
+---
+ common/lc_application.cpp    | 1 -
+ common/lc_profile.cpp        | 2 +-
+ qt/lc_qpreferencesdialog.cpp | 3 ++-
+ qt/lc_renderdialog.cpp       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/common/lc_application.cpp b/common/lc_application.cpp
+index cbdec82e..21974510 100644
+--- a/common/lc_application.cpp
++++ b/common/lc_application.cpp
+@@ -1267,7 +1267,6 @@ void lcApplication::ShowPreferencesDialog()
+ 	lcSetProfileString(LC_PROFILE_DEFAULT_AUTHOR_NAME, Options.DefaultAuthor);
+ 	lcSetProfileString(LC_PROFILE_PARTS_LIBRARY, Options.LibraryPath);
+ 	lcSetProfileString(LC_PROFILE_MINIFIG_SETTINGS, Options.MinifigSettingsPath);
+-	lcSetProfileString(LC_PROFILE_POVRAY_PATH, Options.POVRayPath);
+ 	lcSetProfileString(LC_PROFILE_POVRAY_LGEO_PATH, Options.LGEOPath);
+ 	lcSetProfileString(LC_PROFILE_LANGUAGE, Options.Language);
+ 	lcSetProfileInt(LC_PROFILE_CHECK_UPDATES, Options.CheckForUpdates);
+diff --git a/common/lc_profile.cpp b/common/lc_profile.cpp
+index 1975b586..911c4fb0 100644
+--- a/common/lc_profile.cpp
++++ b/common/lc_profile.cpp
+@@ -132,7 +132,7 @@ static lcProfileEntry gProfileEntries[LC_NUM_PROFILE_KEYS] =
+ 	lcProfileEntry("HTML", "ImageWidth", 640),                                                 // LC_PROFILE_HTML_IMAGE_WIDTH
+ 	lcProfileEntry("HTML", "ImageHeight", 480),                                                // LC_PROFILE_HTML_IMAGE_HEIGHT
+ 
+-	lcProfileEntry("POVRay", "Path", "/usr/bin/povray"),                                       // LC_PROFILE_POVRAY_PATH
++	lcProfileEntry("POVRay", "Path", "@povray@/bin/povray"),                                   // LC_PROFILE_POVRAY_PATH
+ 	lcProfileEntry("POVRay", "LGEOPath", ""),                                                  // LC_PROFILE_POVRAY_LGEO_PATH
+ 	lcProfileEntry("POVRay", "Width", 1280),                                                   // LC_PROFILE_POVRAY_WIDTH
+ 	lcProfileEntry("POVRay", "Height", 720),                                                   // LC_PROFILE_POVRAY_HEIGHT
+diff --git a/qt/lc_qpreferencesdialog.cpp b/qt/lc_qpreferencesdialog.cpp
+index 89f86aad..c239763f 100644
+--- a/qt/lc_qpreferencesdialog.cpp
++++ b/qt/lc_qpreferencesdialog.cpp
+@@ -55,7 +55,8 @@ lcQPreferencesDialog::lcQPreferencesDialog(QWidget* Parent, lcPreferencesDialogO
+ 	ui->partsLibrary->setText(mOptions->LibraryPath);
+ 	ui->ColorConfigEdit->setText(mOptions->ColorConfigPath);
+ 	ui->MinifigSettingsEdit->setText(mOptions->MinifigSettingsPath);
+-	ui->povrayExecutable->setText(mOptions->POVRayPath);
++	ui->povrayExecutable->hide();
++	ui->povrayExecutableBrowse->hide();
+ 	ui->lgeoPath->setText(mOptions->LGEOPath);
+ 	ui->authorName->setText(mOptions->DefaultAuthor);
+ 	ui->mouseSensitivity->setValue(mOptions->Preferences.mMouseSensitivity);
+diff --git a/qt/lc_renderdialog.cpp b/qt/lc_renderdialog.cpp
+index bd8a9102..96794738 100644
+--- a/qt/lc_renderdialog.cpp
++++ b/qt/lc_renderdialog.cpp
+@@ -184,7 +184,7 @@ void lcRenderDialog::on_RenderButton_clicked()
+ #endif
+ 
+ #ifdef Q_OS_LINUX
+-	POVRayPath = lcGetProfileString(LC_PROFILE_POVRAY_PATH);
++	POVRayPath = QDir::cleanPath(QLatin1String("@povray@/bin/povray"));
+ 	Arguments.append("+FN");
+ 	Arguments.append("-D");
+ #endif
+-- 
+2.33.0
+

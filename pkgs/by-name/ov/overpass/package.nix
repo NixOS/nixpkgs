@@ -1,0 +1,35 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  installFonts,
+}:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "overpass";
+  version = "3.0.5";
+
+  src = fetchzip {
+    url = "https://github.com/RedHatOfficial/Overpass/releases/download/v${version}/overpass-${version}.zip";
+    hash = "sha256-8AWT0/DELfNWXtZOejC90DbUSOtyGt9tSkcSuO7HP2o=";
+  };
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  nativeBuildInputs = [ installFonts ];
+
+  postInstall = ''
+    install -Dm644 *.md  -t $out/share/doc/overpass-${version}
+  '';
+
+  meta = {
+    homepage = "https://overpassfont.org/";
+    description = "Font heavily inspired by Highway Gothic";
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
+  };
+}
