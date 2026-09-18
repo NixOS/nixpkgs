@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "zulip";
   };
 })
