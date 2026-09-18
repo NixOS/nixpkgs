@@ -2,7 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
-  libsForQt5,
+  qt6Packages,
   git,
   gnupg,
   pass,
@@ -24,27 +24,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/qtpass.cpp \
-      --replace "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
+      --replace-fail "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
   '';
 
   buildInputs = [
     git
     gnupg
     pass
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
     makeWrapper
-  ];
+  ]
+  ++ (with qt6Packages; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
   qmakeFlags = [
-    # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
-    "QMAKE_LUPDATE=${libsForQt5.qttools.dev}/bin/lupdate"
+    # qtpass.pri expects lrelease/lupdate next to qmake ($$[QT_INSTALL_BINS]);
+    # in nixpkgs they live in qttools, and the build runs both.
+    "QMAKE_LRELEASE=${lib.getDev qt6Packages.qttools}/bin/lrelease"
+    "QMAKE_LUPDATE=${lib.getDev qt6Packages.qttools}/bin/lupdate"
   ];
 
   qtWrapperArgs = [
@@ -66,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # main.pro installs the binary, desktop file, metainfo and icons since
+  # 1.8.0; the man page is the one thing it leaves out.
   postInstall = ''
-    install -D qtpass.desktop -t $out/share/applications
-    install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
     install -D qtpass.1 -t $out/share/man/man1
   '';
 
