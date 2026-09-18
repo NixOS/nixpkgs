@@ -36,8 +36,6 @@ python3Packages.buildPythonApplication {
       --replace-fail 'shutil.copy(' 'shutil.copyfile('
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     meson
     ninja
