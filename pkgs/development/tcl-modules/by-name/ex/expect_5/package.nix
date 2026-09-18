@@ -11,12 +11,12 @@
   replaceVars,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "expect";
   version = "5.45.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
+    url = "mirror://sourceforge/expect/Expect/${finalAttrs.version}/expect${finalAttrs.version}.tar.gz";
     hash = "sha256-Safag7C92fRtBKBN7sGcd2e7mjI+QMR4H4nK92C5LDQ=";
   };
 
@@ -54,8 +54,6 @@ tcl.mkTclDerivation rec {
     bashNonInteractive
   ];
 
-  strictDeps = true;
-
   env = {
     NIX_CFLAGS_COMPILE = toString (
       # Needed to avoid errors when building with GCC 15.
@@ -69,7 +67,7 @@ tcl.mkTclDerivation rec {
 
   postInstall = ''
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
-    ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
+    ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${finalAttrs.version})"}
   '';
 
   tclRequiresCheck = [ "Expect" ];
@@ -88,4 +86,4 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     broken = tcl.isTcl9;
   };
-}
+})
