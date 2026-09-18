@@ -263,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
           ++ [
             ''--set ICAROOT "$ICAInstDir"''
             ''--prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"''
-            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
+            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$ICAInstDir/gst-plugins:${gstPluginPath}"''
             ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
             ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
@@ -362,9 +362,16 @@ stdenv.mkDerivation (finalAttrs: {
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
       ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+
+      # hinst links this plugin into FHS directories; expose it through the wrapper instead.
+      mkdir -p "$ICAInstDir/gst-plugins"
+      ln -s "$ICAInstDir/util/libgstflatstm1.0.so" \
+        "$ICAInstDir/gst-plugins/libgstflatstm.so"
+
       # `hinst` disables multimedia when it cannot link into FHS plugin
       # directories. In Nix we provide the plugin path via wrappers instead.
       sed -i 's/^MultiMedia=Off$/MultiMedia=On/' "$ICAInstDir/config/module.ini"
+      grep -Fxq 'MultiMedia=On' "$ICAInstDir/config/module.ini"
 
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
