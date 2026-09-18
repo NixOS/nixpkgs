@@ -29,8 +29,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-CBDRoUD4kvbqkyUzxmPEcbW4UJLycRAYC4s40fZ0xYY=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
