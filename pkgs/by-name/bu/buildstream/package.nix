@@ -92,18 +92,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
     "test_source_mirror_plugin"
 
-    # AssertionError: assert '1a5528cad211...0bbe5ee314c14' == '2ccfee62a657...52dbc47203a88'
-    "test_fixed_cas_import"
-    "test_random_cas_import"
-
     # Runtime error: The FUSE stager child process unexpectedly died with exit code 2
     "test_patch_sources_cached_1"
     "test_patch_sources_cached_2"
     "test_source_cache_key"
     "test_custom_transform_source"
-
-    # Blob not found in the local CAS
-    "test_source_pull_partial_fallback_fetch"
   ];
 
   disabledTestPaths = [
