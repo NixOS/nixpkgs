@@ -14,16 +14,15 @@
   withGcc ? false,
   withInfer ? false,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "codechecker";
   version = "6.28.0";
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wxV+/hzsk7RrzWTXNz5HyweYdFFI1upNS508QRPCefo=";
   };
 
@@ -71,7 +70,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/Ericsson/codechecker";
-    changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${version}";
+    changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${finalAttrs.version}";
     description = "Analyzer tooling, defect database and viewer extension for the Clang Static Analyzer and Clang Tidy";
     license = with lib.licenses; [
       asl20
@@ -85,4 +84,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "CodeChecker";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

@@ -19,7 +19,6 @@ buildPythonPackage {
     cd bindings/python
   '';
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   cargoDeps = rustPlatform.fetchCargoVendor {

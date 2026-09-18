@@ -66,8 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       patchShebangs bin/click
     '';
 
-  strictDeps = true;
-
   pkgsBuildBuild = [
     pkg-config
   ];
