@@ -187,6 +187,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc
     unzip $docsrc
     mv sqlite-doc-${archiveVersion finalAttrs.version} $doc/share/doc/sqlite
+    # These scripts use a custom tclsh.docsrc shell that is not available, so we can't patch them.
+    # The search button is hidden via css in this zip file anyway, so we can remove them completely.
+    rm $doc/share/doc/sqlite/search
+    rm -r $doc/share/doc/sqlite/search.d
   '';
 
   # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
