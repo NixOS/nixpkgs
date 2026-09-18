@@ -123,16 +123,19 @@ buildPythonPackage (finalAttrs: {
     "devpi_server"
   ];
 
-  passthru.tests = {
-    devpi-server = nixosTests.devpi-server;
-    version = testers.testVersion {
-      package = devpi-server;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      devpi-server = nixosTests.devpi-server;
+      version = testers.testVersion {
+        package = devpi-server;
+      };
     };
-  };
-
-  # devpi uses a monorepo for server, common, client and web
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "server-";
+    # devpi uses a monorepo for server, common, client and web
+    updateScript = gitUpdater {
+      rev-prefix = "server-";
+    };
   };
 
   meta = {
