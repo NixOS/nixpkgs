@@ -78,7 +78,7 @@ let
 
   inherit (_systemInfo) buildIsHost hostIsTarget;
 
-  gccVersions = import ./versions.nix;
+  gccVersions = import ./versions.nix { inherit stdenv; };
   version = gccVersions.fromMajorMinor majorMinorVersion;
 
   majorVersion = versions.major version;

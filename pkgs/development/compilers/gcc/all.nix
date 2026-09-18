@@ -12,7 +12,7 @@
 }:
 
 let
-  versions = import ./versions.nix;
+  versions = import ./versions.nix { inherit stdenv; };
   buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
   buildIsTarget = lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform;
   hostIsTarget = lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform;
