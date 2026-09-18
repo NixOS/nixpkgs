@@ -9,11 +9,9 @@ let
     let
       result = lib.makeOverridable f args;
 
-      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
-
       overrideWith = update: args // (if lib.isFunction update then update args else update);
 
-      overridePackage = copyArgs (update: makePackageOverridable f (overrideWith update));
+      overridePackage = lib.mirrorFunctionArgs f (update: makePackageOverridable f (overrideWith update));
 
     in
     result // { inherit overridePackage; };
