@@ -33,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "livekit" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "protocol-v"; };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater { rev-prefix = "protocol-v"; };
+  };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";
