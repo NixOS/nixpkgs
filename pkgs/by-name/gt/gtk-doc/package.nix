@@ -5,6 +5,7 @@
   ninja,
   pkg-config,
   python3,
+  bashNonInteractive,
   docbook_xml_dtd_43,
   docbook-xsl-nons,
   libxslt,
@@ -51,6 +52,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     docbook_xml_dtd_43
     docbook-xsl-nons
     libxslt
