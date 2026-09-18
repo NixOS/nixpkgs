@@ -119,7 +119,9 @@ let
         # of `pkgs.configFiles` that NixOS modules import by path. The
         # sandbox gets only the directories that this list names, because a
         # copy of all of `pkgs/by-name` costs too much evaluation time.
-        configFilesPackages = [ ];
+        configFilesPackages = [
+          "la/lact"
+        ];
         root = toString pkgs.path;
         prefixRegex = "^" + lib.strings.escapeRegex root + "($|/(modules|nixos|lib)($|/.*))";
         # Set lookups, and not a regex alternation, keep the cost for each
