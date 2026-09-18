@@ -71,6 +71,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "datasets" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
