@@ -1,4 +1,8 @@
-{ lib, python3Packages }:
+{
+  lib,
+  configFiles,
+  python3Packages,
+}:
 
 python3Packages.toPythonApplication (
   python3Packages.litellm.overridePythonAttrs (oldAttrs: {
@@ -11,5 +15,9 @@ python3Packages.toPythonApplication (
           "proxy-runtime"
         ] oldAttrs.optional-dependencies
       );
+
+    passthru = (oldAttrs.passthru or { }) // {
+      configFiles = configFiles (import ./config-files.nix);
+    };
   })
 )
