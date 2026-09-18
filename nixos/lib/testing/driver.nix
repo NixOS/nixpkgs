@@ -258,7 +258,7 @@ in
         # If needed, this can still be turned off.
         virtualisation.qemu.enableSharedMemory = lib.mkDefault isLinux;
         # Needed for screenshots to work (in e.g `nixosTests.login`)
-        virtualisation.qemu.options = lib.optionals (isLinux && isAarch64) [
+        virtualisation.qemu.options = lib.optionals isAarch64 [
           "-device virtio-gpu-pci"
         ];
 
