@@ -17,11 +17,7 @@ in
     nixos.enable = mkDefault false;
   };
 
-  environment = {
-    # Perl is a default package.
-    defaultPackages = mkDefault [ ];
-    stub-ld.enable = mkDefault false;
-  };
+  environment.stub-ld.enable = mkDefault false;
 
   programs = {
     command-not-found.enable = mkDefault false;
