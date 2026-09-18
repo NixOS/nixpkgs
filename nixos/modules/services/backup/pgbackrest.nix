@@ -53,7 +53,14 @@ let
     ];
 
   fullConfig = {
-    global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
+    # cipher-pass-file is not a pgBackRest option, it is turned into
+    # cipher-pass in a separate config file at runtime.
+    global = normalize (
+      cfg.settings
+      // flattenWithIndex (lib.mapAttrs (
+        _: repo: removeAttrs repo [ "cipher-pass-file" ]
+      ) cfg.repos) "repo"
+    );
   }
   // lib.mapAttrs' (
     cmd: settings: lib.nameValuePair "global:${cmd}" (normalize settings)
@@ -87,15 +94,22 @@ let
       default = null;
       internal = true;
     };
+
+  # pgBackRest automatically reads the .conf files in this directory
+  secretsPath = "/run/pgbackrest-secrets";
+  secretsFile = "${secretsPath}/cipher-pass.conf";
+
+  cipherPassOptions = flattenWithIndex (lib.mapAttrs (
+    _: repo: lib.optionalAttrs (repo.cipher-pass-file != null) { cipher-pass = repo.cipher-pass-file; }
+  ) cfg.repos) "repo";
 in
 
 {
   # TODO: Add enableServer option and corresponding pgBackRest TLS server service.
   # TODO: Write wrapper around pgbackrest to turn --repo=<name> into --repo=<number>
-  # The following two are dependent on improvements upstream:
+  # The following is dependent on improvements upstream:
   #   https://github.com/pgbackrest/pgbackrest/issues/2621
   # TODO: Add support for more repository types
-  # TODO: Support passing encryption key safely
   options.services.pgbackrest = {
     enable = lib.mkEnableOption "pgBackRest";
 
@@ -142,6 +156,15 @@ in
 
                   The file must be accessible by both the pgbackrest and the postgres users.
                 '';
+              };
+
+              options.cipher-pass-file = lib.mkOption {
+                type = nullOr externalPath;
+                default = null;
+                description = ''
+                  Path to a file containing the repository passphrase.
+                '';
+                example = "/run/secrets/pgbackrest-cipher-pass";
               };
 
               # The following options should not be used; they would store secrets in the store.
@@ -406,6 +429,9 @@ in
           {
             description = "pgBackRest job ${job} for stanza ${stanza}";
 
+            requires = lib.optional (cipherPassOptions != { }) "pgbackrest-secrets.service";
+            after = lib.optional (cipherPassOptions != { }) "pgbackrest-secrets.service";
+
             serviceConfig = {
               User = "pgbackrest";
               Group = "pgbackrest";
@@ -438,6 +464,37 @@ in
           }
         ) namedJobs;
       }
+
+      (lib.mkIf (cipherPassOptions != { }) {
+        environment.etc."pgbackrest/conf.d".source = secretsPath;
+
+        systemd.tmpfiles.settings.pgbackrest.${secretsPath}.d = {
+          user = "pgbackrest";
+          group = "pgbackrest";
+          mode = "0750";
+        };
+
+        systemd.services.pgbackrest-secrets = {
+          description = "Repository passphrases for pgBackRest";
+          wantedBy = [ "multi-user.target" ];
+          before = [ "postgresql.service" ] ++ lib.mapAttrsToList (name: _: "${name}.service") namedJobs;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            echo "[global]" > ${secretsFile}.new
+            ${lib.concatLines (
+              lib.mapAttrsToList (
+                option: file: ''printf '%s=%s\n' ${option} "$(cat ${file})" >> ${secretsFile}.new''
+              ) cipherPassOptions
+            )}
+            chown pgbackrest:pgbackrest ${secretsFile}.new
+            chmod 0640 ${secretsFile}.new
+            mv ${secretsFile}.new ${secretsFile}
+          '';
+        };
+      })
 
       # The default stanza is set up for the local postgresql instance.
       # It does not backup automatically, the systemd timer still needs to be set.
