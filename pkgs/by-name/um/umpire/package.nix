@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   config,
+  symlinkJoin,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? null,
   rocmSupport ? config.rocmSupport,
@@ -12,6 +13,17 @@
 
 assert cudaSupport -> cudaPackages != null;
 
+let
+  rocm-sdk = symlinkJoin {
+    name = "rocm-merged";
+    paths = with rocmPackages; [
+      clr
+      rocm-comgr
+      rocm-device-libs
+      rocm-runtime
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
   version = "2025.12.0";
@@ -34,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_nvcc
   ]
   ++ lib.optionals rocmSupport [
-    rocmPackages.clr
+    rocm-sdk
   ];
 
   buildInputs = lib.optionals cudaSupport (
@@ -52,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals rocmSupport [
       "-DENABLE_HIP=ON"
+      "-DROCM_ROOT_DIR=${rocm-sdk}"
     ];
 
   passthru = { inherit rocmSupport; };
