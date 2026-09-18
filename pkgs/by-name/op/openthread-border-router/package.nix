@@ -12,6 +12,8 @@
   cjson,
   bashNonInteractive,
   buildNpmPackage,
+  libnftnl,
+  libmnl,
 }:
 let
   pname = "openthread-border-router";
@@ -39,11 +41,6 @@ stdenv.mkDerivation {
   strictDeps = true;
   __structuredAttrs = true;
 
-  patches = [
-    # Patch the firewall script so we can run it within the systemd start script
-    ./firewall-script.patch
-  ];
-
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -62,6 +59,8 @@ stdenv.mkDerivation {
     dbus
     cjson
     (lib.getBin bashNonInteractive)
+    libnftnl
+    libmnl
   ];
 
   postInstall = ''
@@ -82,6 +81,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "OTBR_BORDER_ROUTING" true)
     (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
+    (lib.cmakeBool "OTBR_NFTABLES" true)
 
     (lib.cmakeFeature "OTBR_VERSION" version)
     # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
