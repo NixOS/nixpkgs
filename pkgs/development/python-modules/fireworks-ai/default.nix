@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.11";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fw-ai-external";
