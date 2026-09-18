@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.25.0";
+  version = "4.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SdI2xoPyLf3g+9zhGVyZIzGFwbezMku5l3h7SqeR79k=";
+    hash = "sha256-BlxlOegVi5V4XS1Mm52xpDvLoqCwC9IYEAkgNbTesfQ=";
   };
 
   pythonRelaxDeps = [ "rich-rst" ];
