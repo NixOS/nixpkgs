@@ -462,35 +462,37 @@ in
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
             pkgs.gnome-extensions-app
+            pkgs.gnome-tecla
           ];
         in
         mandatoryPackages ++ removeExcluded optionalPackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-51/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
       environment.systemPackages = removeExcluded [
         pkgs.baobab
         pkgs.decibels
         pkgs.epiphany
-        pkgs.gnome-text-editor
         pkgs.gnome-calculator
         pkgs.gnome-calendar
         pkgs.gnome-characters
         pkgs.gnome-clocks
+        pkgs.gnome-connections
         pkgs.gnome-console
         pkgs.gnome-contacts
+        # gnome-disk-utility is controlled below via `programs.gnome-disks`
         pkgs.gnome-font-viewer
         pkgs.gnome-logs
         pkgs.gnome-maps
         pkgs.gnome-music
+        # gnome-software is controlled below via `services.gnome.gnome-software`
         pkgs.gnome-system-monitor
-        pkgs.gnome-tecla
+        pkgs.gnome-text-editor
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
         pkgs.papers
-        pkgs.gnome-connections
         pkgs.showtime
         pkgs.simple-scan
         pkgs.snapshot
@@ -527,6 +529,7 @@ in
       ];
     })
 
+    # Note: This is an arbitrary list of packages, there is no "official" list of GNOME games.
     (lib.mkIf serviceCfg.games.enable {
       environment.systemPackages = removeExcluded [
         pkgs.aisleriot
@@ -552,18 +555,13 @@ in
       ];
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-51/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
       environment.systemPackages = removeExcluded [
         pkgs.dconf-editor
         pkgs.devhelp
         pkgs.d-spy
         pkgs.gnome-builder
-        # boxes would make sense in this option, however
-        # it doesn't function well enough to be included
-        # in default configurations.
-        # https://github.com/NixOS/nixpkgs/issues/60908
-        # pkgs.gnome-boxes
         pkgs.sysprof
       ];
 
