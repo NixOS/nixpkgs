@@ -100,8 +100,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
-  strictDeps = true;
-
   preFixup = ''
     makeWrapperArgs+=(
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
