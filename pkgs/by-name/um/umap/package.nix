@@ -22,7 +22,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   version = "3.7.3";
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
