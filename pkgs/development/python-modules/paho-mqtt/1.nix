@@ -52,6 +52,11 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${finalAttrs.src.tag}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";
