@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_11,
-  nodejs,
+  nodejs-slim,
   nix-update-script,
   makeBinaryWrapper,
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs-slim
     pnpmConfigHook
     pnpm
     makeBinaryWrapper
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/language-tools}
     cp -r {node_modules,packages,extensions} $out/lib/language-tools/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/vue-language-server \
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/vue-language-server \
       --inherit-argv0 \
       --add-flags $out/lib/language-tools/packages/language-server/bin/vue-language-server.js
 
