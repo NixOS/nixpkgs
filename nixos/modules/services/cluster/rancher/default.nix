@@ -842,22 +842,36 @@ let
           let
             # Merge manifest with manifests generated from auto deploying charts, keep only enabled manifests
             enabledManifests = lib.filterAttrs (_: v: v.enable) (cfg.autoDeployCharts // cfg.manifests);
-            # Build a single store directory containing symlinks to all
-            # container images declared in the NixOS configuration. The
-            # directory's store path changes whenever any image changes, so
-            # k3s/rke2 re-imports images on every generation switch. It is
-            # exposed under ${imageDir}/nixos so that ${imageDir} itself
-            # remains a normal directory that users can still populate manually.
-            agentImagesDir = pkgs.linkFarm "${name}-agent-images" (
-              map (image: {
-                # The store-path hash is included in the link name so that two
-                # different images with the same tarball base name do not
-                # collide. The context is discarded because tmpfiles link names
-                # must not carry store-path references.
-                name = builtins.unsafeDiscardStringContext (builtins.baseNameOf image);
-                path = image;
-              }) cfg.images
-            );
+            # Make a tmpfiles rule exposing declaratively managed content
+            # (manifests, container images) through a single linkFarm in the
+            # Nix store, symlinked at ${dir}/nixos. k3s/rke2 scan
+            # subdirectories recursively (filepath.Walk), so the entries are
+            # picked up. The farm's store path changes whenever any entry
+            # changes, so k3s/rke2 re-imports images and notices manifest
+            # additions, updates, and removals on every generation switch,
+            # while stale files disappear and ${dir} itself remains a normal
+            # directory that users can still populate manually.
+            mkNixosRule =
+              dir: farmName: entries:
+              {
+                "${dir}/nixos" = {
+                  "L+".argument = "${pkgs.linkFarm farmName entries}";
+                };
+              };
+            # All enabled manifests as linkFarm entries
+            manifestEntries = lib.mapAttrsToList (_: v: {
+              name = v.target;
+              path = v.source;
+            }) enabledManifests;
+            # Container images as linkFarm entries
+            imageEntries = map (image: {
+              # The store-path hash is included in the link name so that two
+              # different images with the same tarball base name do not
+              # collide. The context is discarded because tmpfiles link names
+              # must not carry store-path references.
+              name = builtins.unsafeDiscardStringContext (builtins.baseNameOf image);
+              path = image;
+            }) cfg.images;
             # Merge charts with charts contained in enabled auto deploying charts
             helmCharts =
               (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
@@ -874,26 +888,8 @@ let
               };
             };
           in
-          {
-            # Static symlink from k3s/rke2 manifest dir to a linkFarm in the store.
-            # k3s/rke2 scan subdirectories recursively (filepath.Walk),
-            # so files under nixos/ are picked up. When manifests are removed
-            # from config, the linkFarm derivation changes, tmpfiles updates
-            # the symlink, and the stale files disappear.
-            "${manifestDir}/nixos" = {
-              "L+".argument = "${pkgs.linkFarm "${name}-manifests" (
-                lib.mapAttrsToList (_: v: {
-                  name = v.target;
-                  path = v.source;
-                }) enabledManifests
-              )}";
-            };
-          }
-          // (lib.optionalAttrs (cfg.images != [ ]) {
-            "${imageDir}/nixos" = {
-              "L+".argument = "${agentImagesDir}";
-            };
-          })
+          (mkNixosRule manifestDir "${name}-manifests" manifestEntries)
+          // (lib.optionalAttrs (cfg.images != [ ]) (mkNixosRule imageDir "${name}-agent-images" imageEntries))
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
