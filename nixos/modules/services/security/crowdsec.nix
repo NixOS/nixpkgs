@@ -783,6 +783,7 @@ in
                 Group = cfg.group;
                 UMask = "0077";
                 DynamicUser = true;
+                ReadWritePaths = dirs;
                 PrivateDevices = true;
                 LockPersonality = true;
 
