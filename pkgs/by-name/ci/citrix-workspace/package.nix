@@ -344,6 +344,14 @@ stdenv.mkDerivation (finalAttrs: {
       # the tarball still contains the legacy WebKitGTK 4.0 bundle.
       rm -rf "$ICAInstDir/Webkit2gtk4.0"
 
+      # hinst installs this user unit outside the package for non-root installs.
+      mkdir -p $out/lib/systemd/user
+      sed \
+        -e '/^#/d' \
+        -e "s,###ICAROOT###,$ICAInstDir,g" \
+        -e 's,###USER###,default,' \
+        linuxx64/linuxx64.cor/ctxcwalogd.service > $out/lib/systemd/user/ctxcwalogd.service
+
       # FHS launcher hinst generates even for non-root installs; it hardcodes
       # store paths without any of the wrapper environment.
       rm -f "$ICAInstDir/wfica.sh"
