@@ -209,13 +209,13 @@
     "vendorHash": "sha256-AB6VVC/I5E+CoHvdww38gXlHJ9yh4t5jV6ZrvDDTQeE="
   },
   "cloudamqp_cloudamqp": {
-    "hash": "sha256-GMfBdLUqw/3WEtZfP6ShCEwheHeUa/1EDMzIuYGalvA=",
+    "hash": "sha256-WD4ZIUTg8xGfxa4oqA7EGVwcggBzJK/MRchxdldypqU=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.48.0",
+    "rev": "v1.49.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-hgi4CyYMNBmxAUc93uFc4J13nlgVOQNLYyLYz+rnWlM="
+    "vendorHash": "sha256-scHNFyHn4VYm8wtuBdVCpgKCzwPhzrC3KBs1YHXPwos="
   },
   "cloudflare_cloudflare": {
     "hash": "sha256-o+p2QDCwzmhDJx1sUlFZVmZuvo0TiEM9JuLMxg6/B8Y=",
@@ -1328,11 +1328,11 @@
     "vendorHash": "sha256-t799EW0oXtzzHVjbOv5dPQ5V070wg7Y8MZohQ1O70Pk="
   },
   "tencentcloudstack_tencentcloud": {
-    "hash": "sha256-nuzKpMtJT0y4OuSvYTKbAs1+FYTpnXnWYI9oEzdt1BM=",
+    "hash": "sha256-tsqcbnHL1U6zJE+hyFV1ycJIN2+i9zD2EKGms5kAuoQ=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.83.29",
+    "rev": "v1.83.32",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
