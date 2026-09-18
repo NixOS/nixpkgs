@@ -192,6 +192,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "transformers" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     broken = lib.versionAtLeast huggingface-hub.version "1.0";
     homepage = "https://github.com/huggingface/transformers";
