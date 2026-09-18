@@ -59,8 +59,6 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '__version__ = "5.3.3"' '__version__ = "${finalAttrs.version}"'
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     pkg-config
   ];
