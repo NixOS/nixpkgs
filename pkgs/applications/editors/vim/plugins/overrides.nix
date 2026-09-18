@@ -32,6 +32,7 @@
   khard,
   kulala-core,
   languagetool,
+  llm-ls,
   libgit2,
   llvmPackages,
   neovim-unwrapped,
@@ -2364,6 +2365,10 @@ assertNoAdditions {
         '"crypto",' \
         '"${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}",'
     '';
+  };
+
+  llm-nvim = super.llm-nvim.overrideAttrs {
+    runtimeDeps = [ llm-ls ];
   };
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
