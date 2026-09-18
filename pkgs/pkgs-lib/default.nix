@@ -14,4 +14,10 @@
   generatedFiles = import ./generated-files.nix {
     inherit lib pkgs;
   };
+
+  # module system evaluation that maps the options of a program to its
+  # configuration files. It depends on pkgs to build the files
+  configFiles = import ./config-files.nix {
+    inherit lib pkgs;
+  };
 }
