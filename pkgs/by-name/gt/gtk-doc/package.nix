@@ -33,10 +33,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
-
-  strictDeps = true;
 
   depsBuildBuild = [
     python3
@@ -77,7 +75,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
+      --replace-fail "${python3}" ""
   '';
 
   passthru = {
