@@ -49,6 +49,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "cmd2" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
