@@ -74,14 +74,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "5.1.2";
+  version = "5.1.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-7U9SbvA3AGQmx99ayiBrPxx4HrCpKCSc6Qz/zpPFd0E=";
+    hash = "sha256-Ya7AagLwupKmkeOWPbsQB/lWyl/7egTGbcxXqM5yY54=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
