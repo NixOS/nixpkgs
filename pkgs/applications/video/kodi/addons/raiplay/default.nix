@@ -11,7 +11,7 @@
 buildKodiAddon rec {
   pname = "raiplay";
   namespace = "plugin.video.raitv";
-  version = "4.1.2";
+  version = "4.6.0";
 
   propagatedBuildInputs = [
     plugin-cache
@@ -20,7 +20,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-9aR1kkl+0+nhP0bOTnaKCgSfuPvJzX5TWHU0WJZIvSM=";
+    sha256 = "sha256-WJDk2Ck5+AvbxuJ3odu1Gsbe0ByGapHYOpCxek/trFk=";
   };
 
   passthru = {
