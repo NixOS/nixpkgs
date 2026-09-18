@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixinsight";
-  version = "1.9.4-20260621";
+  version = "1.9.5-20260917";
 
   src = requireFile {
-    name = "PI-linux-x64-${finalAttrs.version}-c.tar.xz";
+    name = "PI-linux-x64-gpu-${finalAttrs.version}-c.tar.xz";
     url = "http://pixinsight.com";
-    hash = "sha256-ITJq6q7rLBYe1+6jk2ZtpOSu5M5Z5bRzFPu06PPd7UI=";
+    hash = "sha256-Aykg4++BKHTXJcHLr6/QwrZjKF6WmMxC1zw0x8DDrbQ=";
   };
 
   nativeBuildInputs = [
