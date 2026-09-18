@@ -17,7 +17,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eigenpy";
   version = "3.13.0";
   pyproject = false; # Built with cmake
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-05G0U1RjVwggfnABxZH+9kxDIo7M9rgxHCcTvNgTZCQ=";
   };
 
@@ -40,8 +40,6 @@ buildPythonPackage rec {
     "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
   ];
-
-  strictDeps = true;
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
@@ -69,7 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       nim65s
@@ -77,4 +75,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
