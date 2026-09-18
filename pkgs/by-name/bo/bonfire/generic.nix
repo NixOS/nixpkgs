@@ -257,7 +257,7 @@ beamPkgs.mixRelease (
 
               package = finalAttrs.passthru.yarn-berry.fetchYarnBerryDeps {
                 name = "${pname}-yarn-deps";
-                yarnLock = "${finalAttrs.mixNixDeps.${pname}.src}/assets/yarn.lock";
+                yarnLock = "${finalAttrs.mixNixDeps.${pname}}"+"/src/assets/yarn.lock";
                 hash = lib.readFile (
                   extensions/. + "/${finalAttrs.env.FLAVOUR}/deps/${pname}/yarnBerryOfflineCache.hash"
                 );
@@ -276,7 +276,7 @@ beamPkgs.mixRelease (
                   mkdir -p "pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}/"
                   touch "pkgs/by-name/bo/bonfire/extensions/${finalAttrs.env.FLAVOUR}/deps/${pname}"/{yarnBerryOfflineCache.hash,missingHashes.json}
                   nix -L --extra-experimental-features "nix-command" build --no-link -f . \
-                    "bonfire-${finalAttrs.env.FLAVOUR}.mixNixDeps.${pname}.src"
+                    "bonfire-${finalAttrs.env.FLAVOUR}.mixNixDeps.${pname}"
                   yarnLock=$(nix -L --extra-experimental-features "nix-command" eval --raw -f . \
                     "bonfire-${finalAttrs.env.FLAVOUR}.yarnBerryOfflineCaches.${pname}.package.yarnLock")
                   yarn-berry-fetcher missing-hashes "$yarnLock" \
