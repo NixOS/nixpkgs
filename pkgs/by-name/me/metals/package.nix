@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.6.8";
+  version = "1.6.9";
 
   nativeBuildInputs = [
     makeWrapper
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-LdZ6I7zOUTHgS/TTo0T6Dh+Kb3YpgJg8gK0UngsA7Gs=";
+    outputHash = "sha256-8Btwvg8HJ1SrDbZblCB3d9s97XcOUmhfGyBnek9IEBc=";
   };
 
   meta = {
