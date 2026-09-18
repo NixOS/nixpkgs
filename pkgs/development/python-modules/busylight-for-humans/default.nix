@@ -64,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     $out/bin/busylight udev-rules -o $out/lib/udev/rules.d/99-busylight.rules
   '';
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";

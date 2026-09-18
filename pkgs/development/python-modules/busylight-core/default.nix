@@ -38,6 +38,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "busylight_core" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Library for interacting programmatically with USB-connected LED lights";
     homepage = "https://github.com/JnyJny/busylight";
