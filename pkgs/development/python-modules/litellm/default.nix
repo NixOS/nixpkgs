@@ -23,7 +23,7 @@
   google-genai,
   grpcio,
   gunicorn,
-  httpx,
+  httpx2,
   importlib-metadata,
   inquirerpy,
   jinja2,
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     boto3
     click
     fastuuid
-    httpx
+    httpx2
     importlib-metadata
     jinja2
     jsonschema
