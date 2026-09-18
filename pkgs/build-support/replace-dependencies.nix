@@ -48,6 +48,7 @@ let
     attrValues
     mapAttrs
     filter
+    getAttrs
     hasAttr
     mapAttrsToList
     ;
@@ -169,12 +170,7 @@ let
       drv: references:
       let
         rewrittenReferences = filter (dep: dep != drv && toString rewriteMemo.${dep} != dep) references;
-        rewrites = listToAttrs (
-          map (reference: {
-            name = reference;
-            value = rewriteMemo.${reference};
-          }) rewrittenReferences
-        );
+        rewrites = getAttrs rewrittenReferences rewriteMemo;
       in
       replaceDirectDependencies {
         drv = storePathOrKnownTargetDerivationMemo.${drv};
