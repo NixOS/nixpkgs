@@ -15,13 +15,13 @@
 }:
 let
   pname = "openthread-border-router";
-  version = "2026.06.0";
+  version = "2026.09.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
     tag = "v${version}";
-    hash = "sha256-7si62h1nXnAzEmloThCcOeY3VhfSIFV+7kWKgJywcvk=";
+    hash = "sha256-b/RuAy/A1e5kWJ2x4+/sZ7VDGW1StiXMF/g6kXHSoWQ=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ let
     pname = "${pname}-frontend";
     inherit version;
     src = "${src}/src/web/web-service/frontend";
-    npmDepsHash = "sha256-7UVfPICyIbHEClpr3p7eDR46OUzS8mVf6P7phnDpVLk=";
+    npmDepsHash = "sha256-8KenFVtfxC0jkfZHHuYeV2Dj2kmzHUQTeACvRtOyZLA=";
     dontNpmBuild = true;
   };
 in
@@ -69,11 +69,8 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
-
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "INSTALL_SYSTEMD_UNIT" false)
-    (lib.cmakeBool "Boost_USE_STATIC_LIBS" false)
     (lib.cmakeBool "OTBR_REST" true)
 
     # OpenThread's built-in mDNS publisher (upstream default). No Avahi daemon needed.
