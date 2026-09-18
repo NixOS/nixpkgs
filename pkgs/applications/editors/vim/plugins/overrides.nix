@@ -27,6 +27,7 @@
   fzy,
   gawk,
   git,
+  glow,
   helm-ls,
   himalaya,
   htop,
@@ -1684,6 +1685,10 @@ assertNoAdditions {
       license = lib.licenses.vim;
     };
   });
+
+  glow-nvim = super.glow-nvim.overrideAttrs {
+    runtimeDeps = [ glow ];
+  };
 
   go-nvim = super.go-nvim.overrideAttrs {
     dependencies = with self; [
