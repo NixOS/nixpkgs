@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
   ];
 
+  doCheck = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-mahjongg";
