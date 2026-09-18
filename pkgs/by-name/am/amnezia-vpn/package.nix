@@ -22,13 +22,13 @@ let
   # Even minor updates can break VPN connections without failing the build.
   amneziawg-go-pinned = amneziawg-go.overrideAttrs (
     finalAttrs: _: {
-      version = "3.0.1";
+      version = "3.1.20260814";
 
       src = fetchFromGitHub {
         owner = "amnezia-vpn";
         repo = "amneziawg-go";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-wtjUJSTDWWgJLedyQPlPa+TtOztciyDWIbyZ24N5ELM=";
+        hash = "sha256-HMmbKd1wYzotB+GAZ8GulyJmX7+XUnXOEerab0OCPO8=";
       };
 
       vendorHash = "sha256-Y2dCwlKMVLrkzDcNKyCPxFJwMbCA2mQKkakvzwbamCY=";
@@ -84,7 +84,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "5.0.0.5";
+  version = "5.0.1.5";
 
   __structuredAttrs = true;
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-knQgGyNkOV9CX1I0hJ8xEMRENBV35E2DwWUOgby3iUo=";
+    hash = "sha256-pSuKAv/Vy4k9kCotIzN1g5NbnyUG/6hDeuQQcGOt5Ow=";
     fetchSubmodules = true;
     # Preserve VCS metadata needed by the build before .git is removed.
     postCheckout = ''

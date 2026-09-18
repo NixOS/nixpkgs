@@ -7,11 +7,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "spdx_licenses";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/kit-ty-kate/spdx_licenses/releases/download/v${finalAttrs.version}/spdx_licenses-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Q+z+B/2yHiiulK/FY75fd4+Lyt5fTcJgZwBWdzgy4EQ=";
+    hash = "sha256-ciUka6XWRg2bYqzXWOGsNc62J5OshtXNSDCqbPooGVA=";
   };
 
   doCheck = true;

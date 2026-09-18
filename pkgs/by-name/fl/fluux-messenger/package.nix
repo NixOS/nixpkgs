@@ -18,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.17.3";
+  version = "0.17.4";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -27,17 +27,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RXu5eir1VhezblHCBsdJiZHjJyzxiqIUNs962lezdxE=";
+    hash = "sha256-HHXdWdKXf0qLKNJQEA1oPPpv4kxpfNuPH2uXEMo3DHg=";
   };
-
-  cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-EirsNTfAMm0xCrN5JKokbtCCdUBWBprs8OzOiHL1zq4=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-/iwHjfsLB1c/QOo/I9oymDsYfhOfn7iJm0IhSIA4xNI=";
+    hash = "sha256-Gy1zXHsclHo0FNfZh8v0GLfSKel4boSAKBKIYxGfSW0=";
   };
+
+  cargoRoot = "apps/fluux/src-tauri";
+  cargoHash = "sha256-/Gx4fu9fBL8IEZqMP+ePpv5hvTwLrl2Nywf76g0d/Fw=";
 
   nativeBuildInputs = [
     cargo-tauri.hook

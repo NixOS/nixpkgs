@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lifx-emulator-core";
-  version = "3.8.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "lifx-emulator";
     tag = "core-v${finalAttrs.version}";
-    hash = "sha256-hAgneMgcq7PgOTkjsLeceqoL74FvyCPwJ57n0gZnt3g=";
+    hash = "sha256-oP6YEiG2mYL5VuEuTZriTJlY8i1azYPylUpC/ElztlA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/lifx-emulator-core";

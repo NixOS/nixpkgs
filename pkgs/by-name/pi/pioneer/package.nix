@@ -16,27 +16,21 @@
   libx11,
   lua5_2,
   libgbm,
+  openal-soft,
   SDL2,
   SDL2_image,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioneer";
-  version = "20260203";
+  version = "20260907";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = finalAttrs.version;
-    hash = "sha256-rffm5i8yHy8WXij8PGbBegA6uJ5B3ACpT7Wf9cWHfs4=";
+    hash = "sha256-2r8D2TbbxCiBN6CmBTT64C1Dc+/NhcZfSW7W1BfxUSE=";
   };
-
-  postPatch = ''
-    substituteInPlace contrib/lz4/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.5)' 'cmake_minimum_required(VERSION 3.13)'
-    substituteInPlace contrib/nanosockets/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.5)' 'cmake_minimum_required(VERSION 3.13)'
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     lua5_2
     libgbm
+    openal-soft
     SDL2
     SDL2_image
   ];

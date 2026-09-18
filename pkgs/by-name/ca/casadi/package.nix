@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     tag = finalAttrs.version;
-    hash = "sha256-kSuNOn55eSaF4admtw4aHmPpdxUS/JDF1yBMrRbPv04=";
+    hash = "sha256-GY7Dyt53QE3+/aPB5oDRfZzpRLqKTGrxrmvihq4YJ2o=";
   };
 
   postPatch = ''

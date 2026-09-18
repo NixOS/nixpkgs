@@ -108,6 +108,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./mujoco-system-deps-dont-fetch.patch
   ];
 
+  # Install plugins to expose them in python to fix mujoco-warp tests
+  # ref. https://github.com/google-deepmind/mujoco/pull/3602
+  postPatch = ''
+    for plugin in actuator elasticity sensor; do
+      echo "install(TARGETS $plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+
+    for plugin in sdf usd_decoder; do
+      echo "install(TARGETS $plugin""_plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+  '';
+
   nativeBuildInputs = [
     cmake
     # git is needed to apply patches to ccd-src and qhull-src (see below)

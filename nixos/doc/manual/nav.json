@@ -1,0 +1,444 @@
+{
+  "open": [],
+  "items": [
+    {
+      "file": "preface.md"
+    },
+    {
+      "label": "Installation",
+      "id": "ch-installation",
+      "children": [
+        {
+          "file": "installation/installation.md"
+        },
+        {
+          "file": "installation/obtaining.chapter.md"
+        },
+        {
+          "label": "Installing NixOS",
+          "id": "sec-installation",
+          "children": [
+            {
+              "file": "installation/installing.chapter.md"
+            },
+            {
+              "file": "installation/installing-usb.section.md"
+            },
+            {
+              "file": "installation/installing-pxe.section.md"
+            },
+            {
+              "file": "installation/installing-kexec.section.md"
+            },
+            {
+              "file": "installation/installing-virtualbox-guest.section.md"
+            },
+            {
+              "file": "installation/installing-from-other-distro.section.md"
+            },
+            {
+              "file": "installation/installing-behind-a-proxy.section.md"
+            }
+          ]
+        },
+        {
+          "file": "installation/changing-config.chapter.md"
+        },
+        {
+          "file": "installation/upgrading.chapter.md"
+        },
+        {
+          "file": "installation/building-nixos.chapter.md"
+        },
+        {
+          "file": "installation/building-images-via-nixos-rebuild-build-image.chapter.md"
+        },
+        {
+          "file": "installation/building-images-via-systemd-repart.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Configuration",
+      "id": "ch-configuration",
+      "children": [
+        {
+          "file": "configuration/configuration.md"
+        },
+        {
+          "label": "Configuration Syntax",
+          "id": "sec-configuration-syntax",
+          "children": [
+            {
+              "file": "configuration/config-syntax.chapter.md"
+            },
+            {
+              "file": "configuration/config-file.section.md"
+            },
+            {
+              "file": "configuration/abstractions.section.md"
+            },
+            {
+              "file": "configuration/modularity.section.md"
+            }
+          ]
+        },
+        {
+          "label": "Package Management",
+          "id": "sec-package-management",
+          "children": [
+            {
+              "file": "configuration/package-mgmt.chapter.md"
+            },
+            {
+              "label": "Declarative Package Management",
+              "id": "sec-declarative-package-mgmt",
+              "children": [
+                {
+                  "file": "configuration/declarative-packages.section.md"
+                },
+                {
+                  "file": "configuration/customizing-packages.section.md"
+                },
+                {
+                  "file": "configuration/adding-custom-packages.section.md"
+                }
+              ]
+            },
+            {
+              "file": "configuration/ad-hoc-packages.section.md"
+            }
+          ]
+        },
+        {
+          "file": "configuration/user-mgmt.chapter.md"
+        },
+        {
+          "label": "File Systems",
+          "id": "ch-file-systems",
+          "children": [
+            {
+              "file": "configuration/file-systems.chapter.md"
+            },
+            {
+              "file": "configuration/luks-file-systems.section.md"
+            },
+            {
+              "file": "configuration/sshfs-file-systems.section.md"
+            },
+            {
+              "file": "configuration/nfs-file-systems.section.md"
+            },
+            {
+              "file": "configuration/overlayfs.section.md"
+            }
+          ]
+        },
+        {
+          "file": "configuration/x-windows.chapter.md"
+        },
+        {
+          "file": "configuration/wayland.chapter.md"
+        },
+        {
+          "file": "configuration/gpu-accel.chapter.md"
+        },
+        {
+          "file": "configuration/xfce.chapter.md"
+        },
+        {
+          "label": "Networking",
+          "id": "sec-networking",
+          "children": [
+            {
+              "file": "configuration/networking.chapter.md"
+            },
+            {
+              "file": "configuration/network-manager.section.md"
+            },
+            {
+              "file": "configuration/ssh.section.md"
+            },
+            {
+              "file": "configuration/ipv4-config.section.md"
+            },
+            {
+              "file": "configuration/ipv6-config.section.md"
+            },
+            {
+              "file": "configuration/firewall.section.md"
+            },
+            {
+              "file": "configuration/wireless.section.md"
+            },
+            {
+              "file": "configuration/ad-hoc-network-config.section.md"
+            },
+            {
+              "file": "configuration/renaming-interfaces.section.md"
+            }
+          ]
+        },
+        {
+          "file": "configuration/linux-kernel.chapter.md"
+        },
+        {
+          "file": "configuration/subversion.chapter.md"
+        },
+        "@MODULE_CHAPTERS@",
+        {
+          "label": "Profiles",
+          "id": "ch-profiles",
+          "children": [
+            {
+              "file": "configuration/profiles.chapter.md"
+            },
+            {
+              "file": "configuration/profiles/all-hardware.section.md"
+            },
+            {
+              "file": "configuration/profiles/base.section.md"
+            },
+            {
+              "file": "configuration/profiles/clone-config.section.md"
+            },
+            {
+              "file": "configuration/profiles/demo.section.md"
+            },
+            {
+              "file": "configuration/profiles/docker-container.section.md"
+            },
+            {
+              "file": "configuration/profiles/graphical.section.md"
+            },
+            {
+              "file": "configuration/profiles/headless.section.md"
+            },
+            {
+              "file": "configuration/profiles/installation-device.section.md"
+            },
+            {
+              "file": "configuration/profiles/perlless.section.md"
+            },
+            {
+              "file": "configuration/profiles/minimal.section.md"
+            },
+            {
+              "file": "configuration/profiles/qemu-guest.section.md"
+            }
+          ]
+        },
+        {
+          "file": "configuration/mattermost.chapter.md"
+        },
+        {
+          "file": "configuration/kubernetes.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Administration",
+      "id": "ch-running",
+      "children": [
+        {
+          "file": "administration/running.md"
+        },
+        {
+          "file": "administration/service-mgmt.chapter.md"
+        },
+        {
+          "file": "administration/rebooting.chapter.md"
+        },
+        {
+          "file": "administration/user-sessions.chapter.md"
+        },
+        {
+          "file": "administration/control-groups.chapter.md"
+        },
+        {
+          "file": "administration/logging.chapter.md"
+        },
+        {
+          "label": "Necessary system state",
+          "id": "ch-system-state",
+          "children": [
+            {
+              "file": "administration/system-state.chapter.md"
+            },
+            {
+              "file": "administration/nixos-state.section.md"
+            },
+            {
+              "file": "administration/systemd-state.section.md"
+            },
+            {
+              "file": "administration/zfs-state.section.md"
+            }
+          ]
+        },
+        {
+          "file": "administration/cleaning-store.chapter.md"
+        },
+        {
+          "label": "Container Management",
+          "id": "ch-containers",
+          "children": [
+            {
+              "file": "administration/containers.chapter.md"
+            },
+            {
+              "file": "administration/imperative-containers.section.md"
+            },
+            {
+              "file": "administration/declarative-containers.section.md"
+            },
+            {
+              "file": "administration/container-networking.section.md"
+            }
+          ]
+        },
+        {
+          "label": "Troubleshooting",
+          "id": "ch-troubleshooting",
+          "children": [
+            {
+              "file": "administration/troubleshooting.chapter.md"
+            },
+            {
+              "file": "administration/boot-problems.section.md"
+            },
+            {
+              "file": "administration/maintenance-mode.section.md"
+            },
+            {
+              "file": "administration/rollback.section.md"
+            },
+            {
+              "file": "administration/store-corruption.section.md"
+            },
+            {
+              "file": "administration/network-problems.section.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Development",
+      "id": "ch-development",
+      "children": [
+        {
+          "file": "development/development.md"
+        },
+        {
+          "file": "development/sources.chapter.md"
+        },
+        {
+          "label": "Writing NixOS Modules",
+          "id": "sec-writing-modules",
+          "children": [
+            {
+              "file": "development/writing-modules.chapter.md"
+            },
+            {
+              "file": "development/option-declarations.section.md"
+            },
+            {
+              "file": "development/option-types.section.md"
+            },
+            {
+              "file": "development/option-def.section.md"
+            },
+            {
+              "file": "development/assertions.section.md"
+            },
+            {
+              "file": "development/meta-attributes.section.md"
+            },
+            {
+              "file": "development/importing-modules.section.md"
+            },
+            {
+              "file": "development/replace-modules.section.md"
+            },
+            {
+              "file": "development/freeform-modules.section.md"
+            },
+            {
+              "file": "development/settings-options.section.md"
+            },
+            {
+              "file": "development/state-revision.section.md"
+            }
+          ]
+        },
+        {
+          "file": "development/building-parts.chapter.md"
+        },
+        {
+          "file": "development/bootspec.chapter.md"
+        },
+        {
+          "label": "What happens during a system switch?",
+          "id": "sec-switching-systems",
+          "children": [
+            {
+              "file": "development/what-happens-during-a-system-switch.chapter.md"
+            },
+            {
+              "file": "development/unit-handling.section.md"
+            },
+            {
+              "file": "development/activation-script.section.md"
+            },
+            {
+              "file": "development/non-switchable-systems.section.md"
+            },
+            {
+              "file": "development/etc-overlay.section.md"
+            }
+          ]
+        },
+        {
+          "file": "development/writing-documentation.chapter.md"
+        },
+        {
+          "label": "NixOS Tests",
+          "id": "sec-nixos-tests",
+          "children": [
+            {
+              "file": "development/nixos-tests.chapter.md"
+            },
+            {
+              "file": "development/writing-nixos-tests.section.md"
+            },
+            {
+              "file": "development/running-nixos-tests.section.md"
+            },
+            {
+              "file": "development/running-nixos-tests-interactively.section.md"
+            },
+            {
+              "file": "development/linking-nixos-tests-to-packages.section.md"
+            },
+            {
+              "file": "development/testing-hardware-features.section.md"
+            }
+          ]
+        },
+        {
+          "file": "development/developing-the-test-driver.chapter.md"
+        },
+        {
+          "file": "development/testing-installer.chapter.md"
+        },
+        {
+          "file": "development/modular-services.md"
+        }
+      ]
+    },
+    {
+      "file": "contributing-to-this-manual.chapter.md"
+    }
+  ]
+}

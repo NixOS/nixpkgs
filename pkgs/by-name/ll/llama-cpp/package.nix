@@ -205,12 +205,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # the tests are failing as of 2025-08
   doCheck = false;
 
-  passthru = {
+  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
     updateScript = ./update.sh;
   };
 
   meta = {
-    description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
+    description =
+      "Inference of Meta's LLaMA model (and others) in pure C/C++"
+      + optionalString cudaSupport ", with CUDA support"
+      + optionalString rocmSupport ", with ROCm support"
+      + optionalString vulkanSupport ", with Vulkan support";
     homepage = "https://github.com/ggml-org/llama.cpp";
     license = lib.licenses.mit;
     mainProgram = "llama";

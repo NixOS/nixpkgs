@@ -23,11 +23,12 @@
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
   enableMpi ? false,
   mpi,
-  globalarrays,
+  globalarrays-ilp64,
 }:
 
 assert blas-ilp64.isILP64;
 assert lapack-ilp64.isILP64;
+assert enableMpi -> globalarrays-ilp64.isILP64;
 
 let
   boost = boost188;
@@ -115,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableMpi [
     mpi
-    globalarrays
+    globalarrays-ilp64
   ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
@@ -135,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     "-DLINALG=Manual"
-    (lib.strings.cmakeBool "DGA" enableMpi)
+    (lib.strings.cmakeBool "GA" enableMpi)
     (lib.strings.cmakeBool "MPI" enableMpi)
   ];
 
@@ -143,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
   ''
   + lib.optionalString enableMpi ''
-    export GAROOT=${globalarrays};
+    export GAROOT=${globalarrays-ilp64};
   '';
 
   # The Makefile will install pymolcas during the build grrr.

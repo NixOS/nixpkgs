@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "boost-histogram";
-  version = "1.7.2";
+  version = "1.8.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     repo = "boost-histogram";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-nDNSLpmQ3YOo/nEkHfvsE0l9yATzQnrlunX1qWupbLQ=";
+    hash = "sha256-pI+5KURd2YheV8TGNDxXS1QfwzSsti6h1U7E4Ds825c=";
   };
 
   nativeBuildInputs = [ cmake ];

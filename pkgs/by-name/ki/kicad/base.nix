@@ -2,12 +2,9 @@
   lib,
   stdenv,
   cmake,
-  libGLU,
-  libGL,
   zlib,
   wxGTK,
   gtk3,
-  libx11,
   gettext,
   glew,
   glm,
@@ -17,29 +14,11 @@
   boost,
   pkg-config,
   doxygen,
-  graphviz,
-  libpthread-stubs,
-  libxdmcp,
   unixodbc,
   libgit2,
   libsecret,
-  libgcrypt,
-  libgpg-error,
   ninja,
   writableTmpDirAsHomeHook,
-
-  util-linuxMinimal,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libxtst,
-  pcre2,
-  libdeflate,
 
   swig,
   python,
@@ -133,41 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     doxygen
-    graphviz
     pkg-config
     libgit2
     libsecret
-    libgcrypt
-    libgpg-error
-  ]
-  # wanted by configuration on linux, doesn't seem to affect performance
-  # no effect on closure size
-  ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linuxMinimal
-    libselinux
-    libsepol
-    libthai
-    libdatrie
-    libxkbcommon
-    libepoxy
-    dbus
-    at-spi2-core
-    libxtst
-    pcre2
   ];
 
   buildInputs = [
-    libGLU
-    libGL
     zlib
-    libx11
     wxGTK
     gtk3
-    libxdmcp
     gettext
     glew
     glm
-    libpthread-stubs
     cairo
     curl
     openssl
@@ -176,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     python
     poppler
     unixodbc
-    libdeflate
     opencascade-occt
     protobuf_29
 

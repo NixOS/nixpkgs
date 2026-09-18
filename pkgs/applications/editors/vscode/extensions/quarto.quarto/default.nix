@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "quarto";
     publisher = "quarto";
-    version = "1.137.0";
-    hash = "sha256-huXW4duf8MbilHPlYMyMPxMd+s0Gv9BejE20PxcYsjo=";
+    version = "1.138.0";
+    hash = "sha256-xwqs28ihgYnk7lPLjGQGwnG7ig2HLT9ZyCg1jiHpmR8=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/quarto.quarto/changelog";
