@@ -16,7 +16,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "codechecker";
-  version = "6.28.0";
+  version = "6.29.1";
   pyproject = true;
 
   strictDeps = true;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wxV+/hzsk7RrzWTXNz5HyweYdFFI1upNS508QRPCefo=";
+    hash = "sha256-0D8eO+UumjZXh/t00IUcBLtUUwXJINbFaUG+svkOScQ=";
   };
 
   build-system = with python3Packages; [
@@ -32,23 +32,25 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies = with python3Packages; [
-    alembic
-    argcomplete
-    authlib
-    distutils # required in python312 to call subcommands (see https://github.com/Ericsson/codechecker/issues/4350)
     lxml
-    multiprocess
-    portalocker
-    psutil
-    semver
-    sqlalchemy
     thrift
+    sqlalchemy
+    prettytable
+    multiprocess
     gitpython
-    pyyaml
-    requests
     types-pyyaml
+    alembic
+    psutil
+    requests
+    types-setuptools
+    semver
+    pyyaml
     sarif-tools
+    argcomplete
     types-psutil
+    types-lxml
+    authlib
+    portalocker
   ];
 
   pythonRelaxDeps = true;
