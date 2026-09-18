@@ -283,6 +283,7 @@ stdenv.mkDerivation (
     buildInputs = [
       libxml2
       libffi
+      python3 # for opt-viewer scripts
     ]
     ++ optional enablePFM libpfm; # exegesis
 
