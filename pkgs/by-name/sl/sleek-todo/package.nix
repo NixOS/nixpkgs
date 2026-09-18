@@ -10,7 +10,7 @@
 let
 
   pname = "sleek-todo";
-  version = "2.0.26";
+  version = "2.0.29";
 
   suffixMap = {
     aarch64-darwin = "mac-arm64.dmg";
@@ -28,7 +28,7 @@ let
       {
         aarch64-darwin = "sha256-cQ5c9qs3Icl5vwSoU0tCM5QbrqftYUwlBBzDGaggyOE=";
         aarch64-linux = "sha256-zcMUCLzIseipG15PQXsECNz/baAYBEzOGxh3hvw6pdg=";
-        x86_64-linux = "sha256-QpeWbnSJTCFXrj/sy+Ava7dk2OlHCzaiDoIM29q9r44=";
+        x86_64-linux = "sha256-xJEUISwu+XaSBpJuxWi8K+MBcju9WjsFihxRv7mU9MI=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
   };
