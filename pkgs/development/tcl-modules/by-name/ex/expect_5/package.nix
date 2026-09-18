@@ -6,6 +6,7 @@
   tcl,
   makeWrapper,
   autoreconfHook,
+  bashNonInteractive,
   fetchpatch,
   replaceVars,
 }:
@@ -47,6 +48,10 @@ tcl.mkTclDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
+  ];
+
+  buildInputs = [
+    bashNonInteractive
   ];
 
   strictDeps = true;
