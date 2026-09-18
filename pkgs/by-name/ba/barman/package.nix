@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   file,
   python3Packages,
@@ -8,32 +7,34 @@
   versionCheckHook,
   nix-update-script,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "barman";
-  version = "3.19.1";
+  version = "3.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-7K7ibg2/hr5wBzGR8cW5FZNtPPFEBA7xPwmOl2c1fOU=";
+    hash = "sha256-PWPcEymAHxKdmTWcN0X5umE4fVYWBx29nTspElcqWW8=";
   };
 
   patches = [
-    ./unwrap-subprocess.patch
+    ./01-unwrap-subprocess.patch
+    # 20260917: known issue in upstream (https://github.com/EnterpriseDB/barman/issues/753) since 2023. Temporary patch until redesign implemented or this patch is upstreamed (https://github.com/EnterpriseDB/barman/pull/1223)
+    ./02-py-stdlib-stat.patch
   ];
 
   # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
   postPatch = ''
-    substituteInPlace barman/encryption.py \
+    substituteInPlace src/barman/encryption.py \
       --replace-fail '"file"' '"${lib.getExe file}"'
   '';
 
   build-system = with python3Packages; [
     distutils
     setuptools
+    uv-build
   ];
 
   dependencies = with python3Packages; [
@@ -51,24 +52,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-snappy
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   nativeCheckInputs = [
     python3Packages.lz4
     python3Packages.mock
     python3Packages.pytestCheckHook
     python3Packages.zstandard
     rsync
-    versionCheckHook
   ];
 
   disabledTests = [
-    # Assertion error
+    # 20260917: AssertionError: assert 'usage: __mai...ilog string\n' == 'usage: pytho...ilog string\n'
+    # https://github.com/EnterpriseDB/barman/blob/release/3.20.0/tests/test_cli.py#L2893
     "test_help_output"
-    "test_exits_on_unsupported_target"
-    "test_resolve_mounted_volume_failure"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # FsOperationFailed
-    "test_get_file_mode"
   ];
 
   passthru = {
