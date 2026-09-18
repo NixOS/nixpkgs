@@ -80,6 +80,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail '#!/usr/bin/env sh' '#!${runtimeShell}'
   '';
 
+  # /dev/fuse is not available inside the Nix build sandbox, so buildbox-casd's
+  # default FUSE-based staging strategy cannot work here. Force the hardlink/copy
+  # stager instead (this is a real, supported buildbox-casd staging mode, not a
+  # workaround: https://gitlab.com/BuildGrid/buildbox/buildbox/-/blob/main/casd/buildboxcasd_server.cpp).
+  preCheck = ''
+    export BUILDBOX_STAGER=copy-or-link
+  '';
+
   pythonImportsCheck = [ "buildstream" ];
 
   nativeCheckInputs = [
@@ -105,14 +113,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       src = "${finalAttrs.src}/tests/plugins/sample-plugins";
       dontCheck = true;
     })
-  ];
-
-  disabledTests = [
-    # Runtime error: The FUSE stager child process unexpectedly died with exit code 2
-    "test_patch_sources_cached_1"
-    "test_patch_sources_cached_2"
-    "test_source_cache_key"
-    "test_custom_transform_source"
   ];
 
   postInstall = ''
