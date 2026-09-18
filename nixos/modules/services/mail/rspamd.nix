@@ -227,62 +227,35 @@ let
     ''}
   '';
 
-  filterFiles = files: filterAttrs (n: v: v.enable) files;
+  configFiles =
+    prefix: dir:
+    pkgs.generatedFiles {
+      namePrefix = "rspamd-${prefix}";
+      relativeTo = "{file}`${dir}` in the rspamd configuration directory";
+    };
+  localFiles = configFiles "locals" "local.d";
+  overrideFiles = configFiles "overrides" "override.d";
+
   rspamdDir = pkgs.linkFarm "etc-rspamd-dir" (
-    (mapAttrsToList (name: file: {
-      name = "local.d/${name}";
-      path = file.source;
-    }) (filterFiles cfg.locals))
-    ++ (mapAttrsToList (name: file: {
-      name = "override.d/${name}";
-      path = file.source;
-    }) (filterFiles cfg.overrides))
-    ++ (optional (cfg.localLuaRules != null) {
-      name = "rspamd.local.lua";
-      path = cfg.localLuaRules;
-    })
-    ++ [
+    [
+      {
+        name = "local.d";
+        path = localFiles.toDirectory "rspamd-local.d" cfg.locals;
+      }
+      {
+        name = "override.d";
+        path = overrideFiles.toDirectory "rspamd-override.d" cfg.overrides;
+      }
       {
         name = "rspamd.conf";
         path = rspamdConfFile;
       }
     ]
+    ++ optional (cfg.localLuaRules != null) {
+      name = "rspamd.local.lua";
+      path = cfg.localLuaRules;
+    }
   );
-
-  configFileModule =
-    prefix:
-    { name, config, ... }:
-    {
-      options = {
-        enable = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Whether this file ${prefix} should be generated.  This
-            option allows specific ${prefix} files to be disabled.
-          '';
-        };
-
-        text = mkOption {
-          default = null;
-          type = types.nullOr types.lines;
-          description = "Text of the file.";
-        };
-
-        source = mkOption {
-          type = types.path;
-          description = "Path of the source file.";
-        };
-      };
-      config = {
-        source = mkIf (config.text != null) (
-          let
-            name' = "rspamd-${prefix}-" + baseNameOf name;
-          in
-          mkDefault (pkgs.writeText name' config.text)
-        );
-      };
-    };
 
   configOverrides =
     (mapAttrs' (
@@ -312,7 +285,7 @@ in
       };
 
       locals = mkOption {
-        type = with types; attrsOf (submodule (configFileModule "locals"));
+        type = types.attrsOf localFiles.type;
         default = { };
         description = ''
           Local configuration files, written into {file}`/etc/rspamd/local.d/{name}`.
@@ -325,7 +298,7 @@ in
       };
 
       overrides = mkOption {
-        type = with types; attrsOf (submodule (configFileModule "overrides"));
+        type = types.attrsOf overrideFiles.type;
         default = { };
         description = ''
           Overridden configuration files, written into {file}`/etc/rspamd/override.d/{name}`.
