@@ -230,11 +230,22 @@ stdenv.mkDerivation (finalAttrs: {
       isSelfservice = program: (builtins.match "selfservice(.*)" program) != null;
       isWfica = program: (builtins.match "wfica(.*)" program) != null;
 
+      # These helpers read ICAROOT without accepting the generic -icaroot flag.
+      isEnvOnly =
+        program:
+        builtins.elem program [
+          "util/logmgr"
+          "util/nfcui"
+          "util/sendfeedback"
+          "util/setlog"
+          "util/storebrowse"
+        ];
+
       icaFlag =
         program:
         if isSelfservice program then
           "--icaroot"
-        else if isWfica program then
+        else if isWfica program || isEnvOnly program then
           null
         else
           "-icaroot";
@@ -307,6 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
         "util/conncenter"
         "util/ctx_rehash"
         "util/ctxwebhelper"
+        "util/storebrowse"
       ];
     in
     ''
@@ -335,19 +347,18 @@ stdenv.mkDerivation (finalAttrs: {
       # FHS launcher hinst generates even for non-root installs; it hardcodes
       # store paths without any of the wrapper environment.
       rm -f "$ICAInstDir/wfica.sh"
-      if [ -f "$ICAInstDir/util/setlog" ]; then
-        chmod +x "$ICAInstDir/util/setlog"
-        ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
-      fi
+      chmod +x "$ICAInstDir/util/setlog"
       ${mkWrappers wrapLink toWrap}
       ${makeBinWrapper "wfica" "wfica"}
+      ${makeBinWrapper "util/setlog" "citrix-setlog"}
       ${mkWrappers wrap [
         "PrimaryAuthManager"
         "ServiceRecord"
         "AuthManagerDaemon"
+        "util/logmgr"
+        "util/nfcui"
+        "util/sendfeedback"
       ]}
-
-      ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
 
       # As explained in https://wiki.archlinux.org/index.php/Citrix#Security_Certificates
       echo "Expanding certificates..."
