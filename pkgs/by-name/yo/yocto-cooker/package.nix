@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = {
     description = "Meta buildtool for Yocto Project based Linux embedded systems";
