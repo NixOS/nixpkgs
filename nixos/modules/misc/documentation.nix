@@ -121,6 +121,7 @@ let
         # copy of all of `pkgs/by-name` costs too much evaluation time.
         configFilesPackages = [
           "la/lact"
+          "li/litellm"
         ];
         root = toString pkgs.path;
         prefixRegex = "^" + lib.strings.escapeRegex root + "($|/(modules|nixos|lib)($|/.*))";
