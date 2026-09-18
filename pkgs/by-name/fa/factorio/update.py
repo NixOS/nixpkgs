@@ -34,10 +34,32 @@ flags.DEFINE_list(
 
 
 @dataclass
+class Version:
+    version: str
+    @property
+    def ver(self):
+        return [int(v) for v in self.version.split(".")]
+    def __eq__(self, other):
+        return self.ver == other.ver
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    def __lt__(self, other):
+        return self.ver < other.ver
+    def __gt__(self, other):
+        return self.ver > other.ver
+    def __le__(self, other):
+        return self.__eq__(other) or self.__lt__(other)
+    def __ge__(self, other):
+        return self.__eq__(other) or self.__gt__(other)
+
+
+@dataclass
 class System:
     nix_name: str
     url_name: str
     tar_name: str
+    file_name: str
+    min_ver: Version
 
 
 @dataclass
@@ -59,27 +81,53 @@ FactorioHashes = Dict[str, str]
 
 
 SYSTEMS = [
-    System(nix_name="x86_64-linux", url_name="linux64", tar_name="x64"),
+    System(
+        nix_name="x86_64-linux",
+        url_name="linux64",
+        tar_name="x64",
+        file_name="linux",
+        min_ver=Version("1.1.86")
+   ),
+    System(
+        nix_name="aarch64-linux",
+        url_name="linux-arm64",
+        tar_name="arm64",
+        file_name="linux-arm64",
+        min_ver=Version("2.1.18")
+    ),
 ]
 
 RELEASE_TYPES = [
     ReleaseType(
         "alpha",
         needs_auth=True,
-        hash_filename_format=["factorio_linux_{version}.tar.xz"],
+        hash_filename_format=[
+            "factorio_{system.url_name}_{version}.tar.xz",
+            "factorio_{system.file_name}_{version}.tar.xz",
+        ],
     ),
-    ReleaseType("demo", hash_filename_format=["factorio-demo_linux_{version}.tar.xz"]),
+    ReleaseType(
+        "demo",
+        hash_filename_format=[
+            "factorio-demo_{system.url_name}_{version}.tar.xz",
+            "factorio-demo_{system.file_name}_{version}.tar.xz",
+        ]
+    ),
     ReleaseType(
         "headless",
         hash_filename_format=[
-            "factorio-headless_linux_{version}.tar.xz",
-            "factorio_headless_x64_{version}.tar.xz",
+            "factorio-headless_{system.url_name}_{version}.tar.xz",
+            "factorio-headless_{system.file_name}_{version}.tar.xz",
+            "factorio_headless_{system.tar_name}_{version}.tar.xz",
         ],
     ),
     ReleaseType(
         "expansion",
         needs_auth=True,
-        hash_filename_format=["factorio-space-age_linux_{version}.tar.xz"],
+        hash_filename_format=[
+            "factorio-space-age_{system.url_name}{version}.tar.xz",
+            "factorio-space-age_{system.file_name}{version}.tar.xz",
+        ],
     ),
 ]
 
@@ -141,7 +189,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
         for release_type in RELEASE_TYPES:
             for release_channel in RELEASE_CHANNELS:
                 version = factorio_versions[release_channel.name].get(release_type.name)
-                if version is None:
+                if version is None or Version(version) < system.min_ver:
                     continue
                 this_release = {
                     "name": f"factorio_{release_type.name}_{system.tar_name}-{version}.tar.xz",
@@ -149,7 +197,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
                     "version": version,
                     "needsAuth": release_type.needs_auth,
                     "candidateHashFilenames": [
-                        fmt.format(version=version)
+                        fmt.format(version=version, system=system)
                         for fmt in release_type.hash_filename_format
                     ],
                     "tarDirectory": system.tar_name,
