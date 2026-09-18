@@ -209,7 +209,7 @@ stdenv.mkDerivation {
     # fix missing target vendor
     substituteInPlace \
       src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
-      --replace-fail '$(CrossCompileArch)-linux-$(CrossCompileAbi)' '$(CrossCompileArch)-unknown-linux-$(CrossCompileAbi)'
+      --replace-fail '$(CrossCompileArch)-linux-' '$(CrossCompileArch)-unknown-linux-'
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
