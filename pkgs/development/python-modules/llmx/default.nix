@@ -2,29 +2,33 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
   setuptools-scm,
   setuptools,
-  pydantic,
-  openai,
-  tiktoken,
-  diskcache,
-  cohere,
-  google-auth,
-  typer,
-  pyyaml,
-  transformers,
-  fastapi,
-  uvicorn,
+
   accelerate,
+  cohere,
+  diskcache,
+  fastapi,
+  google-auth,
+  httpx2,
+  openai,
+  pydantic,
+  pyyaml,
+  tiktoken,
+  transformers,
+  typer,
+  uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llmx";
   version = "0.0.21a0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-OEo6wIaDTktzAsP0rOmhxjFSHygTR/EpcRI6AXsu+6M=";
   };
 
@@ -34,14 +38,15 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pydantic
-    openai
-    tiktoken
-    diskcache
     cohere
+    diskcache
     google-auth
-    typer
+    httpx2
+    openai
+    pydantic
     pyyaml
+    tiktoken
+    typer
   ];
 
   optional-dependencies = {
@@ -68,4 +73,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})
