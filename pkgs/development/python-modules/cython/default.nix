@@ -79,8 +79,12 @@ buildPythonPackage (finalAttrs: {
       runHook postCheck
     '';
 
-  passthru.tests = {
-    inherit pygame-ce sage;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit pygame-ce sage;
+    };
   };
 
   # Force code regeneration in source distributions
