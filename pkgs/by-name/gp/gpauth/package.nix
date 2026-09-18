@@ -7,6 +7,7 @@
   perl,
   webkitgtk_4_1,
   stdenv,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -43,7 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cli::tests::client_version_arg_sets_profile_client_version"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.runtime-tls = nixosTests.gpauth-tls;
+  };
 
   meta = {
     changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/changelog.md";
