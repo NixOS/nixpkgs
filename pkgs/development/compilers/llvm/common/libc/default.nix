@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.optional needHdrGen python3Packages.pyyaml);
 
-  buildInputs = lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
+  buildInputs = [
+    python3
+  ]
+  ++ lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
 
   strictDeps = true;
 
