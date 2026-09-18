@@ -121,7 +121,8 @@ Generally, only the last SDK release for a major version is packaged.
 |---------------|-------------|------------------------------|
 | 15.0–15.4     | 14.4        | `apple-sdk_14` / `apple-sdk` |
 | 16.0          | 15.0        | `apple-sdk_15`               |
-| 26.0+         | 26.0+       | `apple-sdk_26`, etc          |
+| 26.0          | 26.0        | `apple-sdk_26`               |
+| 27.0+         | 27.0+       | `apple-sdk_27`, etc          |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
