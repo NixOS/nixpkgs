@@ -1,24 +1,24 @@
-From ceeca9463380ab11483ec22f9e46fdc3f83162b0 Mon Sep 17 00:00:00 2001
+From b3b87e77ad047919291d825f19951884af52bb84 Mon Sep 17 00:00:00 2001
 From: Nathan Regner <nathanregner@gmail.com>
-Date: Sat, 15 Mar 2025 15:50:13 -0600
+Date: Tue, 15 Jul 2025 22:17:04 -0600
 Subject: [PATCH] Repurpose vscode-graphql build script
 
 Bundling the output script means we don't have to ship 1GB of
 `node_modules` (there are lots of unrelated dependencies used by other
 packages in the monorepo).
 ---
- .../esbuild.js                                | 28 ++-----------------
- 1 file changed, 2 insertions(+), 26 deletions(-)
- rename packages/{vscode-graphql => graphql-language-service-cli}/esbuild.js (59%)
+ .../esbuild.js                                | 32 ++-----------------
+ 1 file changed, 2 insertions(+), 30 deletions(-)
+ rename packages/{vscode-graphql => graphql-language-service-cli}/esbuild.js (57%)
 
 diff --git a/packages/vscode-graphql/esbuild.js b/packages/graphql-language-service-cli/esbuild.js
-similarity index 59%
+similarity index 57%
 rename from packages/vscode-graphql/esbuild.js
 rename to packages/graphql-language-service-cli/esbuild.js
-index 744f4e60..4b9147fa 100644
+index 87f8d67c..4b9147fa 100644
 --- a/packages/vscode-graphql/esbuild.js
 +++ b/packages/graphql-language-service-cli/esbuild.js
-@@ -1,12 +1,8 @@
+@@ -1,16 +1,8 @@
  const { build } = require('esbuild');
  const [, , arg] = process.argv;
  
@@ -27,12 +27,16 @@ index 744f4e60..4b9147fa 100644
 -const isWatchMode = arg === '--watch';
 -
  build({
--  entryPoints: ['src/extension.ts', 'src/server/index.ts'],
+-  entryPoints: [
+-    'src/extension.ts',
+-    'src/serverIpc/index.ts',
+-    'src/serverStdio/index.ts',
+-  ],
 +  entryPoints: ['bin/graphql.js'],
    bundle: true,
    minify: arg === '--minify',
    platform: 'node',
-@@ -50,24 +46,4 @@ build({
+@@ -54,24 +46,4 @@ build({
      'liquor',
      'twig',
    ],
@@ -59,5 +63,5 @@ index 744f4e60..4b9147fa 100644
 -  });
 +});
 -- 
-2.48.1
+2.50.0
 
