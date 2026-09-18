@@ -33,6 +33,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fluent.syntax" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/projectfluent/python-fluent/blob/${src.rev}/fluent.syntax/CHANGELOG.md";
     description = "Parse, analyze, process, and serialize Fluent files";
