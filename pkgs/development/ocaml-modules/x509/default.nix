@@ -19,11 +19,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "x509";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${finalAttrs.version}/x509-${finalAttrs.version}.tbz";
-    hash = "sha256-trFZ3Fa6RcNzAn8g5gd5te+Nb7eFTotCio3Zr+FAylU=";
+    hash = "sha256-SD9SkJah/O3D+YJ7gmgZ1qKU+Xq6CPkD62v4n7D2FnQ=";
   };
 
   checkInputs = [ alcotest ];
