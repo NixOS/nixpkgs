@@ -44,7 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "livekit" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "api-v"; };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater { rev-prefix = "api-v"; };
+  };
 
   meta = {
     changelog = "https://github.com/livekit/python-sdks/releases/tag/${src.tag}";
