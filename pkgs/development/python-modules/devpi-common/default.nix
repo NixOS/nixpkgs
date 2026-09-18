@@ -52,6 +52,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "devpi_common" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
