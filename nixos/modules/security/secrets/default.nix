@@ -50,6 +50,7 @@ let
           description = "The name of the backend.";
           type = str;
           default = name;
+          readOnly = true;
         };
 
         get = nullableDeferredPackage ''
@@ -131,6 +132,7 @@ let
           type = safeName "file";
           default = name;
           defaultText = "Name of the file";
+          readOnly = true;
         };
 
         path = lib.mkOption {
@@ -164,6 +166,7 @@ let
           type = safeName "secret";
           default = name;
           defaultText = "Attribute name of the secret";
+          readOnly = true;
         };
 
         backend = lib.mkOption {
@@ -226,6 +229,7 @@ let
           description = "The name of the backend.";
           type = str;
           default = name;
+          readOnly = true;
         };
 
         ask = deferredPackage ''
@@ -249,6 +253,7 @@ let
           description = "The prompt's name.";
           type = safeName "prompt";
           default = name;
+          readOnly = true;
         };
 
         label = lib.mkOption {
