@@ -11,13 +11,13 @@
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";
-  version = "2.3.1";
+  version = "99.99.01";
 
   src = fetchFromGitHub {
     owner = "WalletWasabi";
     repo = "WalletWasabi";
     tag = "v${version}";
-    hash = "sha256-vOvNumR/0agf9Mof0UD3KjJVgN18y6R/OrgLOXwL3K8=";
+    hash = "sha256-MpX9dmhPpm1FIoS7IcCM0d2zS+dcqR4RWAo1L37qpxk=";
   };
 
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
