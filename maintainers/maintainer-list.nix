@@ -19434,6 +19434,12 @@
     githubId = 7831184;
     name = "John Mercier";
   };
+  mobid = {
+    email = "matija.obid@posteo.net";
+    github = "mobid";
+    githubId = 10497126;
+    name = "Matija Obid";
+  };
   mochienya = {
     name = "mochienya";
     github = "mochienya";
