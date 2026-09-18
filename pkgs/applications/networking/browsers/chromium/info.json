@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "153.0.8010.47",
+    "version": "153.0.8010.52",
     "chromedriver": {
-      "version": "153.0.8010.48",
-      "hash_darwin": "sha256-/4yv3KWuvKNAro9oeK+PFsTOrg878yS11aDYSX5S890=",
-      "hash_darwin_aarch64": "sha256-5eO1WwJ8iQrXUjHb776Z1YahR/A8aCoX7JrJXQEcIQ8="
+      "version": "153.0.8010.53",
+      "hash_darwin": "sha256-+g0M1BmVkU71+f+uciKOK/tD93aLiFqlEHAP7quudbY=",
+      "hash_darwin_aarch64": "sha256-CuInj6fujnr93Vx95zC/pngr+Vg830DgrifOaO6MOgw="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "73934a44f61e6b3878d1943064c141a5a820f5f7",
-        "hash": "sha256-D7Oqukze3CzYVWN9AQq9zN6HN2GcZ6b7ZSqhM5bjvUU=",
+        "rev": "78e5e45d4bb41035e17ea4da2cc257f496416ac9",
+        "hash": "sha256-xZ8/QM/ySPfTyxFQvKtget866Pj0xbA4u46RBK4MVbQ=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -617,8 +617,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "ae277bf214480d77ac74852969146655bf728a11",
-        "hash": "sha256-23Bl4gnmj7AJ539nFehZuknvlD+CQFUFavQmzNUuRFk="
+        "rev": "98db81c619c859a496d29ac8515b66d6090bd145",
+        "hash": "sha256-jEGpc1Wg86LRnyY+BrchMqVt791c6RQFLZFKpvuvZx0="
       },
       "src/third_party/perfetto": {
         "url": "https://chromium.googlesource.com/external/github.com/google/perfetto.git",
@@ -672,8 +672,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "fca11a08da7c1ed3777b40b31611961c85c63c43",
-        "hash": "sha256-iQNNgvRVUuyAcSVE+pNJWrWz0NJd/MZLxd9vbYztong="
+        "rev": "f8b66b7597c4cc859d3ed190e9c6872241e6721c",
+        "hash": "sha256-7IlaEAtSu86OUoWozu2C1ItBvanFO3enJ5No3EZDDYs="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -842,8 +842,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "6b96683d44174e78ff4e65cb274bad56dc108231",
-        "hash": "sha256-Oa1wzIbWVPX0x7adJVPUxQocK5gofG0vE56QTg0XKCs="
+        "rev": "d1fed5cd7e3b114dea70f18b20d26f816322833d",
+        "hash": "sha256-plk9HJHbve54eqfGDBi1gfUqTfFNBNUBHa2YEZQnPmw="
       },
       "src/agents/shared": {
         "url": "https://chromium.googlesource.com/chromium/agents.git",
