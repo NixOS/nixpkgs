@@ -330,6 +330,12 @@ assertValidEnvName() {
 assertNoEmptySegment() {
     local flag="$1" env="$2" sep="$3" val="$4"
     [ -n "$sep" ] || return 0
+    case "$env" in
+        # In Lua the loader will substitute the default paths or just ignore the empty segment
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L274
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L475
+        LUA_PATH|LUA_CPATH|LUA_PATH_*|LUA_CPATH_*) return 0 ;;
+    esac
     if [[ "$sep$val$sep" == *"$sep$sep"* ]]; then
         printf '\n%s\n' "#error $flag $env would introduce an empty PATH-like segment (empty, or a leading/trailing/doubled \`$sep\`). This is interpreted as \"search the current directory\" by shells, execvp() and the dynamic linker, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-p7v3-pr2c-8584. Guard the value with e.g. lib.optionalString (list != [])."
     fi
