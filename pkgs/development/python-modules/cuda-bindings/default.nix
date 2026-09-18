@@ -193,9 +193,14 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = cuda-bindings.overridePythonAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    gpuCheck = cuda-bindings.overridePythonAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doCheck = true;
+    };
   };
 
   meta = {
