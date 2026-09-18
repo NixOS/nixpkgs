@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.6.1";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
