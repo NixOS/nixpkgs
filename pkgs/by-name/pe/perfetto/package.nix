@@ -3,9 +3,11 @@
   stdenv,
   cctools,
   cmake,
+  expat,
   fetchFromGitHub,
   fetchpatch2,
   gn,
+  linenoise,
   ninja,
   nix-update-script,
   pkg-config,
@@ -24,12 +26,18 @@ let
   inherit (stdenv.hostPlatform) isStatic isDarwin extensions;
   libName = "libperfetto${if isStatic then ".a" else extensions.sharedLibrary}";
 
-  buildInputs = [
+  # Required for both the SDK and tools output:
+  sdkPropagatedBuildInputs = [
     protobuf
     re2
-    sqlite
     zlib
     zstd
+  ];
+  # Required for tools output only:
+  toolsInputs = [
+    expat
+    linenoise
+    sqlite
   ];
 
   # pkg-config module name -> perfetto_use_system_* GN arg suffix
@@ -42,9 +50,20 @@ let
           drv.pname
       }";
       value = drv.pname;
-    }) buildInputs
+    }) sdkPropagatedBuildInputs
   );
   systemModules = toString (lib.attrNames systemLibs);
+
+  executablesToInstall = [
+    "perfetto"
+    "traced_probes"
+    "traced"
+  ];
+  toolsToInstall = [
+    "trace_processor_shell"
+    "tracebox"
+    "traceconv"
+  ];
 
   # Serialize Nix values into GN values, cf.
   # https://gn.googlesource.com/gn/+/main/docs/language.md
@@ -84,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-73aE+qoHOkdD2Br3NmUE48BM6uE6uIBdug0+ZR2nn94=";
   };
 
+  outputs = [
+    "out"
+    "tools"
+  ];
+
   patches = [
     # TODO: remove once included in a next release
     (fetchpatch2 {
@@ -93,6 +117,18 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch2 {
       url = "https://github.com/google/perfetto/commit/5739344741e4b881952a2786f67355eefe0a2c8d.patch?full_index=1";
       hash = "sha256-AplecRNDDLGpbYC6zg2Ie0LrX+0MBxodTC72SP6SSl8=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/google/perfetto/commit/25f6c94bf1321f61e63c7cd8d50b3b997b176ccb.patch?full_index=1";
+      hash = "sha256-AJLof+TbpGxNUedW2dzKmwS2j9XpnJqI+vEy4d4Qf1Q=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/google/perfetto/commit/38a4e881bec05dbf51a3defb66d7b201c2fd1ea1.patch?full_index=1";
+      hash = "sha256-j/X8GbioV2pNrTUvtaTf1YRaxX6/XhbPTwmJ+9f4bUY=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/google/perfetto/commit/782904b123a369e8c16b91c6eeab093fd3b9343e.patch?full_index=1";
+      hash = "sha256-lHEvJEigMtYXmHPx2cwQ+Wh5rdh7IQVdnNHUJN6I1Zg=";
     })
   ];
   # Upstream includes its own tooling to download its deps, we have to disable it to make it use the ones from the PATH.
@@ -115,27 +151,34 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional isDarwin cctools.libtool;
 
-  inherit buildInputs;
+  buildInputs = sdkPropagatedBuildInputs ++ toolsInputs;
 
   gnFlags = toGnFlags (
     commonGnFlags
+    // (builtins.listToAttrs (
+      builtins.map (drv: {
+        name = "perfetto_use_system_${drv.pname}";
+        value = true;
+      }) toolsInputs
+    ))
+    // {
+      enable_perfetto_etm_importer = false;
+      enable_perfetto_llvm_demangle = false;
+      enable_perfetto_trace_processor_percentile = false;
+    }
     // (lib.optionalAttrs (!isStatic) {
       extra_ldflags = "-Wl,-rpath,${placeholder "out"}/lib";
     })
   );
 
-  ninjaFlags = [
-    "tracebox"
-    "traced"
-    "traced_probes"
-    "perfetto"
-  ];
+  ninjaFlags = executablesToInstall ++ toolsToInstall;
 
   dontUseNinjaInstall = true;
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out/bin perfetto traced traced_probes tracebox
+    install -Dt $out/bin ${builtins.toString executablesToInstall}
+    install -Dt $tools/bin ${builtins.toString toolsToInstall}
     ${lib.optionalString (!isStatic) "install -Dt $out/lib ${libName}"}
 
     runHook postInstall
@@ -145,6 +188,15 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $tools/bin/trace_processor_shell \
+      -Q "select percentile(x, 50), median(x) from (select 1 x union all select 3)" /dev/null \
+    | grep -F '2.0'
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -159,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
           postPatch
           nativeBuildInputs
           ;
-        propagatedBuildInputs = buildInputs;
+        propagatedBuildInputs = sdkPropagatedBuildInputs;
 
         __structuredAttrs = true;
         strictDeps = true;
@@ -350,7 +402,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/google/perfetto/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aduh95 ];
-    mainProgram = "perfetto";
+    mainProgram = lib.head executablesToInstall;
     platforms = lib.platforms.unix;
   };
 })
