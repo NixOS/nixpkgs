@@ -1,10 +1,7 @@
 # System-level alternatives: coreutils, libc, FHS compatibility.
 #
-# These options let the user replace GNU userland components (and, later,
-# libc) that NixOS uses by default, without changing any existing option.
-#
-# Step 7 of the project: the coreutils package.
-# Step 8 of the project: the libc.
+# These options let the user replace GNU userland components that NixOS uses
+# by default, without changing any existing option.
 {
   lib,
   config,
@@ -30,39 +27,34 @@ let
       overlays = [ ];
     };
 
-  # /nix/store/<hash>-fhs-rootfs: the FHS-compatible root view. bin/sbin hold
-  # symlinks to every binary of the system packages, lib/lib64 and usr
-  # counterparts point into the glibc library output. Conventional software
-  # that expects a dynamic linker (ld-linux), /bin and /usr can then be
-  # pointed here with activation symlinks at the real root.
+  # /nix/store/<hash>-fhs-rootfs: the FHS-compatible root view built on top
+  # of the existing system profile pipeline (system.path, the same store
+  # profile that becomes /run/current-system/sw at boot). bin, sbin and usr
+  # mirror the sw profile; lib and lib64 point into the glibc library output
+  # (dynamic linker). Conventional software that expects a dynamic linker in
+  # /lib64, /bin and /usr can be pointed here with activation symlinks at the
+  # real root.
   fhsRootfs =
     pkgs.runCommand "fhs-rootfs"
       {
-        binEnv = pkgs.buildEnv {
-          name = "fhs-bin";
-          paths = config.environment.systemPackages;
-          pathsToLink = [ "/bin" ];
-          ignoreCollisions = true;
-        };
+        sw = config.system.path;
         libSrc = "${pkgs.glibc}/lib";
-        shell = pkgs.stdenv.shell;
       }
       ''
-        mkdir -p $out/{bin,lib,usr/bin,usr/lib}
-        for f in $binEnv/bin/*; do
-          n="$(basename "$f")"
-          ln -s "$f" "$out/bin/$n"
-          ln -s "$f" "$out/usr/bin/$n"
-        done
-        for f in $libSrc/*; do
-          n="$(basename "$f")"
-          ln -s "$f" "$out/lib/$n"
-          ln -s "$f" "$out/usr/lib/$n"
-        done
-        ln -s "$libSrc" "$out/lib64"
-        ln -s "$libSrc" "$out/usr/lib64"
-        ln -s "$out/bin" "$out/sbin"
-        ln -s "$out/usr/bin" "$out/usr/sbin"
+        mkdir -p $out/usr $out/lib $out/usr/lib
+
+        ln -s $sw/bin $out/bin
+        ln -s $out/bin $out/sbin
+        ln -s $out/bin $out/usr/bin
+        ln -s $out/bin $out/usr/sbin
+
+        # libraries: what the sw profile carries, plus the full glibc output
+        ln -s $sw/lib/* $out/lib/ 2>/dev/null || true
+        ln -s $libSrc/* $out/lib/ 2>/dev/null || true
+        ln -s $out/lib $out/usr/lib
+        ln -s $libSrc $out/lib64
+        ln -s $libSrc $out/usr/lib64
+
         ${lib.optionalString (config.system.foreignPackages != [ ]) ''
           for p in ${lib.concatStringsSep " " (map toString config.system.foreignPackages)}; do
             [ -d "$p" ] || continue
@@ -141,9 +133,8 @@ in
       set built against that libc, so packages for it can be pulled from the
       binary caches (hydra) directly. If a package is not available for the
       alternate libc, the glibc build is used instead and the glibc ABI is
-      preserved for it (see the plan: pull what hydra has, fall back to
-      glibc). Set `localBuild` to use the locally evaluated package set
-      instead.
+      preserved for it (pull what hydra has, fall back to glibc). Set
+      `localBuild` to use the locally evaluated package set instead.
     '';
   };
 
@@ -190,12 +181,28 @@ in
     (lib.mkIf fhs.enable {
       system.build.fhsRootfs = fhsRootfs;
 
+      # Stock NixOS creates /bin (binsh) and /usr/bin (usrbinenv) as real
+      # directories holding only /bin/sh and /usr/bin/env. In FHS mode those
+      # paths are rootfs symlinks instead, and the rootfs already provides
+      # sh and env from the system profile, so the stock scripts must not
+      # run: they would shadow the symlinks with real directories, or try to
+      # write into a read-only store path.
+      system.activationScripts.binsh = lib.mkForce "";
+      system.activationScripts.usrbinenv = lib.mkForce "";
+
       # Point the real /bin, /sbin, /lib, /lib64, /usr/* at the generated
       # rootfs, mirroring what a conventional FHS system has at /. Only this
       # set of directories is touched; folders Nix must not manage (/home,
       # /var, /proc, /sys, /dev, ...) are left alone.
       system.activationScripts.fhsRootfs = lib.stringAfter [ "specialfs" ] ''
         for target in bin sbin lib lib64 usr/bin usr/sbin usr/lib usr/lib64; do
+          # never disturb an existing real directory at these paths (for
+          # example a user-provided /usr); only symlinks and absent paths
+          # are managed
+          if [ -d /$target ] && [ ! -L /$target ]; then
+            echo "fhsRootfs: /$target already exists as a real directory; leaving it alone" >&2
+            continue
+          fi
           ln -sfn ${fhsRootfs}/$target /$target
         done
       '';
