@@ -23,6 +23,7 @@
   deno,
   direnv,
   fzf,
+  fzy,
   gawk,
   git,
   helm-ls,
@@ -3072,6 +3073,13 @@ assertNoAdditions {
       neotest
       nvim-nio
       plenary-nvim
+    ];
+  };
+
+  neovim-fuzzy = super.neovim-fuzzy.overrideAttrs {
+    runtimeDeps = [
+      fzy
+      ripgrep
     ];
   };
 
