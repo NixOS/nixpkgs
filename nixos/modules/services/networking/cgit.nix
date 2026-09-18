@@ -21,8 +21,6 @@ let
       (listOf settingType)
     ];
 
-  genAttrs' = names: f: lib.listToAttrs (map f names);
-
   regexEscape =
     let
       # taken from https://github.com/python/cpython/blob/05cb728d68a278d11466f9a6c8258d914135c96c/Lib/re.py#L251-L266
@@ -300,7 +298,7 @@ in
       lib.mapAttrsToList (name: cfg: {
         ${cfg.nginx.virtualHost} = {
           locations =
-            (genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
+            (lib.genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
                 alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
