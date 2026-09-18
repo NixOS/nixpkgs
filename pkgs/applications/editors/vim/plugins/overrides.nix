@@ -21,6 +21,7 @@
   dailies,
   dasht,
   deno,
+  distant,
   direnv,
   fzf,
   fzy,
@@ -1372,6 +1373,10 @@ assertNoAdditions {
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
   });
+
+  distant-nvim = super.distant-nvim.overrideAttrs {
+    runtimeDeps = [ distant ];
+  };
 
   dotnet-nvim = super.dotnet-nvim.overrideAttrs {
     dependencies = with self; [
