@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   gitUpdater,
+  runtimeShell,
 
   # buildInputs
   buildbox,
@@ -72,6 +73,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patch
   ];
 
+  # The dummy buildbox-casd scripts spawned by tests/internals/cascache.py use
+  # an `/usr/bin/env sh` shebang, which doesn't exist in the Nix build sandbox.
+  postPatch = ''
+    substituteInPlace tests/internals/cascache.py \
+      --replace-fail '#!/usr/bin/env sh' '#!${runtimeShell}'
+  '';
+
   pythonImportsCheck = [ "buildstream" ];
 
   nativeCheckInputs = [
@@ -97,11 +105,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_patch_sources_cached_2"
     "test_source_cache_key"
     "test_custom_transform_source"
-  ];
-
-  disabledTestPaths = [
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tmp/popen-gw1/test_report_when_cascache_exit0/buildbox-casd'
-    "tests/internals/cascache.py"
   ];
 
   postInstall = ''
