@@ -8,7 +8,7 @@
   baseConfig ? "GENERIC",
 }:
 (mkDerivation.override {
-  stdenvNoLibc = overrideCC stdenvNoLibc buildPackages.llvmPackages_18.clangNoLibc;
+  stdenvNoLibc = overrideCC stdenvNoLibc buildPackages.llvmPackages_20.clangNoLibc;
 })
   {
     path = "sys/arch/amd64";
