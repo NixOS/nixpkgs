@@ -2844,7 +2844,7 @@
         "version": "43.7.2"
     },
     "44": {
-        "chrome": "152.0.7977.78",
+        "chrome": "152.0.7977.130",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2853,15 +2853,15 @@
                     "version": "0-unstable-2026-07-23"
                 }
             },
-            "version": "152.0.7977.78"
+            "version": "152.0.7977.130"
         },
         "chromium_npm_hash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-+++z44EqfZH44EKiaqChyFAwRtkJaS/fdydjE+Hktco=",
+                    "hash": "sha256-I0LvCx4iUpbruXGa8kbyOEgQq4sInyyF+ozfDbAp5UQ=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "152.0.7977.78",
+                    "tag": "152.0.7977.130",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2908,10 +2908,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-G1FHSkpXicBtYu0tuA9gR7roPQjmKiyhKF8ODTWEw5Q=",
+                    "hash": "sha256-hk7QuRoM+UO+nfy9nfuR3YqYOASPPluNLKtb2nYa/X4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.4.1"
+                    "tag": "v44.4.2"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2941,8 +2941,8 @@
             },
             "src/third_party/angle": {
                 "args": {
-                    "hash": "sha256-3ZCIFT7j944HWPOiADQa88TQZctLej5vbrBFA/FwyHw=",
-                    "rev": "736ed80c7552a4b267bd54a282b971aa4555cb3e",
+                    "hash": "sha256-rEp5z7bjis6rBrS4vWJgjZj1+/sKu8ver/1BzaZy7eA=",
+                    "rev": "616f6f041eac83bc09e107dc9af7230e0c10cf52",
                     "url": "https://chromium.googlesource.com/angle/angle.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3840,8 +3840,8 @@
             },
             "src/third_party/pthreadpool/src": {
                 "args": {
-                    "hash": "sha256-4EHJzZT+Gbhs8SkOhjSvDIPEqIQU93oJmtF3c/T+qjw=",
-                    "rev": "02460584c6092e527c8b89f7df4de143d70e801f",
+                    "hash": "sha256-YJD9n8cxoqTrTQJHKuZFW2qnlNcNmh5rQlBpnlF46to=",
+                    "rev": "15a6644ba1c45f1acc16ac1e883efc3e56c6bed2",
                     "url": "https://chromium.googlesource.com/external/github.com/google/pthreadpool.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3920,8 +3920,8 @@
             },
             "src/third_party/skia": {
                 "args": {
-                    "hash": "sha256-sun/P/JVhTKfRwmVK5dgnz8UZEFnQoyXZZS6PN5z9us=",
-                    "rev": "b6d106297ff9ef2ff8094033695d045e87775581",
+                    "hash": "sha256-n++JuZJUJgALhCXjYNXcqHIKjDnHz+m5t3y8ghU9P4U=",
+                    "rev": "e8efd15f214a4d59b427f55f7769b6dbbb09bbcc",
                     "url": "https://skia.googlesource.com/skia.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4243,8 +4243,8 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-ZHEmeSe8r226gjazm91GYqlfbM9a5yi8KnFv4iAWFKE=",
-                    "rev": "3de6ffffbfdcf265e9f11a5c9d1cfb4d486d7550",
+                    "hash": "sha256-HtR74oqywVwpqDAw6U6wLj0Q8t8WlRhcuEeEwoiPfX4=",
+                    "rev": "fedd021b538607860f9c56e5c193ad8dcd4f2bb1",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4295,6 +4295,6 @@
         },
         "modules": "149",
         "node": "24.21.0",
-        "version": "44.4.1"
+        "version": "44.4.2"
     }
 }
