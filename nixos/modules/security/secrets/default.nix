@@ -50,6 +50,7 @@ let
           description = "The name of the backend.";
           type = str;
           default = name;
+          defaultText = "Attribute name of the backend";
           readOnly = true;
         };
 
@@ -131,7 +132,7 @@ let
           description = "name of the file";
           type = safeName "file";
           default = name;
-          defaultText = "Name of the file";
+          defaultText = "Attribute name of the file";
           readOnly = true;
         };
 
@@ -229,6 +230,7 @@ let
           description = "The name of the backend.";
           type = str;
           default = name;
+          defaultText = "Attribute name of the backend";
           readOnly = true;
         };
 
@@ -253,6 +255,7 @@ let
           description = "The prompt's name.";
           type = safeName "prompt";
           default = name;
+          defaultText = "Attribute name of the prompt";
           readOnly = true;
         };
 
