@@ -94,12 +94,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.pytest-xdist
     python3Packages.pytestCheckHook
     versionCheckHook
+
+    # Test fixture plugin package used by test_source_mirror_plugin[pip]; upstream
+    # normally installs this via tox before running the pip-origin plugin loading test.
+    (python3Packages.buildPythonPackage {
+      pname = "sample-plugins";
+      version = "1.2.3";
+      pyproject = true;
+      build-system = [ python3Packages.setuptools ];
+      src = "${finalAttrs.src}/tests/plugins/sample-plugins";
+      dontCheck = true;
+    })
   ];
 
   disabledTests = [
-    # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
-    "test_source_mirror_plugin"
-
     # Runtime error: The FUSE stager child process unexpectedly died with exit code 2
     "test_patch_sources_cached_1"
     "test_patch_sources_cached_2"
