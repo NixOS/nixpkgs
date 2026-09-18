@@ -17,7 +17,6 @@
   python3Packages,
   nix,
   prefetch-yarn-deps,
-  fetchpatch,
   applyPatches,
 }:
 let
@@ -34,22 +33,6 @@ let
     postPatch = ''
       mv src/NuGet.config NuGet.Config
     '';
-    patches = lib.optionals (lib.versionOlder version "6.0") [
-      # See https://github.com/Radarr/Radarr/pull/11064
-      # Unfortunately, the .NET 8 upgrade will be merged into the v6 branch,
-      # and it may take some time for that to become stable.
-      # However, the patches cleanly apply to v5 as well.
-      (fetchpatch {
-        name = "dotnet8-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/2235823af313ea1f39fd1189b69a75fc5d380c41.patch";
-        hash = "sha256-3YgQV4xc2i5DNWp2KxVz6M5S8n//a/Js7pckGZ06fWc=";
-      })
-      (fetchpatch {
-        name = "dotnet8-darwin-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/2a886fb26a70b4d48a4ad08d7ee23e5e4d81f522.patch";
-        hash = "sha256-SAMUHqlSj8FPq20wY8NWbRytVZXTPtMXMfM3CoM8kSA=";
-      })
-    ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
