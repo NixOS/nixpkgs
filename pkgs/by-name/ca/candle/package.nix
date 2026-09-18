@@ -37,11 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtserialport
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 Candle $out/bin/candle
-    runHook postInstall
-  '';
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        runHook preInstall
+        mkdir -p $out/Applications
+        cp -r Candle.app $out/Applications/
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
+        install -Dm755 Candle $out/bin/candle
+        runHook postInstall
+      '';
 
   doInstallCheck = true;
 
