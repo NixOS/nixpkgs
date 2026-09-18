@@ -95,6 +95,11 @@ buildPythonPackage (finalAttrs: {
   # in a hermetic build environment anymore :(
   doCheck = false;
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
