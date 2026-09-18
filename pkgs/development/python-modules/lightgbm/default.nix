@@ -23,6 +23,7 @@
   opencl-headers,
 
   # dependencies
+  narwhals,
   numpy,
   scipy,
 
@@ -55,7 +56,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
+    hash = "sha256-+OIPaCyaq9AAvPSn7Yqm9HPBrf7MyuNOwk6CPRVvSvA=";
   };
 
   build-system = [
@@ -83,9 +84,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
       cudaPackages.cuda_cudart
+      cudaPackages.nccl
     ];
 
   dependencies = [
+    narwhals
     numpy
     scipy
   ];
@@ -100,6 +103,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport [
     # build fails otherwise
     (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
+
+    # needed to find nccl
+    (lib.cmakeBool "BUILD_WITH_SHARED_NCCL" true)
+    (lib.cmakeFeature "NCCL_ROOT" "${lib.getLib cudaPackages.nccl}")
   ];
 
   optional-dependencies = {
