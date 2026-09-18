@@ -30,7 +30,7 @@
   yq,
   installShellFiles,
   runCommand,
-  buildPackages,
+  pkgsBuildHost,
   sigtool,
   multi-cc-wrapper,
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   };
 
   depsBuildBuild = [
-    buildPackages.llvmPackages_20.stdenv.cc
+    pkgsBuildHost.llvmPackages_20.stdenv.cc
     zlib
     _icu
     openssl

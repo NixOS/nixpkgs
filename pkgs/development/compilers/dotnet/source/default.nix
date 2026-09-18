@@ -42,7 +42,7 @@ let
     artifactsHash
     ;
 
-  artifacts = stdenvNoCC.mkDerivation {
+  artifacts = pkgsBuildBuild.stdenvNoCC.mkDerivation {
     name = lib.nameFromURL artifactsUrl ".tar.gz";
 
     src = fetchurl {
@@ -75,11 +75,13 @@ let
           tarballHash
           depsFile
           ;
-        bootstrapSdk = (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
-          passthru = old.passthru or { } // {
-            inherit artifacts;
-          };
-        });
+        bootstrapSdk =
+          (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs
+            (old: {
+              passthru = old.passthru or { } // {
+                inherit artifacts;
+              };
+            });
       };
 
   fallbackSdk = binary.${"sdk_${suffix.sdk}"};
