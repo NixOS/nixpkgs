@@ -21,7 +21,6 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   # remove supervisor from dependencies, we use systemd
