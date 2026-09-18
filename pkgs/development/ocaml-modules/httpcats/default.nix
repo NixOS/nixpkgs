@@ -25,6 +25,9 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-n0InZn+7jaDbf3WaMACdh3DPMfkfewmkcXQAVfR81rg=";
   };
 
+  # Fix tests with x509 1.2
+  patches = [ ./x509-1_2.patch ];
+
   propagatedBuildInputs = [
     h2
     h1
