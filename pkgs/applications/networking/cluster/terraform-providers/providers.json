@@ -1436,11 +1436,11 @@
     "vendorHash": null
   },
   "vancluever_acme": {
-    "hash": "sha256-t5vN18z7gjF4oxD31oGn8ZPoNCypxQJemDOxFFAVfXs=",
+    "hash": "sha256-9ODFjrawdF0XtmCjfelwSP+10RsYQMjTB2BBqracnos=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "repo": "terraform-provider-acme",
-    "rev": "v3.1.0",
+    "rev": "v3.1.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ZeO1E/9F9rco4p++pjzjiVWPCYQXdPeHWdtghZP6irY="
   },
