@@ -22,6 +22,7 @@
   rustfmt,
   clippy,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -121,7 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) env;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
