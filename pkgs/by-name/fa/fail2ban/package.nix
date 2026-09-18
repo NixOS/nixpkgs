@@ -14,7 +14,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fail2ban";
