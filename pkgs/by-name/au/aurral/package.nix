@@ -16,7 +16,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "aurral";
-  version = "2.9.0";
+  version = "2.9.1";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pwk+efWL0dfvKiobRmGXgPtvunpRDOVbtxohbJamVqY=";
+    hash = "sha256-HiOcDvp+ZZozWPEoou0UJFsZAoql89q2WVZaj7fgVrs=";
   };
 
   # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
