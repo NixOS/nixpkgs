@@ -30,10 +30,6 @@
 let
   version = "4.8-0";
 
-  # as of 2.0.10 a suffix is being added. That may or may not disappear and then
-  # come back, so just leave this here.
-  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion v));
-
   overrides = writeText "revision.inc" (
     lib.concatStringsSep "\n" (
       lib.mapAttrsToList (k: v: "const ${k} = '${v}';") {
@@ -53,7 +49,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
+    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${lib.versions.majorMinor version}/lazarus-${version}.tar.gz";
     hash = "sha256-a0yeyU/nn+TlgCfde/ENm2w1ycsvkdtZMLdYC0ogGpk=";
   };
 
