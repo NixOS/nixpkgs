@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitfourchette";
   version = "1.11.0";
   pyproject = true;
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
