@@ -24,13 +24,18 @@ let
     ) cfg.storage
   );
 
+  packFiles = pkgs.generatedFiles {
+    namePrefix = "bluemap-pack";
+    relativeTo = "the bluemap {file}`packs` directory";
+  };
+
   configFolder = pkgs.linkFarm "bluemap-config" {
     "maps" = mapsFolder;
     "storages" = storageFolder;
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "packs" = pkgs.linkFarm "packs" cfg.packs;
+    "packs" = packFiles.toDirectory "packs" cfg.packs;
   };
 
   inherit (lib) mkOption;
@@ -271,7 +276,7 @@ in
     };
 
     packs = mkOption {
-      type = lib.types.attrsOf lib.types.pathInStore;
+      type = lib.types.attrsOf packFiles.type;
       default = { };
       description = ''
         A set of resourcepacks, datapacks, and mods to extract resources from,
