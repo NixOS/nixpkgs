@@ -19,8 +19,6 @@ buildPythonPackage {
     sha256 = "1nb5iwg0nfz86shw28a2kj5pyhd4jvvxhf73fhnfbl8scgnvjv9h";
   };
 
-  strictDeps = true;
-
   propagatedBuildInputs = [
     twisted
     qtpy
