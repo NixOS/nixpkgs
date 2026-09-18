@@ -115,6 +115,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       SuperSandro2000
       _999eagle
+      rnhmjoj
     ];
   };
 })
