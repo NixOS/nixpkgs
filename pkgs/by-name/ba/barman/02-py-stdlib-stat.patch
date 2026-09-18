@@ -1,0 +1,57 @@
+diff --git a/src/barman/fs.py b/src/barman/fs.py
+index 3870a342..955d6eae 100644
+--- a/src/barman/fs.py
++++ b/src/barman/fs.py
+@@ -17,6 +17,7 @@
+ # along with Barman.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import logging
++import os
+ import re
+ import shutil
+ import sys
+@@ -163,26 +164,7 @@ class UnixLocalCommand(object):
+         """
+         if not self.exists(path):
+             raise FsOperationFailed("Following path does not exist: %s" % path)
+-        args = ["-c", "%a", path]
+-        if self.is_osx():
+-            print("is osx")
+-            args = ["-f", "%Lp", path]
+-        cmd_ret = self.cmd("stat", args=args)
+-        if cmd_ret != 0:
+-            raise FsOperationFailed(
+-                "Failed to get file mode for %s: %s" % (path, self.internal_cmd.err)
+-            )
+-        return self.internal_cmd.out.strip()
+-
+-    def is_osx(self):
+-        """
+-        Identify whether is is a Linux or Darwin system
+-        :return: True is it is osx os
+-        """
+-        self.cmd("uname", args=["-s"])
+-        if self.internal_cmd.out.strip() == "Darwin":
+-            return True
+-        return False
++        return str(oct(os.stat(path).st_mode)[-3:])
+ 
+     def validate_file_mode(self, path, mode):
+         """
+@@ -434,15 +416,7 @@ class UnixLocalCommand(object):
+         """
+         if not self.exists(path):
+             raise FsOperationFailed("Following path does not exist: %s" % path)
+-        args = ["-c", "%d", path]
+-        if self.is_osx():
+-            args = ["-f", "%d", path]
+-        cmd_ret = self.cmd("stat", args=args)
+-        if cmd_ret != 0:
+-            raise FsOperationFailed(
+-                "Failed to get file mode for %s: %s" % (path, self.internal_cmd.err)
+-            )
+-        return self.internal_cmd.out.strip()
++        return str(os.stat(path).st_dev)
+ 
+ 
+ class UnixRemoteCommand(UnixLocalCommand):
