@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
     description = "Simple, zero-configuration HTTP server CLI for serving static files";
     homepage = "https://github.com/eliben/static-server";
     license = lib.licenses.unlicense;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.novalkun ];
     mainProgram = "static-server";
   };
 })
