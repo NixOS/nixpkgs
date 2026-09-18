@@ -358,6 +358,7 @@ mapAliases {
   aseprite-unfree = throw "'aseprite-unfree' has been renamed to/replaced by 'aseprite'"; # Converted to throw 2025-10-27
   asio_1_10 = throw "'asio_1_10' has been removed as it is outdated and unused. Use 'asio' instead"; # Added 2025-12-03
   asitop = throw "'asitop' has been renamed to/replaced by 'macpm'"; # Converted to throw 2025-10-27
+  astal = throw "'ags' and 'astal' ecosystem is no longer packaged in nixpkgs, use upstream flake instead."; # Added 2026-09-18
   asterisk_18 = throw "asterisk_18: Asterisk 18 is end of life and has been removed"; # Added 2025-10-19
   astronomer = throw "'astronomer' has been removed, as it has been unmaintained upstream since August 2020"; # Added 2026-01-01
   atlassian-cli = appfire-cli; # Added 2025-09-29
