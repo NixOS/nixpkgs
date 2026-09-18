@@ -31,8 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail 'await websockets.connect(status["endpoint"], ssl=ssl_context)' 'await websockets.connect(status["endpoint"], ssl=None if self.insecure else ssl_context)'
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
