@@ -8,6 +8,7 @@
   libgnurx ? windows.libgnurx,
   updateAutotoolsGnuConfigScriptsHook,
   testers,
+  pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -57,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
   ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    musl = pkgsMusl.file or null;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   __structuredAttrs = true;
 
