@@ -93,7 +93,7 @@
         {
           name = "printing";
           type = "internal";
-          element = "no printers configured";
+          element = "Configured printers|no printers configured";
         }
         {
           name = "mouse";
