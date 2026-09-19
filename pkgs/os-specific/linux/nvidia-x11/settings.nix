@@ -1,9 +1,7 @@
-nvidia_x11: sha256:
-
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGithubOrNvidia,
   fetchpatch,
   pkg-config,
   m4,
@@ -21,27 +19,30 @@ nvidia_x11: sha256:
   libglvnd,
   wrapGAppsHook3,
   addDriverRunpath,
+  platforms,
+  version,
+  hash,
+  useProfiles,
   withGtk2 ? false,
   withGtk3 ? true,
 }:
 
 let
-  src = fetchFromGitHub {
+  src = fetchFromGithubOrNvidia {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.settingsVersion;
-    inherit sha256;
+    tag = version;
+    inherit hash;
   };
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    platforms = nvidia_x11.meta.platforms;
+    inherit platforms;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
     pname = "libXNVCtrl";
-    version = nvidia_x11.settingsVersion;
-    inherit src;
+    inherit version src;
 
     buildInputs = [
       libxrandr
@@ -61,7 +62,7 @@ let
     patches = [
       # Patch the Makefile to also produce a shared library.
       (
-        if lib.versionOlder nvidia_x11.settingsVersion "400" then
+        if lib.versionOlder version "400" then
           ./libxnvctrl-build-shared-3xx.patch
         else
           ./libxnvctrl-build-shared.patch
@@ -97,30 +98,24 @@ in
 
 stdenv.mkDerivation {
   pname = "nvidia-settings";
-  version = nvidia_x11.settingsVersion;
-
-  inherit src;
+  inherit version src;
 
   patches =
-    lib.optional (lib.versionOlder nvidia_x11.settingsVersion "440") (fetchpatch {
+    lib.optional (lib.versionOlder version "440") (fetchpatch {
       # fixes "multiple definition of `VDPAUDeviceFunctions'" linking errors
       url = "https://github.com/NVIDIA/nvidia-settings/commit/a7c1f5fce6303a643fadff7d85d59934bd0cf6b6.patch";
       hash = "sha256-ZwF3dRTYt/hO8ELg9weoz1U/XcU93qiJL2d1aq1Jlak=";
     })
     ++
-      lib.optional
-        (
-          (lib.versionAtLeast nvidia_x11.settingsVersion "515.43.04")
-          && (lib.versionOlder nvidia_x11.settingsVersion "545.29")
-        )
+      lib.optional ((lib.versionAtLeast version "515.43.04") && (lib.versionOlder version "545.29"))
         (fetchpatch {
           # fix wayland support for compositors that use wl_output version 4
           url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
           hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
         });
 
-  postPatch = lib.optionalString nvidia_x11.useProfiles ''
-    sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
+  postPatch = lib.optionalString useProfiles ''
+    sed -i 's,/usr/share/nvidia/,/run/current-system/sw/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
   '';
 
   enableParallelBuilding = true;
@@ -148,11 +143,10 @@ stdenv.mkDerivation {
     libxext
     libxxf86vm
     libvdpau
-    nvidia_x11
     dbus
     vulkan-headers
   ]
-  ++ lib.optionals (withGtk2 || lib.versionOlder nvidia_x11.settingsVersion "525.53") [ gtk2 ]
+  ++ lib.optionals (withGtk2 || lib.versionOlder version "525.53") [ gtk2 ]
   ++ lib.optionals withGtk3 [
     gtk3
     librsvg
