@@ -32765,5 +32765,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  semka612 = {
+    email = "smgmail987@gmail.com";
+    name = "Semga";
+    github = "semka612";
+    githubId = 180087905;
+  };
   # keep-sorted end
 }
