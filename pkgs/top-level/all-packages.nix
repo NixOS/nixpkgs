@@ -10680,13 +10680,6 @@ with pkgs;
 
   dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
 
-  inherit (callPackage ../applications/networking/instant-messengers/discord { })
-    discord
-    discord-ptb
-    discord-canary
-    discord-development
-    ;
-
   torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 
   hy = with python3Packages; toPythonApplication hy;

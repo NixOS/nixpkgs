@@ -1,12 +1,6 @@
 {
   # Package metadata
-  pname,
-  source,
-  meta,
-  binaryName,
-  desktopName,
-  self,
-  branch,
+  pname ? "discord",
   # Feature flags (cross-platform)
   withOpenASAR ? false,
   withVencord ? false,
@@ -46,7 +40,17 @@
 let
   inherit (stdenv.hostPlatform) isLinux;
 
-  pkgArgs = removeAttrs args [
+  metadata = (callPackage ./metadata.nix { }).${pname};
+  inherit (metadata)
+    source
+    meta
+    binaryName
+    desktopName
+    self
+    branch
+    ;
+
+  pkgArgs = removeAttrs (args // metadata) [
     "branch"
     "self"
     "unwrappedDiscord"
