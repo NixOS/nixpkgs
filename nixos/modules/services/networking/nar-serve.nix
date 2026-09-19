@@ -64,6 +64,7 @@ in
 
       environment.PORT = toString cfg.port;
       environment.NAR_CACHE_URL = cfg.cacheURL;
+      environment.DOMAIN = cfg.domain;
 
       serviceConfig = {
         Restart = "always";
