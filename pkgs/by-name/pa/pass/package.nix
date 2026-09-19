@@ -46,13 +46,25 @@ let
   passExtensions = import ./extensions { inherit pkgs; };
 
   env = lib.makeOverridable (
-    { pass }:
+    {
+      pass,
+      brokenExtensions ? [ ],
+    }:
     extensions:
     let
       selected = [
         pass
       ]
-      ++ extensions passExtensions
+      # Mark extensions who don't support passage as broken for now
+      ++ extensions (
+        lib.mapAttrs (
+          extensionName: extensionDerivation:
+          if (lib.lists.elem extensionName brokenExtensions) then
+            extensionDerivation.overrideAttrs (prev: final: { meta.broken = true; })
+          else
+            extensionDerivation
+        ) passExtensions
+      )
       ++ lib.optional tombPluginSupport passExtensions.tomb;
     in
     buildEnv {
