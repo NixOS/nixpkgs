@@ -747,6 +747,7 @@ in
   gatus = runTest ./gatus.nix;
   gemstash = import ./gemstash.nix { inherit pkgs runTest; };
   geoclue2 = runTest ./geoclue2.nix;
+  gel-server = runTest ./gel-server.nix;
   geoserver = runTest ./geoserver.nix;
   gerrit = runTest ./gerrit.nix;
   getaddrinfo = runTest ./getaddrinfo.nix;
