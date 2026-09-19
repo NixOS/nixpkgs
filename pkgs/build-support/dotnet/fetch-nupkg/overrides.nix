@@ -6,6 +6,13 @@
   libice,
   libsm,
   libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  gtk3,
+  libGL,
+  vulkan-loader,
   stdenv,
   writeText,
 }:
@@ -54,12 +61,25 @@
     package.overrideAttrs (
       old:
       lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-        setupHook = writeText "setupHook.sh" ''
-          prependToVar dotnetRuntimeDeps \
-            "${lib.getLib libice}" \
-            "${lib.getLib libsm}" \
-            "${lib.getLib libx11}"
-        '';
+        nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ dotnetCorePackages.autoPatchcilHook ];
+
+        buildInputs = old.buildInputs or [ ] ++ [
+          libice
+          libsm
+          libx11
+          libxcursor
+          libxext
+          libxi
+          libxrandr
+          gtk3
+          libGL
+          vulkan-loader
+        ];
+
+        autoPatchcilRuntimeId = dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system;
+        autoPatchcilIgnoreMissingDeps = [
+          "libc"
+        ];
       }
     );
 
