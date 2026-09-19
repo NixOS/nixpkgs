@@ -4,8 +4,10 @@ from functools import cached_property
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import os
 
-from libfdt import Fdt, FdtException, FDT_ERR_NOSPACE, FDT_ERR_NOTFOUND, fdt_overlay_apply
+from libfdt import Fdt, FdtException, FDT_ERR_NOTFOUND
 
 
 @dataclass
@@ -35,39 +37,27 @@ def get_compatible(fdt) -> set[str]:
         else:
             raise e
 
+def apply_overlay(base: Path, dtbo: Path):
+    temp = base.with_suffix(".tmp")
+    subprocess.check_call(["ufdt_apply_overlay", base, dtbo, temp])
+    os.replace(temp, base)
 
-def apply_overlay(dt: Fdt, dto: Fdt) -> Fdt:
-    while True:
-        # we need to copy the buffers because they can be left in an inconsistent state
-        # if the operation fails (ref: fdtoverlay source)
-        result = dt.as_bytearray().copy()
-        err = fdt_overlay_apply(result, dto.as_bytearray().copy())
-
-        if err == 0:
-            new_dt = Fdt(result)
-            # trim the extra space from the final tree
-            new_dt.pack()
-            return new_dt
-
-        if err == -FDT_ERR_NOSPACE:
-            # not enough space, add some blank space and try again
-            # magic number of more space taken from fdtoverlay
-            dt.resize(dt.totalsize() + 65536)
-            continue
-
-        raise FdtException(err)
 
 def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: list[Overlay]):
     source_dt = source / rel_path
+    dest_path = destination / rel_path
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(source / rel_path, dest_path)
+
     print(f"Processing source device tree {rel_path}...")
-    with source_dt.open("rb") as fd:
-        dt = Fdt(fd.read())
 
     for overlay in overlays_data:
         if overlay.filter and overlay.filter not in str(rel_path):
             print(f"  Skipping overlay {overlay.name}: filter does not match")
             continue
 
+        with dest_path.open("rb") as fd:
+            dt = Fdt(fd.read())
         dt_compatible = get_compatible(dt)
         if len(dt_compatible) == 0:
             print(f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay")
@@ -76,13 +66,7 @@ def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: 
             continue
 
         print(f"  Applying overlay {overlay.name}")
-        dt = apply_overlay(dt, overlay.fdt)
-
-    print(f"Saving final device tree {rel_path}...")
-    dest_path = destination / rel_path
-    dest_path.parent.mkdir(parents=True, exist_ok=True)
-    with dest_path.open("wb") as fd:
-        fd.write(dt.as_bytearray())
+        apply_overlay(dest_path, overlay.dtbo_file)
 
 def main():
     parser = ArgumentParser(description='Apply a list of overlays to a directory of device trees')
