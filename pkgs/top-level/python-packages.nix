@@ -17996,6 +17996,8 @@ self: super: with self; {
 
   repoze-who = callPackage ../development/python-modules/repoze-who { };
 
+  represent = callPackage ../development/python-modules/represent { };
+
   reprint = callPackage ../development/python-modules/reprint { };
 
   reproject = callPackage ../development/python-modules/reproject { };
@@ -18432,6 +18434,8 @@ self: super: with self; {
   runstats = callPackage ../development/python-modules/runstats { };
 
   runtype = callPackage ../development/python-modules/runtype { };
+
+  rush = callPackage ../development/python-modules/rush { };
 
   russound = callPackage ../development/python-modules/russound { };
 
@@ -19427,6 +19431,8 @@ self: super: with self; {
   sourmash = callPackage ../development/python-modules/sourmash { };
 
   soxr = callPackage ../development/python-modules/soxr { libsoxr = pkgs.soxr; };
+
+  spacetrack = callPackage ../development/python-modules/spacetrack { };
 
   spacy = callPackage ../development/python-modules/spacy { };
 
