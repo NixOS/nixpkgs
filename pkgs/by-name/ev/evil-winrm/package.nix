@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  versionCheckHook,
   bundlerEnv,
   bundlerUpdateScript,
   writeText,
@@ -64,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = bundlerUpdateScript "evil-winrm";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "WinRM shell for hacking/pentesting";
