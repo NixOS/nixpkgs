@@ -12,13 +12,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taoup";
   # nixpkgs-update: no auto update
-  version = "1.1.23";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
     repo = "taoup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9J46fKyeSZW71r67R8y9KVPeCH8fn27hOk/XpusqGmk=";
+    hash = "sha256-UHo3c+DQn77CJONy/QXM55rpIdhVkJbhR82tqmUltPQ=";
   };
 
   buildInputs = [
