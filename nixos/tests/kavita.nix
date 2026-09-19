@@ -2,7 +2,10 @@
 {
   name = "kavita";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ misterio77 ];
+    maintainers = [
+      misterio77
+      debtquity
+    ];
   };
 
   nodes = {
@@ -11,7 +14,7 @@
       {
         services.kavita = {
           enable = true;
-          tokenKeyFile = builtins.toFile "kavita.key" "d26ba694b455271a8872415830fb7b5c58f8da98f9ef7f58b2ca4c34bd406512";
+          settings.TokenKey = "d26ba694b455271a8872415830fb7b5c58f8da98f9ef7f58b2ca4c34bd406512";
         };
       };
   };
