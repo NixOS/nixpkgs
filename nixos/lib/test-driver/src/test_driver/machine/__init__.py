@@ -33,6 +33,7 @@ from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine.ocr import (
+    iter_ocr_variants,
     perform_ocr_on_screenshot,
     perform_ocr_variants_on_screenshot,
 )
@@ -1262,10 +1263,16 @@ class QemuMachine(BaseMachine):
         _warn_if_numeric_duration(timeout, "wait_for_text")
 
         def screen_matches(last_try: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
-                if re.search(regex, text) is not None:
-                    return True
+            variants: list[str] = []
+            retry_delays = () if last_try else (1, 2, 4)
+            with iter_ocr_variants(
+                screenshot_cb=self._managed_screenshot,
+                retry_delays=retry_delays,
+            ) as results:
+                for text in results:
+                    variants.append(text)
+                    if re.search(regex, text) is not None:
+                        return True
 
             if last_try:
                 self.log(f"Last OCR attempt failed. Text was: {variants}")
