@@ -51,6 +51,16 @@ in
       };
     }) { }
   );
+  julia_113-bin = wrapJulia (
+    callPackage (import ./generic-bin.nix {
+      version = "1.13.0";
+      sha256 = {
+        x86_64-linux = "0jwhh4mf16xrgz9i6yddnzg831wcv9lfh6g7sggfb998q5hxlxc9";
+        aarch64-linux = "1d5qi9vkd120vi0ag95dg0fg9562by1yja4ccdamzp52pbja7m3c";
+        aarch64-darwin = "1hm27gkj9pgszzdv42w9c370xgi3zdk4045qfkfrxpz9kp9nlm68";
+      };
+    }) { }
+  );
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
@@ -91,6 +101,27 @@ in
         patches = lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch
+        ];
+      })
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
+  );
+  julia_113 = wrapJulia (
+    callPackage
+      (import ./generic.nix {
+        version = "1.13.0";
+        hash = "sha256-a3+O7LIIsv/8lc7GcToGyU9RvLxWFmMMMLQr2SIcsm4=";
+        patches = [
+          ./patches/1.13/0001-libssh2-fix-source-build.patch
+          ./patches/1.13/0002-llvm-zlib-rpath.patch
+          ./patches/1.13/0003-csl-libatomic-symlink.patch
         ];
       })
       (
