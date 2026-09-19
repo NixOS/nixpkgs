@@ -30666,6 +30666,11 @@
     githubId = 63205921;
     name = "Bryant Collins";
   };
+  vitto4 = {
+    github = "vitto4";
+    githubId = 128498605;
+    name = "vitto";
+  };
   vizid = {
     email = "mail@vizqq.cc";
     github = "ViZiD";
