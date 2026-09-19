@@ -1813,18 +1813,18 @@ mapAliases {
   newlibCross = throw "'newlibCross' has been renamed to/replaced by 'newlib'"; # Converted to throw 2025-10-27
   newt-go = fosrl-newt; # Added 2025-06-24
   next-ls = throw "'next-ls' has been removed because it was deprecated and archived upstream. Consider using 'beamPackages.expert' instead"; # Added 2026-02-24
-  nextcloud31 = throw "
-    Nextcloud v31 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2025-09. Please upgrade to at least Nextcloud v32 by declaring
+  nextcloud32 = throw "
+    Nextcloud v32 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2026-09. Please upgrade to at least Nextcloud v33 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud32;
+        services.nextcloud.package = pkgs.nextcloud33;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 30 you have to upgrade to Nextcloud 31
-    first on 25.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  "; # Added 2026-02-20
-  nextcloud31Packages = throw "Nextcloud 31 is EOL!"; # Added 2026-02-20
+    WARNING: if you were on Nextcloud 31 you have to upgrade to Nextcloud 32
+    first on 26.05 because Nextcloud doesn't support upgrades across multiple major versions!
+  "; # Added 2026-09-19
+  nextcloud32Packages = throw "Nextcloud 32 is EOL!"; # Added 2026-09-19
   nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
   nginxQuic = throw "'nginxQuic' has been removed. QUIC support is now available in the default nginx builds.";
   ngrid = throw "'ngrid' has been removed as it has been unmaintained upstream and broken"; # Added 2025-11-15
