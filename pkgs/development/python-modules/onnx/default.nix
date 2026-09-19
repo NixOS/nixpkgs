@@ -22,6 +22,7 @@ buildPythonPackage {
     ;
 
   format = "wheel";
+  __structuredAttrs = true;
 
   dontUseWheelUnpack = true;
 
