@@ -4351,9 +4351,11 @@ with pkgs;
 
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
 
-  janet = callPackage ../development/interpreters/janet { };
-
-  jpm = callPackage ../development/interpreters/janet/jpm.nix { };
+  janetPackages = recurseIntoAttrs (callPackage ../development/interpreters/janet { });
+  inherit (janetPackages)
+    janet
+    jpm
+    ;
 
   lambda-lisp-blc = lambda-lisp;
 
