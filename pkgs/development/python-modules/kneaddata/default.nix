@@ -22,7 +22,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "kneaddata/tests/ '*.py'" ];
+  unittestStartDir = "kneaddata/tests/";
+  unittestFilePattern = "*.py";
 
   pythonImportsCheck = [ "kneaddata" ];
 
