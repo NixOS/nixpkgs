@@ -19,9 +19,16 @@ in
       default = [ ];
     };
 
+    host = mkOption {
+      type = types.str;
+      default = "127.0.0.1";
+      description = "Host address to bind to.";
+    };
+
     port = mkOption {
       type = types.port;
       default = 8080;
+      description = "Port to bind to.";
     };
 
     threads = mkOption {
@@ -60,7 +67,7 @@ in
         ExecStart = lib.escapeShellArgs (
           [
             "${cfg.package}/bin/local-ai"
-            "--address=:${toString cfg.port}"
+            "--address=${cfg.host}:${toString cfg.port}"
             "--threads=${toString cfg.threads}"
             "--localai-config-dir=."
             "--models-path=${cfg.models}"
