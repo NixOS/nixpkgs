@@ -3,7 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nixosTests,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
@@ -19,7 +19,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-gSjkpAGkvgRRh8WDpL/F7fS8KDxHRJUuWVqHGcFEGAc=";
   };
 
-  nativeBuildInputs = [ pnpm_10 ];
+  nativeBuildInputs = [ pnpm_10_latest ];
   npmConfigHook = pnpmConfigHook;
   npmDeps = finalAttrs.pnpmDeps;
   dontNpmPrune = true;
@@ -29,7 +29,7 @@ buildNpmPackage (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     hash = "sha256-yNRC5sCBn002gxUfHMUvh3DZeVYOokfz4MTvqXR2MzI=";
   };
