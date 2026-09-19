@@ -17,7 +17,7 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
-  typescript_5,
+  typescript_7,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-V951eGBfkfmrQAVRznc423UFvIj0KjPHDOenAWf9tRM=";
   };
 
+  patches = [
+    ./ts7.patch
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     pkg-config
@@ -38,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     gobject-introspection
     gjs
-    typescript_5
+    typescript_7
   ];
 
   buildInputs = [
