@@ -45,6 +45,16 @@ assert dmenuSupport && waylandSupport -> dmenu-wayland != null && ydotool != nul
 let
   passExtensions = import ./extensions { inherit pkgs; };
 
+  extensionsNotSupportinPassage = [
+    "pass-audit"
+    "pass-checkup"
+    "pass-import"
+    "pass-tomb"
+    "pass-update"
+    "pass-genphrase"
+    "pass-file"
+  ];
+
   env = lib.makeOverridable (
     { pass }:
     extensions:
@@ -52,7 +62,18 @@ let
       selected = [
         pass
       ]
-      ++ extensions passExtensions
+      # Mark extensions who don't support passage as broken for now
+      ++ extensions (
+        lib.mapAttrs (
+          extensionName: extensionDerivation:
+          if
+            (pass.meta.mainProgram == "passage" && lib.lists.elem extensionName extensionsNotSupportinPassage)
+          then
+            extensionDerivation.overrideAttrs (prev: final: { meta.broken = true; })
+          else
+            extensionDerivation
+        ) passExtensions
+      )
       ++ lib.optional tombPluginSupport passExtensions.tomb;
     in
     buildEnv {
