@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   name = "gitea-actions-runner";
   meta = {
@@ -42,6 +42,10 @@
           };
         };
       };
+
+      # started manually once the runner token is available
+      systemd.services.gitea-runner-host.wantedBy = lib.mkForce [ ];
+      systemd.services.gitea-runner-podman.wantedBy = lib.mkForce [ ];
 
       virtualisation.podman.enable = true;
 
@@ -112,10 +116,12 @@
           token = gitea_admin("actions generate-runner-token").strip()
           machine.succeed(f"echo TOKEN={token} > /var/lib/gitea/runner_token")
 
+          machine.systemctl("start gitea-runner-host.service")
           machine.wait_for_unit("gitea-runner-host.service")
           machine.wait_until_succeeds("curl --fail http://localhost:9101/readyz")
           machine.wait_until_succeeds("journalctl -u gitea-runner-host.service --grep 'Runner registered successfully'")
 
+          machine.systemctl("start gitea-runner-podman.service")
           machine.wait_for_unit("gitea-runner-podman.service")
           machine.wait_until_succeeds("curl --fail http://localhost:9102/readyz")
           machine.wait_until_succeeds("journalctl -u gitea-runner-podman.service --grep 'Runner registered successfully'")
