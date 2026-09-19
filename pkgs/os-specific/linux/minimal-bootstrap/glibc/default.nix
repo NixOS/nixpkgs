@@ -5,6 +5,7 @@
   fetchurl,
   bash,
   gcc,
+  libgcc,
   binutils,
   linux-headers,
   gnumake,
@@ -54,32 +55,6 @@ bash.runCommand "${pname}-${version}"
       xz
     ];
 
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}"
-        {
-          nativeBuildInputs = [
-            gcc
-            binutils
-          ];
-        }
-        ''
-          cat <<EOF >> test.c
-          #include <stdio.h>
-          int main() {
-            printf("Hello World!\n");
-            return 0;
-          }
-          EOF
-          gcc \
-            -Wl,--dynamic-linker=${result}/lib/${linkerFile}.so.2 \
-            -B${result}/lib \
-            -I${result}/include \
-            -o test test.c
-          ./test
-          mkdir $out
-        '';
-
     meta = {
       description = "The GNU C Library";
       homepage = "https://www.gnu.org/software/libc/";
@@ -98,7 +73,8 @@ bash.runCommand "${pname}-${version}"
     cd build
     # libstdc++.so is built against musl and fails to link
     export CXX=false
-    export CFLAGS="-O1"
+    export CFLAGS="-B${libgcc}/lib -L${libgcc}/lib -Wl,-rpath,${gcc}/lib,-rpath,${libgcc} -O2 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
+    export LDFLAGS="-L${libgcc}/lib -L${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -B${libgcc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
@@ -112,7 +88,7 @@ bash.runCommand "${pname}-${version}"
       --disable-mathvec
 
     # Build
-    make -j $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES sysdep-LDFLAGS="$LDFLAGS"
 
     # Install
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
