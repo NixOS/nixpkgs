@@ -8,6 +8,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "theme-forge-nebular-fusion";
   version = "0.4.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = "https://github.com/Knowledge-Forge-AI/theme-forge-nebular-fusion/releases/download/v0.4.0/theme-forge-nebular-fusion-v0.4.0-aarch64-apple-darwin.tar.gz";
     hash = "sha256-z0JZjav6G3icOJwMZ/sEIPvz6cOUfdk/hHi2DsJlKJE=";

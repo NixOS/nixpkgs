@@ -9,6 +9,8 @@ buildNpmPackage (finalAttrs: {
   pname = "theme-forge-stellar-burst";
   version = "0.5.0";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/Knowledge-Forge-AI/theme-forge-stellar-burst/releases/download/v0.5.0/theme-forge-stellar-burst-staging.tar.gz";
     hash = "sha256-ovSqJmxoFqdKuUgYizxOl7k9H6WJiZTdJh/mm1a+4AY=";
