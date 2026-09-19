@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitLab,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -12,18 +13,11 @@ stdenvNoCC.mkDerivation {
     domain = "salsa.debian.org";
     owner = "fonts-team";
     repo = "fonts-open-sans";
-    rev = "debian/1.11-1";
+    tag = "debian/1.11-1";
     hash = "sha256-gkq5RPa83dND91q1hiA9Qokq1iA8gLQ8XvCNWe+e8Bw=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Open Sans fonts";
