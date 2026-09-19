@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     x264
   ];
 
+  cmakeFlags = [ "-DGLVND=1" ];
+
   strictDeps = true;
 
   postInstall = ''
