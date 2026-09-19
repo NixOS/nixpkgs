@@ -22562,6 +22562,12 @@
     githubId = 121009904;
     name = "penalty1083";
   };
+  pengo = {
+    email = "pengo+nixpkgs@pengo.uk";
+    github = "pengolord";
+    githubId = 152470365;
+    name = "pengo";
+  };
   pentane = {
     email = "cyclopentane@aidoskyneen.eu";
     github = "cyclic-pentane";
