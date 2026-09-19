@@ -109,6 +109,16 @@
           '';
         };
 
+        mount-nvidia-graphics-config = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = ''
+            Mount the libglvnd EGL vendor and Vulkan ICD manifests
+            (10_nvidia.json, nvidia_icd.json) on containers, so EGL and Vulkan
+            applications can discover the Nvidia driver.
+          '';
+        };
+
         suppressNvidiaDriverAssertion = lib.mkOption {
           default = false;
           type = lib.types.bool;
@@ -313,6 +323,16 @@
               {
                 hostPath = "${lib.getLib nvidia-driver}/lib";
                 containerPath = "/usr/local/nvidia/lib64";
+              }
+            ])
+            (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-graphics-config [
+              {
+                hostPath = "${lib.getLib nvidia-driver}/share/glvnd/egl_vendor.d/10_nvidia.json";
+                containerPath = "/usr/share/glvnd/egl_vendor.d/10_nvidia.json";
+              }
+              {
+                hostPath = "${lib.getLib nvidia-driver}/share/vulkan/icd.d/nvidia_icd.json";
+                containerPath = "/usr/share/vulkan/icd.d/nvidia_icd.json";
               }
             ])
           ]);
