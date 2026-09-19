@@ -5,11 +5,15 @@
   readline,
   bc,
   python3Packages,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcal";
   version = "2.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
@@ -28,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     bc
     python3Packages.pytestCheckHook
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   enabledTestPaths = [ "test.py" ];
 
