@@ -55,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "CLI agent harness tool designed to assist with SAST and DAST";
     homepage = "https://github.com/johannus22/zentra";
