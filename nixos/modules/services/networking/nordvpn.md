@@ -61,5 +61,17 @@ Additionally, if you prefer to use the friendly GUI,
 nordvpn-gui
 ```
 
-**Disclaimer:** NixOS currently does not support meshnet.
-Contributions welcome!
+Meshnet and fileshare are supported:
+
+```bash
+nordvpn set meshnet on
+nordvpn mesh peer list
+```
+
+Peer hostnames (e.g. `some-peer.nord`) do not resolve, since that would
+otherwise require making `/etc/hosts` writable, conflicting with NixOS's
+usual immutable, declarative `/etc`; connect to peers by their meshnet IP
+instead.
+
+**Disclaimer:** the closed-source nordwhisper protocol is not supported, as
+it requires NordVPN's proprietary `quench` library.
