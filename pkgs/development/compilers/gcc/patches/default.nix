@@ -107,6 +107,17 @@ optionals noSysDirs (
 
 ## 2. Patches relevant on specific platforms ####################################
 
+## AArch64
+
+# Fix an ICE when a function type carries a C++11 attribute without a namespace.
+# Fixed in GCC 15, never backported to the GCC 14 branch:
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116598
+++ optional (is14 && targetPlatform.isAarch64) (fetchpatch {
+  name = "aarch64-fix-ice-in-lookup-shared-state-flags.patch";
+  url = "https://github.com/gcc-mirror/gcc/commit/1247fa6e95cdf4a6422ec802f733f1f7ecaa3557.patch";
+  hash = "sha256-p8fyIcAx8CvLtQboXPevw/J3LsvkSZp36bHtGHjxsiQ=";
+})
+
 ## Darwin
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
