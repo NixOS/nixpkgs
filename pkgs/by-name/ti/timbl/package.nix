@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timbl";
-  version = "6.11";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "timbl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DzHVUb+inFQ4Z0zrAUuO1+4775ZLMp/gDyN8x7z8EKI=";
+    hash = "sha256-JmbeXqk5zg2Cqmnr4dIVqKrdy4fMUhP/syHNZIILQ6c=";
   };
 
   nativeBuildInputs = [
