@@ -25,8 +25,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-quiet 'PySide6-Essentials' 'PySide6'
+      --replace-quiet 'PySide6-Essentials' 'PySide6' \
+      --replace-fail "'pyqode.qt', " ""
   '';
+
+  # pyqode-qt is replaced by qtpy in angr's fork
+  pythonRemoveDeps = [ "pyqode-qt" ];
 
   build-system = [ setuptools ];
 
@@ -46,7 +50,7 @@ buildPythonPackage rec {
     pyside6
   ];
 
-  pythonImportsCheck = [ "pyqodeng" ];
+  pythonImportsCheck = [ "pyqode.core" ];
 
   meta = {
     description = "Angr's fork of pyQode.core, used as part of angr management";
