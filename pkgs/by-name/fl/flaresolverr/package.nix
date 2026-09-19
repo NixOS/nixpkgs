@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gOrfxFGNlxZWScfYEw7zfy7oVWhYEygYgP7mkO4cs/w=";
+    hash = "sha256-SLiM26MvswC3N85GQVZXcVW5gYMsu/QOoyQEWYZp42U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
