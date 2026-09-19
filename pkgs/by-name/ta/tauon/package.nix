@@ -156,7 +156,7 @@ python3Packages.buildPythonApplication {
   ];
 
   postInstall = ''
-    mv $out/bin/tauonmb $out/bin/tauon
+    ln -s tauonmb $out/bin/tauon
     mkdir -p $out/share/applications
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps
@@ -168,7 +168,7 @@ python3Packages.buildPythonApplication {
 
   meta = {
     description = "Linux desktop music player from the future";
-    mainProgram = "tauon";
+    mainProgram = "tauonmb";
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
     license = lib.licenses.gpl3;
