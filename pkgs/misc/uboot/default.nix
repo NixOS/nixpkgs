@@ -91,9 +91,12 @@ let
           flex
           installShellFiles
           (buildPackages.python3.withPackages (p: [
+            p.jsonschema
             p.libfdt
-            p.setuptools # for pkg_resources
+            p.pyaml
             p.pyelftools
+            p.setuptools # for pkg_resources
+            p.yamllint
           ]))
           swig
           which # for scripts/dtc-version.sh
