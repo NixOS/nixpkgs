@@ -22729,6 +22729,12 @@
     githubId = 1640697;
     name = "Philipp Hausmann";
   };
+  philip-730 = {
+    email = "philip.amendolia@gmail.com";
+    github = "philip-730";
+    githubId = 116534928;
+    name = "Philip Amendolia";
+  };
   philipdb = {
     email = "philipdb.art110@passmail.com";
     name = "Philip de Bruin";
