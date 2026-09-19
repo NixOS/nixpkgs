@@ -16,21 +16,21 @@
   libxtst,
   zlib,
 
-  electron_41,
+  electron_43,
 }:
 
 let
-  electron = electron_41;
+  electron = electron_43;
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2026.5.0";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-yeYDft2d2RHNXYrmnHlBzsZ43bvBgwwsqxQr/Q+/AuQ=";
+    hash = "sha256-KEAUUnk/IiEYLyyzV/MtdIeeBa1SrqCG+6bAH8ZMwKw=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildNpmPackage rec {
     zlib
   ];
 
-  npmDepsHash = "sha256-5y7q6SnA9s85+HFOhqif1N8XRO7ekGJ4nfVbWZ/diuI=";
+  npmDepsHash = "sha256-GaDpFNzug/2cUYfJeoVOg38up6uf1UrWa6mDP73NZPY=";
 
   makeCacheWritable = true;
 
