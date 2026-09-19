@@ -70,8 +70,9 @@ new file mode 100644
 index 00000000000..8cc830662bd
 --- /dev/null
 +++ b/usr.sbin/makefs/compat.h
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,73 @@
 +#pragma once
++#ifndef __OpenBSD__
 +#include <stdint.h>
 +#include <stddef.h>
 +#include <stdio.h>
@@ -142,6 +143,7 @@ index 00000000000..8cc830662bd
 +		return -1;
 +	}
 +}
++#endif
 diff --git a/usr.sbin/makefs/ffs.c b/usr.sbin/makefs/ffs.c
 index b055c62a598..c99cbfef5a7 100644
 --- a/usr.sbin/makefs/ffs.c
@@ -225,7 +227,11 @@ index 00000000000..f382f87226c
 +#include <bsdroot/sys/sys/disklabel.h>
 diff --git a/usr.sbin/makefs/include/sys/endian.h b/usr.sbin/makefs/include/sys/endian.h
 new file mode 100644
-index 00000000000..e69de29bb2d
+index 00000000000..be462c1715e
+--- /dev/null
++++ b/usr.sbin/makefs/include/sys/endian.h
+@@ -0,0 +1 @@
++#include_next <sys/endian.h>
 diff --git a/usr.sbin/makefs/include/sys/uuid.h b/usr.sbin/makefs/include/sys/uuid.h
 new file mode 100644
 index 00000000000..7c2abace377
@@ -259,7 +265,11 @@ index 00000000000..9ec3e81be3d
 +#include <bsdroot/sys/ufs/ufs/dir.h>
 diff --git a/usr.sbin/makefs/include/util.h b/usr.sbin/makefs/include/util.h
 new file mode 100644
-index 00000000000..e69de29bb2d
+index 00000000000..99058c68b50
+--- /dev/null
++++ b/usr.sbin/makefs/include/util.h
+@@ -0,0 +1 @@
++#include_next <util.h>
 diff --git a/usr.sbin/makefs/makefs.c b/usr.sbin/makefs/makefs.c
 index af39605d996..10d86fa10e2 100644
 --- a/usr.sbin/makefs/makefs.c
