@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "6.1";
+  version = "6.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     tag = version;
-    hash = "sha256-vqdJRxZbHNu2Sq318RnJjzDjYRRCSiO72WM+flKwW7g=";
+    hash = "sha256-4ZwhwNJjm0G5hsKptCrriefj0l2TGvIFMqL8lrgMTgA=";
   };
 
   build-system = [ setuptools-scm ];
