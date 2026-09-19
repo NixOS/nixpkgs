@@ -6,6 +6,7 @@
   yojson,
   result,
   fetchurl,
+  fetchpatch2,
   lib,
   ocaml,
   version ?
@@ -111,12 +112,21 @@ buildDunePackage {
   # that includes `Tuple and `Variant, constructors absent from Yojson.Safe.t
   # in yojson 3.0.0.  The lsp package aliases its own Json.t to
   # Ppx_yojson_conv_lib.Yojson.Safe.t, so the two types must match.
-  patches = lib.optionals (lib.elem version [
-    "1.9.0"
-    "1.10.5"
-    "1.18.0"
-    "1.21.0"
-  ]) [ ./jsonrpc-yojson3.patch ];
+  patches =
+    lib.optionals
+      (lib.elem version [
+        "1.17.0"
+        "1.18.0"
+        "1.21.0"
+        "1.22.0"
+      ])
+      [
+        (fetchpatch2 {
+          url = "https://github.com/ocaml/ocaml-lsp/commit/ce94e15c1afcef409a07f9feb99029b4a762eaa3.patch?full_index=1";
+          includes = [ "jsonrpc/src/*" ];
+          hash = "sha256-HUClUbFYwRvhELbJ5g8DYlxPIaHb0NTc7WSLlfuqkSk=";
+        })
+      ];
 
   inherit (params) minimalOCamlVersion;
 
@@ -131,7 +141,7 @@ buildDunePackage {
       ];
 
   propagatedBuildInputs =
-    if lib.versionAtLeast version "1.23.1" then
+    if lib.versionAtLeast version "1.17.0" then
       [ yojson ]
     else if lib.versionAtLeast version "1.7.0" then
       [ ]
