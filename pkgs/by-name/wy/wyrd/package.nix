@@ -3,10 +3,13 @@
   stdenv,
   fetchFromGitLab,
   makeWrapper,
-  ocamlPackages,
+  ocaml-ng,
   remind,
 }:
 
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wyrd";
   version = "1.7.4";
@@ -19,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
