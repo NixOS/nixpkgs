@@ -1355,13 +1355,13 @@
     "vendorHash": "sha256-SF11E60OQiRdf+Pf6XyJg60yGRnGOcSzhrYccrWaeYE="
   },
   "terraform-lxd_lxd": {
-    "hash": "sha256-fGiXnP8neze47FQXVCFlScya9ih67/5TQW5xKEBnI+Y=",
+    "hash": "sha256-U/x3CkUynyMvB9FWzlYgXIfC6/RWeNRV++4ceGW3Rnc=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
     "owner": "terraform-lxd",
     "repo": "terraform-provider-lxd",
-    "rev": "v3.0.2",
+    "rev": "v3.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jOZw/va3dA0DYmnYSKbASHvyL7levjf1Bk6WelLga+Q="
+    "vendorHash": "sha256-OHCnxqn09NyqsdTCRUJseNAL1DMpvl6Icu3YEzjLgPM="
   },
   "terraform-provider-openstack_openstack": {
     "hash": "sha256-6TcyPUacJNfGsaevg1DQ+WJrMFvGeo2mmsE2+P3RAZM=",
