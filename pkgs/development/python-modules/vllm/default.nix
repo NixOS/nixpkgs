@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   python,
@@ -104,6 +105,8 @@
   datasets,
   peft,
   timm,
+  # metal-only
+  vllm-metal,
 
   # optional-dependencies
   # audio
@@ -118,6 +121,7 @@
   rocmSupport ? torch.rocmSupport,
   rocmPackages ? { },
   gpuTargets ? [ ],
+  metalSupport ? config.metalSupport,
 }:
 
 let
@@ -269,7 +273,7 @@ let
     '';
   }) vllm-flash-attn;
 
-  cpuSupport = !cudaSupport && !rocmSupport;
+  cpuSupport = !cudaSupport && !rocmSupport && !metalSupport;
 
   # https://github.com/pytorch/pytorch/blob/v2.9.1/torch/utils/cpp_extension.py#L2407-L2410
   supportedTorchCudaCapabilities =
@@ -396,6 +400,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
     ./0006-drop-rocm-extra-reqs.patch
+    ./0007-darwin-empty-target.patch
   ];
 
   postPatch = ''
@@ -604,6 +609,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     datasets
     peft
     timm
+  ]
+  ++ lib.optionals metalSupport [
+    vllm-metal
   ];
 
   optional-dependencies = {
@@ -656,6 +664,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   // lib.optionalAttrs cpuSupport {
     VLLM_TARGET_DEVICE = "cpu";
     FETCHCONTENT_SOURCE_DIR_ONEDNN = "${onednn.src}";
+  }
+  // lib.optionalAttrs metalSupport {
+    VLLM_TARGET_DEVICE = "empty";
   };
 
   preConfigure = ''
@@ -664,7 +675,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  pythonImportsCheck = [ "vllm" ];
+  # Importing vllm loads all installed plugins, including vllm-metal which
+  # requires a Metal device not available in the sandbox.
+  pythonImportsCheck = lib.optionals (!metalSupport) [ "vllm" ];
   makeWrapperArgs =
     lib.optionals (cudaSupport && cudaPackages ? nccl) [
       "--set"
@@ -704,7 +717,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     badPlatforms = [
       # error: could not find git for clone of arm_compute-populate
       "aarch64-linux"
-
+    ]
+    ++ lib.optionals cpuSupport [
       # CMake Error at cmake/cpu_extension.cmake:188 (message):
       #   vLLM CPU backend requires AVX512, AVX2, Power9+ ISA, S390X ISA, ARMv8 or
       #   RISC-V support.
