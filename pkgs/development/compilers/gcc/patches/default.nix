@@ -80,7 +80,6 @@ optionals noSysDirs (
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
-        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -107,18 +106,6 @@ optionals noSysDirs (
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
-
-## Linux
-
-# Linux 7.1 removed `linux/scc.h`.
-# For GCC 14 and higher, there have already been releases with the fix.
-++ optional (is13 && targetPlatform.isLinux) (fetchpatch {
-  name = "libsanitizer-fix-with-linux-7.1-headers.patch";
-  url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch";
-  relative = "compiler-rt/lib";
-  extraPrefix = "libsanitizer/";
-  hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
-})
 
 ## Darwin
 
