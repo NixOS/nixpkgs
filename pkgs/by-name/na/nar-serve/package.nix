@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nar-serve";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-72gY3V9XLi+qZWDH3ARR2DLEYC3cszYkAVBBBRTNcrM=";
+    hash = "sha256-nbB5eduYl72HGvOXqS/0mnAi2hxvrak7j457baAvqJo=";
   };
 
-  vendorHash = "sha256-sms5yAbbc6PN02DFFRTktjaryDF/h+3b14BC+ZwMBOA=";
+  vendorHash = "sha256-82uMrkvqsUaSvEi0mlGBOAP9JCLABsHsHsikrrCknWY=";
 
   doCheck = false;
 
