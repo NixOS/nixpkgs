@@ -4,8 +4,8 @@ generic: {
     hash = "sha256-795fbxmJbwIAu1JF44ZgNWZyccex6EYm0mCV8kpvu0I=";
   };
   v70 = generic {
-    version = "7.0.29";
-    hash = "sha256-GE0DRU1/8tSfodKSCCrTNbzpB7oi4w1UA10FMpcIzjI=";
+    version = "7.0.30";
+    hash = "sha256-wMpAeRGa3uxBNeM1HRuEkVet4HbDUsAGco5zLxcHIyw=";
   };
   v60 = generic {
     version = "6.0.48";
