@@ -8,8 +8,17 @@
 let
   cfg = config.services.kavita;
   settingsFormat = pkgs.formats.json { };
+
   appsettings = settingsFormat.generate "appsettings.json" (
-    { TokenKey = "@TOKEN@"; } // cfg.settings
+    {
+      TokenKey = "@TOKEN@";
+    }
+    // cfg.settings
+    // lib.optionalAttrs (cfg.settings.OpenIdConnectSettings or { } != { }) {
+      OpenIdConnectSettings = cfg.settings.OpenIdConnectSettings // {
+        Secret = "@OIDC_SECRET@";
+      };
+    }
   );
 in
 {
@@ -25,6 +34,7 @@ in
         lib.concatStringsSep "," value
       )
     )
+
     (lib.mkRenamedOptionModule [ "services" "kavita" "port" ] [ "services" "kavita" "settings" "Port" ])
   ];
 
@@ -53,11 +63,22 @@ in
       '';
     };
 
+    oidcSecretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        File containing the OpenID Connect client secret.
+        Required when OpenIdConnectSettings.Enabled is true.
+      '';
+    };
+
     settings = lib.mkOption {
       default = { };
+
       description = ''
         Kavita configuration options, as configured in {file}`appsettings.json`.
       '';
+
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
@@ -75,6 +96,44 @@ in
               IP Addresses to bind to. The default is to bind to all IPv4 and IPv6 addresses.
             '';
           };
+
+          OpenIdConnectSettings = lib.mkOption {
+            default = { };
+
+            description = ''
+              OpenID Connect authentication settings.
+            '';
+
+            type = lib.types.submodule {
+              options = {
+                Authority = lib.mkOption {
+                  type = lib.types.str;
+                  description = "OIDC authority URL.";
+                };
+
+                ClientId = lib.mkOption {
+                  type = lib.types.str;
+                  description = "OIDC client ID.";
+                };
+
+                CustomScopes = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [
+                    "openid"
+                    "profile"
+                    "email"
+                  ];
+                  description = "OIDC scopes.";
+                };
+
+                Enabled = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Enable OIDC.";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -83,19 +142,41 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.kavita = {
       description = "Kavita";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+
+      wantedBy = [
+        "multi-user.target"
+      ];
+
+      after = [
+        "network.target"
+      ];
+
       preStart = ''
         install -m600 ${appsettings} ${lib.escapeShellArg cfg.dataDir}/config/appsettings.json
+
         ${pkgs.replace-secret}/bin/replace-secret '@TOKEN@' \
           ''${CREDENTIALS_DIRECTORY}/token \
           '${cfg.dataDir}/config/appsettings.json'
+
+        ${lib.optionalString (cfg.oidcSecretFile != null) ''
+          ${pkgs.replace-secret}/bin/replace-secret '@OIDC_SECRET@' \
+            ''${CREDENTIALS_DIRECTORY}/oidc-secret \
+            '${cfg.dataDir}/config/appsettings.json'
+        ''}
       '';
+
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
-        LoadCredential = [ "token:${cfg.tokenKeyFile}" ];
+
+        LoadCredential = [
+          "token:${cfg.tokenKeyFile}"
+        ]
+        ++ lib.optional (cfg.oidcSecretFile != null) "oidc-secret:${cfg.oidcSecretFile}";
+
         ExecStart = lib.getExe cfg.package;
+
         Restart = "always";
+
         User = cfg.user;
       };
     };
@@ -112,9 +193,13 @@ in
         group = cfg.user;
         home = cfg.dataDir;
       };
+
       groups.${cfg.user} = { };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ misterio77 ];
+  meta.maintainers = with lib.maintainers; [
+    misterio77
+    sinjin2300
+  ];
 }
