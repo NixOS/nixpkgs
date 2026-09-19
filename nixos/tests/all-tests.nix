@@ -1593,6 +1593,7 @@ in
   qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
+  quota-tracker = runTest ./quota-tracker.nix;
   rabbitmq = runTest ./rabbitmq.nix;
   radarr = runTest ./radarr.nix;
   radicale = runTest ./radicale.nix;
