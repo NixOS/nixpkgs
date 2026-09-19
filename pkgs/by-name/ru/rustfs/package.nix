@@ -20,7 +20,7 @@ let
 
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.26";
+    version = "0.1.27";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -28,7 +28,7 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-1X7ZcprtVXybV58mdrqbvERNHfs8Y/3klGDPObhUt9o=";
+      hash = "sha256-oo674Nw6wAqg8bwO0qYuaC5Ac62sRIaM7bhupQy6WZs=";
     };
 
     pnpmDeps = fetchPnpmDeps {
@@ -57,7 +57,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.0-rc.6";
+  version = "1.0.0-rc.6-preview.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
