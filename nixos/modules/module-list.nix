@@ -203,6 +203,7 @@
   ./programs/corefreq.nix
   ./programs/cpu-energy-meter.nix
   ./programs/criu.nix
+  ./programs/darling.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
