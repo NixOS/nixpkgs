@@ -7875,6 +7875,8 @@ self: super: with self; {
 
   httpx2 = callPackage ../development/python-modules/httpx2 { };
 
+  httpx2-pytest = callPackage ../development/python-modules/httpx2-pytest { };
+
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
   inherit (callPackage ../development/python-modules/huaweicloudsdk { })
