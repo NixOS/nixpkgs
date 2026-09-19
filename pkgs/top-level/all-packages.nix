@@ -8747,10 +8747,6 @@ with pkgs;
 
   kubectl-convert = kubectl.convert;
 
-  kubectl-view-allocations =
-    callPackage ../applications/networking/cluster/kubectl-view-allocations
-      { };
-
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
