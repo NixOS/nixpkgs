@@ -9,6 +9,7 @@
   freetype,
   glib,
   gtk2,
+  libcdio,
   libusb1,
   libx11,
   openssl,
@@ -22,20 +23,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "np2kai";
-  version = "0.86rev22-unstable-2026-02-08";
+  version = "0.86rev22-unstable-2026-04-12";
 
   src = fetchFromGitHub {
     owner = "AZO234";
     repo = "NP2kai";
-    rev = "44c8a8c61640f2d5476af5224dbd88a36079f45d";
-    hash = "sha256-zLhUkUojsjMYN75jsPa3OHOdv79MmMVvwlvuYC6NZqA=";
+    rev = "5d47f3a04b0b8ea78f625eeec354ac132c80df06";
+    hash = "sha256-R21FCSkL1BbwlZsxpQKSxdYqD3+72m1SX+rXOI4TYKU=";
   };
 
   patches = [
-    # https://github.com/AZO234/NP2kai/pull/202
-    ./1001-CMakeLists.txt-Fix-CMAKE_CXX_FLAGS_-RELEASE-DEBUG.patch
-    ./1002-sdl-x-fontmng.c-Fix-GlyphMetrics-calls.patch
-    ./1003-sdl-np2.c-Fix-wrong-order-of-arguments-to-fgets-call.patch
+    ./1001-fixes.patch
   ];
 
   # - Don't require Git
@@ -74,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libcdio
     libusb1
     openssl
     SDL2
@@ -93,9 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "BUILD_I286" enable16Bit)
     (lib.strings.cmakeBool "BUILD_HAXM" false)
 
-    (lib.strings.cmakeBool "USE_SDL3" false) # WIP, doesn't really seem to build yet
-    (lib.strings.cmakeBool "USE_SDL2" true)
-    (lib.strings.cmakeBool "USE_SDL" true)
+    (lib.strings.cmakeFeature "USE_SDL" "2")
     (lib.strings.cmakeBool "USE_SDL_TTF" true)
     (lib.strings.cmakeBool "USE_X" enableX11)
     (lib.strings.cmakeBool "USE_HAXM" false)
@@ -104,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NP2KAI_VERSION = finalAttrs.version;
     NP2KAI_HASH = builtins.substring 0 7 finalAttrs.src.rev;
-    # GCC 14 incompatibility
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   passthru.updateScript = unstableGitUpdater {
@@ -123,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AZO234/NP2kai";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ OPNA2608 ];
-    mainProgram = "${if enableX11 then "x" else "sdl"}np21kai";
+    mainProgram = "${if enableX11 then "x" else "sdl"}np21kai_sdl2";
     platforms = lib.platforms.x86;
   };
 })
