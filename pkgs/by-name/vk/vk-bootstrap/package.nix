@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vk-bootstrap";
-  version = "1.4.350";
+  version = "1.4.357";
 
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HAoEsWwc12lcpEl5gNz4EN0cvjZcg5jsnEBodiDj+1c=";
+    hash = "sha256-nYGCgk8wDgRcx6nEJ0zj+fUmO1OyXUr6bZlvD7BlLrI=";
   };
 
   patches = [
