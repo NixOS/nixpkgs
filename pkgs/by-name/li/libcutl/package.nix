@@ -25,6 +25,8 @@ gccStdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = gccStdenv.hostPlatform.isDarwin;
     description = "C++ utility library from Code Synthesis";
     longDescription = ''
       libcutl is a C++ utility library.

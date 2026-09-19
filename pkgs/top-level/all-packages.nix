@@ -1987,17 +1987,11 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
-  file = callPackage ../tools/misc/file {
-    inherit (windows) libgnurx;
-  };
-
   findutils = callPackage ../tools/misc/findutils { };
 
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
   };
-
-  fpm = callPackage ../tools/package-management/fpm { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
@@ -2008,8 +2002,6 @@ with pkgs;
   };
 
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
-
-  uniscribe = callPackage ../tools/text/uniscribe { };
 
   inherit (callPackages ../tools/filesystems/garage { })
     garage
@@ -2157,8 +2149,6 @@ with pkgs;
       { };
 
   hassil = with python3Packages; toPythonApplication hassil;
-
-  haste-client = callPackage ../tools/misc/haste-client { };
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
@@ -2561,10 +2551,6 @@ with pkgs;
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
-  nsjail = callPackage ../tools/security/nsjail {
-    protobuf = protobuf_21;
-  };
-
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
@@ -2690,8 +2676,6 @@ with pkgs;
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
   };
-
-  phosh = callPackage ../applications/window-managers/phosh { };
 
   phosh-mobile-settings =
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
@@ -7550,7 +7534,7 @@ with pkgs;
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
 
-  zabbix = zabbix60;
+  zabbix = zabbix74;
 
   ### OS-SPECIFIC
 

@@ -4,7 +4,8 @@
   fetchurl,
   buildPackages,
   zlib,
-  libgnurx,
+  windows,
+  libgnurx ? windows.libgnurx,
   updateAutotoolsGnuConfigScriptsHook,
   testers,
 }:

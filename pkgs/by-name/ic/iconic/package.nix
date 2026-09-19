@@ -19,27 +19,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iconic";
-  version = "2025.9.1";
+  version = "2026.8.1";
 
   src = fetchFromGitHub {
     owner = "youpie";
     repo = "Iconic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vjtPVE+n1p5DB+KewhylA9w1kVkpKyDz0WF5Mrd+BBM=";
+    hash = "sha256-Q6AB3SNqodjRiv9EqjfNHE9MTP+LpnuxG7oyjF4Uzd8=";
   };
 
   postPatch = ''
     substituteInPlace src/windows/file_handling.rs \
-      --replace-fail "/app" "$out"
-    substituteInPlace src/windows/regeneration.rs \
-      --replace-fail "/app" "$out"
-    substituteInPlace src/window.rs \
-      --replace-fail "create_dir" "create_dir_all"
+      --replace-fail '"/app/share/Iconic/folders/"' '"$out/share/Iconic/folders/"'
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ma+ryvDaFfP3BYrtuPPKMVjF2l83xP+T7GlIiOenRAo=";
+    hash = "sha256-l5UpqzgRcM5q7l14b5NAyLuY5QloAA20/0sYrEQA6QE=";
   };
 
   nativeBuildInputs = [
