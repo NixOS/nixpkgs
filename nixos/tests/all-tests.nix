@@ -253,6 +253,7 @@ in
   activation-var = runTest ./activation/var.nix;
   actual = runTest ./actual.nix;
   adguardhome = runTest ./adguardhome.nix;
+  aerothemeplasma = runTestOn [ "x86_64-linux" ] ./aerothemeplasma.nix;
   aesmd = runTestOn [ "x86_64-linux" ] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
   agda = import ./agda {
