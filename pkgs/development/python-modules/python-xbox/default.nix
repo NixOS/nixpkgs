@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-xbox";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "python-xbox";
     tag = "v${version}";
-    hash = "sha256-hYkxoypKqG+UtATplR3j5aSpGxsyyXGsINlYHBMlBvw=";
+    hash = "sha256-Aw6EdGkKDEb75mAPZm+z4V1Y4sCNGIxbOmSE9tv1YFY=";
   };
 
   build-system = [
