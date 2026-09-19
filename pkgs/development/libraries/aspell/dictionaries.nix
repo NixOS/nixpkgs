@@ -385,10 +385,10 @@ rec {
 
   en = buildOfficialDict {
     language = "en";
-    version = "2020.12.07-0";
+    version = "2026.02.25-0";
     fullName = "English";
     filename = "aspell6";
-    sha256 = "1cwzqkm8gr1w51rpckwlvb43sb0b5nbwy7s8ns5vi250515773sc";
+    sha256 = "d6XLQ3xF0RFfO1k4AsIGUdjJOAPtEHMnjcGhJAAW8Q0=";
     # some parts are under a custom free license others are just stated to be"public domain"
     # see the Copyright file in the source for further information
     meta.license = with lib.licenses; [
