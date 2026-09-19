@@ -5,6 +5,7 @@
   sslLibrary ? "openssl",
   stdenv,
   lib,
+  fetchpatch2,
   fetchurl,
   nixosTests,
   zlib,
@@ -39,6 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
     hash = "sha256-sMUFPE1GhA7N7jklc2/po95kclWbQ8aRg9cOWT2RM98=";
   };
+
+  patches = [
+    # Remove once the packaged release fixes CVE-2026-90678.
+    (fetchpatch2 {
+      name = "CVE-2026-90678.patch";
+      url = "https://github.com/haproxy/haproxy/commit/86a4ebc761a278838e8cb06f3a292282ba704c65.patch?full_index=1";
+      hash = "sha256-GTI9c1Y3d7DN2m11eODM3FkY2Aitrndi3CTI2Tr95OU=";
+    })
+  ];
 
   buildInputs = [
     sslPkg

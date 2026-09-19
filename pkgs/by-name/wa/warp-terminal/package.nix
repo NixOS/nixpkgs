@@ -128,7 +128,10 @@ let
   meta = {
     description = "Rust-based terminal";
     homepage = "https://www.warp.dev";
-    license = lib.licenses.unfree;
+    license = with lib.licenses; [
+      mit
+      agpl3Only
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       _4evy

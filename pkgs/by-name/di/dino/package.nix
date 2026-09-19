@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     mainProgram = "dino";
     homepage = "https://github.com/dino/dino";

@@ -17,6 +17,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-vKlnW6Z0Rg2bptU5fxIKDaOY2b+WY/fgaYZQu5tBU44=";
   };
 
+  # The upstream test suite assumes a case-sensitive filesystem and
+  # undecodable filenames on disk, which do not behave the same way on Darwin.
+  patches = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+    ./undecodable-filenames.patch
+    ./case-insensitive-filesystem.patch
+  ];
+
   build-system = with python3.pkgs; [
     setuptools
   ];

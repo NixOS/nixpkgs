@@ -8,17 +8,14 @@
   nix-update-script,
 }:
 
-let
-  version = "0.16.10";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "mrpack-install";
-  inherit version;
+  version = "0.16.10";
 
   src = fetchFromGitHub {
     owner = "nothub";
     repo = "mrpack-install";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mTAXFK97t10imdICpg0UI4YLF744oscJqoOIBG5GEkc=";
   };
 
@@ -26,8 +23,7 @@ buildGoModule {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/nothub/mrpack-install/buildinfo.version=${version}"
+    "-X github.com/nothub/mrpack-install/buildinfo.Version=${finalAttrs.version}"
     "-X github.com/nothub/mrpack-install/buildinfo.date=1970-01-01T00:00:00Z"
   ];
 
@@ -51,6 +47,11 @@ buildGoModule {
         "TestClient_GetProjects_Slug"
         "TestClient_GetVersions"
         "TestGetPlayerUuid"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # /tmp is a symlink to /private/tmp on Darwin, breaking hardcoded path prefix checks
+        "TestPathTraversalAbsolute"
+        "TestPathTraversalRelative"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -79,4 +80,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ encode42 ];
     mainProgram = "mrpack-install";
   };
-}
+})
