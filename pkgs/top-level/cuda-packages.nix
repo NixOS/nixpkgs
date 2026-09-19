@@ -55,7 +55,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "12.8.1";
+      cuda = "12.8.2";
       cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
@@ -82,7 +82,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "12.9.1";
+      cuda = "12.9.2";
       cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
@@ -135,7 +135,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.1.1";
+      cuda = "13.1.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -158,7 +158,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.2.1";
+      cuda = "13.2.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -181,7 +181,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.3.0";
+      cuda = "13.3.1";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -204,7 +204,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.4.1";
+      cuda = "13.4.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";

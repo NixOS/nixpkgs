@@ -1,6 +1,6 @@
 {
-    "release_date": "2025-06-05",
-    "release_label": "12.9.1",
+    "release_date": "2026-05-14",
+    "release_label": "12.9.2",
     "release_product": "cuda",
     "collectx_bringup": {
         "name": "UFM telemetry CollectX Bringup",
@@ -624,30 +624,30 @@
         "name": "CUDA cuBLAS",
         "license": "CUDA Toolkit",
         "license_path": "libcublas/LICENSE.txt",
-        "version": "12.9.1.4",
+        "version": "12.9.2.10",
         "linux-x86_64": {
-            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.9.1.4-archive.tar.xz",
-            "sha256": "546addc4a9d82b8f23aa9ba9274b6bc0429a63008a31c759884ac24880796057",
-            "md5": "9b07f0c3d94534e56e003c6016b9771c",
-            "size": "933611504"
+            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.9.2.10-archive.tar.xz",
+            "sha256": "c80a724aafa1ee49110b0d3385316ea54d418b03e796e91e8f0b47d52f8022fd",
+            "md5": "655b16ec86c0525b0d7e280cdf43ece9",
+            "size": "944339140"
         },
         "linux-sbsa": {
-            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-12.9.1.4-archive.tar.xz",
-            "sha256": "e99b074e6f66034e563508118804599d7579f73afc8424c55ad5fd8d12e085a5",
-            "md5": "4c7cdc43283c0ba62e665b02e9ec7540",
-            "size": "932528492"
+            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-12.9.2.10-archive.tar.xz",
+            "sha256": "da12f27cc758a5bfcc98dba81670eb67e4a10e994587a1183879c96726009a49",
+            "md5": "a22a3d34c2e0edb18c63ce6850f6749b",
+            "size": "940215464"
         },
         "windows-x86_64": {
-            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-12.9.1.4-archive.zip",
-            "sha256": "d534d98b0b453a98914dbf3adf47d7e84b55037abf02f87466439e1dcef581ed",
-            "md5": "3f092963b0767968fe6f02febc1b0cbf",
-            "size": "549755186"
+            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-12.9.2.10-archive.zip",
+            "sha256": "62782c354e1536118caab8fe5fd295ac5fd9076e4814aba0bdaf032fe2b833ae",
+            "md5": "08f474ec4bc1a0b3bcd54078bb66abdf",
+            "size": "549731131"
         },
         "linux-aarch64": {
-            "relative_path": "libcublas/linux-aarch64/libcublas-linux-aarch64-12.9.1.4-archive.tar.xz",
-            "sha256": "f75938d72153902cf08d1666311f35851e7eb6a16af743b2346bc68d7ba6b341",
-            "md5": "15f6396431885647e961af811a90cc06",
-            "size": "493899648"
+            "relative_path": "libcublas/linux-aarch64/libcublas-linux-aarch64-12.9.2.10-archive.tar.xz",
+            "sha256": "e3fbb04bead0dc536879956061d307eb0c870d36026742d5a548c084b633afdc",
+            "md5": "a7bc52d3393f7970004d45def584e1ce",
+            "size": "495495400"
         }
     },
     "libcudla": {
