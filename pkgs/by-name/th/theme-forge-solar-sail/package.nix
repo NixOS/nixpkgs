@@ -4,6 +4,8 @@
   fetchurl,
   makeWrapper,
   nodejs_22,
+  python3,
+  runCommand,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -18,6 +20,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-E70mcQ877ZVVXgQKatLhPv2RQkQC7Ya+KTTIru0Y5oQ=";
   };
 
+  # Upstream's release contains readable, transpiled JavaScript and no runtime
+  # npm dependencies. This installs those published files, not a TypeScript build.
   sourceRoot = "package";
   nativeBuildInputs = [ makeWrapper ];
 
@@ -30,11 +34,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.tests.smoke =
+    runCommand "${finalAttrs.pname}-smoke"
+      {
+        __structuredAttrs = true;
+        strictDeps = true;
+        nativeBuildInputs = [ python3 ];
+      }
+      ''
+        export HOME="$TMPDIR/home"
+        mkdir -p "$HOME"
+        python ${./smoke-test.py} ${finalAttrs.finalPackage}
+        touch "$out"
+      '';
+
   meta = {
     description = "Tailwind v4 and shadcn/ui application theme compiler and CLI";
     homepage = "https://github.com/Knowledge-Forge-AI/theme-forge-solar-sail";
+    changelog = "https://github.com/Knowledge-Forge-AI/theme-forge-solar-sail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.lair001 ];
     mainProgram = "tfss";
-    platforms = lib.platforms.all;
+    platforms = nodejs_22.meta.platforms;
   };
 })
