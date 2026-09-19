@@ -1,0 +1,137 @@
+From 281a48f8b1c202ac291688b7db4d9143cdffba49 Mon Sep 17 00:00:00 2001
+From: DanConwayDev <DanConwayDev@protonmail.com>
+Date: Sat, 19 Sep 2026 20:16:59 +0000
+Subject: [PATCH] test(grasp): retain logs for self-defer repair failures
+
+Native nixpkgs reviews on both Linux architectures intermittently report
+a state-publication rejection in the lead-role repair test. The fixture
+discarded all relay output, so the SDK response error: unknown could not
+be traced to the server state.
+
+Capture stdout and stderr in the existing per-fixture temporary
+directory, keeping passing tests quiet. Expose a bounded log tail and
+attach it to errors in the paired lead and co-maintainer continuation
+tests before their harness is dropped. This handles Result errors as
+well as panics, without changing event ordering, deadlines or
+publication behavior. Document the diagnostic API.
+
+Validation: formatting and diff checks pass; a standalone harness using
+the exact log-tail method verifies missing-file handling and the output
+bound. The existing pre-release compiled repo_edit binary passed 16
+cases with separately captured Grasp logs, but does not validate this
+revision. Full Cargo checks remain for host/CI; the intermittent
+rejection is not claimed fixed.
+
+Assisted-by: Codex (GPT-6)
+---
+ docs/architecture/test-harness.md |  9 ++++++++
+ test_harness/src/grasp.rs         | 38 +++++++++++++++++++++++++++----
+ tests/repo_edit.rs                |  8 +++++--
+ 3 files changed, 48 insertions(+), 7 deletions(-)
+
+diff --git a/docs/architecture/test-harness.md b/docs/architecture/test-harness.md
+index 08b3b054..b82894aa 100644
+--- a/docs/architecture/test-harness.md
++++ b/docs/architecture/test-harness.md
+@@ -447,3 +447,12 @@ tests cover fixed-date exhaustion. For reader tie-break tests, build two events
+ at the same timestamp and sort their IDs; do not mine against a random fixture.
+ An ID-guard nonce is valid even for a strictly later update, so tests must not
+ require such updates to be nonce-free.
++
++### Grasp failure diagnostics
++
++Grasp subprocess output is captured in the fixture's temporary `fixture.log`.
++Successful tests stay quiet. When a command returns an error, attach
++`GraspServer::log_tail()` as error context before dropping the harness; it
++returns at most the final 64 KiB of subprocess output plus a label. This also
++works for tests returning `Result::Err`, where panic-only cleanup logging
++would miss the failure. Logs are diagnostic evidence, not test assertions.
+diff --git a/test_harness/src/grasp.rs b/test_harness/src/grasp.rs
+index 7b4618a3..43590a69 100644
+--- a/test_harness/src/grasp.rs
++++ b/test_harness/src/grasp.rs
+@@ -222,6 +222,13 @@ impl GraspServer {
+             .context("failed to allocate tempdir for ngit-grasp git data")
+             .map_err(StartFailure::Other)?;
+         let git_data_path = git_data_dir.path().to_path_buf();
++        let log = std::fs::File::create(git_data_path.join("fixture.log"))
++            .context("create Grasp fixture log")
++            .map_err(StartFailure::Other)?;
++        let stderr = log
++            .try_clone()
++            .context("clone Grasp fixture log handle")
++            .map_err(StartFailure::Other)?;
+
+         // Build the Command *before* releasing the reservation so that
+         // none of the env-setting allocations happen while the listener
+@@ -242,11 +249,10 @@ impl GraspServer {
+             .env("NGIT_SYNC_STARTUP_DELAY_SECS", "0")
+             .env("NGIT_SYNC_STARTUP_JITTER_MS", "0")
+             .env("NGIT_SYNC_DISCONNECT_CHECK_INTERVAL_SECS", "1")
+-            // Detach from the test's stdio. Tests assert on the harness's
+-            // event store / git state, not on ngit-grasp logs — and noisy
+-            // INFO output makes `cargo test --nocapture` unreadable.
+-            .stdout(Stdio::null())
+-            .stderr(Stdio::null());
++            // Keep successful tests quiet, but retain diagnostics for callers
++            // reporting a failure before the fixture's temporary data is gone.
++            .stdout(Stdio::from(log))
++            .stderr(Stdio::from(stderr));
+
+         // Opt the subprocess into GRASP-06 `/prs/` endpoint support when
+         // requested. The env var is consumed by ngit-grasp's config layer
+@@ -426,6 +432,28 @@ impl GraspServer {
+         &self.git_data_path
+     }
+
++    /// Last 64 KiB of subprocess output, for failure context rather than
++    /// assertions.
++    pub fn log_tail(&self) -> String {
++        use std::io::{Read, Seek, SeekFrom};
++        let tail = (|| -> std::io::Result<Vec<u8>> {
++            let mut file = std::fs::File::open(self.git_data_path.join("fixture.log"))?;
++            let start = file.metadata()?.len().saturating_sub(64 * 1024);
++            file.seek(SeekFrom::Start(start))?;
++            let mut bytes = Vec::new();
++            file.take(64 * 1024).read_to_end(&mut bytes)?;
++            Ok(bytes)
++        })();
++        match tail {
++            Ok(bytes) => format!(
++                "Grasp fixture {} log tail:\n{}",
++                self.role,
++                String::from_utf8_lossy(&bytes)
++            ),
++            Err(error) => format!("Could not read Grasp fixture {} log: {error}", self.role),
++        }
++    }
++
+     /// Query ngit-grasp's nostr surface over a real websocket REQ. Identical
+     /// shape to [`crate::VanillaRelay::events`]; the wire path is the same,
+     /// only the server implementation differs.
+diff --git a/tests/repo_edit.rs b/tests/repo_edit.rs
+index dcb7983a..7f8e094c 100644
+--- a/tests/repo_edit.rs
++++ b/tests/repo_edit.rs
+@@ -1329,7 +1329,9 @@ async fn self_defer_continue_repair_republishes_the_active_lead_role() -> Result
+     publish_to_relay(harness.relay("default").url(), &[&malformed]).await?;
+     publish_to_relay(&harness.grasp("repo").relay_url(), &[&malformed]).await?;
+
+-    edit_ok(&publisher, &["--repair-self-defer", "M=continue"]).await?;
++    edit_ok(&publisher, &["--repair-self-defer", "M=continue"])
++        .await
++        .with_context(|| harness.grasp("repo").log_tail())?;
+
+     let repaired = latest_announcement(&harness, alice, &published.identifier).await?;
+     assert_eq!(
+@@ -1374,7 +1376,9 @@ async fn self_defer_continue_repair_republishes_the_active_co_maintainer_role()
+     publish_to_relay(harness.relay("default").url(), &[&malformed]).await?;
+     publish_to_relay(&harness.grasp("repo").relay_url(), &[&malformed]).await?;
+
+-    edit_ok(&publisher, &["--repair-self-defer", "m=continue"]).await?;
++    edit_ok(&publisher, &["--repair-self-defer", "m=continue"])
++        .await
++        .with_context(|| harness.grasp("repo").log_tail())?;
+
+     let repaired = latest_announcement(&harness, alice, &published.identifier).await?;
+     assert_eq!(
