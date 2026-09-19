@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.evilwm;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";
+  options.services.xserver.windowManager.evilwm = {
+    enable = lib.mkEnableOption "evilwm";
+    package = lib.mkPackageOption pkgs "evilwm" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "evilwm";
       start = ''
-        ${pkgs.evilwm}/bin/evilwm &
+        ${cfg.package}/bin/evilwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.evilwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
