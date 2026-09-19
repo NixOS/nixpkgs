@@ -4,6 +4,7 @@
   fetchurl,
   perl,
   autoconf,
+  automake,
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ autoconf ];
 
-  setupHook = ./setup-hook.sh;
+  inherit (automake) setupHook;
 
   doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
   doInstallCheck = false; # runs the same thing, fails the same tests
