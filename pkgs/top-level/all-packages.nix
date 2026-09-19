@@ -8262,11 +8262,6 @@ with pkgs;
 
   arelle = with python3Packages; toPythonApplication arelle;
 
-  astroid = callPackage ../applications/networking/mailreaders/astroid {
-    vim = vim-full.override { features = "normal"; };
-    protobuf = protobuf_21;
-  };
-
   audacious = audacious-bare.override { withPlugins = true; };
 
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
