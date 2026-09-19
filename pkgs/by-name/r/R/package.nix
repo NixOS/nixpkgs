@@ -35,6 +35,7 @@
   withRecommendedPackages ? false,
   enableStrictBarrier ? false,
   enableMemoryProfiling ? false,
+  enableJava ? true,
   # R as of writing does not support outputting both .so and .a files; it outputs:
   #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
   static ? false,
@@ -105,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     tcl
     tk
-    jdk
-  ];
+  ]
+  ++ lib.lists.optional enableJava jdk;
   strictDeps = true;
 
   patches = [
@@ -149,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      JAVA_HOME="${jdk}"
+      ${if enableJava then "JAVA_HOME='${jdk}'" else "--disable-java"}
       RANLIB=$(type -p ranlib)
       CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
       r_cv_have_curl728=yes
@@ -243,7 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libR" ];
     platforms = lib.platforms.all;
 
-    maintainers = with lib.maintainers; [ jbedo ];
+    maintainers = with lib.maintainers; [
+      jbedo
+      haansn08
+    ];
     teams = [ lib.teams.sage ];
   };
 })
