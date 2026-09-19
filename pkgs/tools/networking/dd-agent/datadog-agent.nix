@@ -111,7 +111,7 @@ buildGoModule rec {
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     wrapProgram "$out/bin/agent" \
-      --set PYTHONPATH "$out/${python.sitePackages}"''
+      --set PYTHONPATH "${python}/${python.sitePackages}:$out/${python.sitePackages}"''
   + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
      lib.makeLibraryPath [
        (lib.getLib systemd)
