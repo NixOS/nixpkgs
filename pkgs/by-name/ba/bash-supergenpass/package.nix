@@ -11,15 +11,15 @@
 
 stdenv.mkDerivation {
   pname = "bash-supergenpass";
-  version = "0-unstable-2024-03-24";
+  version = "0-unstable-2026-04-09";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "lanzz";
     repo = "bash-supergenpass";
-    rev = "03416ad4d753d825acd0443a01ac13d385d5e048";
-    sha256 = "Q+xmT72UFCc71K87mAzpyTmEIXjR9SqX0xzmQfi5P9k=";
+    rev = "0d1e6d7f1f0ea8d1f5bd609013651ea2c32386f0";
+    sha256 = "T9cPMeGIbCfqkGylNObeg2RFBS0zFmmJNED5VRaUCoo=";
   };
 
   installPhase = ''
