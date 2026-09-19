@@ -211,12 +211,42 @@ in
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
         ExecReload = lib.mkIf (config.systemd.mainExecReload != null) config.systemd.mainExecReload;
-        Type = lib.mkDefault (if config.notificationProtocol.systemd then "notify" else "simple");
-        Restart = lib.mkDefault "always";
-        RestartSec = lib.mkDefault "5";
+
+        # "simple" is special-cased: it auto-upgrades to "notify" when the
+        # service opts into the systemd notification protocol. Explicit
+        # lifecycle types are passed through verbatim.
+        Type = lib.mkDefault (
+          if config.process.type == "simple" && config.notificationProtocol.systemd then
+            "notify"
+          else
+            config.process.type
+        );
+
+        Restart = lib.mkDefault (if config.restart.policy == "never" then "no" else config.restart.policy);
+        RestartSec = lib.mkDefault (toString config.restart.delay);
         ExecStart = [
           config.systemd.mainExecStart
         ];
+
+        # Runtime context
+        User = lib.mkDefault config.runtime.user;
+        Group = lib.mkDefault config.runtime.group;
+        WorkingDirectory = lib.mkIf (config.runtime.workingDirectory != null) (
+          lib.mkDefault config.runtime.workingDirectory
+        );
+        Environment = lib.mkDefault (
+          lib.mapAttrsToList (name: value: "${name}=${value}") config.environment
+        );
+
+        # Process lifecycle
+        KillSignal = lib.mkIf (config.process.stopSignal != null) (lib.mkDefault config.process.stopSignal);
+        TimeoutStartSec = lib.mkIf (config.process.startTimeout != null) (
+          lib.mkDefault (toString config.process.startTimeout)
+        );
+        TimeoutStopSec = lib.mkIf (config.process.stopTimeout != null) (
+          lib.mkDefault (toString config.process.stopTimeout)
+        );
+        RemainAfterExit = lib.mkIf (config.process.type == "oneshot") (lib.mkDefault true);
       };
     };
   };
