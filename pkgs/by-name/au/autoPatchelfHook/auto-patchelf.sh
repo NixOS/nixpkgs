@@ -28,13 +28,14 @@ addAutoPatchelfSearchPath() {
         esac
     done
 
+    # Sort in the C locale. find's order is not reproducible.
     local dir=
     while IFS= read -r -d '' dir; do
         extraAutoPatchelfLibs+=("$dir")
     done <  <(find "$@" "${findOpts[@]}" \! -type d \
             \( -name '*.so' -o -name '*.so.*' \) -print0 \
             | sed -z 's#/[^/]*$##' \
-            | uniq -z
+            | LC_ALL=C sort -z -u
         )
 }
 
