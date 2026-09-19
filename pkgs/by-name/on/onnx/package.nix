@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
+    hash = "sha256-Hnp6LMlqV1r4vqeSDvNrPYBiTNANcEcIH4IPT87j37A=";
   };
 
   # We can't use pythonRelaxDeps as we're not using buildPythonPackage
