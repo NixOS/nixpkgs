@@ -1,7 +1,12 @@
 { lib }:
 
 let
-  inherit (lib) all any elem;
+  inherit (lib)
+    all
+    any
+    elem
+    optionalAttrs
+    ;
   handleComplexProperty =
     evaluateSubProperty: AND: OR: license:
     if license.licenseType == "compound" then
@@ -184,4 +189,58 @@ rec {
       "${mkBracket license.license}${license.operator}"
     else
       throw "Unknown license type";
+
+  /**
+    Create a license.
+
+    # Inputs
+
+    `licenseInfo`
+    : Attrset of license infromation
+
+    # Type
+
+    ```
+    mkLicense :: AttrSet -> AttrSet
+    ```
+
+    # Example
+    :::{.example}
+    ## `lib.licenses.mkLicense` usage example
+
+    ```nix
+    mkLicense { shortName = "my-license"; }
+    => { shortName = "my-license"; free = true; deprecated = false; redistributable = true; licenseType = "simple"; }
+    ```
+  */
+  mkLicense =
+    {
+      shortName,
+      # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true,
+      deprecated ? false,
+      spdxId ? null,
+      url ? null,
+      fullName ? null,
+      redistributable ? free,
+    }@attrs:
+    {
+      inherit
+        shortName
+        free
+        deprecated
+        redistributable
+        ;
+      licenseType = "simple";
+    }
+    // optionalAttrs (attrs ? spdxId) {
+      inherit spdxId;
+      url = "https://spdx.org/licenses/${spdxId}.html";
+    }
+    // optionalAttrs (attrs ? url) {
+      inherit url;
+    }
+    // optionalAttrs (attrs ? fullName) {
+      inherit fullName;
+    };
 }
