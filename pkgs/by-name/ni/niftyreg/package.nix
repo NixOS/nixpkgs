@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "niftyreg";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "KCL-BMEIS";
     repo = "niftyreg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtAbcxqvZ5Kt2UMqtnx0aQg73ligQNTktKZjoa+GXvk=";
+    hash = "sha256-DxbX/2/sSK/dNza8eSf1ITrOYBmRpMmFJ3/nmgbuNY8=";
   };
 
   postPatch = ''
