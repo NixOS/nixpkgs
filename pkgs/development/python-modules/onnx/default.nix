@@ -22,6 +22,7 @@ buildPythonPackage {
     ;
 
   format = "wheel";
+  __structuredAttrs = true;
 
   dontUseWheelUnpack = true;
 
@@ -61,7 +62,7 @@ buildPythonPackage {
   '';
 
   enabledTestPaths = [
-    "onnx/test"
+    "tests"
   ];
 
   __darwinAllowLocalNetworking = true;
