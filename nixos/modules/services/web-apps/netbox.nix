@@ -563,6 +563,15 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion =
+              cfg.postgresql.createLocally
+              -> lib.versionAtLeast config.services.postgresql.finalPackage.version "15";
+            message = "NetBox requires PostgreSQL >= 15. Please read the NixOS manual to upgrade your PostgreSQL version.";
+          }
+        ];
+
         services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
 
         services.redis.servers.netbox.enable = cfg.redis.createLocally;
@@ -731,26 +740,6 @@ in
                   "low"
                 ];
                 PrivateTmp = true;
-              };
-            };
-
-            netbox-housekeeping = defaultUnitConfig // {
-              description = "NetBox housekeeping job";
-
-              wantedBy = [ "multi-user.target" ];
-
-              after = [
-                "network-online.target"
-                "netbox.service"
-              ];
-              wants = [ "network-online.target" ];
-
-              serviceConfig = defaultServiceConfig // {
-                Type = "oneshot";
-                ExecStart = toString [
-                  (lib.getExe finalPackage)
-                  "housekeeping"
-                ];
               };
             };
           };
