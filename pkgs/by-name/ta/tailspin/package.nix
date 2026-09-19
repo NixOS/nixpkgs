@@ -2,28 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
+  procps,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     tag = finalAttrs.version;
-    hash = "sha256-9+uu9q9tGIWFnyYpy+HHD5UUCsxUDLRlZlo0Ap4ezsY=";
+    hash = "sha256-RI604v8ImQSgvNUGsnCLe6FuzEMJwE0tNVuFLmJLwvM=";
   };
 
-  cargoHash = "sha256-C3OORW5aeDrRDTlfvRNW3RLE0p8wFs1qbIKl/XpzThs=";
+  cargoHash = "sha256-kcd6rBoonoCKuybVIVtZqt+njHFhVDTjTyF2UURuOSI=";
 
-  postPatch = ''
-    substituteInPlace tests/utils.rs --replace-fail \
-      'target/debug' "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
-  '';
+  nativeCheckInputs = [ procps ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/tspin";
