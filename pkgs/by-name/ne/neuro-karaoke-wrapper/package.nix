@@ -1,4 +1,9 @@
-{ lib, appimageTools, fetchurl, nix-update-script }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  nix-update-script,
+}:
 appimageTools.wrapType2 rec {
   pname = "neuro-karaoke-wrapper";
   version = "1.8.1";
