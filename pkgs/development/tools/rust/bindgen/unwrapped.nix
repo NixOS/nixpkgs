@@ -11,15 +11,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.72.1";
+  version = "0.73.1";
 
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    hash = "sha256-rhdQZcnlqVSUqvFDg0Scs1+DHGcKyazeS5H9HH7u8Fk=";
+    hash = "sha256-EClYOhkZVtjQh+ix+eYUKyPETyhMnHvYZAYQbaUdP2U=";
   };
 
-  cargoHash = "sha256-YNpqVB+zdZ76Av2L+yQuBrxKvNML9+3H7ES4+7mED0E=";
+  cargoHash = "sha256-vc5+ByhCtaVSmxZGcdfrDMCrlJ0IQL+Yfjk4qGKT44c=";
 
   preConfigure = ''
     export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
