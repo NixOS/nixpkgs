@@ -2431,6 +2431,8 @@ self: super: with self; {
 
   biocframe = callPackage ../development/python-modules/biocframe { };
 
+  biocommons-seqrepo = callPackage ../development/python-modules/biocommons-seqrepo { };
+
   biocutils = callPackage ../development/python-modules/biocutils { };
 
   biom-format = callPackage ../development/python-modules/biom-format { };
@@ -2442,6 +2444,8 @@ self: super: with self; {
   biosppy = callPackage ../development/python-modules/biosppy { };
 
   biothings-client = callPackage ../development/python-modules/biothings-client { };
+
+  bioutils = callPackage ../development/python-modules/bioutils { };
 
   bip-utils = callPackage ../development/python-modules/bip-utils { };
 
