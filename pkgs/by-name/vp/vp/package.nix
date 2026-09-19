@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vp";
-  version = "1.8-unstable-2025-09-15";
+  version = "1.8-unstable-2026-07-20";
 
   src = fetchFromGitHub {
     owner = "erikg";
     repo = "vp";
-    rev = "12ab0c49a7d837af8370b91d3f6e4fa11789e57a";
-    hash = "sha256-Ea1p9NLk7tW3elU0zmlPAkobyv+yLYeKv5hscJTFJhs=";
+    rev = "56d14ed3c410ed1b5833f71d7cc6d305b73fac8b";
+    hash = "sha256-7Pjs4h58gKPzXVOE8f4cCg84kmYBeyyGI1zTQlQU12U=";
   };
 
   nativeBuildInputs = [
