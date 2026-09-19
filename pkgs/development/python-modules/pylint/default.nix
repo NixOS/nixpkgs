@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "4.0.6-unstable-2026-07-14";
+  version = "4.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
