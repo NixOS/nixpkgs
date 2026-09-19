@@ -69,6 +69,11 @@ import ./make-test-python.nix (
   {
     name = "os-prober";
 
+    meta = {
+      # NixOS VM tests cannot run on darwin.
+      platforms = lib.platforms.linux;
+    };
+
     nodes.machine =
       { config, pkgs, ... }:
       (
