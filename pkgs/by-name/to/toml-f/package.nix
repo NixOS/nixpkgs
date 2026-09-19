@@ -20,7 +20,7 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml-f";
-  version = "0.5.1";
+  version = "0.5.2";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "toml-f";
     repo = "toml-f";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lReez2rSAJVnLFngjUYgGkm+HUDH8VsCC2m9zYOOr4A=";
+    hash = "sha256-26aFgG6NsrqN5q0A5MYItxVpjIQaBEg5P0LIeDnNyuA=";
   };
 
   patches = [
