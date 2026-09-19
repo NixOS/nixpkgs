@@ -3629,6 +3629,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connector-x = callPackage ../development/python-modules/connector-x { };
+  
   connectrpc = callPackage ../development/python-modules/connectrpc { };
 
   connexion = callPackage ../development/python-modules/connexion { };
