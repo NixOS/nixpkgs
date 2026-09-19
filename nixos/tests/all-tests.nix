@@ -964,6 +964,7 @@ in
     inherit runTest pkgs;
   };
   kaidan = runTest ./kaidan;
+  kanbn = runTest ./web-apps/kanbn.nix;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
