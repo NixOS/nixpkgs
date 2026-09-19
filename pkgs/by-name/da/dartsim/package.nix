@@ -73,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dartsim/dart/commit/6f3d6086780a311ef6e1928697f56a4d845ae028.patch";
       hash = "sha256-sfbTm9C74fl7lVnGPZ1h3cvKXILHhkeNYxd/BpSQvg8=";
     })
+    # ref. https://github.com/dartsim/dart/pull/2525 (for v7)
+    (fetchpatch {
+      url = "https://github.com/dartsim/dart/commit/7c3279ecef0ee27dbd76da8562b71407928996be.patch";
+      hash = "sha256-0jMy55FCN8mU3Mp2IFiczxnTCjlF3tufWqz1QHeOAyk=";
+    })
   ];
 
   # Install python bindings
