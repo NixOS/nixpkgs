@@ -8,6 +8,7 @@
   libxml2,
   lz4,
   openssl,
+  perl,
   pkg-config,
   readline,
   stdenv,
@@ -55,6 +56,9 @@ in
     nativeBuildInputs = [
       bison
       flex
+      # Unconditional like stock postgresql: configure probes for perl
+      # regardless of PL/Perl support.
+      perl
       pkg-config
     ];
 
@@ -83,12 +87,12 @@ in
       "--with-zstd"
     ];
 
-  env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
+    env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
 
-  strictDeps = true;
-  __structuredAttrs = true;
+    strictDeps = true;
+    __structuredAttrs = true;
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
     postInstall = ''
       # Gel-coupled extensions, built exactly like upstream's in-tree build
