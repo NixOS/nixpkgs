@@ -10,7 +10,6 @@ from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
@@ -31,7 +30,11 @@ from .process import run_wrapper, ssh_default_opts
 from .utils import Args, dict_to_flags
 
 local_tz: Final = datetime.now().astimezone().tzinfo
+logger: Final = logging.getLogger(__name__)
 
+GET_GENERATIONS_SCRIPT: Final = (
+    files(__package__).joinpath("get_generations.sh").read_text()
+)
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
 SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
@@ -51,7 +54,6 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
 ]
-logger: Final = logging.getLogger(__name__)
 
 
 def build(
@@ -423,75 +425,30 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         return None
 
 
-def get_generations(profile: Profile) -> list[Generation]:
+def get_generations(
+    profile: Profile,
+    target_host: Remote | None = None,
+) -> list[Generation]:
     """Get all NixOS generations from profile.
 
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
     and if this is the current active profile or not.
     """
-    if not profile.path.exists():
-        raise NixOSRebuildError(f"no profile '{profile.name}' found")
 
-    def parse_path(path: Path, profile: Profile) -> Generation:
-        entry_id = path.name.split("-")[1]
-        current = path.name == profile.path.readlink().name
-        timestamp = datetime.fromtimestamp(
-            timestamp=path.stat().st_ctime,
-            tz=local_tz,
-        ).strftime("%Y-%m-%d %H:%M:%S")
-
-        return Generation(
-            id=int(entry_id),
-            timestamp=timestamp,
-            current=current,
+    try:
+        r = run_wrapper(
+            ["sh", "-c", GET_GENERATIONS_SCRIPT, "get-generations", profile.path],
+            capture_output=True,
+            remote=target_host,
         )
+    except CalledProcessError as ex:
+        # Capture the CalledProcessError and re-raise here as NixOSRebuildError,
+        # otherwise the default error handling will make this error too verbose
+        raise NixOSRebuildError(ex.stderr) from ex
 
     return sorted(
-        [
-            parse_path(p, profile)
-            for p in profile.path.parent.glob(f"{profile.name}-*-link")
-        ],
-        key=lambda d: d.id,
-    )
-
-
-def get_generations_from_nix_env(
-    profile: Profile,
-    target_host: Remote | None = None,
-    elevate: Elevator = NO_ELEVATOR,
-) -> list[Generation]:
-    """Get all NixOS generations from profile with nix-env. Needs root.
-
-    Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
-    and if this is the current active profile or not.
-    """
-    if not profile.path.exists():
-        raise NixOSRebuildError(f"no profile '{profile.name}' found")
-
-    # Using `nix-env --list-generations` needs root to lock the profile
-    r = run_wrapper(
-        ["nix-env", "-p", profile.path, "--list-generations"],
-        stdout=PIPE,
-        remote=target_host,
-        elevate=elevate,
-    )
-
-    def parse_line(line: str) -> Generation:
-        parts = line.split()
-
-        entry_id = parts[0]
-        timestamp = f"{parts[1]} {parts[2]}"
-        current = "(current)" in parts
-
-        return Generation(
-            id=int(entry_id),
-            timestamp=timestamp,
-            current=current,
-        )
-
-    return sorted(
-        [parse_line(line) for line in r.stdout.splitlines()],
-        key=lambda d: d.id,
+        (Generation(**json.loads(line)) for line in r.stdout.splitlines()),
+        key=lambda generation: generation.id,
     )
 
 
@@ -639,12 +596,9 @@ def rollback(profile: Profile, target_host: Remote | None, elevate: Elevator) ->
 def rollback_temporary_profile(
     profile: Profile,
     target_host: Remote | None,
-    elevate: Elevator,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations_from_nix_env(
-        profile, target_host=target_host, elevate=elevate
-    )
+    generations = get_generations(profile, target_host=target_host)
     previous_gen_id = None
     for generation in generations:
         if not generation.current:
@@ -672,7 +626,7 @@ def set_profile(
             check=False,
         )
         if r.returncode:
-            msg = dedent(
+            msg = textwrap.dedent(
                 # the lowercase for the first letter below is proposital
                 f"""
                     your NixOS configuration path seems to be missing essential files.
