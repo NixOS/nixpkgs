@@ -58,8 +58,17 @@ let
 
   finalConfig = defaultConfig // cfg.settings;
 
-  cfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
-
+  cfgFile =
+    let
+      origCfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
+    in
+    pkgs.runCommandLocal "validated-config.ini" { } ''
+      cat ${origCfgFile} > $out
+      if ! ${lib.getExe ly} --validate-config $out; then
+        echo "Your generated configuration for ly the display manager is invalid."
+        exit 1
+      fi
+    '';
 in
 {
   options = {
