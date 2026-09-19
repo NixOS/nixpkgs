@@ -24469,6 +24469,12 @@
     githubId = 220211;
     name = "Renato Garcia";
   };
+  rendergraf = {
+    name = "Xavier Araque";
+    email = "xavieraraque@gmail.com";
+    github = "rendergraf";
+    githubId = 5533099;
+  };
   renesat = {
     name = "Ivan Smolyakov";
     email = "smol.ivan97@gmail.com";
