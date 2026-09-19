@@ -8351,6 +8351,11 @@
     githubId = 5300871;
     name = "Leon Kowarschick";
   };
+  EllianCarlos = {
+    github = "EllianCarlos";
+    githubId = 17656878;
+    name = "Ellian Carlos";
+  };
   elliot = {
     email = "hack00mind@gmail.com";
     github = "Eliot00";
