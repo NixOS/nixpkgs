@@ -10,7 +10,6 @@
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
-  nix-update-script,
 }:
 let
   yarn-berry = yarn-berry_4;
@@ -19,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.68.0";
+  version = "3.69.0";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LNh9F2aKxVegZTAPuEAqo2f78ynGMgnpwnDXEP1u2+M=";
+    hash = "sha256-VNG23I5o9FjoFbiF6FyOG/g72XrF4FloIyd08zIKQRU=";
   };
 
   patches = [
@@ -122,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-o0u9dAoo0sTEV+kjQg8TjRNAIcx8fqfk79HsDwAXriA=";
+    hash = "sha256-ioTQKZrT0lFnlmjVJL/kS5yP+oCw1GUZx0LWK2BqBq0=";
   };
 
   postConfigure = ''
@@ -167,11 +166,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://losslesscut.app/";
+    changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       shelvacu
