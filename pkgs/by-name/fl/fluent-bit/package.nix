@@ -85,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLB_RELEASE" true)
     (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Auto would raise the baseline to rv64gcv_zba
+    (lib.cmakeFeature "FLB_SIMD" "Off")
+  ]
   ++ lib.optionals stdenv.cc.isClang [
     # `FLB_SECURITY` causes bad linker options for Clang to be set.
     (lib.cmakeBool "FLB_SECURITY" false)
