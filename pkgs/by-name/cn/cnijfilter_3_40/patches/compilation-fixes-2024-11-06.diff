@@ -1,0 +1,171 @@
+diff --git a/cngpij/cngpij/bjcups.c b/cngpij/cngpij/bjcups.c
+index b2bce88..e2582bf 100755
+--- a/cngpij/cngpij/bjcups.c
++++ b/cngpij/cngpij/bjcups.c
+@@ -718,8 +718,8 @@ static short getDeviceURI( char *pDestName, char *pDeviceURI, short bufSize)
+ 					*pResponse;					// Pointer to CUPS IPP response.
+ 	ipp_attribute_t	*pAttribute;				// Pointer to CUPS attributes.
+ 	cups_lang_t		*pLanguage;					// Pointer to language.
+-	char			*pPrinter = NULL;			// Pointer to printer name.
+-	char			*pDUri = NULL;				// Pointer to Device uri.
++	const char		*pPrinter = NULL;			// Pointer to printer name.
++	const char		*pDUri = NULL;				// Pointer to Device uri.
+ 	short			retVal = -1;	// Return value.
+ /*** Parameters end ***/
+ 	
+@@ -750,7 +750,7 @@ static short getDeviceURI( char *pDestName, char *pDeviceURI, short bufSize)
+ 
+ 				while (pAttribute != NULL) {
+ 					while (pAttribute != NULL && ippGetGroupTag(pAttribute) != IPP_TAG_PRINTER) {
+-						pAttribute = ippNextAttribute(pAttribute);
++						pAttribute = ippNextAttribute(pResponse);
+ 					}
+ 					if (pAttribute == NULL) {
+ 						break;
+@@ -758,12 +758,12 @@ static short getDeviceURI( char *pDestName, char *pDeviceURI, short bufSize)
+ 					
+ 					while (pAttribute != NULL && ippGetGroupTag(pAttribute) == IPP_TAG_PRINTER) {
+ 						if (strcmp(ippGetName(pAttribute), "printer-name") == 0 && ippGetValueTag(pAttribute) == IPP_TAG_NAME) {
+-							pPrinter = ippGetString(pAttribute, 0, "");
++							pPrinter = ippGetString(pAttribute, 0, NULL);
+ 						}
+ 						if (strcmp(ippGetName(pAttribute), "device-uri") == 0 && ippGetValueTag(pAttribute) == IPP_TAG_URI) {
+-							pDUri = ippGetString(pAttribute, 0, "");
++							pDUri = ippGetString(pAttribute, 0, NULL);
+ 						}
+-						pAttribute = ippNextAttribute(pAttribute);
++						pAttribute = ippNextAttribute(pResponse);
+ 					}
+ 
+ 					if (strcasecmp(pDestName, pPrinter) == 0) {
+@@ -772,14 +772,14 @@ static short getDeviceURI( char *pDestName, char *pDeviceURI, short bufSize)
+ 					}
+ 					
+ 					if (pAttribute != NULL)
+-						 pAttribute = ippNextAttribute(pAttribute);
++						 pAttribute = ippNextAttribute(pResponse);
+ 				}
+ 			}
+ 			
+ 			ippDelete(pResponse);
+ 		}
+ 		else {
+-			pDeviceURI = '\0';
++			*pDeviceURI = '\0';
+ 			goto onErr;
+ 		}
+ 		
+diff --git a/cngpij/cngpij/getipc.c b/cngpij/cngpij/getipc.c
+index 4855a25..4b1d505 100755
+--- a/cngpij/cngpij/getipc.c
++++ b/cngpij/cngpij/getipc.c
+@@ -40,7 +40,7 @@ int GetIPCData(LPIPCU pipc, char *sname)
+ 	int server_fd;
+ 	int client_fd;
+ 	char buf[128];
+-	size_t len;
++	socklen_t len;
+ 	short ret = RET_ERROR;
+ 
+ 	if( (server_fd = socket(PF_UNIX, SOCK_STREAM, 0)) < 0 )
+diff --git a/cnijfilter/src/bjfilter.c b/cnijfilter/src/bjfilter.c
+index c809e30..9b9b56d 100755
+--- a/cnijfilter/src/bjfilter.c
++++ b/cnijfilter/src/bjfilter.c
+@@ -29,6 +29,7 @@
+ #include <popt.h>
+ #include <time.h>
+ #include <string.h>
++#include <ctype.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+@@ -58,6 +59,8 @@ extern short GetIPCData(LPIPCU pipc, char *sname);
+ extern short PsudoGetIPCData(LPIPCU pipc);
+ 
+ extern int ppm_write_tmpfile( LPBJF_IMAGEINFO lpbjfimage, char *filename , char *outfile);
++extern short SetExtLevel( LPBJF_MARGIN_INFO, short);
++extern void bjf_margin_init( LPBJF_MARGIN_INFO lpmgninfo );
+ 
+ /* local function prototypes */
+ static short h_extend( CPKByte CPKPTR, CPKByte CPKPTR, int, int, int );
+diff --git a/cnijfilter/src/bjfimage.c b/cnijfilter/src/bjfimage.c
+index 2f7b36b..48958e1 100755
+--- a/cnijfilter/src/bjfimage.c
++++ b/cnijfilter/src/bjfimage.c
+@@ -39,6 +39,8 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
+ #include <png.h>
+ 
+ #include "cpktypes.h"
+@@ -1520,8 +1522,8 @@ static short png_image_init( LPBJF_IMAGEINFO lpbjfimage )
+ 	short			tmpformat;
+ 	short			retbyte = 0;
+ 	short			bpp = 3;
+-	long			width = 0;
+-	long			length = 0;
++	png_uint_32		width = 0;
++	png_uint_32		length = 0;
+ 	long			rstep = 0;
+ 	long			RasterLength = 0;
+ 	long			i;
+diff --git a/cnijfilter/src/bjfoption.c b/cnijfilter/src/bjfoption.c
+index 15d0998..1fab87b 100755
+--- a/cnijfilter/src/bjfoption.c
++++ b/cnijfilter/src/bjfoption.c
+@@ -28,6 +28,7 @@
+ #include <stdlib.h>
+ #include <popt.h>
+ #include <string.h>
++#include <ctype.h>
+ 
+ #include "cncl.h"
+ #include "cncldef.h"
+@@ -542,7 +543,7 @@ short SetCmdOption(
+ 	/*--- Analyze command line ---*/
+ 	init_optioninfo( lpbjfoption );
+ 	
+-	optcon = poptGetContext( NULL, cargc, cargv, optionsTable, 0 );
++	optcon = poptGetContext( NULL, cargc, (const char **)cargv, optionsTable, 0 );
+ 	
+ 	memset(confname , 0x00 , sizeof(confname));
+ 	MakeModelnameConfname( cargv[0], modelname, confname, BJFILTERXXXXRCPATH, BJFILTERDOTCONF );
+diff --git a/cnijfilter/src/getipc.c b/cnijfilter/src/getipc.c
+index ad3de4c..0ea3bb9 100755
+--- a/cnijfilter/src/getipc.c
++++ b/cnijfilter/src/getipc.c
+@@ -43,7 +43,7 @@ short GetIPCData(LPIPCU pipc, char *sname)
+ 	struct sockaddr_un		sun;
+ 	int						s, c;
+ 	char					buf[128];
+-	size_t					adrlen;
++	socklen_t				adrlen;
+ 	short					ret = RET_ERROR;
+ 
+ 	if ((s = socket(PF_UNIX, SOCK_STREAM, 0)) < 0)
+diff --git a/lgmon/src/bscc2sts.c b/lgmon/src/bscc2sts.c
+index 2a658fc..6df2c09 100755
+--- a/lgmon/src/bscc2sts.c
++++ b/lgmon/src/bscc2sts.c
+@@ -213,7 +213,7 @@ ST_FUNCMODEL modeltable[]={
+   ,{"MG5200",		processformp630}
+   ,{"MG6100",		processformg8100}
+   ,{"MG8100",		processformg8100}
+-  ,{ENDTAG, 0}
++  ,{"", 0}
+ };
+ 
+ 
+@@ -247,7 +247,7 @@ ST_STORESET storeset[]={
+ };
+ 
+  /* MAXMODELNUM delete */
+-  for(i=0; i<modeltable[i].prnname!=ENDTAG; i++){
++  for(i = 0; *modeltable[i].prnname; i++) {
+ 	if( strncmp(p_tbl->pr_name, modeltable[i].prnname, strlen(modeltable[i].prnname))==0 ){
+ 	  ret = (*modeltable[i].model)(&storeset[0], p_tbl, p_bsccbuf);
+ 	  return(ret);
