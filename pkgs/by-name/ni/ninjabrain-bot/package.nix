@@ -65,6 +65,7 @@ maven.buildMavenPackage (finalAttrs: {
     makeWrapperArgs=(
       --add-flags "-Dawt.useSystemAAFontSettings=on"
       --add-flags "-Dswing.aatext=true"
+      --add-flags "-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
       --add-flags "-jar $out/share/java/ninjabrain-bot.jar"
     )
 
