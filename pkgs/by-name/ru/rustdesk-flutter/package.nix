@@ -5,6 +5,8 @@
   copyDesktopItems,
   fetchFromGitHub,
   flutter329,
+  # The nightly variant must override lockfiles before the Dart builder runs.
+  buildFlutterApplication ? flutter329.buildFlutterApplication,
   ffmpeg_7,
   gst_all_1,
   fuse3,
@@ -64,7 +66,7 @@ let
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter329.buildFlutterApplication rec {
+buildFlutterApplication rec {
   pname = "rustdesk";
   version = "1.4.9";
 
