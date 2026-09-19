@@ -62,7 +62,11 @@ in
               STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
             })
             // (lib.optionalAttrs cfg.extest.enable {
-              LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
+              LD_PRELOAD = builtins.concatStringsSep ":" (
+                builtins.map (pkg: "${pkg}/lib/libextest.so")
+                  (lib.optional cfg.extest.enable32Bit pkgs.pkgsi686Linux.extest)
+                  (lib.optional cfg.extest.enable64Bit pkgs.extest)
+              );
             })
             // (prev.extraEnv or { });
           extraLibraries =
@@ -191,10 +195,18 @@ in
       };
     };
 
-    extest.enable = lib.mkEnableOption ''
-      Load the extest library into Steam, to translate X11 input events to
-      uinput events (e.g. for using Steam Input on Wayland)
-    '';
+    extest = {
+      enable = lib.mkEnableOption ''
+        loading the extest library into Steam, to translate X11 XTEST input events to uinput events (e.g. for using Steam Input on Wayland).
+
+        The 32-bit library is loaded by default, but the 64-bit library can be loaded instead or in addition.
+      '';
+      enable32Bit = (lib.mkEnableOption "the 32-bit extest library") // {
+        default = true;
+        example = false;
+      };
+      enable64Bit = lib.mkEnableOption "the 64-bit extest library";
+    };
 
     protontricks = {
       enable = lib.mkEnableOption "protontricks, a simple wrapper for running Winetricks commands for Proton-enabled games";
