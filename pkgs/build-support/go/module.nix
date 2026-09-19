@@ -4,6 +4,8 @@
   gitMinimal,
   lib,
   stdenv,
+  pkgsBuildTarget,
+  targetPackages,
 }:
 
 lib.extendMkDerivation {
@@ -68,6 +70,9 @@ lib.extendMkDerivation {
 
       ...
     }@args:
+    let
+      targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
+    in
     {
       inherit
         modRoot
@@ -217,7 +222,7 @@ lib.extendMkDerivation {
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
       env = args.env or { } // {
-        inherit (go) GOOS GOARCH;
+        inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
 
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";
@@ -393,6 +398,12 @@ lib.extendMkDerivation {
 
           runHook postInstall
         '';
+
+      # TODO: Does this need to go somewhere else?
+      depsBuildTarget = lib.optional (stdenv.hostPlatform != stdenv.targetPlatform) targetCC;
+
+      #      Commented out because threads.package doesn't exist?
+      #      depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
       strictDeps = true;
 
