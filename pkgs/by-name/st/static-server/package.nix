@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "static-server";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "static-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AZcNh/kF6IdAceA7qe+nhRlwU4yGh19av/S1Zt7iKIs=";
+    hash = "sha256-4VfysN1VVMKXgtnQGCluvAKrdOpFeccIl+OiWF9T/Uw=";
   };
 
   vendorHash = "sha256-1p3dCLLo+MTPxf/Y3zjxTagUi+tq7nZSj4ZB/aakJGY=";
@@ -27,6 +27,8 @@ buildGoModule (finalAttrs: {
     (replaceVars ./version.patch {
       inherit (finalAttrs) version;
     })
+    # the certificate bundled with the tests expired in 2025
+    ./regenerate-test-cert.patch
   ];
 
   nativeCheckInputs = [
