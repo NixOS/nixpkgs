@@ -269,6 +269,11 @@ rec {
         family = "arc";
       };
     };
+    isHppa = {
+      cpu = {
+        family = "pa";
+      };
+    };
     isSh4 = {
       cpu = {
         family = "sh";
