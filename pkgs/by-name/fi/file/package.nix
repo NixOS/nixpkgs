@@ -50,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
 
-  # https://bugs.astron.com/view.php?id=382
-  doCheck = !stdenv.buildPlatform.isMusl;
+  doCheck = true;
 
   # In native builds, it will use the newly-compiled file instead.
   makeFlags = lib.optional (
