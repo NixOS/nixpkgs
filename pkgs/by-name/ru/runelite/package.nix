@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   gradle,
@@ -23,21 +24,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1IUjbZEvoHb2Fer16rIvi6shMsol+hiPLQleXHRVLEU=";
   };
 
-  desktop = makeDesktopItem {
-    name = "RuneLite";
-    type = "Application";
-    exec = "runelite";
-    icon = "runelite";
-    comment = "Open source Old School RuneScape client";
-    desktopName = "RuneLite";
-    genericName = "Oldschool Runescape";
-    categories = [ "Game" ];
-    startupWMClass = "net-runelite-client-RuneLite";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "RuneLite";
+      type = "Application";
+      exec = "runelite";
+      icon = "runelite";
+      comment = "Open source Old School RuneScape client";
+      desktopName = "RuneLite";
+      genericName = "Oldschool Runescape";
+      categories = [ "Game" ];
+      startupWMClass = "net-runelite-client-RuneLite";
+    })
+  ];
 
   nativeBuildInputs = [
     gradle
     makeWrapper
+    copyDesktopItems
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -50,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   gradleBuildTask = "shadowJar";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     mkdir -p $out/share/applications
 
     cp build/libs/RuneLite.jar $out/share
     cp appimage/runelite.png $out/share/icons
-
-    ln -s ${finalAttrs.desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
 
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${
@@ -66,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }" \
       --add-flags "-jar $out/share/RuneLite.jar"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
