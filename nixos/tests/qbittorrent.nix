@@ -4,6 +4,7 @@
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [
+      connor-grady
       fsnkty
       undefined-landmark
     ];
@@ -108,14 +109,118 @@
 
 
       # A randomly generated password is printed in the service log when no
-      # password it set
+      # password it set. qBittorrent regenerates this password on every
+      # service start, so journalctl can have multiple matching lines —
+      # take the most recent.
       def get_temp_pass(machine):
           _, password = machine.execute(
               "journalctl -u qbittorrent.service |\
               grep 'The WebUI administrator password was not set.' |\
-              awk '{ print $NF }' | tr -d '\n'"
+              awk 'END { print $NF }' | tr -d '\n'"
           )
           return password
+
+
+      # Parse a Qt-style INI conf file into a flat dict of full keys to
+      # values. Qt joins the section header (e.g. [BitTorrent]) with each
+      # in-section key using backslashes, so 'Session\QueueingSystemEnabled'
+      # under '[BitTorrent]' is conceptually
+      # 'BitTorrent\Session\QueueingSystemEnabled' — which is what
+      # qBittorrent's source uses internally and what the differential test
+      # below operates on.
+      def parse_ini(conf):
+          result = {}
+          section = ""
+          for line in conf.splitlines():
+              line = line.strip()
+              if not line or line.startswith((";", "#")):
+                  continue
+              if line.startswith("[") and line.endswith("]"):
+                  section = line[1:-1]
+              elif "=" in line:
+                  key, _, value = line.partition("=")
+                  full_key = f"{section}\\{key}" if section else key
+                  result[full_key] = value
+          return result
+
+
+      # Differential test for https://github.com/NixOS/nixpkgs/issues/516998.
+      #
+      # The bug: qBittorrent treats any non-empty on-disk config at first
+      # launch as an upgrade from a pre-4.3 install and writes the legacy
+      # values from its `changedDefaults[]` table for any keys not already
+      # present. Since the NixOS module's ExecStartPre writes the conf
+      # before qBittorrent's first launch whenever `serverConfig` is
+      # non-empty, every such install hits this.
+      #
+      # The fix: the module pre-seeds each `changedDefaults[]` entry's
+      # current default into the generated config, so qBittorrent sees
+      # them as already-present and leaves them alone.
+      #
+      # The invariant: `changedDefaults[]` entries are written in BOTH the
+      # firstTimeUser=true (fresh) and the upgrade() (seeded) paths via
+      # `handleChangedDefaults`. With the fix in place, both paths produce
+      # the same values for each entry. Without the fix, the seeded path
+      # writes the legacy value while fresh writes the current — so any
+      # new upstream `changedDefaults[]` entry the module's seed misses
+      # surfaces as a value mismatch on a shared key, no enumeration
+      # required.
+      #
+      # Keys written by the upgrade()-only migration logic appear only in
+      # seeded (since fresh skips upgrade() entirely) — those are not
+      # bug-class, so we don't check "extra in seeded".
+      with subtest("legacy default mode is blocked when serverConfig is non-empty"):
+          # Wait for each qBit to finish initializing (signaled by its WebUI
+          # port opening) and then stop the service. Qt's QSettings only
+          # flushes to disk on a periodic timer or on shutdown, so stopping
+          # the service is the deterministic way to get a settled conf —
+          # SIGTERM triggers `~Application`, which syncs QSettings.
+          conf_path = "/var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf"
+          simple.wait_for_open_port(8080)
+          declarative.wait_for_open_port(8181)
+          simple.succeed("systemctl stop qbittorrent.service")
+          declarative.succeed("systemctl stop qbittorrent.service")
+
+          fresh = parse_ini(simple.succeed(f"cat {conf_path}"))
+          seeded = parse_ini(declarative.succeed(f"cat {conf_path}"))
+
+          # Keys whose values qBittorrent randomizes at first launch.
+          # Each instance picks independently, so fresh and seeded
+          # legitimately differ here.
+          volatile_keys = {
+              "BitTorrent\\Session\\Port",
+              "BitTorrent\\Session\\SSL\\Port",
+          }
+          # Keys declarative.serverConfig sets explicitly. fresh has qBit's
+          # defaults for these (or doesn't have them at all); seeded has the
+          # user-supplied values.
+          explicit_keys = {
+              "Preferences\\WebUI\\Username",
+              "Preferences\\WebUI\\Password_PBKDF2",
+              "Preferences\\WebUI\\Port",
+          }
+          value_mismatches = sorted(
+              (k, fresh[k], seeded[k])
+              for k in (set(fresh) & set(seeded)) - volatile_keys - explicit_keys
+              if fresh[k] != seeded[k]
+          )
+
+          if value_mismatches:
+              lines = ["Seeded install has values differing from fresh install on keys handleChangedDefaults touches in both paths."]
+              lines += [""]
+              lines += [f"  {k}: fresh={fv!r}, seeded={sv!r}" for k, fv, sv in value_mismatches]
+              lines += [""]
+              lines += [
+                  "qBittorrent's legacy default mode likely injected an entry from changedDefaults[] that the module's legacyDefaultsSeed doesn't cover.",
+                  "Mirror the new entry in modules/services/torrent/qbittorrent.nix:",
+                  "https://github.com/qbittorrent/qBittorrent/blob/master/src/app/upgrade.cpp",
+              ]
+              raise AssertionError("\n".join(lines))
+
+          # Restart both services so the existing subtests below can run
+          # against a live qBittorrent.
+          simple.succeed("systemctl start qbittorrent.service")
+          declarative.succeed("systemctl start qbittorrent.service")
 
 
       # Non declarative tests
