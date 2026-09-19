@@ -4191,12 +4191,14 @@ with pkgs;
       zulu17 = callPackage ../development/compilers/zulu/17.nix { };
       zulu21 = callPackage ../development/compilers/zulu/21.nix { };
       zulu25 = callPackage ../development/compilers/zulu/25.nix { };
+      zulu27 = callPackage ../development/compilers/zulu/27.nix { };
     })
     zulu8
     zulu11
     zulu17
     zulu21
     zulu25
+    zulu27
     ;
   zulu = zulu21;
 
