@@ -177,6 +177,10 @@ let
     "RetainPtr.SetContains"
   ];
 
+  darwin27FailingEmbedderTests = lib.filter (test: test != "") (
+    lib.splitString "\n" (builtins.readFile ./darwin-27-failing-embedder-tests.txt)
+  );
+
   disabledEmbedderTests = [
     # These assert exact serialized PDF and font-subset output. With system
     # libraries, output differs from upstream's in-tree stack; known
@@ -195,7 +199,9 @@ let
     "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorScheme"
     "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorSchemeAndConvertFillToStroke"
     "FPDFAnnotEmbedderTest.ModifyRectQuadpointsWithAP"
-  ];
+  ]
+  # Changes to CoreGraphics rendering broke these tests when run on macOS 27+.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin darwin27FailingEmbedderTests;
 
   mkDisabledGtestFilter = disabledTests: "-${lib.concatStringsSep ":" disabledTests}";
   unitTestFilter = mkDisabledGtestFilter disabledUnitTests;
