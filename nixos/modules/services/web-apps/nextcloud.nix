@@ -465,7 +465,6 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud32"
         "nextcloud33"
         "nextcloud34"
       ];
