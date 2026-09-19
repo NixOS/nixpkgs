@@ -1,0 +1,57 @@
+From d1a06e5ed401175fbb3fdbac506944dbffe093ac Mon Sep 17 00:00:00 2001
+From: DanConwayDev <DanConwayDev@protonmail.com>
+Date: Sat, 19 Sep 2026 15:36:50 +0000
+Subject: [PATCH] test(common): retain relay diagnostics when a test panics
+
+Sandboxed package checks delete the relay logs in /tmp when they fail. The ARM invitation-processing timeout therefore reported only a failed readiness assertion, hiding the state of all three relay subprocesses.
+
+After reaping each fixture, emit at most its final 64 KiB when unwinding a panic. Normal cleanup stays silent and diagnostic I/O errors are ignored to avoid a second panic. This adds evidence without changing deadlines, test ordering, or production synchronization; it does not claim to fix the intermittent timeout.
+
+Validation: rustfmt and diff checks; a standalone harness compiled the exact Drop implementation and verified silent normal cleanup, bounded panic output, and missing-log handling. One invocation of the existing invitation-test binary passed in 7.9 seconds; full Cargo and Darwin runs remain for host/CI.
+
+Assisted-by: Codex (GPT-6)
+---
+ tests/common/relay.rs | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/tests/common/relay.rs b/tests/common/relay.rs
+index dbe4d12..83ac8a0 100644
+--- a/tests/common/relay.rs
++++ b/tests/common/relay.rs
+@@ -1095,6 +1095,37 @@ impl Drop for TestRelay {
+         // Ensure process is killed when TestRelay is dropped
+         let _ = self.process.kill();
+         let _ = self.process.wait();
++        if std::thread::panicking() {
++            // Sandboxed builders discard /tmp after failure. Preserve a bounded
++            // tail from every participating relay in libtest's failure output.
++            // Diagnostic I/O must never cause a second panic during unwinding.
++            use std::io::{Read, Seek, SeekFrom, Write};
++            let path = self.log_path();
++            let tail = (|| -> std::io::Result<Vec<u8>> {
++                let mut file = std::fs::File::open(&path)?;
++                let start = file.metadata()?.len().saturating_sub(64 * 1024);
++                file.seek(SeekFrom::Start(start))?;
++                let mut bytes = Vec::new();
++                file.take(64 * 1024).read_to_end(&mut bytes)?;
++                Ok(bytes)
++            })();
++            let mut stderr = std::io::stderr().lock();
++            let _ = writeln!(
++                stderr,
++                "Relay {} failure log ({})",
++                self.port,
++                path.display()
++            );
++            match tail {
++                Ok(bytes) => {
++                    let _ = stderr.write_all(&bytes);
++                    let _ = writeln!(stderr);
++                }
++                Err(error) => {
++                    let _ = writeln!(stderr, "Could not read relay log: {error}");
++                }
++            }
++        }
+     }
+ }
