@@ -16,6 +16,7 @@
   libxcb,
   libxkbcommon,
   openssl,
+  udev,
   vulkan-loader,
   wayland,
 
@@ -29,7 +30,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandora-launcher-unwrapped";
-  version = "5.5.2";
+  version = "5.6.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Moulberry";
     repo = "PandoraLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mn+ZYSIJajc6gzYSdZUvDrfDouXJWlbSeO7nfjKN4sY=";
+    hash = "sha256-f6DYLWcLa55eh4HbrBYRTPFpqlDOZgjUjsqyrGfuDyQ=";
   };
 
   # Currently the client id is hardcoded and must be patched like this.
@@ -68,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libseccomp
     libxcb
     libxkbcommon
+    udev
     wayland
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -132,6 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Minecraft launcher that balances ease-of-use with powerful instance management features";
     homepage = "https://github.com/Moulberry/PandoraLauncher";
+    changelog = "https://github.com/Moulberry/PandoraLauncher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dtomvan
