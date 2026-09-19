@@ -2853,10 +2853,6 @@ with pkgs;
 
   stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
 
-  strongswanTNC = strongswan.override { enableTNC = true; };
-  strongswanTPM = strongswan.override { enableTPM2 = true; };
-  strongswanNM = strongswan.override { enableNetworkManager = true; };
-
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
   su = shadow.su;
