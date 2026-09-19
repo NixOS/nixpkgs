@@ -30679,17 +30679,17 @@
     githubId = 1476338;
     name = "Viktor Illmer";
   };
-  vlaci = {
-    email = "laszlo.vasko@outlook.com";
-    github = "vlaci";
-    githubId = 1771332;
-    name = "László Vaskó";
-  };
   vkluna = {
     email = "git@luna.ht";
     github = "vkluna";
     githubId = 76712878;
     name = "V. Luna";
+  };
+  vlaci = {
+    email = "laszlo.vasko@outlook.com";
+    github = "vlaci";
+    githubId = 1771332;
+    name = "László Vaskó";
   };
   vlinkz = {
     email = "vmfuentes64@gmail.com";
