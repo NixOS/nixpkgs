@@ -4205,12 +4205,6 @@
     githubId = 5555066;
     name = "Andrew Cann";
   };
-  caniko = {
-    email = "gpg@rotas.mozmail.com";
-    github = "caniko";
-    githubId = 29519599;
-    name = "Can H. Tartanoglu";
-  };
   cap = {
     name = "cap";
     email = "nixos_xasenw9@digitalpostkasten.de";
