@@ -1,14 +1,18 @@
 {
-  lib,
-  stdenv,
-  buildGoModule,
+  # mockery has historically required dependency (and sometimes source) changes
+  # to support new versions of go so always use the latest specific go version
+  # that mockery supports rather than buildGoLatestModule.
+  # This can be bumped when a mockery release details support for a new version of go.
+  buildGo127Module,
   fetchFromGitHub,
-  versionCheckHook,
   go-task,
   gotestsum,
+  lib,
+  stdenv,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-mockery";
   version = "3.8.0";
 
