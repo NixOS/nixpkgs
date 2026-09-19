@@ -20226,6 +20226,11 @@
     github = "NanamiNakano";
     githubId = 64841155;
   };
+  nanashi = {
+    name = "Rian Rücker";
+    github = "NANASHI0x74";
+    githubId = 17546398;
+  };
   nanotwerp = {
     email = "nanotwerp@gmail.com";
     github = "nanotwerp";
