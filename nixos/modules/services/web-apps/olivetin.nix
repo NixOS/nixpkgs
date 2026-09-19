@@ -9,6 +9,9 @@ let
   cfg = config.services.olivetin;
 
   settingsFormat = pkgs.formats.yaml { };
+  configFile = settingsFormat.generate "olivetin-config.yaml" (
+    removeAttrs cfg.settings [ "ListenAddressSingleHTTPFrontend" ]
+  );
 in
 
 {
@@ -65,8 +68,15 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
+        imports = [
+          (lib.mkRenamedOptionModule
+            [ "ListenAddressSingleHTTPFrontend" ]
+            [ "listenAddressSingleHTTPFrontend" ]
+          )
+        ];
+
         options = {
-          ListenAddressSingleHTTPFrontend = lib.mkOption {
+          listenAddressSingleHTTPFrontend = lib.mkOption {
             type = lib.types.str;
             description = ''
               The address to listen on for the internal "microproxy" frontend.
@@ -116,7 +126,7 @@ in
 
         tmp="$(mktemp)"
         ${lib.getExe pkgs.yq-go} eval-all '. as $item ireduce ({}; . *+ $item)' \
-          ${settingsFormat.generate "olivetin-config.yaml" cfg.settings} \
+          ${configFile} \
           $CREDENTIALS_DIRECTORY/config-*.yaml > "$tmp"
         chmod -w "$tmp"
 
