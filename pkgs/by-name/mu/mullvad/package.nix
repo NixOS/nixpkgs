@@ -15,7 +15,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: rec {
   pname = "mullvad";
   version = "2026.4";
 
@@ -83,7 +83,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     darwin.libpcap
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  env.MULLVAD_RESOURCE_DIR = "$out/share/mullvad/resources/";
+  postInstall = ''
+    mkdir -p ${env.MULLVAD_RESOURCE_DIR}
+    cp --no-preserve=mode ${src.outPath}/dist-assets/relays/relays.json ${env.MULLVAD_RESOURCE_DIR}/relays.json
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     compdir=$(mktemp -d)
     for shell in bash zsh fish; do
       $out/bin/mullvad shell-completions $shell $compdir
