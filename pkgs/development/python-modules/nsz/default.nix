@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "nsz";
-  version = "4.6.1";
+  version = "5.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nicoboss";
     repo = "nsz";
     tag = version;
-    hash = "sha256-ch4HzQFa95o3HMsi7R0LpPWmhN/Z9EYfrmCdUZLwPSE=";
+    hash = "sha256-vYUHbPoE5dCJX1lVTm+3rATCC+nuIcRPD6vPPCsndAs=";
   };
 
   propagatedBuildInputs = [
