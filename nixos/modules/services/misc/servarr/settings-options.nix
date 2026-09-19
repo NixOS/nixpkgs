@@ -72,6 +72,66 @@
       '';
     };
 
+  mkServarrPostgresqlOption =
+    name:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to automatically create local PostgreSQL databases for ${name}.
+        The service connects through the local Unix socket using peer
+        authentication.
+      '';
+    };
+
+  mkServarrPostgresqlConfig =
+    {
+      cfg,
+      name,
+      postgresqlPort,
+      user,
+    }:
+    let
+      mainDb = "${name}-main";
+      logDb = "${name}-log";
+      localPostgresql = cfg.enable && cfg.database.createLocally;
+    in
+    lib.mkIf localPostgresql {
+      assertions = [
+        {
+          assertion = builtins.match "[a-zA-Z_][a-zA-Z0-9_-]*" user != null;
+          message = "services.${name}.user must be a valid PostgreSQL role name when database.createLocally is true.";
+        }
+      ];
+
+      services.postgresql = {
+        enable = true;
+        ensureDatabases = [
+          mainDb
+          logDb
+        ];
+        ensureUsers = [ { name = user; } ];
+      };
+
+      services.${name}.settings.postgres = {
+        host = "/run/postgresql";
+        port = postgresqlPort;
+        inherit user mainDb logDb;
+      };
+
+      systemd.services = {
+        postgresql-setup.postStart = lib.mkAfter ''
+          psql -tAc 'ALTER DATABASE "${mainDb}" OWNER TO "${user}";'
+          psql -tAc 'ALTER DATABASE "${logDb}" OWNER TO "${user}";'
+        '';
+
+        ${name} = {
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
+        };
+      };
+    };
+
   mkServarrSettingsEnvVars =
     name: settings:
     lib.pipe settings [
