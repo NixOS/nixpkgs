@@ -162,6 +162,13 @@ in
         description = "Group under which Forgejo runs.";
       };
 
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "--verbose" ];
+        description = "List of extra arguments passed to the `forgejo web` command.";
+      };
+
       database = {
         type = mkOption {
           type = types.enum [
@@ -297,6 +304,13 @@ in
             The format is described in
             {manpage}`tmpfiles.d(5)`.
           '';
+        };
+
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--skip-repo-archives" ];
+          description = "List of extra arguments passed to the `forgejo dump` command.";
         };
       };
 
@@ -737,7 +751,9 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${exe} web --pid /run/forgejo/forgejo.pid";
+        ExecStart =
+          "${exe} web --pid /run/forgejo/forgejo.pid"
+          + optionalString (cfg.extraArgs != [ ]) " ${lib.strings.escapeShellArgs cfg.extraArgs}";
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "forgejo";
@@ -835,7 +851,8 @@ in
         User = cfg.user;
         ExecStart =
           "${exe} dump --type ${cfg.dump.type}"
-          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}"
+          + optionalString (cfg.dump.extraArgs != [ ]) " ${lib.strings.escapeShellArgs cfg.dump.extraArgs}";
         WorkingDirectory = cfg.dump.backupDir;
       };
     };
