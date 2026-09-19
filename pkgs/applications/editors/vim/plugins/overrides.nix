@@ -37,6 +37,7 @@
   languagetool,
   llm-ls,
   libgit2,
+  manix,
   llvmPackages,
   neovim-unwrapped,
   nix,
@@ -4596,6 +4597,10 @@ assertNoAdditions {
       plenary-nvim
       telescope-nvim
     ];
+  };
+
+  telescope-manix = super.telescope-manix.overrideAttrs {
+    runtimeDeps = [ manix ];
   };
 
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {
