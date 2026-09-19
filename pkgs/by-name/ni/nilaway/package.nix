@@ -11,6 +11,8 @@ buildGoLatestModule {
   pname = "nilaway";
   version = "0-unstable-2026-09-18";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "nilaway";
@@ -25,7 +27,6 @@ buildGoLatestModule {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   preCheck = ''
