@@ -295,6 +295,15 @@ with haskellLib;
     })
   ] super.cabal-add;
 
+  # https://github.com/haskell/hie-bios/pull/527
+  hie-bios = appendPatches [
+    (pkgs.fetchpatch {
+      name = "support-9.14.2.patch";
+      url = "https://github.com/haskell/hie-bios/commit/9cc36d18045e967b661634e41e3b1e0ed809968d.patch";
+      hash = "sha256-WOhdMHPJqzsthPPmPAxXNQ7xP5xi4XjCrqkByY2rUBU";
+    })
+  ] super.hie-bios;
+
   stylish-haskell = appendPatches [
     (pkgs.fetchpatch {
       name = "bump-optparse-applicative.patch";
