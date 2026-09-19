@@ -4,6 +4,7 @@
   fetchFromRadicle,
   zig_0_16,
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -31,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Convert between Radicle identities and public SSH keys";
