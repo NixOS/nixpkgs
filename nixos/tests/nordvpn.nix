@@ -1,7 +1,7 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "nordvpn";
-  meta.maintainers = [ ];
+  meta.maintainers = pkgs.nordvpn.meta.maintainers;
   nodes =
     let
       commonConfig = user: {
