@@ -106,20 +106,36 @@ stdenv.mkDerivation (finalAttrs: {
     ninja doc
   '';
 
-  passthru.tests = {
-    kea = nixosTests.kea;
-    prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
-    networking-scripted = lib.recurseIntoAttrs {
-      inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf;
+  passthru = {
+    services = {
+      dhcp = {
+        imports = [
+          (lib.modules.importApply ./service-dhcp4.nix { })
+        ];
+        kea-dhcp.package = finalAttrs.finalPackage;
+      };
+      dns = {
+        kea-dhcp-dns.package = finalAttrs.finalPackage;
+        imports = [
+          (lib.modules.importApply ./service-dns.nix { })
+        ];
+      };
     };
-    networking-networkd = lib.recurseIntoAttrs {
-      inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
-    };
+    tests = {
+      kea = nixosTests.kea;
+      prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
+      networking-scripted = lib.recurseIntoAttrs {
+        inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf;
+      };
+      networking-networkd = lib.recurseIntoAttrs {
+        inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
+      };
 
-    version = testers.testVersion {
-      package = kea;
-      command = "kea-shell -v";
-      version = finalAttrs.version;
+      version = testers.testVersion {
+        package = kea;
+        command = "kea-shell -v";
+        version = finalAttrs.version;
+      };
     };
   };
 
