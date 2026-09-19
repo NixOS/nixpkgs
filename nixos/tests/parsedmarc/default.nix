@@ -99,7 +99,7 @@ in
       ''
         parsedmarc.start()
         parsedmarc.wait_for_unit("postfix.service")
-        parsedmarc.wait_for_unit("dovecot2.service")
+        parsedmarc.wait_for_unit("dovecot.service")
         parsedmarc.wait_for_unit("parsedmarc.service")
         parsedmarc.wait_until_succeeds(
             "curl -sS -f http://localhost:${esPort}"
@@ -164,7 +164,7 @@ in
           };
 
         mail =
-          { nodes, ... }:
+          { config, nodes, ... }:
           {
             imports = [ ../common/user-account.nix ];
 
@@ -175,10 +175,17 @@ in
 
             services.dovecot2 = {
               enable = true;
-              protocols = [ "imap" ];
-              sslCACert = "${certs.ca.cert}";
-              sslServerCert = "${certs.${mailDomain}.cert}";
-              sslServerKey = "${certs.${mailDomain}.key}";
+              enablePAM = true;
+              settings = {
+                dovecot_config_version = "2.4.3";
+                dovecot_storage_version = config.services.dovecot2.package.version;
+                protocols.imap = true;
+                mail_driver = "maildir";
+                mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+                ssl_server_ca_file = "${certs.ca.cert}";
+                ssl_server_cert_file = "${certs.${mailDomain}.cert}";
+                ssl_server_key_file = "${certs.${mailDomain}.key}";
+              };
             };
 
             services.postfix = {
@@ -210,7 +217,7 @@ in
         ''
           mail.start()
           mail.wait_for_unit("postfix.service")
-          mail.wait_for_unit("dovecot2.service")
+          mail.wait_for_unit("dovecot.service")
 
           parsedmarc.start()
           parsedmarc.wait_for_unit("parsedmarc.service")
