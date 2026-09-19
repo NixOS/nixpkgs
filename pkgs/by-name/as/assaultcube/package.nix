@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
+  desktopToDarwinBundle,
   openal,
   pkg-config,
   libogg,
@@ -14,7 +15,6 @@
   libx11,
   makeWrapper,
   zlib,
-  file,
   client ? true,
   server ? true,
 }:
@@ -34,21 +34,44 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [
-    file
     zlib
+  ]
+  # On Darwin, even the server needs SDL2 (AC uses SDL threads/timers via __APPLE__)
+  ++ lib.optionals (client || stdenv.hostPlatform.isDarwin) [
+    SDL2
   ]
   ++ lib.optionals client [
     openal
-    SDL2
     SDL2_image
-    libGL
-    libx11
     libogg
     libvorbis
+  ]
+  ++ lib.optionals (client && !stdenv.hostPlatform.isDarwin) [
+    libGL
+    libx11
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
+  };
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace source/src/Makefile \
+      --replace-fail '-lX11' ''' \
+      --replace-fail '-lGL' '-framework OpenGL' \
+      --replace-fail '-lrt' '-lSDL2'
+
+    mkdir -p source/include/OpenAL source/include/Vorbis
+    ln -sf ${lib.getDev openal}/include/AL/al.h source/include/OpenAL/al.h
+    ln -sf ${lib.getDev openal}/include/AL/alc.h source/include/OpenAL/alc.h
+    ln -sf ${lib.getDev libvorbis}/include/vorbis/vorbisfile.h source/include/Vorbis/vorbisfile.h
+  '';
 
   makeFlags = [
     "-C source/src"
@@ -80,20 +103,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r config packages $out/share/games/assaultcube
 
-    if (test -e source/src/ac_client) then
-      cp source/src/ac_client $out/bin
-      mkdir -p $out/share/applications
-      install -Dpm644 packages/misc/icon.png $out/share/icons/hicolor/32x32/apps/assaultcube.png
+    cp source/src/ac_client $out/bin
+    install -Dpm644 packages/misc/icon.png \
+      $out/share/icons/hicolor/32x32/apps/assaultcube.png
 
-      makeWrapper $out/bin/ac_client $out/bin/assaultcube \
-        --chdir "$out/share/games/assaultcube" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
-    fi
+    makeWrapper $out/bin/ac_client $out/bin/assaultcube \
+      --chdir "$out/share/games/assaultcube" \
+      --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
 
-    if (test -e source/src/ac_server) then
-      cp source/src/ac_server $out/bin
-      makeWrapper $out/bin/ac_server $out/bin/assaultcube-server \
-        --chdir "$out/share/games/assaultcube" --add-flags "-Cconfig/servercmdline.txt"
-    fi
+    cp source/src/ac_server $out/bin
+    makeWrapper $out/bin/ac_server $out/bin/assaultcube-server \
+      --chdir "$out/share/games/assaultcube" \
+      --add-flags "-Cconfig/servercmdline.txt"
 
     runHook postInstall
   '';
@@ -101,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = "https://assault.cubers.net";
-    platforms = lib.platforms.linux; # should work on darwin with a little effort.
+    platforms = lib.platforms.all;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ darkonion0 ];
   };
