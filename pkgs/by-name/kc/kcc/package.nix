@@ -15,14 +15,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kcc";
-  version = "9.6.2";
+  version = "11.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ciromattia";
     repo = "kcc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yix0uqSHeWcNw9r0SOhYqTw8A/fTUh3HAOnbgNaQndY=";
+    hash = "sha256-XvF51ix2U6b8E9haPw6IpBWg2Iu2rvPD2bHgXWtd8qw=";
   };
 
   nativeBuildInputs = [
