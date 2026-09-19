@@ -1,17 +1,16 @@
 diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
-index d0f5512b0..b8ac0f329 100644
+index 58623de63..ba3b2ca75 100644
 --- a/music_assistant/providers/spotify/helpers.py
 +++ b/music_assistant/providers/spotify/helpers.py
-@@ -6,6 +6,7 @@
- import os
- import platform
+@@ -9,6 +9,7 @@ import platform
+ import re
+ import tempfile
  import time
 +from shutil import which
  from contextlib import suppress
  from pathlib import Path
  from typing import TYPE_CHECKING, Any
- 
-@@ -28,16 +29,12 @@ async def check_librespot(librespot_path: str) -> str | None:
+@@ -59,16 +60,12 @@ async def get_librespot_binary() -> str:
          except OSError:
              return None
  
