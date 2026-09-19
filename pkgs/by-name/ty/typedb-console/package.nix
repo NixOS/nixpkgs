@@ -22,14 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Upstream console-3.13.0 tag ships a Cargo.lock pinning typedb-driver
   # 3.12.0 while the manifests require 3.12.3, so --locked resolution fails
-  # on the pristine tag. This is the same one-line refresh as upstream PR
-  # <typedb-tools lock refresh>; drop it once a release tag carries a
-  # current lock.
-  postPatch = ''
-    substituteInPlace Cargo.lock \
-      --replace-fail 'git+https://github.com/typedb/typedb-driver?tag=3.12.0#39db6731ba004c8c959cdb3b69a0f05a10793235' \
-      'git+https://github.com/typedb/typedb-driver?tag=3.12.3#f487d961884010ff305d4395c41e80fa620251c6'
-  '';
+  # on the pristine tag. Refresh it with the canonical `cargo update`
+  # resolution (same change as typedb/typedb-tools#372); drop the patch
+  # once a release tag carries a current lock.
+  patches = [ ./lock-refresh.patch ];
 
   # This package ships the Console only (the task's "client"): the sibling
   # loader and typeql-check binaries stay in their own future packages.
