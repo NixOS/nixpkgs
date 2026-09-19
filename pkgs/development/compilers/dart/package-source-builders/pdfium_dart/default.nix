@@ -7,13 +7,13 @@
 { version, src, ... }:
 
 stdenv.mkDerivation {
-  pname = "pdfium_flutter";
+  pname = "pdfium_dart";
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = lib.optionalString (lib.versionOlder version "0.2.0") ''
-    substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "\''${PDFIUM_DIR}/\''${PDFIUM_RELEASE}" "${pdfium-binaries}"
+  postPatch = lib.optionalString (lib.versionAtLeast version "0.2.0") ''
+    substitute ${./build.dart} hook/build.dart \
+      --replace-fail "@pdfium-binaries@" "${pdfium-binaries}"
   '';
 
   installPhase = ''
