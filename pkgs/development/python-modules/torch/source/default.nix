@@ -29,7 +29,6 @@
   withTensorboard ? false,
   MPISupport ? false,
   mpi,
-  buildDocs ? false,
   targetPackages,
 
   # tests.cudaAvailable:
@@ -55,6 +54,8 @@
   openssl,
   numactl,
   llvmPackages,
+  cpuinfo,
+  pkgsHostTarget,
 
   # dependencies
   filelock,
@@ -211,6 +212,7 @@ let
         rocblas
         rocsparse
         hipsparse
+        hipsparselt
         rocthrust
         rocprim
         hipcub
@@ -228,6 +230,7 @@ let
         rocm-device-libs
         rocm-runtime
         rocm-smi
+        rocshmem
         clr.icd
         hipify
         rocprofiler-sdk
@@ -371,8 +374,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     substituteInPlace third_party/NNPACK/CMakeLists.txt \
       --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
   ''
-  # flag from cmakeFlags doesn't work, not clear why
-  # setting it at the top of NNPACK's own CMakeLists does
+  # NNPACK does not respect PYTHON_SIX_SOURCE_DIR set from environment variable
+  # instead set it at the top of NNPACK's own CMakeLists.txt file
   + ''
     sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
   ''
@@ -415,27 +418,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
         '#include "${lib.getInclude llvmPackages.openmp}/include/omp.h"'
   '';
 
-  # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
-  # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
-  # without extreme care to ensure they don't lock each other out of shared resources.
-  # For more, see https://github.com/open-mpi/ompi/issues/7733#issuecomment-629806195.
-  preConfigure =
-    lib.optionalString cudaSupport ''
-      export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-      export CUDAToolkit_CUPTI_INCLUDE_DIR=${lib.getInclude cudaPackages.cuda_cupti}/include
-      export CUDA_cupti_LIBRARY=${lib.getLib cudaPackages.cuda_cupti}/lib/libcupti.so
-    ''
-    + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
-      export CUDNN_INCLUDE_DIR=${lib.getLib cudnn}/include
-      export CUDNN_LIB_DIR=${lib.getLib cudnn}/lib
-    ''
-    + lib.optionalString rocmSupport ''
-      export ROCM_PATH=${rocmtoolkit_joined}
-      export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
-      export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include"
-      python tools/amd_build/build_amd.py
-    '';
+  preConfigure = lib.optionalString rocmSupport ''
+    python tools/amd_build/build_amd.py
+  '';
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
@@ -444,9 +429,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   hardeningDisable = [ "fortify3" ];
 
   env = {
-    BUILD_NAMEDTENSOR = setBool true;
-    BUILD_DOCS = setBool buildDocs;
-
     # We only do an imports check, so do not build tests either.
     BUILD_TEST = setBool false;
 
@@ -488,6 +470,21 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
     USE_NVSHMEM = setBool withNvshmem;
 
+    USE_VULKAN = setBool vulkanSupport;
+    USE_CUDA = setBool cudaSupport;
+    USE_ROCM = setBool rocmSupport;
+    USE_MAGMA = setBool (cudaSupport || rocmSupport);
+    USE_MPI = setBool MPISupport;
+    # Not supported by this package at the moment.
+    USE_OPENCL = setBool false;
+
+    # Can't use ccache in the sandbox
+    USE_CCACHE = setBool false;
+
+    BUILD_CUSTOM_PROTOBUF = setBool false;
+    USE_SYSTEM_ONNX = setBool true;
+    USE_SYSTEM_CPUINFO = setBool true;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -504,10 +501,22 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
         "-Wno-error=incompatible-pointer-types"
       ]
     );
-    USE_VULKAN = setBool vulkanSupport;
   }
   // lib.optionalAttrs vulkanSupport {
     VULKAN_SDK = shaderc.bin;
+  }
+  # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
+  # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
+  # without extreme care to ensure they don't lock each other out of shared resources.
+  # For more, see https://github.com/open-mpi/ompi/issues/7733#issuecomment-629806195.
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = gpuTargetString;
+    CUDAToolkit_CUPTI_INCLUDE_DIR = "${lib.getInclude cudaPackages.cuda_cupti}/include";
+    CUDA_cupti_LIBRARY = "${lib.getLib cudaPackages.cuda_cupti}/lib/libcupti.so";
+  }
+  // lib.optionalAttrs (cudaSupport && cudaPackages ? cudnn) {
+    CUDNN_INCLUDE_DIR = "${lib.getLib cudnn}/include";
+    CUDNN_LIB_DIR = "${lib.getLib cudnn}/lib";
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
@@ -516,10 +525,14 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Broken HIP flag setup, fails to compile due to not finding rocthrust
     # Only supports gfx942 so let's turn it off for now
     USE_FBGEMM_GENAI = setBool false;
+
+    ROCM_PATH = rocmtoolkit_joined;
+    ROCM_SOURCE_DIR = rocmtoolkit_joined;
+    PYTORCH_ROCM_ARCH = gpuTargetString;
+    CMAKE_CXX_FLAGS = "-I${rocmtoolkit_joined}/include";
   };
 
   cmakeFlags = [
-    (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
     # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
   ]
   ++ lib.optionals cudaSupport [
@@ -581,6 +594,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   buildInputs = [
     blas
     blas.provider
+
+    # explicitly use pkgsHostTarget because we don't want to use python3Packages.protobuf
+    pkgsHostTarget.protobuf
+    pkgsHostTarget.onnx
+    cpuinfo
   ]
   # Including openmp leads to two copies being used on ARM, which segfaults.
   # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
@@ -624,6 +642,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
     rocmPackages.clr # Added separately so setup hook applies
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
   ];
 
   dependencies = [
@@ -644,11 +666,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     six
     tensorboard
   ]
-  ++ lib.optionals tritonSupport [ _tritonEffective ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    vulkan-loader
-  ];
+  ++ lib.optionals tritonSupport [ _tritonEffective ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
