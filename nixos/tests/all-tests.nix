@@ -1742,6 +1742,7 @@ in
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
   static-web-server = runTest ./web-servers/static-web-server.nix;
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
+  steve = runTest ./steve;
   stirling-pdf-desktop = runTest ./stirling-pdf-desktop.nix;
   stratis = handleTest ./stratis { };
   strichliste = runTest ./web-apps/strichliste.nix;
