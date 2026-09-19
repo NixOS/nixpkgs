@@ -26068,6 +26068,12 @@
     githubId = 11320;
     name = "Sergiu Ivanov";
   };
+  SConaway = {
+    email = "steven.conaway@icloud.com";
+    github = "SConaway";
+    githubId = 20807660;
+    name = "Steven Conaway";
+  };
   scottstephens = {
     email = "stephens.js@gmail.com";
     github = "scottstephens";
