@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   buildDunePackage,
   logs,
   ppx_yojson_conv_lib,
@@ -21,11 +22,13 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-9n610J62IPUXYQ/u+WjGTtowYFKQ45wE8M7UkLdEKVM=";
   };
 
-  # linol 0.11 vendors a jsonrpc library whose Json.t type included `Tuple and
-  # `Variant, constructors removed from Yojson.Safe.t in yojson 3.0.0.  They
-  # are never constructed anywhere in the compiled code, so removing them from
-  # the type definition is safe.
-  patches = [ ./linol-yojson3.patch ];
+  # backport yojson 3 support merged after v0.11
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/c-cube/linol/commit/cf50e29c358ece3a417cb47bf7d17b06b6219d65.patch?full_index=1";
+      hash = "sha256-oguHTX20Jr7IatCN1mQZ1JfuX1bN1Fz7trJb8yyNzZM=";
+    })
+  ];
 
   propagatedBuildInputs = [
     logs
