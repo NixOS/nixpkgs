@@ -1,0 +1,94 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 65bfd26..717ef10 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,8 +118,7 @@ endif ()
+ get_filename_component(TOKENIZERS_CPP_ROOT ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
+ set(TOKENIZERS_CPP_CARGO_SOURCE_PATH ${TOKENIZERS_CPP_ROOT}/rust)
+ 
+-option(MSGPACK_USE_BOOST "Use Boost libraried" OFF)
+-add_subdirectory(msgpack)
++find_package(msgpack-cxx REQUIRED)
+ 
+ option(MLC_ENABLE_SENTENCEPIECE_TOKENIZER "Enable SentencePiece tokenizer" ON)
+ 
+@@ -130,39 +129,10 @@ else()
+ endif()
+ set(TOKENIZERS_CPP_INCLUDE ${TOKENIZERS_CPP_ROOT}/include)
+ 
+-# Find cargo executable
+-if(CMAKE_HOST_WIN32)
+-    set(USER_HOME "$ENV{USERPROFILE}")
+-else()
+-    set(USER_HOME "$ENV{HOME}")
+-endif()
+-if(NOT DEFINED CARGO_HOME)
+-    if("$ENV{CARGO_HOME}" STREQUAL "")
+-        set(CARGO_HOME "${USER_HOME}/.cargo")
+-    else()
+-        set(CARGO_HOME "$ENV{CARGO_HOME}")
+-    endif()
++if(NOT DEFINED TOKENIZERS_RUST_LIB_PATH)
++  message(FATAL_ERROR "TOKENIZERS_RUST_LIB_PATH must be set to the path of the pre-built libtokenizers_c.a")
+ endif()
+-
+-find_program(CARGO_EXECUTABLE cargo
+- HINTS "${CARGO_HOME}"
+- PATH_SUFFIXES "bin")
+-mark_as_advanced(CARGO_EXECUTABLE)
+-
+-# NOTE: need to use cmake -E env to be portable in win
+-add_custom_command(
+-  OUTPUT ${TOKENIZERS_RUST_LIB}
+-  COMMAND
+-  ${CMAKE_COMMAND} -E env
+-  CARGO_TARGET_DIR=${TOKENIZERS_CPP_CARGO_TARGET_DIR}
+-  ${CARGO_EXTRA_ENVS}
+-  RUSTFLAGS="${TOKENIZERS_CPP_RUST_FLAGS}"
+-  ${CARGO_EXECUTABLE} build ${TOKENIZERS_CPP_CARGO_FLAGS}
+-  WORKING_DIRECTORY ${TOKENIZERS_CPP_CARGO_SOURCE_PATH}
+-  POST_BUILD COMMAND
+-  ${CMAKE_COMMAND} -E copy
+-  ${TOKENIZERS_RUST_LIB} "${CMAKE_CURRENT_BINARY_DIR}"
+-)
++set(TOKENIZERS_RUST_LIB ${TOKENIZERS_RUST_LIB_PATH})
+ 
+ set(
+   TOKENIZER_CPP_SRCS
+@@ -171,30 +141,18 @@ set(
+   src/rwkv_world_tokenizer.cc
+ )
+ add_library(tokenizers_cpp STATIC ${TOKENIZER_CPP_SRCS})
+-target_include_directories(tokenizers_cpp PRIVATE sentencepiece/src)
+-target_include_directories(tokenizers_cpp PRIVATE msgpack/include)
+ target_include_directories(tokenizers_cpp PUBLIC ${TOKENIZERS_CPP_INCLUDE})
+ if (MLC_ENABLE_SENTENCEPIECE_TOKENIZER STREQUAL "ON")
+     target_compile_definitions(tokenizers_cpp PUBLIC MLC_ENABLE_SENTENCEPIECE_TOKENIZER)
+ endif ()
+-target_link_libraries(tokenizers_cpp PRIVATE msgpack-cxx)
+-
+-# sentencepiece config
+-option(SPM_ENABLE_SHARED "override sentence piece config" OFF)
+-option(SPM_ENABLE_TCMALLOC "" OFF)
+-# provide macro if it does not exist in cmake system
+-# it is OK to skip those since we do not provide these apps in the ios
+-# instead just link to the sentencepiece directly
+-if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
+-  macro (set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
+-      set_property (TARGET ${TARGET} PROPERTY
+-          XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
+-  endmacro (set_xcode_property)
+-endif()
+-add_subdirectory(sentencepiece sentencepiece EXCLUDE_FROM_ALL)
++target_link_libraries(tokenizers_cpp PRIVATE msgpack-c)
++
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(SentencePiece REQUIRED sentencepiece)
+ 
+ add_library(tokenizers_c INTERFACE ${TOKENIZERS_RUST_LIB})
+ target_link_libraries(tokenizers_c INTERFACE ${TOKENIZERS_RUST_LIB} ${TOKENIZERS_C_LINK_LIBS})
+ 
+-target_link_libraries(tokenizers_cpp PRIVATE tokenizers_c sentencepiece-static ${TOKENIZERS_CPP_LINK_LIBS})
++target_link_libraries(tokenizers_cpp PRIVATE tokenizers_c ${SentencePiece_LIBRARIES} ${TOKENIZERS_CPP_LINK_LIBS})
++target_include_directories(tokenizers_cpp PRIVATE ${SentencePiece_INCLUDE_DIRS})
+ target_include_directories(tokenizers_cpp PUBLIC ${TOKENIZERS_CPP_INCLUDE})
