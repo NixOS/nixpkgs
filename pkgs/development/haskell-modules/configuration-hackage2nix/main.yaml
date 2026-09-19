@@ -28,6 +28,8 @@ default-package-overrides:
   - clash-lib-hedgehog < 1.9 # needs to match clash-lib from Stackage
   # 2025-12-26: Needs to match egison-pattern-src from Stackage
   - egison-pattern-src-th-mode < 0.2.2
+  # 2026-09-19: needs to match futhark-0.27.1
+  - futhark-manifest == 1.9.0.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
   # Note: When removing this, also remove hnix-store-core from maintainers/scripts/haskell/update-stackage.sh

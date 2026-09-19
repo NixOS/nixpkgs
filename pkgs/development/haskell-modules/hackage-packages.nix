@@ -257311,6 +257311,45 @@ self: {
     }:
     mkDerivation {
       pname = "futhark-manifest";
+      version = "1.9.0.0";
+      sha256 = "1kp4jk4ckg4k8b363k5kmbns7srrlmf5cx7dz44xzcf2dnipqwsl";
+      libraryHaskellDepends = [
+        aeson
+        base
+        bytestring
+        containers
+        text
+      ];
+      testHaskellDepends = [
+        base
+        QuickCheck
+        quickcheck-instances
+        tasty
+        tasty-hunit
+        tasty-quickcheck
+        text
+      ];
+      description = "Definition and serialisation instances for Futhark manifests";
+      license = lib.meta.getLicenseFromSpdxId "ISC";
+    }
+  ) { };
+
+  futhark-manifest_1_10_0_0 = callPackage (
+    {
+      mkDerivation,
+      aeson,
+      base,
+      bytestring,
+      containers,
+      QuickCheck,
+      quickcheck-instances,
+      tasty,
+      tasty-hunit,
+      tasty-quickcheck,
+      text,
+    }:
+    mkDerivation {
+      pname = "futhark-manifest";
       version = "1.10.0.0";
       sha256 = "1gfrh2nqkbpadvgyxdgkajzp5q84kilgmfb00bdvx73mrswydw0v";
       libraryHaskellDepends = [
@@ -257331,6 +257370,7 @@ self: {
       ];
       description = "Definition and serialisation instances for Futhark manifests";
       license = lib.meta.getLicenseFromSpdxId "ISC";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
