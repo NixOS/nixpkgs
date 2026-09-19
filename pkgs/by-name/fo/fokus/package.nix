@@ -8,22 +8,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fokus";
-  version = "2.3.3";
+  version = "3.0.0";
 
   src = fetchFromGitLab {
     owner = "divinae";
     repo = "focus-plasmoid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S/0hAAt9zzj8pP5juFDvT0Z2B+GKpFnBsIVdJjSEakI=";
+    hash = "sha256-xaiXeAjTOdCMfdltUgjaLZ7V0JYjl9DQYgyVI2y8A2Y=";
   };
 
   dontWrapQtApps = true;
+  dontBuild = true;
 
   postPatch = ''
     substituteInPlace package/contents/config/main.xml package/contents/ui/configNotifications.qml \
          --replace-fail "/usr/share/sounds" "${kdePackages.ocean-sound-theme}/share/sounds"
 
-    substituteInPlace package/contents/ui/configNotifications.qml package/contents/ui/configScripts.qml package/contents/ui/main.qml package/contents/ui/NotificationManager.qml \
+    substituteInPlace package/contents/ui/Sfx.qml \
          --replace-fail 'import QtMultimedia' 'import "file://${kdePackages.qtmultimedia}/lib/qt-6/qml/QtMultimedia"'
   '';
 
