@@ -1,0 +1,31 @@
+Sockets created by ArchNetworkBSD lack FD_CLOEXEC, so helpers spawned by
+the Wayland wl-clipboard backend inherit the listening socket fd; wl-copy
+daemonizes and outlives deskflow, keeping the port bound. Every restart
+then fails with "cannot bind address: Address already in use" while no
+deskflow process is running.
+Upstream: no fix; the whole wl-clipboard backend was removed on master
+(deskflow/deskflow@df3746777, PR #9431, targeting 1.27). Drop this patch
+when the backend disappears.
+
+--- a/src/lib/arch/unix/ArchNetworkBSD.cpp	2026-08-24 17:15:22.522141220 +0200
++++ b/src/lib/arch/unix/ArchNetworkBSD.cpp	2026-08-24 17:15:32.442274780 +0200
+@@ -103,6 +103,9 @@
+   if (fd == -1) {
+     throwError(errno);
+   }
++  // Spawned helpers (wl-copy/wl-paste outlive us) must not inherit sockets:
++  // a leaked listen fd keeps the port bound and blocks the next server start.
++  fcntl(fd, F_SETFD, FD_CLOEXEC);
+   try {
+     setBlockingOnSocket(fd, false);
+   } catch (...) {
+@@ -220,6 +223,9 @@
+     throwError(err);
+   }
+ 
++  // See newSocket(): accepted connections must not leak into spawned helpers.
++  fcntl(fd, F_SETFD, FD_CLOEXEC);
++
+   try {
+     setBlockingOnSocket(fd, false);
+   } catch (...) {
