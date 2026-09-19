@@ -104,8 +104,14 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    # used by vikunja-desktop
-    inherit (finalAttrs) frontend;
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        src
+        version
+        meta
+        frontend
+        ;
+    };
 
     tests.vikunja = nixosTests.vikunja;
 
@@ -115,6 +121,8 @@ buildGoModule (finalAttrs: {
         "frontend"
         "--subpackage"
         "veans"
+        "--subpackage"
+        "desktop"
       ];
     };
   };
