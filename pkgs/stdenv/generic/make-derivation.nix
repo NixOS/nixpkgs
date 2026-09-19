@@ -185,9 +185,12 @@ let
 in
 config:
 let
-  doCheckByDefault = config.doCheckByDefault or false;
-  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
-  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
+  inherit (config)
+    enableParallelBuildingByDefault
+    contentAddressedByDefault
+    doCheckByDefault
+    structuredAttrsByDefault
+    ;
   userHook = config.stdenv.userHook or null;
   checkMeta = import ./check-meta.nix {
     inherit lib config;
@@ -448,9 +451,8 @@ let
 
       patches ? [ ],
 
-      __contentAddressed ?
-        (!attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-        && contentAddressedByDefault,
+      # Fixed-output drvs can't be content addressed
+      __contentAddressed ? contentAddressedByDefault && !(attrs ? outputHash),
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
@@ -648,44 +650,53 @@ let
         ];
 
         derivationArg = removeAttrs attrs removedOrReplacedAttrNames // {
-          ${if (attrs ? name || (attrs ? pname && attrs ? version)) then "name" else null} =
+          name =
             let
               # Indicate the host platform of the derivation if cross compiling.
               # Fixed-output derivations like source tarballs shouldn't get a host
-              # suffix. But we have some weird ones with run-time deps that are
-              # just used for their side-affects. Those might as well since the
-              # hash can't be the same. See #32986.
+              # suffix: their store path is derived from the name as well as the
+              # hash, so renaming them per target forks identical content across
+              # store paths. But we have some weird ones with run-time deps that
+              # are just used for their side-effects. Those might as well since
+              # the hash can't be the same. See #32986.
               hostSuffix = optionalString (
                 hostSuffixNecessary
                 && (
                   !(attrs ? outputHash)
-                  ||
-                    depsBuildTarget == [ ]
-                    && depsBuildTargetPropagated == [ ]
-                    && depsHostHost == [ ]
-                    && depsHostHostPropagated == [ ]
-                    && buildInputs == [ ]
-                    && propagatedBuildInputs == [ ]
-                    && depsTargetTarget == [ ]
-                    && depsTargetTargetPropagated == [ ]
+                  || depsBuildTarget != [ ]
+                  || depsBuildTargetPropagated != [ ]
+                  || depsHostHost != [ ]
+                  || depsHostHostPropagated != [ ]
+                  || buildInputs != [ ]
+                  || propagatedBuildInputs != [ ]
+                  || depsTargetTarget != [ ]
+                  || depsTargetTargetPropagated != [ ]
 
                 )
               ) stdenvHostSuffix;
 
               # Disambiguate statically built packages. This was originally
-              # introduce as a means to prevent nix-env to get confused between
-              # nix and nixStatic. This should be also achieved by moving the
-              # hostSuffix before the version, so we could contemplate removing
-              # it again.
+              # introduced as a means to prevent nix-env from getting confused
+              # between nix and nixStatic. The hostSuffix has since moved before
+              # the version, which already disambiguates anything built with a
+              # CC stdenv: pkgsStatic.hello is
+              # hello-static-x86_64-unknown-linux-musl-2.12.3. stdenvNoCC
+              # packages never get a hostSuffix though, so the marker is still
+              # their only disambiguator.
               staticMarker = stdenvStaticMarker;
             in
             sanitizeDerivationName (
               if attrs ? name then
                 attrs.name + hostSuffix
               else
-                # we cannot coerce null to a string below
                 assert
-                  (attrs ? version && attrs.version != null) || throw "The `version` attribute cannot be null.";
+                  isString (attrs.pname or null) && isString (attrs.version or null)
+                  || throw ''
+                    mkDerivation requires either a `name` attribute, or a `pname` and a `version`, both strings.
+                    Got `pname` = ${toPretty { multiline = false; } (attrs.pname or null)} and `version` = ${
+                      toPretty { multiline = false; } (attrs.version or null)
+                    }.
+                  '';
                 "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
             );
 
@@ -746,13 +757,6 @@ let
 
           inherit outputs;
 
-          # When the derivations is content addressed provide default values
-          # for outputHashMode and outputHashAlgo because most people won't
-          # care about these anyways
-          ${if __contentAddressed then "__contentAddressed" else null} = __contentAddressed;
-          ${if __contentAddressed then "outputHashAlgo" else null} = attrs.outputHashAlgo or "sha256";
-          ${if __contentAddressed then "outputHashMode" else null} = attrs.outputHashMode or "recursive";
-
           ${if enableParallelBuilding then "enableParallelBuilding" else null} = enableParallelBuilding;
           ${if enableParallelBuilding then "enableParallelChecking" else null} =
             attrs.enableParallelChecking or true;
@@ -784,8 +788,6 @@ let
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
           # NixOS module already sets gccarch, unsure of nix installers and other distributions
-          ${if requiredSystemFeaturesShouldBeSet then "requiredSystemFeatures" else null} =
-            attrs.requiredSystemFeatures or [ ] ++ gccArchFeature;
 
           # -- Darwin-specific attrs --
           ${if buildIsDarwin then "__darwinAllowLocalNetworking" else null} = __darwinAllowLocalNetworking;
@@ -846,61 +848,101 @@ let
             in
             computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
 
-          # -- Windows/Cygwin-specific attrs --
-          ${if isWindows || isCygwin then "allowedImpureDLLs" else null} =
-            allowedImpureDLLs
-            ++ optionals isCygwin [
-              "KERNEL32.dll"
-            ];
-
-          # -- Output reference checks --
-          ${if !__structuredAttrs && attrs ? disallowedReferences then "disallowedReferences" else null} =
-            map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-          ${if !__structuredAttrs && attrs ? disallowedRequisites then "disallowedRequisites" else null} =
-            map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-          ${if !__structuredAttrs && attrs ? allowedReferences then "allowedReferences" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-          ${if !__structuredAttrs && attrs ? allowedRequisites then "allowedRequisites" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
-          ${if __structuredAttrs then "outputChecks" else null} =
-            let
-              attrsOutputChecks = makeOutputChecks attrs;
-              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
-            in
-            # to avoid the listToAttrs in most common situations, we replicate
-            # what it would produce for most derivations. this can be improved
-            # in the future at the cost of a mass rebuild - empty attrsets for
-            # each output is a noop
-            if
-              !attrs ? outputs
-              && !attrs ? outputChecks
-              && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
-            then
-              if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
-            else
-              listToAttrs (
-                map (name: {
-                  inherit name;
-                  value =
-                    let
-                      raw = zipAttrsWith (_: concatLists) [
-                        attrsOutputChecksFiltered
-                        (makeOutputChecks (attrs.outputChecks.${name} or { }))
-                      ];
-                    in
-                    # separateDebugInfo = true will put all sorts of files in
-                    # the debug output which could carry references, but
-                    # that's "normal". Notably it symlinks to the source.
-                    # So disable reference checking for the debug output
-                    if separateDebugInfo' && name == "debug" then
-                      removeAttrs raw referenceCheckingAttrsToRemove
-                    else
-                      raw;
-                }) outputs
-              );
         };
       in
-      derivationArg;
+      derivationArg
+      // (
+        if requiredSystemFeaturesShouldBeSet then
+          { requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ gccArchFeature; }
+        else
+          { }
+      )
+      // (
+        if __structuredAttrs then
+          {
+            outputChecks =
+              let
+                attrsOutputChecks = makeOutputChecks attrs;
+                attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
+              in
+              # to avoid the listToAttrs in most common situations, we replicate
+              # what it would produce for most derivations. this can be improved
+              # in the future at the cost of a mass rebuild - empty attrsets for
+              # each output is a noop
+              if
+                !attrs ? outputs
+                && !attrs ? outputChecks
+                && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
+              then
+                if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
+              else
+                listToAttrs (
+                  map (name: {
+                    inherit name;
+                    value =
+                      let
+                        raw = zipAttrsWith (_: concatLists) [
+                          attrsOutputChecksFiltered
+                          (makeOutputChecks (attrs.outputChecks.${name} or { }))
+                        ];
+                      in
+                      # separateDebugInfo = true will put all sorts of files in
+                      # the debug output which could carry references, but
+                      # that's "normal". Notably it symlinks to the source.
+                      # So disable reference checking for the debug output
+                      if separateDebugInfo' && name == "debug" then
+                        removeAttrs raw referenceCheckingAttrsToRemove
+                      else
+                        raw;
+                  }) outputs
+                );
+          }
+        else
+          { }
+      )
+      // (
+        # -- Output reference checks --
+        if
+          !__structuredAttrs
+          && (
+            attrs ? disallowedReferences
+            || attrs ? disallowedRequisites
+            || attrs ? allowedReferences
+            || attrs ? allowedRequisites
+          )
+        then
+          {
+            ${if attrs ? disallowedReferences then "disallowedReferences" else null} =
+              map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+            ${if attrs ? disallowedRequisites then "disallowedRequisites" else null} =
+              map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+            ${if attrs ? allowedReferences then "allowedReferences" else null} =
+              mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+            ${if attrs ? allowedRequisites then "allowedRequisites" else null} =
+              mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+          }
+        else
+          { }
+      )
+      // (
+        # -- Windows/Cygwin-specific attrs --
+        if isWindows || isCygwin then
+          { allowedImpureDLLs = allowedImpureDLLs ++ optionals isCygwin [ "KERNEL32.dll" ]; }
+        else
+          { }
+      )
+      // (
+        if __contentAddressed then
+          {
+            __contentAddressed = true;
+            # Provide default values for outputHashMode and outputHashAlgo
+            # because most people won't care about these anyways.
+            outputHashAlgo = attrs.outputHashAlgo or "sha256";
+            outputHashMode = attrs.outputHashMode or "recursive";
+          }
+        else
+          { }
+      );
 
   mkDerivationSimple =
     overrideAttrs:
@@ -1022,8 +1064,7 @@ let
         inputDerivation = derivation (
           removeAttrs derivationArg attrsToRemoveLast
           // {
-            # Add a name in case the original drv didn't have one
-            name = "inputDerivation" + optionalString (derivationArg ? name) "-${derivationArg.name}";
+            name = "inputDerivation-${derivationArg.name}";
             # This always only has one output
             outputs = [ "out" ];
             # This doesn’t require any system features even if the original
