@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fontforge,
+  installFonts,
 }:
 
 stdenv.mkDerivation {
@@ -16,9 +17,13 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ fontforge ];
+  nativeBuildInputs = [
+    fontforge
+    installFonts
+  ];
 
   dontConfigure = true;
+  dontInstallFonts = true;
 
   buildPhase = ''
     runHook preBuild
@@ -40,14 +45,12 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-    install -m444 -Dt $out/share/fonts/opentype/public *.otf
-    install -m444 -Dt $out/share/fonts/truetype/public *.ttf
-    install -m444 -Dt $out/share/fonts/type1/public    *.pfb
-    install -m444 -Dt $out/share/texmf/fonts/enc       *.enc
-    install -m444 -Dt $out/share/texmf/fonts/map       *.map
-    runHook postInstall
+  postInstall = ''
+    installFont otf $out/share/fonts/opentype/public
+    installFont ttf $out/share/fonts/truetype/public
+    installFont pfb $out/share/fonts/type1/public
+    installFont enc $out/share/texmf/fonts/enc
+    installFont map $out/share/texmf/fonts/map
   '';
 
   meta = {
