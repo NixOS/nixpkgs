@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "6.0.2";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TWccO4yiMKXUfvpfimk/PQFTHzj09SMXApm+c0zJhRs=";
+    hash = "sha256-vpfkUlKOekLvCk32g2Td13gz6YLFusXNz+4VyB9l6Ws=";
   };
 
   build-system = [ setuptools ];
