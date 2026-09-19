@@ -2610,6 +2610,7 @@ mapAliases {
   utillinux = warnAlias "'utillinux' has been renamed to/replaced by 'util-linux'" util-linux; # Converted to warning 2025-10-28
   utilmacros = util-macros; # Added 2025-02-04
   utsushi = throw "'utsushi' has been removed as it was archived upstream and depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
+  uutils-login = throw "'uutils-login' has been renamed to/replaced by 'uu-shadow'"; # Added 2026-08-08
   vaapiIntel = throw "'vaapiIntel' has been renamed to/replaced by 'intel-vaapi-driver'"; # Converted to throw 2025-10-27
   vaapiVdpau = throw "'vaapiVdpau' has been renamed to/replaced by 'libva-vdpau-driver'"; # Converted to throw 2025-10-27
   vacuum = throw "'vacuum' has been removed as upstream Vacuum-IM has been unmaintained since December 2021"; # Added 2026-04-26
