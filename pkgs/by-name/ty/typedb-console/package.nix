@@ -18,7 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-WOp5yKCK2hayW6NPKdJNLx+o+IiBBKAkR94AGdDbTCk=";
   };
 
-  cargoHash = "sha256-G0+g5NJ6SJo3N5rsTVu7KQfCDQoz9NfENN4jeWH2MJI=";
+  # Discovery placeholder: the pristine-tag vendor hash. The patched lock
+  # changes vendor content, so this run harvests the patched vendor hash
+  # from the fixed-output mismatch message (sanctioned hash discovery).
+  cargoHash = "sha256-K8InTOFLJwYZKaW98iz/BAJkXPDSl11XIqYeEO6gqpQ=";
 
   # Upstream console-3.13.0 tag ships a Cargo.lock pinning typedb-driver
   # 3.12.0 while the manifests require 3.12.3, so --locked resolution fails
