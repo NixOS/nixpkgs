@@ -53,6 +53,7 @@ let
       {
         nativeBuildInputs = [ makeWrapper ];
         inherit (coq-jupyter) pname version;
+        meta.license = coq-jupyter.meta.license;
       }
       ''
         mkdir -p $out/bin
