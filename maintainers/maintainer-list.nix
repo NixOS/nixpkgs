@@ -22091,6 +22091,12 @@
     github = "owickstrom";
     githubId = 1464328;
   };
+  ownik = {
+    email = "ownik.dev@gmail.com";
+    name = "Nikita Ostrenkov";
+    github = "ownik";
+    githubId = 5059371;
+  };
   oxalica = {
     email = "oxalicc@pm.me";
     github = "oxalica";
