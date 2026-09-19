@@ -10,6 +10,9 @@ let
 
   cfg = config.services.atticd;
 
+  localPostgresql = cfg.database.createLocally;
+  localPostgresqlUrl = "postgresql://${cfg.user}@localhost/${cfg.user}?host=/run/postgresql";
+
   format = pkgs.formats.toml { };
 
   checkedConfigFile =
@@ -100,6 +103,16 @@ in
         default = "atticd";
       };
 
+      database.createLocally = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically create a local PostgreSQL database and user
+          named after `services.atticd.user`. The database is accessed through
+          the local Unix socket using peer authentication.
+        '';
+      };
+
       settings = lib.mkOption {
         description = ''
           Structured configurations of atticd.
@@ -147,7 +160,25 @@ in
           Then, set `services.atticd.environmentFile` to the quoted absolute path of the file.
         '';
       }
+      {
+        assertion = localPostgresql -> cfg.settings.database.url == localPostgresqlUrl;
+        message = ''
+          services.atticd.settings.database.url must use the automatically
+          configured local PostgreSQL URL when database.createLocally is true.
+        '';
+      }
     ];
+
+    services.postgresql = lib.mkIf localPostgresql {
+      enable = true;
+      ensureDatabases = [ cfg.user ];
+      ensureUsers = [
+        {
+          name = cfg.user;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
 
     services.atticd.settings = {
       chunking = lib.mkDefault {
@@ -157,7 +188,9 @@ in
         max-size = 262144; # 256 KiB
       };
 
-      database.url = lib.mkDefault "sqlite:///var/lib/atticd/server.db?mode=rwc";
+      database.url = lib.mkDefault (
+        if localPostgresql then localPostgresqlUrl else "sqlite:///var/lib/atticd/server.db?mode=rwc"
+      );
 
       # "storage" is internally tagged
       # if the user sets something the whole thing must be replaced
