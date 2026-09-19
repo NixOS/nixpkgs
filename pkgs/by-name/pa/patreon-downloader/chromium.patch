@@ -1,0 +1,23 @@
+Submodule submodules/UniversalDownloaderPlatform contains modified content
+diff --git a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.PuppeteerEngine/PuppeteerEngine.cs b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.PuppeteerEngine/PuppeteerEngine.cs
+index c65824d..4eaf1f6 100644
+--- a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.PuppeteerEngine/PuppeteerEngine.cs
++++ b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.PuppeteerEngine/PuppeteerEngine.cs
+@@ -144,8 +144,6 @@ namespace UniversalDownloaderPlatform.PuppeteerEngine
+         {
+             try
+             {
+-                _logger.Debug("Downloading browser");
+-                await new BrowserFetcher().DownloadAsync();
+                 _logger.Debug("Launching browser");
+ 
+                 List<string> browserArguments = new List<string>();
+@@ -159,6 +157,8 @@ namespace UniversalDownloaderPlatform.PuppeteerEngine
+ 
+                 _browser = await PuppeteerSharp.Puppeteer.LaunchAsync(new LaunchOptions
+                 {
++                    Browser = SupportedBrowser.Chromium,
++                    ExecutablePath = "chromium",
+                     //Devtools = true,
+                     Headless = _headless,
+                     UserDataDir = Path.Combine(Environment.CurrentDirectory, "chromedata"),
