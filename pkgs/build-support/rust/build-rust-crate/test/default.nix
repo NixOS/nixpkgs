@@ -916,6 +916,36 @@ rec {
     tests
     // {
 
+      # A binary must not have an RPATH entry for the `lib` output of its crate.
+      # Such an entry makes a reference cycle and the build fails. The patchelf
+      # hook removes the entry and hides the problem. This test disables the hook.
+      noSelfRpath =
+        let
+          crate =
+            (mkHostCrate {
+              crateName = "nixtestcrate-self-rpath";
+              libPath = "src/lib.rs";
+              crateBin = [
+                {
+                  name = "test_self_rpath";
+                  path = "src/main.rs";
+                }
+              ];
+              src = symlinkJoin {
+                name = "buildRustCrateSelfRpathCase";
+                paths = [
+                  (mkLib "src/lib.rs")
+                  (mkBin "src/main.rs")
+                ];
+              };
+            }).overrideAttrs
+              { dontPatchELF = true; };
+        in
+        runCommand "run-buildRustCrate-no-self-rpath-test" { } ''
+          test -x ${crate}/bin/test_self_rpath
+          touch $out
+        '';
+
       crateBinWithPathOutputs = assertOutputs {
         name = "crateBinWithPath";
         crateArgs = {
