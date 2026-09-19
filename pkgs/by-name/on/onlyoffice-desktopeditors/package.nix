@@ -76,13 +76,27 @@ let
     pulseaudio
   ];
 
+  sources = {
+    x86_64-linux = {
+      arch = "amd64";
+      hash = "sha256-L92iTS7+ZVKNCqutBjPYaPIvZ88VZ/jfOecsuiT2ryQ=";
+    };
+    aarch64-linux = {
+      arch = "arm64";
+      hash = "sha256-um0LxqnucrEo+Qg4OxAhMGK+QVJv58qwj4d7+9E6fhI=";
+    };
+  };
+  source =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.1.0";
+    version = "9.3.1";
     minor = null;
     src = fetchurl {
-      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-D36E7hYCTJ9Lw9XnB8nxMGMJDJRhM+K+bviuM9uuzhk=";
+      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_${source.arch}.deb";
+      inherit (source) hash;
     };
 
     nativeBuildInputs = [
@@ -199,7 +213,10 @@ buildFHSEnv {
     homepage = "https://www.onlyoffice.com/";
     downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
     changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
