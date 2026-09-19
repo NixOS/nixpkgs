@@ -110,5 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.mdaniels5757 ];
     teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/findutils@${finalAttrs.version}";
+    };
   };
 })

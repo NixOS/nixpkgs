@@ -129,5 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
       helsinki-Jo
     ];
     mainProgram = "gawk";
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/gawk@${finalAttrs.version}";
+    };
   };
 })

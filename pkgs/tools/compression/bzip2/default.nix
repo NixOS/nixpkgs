@@ -84,6 +84,10 @@ stdenv.mkDerivation (
       pkgConfigModules = [ "bzip2" ];
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ mic92 ];
+      identifiers.purlParts = {
+        type = "nix";
+        spec = "nixpkgs/bzip2@${finalAttrs.version}";
+      };
     };
   }
 )

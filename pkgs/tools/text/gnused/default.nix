@@ -53,5 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "sed";
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/gnused@${finalAttrs.version}";
+    };
   };
 })

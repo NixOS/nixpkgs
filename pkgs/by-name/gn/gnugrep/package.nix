@@ -115,6 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version // {
       product = "grep";
     };
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/gnugrep@${finalAttrs.version}";
+    };
   };
 
   passthru = {
