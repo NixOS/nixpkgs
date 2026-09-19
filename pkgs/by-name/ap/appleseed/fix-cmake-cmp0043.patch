@@ -1,0 +1,46 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 82e1db50f..3db287170 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -547,16 +547,16 @@ set (preprocessor_definitions_ship
+ # A convenience macro to apply the preprocessor definitions to all configurations of a given target.
+ macro (apply_preprocessor_definitions target)
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_DEBUG ${preprocessor_definitions_debug}
++        COMPILE_DEFINITIONS $<$<CONFIG:Debug>:${preprocessor_definitions_debug}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_RELEASE ${preprocessor_definitions_release}
++        COMPILE_DEFINITIONS $<$<CONFIG:Release>:${preprocessor_definitions_release}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_SHIP ${preprocessor_definitions_ship}
++        COMPILE_DEFINITIONS $<$<CONFIG:Ship>:${preprocessor_definitions_ship}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_PROFILE ${preprocessor_definitions_profile}
++        COMPILE_DEFINITIONS $<$<CONFIG:Profile>:${preprocessor_definitions_profile}>
+     )
+ endmacro ()
+ 
+@@ -564,16 +564,16 @@ endmacro ()
+ macro (append_custom_preprocessor_definitions target first_definition)
+     set (definitions ${first_definition} ${ARGN})
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_DEBUG ${definitions}
++        COMPILE_DEFINITIONS $<$<CONFIG:Debug>:${definitions}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_RELEASE ${definitions}
++        COMPILE_DEFINITIONS $<$<CONFIG:Release>:${definitions}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_SHIP ${definitions}
++        COMPILE_DEFINITIONS $<$<CONFIG:Ship>:${definitions}>
+     )
+     set_property (TARGET ${target} APPEND PROPERTY
+-        COMPILE_DEFINITIONS_PROFILE ${definitions}
++        COMPILE_DEFINITIONS $<$<CONFIG:Profile>:${definitions}>
+     )
+ endmacro ()
+ 
