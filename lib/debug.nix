@@ -533,7 +533,7 @@ rec {
             ]
           else
             [ ]
-        ) tests
+        ) (removeAttrs tests [ "tests" ])
       )
     );
 
