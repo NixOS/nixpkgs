@@ -229,6 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Modular C++ IRC server";
     license = [
       lib.licenses.gpl2Only

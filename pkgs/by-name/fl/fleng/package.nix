@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://www.call-with-current-continuation.org/fleng/fleng.html";
     description = "Low level concurrent logic programming language descended from Prolog";
     license = lib.licenses.publicDomain;
