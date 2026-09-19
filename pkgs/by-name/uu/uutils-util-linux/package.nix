@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-util-linux";
-  version = "0.0.1-unstable-2026-09-01";
+  version = "0.0.1-unstable-2026-09-13";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "util-linux";
-    rev = "77b6743fb63660a6a3f9a9ad09ff1963480d0e74";
-    hash = "sha256-QO+Lr6vl3lVS7moRDUK3fM5RdVHE9pfT64VAzKSicNA=";
+    rev = "b364d8263ee89db6856884dd9284342995885469";
+    hash = "sha256-N+EBV5n47OVm8c6dvgTlk/Up+C0U14ncKvAozs+QFHo=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"cut"' '"${lib.getExe' coreutils "cut"}"'
   '';
 
-  cargoHash = "sha256-XdFwScItuXWqd/IBhsZcDMilv7KkUwm0JT1sM0QFmC4=";
+  cargoHash = "sha256-RZjlS7lc8PDgDxEjemK/Xris1rJPJn7Wu0jAi8MbIOk=";
 
   nativeBuildInputs = [
     pkg-config
