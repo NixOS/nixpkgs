@@ -2009,8 +2009,6 @@ with pkgs;
 
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
-  uniscribe = callPackage ../tools/text/uniscribe { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_1
