@@ -27211,6 +27211,11 @@
     github = "syedmoizurrehman";
     githubId = 17818950;
   };
+  smudgebun = {
+    name = "smudge";
+    github = "smudgebun";
+    githubId = 189092906;
+  };
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "S-NA";
