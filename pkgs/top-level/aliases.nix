@@ -2173,6 +2173,7 @@ mapAliases {
   q2pro = throw "'q2pro' has been removed as upstream repository was deleted and no direct active forks were available."; # Added 2025-12-27
   qbz = throw "'qbz' has been removed at the request of the upstream maintainer; the source is no longer available"; # Added 2026-09-18
   qcachegrind = throw "'qcachegrind' has been removed, as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
+  qdjango = throw "'qdjango' has been removed because upstream declared the project unmaintained and archived it; its remaining in-tree consumer vendors its own copy"; # Added 2026-09-02
   qes = throw "'qes' has been removed, as it has been merged into shkd"; # Added 2025-12-21
   qflipper = throw "'qflipper' has been renamed to/replaced by 'qFlipper'"; # Converted to throw 2025-10-27
   qgo = throw "'qgo' has been removed because upstream no longer develops it"; # Added 2026-09-02
