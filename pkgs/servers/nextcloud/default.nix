@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud32Packages,
   nextcloud33Packages,
   nextcloud34Packages,
 }:
@@ -56,12 +55,6 @@ let
     };
 in
 {
-  nextcloud32 = generic {
-    version = "32.0.15";
-    hash = "sha256-aXSsEZUCXxNkPfF21Fas9FI3kNVIjCBbV1OfZCx9Fkw=";
-    packages = nextcloud32Packages;
-  };
-
   nextcloud33 = generic {
     version = "33.0.9";
     hash = "sha256-8zHBBB0CfmWIUm0qAM5CvHCpYi6rWHHAvpF3JSz3dCM=";
