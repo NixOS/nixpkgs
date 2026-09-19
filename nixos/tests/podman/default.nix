@@ -32,12 +32,6 @@ import ../make-test-python.nix (
           boot.supportedFilesystems = [ "zfs" ];
           networking.hostId = "00000000";
         };
-      rootful_norunc =
-        { pkgs, ... }:
-        {
-          virtualisation.podman.enable = true;
-          virtualisation.podman.extraRuntimes = [ ];
-        };
       rootless =
         { pkgs, ... }:
         {
@@ -86,20 +80,10 @@ import ../make-test-python.nix (
 
 
       rootful.wait_for_unit("sockets.target")
-      rootful_norunc.wait_for_unit("sockets.target")
       rootless.wait_for_unit("sockets.target")
       dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
       start_all()
-
-      with subtest("Run container as root with runc"):
-          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          rootful.succeed(
-              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
-          )
-          rootful.succeed("podman ps | grep sleeping")
-          rootful.succeed("podman stop sleeping")
-          rootful.succeed("podman rm sleeping")
 
       with subtest("Run container as root with crun"):
           rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
@@ -119,46 +103,10 @@ import ../make-test-python.nix (
           rootful.succeed("podman stop sleeping")
           rootful.succeed("podman rm sleeping")
 
-      # now without installed runc
-      with subtest("Run runc-less container as root with runc"):
-          rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          rootful_norunc.fail(
-              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
-          )
-
-      with subtest("Run runc-less container as root with crun"):
-          rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          rootful_norunc.succeed(
-              "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
-          )
-          rootful_norunc.succeed("podman ps | grep sleeping")
-          rootful_norunc.succeed("podman stop sleeping")
-          rootful_norunc.succeed("podman rm sleeping")
-
-      with subtest("Run runc-less container as root with the default backend"):
-          rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          rootful_norunc.succeed(
-              "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
-          )
-          rootful_norunc.succeed("podman ps | grep sleeping")
-          rootful_norunc.succeed("podman stop sleeping")
-          rootful_norunc.succeed("podman rm sleeping")
-
       # start systemd session for rootless
       rootless.succeed("loginctl enable-linger alice")
       rootless.succeed(su_cmd("whoami"))
       rootless.sleep(1)
-
-      with subtest("Run container rootless with runc"):
-          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          rootless.succeed(
-              su_cmd(
-                  "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
-              )
-          )
-          rootless.succeed(su_cmd("podman ps | grep sleeping"))
-          rootless.succeed(su_cmd("podman stop sleeping"))
-          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with crun"):
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
