@@ -1,0 +1,15 @@
+--- nsys-ui.old	2023-12-05 08:47:13.000000000 -0500
++++ nsys-ui	2023-12-05 08:47:37.000000000 -0500
+@@ -12,12 +12,6 @@
+ unset QT_AUTO_SCREEN_SCALE_FACTOR
+ unset QT_ENABLE_HIGHDPI_SCALING
+ 
+-nm -D /lib64/libk5crypto.so.3 2>/dev/null | grep 'U EVP_KDF_ctrl' >/dev/null
+-if [[ ${PIPESTATUS[1]} -eq 0 ]]; then
+-    echo "libk5crypto.so.3 requires EVP_KDF_ctrl. Switching to system OpenSSL libraries" >&2
+-    export LD_PRELOAD=/lib64/libcrypto.so.1.1:/lib64/libssl.so.1.1
+-fi
+-
+ QUADD_STDERR_PATH="/tmp/nsys-ui-stderr.txt"
+ 
+ OPENGL_VERSION_MAJOR=$("$NV_QUADD_PATH" --get-opengl-version 2> $QUADD_STDERR_PATH)
