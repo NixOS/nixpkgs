@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   mock,
+  pyprojectVersionPatchHook,
   pytest-mock,
   pytestCheckHook,
   pytz,
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-1dTcT84cDpP9V4tVrgW2MTYx4jQj0/tZiAuakC+orUQ=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     hatchling
