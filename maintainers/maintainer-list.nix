@@ -15975,6 +15975,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lair001 = {
+    email = "lair001@gmail.com";
+    github = "lair001";
+    githubId = 19999488;
+    name = "Samuel Lair";
+  };
   lajp = {
     email = "lajp@iki.fi";
     github = "lajp";
