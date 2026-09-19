@@ -29217,6 +29217,11 @@
     githubId = 1618946;
     name = "Tiago Castro";
   };
+  tiagohierath = {
+    github = "tiagohierath";
+    githubId = 84463665;
+    name = "Tiago Hierath";
+  };
   tie = {
     name = "Ivan Trubach";
     email = "mr.trubach@icloud.com";
