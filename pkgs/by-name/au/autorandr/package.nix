@@ -34,7 +34,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
   '';
 
-  patches = [ ./0001-don-t-use-sys.executable.patch ];
+  patches = [
+    ./0001-don-t-use-sys.executable.patch
+    ./0002-optional-mode.patch
+  ];
 
   outputs = [
     "out"
