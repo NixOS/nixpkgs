@@ -5,6 +5,8 @@
   callPackage,
   installShellFiles,
   qemu,
+  symlinkJoin,
+  virtiofsd,
   darwin,
   makeWrapper,
   nix-update-script,
@@ -22,6 +24,22 @@
 
 let
   source = callPackage ./source.nix { };
+
+  # lima looks for virtiofsd through QEMU's vhost-user descriptor directory
+  # (<qemu-prefix>/share/qemu/vhost-user), which it derives from the path of the
+  # qemu-system-* binary it resolved. virtiofsd therefore has to share a prefix
+  # with qemu, or `mountType: virtiofs` fails with "failed to locate virtiofsd".
+  qemuWithVirtiofsd =
+    if stdenv.hostPlatform.isLinux then
+      symlinkJoin {
+        name = "qemu-with-virtiofsd";
+        paths = [
+          qemu
+          virtiofsd
+        ];
+      }
+    else
+      qemu;
 in
 buildGoModule (finalAttrs: {
   pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
@@ -69,7 +87,7 @@ buildGoModule (finalAttrs: {
     mkdir -p $out
     cp -r _output/* $out
     wrapProgram $out/bin/limactl \
-      --prefix PATH : ${lib.makeBinPath [ qemu ]}
+      --prefix PATH : ${lib.makeBinPath [ qemuWithVirtiofsd ]}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd limactl \
