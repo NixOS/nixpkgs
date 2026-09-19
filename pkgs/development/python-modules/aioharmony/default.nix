@@ -11,7 +11,7 @@
   slixmpp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioharmony";
   version = "1.0.10";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Harmony-Libs";
     repo = "aioharmony";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j4VlYxGd3I6SLZjJUOSZW9hyfSkX04L/8CGBWp7vTj0=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/Harmony-Libs/aioharmony";
-    description = "Python library for interacting the Logitech Harmony devices";
-    mainProgram = "aioharmony";
+    description = "Python library for interacting with the Logitech Harmony devices";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oro ];
+    mainProgram = "aioharmony";
   };
-}
+})
