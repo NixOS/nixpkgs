@@ -59,6 +59,10 @@ in
         '';
       };
 
+      enableConfigCheck = lib.mkEnableOption "checking the config during build time" // {
+        default = true;
+      };
+
       dbusPackage = lib.mkPackageOption pkgs "dbus" { };
 
       brokerPackage = lib.mkPackageOption pkgs "dbus-broker" { };
@@ -153,6 +157,34 @@ in
       systemd.user.sockets.dbus.wantedBy = [
         "sockets.target"
       ];
+
+      # ensure that all the imported dbus configurations are at least valid XML
+      system.checks =
+        let
+          dbusConfigCheck =
+            path:
+            pkgs.runCommand "check-dbus-config-${path.name}" { } ''
+              shopt -s nullglob
+
+              check_path () {
+                for path in $1/*.conf; do
+                  ${lib.getExe' pkgs.libxml2 "xmllint"} -noout "$path" \
+                    || (echo "d-bus check failed due to invalid XML" && exit 1)
+                done
+              }
+
+              pkg="${path}"
+              check_path "$pkg/etc/dbus-1/system.d"
+              check_path "$pkg/share/dbus-1/system.d"
+              check_path "$pkg/share/dbus-1/system-services"
+              check_path "$pkg/etc/dbus-1/session.d"
+              check_path "$pkg/share/dbus-1/session.d"
+              check_path "$pkg/share/dbus-1/services"
+
+              touch $out
+            '';
+        in
+        lib.mkIf cfg.enableConfigCheck (builtins.map dbusConfigCheck cfg.packages);
     }
 
     (mkIf config.boot.initrd.systemd.dbus.enable {
