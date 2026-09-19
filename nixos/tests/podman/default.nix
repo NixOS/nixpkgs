@@ -74,6 +74,50 @@ import ../make-test-python.nix (
             isNormalUser = true;
           };
         };
+
+      # Asserts that `firewall.trustBridge = true` lets a container reach a
+      # host service whose port is allow-listed only on the host's primary
+      # interface (not on the bridge). With `false` the same connection is
+      # dropped by the host firewall.
+      trustBridge =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
+          virtualisation.podman.firewall.trustBridge = true;
+
+          # Per-interface allow-list: 12345 open on eth0, NOT on podman0
+          # (and not in the global allow-list). Without trustBridge=true,
+          # container-originated traffic to the host on this port is dropped.
+          networking.firewall.allowedTCPPorts = [ ];
+          networking.firewall.interfaces.eth0.allowedTCPPorts = [ 12345 ];
+
+          # Tiny host service bound to all interfaces; reachable only
+          # through the firewall hole on whichever interface the request
+          # arrives on.
+          systemd.services.host-probe = {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-online.target" ];
+            wants = [ "network-online.target" ];
+            serviceConfig.ExecStart = "${pkgs.python3}/bin/python -m http.server --bind 0.0.0.0 12345";
+          };
+        };
+
+      noTrustBridge =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
+          virtualisation.podman.firewall.trustBridge = false;
+
+          networking.firewall.allowedTCPPorts = [ ];
+          networking.firewall.interfaces.eth0.allowedTCPPorts = [ 12345 ];
+
+          systemd.services.host-probe = {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-online.target" ];
+            wants = [ "network-online.target" ];
+            serviceConfig.ExecStart = "${pkgs.python3}/bin/python -m http.server --bind 0.0.0.0 12345";
+          };
+        };
     };
 
     testScript = ''
@@ -90,6 +134,8 @@ import ../make-test-python.nix (
       rootless.wait_for_unit("sockets.target")
       dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
+      trustBridge.wait_for_unit("sockets.target")
+      noTrustBridge.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
@@ -241,6 +287,34 @@ import ../make-test-python.nix (
           rootless.systemctl("start quadlet", "alice")
           rootless.wait_until_succeeds(su_cmd("podman ps | grep quadlet"), timeout=20)
           rootless.systemctl("stop quadlet", "alice")
+
+      with subtest("firewall.trustBridge=true allows container -> host on per-iface allow-listed port"):
+          trustBridge.wait_for_unit("host-probe.service")
+          trustBridge.wait_for_open_port(12345)
+
+          host_ip = trustBridge.succeed("ip -o -4 addr show eth0 | awk '{print $4}' | cut -d/ -f1").strip()
+
+          trustBridge.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          # The default network puts the container on podman0; without
+          # trustBridge=true, the host's firewall would drop the SYN since
+          # 12345 is allow-listed only on eth0.
+          trustBridge.succeed(
+              "podman run --rm -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg "
+              f"${pkgs.curl}/bin/curl --max-time 5 --silent --fail http://{host_ip}:12345/"
+          )
+
+      with subtest("firewall.trustBridge=false (default) blocks the same connection"):
+          noTrustBridge.wait_for_unit("host-probe.service")
+          noTrustBridge.wait_for_open_port(12345)
+
+          host_ip = noTrustBridge.succeed("ip -o -4 addr show eth0 | awk '{print $4}' | cut -d/ -f1").strip()
+
+          noTrustBridge.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          # Container's curl should fail with timeout/refused. We assert curl exits non-zero.
+          noTrustBridge.fail(
+              f"podman run --rm -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg "
+              f"${pkgs.curl}/bin/curl --max-time 5 --silent --fail http://{host_ip}:12345/"
+          )
 
       # TODO: add docker-compose test
 
