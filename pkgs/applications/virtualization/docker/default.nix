@@ -1,6 +1,16 @@
-{ lib, callPackage }:
-
+{
+  lib,
+  callPackage,
+}:
 let
+  docker-initial-meta = {
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      vdemeester
+      teutat3s
+    ];
+  };
+
   dockerGen =
     {
       version,
@@ -62,18 +72,7 @@ let
       libseccomp,
       knownVulnerabilities ? [ ],
       versionCheckHook,
-    }:
-    let
-      docker-meta = {
-        license = lib.licenses.asl20;
-        maintainers = with lib.maintainers; [
-          vdemeester
-          teutat3s
-        ];
-        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "docker" version;
-      };
-
-      docker-runc = runc.overrideAttrs {
+      docker-runc ? runc.overrideAttrs {
         pname = "docker-runc";
         inherit version;
 
@@ -90,9 +89,8 @@ let
 
         # docker/runc already include these patches / are not applicable
         patches = [ ];
-      };
-
-      docker-containerd = containerd.overrideAttrs (oldAttrs: {
+      },
+      docker-containerd ? containerd.overrideAttrs (oldAttrs: {
         pname = "docker-containerd";
         inherit version;
 
@@ -110,9 +108,8 @@ let
 
         # See above
         installTargets = "install";
-      });
-
-      docker-tini = tini.overrideAttrs {
+      }),
+      docker-tini ? tini.overrideAttrs {
         pname = "docker-tini";
         inherit version;
 
@@ -134,128 +131,133 @@ let
         ];
 
         env.NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
-      };
-
-      moby-src = fetchFromGitHub {
+      },
+      moby-src ? fetchFromGitHub {
         owner = "moby";
         repo = "moby";
         tag = mobyRev;
         hash = mobyHash;
-      };
-
-      extraMobyPath = lib.optionals stdenv.hostPlatform.isLinux (
-        lib.makeBinPath [
-          iproute2
-          iptables
-          e2fsprogs
-          xz
-          xfsprogs
-          procps
-          util-linuxMinimal
-          gitMinimal
-        ]
-      );
-
-      extraMobyUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (
-        lib.makeBinPath [
-          rootlesskit
-          slirp4netns
-          fuse-overlayfs
-        ]
-      );
-
-      moby = buildGoModule (
-        lib.optionalAttrs stdenv.hostPlatform.isLinux {
-          pname = "moby";
-          inherit version;
-
-          src = moby-src;
-
-          vendorHash = null;
-
-          nativeBuildInputs = [
-            makeBinaryWrapper
-            pkg-config
-            go-md2man
-            go
-            libtool
-            installShellFiles
-          ];
-
-          buildInputs = [
-            sqlite
-          ]
-          ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
-          ++ lib.optionals withLvm [ lvm2 ]
-          ++ lib.optionals withBtrfs [ btrfs-progs ]
-          ++ lib.optionals withSystemd [ systemd ]
-          ++ lib.optionals withSeccomp [ libseccomp ];
-
-          postPatch = ''
-            patchShebangs hack/make.sh hack/make/
-          ''
-          + lib.optionalString (lib.versionOlder version "29.0.0") ''
-            patchShebangs hack/with-go-mod.sh
-          '';
-
-          buildPhase = ''
-            runHook preBuild
-
-            export GOCACHE="$TMPDIR/go-cache"
-            # build engine
-            export AUTO_GOPATH=1
-            export DOCKER_GITCOMMIT="${cliRev}"
-            export VERSION="${version}"
-            ./hack/make.sh dynbinary
-
-            runHook postBuild
-          '';
-
-          installPhase = ''
-            runHook preInstall
-
-            install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
-            install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
-
-            makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
-              --prefix PATH : "$out/libexec/docker${
-                lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
-              }"
-
-            ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
-            ln -s ${docker-containerd}/bin/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"} $out/libexec/docker/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"}
-            ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
-            ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
-
-            # systemd
-            install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
-            substituteInPlace $out/etc/systemd/system/docker.service --replace-fail /usr/bin/dockerd $out/bin/dockerd
-            install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
-
-            # rootless Docker
-            install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
-            makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
-              --prefix PATH : "$out/libexec/docker${
-                lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
-              }${lib.optionalString (extraMobyUserPath != "") ":${extraMobyUserPath}"}"
-
-            runHook postInstall
-          '';
-
-          env.DOCKER_BUILDTAGS = toString (
-            lib.optionals withSystemd [ "journald" ]
-            ++ lib.optionals (!withBtrfs) [ "exclude_graphdriver_btrfs" ]
-            ++ lib.optionals (!withLvm) [ "exclude_graphdriver_devicemapper" ]
-            ++ lib.optionals withSeccomp [ "seccomp" ]
+      },
+      moby ?
+        let
+          extraMobyPath = lib.optionals stdenv.hostPlatform.isLinux (
+            lib.makeBinPath [
+              iproute2
+              iptables
+              e2fsprogs
+              xz
+              xfsprogs
+              procps
+              util-linuxMinimal
+              gitMinimal
+            ]
           );
 
-          meta = docker-meta // {
-            homepage = "https://mobyproject.org/";
-            description = "Collaborative project for the container ecosystem to assemble container-based systems";
-            identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mobyproject" version;
-          };
-        }
-      );
+          extraMobyUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (
+            lib.makeBinPath [
+              rootlesskit
+              slirp4netns
+              fuse-overlayfs
+            ]
+          );
+        in
+        buildGoModule (
+          lib.optionalAttrs stdenv.hostPlatform.isLinux {
+            pname = "moby";
+            inherit version;
+
+            src = moby-src;
+
+            vendorHash = null;
+
+            nativeBuildInputs = [
+              makeBinaryWrapper
+              pkg-config
+              go-md2man
+              go
+              libtool
+              installShellFiles
+            ];
+
+            buildInputs = [
+              sqlite
+            ]
+            ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
+            ++ lib.optionals withLvm [ lvm2 ]
+            ++ lib.optionals withBtrfs [ btrfs-progs ]
+            ++ lib.optionals withSystemd [ systemd ]
+            ++ lib.optionals withSeccomp [ libseccomp ];
+
+            postPatch = ''
+              patchShebangs hack/make.sh hack/make/
+            ''
+            + lib.optionalString (lib.versionOlder version "29.0.0") ''
+              patchShebangs hack/with-go-mod.sh
+            '';
+
+            buildPhase = ''
+              runHook preBuild
+
+              export GOCACHE="$TMPDIR/go-cache"
+              # build engine
+              export AUTO_GOPATH=1
+              export DOCKER_GITCOMMIT="${cliRev}"
+              export VERSION="${version}"
+              ./hack/make.sh dynbinary
+
+              runHook postBuild
+            '';
+
+            installPhase = ''
+              runHook preInstall
+
+              install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
+              install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
+
+              makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
+                --prefix PATH : "$out/libexec/docker${
+                  lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
+                }"
+
+              ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
+              ln -s ${docker-containerd}/bin/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"} $out/libexec/docker/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"}
+              ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
+              ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
+
+              # systemd
+              install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+              substituteInPlace $out/etc/systemd/system/docker.service --replace-fail /usr/bin/dockerd $out/bin/dockerd
+              install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
+
+              # rootless Docker
+              install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
+              makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
+                --prefix PATH : "$out/libexec/docker${
+                  lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
+                }${lib.optionalString (extraMobyUserPath != "") ":${extraMobyUserPath}"}"
+
+              runHook postInstall
+            '';
+
+            env.DOCKER_BUILDTAGS = toString (
+              lib.optionals withSystemd [ "journald" ]
+              ++ lib.optionals (!withBtrfs) [ "exclude_graphdriver_btrfs" ]
+              ++ lib.optionals (!withLvm) [ "exclude_graphdriver_devicemapper" ]
+              ++ lib.optionals withSeccomp [ "seccomp" ]
+            );
+
+            meta = docker-initial-meta // {
+              homepage = "https://mobyproject.org/";
+              description = "Collaborative project for the container ecosystem to assemble container-based systems";
+              identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mobyproject" version;
+            };
+          }
+        ),
+    }:
+    let
+      docker-meta = docker-initial-meta // {
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "docker" version;
+      };
 
       plugins =
         lib.optionals buildxSupport [ docker-buildx ]
@@ -388,8 +390,6 @@ let
         };
       }
       // lib.optionalAttrs (!clientOnly) {
-        # allow overrides of docker components
-        # TODO: move packages out of the let...in into top-level to allow proper overrides
         inherit
           docker-runc
           docker-containerd
@@ -439,5 +439,4 @@ in
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
-
 }
