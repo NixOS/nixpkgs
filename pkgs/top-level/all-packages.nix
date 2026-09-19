@@ -5365,8 +5365,6 @@ with pkgs;
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
-  astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
-
   attr = callPackage ../development/libraries/attr { };
 
   # Not moved to aliases while we decide if we should split the package again.
