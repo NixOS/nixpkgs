@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   callPackages,
+  nixosTests,
   cacert,
   clangStdenv,
   cmake,
@@ -602,6 +603,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit proxy worker apiGoVendorHook;
+    tests = nixosTests.authentik;
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
       inherit apiGoVendorHook;

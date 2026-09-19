@@ -304,6 +304,7 @@ in
   aurral = runTest ./aurral.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
+  authentik = runTest ./authentik.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
   autobrr = runTest ./autobrr.nix;
   autopush-rs = runTest ./autopush-rs.nix;
