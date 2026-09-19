@@ -363,7 +363,6 @@ buildPythonPackage (
     pname = "apache-airflow";
     version = "3.3.1";
 
-    strictDeps = true;
     __structuredAttrs = true;
 
     src = fetchFromGitHub {

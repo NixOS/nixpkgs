@@ -44,7 +44,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-OiH4qhVK7T6o+lYtP1e2UqtSitxVdzUWC5YXbaNMZsQ=";
+    hash = "sha256-lBfsbEa5Z6GmGVSgdDKoMF0R1TuU+e05QYP96qPNnxQ=";
   };
 
   build-system = [ setuptools ];
@@ -129,13 +129,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
-
-    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
-    # self.subTest(dtype=...) when shipping subtest reports between workers.
-    # The assertions themselves pass; the failure is a harness artifact of running with
-    # --numprocesses.
-    # New test in jax 0.10.2 (tests/random_impl_test.py).
-    "test_random_bits"
   ]
   ++ lib.optionals usingMKL [
     # See
@@ -152,17 +145,6 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: 'INFO' not found in 'I0905 10:11:44.349869   24500 pjrt_api.cc:119] GetPjrtApi was found for cuda at...
     "test_subprocess_stderr_info_logging"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    # The Mosaic GPU interpreter emulates tcgen05 MMA on the CPU backend and compares the
-    # result with `assert_array_equal`. On x86_64 the two sides contract differently and
-    # disagree by a single float32 ULP (max relative difference 5.5e-07).
-    # Passes on aarch64-linux and aarch64-darwin.
-    "test_async_copy_tmem_with_mma"
-    "test_can_commit_mma_to_multiple_barriers"
-    "test_can_deallocate_tmem_while_mma_active_on_different_tmem"
-    "test_can_pipeline_with_multiple_children"
-    "test_can_pipeline_with_multiple_parents"
   ];
 
   pythonImportsCheck = [ "jax" ];

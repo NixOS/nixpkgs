@@ -9592,6 +9592,13 @@ self: super: with self; {
     )
   ) { };
 
+  libcec = toPythonModule (
+    pkgs.libcec.override {
+      python3 = python;
+      pythonSupport = true;
+    }
+  );
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libcomps = lib.pipe pkgs.libcomps [
@@ -12247,6 +12254,8 @@ self: super: with self; {
   numato-gpio = callPackage ../development/python-modules/numato-gpio { };
 
   numba = callPackage ../development/python-modules/numba { inherit (pkgs.config) cudaSupport; };
+
+  numba-cuda = callPackage ../development/python-modules/numba-cuda { };
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 

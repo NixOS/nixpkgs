@@ -28,7 +28,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "xacro" ];
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {

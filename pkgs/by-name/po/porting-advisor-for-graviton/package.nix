@@ -20,7 +20,6 @@ buildPythonApplication (finalAttrs: {
   format = "other"; # Only has a requirements.txt
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "aws";
