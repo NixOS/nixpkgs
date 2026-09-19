@@ -10,6 +10,7 @@
   tabledata,
   typepy,
   pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-PObyZmmECxp6keRymYFGi4Uf07yNHu6rUIqSrRx2bPE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     dataproperty
@@ -37,6 +41,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "simplesqlite" ];
+
+  pythonRelaxDeps = [
+    "typepy"
+  ];
 
   meta = {
     description = "Python library to simplify SQLite database operations";
