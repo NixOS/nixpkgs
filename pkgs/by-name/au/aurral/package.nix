@@ -13,6 +13,7 @@
   makeFontsConf,
   noto-fonts-color-emoji,
   dejavu_fonts,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -122,7 +123,10 @@ buildNpmPackage (finalAttrs: {
     chmod +x $out/bin/aurral
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = nixosTests.aurral;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Aurral is the Lidarr companion for self-hosted music discovery";
