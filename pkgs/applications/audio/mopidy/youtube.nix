@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   pythonPackages,
   mopidy,
   pkgs,
@@ -9,15 +9,19 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-youtube";
-  version = "3.7";
+  version = "4.0.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "natumbri";
-    repo = "mopidy-youtube";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-iFt7r8Ljymc+grNJiOClTHkZOeo7AcYpcNc8tLMPROk=";
+  src = fetchPypi {
+    pname = "mopidy_youtube";
+    inherit (finalAttrs) version;
+    hash = "sha256-KgD6cE10efNPyP0XWkpSl386Vgw+ad7Ogqo96ZGJs7w=";
   };
+
+  patches = [
+    # https://github.com/natumbri/mopidy-youtube/pull/265
+    ./fix-youtube-mopidy-4.patch
+  ];
 
   postPatch = ''
     substituteInPlace mopidy_youtube/youtube.py \
@@ -39,6 +43,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pythonPackages.cachetools
     pythonPackages.pykka
     pythonPackages.requests
+    # Provides pkg_resources; remove when upstream replaces it.
+    pythonPackages.setuptools_80
     pythonPackages.ytmusicapi
     pythonPackages.yt-dlp
   ]

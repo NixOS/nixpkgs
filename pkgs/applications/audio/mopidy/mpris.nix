@@ -7,17 +7,18 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-mpris";
-  version = "3.0.3";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Mopidy-MPRIS";
-    hash = "sha256-rHQgNIyludTEL7RDC8dIpyGTMOt1Tazn6i/orKlSP4U=";
+    pname = "mopidy_mpris";
+    hash = "sha256-6cQlXxqno96SMQqlheAY3SkttVpEoVJmPjGndcJ4qQA=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [
