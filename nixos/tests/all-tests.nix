@@ -1677,7 +1677,7 @@ in
   scx-loader = runTest ./scx/loader.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
-  searx = runTest ./searx.nix;
+  searx = import ./searx.nix { inherit pkgs runTest; };
   seatd = runTest ./seatd.nix;
   seerr = runTest ./seerr.nix;
   selfoss = runTest ./selfoss.nix;
