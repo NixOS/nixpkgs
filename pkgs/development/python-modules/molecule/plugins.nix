@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "molecule-plugins";
-  version = "25.8.12";
+  version = "26.7.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible-community";
     repo = "molecule-plugins";
     tag = "v${version}";
-    hash = "sha256-wTvJ+cjZMTOyaqqDZsA1wsKCpu2FEi69IBlSTxNs3/M=";
+    hash = "sha256-2A+xHmrgPsRvEQ9k0NZewNgXy0FW+7uQ0xb1lMxJIkY=";
   };
 
   # reverse the dependency
