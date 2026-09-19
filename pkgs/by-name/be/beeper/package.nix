@@ -14,23 +14,23 @@
 }:
 let
   pname = "beeper";
-  version = "4.3.73";
+  version = "4.3.104";
 
   inherit (stdenv.hostPlatform) system;
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-      hash = "sha256-j6HTTqU7+z8AJ20hYgia6wOH0/n3gxrUocCpMPmgQvQ=";
+      hash = "sha256-a0IHIVBVm6j1Kf3sgA+AD9UfpuEkGuTLYORFQkeyw+k=";
     };
     aarch64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
-      hash = "sha256-kWlKMZdicJ+DhGgYXCTqvSCYinI9QD0pJD4nb4yYdpI=";
+      hash = "sha256-azuuKSl0zsqHjVGNR8Gk2j+RvwDcmak5u++BS2Ov0Zo=";
     };
     aarch64-darwin = fetchurl {
       # Zip unpacks cleanly with unzip; the download API redirects to a .dmg.
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64-mac.zip";
-      hash = "sha256-79T3pPLEt+tQQ2xoC3XBAI/xpxMdnY11qSmVA2VFiVw=";
+      hash = "sha256-7yKLaZYmidfiW/h9mRWXODeBx0bYvaK5uPqMYsuXOIw=";
     };
   };
 
@@ -105,8 +105,10 @@ let
             --replace-fail 'c=d??{},p=c.hw_acceleration??!0' 'c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0'
 
           # Disable user-triggered update checks, which ignore auto_update_disabled.
-          substituteInPlace $appRoot/build/main/main-entry-*.mjs \
-            --replace-fail 'async checkForUpdates(r=!1){' 'async checkForUpdates(r=!1){return;'
+          updateEntryFilename=$appRoot/build/main/main-entry-*.mjs
+          grep -qE 'async checkForUpdates\([^)]*\)\{' $updateEntryFilename \
+            || (echo "checkForUpdates signature not found in $updateEntryFilename" >&2; exit 1)
+          sed -i -E 's/async checkForUpdates\([^)]*\)\{/&return;/' $updateEntryFilename
         '';
       };
     in
