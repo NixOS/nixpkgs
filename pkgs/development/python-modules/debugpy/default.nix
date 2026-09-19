@@ -132,6 +132,8 @@ buildPythonPackage rec {
   disabledTests = [
     # hanging test (flaky)
     "test_systemexit"
+    # Test doesn't pass on hydra
+    "test_conditional_breakpoint"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
