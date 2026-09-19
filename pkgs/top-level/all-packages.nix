@@ -2158,8 +2158,6 @@ with pkgs;
 
   hassil = with python3Packages; toPythonApplication hassil;
 
-  haste-client = callPackage ../tools/misc/haste-client { };
-
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
   hdf5 = callPackage ../tools/misc/hdf5 {
