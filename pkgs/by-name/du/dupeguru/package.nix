@@ -9,7 +9,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dupeguru";
-  version = "4.3.1-unstable-2026-01-06";
+  version = "4.3.1";
 
   pyproject = false;
 
