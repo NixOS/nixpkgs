@@ -318,6 +318,14 @@ in
               '';
               example = 0.1;
             };
+
+            noCache = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Disables local caching of repository data. May improve performance for local repositories.
+              '';
+            };
           };
         }
       )
@@ -398,7 +406,8 @@ in
           "--what='sleep'"
           "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
         ];
-        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
+        cacheFlag = lib.optionalString backup.noCache " --no-cache";
+        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}${cacheFlag}";
         excludeFlags = lib.optional (
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
@@ -422,11 +431,13 @@ in
       lib.nameValuePair "restic-backups-${name}" (
         {
           environment = {
-            # not %C, because that wouldn't work in the wrapper script
-            RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
             RESTIC_PASSWORD_FILE = backup.passwordFile;
             RESTIC_REPOSITORY = backup.repository;
             RESTIC_REPOSITORY_FILE = backup.repositoryFile;
+          }
+          // lib.optionalAttrs (!backup.noCache) {
+            # not %C, because that wouldn't work in the wrapper script
+            RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
           }
           // lib.optionalAttrs (backup.rcloneOptions != null) (
             lib.mapAttrs' (
@@ -464,9 +475,11 @@ in
               ++ checkCmd;
             User = backup.user;
             RuntimeDirectory = "restic-backups-${name}";
+            PrivateTmp = true;
+          }
+          // lib.optionalAttrs (!backup.noCache) {
             CacheDirectory = "restic-backups-${name}";
             CacheDirectoryMode = "0700";
-            PrivateTmp = true;
           }
           // lib.optionalAttrs (backup.environmentFile != null) {
             EnvironmentFile = backup.environmentFile;
@@ -514,7 +527,8 @@ in
       name: backup:
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${lib.getExe backup.package}${extraOptions}";
+        cacheFlag = lib.optionalString backup.noCache " --no-cache";
+        resticCmd = "${lib.getExe backup.package}${extraOptions}${cacheFlag}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
         set -a  # automatically export variables
