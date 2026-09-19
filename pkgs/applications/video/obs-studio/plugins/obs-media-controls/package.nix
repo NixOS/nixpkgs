@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   obs-studio,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
 
   dontWrapQtApps = true;

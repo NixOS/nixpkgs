@@ -14,7 +14,7 @@
   obs-studio,
   opencv,
   procps,
-  qtbase,
+  qt6,
   stdenv,
   websocketpp,
   libxscrnsaver,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     # tesseract
     # leptonica
     procps
-    qtbase
+    qt6.qtbase
     websocketpp
     libxscrnsaver
     libusb1

@@ -8,8 +8,7 @@
   curl,
   dbus,
   pkg-config,
-  qtbase,
-  wrapQtAppsHook,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,11 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
     zlib
     curl
     dbus
