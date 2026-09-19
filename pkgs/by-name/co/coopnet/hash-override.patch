@@ -1,0 +1,24 @@
+diff --git i/common/client.cpp w/common/client.cpp
+index 6f375b4..22fa23f 100644
+--- i/common/client.cpp
++++ w/common/client.cpp
+@@ -73,10 +73,18 @@ bool Client::Begin(std::string aHost, uint32_t aPort, std::string aName, uint64_
+ 
+     mConnection->Begin(nullptr);
+ 
++    std::size_t hash;
++    const char* hashOverride = std::getenv("COOPNET_OVERRIDE_HASH");
++    if (!hashOverride) {
++      hash = hashFile();
++    } else {
++      hash = static_cast<size_t>(std::stoull(hashOverride));
++    }
++
+     MPacketInfo({
+         .destId = aDestId,
+         .infoBits = SocketGetInfoBits(mConnection->mSocket),
+-        .hash = hashFile(),
++        .hash = hash,
+     }, { aName }).Send(*mConnection);
+ 
+     return true;
