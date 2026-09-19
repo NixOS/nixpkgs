@@ -1,0 +1,21 @@
+--- a/init/init.c	2026-04-01 12:01:30.865154175 +0000
++++ b/init/init.c	2026-04-01 12:01:38.836976937 +0000
+@@ -285,6 +285,18 @@
+   if (!quiet)
+     fprintf (stderr, "supermin: chroot\n");
+
++  /* Mount 9p nix-store share if available (used by Nix-built appliances).
++   * This must happen before chroot so that symlinks into /nix/store resolve.
++   * Silently ignored when no 9p share is configured.
++   */
++  mkdir ("/root/nix", 0755);
++  mkdir ("/root/nix/store", 0755);
++  if (mount ("nix-store", "/root/nix/store", "9p", MS_RDONLY,
++             "trans=virtio,version=9p2000.L,msize=262144") == 0) {
++    if (!quiet)
++      fprintf (stderr, "supermin: mounted 9p nix-store\n");
++  }
++
+   if (chroot ("/root") == -1) {
+     perror ("chroot: /root");
+     exit (EXIT_FAILURE);
