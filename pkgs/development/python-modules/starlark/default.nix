@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "starlark";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "dbohdan";
     repo = "starlark-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J3QgztBmoJBJ8VGl+w7Ybwyuehw8ZEEy6oHIn91tVAY=";
+    hash = "sha256-qoJ/V2ZuRFqNZ0HiTQR9ZA6pOI5hGADA0vI/l5qhgsk=";
   };
 
   build-system = [
