@@ -5443,6 +5443,8 @@ self: super: with self; {
 
   effect = callPackage ../development/python-modules/effect { };
 
+  efficient-apriori = callPackage ../development/python-modules/efficient-apriori { };
+
   egauge-async = callPackage ../development/python-modules/egauge-async { };
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
