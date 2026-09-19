@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   go,
   docker,
@@ -47,6 +48,9 @@ stdenv.mkDerivation {
     };
   };
 
-  meta.platforms = go.meta.platforms;
-  meta.mainProgram = "tarsum";
+  meta = {
+    platforms = go.meta.platforms;
+    mainProgram = "tarsum";
+    license = lib.licenses.asl20;
+  };
 }
