@@ -28,11 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     # tonic-build (server/service/admin/proto) needs protoc at build time.
     protobuf
+    # librocksdb-sys runs bindgen at build time; the hook provides libclang.
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
-    # RocksDB (storage) C++ compression dependencies. The `bindgen-runtime`
-    # feature uses pre-generated bindings, so no libclang is required.
+    # RocksDB (storage) C++ compression dependencies.
     lz4
     zlib
     zstd
