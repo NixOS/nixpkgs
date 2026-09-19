@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     description = "Serve NAR file contents via HTTP";
     mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       rizary
       zimbatm
