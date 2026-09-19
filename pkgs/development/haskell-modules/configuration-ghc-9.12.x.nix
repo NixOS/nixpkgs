@@ -129,4 +129,11 @@ with haskellLib;
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
   interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
+
+  # LiquidHaskell stack for GHC 9.12 (versions in main.yaml extra-packages).
+  liquidhaskell-boot = doDistribute self.liquidhaskell-boot_0_9_12_2_1;
+  liquidhaskell = addBuildTool pkgs.z3 (doDistribute self.liquidhaskell_0_9_12_2_1);
+  liquid-fixpoint = doDistribute self.liquid-fixpoint_0_9_6_3_5;
+  liquid-prelude = addBuildTool pkgs.z3 (doDistribute self.liquid-prelude_0_9_12_2_1);
+  liquid-vector = addBuildTool pkgs.z3 (doDistribute self.liquid-vector_0_13_1_0_2);
 }
