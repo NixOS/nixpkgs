@@ -301,13 +301,13 @@
     "vendorHash": "sha256-KBzkbWlFM0SB+YzVU4YIaJxvQlMHalPeKPvvHh4L2kw="
   },
   "datadrivers_nexus": {
-    "hash": "sha256-t9hpZ4COmMPvs4TgcZLeuOA23oD5vvHw8UVK7SpzI0Y=",
+    "hash": "sha256-+MTyr7voagijpqTb7vswO8PAFZpxz3UWAQLEs0os4+s=",
     "homepage": "https://registry.terraform.io/providers/datadrivers/nexus",
     "owner": "datadrivers",
     "repo": "terraform-provider-nexus",
-    "rev": "v3.0.0",
+    "rev": "v3.0.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-DXQ8bfDLI0Wt2UXXeRXaZkgLXoYKjJ6MMNeTbZctD6E="
+    "vendorHash": "sha256-kPx/SicGbmkAu7L11WgWK3PO8M2AkUP4sdUCHOwdKbY="
   },
   "denoland_deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
