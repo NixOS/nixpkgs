@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   gjs,
   glib,
   gobject-introspection,
@@ -11,6 +11,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pango,
   pkg-config,
   vala,
@@ -20,16 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.5";
+  version = "50.10";
 
-  src = fetchurl {
-    url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
+  src = fetchFromGitHub {
+    owner = "Keruspe";
+    repo = "GPaste";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DyCuDtDy8z2F9PTWexWhCCH/GzmqvGLb1qadxfEzX5Y=";
   };
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   # TODO: switch to substituteAll with placeholder
   # https://github.com/NixOS/nix/issues/1846
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gjs
     glib
-    gtk3
     gtk4
     gcr_4
     libadwaita
@@ -77,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by originalName "prefs" \
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Keruspe/GPaste";
