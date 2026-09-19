@@ -11,7 +11,7 @@
       '';
       services.coturn = {
         enable = true;
-        static-auth-secret-file = "/run/coturn-secret";
+        staticAuthSecretFile = "/run/coturn-secret";
       };
     };
   };
