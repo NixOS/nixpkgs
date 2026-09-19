@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/alsa-scarlett-gui --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
 
     substituteInPlace $out/share/applications/vu.b4.alsa-scarlett-gui.desktop \
-      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
+      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=alsa-scarlett-gui"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
