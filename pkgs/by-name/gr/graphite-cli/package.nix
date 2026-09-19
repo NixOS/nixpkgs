@@ -22,7 +22,7 @@ let
   version = "1.8.6";
 
   meta = {
-    changelog = "https://graphite.dev/docs/cli-changelog";
+    changelog = "https://graphite.com/docs/cli-changelog";
     description = "CLI that makes creating stacked git changes fast & intuitive";
     downloadPage = "https://www.npmjs.com/package/@withgraphite/graphite-cli";
     homepage = "https://graphite.dev/docs/graphite-cli";
