@@ -7,23 +7,73 @@
 let
   inherit (lib) types;
 
-  nodeConfigurationAttrs = lib.mkOption {
-    internal = true;
-    type = types.attrsOf (
-      types.submodule {
-        options = {
-          name = lib.mkOption {
-            internal = true;
-            type = types.str;
-          };
-          start_script = lib.mkOption {
-            internal = true;
-            type = types.path;
-          };
-        };
-      }
-    );
+  displayTarget = types.submodule {
+    options = {
+      backend = lib.mkOption {
+        internal = true;
+        type = types.enum [ "x11" ];
+      };
+      display = lib.mkOption {
+        internal = true;
+        type = types.str;
+      };
+      xauthority = lib.mkOption {
+        internal = true;
+        type = types.str;
+      };
+    };
   };
+
+  displayViewer = types.submodule {
+    options = {
+      kind = lib.mkOption {
+        internal = true;
+        type = types.enum [ "vnc" ];
+      };
+      executable = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+    };
+  };
+
+  nspawnDisplayExporter = types.submodule {
+    options = {
+      kind = lib.mkOption {
+        internal = true;
+        type = types.enum [ "x11-vnc" ];
+      };
+      server = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+      relay = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+    };
+  };
+
+  machineConfigurationAttrs =
+    extraOptions:
+    lib.mkOption {
+      internal = true;
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            name = lib.mkOption {
+              internal = true;
+              type = types.str;
+            };
+            start_script = lib.mkOption {
+              internal = true;
+              type = types.path;
+            };
+          }
+          // extraOptions;
+        }
+      );
+    };
 in
 {
   options = {
@@ -32,8 +82,24 @@ in
       internal = true;
       type = types.submodule {
         options = {
-          vms = nodeConfigurationAttrs;
-          containers = nodeConfigurationAttrs;
+          vms = machineConfigurationAttrs { };
+          containers = machineConfigurationAttrs {
+            display_targets = lib.mkOption {
+              internal = true;
+              type = types.listOf displayTarget;
+              default = [ ];
+            };
+            display_exporters = lib.mkOption {
+              internal = true;
+              type = types.attrsOf nspawnDisplayExporter;
+              default = { };
+            };
+          };
+          display_viewers = lib.mkOption {
+            internal = true;
+            type = types.attrsOf displayViewer;
+            default = { };
+          };
           vlans = lib.mkOption {
             internal = true;
             type = types.listOf types.ints.unsigned;
@@ -68,6 +134,7 @@ in
       containers = lib.mapAttrs (name: value: {
         inherit name;
         start_script = lib.getExe value.system.build.nspawn;
+        display_targets = value.testing.displayTargets;
       }) config.containers;
       vlans = lib.unique (
         lib.concatMap (
