@@ -8139,6 +8139,8 @@ self: super: with self; {
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
+  hypothesis-graphql = callPackage ../development/python-modules/hypothesis-graphql { };
+
   hypothesis-jsonschema = callPackage ../development/python-modules/hypothesis-jsonschema { };
 
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
