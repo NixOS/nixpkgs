@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   aiohttp,
   buildPythonPackage,
   fetchPypi,
@@ -47,6 +48,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-httpserver
   ];
+
+  # webservice_test.py connects to all too real MaxMind API servers
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/webservice_test.py" ];
 
   pythonImportsCheck = [ "geoip2" ];
 

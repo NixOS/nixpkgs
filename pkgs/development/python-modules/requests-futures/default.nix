@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     pytest-httpbin
     werkzeug
   ];
+
+  # All tests spin up a local HTTP server but macOS sandbox forbids socket bind
+  doCheck = !stdenv.isDarwin;
 
   pythonImportsCheck = [ "requests_futures" ];
 
