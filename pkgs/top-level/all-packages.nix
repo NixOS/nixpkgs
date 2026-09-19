@@ -1997,8 +1997,6 @@ with pkgs;
     buildProduct = "daemon";
   };
 
-  fpm = callPackage ../tools/package-management/fpm { };
-
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
