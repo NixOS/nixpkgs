@@ -45,6 +45,13 @@ in
       { pkgs, ... }:
       {
         environment.etc."systemd/import-pubring.gpg".source = "${gpgKeyring}/pubkey.gpg";
+
+        # Check the renamed-option shims still go into the config
+        systemd.nspawn.renamed-options = {
+          execConfig.Boot = true;
+          filesConfig.Bind = [ "/home/alice" ];
+          networkConfig.Private = true;
+        };
       };
   };
 
@@ -62,5 +69,10 @@ in
     client.succeed(
         "cmp /var/lib/machines/testimage2/${pkgs.hello}/bin/hello ${pkgs.hello}/bin/hello"
     )
+
+    with subtest("renamed options generate the expected .nspawn file"):
+        cfg = client.succeed("cat /etc/systemd/nspawn/renamed-options.nspawn")
+        for expected in ("[Exec]", "Boot=1", "[Files]", "Bind=/home/alice", "[Network]", "Private=1"):
+            assert expected in cfg, f"missing {expected!r} in:\n{cfg}"
   '';
 }
