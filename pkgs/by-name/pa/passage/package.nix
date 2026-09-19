@@ -20,7 +20,18 @@
   # or store password by its name. Most users would want this dependency.
   tree ? null,
 }:
+let
+  extensionsNotSupportinPassage = [
+    "pass-audit"
+    "pass-checkup"
+    "pass-import"
+    "pass-tomb"
+    "pass-update"
+    "pass-genphrase"
+    "pass-file"
+  ];
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "passage";
   version = "1.7.4a2";
@@ -80,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
   passthru = {
-    withExtensions = pass.withExtensions.override { pass = passage; };
+    withExtensions = pass.withExtensions.override {
+      pass = passage;
+      brokenExtensions = extensionsNotSupportinPassage;
+    };
   };
 
   meta = {
