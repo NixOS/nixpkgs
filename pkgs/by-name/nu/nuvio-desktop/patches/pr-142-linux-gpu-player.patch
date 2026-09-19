@@ -1,0 +1,2407 @@
+diff --git a/composeApp/build.gradle.kts b/composeApp/build.gradle.kts
+index 54177f3b..53c0d14a 100644
+--- a/composeApp/build.gradle.kts
++++ b/composeApp/build.gradle.kts
+@@ -574,6 +574,7 @@ val prepareMacosTorrServerResources = tasks.register<PrepareMacosTorrServerResou
+     outputDir.set(layout.buildDirectory.dir("generated/signed-macos-torrserver-resources"))
+     signingIdentity.set(macosSigningIdentity.orEmpty())
+ }
++val isLinuxHost = System.getProperty("os.name").contains("linux", ignoreCase = true)
+ val mpvKitDir = providers.gradleProperty("nuvio.mpvkit.dir")
+     .orElse(rootProject.layout.projectDirectory.dir("MPVKit").asFile.absolutePath)
+ val macosPlayerBridgeSource = layout.projectDirectory.file("src/desktopMain/native/macos/player_bridge.mm")
+@@ -1341,3 +1342,109 @@ configurations.all {
+     exclude(group = "androidx.media3", module = "media3-exoplayer")
+     exclude(group = "androidx.media3", module = "media3-ui")
+ }
++
++/* ── Linux native player bridge ── */
++fun List<String>.runCommand(): String? =
++    ProcessBuilder(this)
++        .redirectErrorStream(true)
++        .start()
++        .inputStream.bufferedReader().readText()
++        .takeIf { it.isNotBlank() }
++
++val linuxPlayerBridgeSource = layout.projectDirectory.file("src/desktopMain/native/linux/player_bridge.c")
++val linuxPlayerBridgeOutput = layout.buildDirectory.file("native/linux/libplayer_bridge.so")
++val linuxPlayerRuntimeSource = layout.projectDirectory.dir("src/desktopMain/native/linux/live")
++val linuxPlayerRuntimeOutput = layout.buildDirectory.dir("native/linux-runtime")
++
++if (isLinuxHost) {
++    linuxPlayerBridgeOutput.get().asFile.parentFile.mkdirs()
++}
++
++val linuxPlayerBridgeJavaHome = providers.systemProperty("java.home").get()
++
++val buildLinuxPlayerBridge = tasks.register<Exec>("buildLinuxPlayerBridge") {
++    enabled = isLinuxHost
++    inputs.file(linuxPlayerBridgeSource)
++    outputs.file(linuxPlayerBridgeOutput)
++    doFirst {
++        val javaHome = linuxPlayerBridgeJavaHome
++        val javaIncludes = "-I${javaHome}/include -I${javaHome}/include/linux"
++        val mpvPkg = "mpv"
++        val cflags = try {
++            listOf("pkg-config", "--cflags", mpvPkg).runCommand()?.trim() ?: ""
++        } catch (_: Exception) { "" }
++        val libs = try {
++            listOf("pkg-config", "--libs", mpvPkg).runCommand()?.trim() ?: ""
++        } catch (_: Exception) { "" }
++        val sourceFile = linuxPlayerBridgeSource.asFile
++        val outputFile = linuxPlayerBridgeOutput.get().asFile
++        commandLine(
++            "gcc", "-shared", "-fPIC",
++            "-Wl,-rpath,'\$ORIGIN'",
++            "-o", outputFile.absolutePath,
++            sourceFile.absolutePath,
++            *javaIncludes.split(" ").filter { it.isNotBlank() }.toTypedArray(),
++            *cflags.split(" ").filter { it.isNotBlank() }.toTypedArray(),
++            *libs.split(" ").filter { it.isNotBlank() }.toTypedArray(),
++            "-lEGL", "-lGL", "-lgbm",
++            "-lX11",
++            "-ldl",
++            "-lm",
++        )
++    }
++}
++
++val prepareLinuxPlayerRuntime = tasks.register<Sync>("prepareLinuxPlayerRuntime") {
++    enabled = isLinuxHost
++    into(linuxPlayerRuntimeOutput)
++    if (linuxPlayerRuntimeSource.asFile.isDirectory) {
++        from(linuxPlayerRuntimeSource)
++    }
++}
++
++val generateLinuxPlayerRuntimeIndex = tasks.register<GenerateNativeRuntimeIndexTask>("generateLinuxPlayerRuntimeIndex") {
++    enabled = isLinuxHost
++    dependsOn(prepareLinuxPlayerRuntime)
++    runtimeDir.set(linuxPlayerRuntimeOutput)
++    indexFile.set(linuxPlayerRuntimeOutput.map { it.file("runtime-files.txt") })
++}
++
++tasks.withType<Jar>().configureEach {
++    if (isLinuxHost && name == "desktopJar") {
++        dependsOn(buildLinuxPlayerBridge, prepareLinuxPlayerRuntime, generateLinuxPlayerRuntimeIndex)
++        from(linuxPlayerBridgeOutput) {
++            into("native/linux")
++        }
++        from(linuxPlayerRuntimeOutput) {
++            into("native/linux")
++        }
++    }
++}
++
++if (isLinuxHost) {
++    val linuxNativePlayerTasks = setOf(
++        "run",
++        "runRelease",
++        "desktopRun",
++        "runDistributable",
++        "runReleaseDistributable",
++        "desktopRunHot",
++        "hotRunDesktop",
++        "hotRunDesktopAsync",
++        "hotDevDesktop",
++        "hotDevDesktopAsync",
++        "createDistributable",
++        "createReleaseDistributable",
++        "createRuntimeImage",
++        "package",
++        "packageDistributionForCurrentOS",
++        "packageDeb",
++        "packageUberJarForCurrentOS",
++        "packageReleaseDistributionForCurrentOS",
++        "packageReleaseDeb",
++        "packageReleaseUberJarForCurrentOS",
++    )
++    tasks.matching { it.name in linuxNativePlayerTasks }.configureEach {
++        dependsOn(buildLinuxPlayerBridge, prepareLinuxPlayerRuntime, generateLinuxPlayerRuntimeIndex)
++    }
++}
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/PlayerEngine.desktop.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/PlayerEngine.desktop.kt
+index 39d8b6eb..f37178c8 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/PlayerEngine.desktop.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/PlayerEngine.desktop.kt
+@@ -1,5 +1,6 @@
+ package com.nuvio.app.features.player
+ 
++import androidx.compose.foundation.Canvas
+ import androidx.compose.foundation.background
+ import androidx.compose.foundation.layout.Box
+ import androidx.compose.foundation.layout.fillMaxSize
+@@ -10,23 +11,36 @@ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.CompositionLocalProvider
+ import androidx.compose.runtime.DisposableEffect
+ import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.mutableIntStateOf
+ import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.setValue
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.rememberUpdatedState
+ import androidx.compose.runtime.collectAsState
+-import androidx.compose.runtime.getValue
+-import androidx.compose.ui.awt.SwingPanel
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.awt.SwingPanel
+ import androidx.compose.ui.graphics.Color
+ import androidx.compose.ui.platform.LocalDensity
++import androidx.compose.ui.graphics.nativeCanvas
++import androidx.compose.ui.input.pointer.PointerEventType
++import androidx.compose.ui.input.pointer.pointerInput
++import androidx.compose.ui.layout.onSizeChanged
++import androidx.compose.ui.unit.IntSize
+ import androidx.compose.ui.unit.dp
+ import com.nuvio.app.core.ui.LocalNuvioPlatformDensity
+ import com.nuvio.app.features.player.desktop.DesktopHostOs
+ import com.nuvio.app.features.player.desktop.DesktopPlayerLaunchShield
+ import com.nuvio.app.features.player.desktop.NativePlayerController
+ import com.nuvio.app.features.player.desktop.NativePlayerHost
++import com.nuvio.app.features.player.desktop.LinuxPlayerHost
+ import com.nuvio.app.features.player.desktop.desktopFullscreenChanges
++import com.nuvio.app.features.player.desktop.toggleDesktopAppFullscreen
++import java.awt.AWTEvent
++import java.awt.Toolkit
++import java.awt.event.AWTEventListener
++import java.awt.event.MouseEvent
+ import kotlinx.coroutines.delay
+ import kotlinx.coroutines.flow.drop
+ 
+@@ -53,7 +67,29 @@ actual fun PlatformPlayerSurface(
+     onSnapshot: (PlayerPlaybackSnapshot) -> Unit,
+     onError: (String?) -> Unit,
+ ) {
+-    if (DesktopHostOs.current == DesktopHostOs.MACOS || DesktopHostOs.current == DesktopHostOs.WINDOWS) {
++    if (DesktopHostOs.current == DesktopHostOs.LINUX) {
++        // Linux: use offscreen rendering with Compose Canvas overlay.
++        // This ensures player controls render correctly on top of the video.
++        // EGL FBO via GBM (gpuMode=2) with GLES, or SW fallback (gpuMode=0).
++        // GPU decode via hwdec=auto-copy (VAAPI on Intel/AMD, nvdec on NVIDIA).
++        LinuxPlayerSurface(
++            sourceUrl = sourceUrl,
++            sourceHeaders = sourceHeaders,
++            modifier = modifier,
++            playWhenReady = playWhenReady,
++            resizeMode = resizeMode,
++            initialPositionMs = initialPositionMs,
++            playerControlsState = playerControlsState,
++            onPlayerControlsAction = onPlayerControlsAction,
++            onPlayerControlsEvent = onPlayerControlsEvent,
++            onPlayerControlsScrubChange = onPlayerControlsScrubChange,
++            onPlayerControlsScrubFinished = onPlayerControlsScrubFinished,
++            onControllerReady = onControllerReady,
++            onSnapshot = onSnapshot,
++            onError = onError,
++        )
++    } else if (DesktopHostOs.current == DesktopHostOs.MACOS || DesktopHostOs.current == DesktopHostOs.WINDOWS) {
++        // macOS, Windows, and Linux X11: GPU-direct rendering via native view pointer
+         NativePlayerSurface(
+             sourceUrl = sourceUrl,
+             sourceHeaders = sourceHeaders,
+@@ -70,16 +106,197 @@ actual fun PlatformPlayerSurface(
+             onSnapshot = onSnapshot,
+             onError = onError,
+         )
+-        return
++    } else {
++        DesktopStubPlayerSurface(
++            modifier = modifier,
++            onControllerReady = onControllerReady,
++            onSnapshot = onSnapshot,
++        )
++    }
++}
++
++/**
++ * Linux path: renders video frames in a Compose [Canvas] so controls overlay correctly.
++ * mpv renders offscreen (EGL FBO via GBM or SW fallback), frames are pulled into Skia Image for Canvas.
++ */
++@Composable
++private fun LinuxPlayerSurface(
++    sourceUrl: String,
++    sourceHeaders: Map<String, String>,
++    modifier: Modifier,
++    playWhenReady: Boolean,
++    resizeMode: PlayerResizeMode,
++    initialPositionMs: Long,
++    playerControlsState: PlayerControlsState,
++    onPlayerControlsAction: (PlayerControlsAction) -> Boolean,
++    onPlayerControlsEvent: (String, Double) -> Boolean,
++    onPlayerControlsScrubChange: (Long) -> Boolean,
++    onPlayerControlsScrubFinished: (Long) -> Boolean,
++    onControllerReady: (PlayerEngineController) -> Unit,
++    onSnapshot: (PlayerPlaybackSnapshot) -> Unit,
++    onError: (String?) -> Unit,
++) {
++    val host = remember { LinuxPlayerHost() }
++    val controller = remember(host) { NativePlayerController(host) }
++    var surfaceSize by remember { mutableStateOf(IntSize.Zero) }
++    var frameTick by remember { mutableIntStateOf(0) }
++    var disposed by remember { mutableStateOf(false) }
++
++    val playbackHeaders = remember(sourceHeaders) { sanitizePlaybackHeaders(sourceHeaders) }
++    val latestOnPlayerControlsEvent = rememberUpdatedState(onPlayerControlsEvent)
++    val latestOnPlayerControlsScrubChange = rememberUpdatedState(onPlayerControlsScrubChange)
++    val latestOnPlayerControlsScrubFinished = rememberUpdatedState(onPlayerControlsScrubFinished)
++    val latestOnError = rememberUpdatedState(onError)
++
++    LaunchedEffect(controller, sourceUrl) {
++        onControllerReady(controller)
++    }
++
++    LaunchedEffect(controller) {
++        controller.setControlCallbacks(
++            onAction = { action -> onPlayerControlsAction(action) },
++            onEvent = { type, value -> latestOnPlayerControlsEvent.value(type, value) },
++            onScrubChange = { positionMs -> latestOnPlayerControlsScrubChange.value(positionMs) },
++            onScrubFinished = { positionMs -> latestOnPlayerControlsScrubFinished.value(positionMs) },
++        )
+     }
+ 
+-    DesktopStubPlayerSurface(
+-        modifier = modifier,
+-        onControllerReady = onControllerReady,
+-        onSnapshot = onSnapshot,
+-    )
++    LaunchedEffect(controller, sourceUrl, playbackHeaders) {
++        DesktopPlayerLaunchShield.hideAfter()
++        delay(16L)
++        controller.attach(
++            sourceUrl = sourceUrl,
++            sourceHeaders = playbackHeaders,
++            playWhenReady = playWhenReady,
++            initialPositionMs = initialPositionMs,
++            decoderPriority = 0,
++            nvidiaRtxSuperResolutionEnabled = false,
++            onError = { message -> latestOnError.value(message) },
++        )
++    }
++
++    LaunchedEffect(controller, playWhenReady) {
++        if (playWhenReady) controller.play() else controller.pause()
++    }
++
++    LaunchedEffect(controller, resizeMode) {
++        controller.setResizeMode(resizeMode)
++    }
++
++    LaunchedEffect(controller, playerControlsState) {
++        controller.updateControls(playerControlsState)
++    }
++
++    LaunchedEffect(controller) {
++        try {
++            while (true) {
++                onSnapshot(controller.snapshot())
++                delay(500L)
++            }
++        } finally { /* coroutine cancelled on dispose */ }
++    }
++
++    // Frame render loop
++    LaunchedEffect(controller) {
++        try {
++            while (true) {
++                delay(8)
++                if (disposed) break
++                val size = surfaceSize
++                if (host.nativeHandle != 0L && size.width > 0 && size.height > 0) {
++                    if (host.renderFrame(size.width, size.height)) {
++                        frameTick++
++                    }
++                }
++            }
++        } finally { /* coroutine cancelled on dispose */ }
++    }
++
++    DisposableEffect(controller, sourceUrl, playbackHeaders) {
++        onDispose { controller.dispose() }
++    }
++
++    DisposableEffect(host) {
++        onDispose {
++            disposed = true
++            host.nativeHandle = 0L
++            host.dispose()
++            frameTick++
++        }
++    }
++
++    DisposableEffect(Unit) {
++        val listener = AWTEventListener { awtEvent ->
++            when (awtEvent.id) {
++                MouseEvent.MOUSE_MOVED, MouseEvent.MOUSE_DRAGGED -> {
++                    host.noteCursorActivity()
++                    latestOnPlayerControlsEvent.value("keepChromeVisible", 0.0)
++                }
++            }
++        }
++        Toolkit.getDefaultToolkit().addAWTEventListener(
++            listener,
++            AWTEvent.MOUSE_EVENT_MASK or AWTEvent.MOUSE_MOTION_EVENT_MASK,
++        )
++        onDispose {
++            Toolkit.getDefaultToolkit().removeAWTEventListener(listener)
++        }
++    }
++
++    Box(
++        modifier = modifier
++            .fillMaxSize()
++            .background(Color.Black)
++            .pointerInput(Unit) {
++                awaitPointerEventScope {
++                    while (true) {
++                        val event = awaitPointerEvent()
++                        if (event.type == PointerEventType.Scroll) {
++                            event.changes.firstOrNull()?.scrollDelta?.y?.let { delta ->
++                                controller.seekBy(if (delta < 0f) 10000L else -10000L)
++                            }
++                        }
++                    }
++                }
++            },
++    ) {
++        Canvas(
++            modifier = Modifier
++                .fillMaxSize()
++                .onSizeChanged { surfaceSize = it },
++        ) {
++            frameTick // read to trigger recomposition
++            if (!disposed) {
++                val skiaImage = host.latestImage
++                if (skiaImage != null && !skiaImage.isClosed) {
++                    val canvas = drawContext.canvas.nativeCanvas
++                    val imgW = skiaImage.width.toFloat()
++                    val imgH = skiaImage.height.toFloat()
++                    val dstW = size.width
++                    val dstH = size.height
++
++                    // Draw full FBO — mpv handles letterbox/zoom/stretch internally
++                    // via panscan property. Subtitles are always correctly positioned.
++                    val srcRect = org.jetbrains.skia.Rect.makeWH(imgW, imgH)
++                    val dstRect = org.jetbrains.skia.Rect.makeWH(dstW, dstH)
++                    canvas.drawImageRect(
++                        skiaImage,
++                        srcRect,
++                        dstRect,
++                        org.jetbrains.skia.SamplingMode.DEFAULT,
++                        org.jetbrains.skia.Paint(),
++                        false,
++                    )
++                }
++            }
++        }
++    }
+ }
+ 
++/**
++ * macOS / Windows / Linux X11 path: uses AWT Canvas + SwingPanel.
++ * These platforms get the native view pointer for hardware-accelerated rendering.
++ */
+ @Composable
+ private fun NativePlayerSurface(
+     sourceUrl: String,
+@@ -137,6 +354,7 @@ private fun NativePlayerSurface(
+             host.onDisplayableChanged = null
+             host.onFirstPaint = null
+             host.onFirstFullSizePaint = null
++            host.dispose()
+             DesktopPlayerLaunchShield.hide()
+         }
+     }
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/LinuxPlayerHost.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/LinuxPlayerHost.kt
+new file mode 100644
+index 00000000..5785067e
+--- /dev/null
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/LinuxPlayerHost.kt
+@@ -0,0 +1,149 @@
++package com.nuvio.app.features.player.desktop
++
++import org.jetbrains.skia.ColorAlphaType
++import org.jetbrains.skia.Image
++import org.jetbrains.skia.ImageInfo
++import java.awt.Cursor
++import java.awt.KeyboardFocusManager
++import java.awt.Point
++import java.awt.Toolkit
++import java.awt.Window
++import java.awt.image.BufferedImage
++import javax.swing.Timer
++
++/**
++ * PlayerHost for Linux where mpv renders offscreen (EGL FBO via GBM or
++ * SW fallback). This host pulls finished frames via
++ * [NativePlayerBridge.renderFrameBytes] into a Skia [Image] that
++ * Compose Canvas draws each tick. Double-buffered byte arrays avoid
++ * per-frame allocation overhead.
++ */
++internal class LinuxPlayerHost : PlayerHost {
++    @Volatile
++    override var nativeHandle: Long = 0L
++
++    override var onMouseClick: (() -> Unit)? = null
++    override var onCursorActivity: (() -> Unit)? = null
++
++    private var lastWidth = 0
++    private var lastHeight = 0
++
++    /** Native video dimensions (from mpv dwidth/dheight), used for aspect ratio calculation. */
++    @Volatile var videoWidth: Int = 0
++    @Volatile var videoHeight: Int = 0
++
++    /* Double-buffer: one being drawn by Compose, other being filled by native. */
++    private var bufferA: ByteArray? = null
++    private var bufferB: ByteArray? = null
++    private var useBufferA = true
++
++    var latestImage: Image? = null
++        private set
++
++    private var controlsVisible = true
++    private var cursorVisible = true
++    private var cursorHideTimer: Timer? = null
++
++    fun renderFrame(width: Int, height: Int): Boolean {
++        val handle = nativeHandle
++        if (handle == 0L || width <= 0 || height <= 0) return false
++
++        // Update video dimensions for aspect ratio calculations
++        val vw = NativePlayerBridge.videoWidth(handle)
++        val vh = NativePlayerBridge.videoHeight(handle)
++        if (vw > 0 && vh > 0) { videoWidth = vw; videoHeight = vh }
++
++        val byteCount = width * height * 4
++
++        // Use double-buffer: write to inactive buffer while Compose reads from active one
++        val bytes: ByteArray
++        if (useBufferA) {
++            if (bufferA == null || bufferA!!.size < byteCount) bufferA = ByteArray(byteCount)
++            bytes = bufferA!!
++        } else {
++            if (bufferB == null || bufferB!!.size < byteCount) bufferB = ByteArray(byteCount)
++            bytes = bufferB!!
++        }
++        useBufferA = !useBufferA
++
++        if (!NativePlayerBridge.renderFrameBytes(handle, bytes, width, height)) return false
++        if (nativeHandle == 0L) return false
++
++        val imageInfo = ImageInfo.makeS32(width, height, ColorAlphaType.UNPREMUL)
++        val previousImage = latestImage
++        latestImage = Image.makeRaster(imageInfo, bytes, width * 4)
++        previousImage?.close()
++        lastWidth = width
++        lastHeight = height
++        return true
++    }
++
++    override fun setControlsVisible(visible: Boolean) {
++        if (controlsVisible == visible) return
++        controlsVisible = visible
++        cancelCursorHideTimer()
++        setCursorVisible(visible)
++    }
++
++    override fun noteCursorActivity() {
++        onCursorActivity?.invoke()
++        if (controlsVisible) {
++            cancelCursorHideTimer()
++            setCursorVisible(true)
++            return
++        }
++        setCursorVisible(true)
++        restartCursorHideTimer()
++    }
++
++    override fun resetCursorVisibility() {
++        controlsVisible = true
++        cancelCursorHideTimer()
++        setCursorVisible(true)
++    }
++
++    override fun dispose() {
++        resetCursorVisibility()
++        latestImage?.close()
++        latestImage = null
++        bufferA = null
++        bufferB = null
++    }
++
++    private fun setCursorVisible(visible: Boolean) {
++        if (cursorVisible == visible) return
++        cursorVisible = visible
++        val window = activeWindow ?: return
++        window.cursor = if (visible) Cursor.getDefaultCursor() else hiddenCursor
++    }
++
++    private fun restartCursorHideTimer() {
++        cancelCursorHideTimer()
++        cursorHideTimer = Timer(CursorIdleHideDelayMs) {
++            if (!controlsVisible) {
++                setCursorVisible(false)
++            }
++            cancelCursorHideTimer()
++        }.apply {
++            isRepeats = false
++            start()
++        }
++    }
++
++    private fun cancelCursorHideTimer() {
++        cursorHideTimer?.stop()
++        cursorHideTimer = null
++    }
++
++    private val activeWindow: Window?
++        get() = KeyboardFocusManager.getCurrentKeyboardFocusManager().activeWindow
++            ?: Window.getWindows().firstOrNull { it.isVisible && it.isActive }
++
++    private companion object {
++        const val CursorIdleHideDelayMs = 3_000
++        val hiddenCursor: Cursor by lazy {
++            val image = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
++            Toolkit.getDefaultToolkit().createCustomCursor(image, Point(0, 0), "nuvio-hidden-cursor")
++        }
++    }
++}
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/MacosAwtViewResolver.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/MacosAwtViewResolver.kt
+index aea9d4b7..641fa78a 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/MacosAwtViewResolver.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/MacosAwtViewResolver.kt
+@@ -80,3 +80,5 @@ private object WindowsAwtViewResolver {
+     private fun invokeLong(target: Any, methodName: String): Long =
+         (findMethod(target.javaClass, methodName).invoke(target) as Number).toLong()
+ }
++
++
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerBridge.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerBridge.kt
+index a1fe21c0..1dbfc355 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerBridge.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerBridge.kt
+@@ -94,6 +94,14 @@ internal object NativePlayerBridge {
+     external fun shutdownWebView2Warmup()
+     external fun setWindowsDisplaySleepInhibited(inhibited: Boolean): Boolean
+ 
++    // Linux-specific native methods
++    external fun renderFrame(handle: Long, dstPixels: IntArray, dstW: Int, dstH: Int): Boolean
++    external fun renderFrameBytes(handle: Long, dstBytes: ByteArray, dstW: Int, dstH: Int): Boolean
++    external fun resizeNativeView(handle: Long, width: Int, height: Int)
++    external fun videoWidth(handle: Long): Int
++    external fun videoHeight(handle: Long): Int
++    external fun setProperty(handle: Long, name: String, value: String)
++
+     val controlsPageUrl: String by lazy { controlsPageAssets.url }
+     private val controlsPageAssets: ControlsPageAssets by lazy { exportControlsPageAssets() }
+ 
+@@ -124,7 +132,7 @@ internal object NativePlayerBridge {
+ 
+     private fun loadNativeLibrary() {
+         val platform = DesktopHostOs.current
+-        require(platform == DesktopHostOs.MACOS || platform == DesktopHostOs.WINDOWS) {
++        require(platform == DesktopHostOs.MACOS || platform == DesktopHostOs.WINDOWS || platform == DesktopHostOs.LINUX) {
+             "Native desktop playback is not implemented for $platform yet."
+         }
+ 
+@@ -336,7 +344,7 @@ internal object NativePlayerBridge {
+ }
+ 
+ internal fun preloadNativePlayerBridgeAsync() {
+-    if (DesktopHostOs.current == DesktopHostOs.MACOS || DesktopHostOs.current == DesktopHostOs.WINDOWS) {
++    if (DesktopHostOs.current == DesktopHostOs.MACOS || DesktopHostOs.current == DesktopHostOs.WINDOWS || DesktopHostOs.current == DesktopHostOs.LINUX) {
+         runCatching {
+             NativePlayerBridge.preloadAsync()
+         }
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerController.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerController.kt
+index 6ecbab8a..30030218 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerController.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerController.kt
+@@ -29,7 +29,7 @@ import javax.swing.SwingUtilities
+ import kotlin.concurrent.Volatile
+ 
+ internal class NativePlayerController(
+-    private val host: NativePlayerHost,
++    private val host: PlayerHost,
+ ) : PlayerEngineController {
+     private companion object {
+         val json = Json { ignoreUnknownKeys = true }
+@@ -79,21 +79,34 @@ internal class NativePlayerController(
+             "attach requested source=${sourceUrl.toPlaybackLogKey()} headers=${sourceHeaders.size} " +
+                 "playWhenReady=$playWhenReady initialPositionMs=$initialPositionMs decoderPriority=$decoderPriority"
+         }
+-        host.onPeerReady = { attachPending() }
+-        if (host.isDisplayable) {
++        if (host is NativePlayerHost) {
++            host.onPeerReady = { attachPending() }
++            if (host.isDisplayable) {
++                attachPending()
++            }
++        } else {
++            // LinuxPlayerHost — no AWT peer needed, attach immediately
+             attachPending()
+         }
+     }
+ 
+     private fun attachPending() {
+         val pending = pendingSource ?: return
++
++        if (host is LinuxPlayerHost) {
++            // Linux offscreen path — no AWT peer, no SwingUtilities needed
++            attachPendingDirect(pending)
++            return
++        }
++
++        val nativeHost = host as NativePlayerHost
+         SwingUtilities.invokeLater {
+-            if (!host.isDisplayable) {
++            if (!nativeHost.isDisplayable) {
+                 return@invokeLater
+             }
+             disposePlayerHandle()
+             runCatching {
+-                val hostViewPtr = AwtNativeViewResolver.resolveNativeViewPointer(host)
++                val hostViewPtr = AwtNativeViewResolver.resolveNativeViewPointer(nativeHost)
+                 val resolvedSource = if (pending.sourceUrl.startsWith("file:", ignoreCase = true)) {
+                     runCatching { java.io.File(java.net.URI(pending.sourceUrl)).absolutePath }.getOrElse {
+                         val stripped = pending.sourceUrl.replaceFirst(Regex("^file:/{1,3}", RegexOption.IGNORE_CASE), "")
+@@ -128,6 +141,43 @@ internal class NativePlayerController(
+         }
+     }
+ 
++    private fun attachPendingDirect(pending: PendingSource) {
++        disposePlayerHandle()
++        runCatching {
++            val resolvedSource = if (pending.sourceUrl.startsWith("file:", ignoreCase = true)) {
++                runCatching { java.io.File(java.net.URI(pending.sourceUrl)).absolutePath }.getOrElse {
++                    val stripped = pending.sourceUrl.replaceFirst(Regex("^file:/{1,3}", RegexOption.IGNORE_CASE), "")
++                    runCatching { java.net.URLDecoder.decode(stripped, "UTF-8") }.getOrDefault(stripped)
++                }
++            } else {
++                pending.sourceUrl
++            }
++            handle = NativePlayerBridge.create(
++                hostViewPtr = 0L,
++                sourceUrl = resolvedSource,
++                headerLines = pending.headerLines.toTypedArray(),
++                playWhenReady = pending.playWhenReady,
++                initialPositionMs = pending.initialPositionMs,
++                controlsPageUrl = NativePlayerBridge.controlsPageUrl,
++                decoderPriority = pending.decoderPriority,
++                nvidiaRtxSuperResolutionEnabled = pending.nvidiaRtxSuperResolutionEnabled,
++                eventSink = eventSink,
++            )
++            if (handle == 0L) error("Native player did not return a handle.")
++            host.nativeHandle = handle
++            log.d {
++                "attach direct handle=$handle source=${resolvedSource.toPlaybackLogKey()} " +
++                    "initialPositionMs=${pending.initialPositionMs}"
++            }
++            applyRememberedVolume()
++            updateControls(controlsState)
++            applyPendingSubtitleSettings()
++        }.onFailure { error ->
++            log.w(error) { "attach direct failed source=${pending.sourceUrl.toPlaybackLogKey()}" }
++            pending.onError(error.message)
++        }
++    }
++
+     fun setControlCallbacks(
+         onAction: (PlayerControlsAction) -> Boolean,
+         onEvent: (String, Double) -> Boolean,
+@@ -157,7 +207,9 @@ internal class NativePlayerController(
+             state
+         }
+         controlsState = stateWithVolume
+-        val isFullscreen = isDesktopAppFullscreen(SwingUtilities.getWindowAncestor(host))
++        val isFullscreen = (host as? java.awt.Component)?.let {
++            isDesktopAppFullscreen(SwingUtilities.getWindowAncestor(it))
++        } ?: false
+         val structureKey = NativeControlsStructureKey(
+             state = stateWithVolume.nativeControlsStructureKey(),
+             isFullscreen = isFullscreen,
+@@ -180,9 +232,10 @@ internal class NativePlayerController(
+     }
+ 
+     private fun requestKeyboardFocus() {
++        val nativeHost = host as? NativePlayerHost ?: return
+         SwingUtilities.invokeLater {
+-            if (!host.isDisplayable) return@invokeLater
+-            host.requestFocusInWindow()
++            if (!nativeHost.isDisplayable) return@invokeLater
++            nativeHost.requestFocusInWindow()
+             val current = handle.takeIf { it != 0L } ?: return@invokeLater
+             NativePlayerBridge.requestFocus(current)
+         }
+@@ -223,7 +276,8 @@ internal class NativePlayerController(
+                 }
+             }
+             "toggleFullscreen" -> {
+-                toggleDesktopAppFullscreen(SwingUtilities.getWindowAncestor(host))
++                val window = (host as? java.awt.Component)?.let { SwingUtilities.getWindowAncestor(it) }
++                toggleDesktopAppFullscreen(window)
+                 onDesktopFullscreenChanged()
+             }
+             "volumeChange" -> setFallbackVolume(value.toFloat())
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerHost.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerHost.kt
+index f69c9d0a..61d37306 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerHost.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/NativePlayerHost.kt
+@@ -6,22 +6,34 @@ import java.awt.Cursor
+ import java.awt.Graphics
+ import java.awt.Point
+ import java.awt.Toolkit
++import java.awt.event.ComponentAdapter
++import java.awt.event.ComponentEvent
++import java.awt.event.MouseAdapter
+ import java.awt.event.MouseEvent
+ import java.awt.event.MouseMotionAdapter
+ import java.awt.image.BufferedImage
++import javax.swing.Timer
+ 
+-internal class NativePlayerHost : Canvas() {
++internal class NativePlayerHost : Canvas(), PlayerHost {
+     var onPeerReady: (() -> Unit)? = null
+     var onDisplayableChanged: ((Boolean) -> Unit)? = null
+     var onFirstPaint: (() -> Unit)? = null
+     var onFirstFullSizePaint: (() -> Unit)? = null
+-    var onCursorActivity: (() -> Unit)? = null
++    var onResize: ((width: Int, height: Int) -> Unit)? = null
+     private var firstPaintNotified = false
+     private var firstFullSizePaintNotified = false
++    override var onMouseClick: (() -> Unit)? = null
++    override var onCursorActivity: (() -> Unit)? = null
+     private var controlsVisible = true
+     private var cursorVisible = true
++    private var cursorHideTimer: Timer? = null
++
++    @Volatile
++    override var nativeHandle: Long = 0L
+ 
+     private companion object {
++        const val CursorIdleHideDelayMs = 3_000
++
+         val hiddenCursor: Cursor by lazy {
+             val image = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+             Toolkit.getDefaultToolkit().createCustomCursor(image, Point(0, 0), "nuvio-hidden-cursor")
+@@ -31,6 +43,17 @@ internal class NativePlayerHost : Canvas() {
+     init {
+         background = Color.BLACK
+         ignoreRepaint = false
++        addComponentListener(object : ComponentAdapter() {
++            override fun componentResized(e: ComponentEvent) {
++                onResize?.invoke(width, height)
++            }
++        })
++        addMouseListener(object : MouseAdapter() {
++            override fun mouseClicked(e: MouseEvent) {
++                noteCursorActivity()
++                onMouseClick?.invoke()
++            }
++        })
+         addMouseMotionListener(object : MouseMotionAdapter() {
+             override fun mouseMoved(event: MouseEvent) {
+                 noteCursorActivity()
+@@ -42,26 +65,58 @@ internal class NativePlayerHost : Canvas() {
+         })
+     }
+ 
+-    fun setControlsVisible(visible: Boolean) {
++    override fun setControlsVisible(visible: Boolean) {
++        if (controlsVisible == visible) return
+         controlsVisible = visible
++        cancelCursorHideTimer()
+         setCursorVisible(visible)
+     }
+ 
+-    fun noteCursorActivity() {
++    override fun noteCursorActivity() {
+         onCursorActivity?.invoke()
++        if (controlsVisible) {
++            cancelCursorHideTimer()
++            setCursorVisible(true)
++            return
++        }
++        setCursorVisible(true)
++        restartCursorHideTimer()
+     }
+ 
+-    fun resetCursorVisibility() {
++    override fun resetCursorVisibility() {
+         controlsVisible = true
++        cancelCursorHideTimer()
+         setCursorVisible(true)
+     }
+ 
++    override fun dispose() {
++        resetCursorVisibility()
++    }
++
+     private fun setCursorVisible(visible: Boolean) {
+         if (cursorVisible == visible) return
+         cursorVisible = visible
+         cursor = if (visible) Cursor.getDefaultCursor() else hiddenCursor
+     }
+ 
++    private fun restartCursorHideTimer() {
++        cancelCursorHideTimer()
++        cursorHideTimer = Timer(CursorIdleHideDelayMs) {
++            if (!controlsVisible) {
++                setCursorVisible(false)
++            }
++            cancelCursorHideTimer()
++        }.apply {
++            isRepeats = false
++            start()
++        }
++    }
++
++    private fun cancelCursorHideTimer() {
++        cursorHideTimer?.stop()
++        cursorHideTimer = null
++    }
++
+     override fun update(graphics: Graphics) {
+         paint(graphics)
+     }
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/PlayerHost.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/PlayerHost.kt
+new file mode 100644
+index 00000000..760e17e6
+--- /dev/null
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/features/player/desktop/PlayerHost.kt
+@@ -0,0 +1,18 @@
++package com.nuvio.app.features.player.desktop
++
++/**
++ * Common contract between [NativePlayerHost] (AWT Canvas, used on macOS/Windows/X11)
++ * and [LinuxPlayerHost] (Compose Canvas, used on Linux).
++ * Allows [NativePlayerController] to drive both hosts without duplication.
++ */
++internal interface PlayerHost {
++    var nativeHandle: Long
++
++    var onMouseClick: (() -> Unit)?
++    var onCursorActivity: (() -> Unit)?
++
++    fun setControlsVisible(visible: Boolean)
++    fun noteCursorActivity()
++    fun resetCursorVisibility()
++    fun dispose() {}
++}
+diff --git a/composeApp/src/desktopMain/native/linux/player_bridge.c b/composeApp/src/desktopMain/native/linux/player_bridge.c
+new file mode 100644
+index 00000000..c64830d3
+--- /dev/null
++++ b/composeApp/src/desktopMain/native/linux/player_bridge.c
+@@ -0,0 +1,1509 @@
++#define _GNU_SOURCE
++#include <jni.h>
++#include <mpv/client.h>
++#include <mpv/render.h>
++#include <mpv/render_gl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stdint.h>
++#include <inttypes.h>
++#include <pthread.h>
++#include <math.h>
++#include <locale.h>
++#include <unistd.h>
++#include <stdarg.h>
++#include <dlfcn.h>
++#include <EGL/egl.h>
++#include <EGL/eglext.h>
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#include <fcntl.h>
++#include <gbm.h>
++
++/* ------------------------------------------------------------------ */
++/*  Debug logging                                                      */
++/* ------------------------------------------------------------------ */
++#define DBG(...)  do { \
++    fprintf(stderr, "[player_bridge] " __VA_ARGS__); \
++    fflush(stderr); \
++} while (0)
++
++__attribute__((constructor))
++static void on_load(void) {
++    fprintf(stderr, "[player_bridge] CONSTRUCTOR: .so loaded (built %s %s)\n",
++            __DATE__, __TIME__);
++}
++
++/* ------------------------------------------------------------------ */
++/*  Cached GL offscreen instance (reused between player sessions)      */
++/* ------------------------------------------------------------------ */
++static pthread_mutex_t glCacheMutex = PTHREAD_MUTEX_INITIALIZER;
++static struct {
++    int valid;
++    int useGLX;
++    int gbmFd;
++    struct gbm_device *gbmDevice;
++    EGLDisplay eglDisplay;
++    EGLContext eglContext;
++    EGLSurface eglSurface;
++    mpv_handle *mpv;
++    mpv_render_context *renderCtx;
++    GLuint fbo;
++    GLuint fboTex;
++    int fboW;
++    int fboH;
++} glCache = {0};
++
++/* ------------------------------------------------------------------ */
++/*  Per-instance state                                                 */
++/* ------------------------------------------------------------------ */
++typedef struct {
++    JavaVM *jvm;
++    jobject eventSink;
++    jmethodID eventMethod;
++    mpv_handle *mpv;
++    mpv_render_context *renderCtx;
++    char *sourceUrl;
++    char **headers;
++    int nheaders;
++    volatile int alive;
++    int gpuMode; /* 0 = SW rendering, 2 = GL offscreen (EGL or GLX FBO) */
++    int useGLX;  /* 0 = EGL path, 1 = GLX path */
++
++    /* SW mode (gpuMode 0) */
++    pthread_t renderThread;
++    pthread_mutex_t frameMutex;
++    int frameW;
++    int frameH;
++    int frameStride;
++    char *frameData;
++    volatile int frameReady;
++
++    /* Target display size */
++    volatile int targetW;
++    volatile int targetH;
++
++    /* Frame-ready signaling from mpv */
++    pthread_cond_t frameCond;
++    volatile int frameSignal;
++
++    /* GL offscreen mode (gpuMode 2) */
++    int gbmFd;
++    struct gbm_device *gbmDevice;
++    EGLDisplay eglDisplay;
++    EGLContext eglContext;
++    EGLSurface eglSurface;
++    GLuint fbo;
++    GLuint fboTex;
++    int fboW;
++    int fboH;
++
++} CreateTask;
++
++static void callEventSink(JNIEnv *env, JavaVM *jvm,
++    jobject eventSink, jmethodID eventMethod,
++    const char *type, double value) {
++    if (!eventSink || !eventMethod) return;
++    int detach = 0;
++    if (!env) {
++        jint ret = (*jvm)->GetEnv(jvm, (void**)&env, JNI_VERSION_1_6);
++        if (ret == JNI_EDETACHED) {
++            (*jvm)->AttachCurrentThread(jvm, (void**)&env, NULL);
++            detach = 1;
++        }
++    }
++    if (env) {
++        jstring jType = (*env)->NewStringUTF(env, type);
++        (*env)->CallVoidMethod(env, eventSink, eventMethod, jType, value);
++        (*env)->DeleteLocalRef(env, jType);
++    }
++    if (detach) {
++        (*jvm)->DetachCurrentThread(jvm);
++    }
++}
++
++/* ------------------------------------------------------------------ */
++/*  EGL offscreen context via GBM                                      */
++/* ------------------------------------------------------------------ */
++#ifndef EGL_PLATFORM_GBM_KHR
++#define EGL_PLATFORM_GBM_KHR 0x31D7
++#endif
++
++#ifndef EGL_EXT_platform_base
++typedef EGLDisplay (*PFNEGLGETPLATFORMDISPLAYEXTPROC)(EGLenum, void *, const EGLint *);
++#endif
++
++static int initEGL(CreateTask *task) {
++    eglReleaseThread();
++
++    static const char *renderNodes[] = {
++        "/dev/dri/renderD128", "/dev/dri/renderD129", "/dev/dri/renderD130", NULL
++    };
++
++    for (int nodeIdx = 0; renderNodes[nodeIdx]; nodeIdx++) {
++        int origFd = open(renderNodes[nodeIdx], O_RDWR);
++        if (origFd < 0) continue;
++        task->gbmFd = dup(origFd);
++        close(origFd);
++        if (task->gbmFd < 0) continue;
++
++        task->gbmDevice = gbm_create_device(task->gbmFd);
++        if (!task->gbmDevice) { close(task->gbmFd); task->gbmFd = -1; continue; }
++        DBG("EGL: trying render node %s\n", renderNodes[nodeIdx]);
++
++        PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT =
++            (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
++        if (eglGetPlatformDisplayEXT) {
++            task->eglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_GBM_KHR, task->gbmDevice, NULL);
++        } else {
++            task->eglDisplay = eglGetDisplay((EGLNativeDisplayType)task->gbmDevice);
++        }
++        if (task->eglDisplay == EGL_NO_DISPLAY) {
++            gbm_device_destroy(task->gbmDevice); close(task->gbmFd);
++            task->gbmFd = -1; task->gbmDevice = NULL; continue;
++        }
++
++        EGLint major, minor;
++        if (!eglInitialize(task->eglDisplay, &major, &minor)) {
++            gbm_device_destroy(task->gbmDevice); close(task->gbmFd);
++            task->gbmFd = -1; task->gbmDevice = NULL; task->eglDisplay = EGL_NO_DISPLAY; continue;
++        }
++        DBG("EGL: initialized %d.%d via GBM\n", major, minor);
++
++        /* Use Desktop GL — NVIDIA goes through GLX fallback anyway */
++        eglBindAPI(EGL_OPENGL_API);
++        EGLint configAttribs[] = {
++            EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
++            EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8,
++            EGL_NONE
++        };
++        EGLConfig config;
++        EGLint numConfigs;
++        if (!eglChooseConfig(task->eglDisplay, configAttribs, &config, 1, &numConfigs) || numConfigs == 0) {
++            DBG("EGL: config failed\n");
++            eglTerminate(task->eglDisplay); gbm_device_destroy(task->gbmDevice);
++            close(task->gbmFd); task->gbmFd = -1; task->gbmDevice = NULL;
++            task->eglDisplay = EGL_NO_DISPLAY; continue;
++        }
++
++        EGLint ctxAttribs[] = { EGL_CONTEXT_MAJOR_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 3,
++                                EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
++                                EGL_NONE };
++        task->eglContext = eglCreateContext(task->eglDisplay, config, EGL_NO_CONTEXT, ctxAttribs);
++        if (task->eglContext == EGL_NO_CONTEXT) {
++            /* Fallback: try without core profile */
++            EGLint ctxAttribs2[] = { EGL_NONE };
++            task->eglContext = eglCreateContext(task->eglDisplay, config, EGL_NO_CONTEXT, ctxAttribs2);
++        }
++        if (task->eglContext == EGL_NO_CONTEXT) {
++            DBG("EGL: context creation failed (err=0x%x)\n", eglGetError());
++            eglTerminate(task->eglDisplay); gbm_device_destroy(task->gbmDevice);
++            close(task->gbmFd); task->gbmFd = -1; task->gbmDevice = NULL;
++            task->eglDisplay = EGL_NO_DISPLAY; continue;
++        }
++
++        /* Surface: try pbuffer, then GBM window surface, then surfaceless */
++        task->eglSurface = EGL_NO_SURFACE;
++        EGLint pbufAttribs[] = { EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE };
++        task->eglSurface = eglCreatePbufferSurface(task->eglDisplay, config, pbufAttribs);
++        if (task->eglSurface == EGL_NO_SURFACE) {
++            struct gbm_surface *gbmSurf = gbm_surface_create(task->gbmDevice,
++                16, 16, GBM_FORMAT_ARGB8888, GBM_BO_USE_RENDERING);
++            if (gbmSurf) {
++                task->eglSurface = eglCreateWindowSurface(task->eglDisplay, config,
++                    (EGLNativeWindowType)gbmSurf, NULL);
++                if (task->eglSurface == EGL_NO_SURFACE) gbm_surface_destroy(gbmSurf);
++            }
++        }
++
++        /* Verify eglMakeCurrent */
++        EGLSurface testSurf = (task->eglSurface != EGL_NO_SURFACE) ? task->eglSurface : EGL_NO_SURFACE;
++        if (!eglMakeCurrent(task->eglDisplay, testSurf, testSurf, task->eglContext)) {
++            DBG("EGL: eglMakeCurrent failed (err=0x%x)\n", eglGetError());
++            eglDestroyContext(task->eglDisplay, task->eglContext);
++            if (task->eglSurface != EGL_NO_SURFACE) eglDestroySurface(task->eglDisplay, task->eglSurface);
++            eglTerminate(task->eglDisplay); gbm_device_destroy(task->gbmDevice);
++            close(task->gbmFd); task->gbmFd = -1; task->gbmDevice = NULL;
++            task->eglDisplay = EGL_NO_DISPLAY; task->eglContext = EGL_NO_CONTEXT;
++            task->eglSurface = EGL_NO_SURFACE; continue;
++        }
++
++        /* Success */
++        eglMakeCurrent(task->eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
++        DBG("EGL: GBM context ready (surface=%s)\n",
++            task->eglSurface != EGL_NO_SURFACE ? "window/pbuffer" : "surfaceless");
++        return 1;
++    }
++
++    DBG("EGL: all render nodes failed\n");
++    return 0;
++}
++
++/* ------------------------------------------------------------------ */
++/*  GLX offscreen context (fallback for NVIDIA where EGL fails)        */
++/* ------------------------------------------------------------------ */
++#include <X11/Xlib.h>
++#include <GL/glx.h>
++
++static Display *glxDisplay = NULL;
++static GLXContext glxContext = NULL;
++static GLXPbuffer glxPbuffer = 0;
++
++static int initGLX(CreateTask *task) {
++    DBG("GLX: trying X11 offscreen context\n");
++
++    glxDisplay = XOpenDisplay(NULL);
++    if (!glxDisplay) {
++        DBG("GLX: XOpenDisplay failed (no X11/XWayland?)\n");
++        return 0;
++    }
++
++    int screen = DefaultScreen(glxDisplay);
++    int fbAttribs[] = {
++        GLX_RENDER_TYPE, GLX_RGBA_BIT,
++        GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT,
++        GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_ALPHA_SIZE, 8,
++        GLX_DOUBLEBUFFER, False,
++        None
++    };
++    int fbCount = 0;
++    GLXFBConfig *fbConfigs = glXChooseFBConfig(glxDisplay, screen, fbAttribs, &fbCount);
++    if (!fbConfigs || fbCount == 0) {
++        DBG("GLX: no suitable FBConfig\n");
++        XCloseDisplay(glxDisplay); glxDisplay = NULL;
++        return 0;
++    }
++
++    glxContext = glXCreateNewContext(glxDisplay, fbConfigs[0], GLX_RGBA_TYPE, NULL, True);
++    if (!glxContext) {
++        DBG("GLX: context creation failed\n");
++        XFree(fbConfigs); XCloseDisplay(glxDisplay); glxDisplay = NULL;
++        return 0;
++    }
++
++    int pbAttribs[] = { GLX_PBUFFER_WIDTH, 16, GLX_PBUFFER_HEIGHT, 16, None };
++    glxPbuffer = glXCreatePbuffer(glxDisplay, fbConfigs[0], pbAttribs);
++    XFree(fbConfigs);
++    if (!glxPbuffer) {
++        DBG("GLX: pbuffer creation failed\n");
++        glXDestroyContext(glxDisplay, glxContext); glxContext = NULL;
++        XCloseDisplay(glxDisplay); glxDisplay = NULL;
++        return 0;
++    }
++
++    if (!glXMakeContextCurrent(glxDisplay, glxPbuffer, glxPbuffer, glxContext)) {
++        DBG("GLX: MakeContextCurrent failed\n");
++        glXDestroyPbuffer(glxDisplay, glxPbuffer); glxPbuffer = 0;
++        glXDestroyContext(glxDisplay, glxContext); glxContext = NULL;
++        XCloseDisplay(glxDisplay); glxDisplay = NULL;
++        return 0;
++    }
++
++    const char *glVersion = (const char *)glGetString(GL_VERSION);
++    const char *glRenderer = (const char *)glGetString(GL_RENDERER);
++    DBG("GLX: initialized (GL=%s renderer=%s)\n",
++        glVersion ? glVersion : "null", glRenderer ? glRenderer : "null");
++
++    /* Unbind — render thread will rebind */
++    glXMakeContextCurrent(glxDisplay, None, None, NULL);
++
++    /* Open DRM render node for mpv hw decode interop */
++    if (task->gbmFd <= 0) {
++        static const char *nodes[] = {"/dev/dri/renderD128", "/dev/dri/renderD129", "/dev/dri/renderD130", NULL};
++        for (int i = 0; nodes[i]; i++) {
++            int fd = open(nodes[i], O_RDWR);
++            if (fd >= 0) { task->gbmFd = fd; break; }
++        }
++    }
++
++    DBG("GLX: context ready (drmFd=%d)\n", task->gbmFd);
++    return 1;
++}
++
++static void glxMakeCurrent(void) {
++    if (glxDisplay && glxContext && glxPbuffer) {
++        glXMakeContextCurrent(glxDisplay, glxPbuffer, glxPbuffer, glxContext);
++    }
++}
++
++static void glxUnbind(void) {
++    if (glxDisplay) {
++        glXMakeContextCurrent(glxDisplay, None, None, NULL);
++    }
++}
++
++static void *glGetProcAddressWrapper(void *ctx, const char *name) {
++    (void)ctx;
++    void *addr = (void *)eglGetProcAddress(name);
++    if (!addr) addr = (void *)glXGetProcAddressARB((const GLubyte *)name);
++    return addr;
++}
++
++/* Make GL context current — dispatches to EGL or GLX */
++static int makeGLCurrent(CreateTask *task) {
++    if (task->useGLX) {
++        glxMakeCurrent();
++        return 1;
++    }
++    return eglMakeCurrent(task->eglDisplay, task->eglSurface, task->eglSurface, task->eglContext);
++}
++
++static void unbindGL(CreateTask *task) {
++    if (task->useGLX) {
++        glxUnbind();
++    } else {
++        eglMakeCurrent(task->eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
++    }
++}
++
++static void ensureFBO(CreateTask *task, int w, int h) {
++    if (task->fboW == w && task->fboH == h && task->fbo != 0) return;
++
++    if (task->fbo) {
++        glDeleteFramebuffers(1, &task->fbo);
++        glDeleteTextures(1, &task->fboTex);
++    }
++
++    glGenTextures(1, &task->fboTex);
++    glBindTexture(GL_TEXTURE_2D, task->fboTex);
++    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
++    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
++
++    glGenFramebuffers(1, &task->fbo);
++    glBindFramebuffer(GL_FRAMEBUFFER, task->fbo);
++    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, task->fboTex, 0);
++
++    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
++    if (status != GL_FRAMEBUFFER_COMPLETE) {
++        DBG("EGL: FBO incomplete (status=0x%x)\n", status);
++    }
++
++    task->fboW = w;
++    task->fboH = h;
++    DBG("EGL: FBO resized to %dx%d\n", w, h);
++}
++
++static void destroyEGL(CreateTask *task) {
++    /* INTENTIONAL LEAK: Mesa Gallium shares pipe_screen across EGLDisplays.
++     * Calling eglTerminate corrupts Compose/Skia. Resources reclaimed on exit. */
++    task->eglDisplay = EGL_NO_DISPLAY;
++    task->eglContext = EGL_NO_CONTEXT;
++    task->fbo = 0;
++    task->fboTex = 0;
++}
++
++/* ------------------------------------------------------------------ */
++/*  GL offscreen render                                                */
++/* ------------------------------------------------------------------ */
++static void renderFrameGL(CreateTask *task) {
++    if (!task->renderCtx) return;
++
++    int flags = mpv_render_context_update(task->renderCtx);
++    if (!(flags & MPV_RENDER_UPDATE_FRAME)) return;
++
++    int w = task->targetW;
++    int h = task->targetH;
++    if (w <= 0 || h <= 0) {
++        int64_t vw = 0, vh = 0;
++        mpv_get_property(task->mpv, "dwidth", MPV_FORMAT_INT64, &vw);
++        mpv_get_property(task->mpv, "dheight", MPV_FORMAT_INT64, &vh);
++        if (vw <= 0 || vh <= 0) return;
++        w = (int)vw;
++        h = (int)vh;
++    }
++
++    if (!makeGLCurrent(task)) {
++        DBG("renderFrameGL: makeGLCurrent failed\n");
++        return;
++    }
++    ensureFBO(task, w, h);
++
++    mpv_opengl_fbo fbo_params = {
++        .fbo = (int)task->fbo,
++        .w = w,
++        .h = h,
++        .internal_format = 0
++    };
++    int flip_y = 0;
++    mpv_render_param params[] = {
++        {MPV_RENDER_PARAM_OPENGL_FBO, &fbo_params},
++        {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
++        {0}
++    };
++
++    if (mpv_render_context_render(task->renderCtx, params) < 0) {
++        DBG("renderFrameGL: mpv_render_context_render failed\n");
++        return;
++    }
++
++    pthread_mutex_lock(&task->frameMutex);
++    int stride = w * 4;
++    if (w != task->frameW || h != task->frameH) {
++        char *newBuf = realloc(task->frameData, (size_t)stride * h);
++        if (!newBuf) { pthread_mutex_unlock(&task->frameMutex); return; }
++        task->frameData = newBuf;
++        task->frameW = w;
++        task->frameH = h;
++        task->frameStride = stride;
++    }
++    glBindFramebuffer(GL_FRAMEBUFFER, task->fbo);
++    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, task->frameData);
++    task->frameReady = 1;
++    pthread_mutex_unlock(&task->frameMutex);
++}
++
++/* ------------------------------------------------------------------ */
++/*  SW render (fallback if EGL init fails)                             */
++/* ------------------------------------------------------------------ */
++static void renderFrameSW(CreateTask *task) {
++    if (!task->renderCtx) return;
++
++    int flags = mpv_render_context_update(task->renderCtx);
++    if (!(flags & MPV_RENDER_UPDATE_FRAME)) return;
++
++    /* Always render at native video resolution — let Skia/Compose handle scaling.
++     * This avoids mpv's expensive SW scaler on 4K content. */
++    int64_t vw = 0, vh = 0;
++    mpv_get_property(task->mpv, "dwidth", MPV_FORMAT_INT64, &vw);
++    mpv_get_property(task->mpv, "dheight", MPV_FORMAT_INT64, &vh);
++    if (vw <= 0 || vh <= 0) return;
++    int w = (int)vw;
++    int h = (int)vh;
++
++    pthread_mutex_lock(&task->frameMutex);
++    int stride = w * 4;
++    if (w != task->frameW || h != task->frameH) {
++        char *newBuf = realloc(task->frameData, (size_t)stride * h);
++        if (!newBuf) { pthread_mutex_unlock(&task->frameMutex); return; }
++        task->frameData = newBuf;
++        task->frameW = w;
++        task->frameH = h;
++        task->frameStride = stride;
++    }
++
++    mpv_render_param params[] = {
++        {MPV_RENDER_PARAM_SW_SIZE, &(int[2]){w, h}},
++        {MPV_RENDER_PARAM_SW_FORMAT, (char *)"rgb0"},
++        {MPV_RENDER_PARAM_SW_STRIDE, &stride},
++        {MPV_RENDER_PARAM_SW_POINTER, task->frameData},
++        {0}
++    };
++    if (mpv_render_context_render(task->renderCtx, params) < 0) {
++        DBG("renderFrameSW: mpv_render_context_render failed\n");
++    }
++    task->frameReady = 1;
++    pthread_mutex_unlock(&task->frameMutex);
++}
++
++static void mpvWakeupCallback(void *data) {
++    CreateTask *task = (CreateTask *)data;
++    task->frameSignal = 1;
++    pthread_cond_signal(&task->frameCond);
++}
++
++static void *renderThreadFunc(void *data) {
++    CreateTask *task = (CreateTask *)data;
++
++    /* If gpuMode==2, create GL render context here where we own the GL context. */
++    if (task->gpuMode == 2 && !task->renderCtx) {
++        /* Try EGL first, then GLX as fallback */
++        if (task->eglDisplay == EGL_NO_DISPLAY && !task->useGLX) {
++            if (!initEGL(task)) {
++                DBG("render thread: EGL failed, trying GLX\n");
++                if (initGLX(task)) {
++                    task->useGLX = 1;
++                } else {
++                    DBG("render thread: GLX also failed, falling back to SW\n");
++                    task->gpuMode = 0;
++                    int adv = 1;
++                    mpv_render_param sw_params[] = {
++                        {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_SW},
++                        {MPV_RENDER_PARAM_ADVANCED_CONTROL, &adv},
++                        {0}
++                    };
++                    mpv_render_context_create(&task->renderCtx, task->mpv, sw_params);
++                    if (task->renderCtx) {
++                        mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++                        mpv_set_property_string(task->mpv, "hwdec", "auto-copy");
++                    }
++                    goto render_loop;
++                }
++            }
++        }
++
++        if (!makeGLCurrent(task)) {
++            DBG("render thread: makeGLCurrent FAILED, falling back to SW\n");
++            task->gpuMode = 0;
++            int adv = 1;
++            mpv_render_param sw_params[] = {
++                {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_SW},
++                {MPV_RENDER_PARAM_ADVANCED_CONTROL, &adv},
++                {0}
++            };
++            mpv_render_context_create(&task->renderCtx, task->mpv, sw_params);
++            if (task->renderCtx) {
++                mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++                mpv_set_property_string(task->mpv, "hwdec", "auto-copy");
++            }
++            goto render_loop;
++        }
++
++        const char *glVersion = (const char *)glGetString(GL_VERSION);
++        const char *glRenderer = (const char *)glGetString(GL_RENDERER);
++        DBG("render thread: GL=%s renderer=%s (backend=%s)\n",
++            glVersion ? glVersion : "null", glRenderer ? glRenderer : "null",
++            task->useGLX ? "GLX" : "EGL");
++
++        DBG("render thread: creating mpv GL render context (gbmFd=%d)\n", task->gbmFd);
++
++
++        mpv_opengl_init_params gl_init = {
++            .get_proc_address = glGetProcAddressWrapper,
++            .get_proc_address_ctx = NULL,
++        };
++        int advanced = 1;
++
++        /* DRM params only when we have a valid GBM fd (not in Device Platform mode) */
++        mpv_opengl_drm_params_v2 drm_params = {
++            .fd = task->gbmFd,
++            .crtc_id = -1,
++            .connector_id = -1,
++            .render_fd = task->gbmFd,
++        };
++        mpv_render_param render_params_drm[] = {
++            {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_OPENGL},
++            {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init},
++            {MPV_RENDER_PARAM_DRM_DISPLAY_V2, &drm_params},
++            {MPV_RENDER_PARAM_ADVANCED_CONTROL, &advanced},
++            {0}
++        };
++        mpv_render_param render_params_nodrm[] = {
++            {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_OPENGL},
++            {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init},
++            {MPV_RENDER_PARAM_ADVANCED_CONTROL, &advanced},
++            {0}
++        };
++        mpv_render_param *render_params = (task->gbmFd > 0)
++            ? render_params_drm : render_params_nodrm;
++
++        if (mpv_render_context_create(&task->renderCtx, task->mpv, render_params) < 0) {
++            /* If DRM params failed, retry without them */
++            if (render_params == render_params_drm) {
++                DBG("render thread: GL context with DRM failed, retrying without DRM\n");
++                if (mpv_render_context_create(&task->renderCtx, task->mpv, render_params_nodrm) < 0) {
++                    DBG("render thread: GL mpv_render_context_create FAILED (both paths)\n");
++                    goto gl_create_failed;
++                }
++                mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++                DBG("render thread: GL render context created (no DRM)\n");
++            } else {
++                DBG("render thread: GL mpv_render_context_create FAILED\n");
++                goto gl_create_failed;
++            }
++        } else {
++            mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++            DBG("render thread: GL render context created successfully (VAAPI should work)\n");
++        }
++        goto render_loop;
++
++gl_create_failed:
++            eglMakeCurrent(task->eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
++            task->gpuMode = 0; /* fallback to SW */
++            {
++            int adv = 1;
++            mpv_render_param sw_params[] = {
++                {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_SW},
++                {MPV_RENDER_PARAM_ADVANCED_CONTROL, &adv},
++                {0}
++            };
++            mpv_render_context_create(&task->renderCtx, task->mpv, sw_params);
++            if (task->renderCtx) {
++                mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++                mpv_set_property_string(task->mpv, "hwdec", "auto-copy");
++            }
++            }
++    } else if (task->gpuMode == 2 && task->renderCtx) {
++        /* Cached path: render context already exists, just activate GL */
++        makeGLCurrent(task);
++        mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++        DBG("render thread: reusing cached GL context\n");
++    }
++
++render_loop:
++    while (task->alive) {
++        pthread_mutex_lock(&task->frameMutex);
++        while (!task->frameSignal && task->alive) {
++            struct timespec ts;
++            clock_gettime(CLOCK_REALTIME, &ts);
++            ts.tv_nsec += 4000000;
++            if (ts.tv_nsec >= 1000000000) { ts.tv_sec++; ts.tv_nsec -= 1000000000; }
++            pthread_cond_timedwait(&task->frameCond, &task->frameMutex, &ts);
++        }
++        task->frameSignal = 0;
++        pthread_mutex_unlock(&task->frameMutex);
++
++        if (!task->alive) break;
++
++        /* Process mpv events */
++        if (task->mpv) {
++            while (1) {
++                mpv_event *event = mpv_wait_event(task->mpv, 0);
++                if (event->event_id == MPV_EVENT_NONE) break;
++            }
++        }
++
++        if (!task->alive) break;
++
++        if (task->gpuMode == 2) {
++            renderFrameGL(task);
++        } else {
++            renderFrameSW(task);
++        }
++    }
++
++    /* Unbind GL context from render thread */
++    if (task->gpuMode == 2) {
++        unbindGL(task);
++    }
++
++    return NULL;
++}
++
++JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
++    (void)reserved;
++    setlocale(LC_NUMERIC, "C");
++    return JNI_VERSION_1_6;
++}
++
++
++/* ---- simple growable string buffer ---- */
++typedef struct {
++    char *s;
++    size_t len;
++    size_t cap;
++} JsonBuf;
++
++static void jb_init(JsonBuf *b) { b->s = NULL; b->len = 0; b->cap = 0; }
++
++static void jb_grow(JsonBuf *b, size_t need) {
++    if (b->len + need + 1 <= b->cap) return;
++    size_t newCap = b->cap ? b->cap : 64;
++    while (b->len + need + 1 > newCap) newCap *= 2;
++    char *p = realloc(b->s, newCap);
++    if (!p) return;
++    b->s = p;
++    b->cap = newCap;
++}
++
++static void jb_append(JsonBuf *b, const char *str) {
++    if (!str) return;
++    size_t n = strlen(str);
++    jb_grow(b, n);
++    memcpy(b->s + b->len, str, n);
++    b->len += n;
++    b->s[b->len] = '\0';
++}
++
++static void jb_append_c(JsonBuf *b, char c) {
++    jb_grow(b, 1);
++    b->s[b->len++] = c;
++    b->s[b->len] = '\0';
++}
++
++__attribute__((__format__ (__printf__, 2, 3)))
++static void jb_append_f(JsonBuf *b, const char *fmt, ...) {
++    va_list ap;
++    va_start(ap, fmt);
++    int n = vsnprintf(NULL, 0, fmt, ap);
++    va_end(ap);
++    if (n <= 0) return;
++    jb_grow(b, (size_t)n);
++    va_start(ap, fmt);
++    vsnprintf(b->s + b->len, (size_t)n + 1, fmt, ap);
++    va_end(ap);
++    b->len += (size_t)n;
++}
++
++static void jb_escape(JsonBuf *b, const char *str) {
++    if (!str) { jb_append(b, "null"); return; }
++    jb_append_c(b, '"');
++    for (const unsigned char *p = (const unsigned char *)str; *p; p++) {
++        switch (*p) {
++            case '\\': jb_append(b, "\\\\"); break;
++            case '"':  jb_append(b, "\\\""); break;
++            case '\n': jb_append(b, "\\n"); break;
++            case '\r': jb_append(b, "\\r"); break;
++            case '\t': jb_append(b, "\\t"); break;
++            default:
++                if (*p < 0x20) { char buf[8]; snprintf(buf, sizeof buf, "\\u%04x", *p); jb_append(b, buf); }
++                else jb_append_c(b, (char)*p);
++        }
++    }
++    jb_append_c(b, '"');
++}
++
++static char *tracks_json_for_type(mpv_handle *mpv, const char *type) {
++    mpv_node tracks;
++    if (mpv_get_property(mpv, "track-list", MPV_FORMAT_NODE, &tracks) < 0)
++        return strdup("[]");
++    JsonBuf b; jb_init(&b);
++    jb_append_c(&b, '[');
++    if (tracks.format == MPV_FORMAT_NODE_ARRAY && tracks.u.list) {
++        int first = 1;
++        for (int i = 0; i < tracks.u.list->num; i++) {
++            mpv_node *node = &tracks.u.list->values[i];
++            if (node->format != MPV_FORMAT_NODE_MAP || !node->u.list) continue;
++            const char *node_type = NULL;
++            int track_id = 0, selected = 0;
++            const char *lang = NULL, *label = NULL;
++            for (int j = 0; j < node->u.list->num; j++) {
++                const char *key = node->u.list->keys[j];
++                mpv_node *val = &node->u.list->values[j];
++                if (strcmp(key, "type") == 0 && val->format == MPV_FORMAT_STRING) node_type = val->u.string;
++                else if (strcmp(key, "id") == 0 && val->format == MPV_FORMAT_INT64) track_id = (int)val->u.int64;
++                else if (strcmp(key, "selected") == 0 && val->format == MPV_FORMAT_FLAG) selected = val->u.flag;
++                else if (strcmp(key, "lang") == 0 && val->format == MPV_FORMAT_STRING) lang = val->u.string;
++                else if (strcmp(key, "title") == 0 && val->format == MPV_FORMAT_STRING) label = val->u.string;
++            }
++            if (!node_type || strcmp(node_type, type) != 0) continue;
++            if (!first) jb_append_c(&b, ',');
++            first = 0;
++            jb_append_c(&b, '{');
++            jb_append_f(&b, "\"id\":\"%d\"", track_id);
++            jb_append_f(&b, ",\"index\":%d", track_id - 1);
++            jb_append(&b, ",\"label\":"); jb_escape(&b, label ? label : (lang ? lang : "Track"));
++            jb_append(&b, ",\"language\":"); jb_escape(&b, lang ? lang : "");
++            jb_append_f(&b, ",\"selected\":%s", selected ? "true" : "false");
++            jb_append_c(&b, '}');
++        }
++    }
++    jb_append_c(&b, ']');
++    mpv_free_node_contents(&tracks);
++    return b.s ? b.s : strdup("[]");
++}
++
++
++/* ------------------------------------------------------------------ */
++/*  create / dispose                                                   */
++/* ------------------------------------------------------------------ */
++JNIEXPORT jlong JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_create(
++    JNIEnv *env, jobject thiz,
++    jlong hostViewPtr,
++    jstring sourceUrl,
++    jobjectArray headerLines, jboolean playWhenReady, jlong initialPositionMs,
++    jstring controlsPageUrl,
++    jint decoderPriority, jboolean nvidiaRtxSuperResolutionEnabled,
++    jobject eventSink) {
++    (void)thiz;
++    (void)decoderPriority; (void)nvidiaRtxSuperResolutionEnabled;
++    (void)hostViewPtr; /* gpuMode=1 (wid) removed — Linux always uses offscreen */
++
++    DBG("create() called (offscreen GL/SW mode)\n");
++
++    CreateTask *task = calloc(1, sizeof(CreateTask));
++    if (!task) { DBG("create: calloc failed\n"); return 0; }
++
++    (*env)->GetJavaVM(env, &task->jvm);
++    task->alive = 1;
++    task->gpuMode = 0;
++    task->eglDisplay = EGL_NO_DISPLAY;
++
++    pthread_mutex_init(&task->frameMutex, NULL);
++    pthread_cond_init(&task->frameCond, NULL);
++
++    if (eventSink) {
++        task->eventSink = (*env)->NewGlobalRef(env, eventSink);
++        jclass cls = (*env)->GetObjectClass(env, eventSink);
++        task->eventMethod = (*env)->GetMethodID(env, cls, "onPlayerEvent", "(Ljava/lang/String;D)V");
++        (*env)->DeleteLocalRef(env, cls);
++    }
++
++    {
++        const char *src = sourceUrl ? (*env)->GetStringUTFChars(env, sourceUrl, NULL) : NULL;
++        if (src) { task->sourceUrl = strdup(src); (*env)->ReleaseStringUTFChars(env, sourceUrl, src); }
++    }
++    (void)controlsPageUrl;
++
++    jsize nh = headerLines ? (*env)->GetArrayLength(env, headerLines) : 0;
++    task->nheaders = nh;
++    if (nh > 0) {
++        task->headers = calloc(nh, sizeof(char *));
++        for (jsize i = 0; i < nh; i++) {
++            jstring s = (jstring)(*env)->GetObjectArrayElement(env, headerLines, i);
++            const char *h = (*env)->GetStringUTFChars(env, s, NULL);
++            if (h) { task->headers[i] = strdup(h); (*env)->ReleaseStringUTFChars(env, s, h); }
++            (*env)->DeleteLocalRef(env, s);
++        }
++    }
++
++    setlocale(LC_NUMERIC, "C");
++    task->mpv = mpv_create();
++    if (!task->mpv) {
++        DBG("create: mpv_create failed\n");
++        callEventSink(env, task->jvm, task->eventSink, task->eventMethod, "error", 5.0);
++        free(task->sourceUrl);
++        if (task->headers) { for (int i = 0; i < task->nheaders; i++) free(task->headers[i]); free(task->headers); }
++        if (task->eventSink) (*env)->DeleteGlobalRef(env, task->eventSink);
++        pthread_mutex_destroy(&task->frameMutex);
++        free(task);
++        return 0;
++    }
++
++    /* GL offscreen */
++    pthread_mutex_lock(&glCacheMutex);
++    if (glCache.valid) {
++        DBG("create: reusing cached GL instance\n");
++        task->gbmFd = glCache.gbmFd;
++        task->gbmDevice = glCache.gbmDevice;
++        task->eglDisplay = glCache.eglDisplay;
++        task->eglContext = glCache.eglContext;
++        task->eglSurface = glCache.eglSurface;
++        task->useGLX = glCache.useGLX;
++        task->fbo = glCache.fbo;
++        task->fboTex = glCache.fboTex;
++        task->fboW = glCache.fboW;
++        task->fboH = glCache.fboH;
++        if (glCache.mpv && glCache.renderCtx) {
++            mpv_terminate_destroy(task->mpv);
++            task->mpv = glCache.mpv;
++            task->renderCtx = glCache.renderCtx;
++        }
++        glCache.valid = 0;
++        glCache.mpv = NULL;
++        glCache.renderCtx = NULL;
++        pthread_mutex_unlock(&glCacheMutex);
++        task->gpuMode = 2;
++        DBG("create: cached GL instance restored\n");
++    } else {
++        pthread_mutex_unlock(&glCacheMutex);
++        /* Defer EGL init to render thread — NVIDIA GBM/EGL doesn't support
++         * context creation on one thread + MakeCurrent on another. */
++        task->gpuMode = 2;
++        mpv_set_option_string(task->mpv, "vo", "libmpv");
++        mpv_set_option_string(task->mpv, "gpu-api", "opengl");
++        DBG("create: offscreen GL mode, EGL deferred to render thread\n");
++    }
++
++    int reusingCachedMpv = (task->gpuMode == 2 && task->renderCtx != NULL);
++
++    if (reusingCachedMpv) {
++        DBG("create: reusing cached mpv, skipping init\n");
++        if (task->nheaders > 0 && task->headers) {
++            size_t len = 0;
++            for (int i = 0; i < task->nheaders; i++)
++                if (task->headers[i]) len += strlen(task->headers[i]) * 2 + 2;
++            if (len > 0) {
++                char *hdr = malloc(len + 1);
++                hdr[0] = '\0';
++                for (int i = 0; i < task->nheaders; i++) {
++                    if (!task->headers[i]) continue;
++                    if (hdr[0] != '\0') strcat(hdr, ",");
++                    const char *src = task->headers[i];
++                    char *dst = hdr + strlen(hdr);
++                    while (*src) {
++                        if (*src == '\\' || *src == ',') *dst++ = '\\';
++                        *dst++ = *src++;
++                    }
++                    *dst = '\0';
++                }
++                mpv_set_property_string(task->mpv, "http-header-fields", hdr);
++                free(hdr);
++            }
++        }
++        mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++        /* Cached path: start render thread then jump to loadfile */
++        pthread_create(&task->renderThread, NULL, renderThreadFunc, task);
++        goto skip_init;
++    }
++
++    /* -- Common options -- */
++    mpv_set_option_string(task->mpv, "cache", "yes");
++    mpv_set_option_string(task->mpv, "cache-secs", "3");
++    mpv_set_option_string(task->mpv, "demuxer-max-bytes", "50M");
++    mpv_set_option_string(task->mpv, "demuxer-max-back-bytes", "25M");
++    mpv_set_option_string(task->mpv, "audio-file-auto", "no");
++    mpv_set_option_string(task->mpv, "sub-auto", "no");
++    mpv_set_option_string(task->mpv, "config", "yes");
++    mpv_set_option_string(task->mpv, "terminal", "no");
++    mpv_set_option_string(task->mpv, "msg-level", "all=no");
++
++    mpv_set_option_string(task->mpv, "hwdec", "auto-copy");
++
++    mpv_set_option_string(task->mpv, "vd-lavc-dr", "yes");
++    mpv_set_option_string(task->mpv, "video-latency-hacks", "yes");
++    mpv_set_option_string(task->mpv, "keep-open", "no");
++
++    if (task->nheaders > 0 && task->headers) {
++        /* mpv parses http-header-fields as comma-separated list.
++         * Escape backslashes and commas in header values to prevent splitting. */
++        size_t len = 0;
++        for (int i = 0; i < task->nheaders; i++)
++            if (task->headers[i]) len += strlen(task->headers[i]) * 2 + 2;
++        if (len > 0) {
++            char *hdr = malloc(len + 1);
++            hdr[0] = '\0';
++            for (int i = 0; i < task->nheaders; i++) {
++                if (!task->headers[i]) continue;
++                if (hdr[0] != '\0') strcat(hdr, ",");
++                /* Escape \ and , in each header line */
++                const char *src = task->headers[i];
++                char *dst = hdr + strlen(hdr);
++                while (*src) {
++                    if (*src == '\\' || *src == ',') *dst++ = '\\';
++                    *dst++ = *src++;
++                }
++                *dst = '\0';
++            }
++            mpv_set_option_string(task->mpv, "http-header-fields", hdr);
++            free(hdr);
++        }
++    }
++
++    if (mpv_initialize(task->mpv) < 0) {
++        DBG("create: mpv_initialize failed\n");
++        mpv_terminate_destroy(task->mpv);
++        callEventSink(env, task->jvm, task->eventSink, task->eventMethod, "error", 6.0);
++        free(task->sourceUrl);
++        if (task->headers) { for (int i = 0; i < task->nheaders; i++) free(task->headers[i]); free(task->headers); }
++        if (task->eventSink) (*env)->DeleteGlobalRef(env, task->eventSink);
++        pthread_mutex_destroy(&task->frameMutex);
++        if (task->gpuMode == 2) destroyEGL(task);
++        free(task);
++        return 0;
++    }
++
++    /* -- Create render context -- */
++    if (task->gpuMode == 2) {
++        /* Create render context on a dedicated thread where we can own EGL.
++         * JNI thread has Skia's EGL active so eglMakeCurrent fails here.
++         * We spawn render thread early, let it create the mpv render context
++         * with EGL active, then continue rendering. */
++        DBG("create: deferring GL render context to render thread\n");
++    }
++
++    if (task->gpuMode == 0) {
++        int advanced = 1;
++        mpv_render_param render_params[] = {
++            {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_SW},
++            {MPV_RENDER_PARAM_ADVANCED_CONTROL, &advanced},
++            {0}
++        };
++        if (mpv_render_context_create(&task->renderCtx, task->mpv, render_params) < 0) {
++            DBG("create: SW mpv_render_context_create failed\n");
++            mpv_terminate_destroy(task->mpv);
++            callEventSink(env, task->jvm, task->eventSink, task->eventMethod, "error", 7.0);
++            free(task->sourceUrl);
++            if (task->headers) { for (int i = 0; i < task->nheaders; i++) free(task->headers[i]); free(task->headers); }
++            if (task->eventSink) (*env)->DeleteGlobalRef(env, task->eventSink);
++            pthread_mutex_destroy(&task->frameMutex);
++            free(task);
++            return 0;
++        }
++        mpv_render_context_set_update_callback(task->renderCtx, mpvWakeupCallback, task);
++        mpv_set_property_string(task->mpv, "hwdec", "auto-copy");
++        DBG("create: SW render context created (fallback)\n");
++    }
++
++    DBG("create: mpv initialized (gpuMode=%d)\n", task->gpuMode);
++
++    /* Start render thread — for gpuMode==2 it creates the GL render context */
++    pthread_create(&task->renderThread, NULL, renderThreadFunc, task);
++
++    /* Wait for render thread to finish creating context (gpuMode==2) */
++    if (task->gpuMode == 2) {
++        /* Busy wait for renderCtx — render thread sets it quickly */
++        for (int i = 0; i < 500 && !task->renderCtx && task->alive; i++) {
++            usleep(2000); /* 2ms */
++        }
++        if (!task->renderCtx) {
++            DBG("create: render thread failed to create context, aborting\n");
++            task->alive = 0;
++            pthread_join(task->renderThread, NULL);
++            mpv_terminate_destroy(task->mpv);
++            callEventSink(env, task->jvm, task->eventSink, task->eventMethod, "error", 8.0);
++            free(task->sourceUrl);
++            if (task->headers) { for (int i = 0; i < task->nheaders; i++) free(task->headers[i]); free(task->headers); }
++            if (task->eventSink) (*env)->DeleteGlobalRef(env, task->eventSink);
++            pthread_mutex_destroy(&task->frameMutex);
++            free(task);
++            return 0;
++        }
++    }
++
++skip_init:
++    if (task->sourceUrl) {
++        if (initialPositionMs > 0) {
++            char startOpt[80];
++            snprintf(startOpt, sizeof(startOpt), "start=%f", (double)initialPositionMs / 1000.0);
++            const char *cmd[] = {"loadfile", task->sourceUrl, "replace", "0", startOpt, NULL};
++            mpv_command_async(task->mpv, 0, cmd);
++        } else {
++            const char *cmd[] = {"loadfile", task->sourceUrl, "replace", NULL};
++            mpv_command_async(task->mpv, 0, cmd);
++        }
++    }
++
++    if (!playWhenReady) {
++        mpv_set_property_string(task->mpv, "pause", "yes");
++    }
++
++    DBG("create: returning handle (gpuMode=%d)\n", task->gpuMode);
++    return (jlong)(intptr_t)task;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_dispose(
++    JNIEnv *env, jobject thiz, jlong handle) {
++    (void)env; (void)thiz;
++    if (!handle) return;
++    CreateTask *task = (CreateTask *)(intptr_t)handle;
++    DBG("dispose() called (gpuMode=%d)\n", task->gpuMode);
++    task->alive = 0;
++    pthread_cond_signal(&task->frameCond);
++
++    if (task->gpuMode == 2) {
++        /* Detach render callback first to prevent new frames during shutdown */
++        if (task->renderCtx) {
++            mpv_render_context_set_update_callback(task->renderCtx, NULL, NULL);
++        }
++        /* NVIDIA/GLX dispose ordering — fixes a hard deadlock:
++         * The render thread owns the GLX context. If we send mpv "stop" first, mpv's
++         * core thread tears down the decoder (vd_lavc_destroy -> vkDestroyDevice) on the
++         * NVIDIA driver WHILE the render thread is still doing GL work on the same
++         * context — both threads then block forever inside libnvidia-glcore, and
++         * dispose() hangs on pthread_join (player "won't die", app won't close).
++         * So: join the render thread FIRST (it finishes its frame, unbinds the GL
++         * context via glXMakeCurrent(None), and exits), THEN stop playback — no
++         * concurrent GL/VK teardown on the driver. */
++        pthread_cond_signal(&task->frameCond);
++        if (task->renderThread) pthread_join(task->renderThread, NULL);
++        if (task->mpv) {
++            const char *cmd[] = {"stop", NULL};
++            mpv_command(task->mpv, cmd);
++            mpv_wakeup(task->mpv);
++        }
++
++        /* Cache for reuse — do NOT free mpv/renderCtx (crashes Gallium) */
++        pthread_mutex_lock(&glCacheMutex);
++        glCache.valid = 1;
++        glCache.useGLX = task->useGLX;
++        glCache.gbmFd = task->gbmFd;
++        glCache.gbmDevice = task->gbmDevice;
++        glCache.eglDisplay = task->eglDisplay;
++        glCache.eglContext = task->eglContext;
++        glCache.eglSurface = task->eglSurface;
++        glCache.mpv = task->mpv;
++        glCache.renderCtx = task->renderCtx;
++        glCache.fbo = task->fbo;
++        glCache.fboTex = task->fboTex;
++        glCache.fboW = task->fboW;
++        glCache.fboH = task->fboH;
++        pthread_mutex_unlock(&glCacheMutex);
++
++        task->renderCtx = NULL;
++        task->mpv = NULL;
++        task->eglDisplay = EGL_NO_DISPLAY;
++        task->eglContext = EGL_NO_CONTEXT;
++        DBG("dispose: GL instance cached for reuse\n");
++    } else {
++        if (task->mpv) mpv_wakeup(task->mpv);
++        if (task->renderThread) pthread_join(task->renderThread, NULL);
++        if (task->renderCtx) { mpv_render_context_free(task->renderCtx); task->renderCtx = NULL; }
++    }
++
++    if (task->mpv) { mpv_terminate_destroy(task->mpv); task->mpv = NULL; }
++    if (task->gpuMode == 2) destroyEGL(task);
++
++    if (task->eventSink && task->jvm) {
++        JavaVM *jvm = task->jvm;
++        JNIEnv *e = NULL; int detach = 0;
++        jint ret = (*jvm)->GetEnv(jvm, (void**)&e, JNI_VERSION_1_6);
++        if (ret == JNI_EDETACHED) { (*jvm)->AttachCurrentThread(jvm, (void**)&e, NULL); detach = 1; }
++        if (e) (*e)->DeleteGlobalRef(e, task->eventSink);
++        if (detach) (*jvm)->DetachCurrentThread(jvm);
++    }
++    task->eventSink = NULL;
++
++    pthread_mutex_lock(&task->frameMutex);
++    free(task->frameData); task->frameData = NULL;
++    pthread_mutex_unlock(&task->frameMutex);
++
++    free(task->sourceUrl);
++    if (task->headers) { for (int i = 0; i < task->nheaders; i++) free(task->headers[i]); free(task->headers); }
++}
++
++
++/* ------------------------------------------------------------------ */
++/*  JNI property/control functions                                     */
++/* ------------------------------------------------------------------ */
++static CreateTask *getTask(jlong handle) {
++    return handle ? (CreateTask *)(intptr_t)handle : NULL;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_updateControls(JNIEnv *env, jobject thiz, jlong handle, jstring json) {
++    (void)env; (void)thiz; (void)handle; (void)json;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setPaused(JNIEnv *env, jobject thiz, jlong hdl, jboolean paused) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    mpv_set_property_string(task->mpv, "pause", paused ? "yes" : "no");
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_seekTo(JNIEnv *env, jobject thiz, jlong hdl, jlong posMs) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    char buf[64]; snprintf(buf, sizeof(buf), "%f", (double)posMs / 1000.0);
++    mpv_set_property_string(task->mpv, "time-pos", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_seekBy(JNIEnv *env, jobject thiz, jlong hdl, jlong offMs) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    char buf[32]; snprintf(buf, sizeof(buf), "%ld", (long)(offMs / 1000));
++    const char *cmd[] = {"seek", buf, "relative", NULL};
++    mpv_command_async(task->mpv, 0, cmd);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setSpeed(JNIEnv *env, jobject thiz, jlong hdl, jfloat speed) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    char buf[32]; snprintf(buf, sizeof(buf), "%f", (double)speed);
++    mpv_set_property_string(task->mpv, "speed", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_adjustVolume(JNIEnv *env, jobject thiz, jlong hdl, jfloat delta) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    double vol = 100.0; mpv_get_property(task->mpv, "volume", MPV_FORMAT_DOUBLE, &vol);
++    vol += (double)delta; if (vol < 0) vol = 0; if (vol > 200) vol = 200;
++    char buf[32]; snprintf(buf, sizeof(buf), "%f", vol);
++    mpv_set_property_string(task->mpv, "volume", buf);
++}
++
++JNIEXPORT jfloat JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_volume(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0.0f;
++    double vol = 100.0; mpv_get_property(task->mpv, "volume", MPV_FORMAT_DOUBLE, &vol);
++    return (jfloat)(vol / 100.0);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setVolume(JNIEnv *env, jobject thiz, jlong hdl, jfloat level) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    double vol = (double)level * 100.0; if (vol < 0) vol = 0; if (vol > 200) vol = 200;
++    char buf[32]; snprintf(buf, sizeof(buf), "%f", vol);
++    mpv_set_property_string(task->mpv, "volume", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setResizeMode(JNIEnv *env, jobject thiz, jlong hdl, jint mode) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    /* mode: 0=Fit, 1=Fill, 2=Zoom, 3=Stretch */
++    DBG("setResizeMode: mode=%d\n", mode);
++
++    const char *panscan = "0.0";
++    const char *keepaspect = "yes";
++    switch (mode) {
++    case 1: /* Fill */
++    case 2: /* Zoom */
++        panscan = "1.0";
++        break;
++    case 3: /* Stretch */
++        keepaspect = "no";
++        break;
++    default: /* Fit */
++        break;
++    }
++    mpv_set_property_string(task->mpv, "keepaspect", keepaspect);
++    mpv_set_property_string(task->mpv, "panscan", panscan);
++    mpv_set_property_string(task->mpv, "video-unscaled", "no");
++    mpv_set_property_string(task->mpv, "video-aspect-override", "no");
++    mpv_set_property_string(task->mpv, "sub-use-margins", (mode == 0 || mode == 1 || mode == 2) ? "yes" : "no");
++    mpv_set_property_string(task->mpv, "sub-pos", "100");
++}
++
++JNIEXPORT jlong JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_durationMs(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0;
++    double d = 0; mpv_get_property(task->mpv, "duration", MPV_FORMAT_DOUBLE, &d);
++    return (jlong)(d * 1000.0);
++}
++
++JNIEXPORT jlong JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_positionMs(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0;
++    double pos = 0; mpv_get_property(task->mpv, "time-pos", MPV_FORMAT_DOUBLE, &pos);
++    return (jlong)(pos * 1000.0);
++}
++
++JNIEXPORT jlong JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_bufferedPositionMs(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0;
++    double pos = 0, cache = 0;
++    mpv_get_property(task->mpv, "time-pos", MPV_FORMAT_DOUBLE, &pos);
++    mpv_get_property(task->mpv, "demuxer-cache-duration", MPV_FORMAT_DOUBLE, &cache);
++    return (jlong)((pos + cache) * 1000.0);
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_isLoading(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return JNI_FALSE;
++    int v = 0; mpv_get_property(task->mpv, "paused-for-cache", MPV_FORMAT_FLAG, &v);
++    if (v) return JNI_TRUE;
++    mpv_get_property(task->mpv, "seeking", MPV_FORMAT_FLAG, &v);
++    return v ? JNI_TRUE : JNI_FALSE;
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_isEnded(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return JNI_FALSE;
++    int v = 0; mpv_get_property(task->mpv, "eof-reached", MPV_FORMAT_FLAG, &v);
++    return v ? JNI_TRUE : JNI_FALSE;
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_isPaused(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return JNI_TRUE;
++    int v = 0; mpv_get_property(task->mpv, "pause", MPV_FORMAT_FLAG, &v);
++    return v ? JNI_TRUE : JNI_FALSE;
++}
++
++JNIEXPORT jfloat JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_speed(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 1.0f;
++    double v = 1.0; mpv_get_property(task->mpv, "speed", MPV_FORMAT_DOUBLE, &v);
++    return (jfloat)v;
++}
++
++JNIEXPORT jstring JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_audioTracksJson(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)thiz; CreateTask *task = getTask(hdl);
++    if (!task || !task->mpv) return (*env)->NewStringUTF(env, "[]");
++    char *json = tracks_json_for_type(task->mpv, "audio");
++    jstring r = (*env)->NewStringUTF(env, json ? json : "[]"); free(json); return r;
++}
++
++JNIEXPORT jstring JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_subtitleTracksJson(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)thiz; CreateTask *task = getTask(hdl);
++    if (!task || !task->mpv) return (*env)->NewStringUTF(env, "[]");
++    char *json = tracks_json_for_type(task->mpv, "sub");
++    jstring r = (*env)->NewStringUTF(env, json ? json : "[]"); free(json); return r;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_selectAudioTrack(JNIEnv *env, jobject thiz, jlong hdl, jint id) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    char buf[16]; snprintf(buf, sizeof(buf), "%d", id);
++    mpv_set_property_string(task->mpv, "aid", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_selectSubtitleTrack(JNIEnv *env, jobject thiz, jlong hdl, jint id) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    if (id <= 0) { mpv_set_property_string(task->mpv, "sid", "no"); return; }
++    char buf[16]; snprintf(buf, sizeof(buf), "%d", id);
++    mpv_set_property_string(task->mpv, "sid", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_addSubtitleUrl(JNIEnv *env, jobject thiz, jlong hdl, jstring url) {
++    (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv || !url) return;
++    const char *u = (*env)->GetStringUTFChars(env, url, NULL);
++    if (u) { const char *cmd[] = {"sub-add", u, "auto", NULL}; mpv_command_async(task->mpv, 0, cmd); (*env)->ReleaseStringUTFChars(env, url, u); }
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_clearExternalSubtitles(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    mpv_set_property_string(task->mpv, "sid", "no");
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_clearExternalSubtitlesAndSelect(JNIEnv *env, jobject thiz, jlong hdl, jint id) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    if (id <= 0) { mpv_set_property_string(task->mpv, "sid", "no"); return; }
++    char buf[16]; snprintf(buf, sizeof(buf), "%d", id); mpv_set_property_string(task->mpv, "sid", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_applyWindowChrome(JNIEnv *env, jobject thiz, jlong hwnd, jboolean dm, jint cc, jint bc, jint tc) {
++    (void)env; (void)thiz; (void)hwnd; (void)dm; (void)cc; (void)bc; (void)tc;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setWindowBorderlessFullscreen(JNIEnv *env, jobject thiz, jlong hwnd, jboolean fs, jint x, jint y, jint w, jint h) {
++    (void)env; (void)thiz; (void)hwnd; (void)fs; (void)x; (void)y; (void)w; (void)h;
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setSubtitleDelayMs(JNIEnv *env, jobject thiz, jlong hdl, jint delayMs) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    char buf[32]; snprintf(buf, sizeof(buf), "%f", (double)delayMs / 1000.0);
++    mpv_set_property_string(task->mpv, "sub-delay", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_applySubtitleStyle(
++    JNIEnv *env, jobject thiz, jlong hdl,
++    jstring textColor, jstring backgroundColor, jstring outlineColor,
++    jfloat outlineSize, jboolean bold, jfloat fontSize, jint subPos) {
++    (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return;
++    mpv_set_property_string(task->mpv, "sub-ass-override", "yes");
++    const char *s;
++    if (textColor) { s = (*env)->GetStringUTFChars(env, textColor, NULL); if (s) { mpv_set_property_string(task->mpv, "sub-color", s); (*env)->ReleaseStringUTFChars(env, textColor, s); } }
++    if (backgroundColor) { s = (*env)->GetStringUTFChars(env, backgroundColor, NULL); if (s) { mpv_set_property_string(task->mpv, "sub-back-color", s); (*env)->ReleaseStringUTFChars(env, backgroundColor, s); } }
++    if (outlineColor) { s = (*env)->GetStringUTFChars(env, outlineColor, NULL); if (s) { mpv_set_property_string(task->mpv, "sub-border-color", s); (*env)->ReleaseStringUTFChars(env, outlineColor, s); } }
++    char buf[32];
++    snprintf(buf, sizeof(buf), "%f", (double)outlineSize); mpv_set_property_string(task->mpv, "sub-border-size", buf);
++    mpv_set_property_string(task->mpv, "sub-bold", bold ? "yes" : "no");
++    snprintf(buf, sizeof(buf), "%f", (double)fontSize); mpv_set_property_string(task->mpv, "sub-font-size", buf);
++    snprintf(buf, sizeof(buf), "%d", subPos); mpv_set_property_string(task->mpv, "sub-pos", buf);
++}
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_setProperty(JNIEnv *env, jobject thiz, jlong hdl, jstring name, jstring value) {
++    (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv || !name || !value) return;
++    const char *n = (*env)->GetStringUTFChars(env, name, NULL);
++    const char *v = (*env)->GetStringUTFChars(env, value, NULL);
++    if (n && v) mpv_set_property_string(task->mpv, n, v);
++    if (n) (*env)->ReleaseStringUTFChars(env, name, n);
++    if (v) (*env)->ReleaseStringUTFChars(env, value, v);
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_warmupWebView2(JNIEnv *env, jobject thiz, jstring url) { (void)env; (void)thiz; (void)url; return JNI_FALSE; }
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_shutdownWebView2Warmup(JNIEnv *env, jobject thiz) { (void)env; (void)thiz; }
++
++JNIEXPORT void JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_resizeNativeView(JNIEnv *env, jobject thiz, jlong hdl, jint w, jint h) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task) return;
++    task->targetW = w; task->targetH = h;
++}
++
++JNIEXPORT jint JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_videoWidth(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0;
++    int64_t w = 0; mpv_get_property(task->mpv, "dwidth", MPV_FORMAT_INT64, &w);
++    return (jint)w;
++}
++
++JNIEXPORT jint JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_videoHeight(JNIEnv *env, jobject thiz, jlong hdl) {
++    (void)env; (void)thiz; CreateTask *task = getTask(hdl); if (!task || !task->mpv) return 0;
++    int64_t h = 0; mpv_get_property(task->mpv, "dheight", MPV_FORMAT_INT64, &h);
++    return (jint)h;
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_renderFrame(
++    JNIEnv *env, jobject thiz, jlong handle,
++    jintArray dstPixels, jint dstW, jint dstH) {
++    (void)thiz;
++    CreateTask *task = getTask(handle);
++    if (!task || !task->alive) return JNI_FALSE;
++
++    task->targetW = dstW;
++    task->targetH = dstH;
++
++    pthread_mutex_lock(&task->frameMutex);
++    if (!task->frameData || !task->alive) {
++        pthread_mutex_unlock(&task->frameMutex);
++        return JNI_FALSE;
++    }
++
++    int srcW = task->frameW;
++    int srcH = task->frameH;
++    int srcStride = task->frameStride;
++    char *src = task->frameData;
++
++    if (!task->frameReady || srcW <= 0 || srcH <= 0) {
++        pthread_mutex_unlock(&task->frameMutex);
++        return JNI_FALSE;
++    }
++    task->frameReady = 0;
++
++    jint *dst = (*env)->GetIntArrayElements(env, dstPixels, NULL);
++    if (!dst) { pthread_mutex_unlock(&task->frameMutex); return JNI_FALSE; }
++
++    if (srcW == dstW && srcH == dstH) {
++        for (int y = 0; y < srcH; y++) {
++            unsigned char *row = (unsigned char *)(src + y * srcStride);
++            jint *dstRow = dst + y * dstW;
++            for (int x = 0; x < srcW; x++) {
++                unsigned char r = row[x * 4 + 0];
++                unsigned char g = row[x * 4 + 1];
++                unsigned char b = row[x * 4 + 2];
++                dstRow[x] = (jint)((0xFFu << 24) | ((unsigned)r << 16) | ((unsigned)g << 8) | b);
++            }
++        }
++    } else {
++        /* Letterbox scaling */
++        double aspect = (double)srcW / srcH;
++        double dstAspect = (double)dstW / dstH;
++        int drawW, drawH, offX, offY;
++        if (dstAspect > aspect) { drawH = dstH; drawW = (int)(dstH * aspect + 0.5); offX = (dstW - drawW) / 2; offY = 0; }
++        else { drawW = dstW; drawH = (int)(dstW / aspect + 0.5); offX = 0; offY = (dstH - drawH) / 2; }
++        if (drawW > dstW) drawW = dstW; if (drawH > dstH) drawH = dstH;
++        for (int y = 0; y < drawH; y++) {
++            int srcY = y * srcH / drawH;
++            unsigned char *row = (unsigned char *)(src + srcY * srcStride);
++            for (int x = 0; x < drawW; x++) {
++                int srcX = x * srcW / drawW;
++                unsigned char r = row[srcX * 4 + 0], g = row[srcX * 4 + 1], b = row[srcX * 4 + 2];
++                dst[(y + offY) * dstW + (x + offX)] = (jint)((0xFFu << 24) | ((unsigned)r << 16) | ((unsigned)g << 8) | b);
++            }
++        }
++    }
++
++    (*env)->ReleaseIntArrayElements(env, dstPixels, dst, 0);
++    pthread_mutex_unlock(&task->frameMutex);
++    return JNI_TRUE;
++}
++
++JNIEXPORT jboolean JNICALL Java_com_nuvio_app_features_player_desktop_NativePlayerBridge_renderFrameBytes(
++    JNIEnv *env, jobject thiz, jlong handle,
++    jbyteArray dstBytes, jint dstW, jint dstH) {
++    (void)thiz;
++    CreateTask *task = getTask(handle);
++    if (!task || !task->alive) return JNI_FALSE;
++
++    task->targetW = dstW;
++    task->targetH = dstH;
++
++    pthread_mutex_lock(&task->frameMutex);
++    if (!task->frameData || !task->alive) {
++        pthread_mutex_unlock(&task->frameMutex);
++        return JNI_FALSE;
++    }
++
++    int srcW = task->frameW;
++    int srcH = task->frameH;
++    int srcStride = task->frameStride;
++    char *src = task->frameData;
++
++    if (!task->frameReady || srcW <= 0 || srcH <= 0) {
++        pthread_mutex_unlock(&task->frameMutex);
++        return JNI_FALSE;
++    }
++    task->frameReady = 0;
++
++    jbyte *dst = (*env)->GetByteArrayElements(env, dstBytes, NULL);
++    if (!dst) { pthread_mutex_unlock(&task->frameMutex); return JNI_FALSE; }
++
++    jsize dstLen = (*env)->GetArrayLength(env, dstBytes);
++    if (dstLen < (jsize)(dstW * dstH * 4)) {
++        (*env)->ReleaseByteArrayElements(env, dstBytes, dst, JNI_ABORT);
++        pthread_mutex_unlock(&task->frameMutex);
++        return JNI_FALSE;
++    }
++
++    if (srcW == dstW && srcH == dstH) {
++        /* RGBA -> BGRA (Skia N32 on little-endian) */
++        for (int y = 0; y < srcH; y++) {
++            unsigned char *sRow = (unsigned char *)(src + y * srcStride);
++            unsigned char *dRow = (unsigned char *)(dst + y * dstW * 4);
++            for (int x = 0; x < srcW; x++) {
++                dRow[x * 4 + 0] = sRow[x * 4 + 2]; /* B */
++                dRow[x * 4 + 1] = sRow[x * 4 + 1]; /* G */
++                dRow[x * 4 + 2] = sRow[x * 4 + 0]; /* R */
++                dRow[x * 4 + 3] = 0xFF;             /* A */
++            }
++        }
++    } else {
++        double aspect = (double)srcW / srcH;
++        double dstAspect = (double)dstW / dstH;
++        int drawW, drawH, offX, offY;
++        if (dstAspect > aspect) { drawH = dstH; drawW = (int)(dstH * aspect + 0.5); offX = (dstW - drawW) / 2; offY = 0; }
++        else { drawW = dstW; drawH = (int)(dstW / aspect + 0.5); offX = 0; offY = (dstH - drawH) / 2; }
++        if (drawW > dstW) drawW = dstW; if (drawH > dstH) drawH = dstH;
++        memset(dst, 0, (size_t)dstW * dstH * 4);
++        for (int y = 0; y < drawH; y++) {
++            int srcY = y * srcH / drawH;
++            unsigned char *sRow = (unsigned char *)(src + srcY * srcStride);
++            unsigned char *dRow = (unsigned char *)(dst + ((y + offY) * dstW + offX) * 4);
++            for (int x = 0; x < drawW; x++) {
++                int srcX = x * srcW / drawW;
++                dRow[x * 4 + 0] = sRow[srcX * 4 + 2];
++                dRow[x * 4 + 1] = sRow[srcX * 4 + 1];
++                dRow[x * 4 + 2] = sRow[srcX * 4 + 0];
++                dRow[x * 4 + 3] = 0xFF;
++            }
++        }
++    }
++
++    (*env)->ReleaseByteArrayElements(env, dstBytes, dst, 0);
++    pthread_mutex_unlock(&task->frameMutex);
++    return JNI_TRUE;
++}
