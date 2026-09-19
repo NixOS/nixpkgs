@@ -2691,8 +2691,6 @@ with pkgs;
     ssh = openssh;
   };
 
-  phosh = callPackage ../applications/window-managers/phosh { };
-
   phosh-mobile-settings =
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
       { };
