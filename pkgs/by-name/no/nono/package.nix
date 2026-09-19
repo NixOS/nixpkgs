@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.74.0";
+  version = "0.78.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Njfs0kkoNj3VjLd6ziz5WAgI+HLMZ+djqxjbXabEdzg=";
+    hash = "sha256-40ekvTMiIrFW8Fv2P7M/5vGpx3ekKq1kbPXPtXfbRWc=";
   };
-  cargoHash = "sha256-+JLE0hBmsxqDnTwkFRVxphA6HdA/EgkWHIAJiExsxp4=";
+  cargoHash = "sha256-M2jeWx+iWXdxdWf1HURlM6iATr9kGDltdVm5NpcOgyM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "prepare_profile_save_from_patch_updates_existing_user_profile"
       "create_audit_state_creates_session_when_enabled"
 
+      # keystore
+      # needs /usr/bin/touch
+      "load_secrets_sanitizes_path_against_known_outer_caps"
+
       # audit_attestation
       # needs /bin/pwd
       "audit_verify_reports_signed_attestation_with_pinned_public_key"
@@ -60,12 +64,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "corrupt_audit_ledger_downgrades_only_a_clean_exit"
       "corrupt_audit_ledger_is_reported_on_every_run_and_left_untouched"
 
+      # exec_strategy::clone_files
+      # needs /usr/bin/python3
+      "closed_stdio_and_unshare_fallback"
+      "explicit_network_backends_with_af_unix"
+      "fd_churn_signals_and_late_descriptors"
+      "full_cli_supervisor_combined_path"
+      "proxy_and_combined_notifications"
+      "pty_cgroup_write_and_supervisor_inheritance"
+      "tool_gate_with_combined_notifications"
+
       # execution_strategy_run
       # needs /usr/bin/env
       "direct_workdir_overrides_untrusted_host_pwd"
       "direct_workdir_sets_child_pwd_from_uncovered_launch_dir"
       "supervised_workdir_overrides_untrusted_host_pwd"
       "supervised_workdir_sets_child_pwd_from_uncovered_launch_dir"
+      # needs /bin/cat and a bash readable inside the sandbox
+      "command_policies_allows_same_fs_rename_from_child_dir"
+      # needs /bin/cat and /usr/bin/printf
+      "command_policies_allows_immutable_store_shebang_wrapper"
 
       # nono-cli
       # wants a script `scripts/test-list-aliases.sh`, `git`, and `.git` history
@@ -85,6 +103,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # need /bin/cat
       "granted_path_exits_zero"
       "env_credentials_with_command_policies_non_shim_entry_succeeds"
+      # glob_access_run
+      # need /bin/cat
+      "bypass_protection_glob_requires_paired_allow"
+      "read_glob_grants_read_not_write"
+
+      # symlink_hop_run_linux
+      # need /bin/cat
+      "multi_hop_symlinked_leaf_resolves_through_symlinked_directory"
+
+      # tool_sandbox::linux
+      # needs /usr/bin
+      "outer_exec_gate_does_not_break_same_fs_rename_from_child_dir"
+      # needs /usr/bin/env
+      "outer_exec_gate_rejects_an_env_shebang_target_writable_by_outer_caps"
+
+      # tool_sandbox::policy::intercept_tests
+      # needs /usr/bin/touch
+      "load_command_credential_source_skips_trojan_in_writable_path_dir"
+
+      # url_open
+      # needs /usr/bin/touch
+      "open_url_in_browser_skips_trojan_in_writable_path_dir"
+
+      # wiring
+      # cannot set the setuid bit in the build sandbox
+      "write_file_atomic_strips_setuid_bit"
+
+      # sandbox_state
+      # points $TMPDIR at a tempdir it deletes when the test ends, so parallel
+      # tests calling `tempfile::tempdir()` intermittently die with ENOENT
+      # (seen as session::tests::create_socket_link_reuses_matching_link)
+      "test_validate_accepts_file_when_reading_tmpdir_differs"
 
       # nono-proxy
       # fails to prepare TLS bundle inside build sandbox
@@ -100,6 +150,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
       "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
       "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # needs /bin/cat
+      "proxy_runtime::tests::proxy_credential_capture_backend_runs_provider_protocol"
+      # needs /usr/bin/touch
+      "proxy_runtime::tests::load_command_credential_source_skips_trojan_in_writable_path_dir"
       # panic
       "server::tests::reactive_proxy_auth_retry_answered_after_407"
       "server::tests::test_oauth_capture_routes_activate_intercept"
