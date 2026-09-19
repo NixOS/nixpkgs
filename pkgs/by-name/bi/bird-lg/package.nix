@@ -4,6 +4,7 @@
   lib,
   nix-update-script,
   symlinkJoin,
+  nixosTests,
 }:
 let
   generic =
@@ -59,6 +60,9 @@ symlinkJoin {
   ];
   passthru = {
     inherit bird-lg-frontend bird-lg-proxy;
+    tests = {
+      basic-functionality = nixosTests.bird-lg;
+    };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
