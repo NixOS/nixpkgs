@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
     tag = "quil-rs/v${version}";
-    hash = "sha256-QWW8+cup81eyedDTU3jgslNanaj0+D2jI5XQMS3ZUIo=";
+    hash = "sha256-BaetYkdJ9iv79Q39TuSrU/JBFjqj+fZocIGAgGBXOL8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-cIWnTuxoFqkl+0W6NH9DwNokq7RKdNggFLwPYgkbHho=";
+    hash = "sha256-LzPa9HvkzWjR6nwTpUEqcj1QntpYM8yN1zypGH8tIyU=";
   };
 
   buildAndTestSubdir = "quil-rs";
