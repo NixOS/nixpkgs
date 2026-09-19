@@ -257,8 +257,22 @@ in
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
         StateDirectoryMode = "750";
         # For (possible) socket use
-        RuntimeDirectory = "jenkins";
-        RuntimeDirectoryMode = "750";
+        RuntimeDirectory = [
+          "jenkins"
+          "jenkins/rootdir"
+          "jenkins/files"
+        ];
+        RuntimeDirectoryMode = "700";
+        BindPaths = [
+          cfg.home
+          "/run/jenkins/files:/run/jenkins"
+        ];
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+          "/etc/resolv.conf"
+        ];
+        RootDirectory = "/run/jenkins/rootdir";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
@@ -266,7 +280,9 @@ in
         MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateIPC = true;
         PrivateMounts = true;
+        PrivatePid = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
@@ -291,6 +307,10 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        SocketBindAllow = [
+          "tcp:${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
         SystemCallArchitectures = "native";
         UMask = 27;
       };
