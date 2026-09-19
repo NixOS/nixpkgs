@@ -407,6 +407,7 @@ in
   ] ./ceph-multi-node-deprecated-filestore.nix;
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
+    "riscv64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore.nix;
   ceph-single-node-bluestore-dmcrypt = runTestOn [
