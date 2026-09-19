@@ -5,7 +5,8 @@
   cmake,
   pkg-config,
   libubox-nossl,
-  ssl_implementation,
+  ssl_implementation ? openssl,
+  openssl,
 }:
 
 stdenv.mkDerivation {
@@ -17,6 +18,9 @@ stdenv.mkDerivation {
     rev = "5a81c108d20e24724ed847cc4be033f2a74e6635";
     hash = "sha256-IC5740+1YT3TDayath3Md3hdjuml1S1A/OWYd0GxbDc=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   preConfigure = ''
     sed -r \
