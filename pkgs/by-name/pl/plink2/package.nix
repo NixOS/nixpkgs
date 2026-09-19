@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plink2";
-  version = "2.0.0-a.7.6";
+  version = "2.0.0-a.7.7";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chrchang";
     repo = "plink-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IxyoC8oHZN7JLoOJGKI8F61JX0C0OwpbmQ8rJQQ38wU=";
+    hash = "sha256-6mCUSXllfu5puG7oVHC+bAYIBwiFDienFz2r6otjkNc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/2.0/build_dynamic";
