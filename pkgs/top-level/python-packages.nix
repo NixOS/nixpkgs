@@ -19718,6 +19718,8 @@ self: super: with self; {
 
   splinter = callPackage ../development/python-modules/splinter { };
 
+  splitzip = callPackage ../development/python-modules/splitzip { };
+
   splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
 
   spmd-types = callPackage ../development/python-modules/spmd-types { };
