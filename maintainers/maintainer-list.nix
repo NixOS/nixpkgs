@@ -19625,6 +19625,12 @@
     githubId = 72991726;
     name = "Mr-Stoneman";
   };
+  mra = {
+    email = "morgan.arnold@proton.me";
+    github = "CrashAndSideburns";
+    githubId = 62062835;
+    name = "Morgan Arnold";
+  };
   mrbenjadmin = {
     email = "mrbenjadmin@gmail.com";
     github = "mrbenjadmin";
