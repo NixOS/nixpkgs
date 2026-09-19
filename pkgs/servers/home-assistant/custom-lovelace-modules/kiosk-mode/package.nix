@@ -12,13 +12,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kiosk-mode";
-  version = "14.2.0";
+  version = "14.2.1";
 
   src = fetchFromGitHub {
     owner = "nemesisre";
     repo = "kiosk-mode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-htFxbcoTu4yh3hNxpo++GdMdaQXK46gcdzkQfy6V/tA=";
+    hash = "sha256-8QflfG1D2/29QemkMX4KwQa7p/xvZxm3xoGw5i2wy+Q=";
   };
 
   pnpmDeps = fetchPnpmDeps {
