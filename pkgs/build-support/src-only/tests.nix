@@ -9,6 +9,7 @@
   withCFlags,
   stdenv,
   testers,
+  unzip,
 }:
 
 let
@@ -107,6 +108,12 @@ let
   structuredAttrsDrvSrc = srcOnly structuredAttrsDrv;
   structuredAttrsDrvSrcEquiv = srcOnly (getEquivAttrs structuredAttrsDrv);
 
+  worldWritable = srcOnly {
+    name = "world-writable";
+    src = ./ww.zip;
+    nativeBuildInputs = [ unzip ];
+    inherit stdenv;
+  };
 in
 
 runCommand "srcOnly-tests"
@@ -132,6 +139,7 @@ runCommand "srcOnly-tests"
         structuredAttrsDrvSrcEquiv
         structuredAttrsDrvSrc
       )
+      worldWritable
     ];
   }
   ''
