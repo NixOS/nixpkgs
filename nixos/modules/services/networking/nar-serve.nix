@@ -53,6 +53,34 @@ in
           Useful to preview static websites where paths are absolute.
         '';
       };
+
+      maxConcurrency = mkOption {
+        type = types.ints.unsigned;
+        default = 0;
+        description = ''
+          How many requests can walk an archive at the same time.
+
+          Decompressing a NAR up to the wanted file is the whole cost of a
+          request, thus this is what bounds the CPU use of the service.
+          Requests over the limit wait for a free slot, they are not refused.
+
+          Zero does not limit anything.
+        '';
+      };
+
+      metricsAddress = mkOption {
+        type = types.str;
+        default = "";
+        example = "127.0.0.1:9464";
+        description = ''
+          Address to serve Prometheus metrics from, as `host:port`.
+
+          The metrics get their own listener, thus they can stay on an address
+          that is not the one the service answers the world from.
+
+          An empty string does not serve metrics.
+        '';
+      };
     };
   };
 
@@ -65,6 +93,8 @@ in
       environment.PORT = toString cfg.port;
       environment.NAR_CACHE_URL = cfg.cacheURL;
       environment.DOMAIN = cfg.domain;
+      environment.MAX_CONCURRENCY = toString cfg.maxConcurrency;
+      environment.METRICS_ADDR = cfg.metricsAddress;
 
       serviceConfig = {
         Restart = "always";
