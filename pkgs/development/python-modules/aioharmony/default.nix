@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aioharmony";
-  version = "1.0.8";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Harmony-Libs";
     repo = "aioharmony";
     tag = "v${version}";
-    hash = "sha256-7K/I71yonmAqLp12Hk8e72BBfF/sez1cFdQbnixDdbg=";
+    hash = "sha256-j4VlYxGd3I6SLZjJUOSZW9hyfSkX04L/8CGBWp7vTj0=";
   };
 
   build-system = [ setuptools ];
