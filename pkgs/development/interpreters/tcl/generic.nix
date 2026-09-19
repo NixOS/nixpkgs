@@ -40,10 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/lib/zoneinfo" "" \
       --replace-fail "/usr/local/etc/zoneinfo" ""
   ''
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace unix/configure unix/configure.in \
-      --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
-  ''
   # A shared Cygwin build tries to configure the windows build system
   # to separately build these DLLs so it can load them later. That's
   # not gonna work for us --- in Nixpkgs this would need to be a
