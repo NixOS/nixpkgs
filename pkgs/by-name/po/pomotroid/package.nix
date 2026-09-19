@@ -105,6 +105,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
+  # Timer tests rely on 20 ms sleeps and are flaky under Darwin CI scheduling.
+  # The WebSocket integration test cannot bind a socket in the Darwin sandbox.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=timer::engine::tests"
+    "--skip=websocket::tests::integration_getstate_round_trip"
+  ];
+
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${
