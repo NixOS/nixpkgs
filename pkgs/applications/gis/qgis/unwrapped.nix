@@ -88,14 +88,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qgis-unwrapped";
-  version = "4.2.1";
+  version = "4.2.2";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-tdZNSA6kZHwS96YRbN7YF+ODPJrnINa/QGCo8pw196I=";
+    hash = "sha256-gEUShI09n7fpLcfKaNmiatB8pco0yJ227Ge7pPnMxCY=";
   };
 
   postPatch = ''
