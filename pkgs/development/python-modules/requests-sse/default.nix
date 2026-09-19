@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests-sse";
-  version = "0.5.3";
+  version = "0.6.0b0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "requests-sse";
     tag = finalAttrs.version;
-    hash = "sha256-+Zv7k+cYux7aBZk9MN7ySZh+pQUHNa6KjwxQ4l4aFxA=";
+    hash = "sha256-JflM6Rx9TFS7EsusqBJViDvk3X3YAawzI75jn84cbZM=";
   };
 
   build-system = [
