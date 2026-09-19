@@ -6672,6 +6672,8 @@ self: super: with self; {
 
   gdsfactory = callPackage ../development/python-modules/gdsfactory { };
 
+  gel = callPackage ../development/python-modules/gel { };
+
   gdstk = callPackage ../development/python-modules/gdstk { };
 
   ge25519 = callPackage ../development/python-modules/ge25519 { };
@@ -13203,6 +13205,8 @@ self: super: with self; {
   parsedmarc = callPackage ../development/python-modules/parsedmarc { };
 
   parsel = callPackage ../development/python-modules/parsel { };
+
+  parsing = callPackage ../development/python-modules/parsing { };
 
   parsimonious = callPackage ../development/python-modules/parsimonious { };
 
