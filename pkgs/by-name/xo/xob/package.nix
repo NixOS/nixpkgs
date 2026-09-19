@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar

@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Python powered Fortran preprocessor";
     mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.sheepforce ];
   };
 })

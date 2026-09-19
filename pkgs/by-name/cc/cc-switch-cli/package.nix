@@ -2,25 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   versionCheckHook,
   stdenv,
   installShellFiles,
+  writableTmpDirAsHomeHook,
+  lsof,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch-cli";
-  version = "5.0.1";
+  version = "5.10.5";
 
   src = fetchFromGitHub {
     owner = "SaladDay";
     repo = "cc-switch-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JwtgT8cP+i7hsaB13o0PTDZJWvC3os1zWagMqmbffXk=";
+    hash = "sha256-RreuW2hlJFH2ETQPwUOB/DE3CtyK8+sEqjbb5cWbR0g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-m70IR0IFUj8C48WcHgdCCtPwW/8KOxeDIqgG1bIcOpo=";
+  cargoHash = "sha256-OiK0PN1ILtMzl9+QndPnYa1PdFM2Y3BmE7MYJjAWnDc=";
+
+  patches = [
+    (fetchpatch2 {
+      # already merged but not yet released
+      # https://github.com/SaladDay/cc-switch-cli/pull/463
+      name = "cc-switch-cli-skip-non-utf8-filename-test-on-macos";
+      url = "https://github.com/SaladDay/cc-switch-cli/commit/1ae36f7ac66e3a837c064c8c3fb1c56449f3f7c1.patch?full_index=1";
+      relative = "src-tauri";
+      hash = "sha256-qMwAnjBsZZk8xwdlrVx/GpRW7DT+JNbONKxdK583xU4=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -36,13 +50,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # rusqlite uses the "bundled" feature which compiles SQLite from source,
   # so no system sqlite dependency is needed.
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook # needs $HOME for many tests
+    lsof # used in some tests
+  ];
+
+  # upstream defines a highly optimized release profile.
+  # tests do not need the slow release build.
+  checkType = "debug";
+
+  # upstream runs tests single-threaded to prevent io race.
+  dontUseCargoParallelTests = true;
+
+  # needed for many tests in darwin's sandbox
+  __darwinAllowLocalNetworking = true;
+
+  cargoTestFlags = [
+    # easier to diagnose test failures:
+    "--no-fail-fast"
+
+    # match the test targets run by upstream's CI:
+    # https://github.com/SaladDay/cc-switch-cli/blob/main/.github/workflows/rust-ci.yml
+    "--lib"
+    "--bin=cc-switch"
+    "--test=proxy_claude_forwarder_alignment"
+    "--test=proxy_daemon"
+    "--test=proxy_database"
+  ];
+
   checkFlags = [
-    # Requires access to the system hostname, unavailable in the Nix build sandbox.
-    "--skip=detect_system_device_name_returns_some"
-    # Requires binding a network port, unavailable in the Nix build sandbox.
-    "--skip=reloading_app_state_does_not_recover_an_active_takeover_session"
-    # Invokes the install.sh script which downloads binaries from GitHub.
-    "--skip=install_script"
+    # flaky: many database locks during tests make this slow and fail:
+    "--skip=locked_main_database_degrades_within_the_overlay_busy_budget"
+
+    # sandbox: access /bin/cat, not available in the nix sandbox
+    "--skip=clipboard_command_writes_text_to_stdin_and_waits_for_success"
+
+    # flaky: concurrency bug depends on the builder cores
+    "--skip=parser_results_are_delivered_in_completion_order"
   ];
 
   meta = {

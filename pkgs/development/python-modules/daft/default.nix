@@ -346,6 +346,11 @@ buildPythonPackage (finalAttrs: {
     "test_download_with_none" # None vs nan
     "test_from_pandas_roundtrip" # Timestamp[us] vs Timestamp[ns]
     "test_infer_from_type" # issubclass() arg 1 must be a class (numpy_ndarray_int)
+
+    # Regression from the pyiceberg 0.12.0 bump: https://github.com/NixOS/nixpkgs/pull/560480
+    #   AssertionError: assert result is None
+    "test_type_promotion_float_to_double"
+    "test_type_promotion_int_to_long"
   ];
 
   pythonImportsCheck = [ "daft" ];

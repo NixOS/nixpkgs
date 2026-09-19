@@ -126,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fast and lightweight logs and metrics processor for Linux, BSD, OSX and Windows";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;
