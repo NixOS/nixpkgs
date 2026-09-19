@@ -64,8 +64,8 @@ let
     name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.21.0";
-    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
+    tag = "v1.22.0";
+    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
   };
 
   cutlass-src = fetchFromGitHub {
@@ -112,14 +112,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.27.1";
+  version = "1.28.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
+    hash = "sha256-ATVwrWZFv7+inhDG7MbN9XJTRBtiGhjmqY5ar4+pCHs=";
   };
 
   patches = [
@@ -397,15 +400,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
 
-  strictDeps = true;
-
   # See comments in `cudaPackages.nccl`
   postFixup = lib.optionalString cudaSupport ''
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
-
-  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module
