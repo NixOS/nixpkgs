@@ -49,6 +49,7 @@
   slang-server,
   sqlite,
   sshfs,
+  sops,
   stylish-haskell,
   tabnine,
   tmux,
@@ -3553,6 +3554,10 @@ assertNoAdditions {
       # Optional cmp integration
       self.nvim-cmp
     ];
+  };
+
+  nvim-sops = super.nvim-sops.overrideAttrs {
+    runtimeDeps = [ sops ];
   };
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
