@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xbjdLdTBCBbw3BJ8wpz9Q7XkBc9+aEDolGCgJL89CY0=";
+    hash = "sha256-6QDntZpHgfY9npNeiPbsUMTWC+P0rfnGO1HtOdV4/gg=";
   };
 
   build-system = [ setuptools ];
