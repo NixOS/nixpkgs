@@ -31,204 +31,31 @@ let
 
 in
 lib.runTests (
-  # We assert that the new algorithmic way of generating these lists matches the
-  # way they were hard-coded before.
+  # Computing the lib.platforms lists is surprisingly expensive, since all 70+
+  # system doubles needs to be first parsed into a system attribute, and then
+  # filtered with matchAttrs to see whether they match linux, darwin, gnu, etc.
   #
-  # One might think "if we exhaustively test, what's the point of procedurally
-  # calculating the lists anyway?". The answer is one can mindlessly update these
-  # tests as new platforms become supported, and then just give the diff a quick
-  # sanity check before committing :).
-
-  (with lib.systems.doubles; {
-    testall = mseteq all (
-      linux
-      ++ darwin
-      ++ freebsd
-      ++ openbsd
-      ++ netbsd
-      ++ illumos
-      ++ wasi
-      ++ windows
-      ++ cygwin
-      ++ embedded
-      ++ mmix
-      ++ js
-      ++ genode
-      ++ redox
-      ++ uefi
-    );
-
-    testarm = mseteq arm [
-      "armv5tel-linux"
-      "armv6l-linux"
-      "armv6l-netbsd"
-      "armv6l-none"
-      "armv7a-linux"
-      "armv7a-netbsd"
-      "armv7l-linux"
-      "armv7l-netbsd"
-      "arm-none"
-    ];
-    testarmv7 = mseteq armv7 [
-      "armv7a-linux"
-      "armv7l-linux"
-      "armv7a-netbsd"
-      "armv7l-netbsd"
-    ];
-    testi686 = mseteq i686 [
-      "i686-linux"
-      "i686-freebsd"
-      "i686-genode"
-      "i686-netbsd"
-      "i686-openbsd"
-      "i686-cygwin"
-      "i686-windows"
-      "i686-none"
-    ];
-    testmips = mseteq mips [
-      "mips-none"
-      "mips64-none"
-      "mips-linux"
-      "mips64-linux"
-      "mips64el-linux"
-      "mipsel-linux"
-      "mipsel-netbsd"
-    ];
-    testmmix = mseteq mmix [ "mmix-mmixware" ];
-    testpower = mseteq power [
-      "powerpc-linux"
-      "powerpc-netbsd"
-      "powerpc-none"
-      "powerpc64-linux"
-      "powerpc64le-linux"
-      "powerpcle-none"
-    ];
-    testriscv = mseteq riscv [
-      "riscv32-linux"
-      "riscv64-linux"
-      "riscv32-netbsd"
-      "riscv64-netbsd"
-      "riscv32-none"
-      "riscv64-none"
-    ];
-    testriscv32 = mseteq riscv32 [
-      "riscv32-linux"
-      "riscv32-netbsd"
-      "riscv32-none"
-    ];
-    testriscv64 = mseteq riscv64 [
-      "riscv64-linux"
-      "riscv64-netbsd"
-      "riscv64-none"
-    ];
-    tests390x = mseteq s390x [
-      "s390x-linux"
-      "s390x-none"
-    ];
-    testx86_64 = mseteq x86_64 [
-      "x86_64-linux"
-      "x86_64-freebsd"
-      "x86_64-genode"
-      "x86_64-redox"
-      "x86_64-openbsd"
-      "x86_64-netbsd"
-      "x86_64-cygwin"
-      "x86_64-solaris"
-      "x86_64-windows"
-      "x86_64-none"
-      "x86_64-uefi"
-    ];
-
-    testcygwin = mseteq cygwin [
-      "i686-cygwin"
-      "x86_64-cygwin"
-    ];
-    testdarwin = mseteq darwin [
-      "aarch64-darwin"
-    ];
-    testfreebsd = mseteq freebsd [
-      "aarch64-freebsd"
-      "i686-freebsd"
-      "x86_64-freebsd"
-    ];
-    testgenode = mseteq genode [
-      "aarch64-genode"
-      "i686-genode"
-      "x86_64-genode"
-    ];
-    testredox = mseteq redox [ "x86_64-redox" ];
-    testgnu = mseteq gnu linux; # ++ kfreebsd ++ ...
-    testillumos = mseteq illumos [ "x86_64-solaris" ];
-    testlinux = mseteq linux [
-      "aarch64-linux"
-      "arc-linux"
-      "armv5tel-linux"
-      "armv6l-linux"
-      "armv7a-linux"
-      "armv7l-linux"
-      "i686-linux"
-      "loongarch64-linux"
-      "m68k-linux"
-      "sh4-linux"
-      "microblaze-linux"
-      "microblazeel-linux"
-      "mips-linux"
-      "mips64-linux"
-      "mips64el-linux"
-      "mipsel-linux"
-      "powerpc-linux"
-      "powerpc64-linux"
-      "powerpc64le-linux"
-      "riscv32-linux"
-      "riscv64-linux"
-      "s390-linux"
-      "s390x-linux"
-      "x86_64-linux"
-    ];
-    testnetbsd = mseteq netbsd [
-      "aarch64-netbsd"
-      "armv6l-netbsd"
-      "armv7a-netbsd"
-      "armv7l-netbsd"
-      "i686-netbsd"
-      "m68k-netbsd"
-      "mipsel-netbsd"
-      "powerpc-netbsd"
-      "riscv32-netbsd"
-      "riscv64-netbsd"
-      "x86_64-netbsd"
-    ];
-    testopenbsd = mseteq openbsd [
-      "i686-openbsd"
-      "x86_64-openbsd"
-    ];
-    testwindows = mseteq windows [
-      "aarch64-windows"
-      "i686-windows"
-      "x86_64-windows"
-    ];
-    testunix = mseteq unix (
-      linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox
-    );
-  })
+  # We could just compute the platforms based on the doubles alone (if the
+  # string ends in linux, it's a linux system). But this wouldn't work well for
+  # complicated platforms like bigEndian. Instead, we choose to keep our complex
+  # logic for generating the platforms, but preprocess it into a
+  # `platforms/generated.json` file. Whenever we want to support a new system, we
+  # just add it to the list of all systems in platforms/generate.nix, and then
+  # regenerate the data.
+  #
+  # This test just enforces that generating the doubles fresh gives the same
+  # result as the preprocessed doubles.
+  (
+    let
+      generatedPlatforms = import ../platforms/generate.nix { inherit lib; };
+    in
+    lib.mapAttrs' (name: generatedPlatform: {
+      name = "test" + name;
+      value = mseteq lib.platforms.${name} generatedPlatform;
+    }) generatedPlatforms
+  )
 
   // {
-    test_platforms_pass_typecheck = {
-      # To improve performance, the result of parsing all 70+ systems in
-      # `lib.platforms` into their attrset representations aren't typechecked.
-      # The results are expected to be constant, and avoiding the slow
-      # validation gives a meaningful improvement to evaluation speed. We ensure
-      # that all systems pass validation here
-      expr = builtins.filter (
-        system:
-        let
-          evalResult = builtins.tryEval (lib.systems.parse.mkSystemFromString system);
-        in
-        evalResult.success == false
-      ) lib.platforms.all;
-
-      expected = [ ];
-    };
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
         lib.systems.elaborate "x86_64-linux"
