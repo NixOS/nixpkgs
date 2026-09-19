@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ketch";
-  version = "0.14.0";
+  version = "0.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "1broseidon";
     repo = "ketch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SBf9PYBcZ+odOLLdafI6dRczpyYZSYP5zo/0PAEWAiU=";
+    hash = "sha256-h2siX++kPDnm0Qrk55QQRgGINxM2UzbAUspYLLpEz6o=";
   };
 
   vendorHash = "sha256-Kk7fY27y1ziJEMpwRUoGfslGYYQdayLDuuRvNyfiAy8=";
@@ -28,6 +28,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
+  # config user_agent field does not align due to setting version via ldflags, thus skip this test
+  checkFlags = [ "-skip=^TestRegistryConfigCompatibilityGolden$" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
