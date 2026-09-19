@@ -24,6 +24,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/kjd/idna/";
     changelog = "https://github.com/kjd/idna/blob/${finalAttrs.src.tag}/HISTORY.md";

@@ -36,6 +36,8 @@ buildPythonPackage (finalAttrs: {
 
   passthru.tests.trove-classifiers = finalAttrs.finalPackage.overrideAttrs { doInstallCheck = true; };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Canonical source for classifiers on PyPI";
     homepage = "https://github.com/pypa/trove-classifiers";

@@ -50,6 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   passthru.tests.pytest = vcs-versioning.overridePythonAttrs { doCheck = true; };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/pypa/setuptools-scm/releases/tag/${finalAttrs.src.tag}";
     description = "The blessed package to manage your versions by scm tags";

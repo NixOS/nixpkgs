@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycparser";
   version = "3.00";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "pycparser";
-    tag = "release_v${version}";
+    tag = "release_v${finalAttrs.version}";
     hash = "sha256-6eKc+p3xLyRPo3oCWP/dbMpHlkBXLy8XiGR0gTEHI2E=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     substituteInPlace examples/using_gcc_E_libc.py \
       --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
   '';
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "tests"
   ];
@@ -39,11 +39,13 @@ buildPythonPackage rec {
     rev-prefix = "release_v";
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://github.com/eliben/pycparser/releases/tag/${src.tag}";
+    changelog = "https://github.com/eliben/pycparser/releases/tag/${finalAttrs.src.tag}";
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
