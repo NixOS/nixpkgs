@@ -9453,6 +9453,7 @@ with pkgs;
     plugins = with wayfirePlugins; [
       wcm
       wf-shell
+      pixdecor
     ];
   };
 
