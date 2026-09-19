@@ -186,6 +186,26 @@ in
               The port to listen on.
             '';
           };
+          TWO_FACTOR_ENCRYPTION_KEY_FILE = mkOption {
+            type = types.nullOr (
+              types.str
+              // {
+                # We don't want users to be able to pass a path literal here but
+                # it should look like a path.
+                check = it: isString it && types.path.check it;
+              }
+            );
+            default = null;
+            example = "/run/secrets/umami2faSecret";
+            description = ''
+              A file containing a secure random string (best not the same as the app secret).
+              This is used for encrypting two-factor authentication keys.
+              The contents of the file are read through systemd credentials, therefore the
+              user running umami does not need permissions to read the file.
+              If you wish to set this to a string instead (not recommended since it will be
+              placed world-readable in the Nix store), you can use the TWO_FACTOR_ENCRYPTION_KEY option.
+            '';
+          };
         };
       };
 
@@ -218,6 +238,13 @@ in
         assertion = cfg.settings.DATABASE_TYPE or null != "mysql";
         message = "Umami only supports PostgreSQL as of 3.0.0. Follow migration instructions if you are using MySQL: https://umami.is/docs/guides/migrate-mysql-postgresql";
       }
+      {
+        assertion =
+          !(
+            (cfg.settings.TWO_FACTOR_ENCRYPTION_KEY_FILE != null) && (cfg.settings ? TWO_FACTOR_ENCRYPTION_KEY)
+          );
+        message = "services.umami.settings.TWO_FACTOR_ENCRYPTION_KEY_FILE and services.umami.settings.TWO_FACTOR_ENCRYPTION_KEY may not be set together.";
+      }
     ];
 
     services.postgresql = mkIf cfg.createPostgresqlDatabase {
@@ -247,7 +274,10 @@ in
             ) ''export APP_SECRET="$(systemd-creds cat appSecret)"'')
             ++ (optional (
               cfg.settings.DATABASE_URL_FILE != null
-            ) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'');
+            ) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'')
+            ++ (optional (
+              cfg.settings.TWO_FACTOR_ENCRYPTION_KEY_FILE != null
+            ) ''export TWO_FACTOR_ENCRYPTION_KEY="$(systemd-creds cat twoFactorEncryptionKey)"'');
         in
         ''
           ${concatStringsSep "\n" loadCredentials}
@@ -264,7 +294,10 @@ in
           (optional (cfg.settings.APP_SECRET_FILE != null) "appSecret:${cfg.settings.APP_SECRET_FILE}")
           ++ (optional (
             cfg.settings.DATABASE_URL_FILE != null
-          ) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}");
+          ) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}")
+          ++ (optional (
+            cfg.settings.TWO_FACTOR_ENCRYPTION_KEY_FILE != null
+          ) "twoFactorEncryptionKey:${cfg.settings.TWO_FACTOR_ENCRYPTION_KEY_FILE}");
 
         # Hardening
         CapabilityBoundingSet = "";
