@@ -2561,10 +2561,6 @@ with pkgs;
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
-  nsjail = callPackage ../tools/security/nsjail {
-    protobuf = protobuf_21;
-  };
-
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
