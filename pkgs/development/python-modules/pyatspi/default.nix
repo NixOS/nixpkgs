@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.58.1";
+  version = "2.58.2";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor version}/pyatspi-${version}.tar.xz";
-    sha256 = "Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
+    sha256 = "JFkOW2D+yN+1n80n0qkN5wNAYL4xjKP3dw4PmE8flOI=";
   };
 
   nativeBuildInputs = [
