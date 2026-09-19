@@ -34,8 +34,19 @@ let
   binCase = case: writeShellScriptBin "test-trivial-overriding-bin-${case}" extglobScript;
 
   # building this derivation would fail without overriding
-  textFileCase = writeTextFile {
-    name = "test-trivial-overriding-text-file";
+  textFileCase-postInstallCheck = writeTextFile {
+    name = "test-trivial-overriding-text-file-postInstallCheck";
+    derivationArgs.postInstallCheck = "false";
+    text = ''
+      #!${runtimeShell}
+      echo success
+    '';
+    executable = true;
+  };
+
+  # building this derivation would fail without overriding
+  textFileCase-deprecated-checkPhase = writeTextFile {
+    name = "test-trivial-overriding-text-file-deprecated-checkPhase";
     checkPhase = "false";
     text = ''
       #!${runtimeShell}
@@ -92,13 +103,16 @@ let
     binSucc = mkCase binCase "succ" true;
     binFail = mkCase binCase "fail" true;
     # Check that we can also override plain writeTextFile
-    textFileSuccess = textFileCase.overrideAttrs (_: {
+    textFilePostInstallCheckSucc = textFileCase-postInstallCheck.overrideAttrs (_: {
+      postInstallCheck = "true";
+    });
+    textFileDeprecatedCheckPhaseSucc = textFileCase-deprecated-checkPhase.overrideAttrs (_: {
       checkPhase = "true";
     });
   };
 
   # `runTest` forces nix to build the script of our test case and
-  # run its `checkPhase` which is our main interest. Additionally
+  # run its `installCheckPhase` which is our main interest. Additionally
   # it executes the script and thus makes sure that extglob also
   # works at run time.
   runTest =
