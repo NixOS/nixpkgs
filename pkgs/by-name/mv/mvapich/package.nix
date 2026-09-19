@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fake libcuda.so (the real one is deployed impurely)
-  env.LDFLAGS = lib.optionalString cudaSupport "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs";
+  env.LDFLAGS = lib.optionalString cudaSupport "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs";
 
   doCheck = false; # requires bindir/bin/mpicc before install is run
 

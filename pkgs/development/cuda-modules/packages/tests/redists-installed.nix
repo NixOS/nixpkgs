@@ -1,6 +1,6 @@
 {
   _cuda,
-  backendStdenv,
+  redistSystem,
   cudaNamePrefix,
   lib,
   linkFarm,
@@ -41,7 +41,7 @@ linkedWithoutLicenses.overrideAttrs (
       brokenAssertions = prevAttrs.passthru.brokenAssertions or [ ] ++ [
         {
           message =
-            "No redists are available for the current NVIDIA system identifier (${backendStdenv.hostRedistSystem});"
+            "No redists are available for the current NVIDIA system identifier (${redistSystem});"
             + " ensure proper licenses are allowed and that the CUDA version in use supports the system";
           assertion = availableRedistsForPlatform != { };
         }

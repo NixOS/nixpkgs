@@ -67,6 +67,8 @@ The `_cuda` attribute set previously exposed `fixups`, an attribute set mapping 
 
 CUDA package sets are scopes and provide the usual `overrideScope` attribute for overriding package attributes (see the note about `_cuda` in [Configuring CUDA package sets](#cuda-modifying-cuda-package-sets)).
 
+As with other spliced scopes, `overrideScope` changes the current platform stage; it does not change the corresponding BUILD or TARGET package sets. For example, overriding HOST's `cuda_nvcc` does not override the BUILD compiler selected for `nativeBuildInputs` during cross-compilation. To apply a customization across these stages, add it to `_cuda.extensions` through a regular Nixpkgs overlay, as shown below.
+
 Inspired by `pythonPackagesExtensions`, the `_cuda.extensions` attribute is a list of extensions applied to every version of the CUDA package set, allowing modification of all versions of the CUDA package set without needing to know their names or explicitly enumerate and modify them. As an example, disabling `cuda_compat` across all CUDA package sets can be accomplished with this overlay:
 
 ```nix
@@ -129,13 +131,32 @@ Nixpkgs variants are not free: they require re-evaluating Nixpkgs. Where possibl
 
 #### Using `cudaPackages.pkgs` {#cuda-using-cudapackages-pkgs}
 
-Each CUDA package set has a `pkgs` attribute, which is a variant of Nixpkgs in which the enclosing CUDA package set becomes the default. This was done primarily to avoid package set leakage, wherein a member of a non-default CUDA package set has a (potentially transitive) dependency on a member of the default CUDA package set.
+Each CUDA package set has a `pkgs` attribute, which is a variant of Nixpkgs in which its named CUDA release becomes the default. This was done primarily to avoid package set leakage, wherein a member of a non-default CUDA package set has a (potentially transitive) dependency on a member of the default CUDA package set.
 
 ::: {.note}
 Package set leakage is a common problem in Nixpkgs and is not limited to CUDA package sets.
 :::
 
 As an added benefit of `pkgs` being configured this way, building a package with a non-default version of CUDA is as simple as accessing an attribute. As an example, `cudaPackages_12_8.pkgs.opencv` provides OpenCV built against CUDA 12.8.
+
+The variant preserves the originating Nixpkgs stage, including distinct stages
+whose platform records happen to be equal. Its alias overlay applies through
+the complete package graph; stage-specific overlays, including `crossOverlays`,
+retain their original stage and order.
+An extended package graph is shared across dependency roles with the same native
+package context; stage selection does not instantiate another copy of Nixpkgs.
+Distinct native bootstrap or replacement contexts keep separate caches, because
+compiler selection may happen while a later stdenv is still being constructed.
+Custom stage constructors must preserve stage positions when overlays change;
+projection rejects a change in the number of stages.
+
+Within the CUDA scope’s `callPackage`, the `pkgs` argument is the selected package graph with its existing splices. Explicit role references such as `pkgs.pkgsBuildHost` retain their selection; the scope does not splice that graph a second time.
+
+This selects the named release; local `overrideScope` changes and manually overridden manifests are not automatically applied to the package sets inside `.pkgs`. Use regular Nixpkgs overlays and `_cuda.extensions` when those changes must affect the complete dependency graph.
+
+Extensions that need packages outside CUDA should obtain them through the CUDA scope's `callPackage` or `pkgs`, for example `finalCuda.callPackage ({ ucx }: ucx) { }` or `finalCuda.pkgs.ucx`. Referring to the outer Nixpkgs overlay's `final.ucx` captures that package from the original fixed point; selecting a named CUDA scope does not rewrite captured references. The extension is also evaluated within `.pkgs`, where its outer fixed point has the selected CUDA release.
+
+Select CUDA releases through regular `overlays`, rather than stage-specific overlays such as `crossOverlays`. These can run after the alias overlay used to construct `.pkgs` and defeat the requested release selection. CUDA checks that the named scope has the requested minor release in each dependency role and that the unspliced aliases select matching manifests within that role. A conflicting stage-specific override is rejected even if it renames all the aliases together.
 
 #### Using `pkgsCuda` {#cuda-using-pkgscuda}
 
@@ -326,6 +347,183 @@ Failure to run the resulting binary is typically the most challenging to diagnos
 1. First ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath).
 2. Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool.
 3. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
+
+### Cross compilation {#cuda-cross-compilation}
+
+Use the normal Nixpkgs dependency roles: put `cuda_nvcc` in `nativeBuildInputs`
+and CUDA libraries in `buildInputs`. The CUDA scope is spliced separately for
+each platform, including when using a non-default CUDA version.
+
+Compiler paths embedded in strings do not undergo input splicing. For a
+build-time compiler path in a Make flag or CMake argument, select
+`cuda_nvcc.__spliced.buildHost or cuda_nvcc` before applying `lib.getBin` or
+`lib.getExe`. Adding the original derivation to `nativeBuildInputs` only
+splices that dependency entry.
+
+Relative to the `cuda_nvcc` derivation, NVIDIA's compiler executables run on
+`hostPlatform`, while its CRT and CCCL headers describe code for `targetPlatform`.
+Those headers use `depsTargetTargetPropagated`; when NVCC is a native build input,
+they therefore become headers for the consumer's host platform. CUDA 12's CRT
+headers are extracted from the NVCC archive into `cuda_crt`, allowing `cuda_cudart`
+to propagate them without propagating a compiler.
+
+`backendCC` is the compatible C++ backend which runs on HOST and emits for
+TARGET. It is a normal spliced package: `backendStdenv` uses its BUILD→HOST
+splice, while NVCC uses it directly. NVCC keeps this backend private, so adding
+NVCC does not replace the project's C/C++ compiler. To select a different NVCC
+backend, override `cuda_nvcc`'s `backendCC` argument.
+
+Splicing recurses into ordinary package sets, but only splices a derivation and
+its named outputs. Arbitrary attributes such as `stdenv.cc` do not inherit the
+enclosing derivation's splices. Keeping `backendCC` as a separate package allows
+`backendStdenv` to select its BUILD→HOST splice before storing it in `.cc`.
+
+`cudaConfig` resolves GPU capabilities and forward compatibility independently
+of compiler selection. `redistSystem` selects the payload for each component's
+host platform. These values are no longer attributes of `backendStdenv`, and
+there is no separate `ccForTarget` selection policy. Redistributables are
+packaged with `stdenvNoCC`; their C++ runtime is an explicit dependency.
+
+The NVCC wrapper uses the standard `role.bash` markers and its backend's existing
+Bintools Wrapper utilities for role-specific variables.
+Its setup hook sources the existing backend wrapper hooks in a subshell and
+imports their standard `addEnvHooks` collectors under names private to the NVCC
+output, together with their role registrations. The backend's hardening default
+is a fallback after setup activation: the enclosing stdenv and caller retain
+their hardening policy. This preserves compiler-specific collection policy, such as Clang's
+header-path scrubbing, when another compiler activates later. Flags within a
+role still share the ordinary `NIX_*` variables. The import supports the standard
+collectors; it does not capture arbitrary callbacks' private helpers or state.
+Tool selection, role markers, and PATH changes stay in the subshell, so NVCC
+needs no separate inventory of backend tools. The standard dependency flag
+collectors also work with `stdenvNoCC`.
+This does not require changes to the ordinary CC or Bintools Wrappers.
+At invocation, NVCC gives its backend the same roles as that invocation.
+It first discards the selected wrappers' internal flag caches: a parent
+compiler may have initialized them for different roles or compiler defaults.
+The existing wrapper helpers then rebuild flags from the role-specific inputs.
+Dependency headers and libraries use `NIX_CFLAGS_COMPILE` and `NIX_LDFLAGS`, as
+with other Nixpkgs compilers. NVCC evaluates Bintools Wrapper's `add-flags.sh` in a subshell and
+passes library search paths from `NIX_LDFLAGS_BEFORE`, `NIX_LDFLAGS`, and
+`NIX_LDFLAGS_AFTER` to its device linker. The actual backend initializes its own
+wrapper flags and defaults; NVCC does not export its packaged backend's initialized
+cache to an overriding compiler. Its private runtime PATH also supplies
+the unprefixed `ar` that NVCC invokes, using the backend's target archiver.
+
+Setup initializes `CUDAHOSTCXX` and `NVCC_CCBIN` to the selected backend; the
+`_FOR_BUILD` and `_FOR_TARGET` suffixes select overrides for those roles.
+After setup, `CUDAHOSTCXX` configures CMake and `NVCC_CCBIN` configures direct
+NVCC invocations. Changing either variable does not override the other.
+Caller-provided `NVCC_PREPEND_FLAGS` retain their usual NVCC meaning, and
+command-line `--compiler-bindir` takes precedence over the default backend.
+Executable basenames resolve through the caller's PATH before the packaged
+backend fallback. Runtime overrides select an executable; they do not repeat
+setup activation with that compiler's dependency collectors. Override the
+package's `backendCC` argument when changing that collection policy as well.
+The invocation wrapper records the original `NVCC_CCBIN` input before
+projecting its role-specific value or packaged default. A nested invocation
+restores that input if the inherited projection is unchanged, allowing it to
+select its own roles and default while preserving explicit caller overrides.
+For legacy FindCUDA, `CUDA_BIN_PATH` defaults to the NVCC binary directory for
+the HOST role, so a BUILD compiler appearing earlier on PATH does not replace it.
+The component collector supplies compiler-discovery defaults when it registers
+each executable compiler. NVCC's own setup hook normalizes structured flag
+arrays and exports the compression setting; library-only dependencies do not
+configure NVCC.
+
+NVCC and NVVM retain one compiler prefix. The `outputBin` mapping locates its
+executables, wrapper support, and compiler metadata; `outputInclude` and
+`outputLib` still locate their respective contents. Aggregation outputs do not
+publish a second compiler or assign its CUDA version to a different role.
+`outputDev` defaults to `outputBin`, keeping activation and propagated TARGET
+dependencies with that compiler metadata when another package forwards them
+through its development output. An override separating those outputs must
+retain that activation and dependency interface.
+
+NVCC's TARGET component paths and CUDART's public header metadata follow the
+components' declared `outputInclude`, `outputLib`, and `outputStubs` mappings.
+When embedding a mapped component path, use
+`lib.getOutput component.outputInclude component` (or the corresponding
+library/stub selector). `lib.getInclude` follows conventional output names;
+it does not interpret a custom `outputInclude` mapping.
+Ordinary `buildInputs` selection uses `lib.getDev`, which chooses a literal
+`dev` output or falls back to `out`; setting `outputDev` does not rename that
+lookup. `buildRedist` propagates required component outputs through this input
+interface and the declared development output. Keep output references acyclic:
+an aggregate output cannot also depend on a development output that already
+references its payload. Arbitrary remapping of activation and package metadata
+still requires a coherent output layout.
+
+`cudaPackages.saxpy` tests CMake's CUDA discovery, compilation, and linking.
+`cudaPackages.tests.nvcc-roles` builds saxpy twice in one environment, using
+different CUDA releases for BUILD and HOST, and checks both ELF machine types.
+Run the resulting executables on their respective machines with a compatible
+GPU and driver to check runtime behavior as well. Successful evaluation or
+archive unpacking alone does not establish cross-compilation support.
+
+Setup hooks are not automatically run when an installed application invokes
+NVCC for JIT compilation. The executable wrapper supplies its packaged backend,
+and its profile supplies the default TARGET CUDA runtime, CRT, and CCCL paths.
+The profile initializes its component search paths for every invocation: NVCC exports
+its computed `INCLUDES`, `SYSTEM_INCLUDES`, and `LIBRARIES` to subprocesses, which
+must not make a nested compiler select another CUDA release. Supply additional paths
+with `-I`/`-L` or `NVCC_PREPEND_FLAGS`/`NVCC_APPEND_FLAGS`; the internal profile
+accumulators are not caller inputs. `PATH` and `LD_LIBRARY_PATH` retain the
+caller's environment.
+These defaults also work without stdenv activation. A JIT consumer must still
+provide paths for additional dependencies, such as PyTorch's own headers and
+libraries: propagated inputs do not reconstruct a runtime compilation environment.
+Consumers such as `torch.utils.cpp_extension` also invoke a separate C++
+compiler and linker. Those commands need CUDA component include and library
+paths, either explicitly or through the aggregate prefix expected by their
+`CUDA_HOME` interface; NVCC's profile only configures NVCC's own invocations.
+PyTorch additionally turns `CC` into an explicit NVCC backend argument. Unset
+`CC` for this caller to use NVCC's packaged default, or select a compatible
+backend there while keeping the ordinary C++ compiler in `CXX`.
+`cudaPackages.tests.nvcc-runtime` checks PTX, cubin, and shared-library compilation
+in an empty environment without explicit CUDA include or library flags. It also
+creates a separate device archive and links it through each of the three linker
+flag variables, with no ambient compiler or archiver on PATH.
+Native GNU tests also invoke NVCC from GCC and another NVCC to check that
+inherited flag caches and projected backend defaults do not replace the
+child invocation's role-specific inputs.
+GNU tests also nest different CUDA releases, including during cross builds,
+and check the child's CCCL header selection and linked CUDA runtime SONAME.
+
+For NVCC with a Clang backend and glibc, `cuda_crt` maps the unsupported
+`__builtin___vfprintf_chk` builtin to glibc's checked `__vfprintf_chk` entry
+point before the fortified stdio definitions are parsed. The guard applies
+only to that compiler/libc combination with fortify active; it does not lower
+the fortify level. CUDA 12 additionally needs internal linkage for glibc's
+Clang fortify overloads; its guarded header adjustment retains their object-size
+attributes and checked bodies. These workarounds also apply to installed JIT
+invocations. `tests.nvcc-fortify` requests hardening without setup activation,
+compiles and links two translation units, and checks that buffer overflows and writable `%n` formats
+still abort on executable platforms. Nixpkgs' existing Clang wrapper policy
+selects fortify level 2; explicitly forcing level 3 still exposes additional
+NVIDIA frontend incompatibilities and is not covered by this workaround.
+
+Select a JIT compiler as a HOST→HOST dependency of the installed application;
+select a compiler used during its build as a BUILD→HOST dependency. Splicing
+selects these package instances; the wrapper and its profile make each instance
+usable. A runtime wrapper cannot turn a BUILD executable into a HOST executable.
+`cuda_cudart.tests.no-compiler` separately checks that installing the runtime
+does not pull NVCC into its closure.
+
+The deprecated merged `cudatoolkit` follows the same HOST→TARGET convention.
+Build-time compiler users must put it (or preferably `cuda_nvcc`) in
+`nativeBuildInputs`; it no longer forces BUILD executables into its runtime
+package. Its compatibility `lib` output uses the same TARGET library selection
+and participates in normal output splicing without retaining the HOST tools.
+CUDA 12's bundled PTX compiler API is
+extracted as `libnvptxcompiler`, as it is in CUDA 13, and selected for TARGET
+when included in a compiler prefix. `tests.cudatoolkit` checks both CUDA
+compilation and linking a CPU program against that API.
+
+Applications must configure their runtime compiler dependencies explicitly.
+For example, PyCUDA pins a HOST→HOST NVCC path and its additional cuRAND headers
+and device-runtime library fallback in its installed Python code. Its JIT
+compiler does not depend on setup hooks having run in the calling process.
 
 ### Writing tests {#cuda-writing-tests}
 

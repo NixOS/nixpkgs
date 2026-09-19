@@ -1,0 +1,52 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -165,7 +165,7 @@
+   PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR BIN_INSTALL_DIR)
+ 
+ write_basic_package_version_file(
+-  NVSHMEMVersion.cmake
++  NVSHMEMConfigVersion.cmake
+   VERSION ${PROJECT_VERSION}
+   COMPATIBILITY AnyNewerVersion)
+ 
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -457,7 +457,7 @@
+ 
+ endif()
+ 
+-target_link_libraries(nvshmem_host PRIVATE CUDA::cudart_static)
++target_link_libraries(nvshmem_host PRIVATE CUDA::cudart_static PUBLIC CUDA::toolkit)
+ if (CCCL_FOUND AND CUDAToolkit_VERSION_MAJOR GREATER 12)
+   target_link_libraries(nvshmem_host PUBLIC CCCL::CCCL)
+ endif()
+@@ -935,7 +935,7 @@
+ )
+ 
+ # ${CMAKE_CURRENT_BINARY_DIR}/NVSHMEMConfig.cmake
+-install(FILES ${CMAKE_BINARY_DIR}/NVSHMEMVersion.cmake
++install(FILES ${CMAKE_BINARY_DIR}/NVSHMEMConfigVersion.cmake
+         DESTINATION lib/cmake/nvshmem
+ )
+ 
+--- a/src/device/CMakeLists.txt
++++ b/src/device/CMakeLists.txt
+@@ -183,7 +183,7 @@
+   configure_file(../include/non_abi/device/pt-to-pt/transfer_device.cuh.in ${CMAKE_CURRENT_SOURCE_DIR}/comm/transfer_device.cu COPYONLY)
+ endif()
+ 
+-target_link_libraries(nvshmem_device PRIVATE CUDA::cudart_static)
++target_link_libraries(nvshmem_device PRIVATE CUDA::cudart_static PUBLIC CUDA::toolkit)
+ if (CCCL_FOUND AND CUDAToolkit_VERSION_MAJOR GREATER 12)
+   target_link_libraries(nvshmem_device PUBLIC CCCL::CCCL)
+ endif()
+--- a/cmake_config/NVSHMEMConfig.cmake.in
++++ b/cmake_config/NVSHMEMConfig.cmake.in
+@@ -25,7 +25,6 @@
+   endforeach()
+ endmacro()
+ 
+-set(NVSHMEM_VERSION @PACKAGE_VERSION@)
+ 
+ get_filename_component(NVSHMEM_RHEL_INCL_BIN_BASE "${CMAKE_CURRENT_LIST_DIR}/../../../../../" ABSOLUTE)
+ get_filename_component(NVSHMEM_DEB_INCL_BIN_BASE "${CMAKE_CURRENT_LIST_DIR}/../../../../../.." ABSOLUTE)

@@ -53,6 +53,9 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+  # Exercise cache expiry without requiring intervening I/O to finish in 100 ms.
+  patches = [ ./deterministic-cache-expiry-test.patch ];
+
   optional-dependencies = {
     abfs = [ adlfs ];
     adl = [ adlfs ];

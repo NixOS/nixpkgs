@@ -1,11 +1,14 @@
 {
   _cuda,
   buildRedist,
+  callPackage,
+  cuda_cudart,
+  lib,
   libcublas,
   libnvshmem,
   nccl,
 }:
-buildRedist {
+buildRedist (finalAttrs: {
   redistName = "cublasmp";
   pname = "libcublasmp";
 
@@ -19,10 +22,21 @@ buildRedist {
   # TODO: Looks like the minimum supported capability is 7.0 as of the latest:
   # https://docs.nvidia.com/cuda/cublasmp/getting_started/index.html
   buildInputs = [
-    libcublas
     libnvshmem
+  ];
+
+  propagatedBuildInputs = [
+    libcublas
     nccl
   ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [ "cublasmp.h" ];
+    libraries = [ "cublasmp" ];
+    symbols = [ "cublasMpGetVersion" ];
+    driverLibraries = [ "${lib.getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs/libcuda.so" ];
+  };
 
   autoPatchelfIgnoreMissingDeps = [
     "libcuda.so.1"
@@ -40,4 +54,4 @@ buildRedist {
     changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
     license = _cuda.lib.licenses.math_sdk_sla;
   };
-}
+})

@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
-    (lib.getOutput "stubs" cudaPackages.cuda_cudart)
+    (lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart)
   ];
 
   # adaptivecpp makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually

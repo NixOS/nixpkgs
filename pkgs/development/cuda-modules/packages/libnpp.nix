@@ -1,4 +1,10 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+  cudaOlder,
+  lib,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "libnpp";
@@ -11,6 +17,21 @@ buildRedist {
     "static"
     "stubs"
   ];
+
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch =
+    lib.optionalString (cudaOlder "13.4") ''
+      # These obsolete modules name libraries absent from the redistributable.
+      rm share/pkgconfig/{nppi,nppicom}-${cudaMajorMinorVersion}.pc \
+        share/pkgconfig/{nppi,nppicom}.pc
+
+    ''
+    + ''
+      substituteInPlace share/pkgconfig/npp*-${cudaMajorMinorVersion}.pc \
+        --replace-fail 'Cflags:' 'Requires: cudart-${cudaMajorMinorVersion}
+      Cflags:'
+    '';
 
   meta = {
     description = "Library of primitives for image and signal processing";

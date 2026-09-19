@@ -35,10 +35,6 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
-  # TODO(@connorbaker):
-  # When strictDeps is enabled, `cuda_nvcc` is required as the argument to `--with-cuda` in `configureFlags` or else
-  # configurePhase fails with `checking for cuda_runtime.h... no`.
-  # This is odd, especially given `cuda_runtime.h` is provided by `cuda_cudart.dev`, which is already in `buildInputs`.
   strictDeps = true;
 
   pname = "ucx";
@@ -64,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs config/nvcc_wrap.sh
+    substituteInPlace config/m4/fuse3.m4 src/uct/sm/scopy/knem/configure.m4 \
+      --replace-fail 'pkg-config --' '"$PKG_CONFIG" --'
   '';
 
   outputs = [
@@ -92,9 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_nvcc
     cudaPackages.cuda_nvml_dev
-
   ]
   ++ lib.optionals enableRocm rocmList;
 
@@ -104,9 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.LDFLAGS = toString (
     lib.optionals enableCuda [
       # Fake libcuda.so (the real one is deployed impurely)
-      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"
       # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs"
+      "-L${lib.getOutput cudaPackages.cuda_nvml_dev.outputStubs cudaPackages.cuda_nvml_dev}/lib/stubs"
     ]
   );
 
@@ -117,7 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
+  ++ lib.optionals enableCuda [
+    # The toolkit root supplies HOST headers/libraries; find BUILD's NVCC on PATH.
+    "--with-cuda=${lib.getDev cudaPackages.cuda_cudart}"
+    "--with-nvcc-gencode=${cudaPackages.flags.gencodeString}"
+  ]
   ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
 
   postInstall = ''
@@ -129,6 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
 
   meta = {
     description = "Unified Communication X library";

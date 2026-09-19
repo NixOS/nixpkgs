@@ -24,57 +24,68 @@ let
   cudaMajorMinorVersion = majorMinor cudaMajorMinorPatchVersion;
   cudaMajorVersion = major cudaMajorMinorPatchVersion;
 
-  # We must use an instance of Nixpkgs where the CUDA package set we're building is the default; if we do not, members
-  # of the versioned, non-default package sets may rely on (transitively) members of the default, unversioned CUDA
-  # package set.
-  # See `Using cudaPackages.pkgs` in doc/languages-frameworks/cuda.section.md for more information.
+  majorName = mkVersionedName "cudaPackages" cudaMajorVersion;
+  minorName = mkVersionedName "cudaPackages" cudaMajorMinorVersion;
+
+  # Make this CUDA release the default for transitive dependencies too.
+  # See `Using cudaPackages.pkgs` in the manual for the coherence contract.
   pkgs' =
     let
-      cudaPackagesUnversionedName = "cudaPackages";
-      cudaPackagesMajorVersionedName = mkVersionedName cudaPackagesUnversionedName cudaMajorVersion;
-      cudaPackagesMajorMinorVersionedName = mkVersionedName cudaPackagesUnversionedName cudaMajorMinorVersion;
+      isDefault =
+        packages:
+        # A stage overlay can rename the named scope as well as its aliases.
+        packages.${minorName}.cudaMajorMinorVersion == cudaMajorMinorVersion
+        && packages.${minorName}.manifests == packages.${majorName}.manifests
+        && packages.${minorName}.manifests == packages.cudaPackages.manifests;
+      # Manifests are data, but ordinary attribute sets are recursively spliced.
+      # Compare each unspliced role explicitly: comparing merged manifests can
+      # mistake foreign component keys for differences in the selected release.
+      hasDefaultRelease =
+        packages:
+        # The synthetic final TARGET stage only supplies stdenv.cc.
+        lib.all (role: !(role ? cudaPackages) || isDefault role) (
+          lib.attrValues (lib.customisation.renameCrossIndexFrom "pkgs" packages)
+        );
     in
-    if
-      # If the default CUDA package set is the same as the one we're constructing, pass through pkgs unchanged.
-      # This is a handy speedup for cases where we're using the default CUDA package set and don't need to pay for
-      # a re-instantiation of Nixpkgs.
-      pkgs.${cudaPackagesMajorMinorVersionedName}.manifests
-      == pkgs.${cudaPackagesMajorVersionedName}.manifests
-      &&
-        pkgs.${cudaPackagesMajorMinorVersionedName}.manifests
-        == pkgs.${cudaPackagesUnversionedName}.manifests
-    then
+    if hasDefaultRelease pkgs then
+      # Preserve the original stage when no extension is necessary.
       pkgs
     else
-      pkgs.extend (
-        final: _: {
-          recurseForDerivations = false;
-          # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
-          # minor-versioned and unversioned package sets.
-          # However, if we do not replace the major-minor-versioned CUDA package set with our own, our use of splicing
-          # causes the package set to be re-evaluated for each build/host/target!
+      let
+        stage = pkgs.__stage.select pkgs.pkgsBuildBuild.${minorName}._pkgsVariant.pkgs;
+      in
+      assert lib.assertMsg (hasDefaultRelease stage) ''
+        ${minorName}.pkgs: the CUDA aliases do not select ${minorName} consistently after extending Nixpkgs.
+        A stage-specific overlay changed ${minorName}, ${majorName}, or cudaPackages. Select the CUDA package
+        set in regular overlays so every dependency role uses the same release.
+      '';
+      stage;
 
-          # cudaPackages_x_y = <package set created in this file>
-          ${cudaPackagesMajorMinorVersionedName} = cudaPackages;
-          # cudaPackages_x = cudaPackages_x_y
-          ${cudaPackagesMajorVersionedName} = final.${cudaPackagesMajorMinorVersionedName};
-          # cudaPackages = cudaPackages_x
-          ${cudaPackagesUnversionedName} = final.${cudaPackagesMajorVersionedName};
-        }
-      );
+  # Share one version-rebound graph across requesting dependency roles and
+  # local scope overrides; the cache does not depend on their fixed points.
+  # Extend the original import so stage-specific overlays retain their placement.
+  _pkgsVariant = {
+    # Inspecting this internal cache must not instantiate its graph.
+    recurseForDerivations = false;
+    pkgs = pkgs.__stage.extendGraph (
+      final: _: {
+        recurseForDerivations = false;
+        ${majorName} = final.${minorName};
+        cudaPackages = final.${majorName};
+      }
+    );
+  };
 
   cudaPackagesFixedPoint =
     finalCudaPackages:
+    let
+      # Keep the returned compiler and stdenv constructor APIs: callPackage
+      # overrides only this outer result, not their own override attributes.
+      backend = finalCudaPackages.callPackage ./backend.nix { };
+    in
     {
-      # NOTE:
-      # It is important that _cuda is not part of the package set fixed-point. As described by
-      # @SomeoneSerge:
-      # > The layering should be: configuration -> (identifies/is part of) cudaPackages -> (is built using) cudaLib.
-      # > No arrows should point in the reverse directions.
-      # That is to say that cudaLib should only know about package sets and configurations, because it implements
-      # functionality for interpreting configurations, resolving them against data, and constructing package sets.
-      # This decision is driven both by a separation of concerns and by "NAMESET STRICTNESS" (see above).
-      # Also see the comment in `pkgs/top-level/all-packages.nix` about the `_cuda` attribute.
+      # Keep _cuda outside this fixed point: manifest selection uses its pure
+      # configuration and data before the spliced package sets can be built.
 
       inherit
         cudaMajorMinorPatchVersion
@@ -84,8 +95,23 @@ let
 
       pkgs = pkgs';
 
+      backendCC = backend.cc;
+      backendStdenv = backend.stdenv;
+
+      inherit _pkgsVariant;
+
       # Core
-      callPackages = callPackagesWith (pkgs' // finalCudaPackages);
+      # Resolve through callPackage so grouped packages receive the same
+      # spliced arguments and scope overrides as individual packages.
+      callPackages =
+        fn: args:
+        let
+          f = if lib.isFunction fn then fn else import fn;
+          resolved = finalCudaPackages.callPackage (lib.mirrorFunctionArgs f (args: {
+            inherit args;
+          })) args;
+        in
+        callPackagesWith resolved.args f args;
 
       cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
 
@@ -96,39 +122,27 @@ let
       # depend on them recursively as they are used to add top-level attributes.
       inherit manifests;
 
-      # Construct without relying on the fixed-point to allow the use of backendStdenv in creating CUDA package sets.
-      # For example, this allows selecting manifests by predicating on values like
-      # `backendStdenv.hasJetsonCudaCapability`, which would otherwise result in infinite recursion due to the reliance
-      # on `pkgs'`, which in turn depends on the manifests provided to this file (which can depend on `backendStdenv`).
-      backendStdenv = import ./backendStdenv {
+      # Manifest selection needs configuration before the package fixed point
+      # (and its version-specific Nixpkgs instance) can be evaluated.
+      cudaConfig = import ./cudaConfig.nix {
         inherit
           _cuda
           config
           cudaMajorMinorVersion
           lib
-          pkgs
-          ;
-        inherit (pkgs)
-          stdenv
-          stdenvAdapters
           ;
       };
 
-      # Create backendStdenv variants for different host compilers, since users may want to build a CUDA project with
-      # Clang or GCC specifically.
-      # TODO(@connorbaker): Because of the way our setup hooks and patching of NVCC works, the user's choice of
-      # backendStdenv is largely disregarded or will cause build failures; fixing this would require the setup hooks
-      # and patching to be made aware of the current environment (perhaps by reading certain environment variables set
-      # by our backendStdenv).
-      # backendClangStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
-      #   stdenv = pkgs'.clangStdenv;
-      # };
-      # backendGccStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
-      #   stdenv = pkgs'.gccStdenv;
-      # };
+      # A redist is an executable/library for the package's host. Splicing
+      # selects that package; no build/host/target redist fields are needed.
+      redistSystem = _cuda.lib.getRedistSystem {
+        inherit (finalCudaPackages.cudaConfig) cudaCapabilities;
+        inherit cudaMajorMinorVersion;
+        inherit (pkgs.stdenv.hostPlatform) system;
+      };
 
-      # Must be constructed without `callPackage` to avoid replacing the `override` attribute with that of
-      # `callPackage`'s.
+      # Keep the extendMkDerivation helper undecorated and select its construction
+      # dependencies explicitly, before ordinary package argument splicing.
       buildRedist = import ./buildRedist {
         inherit
           _cuda
@@ -139,35 +153,38 @@ let
           autoPatchelfHook
           fetchurl
           srcOnly
-          stdenv
           stdenvNoCC
           zstd
           ;
+        # GCC's library output is for its TARGET. Select BUILD -> HOST before
+        # taking that output, including when this redist itself is a BUILD tool.
+        inherit (pkgs.pkgsBuildHost) gccForLibs;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
-          backendStdenv
+          redistSystem
+          cudaComponentHook
           cudaMajorMinorVersion
           cudaMajorVersion
           cudaNamePrefix
           manifests
-          markForCudatoolkitRootHook
-          removeStubsFromRunpathHook
           ;
+        # This hook is propagated to consumers as a native build dependency.
+        removeStubsFromRunpathHook = pkgs'.pkgsBuildHost.cudaPackages.removeStubsFromRunpathHook;
       };
 
       flags =
         formatCapabilities {
-          inherit (finalCudaPackages.backendStdenv) cudaCapabilities cudaForwardCompat;
+          inherit (finalCudaPackages.cudaConfig) cudaCapabilities cudaForwardCompat;
           inherit (_cuda.db) cudaCapabilityToInfo;
         }
         # TODO(@connorbaker): Enable the corresponding warnings in `./aliases.nix` after some
-        # time to allow users to migrate to cudaLib and backendStdenv.
+        # time to allow users to migrate to cudaLib and cudaConfig.
         // {
           inherit dropDots;
           cudaComputeCapabilityToName =
             cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.archName;
           dropDot = dropDots;
-          isJetsonBuild = finalCudaPackages.backendStdenv.hasJetsonCudaCapability;
+          isJetsonBuild = finalCudaPackages.cudaConfig.hasJetsonCudaCapability;
         };
     }
     // packagesFromDirectoryRecursive {
@@ -182,7 +199,8 @@ let
     ++ _cuda.extensions
   );
 
-  # Using lib.makeScopeWithSplicing' instead of the templated one from pkgs' allows us to defer calling pkgs.extend.
+  # Construct the scope before forcing its release-specific Nixpkgs graph.
+  # The helper from pkgs' would force that graph while looking up the helper.
   cudaPackages =
     lib.makeScopeWithSplicing'
       {
@@ -190,8 +208,12 @@ let
         newScope = pkgs'.newScope;
       }
       {
-        # In pkgs', the default CUDA package set is always the one we've constructed here.
+        # The rebound graph supplies this release's other dependency-role scopes.
+        # Local overrideScope changes apply only to self, as in the standard helper.
         otherSplices = pkgs'.generateSplicesForMkScope [ "cudaPackages" ];
+        # A local overrideScope may replace pkgs with a plain attribute set.
+        # Preserve that replacement instead of merging other roles into it.
+        keep = self: { inherit (self) pkgs; };
         f = extends composedExtensions cudaPackagesFixedPoint;
       };
 in

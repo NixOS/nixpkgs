@@ -1,16 +1,21 @@
-# TODO(@connorbaker): cuda_cudart.dev depends on crt/host_config.h, which is from
-# (getDev cuda_nvcc). It would be nice to be able to encode that.
 {
-  _cuda,
   addDriverRunpath,
   buildRedist,
   cccl,
   cuda_compat,
   cuda_crt,
   cuda_nvcc,
-  cudaAtLeast,
   lib,
+  runCommand,
 }:
+let
+  # These headers form part of cudart's public compile interface. Keep both
+  # stdenv propagation and standalone pkg-config consumers on the same inputs.
+  publicHeaderInputs = [
+    (lib.getOutput cuda_crt.outputInclude cuda_crt)
+    (lib.getOutput cccl.outputInclude cccl)
+  ];
+in
 buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_cudart";
@@ -25,41 +30,33 @@ buildRedist (finalAttrs: {
   # We have stubs but we don't have an explicit stubs output.
   includeRemoveStubsFromRunpathHook = true;
 
-  propagatedBuildOutputs =
+  propagatedBuildOutputs = [
     # required by CMake
-    lib.optionals (lib.elem "static" finalAttrs.outputs) [ "static" ]
+    finalAttrs.outputStatic
     # always propagate, even when cuda_compat is used, to avoid symbol linking errors
-    ++ lib.optionals (lib.elem "stubs" finalAttrs.outputs) [ "stubs" ];
+    finalAttrs.outputStubs
+  ];
 
   # When cuda_compat is available, propagate it.
   # NOTE: `cuda_compat` can be disabled by setting the package to `null`. This is useful in cases where
   # the host OS has a recent enough CUDA driver that the compatibility library isn't needed.
   propagatedBuildInputs =
-    # TODO(@SomeoneSerge): Consider propagating `crt/host_config.h`, but only
-    # once we managed to split out `cuda_nvcc`'s headers into a separate output
-    #
-    # TODO(@connorbaker): Check that the dependency offset for this is correct.
-    #
-    # [ (lib.getInclude cuda_nvcc) ]
-
-    # TODO(@connorbaker): From CUDA 13.0, crt/host_config.h is in cuda_crt
-    lib.optionals (cudaAtLeast "13.0") [ (lib.getOutput "include" cuda_crt) ]
-    # Add the dependency on CCCL's include directory.
-    # - nv/target
-    # TODO(@connorbaker): Check that the dependency offset for this is correct.
-    ++ [ (lib.getOutput "include" cccl) ]
+    publicHeaderInputs
     # NOTE: cuda_compat may be null or unavailable
     ++ lib.optionals (cuda_compat.meta.available or false) [ cuda_compat ];
 
   allowFHSReferences = false;
 
-  # Patch the `cudart` package config files so they reference lib
+  # Publish the public headers for consumers outside stdenv as well.
   postPatch = ''
     local path=""
     while IFS= read -r -d $'\0' path; do
       nixLog "patching $path"
       sed -i \
         -e "s|^cudaroot\s*=.*\$||" \
+        -e "s|^Cflags\s*:\(.*\)\$|Cflags: \1${
+          lib.concatMapStrings (input: " -I${input}/include") publicHeaderInputs
+        }|" \
         -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
         "$path"
     done < <(find -iname 'cudart-*.pc' -print0)
@@ -92,8 +89,22 @@ buildRedist (finalAttrs: {
     popd >/dev/null
   '';
 
+  # NVCC depends on its default runtime. Checking the reverse dependency in
+  # cudart's own derivation would make evaluating their output paths cyclic.
+  # Retain the closure check as an independent test instead.
   # "Never again", cf. https://github.com/NixOS/nixpkgs/pull/457424
-  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
+  passthru.tests.no-compiler =
+    runCommand "${finalAttrs.name}-no-compiler"
+      {
+        disallowedRequisites = [ (lib.getOutput cuda_nvcc.outputBin cuda_nvcc) ];
+      }
+      # Aggregate out need not reach a separate development output.
+      ''
+        mkdir "$out"
+        ${lib.concatMapStringsSep "\n" (output: ''
+          ln -s ${lib.getOutput output finalAttrs.finalPackage} "$out/${output}"
+        '') finalAttrs.outputs}
+      '';
 
   meta.description = "CUDA Runtime";
 })

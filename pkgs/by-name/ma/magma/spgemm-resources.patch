@@ -1,0 +1,113 @@
+--- a/sparse/blas/magma_zcuspmm.cpp
++++ b/sparse/blas/magma_zcuspmm.cpp
+@@ -108,8 +108,8 @@
+     magma_z_matrix C={Magma_CSR};
+     C.num_rows = A.num_rows;
+     C.num_cols = B.num_cols;
+-    C.storage_type = A.storage_type;
+     C.memory_location = A.memory_location;
++    C.ownership = MagmaTrue;
+     C.fill_mode = MagmaFull;
+     
+     C.val = NULL;
+@@ -218,7 +218,8 @@
+     magma_index_t base_t, nnz_t, baseC;
+ 
+     cusparseHandle_t handle=NULL;
+-    cusparseSpMatDescr_t descrA, descrB, descrC;
++    cusparseSpMatDescr_t descrA=NULL, descrB=NULL, descrC=NULL;
++    cusparseSpGEMMDescr_t spgemmDesc=NULL;
+     void*  dBuffer1    = NULL, *dBuffer2   = NULL;
+     size_t bufferSize1 = 0,    bufferSize2 = 0;
+     
+@@ -250,33 +251,36 @@
+                                           CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F) );
+ 
+         // SpGEMM Computation
+-        cusparseSpGEMMDescr_t spgemmDesc;
+         CHECK_CUSPARSE( cusparseSpGEMM_createDescr(&spgemmDesc) );
+ 
+         // ask bufferSize1 bytes for external memory
+-        cuDoubleComplex alpha = MAGMA_Z_ONE, *beta = NULL; 
++        cuDoubleComplex alpha = MAGMA_Z_ONE, beta = MAGMA_Z_ZERO; 
+         CHECK_CUSPARSE( cusparseSpGEMM_workEstimation(handle, opA, opB,
+-                                                      &alpha, descrA, descrB, beta, descrC,
++                                                      &alpha, descrA, descrB, &beta, descrC,
+                                                       CUDA_C_64F, CUSPARSE_SPGEMM_DEFAULT,
+                                                       spgemmDesc, &bufferSize1, NULL) );
+-        CHECK( cudaMalloc((void**) &dBuffer1, bufferSize1) );
++        if (bufferSize1 > 0) {
++            CHECK( magma_malloc( &dBuffer1, bufferSize1 ));
++        }
+ 
+         // inspect the matrices A and B to understand the memory requirement for the next step
+         CHECK_CUSPARSE( cusparseSpGEMM_workEstimation(handle, opA, opB,
+-                                                      &alpha, descrA, descrB, beta, descrC,
++                                                      &alpha, descrA, descrB, &beta, descrC,
+                                                       CUDA_C_64F, CUSPARSE_SPGEMM_DEFAULT,
+                                                       spgemmDesc, &bufferSize1, dBuffer1) );
+ 
+         // ask bufferSize2 bytes for external memory
+         CHECK_CUSPARSE( cusparseSpGEMM_compute(handle, opA, opB,
+-                                               &alpha, descrA, descrB, beta, descrC,
++                                               &alpha, descrA, descrB, &beta, descrC,
+                                                CUDA_C_64F, CUSPARSE_SPGEMM_DEFAULT,
+                                                spgemmDesc, &bufferSize2, NULL) );
+-        CHECK( cudaMalloc((void**) &dBuffer2, bufferSize2) );
++        if (bufferSize2 > 0) {
++            CHECK( magma_malloc( &dBuffer2, bufferSize2 ));
++        }
+ 
+         // compute the intermediate product of A * B
+         CHECK_CUSPARSE( cusparseSpGEMM_compute(handle, opA, opB,
+-                                               &alpha, descrA, descrB, beta, descrC,
++                                               &alpha, descrA, descrB, &beta, descrC,
+                                                CUDA_C_64F, CUSPARSE_SPGEMM_DEFAULT,
+                                                spgemmDesc, &bufferSize2, dBuffer2) );
+ 
+@@ -297,26 +301,37 @@
+ 
+         // copy the final products to the matrix C
+         CHECK_CUSPARSE( cusparseSpGEMM_copy(handle, opA, opB,
+-                                            &alpha, descrA, descrB, beta, descrC,
++                                            &alpha, descrA, descrB, &beta, descrC,
+                                             CUDA_C_64F, CUSPARSE_SPGEMM_DEFAULT, spgemmDesc) );
+ 
+         // end CUSPARSE context
+         magma_queue_sync( queue );
+         CHECK( magma_zmtransfer( C, AB, Magma_DEV, Magma_DEV, queue ));
+ 
+-        // destroy matrix/vector descriptors
+-        CHECK_CUSPARSE( cusparseSpGEMM_destroyDescr(spgemmDesc) );
+     }
+     else {
+         info = MAGMA_ERR_NOT_SUPPORTED;
+     }
+ 
+ cleanup:
+-    CHECK_CUSPARSE( cusparseDestroySpMat(descrA) );
+-    CHECK_CUSPARSE( cusparseDestroySpMat(descrB) );
+-    CHECK_CUSPARSE( cusparseDestroySpMat(descrC) );
+-    cusparseDestroy( handle );
+-    magma_zmfree( &C, queue );
++    // Cleanup must run once, including after partial initialization, and
++    // preserve the first failure instead of jumping back to this label.
++    auto record_error = [&info](magma_int_t status) {
++        if (info == MAGMA_SUCCESS) info = status;
++    };
++    if (spgemmDesc != NULL)
++        record_error( cusparse2magma_error(cusparseSpGEMM_destroyDescr(spgemmDesc)) );
++    if (descrA != NULL)
++        record_error( cusparse2magma_error(cusparseDestroySpMat(descrA)) );
++    if (descrB != NULL)
++        record_error( cusparse2magma_error(cusparseDestroySpMat(descrB)) );
++    if (descrC != NULL)
++        record_error( cusparse2magma_error(cusparseDestroySpMat(descrC)) );
++    if (dBuffer1 != NULL) record_error( magma_free(dBuffer1) );
++    if (dBuffer2 != NULL) record_error( magma_free(dBuffer2) );
++    if (handle != NULL)
++        record_error( cusparse2magma_error(cusparseDestroy(handle)) );
++    record_error( magma_zmfree(&C, queue) );
+     return info;
+     //============================================================================
+ #endif
