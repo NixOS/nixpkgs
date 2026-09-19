@@ -43,8 +43,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/Harmony-Libs/aioharmony";
     description = "Python library for interacting with the Logitech Harmony devices";
+    homepage = "https://github.com/Harmony-Libs/aioharmony";
+    changelog = "https://github.com/Harmony-Libs/aioharmony/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oro ];
     mainProgram = "aioharmony";
