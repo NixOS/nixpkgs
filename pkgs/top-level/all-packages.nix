@@ -2519,10 +2519,12 @@ with pkgs;
   inherit (callPackages ../servers/nextcloud { })
     nextcloud33
     nextcloud34
+    nextcloud35
     ;
 
   nextcloud33Packages = callPackage ../servers/nextcloud/packages { ncVersion = "33"; };
   nextcloud34Packages = callPackage ../servers/nextcloud/packages { ncVersion = "34"; };
+  nextcloud35Packages = callPackage ../servers/nextcloud/packages { ncVersion = "35"; };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
