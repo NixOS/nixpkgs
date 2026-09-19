@@ -2668,7 +2668,7 @@ in
 
     security.wrappers = {
       unix_chkpwd = {
-        setuid = true;
+        capabilities = "cap_dac_read_search,cap_audit_write=ep";
         owner = "root";
         group = "root";
         source = "${package}/bin/unix_chkpwd";
