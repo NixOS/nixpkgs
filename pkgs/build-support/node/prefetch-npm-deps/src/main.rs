@@ -145,45 +145,58 @@ fn fetch_packuments(
         .into_par_iter()
         .try_for_each(|(package_name, requested_versions)| {
             let packument_url = get_packument_url("https://registry.npmjs.org", &package_name)?;
+            let key = format!("make-fetch-happen:request-cache:{packument_url}");
+
+            // Skip the network fetch entirely if both corgi and full variants
+            // are already in the cache (reentrant prefetch).
+            if cache.has_with_headers(&key, CORGI_DOC) && cache.has_with_headers(&key, FULL_DOC) {
+                return Ok(());
+            }
 
             match util::get_url_body_with_retry(&packument_url) {
                 Ok(packument_data) => {
                     let normalized_data =
                         normalize_packument(&package_name, &packument_data, &requested_versions)?;
 
+                    // Write whichever variant is missing (upsert handles dedup).
                     // npm's make-fetch-happen uses the URL-encoded form for cache keys
                     // e.g., "https://registry.npmjs.org/@types%2freact-dom" not "@types/react-dom"
                     // We must use the encoded form in both the cache key string AND the metadata URL
+                    if !cache.has_with_headers(&key, CORGI_DOC) {
+                        cache
+                            .put(
+                                key.clone(),
+                                packument_url.clone(),
+                                &normalized_data,
+                                None, // Packuments don't have integrity hashes
+                                Some(ReqHeaders {
+                                    accept: String::from(CORGI_DOC),
+                                }),
+                            )
+                            .map_err(|e| {
+                                anyhow!(
+                                    "couldn't insert packument cache entry (corgi) for {package_name}: {e:?}"
+                                )
+                            })?;
+                    }
 
-                    // Cache with corgiDoc header (for initial requests)
-                    cache
-                        .put(
-                            format!("make-fetch-happen:request-cache:{packument_url}"),
-                            packument_url.clone(),
-                            &normalized_data,
-                            None, // Packuments don't have integrity hashes
-                            Some(ReqHeaders {
-                                accept: String::from(CORGI_DOC),
-                            }),
-                        )
-                        .map_err(|e| {
-                            anyhow!("couldn't insert packument cache entry (corgi) for {package_name}: {e:?}")
-                        })?;
-
-                    // Cache with fullDoc header (for workspace/full metadata requests)
-                    cache
-                        .put(
-                            format!("make-fetch-happen:request-cache:{packument_url}"),
-                            packument_url.clone(),
-                            &normalized_data,
-                            None,
-                            Some(ReqHeaders {
-                                accept: String::from(FULL_DOC),
-                            }),
-                        )
-                        .map_err(|e| {
-                            anyhow!("couldn't insert packument cache entry (full) for {package_name}: {e:?}")
-                        })?;
+                    if !cache.has_with_headers(&key, FULL_DOC) {
+                        cache
+                            .put(
+                                key.clone(),
+                                packument_url.clone(),
+                                &normalized_data,
+                                None,
+                                Some(ReqHeaders {
+                                    accept: String::from(FULL_DOC),
+                                }),
+                            )
+                            .map_err(|e| {
+                                anyhow!(
+                                    "couldn't insert packument cache entry (full) for {package_name}: {e:?}"
+                                )
+                            })?;
+                    }
                 }
                 Err(e) => {
                     // Log but don't fail - some packages might not need packuments
@@ -449,14 +462,22 @@ fn main() -> anyhow::Result<()> {
 
     // Fetch and cache tarballs
     packages.into_par_iter().try_for_each(|package| {
+        let key = format!("make-fetch-happen:request-cache:{}", package.url);
+        let integrity = package.integrity().map(ToString::to_string);
+
+        // Skip download if this dependency is already in the cache (reentrant prefetch).
+        if cache.has(&key, integrity.as_deref()) {
+            info!("Skipping already-cached dependency: {}", package.name);
+            return Ok(());
+        }
+
         let tarball = package
             .tarball()
             .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
-        let integrity = package.integrity().map(ToString::to_string);
 
         cache
             .put(
-                format!("make-fetch-happen:request-cache:{}", package.url),
+                key,
                 package.url,
                 &tarball,
                 integrity,
