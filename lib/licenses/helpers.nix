@@ -22,22 +22,31 @@ rec {
   /**
     Evaluate a license expression for a given predicate.
 
-    # Example
+    # Inputs
 
-    ```nix
-    evaluateProperty (x: x.free) true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
-    ```
+    `predicate`
+    : Predicate which should get used for checking licenses
+
+    `permissive`
+    : Whether to apply checks permissive or reciprocal
+
+    `license`
+    : License expression which should be evaluated
+
     # Type
 
     ```
-    evaluateProperty :: Function -> Bool -> AttrSet -> Bool
+    evaluateProperty :: (a -> Bool) -> Bool -> { [String] :: a } -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.evaluateProperty usage example`
 
-    - [predicate] checks for each license included in the license expression
-    - [permissive] whether to apply checks permissive or reciprocal
-    - [license] license expression to check
+    ```nix
+    evaluateProperty (x: x.free) true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => true
+    ```
   */
   evaluateProperty =
     predicate: permissive:
@@ -53,22 +62,31 @@ rec {
     Evaluate a license expression for a given property name. The property must
     be defined as a boolean attribute of all licenses passed.
 
-    # Example
+    # Inputs
 
-    ```nix
-    evaluateNamedProperty "deprecated" true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
-    ```
+    `name`
+    : Name of the Attribute which should be checked
+
+    `permissive`
+    : Whether to apply checks permissive or reciprocal
+
+    `license`
+    : License expression which should be evaluated
+
     # Type
 
     ```
-    evaluateProperty :: String -> Bool -> AttrSet -> Bool
+    evaluateNamedProperty :: String -> Bool -> AttrSet -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.evaluateNamedProperty` usage example
 
-    - [name] name of the attribute to check
-    - [permissive] whether to apply checks permissive or reciprocal
-    - [license] license expression to check
+    ```nix
+    evaluateNamedProperty "deprecated" true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => false
+    ```
   */
   evaluateNamedProperty =
     name: permissive:
@@ -83,12 +101,10 @@ rec {
   /**
     Check whether a license expression is free.
 
-    # Example
+    # Inputs
 
-    ```nix
-    isFree (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
-    => true
-    ```
+    `license`
+    : License expression which should be evaluated
 
     # Type
 
@@ -96,21 +112,24 @@ rec {
     isFree :: AttrSet -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.isFree` usage example
 
-    - [license] License expression to check if free
+    ```nix
+    isFree (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
+    => true
+    ```
   */
   isFree = evaluateNamedProperty "free" true;
 
   /**
     Check whether a license expression is redistributable.
 
-    # Example
+    # Inputs
 
-    ```nix
-    isRedistributable (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
-    => true
-    ```
+    `license`
+    : License expression which should be evaluated
 
     # Type
 
@@ -118,44 +137,52 @@ rec {
     isRedistributable :: AttrSet -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.isRedistributable` usage example
 
-    - [license] License expression to check if redistributable
+    ```nix
+    isRedistributable (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
+    => true
+    ```
   */
   isRedistributable = evaluateNamedProperty "redistributable" true;
 
   /**
     Check whether any of the given licenses is required in the license expression.
 
+    # Inputs
+
+    `licenses`
+    : List of licenses which are tested
+
+    `license`
+    : License expression which should be evaluated
+
+    # Type
+
+    ```
+    containsLicenses :: [AttrSet] -> AttrSet -> Bool
+    ```
+
     # Example
+    :::{.example}
+    ## `lib.licenses.containsLicenses` usage example
 
     ```nix
     containsLicenses [ lib.licenses.asl20 ] (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
     => true
     ```
-
-    # Type
-
-    ```
-    containsLicenses :: List -> AttrSet -> Bool
-    ```
-
-    # Arguments
-
-    - [licenses] List of licenses to look
-    - [license] License expression to check
   */
   containsLicenses = licenses: evaluateProperty (x: elem x licenses) false;
 
   /**
     Convert a license expression to an SPDX license expression string.
 
-    # Example
+    # Inputs
 
-    ```nix
-    toSPDX (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
-    => "NCSA AND (Apache-2.0 WITH LLVM-exception)"
-    ```
+    `license`
+    : License expression which to convert to an spdx expression
 
     # Type
 
@@ -163,9 +190,14 @@ rec {
     toSPDX :: AttrSet -> String
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.toSPDX` usage example
 
-    - [license] License expression which to convert to spdx expression
+    ```nix
+    toSPDX (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => "NCSA AND (Apache-2.0 WITH LLVM-exception)"
+    ```
   */
   toSPDX =
     license:
