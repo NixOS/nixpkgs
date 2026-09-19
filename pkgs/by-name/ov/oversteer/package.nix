@@ -16,7 +16,7 @@
   wrapGAppsHook3,
   gobject-introspection,
   bash,
-  linuxConsoleTools,
+  linuxconsoletools,
   udevCheckHook,
 }:
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/lib/udev/rules.d/* \
       --replace-fail /bin/sh ${bash}/bin/sh
     substituteInPlace $out/lib/udev/rules.d/99-fanatec-wheel-perms.rules \
-      --replace-fail /usr/bin/evdev-joystick ${linuxConsoleTools}/bin/evdev-joystick
+      --replace-fail /usr/bin/evdev-joystick ${linuxconsoletools}/bin/evdev-joystick
   '';
 
   doInstallCheck = true;
