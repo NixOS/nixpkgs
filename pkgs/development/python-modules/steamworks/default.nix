@@ -20,7 +20,7 @@ let
   };
 
   library = stdenv.mkDerivation {
-    pname = "steamworkspy-c";
+    pname = "steamworks-c";
     version = "1.6.5-unstable-2026-06-18";
 
     unpackPhase = ''
@@ -44,7 +44,7 @@ let
 in
 
 buildPythonPackage {
-  pname = "steamworkspy";
+  pname = "steamworks";
   version = "1.6.5-unstable-2026-06-18";
   pyproject = true;
 

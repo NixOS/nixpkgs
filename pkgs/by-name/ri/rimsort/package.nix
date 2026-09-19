@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       watchdog
       xmltodict
       zstandard
-      steamworkspy
+      steamworks
       ;
   };
 
