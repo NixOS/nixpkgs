@@ -35,19 +35,20 @@ let
       patches ? [ ],
       extraPostPatch ? "",
       env ? { },
+      version ? "0",
       broken ? null,
     }:
     let
       is_extension = gawkextlib != null;
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "gawkextlib-${name}";
-      version = "unstable-2022-10-20";
+      version = "${version}-unstable-2024-01-21";
 
       src = fetchgit {
         url = "git://git.code.sf.net/p/gawkextlib/code";
-        rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
-        sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
+        rev = "9f5761589277bc1270ff671aa3afcca5bbc45e57";
+        hash = "sha256-NxkgVkA9YHhHOb2weQ+veVk8/VD0YpaDPwK2cGkQRKQ=";
       };
 
       inherit patches;
@@ -105,26 +106,28 @@ let
     abort = buildExtension {
       inherit gawkextlib;
       name = "abort";
+      version = "1.0.1";
     };
     aregex = buildExtension {
       inherit gawkextlib;
       name = "aregex";
+      version = "1.1.0";
       extraBuildInputs = [ tre ];
     };
     csv = buildExtension {
       inherit gawkextlib;
       name = "csv";
+      version = "1.0.0";
     };
     errno = buildExtension {
       inherit gawkextlib;
       name = "errno";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
+      version = "1.1.1";
     };
     gd = buildExtension {
       inherit gawkextlib;
       name = "gd";
+      version = "1.0.3";
       extraBuildInputs = [ gd ];
       # GCC 14 makes this an error by default, remove when fixed upstream
       env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
@@ -132,6 +135,7 @@ let
     haru = buildExtension {
       inherit gawkextlib;
       name = "haru";
+      version = "1.0.2";
       extraBuildInputs = [ libharu ];
       patches = [
         # Renames references to two identifiers with typos that libharu fixed in 2.4.4
@@ -144,24 +148,19 @@ let
     json = buildExtension {
       inherit gawkextlib;
       name = "json";
+      version = "2.1.0";
       extraBuildInputs = [ rapidjson ];
     };
     lmdb = buildExtension {
       inherit gawkextlib;
       name = "lmdb";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
+      version = "1.1.3";
       extraBuildInputs = [ lmdb ];
-      #  mdb_env_open(env, /dev/null)
-      #! No such device
-      #  mdb_env_open(env, /dev/null)
-      #! Operation not supported by device
-      doCheck = !stdenv.hostPlatform.isDarwin;
     };
     mbs = buildExtension {
       inherit gawkextlib;
       name = "mbs";
+      version = "1.0.0";
       extraBuildInputs = [ glibcLocales ];
       #! "spät": length: 5, mbs_length: 6, wcswidth: 4
       doCheck = !stdenv.hostPlatform.isDarwin;
@@ -169,6 +168,7 @@ let
     mpfr = buildExtension {
       inherit gawkextlib;
       name = "mpfr";
+      version = "1.1.0";
       extraBuildInputs = [
         gmp
         mpfr
@@ -177,31 +177,34 @@ let
     nl_langinfo = buildExtension {
       inherit gawkextlib;
       name = "nl_langinfo";
+      version = "1.1.0";
     };
     pgsql = buildExtension {
       inherit gawkextlib;
       name = "pgsql";
+      version = "1.1.2";
       extraBuildInputs = [ libpq ];
+    };
+    reclen = buildExtension {
+      inherit gawkextlib;
+      name = "reclen";
+      version = "1.0.1";
     };
     redis = buildExtension {
       inherit gawkextlib;
       name = "redis";
+      version = "1.7.4";
       extraBuildInputs = [ hiredis ];
     };
     select = buildExtension {
       inherit gawkextlib;
       name = "select";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
-    };
-    timex = buildExtension {
-      inherit gawkextlib;
-      name = "timex";
+      version = "1.1.4";
     };
     xml = buildExtension {
       inherit gawkextlib;
       name = "xml";
+      version = "1.1.2";
       extraBuildInputs = [
         expat
         libiconv
