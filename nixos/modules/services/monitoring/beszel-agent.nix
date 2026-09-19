@@ -151,7 +151,7 @@ in
           ${cfg.package}/bin/beszel-agent
         '';
 
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         StateDirectory = baseNameOf cfg.dataDir;
 
         # adds ability to monitor docker/podman containers
