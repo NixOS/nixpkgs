@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nameparser";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "derek73";
     repo = "python-nameparser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MDzw2F9oH6cvvIYxYRv85+e61uGYFDWubfJ+WP8h7mQ=";
+    hash = "sha256-o5TE0GakzQkvUByntpLsZPxw6wQAlUKoDv0bQzDCLsc=";
   };
 
   build-system = [ setuptools ];
