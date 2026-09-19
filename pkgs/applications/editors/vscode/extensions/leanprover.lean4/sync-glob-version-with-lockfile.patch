@@ -1,0 +1,35 @@
+diff --git a/package-lock.json b/package-lock.json
+index 1f93e8db..5159d4df 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -11794,7 +11794,7 @@
+         },
+         "vscode-lean4": {
+             "name": "lean4",
+-            "version": "0.0.238",
++            "version": "0.0.239",
+             "license": "Apache-2.0",
+             "dependencies": {
+                 "@leanprover/infoview": "~0.13.0",
+@@ -11820,7 +11820,7 @@
+                 "@vscode/vsce": "^2.21.1",
+                 "concurrently": "^8.2.2",
+                 "copy-webpack-plugin": "^12.0.2",
+-                "glob": "^10.4.5",
++                "glob": "^11.0.1",
+                 "mocha": "^10.3.0",
+                 "ovsx": "^0.9.1",
+                 "source-map-loader": "^5.0.0",
+diff --git a/vscode-lean4/package.json b/vscode-lean4/package.json
+index 9261ebb6..8a93a8f5 100644
+--- a/vscode-lean4/package.json
++++ b/vscode-lean4/package.json
+@@ -1885,7 +1885,7 @@
+         "typescript": "^5.4.5",
+         "webpack": "^5.90.3",
+         "webpack-cli": "^5.1.4",
+-        "glob": "^10.4.5"
++        "glob": "^11.0.1"
+     },
+     "icon": "images/lean_logo.png",
+     "license": "Apache-2.0",
