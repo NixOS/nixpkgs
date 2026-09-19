@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation {
   pname = "try";
-  version = "0.2.0-unstable-2025-02-25";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "binpash";
     repo = "try";
-    rev = "67052d8f20725f3cdc22ffaec33f7b7c14f1eb6b";
-    hash = "sha256-8mfCmqN50pRAeNTJUlRVrRQulWon4b2OL4Ug/ygBhB0=";
+    rev = "43217dd3700124ae0beeb9742b64ff2ef583d59e";
+    hash = "sha256-BWCe2oHRUmyLnVdh1BOsVXlmopvSH/N1ux2/YglK21Q=";
   };
 
   # skip TRY_REQUIRE_PROG as it detects executable dependencies by running it
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     versionCheckHook
   ];
   preVersionCheck = ''
-    export version=0.2.0
+    export version=0.2.1
   '';
   versionCheckProgramArg = "-v";
 
