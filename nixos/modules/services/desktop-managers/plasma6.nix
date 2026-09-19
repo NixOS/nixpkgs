@@ -45,7 +45,7 @@ in
     };
 
     environment.plasma6.excludePackages = mkOption {
-      description = "List of default packages to exclude from the configuration";
+      description = "List of packages to exclude from the configuration. You can use this to remove some optional parts of Plasma, and also to remove packages automatically added to support other enabled options.";
       type = types.listOf types.package;
       default = [ ];
       example = literalExpression "[ pkgs.kdePackages.elisa ]";
@@ -185,7 +185,25 @@ in
           # Since PackageKit Nix support is not there yet,
           # only install discover if flatpak or fwupd is enabled.
           discover
-        ];
+        ]
+        # Optional and hardware support features
+        ++ lib.optionals config.hardware.bluetooth.enable [
+          bluedevil
+          bluez-qt
+          pkgs.openobex
+          pkgs.obexftp
+        ]
+        ++ lib.optional config.networking.networkmanager.enable plasma-nm
+        ++ lib.optional config.services.pulseaudio.enable plasma-pa
+        ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
+        ++ lib.optional config.powerManagement.enable powerdevil
+        ++ lib.optional config.services.printing.enable print-manager
+        ++ lib.optional config.hardware.sane.enable skanpage
+        ++ lib.optional config.services.colord.enable colord-kde
+        ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
+        ++ lib.optional config.services.samba.enable kdenetwork-filesharing
+        ++ lib.optional config.services.xserver.wacom.enable wacomtablet
+        ++ lib.optional config.services.flatpak.enable flatpak-kcm;
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
@@ -206,25 +224,7 @@ in
           ''
         )
         kio-extras-kf5
-      ]
-      # Optional and hardware support features
-      ++ lib.optionals config.hardware.bluetooth.enable [
-        bluedevil
-        bluez-qt
-        pkgs.openobex
-        pkgs.obexftp
-      ]
-      ++ lib.optional config.networking.networkmanager.enable plasma-nm
-      ++ lib.optional config.services.pulseaudio.enable plasma-pa
-      ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
-      ++ lib.optional config.powerManagement.enable powerdevil
-      ++ lib.optional config.services.printing.enable print-manager
-      ++ lib.optional config.hardware.sane.enable skanpage
-      ++ lib.optional config.services.colord.enable colord-kde
-      ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
-      ++ lib.optional config.services.samba.enable kdenetwork-filesharing
-      ++ lib.optional config.services.xserver.wacom.enable wacomtablet
-      ++ lib.optional config.services.flatpak.enable flatpak-kcm;
+      ];
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
