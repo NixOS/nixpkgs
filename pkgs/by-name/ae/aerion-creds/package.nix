@@ -5,6 +5,7 @@
 }:
 
 let
+  # nixpkgs-update: no auto update
   version = "0.3.4";
 
   archMap = {
