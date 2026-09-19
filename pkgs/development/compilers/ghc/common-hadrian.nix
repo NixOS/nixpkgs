@@ -64,8 +64,11 @@
   enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64,
 
   # Whether to build dynamic libs for the standard library (on the target
-  # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs,
+  # platform). Static libs are always built. GHC's wasm target interpreter
+  # uses shared libraries.
+  enableShared ?
+    with stdenv.targetPlatform;
+    !isWindows && !useiOSPrebuilt && (!isStatic || isWasm) && !isGhcjs,
 
   # Whether to build terminfo.
   enableTerminfo ?
