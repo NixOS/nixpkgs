@@ -254,6 +254,23 @@ recurseIntoAttrs {
       ''
     );
 
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-doc-comment" ''
+          # Doc comment example
+          def main [] {}
+        '';
+      in
+      runCommand "test-writers-nushell-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
+
     babashka = expectSuccess (
       writeBabashka "test-writers-babashka" { } ''
         (println "success")
