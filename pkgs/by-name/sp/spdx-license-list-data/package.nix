@@ -19,13 +19,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spdx-license-list-data";
-  version = "3.28.0";
+  version = "3.29.0";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FbeeEBAg9ih6DkAsXdU6ruZwkC7A2u2zYBvblpl54q0=";
+    hash = "sha256-HFwaQ6iCK/h8fLPKV0dwPJJnqNiE1Cb5lqjflCbLVeU=";
   };
 
   outputs = [ "out" ] ++ _types;
