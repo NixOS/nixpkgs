@@ -9,7 +9,7 @@ changelog_url="https://docs.foxglove.dev/changelog/tags/foxglove"
 version=$(
   curl -s "$changelog_url" \
   | grep 'Downloads: ' \
-  | grep '<a href="https://get.foxglove.dev/desktop/v' \
+  | grep '<a href=https://get.foxglove.dev/desktop/v' \
   | grep -oP '[0-9]+\.[0-9]+\.[0-9]+' \
   | head -1
 )
