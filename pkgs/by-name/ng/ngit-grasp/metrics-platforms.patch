@@ -1,0 +1,34 @@
+From d506b3f73a90e71b4c657af514183adaf1573dc1 Mon Sep 17 00:00:00 2001
+From: DanConwayDev <DanConwayDev@protonmail.com>
+Date: Sat, 19 Sep 2026 15:34:36 +0000
+Subject: [PATCH] test(metrics): match process assertions to collector
+ platforms
+
+Darwin does not register the Linux ProcessCollector, so the repository-counting test must not require its CPU and resident-memory samples. Keep those assertions inside the existing Linux block while retaining repository metrics coverage on every platform.
+
+This changes only platform-specific test expectations; production metrics and Linux coverage remain unchanged. Validation: inspected the collector registration guard and checked the diff. Darwin execution is still required on a Darwin worker.
+
+Assisted-by: Codex (GPT-6)
+---
+ src/metrics/mod.rs | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/metrics/mod.rs b/src/metrics/mod.rs
+index b9644a6..dc39ce2 100644
+--- a/src/metrics/mod.rs
++++ b/src/metrics/mod.rs
+@@ -1216,10 +1216,12 @@ mod tests {
+         // render() recounts from disk)
+         let output = metrics.render();
+         assert!(output.contains("ngit_repositories_total 0"));
+-        assert!(output.contains("process_cpu_seconds_total"));
+-        assert!(output.contains("process_resident_memory_bytes"));
+         #[cfg(target_os = "linux")]
+         {
++            // ProcessCollector is registered only on Linux, just like the
++            // cgroup collectors below. Repository metrics are portable.
++            assert!(output.contains("process_cpu_seconds_total"));
++            assert!(output.contains("process_resident_memory_bytes"));
+             if let Some(directory) = cgroup_v2_directory() {
+                 if cgroup_cpu_seconds(&directory).is_some() {
+                     assert!(output.contains("ngit_cgroup_cpu_seconds_total"));
