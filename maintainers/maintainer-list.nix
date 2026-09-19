@@ -13232,6 +13232,12 @@
     githubId = 1608697;
     name = "Jens Binkert";
   };
+  jeppe = {
+    email = "JeppeToftlund@proton.me";
+    github = "JeppeToftlund";
+    githubId = 308726180;
+    name = "Jeppe Johansen";
+  };
   jeremiahs = {
     email = "jeremiah@secrist.xyz";
     github = "JeremiahSecrist";
