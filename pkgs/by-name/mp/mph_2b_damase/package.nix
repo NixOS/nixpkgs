@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
   fetchzip,
   installFonts,
@@ -15,5 +16,8 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ installFonts ];
 
-  meta = { };
+  meta = {
+    license = lib.licenses.unfree;
+    homepage = "https://www.wazu.jp/gallery/views/View_MPH2BDamase.html";
+  };
 }
