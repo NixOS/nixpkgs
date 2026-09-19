@@ -30190,7 +30190,7 @@ with self;
     };
     meta = {
       description = "Base class for parsing regexes";
-      homepage = "https://wiki.github.com/toddr/Regexp-Parser";
+      homepage = "https://github.com/cpan-authors/Regexp-Parser";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
