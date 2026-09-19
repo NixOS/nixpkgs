@@ -3,21 +3,22 @@
   fsnotifier,
   jetbrains,
   lib,
-  python3,
+  maven,
   stdenv,
+  zlib,
   # keep-sorted end
 }:
 let
   src = jetbrains.mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.3";
-    buildNumber = "253.31033.139";
-    buildType = "pycharm";
-    ideaHash = "sha256-GRlWzpHvgy7P+vw+UWApyPpLLzWiHmvsC8HLPUyrshQ=";
-    androidHash = "sha256-FA/6ry1M7+RISJL+2SR9QkDvAGJAkXhFMh9YoOEU5nk=";
+    version = "2025.3.4";
+    buildNumber = "253.32098.37";
+    buildType = "idea";
+    ideaHash = "sha256-5rPaXIGOeWY9tcHRs5p376kgo4EbUtEltwcmNpPSsM8=";
+    androidHash = "sha256-uvoDTv/7RlyxRp1d9v2tN9IJkv9d1QEkZpp23hae84k=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
-    mvnDeps = ../source/pycharm_maven_artefacts.json;
+    mvnDeps = ./maven_artefacts.json;
     repositories = [
       "repo1.maven.org/maven2"
       "packages.jetbrains.team/maven/p/ij/intellij-dependencies"
@@ -49,30 +50,28 @@ jetbrains.mkJetBrainsProduct {
   # the jdk is bundled on Darwin.
   jdk = if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk then jetbrains.jdk else null;
 
-  pname = "pycharm-oss";
+  pname = "intellij-idea-oss";
 
-  wmClass = "jetbrains-pycharm-ce";
-  product = "PyCharm Open Source";
-  productShort = "PyCharm";
+  wmClass = "jetbrains-idea-ce";
+  product = "IntelliJ IDEA Open Source";
+  productShort = "IDEA";
 
-  nativeBuildInputs = [
-    # keep-sorted start
-    jetbrains.cythonDebugSpeedupsHook
-    python3
-    python3.pkgs.setuptools
-    # keep-sorted end
+  extraLdPath = [ zlib ];
+  extraWrapperArgs = [
+    ''--set M2_HOME "${maven}/maven"''
+    ''--set M2 "${maven}/maven/bin"''
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
-    homepage = "https://www.jetbrains.com/pycharm/";
-    description = "Free Python IDE from JetBrains (built from source)";
+    homepage = "https://www.jetbrains.com/idea/";
+    description = "Free Java, Kotlin, Groovy and Scala IDE from JetBrains (built from source)";
     longDescription = ''
-      Python IDE with complete set of tools for productive development with Python programming language.
-      In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine.
-      It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing and powerful Debugger.
+      IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven.
+      Also known as IntelliJ.
     '';
     maintainers = with lib.maintainers; [
+      gytis-ivaskevicius
       tymscar
     ];
     teams = [ lib.teams.jetbrains ];
@@ -80,8 +79,8 @@ jetbrains.mkJetBrainsProduct {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     knownVulnerabilities = [
       ''
-        This version of PyCharm has multiple known security vulnerabilities, see NIXPKGS-2026-2269: https://tracker.security.nixos.org/issues/NIXPKGS-2026-2269.
-        The package `jetbrains.pycharm-oss` is currently not receiving updates in nixpkgs, consider using `jetbrains.pycharm`.
+        This version of IDEA has multiple known security vulnerabilities, see NIXPKGS-2026-2269: https://tracker.security.nixos.org/issues/NIXPKGS-2026-2269.
+        The package `jetbrains.idea-oss` is currently not receiving updates in nixpkgs, consider using `jetbrains.idea`.
       ''
     ];
   };
