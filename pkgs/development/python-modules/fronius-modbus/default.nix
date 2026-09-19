@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fronius-modbus";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "farmio";
     repo = "fronius-modbus";
     tag = finalAttrs.version;
-    hash = "sha256-P7zTFB3xpuJ7oEQqwd/Vbn+Kush5eVjpYPlgZO8O9vE=";
+    hash = "sha256-6rictvXvPf/TrI2sRzNwFpx8ewAPnV0CX4125k8bvZo=";
   };
 
   build-system = [
