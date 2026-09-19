@@ -9,6 +9,7 @@
   rustPlatform,
   libxcb-cursor,
   xwayland,
+  fetchpatch2,
   withSystemd ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +22,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Mb7jpqnrcYCfNSItIkkHpuR3YxWFxPuIBfcwNKlRBkk=";
   };
+
+  patches = [
+    # fix steam dropdowns closing instantly and unity add component not focusing
+    # https://github.com/Supreeeme/xwayland-satellite/pull/494
+    (fetchpatch2 {
+      name = "fix-dropdowns-closing-instantly";
+      url = "https://github.com/Supreeeme/xwayland-satellite/commit/add2795134593faafce60e404a0a75df68e9ee0c.diff?full_index=1";
+      hash = "sha256-6QOZsE4/OoYjzNlzkzMmx6d9rcuh66AHjTBUqHnAWxU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace resources/xwayland-satellite.service \
