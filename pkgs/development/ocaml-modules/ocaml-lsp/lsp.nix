@@ -4,6 +4,7 @@
   cppo,
   stdlib-shims,
   ppx_yojson_conv_lib,
+  yojson_2,
   ocaml-syntax-shims,
   jsonrpc,
   omd,
@@ -46,6 +47,11 @@ let
   jsonrpc_v = jsonrpc.override {
     inherit version;
   };
+  ppx_yojson_conv_lib_v =
+    if lib.versionAtLeast version "1.17.0" then
+      ppx_yojson_conv_lib
+    else
+      ppx_yojson_conv_lib.override { yojson = yojson_2; };
 in
 buildDunePackage {
   pname = "lsp";
@@ -133,7 +139,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "1.14.0" then
       [
         jsonrpc
-        ppx_yojson_conv_lib
+        ppx_yojson_conv_lib_v
         uutf
       ]
     else if lib.versionAtLeast version "1.10.0" then
@@ -141,7 +147,7 @@ buildDunePackage {
         dyn
         jsonrpc
         ordering
-        ppx_yojson_conv_lib
+        ppx_yojson_conv_lib_v
         stdune
         uutf
       ]
@@ -150,7 +156,7 @@ buildDunePackage {
         csexp
         jsonrpc
         (pp.override { version = "1.2.0"; })
-        ppx_yojson_conv_lib
+        ppx_yojson_conv_lib_v
         result
         uutf
       ]
