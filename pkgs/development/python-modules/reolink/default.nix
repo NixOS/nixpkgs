@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "reolink";
-  version = "0.64";
+  version = "0.0.64";
   pyproject = true;
 
   src = fetchFromGitHub {
