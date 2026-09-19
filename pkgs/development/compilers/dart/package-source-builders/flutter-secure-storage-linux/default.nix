@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     jsoncpp
   ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -24,4 +26,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 }

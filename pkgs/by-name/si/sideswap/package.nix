@@ -35,13 +35,12 @@ flutter341.buildFlutterApplication (finalAttrs: {
   gitHashes = lib.importJSON ./git-hashes.json;
 
   # Provide OpenGL and libsideswap_client.so for the Flutter application.
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libsideswap-client
-      ]
-    }
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libsideswap-client ])
+  ];
 
   # Install icons.
   postInstall = ''
