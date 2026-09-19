@@ -9,6 +9,7 @@
   libcap,
   zeromq,
   systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -46,6 +47,8 @@ stdenv.mkDerivation {
 
   installCheckPhase = "$out/bin/toxvpn -h";
   doInstallCheck = true;
+
+  passthru.tests.nixos = nixosTests.toxvpn;
 
   meta = {
     description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
