@@ -37,11 +37,13 @@ rustPlatform.buildRustPackage rec {
     ./remove-signing-identity.patch
 
     # Make npm ci pass by adding missing packages to package-lock.json
+    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/408
     ./sync-package-lock.patch
   ];
 
   cargoPatches = [
     # Update charabia crate to v0.10.0 to allow caching of Lindera dictionaries
+    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/407
     ./update-to-charabia-0.10.0.patch
   ];
 
@@ -86,22 +88,32 @@ rustPlatform.buildRustPackage rec {
       # Here's an example build.rs URL:
       # https://github.com/lindera/lindera/blob/v1.5.1/lindera-cc-cedict/build.rs
 
-      dict = language: filename: hash: {
-        inherit filename language;
-        source = fetchurl {
-          url = "https://lindera.dev/${filename}";
-          inherit hash;
+      dict =
+        {
+          language,
+          filename,
+          hash,
+        }:
+        {
+          inherit filename language;
+          source = fetchurl {
+            url = "https://lindera.dev/${filename}";
+            inherit hash;
+          };
         };
-      };
 
       # LRCGET via charabia requires the Korean and Japanese (unidic) dictionaries.
       dictionaries = {
-        lindera-ko-dic =
-          dict "Korean" "mecab-ko-dic-2.1.1-20180720.tar.gz"
-            "sha256-cCztIcYWfp2a68Z0q17lSvWNREOXXylA030FZ8AgWRo=";
-        lindera-unidic =
-          dict "Japanese" "unidic-mecab-2.1.2.tar.gz"
-            "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
+        lindera-ko-dic = dict {
+          language = "Korean";
+          filename = "mecab-ko-dic-2.1.1-20180720.tar.gz";
+          hash = "sha256-cCztIcYWfp2a68Z0q17lSvWNREOXXylA030FZ8AgWRo=";
+        };
+        lindera-unidic = dict {
+          language = "Japanese";
+          filename = "unidic-mecab-2.1.2.tar.gz";
+          hash = "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
+        };
       };
     in
     ''
