@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comfy-angle";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-angle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FnS2aQmPb5a3dO9m5McpO5Kfyy1aOaboc+oAtYqauQo=";
+    hash = "sha256-Zz6xA1DWeE+guONTnhcTc8hyR9d+QT2vEJvBJ9NLAcA=";
   };
 
   postPatch = ''
