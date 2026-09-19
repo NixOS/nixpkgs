@@ -318,9 +318,9 @@
   };
 
   cmake = {
-    version = "0.7.4";
+    version = "0.7.5";
     url = "github:uyha/tree-sitter-cmake";
-    hash = "sha256-tLC3WHEQS2GqUr+5Q884fc+tDCTxx6Jxg83T9wPlHw4=";
+    hash = "sha256-3WAADzMe4Rfd35M1CZd7wc/hE9ydD+vTKaxtcMsjSWM=";
     meta = {
       license = lib.licenses.mit;
     };
