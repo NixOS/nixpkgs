@@ -64,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://darwinsys.com/file";
     description = "Program that shows the type of files";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      mdaniels5757
+    ];
     license = lib.licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];
     platforms = lib.platforms.all;
