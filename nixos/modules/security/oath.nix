@@ -12,6 +12,25 @@
         '';
       };
 
+      control = lib.mkOption {
+        type = lib.types.enum [
+          "required"
+          "requisite"
+          "sufficient"
+          "optional"
+        ];
+        default = "requisite";
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use the OATH module instead of a regular password, use "sufficient".
+
+          Read
+          {manpage}`pam.conf(5)`
+          for better understanding of this option.
+        '';
+      };
+
       digits = lib.mkOption {
         type = lib.types.enum [
           6
@@ -22,6 +41,14 @@
         description = ''
           Specify the lib.length of the one-time password in number of
           digits.
+        '';
+      };
+
+      openasroot = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Open the usersfile as root before dropping privileges.
         '';
       };
 
