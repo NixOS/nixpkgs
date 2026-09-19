@@ -30685,6 +30685,12 @@
     githubId = 1771332;
     name = "László Vaskó";
   };
+  vkluna = {
+    email = "git@luna.ht";
+    github = "vkluna";
+    githubId = 76712878;
+    name = "V. Luna";
+  };
   vlinkz = {
     email = "vmfuentes64@gmail.com";
     github = "vlinkz";
