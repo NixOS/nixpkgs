@@ -27,6 +27,7 @@ in
       services.rosec = {
         enable = true;
         pam.enable = true;
+        package = pkgs.rosecFull;
       };
 
       environment.systemPackages = [ pkgs.libsecret ];
@@ -70,6 +71,12 @@ in
           _, output = machine.systemctl("status rosecd --no-pager", "alice")
           assert "Active: active (running)" in output
           machine.succeed("su - alice -c 'busctl --user list | grep -q org.freedesktop.impl.portal.desktop.rosec'")
+
+      with subtest("rosecFull wasm providers are discovered"):
+          kinds = machine.succeed("su - alice -c 'rosec provider kinds'")
+          assert "bitwarden-pm" in kinds, "bitwarden-pm provider not discovered"
+          assert "bitwarden-sm" in kinds, "bitwarden-sm provider not discovered"
+          assert "gnome-keyring" in kinds, "gnome-keyring provider not discovered"
 
       with subtest("PAM is configured with pam_rosec"):
           login_pam = machine.succeed("cat /etc/pam.d/login")
