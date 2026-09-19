@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rakshasa";
-  version = "0.16.22";
+  version = "0.16.23";
 
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rakshasa";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8di26VhRaa9wrkHCmEE7eWKJjwPzm6ma9yKAJCQaQ+A=";
+    hash = "sha256-6obiCOSkn0S/x8QNdAtVQvt9StT8h+x1qeagg/0w7aA=";
   };
 
   strictDeps = true;
