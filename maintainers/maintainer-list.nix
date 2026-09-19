@@ -2694,6 +2694,12 @@
     githubId = 7745457;
     name = "Astavie";
   };
+  asteriau = {
+    email = "dorahaladita@gmail.com";
+    github = "asteriau";
+    githubId = 131019152;
+    name = "Laura";
+  };
   asterismono = {
     email = "i@nvirellia.im";
     github = "AsterisMono";
