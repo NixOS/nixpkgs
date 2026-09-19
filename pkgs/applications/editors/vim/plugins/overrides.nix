@@ -62,6 +62,7 @@
   xwininfo,
   xxd,
   ycmd,
+  yq,
   zenity,
   zoxide,
   zsh,
@@ -3419,6 +3420,13 @@ assertNoAdditions {
       license = lib.licenses.gpl3Only;
     };
   });
+
+  nvim-jqx = super.nvim-jqx.overrideAttrs {
+    runtimeDeps = [
+      jq
+      yq
+    ];
+  };
 
   nvim-julia-autotest = super.nvim-julia-autotest.overrideAttrs (old: {
     meta = old.meta // {
