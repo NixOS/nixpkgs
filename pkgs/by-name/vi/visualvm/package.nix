@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.1";
+  version = "2.2.2";
   pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${finalAttrs.version}/visualvm_${
       builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
-    sha256 = "sha256-4Ub14FKOp2toMMuIaWJZ2pvE34UJ4m++Psoh8KdCe2M=";
+    sha256 = "sha256-BKKDm3e2r0Qk5o34tYviO/Rd38X+ha7VRZtOk15dR+4=";
   };
 
   desktopItem = makeDesktopItem {
