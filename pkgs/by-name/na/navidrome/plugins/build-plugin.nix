@@ -3,6 +3,10 @@
   lib,
   navidrome,
   zip,
+  tinygo,
+  binaryen,
+  jq,
+  advancecomp,
 }:
 
 {
@@ -29,25 +33,58 @@ buildGoModule (
     }
     // (args.env or { });
 
-    postBuild = ''
-      GOOS=wasip1 \
-      GOARCH=wasm \
-      go build \
+    nativeBuildInputs = [
+      tinygo
+      zip
+      binaryen
+      jq
+      advancecomp
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME=$(mktemp -d)
+
+      tinygo build \
+        -target=wasip1 \
         -buildmode=c-shared \
-        -o $GOPATH/bin/plugin.wasm .
+        -opt=z \
+        -no-debug \
+        -panic=trap \
+        -gc=leaking \
+        -o plugin.wasm .
+
+      # Optimize the output
+      wasm-opt -Oz \
+        --strip-debug \
+        --strip-producers \
+        --strip-target-features \
+        --vacuum \
+        --dce \
+        --remove-unused-module-elements \
+        --converge \
+        plugin.wasm -o plugin.wasm
+
+      # JSON can be safely minified to save some bytes
+      jq -c . manifest.json > manifest.json
+
+      runHook postBuild
     '';
 
-    postInstall = ''
-      mkdir $out/share
-      pushd $(mktemp -d)
-      cp $GOPATH/bin/plugin.wasm .
-      cp ${finalAttrs.src}/manifest.json .
-      ${lib.getExe zip} \
-        $out/share/${finalAttrs.pname}.ndp \
-        plugin.wasm \
-        manifest.json
-      popd
-      rm -r $out/bin
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share
+      # timestamps not required
+      touch -t 202001010000.00 manifest.json plugin.wasm
+      TZ=UTC zip -X -D out.zip manifest.json plugin.wasm
+      # shrink to absolute smallest possible zip file
+      advzip -z -4 out.zip
+
+      cp out.zip $out/share/${finalAttrs.pname}.ndp
+
+      runHook postInstall
     '';
 
     passthru = {
