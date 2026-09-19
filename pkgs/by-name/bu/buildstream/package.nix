@@ -124,6 +124,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/apache/buildstream/blob/${finalAttrs.src.tag}/NEWS";
     description = "Powerful software integration tool";
     downloadPage = "https://buildstream.build/install.html";
     homepage = "https://buildstream.build";
