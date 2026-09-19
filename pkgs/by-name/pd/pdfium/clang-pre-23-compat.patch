@@ -1,5 +1,19 @@
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
+@@ -589,13 +589,5 @@
+     # Flags for diagnostics.
+     cflags += [ "-fcolor-diagnostics" ]
+-    if (!is_wasm) {
+-      if (!is_win) {
+-        cflags += [ "-fdiagnostics-show-inlining-chain" ]
+-      } else {
+-        # Combine after https://github.com/llvm/llvm-project/pull/192241
+-        cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+-      }
+-    }
+     if (diagnostics_print_source_range_info && !is_win) {
+       cflags += [ "-fdiagnostics-print-source-range-info" ]
+     }
 @@ -613,12 +613,6 @@
        ]
      }
@@ -13,15 +27,20 @@
 
      # TODO(hans): Remove this once Clang generates better optimized debug info
      # by default. https://crbug.com/765793
-@@ -1881,11 +1875,6 @@
-       "-fsanitize=array-bounds",
-       "-fsanitize-trap=array-bounds",
-
--      # Some code users feature detection to determine if UBSAN (or any
--      # sanitizer) is enabled, they then do expensive debug like operations. We
--      # want to suppress this behaviour since we want to keep performance costs
--      # as low as possible while having these checks.
--      "-fsanitize-ignore-for-ubsan-feature=array-bounds",
-
-       # Because we've enabled array-bounds sanitizing we also want to suppress
-       # the related warning about "unsafe-buffer-usage-in-static-sized-array",
+--- a/build/config/sanitizers/sanitizers.gni
++++ b/build/config/sanitizers/sanitizers.gni
+@@ -543,14 +543,7 @@
+       cflags = [
+         "-fsanitize=${invoker.sanitizer}",
+         "-fsanitize-trap=${invoker.sanitizer}",
+-
+-        # Prevents `__has_feature(undefined_behavior_sanitizer)`
+-        # from evaluating true. Configs defined here are intended to
+-        # be usable even in release builds, i.e. as widely as possible.
+-        # It's important not to have full-on UBSan workarounds activate
+-        # just because we built support for a specific sanitizer.
+-        "-fsanitize-ignore-for-ubsan-feature=${invoker.sanitizer}",
+       ]
+       if (defined(invoker.cflags)) {
+         cflags += invoker.cflags
+       }
