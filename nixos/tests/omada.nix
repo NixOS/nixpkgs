@@ -26,6 +26,8 @@ in
     machine.start()
     machine.wait_for_unit("omada.service")
     machine.wait_for_open_port(${toString port})
+    machine.wait_for_open_port(8043)
+    machine.succeed("pgrep -x mongod")
 
     with machine.nested("Waiting for UI to work"):
         retry(omada_is_up)
