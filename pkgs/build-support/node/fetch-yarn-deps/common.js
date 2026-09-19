@@ -1,11 +1,14 @@
 const path = require('path')
 
-const urlToName = url => {
+const urlToName = (url, hash) => {
   const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
 
   if (url.startsWith('file:')) {
     return url
-  } else if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+  } else if (url.startsWith('git+')) {
+    const base = path.basename(url);
+    return hash ? `${base}-${hash}` : base;
+  } else if (isCodeloadGitTarballUrl) {
     return path.basename(url)
   } else {
     return url
