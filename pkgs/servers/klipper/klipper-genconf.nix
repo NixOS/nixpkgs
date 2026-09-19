@@ -18,4 +18,6 @@ writeShellApplication {
     printf "\nYour firmware configuration for klipper:\n\n"
     cat config
   '';
+
+  meta.license = klipper.meta.license;
 }
