@@ -11,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "motioneye-client";
-  version = "0.3.14";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "motioneye-client";
-    rev = "v${version}";
-    hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-A5NYtZc2jaezTRtT9CjBi95kPBYDkbS76/4/S2SF1T4=";
   };
 
   postPatch = ''
@@ -28,9 +28,9 @@ buildPythonPackage rec {
       --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-aiohttp
@@ -44,8 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for motionEye";
     homepage = "https://github.com/dermotduffy/motioneye-client";
+    changelog = "https://github.com/motioneye-project/motioneye-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
