@@ -16345,6 +16345,8 @@ self: super: with self; {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pystalk = callPackage ../development/python-modules/pystalk { };
+
   pystardict = callPackage ../development/python-modules/pystardict { };
 
   pystatgrab = callPackage ../development/python-modules/pystatgrab { };
