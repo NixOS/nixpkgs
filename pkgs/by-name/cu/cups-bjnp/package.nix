@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://cups-bjnp.sourceforge.net";
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 })
