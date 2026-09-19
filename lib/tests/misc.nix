@@ -3359,32 +3359,50 @@ runTests {
   };
 
   testToCommandLineGNU = {
-    expr = cli.toCommandLineGNU { } {
-      v = true;
-      verbose = [
-        true
-        true
-        false
-        null
-      ];
-      i = ".bak";
-      testsuite = [
-        "unit"
-        "integration"
-      ];
-      e = [
-        "s/a/b/"
-        "s/b/c/"
-      ];
-      n = false;
-      data = builtins.toJSON { id = 0; };
-    };
+    expr =
+      cli.toCommandLineGNU
+        {
+          detachArg =
+            optionName:
+            builtins.elem optionName [
+              "p"
+              "prompt"
+            ];
+        }
+        {
+          v = true;
+          verbose = [
+            true
+            true
+            false
+            null
+          ];
+          i = ".bak";
+          testsuite = [
+            "unit"
+            "integration"
+          ];
+          e = [
+            "s/a/b/"
+            "s/b/c/"
+          ];
+          n = false;
+          data = builtins.toJSON { id = 0; };
+          p = "";
+          P = "";
+          prompt = "";
+        };
 
     expected = [
+      "-P"
       "--data={\"id\":0}"
       "-es/a/b/"
       "-es/b/c/"
       "-i.bak"
+      "-p"
+      ""
+      "--prompt"
+      ""
       "--testsuite=unit"
       "--testsuite=integration"
       "-v"
