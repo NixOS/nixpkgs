@@ -58,20 +58,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nbb+ob16I3rHQ8BEN041nmQItHDBoakB3SojD0tCy9w=";
+    hash = "sha256-QAgYeWV37VtEnvoDvqEAqXoR1mRVVpyA4XqCPEXGSGk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-/yGajAaFupPmL1/HL2qMGdpG8l0kP5t5iwb0/u2ANi8=";
+    hash = "sha256-0ZBSIIfZwxgtEGvedEEc7bbod2UUeFGGqquJna7cr8s=";
   };
 
   inherit matrix-js-sdk;
