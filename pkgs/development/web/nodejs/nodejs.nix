@@ -551,6 +551,10 @@ let
             # patch does not apply
             ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
             ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
+            # https://github.com/NixOS/nixpkgs/issues/564449
+            ++ lib.optional (
+              majorVersion == "26" && !stdenv.buildPlatform.isDarwin
+            ) "test-fs-cp-async-file-modes"
           )
         }"
       ];
