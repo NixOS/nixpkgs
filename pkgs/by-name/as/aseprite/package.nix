@@ -34,14 +34,14 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.18.3";
+  version = "1.3.18.5";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-pMjBFJ1nhSNLITDS4oliD2DPMey6JBWplIqdcOtZfqM=";
+    hash = "sha256-8BLbAX+wif4vJySv11/NGzGrwRIsK3tvKhpkX2Zoci0=";
   };
 
   asepriteStrings = fetchFromGitHub {
