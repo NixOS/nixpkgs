@@ -53,8 +53,7 @@ python312Packages.buildPythonApplication rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}-cargo-deps";
-    # Resolved from the first worker build log (standard fakeHash flow).
-    hash = lib.fakeHash;
+    hash = "sha256-6Ll2PjKEeU2zxxq3QVaYbj/VmP5xlyx4S/T42OeZE64=";
   };
 
   build-system = with python312Packages; [

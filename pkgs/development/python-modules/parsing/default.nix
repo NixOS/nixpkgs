@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iCtcON9AyCdlwEIYP41I/K4wUCNp6w/wwzBqLPcpodg=";
+    hash = "sha256-CP8ZQhU2be/qJuiys2Q2PNzQ0+RktCsdSbuGx2QspQQ=";
   };
 
   build-system = [setuptools];
