@@ -5,14 +5,15 @@
   makeDesktopItem,
   copyDesktopItems,
 
-  electron_42,
+  electron_44,
   zip,
   makeWrapper,
+  darwin,
 
   gomuks-web,
 }:
 let
-  electron = electron_42;
+  electron = electron_44;
 in
 buildNpmPackage (finalAttrs: {
   pname = "gomuks-desktop";
@@ -30,12 +31,18 @@ buildNpmPackage (finalAttrs: {
   patches = [
     # allow specifying location of icons and gomuks-web binary at runtime
     ./resources-path.patch
+
+    # prevent electron forge from signing the app itself
+    ./electron-forge-disable-signing.patch
   ];
 
   nativeBuildInputs = [
     zip
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   env = {
@@ -62,7 +69,8 @@ buildNpmPackage (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/share/gomuks-desktop
     cp -r out/gomuks-desktop-*/resources $out/share/gomuks-desktop
 
@@ -77,6 +85,22 @@ buildNpmPackage (finalAttrs: {
       --inherit-argv0
 
     runHook copyDesktopItems
+    runHook postInstall
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    mkdir -p $out/Applications
+
+    cp -r out/gomuks-desktop-*/gomuks-desktop.app $out/Applications/
+    mv $out/Applications/{gomuks-desktop,Gomuks}.app
+
+    mv $out/Applications/Gomuks.app/Contents/MacOS/gomuks-desktop \
+      $out/Applications/Gomuks.app/Contents/MacOS/gomuks-desktop-bin
+    makeWrapper $out/Applications/Gomuks.app/Contents/MacOS/gomuks-desktop-bin \
+      $out/Applications/Gomuks.app/Contents/MacOS/gomuks-desktop \
+      --set-default GOMUKS_DESKTOP_BINARY_PATH ${gomuks-web}/bin/gomuks-web \
+      --set-default GOMUKS_DESKTOP_RESOURCES_PATH $out/Applications/Gomuks.app/Contents/Resources/ \
+      --inherit-argv0
+
     runHook postInstall
   '';
 
@@ -108,7 +132,6 @@ buildNpmPackage (finalAttrs: {
       logn
       xaltsc
     ];
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = electron.meta.platforms;
   };
 })
