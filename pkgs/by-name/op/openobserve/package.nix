@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.0.3";
   updateScript = gitUpdater {
     rev-prefix = "v";
     ignoredVersions = "rc";
@@ -139,7 +139,7 @@ else
         owner = "openobserve";
         repo = "openobserve";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-rC4aykzrcMskAtEyW3XJyAYG4H0p+mTe66uyrfZr+3U=";
+        hash = "sha256-lSsLW6QmDLuRD+hak1ya0cKjDJW50iiErhsDYUo4bcc=";
       };
 
       patches = [
