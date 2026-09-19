@@ -1,0 +1,70 @@
+diff --git a/configure.ac b/configure.ac
+index 1c1c4e7..f3fa1fd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,1 +1,1 @@
+-AC_PREREQ(2.61)
++AC_PREREQ(2.64)
+diff --git a/src/ImageLoader.cpp b/src/ImageLoader.cpp
+index 1c9d1db..e01bfde 100644
+--- a/src/ImageLoader.cpp
++++ b/src/ImageLoader.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "ImageLoader.h"
+diff --git a/src/IOGfxGLFuncs.cpp b/src/IOGfxGLFuncs.cpp
+index a1b6e1b..1ed2999 100644
+--- a/src/IOGfxGLFuncs.cpp
++++ b/src/IOGfxGLFuncs.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "IOGfxGLFuncs.h"
+diff --git a/src/IOGfxPrimitivesSW.cpp b/src/IOGfxPrimitivesSW.cpp
+index 6bd12e8..936362f 100644
+--- a/src/IOGfxPrimitivesSW.cpp
++++ b/src/IOGfxPrimitivesSW.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "SDL.h"
+diff --git a/src/IOGfxSurface.cpp b/src/IOGfxSurface.cpp
+index 87ce98a..76f48f1 100644
+--- a/src/IOGfxSurface.cpp
++++ b/src/IOGfxSurface.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "IOGfxSurface.h"
+diff --git a/src/IOGfxSurfaceSW.cpp b/src/IOGfxSurfaceSW.cpp
+index d4dd5ae..33f89b2 100644
+--- a/src/IOGfxSurfaceSW.cpp
++++ b/src/IOGfxSurfaceSW.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "IOGfxSurfaceSW.h"
+diff --git a/src/dinkc_console_renderer.cpp b/src/dinkc_console_renderer.cpp
+index 4d450df..0b7cbd5 100644
+--- a/src/dinkc_console_renderer.cpp
++++ b/src/dinkc_console_renderer.cpp
+@@ -1,1 +1,2 @@
++#include "../config.h"
+ #include "dinkc_console_renderer.h"
+diff --git a/src/gfx_fonts.cpp b/src/gfx_fonts.cpp
+index 46a1221..b7e29cd 100644
+--- a/src/gfx_fonts.cpp
++++ b/src/gfx_fonts.cpp
+@@ -294,7 +294,7 @@ void setup_font(TTF_Font *font)
+ {
+-  char *familyname = TTF_FontFaceFamilyName(font);
++  const char *familyname = TTF_FontFaceFamilyName(font);
+   if(familyname)
+     log_info("The family name of the face in the font is: %s", familyname);
+-  char *stylename = TTF_FontFaceStyleName(font);
++  const char *stylename = TTF_FontFaceStyleName(font);
+   if(stylename)
+     log_info("The name of the face in the font is: %s", stylename);
+diff --git a/src/input.cpp b/src/input.cpp
+index 91ce43b..34cb93b 100644
+--- a/src/input.cpp
++++ b/src/input.cpp
+@@ -220,1 +220,1 @@ void input_init ()
+-  SDL_SetHint(SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH, "0");
++  /* SDL_SetHint(SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH, "0"); */
