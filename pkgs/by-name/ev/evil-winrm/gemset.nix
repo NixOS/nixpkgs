@@ -29,6 +29,16 @@
     };
     version = "3.3.0";
   };
+  csv = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0kmx36jjh2sahd989vcvw74lrlv07dqc3rnxchc5sj2ywqsw3w3g";
+      type = "gem";
+    };
+    version = "3.3.2";
+  };
   erubi = {
     groups = [ "default" ];
     platforms = [ ];

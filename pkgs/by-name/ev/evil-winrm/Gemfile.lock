@@ -4,6 +4,7 @@ GEM
     base64 (0.3.0)
     bigdecimal (3.3.1)
     builder (3.3.0)
+    csv (3.3.2)
     erubi (1.13.1)
     ffi (1.17.2)
     fileutils (1.7.3)
@@ -48,6 +49,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  csv
   fileutils
   logger
   stringio
