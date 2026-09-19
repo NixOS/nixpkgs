@@ -14,32 +14,26 @@
 }:
 
 let
-  version = "2.0.0";
-  hash = "sha256-rOCMjJV0lFSIlvstkSMqGwXKDZsBkWtTYhvXpA73ucA=";
-  cargoHash = "sha256-ppZYlGWNS5lXQZNt7RcwJIvU5jp07cXhEpmFJ9UtxRE=";
-
-  withOpenssl = stdenv.hostPlatform.isLinux && builtins.elem "native-tls" buildFeatures;
-  emulator = stdenv.hostPlatform.emulator buildPackages;
-  exe = stdenv.hostPlatform.extensions.executable;
+  nativeTls = builtins.elem "native-tls" buildFeatures;
 
 in
-rustPlatform.buildRustPackage {
-  inherit
-    version
-    cargoHash
-    buildFeatures
-    buildNoDefaultFeatures
-    ;
+rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
+  inherit buildFeatures buildNoDefaultFeatures;
 
   pname = "himalaya";
+  version = "2.1.0";
+  cargoHash = "sha256-aBNgXnAjyNYe3FHQ5GhHek5OMWyc3+6h/CIg9qXejYU=";
 
   src = fetchFromGitHub {
-    inherit hash;
     owner = "pimalaya";
-    repo = "himalaya";
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m+eJqHJ9tTHP6dqHyjDxe/fexoEX736Qs8KcrnCqku8=";
   };
 
+  # openssl should not be provided by vendors, not even on windows
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
@@ -47,42 +41,46 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = lib.optional withOpenssl openssl;
+  buildInputs = lib.optional nativeTls openssl;
 
   postInstall =
-    lib.optionalString (lib.hasInfix "wine" emulator) ''
-      export WINEPREFIX="''${WINEPREFIX:-$(mktemp -d)}"
-      mkdir -p $WINEPREFIX
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/${finalAttrs.pname}"
+        else
+          lib.getExe buildPackages.${finalAttrs.pname};
+    in
     ''
-    + ''
-      mkdir -p $out/share/{applications,completions,man,schemas}
-      cp assets/himalaya.desktop "$out"/share/applications/
-      ${emulator} "$out"/bin/himalaya${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
-      ${emulator} "$out"/bin/himalaya${exe} manual "$out"/share/man
-      ${emulator} "$out"/bin/himalaya${exe} json-schema "$out"/share/schemas
+      mkdir -p $out/share/{completions,man,schemas}
+      ${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
+      ${exe} manual "$out"/share/man
+      ${exe} json-schema "$out"/share/schemas
     ''
     + lib.optionalString installManPages ''
       installManPage "$out"/share/man/*
     ''
     + lib.optionalString installShellCompletions ''
-      installShellCompletion --cmd himalaya \
-        --bash "$out"/share/completions/himalaya.bash \
-        --fish "$out"/share/completions/himalaya.fish \
-        --zsh "$out"/share/completions/_himalaya
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash "$out"/share/completions/${finalAttrs.pname}.bash \
+        --fish "$out"/share/completions/${finalAttrs.pname}.fish \
+        --zsh "$out"/share/completions/_${finalAttrs.pname}
     '';
 
   meta = {
     description = "CLI to manage emails";
-    mainProgram = "himalaya";
-    homepage = "https://github.com/pimalaya/himalaya";
-    changelog = "https://github.com/pimalaya/himalaya/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    mainProgram = finalAttrs.pname;
+    homepage = "https://github.com/pimalaya/${finalAttrs.pname}";
+    changelog = "https://github.com/pimalaya/${finalAttrs.pname}/releases/tag/${finalAttrs.src.tag}";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       soywod
       yanganto
     ];
   };
-}
+})
