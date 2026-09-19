@@ -8,6 +8,7 @@
   python3,
   readline,
   lib,
+  nixosTests,
   openssl,
 }:
 
@@ -70,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "man"
   ];
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) ipmi; };
 
   meta = {
     homepage = "https://openipmi.sourceforge.io/";
