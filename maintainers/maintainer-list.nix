@@ -6985,6 +6985,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  denisotree = {
+    email = "denxvd@gmail.com";
+    github = "denisotree";
+    githubId = 14933172;
+    name = "Denis Vdovin";
+  };
   Denommus = {
     email = "yuridenommus@gmail.com";
     github = "Denommus";
