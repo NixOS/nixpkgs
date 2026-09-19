@@ -13052,6 +13052,8 @@ self: super: with self; {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovirt-engine-sdk = callPackage ../development/python-modules/ovirt-engine-sdk { };
+
   ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
