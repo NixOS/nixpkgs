@@ -259,7 +259,17 @@ with haskellLib;
             })
           ] super.fourmolu;
 
-          haskell-language-server = dontCheck super.haskell-language-server;
+          haskell-language-server = lib.pipe super.haskell-language-server [
+            dontCheck
+            (appendPatch (
+              pkgs.fetchpatch {
+                # https://github.com/haskell/haskell-language-server/pull/5093 krank:ignore-line
+                name = "bump-ormolu-bound.patch";
+                url = "https://github.com/haskell/haskell-language-server/commit/cc51a0458cbfcf1e7d5524bde26e84a1f09b5fc1.patch";
+                hash = "sha256-Eo6UBCgJMNVayVqJkA1J9/4eNQr16xiVPFVy3iFZhbU";
+              }
+            ))
+          ];
         }
       )
     )
