@@ -39,6 +39,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python API for interacting with the Stiebel Eltron ISG web gateway via Modbus";
     homepage = "https://github.com/ThyMYthOS/python-stiebel-eltron";
+    changelog = "https://github.com/ThyMYthOS/python-stiebel-eltron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
