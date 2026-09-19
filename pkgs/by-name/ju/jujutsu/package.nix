@@ -94,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       thoughtpolice
       emily
       bbigras
+      graysontinker
     ];
     mainProgram = "jj";
   };
