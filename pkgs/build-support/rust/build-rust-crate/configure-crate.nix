@@ -245,14 +245,18 @@ in
      done
      IFS="$_OLDIFS"
 
-     CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
+     # Cargo exposes DEP_ metadata only for packages with links.
+     # https://github.com/rust-lang/cargo/blob/175537e6698a02940dd181ffcd466a46e5d73b57/src/compiler/custom_build.rs#L568-L575
+     METADATA_PREFIX=$(echo ${lib.escapeShellArg crateLinks} | sed -e "s/-/_/g")
      # SemVer allows version numbers to contain alphanumeric characters and `.+-`
      # which aren't legal bash identifiers.
      # https://semver.org/#backusnaur-form-grammar-for-valid-semver-versions
      CRATEVERSION=$(echo ${crateVersion} | sed -e "s/[\.\+-]/_/g")
-     grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
-       | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
-                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; print \"export \" toupper(\"DEP_$(echo $CRATENAME)_$(echo $CRATEVERSION)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
+     if [[ -n "$METADATA_PREFIX" ]]; then
+       grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
+         | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $METADATA_PREFIX)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
+                    /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $METADATA_PREFIX)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; print \"export \" toupper(\"DEP_$(echo $METADATA_PREFIX)_$(echo $CRATEVERSION)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
+     fi
      set -e
   fi
   runHook postConfigure
