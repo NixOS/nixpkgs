@@ -1,36 +1,22 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  libx11,
-  libxext,
-  libxrandr,
-  libxinerama,
-  libglvnd,
-  openal,
-  glibc,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
+  pkgsi686Linux,
 }:
-let
-  version = "1.3";
-in
-stdenv.mkDerivation {
+
+pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "unigine-tropics";
-  inherit version;
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://assets.unigine.com/d/Unigine_Tropics-${version}.run";
-    sha256 = "sha256-/eA1i42/PMcoBbUJIGS66j7QpZ13oPkOi1Y6Q27TikU=";
+    url = "https://assets.unigine.com/d/Unigine_Tropics-${finalAttrs.version}.run";
+    hash = "sha256-/eA1i42/PMcoBbUJIGS66j7QpZ13oPkOi1Y6Q27TikU=";
   };
 
   libPath = lib.makeLibraryPath [
-    libglvnd
-    openal
-    glibc
+    pkgsi686Linux.libglvnd
+    pkgsi686Linux.openal
+    pkgsi686Linux.glibc
   ];
 
   installPhase = ''
@@ -60,7 +46,7 @@ stdenv.mkDerivation {
   '';
 
   desktopItems = [
-    (makeDesktopItem {
+    (pkgsi686Linux.makeDesktopItem {
       name = "Tropics";
       exec = "Tropics";
       genericName = "A GPU Stress test tool from the UNIGINE";
@@ -70,18 +56,18 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    imagemagick
-    copyDesktopItems
+    pkgsi686Linux.autoPatchelfHook
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.imagemagick
+    pkgsi686Linux.copyDesktopItems
   ];
 
   buildInputs = [
-    stdenv.cc.cc
-    libx11
-    libxext
-    libxrandr
-    libxinerama
+    pkgsi686Linux.stdenv.cc.cc
+    pkgsi686Linux.libx11
+    pkgsi686Linux.libxext
+    pkgsi686Linux.libxrandr
+    pkgsi686Linux.libxinerama
   ];
 
   dontUnpack = true;
@@ -98,4 +84,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "Tropics";
   };
-}
+})
