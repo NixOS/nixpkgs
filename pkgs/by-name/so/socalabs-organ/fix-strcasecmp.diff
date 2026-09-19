@@ -1,0 +1,12 @@
+diff --git a/plugin/setBfree/src/tonegen.c b/plugin/setBfree/src/tonegen.c
+index 314a302..132bf7a 100644
+--- a/plugin/setBfree/src/tonegen.c
++++ b/plugin/setBfree/src/tonegen.c
+@@ -29,6 +29,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <strings.h>
+ 
+ #include "global_inst.h"
+ #include "main.h"
