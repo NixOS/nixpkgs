@@ -29775,6 +29775,12 @@
     githubId = 5356506;
     name = "Tricia Tan";
   };
+  tristanqtn = {
+    email = "tristan.querton@gmail.com";
+    github = "tristanqtn";
+    githubId = 77152870;
+    name = "Tristan Querton";
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";
