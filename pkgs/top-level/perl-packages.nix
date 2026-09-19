@@ -30246,7 +30246,7 @@ with self;
     ];
     meta = {
       description = "Utility functions for REST applications";
-      homepage = "https://jaldhar.github.com/REST-Utils";
+      homepage = "https://jaldhar.github.io/REST-Utils/";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
