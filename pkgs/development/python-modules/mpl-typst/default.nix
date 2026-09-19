@@ -60,7 +60,7 @@ buildPythonPackage rec {
     "test_draw_image_spy"
   ];
 
-  disabledTestPaths = lib.optional stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # fatal error when matplotlib creates a canvas
     "mpl_typst/backend_test.py"
   ];

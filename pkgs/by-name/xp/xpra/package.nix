@@ -238,7 +238,7 @@ effectiveBuildPythonApplication rec {
     "--with-pam"
     "--with-vsock"
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     "--with-nvenc"
     "--with-nvjpeg_encoder"
   ];
