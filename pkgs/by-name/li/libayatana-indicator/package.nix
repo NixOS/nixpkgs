@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-indicator";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-indicator";
     rev = finalAttrs.version;
-    sha256 = "sha256-OsguZ+jl274uPSCTFHq/ZwUE3yHR7MlUPHCpfmn1F7A=";
+    sha256 = "sha256-1fdISeo9854CBNfgE9/ihnqS0ozb5LGw9XKxwKx0xCI=";
   };
 
   nativeBuildInputs = [
