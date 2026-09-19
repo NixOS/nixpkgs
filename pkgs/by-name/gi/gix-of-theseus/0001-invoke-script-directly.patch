@@ -1,0 +1,130 @@
+From dc6a2f346fcef780e635fedb08e29af4cd30bd98 Mon Sep 17 00:00:00 2001
+From: Daniel Woffinden <daw@hey.com>
+Date: Tue, 8 Sep 2026 19:54:29 +0100
+Subject: [PATCH] invoke script directly
+
+---
+ src/main.rs | 19 ++++++-----------
+ src/plot.rs | 59 +++++------------------------------------------------
+ 2 files changed, 11 insertions(+), 67 deletions(-)
+
+diff --git a/src/main.rs b/src/main.rs
+index 149fe36..ddf6f26 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -64,7 +64,6 @@ fn main() -> Result<()> {
+     match args.subcommand {
+         Subcommands::Plot(args) => plot::run_stackplot(args.input_file, args.output_file, None),
+         Subcommands::Analyze(args) => {
+-            let python_runner = plot::get_python_runner();
+             let repo_path = Path::new(&args.repo_path);
+             let repo_name = repo_path.file_name().unwrap().to_str().unwrap();
+ 
+@@ -73,18 +72,12 @@ fn main() -> Result<()> {
+             let cohorts_file = analyze_repo(&args.repo_path, outdir.clone(), args.all_filetypes)
+                 .expect("Error analyzing repo");
+             if !args.no_plot {
+-                if python_runner.is_some() {
+-                    let image_file = outdir.join("stackplot.png");
+-                    plot::run_stackplot(
+-                        cohorts_file.display().to_string().clone(),
+-                        image_file.display().to_string(),
+-                        Some(repo_name.to_string()),
+-                    )?;
+-                } else {
+-                    println!(
+-                        "No Python PEP 723 script runner found (tried: uv, pipx), we won't be able to plot the chart automatically and will only save the raw to cohorts.json.\nYou can install uv with `pip install uv` or pipx with `pip install pipx`"
+-                    );
+-                }
++                let image_file = outdir.join("stackplot.png");
++                plot::run_stackplot(
++                    cohorts_file.display().to_string().clone(),
++                    image_file.display().to_string(),
++                    Some(repo_name.to_string()),
++                )?;
+             }
+             Ok(())
+         }
+diff --git a/src/plot.rs b/src/plot.rs
+index 017adbd..cc4d1df 100644
+--- a/src/plot.rs
++++ b/src/plot.rs
+@@ -1,70 +1,21 @@
+ use anyhow::Result;
+-use std::io::Write;
+ use std::process::Command;
+-use std::sync::OnceLock;
+-use std::{env, fs};
+ 
+-const STACKPLOT_SCRIPT: &str = include_str!("stackplot.py");
+-
+-static PYTHON_SCRIPT_RUNNER: OnceLock<Option<String>> = OnceLock::new();
+-
+-pub fn get_python_runner() -> Option<String> {
+-    PYTHON_SCRIPT_RUNNER
+-        .get_or_init(|| {
+-            let runners = ["uv", "pipx"];
+-
+-            for runner in runners {
+-                if Command::new(runner)
+-                    .arg("--version")
+-                    .output()
+-                    .map(|output| output.status.success())
+-                    .unwrap_or(false)
+-                {
+-                    return Some(runner.to_string());
+-                }
+-            }
+-
+-            None
+-        })
+-        .clone()
+-}
+ pub fn run_stackplot(input_file: String, output_file: String, title: Option<String>) -> Result<()> {
+-    let runner = get_python_runner().ok_or_else(|| anyhow::anyhow!("No Python runner found"))?;
++    let path = "stackplot.py";
+ 
+-    let mut path = env::temp_dir();
+-    path.push("stackplot.py");
+-
+-    let mut file = fs::File::create(&path)?;
+-    file.write_all(STACKPLOT_SCRIPT.as_bytes())?;
+-
+-    let status = if runner == "uv" {
+-        Command::new(&runner)
+-            .arg("run")
+-            .arg(&path)
+-            .arg("--outfile")
+-            .arg(output_file)
+-            .arg("--title")
+-            .arg(title.unwrap_or_default())
+-            .arg(input_file)
+-            .status()?
+-    } else if runner == "pipx" {
+-        Command::new(&runner)
+-            .arg("run")
+-            .arg(&path)
++    let status =
++        Command::new(&path)
+             .arg("--outfile")
+             .arg(output_file)
+             .arg("--title")
+             .arg(title.unwrap_or_default())
+             .arg(input_file)
+-            .status()?
+-    } else {
+-        anyhow::bail!("Unsupported runner: {}", runner);
+-    };
++            .status()?;
+ 
+     if !status.success() {
+-        anyhow::bail!("Failed to execute '{} run {}'", runner, path.display());
++        anyhow::bail!("Failed to execute '{}'", path);
+     }
+ 
+-    fs::remove_file(path)?;
+     Ok(())
+ }
+-- 
+2.54.0
+
