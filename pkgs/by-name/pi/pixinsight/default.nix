@@ -5,7 +5,6 @@
   bubblewrap,
   fakeroot,
   unixtools,
-  cudaSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,12 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
         --install-mime-dir=$out/share/mime \
         --install-icons-dir=$out/share/icons/hicolor \
         --no-bin-launcher"
-  ''
-  + lib.optionalString cudaSupport ''
-    # Remove bundled libtensorflow-cpu files
-    rm -f $out/opt/PixInsight/bin/lib/libtensorflow*
-  ''
-  + ''
+
     runHook postInstall
   '';
 
