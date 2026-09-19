@@ -9,6 +9,7 @@
   updateAutotoolsGnuConfigScriptsHook,
   testers,
   pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
+  versionCheckHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -51,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # In native builds, it will use the newly-compiled file instead.
   makeFlags = lib.optional (
