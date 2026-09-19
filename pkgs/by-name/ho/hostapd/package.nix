@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hostapd";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchurl {
     url = "https://w1.fi/releases/hostapd-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
+    sha256 = "sha256-9DUCVhwoukerd+GOGpc9BzYcaMyLFBeOYZvVeWtw6r0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

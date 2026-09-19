@@ -1,4 +1,4 @@
-commit ca4bcfbd9d2233c90080b9ad400bf576db221781
+commit d88fba577e027c9849b39af57038b6dc8a0db6c2
 Author: rnhmjoj <rnhmjoj@inventati.org>
 Date:   Sat Sep 13 13:54:00 2025 +0200
 
@@ -24,10 +24,10 @@ index df538e332..71195d0d3 100644
        </varlistentry>
  
 diff --git a/wpa_supplicant/main.c b/wpa_supplicant/main.c
-index 9229eb51f..ff877f3b9 100644
+index 4874bcf11..418a7c29b 100644
 --- a/wpa_supplicant/main.c
 +++ b/wpa_supplicant/main.c
-@@ -76,7 +76,7 @@ static void usage(void)
+@@ -79,7 +79,7 @@ static void usage(void)
  	       "  -G = global ctrl_interface group\n"
  	       "  -h = show this help text\n"
  	       "  -i = interface name\n"
@@ -36,7 +36,7 @@ index 9229eb51f..ff877f3b9 100644
  	       "  -K = include keys (passwords, etc.) in debug output\n"
  	       "  -L = show license (BSD)\n"
  #ifdef CONFIG_P2P
-@@ -183,7 +183,8 @@ int main(int argc, char *argv[])
+@@ -194,7 +194,8 @@ int main(int argc, char *argv[])
  {
  	int c, i;
  	struct wpa_interface *ifaces, *iface;
@@ -46,7 +46,7 @@ index 9229eb51f..ff877f3b9 100644
  	struct wpa_params params;
  	struct wpa_global *global;
  
-@@ -253,7 +254,15 @@ int main(int argc, char *argv[])
+@@ -264,7 +265,15 @@ int main(int argc, char *argv[])
  			iface->ifname = optarg;
  			break;
  		case 'I':
@@ -64,10 +64,10 @@ index 9229eb51f..ff877f3b9 100644
  		case 'K':
  			params.wpa_debug_show_keys++;
 diff --git a/wpa_supplicant/wpa_supplicant.c b/wpa_supplicant/wpa_supplicant.c
-index d45002fd9..af5836ef5 100644
+index d872c1e31..dc2a998be 100644
 --- a/wpa_supplicant/wpa_supplicant.c
 +++ b/wpa_supplicant/wpa_supplicant.c
-@@ -675,8 +675,10 @@ static void wpa_supplicant_cleanup(struct wpa_supplicant *wpa_s)
+@@ -665,8 +665,10 @@ static void wpa_supplicant_cleanup(struct wpa_supplicant *wpa_s)
  	os_free(wpa_s->confname);
  	wpa_s->confname = NULL;
  
@@ -80,7 +80,7 @@ index d45002fd9..af5836ef5 100644
  
  	os_free(wpa_s->last_con_fail_realm);
  	wpa_s->last_con_fail_realm = NULL;
-@@ -1404,6 +1406,7 @@ int wpa_supplicant_reload_configuration(struct wpa_supplicant *wpa_s)
+@@ -1428,6 +1430,7 @@ int wpa_supplicant_reload_configuration(struct wpa_supplicant *wpa_s)
  	struct wpa_config *conf;
  	int reconf_ctrl;
  	int old_ap_scan;
@@ -88,19 +88,20 @@ index d45002fd9..af5836ef5 100644
  
  	if (wpa_s->confname == NULL)
  		return -1;
-@@ -1413,12 +1416,14 @@ int wpa_supplicant_reload_configuration(struct wpa_supplicant *wpa_s)
+@@ -1438,13 +1441,14 @@ int wpa_supplicant_reload_configuration(struct wpa_supplicant *wpa_s)
  			"file '%s' - exiting", wpa_s->confname);
  		return -1;
  	}
 -	if (wpa_s->confanother &&
--	    !wpa_config_read(wpa_s->confanother, conf, true)) {
+-	    !wpa_config_read(wpa_s->confanother, conf, true,
+-			     wpa_s->global->params.show_details)) {
 -		wpa_msg(wpa_s, MSG_ERROR,
 -			"Failed to parse the configuration file '%s' - exiting",
 -			wpa_s->confanother);
 -		return -1;
-+
 +	for (i = 0; wpa_s->confanother[i] != NULL; i++) {
-+		if (!wpa_config_read(wpa_s->confanother[i], conf, true)) {
++		if (!wpa_config_read(wpa_s->confanother[i], conf, true,
++				wpa_s->global->params.show_details)) {
 +			wpa_msg(wpa_s, MSG_ERROR,
 +				"Failed to parse the configuration file '%s' - exiting",
 +				wpa_s->confanother[i]);
@@ -109,35 +110,36 @@ index d45002fd9..af5836ef5 100644
  	}
  
  	conf->changed_parameters = (unsigned int) -1;
-@@ -7658,13 +7663,16 @@ static int wpa_supplicant_init_iface(struct wpa_supplicant *wpa_s,
+@@ -7906,14 +7910,16 @@ static int wpa_supplicant_init_iface(struct wpa_supplicant *wpa_s,
  				   "configuration '%s'.", wpa_s->confname);
  			return -1;
  		}
 -		wpa_s->confanother = os_rel2abs_path(iface->confanother);
 -		if (wpa_s->confanother &&
--		    !wpa_config_read(wpa_s->confanother, wpa_s->conf, true)) {
+-		    !wpa_config_read(wpa_s->confanother, wpa_s->conf, true,
+-				     wpa_s->global->params.show_details)) {
 -			wpa_printf(MSG_ERROR,
 -				   "Failed to read or parse configuration '%s'.",
 -				   wpa_s->confanother);
 -			return -1;
-+
 +		for (int i = 0; iface->confanother[i] != NULL; i++) {
 +			wpa_s->confanother[i] = os_rel2abs_path(iface->confanother[i]);
 +			if (wpa_s->confanother[i] &&
-+					!wpa_config_read(wpa_s->confanother[i], wpa_s->conf, true)) {
++				!wpa_config_read(wpa_s->confanother[i], wpa_s->conf, true,
++					wpa_s->global->params.show_details)) {
 +				wpa_printf(MSG_ERROR,
-+						 "Failed to read or parse configuration '%s'.",
-+						 wpa_s->confanother[i]);
++					"Failed to read or parse configuration '%s'.",
++					wpa_s->confanother[i]);
 +				return -1;
 +			}
  		}
  
  		/*
 diff --git a/wpa_supplicant/wpa_supplicant_i.h b/wpa_supplicant/wpa_supplicant_i.h
-index 2f77413d5..84c009e78 100644
+index cd763693f..919be6334 100644
 --- a/wpa_supplicant/wpa_supplicant_i.h
 +++ b/wpa_supplicant/wpa_supplicant_i.h
-@@ -66,12 +66,12 @@ struct wpa_interface {
+@@ -67,12 +67,12 @@ struct wpa_interface {
  	const char *confname;
  
  	/**
@@ -152,7 +154,7 @@ index 2f77413d5..84c009e78 100644
  
  	/**
  	 * ctrl_interface - Control interface parameter
-@@ -713,7 +713,7 @@ struct wpa_supplicant {
+@@ -779,7 +779,7 @@ struct wpa_supplicant {
  	char bridge_ifname[16];
  
  	char *confname;

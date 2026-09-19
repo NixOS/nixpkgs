@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  qt5,
+  qt6,
   inkscape,
   imagemagick,
   wpa_supplicant,
@@ -12,14 +12,14 @@ stdenv.mkDerivation {
   inherit (wpa_supplicant) version src patches;
 
   buildInputs = [
-    qt5.qtbase
+    qt6.qtbase
   ];
 
   nativeBuildInputs = [
-    qt5.qmake
+    qt6.qmake
     inkscape
     imagemagick
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   postPatch = ''
