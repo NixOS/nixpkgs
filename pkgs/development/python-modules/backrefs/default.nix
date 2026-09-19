@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "backrefs";
-  version = "6.2";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "backrefs";
     tag = version;
-    hash = "sha256-y0scI6FBvjuvWLx1V3AHiGhtLB2Mk7jCx4hEjOv+ETA=";
+    hash = "sha256-PCFjtCG+rDRtopeIEdW8r7vje5MnC6PigOyHzsEqgTI=";
   };
 
   build-system = [
