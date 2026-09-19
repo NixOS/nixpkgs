@@ -35,6 +35,8 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "requests_futures" ];
 
   meta = {
