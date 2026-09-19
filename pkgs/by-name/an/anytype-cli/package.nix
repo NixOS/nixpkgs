@@ -9,16 +9,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "anytype-cli";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T/mdF+pzApm15Cg2g1ybgU7pEHLsTC4jD7WuXzNqM2M=";
+    hash = "sha256-79YLYbS0pj3n6t+gIvyb7qBmeARJNTuxll4BWt1WMRs=";
   };
 
-  vendorHash = "sha256-S6Xb2XYAn/cTC++1WK5cmXcC6QCZpPoYMRrjk/IPKas=";
+  vendorHash = "sha256-XgZD2klVYwa78AMSs2nPptgzo9xM+Ishs/rUvjVFZks=";
   proxyVendor = true;
 
   env.CGO_ENABLED = 1;
