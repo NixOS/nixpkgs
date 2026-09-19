@@ -174,6 +174,19 @@ in
         '';
       };
 
+      restartOnConfigChange = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether to automatically restart PipeWire and PipeWire PulseAudio
+          when configurations change.
+
+          Restarting can cause issues with clients (e.g. it can stop an audio playback),
+          some applications easily recover from it while others will need to be restarted.
+        '';
+      };
+
       extraConfig = {
         pipewire = mkOption {
           type = attrsOf json.type;
@@ -194,6 +207,9 @@ in
             Additional configuration for the PipeWire server.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire.conf.d`.
+
+            For changes to take effect, PipeWire service has to be restarted,
+            auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
 
             See `man pipewire.conf` for details, and [the PipeWire wiki][wiki] for examples.
 
@@ -270,6 +286,9 @@ in
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire-pulse.conf.d`.
 
+            For changes to take effect, PipeWire PulseAudio service has to be restarted,
+            auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
+
             See `man pipewire-pulse.conf` for details, and [the PipeWire wiki][wiki] for examples.
 
             See also:
@@ -314,6 +333,9 @@ in
 
           LV2/LADSPA dependencies will be picked up from config packages automatically
           via `passthru.requiredLv2Packages`/`passthru.requiredLadspaPackages`.
+
+          For changes to PipeWire or PipeWire PulseAudio to take effect, the corresponding service has to be restarted,
+          auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
         '';
       };
 
@@ -422,6 +444,16 @@ in
     systemd.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
+
+    # Restart services when configs change
+    systemd.services.pipewire.restartTriggers = mkIf cfg.restartOnConfigChange [ configs ];
+    systemd.user.services.pipewire.restartTriggers = mkIf cfg.restartOnConfigChange [ configs ];
+    systemd.services.pipewire-pulse.restartTriggers = mkIf cfg.restartOnConfigChange [ configs ];
+    systemd.user.services.pipewire-pulse.restartTriggers = mkIf cfg.restartOnConfigChange [ configs ];
+    systemd.services.pipewire.stopIfChanged = mkIf cfg.restartOnConfigChange false;
+    systemd.user.services.pipewire.stopIfChanged = mkIf cfg.restartOnConfigChange false;
+    systemd.services.pipewire-pulse.stopIfChanged = mkIf cfg.restartOnConfigChange false;
+    systemd.user.services.pipewire-pulse.stopIfChanged = mkIf cfg.restartOnConfigChange false;
 
     services.udev.packages = [ cfg.package ];
 
