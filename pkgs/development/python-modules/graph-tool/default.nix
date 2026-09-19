@@ -39,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.6";
   pyproject = false;
 
-  strictDeps = true;
-
   __structuredAttrs = true;
 
   src = fetchurl {

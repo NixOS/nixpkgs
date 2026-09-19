@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -33,7 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     pnpmConfigHook
     makeWrapper
+    installAgentSkills
   ];
+
+  # the monorepo vendors the same skills for many agents and packages
+  dontInstallAgentSkills = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -64,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/ctx7 \
       --add-flags "$out/lib/ctx7/dist/index.js"
 
-    cp -R $src/{plugins,rules,skills} $out
+    cp -R $src/{plugins,rules} $out
+    installSkill skills/context7-cli
+    installSkill skills/find-docs
 
     runHook postInstall
   '';

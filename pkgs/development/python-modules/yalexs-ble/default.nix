@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/Yale-Libs/yalexs-ble";
     changelog = "https://github.com/Yale-Libs/yalexs-ble/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

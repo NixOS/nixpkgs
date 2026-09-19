@@ -58,8 +58,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
   ]);
 
-  strictDeps = true;
-
   mesonFlags = [ (lib.mesonBool "network_tests" false) ];
 
   dontWrapGApps = true;

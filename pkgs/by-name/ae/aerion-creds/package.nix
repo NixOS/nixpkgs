@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.3.3";
+  version = "0.3.4";
 
   archMap = {
     "x86_64-linux" = "x86_64";
@@ -16,7 +16,7 @@ let
       or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
 
   shimHashes = {
-    "x86_64" = "sha256-8WvuQgWTJNe4UpmS6uSYDYm46sIqxJbwVZ/J3CRz0OI=";
+    "x86_64" = "sha256-7PLMiY2Aqx33IsdMMtZd2WLsErWLZTAYV+5TcED0pUU=";
     "aarch64" = "sha256-4RvFbxJGwM70huziY2ELoCouTrtMasgoqFUncBeBFvU=";
   };
 in

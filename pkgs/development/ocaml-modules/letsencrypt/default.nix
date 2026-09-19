@@ -14,11 +14,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "letsencrypt";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${finalAttrs.version}/letsencrypt-${finalAttrs.version}.tbz";
-    hash = "sha256-fBSPKtt8roTqhzBlpf9rDg5Y1ieC2lS6XQJNQGncUO0=";
+    hash = "sha256-jv/CxJFhqb4ouC7CvYMXHhVRmgpdlMPIwPYPAMt7Bts=";
   };
 
   buildInputs = [

@@ -53,12 +53,14 @@
   # - Packages required for building extra packages.
   newScope,
   callPackage,
-  makeSetupHook,
-  makeWrapper,
   # - Build Octave Qt GUI:
   enableQt ? false,
-  libsForQt5,
+  qt6Packages,
   libiconv,
+
+  # tests
+  writableTmpDirAsHomeHook,
+  makeFontsConf,
 }:
 
 let
@@ -142,9 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals enableQt [
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
-    libsForQt5.qscintilla
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qt5compat
+    qt6Packages.qscintilla
   ]
   ++ lib.optionals enableJava [
     jdk
@@ -167,35 +170,79 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ]
   ++ lib.optionals enableQt [
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qtscript
-    libsForQt5.qttools
+    qt6Packages.wrapQtAppsHook
+    qt6Packages.qttools
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  # When built with Qt support, Qt's platform integration probes Wayland at
+  # startup, which gives a harmless, but slightly spamming error:
+  #
+  #   XDG_RUNTIME_DIR is invalid or not set in the environment
+  preCheck = lib.optionalString enableQt ''
+    export XDG_RUNTIME_DIR=$TMPDIR
+  '';
+
   enableParallelBuilding = true;
 
-  env =
-    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-      NIX_LDFLAGS = "-lobjc";
-      # https://savannah.gnu.org/bugs/index.php?68042
-      NIX_CFLAGS_COMPILE = "-Wno-format-security";
-    }
-    // lib.optionalAttrs use64BitIdx {
-      # See https://savannah.gnu.org/bugs/?50339
-      F77_INTEGER_8_FLAG = "-fdefault-integer-8";
-    };
+  env = {
+    # gnuplot (invoked by the test suite) requires a fontconfig config
+    # file to exist, or else it errors with "Fontconfig error: Cannot
+    # load default config file: File not found". No fonts are actually
+    # needed to avoid this.
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # gnuplot's degree sign handling requires a UTF-8 locale, or else it
+    # errors with "warning: iconv failed to convert degree sign".
+    # C.UTF-8 is built into glibc itself, so no extra locale-archive
+    # dependency is needed.
+    LC_ALL = "C.UTF-8";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+    NIX_LDFLAGS = "-lobjc";
+    # https://savannah.gnu.org/bugs/index.php?68042
+    NIX_CFLAGS_COMPILE = "-Wno-format-security";
+  }
+  // lib.optionalAttrs use64BitIdx {
+    # See https://savannah.gnu.org/bugs/?50339
+    F77_INTEGER_8_FLAG = "-fdefault-integer-8";
+  };
+
+  # Otherwise `qhelpgenerator` executable is not detected, and Qt support is
+  # not enabled.
+  preConfigure = ''
+    export PATH="$PATH:${qt6Packages.qttools}/libexec"
+  '';
 
   configureFlags = [
-    "--with-blas=blas"
-    "--with-lapack=lapack"
-    (if use64BitIdx then "--enable-64" else "--disable-64")
+    (lib.withFeatureAs true "blas" "blas")
+    (lib.withFeatureAs true "lapack" "lapack")
+    (lib.enableFeature use64BitIdx "64")
+    (lib.enableFeature enableReadline "readline")
+    (lib.withFeatureAs enableQt "qt" (lib.versions.major qt6Packages.qtbase.version))
   ]
-  ++ lib.optionals enableReadline [ "--enable-readline" ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-  ++ lib.optionals enableQt [ "--with-qt=5" ];
+  # Ideally octave would have realized by itself that x is irrelevant for
+  # darwin, but from some reason without this flag the build fails with a
+  # compilation error:
+  #
+  #    In file included from libinterp/dldfcn/__init_fltk__.cc:74:
+  #    In file included from /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/fl_draw.H:27:
+  #    In file included from /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/x.H:30:
+  #    /nix/store/3r8msa1x0x08rgf075vig01w1i2lkbhm-fltk-1.3.11/include/FL/mac.H:32:25: error: typedef redefinition with different types ('class FLWindow *' vs 'XID' (aka 'unsigned long'))
+  #       32 | typedef class FLWindow *Window; // pointer to the FLWindow objective-c class
+  #          |                         ^
+  #    /nix/store/mqyaq13d0h4c8hia4bjgpn02by26nb8q-xorgproto-2025.1/include/X11/X.h:96:13: note: previous definition is here
+  #       96 | typedef XID Window;
+  #          |             ^
+  #      CXX      libinterp/dldfcn/__init_gnuplot___la-__init_gnuplot__.lo
+  #    1 error generated.
+  #
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care

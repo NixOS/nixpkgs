@@ -37,8 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail '"upscayl-bin",' '"${lib.getExe upscayl-ncnn}",'
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     wrapGAppsHook4
     meson

@@ -5,7 +5,7 @@
       "file": "preface.md"
     },
     {
-      "label": "Installation",
+      "label": "Getting started",
       "id": "ch-installation",
       "children": [
         {
@@ -46,20 +46,11 @@
         },
         {
           "file": "installation/upgrading.chapter.md"
-        },
-        {
-          "file": "installation/building-nixos.chapter.md"
-        },
-        {
-          "file": "installation/building-images-via-nixos-rebuild-build-image.chapter.md"
-        },
-        {
-          "file": "installation/building-images-via-systemd-repart.chapter.md"
         }
       ]
     },
     {
-      "label": "Configuration",
+      "label": "Guides",
       "id": "ch-configuration",
       "children": [
         {
@@ -91,19 +82,13 @@
               "file": "configuration/package-mgmt.chapter.md"
             },
             {
-              "label": "Declarative Package Management",
-              "id": "sec-declarative-package-mgmt",
-              "children": [
-                {
-                  "file": "configuration/declarative-packages.section.md"
-                },
-                {
-                  "file": "configuration/customizing-packages.section.md"
-                },
-                {
-                  "file": "configuration/adding-custom-packages.section.md"
-                }
-              ]
+              "file": "configuration/declarative-packages.section.md"
+            },
+            {
+              "file": "configuration/customizing-packages.section.md"
+            },
+            {
+              "file": "configuration/adding-custom-packages.section.md"
             },
             {
               "file": "configuration/ad-hoc-packages.section.md"
@@ -133,18 +118,6 @@
               "file": "configuration/overlayfs.section.md"
             }
           ]
-        },
-        {
-          "file": "configuration/x-windows.chapter.md"
-        },
-        {
-          "file": "configuration/wayland.chapter.md"
-        },
-        {
-          "file": "configuration/gpu-accel.chapter.md"
-        },
-        {
-          "file": "configuration/xfce.chapter.md"
         },
         {
           "label": "Networking",
@@ -180,104 +153,61 @@
           ]
         },
         {
-          "file": "configuration/linux-kernel.chapter.md"
-        },
-        {
-          "file": "configuration/subversion.chapter.md"
-        },
-        "@MODULE_CHAPTERS@",
-        {
-          "label": "Profiles",
-          "id": "ch-profiles",
+          "label": "Graphical Desktops",
+          "id": "sec-x11",
           "children": [
             {
-              "file": "configuration/profiles.chapter.md"
+              "file": "configuration/x-windows.chapter.md"
             },
             {
-              "file": "configuration/profiles/all-hardware.section.md"
+              "file": "configuration/wayland.chapter.md"
             },
             {
-              "file": "configuration/profiles/base.section.md"
+              "file": "configuration/gpu-accel.chapter.md"
             },
             {
-              "file": "configuration/profiles/clone-config.section.md"
-            },
-            {
-              "file": "configuration/profiles/demo.section.md"
-            },
-            {
-              "file": "configuration/profiles/docker-container.section.md"
-            },
-            {
-              "file": "configuration/profiles/graphical.section.md"
-            },
-            {
-              "file": "configuration/profiles/headless.section.md"
-            },
-            {
-              "file": "configuration/profiles/installation-device.section.md"
-            },
-            {
-              "file": "configuration/profiles/perlless.section.md"
-            },
-            {
-              "file": "configuration/profiles/minimal.section.md"
-            },
-            {
-              "file": "configuration/profiles/qemu-guest.section.md"
+              "file": "configuration/xfce.chapter.md"
             }
           ]
         },
         {
-          "file": "configuration/mattermost.chapter.md"
-        },
-        {
-          "file": "configuration/kubernetes.chapter.md"
-        }
-      ]
-    },
-    {
-      "label": "Administration",
-      "id": "ch-running",
-      "children": [
-        {
-          "file": "administration/running.md"
-        },
-        {
-          "file": "administration/service-mgmt.chapter.md"
-        },
-        {
-          "file": "administration/rebooting.chapter.md"
-        },
-        {
-          "file": "administration/user-sessions.chapter.md"
-        },
-        {
-          "file": "administration/control-groups.chapter.md"
-        },
-        {
-          "file": "administration/logging.chapter.md"
-        },
-        {
-          "label": "Necessary system state",
-          "id": "ch-system-state",
+          "label": "Building Images",
+          "id": "sec-building-image",
           "children": [
             {
-              "file": "administration/system-state.chapter.md"
+              "file": "installation/building-nixos.chapter.md"
             },
             {
-              "file": "administration/nixos-state.section.md"
+              "file": "installation/building-images-via-nixos-rebuild-build-image.chapter.md"
             },
             {
-              "file": "administration/systemd-state.section.md"
-            },
-            {
-              "file": "administration/zfs-state.section.md"
+              "file": "installation/building-images-via-systemd-repart.chapter.md"
             }
           ]
         },
         {
-          "file": "administration/cleaning-store.chapter.md"
+          "label": "Administration",
+          "id": "ch-running",
+          "children": [
+            {
+              "file": "administration/running.md"
+            },
+            {
+              "file": "administration/service-mgmt.chapter.md"
+            },
+            {
+              "file": "administration/rebooting.chapter.md"
+            },
+            {
+              "file": "administration/user-sessions.chapter.md"
+            },
+            {
+              "file": "administration/logging.chapter.md"
+            },
+            {
+              "file": "administration/cleaning-store.chapter.md"
+            }
+          ]
         },
         {
           "label": "Container Management",
@@ -324,7 +254,128 @@
       ]
     },
     {
-      "label": "Development",
+      "label": "Services and Programs",
+      "id": "ch-services",
+      "children": [
+        {
+          "file": "services.md"
+        },
+        "@MODULE_CHAPTERS@",
+        {
+          "file": "configuration/subversion.chapter.md"
+        },
+        {
+          "file": "configuration/mattermost.chapter.md"
+        },
+        {
+          "file": "configuration/kubernetes.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Reference",
+      "id": "ch-reference",
+      "children": [
+        {
+          "file": "reference.md"
+        },
+        {
+          "label": "Profiles",
+          "id": "ch-profiles",
+          "children": [
+            {
+              "file": "configuration/profiles.chapter.md"
+            },
+            {
+              "file": "configuration/profiles/all-hardware.section.md"
+            },
+            {
+              "file": "configuration/profiles/base.section.md"
+            },
+            {
+              "file": "configuration/profiles/clone-config.section.md"
+            },
+            {
+              "file": "configuration/profiles/demo.section.md"
+            },
+            {
+              "file": "configuration/profiles/docker-container.section.md"
+            },
+            {
+              "file": "configuration/profiles/graphical.section.md"
+            },
+            {
+              "file": "configuration/profiles/headless.section.md"
+            },
+            {
+              "file": "configuration/profiles/installation-device.section.md"
+            },
+            {
+              "file": "configuration/profiles/perlless.section.md"
+            },
+            {
+              "file": "configuration/profiles/minimal.section.md"
+            },
+            {
+              "file": "configuration/profiles/qemu-guest.section.md"
+            }
+          ]
+        },
+        {
+          "file": "configuration/linux-kernel.chapter.md"
+        },
+        {
+          "label": "Necessary system state",
+          "id": "ch-system-state",
+          "children": [
+            {
+              "file": "administration/system-state.chapter.md"
+            },
+            {
+              "file": "administration/nixos-state.section.md"
+            },
+            {
+              "file": "administration/systemd-state.section.md"
+            },
+            {
+              "file": "administration/zfs-state.section.md"
+            }
+          ]
+        },
+        {
+          "label": "What happens during a system switch?",
+          "id": "sec-switching-systems",
+          "children": [
+            {
+              "file": "development/what-happens-during-a-system-switch.chapter.md"
+            },
+            {
+              "file": "development/unit-handling.section.md"
+            },
+            {
+              "file": "development/activation-script.section.md"
+            },
+            {
+              "file": "development/non-switchable-systems.section.md"
+            },
+            {
+              "file": "development/etc-overlay.section.md"
+            }
+          ]
+        },
+        {
+          "file": "administration/control-groups.chapter.md"
+        },
+        {
+          "file": "development/bootspec.chapter.md"
+        },
+        {
+          "file": "development/modular-services.md"
+        }
+      ]
+    },
+    {
+      "label": "Contributing",
       "id": "ch-development",
       "children": [
         {
@@ -373,36 +424,6 @@
           ]
         },
         {
-          "file": "development/building-parts.chapter.md"
-        },
-        {
-          "file": "development/bootspec.chapter.md"
-        },
-        {
-          "label": "What happens during a system switch?",
-          "id": "sec-switching-systems",
-          "children": [
-            {
-              "file": "development/what-happens-during-a-system-switch.chapter.md"
-            },
-            {
-              "file": "development/unit-handling.section.md"
-            },
-            {
-              "file": "development/activation-script.section.md"
-            },
-            {
-              "file": "development/non-switchable-systems.section.md"
-            },
-            {
-              "file": "development/etc-overlay.section.md"
-            }
-          ]
-        },
-        {
-          "file": "development/writing-documentation.chapter.md"
-        },
-        {
           "label": "NixOS Tests",
           "id": "sec-nixos-tests",
           "children": [
@@ -427,18 +448,21 @@
           ]
         },
         {
+          "file": "development/building-parts.chapter.md"
+        },
+        {
           "file": "development/developing-the-test-driver.chapter.md"
         },
         {
           "file": "development/testing-installer.chapter.md"
         },
         {
-          "file": "development/modular-services.md"
+          "file": "development/writing-documentation.chapter.md"
+        },
+        {
+          "file": "contributing-to-this-manual.chapter.md"
         }
       ]
-    },
-    {
-      "file": "contributing-to-this-manual.chapter.md"
     }
   ]
 }
