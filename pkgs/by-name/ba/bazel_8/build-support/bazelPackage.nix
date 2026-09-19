@@ -30,6 +30,9 @@
   buildInputs ? [ ],
   nativeBuildInputs ? [ ],
   autoPatchelfIgnoreMissingDeps ? null,
+  # Extra impure env vars for the dependency-fetching derivations,
+  # in addition to the proxy variables which are always passed
+  impureEnvVars ? [ ],
 }:
 let
   # FOD produced by `bazel fetch`
@@ -62,6 +65,7 @@ let
         command = "fetch";
         outputHashMode = "recursive";
         commandArgs = [ "--repository_cache=repo_cache" ] ++ commandArgs;
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars;
         bazelPreBuild = ''
           mkdir repo_cache
         '';
@@ -106,6 +110,7 @@ let
             command = "vendor";
             outputHashMode = "recursive";
             commandArgs = [ "--vendor_dir=vendor_dir" ] ++ commandArgs;
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars;
             bazelPreBuild = ''
               mkdir vendor_dir
             '';
