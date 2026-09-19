@@ -15,6 +15,9 @@
           # Connect to the localhost nginx instead of the default
           # https://cache.nixos.org
           cacheURL = "http://localhost/";
+          domain = "example.com";
+          maxConcurrency = 2;
+          metricsAddress = "127.0.0.1:9464";
         };
         environment.systemPackages = [
           pkgs.hello
@@ -47,5 +50,14 @@
     server.succeed(
         "curl -o hello -f http://localhost:8383/nix/store/{}/bin/hello".format(drvHash)
     )
+
+    # `domain` serves the same content under <store-hash>.<domain>
+    server.succeed(
+        'curl -o hello-subdomain -f -H "Host: {}.example.com" http://localhost:8383/bin/hello'.format(drvHash)
+    )
+
+    # `metricsAddress` reports what the instance did, on its own listener
+    server.succeed("curl -sf -o metrics http://127.0.0.1:9464/metrics")
+    server.succeed("grep -q '^nar_serve_requests_total' metrics")
   '';
 }
