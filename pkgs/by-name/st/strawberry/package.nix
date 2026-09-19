@@ -1,9 +1,12 @@
 {
+  _experimental-update-script-combinators,
   alsa-lib,
   boost,
   chromaprint,
   cmake,
+  common-updater-scripts,
   fetchFromGitHub,
+  fetchurl,
   fftw,
   glib-networking,
   gnutls,
@@ -37,23 +40,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.21";
+  version = "1.2.30";
 
   src = fetchFromGitHub {
     owner = "strawberrymusicplayer";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-FI+lyVx9x82o2HZ9YysIlPsSAl94YUD8nrHP0HsmO2E=";
+    hash = "sha256-/exjOFQtWVBUzDaqSbYR5g4N21sZzsiIgkTZ1Qryu/o=";
   };
 
-  patches = [
-    # Link tests against missing gstreamer app
-    # https://github.com/strawberrymusicplayer/strawberry/pull/2252
-    ./strawberry-tests-link-gst-app.patch
-  ];
+  # This is for the apicredentials.h file, when updating the package check that
+  # apicredentials.h contains only secrets and not injected code as it is not
+  # checked in to the GitHub Repository.
+  releaseTarball = fetchurl {
+    url = "https://github.com/strawberrymusicplayer/strawberry/releases/download/${finalAttrs.version}/strawberry-${finalAttrs.version}.tar.xz";
+    hash = "sha256-MP6g/fwvnFRJrDDXisL1Qp+14dAlpNHTRz0Q8qvh7yo=";
+  };
 
-  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
   postPatch = ''
+    tar -xOf "${finalAttrs.releaseTarball}" "strawberry-${finalAttrs.version}/src/apicredentials.h" > src/apicredentials.h
+
+    # the big strawberry shown in the context menu is *very* much in your face,
+    # so use the grey version instead
     substituteInPlace src/context/contextalbum.cpp \
       --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
   '';
@@ -128,7 +136,17 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    {
+      command = [
+        (lib.getExe' common-updater-scripts "update-source-version")
+        "strawberry"
+        "--ignore-same-version"
+        "--source-key=releaseTarball"
+      ];
+    }
+  ];
 
   meta = {
     description = "Music player and music collection organizer";
