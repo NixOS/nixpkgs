@@ -12,11 +12,18 @@
   ripgrep,
   bbe,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   coreutils,
   gnused,
   gnugrep,
   gawk,
   mixBuildDirHook,
+  mixCompileHook,
+  mixDepsCompileHook,
+  mixEscriptSetupHook,
+  mixFodDepsSetupHook,
+  mixNixDepsSetupHook,
+  mixReleaseSetupHook,
 }@inputs:
 
 lib.extendMkDerivation {
@@ -25,7 +32,6 @@ lib.extendMkDerivation {
   excludeDrvArgNames = [
     "compileFlags"
     "erlangCompilerOptions"
-    "mixNixDeps"
   ];
 
   extendDrvArgs =
@@ -41,6 +47,7 @@ lib.extendMkDerivation {
       mixEnv ? "prod",
       mixTarget ? "host",
       compileFlags ? [ ],
+      mixCompileFlags ? compileFlags,
       # Build a particular named release.
       # see https://hexdocs.pm/mix/1.12/Mix.Tasks.Release.html#content
       mixReleaseName ? "",
@@ -106,20 +113,23 @@ lib.extendMkDerivation {
             erlang
             elixir
             hex
-            git
-            mixBuildDirHook
-          ]
-        ++
-          # Mix deps
-          (builtins.attrValues mixNixDeps)
-        ++
-          # other compile-time deps
-          [
-            findutils
-            ripgrep
+
             bbe
+            findutils
+            git
             makeWrapper
-          ];
+            ripgrep
+            writableTmpDirAsHomeHook
+
+            mixBuildDirHook
+            mixCompileHook
+            mixDepsCompileHook
+          ]
+        ++ lib.optionals (escriptBinName != null) [ mixEscriptSetupHook ]
+        ++ lib.optionals (escriptBinName == null) [ mixReleaseSetupHook ]
+        ++ (builtins.attrValues mixNixDeps)
+        ++ lib.optionals (mixFodDeps != null) [ mixFodDepsSetupHook ]
+        ++ lib.optionals (mixNixDeps != { }) ([ mixNixDepsSetupHook ] ++ (builtins.attrValues mixNixDeps));
 
       buildInputs = [
         bashNonInteractive
@@ -158,147 +168,13 @@ lib.extendMkDerivation {
       }
       // (attrs.env or { });
 
-      postUnpack = ''
-        # Mix and Hex
-        export MIX_HOME="$TEMPDIR/mix"
-        export HEX_HOME="$TEMPDIR/hex"
+      inherit erlang;
 
-        # Rebar
-        export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
-        export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
-
-        ${lib.optionalString (mixFodDeps != null) ''
-          # Compilation of the dependencies will require that the dependency path is
-          # writable, thus a copy to the $TEMPDIR is inevitable here.
-          export MIX_DEPS_PATH="$TEMPDIR/deps"
-          cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
-        ''}
-      ''
-      + (attrs.postUnpack or "");
-
-      configurePhase =
-        attrs.configurePhase or ''
-          runHook preConfigure
-
-          # This is needed for projects that have a specific compile step
-          # the dependency needs to be compiled in order for the task
-          # to be available.
-          #
-          # Phoenix projects for example will need compile.phoenix.
-          mix deps.compile --no-deps-check --skip-umbrella-children
-
-          # Symlink dependency sources. This is needed for projects that require
-          # access to the source of their dependencies. For example, Phoenix
-          # projects need javascript assets to build asset bundles.
-          ${lib.optionalString (mixNixDeps != { }) ''
-            mkdir -p deps
-
-            ${lib.concatMapAttrsStringSep "\n" (name: dep: ''
-              dep_path="deps/${name}"
-              if [ -d "${dep}/src" ]; then
-                ln -sv ${dep}/src $dep_path
-              fi
-            '') mixNixDeps}
-          ''}
-
-          # Symlink deps to build root. Similar to above, but allows for mixFodDeps
-          # Phoenix projects to find javascript assets.
-          ${lib.optionalString (mixFodDeps != null) ''
-            ln -s "$MIX_DEPS_PATH" ./deps
-          ''}
-
-          runHook postConfigure
-        '';
-
-      buildPhase =
-        attrs.buildPhase or ''
-          runHook preBuild
-
-          mix compile --no-deps-check ${lib.concatStringsSep " " compileFlags}
-
-          ${lib.optionalString (escriptBinName != null) ''
-            mix escript.build --no-deps-check
-          ''}
-
-          runHook postBuild
-        '';
-
-      installPhase =
-        attrs.installPhase or ''
-          runHook preInstall
-
-          ${
-            if (escriptBinName != null) then
-              ''
-                mkdir -p $out/bin
-                cp ${escriptBinName} $out/bin
-              ''
-            else
-              ''
-                mix release ${mixReleaseName} --no-deps-check --path "$out"
-              ''
-          }
-
-          runHook postInstall
-        '';
-
-      postFixup = ''
-        echo "removing files for Microsoft Windows"
-        rm -f "$out"/bin/*.bat
-
-        echo "wrapping programs in $out/bin with their runtime deps"
-        for f in $(find $out/bin/ -type f -executable); do
-          wrapProgram "$f" \
-            --prefix PATH : ${
-              lib.makeBinPath [
-                coreutils
-                gnused
-                gnugrep
-                gawk
-              ]
-            }
-        done
-      ''
-      + lib.optionalString removeCookie ''
-        if [ -e $out/releases/COOKIE ]; then
-          echo "removing $out/releases/COOKIE"
-          rm $out/releases/COOKIE
-        fi
-      ''
-      + ''
-        if [ -e $out/erts-* ]; then
-          # ERTS is included in the release, then erlang is not required as a runtime dependency.
-          # But, erlang is still referenced in some places. To removed references to erlang,
-          # following steps are required.
-
-          # 1. remove references to erlang from plain text files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
-            echo "removing references to erlang in $file"
-            substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
-          done
-
-          # 2. remove references to erlang from .beam files
-          #
-          # No need to do anything, because it has been handled by "deterministic" option specified
-          # by ERL_COMPILER_OPTIONS.
-
-          # 3. remove references to erlang from normal binary files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches --binary --iglob '!*.beam'); do
-            echo "removing references to erlang in $file"
-            # use bbe to substitute strings in binary files, because using substituteInPlace
-            # on binaries will raise errors
-            bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
-            rm -f "$file"
-            mv "$file".tmp "$file"
-          done
-
-          # References to erlang should be removed from output after above processing.
-        fi
-      ''
-      + lib.optionalString stripDebug ''
-        # Strip debug symbols to avoid hardreferences to "foreign" closures actually
-        # not needed at runtime, while at the same time reduce size of BEAM files.
-        erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
-      '';
+      mixReleaseRuntimePath = lib.makeBinPath [
+        coreutils
+        gnused
+        gnugrep
+        gawk
+      ];
     };
 }
