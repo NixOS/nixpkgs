@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://gitlab.com/BuildGrid/buildbox/buildbox/-/releases/${finalAttrs.version}";
     description = "Set of tools for remote worker build execution";
     homepage = "https://gitlab.com/BuildGrid/buildbox/";
     license = lib.licenses.asl20;
