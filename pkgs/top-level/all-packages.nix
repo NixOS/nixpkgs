@@ -1987,10 +1987,6 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
-  file = callPackage ../tools/misc/file {
-    inherit (windows) libgnurx;
-  };
-
   findutils = callPackage ../tools/misc/findutils { };
 
   bsd-fingerd = bsd-finger.override {
