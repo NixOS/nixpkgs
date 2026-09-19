@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "landrun";
-  version = "0.1.15";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "Zouuup";
     repo = "landrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yfK7Q3FKXp5pXVBNV0w/vN0xuoaTxWCq19ziBQnLapg=";
+    hash = "sha256-BjIRO5qDd5lnNZEE8gmMJP0CN6ZOAIFEb/DzDRD2fu8=";
   };
 
   # Test script requires lots of patching for build sandbox.
@@ -31,7 +31,6 @@ buildGoModule (finalAttrs: {
       --replace-fail '--rox /usr' '--rox ${builtins.storeDir}' \
       --replace-fail '--ro /usr/bin' "" \
       --replace-fail '#!/bin/bash' '#!${stdenv.shell}' \
-      --replace-fail '/usr/bin/true' '$(which true)' \
       --replace-fail 'ls /usr | grep bin' '$(which ls) / | $(which grep) build' \
       --replace-fail 'ls /usr' '$(which ls) /build' \
       --replace-fail 'cat ' '$(which cat) ' \
@@ -44,7 +43,7 @@ buildGoModule (finalAttrs: {
       --replace-fail 'run_test "Root path' 'false && run_test "Root path'
   '';
 
-  vendorHash = "sha256-Bs5b5w0mQj1MyT2ctJ7V38Dy60moB36+T8TFH38FA08=";
+  vendorHash = "sha256-gmmXTffuHFPbPKNY2DrFApXT2xazwnvmM4/aQiepMuY=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -54,13 +53,13 @@ buildGoModule (finalAttrs: {
   postInstallCheck = ''
     # only check functionality if the builder supports it (Linux 5.13+)
     set +e
-    $out/bin/landrun --best-effort --rox ${builtins.storeDir} sh -c 'exit'
+    $out/bin/landrun --best-effort --rox ${builtins.storeDir} -- sh -c 'exit'
     [[ $? != 0 ]] && set -e && return
     set -e
 
     # only run upstream tests if the builder supports all features (Linux 6.7+)
     set +e
-    $out/bin/landrun --rox ${builtins.storeDir} sh -c 'exit'
+    $out/bin/landrun --rox ${builtins.storeDir} -- sh -c 'exit'
     [[ $? == 0 ]] && set -e && export PATH=$out/bin:"$PATH" && ./test.sh --use-system
     set -e
 
@@ -71,20 +70,20 @@ buildGoModule (finalAttrs: {
     echo content > dir1/file1
 
     set +e
-    $out/bin/landrun --best-effort --rox ${builtins.storeDir} sh -c '< dir1/file1'
+    $out/bin/landrun --best-effort --rox ${builtins.storeDir} -- sh -c '< dir1/file1'
     [[ $? == 0 ]] && die
     set -e
 
-    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --ro ./dir1 --env PATH sh -c 'cat dir1/file1' \
+    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --ro ./dir1 --env PATH -- sh -c 'cat dir1/file1' \
       | grep content > /dev/null
 
     set +e
-    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --ro ./dir1 sh -c 'echo x > dir1/file1'
+    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --ro ./dir1 -- sh -c 'echo x > dir1/file1'
     [[ $? == 0 ]] && die
     set -e
     cat dir1/file1 | grep content > /dev/null
 
-    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --rw ./dir1 sh -c 'echo x > dir1/file1'
+    $out/bin/landrun --best-effort --rox ${builtins.storeDir} --rw ./dir1 -- sh -c 'echo x > dir1/file1'
     cat dir1/file1 | grep x > /dev/null
 
     popd
