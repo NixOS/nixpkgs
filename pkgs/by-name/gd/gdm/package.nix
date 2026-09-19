@@ -12,12 +12,10 @@
   itstool,
   accountsservice,
   libx11,
-  libxdmcp,
-  libxcb,
+  libxau,
   gnome,
   systemd,
   dconf,
-  gtk3,
   pam,
   libgudev,
   libselinux,
@@ -83,11 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
     audit
     glib
     json-glib
-    gtk3
     keyutils
     libx11
-    libxdmcp
-    libxcb
+    libxau
     libgudev
     libselinux
     pam
