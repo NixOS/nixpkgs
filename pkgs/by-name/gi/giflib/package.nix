@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./CVE-2021-40633.patch
     ./CVE-2025-31344.patch
+    ./CVE-2026-23868.patch
+    ./CVE-2026-26740.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.

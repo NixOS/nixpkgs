@@ -1,0 +1,49 @@
+diff --git a/dist/source/as-promise/index.js b/dist/source/as-promise/index.js
+index 9575c09d653037596ddf945afccedbbc672c4ee6..4560ce3bdcfdca11b7eaeaba1ff83a28f7a0caac 100644
+--- a/dist/source/as-promise/index.js
++++ b/dist/source/as-promise/index.js
+@@ -30,6 +30,7 @@ function asPromise(normalizedOptions) {
+     let globalRequest;
+     let globalResponse;
+     const emitter = new events_1.EventEmitter();
++    let promiseSettled = false;
+     const promise = new PCancelable((resolve, reject, onCancel) => {
+         const makeRequest = (retryCount) => {
+             const request = new core_1.default(undefined, normalizedOptions);
+@@ -37,7 +38,10 @@ function asPromise(normalizedOptions) {
+             request._noPipe = true;
+             onCancel(() => request.destroy());
+             onCancel.shouldReject = false;
+-            onCancel(() => reject(new types_1.CancelError(request)));
++            onCancel(() => {
++                promiseSettled = true;
++                reject(new types_1.CancelError(request))
++            });
+             globalRequest = request;
+             request.once('response', async (response) => {
+                 var _a;
+@@ -118,12 +122,14 @@ function asPromise(normalizedOptions) {
+                     return;
+                 }
+                 globalResponse = response;
++                promiseSettled = true;
+                 resolve(request.options.resolveBodyOnly ? response.body : response);
+             });
+             const onError = (error) => {
+                 if (promise.isCanceled) {
+                     return;
+                 }
++                promiseSettled = true;
+                 const { options } = request;
+                 if (error instanceof types_1.HTTPError && !options.throwHttpErrors) {
+                     const { response } = error;
+@@ -135,6 +141,9 @@ function asPromise(normalizedOptions) {
+             request.once('error', onError);
+             const previousBody = request.options.body;
+             request.once('retry', (newRetryCount, error) => {
++                if (promiseSettled) {
++                    return;
++                }
+                 var _a, _b;
+                 if (previousBody === ((_a = error.request) === null || _a === void 0 ? void 0 : _a.options.body) && is_1.default.nodeStream((_b = error.request) === null || _b === void 0 ? void 0 : _b.options.body)) {
+                     onError(error);
