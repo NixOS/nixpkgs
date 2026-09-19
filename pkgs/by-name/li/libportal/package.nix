@@ -22,7 +22,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.9.1";
+  version = "0.10.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "libportal";
     rev = finalAttrs.version;
-    sha256 = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
+    sha256 = "sha256-vU3jnHxCvxZMSJOh5hzkCB8uuE0NnbnZM7+eQ6a5+oI=";
   };
 
   depsBuildBuild = [
@@ -67,15 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "qt6") [
     qt6Packages.qtbase
-  ];
-
-  patches = [
-    # See https://github.com/flatpak/libportal/pull/200
-    (fetchpatch2 {
-      name = "libportal-fix-qt6.9-private-api-usage.patch";
-      url = "https://github.com/flatpak/libportal/commit/796053d2eebe4532aad6bd3fd80cdf3b197806ec.patch?full_index=1";
-      hash = "sha256-TPIKKnZCcp/bmmsaNlDxAsKLTBe6BKPCTOutLjXPCHQ=";
-    })
   ];
 
   mesonFlags = [
