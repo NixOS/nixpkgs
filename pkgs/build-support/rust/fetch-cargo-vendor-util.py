@@ -172,7 +172,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
 def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
     cmd = ["cargo", "metadata", "--format-version", "1", "--no-deps", "--manifest-path", str(manifest_path)]
-    output = subprocess.check_output(cmd)
+    output = subprocess.check_output(cmd, cwd=manifest_path.parent)
     return json.loads(output)
 
 
