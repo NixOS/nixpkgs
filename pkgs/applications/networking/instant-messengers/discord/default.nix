@@ -72,6 +72,7 @@ let
     license = lib.licenses.unfree;
     mainProgram = "discord";
     maintainers = with lib.maintainers; [
+      anish
       artturin
       _4evy
       infinidoge
