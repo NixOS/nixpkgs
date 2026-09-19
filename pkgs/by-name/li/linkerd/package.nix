@@ -6,22 +6,16 @@
   installShellFiles,
 }:
 
-{
-  channel,
-  version,
-  sha256,
-  vendorHash,
-}:
-
-buildGoModule rec {
-  pname = "linkerd-${channel}";
-  inherit version vendorHash;
+buildGoModule (finalAttrs: {
+  pname = "linkerd-stable";
+  version = "2.14.9";
+  vendorHash = "sha256-bGl8IZppwLDS6cRO4HmflwIOhH3rOhE/9slJATe+onI=";
 
   src = fetchFromGitHub {
     owner = "linkerd";
     repo = "linkerd2";
-    rev = "${channel}-${version}";
-    inherit sha256;
+    tag = "stable-${finalAttrs.version}";
+    hash = "sha256-R/sxsPV2RnCUplC4f0pMxH9zMsNdPDXlmsxOpAAuvYw=";
   };
 
   subPackages = [ "cli" ];
@@ -40,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+    "-X github.com/linkerd/linkerd2/pkg/version.Version=${finalAttrs.src.tag}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -57,10 +51,10 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
+    $out/bin/linkerd version --client | grep ${finalAttrs.src.tag} > /dev/null
   '';
 
-  passthru.updateScript = (./. + "/update-${channel}.sh");
+  passthru.updateScript = (./. + "/update-stable.sh");
 
   meta = {
     description = "Simple Kubernetes service mesh that improves security, observability and reliability";
@@ -71,4 +65,4 @@ buildGoModule rec {
     maintainers = [
     ];
   };
-}
+})
