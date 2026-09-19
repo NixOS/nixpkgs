@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   unsecvars,
   linuxHeaders,
@@ -31,5 +32,11 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     $CC $CFLAGS ${./wrapper.c} -I${unsecvars} -o $out/bin/security-wrapper
+  '';
+
+  # HACK: Avoid leaking all of `buildInputs` into runtime closure
+  # FIXME when/if https://github.com/NixOS/nixpkgs/issues/83667 is resolved
+  postFixup = lib.optionalString stdenv.hostPlatform.isStatic ''
+    rm $out/nix-support/propagated-build-inputs
   '';
 }
