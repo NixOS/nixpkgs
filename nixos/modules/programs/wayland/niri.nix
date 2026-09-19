@@ -16,6 +16,10 @@ in
     useNautilus = lib.mkEnableOption "Nautilus as file-chooser for xdg-desktop-portal-gnome" // {
       default = true;
     };
+
+    useGnomeKeyring = lib.mkEnableOption "GNOME Keyring as a secret service" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -43,7 +47,7 @@ in
 
           # Recommended by upstream
           # https://github.com/YaLTeR/niri/wiki/Important-Software#portals
-          gnome.gnome-keyring.enable = lib.mkDefault true;
+          gnome.gnome-keyring.enable = lib.mkIf cfg.useGnomeKeyring (lib.mkDefault true);
         };
 
         systemd.packages = [ cfg.package ];
@@ -71,7 +75,7 @@ in
             "org.freedesktop.impl.portal.Access" = "gtk";
             "org.freedesktop.impl.portal.FileChooser" = lib.mkIf (!cfg.useNautilus) "gtk";
             "org.freedesktop.impl.portal.Notification" = "gtk";
-            "org.freedesktop.impl.portal.Secret" = "gnome-keyring";
+            "org.freedesktop.impl.portal.Secret" = lib.mkIf cfg.useGnomeKeyring "gnome-keyring";
           };
 
           # Recommended by upstream, required for screencast support
