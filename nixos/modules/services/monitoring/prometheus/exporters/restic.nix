@@ -16,7 +16,7 @@ let
     mapAttrs'
     splitString
     toUpper
-    optional
+    optionals
     optionalAttrs
     nameValuePair
     ;
@@ -145,7 +145,7 @@ in
       LoadCredential = [
         "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
       ]
-      ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
+      ++ optionals (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
     };
     environment =
       let

@@ -295,7 +295,7 @@ stdenv.mkDerivation (
     dontConfigure = true;
     noDumpEnvVars = true;
 
-    stripExclude = lib.optional hasVsceSign [
+    stripExclude = lib.optionals hasVsceSign [
       # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
       "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
     ];

@@ -35,24 +35,6 @@
   nixosTests,
 }:
 
-let
-  qt6' = qt6.overrideScope (
-    self: super: {
-      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
-      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
-      qtdeclarative = super.qtdeclarative.overrideAttrs (
-        new: old: {
-          patches = old.patches ++ [
-            (fetchpatch {
-              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
-              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
-            })
-          ];
-        }
-      );
-    }
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
   version = "4.7.4";
@@ -124,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qt6'.qttools
-    qt6'.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
     ninja
     pkg-config
   ]
@@ -138,12 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     flac
     freetype
-    qt6'.qt5compat
-    qt6'.qtbase
-    qt6'.qtdeclarative
-    qt6'.qtnetworkauth
-    qt6'.qtscxml
-    qt6'.qtsvg
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtnetworkauth
+    qt6.qtscxml
+    qt6.qtsvg
     lame
     libjack2
     libogg
@@ -160,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    qt6'.qtwayland
+    qt6.qtwayland
   ];
 
   # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
