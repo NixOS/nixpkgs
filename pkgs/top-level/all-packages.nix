@@ -1375,8 +1375,6 @@ with pkgs;
 
   hwi = with python3Packages; toPythonApplication hwi;
 
-  pass = callPackage ../tools/security/pass { };
-
   pass-nodmenu = pass.override {
     dmenuSupport = false;
     pass = pass-nodmenu;
