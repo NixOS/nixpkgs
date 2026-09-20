@@ -7,6 +7,7 @@
   bundlerUpdateScript,
   writeText,
   krb5,
+  testers,
   sslLegacyProvider ? false,
 }:
 let
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = bundlerUpdateScript "evil-winrm";
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
 
   meta = {
     description = "WinRM shell for hacking/pentesting";

@@ -16,18 +16,24 @@
   requests-credssp,
   setuptools,
   xmldiff,
+  # evil-winrm-py requires the 0.8.1 WSMan transport API.
+  legacy ? false,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pypsrp";
-  version = "0.9.1";
+  version = if legacy then "0.8.1" else "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "pypsrp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a0xTYrdy0SwYQ7NS/hm80BAarjhUazP/I/J7PlsIWIM=";
+    hash =
+      if legacy then
+        "sha256-Pwfc9e39sYPdcHN1cZtxxGEglEYzPp4yOYLD5/4SSiU="
+      else
+        "sha256-a0xTYrdy0SwYQ7NS/hm80BAarjhUazP/I/J7PlsIWIM=";
   };
 
   build-system = [ setuptools ];
