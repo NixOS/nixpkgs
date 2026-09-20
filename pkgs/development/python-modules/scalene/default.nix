@@ -41,14 +41,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "scalene";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a8laU7w6DLNIxmfhis/PvYd0iQMSqiQ2j6WURbsWPxk=";
+    hash = "sha256-QvBi1a2fqcOEti80CmPyEc7Oj6zzPy4nhF7KUs+gnYk=";
   };
 
   patches = [
