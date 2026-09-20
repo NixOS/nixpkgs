@@ -35,6 +35,11 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false; # cannot import 'devtools_testutils'
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Azure Image Analysis client library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/vision/azure-ai-vision-imageanalysis";

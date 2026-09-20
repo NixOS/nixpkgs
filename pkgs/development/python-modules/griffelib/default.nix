@@ -63,6 +63,11 @@ buildPythonPackage (finalAttrs: {
     "tests/test_git.py"
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/mkdocstrings/griffe/releases/tag/${finalAttrs.src.tag}";
     description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API";

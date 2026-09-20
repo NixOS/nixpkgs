@@ -84,6 +84,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
