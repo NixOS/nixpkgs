@@ -325,7 +325,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "...";
   };
 })
@@ -367,7 +367,7 @@ Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase rep
    pnpmDeps = fetchPnpmDeps {
      inherit (finalAttrs) pname version src;
 +    pnpm = pnpm_10;
-     fetcherVersion = 4;
+     fetcherVersion = 5;
      hash = "...";
    };
  })
@@ -475,14 +475,14 @@ In this example, `prePnpmInstall` runs in both `pnpmConfigHook` and the `fetchPn
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. Use `4` for new packages:
+This is the version of the output of `fetchPnpmDeps`. Use `5` for new packages:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -501,6 +501,7 @@ Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 2
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975) (removed in 26.11)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
+- 5: [Keep virtual store materializations out of the archived store](https://github.com/NixOS/nixpkgs/pull/565315)
 
 ### Yarn {#javascript-yarn}
 

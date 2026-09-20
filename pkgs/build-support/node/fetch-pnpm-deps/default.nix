@@ -19,6 +19,7 @@ let
   supportedFetcherVersions = [
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
     4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
+    5 # Keep virtual store materializations out of the archived store.
   ];
 in
 {
@@ -59,7 +60,7 @@ in
 
     assert
       !(fetcherVersion == 1 || fetcherVersion == 2)
-      || throw "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` was removed in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 4` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
+      || throw "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` was removed in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 5` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     assert
       builtins.elem fetcherVersion supportedFetcherVersions
@@ -135,6 +136,17 @@ in
 
             # Run any additional pnpm configuration commands that users provide.
             ${prePnpmInstall}
+
+            ${lib.optionalString (fetcherVersion >= 5) ''
+              # The virtual store is a derived installation artifact. Keep it
+              # outside the content-addressable store archived by this fetcher.
+              virtualStorePath=$(mktemp -d)
+              # pnpm 10 and pnpm >= 11 use different configuration prefixes.
+              export npm_config_virtual_store_dir="$virtualStorePath"
+              export npm_config_global_virtual_store_dir="$virtualStorePath"
+              export pnpm_config_virtual_store_dir="$virtualStorePath"
+              export pnpm_config_global_virtual_store_dir="$virtualStorePath"
+            ''}
 
             echo "Final pnpm config:"
             pnpm config list
