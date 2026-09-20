@@ -8,13 +8,14 @@
   perl,
   writeScript,
   enableUnstable ? false,
+  gcc14Stdenv,
 }:
 
 let
   stableVersion = "1.4.0";
 in
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "ath9k-htc-blobless-firmware";
   version = if enableUnstable then "${stableVersion}-unstable-2022-05-22" else stableVersion;
 
