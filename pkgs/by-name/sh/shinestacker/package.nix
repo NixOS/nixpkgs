@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python314.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "shinestacker";
   version = "1.16.2";
   pyproject = true;
