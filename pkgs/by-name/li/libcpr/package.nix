@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "C++ wrapper around libcurl";
-    homepage = "https://docs.libcpr.org/";
+    homepage = "https://github.com/libcpr/cpr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       phodina
