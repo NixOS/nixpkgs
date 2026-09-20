@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cuddly teddy bear for your X desktop";
-    homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
+    homepage = "http://salsa.debian.org/games-team/xteddy";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.linux;
