@@ -208,7 +208,7 @@ lib.makeScope pkgs.newScope (
       meta = {
         broken = gimp.apiVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
-        homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
+        homepage = "https://www.lprp.fr/gimp_plugin_en/";
         license = lib.licenses.gpl3Plus;
       };
     };
