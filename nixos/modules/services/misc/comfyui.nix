@@ -9,6 +9,19 @@ let
 
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
+
+  modelDrvs = map (m: {
+    inherit m;
+    drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
+  }) cfg.models;
+
+  modelSymlinks = lib.concatMapStringsSep "\n" (
+    x:
+    lib.concatMapStringsSep "\n" (p: ''
+      mkdir -p ${lib.escapeShellArg "${cfg.dataDir}/models/${p}"}
+      ln -sn ${x.drv} ${lib.escapeShellArg "${cfg.dataDir}/models/${p}/${x.m.name}"}
+    '') x.m.installPaths
+  ) modelDrvs;
 in
 {
   options = {
@@ -67,6 +80,71 @@ in
           Flags set by the module are prepended with `lib.mkBefore`, so any user supplied flag wins over that.
         '';
       };
+
+      models = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The model file name, used as the link name in `models/<installPath>/<name>`,
+                  and as the `fetchurl` derivation name.
+                  It must be unique within the same `<installPath>`,
+                  since the module creates one symlink per model there.
+                '';
+              };
+              url = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The download URL of the model file.
+                  Prefer a pinned-resolve URL (e.g. HuggingFace's `/resolve/<commit>/<file>`) so the hash stays stable.
+                '';
+              };
+              hash = lib.mkOption {
+                type = lib.types.str;
+                example = lib.fakeHash;
+                description = ''
+                  The SRI hash of the model file. Generate it with `nix-prefetch-url <url>`,
+                  or set this to `lib.fakeHash` and build once:
+                  the resulting error message reports the actual hash to replace it with.
+                '';
+              };
+              installPaths = lib.mkOption {
+                # A single directory name is upgraded to a one-element list; lists are merged by concatenation.
+                type = lib.types.coercedTo (lib.types.strMatching "[A-Za-z0-9_-]+") lib.singleton (
+                  lib.types.nonEmptyListOf (lib.types.strMatching "[A-Za-z0-9_-]+")
+                );
+                description = ''
+                  List of target subdirectory names below `models/`, such as `upscale_models`, `loras`, `checkpoints`.
+                  Write bare directory names (the module assembles them into `models/<installPath>`,
+                  one symlink per install path); a single string is also accepted and upgraded to a one-element list.
+                '';
+                example = [ "upscale_models" ];
+              };
+            };
+          }
+        );
+        default = [ ];
+        example = lib.literalExpression ''
+          [ {
+            name = "RealESRGAN_x4plus_anime_6B.pth";
+            url = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth";
+            hash = "sha256-+HLYN9PJDtLgUie+1xGvVnGm/RyffX6RyRGmHxVemdo=";
+            installPaths = [ "upscale_models" ];
+          } ]
+        '';
+        description = ''
+          ComfyUI models to fetch and symlink into `<dataDir>/models/<installPath>/<name>`,
+          where `<dataDir>` is the directory set by `services.comfyui.dataDir`.
+          Models are fetched at build time via `pkgs.fetchurl` and are not members of the nixpkgs package set,
+          so they never enter the nixpkgs binary cache.
+          Regular files placed manually under `<dataDir>/models/<type>/` are left untouched;
+          only symlinks there are managed (removed and rebuilt at start).
+          A manually placed regular file with the same name as a declared model prevents the service from starting,
+          because the symlink cannot be created over it.
+        '';
+      };
     };
   };
 
@@ -98,6 +176,20 @@ in
             cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
+
+        # Remove all model symlinks pointing into /nix/store,
+        # then rebuild the managed ones below,
+        # so removed declarations no longer leave stale entries.
+        readarray -d "" stale < <(find "${cfg.dataDir}/models" \
+          -type l -print0)
+        for link in "''${stale[@]}"; do
+          if [[ "$(readlink "$link")" == ${lib.escapeShellArg builtins.storeDir}/* ]]; then
+            rm "$link"
+          fi
+        done
+
+        # Rebuild model symlinks
+        ${modelSymlinks}
       '';
 
       serviceConfig = {
