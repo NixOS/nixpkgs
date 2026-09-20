@@ -591,7 +591,7 @@ final: prev: {
       propagatedBuildInputs = [ lpeg ];
 
       meta = {
-        homepage = "http://cosmo.luaforge.net";
+        homepage = "https://github.com/mascarenhas/cosmo";
         license = lib.licenses.AND [
           lib.licenses.mit
           lib.licenses.x11
