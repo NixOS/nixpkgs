@@ -1,21 +1,21 @@
 {
-  "version": "1.25.0",
+  "version": "1.35.1",
   "binaries": {
     "aarch64-darwin": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.25.0/darwin/arm64/yc",
-      "hash": "sha256-1hwZh8b9FnYjhryJ/XrFUBm1F4SJVLERwLfCSVJvfZI="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.35.1/darwin/arm64/yc",
+      "hash": "sha256-BKvzkPgwtdmdX2kwWLcozWYJkOCkJNyg1wWsBYaMkWQ="
     },
     "aarch64-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.25.0/linux/arm64/yc",
-      "hash": "sha256-2z6qThMXOoN15EaheESrq/xHD49/F5Q401U8oRDwW+k="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.35.1/linux/arm64/yc",
+      "hash": "sha256-xrrNOqXq1SQwjNf48ldchGBvfF2K7PgPN5cUvV9Ri3U="
     },
     "i686-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.25.0/linux/386/yc",
-      "hash": "sha256-lNdLqsjDbkzolx+wutXn1lcaW/Bt1yLs6PER3rqaivQ="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.35.1/linux/386/yc",
+      "hash": "sha256-rHSNY5z9tSQwUDgruYgLxpH01yuDjwB4ntiNmhvrTuA="
     },
     "x86_64-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.25.0/linux/amd64/yc",
-      "hash": "sha256-7lnoJM4gILuuAMA/do65obg6bqqMsaIW4sgsmMBqWLg="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/1.35.1/linux/amd64/yc",
+      "hash": "sha256-0wiL1EhoDRWDp0i+lPwE2XrgHl/94cnlk7wgbAAU5+Y="
     }
   }
 }
