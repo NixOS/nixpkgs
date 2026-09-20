@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   git,
   python3,
@@ -91,7 +92,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Generated hooks config references pytest binary, instead of ggshield CLI. Odd!
     "test_install_cursor_local_fresh"
     "test_install_vibe_global"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_git_command_includes_longpaths_on_windows"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
