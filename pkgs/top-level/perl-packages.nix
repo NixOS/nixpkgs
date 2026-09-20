@@ -12641,7 +12641,7 @@ with self;
     ];
     meta = {
       description = "Exporting done right";
-      homepage = "http://open-exodus.net/projects/Exporter-Declare";
+      homepage = "https://metacpan.org/pod/Export::Declare";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
