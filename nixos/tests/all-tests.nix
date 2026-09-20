@@ -795,6 +795,7 @@ in
   gotify-server = runTest ./gotify-server.nix;
   gotosocial = runTest ./web-apps/gotosocial.nix;
   goupile = runTest ./web-apps/goupile;
+  gpauth-tls = runTest ./gpauth-tls.nix;
   grafana = import ./grafana {
     inherit runTest;
   };
