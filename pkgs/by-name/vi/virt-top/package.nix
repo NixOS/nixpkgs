@@ -2,13 +2,17 @@
   lib,
   stdenv,
   fetchgit,
-  ocamlPackages,
+  ocaml-ng,
   autoreconfHook,
   libxml2,
   pkg-config,
   getopt,
   gettext,
 }:
+
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+in
 
 stdenv.mkDerivation rec {
   pname = "virt-top";

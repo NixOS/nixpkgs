@@ -9288,10 +9288,6 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  virt-top = callPackage ../applications/virtualization/virt-top {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
 
