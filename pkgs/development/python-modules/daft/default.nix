@@ -55,6 +55,7 @@
   duckdb,
   gcsfs,
   google-cloud-bigtable,
+  httpx2,
   hypothesis,
   jax,
   jaxtyping,
@@ -225,6 +226,7 @@ buildPythonPackage (finalAttrs: {
     gcsfs
     google-cloud-bigtable
     google-genai
+    httpx2
     huggingface-hub
     hypothesis
     jax
