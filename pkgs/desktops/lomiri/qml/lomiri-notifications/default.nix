@@ -3,9 +3,11 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  testers,
   cmake,
   dbus,
   libqtdbustest,
+  lomiri,
   lomiri-api,
   pkg-config,
   qtbase,
@@ -17,25 +19,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-9K9+zS2MDqARTlGH2bu363ysrCg82D53sBkKiLSXBoI=";
+    hash = "sha256-T9Diebp91kZrIt6o9acRQyn+9Hhu20YUYxf6iTntpsc=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   ''
-  # Need to replace prefix to not try to install into lomiri-api prefix
+  # Agreed-upon location between multiple components
+  # Qt6 one is already correct as-is
   + ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail \
-        '--variable=plugindir lomiri-shell-api' \
-        '--define-variable=libdir=''${CMAKE_INSTALL_LIBDIR} --variable=plugindir lomiri-shell-api'
+      --replace-fail 'SHELL_PLUGINDIR_SUFFIX lomiri/qml' 'SHELL_PLUGINDIR_SUFFIX ${lomiri.passthru.shellPlugindirSuffix}' \
+      --replace-fail 'string(APPEND SHELL_PLUGINDIR_SUFFIX "6")' '# string(APPEND SHELL_PLUGINDIR_SUFFIX "6")'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
@@ -80,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Free Desktop Notification server QML implementation for Lomiri";
@@ -89,5 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "lomiri-shell-notifications${lib.optionalString withQt6 "-qt6"}"
+    ];
   };
 })
