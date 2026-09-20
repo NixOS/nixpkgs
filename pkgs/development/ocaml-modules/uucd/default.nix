@@ -12,7 +12,7 @@
 let
   pname = "uucd";
   webpage = "https://erratique.ch/software/${pname}";
-  version = "17.0.0";
+  version = "18.0.0";
 in
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-${pname}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = "sha256-ifjEBUN+Lqw4W9FeoGX4XBjnxcJL15ukd+aSSDS8KC0=";
+    hash = "sha256-6HSF72EBD7VUAJ+PMrvFWxp7DF1p771LjM7JNRRfYHQ=";
   };
 
   nativeBuildInputs = [
