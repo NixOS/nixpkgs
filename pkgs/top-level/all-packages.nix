@@ -1614,8 +1614,6 @@ with pkgs;
 
   klaus = with python3Packages; toPythonApplication klaus;
 
-  klipper = callPackage ../servers/klipper { };
-
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
   klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
