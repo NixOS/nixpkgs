@@ -20,6 +20,7 @@
   icu63,
   nss,
   minizip,
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -131,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
         libxfixes
         dbus
         icu63
+        # dlopen'd by TeamViewer_Desktop for the Wayland ScreenCast portal
+        pipewire
       ]
     }"
   ];
