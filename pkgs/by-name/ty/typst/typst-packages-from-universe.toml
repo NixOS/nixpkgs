@@ -14997,7 +14997,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."1.2.0"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-1.2.0.tar.gz"
