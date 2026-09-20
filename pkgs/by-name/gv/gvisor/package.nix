@@ -31,7 +31,7 @@ buildGoModule {
       --replace-fail '"/sbin/ldconfig"' '"${glibc}/bin/ldconfig"'
   '';
 
-  vendorHash = "sha256-8Zkgt5hegYEHnG1lF+wLgdru6t3l+Z/qKRvJHukZbPo=";
+  vendorHash = "sha256-RfumZ2XJ+68Y4oB27KpjAYhdFVmCnIUEYXBF7Yy/0IQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -60,9 +60,35 @@ buildGoModule {
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1
   '';
 
-  patches = [ ./fix-go-mod-tidy.diff ];
+  # The go.mod that gVisor publishes is not `go mod tidy`-clean: it still
+  # carries requirements that are not imported by any built package (for
+  # example the Bazel-only `github.com/bazelbuild/rules_go`), which makes
+  # `go mod vendor` fail. Tidy the module in the fixed-output module
+  # derivation, carry the result along in the vendor directory, and restore it
+  # before the main build. Doing this at build time (instead of with a static
+  # patch) keeps the package updateable by the update bot.
+  overrideModAttrs = oldAttrs: {
+    postPatch = (oldAttrs.postPatch or "") + ''
+      export GOCACHE=$TMPDIR/go-cache
+      export GOPATH=$TMPDIR/go
+      go mod tidy
+    '';
+    postBuild = (oldAttrs.postBuild or "") + ''
+      cp go.mod go.sum vendor/
+    '';
+  };
 
-  passthru.tests = { inherit (nixosTests) gvisor; };
+  preBuild = ''
+    if [ -d vendor ]; then
+      chmod -R u+w vendor
+      cp vendor/go.mod vendor/go.sum .
+    fi
+  '';
+
+  passthru = {
+    tests = { inherit (nixosTests) gvisor; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Application Kernel for Containers";
