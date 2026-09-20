@@ -13,9 +13,15 @@ in
 
   nodes.machine = {
     imports = [ ../modules/profiles/minimal.nix ];
+    systemd.shutdown.pre-exitrd = pkgs.writeShellScript "pre-exitrd" ''
+      echo pre-exitrd > /run/initramfs/test.txt
+    '';
     systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source =
       pkgs.writeShellScript "shutdown-message" ''
-        echo "${msg}" > /dev/kmsg
+        if test -e /test.txt; then
+          # Test should only pass if both scripts run.
+          echo "${msg}" > /dev/kmsg
+        fi
       '';
     boot.initrd.systemd.enable = systemdStage1;
   };
