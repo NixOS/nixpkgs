@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
         python3.pkgs.pygobject3
       ];
     })
+
+    # Pin the embedded interpreter to the Python it was built against, and
+    # register each extension only once.
+    # https://gitlab.gnome.org/GNOME/nautilus-python/-/merge_requests/18
+    ./fix-extension-loading.patch
   ];
 
   nativeBuildInputs = [
