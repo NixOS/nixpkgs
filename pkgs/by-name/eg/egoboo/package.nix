@@ -8,77 +8,87 @@
   SDL_mixer,
   SDL_image,
   SDL_ttf,
+  physfs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  # pf5234 (a developer?) at freenode #egoboo told me that I better use 2.7.3 until
-  # they fix more, because it even has at least one bugs less than 2.7.4.
-  # 2.8.0 does not start properly on linux
-  # They just starting making that 2.8.0 work on linux.
   pname = "egoboo";
-  version = "2.7.3";
+  version = "2.8.1";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/egoboo/egoboo-${finalAttrs.version}.tar.gz";
-    sha256 = "18cjgp9kakrsa90jcb4cl8hhh9k57mi5d1sy5ijjpd3p7zl647hd";
+    hash = "sha256-omlBh9KKeq30yjubemxtzTuwPsjxRUNcdEu3evtfTCY=";
   };
 
-  buildPhase = ''
-    cd source
-    make -C enet all
-    # The target 'all' has trouble
-    make -C game -f Makefile.unix egoboo
-  '';
+  patches = [
+    ./egoboo-fix-build.patch
+    ./egoboo-fix-physfs.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./egoboo-fix-darwin.patch
+  ];
 
-  # The user will need to have all the files in '.' to run egoboo, with
-  # writeable controls.txt and setup.txt
-  installPhase = ''
-    mkdir -p $out/share/egoboo-${finalAttrs.version}
-    cp -v game/egoboo $out/share/egoboo-${finalAttrs.version}
-    cd ..
-    cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${finalAttrs.version}
-  '';
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    SDL
+  ];
 
   buildInputs = [
-    libGLU
-    libGL
     SDL
     SDL_mixer
     SDL_image
     SDL_ttf
+    physfs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libGL
   ];
 
-  /*
-    This big commented thing may be needed for versions 2.8.0 or beyond
-    I keep it here for future updates.
-
-    # Some files have to go to $HOME, but we put them in the 'shared'.
-    patchPhase = ''
-      sed -i -e 's,''${HOME}/.''${PROJ_NAME},''${PREFIX}/share/games/''${PROJ_NAME},g' Makefile
-    '';
-
-    preBuild = ''
-      makeFlags=PREFIX=$out
-    '';
-  */
-
   env = {
-    # Workaround build failure on -fno-common toolchains like upstream
-    # gcc-10. Otherwise build fails as:
-    #   ld: mad.o:(.bss+0x233800): multiple definition of `tile_dict'; camera.o:(.bss+0x140): first defined here
     NIX_CFLAGS_COMPILE = "-fcommon";
-
-    NIX_LDFLAGS = "-lm";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lm";
   };
+
+  buildPhase = ''
+    runHook preBuild
+    make -C src PREFIX=$out
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 src/game/egoboo-2.x $out/bin/egoboo
+
+    mkdir -p $out/share/egoboo
+    cp -r controls.txt setup.txt basicdat modules \
+      $out/share/egoboo/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/Egoboo.app/Contents/{MacOS,Resources}
+
+    install -Dm755 src/game/egoboo-2.x \
+      $out/Applications/Egoboo.app/Contents/MacOS/egoboo
+
+    install -Dm644 src/OSX/Info.plist \
+      $out/Applications/Egoboo.app/Contents/Info.plist
+
+    install -Dm644 src/OSX/skull.icns \
+      $out/Applications/Egoboo.app/Contents/Resources/skull.icns
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = {
     description = "3D dungeon crawling adventure";
-
     homepage = "https://egoboo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-
-    # I take it out of hydra as it does not work as well as I'd like
-    # maintainers = [ ];
-    # platforms = lib.platforms.all;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "egoboo";
   };
 })
