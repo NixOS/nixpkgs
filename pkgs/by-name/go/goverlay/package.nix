@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goverlay";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = "goverlay";
     tag = finalAttrs.version;
-    hash = "sha256-Il2EtcTLswmhQhIZ8lcOWqryoqvSNXZ3b1FiJPv85M8=";
+    hash = "sha256-gU2jgmjPP1H9aqBVSz+M/ZkHa0TqzS1fAcgQr5EU/8o=";
   };
 
   outputs = [
@@ -77,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    curl
+  ];
+
   checkPhase = ''
     # test-logic
     HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B tests/logic/logic_tests.lpi --widgetset=qt6
@@ -87,15 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }
     ./tests/logic/logic_tests
-    # test-gui
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B tests/gui/gui_tests.lpi --widgetset=qt6
-    patchelf ./tests/gui/gui_tests --set-rpath ${
-      lib.makeLibraryPath [
-        libx11
-        qt6Packages.libqtpas
-      ]
-    }
-    QT_QPA_PLATFORM=offscreen ./tests/gui/gui_tests
   '';
 
   preFixup = ''

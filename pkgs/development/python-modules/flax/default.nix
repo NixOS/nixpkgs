@@ -87,13 +87,15 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cloudpickle
-    keras
     einops
     pytestCheckHook
     pytest-xdist
     sphinx
-    tensorflow
     torch
+  ]
+  ++ lib.optionals tensorflow.meta.available [
+    keras
+    tensorflow
   ];
 
   disabledTestPaths = [
@@ -107,6 +109,10 @@ buildPythonPackage (finalAttrs: {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    "tests/io_test.py"
+    "tests/tensorboard_test.py"
   ];
 
   disabledTests = [
