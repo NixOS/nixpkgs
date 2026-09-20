@@ -20116,6 +20116,12 @@
     githubId = 69087176;
     name = "n0pl4c3";
   };
+  n0rad = {
+    email = "agithub@lmr.fr";
+    github = "n0rad";
+    githubId = 541709;
+    name = "Arnaud Lemaire";
+  };
   n3oney = {
     name = "Michał Minarowski";
     email = "nixpkgs@neoney.dev";
