@@ -2669,6 +2669,7 @@ mapAliases {
   vtkWithQt5 = throw "'vtkWithQt5' has been removed. Consider using 'vtkWithQt6' instead."; # Added 2025-09-06
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   w_scan = throw "'w_scan' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
+  waifu2x-converter-cpp = throw "'waifu2x-converter-cpp' has been removed as it is unmaintained upstream"; # Added 2026-09-20
   waitron = throw "'waitron' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   wakatime = throw "'wakatime' has been renamed to/replaced by 'wakatime-cli'"; # Converted to throw 2025-10-27
   waon = throw "'waon' has been removed as it was unmaintained upstream and depended on the deprecated GTK 2 engine"; # Added 2026-08-13
