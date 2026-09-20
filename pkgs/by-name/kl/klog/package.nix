@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       KLog provides QSO management, useful QSL management DX-Cluster client, DXCC management,
       ClubLog integration, WSJT-X, DX-Marathon support and much more.
     '';
-    homepage = "https://www.klog.xyz/";
+    homepage = "https://github.com/ea4k/klog";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pulsation ];
