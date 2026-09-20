@@ -6,25 +6,37 @@
   makeBinaryWrapper,
   python3,
   stdenvNoCC,
+  # Deliberately not named `cudaPackages`: callPackage supplies any argument
+  # whose name is a top-level attribute, so that spelling would silently
+  # resolve to the default cudaPackages (12.9) and this default would never
+  # apply.
+  torchCudaPackages ? cudaPackages_13,
   withManager ? false,
 }:
 
 let
   # Using overrideScope does not work when using `withPackages appDependencies`
   # and creates a an env without those overrides
-  python = python3.override {
+  python = python3.override (old: {
     self = python;
-    packageOverrides = final: prev: {
-      # older cudaPackages are not supported and actively disabled
-      # https://github.com/Comfy-Org/ComfyUI/blob/v0.27.0/comfy/quant_ops.py#L25
-      torch = prev.torch.override {
-        cudaPackages = cudaPackages_13;
-      };
-      triton = prev.triton.override {
-        cudaPackages = cudaPackages_13;
-      };
-    };
-  };
+    # Compose with the caller's overrides rather than replacing them, so a
+    # `python3` passed in from outside (one providing torch-bin, say) survives.
+    # The caller runs first and supplies the base package; the CUDA pin below
+    # is applied on top of it and stays in effect unless torchCudaPackages is
+    # overridden too.
+    packageOverrides = lib.composeExtensions (old.packageOverrides or (_: _: { })) (
+      final: prev: {
+        # older cudaPackages are not supported and actively disabled
+        # https://github.com/Comfy-Org/ComfyUI/blob/v0.27.0/comfy/quant_ops.py#L25
+        torch = prev.torch.override {
+          cudaPackages = torchCudaPackages;
+        };
+        triton = prev.triton.override {
+          cudaPackages = torchCudaPackages;
+        };
+      }
+    );
+  });
 
   appDependencies =
     ps:
