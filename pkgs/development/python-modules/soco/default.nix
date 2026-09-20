@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "CLI and library to control Sonos speakers";
-    homepage = "http://python-soco.com/";
+    homepage = "https://github.com/SoCo/SoCo";
     changelog = "https://github.com/SoCo/SoCo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];

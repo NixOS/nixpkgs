@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OCaml bindings to libcurl (deprecated)";
     license = lib.licenses.mit;
-    homepage = "http://ygrek.org.ua/p/ocurl/";
+    homepage = "https://github.com/ygrek/ocurl";
     maintainers = with lib.maintainers; [
       dandellion
       bennofs

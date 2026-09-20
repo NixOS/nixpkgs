@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
-    homepage = "https://www.keystone-engine.org";
+    homepage = "https://github.com/keystone-engine/keystone";
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.gpl2Only;
   };
