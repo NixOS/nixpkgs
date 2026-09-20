@@ -5,6 +5,7 @@
   imagemagick,
   lib,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   nodejs,
   pnpm_11,
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_11
     makeWrapper
     imagemagick
+    copyDesktopItems
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -84,15 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     echo 'verifyDepsBeforeRun: false' >> pnpm-workspace.yaml
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "folo";
-    desktopName = "Folo";
-    comment = "Next generation information browser";
-    icon = "follow";
-    exec = "follow";
-    categories = [ "Utility" ];
-    mimeTypes = [ "x-scheme-handler/follow" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "folo";
+      desktopName = "Folo";
+      comment = "Next generation information browser";
+      icon = "follow";
+      exec = "follow";
+      categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/follow" ];
+    })
+  ];
 
   icon = finalAttrs.src + "/apps/desktop/resources/icon.png";
 
@@ -125,9 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       --inherit-argv0 \
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-
-    install -m 444 -D "${finalAttrs.desktopItem}/share/applications/"* \
-        -t $out/share/applications/
 
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
