@@ -9115,12 +9115,6 @@ with pkgs;
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
-  tabbed = callPackage ../applications/window-managers/tabbed {
-    # if you prefer a custom config, write the config.h in tabbed.config.h
-    # and enable
-    # customConfig = builtins.readFile ./tabbed.config.h;
-  };
-
   taffybar = callPackage ../applications/window-managers/taffybar {
     inherit (haskellPackages) ghcWithPackages taffybar;
   };
