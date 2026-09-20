@@ -5042,8 +5042,6 @@ with pkgs;
 
   doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
-  drake = callPackage ../development/tools/build-managers/drake { };
-
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
   fffuu = haskell.lib.compose.justStaticExecutables (
     haskellPackages.callPackage ../tools/misc/fffuu { }
