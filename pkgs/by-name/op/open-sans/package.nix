@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
-    homepage = "https://www.opensans.com";
+    homepage = "https://salsa.debian.org/fonts-team/fonts-open-sans";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     teams = [ lib.teams.pantheon ];
