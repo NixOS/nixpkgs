@@ -28,7 +28,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchvision";
-  version = "0.28.0";
+  version = "0.29.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     owner = "pytorch";
     repo = "vision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rku0QAW7RTkCjD4RorY7DeYfr6PDvqdm+6Yw9wBjGHU=";
+    hash = "sha256-4Rzuxc+YvC3SlvNyPedXqKOzEUgFfKp+6Zj19Ziwcss=";
   };
 
   nativeBuildInputs = [
