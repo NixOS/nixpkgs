@@ -28,7 +28,6 @@
   libical,
   libmysqlclient,
   libpq,
-  libsrs2,
   libuuid,
   libxml2,
   nghttp2,
@@ -54,7 +53,6 @@
   enableMurder ? true,
   enableNNTP ? false,
   enableReplication ? true,
-  enableSrs ? true,
   enableUnitTests ? true,
   enableXapian ? true,
   withLibcap ? true,
@@ -95,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     zlib
     bison
-    libsrs2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ]
   ++ lib.optionals (enableHttp || enableCalalarmd || enableJMAP) [
@@ -158,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-pidfile=/run/cyrus/master.pid"
     (lib.enableFeature enableAutoCreate "autocreate")
-    (lib.enableFeature enableSrs "srs")
     (lib.enableFeature enableIdled "idled")
     (lib.enableFeature enableMurder "murder")
     (lib.enableFeature enableBackup "backup")
