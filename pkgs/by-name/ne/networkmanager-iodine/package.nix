@@ -32,6 +32,10 @@ stdenv.mkDerivation {
     (replaceVars ./fix-paths.patch {
       inherit iodine;
     })
+
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/issues/4
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/merge_requests/6
+    ./CVE-2026-91837.patch
   ];
 
   nativeBuildInputs = [
