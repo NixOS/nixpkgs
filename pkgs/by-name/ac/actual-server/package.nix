@@ -166,5 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.patrickdag
       lib.maintainers.yash-garg
     ];
+    # Broken on Darwin due to lack of a Darwin maintainer, see https://github.com/NixOS/nixpkgs/issues/565283
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
