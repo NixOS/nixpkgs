@@ -4,7 +4,6 @@
   python3Packages,
   fetchFromGitHub,
   kdePackages,
-  gnome-themes-extra,
   qt6,
   makeWrapper,
   x11Support ? stdenv.hostPlatform.isLinux,
@@ -44,6 +43,12 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
         makeWrapper
       ]);
 
+    makeWrapperArgs = lib.optionals enableDragAndDrop [
+      "--set"
+      "tuifi_synth_dnd"
+      "True"
+    ];
+
     dependencies = [
       python3Packages.send2trash
       python3Packages.uni-curses
@@ -54,20 +59,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
       python3Packages.requests
       python3Packages.python-xlib
       kdePackages.qtbase
-      kdePackages.qt6gtk2
     ]);
-
-    postFixup =
-      let
-        # fix missing 'adwaita' warning missing with ncurses tui
-        # see: https://github.com/NixOS/nixpkgs/issues/60918
-        theme = gnome-themes-extra;
-      in
-      lib.optionalString enableDragAndDrop ''
-        wrapProgram $out/bin/tuifi \
-          --prefix GTK_PATH : "${theme}/lib/gtk-2.0" \
-          --set tuifi_synth_dnd True
-      '';
 
     pythonImportsCheck = [ "TUIFIManager" ];
 
