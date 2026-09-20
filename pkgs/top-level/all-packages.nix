@@ -7252,8 +7252,6 @@ with pkgs;
     ];
   };
 
-  moodle = callPackage ../servers/web-apps/moodle { };
-
   moodle-utils = callPackage ../servers/web-apps/moodle/moodle-utils.nix { };
 
   napalm =
