@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pykka" ];
 
   meta = {
-    homepage = "https://www.pykka.org/";
+    homepage = "https://github.com/jodal/pykka";
     description = "Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
     maintainers = [ ];
