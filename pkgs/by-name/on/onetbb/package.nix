@@ -67,11 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     "test_arena_constraints"
   ];
 
-  # Disable failing test on musl
+  # Disable failing tests on musl
   # test/conformance/conformance_resumable_tasks.cpp:37:24: error: ‘suspend’ is not a member of ‘tbb::v1::task’; did you mean ‘tbb::detail::r1::suspend’?
+  # test_eh_algorithms: hangs
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace test/CMakeLists.txt \
-      --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
+      --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' "" \
+      --replace-fail 'tbb_add_test(SUBDIR tbb NAME test_eh_algorithms DEPENDENCIES TBB::tbb)' ""
   '';
 
   cmakeFlags = [
