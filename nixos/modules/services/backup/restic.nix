@@ -8,6 +8,78 @@
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
   inherit (utils.systemdUtils.unitOptions) unitOption;
+
+  mkScript =
+    name: backup:
+    let
+      extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+      resticCmd = "${lib.getExe backup.package}${extraOptions}";
+    in
+    pkgs.writeShellScriptBin "restic-${name}" ''
+      set -a  # automatically export variables
+      ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+      # set same environment variables as the systemd service
+      ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+        (lib.filterAttrs (n: v: v != null && n != "PATH"))
+        (lib.mapAttrs (_: v: "${v}"))
+        lib.toShellVars
+      ]}
+      PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+
+      exec ${resticCmd} "$@"
+    '';
+
+  mkBackupContractScript =
+    name: backup:
+    let
+      script = mkScript name backup;
+    in
+    # I chose to base the contract script on the existing script
+    # to avoid duplicating the environment variables logic.
+    # Similarly, I based the backup command on the systemd service
+    # because it already handled giving the source directories.
+    # I prioritized a small diff size.
+    pkgs.writeShellApplication {
+      name = "restic-${name}";
+      text = ''
+        usage() {
+          echo "$0 snapshots"
+          echo "$0 backup"
+          echo "$0 restore <snapshot>"
+          echo "$0 exec <arg> [<arg>...]"
+        }
+
+        if [ -z "''${1:-}" ]; then
+          usage
+          exit 0
+        fi
+
+        if [ "$1" = "restore" ]; then
+          shift
+          snapshot="$1"
+
+          echo "Will restore snapshot '$snapshot'"
+
+          exec ${lib.getExe script} restore "$snapshot" --target /
+        elif [ "$1" = "backup" ]; then
+          shift
+
+          systemctl start --wait restic-backups-${name}
+        elif [ "$1" = "snapshots" ]; then
+          shift
+
+          ${lib.getExe script} snapshots --json \
+            | ${pkgs.jq}/bin/jq '.[].id'
+        elif [ "$1" = "exec" ]; then
+          shift
+
+          exec ${lib.getExe script} "$@"
+        else
+          usage
+          exit 1
+        fi
+      '';
+    };
 in
 {
   options.services.restic.backups = lib.mkOption {
@@ -16,7 +88,7 @@ in
     '';
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        { name, config, ... }:
         {
           options = {
             passwordFile = lib.mkOption {
@@ -134,12 +206,19 @@ in
               # This is nullable for legacy reasons only. We should consider making it a pure listOf
               # after some time has passed since this comment was added.
               type = lib.types.nullOr (lib.types.listOf lib.types.str);
-              default = [ ];
+              default =
+                if config.fileBackupContract == null then
+                  [ ]
+                else
+                  config.fileBackupContract.input.sourceDirectories;
               description = ''
                 Which paths to backup, in addition to ones specified via
                 `dynamicFilesFrom`.  If null or an empty array and
                 `dynamicFilesFrom` is also null, no backup command will be run.
                  This can be used to create a prune-only job.
+
+                If using the `fileBackupContract`, this option is set through
+                the `sourceDirectories` option of the contract.
               '';
               example = [
                 "/var/lib/postgresql"
@@ -164,7 +243,8 @@ in
 
             exclude = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
+              default =
+                if config.fileBackupContract == null then [ ] else config.fileBackupContract.input.excludePatterns;
               description = ''
                 Patterns to exclude when backing up. See
                 https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
@@ -197,9 +277,13 @@ in
 
             user = lib.mkOption {
               type = lib.types.str;
-              default = "root";
+              default =
+                if config.fileBackupContract == null then "root" else config.fileBackupContract.input.user;
               description = ''
                 As which user the backup should run.
+
+                If using the `fileBackupContract`, this option is set through
+                the `user` option of the contract.
               '';
               example = "postgresql";
             };
@@ -254,7 +338,7 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
+              default = builtins.length config.checkOpts > 0;
               defaultText = lib.literalExpression "builtins.length config.services.backups.${name}.checkOpts > 0";
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
@@ -317,6 +401,79 @@ in
                 Controls the frequency of progress reporting.
               '';
               example = 0.1;
+            };
+
+            fileBackupContract = lib.mkOption {
+              description = "Provider of the fileBackup contract.";
+              default = null;
+              type = lib.types.nullOr (
+                lib.types.submodule {
+                  options = {
+                    input = {
+                      user = lib.mkOption {
+                        description = ''
+                          As which user the backup should run.
+                        '';
+                        type = lib.types.str;
+                        example = "vaultwarden";
+                      };
+
+                      sourceDirectories = lib.mkOption {
+                        description = ''
+                          Directories to backup.
+                        '';
+                        type = lib.types.nonEmptyListOf lib.types.str;
+                        example = [
+                          "/var/lib/vaultwarden"
+                        ];
+                      };
+
+                      excludePatterns = lib.mkOption {
+                        description = ''
+                          File patterns to exclude.
+                        '';
+                        type = lib.types.listOf lib.types.str;
+                        default = [ ];
+                      };
+                    };
+                    output = {
+                      script = lib.mkOption {
+                        description = ''
+                          Script that provide the following commands
+                          and runs with the necessary environment variables:
+
+                          - Listing snapshots:
+
+                            ```bash
+                            <script> snaphots
+                            ```
+
+                          - Restore a snapshot:
+
+                            ```bash
+                            <script> restore <snapshot>
+                            ```
+
+                          - Take a backup:
+
+                            ```bash
+                            <script> backup
+                            ```
+
+                          - Pass a custom command to the underlying provider:
+
+                            ```bash
+                            <script> exec <arg> [<arg> ...]
+                            ```
+                        '';
+                        type = lib.types.package;
+                        default = mkBackupContractScript name config;
+                        defaultText = "/path/to/script";
+                      };
+                    };
+                  };
+                }
+              );
             };
           };
         }
@@ -500,6 +657,7 @@ in
         }
       )
     ) config.services.restic.backups;
+
     systemd.timers = lib.mapAttrs' (
       name: backup:
       lib.nameValuePair "restic-backups-${name}" {
@@ -510,25 +668,8 @@ in
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
-    environment.systemPackages = lib.mapAttrsToList (
-      name: backup:
-      let
-        extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${lib.getExe backup.package}${extraOptions}";
-      in
-      pkgs.writeShellScriptBin "restic-${name}" ''
-        set -a  # automatically export variables
-        ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-        # set same environment variables as the systemd service
-        ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-          (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrs (_: v: "${v}"))
-          lib.toShellVars
-        ]}
-        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
-
-        exec ${resticCmd} "$@"
-      ''
-    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+    environment.systemPackages = (
+      lib.mapAttrsToList mkScript (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups)
+    );
   };
 }
