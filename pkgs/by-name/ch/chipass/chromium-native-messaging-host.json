@@ -4,8 +4,6 @@
     "path": "@out@/bin/ChiPass-proxy",
     "type": "stdio",
     "allowed_origins": [
-        "chrome-extension://iopaggbpplllidnfmcghoonnokmjoicf/",
-        "chrome-extension://oboonakemofpalcgghocfoadofidjkkk/",
-        "chrome-extension://pdffhmdngciaglkoonimfcmckehcpafo/"
+        "chrome-extension://oboonakemofpalcgghocfoadofidjkkk/"
     ]
 }
