@@ -16,30 +16,22 @@
   pkg-config,
   python3,
   qtbase,
-  qtdeclarative,
+  writableTmpDirAsHomeHook,
   withDocumentation ? true,
 }:
 
-# Juuuuust in case this ever changes
-assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qtbase.qtQmlPrefix)
-  "Assumption that qtbase.qtQmlPrefix (${qtbase.qtQmlPrefix} starts with 'lib/' no longer holds, SHELL_PLUGINDIR_SUFFIX in lomiri-api needs to be adjusted!";
-
 let
   withQt6 = lib.strings.versionAtLeast qtbase.version "6";
-
-  # TODO This is likely not supposed to be the regular Qt QML import prefix
-  # but otherwise i.e. lomiri-notifications cannot be found in lomiri
-  shellPlugindirSuffix = lib.strings.removePrefix "lib/" qtbase.qtQmlPrefix;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-5w1cXKi8RZL2tbYMnqVFnlCK4BxcpCBg4jRwI7jB6AQ=";
+    hash = "sha256-V26qaVGfG+kRLjR9CnUzSQr0pbo8kz4pyZ0TvEwybgE=";
   };
 
   outputs = [
@@ -52,13 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')
-  ''
-  # Variable is queried via pkg-config by reverse dependencies
-  # Qt6 one is already correct as-is
-  + ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'SHELL_PLUGINDIR_SUFFIX lomiri/qml' 'SHELL_PLUGINDIR_SUFFIX ${shellPlugindirSuffix}' \
-      --replace-fail 'string(APPEND SHELL_PLUGINDIR_SUFFIX "6")' '# string(APPEND SHELL_PLUGINDIR_SUFFIX "6")'
   '';
 
   strictDeps = true;
@@ -66,20 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qtdeclarative
   ]
   ++ lib.optionals withDocumentation [
     doxygen
     graphviz
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     cmake-extras
     glib
-    gtest
-    libqtdbustest
-    qtbase
-    qtdeclarative
   ];
 
   nativeCheckInputs = [
@@ -87,31 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  checkInputs = [
+    gtest
+    libqtdbustest
+    qtbase
+  ];
+
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
   ];
 
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  preBuild = ''
-    # Makes fontconfig produce less noise in logs
-    export HOME=$TMPDIR
-  '';
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  preCheck = ''
-    # needs minimal plugin and QtTest QML
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
-  '';
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Only tests use Qt, Qt5 support dropped in 0.4.0
+    && withQt6;
 
   passthru = {
-    # https://gitlab.com/ubports/development/core/lomiri-api/-/issues/5
-    tests = lib.optionalAttrs (!withQt6) {
+    tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };
@@ -131,10 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
-      "lomiri-shell-api${lib.optionalString withQt6 "-qt6"}"
-      "lomiri-shell-application${lib.optionalString withQt6 "-qt6"}"
-      "lomiri-shell-launcher${lib.optionalString withQt6 "-qt6"}"
-      "lomiri-shell-notifications${lib.optionalString withQt6 "-qt6"}"
     ];
   };
 })
