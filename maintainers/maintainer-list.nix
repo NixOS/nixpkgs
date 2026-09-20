@@ -26286,6 +26286,12 @@
     github = "semi710";
     githubId = 60490474;
   };
+  semka612 = {
+    email = "smgmail987@gmail.com";
+    name = "Semga";
+    github = "semka612";
+    githubId = 180087905;
+  };
   sempiternal-aurora = {
     email = "myrialsarvay@gmail.com";
     github = "sempiternal-aurora";
