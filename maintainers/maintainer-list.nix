@@ -5592,12 +5592,6 @@
     githubId = 1736138;
     email = "cococolanosugar@gmail.com";
   };
-  coconnor = {
-    email = "coreyoconnor@gmail.com";
-    github = "coreyoconnor";
-    githubId = 34317;
-    name = "Corey O'Connor";
-  };
   code-asher = {
     email = "ash@coder.com";
     github = "code-asher";
