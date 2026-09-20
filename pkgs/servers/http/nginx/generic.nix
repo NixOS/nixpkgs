@@ -94,7 +94,8 @@ stdenv.mkDerivation {
     installShellFiles
     removeReferencesTo
   ]
-  ++ nativeBuildInputs;
+  ++ nativeBuildInputs
+  ++ mapModules "nativeBuildInputs";
 
   buildInputs = [
     openssl
@@ -204,6 +205,10 @@ stdenv.mkDerivation {
   }
   // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     CONFIG_BIG_ENDIAN = if stdenv.hostPlatform.isBigEndian then "y" else "n";
+  }
+  // lib.optionalAttrs (mapModules "nativeBuildInputs" != [ ]) {
+    # cmake's setup hook would replace nginx's configurePhase.
+    dontUseCmakeConfigure = true;
   };
 
   configurePlatforms = [ ];
