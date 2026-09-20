@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module for dynamic SVG charting";
-    homepage = "http://www.pygal.org";
+    homepage = "https://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
     license = lib.licenses.lgpl3Plus;
