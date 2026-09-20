@@ -6,6 +6,7 @@
   makeWrapper,
   openjdk11,
   makeDesktopItem,
+  copyDesktopItems,
   icoutils,
   config,
   acceptLicense ? config.xxe-pe.acceptLicense or false,
@@ -13,24 +14,10 @@
 
 let
   pkg_path = "$out/lib/xxe";
-
-  desktopItem = makeDesktopItem {
-    name = "XMLmind XML Editor Personal Edition";
-    exec = "xxe";
-    icon = "xxe";
-    desktopName = "xxe";
-    genericName = "XML Editor";
-    categories = [
-      "Development"
-      "IDE"
-      "TextEditor"
-      "Java"
-    ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "xxe-pe";
-  version = "10.2.0";
+  version = "11.2.0";
 
   src =
     assert
@@ -45,22 +32,39 @@ stdenv.mkDerivation rec {
       url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${
         builtins.replaceStrings [ "." ] [ "_" ] version
       }.zip";
-      sha256 = "sha256-JZ9nQwMrQL/1HKGwvXoWlnTx55ZK/UYjMJAddCtm0rw=";
+      sha256 = "sha256-5ClhGbwYNg1dcYcd8L5ycchmos1WPzPuY1HmdEc/Gus=";
     };
 
   nativeBuildInputs = [
     unzip
     makeWrapper
     icoutils
+    copyDesktopItems
   ];
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XMLmind XML Editor Personal Edition";
+      exec = "xxe";
+      icon = "xxe";
+      desktopName = "xxe";
+      genericName = "XML Editor";
+      categories = [
+        "Development"
+        "IDE"
+        "TextEditor"
+        "Java"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/bin/icon/xxe.ico"
     ls
@@ -69,6 +73,8 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/xxe.png"
     done;
+
+    runHook postInstall
   '';
 
   postFixup = ''
