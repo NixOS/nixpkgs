@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/eldris-io/macdown-se";
     license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jeff-oomu ];
     mainProgram = "macdown-se";
   };
 })
