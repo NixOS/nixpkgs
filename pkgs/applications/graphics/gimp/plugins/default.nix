@@ -359,7 +359,7 @@ lib.makeScope pkgs.newScope (
         broken = gimp.apiVersion != "2.0";
         description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
-        homepage = "http://lensfun.sebastiankraft.net/";
+        homepage = "https://seebk.github.io/GIMP-Lensfun/";
 
         license = lib.licenses.gpl3Plus;
         maintainers = [ ];
