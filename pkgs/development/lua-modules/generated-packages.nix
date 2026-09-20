@@ -1613,7 +1613,7 @@ final: prev: {
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "http://www.myriabit.com/ljsyscall/";
+        homepage = "https://github.com/justincormack/ljsyscall";
         maintainers = with lib.maintainers; [ lblasc ];
         license = lib.licenses.mit;
         description = "LuaJIT Linux syscall FFI";
