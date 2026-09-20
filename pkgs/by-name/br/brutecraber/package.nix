@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
   ocl-icd,
@@ -36,5 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "brutecraber";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
