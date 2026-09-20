@@ -22,7 +22,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-wlu6WPLWfMvuk4cNTBNv7ugtlK3sU5r2DXuEHcaCk9o=";
   };
 
-  cargoHash = "sha256-naHHXvUb96FG2COM/xVXjetIt4zK2ShXNP6FCsNDDw0=";
+  # importCargoLock (real `cargo vendor` with full git trees) rather than
+  # fetchCargoVendor: the vendored git checkouts keep sibling directories
+  # (typedb-protocol's build script compiles ../../proto/*.proto), which
+  # subtree-copy vendoring drops. Git revisions pinned with fixed-output
+  # hashes; recompute after any lock change touching them.
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "typedb-protocol-0.0.0" = "sha256-vP1UttrPyKzFnE6b3/b5sA+vyld29/sEP82E2+hChic=";
+      "typeql-0.0.0" = "sha256-ZoXQhzAvexROIhg/8hr9yR01aJqumDeC7FNkpBP/o/E=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
