@@ -203,6 +203,7 @@ in
     users = {
       users.${user} = {
         isSystemUser = true;
+        home = "/var/lib/funkwhale";
         group = group;
       };
       groups.${group} = { };
@@ -339,6 +340,7 @@ in
             '';
             serviceConfig = {
               Type = "oneshot";
+              RemainAfterExit = true;
             };
           };
 
@@ -346,7 +348,7 @@ in
             description = "Funkwhale application server";
 
             serviceConfig = {
-              type = "notify";
+              Type = "notify";
               KillMode = "mixed";
               ExecStart = ''
                 ${lib.getExe' pythonEnv "gunicorn"} \

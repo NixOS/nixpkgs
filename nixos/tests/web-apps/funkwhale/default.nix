@@ -25,7 +25,7 @@
 
         services.typesense = {
           enable = true;
-          settings.server.api-address = "localhost";
+          settings.server.api-address = "127.0.0.1";
           apiKeyFile = pkgs.writeText "surely-not-in-store" "publicly-secret-key";
         };
 
