@@ -270,6 +270,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "squeezelite"
       "tidal"
       "vban_receiver"
+      "wiim"
       "ytmusic"
     ]);
 
@@ -293,7 +294,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/qqmusic"
     "tests/providers/siriusxm"
     "tests/providers/stream_limits"
-    "tests/providers/wiim"
     "tests/providers/yandex_music"
     "tests/providers/yandex_smarthome"
     "tests/providers/yandex_station"
