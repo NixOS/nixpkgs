@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/openSUSE/xinetd";
     license = lib.licenses.xinetd;
     maintainers = with lib.maintainers; [ fgaz ];
+    mainProgram = "xinetd";
   };
 })
