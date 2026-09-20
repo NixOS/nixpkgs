@@ -39503,7 +39503,7 @@ with self;
       rm t/plugin/auth/github.t t/plugin/form/bootstrap4.t
     '';
     meta = {
-      homepage = "http://preaction.me/yancy/";
+      homepage = "https://github.com/preaction/Yancy";
       description = "Best Web Framework Deserves the Best CMS";
       license = with lib.licenses; [
         artistic1
