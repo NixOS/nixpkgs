@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://docs.gitops.weave.works";
+    homepage = "https://github.com/weaveworks/weave-gitops";
     description = "Weave Gitops CLI";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
