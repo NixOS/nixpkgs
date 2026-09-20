@@ -13,7 +13,7 @@
   boost,
   wrapGAppsHook3,
   glib-networking,
-  protobuf,
+  protobuf_21,
   gtkmm3,
   libpeas,
   gsettings-desktop-schemas,
@@ -21,12 +21,17 @@
   python3,
   fetchpatch,
 
-  # vim to be used, should support the GUI mode.
-  vim,
+  vim-full,
 
   # additional python3 packages to be available within plugins
   extraPythonPackages ? [ ],
 }:
+
+let
+  protobuf = protobuf_21;
+  # Vim to be used, should support the GUI mode.
+  vim = vim-full.override { features = "normal"; };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astroid";
