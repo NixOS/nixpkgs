@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools_80,
   setuptools-scm,
 
   # dependencies
@@ -17,6 +18,7 @@
   dask,
 
   # tests
+  cupy,
   pytest-xdist,
   pytestCheckHook,
 }:
@@ -39,7 +41,11 @@ buildPythonPackage rec {
       --replace-fail "if arr:" "if (arr is not None) and (arr.size > 0):"
   '';
 
-  build-system = [ setuptools-scm ];
+  # Use pinned setuptools for pkg_resources
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   dependencies = [
     cloudpickle
@@ -52,6 +58,7 @@ buildPythonPackage rec {
   ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
+    cupy
     pytest-xdist
     pytestCheckHook
   ];
