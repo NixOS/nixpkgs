@@ -17274,7 +17274,7 @@ with self;
     meta = {
       changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
-      homepage = "http://imager.perl.org";
+      homepage = "https://metacpan.org/pod/Imager";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
