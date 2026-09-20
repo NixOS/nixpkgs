@@ -80,11 +80,64 @@ let
 
   lomiriWallpaperDconfSettings = pkgs: {
     settings = {
+      "com/lomiri/shell" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      "com/lomiri/shell/greeter" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      # Fallback
       "org/gnome/desktop/background" = {
         picture-uri = "file://${wallpaperFile pkgs}";
       };
     };
   };
+
+  sharedMachineConfig =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      imports = [
+        ./common/auto.nix
+        ./common/user-account.nix
+      ];
+
+      virtualisation.memorySize = 2047;
+
+      users.users.${user} = {
+        inherit description password;
+      };
+
+      test-support.displayManager.auto = {
+        enable = true;
+        inherit user;
+      };
+
+      # Help with OCR
+      fonts.packages = [ pkgs.inconsolata ];
+
+      # To control mouse via scripting
+      programs.ydotool.enable = true;
+
+      services.desktopManager.lomiri.enable = true;
+      services.displayManager.defaultSession = "lomiri";
+
+      environment = {
+        etc."${wallpaperName}".source = wallpaperFile pkgs;
+        variables = {
+          LOMIRI_RUNNING_IN_VM = "1";
+        };
+      };
+
+      # Help with OCR
+      systemd.tmpfiles.settings = {
+        "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+      };
+    };
 
   sharedTestFunctions = lib: ''
     from collections.abc import Callable
@@ -268,31 +321,8 @@ let
 
         nodes.machine =
           { config, ... }:
-          {
-            imports = [
-              ./common/auto.nix
-              ./common/user-account.nix
-            ];
-
-            virtualisation.memorySize = 2047;
-
-            users.users.${user} = {
-              inherit description password;
-            };
-
-            test-support.displayManager.auto = {
-              enable = true;
-              inherit user;
-            };
-
-            # To control mouse via scripting
-            programs.ydotool.enable = true;
-
-            services.desktopManager.lomiri.enable = lib.mkForce true;
-            services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-            # Not setting wallpaper, as it breaks indicator OCR(?)
-          };
+          # Not setting wallpaper, as it breaks indicator OCR(?)
+          sharedMachineConfig { inherit config pkgs lib; };
 
         enableOCR = true;
 
@@ -369,22 +399,22 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [ ./common/user-account.nix ];
-
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
+          # Want to enter greeter
+          test-support.displayManager.auto.enable = false;
 
           services.xserver.enable = true;
+          services.desktopManager.lomiri.enable = false;
           services.xserver.windowManager.icewm.enable = true;
           services.xserver.displayManager.lightdm = {
             enable = true;
             greeters.lomiri.enable = true;
           };
           services.displayManager.defaultSession = lib.mkForce "none+icewm";
+
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
         };
 
       enableOCR = true;
@@ -403,6 +433,7 @@ in
               # Login
               machine.send_chars("${password}\n")
               machine.wait_for_x()
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.screenshot("session_launched")
         '';
     }
@@ -419,32 +450,7 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
-
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
           environment = {
             # Help with OCR
             etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
@@ -466,8 +472,6 @@ in
               };
             };
 
-            etc."${wallpaperName}".source = wallpaperFile pkgs;
-
             systemPackages = with pkgs; [
               # Forcing alacritty to run as an X11 app when opened from the starter menu
               (symlinkJoin {
@@ -486,15 +490,6 @@ in
                 inherit (alacritty) meta;
               })
             ];
-          };
-
-          programs.dconf.profiles.user.databases = [
-            (lomiriWallpaperDconfSettings pkgs)
-          ];
-
-          # Help with OCR
-          systemd.tmpfiles.settings = {
-            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
         };
 
@@ -572,57 +567,13 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
           users.users.${user} = {
-            inherit description password;
             # polkit agent test
             extraGroups = [ "wheel" ];
           };
 
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
           environment = {
-            # Help with OCR
-            etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
-              font = rec {
-                normal.family = "Inconsolata";
-                bold.family = normal.family;
-                italic.family = normal.family;
-                bold_italic.family = normal.family;
-                size = 16;
-              };
-              colors = rec {
-                primary = {
-                  foreground = "0x000000";
-                  background = "0xffffff";
-                };
-                normal = {
-                  green = primary.foreground;
-                };
-              };
-            };
-
-            etc."${wallpaperName}".source = wallpaperFile pkgs;
-
             variables = {
               # So we can test what lomiri-content-hub is working behind the scenes
               LOMIRI_CONTENT_HUB_LOGGING_LEVEL = "2";
@@ -632,15 +583,6 @@ in
               # For a convenient way of kicking off lomiri-content-hub peer collection
               lomiri.lomiri-content-hub.examples
             ];
-          };
-
-          programs.dconf.profiles.user.databases = [
-            (lomiriWallpaperDconfSettings pkgs)
-          ];
-
-          # Help with OCR
-          systemd.tmpfiles.settings = {
-            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
         };
 
@@ -755,21 +697,14 @@ in
 
         nodes.machine =
           { config, ... }:
-          {
-            imports = [ ./common/user-account.nix ];
-
-            virtualisation.memorySize = 2047;
-
+          lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
             users.users.${user} = {
-              inherit description;
+              # Need different password to test keymap differences
               password = lib.mkForce pwOutput;
             };
 
-            services.desktopManager.lomiri.enable = lib.mkForce true;
-            services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-            # Help with OCR
-            fonts.packages = [ pkgs.inconsolata ];
+            # Want to enter greeter
+            test-support.displayManager.auto.enable = false;
 
             services.xserver.xkb.layout = lib.strings.concatStringsSep "," [
               # Start with a non-QWERTY keymap to test keymap patch
@@ -777,17 +712,6 @@ in
               # Then a QWERTY one to test switching
               "us"
             ];
-
-            environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
-
-            programs.dconf.profiles.user.databases = [
-              (lomiriWallpaperDconfSettings pkgs)
-            ];
-
-            # Help with OCR
-            systemd.tmpfiles.settings = {
-              "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
-            };
           };
 
         enableOCR = true;
