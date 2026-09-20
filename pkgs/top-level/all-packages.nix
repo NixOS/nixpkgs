@@ -381,6 +381,9 @@ with pkgs;
   ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
   ollama-vulkan = callPackage ../by-name/ol/ollama/package.nix { acceleration = "vulkan"; };
 
+  ds4-rocm = callPackage ../by-name/ds/ds4/package.nix { backend = "rocm"; };
+  ds4-cuda = callPackage ../by-name/ds/ds4/package.nix { backend = "cuda"; };
+
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
   devShellTools = callPackage ../build-support/dev-shell-tools { };
