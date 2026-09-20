@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   wrapGAppsHook3,
   stripJavaArchivesHook,
@@ -27,15 +28,6 @@ let
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  desktopItem = makeDesktopItem {
-    name = "jameica";
-    exec = "jameica";
-    comment = "Free Runtime Environment for Java Applications.";
-    desktopName = "Jameica";
-    genericName = "Jameica";
-    icon = "jameica";
-    categories = [ "Office" ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "jameica";
@@ -54,12 +46,25 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     makeWrapper
     stripJavaArchivesHook
+    copyDesktopItems
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     glib
     libxtst
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jameica";
+      exec = "jameica";
+      comment = "Free Runtime Environment for Java Applications.";
+      desktopName = "Jameica";
+      genericName = "Jameica";
+      icon = "jameica";
+      categories = [ "Office" ];
+    })
   ];
 
   dontWrapGApps = true;
@@ -75,7 +80,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{jameica-${version},java}/
 
     # copy libraries except SWT
     cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
@@ -85,7 +90,6 @@ stdenv.mkDerivation rec {
     install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/icons/hicolor/64x64/apps/jameica.png
-    cp ${desktopItem}/share/applications/* $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
 
