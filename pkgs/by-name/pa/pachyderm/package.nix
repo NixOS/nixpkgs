@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Containerized Data Analytics";
-    homepage = "https://www.pachyderm.com/";
+    homepage = "https://github.com/pachyderm/pachyderm";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "pachctl";
