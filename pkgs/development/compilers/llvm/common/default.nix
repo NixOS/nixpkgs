@@ -159,6 +159,13 @@ makeScopeWithSplicing' {
 
       bintoolsNoLibc' = if bootBintoolsNoLibc == null then self.bintoolsNoLibc else bootBintoolsNoLibc;
       bintools' = if bootBintools == null then self.bintools else bootBintools;
+
+      useLibUnwind = (
+        !stdenv.targetPlatform.isWasm
+        && !stdenv.targetPlatform.isFreeBSD
+        && !stdenv.targetPlatform.isWindows
+      );
+
     in
     {
       inherit (metadata) release_version;
@@ -290,7 +297,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetLlvmPackages.compiler-rt
         ]
-        ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
+        ++ lib.optionals useLibUnwind [
           targetLlvmPackages.libunwind
         ];
         extraBuildCommands = mkExtraBuildCommands cc;
@@ -299,18 +306,12 @@ makeScopeWithSplicing' {
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmPackages.compiler-rt}/lib"
         ]
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) "--unwindlib=libunwind"
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm
-          && !stdenv.targetPlatform.isFreeBSD
-          && stdenv.targetPlatform.useLLVM or false
-        ) "-lunwind"
+        ++ (lib.optional useLibUnwind "--unwindlib=libunwind")
+        ++ (lib.optional (useLibUnwind && stdenv.targetPlatform.useLLVM) "-lunwind")
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-        nixSupport.cc-ldflags = lib.optionals (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) [ "-L${targetLlvmPackages.libunwind}/lib" ];
+        nixSupport.cc-ldflags = lib.optionals useLibUnwind [
+          "-L${targetLlvmPackages.libunwind}/lib"
+        ];
       };
 
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
@@ -324,32 +325,21 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetLlvmPackages.compiler-rt-no-libc
         ]
-        ++
-          lib.optionals
-            (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-            )
-            [
-              targetLlvmPackages.libunwind
-            ];
+        ++ lib.optionals (useLibUnwind && !stdenv.targetPlatform.isDarwin) [
+          targetLlvmPackages.libunwind
+        ];
         extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmPackages.compiler-rt-no-libc}/lib"
         ]
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-        ) "--unwindlib=libunwind"
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm
-          && !stdenv.targetPlatform.isFreeBSD
-          && stdenv.targetPlatform.useLLVM or false
-        ) "-lunwind"
+        ++ (lib.optional (useLibUnwind && !stdenv.targetPlatform.isDarwin) "--unwindlib=libunwind")
+        ++ (lib.optional (useLibUnwind && stdenv.targetPlatform.useLLVM) "-lunwind")
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-        nixSupport.cc-ldflags = lib.optionals (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-        ) [ "-L${targetLlvmPackages.libunwind}/lib" ];
+        nixSupport.cc-ldflags = lib.optionals (useLibUnwind && !stdenv.targetPlatform.isDarwin) [
+          "-L${targetLlvmPackages.libunwind}/lib"
+        ];
       };
 
       clangWithLibcAndBasicRt = wrapCCWith rec {
@@ -460,13 +450,14 @@ makeScopeWithSplicing' {
             overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
       };
 
-      libunwind = callPackage ./libunwind {
-        stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
-      };
-
       openmp = callPackage ./openmp { };
 
       mlir = callPackage ./mlir { };
+    }
+    // lib.optionalAttrs useLibUnwind {
+      libunwind = callPackage ./libunwind {
+        stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+      };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt { };

@@ -14,6 +14,7 @@
   libcxx,
   linuxHeaders,
   freebsd,
+  windows,
 
   # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
@@ -146,10 +147,18 @@ stdenv.mkDerivation (finalAttrs: {
         # wrong, or perhaps there is a way to provide an assert.h.
         "-Wno-error=implicit-function-declaration"
       ]
+      ++ lib.optionals (useLLVM && stdenv.targetPlatform.isWindows) [
+        "-isystem ${windows.sdk}/crt/include"
+        "-isystem ${windows.sdk}/sdk/include"
+        "-isystem ${windows.sdk}/sdk/include/ucrt"
+      ]
     );
 
     # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
     NIX_CFLAGS_LINK = lib.optionalString (stdenv.hostPlatform.isDarwin) "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  }
+  // lib.optionalAttrs (stdenv.targetPlatform.isWindows && stdenv.cc.bintools.isLLVM) {
+    RC = "${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}windres";
   };
 
   cmakeFlags = [
