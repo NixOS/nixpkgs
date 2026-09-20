@@ -58,7 +58,10 @@ buildGo127Module (finalAttrs: {
     homepage = "https://github.com/tailscale/tailcat";
     changelog = "https://github.com/tailscale/tailcat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sophronesis ];
+    maintainers = with lib.maintainers; [
+      sophronesis
+      mfrw
+    ];
     mainProgram = "tailcat";
   };
 })
