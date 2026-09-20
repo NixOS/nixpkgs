@@ -36,4 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtk3 ];
 
+  postInstall = ''
+    # This is excluded from the standard build for some reason, but we want this
+    cmake --install . --component grooves
+  '';
 })

@@ -4,6 +4,7 @@
   pname,
   version,
   meta,
+  undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -12,34 +13,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     version
     meta
     ;
-  srcs =
-
-    let
-      plugin = fetchurl {
-        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-arm64.dylib";
-        hash = "sha256-jmuob0qslYhxiE2ShfTwY4RJAKBLJSUb+VBEM0sQPbo=";
-      };
-    in
-    [
-      plugin
-      (fetchurl {
-        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python64.py";
-        hash = "sha256-GDlvfARg1g5oTH2itEug6Auxr9iFlPDdGueInGmHqSI=";
-      })
-      (fetchurl {
-        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python32.py";
-        hash = "sha256-np2r568csSdIS7VZHDASroZlXhpfxXwNn0gROTinWU4=";
-      })
+  src = fetchurl {
+    urls = [
+      "https://www.sws-extension.org/download/featured/sws-${finalAttrs.version}-Darwin-arm64.dmg"
+      "https://www.sws-extension.org/download/old/sws-${finalAttrs.version}-Darwin-arm64.dmg"
     ];
+    hash = "sha256-AzOLBgh3WECqbFHMTZ4EBGNLpAleXFJT2USzh7pDkQA=";
+  };
 
-  unpackCmd = ''
-    cp $curSrc $(stripHash $curSrc)
-  '';
+  nativeBuildInputs = [ undmg ];
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
-    install -D -t $out/Scripts *.py
-    install -D -t $out/UserPlugins *.dylib
+
+    mkdir -p $out/Data
+    cp -r Grooves $out/Data
+    install -D *.py -t $out/Scripts
+    install -D *.dylib -t $out/UserPlugins
+
     runHook postInstall
   '';
 })
