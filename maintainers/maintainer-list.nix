@@ -28853,6 +28853,12 @@
     githubId = 19289296;
     keys = [ { fingerprint = "6C9E EFC5 1AE0 0131 78DE  B9C8 68FF FB1E C187 88CA"; } ];
   };
+  thebigjc = {
+    email = "thebigjc@gmail.com";
+    github = "thebigjc";
+    githubId = 311085;
+    name = "Jordan Christensen";
+  };
   TheBrainScrambler = {
     email = "esthromeris@riseup.net";
     github = "TheBrainScrambler";
