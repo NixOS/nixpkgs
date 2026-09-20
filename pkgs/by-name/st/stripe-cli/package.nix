@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "stripe-cli";
-  version = "1.43.2";
+  version = "1.51.0";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,9 +21,9 @@ buildGoModule (finalAttrs: {
     owner = "stripe";
     repo = "stripe-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FopjU7m6RbEJTekIFG2XppZ52U/TrFpipVUDWwngPJI=";
+    hash = "sha256-PtY3eiQDCEMzRxv4sry1gpJgSOwduzZoHELsNT7f3Zk=";
   };
-  vendorHash = "sha256-6z6jfRMmEll1703xUJYSc4WU7CN7tMMyidNtay6vo2M=";
+  vendorHash = "sha256-pgL25vTwQcpwljwqEKdUar8sjJS8YYPWpBBCnGh08+o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
