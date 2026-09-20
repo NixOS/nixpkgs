@@ -1,0 +1,54 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index fed126a..9caf27d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1807,12 +1807,6 @@ dependencies = [
+  "windows-sys 0.59.0",
+ ]
+ 
+-[[package]]
+-name = "rustls-pki-types"
+-version = "1.14.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "be040f8b0a225e40375822a563fa9524378b9d63112f53e19ffff34df5d33fdd"
+-
+ [[package]]
+ name = "rustversion"
+ version = "1.0.20"
+@@ -2605,15 +2599,6 @@ dependencies = [
+  "wasm-bindgen",
+ ]
+ 
+-[[package]]
+-name = "webpki-root-certs"
+-version = "1.0.6"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "804f18a4ac2676ffb4e8b5b5fa9ae38af06df08162314f96a68d2a363e21a8ca"
+-dependencies = [
+- "rustls-pki-types",
+-]
+-
+ [[package]]
+ name = "winapi"
+ version = "0.3.9"
+@@ -2796,7 +2781,6 @@ dependencies = [
+  "tower-http",
+  "url",
+  "want",
+- "webpki-root-certs",
+  "zstd",
+ ]
+ 
+diff --git a/Cargo.toml b/Cargo.toml
+index b47bd05..89b6455 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -59,7 +59,7 @@ bincode = "1.3.3"
+ base2048 = "2.0.2"
+ revision = "0.17.0"
+ fake_user_agent = "0.2.2"
+-wreq = { version = "6.0.0-rc.28", features = ["brotli", "gzip", "deflate", "zstd", "json", "stream", "socks"] }
++wreq = { version = "6.0.0-rc.28", default-features = false, features = ["brotli", "gzip", "deflate", "zstd", "json", "stream", "socks"] }
+ wreq-util = { version = "3.0.0-rc.10" }
+ 
+ [dev-dependencies]
