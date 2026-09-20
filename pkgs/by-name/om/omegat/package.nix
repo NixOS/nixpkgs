@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       tool with fuzzy matching, translation memory, keyword search, glossaries, and
       translation leveraging into updated projects.
     '';
-    homepage = "http://www.omegat.org/";
+    homepage = "https://sourceforge.net/projects/omegat/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ t184256 ];
