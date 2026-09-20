@@ -195,6 +195,7 @@ mapAliases {
   discogs_client = throw "'discogs_client' has been renamed to/replaced by 'discogs-client'"; # Converted to throw 2025-10-29
   distutils_extra = throw "'distutils_extra' has been renamed to/replaced by 'distutils-extra'"; # Converted to throw 2025-10-29
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
+  django-admin-datta = throw "django-admin-datta has been removed because it is unmaintained"; # added 2026-09-19
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
