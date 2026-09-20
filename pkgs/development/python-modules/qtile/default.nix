@@ -65,6 +65,7 @@
   xvfb,
 
   # passthru.tests
+  qtile,
   nixosTests,
 }:
 
@@ -145,6 +146,8 @@ buildPythonPackage (finalAttrs: {
     librsvg
   ];
 
+  doCheck = false; # The test suite is slow and tends to flaky in hydra jobs
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
@@ -195,7 +198,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    tests.qtile = nixosTests.qtile;
+    tests = {
+      nixosTestSession = nixosTests.qtile;
+      # overridePythonAttrs is not available in finalAttrs.finalPackage
+      withCheck = qtile.overridePythonAttrs (_: {
+        doCheck = true;
+      });
+    };
     providedSessions = [ "qtile" ];
   };
 
