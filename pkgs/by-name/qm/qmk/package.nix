@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   pkgsCross,
   avrdude,
@@ -13,7 +13,7 @@
   teensy-loader-cli,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qmk";
   version = "1.2.0";
   pyproject = true;
@@ -23,38 +23,40 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-FkvRbExAGyt2XuTwF7z6gUGULd82KWHEy6GXXYyyikg=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      dotty-dict
-      hid
-      hjson
-      jsonschema
-      milc
-      pygments
-      pyserial
-      pyusb
-      pillow
-    ]
-    ++ [
-      # Binaries need to be in the path so this is in propagatedBuildInputs
-      avrdude
-      bootloadhid
-      dfu-programmer
-      dfu-util
-      wb32-dfu-updater
-      teensy-loader-cli
-      gcc-arm-embedded
-      gnumake
-      pkgsCross.avr.buildPackages.binutils
-      pkgsCross.avr.buildPackages.binutils.bintools
-      pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libc
-    ];
+  dependencies = with python3Packages; [
+    dotty-dict
+    hid
+    hjson
+    jsonschema
+    milc
+    pygments
+    pyserial
+    pyusb
+    pillow
+  ];
+
+  propagatedBuildInputs = [
+    # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    bootloadhid
+    dfu-programmer
+    dfu-util
+    wb32-dfu-updater
+    teensy-loader-cli
+    gcc-arm-embedded
+    gnumake
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
+    pkgsCross.avr.buildPackages.gcc
+    pkgsCross.avr.libc
+  ];
 
   # no tests implemented
   doCheck = false;
@@ -76,8 +78,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         - qmk lint
       - ... and many more!
     '';
-    license = lib.licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.PLUS lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.RossSmyth ];
     mainProgram = "qmk";
   };
 })
