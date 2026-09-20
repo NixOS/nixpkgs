@@ -1,0 +1,995 @@
+From 19f6e0ac52c1a39e7981f0f3f15da620f4d2bee1 Mon Sep 17 00:00:00 2001
+From: Marius Gripsgard <marius@ubports.com>
+Date: Wed, 26 Aug 2026 17:09:45 +0200
+Subject: [PATCH 1/3] Vendor the Launcher API headers instead of depending on
+ lomiri-api
+
+lomiri is the only implementer and consumer of lomiri-shell-launcher,
+so there's no value in fetching those interface headers from a
+separate API package at build time. The headers move into
+include/lomiri/shell/launcher/ here; the CMakeLists.txt files that
+referenced them via the old LAUNCHER_API_INCLUDEDIR pkg-config
+variable (for AUTOMOC's header list) now point at the local copy
+instead. lomiri-api drops its copy in a companion commit.
+---
+ CMakeLists.txt                                |   1 -
+ .../shell/launcher/AppDrawerModelInterface.h  |  71 +++++++
+ .../shell/launcher/LauncherItemInterface.h    | 185 ++++++++++++++++
+ .../shell/launcher/LauncherModelInterface.h   | 198 ++++++++++++++++++
+ .../shell/launcher/QuickListModelInterface.h  |  94 +++++++++
+ .../Greeter/Lomiri/Launcher/CMakeLists.txt    |   6 +-
+ plugins/Lomiri/Launcher/CMakeLists.txt        |   8 +-
+ plugins/Utils/CMakeLists.txt                  |   6 +-
+ tests/mocks/Lomiri/Launcher/CMakeLists.txt    |   8 +-
+ tests/mocks/Utils/CMakeLists.txt              |   8 +-
+ .../Greeter/Lomiri/Launcher/CMakeLists.txt    |   8 +-
+ tests/plugins/Lomiri/Launcher/CMakeLists.txt  |  14 +-
+ 12 files changed, 577 insertions(+), 30 deletions(-)
+ create mode 100644 include/lomiri/shell/launcher/AppDrawerModelInterface.h
+ create mode 100644 include/lomiri/shell/launcher/LauncherItemInterface.h
+ create mode 100644 include/lomiri/shell/launcher/LauncherModelInterface.h
+ create mode 100644 include/lomiri/shell/launcher/QuickListModelInterface.h
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e00d04308..1b05afc01 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,7 +93,6 @@ pkg_check_modules(APPLICATION_API REQUIRED lomiri-shell-application=28)
+ pkg_check_modules(GEONAMES REQUIRED geonames>=0.2)
+ pkg_check_modules(GIO REQUIRED gio-2.0>=2.32 gio-unix-2.0)
+ pkg_check_modules(GLIB REQUIRED glib-2.0>=2.32)
+-pkg_check_modules(LAUNCHER_API REQUIRED lomiri-shell-launcher=13)
+ pkg_check_modules(QMENUMODEL REQUIRED qmenumodel)
+ pkg_check_modules(GD4 REQUIRED gnome-desktop-4)
+ # 0.1.5 adds lal-application-end.target.
+diff --git a/include/lomiri/shell/launcher/AppDrawerModelInterface.h b/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+new file mode 100644
+index 000000000..ffe07c380
+--- /dev/null
++++ b/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+@@ -0,0 +1,71 @@
++/*
++ * Copyright 2016 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#pragma once
++
++#include <lomiri/SymbolExport.h>
++
++#include <QAbstractListModel>
++
++namespace lomiri {
++namespace shell {
++namespace launcher {
++
++/**
++ * @brief A list of app drawer items to be displayed
++ *
++ * This model exposes all the items that should be shown in the app drawer.
++ */
++class LOMIRI_API AppDrawerModelInterface: public QAbstractListModel
++{
++    Q_OBJECT
++public:
++    /**
++     * @brief The Roles supported by the model
++     *
++     * See LauncherItemInterface properties for details.
++     */
++    enum Roles {
++        RoleAppId,
++        RoleName,
++        RoleIcon,
++        RoleKeywords,
++        RoleUsage
++    };
++    Q_ENUM(Roles)
++
++    /// @cond
++    AppDrawerModelInterface(QObject* parent = nullptr): QAbstractListModel(parent) {}
++    /// @endcond
++
++    virtual ~AppDrawerModelInterface() {}
++
++    /// @cond
++    QHash<int, QByteArray> roleNames() const override {
++        QHash<int, QByteArray> roles;
++        roles.insert(RoleAppId, "appId");
++        roles.insert(RoleName, "name");
++        roles.insert(RoleIcon, "icon");
++        roles.insert(RoleKeywords, "keywords");
++        roles.insert(RoleUsage, "usage");
++        return roles;
++    }
++    /// @endcond
++};
++
++}
++}
++}
+diff --git a/include/lomiri/shell/launcher/LauncherItemInterface.h b/include/lomiri/shell/launcher/LauncherItemInterface.h
+new file mode 100644
+index 000000000..4d62f3351
+--- /dev/null
++++ b/include/lomiri/shell/launcher/LauncherItemInterface.h
+@@ -0,0 +1,185 @@
++/*
++ * Copyright 2013-2106 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_LAUNCHER_LAUNCHERITEM_H
++#define LOMIRI_SHELL_LAUNCHER_LAUNCHERITEM_H
++
++#include <lomiri/SymbolExport.h>
++
++#include <QtCore/QObject>
++
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++Q_MOC_INCLUDE("QuickListModelInterface.h")
++#endif
++
++namespace lomiri
++{
++namespace shell
++{
++namespace launcher
++{
++
++class QuickListModelInterface;
++
++/**
++ * @brief An item presented in the launcher
++ *
++ * The items hold all the information required for the visual representation
++ * in the launcher.
++ */
++
++class LOMIRI_API LauncherItemInterface: public QObject
++{
++    Q_OBJECT
++
++    /**
++     * @brief The appId of the application associated with the item.
++     */
++    Q_PROPERTY(QString appId READ appId CONSTANT)
++
++    /**
++     * @brief The user visible name of the item.
++     */
++    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
++
++    /**
++     * @brief The full path to the icon to be shown for the item.
++     */
++    Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
++
++    /**
++     * @brief The keywords for this item.
++     */
++    Q_PROPERTY(QStringList keywords READ keywords NOTIFY keywordsChanged)
++
++    /**
++     * @brief The popularity of this application, e.g. usage count given by Zeitgeist
++     */
++    Q_PROPERTY(uint popularity READ popularity NOTIFY popularityChanged)
++
++    /**
++     * @brief A flag whether the item is pinned or not
++     */
++    Q_PROPERTY(bool pinned READ pinned NOTIFY pinnedChanged)
++
++    /**
++     * @brief A flag whether the application belonging to the icon is currently running or not
++     */
++    Q_PROPERTY(bool running READ running NOTIFY runningChanged)
++
++    /**
++     * @brief A flag wheter the application is in the recently used applications list
++     */
++    Q_PROPERTY(bool recent READ recent NOTIFY recentChanged)
++
++    /**
++     * @brief The percentage of the progress bar shown on the item.
++     *
++     * For values from 0 and 100 this will present a progress bar on the item.
++     * For values outside this range, no progress bar will be drawn.
++     */
++    Q_PROPERTY(int progress READ progress NOTIFY progressChanged)
++
++    /**
++     * @brief The number for the count emblem on the item
++     *
++     * For values >0 this will paint an emblem containing the number.
++     * For 0 and negative values, no count emblem will be drawn.
++     */
++    Q_PROPERTY(int count READ count NOTIFY countChanged)
++
++    /**
++     * @brief The visibility of the count emblem.
++     *
++     * True if the count emblem should be visible, false otherwise.
++     */
++    Q_PROPERTY(bool countVisible READ countVisible NOTIFY countVisibleChanged)
++
++    /**
++     * @brief The focused state of the item
++     *
++     * True if focused, false if not focused
++     */
++    Q_PROPERTY(bool focused READ focused NOTIFY focusedChanged)
++
++    /**
++     * @brief The alerting state of the item
++     *
++     * True if alerting/wobbling, false if not alerting/wobbling
++     */
++    Q_PROPERTY(bool alerting READ alerting NOTIFY alertingChanged)
++
++    /**
++     * @brief The number of surfaces that this application entry has opened
++     *
++     * The Launcher will display up to 3 pips, one for each surface
++     */
++    Q_PROPERTY(int surfaceCount READ surfaceCount NOTIFY surfaceCountChanged)
++
++    /**
++     * @brief The quick list menu contents for the item
++     *
++     * Items can have a quick list menu. This property holds a model for
++     * the contents of that menu. The pointer to the model will be
++     * constant, but of course the contents of the model can change.
++     */
++    Q_PROPERTY(lomiri::shell::launcher::QuickListModelInterface* quickList READ quickList CONSTANT)
++
++protected:
++    /// @cond
++    LauncherItemInterface(QObject *parent = 0): QObject(parent) {}
++
++public:
++    virtual ~LauncherItemInterface() {}
++
++    virtual QString appId() const = 0;
++    virtual QString name() const = 0;
++    virtual QString icon() const = 0;
++    virtual QStringList keywords() const = 0;
++    virtual uint popularity() const = 0;
++    virtual bool pinned() const = 0;
++    virtual bool running() const = 0;
++    virtual bool recent() const = 0;
++    virtual int progress() const = 0;
++    virtual int count() const = 0;
++    virtual bool countVisible() const = 0;
++    virtual bool focused() const = 0;
++    virtual bool alerting() const = 0;
++    virtual int surfaceCount() const = 0;
++    virtual lomiri::shell::launcher::QuickListModelInterface *quickList() const = 0;
++
++Q_SIGNALS:
++    void nameChanged(const QString &name);
++    void iconChanged(const QString &icon);
++    void keywordsChanged(const QStringList &keywords);
++    void popularityChanged(uint popularity);
++    void pinnedChanged(bool pinned);
++    void runningChanged(bool running);
++    void recentChanged(bool running);
++    void progressChanged(int progress);
++    void countChanged(int count);
++    void countVisibleChanged(bool countVisible);
++    void focusedChanged(bool focused);
++    void alertingChanged(bool alerting);
++    void surfaceCountChanged(int surfaceCount);
++    /// @endcond
++};
++
++} // namespace launcher
++} // namespace shell
++} // namespace lomiri
++
++#endif // LOMIRI_SHELL_LAUNCHER_LAUNCHERITEMINTERFACE_H
+diff --git a/include/lomiri/shell/launcher/LauncherModelInterface.h b/include/lomiri/shell/launcher/LauncherModelInterface.h
+new file mode 100644
+index 000000000..63810205e
+--- /dev/null
++++ b/include/lomiri/shell/launcher/LauncherModelInterface.h
+@@ -0,0 +1,198 @@
++/*
++ * Copyright 2013 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authors:
++ *      Michael Zanetti <michael.zanetti@canonical.com>
++ */
++
++#ifndef LOMIRI_SHELL_LAUNCHER_LAUNCHERMODELINTERFACE_H
++#define LOMIRI_SHELL_LAUNCHER_LAUNCHERMODELINTERFACE_H
++
++#include <lomiri/SymbolExport.h>
++
++#include <lomiri/shell/application/ApplicationManagerInterface.h>
++
++#include <QtCore/QAbstractListModel>
++
++namespace lomiri
++{
++namespace shell
++{
++namespace launcher
++{
++
++class LauncherItemInterface;
++
++/**
++ * @brief A list of launcher items to be displayed
++ *
++ * This model exposes all the launcher items that should be shown in the launcher.
++ */
++class LOMIRI_API LauncherModelInterface: public QAbstractListModel
++{
++    Q_OBJECT
++
++    /**
++     * @brief The ApplicationManager instance the launcher should be connected to
++     *
++     * The Launcher will display applications contained in the ApplicationManager as
++     * running/recent apps and adjust the currently focused app highlight according
++     * to this.
++     */
++    Q_PROPERTY(lomiri::shell::application::ApplicationManagerInterface* applicationManager
++               READ applicationManager WRITE setApplicationManager NOTIFY applicationManagerChanged)
++
++    /**
++     * @brief Only show pinned apps, hiding the unpinned running/recent ones.
++     */
++    Q_PROPERTY(bool onlyPinned READ onlyPinned WRITE setOnlyPinned NOTIFY onlyPinnedChanged)
++
++protected:
++    /// @cond
++    LauncherModelInterface(QObject *parent = 0): QAbstractListModel(parent) {
++        m_roleNames.insert(RoleAppId, "appId");
++        m_roleNames.insert(RoleName, "name");
++        m_roleNames.insert(RoleIcon, "icon");
++        m_roleNames.insert(RolePinned, "pinned");
++        m_roleNames.insert(RoleRunning, "running");
++        m_roleNames.insert(RoleRecent, "recent");
++        m_roleNames.insert(RoleProgress, "progress");
++        m_roleNames.insert(RoleCount, "count");
++        m_roleNames.insert(RoleCountVisible, "countVisible");
++        m_roleNames.insert(RoleFocused, "focused");
++        m_roleNames.insert(RoleAlerting, "alerting");
++        m_roleNames.insert(RoleSurfaceCount, "surfaceCount");
++    }
++    /// @endcond
++
++public:
++    /**
++     * @brief The Roles supported by the model
++     *
++     * See LauncherItemInterface properties for details.
++     */
++    enum Roles {
++        RoleAppId = Qt::UserRole,
++        RoleName,
++        RoleIcon,
++        RolePinned,
++        RoleRunning,
++        RoleRecent,
++        RoleProgress,
++        RoleCount,
++        RoleCountVisible,
++        RoleFocused,
++        RoleAlerting,
++        RoleSurfaceCount
++    };
++
++    virtual ~LauncherModelInterface() {}
++
++    /**
++     * @brief Move an item in the model.
++     *
++     * @param oldIndex The current (old) index of the item to be moved.
++     * @param newIndex The new index where the item should be moved to.
++     */
++    Q_INVOKABLE virtual void move(int oldIndex, int newIndex) = 0;
++
++    /**
++     * @brief Get a launcher item.
++     *
++     * Note: QML requires the full namespace in the return value.
++     *
++     * @param index the index of the item to get
++     * @returns The item.
++     */
++    Q_INVOKABLE virtual lomiri::shell::launcher::LauncherItemInterface *get(int index) const = 0;
++
++    /**
++     * @brief Pin an item to the launcher.
++     *
++     * Recent and running applications will eventually disappear from the model
++     * as the application is closed or new recent items appear. Pinning an item
++     * to the launcher makes it persist until remove is called on it.
++     *
++     * @param appId The appId of the item to be pinned.
++     * @param index The index where the item should be pinned to. This parameter is optional
++     * and if not supplied, the item will be pinned to the current position.
++     * Note: If an item is not contained in the launcher yet, calling this without an index
++     * will pin the item to the end of the list.
++     */
++    Q_INVOKABLE virtual void pin(const QString &appId, int index = -1) = 0;
++
++    /**
++     * @brief Request removal of an item from the model.
++     *
++     * Note: The actual removal of the item might be delayed in certain circumstances.
++     *
++     * @param appId The appId of the item to be removed.
++     */
++    Q_INVOKABLE virtual void requestRemove(const QString &appId) = 0;
++
++
++    /**
++      * @brief Trigger an action from the QuickList
++      *
++      * @param appId The appId of the LauncherItem.
++      * @param actionIndex The index of the triggered entry in the QuickListModel.
++      */
++    Q_INVOKABLE virtual void quickListActionInvoked(const QString &appId, int actionIndex) = 0;
++
++
++    /**
++      * @brief Set the user for which the launcher should display items.
++      *
++      * @param username The user for which the launcher should display items.
++      */
++    Q_INVOKABLE virtual void setUser(const QString &username) = 0;
++
++    /// @cond
++    virtual lomiri::shell::application::ApplicationManagerInterface *applicationManager() const = 0;
++    virtual void setApplicationManager(lomiri::shell::application::ApplicationManagerInterface *applicationManager) = 0;
++
++    virtual bool onlyPinned() const = 0;
++    virtual void setOnlyPinned(bool onlyPinned) = 0;
++
++    QHash<int, QByteArray> roleNames() const override
++    {
++        return m_roleNames;
++    }
++    /// @endcond
++
++Q_SIGNALS:
++    /// @cond
++    void applicationManagerChanged();
++    void onlyPinnedChanged();
++    /// @endcond
++
++    /**
++      * @brief Emitted when the launcher should hint itself to the user, e.g. to indicate a
++      * change the user should be made aware of.
++      */
++    void hint();
++
++protected:
++    /// @cond
++    QHash<int, QByteArray> m_roleNames;
++    /// @endcond
++
++};
++
++} // namespace launcher
++} // namespace shell
++} // namespace lomiri
++
++#endif // LOMIRI_SHELL_LAUNCHER_LAUNCHERMODELINTERFACE_H
+diff --git a/include/lomiri/shell/launcher/QuickListModelInterface.h b/include/lomiri/shell/launcher/QuickListModelInterface.h
+new file mode 100644
+index 000000000..9a0a8469b
+--- /dev/null
++++ b/include/lomiri/shell/launcher/QuickListModelInterface.h
+@@ -0,0 +1,94 @@
++/*
++ * Copyright 2013 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authors:
++ *      Michael Zanetti <michael.zanetti@canonical.com>
++ */
++
++#ifndef LOMIRI_SHELL_LAUNCHER_QUICKLISTMODELINTERFACE_H
++#define LOMIRI_SHELL_LAUNCHER_QUICKLISTMODELINTERFACE_H
++
++#include <lomiri/SymbolExport.h>
++
++#include <QtCore/QAbstractListModel>
++
++namespace lomiri
++{
++namespace shell
++{
++namespace launcher
++{
++
++/**
++  * @brief A model containing QuickList actions for an application in the launcher.
++  *
++  * The model has the following roles:
++  * - RoleLabel (label): The text entry in the QuickList menu (QString).
++  * - RoleIcon (icon): The icon to be shown for this entry (QString).
++  * - RoleClickable (clickable): Determines if the entry can be triggered or is just a static text (boolean)
++  * - RoleHasSeparator (hasSeparator): Determines if the entry has a separator (boolean)
++  * - RoleIsPrivate (isPrivate): Determines whether the entry should be shown or not in locked mode (e.g. greeter is locked)
++  */
++class LOMIRI_API QuickListModelInterface: public QAbstractListModel
++{
++    Q_OBJECT
++
++protected:
++    /// @cond
++    explicit QuickListModelInterface(QObject *parent = 0) : QAbstractListModel(parent) {
++        m_roleNames.insert(RoleLabel, "label");
++        m_roleNames.insert(RoleIcon, "icon");
++        m_roleNames.insert(RoleClickable, "clickable");
++        m_roleNames.insert(RoleHasSeparator, "hasSeparator");
++        m_roleNames.insert(RoleIsPrivate, "isPrivate");
++    }
++    /// @endcond
++public:
++    /**
++     * @brief The Roles supported by the model
++     *
++     * See class description for details.
++     */
++    enum Roles {
++        RoleLabel,
++        RoleIcon,
++        RoleClickable,
++        RoleHasSeparator,
++        RoleIsPrivate
++    };
++    Q_ENUM(Roles)
++
++    /// @cond
++    virtual ~QuickListModelInterface() {}
++    /// @endcond
++
++    /// @cond
++    QHash<int, QByteArray> roleNames() const override {
++        return m_roleNames;
++    }
++    /// @endcond
++
++protected:
++    /// @cond
++    QHash<int, QByteArray> m_roleNames;
++    /// @endcond
++
++};
++
++} // launcher
++} // shell
++} // lomiri
++
++#endif // LOMIRI_SHELL_LAUNCHER_QUICKLISTMODELINTERFACE_H
+diff --git a/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt b/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
+index 6fe557484..63a39361f 100644
+--- a/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
++++ b/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
+@@ -17,9 +17,9 @@ set(QMLLAUNCHERPLUGINAS_SRC
+     quicklistentry.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/AccountsService/AccountsServiceDBusAdaptor.cpp
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
+     )
+ 
+ add_library(LomiriLauncherAS-qml MODULE
+diff --git a/plugins/Lomiri/Launcher/CMakeLists.txt b/plugins/Lomiri/Launcher/CMakeLists.txt
+index 94b78e577..3ddb2d4d3 100644
+--- a/plugins/Lomiri/Launcher/CMakeLists.txt
++++ b/plugins/Lomiri/Launcher/CMakeLists.txt
+@@ -35,10 +35,10 @@ set(QMLLAUNCHERPLUGIN_SRC
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceListInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/AppDrawerModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+     )
+ 
+ add_library(LomiriLauncher-qml MODULE
+diff --git a/plugins/Utils/CMakeLists.txt b/plugins/Utils/CMakeLists.txt
+index 88f75906b..1bb1053b2 100644
+--- a/plugins/Utils/CMakeLists.txt
++++ b/plugins/Utils/CMakeLists.txt
+@@ -15,9 +15,9 @@ set(QMLPLUGIN_SRC
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
+     applicationsfiltermodel.cpp
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/AppDrawerModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/AppDrawerModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
+     appdrawerproxymodel.cpp
+     constants.cpp
+diff --git a/tests/mocks/Lomiri/Launcher/CMakeLists.txt b/tests/mocks/Lomiri/Launcher/CMakeLists.txt
+index 6faad070d..6b0e8a295 100644
+--- a/tests/mocks/Lomiri/Launcher/CMakeLists.txt
++++ b/tests/mocks/Lomiri/Launcher/CMakeLists.txt
+@@ -5,10 +5,10 @@ include_directories(
+ 
+ set(MockLauncherModel_SOURCES
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/AppDrawerModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+     plugin.cpp
+     MockLauncherModel.cpp
+     MockLauncherItem.cpp
+diff --git a/tests/mocks/Utils/CMakeLists.txt b/tests/mocks/Utils/CMakeLists.txt
+index b92aec48e..14ec6068e 100644
+--- a/tests/mocks/Utils/CMakeLists.txt
++++ b/tests/mocks/Utils/CMakeLists.txt
+@@ -33,10 +33,10 @@ set(QMLPLUGIN_SRC
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceListInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/AppDrawerModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/AppDrawerModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
+     constants.cpp
+     plugin.cpp
+     windowstatestorage.cpp
+diff --git a/tests/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt b/tests/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
+index 532bb0754..99e83f3f4 100644
+--- a/tests/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
++++ b/tests/plugins/Greeter/Lomiri/Launcher/CMakeLists.txt
+@@ -17,11 +17,11 @@ add_executable(launchermodelastestExec
+     ${CMAKE_SOURCE_DIR}/plugins/Greeter/Lomiri/Launcher/launcheritem.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Greeter/Lomiri/Launcher/quicklistmodel.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Greeter/Lomiri/Launcher/quicklistentry.cpp
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
++    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
+     )
+ target_link_libraries(launchermodelastestExec
+     lomiri-private
+diff --git a/tests/plugins/Lomiri/Launcher/CMakeLists.txt b/tests/plugins/Lomiri/Launcher/CMakeLists.txt
+index 50ba4a6b4..2b139ce1c 100644
+--- a/tests/plugins/Lomiri/Launcher/CMakeLists.txt
++++ b/tests/plugins/Lomiri/Launcher/CMakeLists.txt
+@@ -30,14 +30,14 @@ add_executable(launchermodeltestExec
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/dbusinterface.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/quicklistentry.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/ualwrapper.cpp
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherModelInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceListInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceInterface.h
+     ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
++    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
+     )
+ target_link_libraries(launchermodeltestExec
+     lomiri-private
+@@ -68,12 +68,12 @@ add_executable(appdrawermodeltestExec
+     xdgwatcher.cpp
+     iconcachewatcher.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/appdrawermodel.cpp
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/AppDrawerModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/launcheritem.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/quicklistmodel.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Lomiri/Launcher/quicklistentry.cpp
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/LauncherItemInterface.h
+-    ${LAUNCHER_API_INCLUDEDIR}/lomiri/shell/launcher/QuickListModelInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/QuickListModelInterface.h
+     )
+ target_link_libraries(appdrawermodeltestExec
+     lomiri-private
+-- 
+2.54.0
+
+
+From 87343bc2c3a396879a77d8e6c18458a271f85a4f Mon Sep 17 00:00:00 2001
+From: Marius Gripsgard <marius@ubports.com>
+Date: Sat, 29 Aug 2026 03:03:45 +0200
+Subject: [PATCH 2/3] Launcher headers: drop the inert
+ LOMIRI_API/SymbolExport.h
+
+LOMIRI_API only expands to a visibility attribute when
+LOMIRI_DLL_EXPORTS is defined, and that's only defined while building
+lomiri-api's own liblomiri-api.so. lomiri never defines it, so the
+macro has always expanded to nothing here, and SymbolExport.h was the
+one thing keeping these headers from being fully self-contained.
+---
+ include/lomiri/shell/launcher/AppDrawerModelInterface.h | 4 +---
+ include/lomiri/shell/launcher/LauncherItemInterface.h   | 4 +---
+ include/lomiri/shell/launcher/LauncherModelInterface.h  | 4 +---
+ include/lomiri/shell/launcher/QuickListModelInterface.h | 4 +---
+ 4 files changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/include/lomiri/shell/launcher/AppDrawerModelInterface.h b/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+index ffe07c380..eb05a12ca 100644
+--- a/include/lomiri/shell/launcher/AppDrawerModelInterface.h
++++ b/include/lomiri/shell/launcher/AppDrawerModelInterface.h
+@@ -16,8 +16,6 @@
+ 
+ #pragma once
+ 
+-#include <lomiri/SymbolExport.h>
+-
+ #include <QAbstractListModel>
+ 
+ namespace lomiri {
+@@ -29,7 +27,7 @@ namespace launcher {
+  *
+  * This model exposes all the items that should be shown in the app drawer.
+  */
+-class LOMIRI_API AppDrawerModelInterface: public QAbstractListModel
++class AppDrawerModelInterface: public QAbstractListModel
+ {
+     Q_OBJECT
+ public:
+diff --git a/include/lomiri/shell/launcher/LauncherItemInterface.h b/include/lomiri/shell/launcher/LauncherItemInterface.h
+index 4d62f3351..0510c3763 100644
+--- a/include/lomiri/shell/launcher/LauncherItemInterface.h
++++ b/include/lomiri/shell/launcher/LauncherItemInterface.h
+@@ -17,8 +17,6 @@
+ #ifndef LOMIRI_SHELL_LAUNCHER_LAUNCHERITEM_H
+ #define LOMIRI_SHELL_LAUNCHER_LAUNCHERITEM_H
+ 
+-#include <lomiri/SymbolExport.h>
+-
+ #include <QtCore/QObject>
+ 
+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+@@ -41,7 +39,7 @@ class QuickListModelInterface;
+  * in the launcher.
+  */
+ 
+-class LOMIRI_API LauncherItemInterface: public QObject
++class LauncherItemInterface: public QObject
+ {
+     Q_OBJECT
+ 
+diff --git a/include/lomiri/shell/launcher/LauncherModelInterface.h b/include/lomiri/shell/launcher/LauncherModelInterface.h
+index 63810205e..4eacdc41b 100644
+--- a/include/lomiri/shell/launcher/LauncherModelInterface.h
++++ b/include/lomiri/shell/launcher/LauncherModelInterface.h
+@@ -20,8 +20,6 @@
+ #ifndef LOMIRI_SHELL_LAUNCHER_LAUNCHERMODELINTERFACE_H
+ #define LOMIRI_SHELL_LAUNCHER_LAUNCHERMODELINTERFACE_H
+ 
+-#include <lomiri/SymbolExport.h>
+-
+ #include <lomiri/shell/application/ApplicationManagerInterface.h>
+ 
+ #include <QtCore/QAbstractListModel>
+@@ -40,7 +38,7 @@ class LauncherItemInterface;
+  *
+  * This model exposes all the launcher items that should be shown in the launcher.
+  */
+-class LOMIRI_API LauncherModelInterface: public QAbstractListModel
++class LauncherModelInterface: public QAbstractListModel
+ {
+     Q_OBJECT
+ 
+diff --git a/include/lomiri/shell/launcher/QuickListModelInterface.h b/include/lomiri/shell/launcher/QuickListModelInterface.h
+index 9a0a8469b..f9d5e3636 100644
+--- a/include/lomiri/shell/launcher/QuickListModelInterface.h
++++ b/include/lomiri/shell/launcher/QuickListModelInterface.h
+@@ -20,8 +20,6 @@
+ #ifndef LOMIRI_SHELL_LAUNCHER_QUICKLISTMODELINTERFACE_H
+ #define LOMIRI_SHELL_LAUNCHER_QUICKLISTMODELINTERFACE_H
+ 
+-#include <lomiri/SymbolExport.h>
+-
+ #include <QtCore/QAbstractListModel>
+ 
+ namespace lomiri
+@@ -41,7 +39,7 @@ namespace launcher
+   * - RoleHasSeparator (hasSeparator): Determines if the entry has a separator (boolean)
+   * - RoleIsPrivate (isPrivate): Determines whether the entry should be shown or not in locked mode (e.g. greeter is locked)
+   */
+-class LOMIRI_API QuickListModelInterface: public QAbstractListModel
++class QuickListModelInterface: public QAbstractListModel
+ {
+     Q_OBJECT
+ 
+-- 
+2.54.0
+
+
+From 032c6680e3d4da88a04eb6749d5c58616f015a1d Mon Sep 17 00:00:00 2001
+From: Marius Gripsgard <marius@ubports.com>
+Date: Sat, 29 Aug 2026 03:03:59 +0200
+Subject: [PATCH 3/3] Depend on lomiri-notifications' interface header, drop
+ the shell-api pkg-config round-trip
+
+The Notifications mock includes ModelInterface.h, which used to come
+from lomiri-api. That interface now lives in lomiri-notifications, its
+sole implementer, so switch the build-dep and query it explicitly
+instead of relying on it showing up as a side effect of the unrelated
+Application include path. Also drops a stale
+liblomiri-shell-application-dev build-dep: that package was never
+created, since the Application headers ended up folded into qtmir's
+existing libqt5mir1server-dev instead, already a build-dep here.
+
+lomiri-api also no longer publishes a generic lomiri-shell-api
+pkg-config module; it never carried anything but a QML plugindir
+convention. Compute that install path directly instead of querying it.
+---
+ CMakeLists.txt | 40 ++++++----------------------------------
+ debian/control |  2 +-
+ 2 files changed, 7 insertions(+), 35 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1b05afc01..882476115 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,6 +90,7 @@ find_package(Qt5Xml 5.6 REQUIRED)
+ find_package(Intl REQUIRED)
+ 
+ pkg_check_modules(APPLICATION_API REQUIRED lomiri-shell-application=28)
++pkg_check_modules(NOTIFICATIONS_API REQUIRED lomiri-shell-notifications=3)
+ pkg_check_modules(GEONAMES REQUIRED geonames>=0.2)
+ pkg_check_modules(GIO REQUIRED gio-2.0>=2.32 gio-unix-2.0)
+ pkg_check_modules(GLIB REQUIRED glib-2.0>=2.32)
+@@ -133,48 +134,18 @@ add_definitions(-DSHELL_APP_FULL_DIR=\"${SHELL_APP_FULL_DIR}\")
+ set(SHELL_PRIVATE_FULL_LIBDIR ${CMAKE_INSTALL_FULL_LIBDIR}/lomiri)
+ set(SHELL_PRIVATE_FULL_LIBEXECDIR ${CMAKE_INSTALL_FULL_LIBEXECDIR}/lomiri)
+ 
+-pkg_check_modules(LOMIRI_SHELL_API REQUIRED lomiri-shell-api)
+-
+-set(SHELL_INSTALL_QMLDIR_PKGCONFIG_ARGS)
+-set(SHELL_INSTALL_QMLDIR_PREFIX)
+-if(LOMIRI_SHELL_API_VERSION VERSION_GREATER_EQUAL "1.1")
+-    list(APPEND SHELL_INSTALL_QMLDIR_PKGCONFIG_ARGS
+-        --define-variable=libdir=${CMAKE_INSTALL_FULL_LIBDIR}
+-        --variable=plugindir
+-    )
+-    # Already absolute path
+-else()
+-    list(APPEND SHELL_INSTALL_QMLDIR_PKGCONFIG_ARGS
+-        --variable=plugindir_suffix
+-    )
+-    set(SHELL_INSTALL_QMLDIR_PREFIX "${CMAKE_INSTALL_PREFIX}/")
+-endif()
++# Convention for where lomiri's own QML plugins install to and get loaded
++# from; other packages implementing a shell interface (e.g. qtmir,
++# lomiri-notifications) install their QML plugins here too.
++set(SHELL_INSTALL_QML ${CMAKE_INSTALL_FULL_LIBDIR}/lomiri/qml)
+ 
+ execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=plugin_private_module_dir LomiriSystemSettings OUTPUT_VARIABLE LOMIRI_SYSTEM_SETTINGS_PRIVATE_PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+ if(LOMIRI_SYSTEM_SETTINGS_PRIVATE_PLUGINDIR STREQUAL "")
+     message(FATAL_ERROR "Could not determine LomiriSystemSettings private plugin installation dir.")
+ endif()
+ 
+-execute_process(
+-    COMMAND
+-    ${PKG_CONFIG_EXECUTABLE} ${SHELL_INSTALL_QMLDIR_PKGCONFIG_ARGS} lomiri-shell-api
+-    OUTPUT_VARIABLE SHELL_INSTALL_QML_RAW
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
+-if(SHELL_INSTALL_QML_RAW STREQUAL "")
+-    message(FATAL_ERROR "Could not determine plugin installation dir.")
+-else()
+-    set(SHELL_INSTALL_QML "${SHELL_INSTALL_QMLDIR_PREFIX}${SHELL_INSTALL_QML_RAW}")
+-    message(STATUS "Lomiri shell plugin installation dir: ${SHELL_INSTALL_QML}")
+-endif()
+-
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+ 
+-execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=plugindir lomiri-shell-api OUTPUT_VARIABLE SHELL_PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-if(SHELL_PLUGINDIR STREQUAL "")
+-    message(FATAL_ERROR "Could not determine plugin import dir.")
+-endif()
+-
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-permissive -pedantic -Wall -Wextra")
+ 
+ set (CMAKE_CXX_STANDARD 17)
+@@ -209,6 +180,7 @@ include_directories(
+     ${CMAKE_SOURCE_DIR}/include
+     ${CMAKE_BINARY_DIR}/include
+     ${APPLICATION_API_INCLUDE_DIRS}
++    ${NOTIFICATIONS_API_INCLUDE_DIRS}
+ )
+ 
+ # Quiet logger
+diff --git a/debian/control b/debian/control
+index 2209bd56f..2f2f38ff1 100644
+--- a/debian/control
++++ b/debian/control
+@@ -29,10 +29,10 @@ Build-Depends:
+  libldm-common-dev,
+  liblightdm-qt5-3-dev,
+  liblomiri-api-dev,
++ liblomiri-shell-notifications-dev,
+  liblomiri-app-launch-dev,
+  liblomiri-connectivity-qt1-dev,
+  liblomiri-download-manager-common-dev,
+- liblomiri-shell-api-dev,
+  liblomirigestures-dev,
+  liblomirigestures5-private-dev,
+  liblomirisystemsettings-dev,
+-- 
+2.54.0
+
