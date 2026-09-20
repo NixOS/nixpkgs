@@ -1,6 +1,6 @@
 {
-    "release_date": "2025-03-06",
-    "release_label": "12.8.1",
+    "release_date": "2026-04-21",
+    "release_label": "12.8.2",
     "release_product": "cuda",
     "cuda_cccl": {
         "name": "CXX Core Compute Libraries",
@@ -558,78 +558,78 @@
         "name": "NVIDIA Driver Assistant",
         "license": "MIT",
         "license_path": "driver_assistant/LICENSE.txt",
-        "version": "0.20.124.06",
+        "version": "0.20.211.01",
         "linux-all": {
-            "relative_path": "driver_assistant/source/driver_assistant-0.20.124.06-archive.tar.xz",
-            "sha256": "bcf33756abe82800cc3dbca9580a91a1289704c99601ce1b987bbd5011c96c21",
-            "md5": "f330b55a1482efa011f991d1a4458461",
-            "size": "38472"
+            "relative_path": "driver_assistant/source/driver_assistant-0.20.211.01-archive.tar.xz",
+            "sha256": "7cc629e29f71d3513ebe042e8f85b242cf80295214451b87e2a804f687212bc1",
+            "md5": "4eadd40bccaa640acf3266a978602cc7",
+            "size": "38748"
         }
     },
     "fabricmanager": {
         "name": "NVIDIA Fabric Manager",
         "license": "NVIDIA Driver",
         "license_path": "fabricmanager/LICENSE.txt",
-        "version": "570.124.06",
+        "version": "570.211.01",
         "linux-x86_64": {
-            "relative_path": "fabricmanager/linux-x86_64/fabricmanager-linux-x86_64-570.124.06-archive.tar.xz",
-            "sha256": "e2d359986ca733c568f5a21fd7686f1b002b09637bf1b3a596333bd5ffbc3edb",
-            "md5": "464b2abdc3e8241029ad100ab4c82d9e",
-            "size": "8066240"
+            "relative_path": "fabricmanager/linux-x86_64/fabricmanager-linux-x86_64-570.211.01-archive.tar.xz",
+            "sha256": "ca18525b22546e26e26687637b87e492c6dab6477df681abbb6be942f9e5e944",
+            "md5": "648409fa2f68cf579f383ec06d666ed6",
+            "size": "8178396"
         },
         "linux-sbsa": {
-            "relative_path": "fabricmanager/linux-sbsa/fabricmanager-linux-sbsa-570.124.06-archive.tar.xz",
-            "sha256": "a7e0ebba25d85aa2211b20f9c4097e426d3a196d3748c03f13c432d7b3bc2cc9",
-            "md5": "2fac7d61d1af5296dd4ab973e2e50bb3",
-            "size": "7321304"
+            "relative_path": "fabricmanager/linux-sbsa/fabricmanager-linux-sbsa-570.211.01-archive.tar.xz",
+            "sha256": "38ba0d26e2c02db349e858164455d916cc09d51a728accefe71413547efc0278",
+            "md5": "c324bc15d9bec385ac950029868cc2ef",
+            "size": "7420840"
         }
     },
     "imex": {
         "name": "Nvidia-Imex",
         "license": "NVIDIA Proprietary",
         "license_path": "imex/LICENSE.txt",
-        "version": "570.124.06",
+        "version": "570.211.01",
         "linux-x86_64": {
-            "relative_path": "imex/linux-x86_64/nvidia-imex-linux-x86_64-570.124.06-archive.tar.xz",
-            "sha256": "b2ed7086793ec6d99adaa766daeda2baca6c1ac4002ee916f0e6acd4a47a6ffb",
-            "md5": "a6261cc90db45fa4ead7a8349077e9c2",
-            "size": "9670448"
+            "relative_path": "imex/linux-x86_64/nvidia-imex-linux-x86_64-570.211.01-archive.tar.xz",
+            "sha256": "0a70d814d309d1967b86d99e2042b4ef1959168ce5e2c9e33e97089c18a7afef",
+            "md5": "6c0d596b1229dda0e40e163c23da915f",
+            "size": "8128408"
         },
         "linux-sbsa": {
-            "relative_path": "imex/linux-sbsa/nvidia-imex-linux-sbsa-570.124.06-archive.tar.xz",
-            "sha256": "55d1f5c2960305fad129df567e85be9431412e5ac5814740b368f8acd5ff8a04",
-            "md5": "3b7c19eaf4cad5e6bc36948d466dc4c2",
-            "size": "8771664"
+            "relative_path": "imex/linux-sbsa/nvidia-imex-linux-sbsa-570.211.01-archive.tar.xz",
+            "sha256": "bba5c931ceedc365cf79bd2c0d1d5303cdee5fffaec617ecbeb3f6708667b065",
+            "md5": "45995a92cc2b0374832e409821e36aaf",
+            "size": "7568272"
         }
     },
     "libcublas": {
         "name": "CUDA cuBLAS",
         "license": "CUDA Toolkit",
         "license_path": "libcublas/LICENSE.txt",
-        "version": "12.8.4.1",
+        "version": "12.8.5.5",
         "linux-x86_64": {
-            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.8.4.1-archive.tar.xz",
-            "sha256": "21718957c2cf000bacd69d36c95708a2319199e39e056f8b4f0f68e3b9f323bb",
-            "md5": "5d17d588c1d645140127ea8033d9606f",
-            "size": "938651324"
+            "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.8.5.5-archive.tar.xz",
+            "sha256": "f732baf6e55de1844f9bea6646ceae13f30b10592f87b12406bf4713b7f67521",
+            "md5": "cfa9c9e21cac8ab7bc407f471461c531",
+            "size": "949754460"
         },
         "linux-sbsa": {
-            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-12.8.4.1-archive.tar.xz",
-            "sha256": "429803c0ea8aec1db0050f7bfd807d519e22c9bf223c19000d6018d930741028",
-            "md5": "11208a797fce647fb34902a6e63f0629",
-            "size": "937337100"
+            "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-12.8.5.5-archive.tar.xz",
+            "sha256": "17f56c9b89e9cc71e0738a874d9a0c98cfe224119b475b16c6ccd07fc3ded74b",
+            "md5": "0c1e1a1695cc0a684a943f9d66f79e95",
+            "size": "948745504"
         },
         "windows-x86_64": {
-            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-12.8.4.1-archive.zip",
-            "sha256": "57a470112cec7e112c95253dde8b3c7184d795dbd92b0bde77a4cb7f8c94c8aa",
-            "md5": "5982188f53c503844f6cb86606b6b696",
-            "size": "563660944"
+            "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-12.8.5.5-archive.zip",
+            "sha256": "0a2beedd7c1203cb9de5e5ab11943d27e41ee5d18dc3810b21bcd75be7e57a05",
+            "md5": "863045666c56d1d663ffc869c7c635dd",
+            "size": "563633310"
         },
         "linux-aarch64": {
-            "relative_path": "libcublas/linux-aarch64/libcublas-linux-aarch64-12.8.4.1-archive.tar.xz",
-            "sha256": "d3c3f32be793fbc995754acf12f94fcec5afc8d85d860875b38eed3ff6f97804",
-            "md5": "056caa43ee8df05c58b8d30bc4a8814e",
-            "size": "513261552"
+            "relative_path": "libcublas/linux-aarch64/libcublas-linux-aarch64-12.8.5.5-archive.tar.xz",
+            "sha256": "8d0e5bc5fb58419593a6452766e35bccf3773c713e1a0eca4103f6a73eb2c796",
+            "md5": "4965f266447810aebed43119738c4dc5",
+            "size": "514418300"
         }
     },
     "libcudla": {
@@ -852,18 +852,18 @@
         "name": "NVIDIA NSCQ API",
         "license": "NVIDIA Driver",
         "license_path": "libnvidia_nscq/LICENSE.txt",
-        "version": "570.124.06",
+        "version": "570.211.01",
         "linux-x86_64": {
-            "relative_path": "libnvidia_nscq/linux-x86_64/libnvidia_nscq-linux-x86_64-570.124.06-archive.tar.xz",
-            "sha256": "8af30cdb8883a358a456566ee18c34e6e3b1eb166f8bc005b2f018da9a8c920a",
-            "md5": "ee67378b27d02fd5fdd5f93771f91a8c",
-            "size": "455616"
+            "relative_path": "libnvidia_nscq/linux-x86_64/libnvidia_nscq-linux-x86_64-570.211.01-archive.tar.xz",
+            "sha256": "935a24b4a421430c69accb0314e6777e647f946e50057f8142d5283fc9a7d0c8",
+            "md5": "c71a685191fd4a12d28bf91aedcb2130",
+            "size": "357180"
         },
         "linux-sbsa": {
-            "relative_path": "libnvidia_nscq/linux-sbsa/libnvidia_nscq-linux-sbsa-570.124.06-archive.tar.xz",
-            "sha256": "15ea42d7c3282b27e2e37efe8f59ee499f5ab40fc9e76f8295775ea1a3d5c139",
-            "md5": "7eca835f610eec5e70b571794be25057",
-            "size": "447036"
+            "relative_path": "libnvidia_nscq/linux-sbsa/libnvidia_nscq-linux-sbsa-570.211.01-archive.tar.xz",
+            "sha256": "01752f9fd0af7e8aec21168d759243b23716e6f970789f3ba19aeefe12d12493",
+            "md5": "490a6e7459d4ea540bf09f70798085f3",
+            "size": "350888"
         }
     },
     "libnvjitlink": {
@@ -930,12 +930,12 @@
         "name": "LIBNVSDM",
         "license": "NVIDIA",
         "license_path": "libnvsdm/LICENSE.txt",
-        "version": "570.124.06",
+        "version": "570.211.01",
         "linux-x86_64": {
-            "relative_path": "libnvsdm/linux-x86_64/libnvsdm-linux-x86_64-570.124.06-archive.tar.xz",
-            "sha256": "d3e36b09ad7fbe48ebc9e1df0cf6f022e6e92ddaa0d927d06539c1bcaef04e2e",
-            "md5": "67c17ab3e6456cbd628a5588baaa674d",
-            "size": "488944"
+            "relative_path": "libnvsdm/linux-x86_64/libnvsdm-linux-x86_64-570.211.01-archive.tar.xz",
+            "sha256": "a4b5d5f76de3a450218f381e113ef937529859b865eed9341e247f8f40f0fdbf",
+            "md5": "023a523dbddf6f74cb67109ecca83993",
+            "size": "491744"
         }
     },
     "nsight_compute": {
@@ -1008,18 +1008,18 @@
         "name": "NVIDIA Linux Driver",
         "license": "NVIDIA Driver",
         "license_path": "nvidia_driver/LICENSE.txt",
-        "version": "570.124.06",
+        "version": "570.211.01",
         "linux-x86_64": {
-            "relative_path": "nvidia_driver/linux-x86_64/nvidia_driver-linux-x86_64-570.124.06-archive.tar.xz",
-            "sha256": "0fcaa9b47c124cca981df5155e2826615de3f28e31a27e139af8901e92d38b34",
-            "md5": "b8fc22d07fd46760c7fc01f2836bc862",
-            "size": "445113608"
+            "relative_path": "nvidia_driver/linux-x86_64/nvidia_driver-linux-x86_64-570.211.01-archive.tar.xz",
+            "sha256": "7b3dcdd6beb6abbc8e88e872a7276cbcf7d48d0aeabc6a9cf249f897096dfb09",
+            "md5": "1fb59df62e2827283163a4797f3b684b",
+            "size": "450164200"
         },
         "linux-sbsa": {
-            "relative_path": "nvidia_driver/linux-sbsa/nvidia_driver-linux-sbsa-570.124.06-archive.tar.xz",
-            "sha256": "0edad79f9f52818d4b03bcc06ee4ef2ea81136330381347696fd3f804087f54b",
-            "md5": "efc8ddc7039ddbb30928f83b98b91fea",
-            "size": "344090356"
+            "relative_path": "nvidia_driver/linux-sbsa/nvidia_driver-linux-sbsa-570.211.01-archive.tar.xz",
+            "sha256": "e1553b67794a01b56cca657ec201dd223d0e1c522d3d637a4d9166f17a9584d1",
+            "md5": "aabc2e2726b7f39f0e456af4545b00c2",
+            "size": "349387888"
         }
     },
     "nvidia_fs": {
