@@ -1811,6 +1811,7 @@ mapAliases {
   netsurf.libwapcaplet = throw "'netsurf.libwapcaplet' has been renamed to/replaced by 'libwapcaplet'"; # Converted to throw 2025-10-27
   netsurf.nsgenbind = throw "'netsurf.nsgenbind' has been renamed to/replaced by 'nsgenbind'"; # Converted to throw 2025-10-27
   nettools = net-tools; # Added 2025-06-11
+  networkmanager-fortisslvpn = throw "'networkmanager-fortisslvpn' has been removed as insecure and archived upstream. Migrate to 'networkmanager-openconnect'"; # Added 2026-09-20
   networkmanager-vpnc = throw "'networkmanager-vpnc' has been removed as insecure and archived upstream. Migrate to 'networkmanager-libreswan'"; # Added 2026-09-20
   networkmanager_strongswan = networkmanager-strongswan; # Added 2025-06-29
   newlib-nanoCross = throw "'newlib-nanoCross' has been renamed to/replaced by 'newlib-nano'"; # Converted to throw 2025-10-27
