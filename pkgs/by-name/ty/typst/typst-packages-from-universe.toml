@@ -28983,7 +28983,7 @@ description = "An unofficial lab report template for the School of Cyber Science
 license = [
     "GPL-3.0-or-later",
 ]
-homepage = "https://tangled.dzming.li/dzming.li/hust-cse-report"
+homepage = "https://github.com/DzmingLi/hust-cse-report"
 
 [modern-hust-cse-report."0.1.1"]
 url = "https://packages.typst.org/preview/modern-hust-cse-report-0.1.1.tar.gz"
