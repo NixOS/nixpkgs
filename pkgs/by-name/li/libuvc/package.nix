@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb1 ];
 
   meta = {
-    homepage = "https://ken.tossell.net/libuvc/";
+    homepage = "https://github.com/libuvc/libuvc";
     description = "Cross-platform library for USB video devices";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
