@@ -60,6 +60,7 @@ in
     version = "32.0.15";
     hash = "sha256-aXSsEZUCXxNkPfF21Fas9FI3kNVIjCBbV1OfZCx9Fkw=";
     packages = nextcloud32Packages;
+    eol = true;
   };
 
   nextcloud33 = generic {
