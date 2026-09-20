@@ -886,6 +886,7 @@
   ./services/misc/docker-registry.nix
   ./services/misc/docling-serve.nix
   ./services/misc/domoticz.nix
+  ./services/misc/ds4.nix
   ./services/misc/duckdns.nix
   ./services/misc/duckling.nix
   ./services/misc/dump1090-fa.nix
