@@ -3,6 +3,10 @@
   name = "apollo";
 
   meta = {
+    # The aarch64 VM in CI boots under TCG (no KVM); the full X11 stack
+    # outlasts the test driver's boot timeout. Same treatment as the
+    # sunshine test.
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
     maintainers = [ lib.maintainers.NCBlizzard ];
     timeout = 600;
   };
