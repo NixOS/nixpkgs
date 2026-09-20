@@ -1,5 +1,7 @@
 {
   fetchFromGitHub,
+  unzip,
+  zip,
   lib,
   pkgs,
   nodejs,
@@ -35,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn
+    unzip
+    zip
   ];
 
   strictDeps = true;
@@ -43,6 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    (
+      # Remove when Yarn updates or removes the `got` dependency
+      # https://github.com/yarnpkg/berry/issues/7245#issuecomment-5538874542
+      GOT_CACHE_PATH=$(printf '%s' $(pwd)/.yarn/cache/got-npm-11.8.2-c1eb105458-*.zip)
+      cd $(mktemp -d)
+      unzip $GOT_CACHE_PATH -d .
+      rm $GOT_CACHE_PATH
+      patch -p1 -d node_modules/got < ${./got-npm-11.8.2.patch}
+      zip -Xr got-patched.zip node_modules
+      mv got-patched.zip $GOT_CACHE_PATH
+    )
+
     yarn workspace @yarnpkg/cli build:cli
     runHook postBuild
   '';

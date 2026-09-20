@@ -21,7 +21,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "13.0.7";
+  version = "13.0.9";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Akb3ZhfYqwaXnhB6o+gbGfibflBYRDMUNvXQzwGXab0=";
+    hash = "sha256-VUPn7EN3dzoJdRpKUKF57n3wsxnXND/hXGQ0FdWswLs=";
   };
 
   patches = [
@@ -55,12 +55,12 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-0rmQGRgu22Yxm3Vlr2YKrGjU1xxePadByH/HGqubSVM=";
+    hash = "sha256-3p9EYboa6ilguJ+cqmcBfnYfe6L/LqZk0hI7ix1hQBM=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-iYC96mt2Zy/yHRj1sYncvOc5P4zVAv3bk3Bq733UMDw=";
+  vendorHash = "sha256-XT9bVwF/crVpPzodQaGtvCYr9+1BBy1SYhC81EI+UsI=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.

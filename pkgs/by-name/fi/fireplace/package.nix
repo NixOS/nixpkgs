@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     hash = "sha256-2NUE/zaFoGwkZxgvVCYXxToiL23aVUFwFNlQzEq9GEc=";
   };
 
-  makeFlags = lib.optional stdenv.hostPlatform.isDarwin [ "CC=cc" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CC=cc" ];
 
   meta = {
     description = "Cozy fireplace in your terminal";
