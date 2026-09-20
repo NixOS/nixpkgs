@@ -15,6 +15,7 @@
   numpy,
 
   # check inputs
+  httpx2,
   openai,
   pytestCheckHook,
 }:
@@ -74,6 +75,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    httpx2
     numpy
     openai
     pytestCheckHook
