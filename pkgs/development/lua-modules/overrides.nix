@@ -348,6 +348,7 @@ in
     '';
     meta = (old.meta or { }) // {
       broken = luaOlder "5.1" || luaAtLeast "5.3";
+      homepage = "https://github.com/justincormack/ljsyscall";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
