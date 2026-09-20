@@ -54,6 +54,9 @@ stdenv.mkDerivation (
       # Remove extraneous ".a" suffix from baremetal clang_rt.builtins when compiling for baremetal.
       # https://reviews.llvm.org/D51899
       (getVersionFile "clang/gnu-install-dirs.patch")
+      # Define __mlibc__ for *-mlibc* targets, so software can detect mlibc.
+      # This mirrors what the GCC patches do for mlibc targets.
+      ./mlibc-target.patch
     ]
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # https://github.com/llvm/llvm-project/pull/116476
