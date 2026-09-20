@@ -31655,7 +31655,7 @@ with self;
     };
     meta = {
       description = "Turn on strict and make most warnings fatal";
-      homepage = "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git";
+      homepage = "https://metacpan.org/pod/strictures";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
