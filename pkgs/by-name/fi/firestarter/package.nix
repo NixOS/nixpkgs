@@ -9,8 +9,10 @@
   glibc,
   git,
   pkg-config,
+  installShellFiles,
   config,
   cudaPackages,
+  versionCheckHook,
   withCuda ? config.cudaSupport,
 }:
 
@@ -56,7 +58,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firestarter";
   version = "2.0";
 
@@ -66,12 +68,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q1jIvcuiAUzyF0v32beIqZLyMPeZUjoikY3awmmQZsY=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(_FIRESTARTER_VERSION_STRING "unknown")' \
+        'set(_FIRESTARTER_VERSION_STRING "v${finalAttrs.version}")'
     substituteInPlace lib/nitro/CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 3.2)' 'cmake_minimum_required(VERSION 3.10)'
     substituteInPlace lib/json/CMakeLists.txt \
@@ -82,6 +87,7 @@ stdenv.mkDerivation rec {
     cmake
     git
     pkg-config
+    installShellFiles
   ]
   ++ lib.optionals withCuda [
     addDriverRunpath
@@ -119,10 +125,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
+    installBin src/FIRESTARTER${lib.optionalString withCuda "_CUDA"}
     runHook postInstall
   '';
+
+  doInstallCheck = !withCuda; # tries to access GPU
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postFixup = lib.optionalString withCuda ''
     addDriverRunpath $out/bin/FIRESTARTER_CUDA
@@ -138,6 +146,6 @@ stdenv.mkDerivation rec {
       marenz
     ];
     license = lib.licenses.gpl3;
-    mainProgram = "FIRESTARTER";
+    mainProgram = "FIRESTARTER${lib.optionalString withCuda "_CUDA"}";
   };
-}
+})
