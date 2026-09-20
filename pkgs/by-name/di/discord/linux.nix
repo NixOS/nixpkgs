@@ -34,6 +34,7 @@
   addDriverRunpath,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   autoPatchelfHook,
   cups,
   libdrm,
@@ -163,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeShellWrapper
     brotli
+    copyDesktopItems
   ]
   ++ lib.optionals (!useFHSEnv) [
     autoPatchelfHook
@@ -252,8 +254,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "$desktopItem/share/applications" $out/share/
-
     runHook postInstall
   '';
 
@@ -280,20 +280,22 @@ stdenv.mkDerivation (finalAttrs: {
       echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
     '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    comment = meta.description;
-    genericName = "Instant Messenger";
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/discord" ];
-    startupWMClass = "discord";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = binaryName;
+      icon = pname;
+      inherit desktopName;
+      comment = meta.description;
+      genericName = "Instant Messenger";
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeTypes = [ "x-scheme-handler/discord" ];
+      startupWMClass = "discord";
+    })
+  ];
 
   passthru = passthru // {
     inherit targetPkgs;
