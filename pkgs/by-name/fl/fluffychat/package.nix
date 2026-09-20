@@ -39,13 +39,13 @@ in
 flutter344.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.8.0";
+    version = "2.9.4";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-+2srYuGNsCvxc89gq3zHgeCHrWTid7Oqtdno/Q/9hgk=";
+      hash = "sha256-nL0zyOg3pXbgg9hkXzq6B2igmUQ5jkTVlVi7k8TLggA=";
     };
 
     inherit pubspecLock;

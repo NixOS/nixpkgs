@@ -64,42 +64,55 @@ stdenv.mkDerivation {
 
   inherit (source) src;
 
-  patches = lib.optionals (!atLeast23) (
-    if atLeast21 then
-      [
-        ./21/patches/backport-ffmpeg-7-support-jfx21.patch
-      ]
-    else
-      [
-        ./17/patches/backport-ffmpeg-6-support-jfx11.patch
-        ./17/patches/backport-ffmpeg-7-support-jfx11.patch
+  patches =
+    lib.optionals (!atLeast23) (
+      if atLeast21 then
+        [
+          ./21/patches/backport-ffmpeg-7-support-jfx21.patch
+        ]
+      else
+        [
+          ./17/patches/backport-ffmpeg-6-support-jfx11.patch
+          ./17/patches/backport-ffmpeg-7-support-jfx11.patch
 
-        # Build with Gradle 8
-        (fetchpatch2 {
-          # Yes, this patch taken from the jfx21u repo is intended to be
-          # applied to jfx17.
-          url = "https://github.com/openjdk/jfx21u/commit/7f704c24c2238f9d7bb744a20667a8c1337decc6.patch?full_index=1";
-          excludes = [
-            # The patch fails to apply to these files, but with the exception
-            # of build.properties (which is patched in postPatch), none of them
-            # matter.
-            "build.properties"
-            "gradle/legal/gradle.md"
-            "gradle/wrapper/gradle-wrapper.properties"
-            "gradlew"
-          ];
-          hash = "sha256-WuJtzPy0IV4xvn+i5xeDqekWO0VR2GIfsYKkEmh8KKU=";
-        })
-        # Drop GTK2 support
-        (fetchpatch2 {
-          url = "https://github.com/openjdk/jfx/commit/63635ee8160ba6507d625c44320b58e2f9bfb87a.patch?full_index=1";
-          includes = [
-            "buildSrc/linux.gradle"
-          ];
-          hash = "sha256-p2vRy8jA/JJBGCC5irV3gGbcJqChFNi+ViMeQ1wjtU0=";
-        })
-      ]
-  );
+          # Build with Gradle 8
+          (fetchpatch2 {
+            # Yes, this patch taken from the jfx21u repo is intended to be
+            # applied to jfx17.
+            url = "https://github.com/openjdk/jfx21u/commit/7f704c24c2238f9d7bb744a20667a8c1337decc6.patch?full_index=1";
+            excludes = [
+              # The patch fails to apply to these files, but with the exception
+              # of build.properties (which is patched in postPatch), none of them
+              # matter.
+              "build.properties"
+              "gradle/legal/gradle.md"
+              "gradle/wrapper/gradle-wrapper.properties"
+              "gradlew"
+            ];
+            hash = "sha256-WuJtzPy0IV4xvn+i5xeDqekWO0VR2GIfsYKkEmh8KKU=";
+          })
+          # Drop GTK2 support
+          (fetchpatch2 {
+            url = "https://github.com/openjdk/jfx/commit/63635ee8160ba6507d625c44320b58e2f9bfb87a.patch?full_index=1";
+            includes = [
+              "buildSrc/linux.gradle"
+            ];
+            hash = "sha256-p2vRy8jA/JJBGCC5irV3gGbcJqChFNi+ViMeQ1wjtU0=";
+          })
+        ]
+    )
+    ++ lib.optionals withWebKit [
+      # Building WebKit using CMake >= 4.4.0 requires patching a malformed CMake expression.
+      # https://bugs.webkit.org/show_bug.cgi?id=319196
+      # https://gitlab.kitware.com/cmake/cmake/-/work_items/26424
+      (fetchpatch2 {
+        name = "cmake4.4-linked-into-quoting.patch";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/cmake4-linked-into-quoting.patch?h=webkit2gtk&id=bcf95cb5382e16354be70b0a3c88436917588c8a";
+        stripLen = 1;
+        extraPrefix = "modules/javafx.web/src/main/native/";
+        hash = "sha256-W/sYyzrE12kEA993bfru6igiBdkyRtMiKBRjJqXN97g=";
+      })
+    ];
 
   nativeBuildInputs = [
     gradle_8

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
   coreutils,
@@ -13,18 +13,18 @@
 }:
 
 let
-  package = buildGoModule rec {
+  package = buildGo127Module rec {
     pname = "terraform";
-    version = "1.16.1";
+    version = "1.16.3";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
       rev = "v${version}";
-      hash = "sha256-0cCEQU+f6wVfcVqFoRA3hpf9Qwdxko2AraeCJQ/vkM4=";
+      hash = "sha256-XfVzSAMx/Y/gqDSXkRtGupGQB0ytBp907zHcsA0IUKw=";
     };
 
-    vendorHash = "sha256-w/dtggDM8sDDA5rqzsRfuZHkBThu6JVvhr13R71E/d8=";
+    vendorHash = "sha256-e3j9PSptoqUV+/CQWLcy3/0E9qhdWbXUe3f+ZB5WsHI=";
 
     patches = [ ./provider-path-0_15.patch ];
 
