@@ -1,12 +1,63 @@
-diff --git a/configure.ac b/configure.ac
-index ee72283..b42c42a 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -19,7 +19,6 @@ AM_SILENT_RULES([yes])
- LT_INIT([disable-static pic-only])
- DOLT
+diff --git a/meson.build b/meson.build
+index a0cf675..5b1b70a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -421,18 +421,29 @@ endif
  
--AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
- AS_IF([test "x$enable_largefile" = "xno"], [AC_MSG_ERROR([--disable-largefile is not supported by kmod])])
+ install_headers('libkmod/libkmod.h')
  
- #####################################################################
+-libkmod = shared_library(
+-  'kmod',
+-  libkmod_files,
+-  dependencies : libkmod_deps + cdeps,
+-  link_with : libshared,
+-  link_args : ['-Wl,--version-script', meson.current_source_dir() /
+-                                                  'libkmod/libkmod.sym'],
+-  link_depends : files('libkmod/libkmod.sym'),
+-  gnu_symbol_visibility : 'hidden',
+-  version : '2.5.1',
+-  install : true,
+-)
++if get_option('default_library') == 'static'
++  libkmod = static_library(
++    'kmod',
++    libkmod_files,
++    dependencies : libkmod_deps + cdeps,
++    link_with : libshared,
++    gnu_symbol_visibility : 'hidden',
++    install : true,
++  )
++else
++  libkmod = shared_library(
++    'kmod',
++    libkmod_files,
++    dependencies : libkmod_deps + cdeps,
++    link_with : libshared,
++    link_args : ['-Wl,--version-script', meson.current_source_dir() /
++                                                    'libkmod/libkmod.sym'],
++    link_depends : files('libkmod/libkmod.sym'),
++    gnu_symbol_visibility : 'hidden',
++    version : '2.5.1',
++    install : true,
++  )
++endif
+ 
+ pkg.generate(
+   name : 'libkmod',
+@@ -465,10 +476,16 @@ kmod_sources = files(
+   'tools/static-nodes.c',
+ )
+ 
++kmod_link_args = []
++if get_option('default_library') == 'static'
++  kmod_link_args += ['-static']
++endif
++
+ kmod = executable(
+   'kmod',
+   kmod_sources,
+   link_with : [libshared, libkmod_internal],
++  link_args : kmod_link_args,
+   gnu_symbol_visibility : 'hidden',
+   build_by_default : get_option('tools'),
+   install : get_option('tools'),
