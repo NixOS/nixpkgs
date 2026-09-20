@@ -1558,10 +1558,6 @@ with pkgs;
 
   ### TOOLS/TYPESETTING/TEX
 
-  advi = callPackage ../tools/typesetting/tex/advi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   latex2mathml = with python3Packages; toPythonApplication latex2mathml;
