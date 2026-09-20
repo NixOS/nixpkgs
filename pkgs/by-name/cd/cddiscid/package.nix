@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "http://linukz.org/cd-discid.shtml";
+    homepage = "https://github.com/taem/cd-discid";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     description = "Command-line utility to get CDDB discid information from a CD-ROM disc";
