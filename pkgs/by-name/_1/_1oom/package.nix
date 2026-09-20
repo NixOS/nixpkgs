@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    homepage = "https://fork1oom.sourcecraft.site/";
+    homepage = "https://sourcecraft.dev/fork1oom/1oom";
     changelog = "https://sourcecraft.dev/fork1oom/1oom/releases/v${finalAttrs.version}";
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = lib.licenses.gpl2Only;
