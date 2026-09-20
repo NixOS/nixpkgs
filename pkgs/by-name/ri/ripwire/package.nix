@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     prependToVar cmakeFlags "-DCMAKE_C_COMPILER_AR=$(command -v $AR)"
     prependToVar cmakeFlags "-DCMAKE_C_COMPILER_RANLIB=$(command -v $RANLIB)"
+    prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER_AR=$(command -v $AR)"
+    prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER_RANLIB=$(command -v $RANLIB)"
   '';
 
   cmakeFlags = [
