@@ -75,11 +75,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     EOF
   '';
 
-  # Unit suites only: lib/bins are hermetic, while the process-spawning
-  # integration suites (assembly, behaviour, crash recovery) need excluded
-  # infrastructure. Narrowed with evidence from remote builds.
+  # Unit suites only: member libs are hermetic. Excluded: the root binary
+  # (covered by the smoke tests), and the steps/http_steps behaviour-test
+  # helpers, whose `bdd` imports postdate the pinned protocol 3.12.0
+  # (upstream tests those through Bazel, not cargo). Process-spawning
+  # integration suites stay out for the same reason.
   doCheck = true;
   checkFlags = [
+    "--workspace"
+    "--exclude"
+    "typedb_server_bin"
+    "--exclude"
+    "steps"
+    "--exclude"
+    "http_steps"
     "--lib"
     "--bins"
   ];

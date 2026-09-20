@@ -55,8 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doCheck = true;
+  # Bin unit tests only: the package has no lib target, and the repo's
+  # integration tests need a running server.
   checkFlags = [
-    "--lib"
+    "--workspace"
     "--bins"
   ];
 
