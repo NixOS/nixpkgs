@@ -121,7 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "PC-9801 series emulator";
     homepage = "https://github.com/AZO234/NP2kai";
-    license = lib.licenses.mit;
+    # Information on the repo is untrustworthy.
+    # This is a fork from the original np2, which lacked any licensing information for most of its code -> Unfree
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "${if enableX11 then "x" else "sdl"}np21kai";
     platforms = lib.platforms.x86;
