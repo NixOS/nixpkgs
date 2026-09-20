@@ -331,7 +331,7 @@ in
                 echo "No \`DJANGO_SECRET_KEY\` found, auto-generating one."
                 ${pythonEnv.interpreter} -c \
                   "from django.core.management.utils import get_random_secret_key; \
-                  print(f'DJANGO_SECRET_KEY=\"{get_random_secret_key()}\"')" \
+                  print(f\"DJANGO_SECRET_KEY='{get_random_secret_key()}'\")" \
                   > $STATE_DIRECTORY/config/django_secret_key.env
                 export DJANGO_SECRET_KEY="$(cat $STATE_DIRECTORY/config/django_secret_key.env)"
               fi
