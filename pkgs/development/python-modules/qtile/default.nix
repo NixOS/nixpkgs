@@ -71,7 +71,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.37.0";
+  version = "0.37.1";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile-extras`
 
@@ -81,12 +81,8 @@ buildPythonPackage (finalAttrs: {
     owner = "qtile";
     repo = "qtile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-04oSoqKzr9OKb7xOTmLzRUJl8x6aQzH7t9d4LYlgkO8=";
+    hash = "sha256-n45e5/XvzKjH/ehatDPA+UWIlaiwSUhYnoPQOb5cLnA=";
   };
-
-  patches = [
-    ./restore-generic-desktop-file.patch
-  ];
 
   build-system = [
     setuptools
@@ -216,8 +212,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   postInstall = ''
-    install resources/qtile-generic.desktop -Dt $out/share/xsessions
-    install resources/qtile-generic.desktop -Dt $out/share/wayland-sessions
+    install -Dm644 resources/qtile-generic.desktop $out/share/xsessions/qtile.desktop
+    install -Dm644 resources/qtile-generic.desktop $out/share/wayland-sessions/qtile.desktop
   '';
 
   meta = {
