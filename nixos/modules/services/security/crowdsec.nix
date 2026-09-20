@@ -860,6 +860,11 @@ in
                 "crowdsec-setup.service"
               ];
 
+              environment = {
+                LANG = "C";
+                LC_ALL = "C";
+              };
+
               serviceConfig =
                 let
                   crowdsec = "${lib.getExe' cfg.package "crowdsec"}";
