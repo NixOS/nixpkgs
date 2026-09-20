@@ -155,7 +155,7 @@ let
       description = "Secure and simple password manager for a stress-free online experience";
       license = lib.licenses.unfree;
       mainProgram = "nordpass";
-      maintainers = with lib.maintainers; [ coconnor ];
+      maintainers = [ ];
       platforms = [ "x86_64-linux" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
