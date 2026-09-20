@@ -4,16 +4,9 @@
   makeDesktopItem,
   fetchFromGitLab,
   libsForQt5,
+  copyDesktopItems,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "Michabo";
-    desktopName = "Michabo";
-    exec = "Michabo";
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "michabo";
   version = "0.1";
@@ -29,20 +22,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
+    copyDesktopItems
   ];
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.qtwebsockets
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Michabo";
+      desktopName = "Michabo";
+      exec = "Michabo";
+    })
+  ];
+
   qmakeFlags = [
     "michabo.pro"
     "DESTDIR=${placeholder "out"}/bin"
   ];
-
-  postInstall = ''
-    ln -s ${desktopItem}/share $out/share
-  '';
 
   meta = {
     description = "Native desktop app for Pleroma and Mastodon servers";
