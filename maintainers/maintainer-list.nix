@@ -11020,6 +11020,14 @@
     github = "haansn08";
     githubId = 6215916;
   };
+  hackcraft_ = {
+    name = "Hackcraft_";
+    github = "realhackcraft";
+    githubId = 65378120;
+    email = "hackcraft_@hotmail.com";
+    matrix = "@hackcraft_:matrix.org";
+    keys = [ { fingerprint = "097C C394 927D FBF9 99C3  7D62 3554 8B5F 693C 7E6B"; } ];
+  };
   hacker1024 = {
     name = "hacker1024";
     email = "hacker1024@users.sourceforge.net";

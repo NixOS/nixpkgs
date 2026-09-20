@@ -1,55 +1,57 @@
 {
   lib,
   fetchFromCodeberg,
+  blueprint-compiler,
   desktop-file-utils,
   gettext,
   glib,
   glib-networking,
+  gnome,
   gobject-introspection,
-  blueprint-compiler,
   gtk4,
+  gtksourceview5,
   libadwaita,
   libglycin,
-  webkitgtk_6_0,
+  librsvg,
   meson,
   ninja,
   pkg-config,
   python3,
-  wrapGAppsHook4,
-  librsvg,
-  gnome,
+  webkitgtk_6_0,
   webp-pixbuf-loader,
+  wrapGAppsHook4,
   nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "50.11.0";
+  version = "51.0.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WO0wqDZP6rIe7B2oboJctQ302Ot2ooecqCSWOERdURg=";
+    hash = "sha256-5YEvYdkktoIEWoyTLop4tNVxG69/qPneOO0i0nW/Tfg=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
+    desktop-file-utils
+    gettext
+    glib # for glib-compile-resources
+    gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-    gettext
-    glib # for glib-compile-resources
-    desktop-file-utils
-    gobject-introspection
-    blueprint-compiler
   ];
 
   buildInputs = [
     glib
     glib-networking
     gtk4
+    gtksourceview5
     libadwaita
     libglycin
     webkitgtk_6_0
@@ -59,6 +61,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     beautifulsoup4
     brotli
     colorthief
+    curl-cffi
     dateparser
     ebooklib
     emoji
@@ -68,10 +71,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     natsort
     piexif
     pillow
-    curl-cffi
     pygobject3
     pyjwt
     pypdf
+    pytesseract
     python-magic
     rarfile
     requests
