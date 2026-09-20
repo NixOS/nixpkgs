@@ -240,6 +240,7 @@ in
           with pkgs; [
             networkmanager-fortisslvpn
             networkmanager-iodine
+            networkmanager-libreswan
             networkmanager-l2tp
             networkmanager-openconnect
             networkmanager-openvpn
