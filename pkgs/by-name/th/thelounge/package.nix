@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
-  version = "4.5.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "thelounge";
     repo = "thelounge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-I+ITSEm/FCI4omeBM8BCowI6hXBYriJfZ0vP27771Ms=";
+    hash = "sha256-E3QDmvUQlzmVCWUgzwVpWddFklWqywZG3/WAr1uVf0U=";
   };
 
   # Allow setting package path for the NixOS module.
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-wgG5AGZvMzdw4QnTNOzAfQGB//VWlV403AgWv4TceGQ=";
+    hash = "sha256-dIE6Dqg9npistgmSRQ5vD96YtDtRveTgLXyF+omtH2s=";
   };
 
   nativeBuildInputs = [
