@@ -1310,6 +1310,7 @@ in
 
   vicious = prev.vicious.overrideAttrs (old: {
     meta = (old.meta or { }) // {
+      homepage = "https://vicious.readthedocs.io/";
       changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
       maintainers = with lib.maintainers; [
         makefu
