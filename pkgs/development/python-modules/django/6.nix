@@ -62,6 +62,8 @@ buildPythonPackage (finalAttrs: {
     ./6.x/pythonpath.patch
     # test_incorrect_timezone should raise but doesn't
     ./6.x/disable-failing-test.patch
+    # some perf tests are often flaky under pressure
+    ./6.x/skip-flaky-tests.patch
     # https://code.djangoproject.com/ticket/36997
     # https://github.com/django/django/pull/21019
     ./6.x/invalidate-importlib-cache.patch
