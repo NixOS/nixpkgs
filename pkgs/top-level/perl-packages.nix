@@ -3680,7 +3680,7 @@ with self;
     ];
     meta = {
       description = "Catalyst Framework Runtime";
-      homepage = "http://dev.catalyst.perl.org";
+      homepage = "https://metacpan.org/pod/Catalyst";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
