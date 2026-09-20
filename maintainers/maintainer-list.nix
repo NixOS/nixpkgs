@@ -12419,6 +12419,11 @@
     githubId = 137306;
     name = "Michele Catalano";
   };
+  ironship = {
+    github = "Ironship";
+    githubId = 25068602;
+    name = "Ironship";
+  };
   isabelroses = {
     email = "isabel@isabelroses.com";
     matrix = "@isabel:isabelroses.com";
