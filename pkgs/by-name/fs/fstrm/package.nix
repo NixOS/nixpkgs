@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
   };
 
   outputs = [
@@ -34,11 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  strictDeps = true;
+
   preBuild = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -L${openssl}/lib"
   '';
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Frame Streams implementation in C";
