@@ -72,7 +72,7 @@ buildPythonPackage rec {
     # assert basically correct but fails in string match due to '' removed
     "test_unknown_command"
   ]
-  ++ lib.optional (pythonAtLeast "3.13") [
+  ++ lib.optionals (pythonAtLeast "3.13") [
     # assert basically correct but string match fails in due to
     # ('pathlib._local', 'Path.write_text') != ('pathlib', 'Path.write_text')
     "test_infer"

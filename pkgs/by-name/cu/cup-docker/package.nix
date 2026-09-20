@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [
     "cli"
   ]
-  ++ lib.optional withServer [
+  ++ lib.optionals withServer [
     "server"
   ];
 
