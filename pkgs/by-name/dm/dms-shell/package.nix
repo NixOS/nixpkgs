@@ -29,19 +29,19 @@ buildGoModule (
   in
   {
     pname = "dms-shell";
-    version = "1.6.1";
+    version = "1.6.2";
 
     src = fetchFromGitHub {
       owner = "AvengeMedia";
       repo = "DankMaterialShell";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-q8ciRRLhTMKsGl7OPU8v5sqToY64Fm61SeIHYOAEyjI=";
+      hash = "sha256-U1D/RVtIULXwywT5BgOrhW5qge4AdBfTLSXxCSLn4F0=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";
 
-    vendorHash = "sha256-Ls6Dquwt0fzDCEjZ6FfTsZTXDI8408mFdByv/OWHVgI=";
+    vendorHash = "sha256-ejDi+TzstUtxtWpcl5yYw4UZuTnZraOsIdJuXPKxJ6s=";
 
     tags = [ "withshell" ];
 
