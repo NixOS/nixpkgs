@@ -5,7 +5,10 @@
 
 {
   name = "music-assistant";
-  meta.maintainers = with lib.maintainers; [ hexa ];
+  meta.maintainers = with lib.maintainers; [
+    hexa
+    tebriel
+  ];
 
   containers.machine = {
     services.music-assistant = {
