@@ -5,7 +5,8 @@
   leveldb,
   perl,
   actool,
-  makeWrapper,
+  makeBinaryWrapper,
+  re-plistbuddy,
   rcodesign,
   nix-update-script,
 }:
@@ -13,19 +14,66 @@
 let
   inherit (swiftPackages) stdenv swift;
 
-  frameworks = [
-    "Kit"
-    "CPU"
-    "GPU"
-    "RAM"
-    "Disk"
-    "Net"
-    "Battery"
-    "Bluetooth"
-    "Sensors"
-    "Clock"
-    "Remote"
+  moduleConfigs = [
+    {
+      name = "CPU";
+      bridgingHeader = "Modules/CPU/bridge.h";
+      frameworks = [ "IOKit" ];
+      libraries = [ "IOReport" ];
+    }
+    {
+      name = "GPU";
+      bridgingHeader = "Modules/GPU/bridge.h";
+      frameworks = [
+        "IOKit"
+        "Metal"
+      ];
+      libraries = [ "IOReport" ];
+    }
+    {
+      name = "RAM";
+      frameworks = [ "IOKit" ];
+    }
+    {
+      name = "Disk";
+      bridgingHeader = "Modules/Disk/header.h";
+      frameworks = [
+        "IOKit"
+        "DiskArbitration"
+      ];
+    }
+    {
+      name = "Net";
+      frameworks = [
+        "IOKit"
+        "CoreWLAN"
+        "SystemConfiguration"
+      ];
+    }
+    {
+      name = "Battery";
+      frameworks = [ "IOKit" ];
+    }
+    {
+      name = "Bluetooth";
+      frameworks = [
+        "IOKit"
+        "IOBluetooth"
+        "CoreBluetooth"
+      ];
+    }
+    {
+      name = "Sensors";
+      bridgingHeader = "Modules/Sensors/bridge.h";
+      frameworks = [ "IOKit" ];
+      libraries = [ "IOReport" ];
+      objcSource = "Modules/Sensors/reader.m";
+    }
+    { name = "Clock"; }
+    { name = "Remote"; }
   ];
+
+  frameworks = [ "Kit" ] ++ map (module: module.name) moduleConfigs;
   modules = lib.tail frameworks;
 
   toPlist = lib.generators.toPlist { escape = true; };
@@ -41,32 +89,59 @@ let
       CFBundleVersion = "1";
     };
 
-  mainInfoPlist =
-    version:
-    toPlist {
-      CFBundleDevelopmentRegion = "en";
-      CFBundleExecutable = "Stats";
-      CFBundleIconFile = "AppIcon";
-      CFBundleIconName = "AppIcon";
-      CFBundleIdentifier = "eu.exelban.Stats";
-      CFBundleInfoDictionaryVersion = "6.0";
-      CFBundleName = "Stats";
-      CFBundlePackageType = "APPL";
-      CFBundleShortVersionString = version;
-      # CFBundleVersion is extracted from upstream's Info.plist at build time
-      Description = "Simple macOS system monitor in your menu bar";
-      LSApplicationCategoryType = "public.app-category.utilities";
-      LSMinimumSystemVersion = "12.0";
-      LSUIElement = true;
-      NSAppTransportSecurity = {
-        NSAllowsArbitraryLoads = true;
-      };
-      NSBluetoothAlwaysUsageDescription = "This permission allows obtaining battery level of Bluetooth devices";
-      NSHumanReadableCopyright = "Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.";
-      NSPrincipalClass = "NSApplication";
-      NSUserNotificationAlertStyle = "alert";
-      TeamId = "RP2S87B72W";
-    };
+  findSwiftFiles = varName: dirs: ''
+    ${varName}=()
+    while IFS= read -r -d "" f; do
+      ${varName}+=("$f")
+    done < <(find ${lib.escapeShellArgs dirs} -name '*.swift' -print0 2>/dev/null)
+  '';
+
+  buildModuleShell =
+    mod:
+    let
+      linkFlags = [
+        "-lKit"
+      ]
+      ++ map (library: "-l${library}") (mod.libraries or [ ])
+      ++ lib.concatMap (framework: [
+        "-framework"
+        framework
+      ]) (mod.frameworks or [ ]);
+    in
+    ''
+      echo "Building framework: ${mod.name}"
+
+      ${lib.optionalString (mod ? objcSource) ''
+        clang -x objective-c \
+          -I "Modules/${mod.name}" \
+          -fobjc-arc \
+          -O2 \
+          -c "${mod.objcSource}" \
+          -o "$buildDir/${lib.toLower mod.name}_objc.o"
+      ''}
+
+      ${findSwiftFiles "swiftFiles" [
+        mod.name
+        "Modules/${mod.name}"
+      ]}
+
+      swiftc \
+        "''${commonSwiftFlags[@]}" \
+        -emit-module \
+        -emit-library \
+        -module-name "${mod.name}" \
+        -module-link-name "${mod.name}" \
+        -emit-module-path "$buildDir/${mod.name}.swiftmodule" \
+        ${lib.optionalString (mod ? bridgingHeader) ''-import-objc-header "${mod.bridgingHeader}"''} \
+        -I "$buildDir" \
+        -L "$buildDir" \
+        -Xlinker -install_name -Xlinker "@rpath/${mod.name}.framework/${mod.name}" \
+        ${lib.escapeShellArgs linkFlags} \
+        ${lib.optionalString (mod ? objcSource) ''"$buildDir/${lib.toLower mod.name}_objc.o"''} \
+        "''${swiftFiles[@]}" \
+        -o "$buildDir/lib${mod.name}.dylib"
+    '';
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
@@ -86,14 +161,11 @@ stdenv.mkDerivation (finalAttrs: {
     swift
     perl
     actool
-    makeWrapper
+    makeBinaryWrapper
     rcodesign
   ];
 
   buildInputs = [ leveldb ];
-
-  # Stats uses IOReport private API symbols declared in bridging headers
-  env.NIX_LDFLAGS = "-lIOReport";
 
   # Swift 5.10 doesn't support trailing commas in argument lists (Swift 6 feature)
   # Remove them from all Swift source files
@@ -127,48 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
       # this flag the linker records SDK 14 and macOS withholds it (Liquid Glass)
       -Xlinker -platform_version -Xlinker macos -Xlinker 14.0 -Xlinker 26.0
     )
-
-    buildFramework() {
-      local name="$1"
-      shift
-      local bridgingHeader="$1"
-      shift
-      local extraFlags=("$@")
-
-      echo "Building framework: $name"
-
-      local swiftFiles=()
-      while IFS= read -r -d "" f; do
-        swiftFiles+=("$f")
-      done < <(find "$name" -name '*.swift' -print0 2>/dev/null)
-
-      # For modules in Modules/ subdirectory
-      if [ ''${#swiftFiles[@]} -eq 0 ]; then
-        while IFS= read -r -d "" f; do
-          swiftFiles+=("$f")
-        done < <(find "Modules/$name" -name '*.swift' -print0 2>/dev/null)
-      fi
-
-      local bridgeFlags=()
-      if [ -n "$bridgingHeader" ]; then
-        bridgeFlags=(-import-objc-header "$bridgingHeader")
-      fi
-
-      swiftc \
-        "''${commonSwiftFlags[@]}" \
-        -emit-module \
-        -emit-library \
-        -module-name "$name" \
-        -module-link-name "$name" \
-        -emit-module-path "$buildDir/$name.swiftmodule" \
-        "''${bridgeFlags[@]}" \
-        -I "$buildDir" \
-        -L "$buildDir" \
-        -Xlinker -install_name -Xlinker "@rpath/$name.framework/$name" \
-        "''${extraFlags[@]}" \
-        "''${swiftFiles[@]}" \
-        -o "$buildDir/lib$name.dylib"
-    }
 
     echo "=== Building Kit ==="
 
@@ -207,65 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
       "''${kitSwiftFiles[@]}" \
       -o "$buildDir/libKit.dylib"
 
-    buildFramework CPU "Modules/CPU/bridge.h" \
-      -lKit -framework IOKit
-
-    buildFramework GPU "Modules/GPU/bridge.h" \
-      -lKit -framework IOKit -framework Metal
-
-    buildFramework RAM "" \
-      -lKit -framework IOKit
-
-    buildFramework Disk "Modules/Disk/header.h" \
-      -lKit -framework IOKit -framework DiskArbitration
-
-    buildFramework Net "" \
-      -lKit -framework IOKit -framework CoreWLAN -framework SystemConfiguration
-
-    buildFramework Battery "" \
-      -lKit -framework IOKit
-
-    buildFramework Bluetooth "" \
-      -lKit -framework IOKit -framework IOBluetooth -framework CoreBluetooth
-
-    # Build Sensors - needs ObjC file too
-    echo "Building framework: Sensors"
-
-    # Compile reader.m (ObjC)
-    clang -x objective-c \
-      -I "Modules/Sensors" \
-      -fobjc-arc \
-      -O2 \
-      -c Modules/Sensors/reader.m \
-      -o "$buildDir/sensors_reader.o"
-
-    sensorsSwiftFiles=()
-    while IFS= read -r -d "" f; do
-      sensorsSwiftFiles+=("$f")
-    done < <(find Modules/Sensors -name '*.swift' -print0)
-
-    swiftc \
-      "''${commonSwiftFlags[@]}" \
-      -emit-module \
-      -emit-library \
-      -module-name Sensors \
-      -module-link-name Sensors \
-      -emit-module-path "$buildDir/Sensors.swiftmodule" \
-      -import-objc-header "Modules/Sensors/bridge.h" \
-      -I "$buildDir" \
-      -L "$buildDir" \
-      -lKit \
-      -framework IOKit \
-      -Xlinker -install_name -Xlinker "@rpath/Sensors.framework/Sensors" \
-      "$buildDir/sensors_reader.o" \
-      "''${sensorsSwiftFiles[@]}" \
-      -o "$buildDir/libSensors.dylib"
-
-    buildFramework Clock "" \
-      -lKit
-
-    buildFramework Remote "" \
-      -lKit
+    ${lib.concatMapStrings buildModuleShell moduleConfigs}
 
     echo "=== Building Stats app ==="
 
@@ -292,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     app="$out/Applications/Stats.app"
+    appInfo="$app/Contents/Info.plist"
+    assetInfo="$NIX_BUILD_TOP/asset-info.plist"
     mkdir -p "$app/Contents/"{MacOS,Frameworks,Resources}
 
     cp "$buildDir/Stats" "$app/Contents/MacOS/Stats"
@@ -304,14 +278,16 @@ stdenv.mkDerivation (finalAttrs: {
       printf '%s' ${lib.escapeShellArg (frameworkPlist fw)} > "$fwDir/Resources/Info.plist"
     '') frameworks}
 
-    printf '%s' ${lib.escapeShellArg (mainInfoPlist finalAttrs.version)} > "$app/Contents/Info.plist"
-    # Splice CFBundleVersion from upstream's checked-in Info.plist so it stays
-    # in sync automatically — nix-update-script bumps the tag & hash, and the
-    # new source tree carries the correct build number
-    bundleVersion=$(sed -n '/<key>CFBundleVersion<\/key>/{n;s/.*<string>\(.*\)<\/string>.*/\1/p;}' \
-      "Stats/Supporting Files/Info.plist")
-    sed -i "s|</dict>|<key>CFBundleVersion</key><string>$bundleVersion</string></dict>|" \
-      "$app/Contents/Info.plist"
+    # Keep upstream's plist as the source of truth so privacy and bundle
+    # metadata added by upstream are retained.
+    cp "Stats/Supporting Files/Info.plist" "$appInfo"
+    substituteInPlace "$appInfo" \
+      --replace-fail '$(DEVELOPMENT_LANGUAGE)' "en" \
+      --replace-fail '$(EXECUTABLE_NAME)' "Stats" \
+      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' "eu.exelban.Stats" \
+      --replace-fail '$(PRODUCT_NAME)' "Stats" \
+      --replace-fail '$(MARKETING_VERSION)' "${finalAttrs.version}" \
+      --replace-fail '$(MACOSX_DEPLOYMENT_TARGET)' "12.0"
 
     # Compile asset catalogs
     actool \
@@ -319,17 +295,18 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx \
       --minimum-deployment-target 14.0 \
       --app-icon AppIcon \
-      --output-partial-info-plist /dev/null \
+      --output-partial-info-plist "$assetInfo" \
       "Stats/Supporting Files/Assets.xcassets"
+
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Merge $assetInfo" "$appInfo"
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Delete :SMPrivilegedExecutables" "$appInfo"
 
     # Copy localization files
     find "Stats/Supporting Files" -name '*.lproj' -type d -exec cp -r {} "$app/Contents/Resources/" \;
 
     # Copy module config plists into each framework's Resources
     for mod in ${lib.concatStringsSep " " modules}; do
-      if [ -f "Modules/$mod/config.plist" ]; then
-        cp "Modules/$mod/config.plist" "$app/Contents/Frameworks/$mod.framework/Resources/config.plist"
-      fi
+      cp "Modules/$mod/config.plist" "$app/Contents/Frameworks/$mod.framework/Resources/config.plist"
     done
 
     makeWrapper "$app/Contents/MacOS/Stats" "$out/bin/stats"
