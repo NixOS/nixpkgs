@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   makeDesktopItem,
+  copyDesktopItems,
   unzip,
   fpc,
   lazarus,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     unzip
+    copyDesktopItems
   ];
   buildInputs = [
     fpc
@@ -73,30 +75,30 @@ stdenv.mkDerivation rec {
 
   env.LCL_PLATFORM = "gtk2";
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = "${pname} %U";
-    icon = pname;
-    type = "Application";
-    comment = meta.description;
-    desktopName = "Transmission Remote GUI";
-    genericName = "BitTorrent Client";
-    categories = [
-      "Network"
-      "FileTransfer"
-      "P2P"
-      "GTK"
-    ];
-    startupNotify = true;
-    mimeTypes = [
-      "application/x-bittorrent"
-      "x-scheme-handler/magnet"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "${pname} %U";
+      icon = pname;
+      type = "Application";
+      comment = meta.description;
+      desktopName = "Transmission Remote GUI";
+      genericName = "BitTorrent Client";
+      categories = [
+        "Network"
+        "FileTransfer"
+        "P2P"
+        "GTK"
+      ];
+      startupNotify = true;
+      mimeTypes = [
+        "application/x-bittorrent"
+        "x-scheme-handler/magnet"
+      ];
+    })
+  ];
 
   postInstall = ''
-    mkdir -p "$out/share/applications"
-    cp $desktopItem/share/applications/* $out/share/applications
     mkdir -p "$out/share/icons/hicolor/48x48/apps"
     cp transgui.png "$out/share/icons/hicolor/48x48/apps"
     mkdir -p "$out/share/transgui"
