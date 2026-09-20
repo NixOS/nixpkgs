@@ -11,19 +11,9 @@
   flex,
   zlib,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "goldencheetah";
-    exec = "GoldenCheetah";
-    icon = "goldencheetah";
-    desktopName = "GoldenCheetah";
-    genericName = "GoldenCheetah";
-    comment = "Performance software for cyclists, runners and triathletes";
-    categories = [ "Utility" ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
   version = "3.8";
@@ -57,11 +47,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
+    copyDesktopItems
   ]
   ++ (with qt6; [
     qmake
     wrapQtAppsHook
   ]);
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "goldencheetah";
+      exec = "GoldenCheetah";
+      icon = "goldencheetah";
+      desktopName = "GoldenCheetah";
+      genericName = "GoldenCheetah";
+      comment = "Performance software for cyclists, runners and triathletes";
+      categories = [ "Utility" ];
+    })
+  ];
 
   patches = [
     # allow building with bison 3.7
@@ -99,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
 
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
-        install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
         install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall
