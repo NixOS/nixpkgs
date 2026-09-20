@@ -33113,7 +33113,7 @@ with self;
     ];
     meta = {
       description = "Comprehensive template processing system";
-      homepage = "http://www.template-toolkit.org";
+      homepage = "http://template-toolkit.org";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
