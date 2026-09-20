@@ -5066,10 +5066,6 @@ with pkgs;
   iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
   iaca = iaca_3_0;
 
-  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_22;
-  };
-
   inherit (callPackage ../applications/misc/inochi2d { })
     inochi-creator
     inochi-session

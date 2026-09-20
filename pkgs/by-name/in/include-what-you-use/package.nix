@@ -3,9 +3,13 @@
   stdenv,
   fetchurl,
   cmake,
-  llvmPackages,
+  llvmPackages_22,
   python3,
 }:
+
+let
+  llvmPackages = llvmPackages_22;
+in
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
