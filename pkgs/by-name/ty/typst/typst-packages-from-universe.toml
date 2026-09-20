@@ -28829,7 +28829,6 @@ description = "📄 Thesis Template for HKUST-GZ in typst"
 license = [
     "MIT",
 ]
-homepage = "https://gitlab.hkust-gz.edu.cn/jlu625/typst-thesis-template"
 
 [modern-hsh-thesis."1.1.2"]
 url = "https://packages.typst.org/preview/modern-hsh-thesis-1.1.2.tar.gz"
