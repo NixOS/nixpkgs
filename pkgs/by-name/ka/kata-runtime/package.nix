@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   qemu_kvm,
   stdenv,
   virtiofsd,
@@ -13,7 +14,11 @@
 let
   version = "3.32.0";
 
-  kata-images = callPackage ./kata-images.nix { inherit version; };
+  kata-images-all = callPackage ./kata-images.nix { inherit version; };
+
+  kata-images =
+    kata-images-all.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   qemuSystemBinary =
     {
@@ -74,6 +79,19 @@ buildGoModule rec {
 
   passthru = {
     inherit kata-images;
+
+    # The kata-images hashes live in a separate file that the generic
+    # rewriters do not touch. Expose every architecture variant as a
+    # subpackage so a single `nix-update --subpackage` run refreshes all of
+    # them, regardless of the builder's architecture.
+    kata-images-aarch64-linux = kata-images-all.aarch64-linux;
+    kata-images-x86_64-linux = kata-images-all.x86_64-linux;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage=kata-images-aarch64-linux"
+        "--subpackage=kata-images-x86_64-linux"
+      ];
+    };
   };
 
   meta = {

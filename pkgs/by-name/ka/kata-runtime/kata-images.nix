@@ -2,50 +2,50 @@
 {
   fetchzip,
   lib,
-  stdenv,
   version,
   zstd,
 }:
 
 let
-  imageSuffix =
-    {
-      "x86_64-linux" = "amd64";
-      "aarch64-linux" = "arm64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  imageHash =
-    {
-      "x86_64-linux" = "sha256-ea4/6xjuoiqFebGF+NegGa4B+3Imf/4uULfQbJxqKtc=";
-      "aarch64-linux" = "sha256-cPx6uHXyMZ0x56dLUKx91FjhgkJaYW0nUtLrnfHz0as=";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-in
-fetchzip {
-  name = "kata-images-${version}";
-  url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.zst";
-  hash = imageHash;
-  nativeBuildInputs = [ zstd ];
-
-  postFetch = ''
-    mv $out/kata/share/kata-containers kata-containers
-    rm -r $out
-    mkdir -p $out/share
-    mv kata-containers $out/share/kata-containers
-  '';
-
-  meta = {
-    description = "Lightweight Virtual Machines like containers that provide the workload isolation and security of VMs";
-    homepage = "https://github.com/kata-containers/kata-containers";
-    changelog = "https://github.com/kata-containers/kata-containers/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ thomasjm ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  # Each entry maps a supported system to the release asset suffix for that
+  # architecture. The assets are architecture-specific, but every derivation
+  # below is instantiated with the host stdenv - only the URL and hash differ.
+  # That way a single `nix-update` run on any builder can refresh all of them.
+  images = {
+    x86_64-linux = {
+      suffix = "amd64";
+      hash = "sha256-ea4/6xjuoiqFebGF+NegGa4B+3Imf/4uULfQbJxqKtc=";
+    };
+    aarch64-linux = {
+      suffix = "arm64";
+      hash = "sha256-cPx6uHXyMZ0x56dLUKx91FjhgkJaYW0nUtLrnfHz0as=";
+    };
   };
-}
+
+  mkKataImages =
+    { suffix, hash }:
+    fetchzip {
+      name = "kata-images-${version}";
+      url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${suffix}.tar.zst";
+      inherit hash;
+      nativeBuildInputs = [ zstd ];
+
+      postFetch = ''
+        mv $out/kata/share/kata-containers kata-containers
+        rm -r $out
+        mkdir -p $out/share
+        mv kata-containers $out/share/kata-containers
+      '';
+
+      meta = {
+        description = "Lightweight Virtual Machines like containers that provide the workload isolation and security of VMs";
+        homepage = "https://github.com/kata-containers/kata-containers";
+        changelog = "https://github.com/kata-containers/kata-containers/releases/tag/${version}";
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [ thomasjm ];
+        platforms = lib.attrNames images;
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      };
+    };
+in
+lib.mapAttrs (_: mkKataImages) images
