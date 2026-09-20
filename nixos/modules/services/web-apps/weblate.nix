@@ -12,24 +12,34 @@ let
   cacheDir = "${dataDir}/cache";
   settingsDir = "${dataDir}/settings";
 
-  finalPackage = cfg.package.overridePythonAttrs (old: {
-    # We only support the PostgreSQL backend in this module
-    dependencies = old.dependencies ++ cfg.package.optional-dependencies.postgres;
-    # Use a settings module in dataDir, to avoid having to rebuild the package
-    # when user changes settings.
-    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set PYTHONPATH  \"${settingsDir}\""
-      "--set DJANGO_SETTINGS_MODULE \"settings\""
-    ];
-  });
-  inherit (finalPackage) python;
-
-  pythonEnv = python.buildEnv.override {
-    extraLibs = with python.pkgs; [
-      (toPythonModule finalPackage)
-      celery
-    ];
+  python = cfg.package.python.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      gunicorn = prev.gunicorn.overridePythonAttrs (old: {
+        # Allows Gunicorn to set a meaningful process name
+        dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+      });
+      weblate = prev.toPythonModule (
+        (cfg.package.override { python3 = python; }).overridePythonAttrs (old: {
+          # We only support the PostgreSQL backend in this module
+          dependencies = old.dependencies ++ cfg.package.optional-dependencies.postgres;
+          # Use a settings module in dataDir, to avoid having to rebuild the package
+          # when user changes settings.
+          makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+            "--set PYTHONPATH  \"${settingsDir}\""
+            "--set DJANGO_SETTINGS_MODULE \"settings\""
+          ];
+        })
+      );
+    };
   };
+
+  pythonEnv = python.withPackages (
+    ps: with ps; [
+      weblate
+      gunicorn
+    ]
+  );
 
   # This extends and overrides the weblate/settings_example.py code found in upstream.
   weblateConfig = ''
@@ -42,10 +52,8 @@ let
     SESSION_COOKIE_SECURE = ENABLE_HTTPS
     DATA_DIR = "${dataDir}"
     CACHE_DIR = f"{DATA_DIR}/cache"
-    STATIC_ROOT = "${finalPackage.static}"
+    STATIC_ROOT = "${python.pkgs.weblate.static}"
     MEDIA_ROOT = "/var/lib/weblate/media"
-    COMPRESS_ROOT = "${finalPackage.static}"
-    COMPRESS_OFFLINE = True
     DEBUG = False
 
     with open("${cfg.djangoSecretKeyFile}") as f:
@@ -119,7 +127,7 @@ let
       ''
         mkdir -p $out
         cat \
-          ${finalPackage}/${python.sitePackages}/weblate/settings_example.py \
+          ${python.pkgs.weblate}/${python.sitePackages}/weblate/settings_example.py \
           $weblateConfigPath \
           > $out/settings.py
       '';
@@ -127,8 +135,6 @@ let
   environment = {
     PYTHONPATH = "${settingsDir}:${pythonEnv}/${python.sitePackages}/";
     DJANGO_SETTINGS_MODULE = "settings";
-    # We run Weblate through gunicorn, so we can't utilise the env var set in the wrapper.
-    inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
   # Packages needed at runtime
@@ -246,8 +252,8 @@ in
         enableACME = true;
 
         locations = {
-          "= /favicon.ico".alias = "${finalPackage}/${python.sitePackages}/weblate/static/favicon.ico";
-          "/static/".alias = "${finalPackage.static}/";
+          "= /favicon.ico".alias = "${python.pkgs.weblate}/${python.sitePackages}/weblate/static/favicon.ico";
+          "/static/".alias = "${python.pkgs.weblate.static}/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };
       };
@@ -261,7 +267,7 @@ in
         User = "postgres";
         Group = "postgres";
         ExecStart = ''
-          ${config.services.postgresql.package}/bin/psql weblate -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+          ${lib.getExe' config.services.postgresql.finalPackage "psql"} weblate -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         '';
       };
     };
@@ -285,7 +291,7 @@ in
         StateDirectory = "weblate";
         User = "weblate";
         Group = "weblate";
-        ExecStart = "${finalPackage}/bin/weblate migrate --noinput";
+        ExecStart = "${lib.getExe' pythonEnv "weblate"} migrate --noinput";
       };
     };
 
@@ -310,7 +316,7 @@ in
           pidFile = "/run/celery/weblate-%%n.pid";
           nodes = "celery notify memory backup translate";
           cmd = verb: ''
-            ${pythonEnv}/bin/celery multi ${verb} \
+            ${lib.getExe' pythonEnv "celery"} multi ${verb} \
               ${nodes} \
               -A "weblate.utils" \
               --pidfile=${pidFile} \
@@ -334,14 +340,14 @@ in
           Type = "forking";
           User = "weblate";
           Group = "weblate";
-          WorkingDirectory = "${finalPackage}/${python.sitePackages}/weblate/";
+          WorkingDirectory = "${python.pkgs.weblate}/${python.sitePackages}/weblate/";
           RuntimeDirectory = "celery";
           RuntimeDirectoryPreserve = "restart";
           LogsDirectory = "celery";
           ExecStart = cmd "start";
           ExecReload = cmd "restart";
           ExecStop = ''
-            ${pythonEnv}/bin/celery multi stopwait \
+            ${lib.getExe' pythonEnv "celery"} multi stopwait \
               ${nodes} \
               --pidfile=${pidFile}
           '';
@@ -378,20 +384,13 @@ in
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "all";
-        ExecStart =
-          let
-            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-              # Allows Gunicorn to set a meaningful process name
-              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
-            });
-          in
-          ''
-            ${lib.getExe gunicorn} \
-              --name=weblate \
-              --bind='unix:///run/weblate.socket' \
-              --preload \
-              weblate.wsgi
-          '';
+        ExecStart = ''
+          ${lib.getExe' pythonEnv "gunicorn"} \
+            --name=weblate \
+            --bind='unix:///run/weblate.socket' \
+            --preload \
+            weblate.wsgi
+        '';
         ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
@@ -435,7 +434,7 @@ in
     users.users.weblate = {
       isSystemUser = true;
       group = "weblate";
-      packages = [ finalPackage ] ++ weblatePath;
+      packages = [ python.pkgs.weblate ] ++ weblatePath;
     };
 
     users.groups.weblate.members = [ config.services.nginx.user ];

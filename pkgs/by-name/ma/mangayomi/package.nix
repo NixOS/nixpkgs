@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter344,
+  flutter347,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-xdspJrqlTj+D5S69Y2dLcAZ0wfyTbpNytC8mY1fXnqo=";
+    hash = "sha256-7geEJynXq2OcCLhTtm8KxvfuCagI5grCUUQ0K7jFkcY=";
   };
 
   metaCommon = {
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-0XsGqhmTLe0y4TJCpU65Ewwgo0MNUp8EPPJ6Hv7Hci8=";
+    cargoHash = "sha256-q/jlamNxHrBe4z+MIpNr4T4HJgPsJMh0x18bXr4HKtU=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter344.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -86,7 +86,7 @@ flutter344.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
-          cargoHash = "sha256-8pCwqYWPS098kQGl2BqRfkq9ZF0KIlfzuPqzuQeictM=";
+          cargoHash = "sha256-mS8XJNw6qn6AVdUtZmSe2xfuraHz8m8t7tQhnSlof2M=";
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
@@ -148,6 +148,13 @@ flutter344.buildFlutterApplication {
 
   postInstall = ''
     install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
+  '';
+
+  # clang errors on the ignored fread result (-Werror=unused-result);
+  # magic is zero-initialized so a short read is harmless
+  postPatch = ''
+    substituteInPlace lib/ffi/image_decoder.cpp \
+      --replace-fail 'fread(magic, 1, 2, f);' '(void)fread(magic, 1, 2, f);'
   '';
 
   extraWrapProgramArgs = ''

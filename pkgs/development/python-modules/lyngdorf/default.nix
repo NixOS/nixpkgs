@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lyngdorf";
-  version = "1.4.8";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fishloa";
     repo = "lyngdorf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KasnlVp9Hx4B3NccLL1qaViLJRLKFY41yXu2bz1/8hA=";
+    hash = "sha256-CXKDXaCwn9n3VprpS5JuKXI/zOEPPgv94cyhEtDEknw=";
   };
 
   build-system = [ poetry-core ];
