@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ wrappers for ATK accessibility toolkit";
     license = lib.licenses.lgpl21Plus;
-    homepage = "https://gtkmm.org";
+    homepage = "https://gitlab.gnome.org/GNOME/atkmm";
     platforms = lib.platforms.unix;
   };
 })
