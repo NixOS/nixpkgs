@@ -192,6 +192,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_XRAY=OFF"
     "-DCOMPILER_CACHE=disabled"
   ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) "-DX86_ARCH_LEVEL=1"
   ++ lib.optional (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
   ) "-DNO_ARMV81_OR_HIGHER=1";
