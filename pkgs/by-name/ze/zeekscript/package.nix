@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-yky9w1G4e/dfzOGHXqKGxRgD8Uw9X8oJDjT4avJ9wKM=";
   };
 
+  pythonRelaxDeps = [ "tree-sitter-zeek" ];
+
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
