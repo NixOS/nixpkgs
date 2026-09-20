@@ -21,10 +21,13 @@
   dailies,
   dasht,
   deno,
+  distant,
   direnv,
   fzf,
+  fzy,
   gawk,
   git,
+  glow,
   helm-ls,
   himalaya,
   htop,
@@ -32,7 +35,9 @@
   khard,
   kulala-core,
   languagetool,
+  llm-ls,
   libgit2,
+  manix,
   llvmPackages,
   neovim-unwrapped,
   nix,
@@ -45,6 +50,7 @@
   slang-server,
   sqlite,
   sshfs,
+  sops,
   stylish-haskell,
   tabnine,
   tmux,
@@ -58,6 +64,7 @@
   xwininfo,
   xxd,
   ycmd,
+  yq,
   zenity,
   zoxide,
   zsh,
@@ -1371,6 +1378,10 @@ assertNoAdditions {
     '';
   });
 
+  distant-nvim = super.distant-nvim.overrideAttrs {
+    runtimeDeps = [ distant ];
+  };
+
   dotnet-nvim = super.dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       telescope-nvim
@@ -1677,6 +1688,10 @@ assertNoAdditions {
       license = lib.licenses.vim;
     };
   });
+
+  glow-nvim = super.glow-nvim.overrideAttrs {
+    runtimeDeps = [ glow ];
+  };
 
   go-nvim = super.go-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2364,6 +2379,10 @@ assertNoAdditions {
         '"crypto",' \
         '"${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}",'
     '';
+  };
+
+  llm-nvim = super.llm-nvim.overrideAttrs {
+    runtimeDeps = [ llm-ls ];
   };
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
@@ -3070,6 +3089,13 @@ assertNoAdditions {
     ];
   };
 
+  neovim-fuzzy = super.neovim-fuzzy.overrideAttrs {
+    runtimeDeps = [
+      fzy
+      ripgrep
+    ];
+  };
+
   neovim-project = super.neovim-project.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3397,6 +3423,13 @@ assertNoAdditions {
     };
   });
 
+  nvim-jqx = super.nvim-jqx.overrideAttrs {
+    runtimeDeps = [
+      jq
+      yq
+    ];
+  };
+
   nvim-julia-autotest = super.nvim-julia-autotest.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.agpl3Only;
@@ -3522,6 +3555,10 @@ assertNoAdditions {
       # Optional cmp integration
       self.nvim-cmp
     ];
+  };
+
+  nvim-sops = super.nvim-sops.overrideAttrs {
+    runtimeDeps = [ sops ];
   };
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
@@ -4560,6 +4597,10 @@ assertNoAdditions {
       plenary-nvim
       telescope-nvim
     ];
+  };
+
+  telescope-manix = super.telescope-manix.overrideAttrs {
+    runtimeDeps = [ manix ];
   };
 
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {

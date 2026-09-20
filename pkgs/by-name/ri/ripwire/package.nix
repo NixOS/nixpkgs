@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ripwire";
-  version = "0.5.0";
+  version = "0.6.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-et";
     repo = "ripwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JB2xwEfDhljHo9tpxmpDkIFvjBdLwkhe7w2KnNrcN+Q=";
+    hash = "sha256-2a4J9lS0rdJyhkXkpQSkFrSf+NsMyeI2mJJNIYvgA8Y=";
   };
 
   # Unvendor tree-sitter
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     prependToVar cmakeFlags "-DCMAKE_C_COMPILER_AR=$(command -v $AR)"
     prependToVar cmakeFlags "-DCMAKE_C_COMPILER_RANLIB=$(command -v $RANLIB)"
+    prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER_AR=$(command -v $AR)"
+    prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER_RANLIB=$(command -v $RANLIB)"
   '';
 
   cmakeFlags = [

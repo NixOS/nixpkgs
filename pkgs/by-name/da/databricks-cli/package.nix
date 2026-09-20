@@ -9,7 +9,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "1.16.0";
+  version = "1.17.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "databricks";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zb+hKKMscCOX4yJBwLmBFln5FFZIiwvZPf/80kP21g4=";
+    hash = "sha256-HWk3vw0DT8Jsjv9fM8jcQdJUDwEjjZEAYn7EP3V/OSQ=";
   };
 
-  vendorHash = "sha256-v4ntZgT89NV1wzMEMuRjeLmQql+fQ+XcMkidAVsxwXE=";
+  vendorHash = "sha256-eDFlN1dql+ojOSyP7huhzzyaH9o1tvdjHD4WxP//NwA=";
 
   subPackages = [ "." ];
 
