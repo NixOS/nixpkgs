@@ -1933,7 +1933,6 @@ in
   trailbase = runTest ./trailbase;
   tranquil-pds = runTest ./tranquil-pds.nix;
   transfer-sh = runTest ./transfer-sh.nix;
-  transmission_4 = runTest ./transmission.nix;
   trezord = runTest ./trezord.nix;
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
