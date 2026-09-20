@@ -1,21 +1,25 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "macdown-se";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/eldris-io/macdown-se/releases/download/v${version}/MacDown-SE-${version}.dmg";
+    url = "https://github.com/eldris-io/macdown-se/releases/download/v${finalAttrs.version}/MacDown-SE-${finalAttrs.version}.dmg";
     hash = "sha256-gYScYvQnRf9SCtqjA+Da+jg+5qPqfChc0kCAvtrLBjE=";
   };
 
   nativeBuildInputs = [ undmg ];
 
   sourceRoot = ".";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
@@ -27,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Markdown editor for Apple Silicon";
     longDescription = ''
       MacDown SE is the native Apple Silicon continuation of the classic
@@ -35,9 +39,9 @@ stdenvNoCC.mkDerivation rec {
       Protocol (MCP) server integration and AppKit performance.
     '';
     homepage = "https://github.com/eldris-io/macdown-se";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "macdown-se";
   };
-}
+})
