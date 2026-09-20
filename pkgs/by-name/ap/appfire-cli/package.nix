@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       Since the /nix/store is not writable, you can instead place the file
       at {file}`$HOME/acli.properties` to achieve the same effect.
     '';
-    homepage = "https://apps.appf.re/acli";
+    homepage = "https://appfire.com/products/acli";
     license = lib.licenses.unfreeRedistributable;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ twey ];
