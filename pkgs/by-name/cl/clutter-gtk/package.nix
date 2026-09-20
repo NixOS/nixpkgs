@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clutter-GTK";
-    homepage = "http://www.clutter-project.org/";
+    homepage = "https://gitlab.gnome.org/Archive/clutter-gtk";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
