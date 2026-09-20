@@ -85,7 +85,7 @@ buildGoModule (
       install -D ${finalAttrs.src}/assets/com.danklinux.dms.notepad.desktop \
         $out/share/applications/com.danklinux.dms.notepad.desktop
       install -D ${finalAttrs.src}/core/assets/danklogo.svg \
-        $out/share/hicolor/scalable/apps/danklogo.svg
+        $out/share/icons/hicolor/scalable/apps/danklogo.svg
 
       wrapProgram $out/bin/dms \
         --run 'export DMS_ORIG_NIXPKGS_QT6_QML_IMPORT_PATH="''${NIXPKGS_QT6_QML_IMPORT_PATH:-}"' \
