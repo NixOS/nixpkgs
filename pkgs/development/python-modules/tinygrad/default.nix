@@ -60,7 +60,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tinygrad";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tinygrad";
     repo = "tinygrad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cGv+swFzaMjwz40/p9OyW3HpZts09kVax2T/xYKW8sE=";
+    hash = "sha256-oiLzxSc+gpECQMjteI9q/CBI+fRopsm67tqR2pwz18U=";
   };
 
   patches =
@@ -97,24 +97,33 @@ buildPythonPackage (finalAttrs: {
       (replaceVars ./patch-rocm-paths.patch {
         comgr = lib.getLib rocmPackages.rocm-comgr;
         clr = lib.getLib rocmPackages.clr;
-        rocm-runtime = lib.getLib rocmPackages.rocm-runtime;
         rocm-llvm-objdump = lib.getExe' rocmPackages.llvm.llvm "llvm-objdump";
         llvm-objdump = lib.getExe' llvmPackages.llvm "llvm-objdump";
         hipcc = lib.getExe' rocmPackages.hipcc "hipcc";
       })
     ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace tinygrad/runtime/autogen/opencl.py \
-      --replace-fail \
-        "dll = c.DLL('opencl', 'OpenCL')" \
-        "dll = c.DLL('opencl', '${lib.getLib ocl-icd}/lib/libOpenCL.so')"
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux (
+    ''
+      substituteInPlace tinygrad/runtime/autogen/opencl.py \
+        --replace-fail \
+          "dll = c.DLL('opencl', 'OpenCL')" \
+          "dll = c.DLL('opencl', '${lib.getLib ocl-icd}/lib/libOpenCL.so')"
 
-    substituteInPlace tinygrad/runtime/autogen/libc.py \
-      --replace-fail \
-        "dll = c.DLL('libc', 'c', use_errno=True)" \
-        "dll = c.DLL('libc', '${lib.getLib stdenv.cc.libc}/lib/libc.so.6', use_errno=True)"
-  '';
+      substituteInPlace tinygrad/runtime/autogen/libc.py \
+        --replace-fail \
+          "dll = c.DLL('libc', 'c', use_errno=True)" \
+          "dll = c.DLL('libc', '${lib.getLib stdenv.cc.libc}/lib/libc.so.6', use_errno=True)"
+    ''
+    # The CPU runtime links JIT-compiled kernels against `libm` (`DLL('m', 'm')`) and
+    # `libgcc_s` (`DLL('rt', 'gcc_s')`), which are only looked up in FHS directories.
+    + ''
+      substituteInPlace tinygrad/runtime/support/c.py \
+        --replace-fail \
+          "'linux': [\"/usr/lib/wsl/lib/\"" \
+          "'linux': [\"${lib.getLib stdenv.cc.libc}/lib\", \"${lib.getLib stdenv.cc.cc}/lib\", \"/usr/lib/wsl/lib/\""
+    ''
+  );
 
   __propagatedImpureHostDeps = lib.optional stdenv.hostPlatform.isDarwin "/usr/lib/libc.dylib";
 
@@ -178,18 +187,15 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.testing;
 
+  pytestFlags = [ "--maxfail=10" ];
+
   disabledTests = [
     # Benign regression since safetensors >= 0.8.0
     #   json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 235 (char 234)
     "test_load_supported_types"
 
-    # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
-    "test_backward_sum_acc_dtype"
-    "test_failure_27"
-
     # Fail on some CPUs
     #   RuntimeError: DNNL does not support bf16/f16 backward on the platform with avx2_vnni_2
-    "test_conv2d_fused_half"
     "test_conv2d_half"
 
     # Flaky:
@@ -197,16 +203,17 @@ buildPythonPackage (finalAttrs: {
     "test_recursive_pad"
     # AssertionError: 23476983700 not greater than 60457564575 (performance test)
     "test_flops"
+    # Compares wall-clock scheduling times, fails on a loaded builder:
+    #   AssertionError: 9.885309216237726 not less than 8 : 48.9ms -> 483.3ms
+    "test_limit_bufs_linear_scaling"
 
     # Require internet access
     "testCopySHMtoDefault"
-    "test_benchmark_openpilot_model"
     "test_bn_alone"
     "test_bn_linear"
     "test_bn_mnist"
     "test_car"
     "test_chicken"
-    "test_chicken_bigbatch"
     "test_conv_mnist"
     "test_data_parallel_resnet"
     "test_dataset_is_realized"
@@ -219,6 +226,7 @@ buildPythonPackage (finalAttrs: {
     "test_linear_mnist"
     "test_llama_basic"
     "test_llama_bytes"
+    "test_llama_continued_conversation"
     "test_llama_control_char"
     "test_llama_early_tokenize"
     "test_llama_pat"
@@ -231,12 +239,11 @@ buildPythonPackage (finalAttrs: {
     "test_load_gpt2_q4_1"
     "test_load_llama2bfloat"
     "test_load_resnet"
-    "test_load_sample_mxfp4"
     "test_load_sample_q6_k"
     "test_load_tinyllama_q4_0"
     "test_load_tinyllama_q8_0"
+    "test_long_cached_prompt_matches_fresh_tokenization"
     "test_mnist_val"
-    "test_openpilot_model"
     "test_resnet"
     "test_shufflenet"
     "test_transcribe_batch12"
@@ -261,10 +268,18 @@ buildPythonPackage (finalAttrs: {
     "test_zero_copy_from_default_to_cpu"
 
     # RuntimeError: Failed to initialize cpuinfo!
-    "test_conv2d_fused_half"
     "test_conv2d_half"
     "test_gemm_fp16"
     "test_softmax_dtype"
+
+    # Cross-compiles for x86_64 and disassembles with the host `objdump`, which only
+    # knows about aarch64:
+    #   objdump: can't disassemble for architecture UNKNOWN!
+    "test_arch_feats"
+
+    # NaN payload propagation differs from x86:
+    #   AssertionError: 2143289347 != 2143289345 : mul(0x7fc00001, 0x7f800003)
+    "test_mul_nan_priority"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky (pass when running a smaller set of tests: tests/unit/*, but not within the full test suite)
@@ -291,6 +306,7 @@ buildPythonPackage (finalAttrs: {
     "test/amd/test_llvm.py"
     "test/amd/test_pdf.py"
     "test/models/test_mnist.py"
+    "test/models/test_whisper.py"
     "test/testextra/test_lr_scheduler.py"
 
     # Files under this directory are not considered as tests by upstream and should be skipped

@@ -1,64 +1,69 @@
-diff --git a/tinygrad/runtime/autogen/comgr.py b/tinygrad/runtime/autogen/comgr.py
-index 9c642cef2..b42c7c9c8 100644
---- a/tinygrad/runtime/autogen/comgr.py
-+++ b/tinygrad/runtime/autogen/comgr.py
-@@ -2,7 +2,7 @@
- import ctypes
- from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
- import os
--dll = DLL('comgr', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamd_comgr.so', 'amd_comgr'])
-+dll = DLL('comgr', '@comgr@/lib/libamd_comgr.so')
- amd_comgr_status_s = CEnum(ctypes.c_uint32)
- AMD_COMGR_STATUS_SUCCESS = amd_comgr_status_s.define('AMD_COMGR_STATUS_SUCCESS', 0)
- AMD_COMGR_STATUS_ERROR = amd_comgr_status_s.define('AMD_COMGR_STATUS_ERROR', 1)
-diff --git a/tinygrad/runtime/autogen/hip.py b/tinygrad/runtime/autogen/hip.py
-index 1cccb1e1f..d57a4d90a 100644
---- a/tinygrad/runtime/autogen/hip.py
-+++ b/tinygrad/runtime/autogen/hip.py
-@@ -2,7 +2,7 @@
- import ctypes
- from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
- import os
--dll = DLL('hip', os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamdhip64.so')
-+dll = DLL('hip', '@clr@/lib/libamdhip64.so')
- hipError_t = CEnum(ctypes.c_uint32)
- hipSuccess = hipError_t.define('hipSuccess', 0)
- hipErrorInvalidValue = hipError_t.define('hipErrorInvalidValue', 1)
-diff --git a/tinygrad/runtime/autogen/hsa.py b/tinygrad/runtime/autogen/hsa.py
-index 16e568e21..9788d3705 100644
---- a/tinygrad/runtime/autogen/hsa.py
-+++ b/tinygrad/runtime/autogen/hsa.py
-@@ -2,7 +2,7 @@
- import ctypes
- from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
- import os
--dll = DLL('hsa', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libhsa-runtime64.so', 'hsa-runtime64'])
-+dll = DLL('hsa', '@rocm-runtime@/lib/libhsa-runtime64.so')
- enum_SQ_RSRC_BUF_TYPE = CEnum(ctypes.c_uint32)
- SQ_RSRC_BUF = enum_SQ_RSRC_BUF_TYPE.define('SQ_RSRC_BUF', 0)
- SQ_RSRC_BUF_RSVD_1 = enum_SQ_RSRC_BUF_TYPE.define('SQ_RSRC_BUF_RSVD_1', 1)
-diff --git a/tinygrad/runtime/support/compiler_amd.py b/tinygrad/runtime/support/compiler_amd.py
-index e97aaefcd..ef55838a3 100644
---- a/tinygrad/runtime/support/compiler_amd.py
-+++ b/tinygrad/runtime/support/compiler_amd.py
-@@ -13,9 +13,9 @@ from tinygrad.runtime.support.compiler_cpu import LLVMCompiler
- from tinygrad.helpers import OSX, to_char_p_p
+diff --git a/tinygrad/helpers.py b/tinygrad/helpers.py
+index 7390709b0..4ce90a174 100644
+--- a/tinygrad/helpers.py
++++ b/tinygrad/helpers.py
+@@ -542,9 +542,8 @@ def capstone_flatdump(lib: bytes, arch:str):
+   sys.stdout.flush()
  
  def _find_llvm_objdump():
 -  if OSX: return '/opt/homebrew/opt/llvm/bin/llvm-objdump'
-+  if OSX: return '@llvm-objdump@'
-   # Try ROCm path first, then versioned, then unversioned
+-  # Try ROCm path first, then versioned, then unversioned
 -  for p in ['/opt/rocm/llvm/bin/llvm-objdump', 'llvm-objdump-21', 'llvm-objdump-20', 'llvm-objdump']:
++  if OSX: return '@llvm-objdump@'
 +  for p in ['@rocm-llvm-objdump@', '@llvm-objdump@']:
      if shutil.which(p): return p
    raise FileNotFoundError("llvm-objdump not found")
  
-@@ -107,9 +107,9 @@ class HIPCCCompiler(Compiler):
+diff --git a/tinygrad/runtime/autogen/comgr.py b/tinygrad/runtime/autogen/comgr.py
+index adcf0ef28..719a1786f 100644
+--- a/tinygrad/runtime/autogen/comgr.py
++++ b/tinygrad/runtime/autogen/comgr.py
+@@ -5,7 +5,7 @@ from typing import Literal, TypeAlias
+ from tinygrad.runtime.support.c import _IO, _IOW, _IOR, _IOWR
+ from tinygrad.runtime.support import c
+ import os
+-dll = c.DLL('comgr', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamd_comgr.so', 'amd_comgr'])
++dll = c.DLL('comgr', '@comgr@/lib/libamd_comgr.so')
+ amd_comgr_status_s: dict[int, str] = {(AMD_COMGR_STATUS_SUCCESS:=0): 'AMD_COMGR_STATUS_SUCCESS', (AMD_COMGR_STATUS_ERROR:=1): 'AMD_COMGR_STATUS_ERROR', (AMD_COMGR_STATUS_ERROR_INVALID_ARGUMENT:=2): 'AMD_COMGR_STATUS_ERROR_INVALID_ARGUMENT', (AMD_COMGR_STATUS_ERROR_OUT_OF_RESOURCES:=3): 'AMD_COMGR_STATUS_ERROR_OUT_OF_RESOURCES'}
+ amd_comgr_status_t: TypeAlias = ctypes.c_uint32
+ amd_comgr_language_s: dict[int, str] = {(AMD_COMGR_LANGUAGE_NONE:=0): 'AMD_COMGR_LANGUAGE_NONE', (AMD_COMGR_LANGUAGE_OPENCL_1_2:=1): 'AMD_COMGR_LANGUAGE_OPENCL_1_2', (AMD_COMGR_LANGUAGE_OPENCL_2_0:=2): 'AMD_COMGR_LANGUAGE_OPENCL_2_0', (AMD_COMGR_LANGUAGE_HC:=3): 'AMD_COMGR_LANGUAGE_HC', (AMD_COMGR_LANGUAGE_HIP:=4): 'AMD_COMGR_LANGUAGE_HIP', (AMD_COMGR_LANGUAGE_LLVM_IR:=5): 'AMD_COMGR_LANGUAGE_LLVM_IR', (AMD_COMGR_LANGUAGE_LAST:=5): 'AMD_COMGR_LANGUAGE_LAST'}
+diff --git a/tinygrad/runtime/autogen/comgr_3.py b/tinygrad/runtime/autogen/comgr_3.py
+index d8c608d13..d53d00487 100644
+--- a/tinygrad/runtime/autogen/comgr_3.py
++++ b/tinygrad/runtime/autogen/comgr_3.py
+@@ -5,7 +5,7 @@ from typing import Literal, TypeAlias
+ from tinygrad.runtime.support.c import _IO, _IOW, _IOR, _IOWR
+ from tinygrad.runtime.support import c
+ import os
+-dll = c.DLL('comgr_3', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamd_comgr.so', 'amd_comgr'])
++dll = c.DLL('comgr_3', '@comgr@/lib/libamd_comgr.so')
+ amd_comgr_status_s: dict[int, str] = {(AMD_COMGR_STATUS_SUCCESS:=0): 'AMD_COMGR_STATUS_SUCCESS', (AMD_COMGR_STATUS_ERROR:=1): 'AMD_COMGR_STATUS_ERROR', (AMD_COMGR_STATUS_ERROR_INVALID_ARGUMENT:=2): 'AMD_COMGR_STATUS_ERROR_INVALID_ARGUMENT', (AMD_COMGR_STATUS_ERROR_OUT_OF_RESOURCES:=3): 'AMD_COMGR_STATUS_ERROR_OUT_OF_RESOURCES'}
+ amd_comgr_status_t: TypeAlias = ctypes.c_uint32
+ amd_comgr_language_s: dict[int, str] = {(AMD_COMGR_LANGUAGE_NONE:=0): 'AMD_COMGR_LANGUAGE_NONE', (AMD_COMGR_LANGUAGE_OPENCL_1_2:=1): 'AMD_COMGR_LANGUAGE_OPENCL_1_2', (AMD_COMGR_LANGUAGE_OPENCL_2_0:=2): 'AMD_COMGR_LANGUAGE_OPENCL_2_0', (AMD_COMGR_LANGUAGE_HIP:=3): 'AMD_COMGR_LANGUAGE_HIP', (AMD_COMGR_LANGUAGE_LLVM_IR:=4): 'AMD_COMGR_LANGUAGE_LLVM_IR', (AMD_COMGR_LANGUAGE_LAST:=4): 'AMD_COMGR_LANGUAGE_LAST'}
+diff --git a/tinygrad/runtime/autogen/hip.py b/tinygrad/runtime/autogen/hip.py
+index bc4d6324c..340b851af 100644
+--- a/tinygrad/runtime/autogen/hip.py
++++ b/tinygrad/runtime/autogen/hip.py
+@@ -5,7 +5,7 @@ from typing import Literal, TypeAlias
+ from tinygrad.runtime.support.c import _IO, _IOW, _IOR, _IOWR
+ from tinygrad.runtime.support import c
+ import os
+-dll = c.DLL('hip', os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamdhip64.so')
++dll = c.DLL('hip', '@clr@/lib/libamdhip64.so')
+ hipError_t: dict[int, str] = {(hipSuccess:=0): 'hipSuccess', (hipErrorInvalidValue:=1): 'hipErrorInvalidValue', (hipErrorOutOfMemory:=2): 'hipErrorOutOfMemory', (hipErrorMemoryAllocation:=2): 'hipErrorMemoryAllocation', (hipErrorNotInitialized:=3): 'hipErrorNotInitialized', (hipErrorInitializationError:=3): 'hipErrorInitializationError', (hipErrorDeinitialized:=4): 'hipErrorDeinitialized', (hipErrorProfilerDisabled:=5): 'hipErrorProfilerDisabled', (hipErrorProfilerNotInitialized:=6): 'hipErrorProfilerNotInitialized', (hipErrorProfilerAlreadyStarted:=7): 'hipErrorProfilerAlreadyStarted', (hipErrorProfilerAlreadyStopped:=8): 'hipErrorProfilerAlreadyStopped', (hipErrorInvalidConfiguration:=9): 'hipErrorInvalidConfiguration', (hipErrorInvalidPitchValue:=12): 'hipErrorInvalidPitchValue', (hipErrorInvalidSymbol:=13): 'hipErrorInvalidSymbol', (hipErrorInvalidDevicePointer:=17): 'hipErrorInvalidDevicePointer', (hipErrorInvalidMemcpyDirection:=21): 'hipErrorInvalidMemcpyDirection', (hipErrorInsufficientDriver:=35): 'hipErrorInsufficientDriver', (hipErrorMissingConfiguration:=52): 'hipErrorMissingConfiguration', (hipErrorPriorLaunchFailure:=53): 'hipErrorPriorLaunchFailure', (hipErrorInvalidDeviceFunction:=98): 'hipErrorInvalidDeviceFunction', (hipErrorNoDevice:=100): 'hipErrorNoDevice', (hipErrorInvalidDevice:=101): 'hipErrorInvalidDevice', (hipErrorInvalidImage:=200): 'hipErrorInvalidImage', (hipErrorInvalidContext:=201): 'hipErrorInvalidContext', (hipErrorContextAlreadyCurrent:=202): 'hipErrorContextAlreadyCurrent', (hipErrorMapFailed:=205): 'hipErrorMapFailed', (hipErrorMapBufferObjectFailed:=205): 'hipErrorMapBufferObjectFailed', (hipErrorUnmapFailed:=206): 'hipErrorUnmapFailed', (hipErrorArrayIsMapped:=207): 'hipErrorArrayIsMapped', (hipErrorAlreadyMapped:=208): 'hipErrorAlreadyMapped', (hipErrorNoBinaryForGpu:=209): 'hipErrorNoBinaryForGpu', (hipErrorAlreadyAcquired:=210): 'hipErrorAlreadyAcquired', (hipErrorNotMapped:=211): 'hipErrorNotMapped', (hipErrorNotMappedAsArray:=212): 'hipErrorNotMappedAsArray', (hipErrorNotMappedAsPointer:=213): 'hipErrorNotMappedAsPointer', (hipErrorECCNotCorrectable:=214): 'hipErrorECCNotCorrectable', (hipErrorUnsupportedLimit:=215): 'hipErrorUnsupportedLimit', (hipErrorContextAlreadyInUse:=216): 'hipErrorContextAlreadyInUse', (hipErrorPeerAccessUnsupported:=217): 'hipErrorPeerAccessUnsupported', (hipErrorInvalidKernelFile:=218): 'hipErrorInvalidKernelFile', (hipErrorInvalidGraphicsContext:=219): 'hipErrorInvalidGraphicsContext', (hipErrorInvalidSource:=300): 'hipErrorInvalidSource', (hipErrorFileNotFound:=301): 'hipErrorFileNotFound', (hipErrorSharedObjectSymbolNotFound:=302): 'hipErrorSharedObjectSymbolNotFound', (hipErrorSharedObjectInitFailed:=303): 'hipErrorSharedObjectInitFailed', (hipErrorOperatingSystem:=304): 'hipErrorOperatingSystem', (hipErrorInvalidHandle:=400): 'hipErrorInvalidHandle', (hipErrorInvalidResourceHandle:=400): 'hipErrorInvalidResourceHandle', (hipErrorIllegalState:=401): 'hipErrorIllegalState', (hipErrorNotFound:=500): 'hipErrorNotFound', (hipErrorNotReady:=600): 'hipErrorNotReady', (hipErrorIllegalAddress:=700): 'hipErrorIllegalAddress', (hipErrorLaunchOutOfResources:=701): 'hipErrorLaunchOutOfResources', (hipErrorLaunchTimeOut:=702): 'hipErrorLaunchTimeOut', (hipErrorPeerAccessAlreadyEnabled:=704): 'hipErrorPeerAccessAlreadyEnabled', (hipErrorPeerAccessNotEnabled:=705): 'hipErrorPeerAccessNotEnabled', (hipErrorSetOnActiveProcess:=708): 'hipErrorSetOnActiveProcess', (hipErrorContextIsDestroyed:=709): 'hipErrorContextIsDestroyed', (hipErrorAssert:=710): 'hipErrorAssert', (hipErrorHostMemoryAlreadyRegistered:=712): 'hipErrorHostMemoryAlreadyRegistered', (hipErrorHostMemoryNotRegistered:=713): 'hipErrorHostMemoryNotRegistered', (hipErrorLaunchFailure:=719): 'hipErrorLaunchFailure', (hipErrorCooperativeLaunchTooLarge:=720): 'hipErrorCooperativeLaunchTooLarge', (hipErrorNotSupported:=801): 'hipErrorNotSupported', (hipErrorStreamCaptureUnsupported:=900): 'hipErrorStreamCaptureUnsupported', (hipErrorStreamCaptureInvalidated:=901): 'hipErrorStreamCaptureInvalidated', (hipErrorStreamCaptureMerge:=902): 'hipErrorStreamCaptureMerge', (hipErrorStreamCaptureUnmatched:=903): 'hipErrorStreamCaptureUnmatched', (hipErrorStreamCaptureUnjoined:=904): 'hipErrorStreamCaptureUnjoined', (hipErrorStreamCaptureIsolation:=905): 'hipErrorStreamCaptureIsolation', (hipErrorStreamCaptureImplicit:=906): 'hipErrorStreamCaptureImplicit', (hipErrorCapturedEvent:=907): 'hipErrorCapturedEvent', (hipErrorStreamCaptureWrongThread:=908): 'hipErrorStreamCaptureWrongThread', (hipErrorGraphExecUpdateFailure:=910): 'hipErrorGraphExecUpdateFailure', (hipErrorInvalidChannelDescriptor:=911): 'hipErrorInvalidChannelDescriptor', (hipErrorInvalidTexture:=912): 'hipErrorInvalidTexture', (hipErrorUnknown:=999): 'hipErrorUnknown', (hipErrorRuntimeMemory:=1052): 'hipErrorRuntimeMemory', (hipErrorRuntimeOther:=1053): 'hipErrorRuntimeOther', (hipErrorTbd:=1054): 'hipErrorTbd'}
+ class ihipModuleSymbol_t(c.Struct): pass
+ hipFunction_t: TypeAlias = c.POINTER[ihipModuleSymbol_t]
+diff --git a/tinygrad/runtime/support/compiler_amd.py b/tinygrad/runtime/support/compiler_amd.py
+index eef5e07f8..f3f0d5e0c 100644
+--- a/tinygrad/runtime/support/compiler_amd.py
++++ b/tinygrad/runtime/support/compiler_amd.py
+@@ -99,10 +99,9 @@ class HIPCCCompiler(Compiler):
          srcf.write(src.encode())
          srcf.flush()
  
+-        rocm_path = getenv("ROCM_PATH", "/opt/rocm")
 -        subprocess.run(["hipcc", "-c", "-emit-llvm", "--cuda-device-only", "-O3", "-mcumode",
--                        f"--offload-arch={self.arch}", "-I/opt/rocm/include/hip", "-o", bcf.name, srcf.name] + self.extra_options, check=True)
+-                        f"--offload-arch={self.arch}", f"-I{rocm_path}/include/hip", "-o", bcf.name, srcf.name] + self.extra_options, check=True)
 -        subprocess.run(["hipcc", "-target", "amdgcn-amd-amdhsa", f"-mcpu={self.arch}",
 +        subprocess.run(["@hipcc@", "-c", "-emit-llvm", "--cuda-device-only", "-O3", "-mcumode",
 +                        f"--offload-arch={self.arch}", "-I@clr@/include/hip", "-o", bcf.name, srcf.name] + self.extra_options, check=True)
