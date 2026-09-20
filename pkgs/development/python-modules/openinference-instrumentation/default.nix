@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  httpx2,
   jsonschema,
   nix-update-script,
   openai,
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   dependencies = [
+    httpx2
     opentelemetry-api
     opentelemetry-sdk
     openinference-semantic-conventions
