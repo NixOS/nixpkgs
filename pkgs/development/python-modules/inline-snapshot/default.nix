@@ -10,11 +10,12 @@
   hypothesis,
   isort,
   pydantic,
-  pytest,
   pytest-freezer,
   pytest-mock,
   pytest-xdist,
+  pytest,
   pytestCheckHook,
+  pythonOlder,
   rich,
   typing-extensions,
 }:
@@ -65,6 +66,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    # Fail on small formatting differences
+    "tests/test_docs.py::test_docs[categories.md]"
+    "tests/test_docs.py::test_docs[testing.md]"
+    "tests/test_docs.py::test_docs[code_generation.md]"
   ];
 
   meta = {
