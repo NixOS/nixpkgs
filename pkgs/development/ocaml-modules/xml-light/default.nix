@@ -25,7 +25,7 @@ buildDunePackage rec {
       entirely written in OCaml, hence it does not require additional C
       library.
     '';
-    homepage = "http://tech.motion-twin.com/xmllight.html";
+    homepage = "https://github.com/ncannasse/xml-light";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.romildo ];
   };
