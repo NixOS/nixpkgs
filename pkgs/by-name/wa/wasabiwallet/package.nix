@@ -5,6 +5,7 @@
   makeWrapper,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   lttng-ust_2_12,
   fontconfig,
   openssl,
@@ -38,27 +39,32 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  desktopItem = makeDesktopItem {
-    name = "wasabi";
-    exec = "wasabiwallet-desktop";
-    desktopName = "Wasabi";
-    genericName = "Bitcoin wallet";
-    comment = meta.description;
-    categories = [
-      "Network"
-      "Utility"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wasabi";
+      exec = "wasabiwallet-desktop";
+      desktopName = "Wasabi";
+      genericName = "Bitcoin wallet";
+      comment = meta.description;
+      categories = [
+        "Network"
+        "Utility"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = runtimeLibs ++ [
     lttng-ust_2_12
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
 
     # The weird path is an upstream packaging error and could be fixed in the upcoming release
@@ -70,7 +76,7 @@ stdenv.mkDerivation rec {
         --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
     done
 
-    cp -v $desktopItem/share/applications/* $out/share/applications
+    runHook postInstall
   '';
 
   meta = {
