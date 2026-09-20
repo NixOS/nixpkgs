@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   gitUpdater,
+  runtimeShell,
 
   # buildInputs
   buildbox,
@@ -72,6 +73,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patch
   ];
 
+  # The dummy buildbox-casd scripts spawned by tests/internals/cascache.py use
+  # an `/usr/bin/env sh` shebang, which doesn't exist in the Nix build sandbox.
+  postPatch = ''
+    substituteInPlace tests/internals/cascache.py \
+      --replace-fail '#!/usr/bin/env sh' '#!${runtimeShell}'
+  '';
+
+  # /dev/fuse is not available inside the Nix build sandbox, so buildbox-casd's
+  # default FUSE-based staging strategy cannot work here. Force the hardlink/copy
+  # stager instead (this is a real, supported buildbox-casd staging mode, not a
+  # workaround: https://gitlab.com/BuildGrid/buildbox/buildbox/-/blob/main/casd/buildboxcasd_server.cpp).
+  preCheck = ''
+    export BUILDBOX_STAGER=copy-or-link
+  '';
+
   pythonImportsCheck = [ "buildstream" ];
 
   nativeCheckInputs = [
@@ -86,29 +102,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.pytest-xdist
     python3Packages.pytestCheckHook
     versionCheckHook
-  ];
 
-  disabledTests = [
-    # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
-    "test_source_mirror_plugin"
-
-    # AssertionError: assert '1a5528cad211...0bbe5ee314c14' == '2ccfee62a657...52dbc47203a88'
-    "test_fixed_cas_import"
-    "test_random_cas_import"
-
-    # Runtime error: The FUSE stager child process unexpectedly died with exit code 2
-    "test_patch_sources_cached_1"
-    "test_patch_sources_cached_2"
-    "test_source_cache_key"
-    "test_custom_transform_source"
-
-    # Blob not found in the local CAS
-    "test_source_pull_partial_fallback_fetch"
-  ];
-
-  disabledTestPaths = [
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tmp/popen-gw1/test_report_when_cascache_exit0/buildbox-casd'
-    "tests/internals/cascache.py"
+    # Test fixture plugin package used by test_source_mirror_plugin[pip]; upstream
+    # normally installs this via tox before running the pip-origin plugin loading test.
+    (python3Packages.buildPythonPackage {
+      pname = "sample-plugins";
+      version = "1.2.3";
+      pyproject = true;
+      build-system = [ python3Packages.setuptools ];
+      src = "${finalAttrs.src}/tests/plugins/sample-plugins";
+      dontCheck = true;
+    })
   ];
 
   postInstall = ''
