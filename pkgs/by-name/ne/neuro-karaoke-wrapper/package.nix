@@ -10,7 +10,7 @@ let
     url = "https://github.com/AferilVT/neuro-karaoke-wrapper/releases/download/v${version}/Neuro.Karaoke.Player-x86_64.AppImage";
     hash = "sha256-2iZdZq2XkK2jlVsg1i23+9IHyV5QPNl1bxL33qk/s+E=";
   };
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
