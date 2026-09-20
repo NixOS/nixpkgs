@@ -13,6 +13,7 @@
   fixDarwinDylibNames,
   version,
   freebsd,
+  windows,
   cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null,
   libunwind,
   enableShared ? stdenv.hostPlatform.hasSharedLibraries,
@@ -27,11 +28,16 @@
 # https://github.com/NixOS/nixpkgs/issues/269548
 assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
-  cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
-  runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
+  useLibUnwind = (
+    !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD && !stdenv.hostPlatform.isWindows
+  );
+  isMsvc = stdenv.hostPlatform.isWindows && useLLVM;
+
+  cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
+  runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null && !isMsvc) "libcxxabi";
 
   cxxabiCMakeFlags = [
     (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
@@ -50,10 +56,10 @@ let
   ];
 
   cxxCMakeFlags = [
-    (lib.cmakeFeature "LIBCXX_CXX_ABI" cxxabiName)
+    (lib.cmakeFeature "LIBCXX_CXX_ABI" (if isMsvc then "none" else cxxabiName))
     (lib.cmakeBool "LIBCXX_ENABLE_SHARED" enableShared)
     # https://github.com/llvm/llvm-project/issues/55245
-    (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
+    (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" (stdenv.hostPlatform.isWindows && !isMsvc))
   ]
   ++ lib.optionals (cxxabi == null) [
     # Include libc++abi symbols within libc++.a for static linking libc++;
@@ -72,15 +78,17 @@ let
       [
         (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
       ]
-  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+  ++ lib.optionals (!useLibUnwind) [
     # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
     # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
     (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
   ]
   ++ lib.optionals useLLVM [
     (lib.cmakeBool "LIBCXX_USE_COMPILER_RT" true)
+    #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
+    (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
   ]
-  ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals useLibUnwind [
     (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
   ]
   ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -101,7 +109,7 @@ let
     (lib.cmakeBool "UNIX" true) # Required otherwise libc++ fails to detect the correct linker
   ]
   ++ cxxCMakeFlags
-  ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
+  ++ lib.optionals ((cxxabi == null) && !isMsvc) cxxabiCMakeFlags
   ++ devExtraCmakeFlags;
 
 in
@@ -160,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cxxabi
   ]
-  ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals (useLLVM && useLibUnwind) [
     libunwind
   ];
 
