@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://blog.lxde.org/category/pcmanfm/";
+    homepage = "https://github.com/lxde/pcmanfm";
     license = lib.licenses.gpl2Plus;
     description = "File manager with GTK interface";
     maintainers = [ ];
