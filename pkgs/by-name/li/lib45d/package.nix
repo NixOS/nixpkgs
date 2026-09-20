@@ -6,22 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib45d";
-  version = "0.3.6";
+  version = "0-unstable-2024-01-29";
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "lib45d";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-42xB30Iu2WxNrBxomVBKd/uyIRt27y/Y1ah5mckOrc0=";
+    rev = "a607e278182a3184c004c45c215aa22c15d6941d";
+    hash = "sha256-N/HC1OJe1Oa66KFdbIwIcCbV4Fi6FPSi0+KAtKJSjds=";
   };
-
-  patches = [
-    # https://github.com/45Drives/lib45d/issues/3
-    # fix "error: 'uintmax_t' has not been declared" build failure until next release
-    (fetchpatch {
-      url = "https://github.com/45Drives/lib45d/commit/a607e278182a3184c004c45c215aa22c15d6941d.patch";
-      hash = "sha256-sMAvOp4EjBXGHa9PGuuEqJvpEvUlMuzRKCfq9oqQLgY=";
-    })
-  ];
 
   installPhase = ''
     runHook preInstall
