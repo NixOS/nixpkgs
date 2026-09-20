@@ -20,14 +20,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Jo2nAYUx6N2fJvX4hHckRKr2gr6xsGW9lNMD45+/uNY=";
+    hash = "sha256-lCDhKt1lKZnzKuOuusbWYqwLBH8NJ8sF/UaDk7gjfLc=";
   };
 
-  cargoHash = "sha256-TsM2CFsNDu4SRPcDwAWoPOtWPMf/Z3R9HlSlh4Ly92s=";
+  cargoHash = "sha256-vp8hJuskBxeyZ2vxoKe73kEI8TR13ooNwqP7gw19yo4=";
 
   buildInputs = [
     qt6.qtbase
