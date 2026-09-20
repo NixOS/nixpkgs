@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -14,24 +15,44 @@ in
 
       package = lib.mkPackageOption pkgs "typedb" { };
 
-      listenAddress = lib.mkOption {
+      listenHost = lib.mkOption {
         type = lib.types.str;
-        default = "127.0.0.1:1729";
-        example = "127.0.0.1:1729";
+        default = "127.0.0.1";
+        example = "127.0.0.1";
         description = ''
-          Address (host:port) the TypeDB driver protocol listens on.
-          Loopback by default; set a LAN address together with
-          {option}`openFirewall` only on trusted networks (TypeDB has no
-          read-only role; any credential holder can write).
+          Host the TypeDB driver protocol listens on. Loopback by default;
+          set a LAN address together with {option}`openFirewall` only on
+          trusted networks (TypeDB has no read-only role; any credential
+          holder can write).
         '';
       };
 
-      httpListenAddress = lib.mkOption {
-        type = lib.types.str;
-        default = "127.0.0.1:8000";
-        example = "127.0.0.1:8000";
+      listenPort = lib.mkOption {
+        type = lib.types.port;
+        default = 1729;
+        example = 1729;
         description = ''
-          Address (host:port) the TypeDB HTTP endpoint listens on.
+          Port the TypeDB driver protocol listens on. Opened in the firewall
+          when {option}`openFirewall` is enabled.
+        '';
+      };
+
+      httpListenHost = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1";
+        example = "127.0.0.1";
+        description = ''
+          Host the TypeDB HTTP endpoint listens on.
+        '';
+      };
+
+      httpListenPort = lib.mkOption {
+        type = lib.types.port;
+        default = 8000;
+        example = 8000;
+        description = ''
+          Port the TypeDB HTTP endpoint listens on. Opened in the firewall
+          when {option}`openFirewall` is enabled.
         '';
       };
 
@@ -39,8 +60,9 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Open the firewall for the driver and HTTP ports. Off by default;
-          the service binds loopback unless the addresses above say otherwise.
+          Open the firewall for the configured driver and HTTP ports. Off by
+          default; the service binds loopback unless the host options above
+          say otherwise.
         '';
       };
 
@@ -79,6 +101,8 @@ in
 
   config =
     let
+      listenAddress = "${cfg.listenHost}:${toString cfg.listenPort}";
+      httpListenAddress = "${cfg.httpListenHost}:${toString cfg.httpListenPort}";
       # The server mandates a config file (it resolves a bare `config.yml`
       # against the executable directory, never CWD defaults), so the
       # module renders one. This mirrors upstream `server/config.yml`
@@ -87,11 +111,11 @@ in
       # remain available via extraFlags and override file values.
       configFile = pkgs.writeText "typedb-config.yml" ''
         server:
-          listen-address: "${cfg.listenAddress}"
+          listen-address: "${listenAddress}"
           advertise-address:
           http:
             enabled: true
-            listen-address: "${cfg.httpListenAddress}"
+            listen-address: "${httpListenAddress}"
             advertise-address:
           admin:
             enabled: false
@@ -132,9 +156,9 @@ in
       environment.systemPackages = [ cfg.package ];
 
       networking.firewall = lib.mkIf cfg.openFirewall {
-        allowedTCPPorts = [
-          1729
-          8000
+        allowedTCPPorts = lib.unique [
+          cfg.listenPort
+          cfg.httpListenPort
         ];
       };
 
@@ -144,7 +168,7 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStart = lib.concatStringsSep " " (
+          ExecStart = utils.escapeSystemdExecArgs (
             [
               "${cfg.package}/bin/typedb-server"
               "--config=${configFile}"

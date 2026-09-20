@@ -23,6 +23,7 @@ let
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "typedb";
   version = "3.13.0";
 
@@ -34,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # importCargoLock (real `cargo vendor` with full git trees) rather than
-  # fetchCargoVendor: the vendored git checkouts keep sibling directories
-  # (typedb-protocol's build script compiles ../../proto/*.proto), which
-  # subtree-copy vendoring drops. Git revisions pinned with fixed-output
-  # hashes; recompute after any lock change touching them.
+  # fetchCargoVendor: the locally patched protocol tree is available while
+  # the lock and vendor outputs are processed offline. Git revisions are
+  # pinned with fixed-output hashes; recompute after any lock change
+  # touching them.
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

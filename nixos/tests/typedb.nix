@@ -23,32 +23,34 @@
 
     console = "typedb-console --address 127.0.0.1:1729 --tls-disabled --username admin --password password"
 
-    # Schema + write + read through the Console client.
-    server.succeed(
+    # Schema + write + read through the Console client. TypeQL variables
+    # stay inside single quotes so the guest shell passes `$p` and `$n`
+    # through unchanged.
+    out = server.succeed(
         f"{console}"
-        ' --command "database create testdb"'
-        ' --command "transaction testdb schema"'
-        ' --command "define entity person, owns name; attribute name, value string;"'
-        ' --command "commit"'
-        ' --command "transaction testdb write"'
+        " --command 'database create testdb'"
+        " --command 'transaction testdb schema'"
+        " --command 'define entity person, owns name; attribute name, value string;'"
+        " --command 'commit'"
+        " --command 'transaction testdb write'"
         " --command 'insert $p isa person, has name \"ada\";'"
-        ' --command "commit"'
-        ' --command "transaction testdb read"'
-        ' --command "match $p isa person, has name $n; select $n;"'
-        " | grep -q ada"
+        " --command 'commit'"
+        " --command 'transaction testdb read'"
+        " --command 'match $p isa person, has name $n; select $n;'"
     )
+    assert "ada" in out, f"console query output should contain the inserted name: {out}"
 
     # Restart persistence: reboot, same query still answers.
     server.shutdown()
     server.start()
     server.wait_for_unit("typedb.service")
     server.wait_for_open_port(1729)
-    server.succeed(
+    out = server.succeed(
         f"{console}"
-        ' --command "transaction testdb read"'
-        ' --command "match $p isa person, has name $n; select $n;"'
-        " | grep -q ada"
+        " --command 'transaction testdb read'"
+        " --command 'match $p isa person, has name $n; select $n;'"
     )
+    assert "ada" in out, f"post-reboot query should still contain the inserted name: {out}"
   '';
 
   meta.maintainers = with lib.maintainers; [ caniko ];

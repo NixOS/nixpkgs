@@ -15,6 +15,7 @@ let
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "typedb-console";
   version = "3.13.0";
 
