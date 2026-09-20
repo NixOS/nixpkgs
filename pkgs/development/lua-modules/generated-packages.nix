@@ -6738,7 +6738,7 @@ final: prev: {
       disabled = luaOlder "5.1";
 
       meta = {
-        homepage = "https://vicious.rtfd.io";
+        homepage = "https://vicious.readthedocs.io/";
         license = lib.licenses.gpl2Plus;
         description = "Modular widget library for the \"awesome\" window manager";
       };
