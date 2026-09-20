@@ -571,7 +571,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
+    disable_test t0050-filesystem
     disable_test t3910-mac-os-precompose
+    disable_test t7527-builtin-fsmonitor
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
