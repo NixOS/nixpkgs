@@ -8,28 +8,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pumpkin";
-  version = "0.1.0-unstable-2026-07-25";
+  version = "0.1.0-dev+26.2-26.45";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Pumpkin-MC";
     repo = "Pumpkin";
-    rev = "0dfaf5d213e9bc281defa8315945160eddbc7f47";
-    hash = "sha256-b2Ws2zUPouJWFDEeqr3zJ+l0G4BQNg+pYo21LBQDSzk=";
+    tag = "0.1.0-dev+26.2-26.45";
+    hash = "sha256-Q5v8vxkDjRPXEKgVg7K1/FFO8jgK0e56V8VMBAK9Vbs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-xLFfb6ufSw6M6GIMcfvGfVYwN8kccK4+ufwHjdrLJxI=";
-
+  cargoHash = "sha256-BEYk8hB5tQA/Ns071E3zsqDAXF1/C77sI0ii62dFAxc=";
   cargoBuildFlags = [
     "--package"
     "pumpkin"
+  ];
+  cargoTestFlags = [
+    "--"
+    # requires network access to fetch CA, fails in sandbox
+    "--skip=license_checker_offline_and_grace_period"
   ];
 
   doCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    updateScript = nix-update-script { };
     tests = {
       nixos = nixosTests.pumpkin;
     };
