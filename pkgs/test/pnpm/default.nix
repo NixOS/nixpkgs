@@ -18,6 +18,7 @@
     pnpm = pnpm_12;
     pnpmDepsHash = "sha256-cj/RldHr60y9KwktAexAJI0hmp4HcIaBgbO1N2hkGVI=";
   };
+  pnpm_12_v5 = callPackage ./pnpm_12_v5 { };
 
   # pnpm reverse dependencies that don't have a top-level package
   opencloud = lib.recurseIntoAttrs {
