@@ -48,6 +48,19 @@
       virtualisation.diskSize = 3 * 1024;
     };
 
+    machineWithQsvTranscoding = {
+      services.jellyfin = {
+        enable = true;
+        hardwareAcceleration = {
+          enable = true;
+          type = "qsv";
+          device = "/dev/dri/renderD128";
+        };
+      };
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      virtualisation.diskSize = 3 * 1024;
+    };
+
     machineWithForceConfig = {
       services.jellyfin = {
         enable = true;
@@ -185,6 +198,31 @@
           assert "h264" in decoding_codecs, f"h264 should be in HardwareDecodingCodecs, got {decoding_codecs}"
           assert "hevc" in decoding_codecs, f"hevc should be in HardwareDecodingCodecs, got {decoding_codecs}"
           assert "vp9" in decoding_codecs, f"vp9 should be in HardwareDecodingCodecs, got {decoding_codecs}"
+
+      # Regression test: the qsv branch used to write the device path to a
+      # nonexistent <OpenclDevice> XML element, which Jellyfin silently
+      # ignores, instead of <QsvDevice> (see MediaBrowser.Model/Configuration/
+      # EncodingOptions.cs upstream, which has no OpenclDevice property).
+      with subtest("QSV hardware acceleration configuration"):
+          wait_for_jellyfin(machineWithQsvTranscoding)
+
+          machineWithQsvTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
+
+          machineWithQsvTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
+          machineWithQsvTranscoding.succeed(api_get("/Startup/FirstUser"))
+          machineWithQsvTranscoding.succeed(api_post("/Startup/Complete"))
+
+          qsv_auth_result = json.loads(machineWithQsvTranscoding.succeed(
+              api_post("/Users/AuthenticateByName", "${payloads.auth}")
+          ))
+          qsv_token = qsv_auth_result["AccessToken"]
+
+          qsv_config = json.loads(machineWithQsvTranscoding.succeed(
+              f"curl --fail 'http://localhost:8096/System/Configuration/encoding' -H 'Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={qsv_token}'"
+          ))
+
+          assert qsv_config.get("HardwareAccelerationType") == "qsv", f"Hardware acceleration type: expected 'qsv', got '{qsv_config.get('HardwareAccelerationType')}'"
+          assert qsv_config.get("QsvDevice") == "/dev/dri/renderD128", f"QSV device: expected '/dev/dri/renderD128', got '{qsv_config.get('QsvDevice')}'"
 
 
       with machine.nested("Wizard completes"):
