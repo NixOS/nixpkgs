@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url =
       with finalAttrs;
-      "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GxzeWyNdQEeekb4vDoijCeMhTIq0cOyKJ0TYKlqeoFw=";
+      "https://github.com/fribidi/fribidi/releases/download/v${version}/fribidi-${version}.tar.xz";
+    hash = "sha256-GxzeWyNdQEeekb4vDoijCeMhTIq0cOyKJ0TYKlqeoFw=";
   };
 
   postPatch = ''
@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/fribidi/fribidi";
