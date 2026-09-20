@@ -9,13 +9,12 @@
   glibc,
   git,
   pkg-config,
-  cudaPackages ? { },
-  withCuda ? false,
+  config,
+  cudaPackages,
+  withCuda ? config.cudaSupport,
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit;
-
   hwloc = stdenv.mkDerivation rec {
     pname = "hwloc";
     version = "2.2.0";
@@ -61,11 +60,14 @@ stdenv.mkDerivation rec {
   pname = "firestarter";
   version = "2.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
     tag = "v${version}";
-    sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
+    hash = "sha256-Q1jIvcuiAUzyF0v32beIqZLyMPeZUjoikY3awmmQZsY=";
     fetchSubmodules = true;
   };
 
@@ -83,6 +85,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withCuda [
     addDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -92,14 +95,17 @@ stdenv.mkDerivation rec {
     if withCuda then
       [
         glibc_multi
-        cudatoolkit
+        cudaPackages.cuda_nvcc # crt/host_defines.h
+        cudaPackages.cuda_cudart
+        cudaPackages.libcublas
+        cudaPackages.libcurand
       ]
     else
       [ glibc.static ]
   );
 
   env = lib.optionalAttrs withCuda {
-    NIX_LDFLAGS = "-L${cudatoolkit}/lib/stubs";
+    NIX_LDFLAGS = "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs";
   };
 
   cmakeFlags = [
