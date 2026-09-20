@@ -5,7 +5,6 @@
   fetchpatch2,
   autoreconfHook,
   makeWrapper,
-  glibc,
   adcli,
   augeas,
   bashNonInteractive,
@@ -23,6 +22,7 @@
   python3,
   pam,
   popt,
+  realmd,
   talloc,
   tdb,
   tevent,
@@ -104,9 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
-    ];
     KRB5_CONFIG = lib.getExe' (lib.getDev libkrb5) "krb5-config";
     NSUPDATE = lib.getExe' dnsutils "nsupdate";
     XMLLINT = lib.getExe' libxml2 "xmllint";
@@ -128,12 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
       --with-syslog=journald
       --with-initscript=systemd
       --without-selinux
-      --without-semanage
       --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
       --with-ldb-lib-dir=$out/modules/ldb
-      --with-nscd=${glibc.bin}/sbin/nscd
       --with-sssd-user=root
       --with-ldb-modules-path="${placeholder "out"}/modules/ldb:${ldb}/modules/ldb"
+      --with-adcli-path=${lib.meta.getExe adcli}
+      --with-realm-path=${lib.meta.getExe realmd}
     )
   ''
   + lib.optionalString withSudo ''
