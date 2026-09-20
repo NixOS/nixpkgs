@@ -219,6 +219,8 @@ let
       rewriter = callPackage ../development/rocq-modules/rewriter { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       coq-elpi = self.rocq-elpi;
+      rocqide-server = callPackage ../development/rocq-modules/rocqide-server { };
+      rocqide = callPackage ../development/rocq-modules/rocqide { };
       rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };
       RustExtraction = callPackage ../development/rocq-modules/RustExtraction { };
       semantics = callPackage ../development/rocq-modules/semantics { };
