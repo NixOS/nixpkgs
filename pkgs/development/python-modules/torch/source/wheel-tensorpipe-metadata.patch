@@ -1,0 +1,14 @@
+TensorPipe is linked statically into Torch's shared libraries. The wheel keeps
+its headers but does not package the static archives, so its standalone CMake
+targets would refer to files that do not exist.
+
+--- a/setup.py
++++ b/setup.py
+@@ -1209,7 +1209,6 @@
+         "share/cmake/Caffe2/Modules_CUDA_fix/upstream/*.cmake",
+         "share/cmake/Caffe2/Modules_CUDA_fix/upstream/FindCUDA/*.cmake",
+         "share/cmake/Gloo/*.cmake",
+-        "share/cmake/Tensorpipe/*.cmake",
+         "share/cmake/Torch/*.cmake",
+         "utils/benchmark/utils/*.cpp",
+         "utils/benchmark/utils/valgrind_wrapper/*.cpp",

@@ -1,0 +1,225 @@
+--- a/sparse/blas/magma_z_blaswrapper.cpp
++++ b/sparse/blas/magma_z_blaswrapper.cpp
+@@ -28,69 +28,97 @@
+   #define CUSPARSE_CSRMM_ALG1 CUSPARSE_SPMM_CSR_ALG1
+ #endif
+ 
+-#if CUDA_VERSION >= 11000 
+-// todo: destroy descriptor and see if the original code descriptors have to be changed 
++#if CUDA_VERSION >= 11000
++// Dense descriptor dimensions follow op(A), not the CSR storage dimensions.
++// Keep descriptors and temporary storage local so every failure releases them.
++static magma_int_t
++magma_zcsrmv_generic(
++    cusparseHandle_t handle, cusparseOperation_t op,
++    int rows, int cols, int nnz, const void *alpha,
++    void *dval, int *drow, int *dcol, void *x, const void *beta, void *y )
++{
++    magma_int_t info = MAGMA_SUCCESS;
++    cusparseSpMatDescr_t descrA = NULL;
++    cusparseDnVecDescr_t descrX = NULL, descrY = NULL;
++    size_t bufsize = 0;
++    void *buf = NULL;
++    int xrows = (op == CUSPARSE_OPERATION_NON_TRANSPOSE ? cols : rows);
++    int yrows = (op == CUSPARSE_OPERATION_NON_TRANSPOSE ? rows : cols);
++
++    CHECK_CUSPARSE( cusparseCreateCsr(
++        &descrA, rows, cols, nnz, drow, dcol, dval,
++        CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I,
++        CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F ));
++    CHECK_CUSPARSE( cusparseCreateDnVec( &descrX, xrows, x, CUDA_C_64F ));
++    CHECK_CUSPARSE( cusparseCreateDnVec( &descrY, yrows, y, CUDA_C_64F ));
++    CHECK_CUSPARSE( cusparseSpMV_bufferSize(
++        handle, op, alpha, descrA, descrX, beta, descrY,
++        CUDA_C_64F, CUSPARSE_CSRMV_ALG1, &bufsize ));
++    if (bufsize > 0) {
++        CHECK( magma_malloc( &buf, bufsize ));
++    }
++    CHECK_CUSPARSE( cusparseSpMV(
++        handle, op, alpha, descrA, descrX, beta, descrY,
++        CUDA_C_64F, CUSPARSE_CSRMV_ALG1, buf ));
++
++cleanup:
++    if (buf != NULL) magma_free( buf );
++    if (descrY != NULL) cusparseDestroyDnVec( descrY );
++    if (descrX != NULL) cusparseDestroyDnVec( descrX );
++    if (descrA != NULL) cusparseDestroySpMat( descrA );
++    return info;
++}
++
++static magma_int_t
++magma_zcsrmm_generic(
++    cusparseHandle_t handle, cusparseOperation_t op,
++    int rows, int num_vecs, int cols, int nnz, const void *alpha,
++    void *dval, int *drow, int *dcol, void *x, int ldx,
++    const void *beta, void *y, int ldy )
++{
++    magma_int_t info = MAGMA_SUCCESS;
++    cusparseSpMatDescr_t descrA = NULL;
++    cusparseDnMatDescr_t descrX = NULL, descrY = NULL;
++    size_t bufsize = 0;
++    void *buf = NULL;
++    int xrows = (op == CUSPARSE_OPERATION_NON_TRANSPOSE ? cols : rows);
++    int yrows = (op == CUSPARSE_OPERATION_NON_TRANSPOSE ? rows : cols);
++
++    CHECK_CUSPARSE( cusparseCreateCsr(
++        &descrA, rows, cols, nnz, drow, dcol, dval,
++        CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I,
++        CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F ));
++    CHECK_CUSPARSE( cusparseCreateDnMat(
++        &descrX, xrows, num_vecs, ldx, x, CUDA_C_64F, CUSPARSE_ORDER_COL ));
++    CHECK_CUSPARSE( cusparseCreateDnMat(
++        &descrY, yrows, num_vecs, ldy, y, CUDA_C_64F, CUSPARSE_ORDER_COL ));
++    CHECK_CUSPARSE( cusparseSpMM_bufferSize(
++        handle, op, CUSPARSE_OPERATION_NON_TRANSPOSE,
++        alpha, descrA, descrX, beta, descrY, CUDA_C_64F,
++        CUSPARSE_CSRMM_ALG1, &bufsize ));
++    if (bufsize > 0) {
++        CHECK( magma_malloc( &buf, bufsize ));
++    }
++    CHECK_CUSPARSE( cusparseSpMM(
++        handle, op, CUSPARSE_OPERATION_NON_TRANSPOSE,
++        alpha, descrA, descrX, beta, descrY, CUDA_C_64F,
++        CUSPARSE_CSRMM_ALG1, buf ));
++
++cleanup:
++    if (buf != NULL) magma_free( buf );
++    if (descrY != NULL) cusparseDestroyDnMat( descrY );
++    if (descrX != NULL) cusparseDestroyDnMat( descrX );
++    if (descrA != NULL) cusparseDestroySpMat( descrA );
++    return info;
++}
++
+ #define cusparseZcsrmv(handle, op, rows, cols, nnz, alpha, descr, dval, drow, dcol, x, beta, y) \
+-    {                                                                                           \
+-        cusparseSpMatDescr_t descrA=NULL;                                                       \
+-        cusparseDnVecDescr_t descrX=NULL, descrY=NULL;                                          \
+-        cusparseCreateCsr(&descrA, rows, cols, nnz,                                             \
+-                          (void *)drow, (void *)dcol, (void *)dval,                             \
+-                          CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I,                               \
+-                          CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F);                                \
+-        cusparseCreateDnVec(&descrX, cols, x, CUDA_C_64F);                                      \
+-        cusparseCreateDnVec(&descrY, rows, y, CUDA_C_64F);                                      \
+-                                                                                                \
+-        size_t bufsize;                                                                         \
+-        void *buf;                                                                              \
+-        cusparseSpMV_bufferSize(handle, op,                                                     \
+-                                (void *)alpha, descrA, descrX, (void *)beta,                    \
+-                                descrY, CUDA_C_64F, CUSPARSE_CSRMV_ALG1, &bufsize);             \
+-        if (bufsize > 0)                                                                        \
+-           magma_malloc(&buf, bufsize);                                                         \
+-        cusparseSpMV( handle, op,                                                               \
+-                      (void *)alpha, descrA, descrX, (void *)beta,                              \
+-                      descrY, CUDA_C_64F, CUSPARSE_CSRMV_ALG1, buf);                            \
+-        if (bufsize > 0)                                                                        \
+-           magma_free(buf);                                                                     \
+-        cusparseDestroySpMat(descrA);                                                           \
+-        cusparseDestroyDnVec(descrX);                                                           \
+-        cusparseDestroyDnVec(descrY);                                                           \
+-    }
++    CHECK( magma_zcsrmv_generic( handle, op, rows, cols, nnz, alpha, dval, drow, dcol, x, beta, y ))
++#define cusparseZcsrmm(handle, op, rows, num_vecs, cols, nnz, alpha, descr, dval, drow, dcol, x, ldx, beta, y, ldy) \
++    CHECK( magma_zcsrmm_generic( handle, op, rows, num_vecs, cols, nnz, alpha, dval, drow, dcol, x, ldx, beta, y, ldy ))
+ #else
+ #define cusparseZcsrmv(handle, op, rows, cols, nnz, alpha, descr, dval, drow, dcol, x, beta, y) \
+     CHECK_CUSPARSE(cusparseZcsrmv(handle,op,rows,cols,nnz,alpha,descr,dval,drow,dcol,x,beta,y))
+-#endif
+-
+-#if CUDA_VERSION >= 11000
+-#define cusparseZcsrmm(handle, op, rows, num_vecs, cols, nnz, alpha, descr, dval, drow, dcol,   \
+-                       x, ldx, beta, y, ldy)                                                    \
+-    {                                                                                           \
+-        cusparseSpMatDescr_t descrA=NULL;                                                       \
+-        cusparseDnMatDescr_t descrX=NULL, descrY=NULL;                                          \
+-        cusparseCreateCsr(&descrA, rows, cols, nnz,                                             \
+-                          (void *)drow, (void *)dcol, (void *)dval,                             \
+-                          CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I,                               \
+-                          CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F);                                \
+-        cusparseCreateDnMat(&descrX, cols, num_vecs, ldx, x, CUDA_C_64F, CUSPARSE_ORDER_COL);   \
+-        cusparseCreateDnMat(&descrY, cols, num_vecs, ldy, y, CUDA_C_64F, CUSPARSE_ORDER_COL);   \
+-                                                                                                \
+-        size_t bufsize;                                                                         \
+-        void *buf;                                                                              \
+-        cusparseSpMM_bufferSize(handle, op, CUSPARSE_OPERATION_NON_TRANSPOSE,                   \
+-                                (void *)alpha, descrA, descrX, beta, descrY, CUDA_C_64F,        \
+-                                CUSPARSE_CSRMM_ALG1, &bufsize);                                 \
+-        if (bufsize > 0)                                                                        \
+-           magma_malloc(&buf, bufsize);                                                         \
+-        cusparseSpMM(handle, op, CUSPARSE_OPERATION_NON_TRANSPOSE,                              \
+-                     (void *)alpha, descrA, descrX, beta, descrY, CUDA_C_64F,                   \
+-                     CUSPARSE_CSRMM_ALG1, buf);                                                 \
+-        if (bufsize > 0)                                                                        \
+-           magma_free(buf);                                                                     \
+-        cusparseDestroySpMat(descrA);                                                           \
+-        cusparseDestroyDnMat(descrX);                                                           \
+-        cusparseDestroyDnMat(descrY);                                                           \
+-    }
+ #endif
+ 
+ /**
+@@ -189,8 +217,8 @@
+                 CHECK_CUSPARSE( cusparseSetMatIndexBase( descr, CUSPARSE_INDEX_BASE_ZERO ));
+                 
+                 cusparseZcsrmv( cusparseHandle,CUSPARSE_OPERATION_TRANSPOSE,
+-                              A.num_rows, A.num_cols, A.nnz, (cuDoubleComplex*)&alpha, descr,
+-                              (cuDoubleComplex*)A.dval, A.drow, A.dcol, (cuDoubleComplex*)x.dval, (cuDoubleComplex*)&beta, (cuDoubleComplex*)y.dval );
++                              A.num_cols, A.num_rows, A.nnz, (cuDoubleComplex*)&alpha, descr,
++                              (cuDoubleComplex*)A.dval, A.dcol, A.drow, (cuDoubleComplex*)x.dval, (cuDoubleComplex*)&beta, (cuDoubleComplex*)y.dval );
+             }
+             else if ( A.storage_type == Magma_ELL ) {
+                 //printf("using ELLPACKT kernel for SpMV: ");
+@@ -266,41 +294,26 @@
+         }
+         else if ( A.num_cols < x.num_rows || x.num_cols > 1 ) {
+             magma_int_t num_vecs = x.num_rows / A.num_cols * x.num_cols;
+-            if ( A.storage_type == Magma_CSR ) {
++            if ( A.storage_type == Magma_CSR || A.storage_type == Magma_CSC ) {
+                 cusparseHandle = magma_queue_get_cusparse_handle( queue );
+                 CHECK_CUSPARSE( cusparseCreateMatDescr( &descr ));
+                 CHECK_CUSPARSE( cusparseSetMatType( descr, CUSPARSE_MATRIX_TYPE_GENERAL ));
+                 CHECK_CUSPARSE( cusparseSetMatIndexBase( descr, CUSPARSE_INDEX_BASE_ZERO ));
+ 
+-                if ( x.major == MagmaColMajor) {
+-                    cusparseZcsrmm(cusparseHandle,
+-                                   CUSPARSE_OPERATION_NON_TRANSPOSE,
+-                                   A.num_rows,   num_vecs, A.num_cols, A.nnz,
+-                                   (cuDoubleComplex*)&alpha, descr, (cuDoubleComplex*)A.dval, A.drow, A.dcol,
+-                                   (cuDoubleComplex*)x.dval, A.num_cols, (cuDoubleComplex*)&beta, (cuDoubleComplex*)y.dval, A.num_cols);
+-                } else if ( x.major == MagmaRowMajor) {
+-                    /*cusparseZcsrmm2(cusparseHandle,
+-                    CUSPARSE_OPERATION_NON_TRANSPOSE,
+-                    CUSPARSE_OPERATION_TRANSPOSE,
+-                    A.num_rows,   num_vecs, A.num_cols, A.nnz,
+-                    &alpha, descr, A.dval, A.drow, A.dcol,
+-                    x.dval, A.num_cols, &beta, y.dval, A.num_cols);
+-                    */
++                if ( x.major == MagmaColMajor ) {
++                    // CSC storage is CSR of the transposed matrix.
++                    bool csc = (A.storage_type == Magma_CSC);
++                    cusparseZcsrmm( cusparseHandle,
++                                   csc ? CUSPARSE_OPERATION_TRANSPOSE : CUSPARSE_OPERATION_NON_TRANSPOSE,
++                                   csc ? A.num_cols : A.num_rows, num_vecs,
++                                   csc ? A.num_rows : A.num_cols, A.nnz,
++                                   (cuDoubleComplex*)&alpha, descr, (cuDoubleComplex*)A.dval, csc ? A.dcol : A.drow, csc ? A.drow : A.dcol,
++                                   (cuDoubleComplex*)x.dval, A.num_cols,
++                                   (cuDoubleComplex*)&beta, (cuDoubleComplex*)y.dval, A.num_rows );
++                } else {
+                     printf("error: format not supported.\n");
+                     info = MAGMA_ERR_NOT_SUPPORTED;
+-                } else if ( A.storage_type == Magma_CSC )
+-                    {
+-                        cusparseHandle = magma_queue_get_cusparse_handle( queue );
+-                        CHECK_CUSPARSE( cusparseCreateMatDescr( &descr ));
+-                        
+-                        CHECK_CUSPARSE( cusparseSetMatType( descr, CUSPARSE_MATRIX_TYPE_GENERAL ));
+-                        CHECK_CUSPARSE( cusparseSetMatIndexBase( descr, CUSPARSE_INDEX_BASE_ZERO ));
+-                        
+-                        cusparseZcsrmm( cusparseHandle,CUSPARSE_OPERATION_TRANSPOSE,
+-                                        A.num_rows,   num_vecs, A.num_cols, A.nnz,
+-                                        (cuDoubleComplex*)&alpha, descr, (cuDoubleComplex*)A.dval, A.drow, A.dcol,
+-                                        (cuDoubleComplex*)x.dval, A.num_cols, (cuDoubleComplex*)&beta, (cuDoubleComplex*)y.dval, A.num_cols);
+-                    }
++                }
+             } else if ( A.storage_type == Magma_SELLP ) {
+                 if ( x.major == MagmaRowMajor) {
+                     CHECK( magma_zmgesellpmv( MagmaNoTrans, A.num_rows, A.num_cols,

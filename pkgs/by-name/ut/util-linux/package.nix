@@ -159,6 +159,11 @@ stdenv.mkDerivation (finalAttrs: {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake116x

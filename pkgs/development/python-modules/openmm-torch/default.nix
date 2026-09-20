@@ -72,7 +72,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
       # Link the driver stub explicitly so the symbols resolve; the real driver is found at runtime via
       # autoAddDriverRunpath, and removeStubsFromRunpath strips the stub path from the output.
-      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"
 
       "-lcuda"
     ]

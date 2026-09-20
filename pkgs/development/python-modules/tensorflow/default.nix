@@ -308,7 +308,10 @@ let
       protobuf-core
       protobuf-extra
     ]
-    ++ lib.optional cudaSupport addDriverRunpath;
+    ++ lib.optionals cudaSupport [
+      addDriverRunpath
+      cudaPackages.cuda_nvcc
+    ];
 
     buildInputs = [
       jemalloc

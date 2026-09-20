@@ -1,4 +1,8 @@
-{ buildRedist, lib }:
+{
+  addDriverRunpath,
+  buildRedist,
+  cudaMajorMinorVersion,
+}:
 buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_nvml_dev";
@@ -10,17 +14,25 @@ buildRedist (finalAttrs: {
     "stubs"
   ];
 
-  # TODO(@connorbaker): Add a setup hook to the outputStubs output to automatically replace rpath entries
-  # containing the stubs output with the driver link.
+  # NVML's driver library is a stub even when its output is collapsed or renamed.
+  includeRemoveStubsFromRunpathHook = true;
 
   allowFHSReferences = true;
 
   # Include the stubs output since it provides libnvidia-ml.so.
-  propagatedBuildOutputs = lib.optionals (lib.elem "stubs" finalAttrs.outputs) [ "stubs" ];
+  propagatedBuildOutputs = [ finalAttrs.outputStubs ];
 
-  # TODO: Some programs try to link against libnvidia-ml.so.1, so make an alias.
-  # Not sure about the version number though!
-  postInstall = lib.optionalString (lib.elem "stubs" finalAttrs.outputs) ''
+  # The module appends /stubs to libdir; NVML has no separate runtime library.
+  # Direct pkg-config consumers also need the driver before any stub RUNPATH
+  # added by the compiler wrapper, without relying on stdenv's fixup hooks.
+  postPatch = ''
+    substituteInPlace share/pkgconfig/nvidia-ml-${cudaMajorMinorVersion}.pc \
+      --replace-fail "libdir=''${!outputLib:?}/lib" "libdir=''${!outputStubs:?}/lib" \
+      --replace-fail '-lnvidia-ml' '-lnvidia-ml -Wl,-rpath,${addDriverRunpath.driverLink}/lib'
+  '';
+
+  # Consumers which search by NVML's SONAME also need a versioned stub alias.
+  postInstall = ''
     pushd "''${!outputStubs:?}/lib/stubs" >/dev/null
     if [[ -f libnvidia-ml.so && ! -f libnvidia-ml.so.1 ]]; then
       nixLog "creating versioned symlink for libnvidia-ml.so stub"

@@ -1,0 +1,132 @@
+--- a/sparse/control/magmasparse_internal.h
++++ b/sparse/control/magmasparse_internal.h
+@@ -74,6 +74,44 @@
+     } while(0)
+ 
+ 
++#if defined(MAGMA_HAVE_CUDA) && CUDA_VERSION >= 11000
++// Own the workspace for legacy CSR-to-CSC callers. The generic API takes
++// the CSC column pointers before its row indices, unlike the legacy API.
++static inline magma_int_t
++magma_csr2csc_ex2(
++    cusparseHandle_t handle, int m, int n, int nnz,
++    const void *csrval, const int *csrrow, const int *csrcol,
++    void *cscval, int *csccol, int *cscrow,
++    cudaDataType value_type, cusparseAction_t action, cusparseIndexBase_t base )
++{
++    magma_int_t info = MAGMA_SUCCESS;
++    size_t workspace_size = 0;
++    void *workspace = NULL;
++
++    CHECK_CUSPARSE( cusparseCsr2cscEx2_bufferSize(
++        handle, m, n, nnz, csrval, csrrow, csrcol,
++        cscval, csccol, cscrow, value_type, action, base,
++        CUSPARSE_CSR2CSC_ALG1, &workspace_size ));
++    if (workspace_size > 0) {
++        CHECK( magma_malloc( &workspace, workspace_size ));
++    }
++    CHECK_CUSPARSE( cusparseCsr2cscEx2(
++        handle, m, n, nnz, csrval, csrrow, csrcol,
++        cscval, csccol, cscrow, value_type, action, base,
++        CUSPARSE_CSR2CSC_ALG1, workspace ));
++
++cleanup:
++    if (workspace != NULL) {
++        magma_int_t cleanup_info = magma_free( workspace );
++        if (info == MAGMA_SUCCESS) {
++            info = cleanup_info;
++        }
++    }
++    return info;
++}
++#endif
++
++
+ #ifdef __cplusplus
+ } // extern C
+ #endif
+--- a/sparse/control/magma_zmconvert.cpp
++++ b/sparse/control/magma_zmconvert.cpp
+@@ -19,23 +19,10 @@
+ #endif
+ 
+ 
+-// todo: check if we need buf later
+ #if CUDA_VERSION >= 11000
+-#define cusparseZcsr2csc(handle, m, n, nnz, valA, rowA, colA, valB, rowB, colB,                \
+-                         action, base)                                                         \
+-    {                                                                                          \
+-        size_t bufsize;                                                                        \
+-        void *buf;                                                                             \
+-        cusparseCsr2cscEx2_bufferSize(handle, m, n, nnz, valA, rowA, colA,                     \
+-                                      valB, colB, rowB, CUDA_C_64F, action, base,              \
+-                                      CUSPARSE_CSR2CSC_ALG1, &bufsize);                        \
+-        if (bufsize > 0)                                                                       \
+-           CHECK( magma_malloc(&buf, bufsize) );                                                        \
+-        cusparseCsr2cscEx2(handle, m, n, nnz, valA, rowA, colA, valB, colB, rowB,              \
+-                           CUDA_C_64F, action, base, CUSPARSE_CSR2CSC_ALG1, buf);              \
+-        if (bufsize > 0)                                                                       \
+-           magma_free(buf);                                                                    \
+-    }
++#define cusparseZcsr2csc(handle, m, n, nnz, valA, rowA, colA, valB, rowB, colB, action, base) \
++    CHECK( magma_csr2csc_ex2( handle, m, n, nnz, valA, rowA, colA, \
++                             valB, colB, rowB, CUDA_C_64F, action, base ))
+ #endif
+ 
+ 
+--- a/sparse/control/magma_zmtranspose.cpp
++++ b/sparse/control/magma_zmtranspose.cpp
+@@ -19,23 +19,10 @@
+   #define hipblasDoubleComplex hipDoubleComplex
+ #endif
+ 
+-// todo: check if we need buf later
+ #if CUDA_VERSION >= 11000
+-#define cusparseZcsr2csc(handle, m, n, nnz, valA, rowA, colA, valB, colB, rowB,                \
+-                         action, base)                                                         \
+-    {                                                                                          \
+-        size_t bufsize;                                                                        \
+-        void *buf;                                                                             \
+-        cusparseCsr2cscEx2_bufferSize(handle, m, n, nnz, valA, rowA, colA,                     \
+-                                      valB, rowB, colB, CUDA_C_64F, action, base,              \
+-                                      CUSPARSE_CSR2CSC_ALG1, &bufsize);                        \
+-        if (bufsize > 0)                                                                       \
+-           CHECK( magma_malloc(&buf, bufsize) );                                               \
+-        cusparseCsr2cscEx2(handle, m, n, nnz, valA, rowA, colA, valB, rowB, colB,              \
+-                           CUDA_C_64F, action, base, CUSPARSE_CSR2CSC_ALG1, buf);              \
+-        if (bufsize > 0)                                                                       \
+-           magma_free(buf);                                                                    \
+-    }
++#define cusparseZcsr2csc(handle, m, n, nnz, valA, rowA, colA, valB, rowB, colB, action, base) \
++    CHECK( magma_csr2csc_ex2( handle, m, n, nnz, valA, rowA, colA, \
++                             valB, colB, rowB, CUDA_C_64F, action, base ))
+ #endif
+ 
+ /**
+--- a/sparse/blas/zilu.cpp
++++ b/sparse/blas/zilu.cpp
+@@ -91,21 +91,9 @@
+ #endif
+ 
+ #if CUDA_VERSION >= 11000
+-#define cusparseZcsr2csc(handle, cols, rows, nnz, dval, drow, dcol, prdval, prdcol, prdrow,     \
+-                         action, base)                                                          \
+-    {                                                                                           \
+-        size_t bufsize;                                                                         \
+-        void *buf;                                                                              \
+-        cusparseCsr2cscEx2_bufferSize(handle, cols, rows, nnz, dval, drow, dcol, prdval,        \
+-                                      prdcol, prdrow, CUDA_C_64F, action, base,                 \
+-                                      CUSPARSE_CSR2CSC_ALG1, &bufsize);                         \
+-        if (bufsize > 0)                                                                        \
+-           magma_malloc(&buf, bufsize);                                                         \
+-        cusparseCsr2cscEx2(handle, cols, rows, nnz, dval, drow, dcol, prdval, prdcol, prdrow,   \
+-                           CUDA_C_64F, action, base, CUSPARSE_CSR2CSC_ALG1, buf);               \
+-        if (bufsize > 0)                                                                        \
+-           magma_free(buf);                                                                     \
+-    }
++#define cusparseZcsr2csc(handle, cols, rows, nnz, dval, drow, dcol, prdval, prdcol, prdrow, action, base) \
++    CHECK( magma_csr2csc_ex2( handle, cols, rows, nnz, dval, drow, dcol, \
++                             prdval, prdrow, prdcol, CUDA_C_64F, action, base ))
+ #endif
+ 
+ // todo: info is passed from analysis; to change info with this linfo & remove linfo from here

@@ -1,5 +1,7 @@
 {
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cuda_nvrtc,
   lib,
 }:
@@ -20,6 +22,15 @@ buildRedist (finalAttrs: {
     "static"
     "stubs"
   ];
+
+  # Public headers include CUDA types; publish the same dependencies to
+  # stdenv and to pkg-config consumers.
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cublas-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion}\nCflags:'
+  '';
 
   meta = {
     description = "CUDA Basic Linear Algebra Subroutine library";

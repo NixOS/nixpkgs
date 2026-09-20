@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   blas,
+  callPackage,
   cmake,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
@@ -12,8 +13,10 @@
   lapack,
   lib,
   libpthread-stubs,
+  llvmPackages,
   ninja,
   perl,
+  pkg-config,
   python3,
   config,
   # At least one back-end has to be enabled,
@@ -34,6 +37,10 @@ let
     ;
 
   inherit (cudaPackages) cudaAtLeast flags cudaOlder;
+
+  # Use the runtime of the Fortran compiler selected by nativeBuildInputs.
+  # Select the compiler's role before accessing its nested cc attribute.
+  buildGfortran = gfortran.__spliced.buildHost or gfortran;
 
   supportedGpuTargets = [
     "700"
@@ -99,14 +106,6 @@ let
   );
 
   cudaArchitecturesString = flags.cmakeCudaArchitecturesString;
-  minArch =
-    let
-      # E.g. [ "80" "86" "90" ]
-      cudaArchitectures = (map flags.dropDots flags.cudaCapabilities);
-      minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
-    in
-    # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201
-    "${minArch'}0";
 
 in
 
@@ -131,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    ./sparse-free-status.patch
+    ./trsm-test-version.patch
     (fetchpatch {
       # [PATCH] Drop CMP0037 to fix cmake 4.0 build error
       name = "drop-cmp0037-old.patch";
@@ -139,6 +140,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   ++ lib.optionals cudaSupport [
+    # Export the public CUDA component interfaces, not build-only include paths.
+    ./cuda-pkg-config.patch
+    # Reuse checked cuSPARSE workspace across symbolic and numeric addition.
+    ./csrgeam2-workspace.patch
+    ./spgemm-resources.patch
+    # Share checked workspace ownership for sparse conversion and transpose.
+    ./csr2csc-workspace.patch
+    # Release conversion scratch arrays and propagate cuSPARSE failures.
+    ./coo2csr-resources.patch
+    # Match dense descriptors to op(A) and release checked temporary resources.
+    ./spmv-spmm-workspace.patch
     # Fixes:
     # error: 'struct cudaDeviceProp' has no member named 'clockRate'
     # Context: https://github.com/icl-utk-edu/magma/issues/61
@@ -168,10 +180,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # For rocm version script invoked by cmake
-    patchShebangs tools/
+    substituteInPlace lib/pkgconfig/magma.pc.in \
+      --replace-fail 'Version: 0.0.0' 'Version: ${finalAttrs.version}'
+    # Generators and version scripts run during the build.
+    patchShebangs --build tools/
     # Fixup for the python test runners
-    patchShebangs ./testing/run_{tests,summarize}.py
+    patchShebangs --host ./testing/run_{tests,summarize}.py
   '';
 
   nativeBuildInputs = [
@@ -179,10 +193,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     perl # for make generate
+    python3 # for code generation
     gfortran
   ]
   ++ lists.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    pkg-config
   ];
 
   # README Step 0: generate precision variants and CMake.src.{hip|cuda} when building from git
@@ -202,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
     blas
     python3
-    (getLib gfortran.cc) # libgfortran.so
+    (getLib buildGfortran.cc) # libgfortran.so
   ]
   ++ lists.optionals cudaSupport (
     with cudaPackages;
@@ -241,7 +257,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lists.optionals cudaSupport [
     (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
   ]
   ++ lists.optionals rocmSupport [
     (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clang}/bin/clang")
@@ -407,23 +422,38 @@ stdenv.mkDerivation (finalAttrs: {
           runtimeInputs = [ magma.test ];
         };
     };
-    tests = {
-      all =
-        runCommand "magma-tests-all"
-          {
-            __structuredAttrs = true;
-            strictDeps = true;
-            nativeBuildInputs = [ finalAttrs.passthru.testers.all ];
-            requiredSystemFeatures = lib.optionals cudaSupport [ "cuda" ];
-          }
-          ''
-            if magma-testers-all; then
-              touch "$out"
-            else
-              exit 1
-            fi
-          '';
-    };
+    tests =
+      lib.optionalAttrs cudaSupport {
+        sparse = callPackage ./tests/sparse.nix {
+          inherit stdenv;
+          magma = finalAttrs.finalPackage;
+        };
+        pkg-config = callPackage ./pkg-config-test.nix {
+          inherit stdenv;
+          magma = finalAttrs.finalPackage;
+        };
+        pkg-config-clang = callPackage ./pkg-config-test.nix {
+          stdenv = llvmPackages.stdenv;
+          magma = finalAttrs.finalPackage;
+        };
+      }
+      // {
+        all =
+          runCommand "magma-tests-all"
+            {
+              __structuredAttrs = true;
+              strictDeps = true;
+              nativeBuildInputs = [ finalAttrs.passthru.testers.all ];
+              requiredSystemFeatures = lib.optionals cudaSupport [ "cuda" ];
+            }
+            ''
+              if magma-testers-all; then
+                touch "$out"
+              else
+                exit 1
+              fi
+            '';
+      };
   };
 
   meta = {

@@ -1,0 +1,105 @@
+Respect resident-thread limits and retain valid launch bounds.
+
+Clamp AOT and JIT reduction hints to the available resident threads. For the
+one-warp sparse kernels, keep their block-size contract without imposing an
+unsupported minimum number of resident blocks. Throughput is not established
+by these correctness and compiler-metadata controls.
+
+--- a/torch/headeronly/macros/Macros.h
++++ b/torch/headeronly/macros/Macros.h
+@@ -266,14 +266,16 @@
+ // constants from
+ // (https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#features-and-technical-specifications)
+ // The maximum number of threads per multiprocessor is 1024 for Turing
+-// architecture (7.5), 1536 for Geforce Ampere (8.6)/Jetson Orin (8.7), and
+-// 2048 for all other architectures. You'll get warnings if you exceed these
++// architecture (7.5), 1536 for Ampere (8.6/8.7), Ada (8.9), Thor
++// (10.1 before CUDA 13, 11.0 thereafter) and Blackwell (12.0/12.1),
++// and 2048 for the other supported architectures. You'll get warnings if you exceed these
+ // constants. Hence, the following macros adjust the input values from the user
+ // to resolve potential warnings.
+ #if __CUDA_ARCH__ == 750
+ constexpr uint32_t CUDA_MAX_THREADS_PER_SM = 1024;
+ #elif __CUDA_ARCH__ == 860 || __CUDA_ARCH__ == 870 || __CUDA_ARCH__ == 890 || \
+-    __CUDA_ARCH__ == 1200
++    __CUDA_ARCH__ == 1010 || __CUDA_ARCH__ == 1100 || __CUDA_ARCH__ == 1200 || \
++    __CUDA_ARCH__ == 1210
+ constexpr uint32_t CUDA_MAX_THREADS_PER_SM = 1536;
+ #else
+ constexpr uint32_t CUDA_MAX_THREADS_PER_SM = 2048;
+@@ -297,11 +299,13 @@
+ #define C10_MAX_THREADS_PER_BLOCK(val)           \
+   (((val) <= CUDA_MAX_THREADS_PER_BLOCK) ? (val) \
+                                          : CUDA_THREADS_PER_BLOCK_FALLBACK)
+-#define C10_MIN_BLOCKS_PER_SM(threads_per_block, blocks_per_sm)        \
+-  ((((threads_per_block) * (blocks_per_sm) <= CUDA_MAX_THREADS_PER_SM) \
+-        ? (blocks_per_sm)                                              \
+-        : ((CUDA_MAX_THREADS_PER_SM + (threads_per_block) - 1) /       \
+-           (threads_per_block))))
++// Clamp against whole resident blocks, using the same block-size fallback as
++// C10_LAUNCH_BOUNDS_2. Rounding up can still request an impossible residency.
++#define C10_MIN_BLOCKS_PER_SM(threads_per_block, blocks_per_sm)              \
++  (((blocks_per_sm) <=                                                     \
++    CUDA_MAX_THREADS_PER_SM / C10_MAX_THREADS_PER_BLOCK(threads_per_block)) \
++       ? (blocks_per_sm)                                                  \
++       : CUDA_MAX_THREADS_PER_SM / C10_MAX_THREADS_PER_BLOCK(threads_per_block))
+ // C10_LAUNCH_BOUNDS is analogous to __launch_bounds__
+ #define C10_LAUNCH_BOUNDS_0 \
+   __launch_bounds__(        \
+--- a/aten/src/ATen/native/sparse/cuda/SparseSemiStructuredApplyDense.cu
++++ b/aten/src/ATen/native/sparse/cuda/SparseSemiStructuredApplyDense.cu
+@@ -47,7 +47,8 @@
+ };
+ 
+ template <bool kInputRowMajor = true, bool kOutputRowMajor = true>
+-__global__ void __launch_bounds__(32 /* num_threads */, 32) sparse_semi_structured_apply_dense_k(Params p) {
++C10_LAUNCH_BOUNDS_1(32)
++__global__ void sparse_semi_structured_apply_dense_k(Params p) {
+   using Fragment = cutlass::Array<uint16_t, 8>;
+ 
+   // Top-left of the 8x8 tile we own
+--- a/aten/src/ATen/native/sparse/cuda/SparseSemiStructuredTile.cu
++++ b/aten/src/ATen/native/sparse/cuda/SparseSemiStructuredTile.cu
+@@ -197,8 +197,8 @@
+ };
+ 
+ template <typename KT, typename Metadata, typename Algorithm>
+-__global__ void __launch_bounds__(32 /* num_threads */, 20)
+-    sparse_semi_structured_tile_kernel(
++C10_LAUNCH_BOUNDS_1(32)
++__global__ void sparse_semi_structured_tile_kernel(
+         typename KT::Params p,
+         Metadata metadata,
+         Algorithm algo) {
+--- a/aten/src/ATen/native/cuda/reduction_template.cuh
++++ b/aten/src/ATen/native/cuda/reduction_template.cuh
+@@ -722,7 +722,7 @@
+ };
+ 
+ extern "C"
+-__launch_bounds__(${max_threads_lb}, 4)
++__launch_bounds__(${max_threads_lb}, ${min_blocks_lb})
+ __global__ void reduction_${name}_kernel(ReduceJitOp r){
+   r.run();
+ }
+--- a/aten/src/ATen/native/cuda/jit_utils.cpp
++++ b/aten/src/ATen/native/cuda/jit_utils.cpp
+@@ -2,6 +2,7 @@
+ #include <c10/core/ScalarType.h>
+ #include <c10/util/irange.h>
+ #include <c10/util/hash.h>
++#include <algorithm>
+ #include <optional>
+ #include <ATen/jit_macros.h>
+ #include <ATen/cuda/CUDAContext.h>
+@@ -1408,6 +1409,10 @@
+       env.s("vt0", std::to_string(vt0));
+       env.s("name", name);
+       env.s("max_threads_lb", std::to_string(max_threads_codegen));
++      // Match the AOT reduction bound using the device selected for this JIT.
++      const auto* props = at::cuda::getCurrentDeviceProperties();
++      env.s("min_blocks_lb", std::to_string(std::min(
++          4, props->maxThreadsPerMultiProcessor / max_threads_codegen)));
+       env.s("thread_work_size", std::to_string(thread_work_size));
+       // reductions don't support dynamic casting, so the only way to get nonstandard types
+       // is through input

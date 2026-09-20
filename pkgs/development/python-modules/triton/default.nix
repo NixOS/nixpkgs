@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgsHostHost,
   config,
   buildPythonPackage,
   fetchFromGitHub,
@@ -43,9 +44,16 @@
 }:
 
 let
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  # The build compiler runs on BUILD; the installed JIT compiles and loads C
+  # extensions on HOST. Select that compiler's HOST/HOST role explicitly.
+  runtimeCC =
+    if stdenv.buildPlatform == stdenv.hostPlatform then
+      stdenv.cc
+    else
+      pkgsHostHost.targetPackages.stdenv.cc;
+  runtimeCCExe = lib.getExe' runtimeCC "${runtimeCC.targetPrefix}cc";
 in
-buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "triton";
   version = "3.7.1";
   pyproject = true;
@@ -65,18 +73,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     })
     (replaceVars ./0002-nvidia-driver-short-circuit-before-ldconfig.patch {
       libcudaStubsDir =
-        if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
+        if cudaSupport then
+          "${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"
+        else
+          null;
     })
-
-    # Use our `cmakeFlags` instead and avoid downloading dependencies.
-    ./inject-nix-cmakeFlags.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
       cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
-    })
-    (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
-      nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
     })
   ];
 
@@ -108,7 +113,16 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       substituteInPlace python/triton/runtime/build.py \
         --replace-fail \
           'cc = os.environ.get("CC")' \
-          'cc = os.environ.get("CC", "${lib.getExe' effectiveStdenv.cc "cc"}")'
+          'cc = os.environ.get("CC", "${runtimeCCExe}")'
+    ''
+
+    # MLIRConfig selects its imported mlir-tblgen executable, which runs on HOST.
+    # Table generation runs on BUILD, while MLIR's libraries still target HOST.
+    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'find_package(MLIR REQUIRED CONFIG PATHS ''${MLIR_DIR})' \
+          'find_package(MLIR REQUIRED CONFIG PATHS ''${MLIR_DIR})
+      set(MLIR_TABLEGEN_EXE "${lib.getExe' (llvm.__spliced.buildHost or llvm) "mlir-tblgen"}")'
     ''
 
     # triton will try dlopening libcublas.so at runtime
@@ -125,11 +139,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     cmake
     ninja
 
-    # Note for future:
-    # These *probably* should go in depsTargetTarget
-    # ...but we cannot test cross right now anyway
-    # because we only support cudaPackages on x86_64-linux atm
     lit
+    # Native tools, including mlir-tblgen, run during the build.
     llvm
 
     # Upstream's setup.py tries to write cache somewhere in ~/
@@ -143,6 +154,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # https://cmake.org/cmake/help/latest/command/find_package.html
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
     (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}/lib/cmake/lld")
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    (lib.cmakeFeature "LLVM_DIR" "${lib.getLib llvm}/lib/cmake/llvm")
+    (lib.cmakeFeature "MLIR_DIR" "${lib.getLib llvm}/lib/cmake/mlir")
+    (lib.cmakeFeature "Python3_INCLUDE_DIR" "${lib.getInclude python}/include/${python.libPrefix}")
   ];
 
   buildInputs = [
@@ -151,7 +167,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     ncurses
     pybind11
     zlib
-  ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ llvm ];
 
   dependencies = [
     filelock
@@ -160,11 +177,17 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     setuptools
   ];
 
-  preConfigure =
-    # Ensure that the build process uses the requested number of cores
-    ''
-      export MAX_JOBS="$NIX_BUILD_CORES"
-    '';
+  preBuild = ''
+    export MAX_JOBS="$NIX_BUILD_CORES"
+    # setup.py configures CMake after preConfigure hooks have added their flags.
+    local tritonCmakeFlags=()
+    concatTo tritonCmakeFlags cmakeFlags cmakeFlagsArray
+    export TRITON_APPEND_CMAKE_ARGS="$(
+      ${python.pythonOnBuildForHost.interpreter} -c \
+        'import shlex, sys; print(shlex.join(sys.argv[1:]))' \
+        "''${tritonCmakeFlags[@]}"
+    )''${TRITON_APPEND_CMAKE_ARGS:+ $TRITON_APPEND_CMAKE_ARGS}"
+  '';
 
   # `examples/plugins` (an MLIR example dialect plugin and a unit-test helper lib) is built
   # unconditionally with the Python module and shipped into `triton/plugins/`.
@@ -172,6 +195,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   # fails the fixup phase.
   postInstall = ''
     rm -rf "$out/${python.sitePackages}/triton/plugins"
+  ''
+  + lib.optionalString cudaSupport ''
+    # Upstream resolves these tools relative to the installed NVIDIA backend.
+    local nvidiaBin="$out/${python.sitePackages}/triton/backends/nvidia/bin"
+    mkdir -p "$nvidiaBin"
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} "$nvidiaBin/ptxas"
+    ln -s ptxas "$nvidiaBin/ptxas-blackwell"
+    ln -s ${lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump"} "$nvidiaBin/cuobjdump"
+    ln -s ${lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm"} "$nvidiaBin/nvdisasm"
   '';
 
   env = {
@@ -184,14 +216,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
       "-Wno-stringop-overread"
     ];
-
-    # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
-    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-    TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
-    TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
-    TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
-    TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
-    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
   };
 
   pythonRemoveDeps = [
@@ -219,7 +243,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   passthru = {
     inherit cudaPackages;
-    gpuCheck = effectiveStdenv.mkDerivation {
+    gpuCheck = stdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;
 
@@ -392,8 +416,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
             if __name__ == "__main__":
               if os.environ.get("HOME", None) == "/homeless-shelter":
                 os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
-              if "CC" not in os.environ:
-                os.environ["CC"] = "${lib.getExe' effectiveStdenv.cc "cc"}"
               torch.manual_seed(0)
               size = 12345
               x = torch.rand(size, device='cuda')

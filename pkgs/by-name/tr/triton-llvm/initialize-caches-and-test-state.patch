@@ -1,0 +1,48 @@
+Initialize iterator caches and test state before implicit copies or swaps.
+The caches are assigned on dereference, but copying their initial indeterminate
+scalar values is already invalid.
+
+--- a/llvm/include/llvm/Object/SFrameParser.h
++++ b/llvm/include/llvm/Object/SFrameParser.h
+@@ -108,7 +108,7 @@
+   uint32_t Idx;
+   uint32_t Size;
+   uint64_t Offset;
+-  FrameRowEntry FRE;
++  FrameRowEntry FRE{};
+ };
+ 
+ extern template class LLVM_TEMPLATE_ABI SFrameParser<endianness::big>;
+--- a/llvm/include/llvm/ADT/iterator.h
++++ b/llvm/include/llvm/ADT/iterator.h
+@@ -351,7 +351,7 @@
+           pointer_iterator<WrappedIteratorT, T>, WrappedIteratorT,
+           typename std::iterator_traits<WrappedIteratorT>::iterator_category,
+           T> {
+-  mutable T Ptr;
++  mutable T Ptr{};
+ 
+ public:
+   pointer_iterator() = default;
+--- a/llvm/unittests/ADT/CountCopyAndMove.h
++++ b/llvm/unittests/ADT/CountCopyAndMove.h
+@@ -19,7 +19,7 @@
+   static int MoveConstructions;
+   static int MoveAssignments;
+   static int Destructions;
+-  int val;
++  int val = 0;
+ 
+   CountCopyAndMove() { ++DefaultConstructions; }
+   explicit CountCopyAndMove(int val) : val(val) { ++ValueConstructions; }
+--- a/llvm/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp
++++ b/llvm/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp
+@@ -78,7 +78,7 @@
+   void transferResources(JITDylib &JD, ResourceKey DstKey, ResourceKey SrcKey,
+                          MergeOp Merge = MergeOp()) {
+     auto &DstResourceRef = Resources[DstKey];
+-    ResourceT DstResources;
++    ResourceT DstResources{};
+     std::swap(DstResourceRef, DstResources);
+ 
+     auto SI = Resources.find(SrcKey);

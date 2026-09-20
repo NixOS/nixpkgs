@@ -54,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/prte_info" "''${!outputDev}"
     moveToOutput "bin/prte-info" "''${!outputDev}"
     # Fix a broken symlink, created due to FHS assumptions
-    rm "$out/bin/pcc"
+    # The upstream configure probe cannot run HOST pmixcc when cross-compiling,
+    # so it may omit this optional symlink.
+    rm -f "$out/bin/pcc"
     ln -s ${lib.getDev pmix}/bin/pmixcc "''${!outputDev}"/bin/pcc
 
     remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libprrte${stdenv.hostPlatform.extensions.library})
@@ -79,10 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
     pmix
   ];
 
-  # Setting this manually, required for RiscV cross-compile
+  # PMIx's pkg-config file is in dev; it supplies the separate library output.
   configureFlags = [
     "--with-pmix=${lib.getDev pmix}"
-    "--with-pmix-libdir=${lib.getLib pmix}/lib"
+  ];
+
+  # The generated libtool would otherwise try to run HOST ldconfig on BUILD.
+  ${if stdenv.buildPlatform != stdenv.hostPlatform then "installFlags" else null} = [
+    "LIBTOOLFLAGS=--no-finish"
   ];
 
   enableParallelBuilding = true;

@@ -1,0 +1,35 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -760,20 +760,8 @@
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+   )
+ 
+-# Mark CTK headers as system to supress warnings from them
+-target_include_directories(
+-  CUTLASS
+-  SYSTEM INTERFACE
+-  $<BUILD_INTERFACE:${CUDA_TOOLKIT_ROOT_DIR}/include>
+-  )
+-
+-if(CUDA_VERSION VERSION_GREATER_EQUAL 13.0)
+-  target_include_directories(
+-    CUTLASS
+-    SYSTEM INTERFACE
+-    $<BUILD_INTERFACE:${CUTLASS_CUDA_CCCL_INCLUDE_DIR}>
+-    )
+-endif()
++# Toolkit headers are part of the installed C++ interface.
++target_link_libraries(CUTLASS INTERFACE CUDA::toolkit)
+ 
+ install(
+   DIRECTORY
+--- a/cmake/NvidiaCutlassConfig.cmake.in
++++ b/cmake/NvidiaCutlassConfig.cmake.in
+@@ -1,6 +1,7 @@
+ get_filename_component(NvidiaCutlass_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ 
+ include(CMakeFindDependencyMacro)
++find_dependency(CUDAToolkit)
+ 
+ if(TARGET nvidia::cutlass::CUTLASS)
+   return()

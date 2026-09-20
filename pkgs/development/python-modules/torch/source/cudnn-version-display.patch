@@ -1,0 +1,40 @@
+Display cuDNN version components instead of decoding its changing integer format.
+
+--- a/aten/src/ATen/cuda/detail/CUDAHooks.cpp
++++ b/aten/src/ATen/cuda/detail/CUDAHooks.cpp
+@@ -453,16 +453,21 @@
+ #if AT_CUDNN_ENABLED()
+ 
+ 
+-  auto printCudnnStyleVersion = [&](size_t v) {
+-    oss << (v / 1000) << '.' << (v / 100 % 10);
+-    if (v % 100 != 0) {
+-      oss << '.' << (v % 100);
++  auto printCudnnStyleVersion = [&](int major, int minor, int patch) {
++    oss << major << '.' << minor;
++    if (patch != 0) {
++      oss << '.' << patch;
+     }
+   };
+ 
+   size_t cudnnVersion = cudnnGetVersion();
+   oss << "  - CuDNN ";
+-  printCudnnStyleVersion(cudnnVersion);
++  // Query components directly: cuDNN 9 changed the packed integer encoding.
++  int major = 0, minor = 0, patch = 0;
++  AT_CUDNN_CHECK(cudnnGetProperty(MAJOR_VERSION, &major));
++  AT_CUDNN_CHECK(cudnnGetProperty(MINOR_VERSION, &minor));
++  AT_CUDNN_CHECK(cudnnGetProperty(PATCH_LEVEL, &patch));
++  printCudnnStyleVersion(major, minor, patch);
+   size_t cudnnCudartVersion = cudnnGetCudartVersion();
+   if (cudnnCudartVersion != CUDART_VERSION) {
+     oss << "  (built against CUDA ";
+@@ -472,7 +477,7 @@
+   oss << '\n';
+   if (cudnnVersion != CUDNN_VERSION) {
+     oss << "    - Built with CuDNN ";
+-    printCudnnStyleVersion(CUDNN_VERSION);
++    printCudnnStyleVersion(CUDNN_MAJOR, CUDNN_MINOR, CUDNN_PATCHLEVEL);
+     oss << '\n';
+   }
+ #endif

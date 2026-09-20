@@ -1,0 +1,169 @@
+Complete the binary128 datatype separation from upstream PR #13714.
+
+Keep Fortran COMPLEX*32 enabled with its matching ISO_C_BINDING kind and
+quad-complex SUM/PROD kernels. Append the operation slot so existing indices
+remain unchanged. Preserve x87 long-double external32 conversion, while
+binary128 complex needs only byte-order conversion, not x87 conversion.
+Correct the upstream backport's inverted _Quad availability guard as well.
+
+The installed regression tests cover both Fortran quad types and the distinct
+C long-double types, including independently specified external32 bytes.
+
+--- a/config/ompi_fortran_check.m4
++++ b/config/ompi_fortran_check.m4
+@@ -139,6 +139,8 @@
+             opal_short_float_complex_t) ofc_type_kind=C_SHORT_FLOAT_COMPLEX ;;
+             _Float128)            ofc_type_kind=C_FLOAT128            ;;
+             __float128)           ofc_type_kind=C_FLOAT128            ;;
++            _Float128*_Complex|__float128*_Complex)
++                                  ofc_type_kind=C_FLOAT128_COMPLEX    ;;
+             *)
+                 # Skip types like "DOUBLE PRECISION"
+                 ;;
+--- a/config/ompi_setup_mpi_fortran.m4
++++ b/config/ompi_setup_mpi_fortran.m4
+@@ -227,7 +227,7 @@
+                    [long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
+                    [16], [no])
+     OMPI_FORTRAN_CHECK([COMPLEX*32], [no],
+-                   [_Float128 _Complex, __float _Complex, long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
++                   [_Float128 _Complex, __float128 _Complex, long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
+                    [32], [no])
+     # Double precision complex types are not standard, but many
+     # compilers support it.  Code should be wrapped with #ifdef
+--- a/ompi/datatype/ompi_datatype_internal.h
++++ b/ompi/datatype/ompi_datatype_internal.h
+@@ -614,6 +614,7 @@
+ #define OMPI_DATATYPE_INITIALIZER_C_FLOAT_COMPLEX       OPAL_DATATYPE_INITIALIZER_FLOAT_COMPLEX
+ #define OMPI_DATATYPE_INITIALIZER_C_DOUBLE_COMPLEX      OPAL_DATATYPE_INITIALIZER_DOUBLE_COMPLEX
+ #define OMPI_DATATYPE_INITIALIZER_C_LONG_DOUBLE_COMPLEX OPAL_DATATYPE_INITIALIZER_LONG_DOUBLE_COMPLEX
++#define OMPI_DATATYPE_INITIALIZER_C_FLOAT128_COMPLEX    OPAL_DATATYPE_INITIALIZER_FLOAT128_COMPLEX
+ 
+ /*
+  * Following are the structured types, that cannot be represented
+--- a/ompi/mca/op/op.h
++++ b/ompi/mca/op/op.h
+@@ -198,6 +198,9 @@
+ 
+     /** 2 location C: wchar_t */
+     OMPI_OP_BASE_TYPE_WCHAR,
++
++    /** IEEE binary128 complex, distinct from C long double complex. */
++    OMPI_OP_BASE_TYPE_C_FLOAT128_COMPLEX,
+ 
+     /** Maximum type */
+     OMPI_OP_BASE_TYPE_MAX
+--- a/ompi/mca/op/base/op_base_functions.c
++++ b/ompi/mca/op/base/op_base_functions.c
+@@ -37,6 +37,16 @@
+  *
+  * This macro is for (out op in).
+  */
++#if defined(HAVE__FLOAT128) && defined(HAVE__FLOAT128__COMPLEX)
++typedef _Float128 _Complex ompi_op_base_float128_complex_t;
++#define OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX 1
++#elif defined(HAVE___FLOAT128) && defined(HAVE___FLOAT128__COMPLEX)
++typedef __float128 _Complex ompi_op_base_float128_complex_t;
++#define OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX 1
++#else
++#define OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX 0
++#endif
++
+ #define OP_FUNC(name, type_name, type, op) \
+   static void ompi_op_base_2buff_##name##_##type_name(const void *in, void *out, int *count, \
+                                                       struct ompi_datatype_t **dtype, \
+@@ -348,6 +358,9 @@
+ OP_FUNC(sum, c_float_complex, float _Complex, +=)
+ OP_FUNC(sum, c_double_complex, double _Complex, +=)
+ OP_FUNC(sum, c_long_double_complex, long double _Complex, +=)
++#if OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX
++OP_FUNC(sum, c_float128_complex, ompi_op_base_float128_complex_t, +=)
++#endif
+ 
+ /*************************************************************************
+  * Product
+@@ -420,6 +433,9 @@
+ OP_FUNC(prod, c_float_complex, float _Complex, *=)
+ OP_FUNC(prod, c_double_complex, double _Complex, *=)
+ OP_FUNC(prod, c_long_double_complex, long double _Complex, *=)
++#if OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX
++OP_FUNC(prod, c_float128_complex, ompi_op_base_float128_complex_t, *=)
++#endif
+ 
+ /*************************************************************************
+  * Logical AND
+@@ -1008,6 +1024,9 @@
+ OP_FUNC_3BUF(sum, c_float_complex, float _Complex, +)
+ OP_FUNC_3BUF(sum, c_double_complex, double _Complex, +)
+ OP_FUNC_3BUF(sum, c_long_double_complex, long double _Complex, +)
++#if OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX
++OP_FUNC_3BUF(sum, c_float128_complex, ompi_op_base_float128_complex_t, +)
++#endif
+ 
+ /*************************************************************************
+  * Product
+@@ -1080,6 +1099,9 @@
+ OP_FUNC_3BUF(prod, c_float_complex, float _Complex, *)
+ OP_FUNC_3BUF(prod, c_double_complex, double _Complex, *)
+ OP_FUNC_3BUF(prod, c_long_double_complex, long double _Complex, *)
++#if OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX
++OP_FUNC_3BUF(prod, c_float128_complex, ompi_op_base_float128_complex_t, *)
++#endif
+ 
+ /*************************************************************************
+  * Logical AND
+@@ -1492,12 +1514,18 @@
+ #define FLOAT_COMPLEX(name, ftype) ompi_op_base_##ftype##_##name##_c_float_complex
+ #define DOUBLE_COMPLEX(name, ftype) ompi_op_base_##ftype##_##name##_c_double_complex
+ #define LONG_DOUBLE_COMPLEX(name, ftype) ompi_op_base_##ftype##_##name##_c_long_double_complex
++#if OMPI_OP_BASE_HAVE_FLOAT128_COMPLEX
++#define FLOAT128_COMPLEX(name, ftype) ompi_op_base_##ftype##_##name##_c_float128_complex
++#else
++#define FLOAT128_COMPLEX(name, ftype) NULL
++#endif
+ 
+ #define COMPLEX(name, ftype)                                                  \
+     [OMPI_OP_BASE_TYPE_C_SHORT_FLOAT_COMPLEX] = SHORT_FLOAT_COMPLEX(name, ftype), \
+     [OMPI_OP_BASE_TYPE_C_FLOAT_COMPLEX] = FLOAT_COMPLEX(name, ftype),         \
+     [OMPI_OP_BASE_TYPE_C_DOUBLE_COMPLEX] = DOUBLE_COMPLEX(name, ftype),       \
+-    [OMPI_OP_BASE_TYPE_C_LONG_DOUBLE_COMPLEX] = LONG_DOUBLE_COMPLEX(name, ftype)
++    [OMPI_OP_BASE_TYPE_C_LONG_DOUBLE_COMPLEX] = LONG_DOUBLE_COMPLEX(name, ftype), \
++    [OMPI_OP_BASE_TYPE_C_FLOAT128_COMPLEX] = FLOAT128_COMPLEX(name, ftype)
+ 
+ /** Byte ****************************************************************/
+ 
+--- a/opal/datatype/opal_copy_functions_heterogeneous.c
++++ b/opal/datatype/opal_copy_functions_heterogeneous.c
+@@ -1020,7 +1020,8 @@
+ #endif
+ 
+ #if SIZEOF_LONG_DOUBLE == OPAL_SIZEOF_FLOAT12
+-COPY_TYPE_HETEROGENEOUS(float12, long double)
++/* FLOAT12 denotes x87 precision even when its storage occupies 16 bytes. */
++COPY_TYPE_HETEROGENEOUS_INTERNAL(float12, long double, 1)
+ #elif SIZEOF_DOUBLE == OPAL_SIZEOF_FLOAT12
+ COPY_TYPE_HETEROGENEOUS(float12, double)
+ #elif SIZEOF_FLOAT == OPAL_SIZEOF_FLOAT12
+@@ -1069,9 +1070,9 @@
+ COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(long_double_complex, long double, 1)
+ 
+ #if defined(HAVE__FLOAT128) && defined(HAVE__FLOAT128__COMPLEX)
+-COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(float128_complex, _Float128, 1)
++COPY_2SAMETYPE_HETEROGENEOUS(float128_complex, _Float128)
+ #elif defined(HAVE___FLOAT128) && defined(HAVE___FLOAT128__COMPLEX)
+-COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(float128_complex, __float128, 1)
++COPY_2SAMETYPE_HETEROGENEOUS(float128_complex, __float128)
+ #else
+ /* #error No _Float128 _Complex support available */
+ #    define copy_float128_complex_heterogeneous NULL
+--- a/config/ompi_fortran_check_real16_c_equiv.m4
++++ b/config/ompi_fortran_check_real16_c_equiv.m4
+@@ -74,7 +74,7 @@
+                                      AS_IF([test "$ac_cv_type__Quad" != "yes"],
+                                            [CFLAGS="$CFLAGS_save"])
+                                      ])
+-                              AS_IF([test "$ac_cv_type__Quad" != "yes"],
++                              AS_IF([test "$ac_cv_type__Quad" = "yes"],
+                                     [AC_MSG_CHECKING([if the compiler _Quad == REAL*16])
+                                      OMPI_FORTRAN_CHECK_REAL16_EQUIV_TYPE([_Quad], [q])
+                                      AS_IF([test "$fortran_real16_happy" = "yes"],

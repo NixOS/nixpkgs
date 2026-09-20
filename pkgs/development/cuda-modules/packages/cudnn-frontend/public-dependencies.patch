@@ -1,0 +1,244 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -45,13 +45,16 @@
+     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ 
+-# Find the cuda compiler
+-find_package(CUDAToolkit REQUIRED)
+-
+-target_include_directories(
+-    cudnn_frontend INTERFACE
+-    ${CUDAToolkit_INCLUDE_DIRS}
+-)
++# Resolve the same imported dependencies for this build and installed consumers.
++configure_file(cmake/cudnn_frontend-dependencies.cmake.in
++               cudnn_frontend-dependencies.cmake @ONLY)
++configure_file(cmake/cuDNN.cmake cuDNN.cmake COPYONLY)
++include(${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-dependencies.cmake)
++target_link_libraries(cudnn_frontend INTERFACE
++    CUDA::cudart CUDNN::cudnn cudnn_frontend::nvrtc)
++if(NOT CUDNN_FRONTEND_SKIP_JSON_LIB)
++    target_link_libraries(cudnn_frontend INTERFACE nlohmann_json::nlohmann_json)
++endif()
+ 
+ target_compile_features(cudnn_frontend INTERFACE cxx_std_17)
+ 
+@@ -113,5 +116,7 @@
+ )
+ install(
+     FILES "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-config.cmake"
++          "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-dependencies.cmake"
++          "${CMAKE_CURRENT_BINARY_DIR}/cuDNN.cmake"
+     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cudnn_frontend"
+ )
+--- a/cudnn_frontend-config.cmake.in
++++ b/cudnn_frontend-config.cmake.in
+@@ -3,4 +3,9 @@
+ 
+ @PACKAGE_INIT@
+ 
++include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-dependencies.cmake)
++if(DEFINED cudnn_frontend_FOUND AND NOT cudnn_frontend_FOUND)
++    return()
++endif()
++
+ include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-targets.cmake)
+--- a/cmake/cuDNN.cmake
++++ b/cmake/cuDNN.cmake
+@@ -1,17 +1,32 @@
+ # SPDX-FileCopyrightText: Copyright (c) 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ # SPDX-License-Identifier: Apache-2.0
+ 
+-# Check if CUDNN:: targets already exist (integrated build)
+-if(TARGET CUDNN::cudnn AND TARGET CUDNN::cudnn_all)
+-    message(STATUS "cuDNN: Using existing CMake targets")
++# Standalone builds require cuDNN; package configs may perform optional discovery.
++if(NOT DEFINED CUDNN_FIND_REQUIRED)
++    set(CUDNN_FIND_REQUIRED TRUE)
++endif()
++
++# Check if CUDNN:: targets already exist (integrated build). A previous optional
++# lookup may have created some targets before finding a missing library.
++if(TARGET CUDNN::cudnn AND TARGET CUDNN::cudnn_all AND
++   (NOT DEFINED CUDNN_FOUND OR CUDNN_FOUND))
++    if(NOT CUDNN_FIND_QUIETLY)
++        message(STATUS "cuDNN: Using existing CMake targets")
++    endif()
+     set(CUDNN_FOUND ON CACHE INTERNAL "cuDNN Library Found")
+     return()
+ endif()
+ 
+ # Original behavior: search for pre-built libraries
+-message(STATUS "cuDNN: Searching for pre-built libraries")
+-
+-add_library(CUDNN::cudnn_all INTERFACE IMPORTED)
++if(NOT CUDNN_FIND_QUIETLY)
++    message(STATUS "cuDNN: Searching for pre-built libraries")
++endif()
++
++if(NOT TARGET CUDNN::cudnn_all)
++    add_library(CUDNN::cudnn_all INTERFACE IMPORTED)
++endif()
++set_property(TARGET CUDNN::cudnn_all PROPERTY INTERFACE_LINK_LIBRARIES)
++set(_cudnn_missing_required_library FALSE)
+ 
+ find_path(
+     CUDNN_INCLUDE_DIR cudnn.h
+@@ -49,7 +64,7 @@
+ endif()
+ 
+ function(find_cudnn_library NAME)
+-    if(NOT "${ARGV1}" STREQUAL "OPTIONAL")
++    if(NOT "${ARGV1}" STREQUAL "OPTIONAL" AND CUDNN_FIND_REQUIRED)
+         set(_cudnn_required "REQUIRED")
+     else()
+         set(_cudnn_required "")
+@@ -70,15 +85,24 @@
+     )
+ 
+     if(${NAME}_LIBRARY)
+-        add_library(CUDNN::${NAME} UNKNOWN IMPORTED)
++        if(NOT TARGET CUDNN::${NAME})
++            add_library(CUDNN::${NAME} UNKNOWN IMPORTED)
++        endif()
+         set_target_properties(
+             CUDNN::${NAME} PROPERTIES
+             INTERFACE_INCLUDE_DIRECTORIES ${CUDNN_INCLUDE_DIR}
+             IMPORTED_LOCATION ${${NAME}_LIBRARY}
+         )
+-        message(STATUS "${NAME} found at ${${NAME}_LIBRARY}.")
+-    else()
+-        message(STATUS "${NAME} not found.")
++        if(NOT CUDNN_FIND_QUIETLY)
++            message(STATUS "${NAME} found at ${${NAME}_LIBRARY}.")
++        endif()
++    else()
++        if(NOT "${ARGV1}" STREQUAL "OPTIONAL")
++            set(_cudnn_missing_required_library TRUE PARENT_SCOPE)
++        endif()
++        if(NOT CUDNN_FIND_QUIETLY)
++            message(STATUS "${NAME} not found.")
++        endif()
+     endif()
+ endfunction()
+ 
+@@ -89,14 +113,16 @@
+ 
+ include (FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(
+-    LIBRARY REQUIRED_VARS
++    CUDNN NAME_MISMATCHED REQUIRED_VARS
+     CUDNN_INCLUDE_DIR ${CUDNN_LIBRARY_VAR}
+ )
+ 
+ if(CUDNN_INCLUDE_DIR AND (CUDNN_STATIC OR cudnn_LIBRARY))
+ 
+-    message(STATUS "cuDNN: ${cudnn_LIBRARY}")
+-    message(STATUS "cuDNN: ${CUDNN_INCLUDE_DIR}")
++    if(NOT CUDNN_FIND_QUIETLY)
++        message(STATUS "cuDNN: ${cudnn_LIBRARY}")
++        message(STATUS "cuDNN: ${CUDNN_INCLUDE_DIR}")
++    endif()
+ 
+     set(CUDNN_FOUND ON CACHE INTERNAL "cuDNN Library Found")
+ 
+@@ -106,22 +132,30 @@
+ 
+ endif()
+ 
+-target_include_directories(
+-    CUDNN::cudnn_all
+-    INTERFACE
+-    $<INSTALL_INTERFACE:include>
+-    $<BUILD_INTERFACE:${CUDNN_INCLUDE_DIR}>
++set_target_properties(CUDNN::cudnn_all PROPERTIES
++    INTERFACE_INCLUDE_DIRECTORIES
++    "$<INSTALL_INTERFACE:include>;$<BUILD_INTERFACE:${CUDNN_INCLUDE_DIR}>"
+ )
+ 
+ if(CUDNN_STATIC)
+-    add_library(CUDNN::cudnn INTERFACE IMPORTED)
+-    target_link_libraries(
+-        CUDNN::cudnn
+-        INTERFACE
+-        CUDNN::cudnn_all
+-    )
+-
+-    find_package(ZLIB REQUIRED)
++    if(NOT TARGET CUDNN::cudnn)
++        add_library(CUDNN::cudnn INTERFACE IMPORTED)
++    endif()
++    set_target_properties(CUDNN::cudnn PROPERTIES
++        INTERFACE_LINK_LIBRARIES CUDNN::cudnn_all
++    )
++
++    set(_cudnn_zlib_args)
++    if(CUDNN_FIND_REQUIRED)
++        list(APPEND _cudnn_zlib_args REQUIRED)
++    endif()
++    if(CUDNN_FIND_QUIETLY)
++        list(APPEND _cudnn_zlib_args QUIET)
++    endif()
++    find_package(ZLIB ${_cudnn_zlib_args})
++    if(NOT ZLIB_FOUND)
++        set(_cudnn_missing_required_library TRUE)
++    endif()
+ else()
+     target_link_libraries(
+         CUDNN::cudnn_all
+@@ -174,3 +208,8 @@
+         $<$<BOOL:${CUDNN_STATIC}>:CUDA::cublasLt_static $<IF:$<TARGET_EXISTS:CUDA::nvrtc_static>,CUDA::nvrtc_static,CUDA::nvrtc> ZLIB::ZLIB>
+     )
+ endif()
++
++if(_cudnn_missing_required_library)
++    set(CUDNN_FOUND OFF)
++    set(CUDNN_FOUND OFF CACHE INTERNAL "cuDNN Library Not Found")
++endif()
+--- /dev/null
++++ b/cmake/cudnn_frontend-dependencies.cmake.in
+@@ -0,0 +1,43 @@
++include(CMakeFindDependencyMacro)
++# Outside find_package, preserve the producer's required dependency checks.
++set(_cudnn_frontend_required REQUIRED)
++if(CMAKE_FIND_PACKAGE_NAME STREQUAL "cudnn_frontend")
++    set(_cudnn_frontend_required "")
++endif()
++find_dependency(CUDAToolkit ${_cudnn_frontend_required})
++if(NOT TARGET CUDNN::cudnn OR
++   (TARGET CUDNN::cudnn_all AND DEFINED CUDNN_FOUND AND NOT CUDNN_FOUND))
++    if(CMAKE_FIND_PACKAGE_NAME STREQUAL "cudnn_frontend")
++        set(CUDNN_FIND_REQUIRED "${cudnn_frontend_FIND_REQUIRED}")
++        set(CUDNN_FIND_QUIETLY "${cudnn_frontend_FIND_QUIETLY}")
++    endif()
++    include(${CMAKE_CURRENT_LIST_DIR}/cuDNN.cmake)
++    if(NOT CUDNN_FOUND)
++        set(cudnn_frontend_FOUND FALSE)
++        set(cudnn_frontend_NOT_FOUND_MESSAGE "cuDNN headers or required libraries were not found")
++        return()
++    endif()
++endif()
++if(NOT @CUDNN_FRONTEND_SKIP_JSON_LIB@)
++    find_dependency(nlohmann_json CONFIG ${_cudnn_frontend_required})
++endif()
++
++# FindCUDAToolkit assumes NVRTC and CUDART share an include directory. NVIDIA's
++# component packages may install them separately. Discover the public header
++# here, without exporting the producer's resolved directory to consumers.
++if(NOT TARGET cudnn_frontend::nvrtc)
++    find_path(cudnn_frontend_NVRTC_INCLUDE_DIR nvrtc.h
++              HINTS ${CUDAToolkit_INCLUDE_DIRS} ${_cudnn_frontend_required})
++    if(NOT cudnn_frontend_NVRTC_INCLUDE_DIR OR NOT TARGET CUDA::nvrtc)
++        if(_cudnn_frontend_required)
++            message(FATAL_ERROR "NVRTC headers and library are required")
++        endif()
++        set(cudnn_frontend_FOUND FALSE)
++        set(cudnn_frontend_NOT_FOUND_MESSAGE "NVRTC headers or library were not found")
++        return()
++    endif()
++    add_library(cudnn_frontend::nvrtc INTERFACE IMPORTED)
++    set_target_properties(cudnn_frontend::nvrtc PROPERTIES
++        INTERFACE_INCLUDE_DIRECTORIES "${cudnn_frontend_NVRTC_INCLUDE_DIR}"
++        INTERFACE_LINK_LIBRARIES CUDA::nvrtc)
++endif()

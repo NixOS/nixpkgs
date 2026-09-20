@@ -1,8 +1,8 @@
 {
   lib,
+  lndir,
   symlinkJoin,
-  backendStdenv,
-  cudaAtLeast,
+  backendCC,
   cudaMajorMinorVersion,
   cccl ? null,
   cuda_crt ? null,
@@ -25,15 +25,20 @@
   libcusolver ? null,
   libcusparse ? null,
   libnpp ? null,
+  libnvptxcompiler ? null,
 }:
 
 let
   # Retrieve all the outputs of a package except for the "static" output.
   getAllOutputs =
-    p: lib.concatMap (output: lib.optionals (output != "static") [ p.${output} ]) p.outputs;
+    p:
+    lib.optionals (p != null) (
+      lib.concatMap (output: lib.optionals (output != "static") [ p.${output} ]) p.outputs
+    );
 
   hostPackages = [
     cuda_cuobjdump
+    cuda_cuxxfilt
     cuda_gdb
     cuda_nvcc
     cuda_nvdisasm
@@ -41,9 +46,9 @@ let
   ];
   targetPackages = [
     cccl
+    cuda_crt
     cuda_cudart
     cuda_cupti
-    cuda_cuxxfilt
     cuda_nvml_dev
     cuda_nvrtc
     cuda_nvtx
@@ -55,31 +60,59 @@ let
     libcusolver
     libcusparse
     libnpp
-  ]
-  ++ lib.optionals (cudaAtLeast "13") [
-    cuda_crt
+    libnvptxcompiler
   ];
 
-  # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:
-  allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
+  # Like NVCC, this package runs on HOST and compiles for TARGET. Consumers
+  # select its BUILD -> HOST instance with nativeBuildInputs, or HOST -> HOST
+  # for runtime compilation. Never bake BUILD executables into a HOST package.
+  targetPackagesForTarget = map (p: p.__spliced.targetTarget or p) targetPackages;
+  hostComponents = builtins.concatMap getAllOutputs hostPackages;
+  targetComponents = builtins.concatMap getAllOutputs targetPackagesForTarget;
+  libraryComponents = map lib.getLib (lib.filter (p: p != null) targetPackagesForTarget);
 in
-symlinkJoin rec {
+symlinkJoin {
   pname = "cuda-merged";
   version = cudaMajorMinorVersion;
+  # Keep the legacy .lib access as a real output, so ordinary output splicing
+  # applies. Both outputs use the same TARGET component selection, while
+  # library consumers need not retain HOST executables in their closure.
+  outputs = [
+    "out"
+    "lib"
+  ];
 
-  paths = builtins.concatMap getAllOutputs allPackages;
+  paths = hostComponents ++ targetComponents;
+  nativeBuildInputs = [ lndir ];
+  # A symlinkJoin cannot merge the per-output nix-support files: each path has
+  # the same file names, so lndir keeps whichever one it sees first. Replace
+  # those collisions with propagation of the actual component outputs.
+  postBuild = ''
+    mkdir -p "$lib"
+    for component in ${lib.escapeShellArgs libraryComponents}; do
+      lndir -silent "$component" "$lib"
+    done
+    for output in "$out" "$lib"; do
+      rm -rf "$output/nix-support"
+      mkdir -p "$output/nix-support"
+    done
+    printWords ${lib.escapeShellArgs hostComponents} \
+      >"$out/nix-support/propagated-build-inputs"
+    printWords ${lib.escapeShellArgs targetComponents} \
+      >"$out/nix-support/propagated-target-target-deps"
+    printWords ${lib.escapeShellArgs libraryComponents} \
+      >"$lib/nix-support/propagated-target-target-deps"
+  '';
 
   passthru = {
-    cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
-    lib = symlinkJoin {
-      inherit pname version;
-      paths = map (p: lib.getLib p) allPackages;
-    };
+    cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendCC;
   };
 
   meta = {
     description = "Wrapper substituting the deprecated runfile-based CUDA installation";
+    mainProgram = "nvcc";
     license = lib.licenses.nvidiaCudaRedist;
     teams = [ lib.teams.cuda ];
+    outputsToInstall = [ "out" ];
   };
 }

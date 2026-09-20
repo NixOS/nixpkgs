@@ -18,7 +18,7 @@ let
     );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
   emulator = stdenv.hostPlatform.emulator buildPackages;
-  isCxx = stdenv.cc.libcxx != null;
+  isCxx = stdenv.cc.libcxx.isLLVM or false;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
   CXX = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}c++"}";
@@ -43,6 +43,12 @@ stdenv.mkDerivation {
     echo "checking whether compiler builds valid C++ binaries... " >&2
     ${CXX} -o cxx-check ${./cxx-main.cc}
     ${emulator} ./cxx-check
+
+    # A compiler used outside stdenv must also locate its C++ runtime without
+    # the dependency flags and wrapper caches populated by setup hooks.
+    echo "checking whether compiler builds C++ binaries in a clean environment... " >&2
+    env -i TMPDIR="$TMPDIR" ${CXX} -o cxx-standalone ${./cxx-main.cc}
+    ${emulator} ./cxx-standalone
 
     # test for https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1431745905
     # .../include/cxxabi.h:20:10: fatal error: '__cxxabi_config.h' file not found

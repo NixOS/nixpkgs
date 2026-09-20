@@ -1,0 +1,40 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -699,8 +699,36 @@
+ # CMake finds the Accelerate directory; we want -framework Accelerate for linking.
+ string( REPLACE "/System/Library/Frameworks/Accelerate.framework" "-framework Accelerate" LAPACK_LIBS "${LAPACK_LIBRARIES}" )
+ if (MAGMA_ENABLE_CUDA)
++  # Public headers include CUDA runtime, cuBLAS and cuSPARSE headers. Their
++  # pkg-config metadata also accounts for split header and library outputs.
++  find_package(PkgConfig REQUIRED)
++  pkg_check_modules(MAGMA_CUDA REQUIRED cudart cublas cusparse)
++  string(REPLACE ";" " " MAGMA_INCLUDE "${MAGMA_CUDA_CFLAGS}")
++  # Export public feature macros, not private compiler flags. In particular,
++  # consumers must not select their own OpenMP runtime with -fopenmp.
++  function(magma_pkgconfig_compile_flags)
++    include(CheckCXXSourceCompiles)
++    include(CMakePushCheckState)
++    cmake_reset_check_state()
++    get_directory_property(CMAKE_REQUIRED_DEFINITIONS COMPILE_DEFINITIONS)
++    list(TRANSFORM CMAKE_REQUIRED_DEFINITIONS PREPEND "-D")
++    set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
++    set(CMAKE_TRY_COMPILE_CONFIGURATION "${CMAKE_BUILD_TYPE}")
++    set(public_flags "")
++    foreach(macro MAGMA_ILP64 MKL_ILP64 MAGMA_WITH_MKL HAVE_CBLAS MAGMA_HAVE_PASTIX MAGMA_NO_V1)
++      unset(MAGMA_PC_HAS_${macro} CACHE)
++      check_cxx_source_compiles("#ifndef ${macro}\n#error macro not defined\n#endif\nint main() { return 0; }"
++        MAGMA_PC_HAS_${macro})
++      if(MAGMA_PC_HAS_${macro})
++        string(APPEND public_flags " -D${macro}")
++      endif()
++    endforeach()
++    set(CXXFLAGS "${public_flags}" PARENT_SCOPE)
++  endfunction()
++  magma_pkgconfig_compile_flags()
++  # Keep ordinary --libs sufficient for static MAGMA, including LAPACK.
+   string( REPLACE ";" " " LIBS
+-    "${blas_fix_lib} ${LAPACK_LIBS} -L${CUDAToolkit_LIBRARY_DIR} -lcudart -lcublas -lcusparse")
++    "${blas_fix_lib} ${LAPACK_LIBS} ${OpenMP_CXX_LIBRARIES} ${MAGMA_CUDA_LDFLAGS}")
+ else()
+   string( REPLACE ";" " " LIBS
+      "${blas_fix_lib} ${LAPACK_LIBS} ${HIP} ${rocBLAS} ${rocSPARSE}" )

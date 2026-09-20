@@ -29,10 +29,10 @@
 
 # Type:
 #   [ pkgset -> (args to stage/default.nix) or ({ __raw = true; } // pkgs) ]
-#   -> pkgset
+#   -> { pkgs :: pkgset; stageAt :: Int -> pkgset; }
 #
 # In English: This takes a list of function from the previous stage pkgset and
-# returns the final pkgset. Each of those functions returns, if `__raw` is
+# returns the final pkgset and a selector for its graph. Each stage returns, if `__raw` is
 # undefined or false, args for this stage's pkgset (the most complex and
 # important arg is the stdenv), or, if `__raw = true`, simply this stage's
 # pkgset itself.
@@ -87,7 +87,11 @@ let
     # So true by default for only the first element because one
     # 1-indexing. Since we reverse the list, this means this is true
     # for the final stage.
-    { allowCustomOverrides = index == 1; } // (stageFun prevStage)
+    {
+      allowCustomOverrides = index == 1;
+      __stageIndex = index;
+    }
+    // (stageFun prevStage)
   ) (lib.lists.reverseList stageFuns);
 
   # Adds the stdenv to the arguments, and sticks in it the previous stage for
@@ -134,7 +138,12 @@ let
             }
           );
     in
-    thisStage;
+    # Keep selection metadata outside stdenv and retain the complete graph,
+    # including forward TARGET stages when returning an intermediate stage.
+    thisStage
+    // {
+      __stageAt = wanted: if wanted == args.__stageIndex then thisStage else prevStage.__stageAt wanted;
+    };
 
   # This is a hack for resolving cross-compiled compilers' run-time
   # deps. (That is, compilers that are themselves cross-compiled, as
@@ -164,7 +173,21 @@ let
 
   pkgs = dfold folder postStage (_: { }) withAllowCustomOverrides;
 
+  stageAt =
+    stageIndex:
+    assert lib.assertMsg (
+      builtins.isInt stageIndex && stageIndex > 0 && stageIndex <= builtins.length stageFuns
+    ) "Nixpkgs: requested stage index is outside the constructed stage graph";
+    let
+      selected = pkgs.__stageAt stageIndex;
+    in
+    if selected ? __splicedPackages then
+      selected.__splicedPackages
+    else
+      throw "Nixpkgs: a raw bootstrap stage has no spliced package set";
 in
-# Return the spliced package set, so that consumers of the nixpkgs top-level
-# attributes, like NixOS, don't break when cross-compiling.
-pkgs.__splicedPackages
+# Keep graph operations separate from the package namespace.
+{
+  inherit stageAt;
+  pkgs = pkgs.__splicedPackages;
+}

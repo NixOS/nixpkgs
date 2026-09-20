@@ -116,7 +116,7 @@ stdenv'.mkDerivation (finalAttrs: {
   env =
     lib.optionalAttrs cudaSupport {
       TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" python3.pkgs.torch.cudaCapabilities}";
-      NIX_LDFLAGS = "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"; # fixes -lcuda not found
+      NIX_LDFLAGS = "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"; # fixes -lcuda not found
     }
     // lib.optionalAttrs rocmSupport {
       PYTORCH_ROCM_ARCH = torch.gpuTargetString;

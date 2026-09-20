@@ -6,6 +6,7 @@
   fetchpatch,
   git-unroll,
   buildPythonPackage,
+  buildPackages,
   python,
   runCommand,
   writeShellScript,
@@ -30,7 +31,7 @@
   MPISupport ? false,
   mpi,
   buildDocs ? false,
-  targetPackages,
+  pkgsHostHost,
 
   # tests.cudaAvailable:
   callPackage,
@@ -115,6 +116,10 @@ let
     trivial
     ;
   inherit (cudaPackages) cudnn flags nccl;
+
+  # Inductor loads its generated code in the running HOST process. Select the
+  # HOST -> HOST compiler before extracting the nested stdenv.cc attribute.
+  runtimeCC = pkgsHostHost.targetPackages.stdenv.cc;
 
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
 
@@ -299,7 +304,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     "lib" # output libtorch libraries
     "cxxdev" # propagated deps for the cmake consumers of torch
   ];
-  cudaPropagateToOutput = "cxxdev";
+  cudaPropagateDependenciesToOutput = "cxxdev";
 
   src = callPackage ./src.nix {
     inherit
@@ -314,9 +319,23 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+    ./cmake-args.patch
+    ./python-extension-suffix.patch
+    ./wheel-tensorpipe-metadata.patch
+    ./nnpack-psimd-array-contracts.patch
+    # Resolve reduction dtype before dispatch and keep wider accumulators
+    # separate from explicit result dtypes on both CPU and CUDA.
+    ./sparse-csr-reduction-dtypes.patch
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ./cross-blas-dot.patch
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
+    ./find-cuda-use-package-paths.patch
+    ./cuda-launch-bounds.patch
+    ./async-mm-eligibility.patch
+    ./cudnn-version-display.patch
 
     # Let CMake find CUPTI through the variables we export in `preConfigure`, so that the
     # `CUDA::cupti` target kineto requires gets defined
@@ -371,11 +390,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     substituteInPlace third_party/NNPACK/CMakeLists.txt \
       --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
   ''
-  # flag from cmakeFlags doesn't work, not clear why
-  # setting it at the top of NNPACK's own CMakeLists does
-  + ''
-    sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
-  ''
   # Ensure that torch profiler unwind uses addr2line from nix
   + ''
     substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
@@ -385,7 +399,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   + ''
     substituteInPlace torch/_inductor/config.py \
       --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
-      '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
+      '"${lib.getExe' runtimeCC "${runtimeCC.targetPrefix}c++"}"'
+  ''
+  # ATen's generated config otherwise embeds the temporary wheel install
+  # prefix. Its public headers are copied to dev on every backend/platform.
+  + ''
+    substituteInPlace aten/src/ATen/ATenConfig.cmake.in \
+      --replace-fail '@ATEN_INCLUDE_DIR@' "$dev/include"
   ''
   # Doesn't pick up the environment variable?
   + lib.optionalString rocmSupport ''
@@ -520,6 +540,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
+    (lib.cmakeFeature "Python_INCLUDE_DIR" "${lib.getInclude python}/include/${python.libPrefix}")
+    (lib.cmakeFeature "Python_NumPy_INCLUDE_DIR" numpy.coreIncludeDir)
     # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
   ]
   ++ lib.optionals cudaSupport [
@@ -527,12 +549,30 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
     # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
     (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
-  ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) (
+    let
+      nativeTools = buildPackages.callPackage ./native-tools.nix { inherit (finalAttrs) src; };
+    in
+    [
+      (lib.cmakeFeature "NATIVE_BUILD_DIR" "${nativeTools.sleef}")
+      (lib.cmakeFeature "CAFFE2_CUSTOM_PROTOC_EXECUTABLE" "${nativeTools.protoc}/bin/protoc")
+    ]
+  );
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
+    # Pass flags before either configure path, keeping caller overrides last.
+    local torchCmakeFlags=()
+    concatTo torchCmakeFlags cmakeFlags cmakeFlagsArray
+    export CMAKE_ARGS="$(
+      ${python.pythonOnBuildForHost.interpreter} -c \
+        'import shlex, sys; print(shlex.join(sys.argv[1:]))' \
+        "''${torchCmakeFlags[@]}"
+    )''${CMAKE_ARGS:+ $CMAKE_ARGS}"
+    # setup.py caches the build type at import time. Populate CMakeCache
+    # before the wheel process imports it, including for multi-config builds.
     ${python.pythonOnBuildForHost.interpreter} setup.py build --cmake-only
-    ${cmake}/bin/cmake build
   '';
 
   preFixup = ''
@@ -589,9 +629,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     with cudaPackages;
     [
       cccl # <thrust/*>
-      cuda_cudart # cuda_runtime.h and libraries
+      cuda_cudart # cuda_runtime.h, propagated CRT headers, and libraries
       cuda_cupti # For kineto
-      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
       cuda_nvml_dev # <nvml.h>
       cuda_nvrtc
       cuda_nvtx # -llibNVToolsExt
@@ -714,13 +753,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     mkdir $lib
     mv $out/${python.sitePackages}/torch/lib $lib/lib
     ln -s $lib/lib $out/${python.sitePackages}/torch/lib
-  ''
-  + lib.optionalString rocmSupport ''
-    substituteInPlace $dev/share/cmake/Tensorpipe/TensorpipeTargets-release.cmake \
-      --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
-
-    substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-      --replace-fail "/build/${finalAttrs.src.name}/torch/include" "$dev/include"
   '';
 
   postFixup = ''
@@ -777,9 +809,22 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests {
-      inherit rocmSupport cudaSupport;
-    };
+    tests =
+      callPackage ../tests {
+        inherit rocmSupport cudaSupport;
+      }
+      // {
+        nnpackPSIMD = buildPackages.callPackage ../tests/nnpack-psimd.nix {
+          inherit (finalAttrs) src;
+          nnpackPatch = ./nnpack-psimd-array-contracts.patch;
+        };
+      }
+      // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        csrReductions = (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+          name = "torch-csr-reductions";
+          libraries = [ finalAttrs.finalPackage ];
+        } (builtins.readFile ../tests/csr-reductions.py);
+      };
   };
 
   meta = {

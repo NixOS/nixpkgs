@@ -1,0 +1,369 @@
+Subject: [PATCH] Fix CSR reduction promotion, output dtype, and value strides
+
+Resolve sum/product output dtype before dispatch, preserve explicit dtype in
+accumulator allocation, and project the all-axis CUDA reduction into its
+accumulator type. Products use the accumulator type on CPU and CUDA too.
+Keep empty results structurally valid and retain both reduced dimensions.
+Normalize values in pointer-based reducers: CSR values may be strided, unlike
+its validated unit-stride index arrays. TensorIterator already handles strides.
+
+diff --git a/aten/src/ATen/SparseCsrTensorUtils.h b/aten/src/ATen/SparseCsrTensorUtils.h
+--- a/aten/src/ATen/SparseCsrTensorUtils.h
++++ b/aten/src/ATen/SparseCsrTensorUtils.h
+@@ -425,15 +425,15 @@
+ template <typename acc_t, typename scalar_t>
+ inline std::tuple<Tensor, Tensor> create_acc_buffer(
+     TensorOptions option,
+-    ScalarType type,
+     int64_t nnz = -1) {
++  // The caller has already resolved promotion and any explicit output dtype.
++  // A wider accumulator must not change the requested result dtype.
+   Tensor new_values, new_values_acc;
+   constexpr bool need_acc = !std::is_same_v<scalar_t, acc_t>;
+-  bool is_integral = at::isIntegralType(type, /*includeBool=*/true);
+   if constexpr (need_acc) {
+     auto acc_dtype = CppTypeToScalarType<acc_t>::value;
+     new_values_acc = at::empty({}, option.dtype(acc_dtype));
+-    new_values = is_integral ? new_values_acc : at::empty({}, option);
++    new_values = at::empty({}, option);
+   } else {
+     new_values = new_values_acc = at::empty({}, option);
+   }
+diff --git a/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp b/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
+--- a/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
++++ b/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
+@@ -10,6 +10,7 @@
+ #include <ATen/native/BinaryOps.h>
+ #include <ATen/native/CPUBlas.h>
+ #include <ATen/native/Resize.h>
++#include <ATen/native/ReduceOpsUtils.h>
+ #include <ATen/native/SparseTensorUtils.h>
+ #include <ATen/native/TensorConversions.h>
+ #include <ATen/native/mkl/SparseBlasImpl.h>
+@@ -1072,7 +1073,7 @@
+    */
+ 
+   Tensor col_indices = sparse.col_indices();
+-  Tensor values = sparse.values();
++  Tensor values = sparse.values().contiguous();
+   auto numel = values.numel();
+ 
+   /*
+@@ -1093,7 +1094,7 @@
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+   auto acc_buffer = at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+-      values.options(), values.scalar_type(), nnz);
++      values.options(), nnz);
+   Tensor new_values = std::get<0>(acc_buffer);
+   Tensor new_values_acc = std::get<1>(acc_buffer);
+   new_values_acc.fill_(rop.identity());
+@@ -1169,7 +1170,7 @@
+ 
+   Tensor crow_indices = sparse.crow_indices();
+   auto ioptions = crow_indices.options();
+-  Tensor values = sparse.values();
++  Tensor values = sparse.values().contiguous();
+   auto nrows = sparse.size(0);
+ 
+   Tensor new_crow_indices = at::empty({crow_indices.numel()}, ioptions);
+@@ -1181,7 +1182,7 @@
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+   auto acc_buffer = at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+-      values.options(), values.scalar_type());
++      values.options());
+   Tensor new_values = std::get<0>(acc_buffer);
+   Tensor new_values_acc = std::get<1>(acc_buffer);
+ 
+@@ -1240,7 +1241,7 @@
+ Tensor reduce_sparse_csr_dim01_cpu_template(const Tensor& sparse, ReductionOp rop) {
+ 
+   auto ioptions = sparse.col_indices().options();
+-  Tensor values = sparse.values();
++  Tensor values = sparse.values().contiguous();
+   auto numel = values.numel();
+   auto nnz = std::min<int64_t>(1, numel);
+ 
+@@ -1265,7 +1266,7 @@
+                                        numel,
+                                        internal::GRAIN_SIZE,
+                                        rop.identity(),
+-                                       [&](int64_t i_start, int64_t i_end, scalar_t identity) {
++                                       [&](int64_t i_start, int64_t i_end, acc_t identity) {
+                                          acc_t res = acc_t(identity);
+                                          for (int64_t i=i_start; i<i_end; i++) {
+                                            acc_t val = acc_t(values_ptr[i]);
+@@ -1277,16 +1278,12 @@
+ 
+   Tensor new_col_indices = at::zeros({nnz}, ioptions);
+   Tensor new_crow_indices = at::tensor(ArrayRef<int64_t>{0, nnz}, ioptions);
+-  Tensor new_values;
+-  auto result_dtype = at::isIntegralType(values.scalar_type(), /*includeBool=*/true) ? ScalarType::Long : values.scalar_type();
++  Tensor new_values = at::empty({nnz}, values.options());
+   if (numel > 0) {
+-    new_values = at::empty({1}, values.options().dtype(result_dtype));
+-    new_values.fill_(value);
+-  } else {
+-    new_values = at::empty({}, values.options().dtype(result_dtype));
++    new_values.fill_(scalar_t(value));
+   }
+   return at::native::_sparse_csr_tensor_unsafe(new_crow_indices, new_col_indices, new_values,
+-                                               {1, std::min<int64_t>(1, sparse.size(1))},
++                                               {1, 1},
+                                                new_values.scalar_type(),
+                                                sparse.layout(),
+                                                new_values.device());
+@@ -1347,11 +1344,11 @@
+ }  // namespace
+ 
+ Tensor _sparse_csr_sum_cpu(const Tensor& input, IntArrayRef dims_to_sum, bool keepdim, std::optional<ScalarType> dtype) {
+-  ScalarType dtype_ = dtype.value_or(input.scalar_type());
++  ScalarType dtype_ = get_dtype_from_self(input, dtype, /*promote_integers=*/true);
+   Tensor input_ = at::sparse_csr::to_type(input, dtype_);
+   Tensor result;
+-  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND2(
+-      kHalf, kBFloat16, input_.scalar_type(), "_sparse_csr_sum_cpu", [&] {
++  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND3(
++      kHalf, kBFloat16, kBool, input_.scalar_type(), "_sparse_csr_sum_cpu", [&] {
+         // Set `is_cuda` = `true` in acc_type in CPU backend. Because the accumulate type
+         // of float should be float in current scenario. In CUDA, float is the accumulate type
+         // of float, while in CPU, double is the accumulate type of float.
+@@ -1363,13 +1360,14 @@
+ }
+ 
+ Tensor _sparse_csr_prod_cpu(const Tensor& input, IntArrayRef dims_to_reduce, bool keepdim, std::optional<ScalarType> dtype) {
+-  ScalarType dtype_ = dtype.value_or(input.scalar_type());
+-  Tensor input_ = input.to(dtype_);
++  ScalarType dtype_ = get_dtype_from_self(input, dtype, /*promote_integers=*/true);
++  Tensor input_ = at::sparse_csr::to_type(input, dtype_);
+   Tensor result;
+-  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND2(
+-    kHalf, kBFloat16, input_.scalar_type(), "_sparse_csr_prod_cpu",
++  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND3(
++    kHalf, kBFloat16, kBool, input_.scalar_type(), "_sparse_csr_prod_cpu",
+     [&] {
+-      result = reduce_sparse_csr_cpu_template<scalar_t>(input_, dims_to_reduce, keepdim, ReductionMulOp<scalar_t>());
++      using acc_t = at::acc_type<scalar_t, true>;
++      result = reduce_sparse_csr_cpu_template<scalar_t>(input_, dims_to_reduce, keepdim, ReductionMulOp<acc_t>());
+     });
+   return result;
+ }
+diff --git a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+--- a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
++++ b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+@@ -8,6 +8,7 @@
+ #include <ATen/WrapDimUtilsMulti.h>
+ #include <ATen/native/BinaryOps.h>
+ #include <ATen/native/Resize.h>
++#include <ATen/native/ReduceOpsUtils.h>
+ #include <ATen/native/SparseTensorUtils.h>
+ #include <algorithm>
+ #include <ATen/AccumulateType.h>
+@@ -476,7 +477,7 @@
+   */
+ 
+   Tensor col_indices = sparse.col_indices();
+-  Tensor values = sparse.values();
++  Tensor values = sparse.values().contiguous();
+   auto ncols = sparse.size(1);
+   auto nnz = col_indices.numel();
+ 
+@@ -489,7 +490,7 @@
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+   auto acc_buffer = at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+-      values.options(), values.scalar_type(), new_nnz);
++      values.options(), new_nnz);
+   Tensor new_values = std::get<0>(acc_buffer);
+   Tensor new_values_acc = std::get<1>(acc_buffer);
+   scalar_t* values_ptr = values.data_ptr<scalar_t>();
+@@ -567,7 +568,7 @@
+   */
+   Tensor crow_indices = sparse.crow_indices();
+   auto ioptions = crow_indices.options();
+-  Tensor values = sparse.values();
++  Tensor values = sparse.values().contiguous();
+   auto nrows = sparse.size(0);
+   auto numel = values.numel();
+ 
+@@ -580,7 +581,7 @@
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+   auto acc_buffer = at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+-      values.options(), values.scalar_type());
++      values.options());
+   Tensor new_values = std::get<0>(acc_buffer);
+   Tensor new_values_acc = std::get<1>(acc_buffer);
+ 
+@@ -631,21 +632,20 @@
+   auto numel = values.numel();
+   auto nnz = std::min<int64_t>(1, numel);
+ 
+-  auto result_dtype = at::isIntegralType(values.scalar_type(), /*includeBool=*/true) ? ScalarType::Long : values.scalar_type();
+-  Tensor new_values, new_values_acc;
++  using acc_t = at::acc_type<scalar_t, true>;
++  auto acc_buffer = at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
++      values.options(), nnz);
++  Tensor new_values = std::get<0>(acc_buffer);
++  Tensor new_values_acc = std::get<1>(acc_buffer);
+   if (numel > 0) {
+-    new_values = at::empty({1}, values.options().dtype(result_dtype));
+-    new_values_acc = at::empty({1}, values.options());
+     auto iter = TensorIterator::reduce_op(new_values_acc, values);
+-    gpu_reduce_kernel<scalar_t, scalar_t>(iter, func_wrapper<scalar_t>(rop), rop.identity_cpu());
+-    new_values.copy_(new_values_acc);
+-  } else {
+-    new_values = at::empty({}, values.options().dtype(result_dtype));
++    gpu_reduce_kernel<scalar_t, acc_t>(iter, func_wrapper<acc_t>(rop), rop.identity_cpu());
++    copy_from_acc_buffer(new_values, new_values_acc);
+   }
+   Tensor new_col_indices = at::zeros({nnz}, ioptions);
+   Tensor new_crow_indices = at::tensor(ArrayRef<int64_t>{0, nnz}, ioptions);
+   return at::native::_sparse_csr_tensor_unsafe(new_crow_indices, new_col_indices, new_values,
+-                                               {1, std::min<int64_t>(1, sparse.size(1))},
++                                               {1, 1},
+                                                new_values.scalar_type(),
+                                                sparse.layout(),
+                                                new_values.device());
+@@ -773,11 +773,11 @@
+ } // namespace
+ 
+ Tensor _sparse_csr_sum_cuda(const Tensor& input, IntArrayRef dims_to_sum, bool keepdim, std::optional<ScalarType> dtype) {
+-  ScalarType dtype_ = dtype.value_or(input.scalar_type());
++  ScalarType dtype_ = get_dtype_from_self(input, dtype, /*promote_integers=*/true);
+   Tensor input_ = at::sparse_csr::to_type(input, dtype_);
+   Tensor result;
+-  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND2(
+-      kHalf, kBFloat16, input_.scalar_type(), "_sparse_csr_sum_cuda", [&] {
++  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND3(
++      kHalf, kBFloat16, kBool, input_.scalar_type(), "_sparse_csr_sum_cuda", [&] {
+       // Set `is_cuda` = `true` in acc_type in CPU backend. Because the accumulate type
+       // of float should be float in current scenario. In CUDA, float is the accumulate type
+       // of float, while in CPU, double is the accumulate type of float.
+@@ -789,13 +789,14 @@
+ }
+ 
+ Tensor _sparse_csr_prod_cuda(const Tensor& input, IntArrayRef dims_to_reduce, bool keepdim, std::optional<ScalarType> dtype) {
+-  ScalarType dtype_ = dtype.value_or(input.scalar_type());
+-  Tensor input_ = input.to(dtype_);
++  ScalarType dtype_ = get_dtype_from_self(input, dtype, /*promote_integers=*/true);
++  Tensor input_ = at::sparse_csr::to_type(input, dtype_);
+   Tensor result;
+-  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND2(
+-    kHalf, kBFloat16, input_.scalar_type(), "_sparse_csr_prod_cuda",
++  AT_DISPATCH_ALL_TYPES_AND_COMPLEX_AND3(
++    kHalf, kBFloat16, kBool, input_.scalar_type(), "_sparse_csr_prod_cuda",
+     [&] {
+-      result = reduce_sparse_csr_cuda_template<scalar_t>(input_, dims_to_reduce, keepdim, ReductionMulOp<scalar_t>());
++      using acc_t = at::acc_type<scalar_t, true>;
++      result = reduce_sparse_csr_cuda_template<scalar_t>(input_, dims_to_reduce, keepdim, ReductionMulOp<acc_t>());
+     });
+   return result;
+ }
+diff --git a/test/test_sparse_csr.py b/test/test_sparse_csr.py
+--- a/test/test_sparse_csr.py
++++ b/test/test_sparse_csr.py
+@@ -2960,6 +2960,87 @@
+             run_test(shape, max(shape), index_dtype)
+             run_test(shape, shape[0] * shape[1], index_dtype)
+ 
++    @skipMeta
++    @dtypes(*all_types_and_complex_and(torch.half, torch.bool, torch.bfloat16))
++    @parametrize("dim", [(0,), (1,), (0, 1), (1, 0), (-1, -2), ()])
++    @parametrize("index_dtype", [torch.int32, torch.int64])
++    @parametrize("operation", ["sum", "prod"])
++    def test_reduction_dtype(self, device, dtype, dim, index_dtype, operation):
++        values = [1] * 257 if operation == "sum" else [8] * 3
++        if dtype == torch.int32:
++            values = [2**30] * 3 if operation == "sum" else [1024] * 4
++        elif dtype == torch.float16 and operation == "prod":
++            values = [256, 256, 1 / 256, 1 / 256]
++        normalized = tuple(axis % 2 for axis in dim) or (0, 1)
++        shape = (len(values), 1) if normalized == (0,) else (1, len(values))
++        dense = torch.tensor(values, device=device, dtype=dtype).reshape(shape)
++        csr = dense.to_sparse_csr()
++        csr = torch.sparse_csr_tensor(csr.crow_indices().to(index_dtype),
++                                      csr.col_indices().to(index_dtype), csr.values(),
++                                      size=shape, check_invariants=True)
++        op = torch._sparse_csr_sum if operation == "sum" else torch._sparse_csr_prod
++        for requested in (None, dtype, torch.float64):
++            result_dtype = requested or (
++                dtype if dtype.is_floating_point or dtype.is_complex else torch.int64)
++            acc_dtype = torch.float32 if result_dtype in (torch.half, torch.bfloat16) else result_dtype
++            reference = dense.to(result_dtype).to(acc_dtype)
++            if operation == "sum":
++                expected = reference.sum(dim=normalized, keepdim=True)
++            elif len(normalized) == 2:
++                expected = reference.flatten().prod().reshape(1, 1)
++            else:
++                expected = reference.prod(dim=normalized[0], keepdim=True)
++            result = op(csr, dim, True, dtype=requested)
++            self.assertEqual(result.dtype, result_dtype)
++            self.assertEqual(result.to_dense(), expected.to(result_dtype))
++
++    @skipMeta
++    @dtypes(*all_types_and_complex_and(torch.half, torch.bool, torch.bfloat16))
++    @parametrize("dim", [(0,), (1,), (0, 1)])
++    @parametrize("index_dtype", [torch.int32, torch.int64])
++    @parametrize("value_stride", [0, 2])
++    def test_reduction_strided_values(self, device, dtype, dim, index_dtype, value_stride):
++        if value_stride == 2:
++            data = [False, True, True, True, True, False, False] if dtype == torch.bool else [99, 2, 99, 3, 99, 5, 99]
++            values = torch.tensor(data, dtype=dtype, device=device)[1::2]
++        else:
++            data = [False, True, True] if dtype == torch.bool else [2, 99, 99]
++            values = torch.tensor(data, dtype=dtype, device=device)[:1].expand(3)
++        column = dim == (0,)
++        csr = torch.sparse_csr_tensor(
++            torch.arange(4, dtype=index_dtype, device=device) if column else
++                torch.tensor([0, 3], dtype=index_dtype, device=device),
++            torch.zeros(3, dtype=index_dtype, device=device) if column else
++                torch.arange(3, dtype=index_dtype, device=device),
++            values, size=(3, 1) if column else (1, 3), check_invariants=True)
++        self.assertEqual(csr.values().stride(), (value_stride,))
++        for operation, requested in itertools.product(("sum", "prod"), (None, dtype)):
++            op = torch._sparse_csr_sum if operation == "sum" else torch._sparse_csr_prod
++            expected = getattr(values.cpu(), operation)(dtype=requested).reshape(1, 1)
++            self.assertEqual(op(csr, dim, True, dtype=requested).to_dense().cpu(), expected)
++
++    @skipMeta
++    @dtypes(torch.int8, torch.float32)
++    @parametrize("shape", [(0, 0), (0, 3), (3, 0), (3, 4)])
++    @parametrize("dim", [(0,), (1,), (0, 1)])
++    @parametrize("index_dtype", [torch.int32, torch.int64])
++    def test_reduction_empty(self, device, dtype, shape, dim, index_dtype):
++        csr = torch.sparse_csr_tensor(
++            torch.zeros(shape[0] + 1, device=device, dtype=index_dtype),
++            torch.empty(0, device=device, dtype=index_dtype),
++            torch.empty(0, device=device, dtype=dtype), size=shape, check_invariants=True)
++        result_shape = tuple(1 if axis in dim else size for axis, size in enumerate(shape))
++        for op, requested in itertools.product(
++                (torch._sparse_csr_sum, torch._sparse_csr_prod), (None, dtype)):
++            result = op(csr, dim, True, dtype=requested)
++            torch._validate_sparse_compressed_tensor_args(
++                result.crow_indices(), result.col_indices(), result.values(),
++                result.shape, result.layout)
++            self.assertEqual(result.shape, result_shape)
++            self.assertEqual(result.values().numel(), 0)
++            self.assertEqual(result.dtype, requested or (
++                dtype if dtype.is_floating_point else torch.int64))
++
+     @skipIfTorchDynamo()
+     @skipMeta
+     @dtypes(*all_types_and_complex_and(torch.half, torch.bool, torch.bfloat16))
+diff --git a/torch/testing/_internal/opinfo/definitions/sparse.py b/torch/testing/_internal/opinfo/definitions/sparse.py
+--- a/torch/testing/_internal/opinfo/definitions/sparse.py
++++ b/torch/testing/_internal/opinfo/definitions/sparse.py
+@@ -353,11 +353,6 @@
+                     error_regex=("input_dim == 2 INTERNAL ASSERT"),
+                 )
+             if layout == torch.sparse_csr:
+-                if t_inp.dtype == torch.bool:
+-                    return ErrorInput(
+-                        sample,
+-                        error_regex=("_sparse_csr_sum_cpu not implemented for 'Bool'"),
+-                    )
+                 if t_inp.dtype == torch.complex32:
+                     return ErrorInput(
+                         sample,

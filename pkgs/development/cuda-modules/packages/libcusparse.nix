@@ -1,5 +1,7 @@
 {
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cudaAtLeast,
   lib,
   libnvjitlink,
@@ -29,6 +31,15 @@ buildRedist {
   buildInputs =
     # Dependency from 12.0 and on
     lib.optionals (cudaAtLeast "12.0") [ libnvjitlink ];
+
+  # Public headers include CUDA types; publish the same dependencies to
+  # stdenv and to pkg-config consumers.
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cusparse-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion}\nCflags:'
+  '';
 
   meta = {
     description = "GPU-accelerated basic linear algebra subroutines for sparse matrix computations for unstructured sparsity";

@@ -1,0 +1,27 @@
+--- a/fsspec/implementations/tests/test_cached.py
++++ b/fsspec/implementations/tests/test_cached.py
+@@ -772,8 +772,8 @@
+     assert fs.cat(f1) == data
+ 
+ 
+-def test_filecache_with_checks():
+-    import time
++def test_filecache_with_checks(mocker):
++    clock = mocker.patch("time.time", return_value=1_000_000.0)
+ 
+     origin = tempfile.mkdtemp()
+     cache1 = tempfile.mkdtemp()
+@@ -799,8 +799,11 @@
+     assert fs2.cat(f1) == data * 2  # changed, since origin changed
+     with fs2.open(f1) as f:
+         assert f.read() == data * 2  # read also sees new data
+-    time.sleep(0.11)  # allow cache details to expire
+-    assert fs.cat(f1) == data * 2  # changed, since origin changed
++    with open(f1, "wb") as f:
++        f.write(data * 3)
++    assert fs.cat(f1) == data * 2  # cached version has not expired
++    clock.return_value += 0.11  # allow cache details to expire
++    assert fs.cat(f1) == data * 3  # expired cache fetches the new version
+ 
+ 
+ @pytest.mark.parametrize("impl", ["filecache", "simplecache", "blockcache", "cached"])

@@ -21,7 +21,6 @@ let
     cmakeBool
     cmakeFeature
     getAttr
-    getInclude
     licenses
     maintainers
     optionalString
@@ -170,7 +169,6 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (getInclude cuda_nvcc)
     cuda_cudart
     cuda_profiler_api
     tensorrt

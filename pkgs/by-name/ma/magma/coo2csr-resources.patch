@@ -1,0 +1,122 @@
+--- a/sparse/control/magma_zmconvert.cpp
++++ b/sparse/control/magma_zmconvert.cpp
+@@ -182,6 +182,14 @@
+ 
+     cusparseHandle_t cusparseHandle = 0;
+     cusparseMatDescr_t descr = 0;
++#if CUDA_VERSION >= 7000
++    void *coo_workspace = NULL;
++    magma_index_t *coo_rows = NULL, *coo_permutation = NULL;
++#endif
++#if CUDA_VERSION >= 12000
++    cusparseSpVecDescr_t coo_permuted_values = NULL;
++    cusparseDnVecDescr_t coo_values = NULL;
++#endif
+     
+     // make sure the target structure is empty
+     magma_zmfree( B, queue );
+@@ -1888,8 +1896,6 @@
+             // CUSPARSE context //
+ 
+             size_t pBufferSizeInBytes = 0;
+-            void *pBuffer = NULL;
+-            int *P = NULL;
+ 
+             CHECK_CUSPARSE( cusparseCreate( &cusparseHandle ));
+             CHECK_CUSPARSE( cusparseSetStream( cusparseHandle, queue->cuda_stream() ));
+@@ -1897,49 +1903,45 @@
+             // end CUSPARSE context //
+ 
+             CHECK( magma_zmalloc( &B->dval, B->nnz ));
+-            CHECK( magma_index_malloc( &B->drowidx, B->nnz ));
++            CHECK( magma_index_malloc( &coo_rows, B->nnz ));
+             CHECK( magma_index_malloc( &B->dcol, B->nnz ));
+             CHECK( magma_index_malloc( &B->drow, B->num_rows + 1 ));
+ 
+             magma_zcopyvector( A.nnz, A.dval, 1, B->dval, 1, queue );
+             magma_index_copyvector( A.nnz, A.dcol, 1, B->dcol, 1, queue );
+-            magma_index_copyvector( A.nnz, A.drowidx, 1, B->drowidx, 1, queue );
++            magma_index_copyvector( A.nnz, A.drowidx, 1, coo_rows, 1, queue );
+ 
+             // step 1: allocate buffer
+-            cusparseXcoosort_bufferSizeExt(cusparseHandle, m, n, nnz, B->drowidx, B->dcol, &pBufferSizeInBytes);
+-            CHECK( magma_malloc( &pBuffer, sizeof(char)* pBufferSizeInBytes ));
++            CHECK_CUSPARSE( cusparseXcoosort_bufferSizeExt(
++                cusparseHandle, m, n, nnz, coo_rows, B->dcol, &pBufferSizeInBytes ));
++            if (pBufferSizeInBytes > 0) {
++                CHECK( magma_malloc( &coo_workspace, pBufferSizeInBytes ));
++            }
+             // step 2: setup permutation vector P to identity
+-            CHECK( magma_index_malloc( &P, nnz ));
+-            cusparseCreateIdentityPermutation(cusparseHandle, nnz, P);
++            CHECK( magma_index_malloc( &coo_permutation, nnz ));
++            CHECK_CUSPARSE( cusparseCreateIdentityPermutation(cusparseHandle, nnz, coo_permutation) );
+ 
+             // step 3: sort COO format by Row
+-            cusparseXcoosortByRow(cusparseHandle, m, n, nnz, B->drowidx, B->dcol, P, pBuffer);
++            CHECK_CUSPARSE( cusparseXcoosortByRow(
++                cusparseHandle, m, n, nnz, coo_rows, B->dcol, coo_permutation, coo_workspace) );
+ 
+             // step 4: gather sorted cooVals
+ #if CUDA_VERSION >= 12000
+-            cusparseSpVecDescr_t vec_permutation;
+-            cusparseDnVecDescr_t vec_values;
+-            CHECK_CUSPARSE( cusparseCreateSpVec(&vec_permutation, A.nnz, A.nnz,
+-                                                P, B->dval,
++            CHECK_CUSPARSE( cusparseCreateSpVec(&coo_permuted_values, A.nnz, A.nnz,
++                                                coo_permutation, B->dval,
+                                                 CUSPARSE_INDEX_32I,
+                                                 CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F) );
+-            CHECK_CUSPARSE( cusparseCreateDnVec(&vec_values, A.nnz, A.dval, CUDA_C_64F) );
+-            CHECK_CUSPARSE( cusparseGather(cusparseHandle, vec_values, vec_permutation) );
+-            
+-            // destroy matrix/vector descriptors
+-            CHECK_CUSPARSE( cusparseDestroySpVec(vec_permutation) );
+-            CHECK_CUSPARSE( cusparseDestroyDnVec(vec_values) );
++            CHECK_CUSPARSE( cusparseCreateDnVec(&coo_values, A.nnz, A.dval, CUDA_C_64F) );
++            CHECK_CUSPARSE( cusparseGather(cusparseHandle, coo_values, coo_permuted_values) );
+ #else
+-            cusparseZgthr(cusparseHandle, nnz, A.dval, B->dval, P, CUSPARSE_INDEX_BASE_ZERO);
++            CHECK_CUSPARSE( cusparseZgthr(
++                cusparseHandle, nnz, A.dval, B->dval, coo_permutation, CUSPARSE_INDEX_BASE_ZERO) );
+ #endif
+ 
+             // conversion using CUSPARSE
+-            cusparseXcoo2csr( cusparseHandle, B->drowidx,
++            CHECK_CUSPARSE( cusparseXcoo2csr( cusparseHandle, coo_rows,
+                               A.nnz, A.num_rows, B->drow,
+-                              CUSPARSE_INDEX_BASE_ZERO );
+-            magma_free( B->drowidx );
+-            magma_free( pBuffer );
+-            magma_free( P );
++                              CUSPARSE_INDEX_BASE_ZERO ));
+ #else
+                 printf("error: conversion on GPU only supported for CUDA version >= 7.0.\n");
+ 
+@@ -1955,6 +1957,26 @@
+     }
+ 
+ cleanup:
++#if CUDA_VERSION >= 12000
++    if (coo_permuted_values != NULL) {
++        magma_int_t cleanup_info = cusparse2magma_error( cusparseDestroySpVec( coo_permuted_values ));
++        if (info == MAGMA_SUCCESS) info = cleanup_info;
++    }
++    if (coo_values != NULL) {
++        magma_int_t cleanup_info = cusparse2magma_error( cusparseDestroyDnVec( coo_values ));
++        if (info == MAGMA_SUCCESS) info = cleanup_info;
++    }
++#endif
++#if CUDA_VERSION >= 7000
++    // These are conversion scratch arrays, not part of the returned CSR matrix.
++    void *coo_allocations[] = { coo_workspace, coo_rows, coo_permutation };
++    for (void *allocation : coo_allocations) {
++        if (allocation != NULL) {
++            magma_int_t cleanup_info = magma_free( allocation );
++            if (info == MAGMA_SUCCESS) info = cleanup_info;
++        }
++    }
++#endif
+     cusparseDestroyMatDescr(descr);
+     cusparseDestroy(cusparseHandle);
+     descr = NULL;

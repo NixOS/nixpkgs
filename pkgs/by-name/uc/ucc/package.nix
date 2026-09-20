@@ -56,6 +56,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Cross installs cannot run HOST's shared-library cache updater on BUILD.
+  ${if effectiveStdenv.buildPlatform != effectiveStdenv.hostPlatform then "installFlags" else null} =
+    [ "LIBTOOLFLAGS=--no-finish" ];
+
   # NOTE: We use --replace-quiet because not all Makefile.am files contain /bin/bash.
   postPatch = ''
     for comp in $(find src/components -name Makefile.am); do
@@ -89,9 +93,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   env.LDFLAGS = toString (
     optionals enableCuda [
       # Fake libcuda.so (the real one is deployed impurely)
-      "-L${getOutput "stubs" cuda_cudart}/lib/stubs"
+      "-L${getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs"
       # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${getOutput "stubs" cuda_nvml_dev}/lib/stubs"
+      "-L${getOutput cuda_nvml_dev.outputStubs cuda_nvml_dev}/lib/stubs"
     ]
   );
 

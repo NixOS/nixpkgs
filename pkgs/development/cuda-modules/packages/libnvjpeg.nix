@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "libnvjpeg";
@@ -11,6 +15,14 @@ buildRedist {
     "static"
     "stubs"
   ];
+
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/nvjpeg-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' 'Requires: cudart-${cudaMajorMinorVersion}
+    Cflags:'
+  '';
 
   meta = {
     description = "Provides high-performance, GPU accelerated JPEG decoding functionality for image formats commonly used in deep learning and hyperscale multimedia applications";

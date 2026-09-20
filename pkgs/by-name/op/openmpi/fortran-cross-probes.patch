@@ -1,0 +1,116 @@
+--- a/config/ompi_fortran_get_sizeof.m4
++++ b/config/ompi_fortran_get_sizeof.m4
+@@ -76,9 +76,9 @@
+              AC_MSG_ERROR([Cannot continue])
+          fi
+ 
+-         AS_IF([test "$cross_compiling" = "yes"],
++         AS_IF([test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+              [AC_MSG_ERROR([Can not determine size of $2 when cross-compiling])],
+-             [OPAL_LOG_COMMAND([./conftest],
++             [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                  [AS_VAR_SET(type_var, [`cat conftestval | xargs`])],
+                  [AC_MSG_ERROR([Could not determine size of $2])])])
+ 
+--- a/config/ompi_fortran_get_alignment.m4
++++ b/config/ompi_fortran_get_alignment.m4
+@@ -122,10 +122,10 @@
+             AC_MSG_ERROR([Could not determine alignment of $1])
+         fi
+ 
+-        AS_IF([test "$cross_compiling" = "yes"],
++        AS_IF([test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+             [AC_MSG_RESULT([Error!])
+              AC_MSG_ERROR([Can not determine alignment of $1 when cross-compiling])],
+-            [OPAL_LOG_COMMAND([./conftest],
++            [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                 [AS_VAR_SET(type_var, [`cat conftestval`])],
+                 [AC_MSG_RESULT([Error!])
+                  AC_MSG_ERROR([Could not determine alignment of $1])])])
+@@ -165,9 +165,9 @@
+    CLOSE(10)
+ 
+ end program]])],
+-                          [AS_IF([test "$cross_compiling" = "yes"],
++                          [AS_IF([test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+                                  [AC_MSG_ERROR([Can not determine alignment of $1 when cross-compiling])],
+-                                 [OPAL_LOG_COMMAND([./conftest],
++                                 [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                                                    [AS_VAR_SET(type_var, [`cat conftestval`])],
+                                                    [AC_MSG_ERROR([Could not determine alignment of $1])])])],
+ 
+@@ -200,9 +200,9 @@
+    CLOSE(10)
+ 
+ end program]])],
+-                          [AS_IF([test "$cross_compiling" = "yes"],
++                          [AS_IF([test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+                                  [AC_MSG_ERROR([Can not determine common alignment when cross-compiling])],
+-                                 [OPAL_LOG_COMMAND([./conftest],
++                                 [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                                                    [AS_VAR_SET(ompi_cv_fortran_common_alignment, [`cat conftestval | xargs`])],
+                                                    [AC_MSG_ERROR([Could not determine common alignment])])])],
+ 
+--- a/config/ompi_fortran_get_kind_value.m4
++++ b/config/ompi_fortran_get_kind_value.m4
+@@ -37,13 +37,14 @@
+          else
+              AC_LANG_PUSH([Fortran])
+              value=
+-             AC_RUN_IFELSE(AC_LANG_PROGRAM(, [[
++             AC_LINK_IFELSE(AC_LANG_PROGRAM(, [[
+         use, intrinsic :: ISO_C_BINDING
+         implicit none
+         open(unit = 7, file = "conftest.out")
+         write(7, *) $1
+         close(7)
+-]]), [value=`cat conftest.out | awk '{print [$]1}'`], [value=no], [value=cross])
++]]), [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest$ac_exeext],
++                       [value=`cat conftest.out | awk '{print [$]1}'`], [value=no])], [value=no])
+              rm -f conftest.out
+          fi
+ 
+@@ -82,11 +83,12 @@
+                 test $ompi_fortran_happy -eq 1],
+                [rm -f conftest.out
+                 AC_LANG_PUSH([Fortran])
+-                AC_RUN_IFELSE(AC_LANG_PROGRAM(, [[
++                AC_LINK_IFELSE(AC_LANG_PROGRAM(, [[
+         open(8, file="conftest.out")
+         write(8, fmt="(I5)") selected_int_kind($1)
+         close(8)
+-]]), [outval=`cat conftest.out | awk '{print [$]1}'`], [outval=no], [outval=cross])
++]]), [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest$ac_exeext],
++                       [outval=`cat conftest.out | awk '{print [$]1}'`], [outval=no])], [outval=no])
+                 rm -f conftest.out
+                 AC_LANG_POP([Fortran])
+                ])
+--- a/config/ompi_fortran_get_value_true.m4
++++ b/config/ompi_fortran_get_value_true.m4
+@@ -111,9 +111,9 @@
+                           [AC_MSG_ERROR([Could not compile Fortran .TRUE. test.  Aborting.])
+                           ])
+ 
+-             AS_IF([test "$cross_compiling" = "yes"],
++             AS_IF([test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+                  [AC_MSG_ERROR([Can not determine value of .TRUE. when cross-compiling])],
+-                 [OPAL_LOG_COMMAND([./conftest],
++                 [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                      [value=`sed 's/  *//' conftestval`],
+                      [AC_MSG_ERROR([Could not determine value of Fotran .TRUE..  Aborting.])])])
+          fi
+--- a/config/ompi_fortran_check_real16_c_equiv.m4
++++ b/config/ompi_fortran_check_real16_c_equiv.m4
+@@ -137,10 +137,10 @@
+     AS_IF([test "$fortran_real16_happy" = "no"],
+         [AC_MSG_RESULT([Could not determine if REAL*16 bit-matches C type])],
+         # If it worked so far, try running to see what we get
+-        [AS_IF([test "$fortran_real16_happy" = "yes" && test "$cross_compiling" = "yes"],
++        [AS_IF([test "$fortran_real16_happy" = "yes" && test "$cross_compiling" = "yes" && test -z "$OMPI_FORTRAN_RUNNER"],
+              [AC_MSG_RESULT([Error!])
+               AC_MSG_ERROR([Can not determine if REAL*16 bit-matches C if cross compiling])],
+-             [OPAL_LOG_COMMAND([./conftest],
++             [OPAL_LOG_COMMAND([$OMPI_FORTRAN_RUNNER ./conftest],
+                  [fortran_real16_happy=`cat conftestval | xargs`],
+                  [AC_MSG_RESULT([Error!])
+                   AC_MSG_ERROR([Could not determine if REAL*16 bit-matches C type])

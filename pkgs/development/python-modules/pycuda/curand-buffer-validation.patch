@@ -1,0 +1,140 @@
+--- a/src/cpp/curand.hpp
++++ b/src/cpp/curand.hpp
+@@ -43,41 +43,64 @@
+   }
+ 
+ #if CUDAPP_CUDA_VERSION >= 3020
++  template <class T>
++  class curand_table_buffer
++  {
++    py_buffer_wrapper m_buffer;
++    int m_count;
++
++    public:
++      curand_table_buffer(py::object dst, int count) : m_count(count)
++      {
++        m_buffer.get(dst.ptr(), PyBUF_ANY_CONTIGUOUS | PyBUF_WRITABLE);
++        // Divide the byte capacity before comparing, avoiding count * sizeof(T)
++        // overflow. Direction-vector elements are themselves arrays.
++        if (count < 0 || count > m_buffer.m_buf.len
++            / static_cast<PYCUDA_BUFFER_SIZE_T>(sizeof(T)))
++        {
++          PyErr_SetString(PyExc_ValueError,
++              "count must be non-negative and fit in the destination buffer");
++          throw py::error_already_set();
++        }
++      }
++
++      void copy(const T *table)
++      {
++        char *dst = static_cast<char *>(m_buffer.m_buf.buf);
++        int remaining = m_count;
++        // cuRAND supplies 20,000 dimensions. Preserve PyCUDA's existing
++        // repetition of that table when more entries are requested.
++        while (remaining > 0)
++        {
++          int entries = remaining > 20000 ? 20000 : remaining;
++          size_t bytes = entries * sizeof(T);
++          memcpy(dst, table, bytes);
++          dst += bytes;
++          remaining -= entries;
++        }
++      }
++  };
++
+   void py_curand_get_direction_vectors(
+       curandDirectionVectorSet_t set, py::object dst, int count)
+   {
+-    int n = 0;
+-
+-    py_buffer_wrapper buf_wrapper;
+-    buf_wrapper.get(dst.ptr(), PyBUF_ANY_CONTIGUOUS | PyBUF_WRITABLE);
+-
+-    void *buf = buf_wrapper.m_buf.buf;
+-
+     if (CURAND_DIRECTION_VECTORS_32_JOEKUO6 == set
+ #if CUDAPP_CUDA_VERSION >= 4000
+       || CURAND_SCRAMBLED_DIRECTION_VECTORS_32_JOEKUO6 == set
+ #endif
+     ) {
++      curand_table_buffer<curandDirectionVectors32_t> buffer(dst, count);
+       curandDirectionVectors32_t *vectors;
+       CURAND_CALL_GUARDED(curandGetDirectionVectors32, (&vectors, set));
+-      while (count > 0) {
+-        int size = ((count > 20000) ? 20000 : count)*sizeof(curandDirectionVectors32_t);
+-        memcpy((unsigned int *)buf+n*20000*sizeof(curandDirectionVectors32_t)/sizeof(unsigned int), vectors, size);
+-	count -= size/sizeof(curandDirectionVectors32_t);
+-        n++;
+-      }
++      buffer.copy(vectors);
+     }
+ #if CUDAPP_CUDA_VERSION >= 4000
+     if (CURAND_DIRECTION_VECTORS_64_JOEKUO6 == set
+       || CURAND_SCRAMBLED_DIRECTION_VECTORS_64_JOEKUO6 == set) {
++      curand_table_buffer<curandDirectionVectors64_t> buffer(dst, count);
+       curandDirectionVectors64_t *vectors;
+       CURAND_CALL_GUARDED(curandGetDirectionVectors64, (&vectors, set));
+-      while (count > 0) {
+-        int size = ((count > 20000) ? 20000 : count)*sizeof(curandDirectionVectors64_t);
+-        memcpy((unsigned long long *)buf+n*20000*sizeof(curandDirectionVectors64_t)/sizeof(unsigned long long), vectors, size);
+-	count -= size/sizeof(curandDirectionVectors64_t);
+-        n++;
+-      }
++      buffer.copy(vectors);
+     }
+ #endif
+   }
+@@ -86,49 +109,20 @@
+ #if CUDAPP_CUDA_VERSION >= 4000
+   void py_curand_get_scramble_constants32(py::object dst, int count)
+   {
+-    int n = 0;
+-
+-    py_buffer_wrapper buf_wrapper;
+-    buf_wrapper.get(dst.ptr(), PyBUF_ANY_CONTIGUOUS | PyBUF_WRITABLE);
+-
+-    void *buf = buf_wrapper.m_buf.buf;
+-    PYCUDA_BUFFER_SIZE_T len = buf_wrapper.m_buf.len;
+-
++    curand_table_buffer<unsigned int> buffer(dst, count);
+     unsigned int *vectors;
+     CURAND_CALL_GUARDED(curandGetScrambleConstants32, (&vectors));
+-// Documentation does not mention number of dimensions
+-// Assuming the same as in getDirectionVectors*
+-    while (count > 0) {
+-      int size = ((count > 20000) ? 20000 : count)*sizeof(unsigned int);
+-      memcpy((unsigned int *)buf+n*20000, vectors, size);
+-      count -= size/sizeof(unsigned int);
+-      n++;
+-    }
++    buffer.copy(vectors);
+   }
+ 
+   void py_curand_get_scramble_constants64(py::object dst, int count)
+   {
+-    int n = 0;
+-
+-    py_buffer_wrapper buf_wrapper;
+-    buf_wrapper.get(dst.ptr(), PyBUF_ANY_CONTIGUOUS | PyBUF_WRITABLE);
+-
+-    void *buf = buf_wrapper.m_buf.buf;
+-    PYCUDA_BUFFER_SIZE_T len = buf_wrapper.m_buf.len;
+-
++    curand_table_buffer<unsigned long long> buffer(dst, count);
+     unsigned long long *vectors;
+     CURAND_CALL_GUARDED(curandGetScrambleConstants64, (&vectors));
+-// Documentation does not mention number of dimensions
+-// Assuming the same as in getDirectionVectors*
+-    while (count > 0) {
+-      int size = ((count > 20000) ? 20000 : count)*sizeof(unsigned long long);
+-      memcpy((unsigned long long *)buf+n*20000, vectors, size);
+-      count -= size/sizeof(unsigned long long);
+-      n++;
+-    }
++    buffer.copy(vectors);
+   }
+ #endif
+ } }
+ 
+ #endif
+-

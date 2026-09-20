@@ -1,4 +1,4 @@
-{ buildRedist }:
+{ buildRedist, openssl }:
 buildRedist {
   redistName = "cuda";
   pname = "cuda_compat";
@@ -6,6 +6,14 @@ buildRedist {
   # NOTE: Using multiple outputs with symlinks causes build cycles.
   # To avoid that (and troubleshooting why), we just use a single output.
   outputs = [ "out" ];
+
+  buildInputs = [ openssl ];
+
+  # As in nvidia-x11, keep the OpenSSL 3 PKCS#11 module and discard the unused
+  # alternative linked against OpenSSL 1.1.
+  postPatch = ''
+    rm -f compat/libnvidia-pkcs11.so*
+  '';
 
   autoPatchelfIgnoreMissingDeps = [
     "libnvdla_runtime.so"

@@ -1,5 +1,7 @@
 {
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cuda_nvrtc,
   cudaAtLeast,
   lib,
@@ -26,6 +28,17 @@ buildRedist {
     "static"
     "stubs"
   ];
+
+  # Public headers include CUDA types; publish the same dependencies to
+  # stdenv and to pkg-config consumers.
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cufft-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion}\nCflags:'
+    substituteInPlace share/pkgconfig/cufftw-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion}\nCflags:'
+  '';
 
   meta = {
     description = "High-performance FFT product CUDA library";

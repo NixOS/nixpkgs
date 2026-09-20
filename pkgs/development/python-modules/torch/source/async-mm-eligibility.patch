@@ -1,0 +1,79 @@
+Keep the Hopper AsyncMM specialization behind its actual eligibility requirements.
+
+--- a/torch/distributed/_symmetric_memory/__init__.py
++++ b/torch/distributed/_symmetric_memory/__init__.py
+@@ -880,7 +880,10 @@
+         A, out = _fused_all_gather_matmul_native(
+             A_shard.flatten(0, -2), Bs[0], group_name
+         )
+-        return A.view(*leading_dims, -1), [out.view(*leading_dims, -1)]
++        return (
++            A.view(*leading_dims, -1) if return_A else None,
++            [out.view(*leading_dims, -1)],
++        )
+ 
+     if _should_use_multimem_all_gather_matmul(
+         A_shard, gather_dim, group_name, return_A
+@@ -907,20 +910,41 @@
+     gather_dim: int,
+     group_name: c10d.GroupName,
+ ) -> bool:
++    # This specialization uses Hopper-only WGMMA, not the portable MMA path.
++    if (
++        os.getenv("TORCH_SYMM_MEM_ENABLE_NATIVE_ASYNC_TP") != "1"
++        or os.name == "nt"
++        or torch.version.hip is not None
++        or A_shard.device.type != "cuda"
++        or torch.cuda.get_device_capability(A_shard.device) != (9, 0)
++        or not {"sm_90a", "compute_90a"}.intersection(torch.cuda.get_arch_list())
++        or A_shard.dtype != torch.bfloat16
++        or len(Bs) != 1
++    ):
++        return False
++
++    B = Bs[0]
+     group = c10d._resolve_process_group(group_name)
+     local_M = math.prod(A_shard.shape[:-1])
+ 
+     return (
+-        "TORCH_SYMM_MEM_ENABLE_NATIVE_ASYNC_TP" in os.environ
+-        and A_shard.is_contiguous()
++        A_shard.is_contiguous()
+         and gather_dim == 0
+-        # _async_input_mm requires local_M to be divisible by world_size.
+-        and local_M % group.size() == 0
+-        # _async_input_mm outperforms the decomposition-based approach when the
+-        # global M is small.
++        # Each signalled chunk must consist of whole 128-row kernel tiles.
++        and local_M % 128 == 0
++        # The native kernel outperforms decomposition when the global M is small.
+         and 2048 < local_M * group.size() <= 4096
+-        # _async_input_mm only supports a single B.
+-        and len(Bs) == 1
++        and B.dim() == 2
++        and B.device == A_shard.device
++        and B.dtype == A_shard.dtype
++        and B.shape[0] == A_shard.shape[-1]
++        and (B.is_contiguous() or B.t().is_contiguous())
++        # The BF16 TMA loads and output stores require 16-byte alignment.
++        and B.shape[0] > 0
++        and B.shape[0] % 8 == 0
++        and B.shape[1] > 0
++        and B.shape[1] % 8 == 0
++        and B.data_ptr() % 16 == 0
+     )
+ 
+ 
+--- a/torch/csrc/distributed/c10d/cuda/AsyncMM.cu
++++ b/torch/csrc/distributed/c10d/cuda/AsyncMM.cu
+@@ -241,6 +241,10 @@
+   TORCH_CHECK_EQ(out.sizes()[1], N);
+ 
+ #if defined(BUILD_ASYNC_MM_KERNEL)
++  const auto* props = at::cuda::getDeviceProperties(a.get_device());
++  TORCH_CHECK(
++      props->major == 9 && props->minor == 0,
++      "async_input_mm requires a Hopper (sm_90a) GPU");
+   const bool is_b_row_major = b.is_contiguous();
+   DISPATCH_LAYOUT_B(is_b_row_major, [&]() {
+     // TODO(yifu): tuning

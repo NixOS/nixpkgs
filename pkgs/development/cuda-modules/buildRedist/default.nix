@@ -5,22 +5,21 @@
   autoAddCudaCompatRunpath,
   autoAddDriverRunpath,
   autoPatchelfHook,
-  backendStdenv,
+  cudaComponentHook,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
   fetchurl,
+  gccForLibs,
   lib,
   manifests,
-  markForCudatoolkitRootHook,
+  redistSystem,
   removeStubsFromRunpathHook,
   srcOnly,
-  stdenv,
   stdenvNoCC,
   zstd,
 }:
 let
-  inherit (backendStdenv) hostRedistSystem;
   inherit (_cuda.lib) getNixSystems _mkCudaVariant mkRedistUrl;
   inherit (lib.attrsets)
     foldlAttrs
@@ -70,7 +69,12 @@ let
 
   getSupportedReleases =
     let
-      desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
+      # Driver compatibility archives are tied to a CUDA minor release, while
+      # other redistributables commonly provide one variant for a whole major.
+      desiredCudaVariants = [
+        "cuda${cudaMajorMinorVersion}"
+        (_mkCudaVariant cudaMajorVersion)
+      ];
     in
     release:
     # Always show preference to the "source", then "linux-all" redistSystem if they are available, as they are
@@ -89,21 +93,26 @@ let
       in
       foldlAttrs (
         acc: name: value:
+        let
+          cudaVariant = findFirst (variant: hasAttr variant value) null desiredCudaVariants;
+        in
         acc
         # If the value is an attribute, and when hasCudaVariants is true it has the relevant CUDA variant,
         # then add it to the set.
-        // optionalAttrs (isAttrs value && (hasCudaVariants -> hasAttr desiredCudaVariant value)) {
-          ${name} = value.${desiredCudaVariant} or value;
+        // optionalAttrs (isAttrs value && (hasCudaVariants -> cudaVariant != null)) {
+          ${name} = if hasCudaVariants then value.${cudaVariant} else value;
         }
       ) { } release;
 
   getPreferredRelease =
     supportedReleases:
-    supportedReleases.source or supportedReleases.linux-all or supportedReleases.${hostRedistSystem}
+    supportedReleases.source or supportedReleases.linux-all or supportedReleases.${redistSystem}
       or null;
 in
 extendMkDerivation {
-  constructDrv = backendStdenv.mkDerivation;
+  # Redistributables are already compiled. Their packaging environment does
+  # not need NVCC's backend; the runtime for autoPatchelf is an explicit input.
+  constructDrv = stdenvNoCC.mkDerivation;
   # These attributes are moved to passthru to avoid changing derivation hashes.
   excludeDrvArgNames = [
     # Core
@@ -119,7 +128,7 @@ extendMkDerivation {
   ];
   extendDrvArgs =
     finalAttrs:
-    {
+    attrs@{
       # Core
       redistName,
       pname,
@@ -133,6 +142,11 @@ extendMkDerivation {
       nativeBuildInputs ? [ ],
       propagatedBuildInputs ? [ ],
       buildInputs ? [ ],
+
+      # CUDA component metadata
+      cudaComponentName ? finalAttrs.pname,
+      cudaComponentVersion ? finalAttrs.version,
+      cudaCompilerExecutable ? "",
 
       # Checking
       doInstallCheck ? true,
@@ -231,19 +245,26 @@ extendMkDerivation {
         else
           intersectLists outputs finalAttrs.passthru.expectedOutputs;
 
-      # NOTE: Because the `dev` output is special in Nixpkgs -- make-derivation.nix uses it as the default if
-      # it is present -- we must ensure that it brings in the expected dependencies. For us, this means that `dev`
-      # should include `bin`, `include`, and `lib` -- `static` is notably absent because it is quite large.
-      # We do not include `stubs`, as a number of packages contain stubs for libraries they already ship with!
-      # Only a few, like cuda_cudart, actually provide stubs for libraries we're missing.
-      # As such, these packages should override propagatedBuildOutputs to add `stubs`.
+      # Follow the same output roles as multiple-outputs.sh. Callers add required
+      # static archives or stubs; these are not implicit for every component.
+      # The hook removes each propagation destination from this required set.
       propagatedBuildOutputs =
-        intersectLists [
-          "bin"
-          "include"
-          "lib"
-        ] finalAttrs.outputs
-        ++ propagatedBuildOutputs;
+        let
+          required = [
+            finalAttrs.outputBin
+            finalAttrs.outputInclude
+            finalAttrs.outputLib
+          ]
+          ++ propagatedBuildOutputs;
+        in
+        unique (
+          if elem "dev" finalAttrs.outputs || finalAttrs.outputDev == "out" then
+            required
+          else
+            # Without a named dev output, getDev selects the aggregate out.
+            # It must activate outputDev without a reverse edge back to out.
+            subtractLists [ "out" ] required ++ [ finalAttrs.outputDev ]
+        );
 
       # src :: null | Derivation
       src = mapNullable (
@@ -261,8 +282,16 @@ extendMkDerivation {
         }
       ) (getPreferredRelease finalAttrs.passthru.supportedReleases);
 
-      # Required for the hook.
-      inherit cudaMajorMinorVersion cudaMajorVersion;
+      # Publish library outputs as independently versioned CUDA components.
+      # Compiler providers instead publish their outputBin with its TARGET role.
+      inherit
+        cudaComponentName
+        cudaComponentVersion
+        cudaCompilerExecutable
+        cudaMajorMinorVersion
+        cudaMajorVersion
+        ;
+      cudaPublishComponent = true;
 
       # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
       dontBuild = true;
@@ -278,7 +307,7 @@ extendMkDerivation {
         # allowing autoPatchelf to find and link against the stub files and rely on removeStubsFromRunpathHook to
         # automatically find and replace those references with ones to the driver link lib directory.
         autoAddDriverRunpath
-        markForCudatoolkitRootHook
+        cudaComponentHook
       ]
       # autoAddCudaCompatRunpath depends on cuda_compat and would cause
       # infinite recursion if applied to `cuda_compat` itself (beside the fact
@@ -291,13 +320,11 @@ extendMkDerivation {
       ++ nativeBuildInputs;
 
       buildInputs = [
-        # autoPatchelfHook will search for a libstdc++ and we're giving it
-        # one that is compatible with the rest of nixpkgs, even when
-        # nvcc forces us to use an older gcc
-        # NB: We don't actually know if this is the right thing to do
+        # NVIDIA's binaries require the GNU runtime independently of the
+        # compiler and C++ runtime selected for source-built packages.
         # NOTE: Not all packages actually need this, but it's easier to just add it than create overrides for nearly all
         # of them.
-        (lib.getLib stdenv.cc.cc)
+        (lib.getLib gccForLibs)
       ]
       ++ buildInputs;
 
@@ -326,9 +353,10 @@ extendMkDerivation {
         ''
           runHook preInstall
         ''
-        # Create the primary output, out, and move the other outputs into it.
+        # out and the development output may contain only nix-support files.
+        # Create both before fixup hooks traverse the declared outputs.
         + ''
-          mkdir -p "$out"
+          mkdir -p "$out" "''${!outputDev:?}"
           nixLog "moving tree to output out"
           mv * "$out"
         ''
@@ -350,7 +378,7 @@ extendMkDerivation {
         + optionalString finalAttrs.includeRemoveStubsFromRunpathHook ''
           nixLog "installing stub removal runpath hook"
           mkdir -p "''${!outputStubs:?}/nix-support"
-          printWords >>"''${!outputStubs:?}/nix-support/propagated-build-inputs" \
+          printWords >>"''${!outputStubs:?}/nix-support/propagated-native-build-inputs" \
             "${getDev removeStubsFromRunpathHook}"
         '';
 
@@ -433,15 +461,15 @@ extendMkDerivation {
         # NOTE: Use this when a failed assertion means evaluation can fail!
         platformAssertions =
           let
-            isSupportedRedistSystem = _redistSystemIsSupported hostRedistSystem finalAttrs.passthru.supportedRedistSystems;
+            isSupportedRedistSystem = _redistSystemIsSupported redistSystem finalAttrs.passthru.supportedRedistSystems;
           in
           [
             {
-              message = "src is null if and only if hostRedistSystem is unsupported";
+              message = "src is null if and only if redistSystem is unsupported";
               assertion = (finalAttrs.src == null) == !isSupportedRedistSystem;
             }
             {
-              message = "hostRedistSystem (${hostRedistSystem}) is supported (${builtins.toJSON finalAttrs.passthru.supportedRedistSystems})";
+              message = "redistSystem (${redistSystem}) is supported (${builtins.toJSON finalAttrs.passthru.supportedRedistSystems})";
               assertion = isSupportedRedistSystem;
             }
           ]
@@ -474,7 +502,7 @@ extendMkDerivation {
         teams = meta.teams or [ ] ++ [ teams.cuda ];
       };
     }
-    # Setup the outputNameVar variables to gracefully handle missing outputs.
+    # Default the outputNameVar variables while preserving explicit mappings.
     # NOTE: We cannot use expectedOutputs from finalAttrs.passthru because we will infinitely recurse: presence of
     # attributes in finalAttrs cannot depend on finalAttrs.
     // foldl' (
@@ -485,8 +513,9 @@ extendMkDerivation {
       acc
       // {
         ${outputNameVar} =
-          findFirst (flip elem finalAttrs.outputs) "out"
-            finalAttrs.passthru.outputNameVarFallbacks.${outputNameVar};
+          attrs.${outputNameVar} or (findFirst (flip elem finalAttrs.outputs) "out"
+            finalAttrs.passthru.outputNameVarFallbacks.${outputNameVar}
+          );
       }
     ) { } expectedOutputs;
 

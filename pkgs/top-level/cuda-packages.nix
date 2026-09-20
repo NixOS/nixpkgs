@@ -3,6 +3,7 @@
   callPackage,
   config,
   lib,
+  stdenv,
 }:
 let
   mkCudaPackages =
@@ -24,7 +25,8 @@ let
 
   cudaPackages_12_6 =
     let
-      inherit (cudaPackages_12_6.backendStdenv) hasJetsonCudaCapability hostPlatform;
+      inherit (cudaPackages_12_6.cudaConfig) hasJetsonCudaCapability;
+      inherit (stdenv) hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -51,7 +53,8 @@ let
 
   cudaPackages_12_8 =
     let
-      inherit (cudaPackages_12_8.backendStdenv) hasJetsonCudaCapability hostPlatform;
+      inherit (cudaPackages_12_8.cudaConfig) hasJetsonCudaCapability;
+      inherit (stdenv) hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -78,7 +81,8 @@ let
 
   cudaPackages_12_9 =
     let
-      inherit (cudaPackages_12_9.backendStdenv) hasJetsonCudaCapability hostPlatform;
+      inherit (cudaPackages_12_9.cudaConfig) hasJetsonCudaCapability;
+      inherit (stdenv) hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -108,7 +112,7 @@ let
 
   cudaPackages_13_0 =
     let
-      inherit (cudaPackages_13_0.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_0.cudaConfig) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -131,7 +135,7 @@ let
 
   cudaPackages_13_1 =
     let
-      inherit (cudaPackages_13_1.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_1.cudaConfig) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -154,7 +158,7 @@ let
 
   cudaPackages_13_2 =
     let
-      inherit (cudaPackages_13_2.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_2.cudaConfig) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -177,7 +181,7 @@ let
 
   cudaPackages_13_3 =
     let
-      inherit (cudaPackages_13_3.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_3.cudaConfig) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
@@ -200,7 +204,7 @@ let
 
   cudaPackages_13_4 =
     let
-      inherit (cudaPackages_13_4.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_4.cudaConfig) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.8.1";

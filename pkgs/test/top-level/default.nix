@@ -3,6 +3,9 @@ let
   nixpkgsFun = import ../../top-level;
 in
 lib.recurseIntoAttrs {
+  stageProjection = import ./stage-projection.nix { inherit lib pkgs nixpkgsFun; };
+  splicedPackageGraphs = import ./spliced-package-graphs.nix { inherit lib pkgs nixpkgsFun; };
+
   platformEquality =
     let
       configsLocal = [

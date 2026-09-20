@@ -1,0 +1,27 @@
+--- a/testing/testing_ztrsm_batched.cpp
++++ b/testing/testing_ztrsm_batched.cpp
+@@ -74,6 +74,12 @@
+ 
+     magma_opts opts( MagmaOptsBatched );
+     opts.parse_opts( argc, argv );
++    if (opts.version != 1 && opts.version != 2) {
++        fprintf(stderr, "--version must be 1 or 2 for trsm_batched\n");
++        opts.cleanup();
++        magma_finalize();
++        return EXIT_FAILURE;
++    }
+     batchCount = opts.batchcount;
+ 
+     double tol = opts.tolerance * lapackf77_dlamch("E");
+@@ -141,10 +147,10 @@
+ 
+                 magma_zset_pointer( dwork_array, dwork, lddb, 0, 0, dwork_batchSize, batchCount, opts.queue );
+                 magma_zset_pointer( dinvA_array, dinvA, magma_roundup( Ak, TRI_NB ), 0, 0, dinvA_batchSize, batchCount, opts.queue );
++                magmablas_zlaset( MagmaFull, lddb, N*batchCount, c_zero, c_zero, dwork, lddb, opts.queue );
+             }
+ 
+             memset( h_Bmagma, 0, batchCount*ldb*N*sizeof(magmaDoubleComplex) );
+-            magmablas_zlaset( MagmaFull, lddb, N*batchCount, c_zero, c_zero, dwork, lddb, opts.queue );
+ 
+             /* Initialize the matrices */
+             /* Factor A into LU to get well-conditioned triangular matrix.

@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withCuda [
     addDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
