@@ -4,35 +4,38 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   pnpmConfigHook,
   python3,
-  electron_42,
+  electron_44,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
 }:
 
 let
-  electron = electron_42;
-  pnpm = pnpm_11;
+  electron = electron_44;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.4";
+  version = "5.13.1";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0TQKQfjfA1Nn/xvtHF0t6i+whLkyu1kVwuZ62Z0AZgk=";
+    hash = "sha256-bYN63EQo+c0SIz3BBIwkAS1QqS7+sg7JdpoOekVYq5Q=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-D9Ge0Ao1fnVA1hk+K1ScZ3iCnl1+iqUtZSG5ACO2H2M=";
+    hash = "sha256-7F1mRrNgU9Ki7yfkz46LXgw10bY5roJP12oo4wSg91s=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
+    donationPage = "https://zulip.com/help/support-zulip-project";
+    downloadPage = "https://github.com/zulip/zulip-desktop";
+    changelog = "https://github.com/zulip/zulip-desktop/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
