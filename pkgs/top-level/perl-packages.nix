@@ -13350,7 +13350,7 @@ with self;
     };
     meta = {
       description = "Minimalist Fennec, the commonly used bits";
-      homepage = "http://open-exodus.net/projects/Fennec-Lite";
+      homepage = "https://metacpan.org/pod/Fennec::Lite";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
