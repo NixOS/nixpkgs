@@ -429,6 +429,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./fix-unpack-collabora.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "26.8" && lib.versionOlder version "26.8.999") [
+    ./26.8-add-dir-prereq.patch
   ];
 
   postPatch = ''
