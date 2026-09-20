@@ -212,8 +212,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   postInstall = ''
-    install resources/qtile-generic.desktop -Dt $out/share/xsessions
-    install resources/qtile-generic.desktop -Dt $out/share/wayland-sessions
+    install -Dm644 resources/qtile-generic.desktop $out/share/xsessions/qtile.desktop
+    install -Dm644 resources/qtile-generic.desktop $out/share/wayland-sessions/qtile.desktop
   '';
 
   meta = {
