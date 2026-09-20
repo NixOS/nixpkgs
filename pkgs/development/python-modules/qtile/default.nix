@@ -71,7 +71,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.36.0";
+  version = "0.37.1";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile-extras`
 
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
     owner = "qtile";
     repo = "qtile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yFh9h3djV52zdZjPYwOWaMzN9ZNhFdZYyxFJreoJBCk=";
+    hash = "sha256-n45e5/XvzKjH/ehatDPA+UWIlaiwSUhYnoPQOb5cLnA=";
   };
 
   build-system = [
