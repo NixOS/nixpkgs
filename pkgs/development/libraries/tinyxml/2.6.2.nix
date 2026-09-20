@@ -91,7 +91,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
+    homepage = "https://sourceforge.net/projects/tinyxml/";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
   };
