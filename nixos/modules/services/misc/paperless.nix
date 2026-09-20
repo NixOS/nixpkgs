@@ -38,11 +38,7 @@ let
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
   }
   // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
-    NLTK_DATA = cfg.package.nltkDataDir;
     TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
-  }
-  // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-    PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
   }
   // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
