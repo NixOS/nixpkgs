@@ -236,6 +236,7 @@ let
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
       DAMON_STAT = whenAtLeast "6.17" yes;
+      DAMON_STAT_ENABLED_DEFAULT = whenAtLeast "6.17" no;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
       MEMORY_FAILURE = yes;
 
