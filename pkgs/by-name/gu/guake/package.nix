@@ -101,7 +101,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Drop-down terminal for GNOME";
-    homepage = "http://guake-project.org";
+    homepage = "https://github.com/Guake/guake";
     license = lib.licenses.gpl2Plus;
     maintainers = [
       lib.maintainers.msteen
