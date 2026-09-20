@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "3.3.4"; # FIXME Can we check metadata again?
+  version = "3.2.5"; # FIXME Can we check metadata again?
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = "ha-philipsjs";
     tag = version;
-    hash = "sha256-Ui15KtTpyfVTHmiHNVx/99qiUtKLZeyOOtAuQvfnU8k=";
+    hash = "sha256-9zepMeD7N8gIzWOKZ1jQ3k7A7oVXAdnvRRAqh0IuD/A=";
   };
 
   build-system = [ setuptools ];
