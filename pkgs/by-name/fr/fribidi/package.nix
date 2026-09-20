@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  strictDeps = true;
+
   doCheck = true;
   nativeCheckInputs = [ python3 ];
 
