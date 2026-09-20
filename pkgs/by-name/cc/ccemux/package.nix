@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   jre,
   useCCTweaked ? true,
@@ -29,15 +30,6 @@ let
     url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
     hash = "sha256-gqWURXaOFD/4aZnjmgtKb0T33NbrOdyRTMmLmV42q+4=";
   };
-  desktopItem = makeDesktopItem {
-    name = "CCEmuX";
-    exec = "ccemux";
-    icon = desktopIcon;
-    comment = "A modular ComputerCraft emulator";
-    desktopName = "CCEmuX";
-    genericName = "ComputerCraft Emulator";
-    categories = [ "Emulator" ];
-  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,14 +39,28 @@ stdenv.mkDerivation (finalAttrs: {
   src = jar;
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ jre ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "CCEmuX";
+      exec = "ccemux";
+      icon = desktopIcon;
+      comment = "A modular ComputerCraft emulator";
+      desktopName = "CCEmuX";
+      genericName = "ComputerCraft Emulator";
+      categories = [ "Emulator" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,share/ccemux}
-    cp -r ${desktopItem}/share/applications $out/share/applications
 
     install -D ${finalAttrs.src} $out/share/ccemux/ccemux.jar
     install -D ${desktopIcon} $out/share/icons/hicolor/256x256/apps/ccemux.png
