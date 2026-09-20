@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-ldap";
-  version = "3.4.7";
+  version = "3.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
     tag = "python-ldap-${finalAttrs.version}";
-    hash = "sha256-uSP8c5gid5TBenBaNVdlteHatkctAafz6yFHuIYKiTY=";
+    hash = "sha256-EvLH8Yyx2iEde4OFk9MkzPtPr/n7NnGxAb8xJTo8Tn8=";
   };
 
   build-system = [
