@@ -13,7 +13,6 @@ outer@{
   nixosTests,
   installShellFiles,
   replaceVars,
-  removeReferencesTo,
   gd,
   geoip,
   perl,
@@ -44,6 +43,12 @@ outer@{
   preConfigure ? "",
   preInstall ? "",
   postInstall ? "",
+  stripDebugList ? [
+    "bin"
+    "sbin"
+    "lib"
+    "modules"
+  ],
   meta ? null,
   nginx-doc ? outer.nginx-doc,
   passthru ? { },
@@ -92,7 +97,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     installShellFiles
-    removeReferencesTo
   ]
   ++ nativeBuildInputs;
 
@@ -216,7 +220,7 @@ stdenv.mkDerivation {
   # Make all modules source trees writable
   + ''
     addModule() {
-      local dst="$NIX_BUILD_TOP/$(basename "$2")"
+      local dst="$NIX_BUILD_TOP/$(stripHash "$2")"
       cp --recursive "$2" "$dst"
       chmod --recursive +w "$dst"
       appendToVar configureFlags "$1=$dst"
@@ -281,20 +285,12 @@ stdenv.mkDerivation {
   ''
   + preInstall;
 
-  disallowedReferences = map (m: m.src) modules;
+  disallowedReferences = modules;
 
-  stripDebugList = [
-    "bin"
-    "sbin"
-    "lib"
-    "modules"
-  ];
+  inherit stripDebugList;
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (
-        m: "remove-references-to -t ${m.src} $(readlink -fn $out/bin/nginx)\n"
-      ) modules;
       dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
         shopt -s nullglob
         sofiles=("$out"/modules/*.so)
@@ -306,7 +302,7 @@ stdenv.mkDerivation {
         printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
       '';
     in
-    postInstall + noSourceRefs + dynamicPost;
+    postInstall + dynamicPost;
 
   passthru = {
     inherit modules dynamicModules;
