@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://www.c-amie.co.uk/software/analog/";
+    homepage = "https://github.com/c-amie/analog-ce";
     license = lib.licenses.gpl2Only;
     description = "Powerful tool to generate web server statistics";
     platforms = lib.platforms.all;
