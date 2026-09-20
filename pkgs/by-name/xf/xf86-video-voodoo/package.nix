@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OuKGgrdGIIUF6CHD1BwO7ZQgvcbhGHQETExv+Ra0X2E=";
   };
 
+  # Xorg loads helper modules after loading this driver, so their symbols must
+  # be resolved lazily.
+  hardeningDisable = [ "bindnow" ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
