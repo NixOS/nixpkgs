@@ -168,6 +168,13 @@ pkgs.lib.recurseIntoAttrs rec {
       "${./init-single-lines.vim}"
   '';
 
+  nvim_with_providers = neovim.override {
+    withPython3 = true;
+    withRuby = true;
+    withNodeJs = true;
+    withPerl = true;
+  };
+
   nvim_via_override = neovim.override {
     extraName = "-via-override";
     configure = {
