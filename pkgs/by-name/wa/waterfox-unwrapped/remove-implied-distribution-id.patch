@@ -1,0 +1,9 @@
+diff --git a/waterfox/moz.configure b/waterfox/moz.configure
+index fe4b5abe04d1..b0458c383519 100644
+--- a/waterfox/moz.configure
++++ b/waterfox/moz.configure
+@@ -6,4 +6,3 @@
+
+ imply_option("MOZ_APP_UA_NAME", "Firefox")
+ imply_option("MOZ_APP_PROFILE", "Waterfox")
+-imply_option("--with-distribution-id", "net.waterfox")
