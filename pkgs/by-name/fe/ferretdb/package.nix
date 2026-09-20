@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     description = "Truly Open Source MongoDB alternative";
     mainProgram = "ferretdb";
     changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${finalAttrs.version}";
-    homepage = "https://www.ferretdb.com/";
+    homepage = "https://github.com/FerretDB/FerretDB";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       noisersup
