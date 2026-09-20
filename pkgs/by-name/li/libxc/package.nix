@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library of exchange-correlation functionals for density-functional theory";
     mainProgram = "xc-info";
-    homepage = "https://www.tddft.org/programs/Libxc/";
+    homepage = "https://gitlab.com/libxc/libxc";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ markuskowa ];
