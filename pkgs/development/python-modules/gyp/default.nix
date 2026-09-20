@@ -42,7 +42,7 @@ buildPythonPackage {
   meta = {
     description = "Tool to generate native build files";
     mainProgram = "gyp";
-    homepage = "https://gyp.gsrc.io";
+    homepage = "https://chromium.googlesource.com/external/gyp";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
