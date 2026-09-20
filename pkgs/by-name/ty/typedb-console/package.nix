@@ -2,8 +2,18 @@
   lib,
   rustPlatform,
   fetchgit,
+  protobuf,
   testers,
 }:
+let
+  # Full protocol tree (same subdirectory-vendoring reason as the server
+  # package): the protocol build script compiles ../../proto/*.proto.
+  protocolFull = fetchgit {
+    url = "https://github.com/typedb/typedb-protocol.git";
+    rev = "cef7aaf8144b7534f47c9ca82db3fefc3b81d623";
+    hash = "sha256-6pSzWHMnTDtZm0jKgivikP8EWkD69ABTlsau8mf6tFg=";
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typedb-console";
   version = "3.13.0";
@@ -19,9 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # Patched-lock vendor hash, harvested from the fixed-output mismatch on
-  # the reviewed revision (console has no build scripts, so subtree-copy
-  # vendoring is complete for it).
+  # the reviewed revision. The protocol git dep needs its full tree (see
+  # the server package); the rest is complete under subtree vendoring.
   cargoHash = "sha256-A1WntvJhv23aqovtSTx9XQ4EwUy4TwdjY/ZM1mfBUW4=";
+
+  nativeBuildInputs = [ protobuf ];
+  PROTOC = "${protobuf}/bin/protoc";
 
   # Upstream console-3.13.0 tag ships a Cargo.lock pinning typedb-driver
   # 3.12.0 while the manifests require 3.12.3, so --locked resolution fails
@@ -30,6 +43,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # once a release tag carries a current lock. cargoPatches (not patches)
   # so the refresh also applies inside the vendor derivation.
   cargoPatches = [ ./lock-refresh.patch ];
+
+  # Same full-tree protocol patch as the server package (its build script
+  # reaches ../../proto). The lock updates offline; unit scope only, since
+  # the repo's integration tests need a running server.
+  postPatch = ''
+    cat >> Cargo.toml <<EOF
+    [patch."https://github.com/typedb/typedb-protocol"]
+    typedb-protocol = { path = "${protocolFull}/grpc/rust" }
+    EOF
+  '';
+
+  doCheck = true;
+  checkFlags = [
+    "--lib"
+    "--bins"
+  ];
 
   # This package ships the Console only (the task's "client"): the sibling
   # loader and typeql-check binaries stay in their own future packages.

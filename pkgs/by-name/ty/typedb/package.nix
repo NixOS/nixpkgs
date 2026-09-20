@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchgit,
   pkg-config,
   protobuf,
   lz4,
@@ -11,6 +12,16 @@
   snappy,
   testers,
 }:
+let
+  # Full protocol tree: its build script compiles ../../proto/*.proto,
+  # which subdirectory vendoring drops. Patched in as a path dependency
+  # below; the vendored partial copy stays unused.
+  protocolFull = fetchgit {
+    url = "https://github.com/typedb/typedb-protocol.git";
+    rev = "0373c1ae106b1f68e80edb06c1b7375075fe62e2";
+    hash = "sha256-vP1UttrPyKzFnE6b3/b5sA+vyld29/sEP82E2+hChic=";
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typedb";
   version = "3.13.0";
@@ -54,12 +65,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   PROTOC = "${protobuf}/bin/protoc";
 
+  # The git protocol dep cannot build from a subdirectory vendor copy, so
+  # it is patched to the full tree above. The lock therefore updates
+  # offline (path sources are local); --locked is not enforced.
+  postPatch = ''
+    cat >> Cargo.toml <<EOF
+    [patch."https://github.com/typedb/typedb-protocol"]
+    typedb-protocol = { path = "${protocolFull}/grpc/rust" }
+    EOF
+  '';
+
   # Unit suites only: lib/bins are hermetic, while the process-spawning
   # integration suites (assembly, behaviour, crash recovery) need excluded
   # infrastructure. Narrowed with evidence from remote builds.
   doCheck = true;
   checkFlags = [
-    "--locked"
     "--lib"
     "--bins"
   ];
