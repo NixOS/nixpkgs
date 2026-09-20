@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  env.JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+
   # Use the JDK for building
   gradleFlags = [
     "-Dfile.encoding=utf-8"
