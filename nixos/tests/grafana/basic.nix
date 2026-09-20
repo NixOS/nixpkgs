@@ -118,7 +118,6 @@ in
         sqlite.succeed(
             "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
-        sqlite.shutdown()
 
     with subtest("Successful API query as admin user with sqlite db listening on socket"):
         socket.wait_for_unit("grafana.service")
@@ -129,7 +128,6 @@ in
         socket.succeed(
             "curl -sSfN -u testadmin:snakeoilpwd http://[::1]/api/org/users | grep admin\@localhost"
         )
-        socket.shutdown()
 
     with subtest("Successful API query as admin user with postgresql db"):
         postgresql.wait_for_unit("grafana.service")
@@ -139,7 +137,6 @@ in
         postgresql.succeed(
             "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
-        postgresql.shutdown()
 
     with subtest("Successful API query as admin user with mysql db"):
         mysql.wait_for_unit("grafana.service")
@@ -149,6 +146,5 @@ in
         mysql.succeed(
             "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
-        mysql.shutdown()
   '';
 }
