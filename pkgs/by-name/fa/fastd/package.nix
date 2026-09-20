@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Fast and Secure Tunneling Daemon";
-    homepage = "https://projects.universe-factory.net/projects/fastd/wiki";
+    homepage = "https://github.com/neocturne/fastd";
     license = with lib.licenses; [
       bsd2
       bsd3
