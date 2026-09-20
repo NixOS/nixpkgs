@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Modern template for Django that covers Admin Section";
-    homepage = "https://appseed.us/product/datta-able/django";
+    homepage = null;
     changelog = "https://github.com/app-generator/django-admin-datta/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
