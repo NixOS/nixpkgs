@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Framework for creating cross-platform Rust apps leveraging Flutter";
-    homepage = "https://rinf.cunarist.com";
+    homepage = "https://github.com/cunarist/rinf";
     changelog = "https://github.com/cunarist/rinf/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Noah765 ];
