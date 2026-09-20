@@ -81,6 +81,7 @@ assert cpu.tests.cuda == { } && cpu.testers.cuda == { };
 assert gpu.tests.cuda.pjrt.requiredSystemFeatures == [ "cuda" ];
 assert gpu.tests.cuda.hlo.requiredSystemFeatures == [ "cuda" ];
 assert gpu.tests.cuda.nccl.requiredSystemFeatures == [ "cuda" ];
+assert gpu.tests.cuda.gpuCheck.requiredSystemFeatures == [ "cuda" ];
 assert gpu.tests.cuda.install.requiredSystemFeatures == [ ];
 assert gpu.tests.cuda.configure.requiredSystemFeatures == [ "big-parallel" ];
 assert gpu.tests.cuda.configureOverride.requiredSystemFeatures == [ "big-parallel" ];
