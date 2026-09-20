@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    homepage = "http://compression.ca/pbzip2/";
+    homepage = "https://launchpad.net/pbzip2";
     description = "Parallel implementation of bzip2 for multi-core machines";
     license = lib.licenses.bsd2;
     maintainers = [ ];
