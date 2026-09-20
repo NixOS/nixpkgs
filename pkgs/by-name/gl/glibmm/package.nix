@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ interface to the GLib library";
 
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gitlab.gnome.org/GNOME/glibmm";
 
     license = lib.licenses.lgpl2Plus;
 
