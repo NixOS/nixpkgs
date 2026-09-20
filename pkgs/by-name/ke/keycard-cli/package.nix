@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Command line tool and shell to manage keycards";
     mainProgram = "keycard-cli";
-    homepage = "https://keycard.status.im";
+    homepage = "https://keycard.tech/";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.zimbatm ];
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/keycard-cli.x86_64-darwin
