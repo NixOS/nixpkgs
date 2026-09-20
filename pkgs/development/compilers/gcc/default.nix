@@ -20,6 +20,7 @@
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
   enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
+  enableHostPie ? false,
   enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   texinfo ? null,
   perl ? null, # optional, for texi2pod (then pod2man)
@@ -141,6 +142,7 @@ let
       disableBootstrap
       disableGdbPlugin
       enableDefaultPie
+      enableHostPie
       enableLTO
       enableMultilib
       enablePlugin
