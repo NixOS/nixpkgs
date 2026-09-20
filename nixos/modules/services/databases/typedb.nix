@@ -129,50 +129,50 @@ in
       '';
     in
     lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ];
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [
-        1729
-        8000
-      ];
-    };
-
-    systemd.services.typedb = {
-      description = "TypeDB server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-
-      serviceConfig = {
-        ExecStart = lib.concatStringsSep " " (
-          [
-            "${cfg.package}/bin/typedb-server"
-            "--config=${configFile}"
-          ]
-          ++ cfg.extraFlags
-        );
-        DynamicUser = true;
-        StateDirectory = "typedb";
-        LogsDirectory = "typedb";
-        Restart = "on-failure";
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectClock = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        ProtectHostname = true;
-        RestrictAddressFamilies = [
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
+      networking.firewall = lib.mkIf cfg.openFirewall {
+        allowedTCPPorts = [
+          1729
+          8000
         ];
       };
+
+      systemd.services.typedb = {
+        description = "TypeDB server";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+
+        serviceConfig = {
+          ExecStart = lib.concatStringsSep " " (
+            [
+              "${cfg.package}/bin/typedb-server"
+              "--config=${configFile}"
+            ]
+            ++ cfg.extraFlags
+          );
+          DynamicUser = true;
+          StateDirectory = "typedb";
+          LogsDirectory = "typedb";
+          Restart = "on-failure";
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          ProtectHostname = true;
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+        };
+      };
     };
-  };
 
   meta.maintainers = with lib.maintainers; [ caniko ];
 }
