@@ -170,6 +170,7 @@ let
     fi
 
     extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
+    extraFlags+=(${lib.escapeShellArgs cfg.extraFlags})
 
     for iface in ''${INTERFACES-}; do
       extraFlags+=("--network-interface=$iface")
@@ -517,6 +518,7 @@ let
 
   dummyConfig = {
     extraVeths = { };
+    extraFlags = [ ];
     additionalCapabilities = [ ];
     ephemeral = false;
     timeoutStartSec = "1min";
@@ -1179,10 +1181,7 @@ in
                 ${optionalString cfg.autoStart ''
                   AUTO_START=1
                 ''}
-                EXTRA_NSPAWN_FLAGS="${
-                  mkBindFlags cfg.bindMounts
-                  + optionalString (cfg.extraFlags != [ ]) (" " + concatStringsSep " " cfg.extraFlags)
-                }"
+                EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
               '';
             }
           ) config.containers;
