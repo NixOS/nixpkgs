@@ -50,16 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
     "--skip=system::auto_update::test::test_should_check_whether_github_api_is_reachable"
     "--skip=system::environment::tests::test_system_environment_get_config_dir_err"
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-    "--skip=system::watcher::test::should_poll_file_removed"
-    "--skip=system::watcher::test::should_poll_file_update"
-    "--skip=system::watcher::test::should_poll_nothing"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/veeso/termscp/blob/v${finalAttrs.version}/CHANGELOG.md";
@@ -71,6 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fab
       gepbird
     ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux;
   };
 })
