@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   libusb1,
@@ -12,8 +12,7 @@ stdenv.mkDerivation {
   pname = "fw-ectool";
   version = "0-unstable-2024-04-23";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.howett.net";
+  src = fetchFromGitHub {
     owner = "DHowett";
     repo = "ectool";
     rev = "abdd574ebe3640047988cb928bb6789a15dd1390";
@@ -44,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "EC-Tool adjusted for usage with framework embedded controller";
-    homepage = "https://gitlab.howett.net/DHowett/ectool";
+    homepage = "https://github.com/DHowett/ectool";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.mkg20001 ];
     platforms = lib.platforms.linux;
