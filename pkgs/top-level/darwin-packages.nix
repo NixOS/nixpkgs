@@ -10,6 +10,7 @@ in
   libc,
   llvmPackages,
   makeScopeWithSplicing',
+  nixosTests,
   pkgs,
   preLibcHeaders,
   stdenv,
@@ -202,7 +203,13 @@ makeScopeWithSplicing' {
             system = null;
           };
         in
-        nixos.config.system.build.macos-builder-installer
+        nixos.config.system.build.macos-builder-installer.overrideAttrs (oldAttrs: {
+          passthru = oldAttrs.passthru // {
+            tests = (oldAttrs.passthru.tests or { }) // {
+              store-gc = nixosTests.linux-builder-vz-store-gc;
+            };
+          };
+        })
       ) { modules = [ ]; };
     }
   );
