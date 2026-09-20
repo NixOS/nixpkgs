@@ -7490,7 +7490,7 @@ with self;
     };
     meta = {
       description = "Perl extension for the RIPEMD-160 Hash function";
-      homepage = "https://wiki.github.com/toddr/Crypt-RIPEMD160";
+      homepage = "https://github.com/cpan-authors/Crypt-RIPEMD160";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -12530,7 +12530,7 @@ with self;
     propagatedBuildInputs = [ ArchiveZip ];
     meta = {
       description = "Create a new file in the Excel 2007+ XLSX format";
-      homepage = "https://jmcnamara.github.com/excel-writer-xlsx";
+      homepage = "https://jmcnamara.github.io/excel-writer-xlsx/";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -17963,7 +17963,7 @@ with self;
     installPhase = "make install";
     meta = {
       description = "Change and print terminal line settings";
-      homepage = "https://wiki.github.com/toddr/IO-Stty";
+      homepage = "https://github.com/cpan-authors/IO-Stty";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -30190,7 +30190,7 @@ with self;
     };
     meta = {
       description = "Base class for parsing regexes";
-      homepage = "https://wiki.github.com/toddr/Regexp-Parser";
+      homepage = "https://github.com/cpan-authors/Regexp-Parser";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -30246,7 +30246,7 @@ with self;
     ];
     meta = {
       description = "Utility functions for REST applications";
-      homepage = "https://jaldhar.github.com/REST-Utils";
+      homepage = "https://jaldhar.github.io/REST-Utils/";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
