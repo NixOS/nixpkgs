@@ -246,7 +246,6 @@ in
             networkmanager-openvpn
             networkmanager-sstp
             networkmanager-strongswan
-            networkmanager-vpnc
           ]
         '';
         description = ''
