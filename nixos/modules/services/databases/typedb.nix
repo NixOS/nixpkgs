@@ -81,21 +81,48 @@ in
     let
       # The server mandates a config file (it resolves a bare `config.yml`
       # against the executable directory, never CWD defaults), so the
-      # module renders one. CLI flags remain available via extraFlags and
-      # override file values.
+      # module renders one. This mirrors upstream `server/config.yml`
+      # section-complete (the loader validates presence); only the values
+      # below are managed, the rest stay at upstream defaults. CLI flags
+      # remain available via extraFlags and override file values.
       configFile = pkgs.writeText "typedb-config.yml" ''
         server:
           listen-address: "${cfg.listenAddress}"
+          advertise-address:
           http:
             enabled: true
             listen-address: "${cfg.httpListenAddress}"
+            advertise-address:
+          admin:
+            enabled: false
+            socket-path:
+
+          authentication:
+            token-expiration-seconds: 5000
+
+          encryption:
+            enabled: false
+            certificate:
+            certificate-key:
+            ca-certificate:
+
         storage:
           data-directory: "/var/lib/typedb/data"
+          rocksdb:
+            cache-size: 1gb
+            write-buffers-limit: 512mb
+          mvcc:
+            cleanup:
+              enabled: false
+              strategy: eager
+
         logging:
           directory: "/var/log/typedb"
+
         diagnostics:
           monitoring:
             enabled: ${lib.boolToString cfg.diagnosticsMonitoring}
+            port: 4104
           reporting:
             metrics: ${lib.boolToString cfg.diagnosticsReporting}
             errors: ${lib.boolToString cfg.diagnosticsReporting}
