@@ -127,6 +127,8 @@ let
       "x64"
     else if platform.isAarch64 then
       "arm64"
+    else if platform.isRiscV64 then
+      "riscv64"
     else
       throw "unsupported CPU for pdfium";
   chromiumToolchain =
@@ -456,6 +458,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-darwin"
       "x86_64-linux"
     ];

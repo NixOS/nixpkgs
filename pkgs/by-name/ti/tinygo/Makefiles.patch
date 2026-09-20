@@ -1,8 +1,8 @@
-diff --git a/GNUmakefile b/GNUmakefile
-index f078bde5..901c8e08 100644
---- a/GNUmakefile
-+++ b/GNUmakefile
-@@ -21,11 +21,6 @@ LLVM_VERSIONS = 19 18 17 16 15
+diff --git a/make/config.mk b/make/config.mk
+index 5b592d82..86481a21 100644
+--- a/make/config.mk
++++ b/make/config.mk
+@@ -20,11 +20,6 @@ LLVM_VERSIONS = 19 18 17 16 15
  errifempty = $(if $(1),$(1),$(error $(2)))
  detect = $(shell which $(call errifempty,$(firstword $(foreach p,$(2),$(shell command -v $(p) 2> /dev/null && echo $(p)))),failed to locate $(1) at any of: $(2)))
  toolSearchPathsVersion = $(1)-$(2)
@@ -14,9 +14,12 @@ index f078bde5..901c8e08 100644
  # First search for a custom built copy, then move on to explicitly version-tagged binaries, then just see if the tool is in path with its normal name.
  findLLVMTool = $(call detect,$(1),$(abspath llvm-build/bin/$(1)) $(foreach ver,$(LLVM_VERSIONS),$(call toolSearchPathsVersion,$(1),$(ver))) $(1))
  CLANG ?= $(call findLLVMTool,clang)
-@@ -942,10 +937,9 @@ endif
- wasmtest:
- 	$(GO) test ./tests/wasm
+diff --git a/make/release.mk b/make/release.mk
+index 89dc4c9e..b43bf814 100644
+--- a/make/release.mk
++++ b/make/release.mk
+@@ -1,9 +1,8 @@
+ # Build the release tarball and the Debian package.
  
 -build/release: tinygo gen-device $(if $(filter 1,$(USE_SYSTEM_BINARYEN)),,binaryen)
 +build/release:
@@ -26,7 +29,7 @@ index f078bde5..901c8e08 100644
  	@mkdir -p build/release/tinygo/lib/CMSIS/CMSIS
  	@mkdir -p build/release/tinygo/lib/macos-minimal-sdk
  	@mkdir -p build/release/tinygo/lib/mingw-w64/mingw-w64-crt/crt
-@@ -968,7 +962,6 @@ ifneq ($(USE_SYSTEM_BINARYEN),1)
+@@ -27,7 +26,6 @@ ifneq ($(USE_SYSTEM_BINARYEN),1)
  	@cp -p  build/wasm-opt$(EXE)         build/release/tinygo/bin
  endif
  	@cp -rp lib/bdwgc/*                  build/release/tinygo/lib/bdwgc
@@ -34,12 +37,12 @@ index f078bde5..901c8e08 100644
  	@cp -rp lib/CMSIS/CMSIS/Include      build/release/tinygo/lib/CMSIS/CMSIS
  	@cp -rp lib/CMSIS/README.md          build/release/tinygo/lib/CMSIS
  	@cp -rp lib/macos-minimal-sdk/*      build/release/tinygo/lib/macos-minimal-sdk
-@@ -1060,8 +1053,7 @@ endif
+@@ -120,8 +118,7 @@ endif
  	@cp -rp lib/wasi-libc/libc-top-half/musl/src/unistd             build/release/tinygo/lib/wasi-libc/libc-top-half/musl/src
  	@cp -rp lib/wasi-libc/libc-top-half/sources                     build/release/tinygo/lib/wasi-libc/libc-top-half
  	@cp -rp lib/wasi-cli/wit                                        build/release/tinygo/lib/wasi-cli/wit
--	@cp -rp llvm-project/compiler-rt/lib/builtins build/release/tinygo/lib/compiler-rt-builtins
--	@cp -rp llvm-project/compiler-rt/LICENSE.TXT  build/release/tinygo/lib/compiler-rt-builtins
+-	@cp -rp ${LLVM_PROJECTDIR}/compiler-rt/lib/builtins build/release/tinygo/lib/compiler-rt-builtins
+-	@cp -rp ${LLVM_PROJECTDIR}/compiler-rt/LICENSE.TXT  build/release/tinygo/lib/compiler-rt-builtins
 +	@cp -rp lib/compiler-rt-builtins     build/release/tinygo/lib/compiler-rt-builtins
  	@cp -rp src                          build/release/tinygo/src
  	@cp -rp targets                      build/release/tinygo/targets
