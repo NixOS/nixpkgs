@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://projects.sirrix.com/trac/tpmmanager";
+    homepage = "https://github.com/Rohde-Schwarz/TPMManager";
     description = "Tool for managing the TPM";
     mainProgram = "tpmmanager";
     license = lib.licenses.gpl2;
