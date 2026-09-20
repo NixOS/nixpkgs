@@ -62,7 +62,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Lightweight userspace bandwidth shaper";
     license = lib.licenses.bsd3;
-    homepage = "https://monkey.org/~marius/pages/?page=trickle";
+    homepage = "https://github.com/mariusae/trickle";
     platforms = lib.platforms.linux;
     mainProgram = "trickle";
   };
