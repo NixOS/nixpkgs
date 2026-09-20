@@ -11,6 +11,7 @@
   filetype,
   fsspec,
   hatchling,
+  httpx2,
   jsonpath-ng,
   llama-index-workflows,
   nest-asyncio,
@@ -80,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     dirtyjson
     filetype
     fsspec
+    httpx2
     jsonpath-ng
     llama-index-workflows
     nest-asyncio
