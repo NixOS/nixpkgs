@@ -20,6 +20,7 @@
   rustc,
   rustfmt,
   pkg-config,
+  bashNonInteractive,
   openssl,
   xz,
   zlib,
@@ -402,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
     rust-jemalloc-sys
   ]
