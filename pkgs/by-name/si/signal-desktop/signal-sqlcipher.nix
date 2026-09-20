@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "4.0.5";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V+f6cNBHZLBKzrcDg5jMEjcs1TjpoG8mQRG2rG+aT3E=";
+    hash = "sha256-llNSPeZG3gpajxdu+RAyoNhMQThhl9qPFdS9SfipYHs=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "sqlcipher-signal-exentsion";
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-RF+SHIobW5UAz0MM6c50Ewp9XignCBs6U7IhyZJixbk=";
+    hash = "sha256-81IYGJ85pNcWDzbTUlq6rQPrOtetXo2Na4rMOPxoECY=";
   };
 
   strictDeps = true;
