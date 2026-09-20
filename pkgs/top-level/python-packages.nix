@@ -22647,6 +22647,8 @@ self: super: with self; {
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 
+  whoosh-compat = callPackage ../development/python-modules/whoosh-compat { };
+
   whoosh-reloaded = callPackage ../development/python-modules/whoosh-reloaded { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
