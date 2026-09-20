@@ -1127,6 +1127,7 @@ mapAliases {
   guile-sdl = throw "guile-sdl has been removed, as it was broken"; # Added 2025-08-25
   gupnp = throw "'gupnp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using 'gupnp_1_6' instead"; # Added 2026-06-07
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
+  guvcview = throw "'guvcview' has been removed"; # 2026-09-19
   gvolicon = throw "'gvolicon' has been removed because upstream archived the project in January 2018."; # Added 2026-09-02
   gwc = throw "'gwc' has been removed, as it relies on gtk2"; # Added 2026-09-03
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
@@ -1158,6 +1159,7 @@ mapAliases {
   hspellDicts = throw "'hspellDicts' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   htb-toolkit = throw "'htb-toolkit' has been removed as its upstream repository was deleted."; # Added 2026-09-04
   hterm = throw "'hterm' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-13
+  html-unit-driver = throw "'html-unit-driver' has been removed"; # Added 2026-09-19
   http-prompt = throw "'http-prompt' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-26
   httperf = throw "'httperf' has been removed as it was unmaintained and broken"; # Added 2026-05-04
   httpfs2 = throw "'httpfs2' has been removed as it was unmaintained upstream"; # Added 2026-05-31
@@ -1689,6 +1691,7 @@ mapAliases {
   mdt = throw "'mdt' has been renamed to/replaced by 'md-tui'"; # Converted to throw 2025-10-27
   mediastreamer = throw "'mediastreamer' has been moved to 'linphonePackages.mediastreamer2'"; # Added 2025-09-20
   mediastreamer-openh264 = throw "'mediastreamer-openh264' has been moved to 'linphonePackages.msopenh264'"; # Added 2025-09-20
+  memcached = throw "'memcached' has been removed"; # Added 2026-09-19
   meilisearch_1_11 = throw "'meilisearch_1_11' has been removed, as it is no longer supported"; # Added 2025-10-03
   mellowplayer = throw "'mellowplayer' has been removed as it was discontinued upstream in 2021."; # Added 2026-02-10
   melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
@@ -2301,6 +2304,7 @@ mapAliases {
   seafile-server = throw "'seafile-server' has been removed as it is unmaintained"; # Added 2025-08-21
   seahub = throw "'seahub' has been removed as it is unmaintained"; # Added 2025-08-21
   securefs = throw "'securefs' has been removed as it depends on fuse2"; # Added 2026-05-05
+  selenium-server-standalone = throw "'selenium-server-standalone' has been removed"; # Added 2026-09-19
   semantik = throw "'semantik' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   semiphemeral = throw "'semiphemeral' has been removed as it is archived upstream"; # Added 2025-11-06
   seq24 = throw "'seq24' has been removed as it was unmaintained upsteam and depended on the deprecated GTK 2 engine."; # Added 2026-08-03
@@ -2574,6 +2578,7 @@ mapAliases {
   transmission_3_noSystemd = throw "transmission_3_noSystemd has been removed in favour of transmission_4. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
   transmission_4-qt5 = lib.warnOnInstantiate "'transmission_4-qt5' has been removed in favour of 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
   transmission_4-qt6 = lib.warnOnInstantiate "'transmission_4-qt6' has been renamed to 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
+  traverso = throw "'traverso' has been removed"; # 2026-09-19
   travis = throw "'travis' has been removed because upstream has stopped maintaining it, and it contains dependencies with security vulnerabilities."; # Added 2026-02-14
   treefmt2 = throw "'treefmt2' has been renamed to/replaced by 'treefmt'"; # Converted to throw 2025-10-27
   tremor = throw "'tremor' has been removed because it is unmaintained"; # Added 2026-08-27
