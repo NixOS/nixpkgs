@@ -24,6 +24,13 @@ let
   settingsFormat = pkgs.formats.keyValue { };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "hardware" "nvidiaOptimus" "disable" ]
+      [ "hardware" "nvidia" "disable" ]
+    )
+  ];
+
   options = {
     hardware.nvidia = {
       enabled = lib.mkOption {
@@ -33,6 +40,10 @@ in
         defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
         description = "True if NVIDIA support is enabled";
       };
+      disable = lib.mkEnableOption ''
+        Disable the NVIDIA GPU completely by blacklisting drivers and power-gating PCI devices.
+        This is useful for saving power or running a secondary profile/specialisation without NVIDIA drivers.
+      '';
       datacenter.enable = lib.mkEnableOption ''
         Data Center drivers for NVIDIA cards on a NVLink topology
       '';
@@ -408,6 +419,10 @@ in
         {
           assertions = [
             {
+              assertion = cfg.disable -> !cfg.enabled;
+              message = "You cannot enable NVIDIA video drivers in `services.xserver.videoDrivers` while `hardware.nvidia.disable` is true.";
+            }
+            {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
               message = "You cannot configure both X11 and Data Center drivers at the same time.";
             }
@@ -511,6 +526,30 @@ in
             };
           environment.systemPackages = [ nvidia_x11.bin ];
         }
+
+        # Disable NVIDIA
+        (lib.mkIf cfg.disable {
+          boot.blacklistedKernelModules = [
+            "nouveau"
+            "nvidia"
+            "nvidiafb"
+            "nvidia-drm"
+            "nvidia-uvm"
+            "nvidia-modeset"
+          ];
+
+          # Ensures NVIDIA powers down completely to
+          # avoid it bypassing simple 'blacklist' rule
+          services.udev.extraRules = ''
+            # Remove NVIDIA Audio devices
+            ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+            # Remove NVIDIA USB xHCI / Type-C devices
+            ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+            ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+            # Remove NVIDIA VGA/3D controller devices
+            ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+          '';
+        })
 
         # X11
         (lib.mkIf nvidiaEnabled {
