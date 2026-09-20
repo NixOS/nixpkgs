@@ -29,13 +29,13 @@
     out = server.succeed(
         f"{console}"
         " --command 'database create testdb'"
-        " --command 'transaction testdb schema'"
+        " --command 'transaction schema testdb'"
         " --command 'define entity person, owns name; attribute name, value string;'"
         " --command 'commit'"
-        " --command 'transaction testdb write'"
+        " --command 'transaction write testdb'"
         " --command 'insert $p isa person, has name \"ada\";'"
         " --command 'commit'"
-        " --command 'transaction testdb read'"
+        " --command 'transaction read testdb'"
         " --command 'match $p isa person, has name $n; select $n;'"
     )
     assert "ada" in out, f"console query output should contain the inserted name: {out}"
@@ -47,7 +47,7 @@
     server.wait_for_open_port(1729)
     out = server.succeed(
         f"{console}"
-        " --command 'transaction testdb read'"
+        " --command 'transaction read testdb'"
         " --command 'match $p isa person, has name $n; select $n;'"
     )
     assert "ada" in out, f"post-reboot query should still contain the inserted name: {out}"

@@ -1531,11 +1531,11 @@ in
   tuptime = runTest ./tuptime.nix;
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
   turn-rs = runTest ./turn-rs.nix;
-  typedb = runTest ./typedb.nix;
   tusd = runTest ./tusd/default.nix;
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
+  typedb = runTest ./typedb.nix;
   typesense = runTest ./typesense.nix;
   tzupdate = runTest ./tzupdate.nix;
   ucarp = runTest ./ucarp.nix;
