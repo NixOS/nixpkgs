@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "General purpose HTTP reverse proxy and forwarding tool written in Go";
-    homepage = "https://zoraxy.arozos.com/";
+    homepage = "https://zoraxy.aroz.org/";
     changelog = "https://github.com/tobychui/zoraxy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
