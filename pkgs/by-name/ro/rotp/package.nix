@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''Open-source modernization of the 1993 classic "Master of Orion", written in Java'';
-    homepage = "https://www.remnantsoftheprecursors.com/";
+    homepage = "https://github.com/rayfowler/rotp-public";
 
     # See LICENSE file in source repo for more details.
     license = with lib.licenses; [
