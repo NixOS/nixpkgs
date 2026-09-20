@@ -1,14 +1,26 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   makeBinaryWrapper,
   which,
+  cmake,
   nix-update-script,
   llvmPackages,
+  enableBox2d ? true,
 }:
 
 let
   inherit (llvmPackages) stdenv;
+  box2dVersion = "3.1.1";
+  box2dTarball =
+    if enableBox2d then
+      fetchurl {
+        url = "https://github.com/erincatto/box2d/archive/refs/tags/v${box2dVersion}.tar.gz";
+        hash = "sha256-+275FLUPQxLX2SGmAOq8EjGLs8VaC4wLkGCPpEiO8uQ=";
+      }
+    else
+      null;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
@@ -28,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     # available on Nix based systems. Instead, use the "system" Raylib version,
     # which can be provided by a pure Nix expression, for example in a shell.
     ./system-raylib.patch
+    ./box2d-no-network.patch
   ];
 
   postPatch = ''
@@ -52,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
+    cmake
   ];
 
   installPhase = ''
@@ -83,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
     $out/share/vendor/stb/src/build_stb.sh
     $out/share/vendor/miniaudio/src/build_miniaudio.sh
     $out/share/vendor/kb_text_shape/src/build_unix.sh
+
+    if [ "${lib.boolToString enableBox2d}" = "true" ]; then
+      BOX2D_TARBALL=${box2dTarball} BOX2D_VERSION=${box2dVersion} $out/share/vendor/box2d/build_box2d.sh
+    fi
 
     runHook postInstall
   '';
