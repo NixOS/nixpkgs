@@ -79,9 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # (covered by the smoke tests), and the steps/http_steps behaviour-test
   # helpers, whose `bdd` imports postdate the pinned protocol 3.12.0
   # (upstream tests those through Bazel, not cargo). Process-spawning
-  # integration suites stay out for the same reason.
+  # integration suites stay out for the same reason. cargoTestFlags (not
+  # checkFlags: those land after `--` as test-binary args).
   doCheck = true;
-  checkFlags = [
+  cargoTestFlags = [
     "--workspace"
     "--exclude"
     "typedb_server_bin"
