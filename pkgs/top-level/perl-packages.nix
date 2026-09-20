@@ -23297,7 +23297,7 @@ with self;
     ];
     meta = {
       description = "Postmodern object system for Perl 5";
-      homepage = "http://moose.perl.org";
+      homepage = "https://metacpan.org/pod/Moose";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
