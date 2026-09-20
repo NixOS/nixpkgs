@@ -238,7 +238,6 @@ in
         default = [ ];
         example = literalExpression ''
           with pkgs; [
-            networkmanager-fortisslvpn
             networkmanager-iodine
             networkmanager-libreswan
             networkmanager-l2tp
