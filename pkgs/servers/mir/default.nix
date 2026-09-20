@@ -11,6 +11,7 @@ in
   };
 
   mir_2_15 = common {
+    broken = true; # doesn't build with glibc 2.44
     version = "2.15.0";
     pinned = true;
     hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";

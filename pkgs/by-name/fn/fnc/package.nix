@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12
       "-Wno-error=maybe-uninitialized"
+      # Fix build w/ glibc-2.44
+      "-Wno-error=discarded-qualifiers"
     ]
   );
 

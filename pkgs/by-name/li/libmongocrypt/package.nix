@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   nativeBuildInputs = [
     cmake
     pkg-config

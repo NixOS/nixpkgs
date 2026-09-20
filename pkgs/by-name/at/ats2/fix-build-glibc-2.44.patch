@@ -1,0 +1,20 @@
+diff --git a/prelude/CATS/array.cats b/prelude/CATS/array.cats
+index 70c7e3e..cec3b1d 100644
+--- a/prelude/CATS/array.cats
++++ b/prelude/CATS/array.cats
+@@ -56,6 +56,7 @@ void qsort
+   void *base, size_t nmemb, size_t size
+ , int(*compar)(const void *, const void *)
+ ) ; // end of [qsort]
++#ifndef bsearch
+ extern
+ void *bsearch
+ (
+@@ -64,6 +65,7 @@ void *bsearch
+ , size_t nmemb, size_t size
+ , int (*compar)(const void *, const void *)
+ ) ; // end of [bsearch]
++#endif
+ //
+ #define atspre_array_qsort qsort
+ #define atspre_array_bsearch bsearch

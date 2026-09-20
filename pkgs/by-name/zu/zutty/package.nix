@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.rolfschr ];
     platforms = lib.platforms.linux;
+    broken = true; # Added 2026-09-19, fails with latest glibc
   };
 })

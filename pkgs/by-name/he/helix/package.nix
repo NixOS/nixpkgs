@@ -68,7 +68,23 @@ let
 
   helixTreeSitterGrammars =
     lib.filterAttrs (drvName: _: lib.hasAttr (lib.removePrefix "tree-sitter-" drvName) lockedGrammars)
-      (tree-sitter-grammars.overrideScope (lib.composeExtensions lockedVersionsOverlay grammarsOverlay));
+      (
+        tree-sitter-grammars.overrideScope (
+          lib.composeManyExtensions [
+            lockedVersionsOverlay
+            grammarsOverlay
+            (self: super: {
+              tree-sitter-perl = super.tree-sitter-perl.overrideAttrs {
+                postPatch = ''
+                  rm src/bsearch.c
+                  substituteInPlace src/tsp_unicode.h \
+                    --replace-fail '#include "bsearch.c"' ""
+                '';
+              };
+            })
+          ]
+        )
+      );
 
   # Dynamic libraries for the grammars always use the `.so` extension, also on Darwin (should use `.dylib`)
   # See here: https://github.com/helix-editor/helix/pull/14982
