@@ -146,44 +146,6 @@ let
       '';
     };
 
-  mkDictFromDicollecte =
-    {
-      shortName,
-      shortDescription,
-      longDescription,
-      dictFileName,
-      isDefault ? false,
-    }:
-    mkDict rec {
-      inherit dictFileName;
-      version = "5.3";
-      pname = "hunspell-dict-${shortName}-dicollecte";
-      readmeFile = "README_dict_fr.txt";
-      src = fetchurl {
-        url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-        sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
-      };
-      meta = {
-        inherit longDescription;
-        description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "https://www.dicollecte.org/home.php?prj=fr";
-        license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ renzo ];
-        platforms = lib.platforms.all;
-      };
-      nativeBuildInputs = [ unzip ];
-      sourceRoot = ".";
-      unpackCmd = ''
-        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
-      '';
-      postInstall = lib.optionalString isDefault ''
-        for ext in aff dic; do
-          ln -sv $out/share/hunspell/${dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
-          ln -sv $out/share/myspell/dicts/${dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
-        done
-      '';
-    };
-
   mkDictFromWordlist =
     {
       shortName,
@@ -624,51 +586,6 @@ rec {
     shortName = "es-ve";
     shortDescription = "Spanish (Venezuela)";
     dictFileName = "es_VE";
-  };
-
-  # FRENCH
-
-  fr-any = mkDictFromDicollecte {
-    shortName = "fr-any";
-    dictFileName = "fr-toutesvariantes";
-    shortDescription = "French (any variant)";
-    longDescription = ''
-      Ce dictionnaire contient les nouvelles et les anciennes graphies des
-      mots concernés par la réforme de 1990.
-    '';
-  };
-
-  fr-classique = mkDictFromDicollecte {
-    shortName = "fr-classique";
-    dictFileName = "fr-classique";
-    shortDescription = "French (classic)";
-    longDescription = ''
-      Ce dictionnaire est une extension du dictionnaire «Moderne» et propose
-      en sus des graphies alternatives, parfois encore très usitées, parfois
-      tombées en désuétude.
-    '';
-  };
-
-  fr-moderne = mkDictFromDicollecte {
-    shortName = "fr-moderne";
-    dictFileName = "fr-moderne";
-    shortDescription = "French (modern)";
-    longDescription = ''
-      Ce dictionnaire propose une sélection des graphies classiques et
-      réformées, suivant la lente évolution de l’orthographe actuelle. Ce
-      dictionnaire contient les graphies les moins polémiques de la réforme.
-    '';
-    isDefault = true;
-  };
-
-  fr-reforme1990 = mkDictFromDicollecte {
-    shortName = "fr-reforme1990";
-    dictFileName = "fr-reforme1990";
-    shortDescription = "French (1990 reform)";
-    longDescription = ''
-      Ce dictionnaire ne connaît que les graphies nouvelles des mots concernés
-      par la réforme de 1990.
-    '';
   };
 
   # ITALIAN
