@@ -31,6 +31,7 @@
   uvloop,
 
   # tests
+  httpx2,
   openai,
   pycountry,
   uvicorn,
@@ -109,6 +110,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mistral_common" ];
 
   nativeCheckInputs = [
+    httpx2
     openai
     pycountry
     pytestCheckHook
