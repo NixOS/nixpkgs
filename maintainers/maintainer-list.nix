@@ -32298,6 +32298,14 @@
     githubId = 65394961;
     name = "Yves Straten";
   };
+  yvnth = {
+    name = "Yashwanth Prasannakumar";
+    github = "yvnth";
+    githubId = 201552597;
+    email = "yashupress@gmail.com";
+    keys = [ { fingerprint = "D9AA B78D 42E1 4B5C 08C0  C2BE 9012 0221 65D9 7825"; } ];
+    matrix = "@yvnth:matrix.org";
+  };
   yzx9 = {
     email = "yuan.zx@outlook.com";
     github = "yzx9";
