@@ -105,6 +105,10 @@ A list of the teams of this Nix expression. Teams are defined in [`nixpkgs/maint
 
 The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
 
+### `mainDarwinApp` {#var-meta-mainDarwinApp}
+
+The name of the main Darwin/macOS Application for the package. It must end in `.app`. Example: `"VSCodium.app"`
+
 ### `priority` {#var-meta-priority}
 
 The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
