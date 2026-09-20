@@ -241,9 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
   // lib.optionalAttrs config.allowAliases {
     # Legacy aliases for the old Swift packaging. These should eventually be removed.
     swift = lib.warnOnInstantiate "`swift` is an alias for this (`swift`) package. Just use it directly." finalAttrs.finalPackage;
-    swiftArch = lib.warnOnInstantiate "'swiftArch' is an alias for 'stdenv.hostPlatform.swift.arch'." stdenv.hostPlatform.swift.arch;
+    swiftArch = lib.warn "'swiftArch' is an alias for 'stdenv.hostPlatform.swift.arch'." stdenv.hostPlatform.swift.arch;
     swiftDriver = lib.warnOnInstantiate "'swiftDriver' has been renamed to 'swift-driver'" finalAttrs.passthru.swift-driver;
-    swiftOs = lib.warnOnInstantiate "'swiftOs' is an alias for 'stdenv.hostPlatform.swift.platform'." stdenv.hostPlatform.swift.platform;
+    swiftOs = lib.warn "'swiftOs' is an alias for 'stdenv.hostPlatform.swift.platform'." stdenv.hostPlatform.swift.platform;
   };
 
   meta = {
