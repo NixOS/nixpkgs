@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.19.2979";
+  version = "4.0.20.3014";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,14 +29,10 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-hYO7I1zaBSYgobd8GvIx/sWyRzflXMFjnnPB21pm4wQ=";
+      hash = "sha256-XEGGcrMAZd/9ta02QlMQD2nwogJSgNCBswlYwyMTRzo=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
-
-      # error CS0104: 'IPNetwork' is an ambiguous reference between 'Microsoft.AspNetCore.HttpOverrides.IPNetwork' and 'System.Net.IPNetwork'
-      substituteInPlace src/NzbDrone.Host/Startup.cs \
-        --replace-fail 'IPNetwork' 'Microsoft.AspNetCore.HttpOverrides.IPNetwork'
     '';
     patches = lib.optionals (lib.versionOlder version "5.0") [
       # Prerequisite for .NET 8 patches, some commits
