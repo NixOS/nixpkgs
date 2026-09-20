@@ -77,7 +77,31 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config =
+    let
+      # The server mandates a config file (it resolves a bare `config.yml`
+      # against the executable directory, never CWD defaults), so the
+      # module renders one. CLI flags remain available via extraFlags and
+      # override file values.
+      configFile = pkgs.writeText "typedb-config.yml" ''
+        server:
+          listen-address: "${cfg.listenAddress}"
+          http:
+            enabled: true
+            listen-address: "${cfg.httpListenAddress}"
+        storage:
+          data-directory: "/var/lib/typedb/data"
+        logging:
+          directory: "/var/log/typedb"
+        diagnostics:
+          monitoring:
+            enabled: ${lib.boolToString cfg.diagnosticsMonitoring}
+          reporting:
+            metrics: ${lib.boolToString cfg.diagnosticsReporting}
+            errors: ${lib.boolToString cfg.diagnosticsReporting}
+      '';
+    in
+    lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     networking.firewall = lib.mkIf cfg.openFirewall {
@@ -96,13 +120,7 @@ in
         ExecStart = lib.concatStringsSep " " (
           [
             "${cfg.package}/bin/typedb-server"
-            "--storage.data-directory=/var/lib/typedb/data"
-            "--logging.directory=/var/log/typedb"
-            "--server.listen-address=${cfg.listenAddress}"
-            "--server.http.listen-address=${cfg.httpListenAddress}"
-            "--diagnostics.reporting.metrics=${lib.boolToString cfg.diagnosticsReporting}"
-            "--diagnostics.reporting.errors=${lib.boolToString cfg.diagnosticsReporting}"
-            "--diagnostics.monitoring.enabled=${lib.boolToString cfg.diagnosticsMonitoring}"
+            "--config=${configFile}"
           ]
           ++ cfg.extraFlags
         );
