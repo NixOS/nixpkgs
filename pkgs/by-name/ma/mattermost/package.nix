@@ -27,10 +27,13 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.8";
-    srcHash = "sha256-HH+LioMTxu0+VLr6+fpa/O9YduChIF0ieSgMBaS91uc=";
-    vendorHash = "sha256-FytvnZcPStztvUJLEnC3DUeyhmYWKP+/8xqv4suDZNE=";
-    npmDepsHash = "sha256-d1X33SV0c1l0e9fCIWEx7opeWByyovj0zNs+aGddRJc=";
+    version = "11.7.11";
+    srcHash = "sha256-C0t/PITQ1R4VRHQk+bQE8GPfdy5GjxLsHtRgYq6qgSw=";
+    vendorHash = "sha256-V63mY8za59WOI7dk8wMuHxWs2cs2rfZ9Ubpm5O+KMYU=";
+    npmDepsHash = "sha256-mK5wrX9dWDC+8dn/J7E1EOiwHekAzt5yQCJ8xqfKa3g=";
+    lockfileOverlay = ''
+      .packages["node_modules/rollup"] |= (del(.resolved, .integrity) | .version = "2.80.0")
+    '';
   },
   ...
 }:
@@ -257,7 +260,7 @@ buildMattermost rec {
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated
       postPatch = ''
         substituteInPlace channels/webpack.config.js \
-          --replace-fail 'options: {}' 'options: { disable: true }'
+          --replace-quiet 'options: {}' 'options: { disable: true }'
       '';
 
       inherit nodejs;
