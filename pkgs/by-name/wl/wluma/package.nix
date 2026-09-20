@@ -51,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
+    install -Dm644 -t $out/lib/udev/rules.d 90-wluma-backlight.rules
+    install -Dm644 -t $out/lib/systemd/user wluma.service
     wrapProgram $out/bin/wluma \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
