@@ -395,10 +395,7 @@ stdenv.mkDerivation {
       inherit (nixosTests)
         ceph-multi-node-bluestore
         ceph-multi-node-bluestore-cephfs
-        ceph-multi-node-deprecated-filestore
         ceph-single-node-bluestore
-        ceph-single-node-bluestore-dmcrypt
-        ceph-single-node-deprecated-filestore
         ;
     };
   };
