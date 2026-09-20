@@ -27,8 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # 3.12.0 while the manifests require 3.12.3, so --locked resolution fails
   # on the pristine tag. Refresh it with the canonical `cargo update`
   # resolution (same change as typedb/typedb-tools#372); drop the patch
-  # once a release tag carries a current lock.
-  patches = [ ./lock-refresh.patch ];
+  # once a release tag carries a current lock. cargoPatches (not patches)
+  # so the refresh also applies inside the vendor derivation.
+  cargoPatches = [ ./lock-refresh.patch ];
 
   # This package ships the Console only (the task's "client"): the sibling
   # loader and typeql-check binaries stay in their own future packages.
