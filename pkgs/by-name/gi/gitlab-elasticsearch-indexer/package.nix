@@ -12,14 +12,14 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.14.13";
+  version = "5.14.14";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HtsZHxdRlopndeJp0dwza9AUsjbkx17gtqnF6XnIe7o=";
+    hash = "sha256-rN+K/7sCV0S3Wd9ZhC/lG6inZUyqIWHCyD26/uc2XYM=";
   };
 
   # A dependency rather than an actual package to build.
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     "third_party/icu"
   ];
 
-  vendorHash = "sha256-hUArtddPPhj06A4pN8F1sUVXTfVBzlytJ977neTKw34=";
+  vendorHash = "sha256-0Mt/IRtprLN/7rcY13WnVwlZfFAwl0EC5E0hnJzCBDE=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
