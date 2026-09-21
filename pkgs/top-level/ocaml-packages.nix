@@ -1845,6 +1845,8 @@ let
 
         ppx_import = callPackage ../development/ocaml-modules/ppx_import { };
 
+        ppx_inline_test_nobase = callPackage ../development/ocaml-modules/ppx_inline_test_nobase { };
+
         ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
         ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
