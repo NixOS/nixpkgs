@@ -2,34 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
-  stdenv,
-
-  # nativeBuildInputs
-  autoPatchelfHook,
-  pypaInstallHook,
-  pythonRuntimeDepsCheckHook,
-  wheelUnpackHook,
 
   # dependencies
   apache-tvm-ffi,
   nvidia-cutlass-dsl,
-  nvidia-cutlass-dsl-libs-base,
   tokenspeed-triton,
   torch,
 }:
-let
-  inherit (stdenv.hostPlatform) system;
-
-  hashes = {
-    aarch64-linux = "sha256-rD4rFrvtQXuICjBOkFfmzj3DaGRC4RHGX5EV4x/3T34=";
-    x86_64-linux = "sha256-1gW6k7nZT4Luj1LOLWaAs91AHBmPi0XCL11loqaCHqQ=";
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-mla";
-  version = "0.1.5";
-  pyproject = false;
+  version = "0.2.10";
+  format = "wheel";
   __structuredAttrs = true;
 
   src = fetchPypi {
@@ -38,31 +21,18 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version;
     dist = "py3";
     python = "py3";
-    abi = "none";
-    platform = "manylinux_2_28_${stdenv.hostPlatform.uname.processor}";
-    hash = hashes.${system} or (throw "Unsupported system: ${system}");
+    hash = "sha256-o5dwtxhoLiNVF0O2iizjb1FArCNR/oZBI0PMS0KqV9E=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    pypaInstallHook
-    pythonRuntimeDepsCheckHook
-    wheelUnpackHook
+  pythonRelaxDeps = [
+    "apache-tvm-ffi"
   ];
-
   dependencies = [
     apache-tvm-ffi
     nvidia-cutlass-dsl
     tokenspeed-triton
     torch
   ];
-
-  preFixup = ''
-    # libtvm_ffi.so
-    addAutoPatchelfSearchPath "${apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
-    # libcute_dsl_runtime.so
-    addAutoPatchelfSearchPath "${nvidia-cutlass-dsl-libs-base}/${python.sitePackages}/nvidia_cutlass_dsl"/cu*/lib
-  '';
 
   pythonImportsCheck = [ "tokenspeed_mla" ];
 
@@ -71,9 +41,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/lightseekorg/tokenspeed/tree/main/tokenspeed-mla";
     downloadPage = "https://pypi.org/project/tokenspeed-mla/#files";
     license = lib.licenses.mit;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ prince213 ];
-    platforms = lib.attrNames hashes;
     broken = !torch.cudaSupport;
   };
 })
