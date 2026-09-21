@@ -2,8 +2,10 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.3.0)
+    benchmark (0.5.0)
     bigdecimal (3.3.1)
     builder (3.3.0)
+    csv (3.3.6)
     erubi (1.13.1)
     ffi (1.17.2)
     fileutils (1.7.3)
@@ -14,6 +16,7 @@ GEM
       rexml (~> 3.0)
     httpclient (2.9.0)
       mutex_m
+    io-console (0.9.4)
     little-plugger (1.1.4)
     logger (1.7.0)
     logging (2.4.0)
@@ -23,11 +26,17 @@ GEM
     mutex_m (0.3.0)
     nori (2.7.1)
       bigdecimal
+    readline (0.0.4)
+      reline
+    reline (0.7.0)
+      io-console (~> 0.5)
     rexml (3.4.4)
     rubyntlm (0.6.5)
       base64
     rubyzip (2.4.1)
     stringio (3.1.7)
+    syslog (0.4.0)
+      logger
     winrm (2.3.9)
       builder (>= 2.1.2)
       erubi (~> 1.8)
@@ -48,11 +57,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  benchmark
+  csv
   fileutils
   logger
+  readline
   stringio
+  syslog
   winrm
   winrm-fs
 
 BUNDLED WITH
-   2.7.1
+   2.6.9

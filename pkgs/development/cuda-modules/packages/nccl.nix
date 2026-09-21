@@ -56,7 +56,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   #   newer versions of NCCL than what we provide here.
   version =
     if cudaAtLeast "12.0" then
-      "2.31.2-1"
+      "2.32.3-1"
     else if cudaAtLeast "11.7" then
       "2.28.7-1"
     else if cudaAtLeast "11.6" then
@@ -69,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.31.2-1" = "sha256-G3Nx9pCgSNBYX0CV86ruiNC9aZ9YuZH5hF/WnoOF2mQ=";
+      "2.32.3-1" = "sha256-ytAJn8F0QEHhUadiOmVKTUiL7lsUnasoP4MOv/t60xk=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
@@ -182,6 +182,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
+    changelog = "https://github.com/NVIDIA/nccl/releases/tag/${finalAttrs.src.tag}";
     license = licenses.bsd3;
     platforms = [
       "aarch64-linux"

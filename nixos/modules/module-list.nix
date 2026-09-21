@@ -1741,7 +1741,6 @@
   ./services/web-apps/hledger-web.nix
   ./services/web-apps/homebox.nix
   ./services/web-apps/homer.nix
-  ./services/web-apps/honk.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ifm.nix
@@ -1830,7 +1829,6 @@
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
-  ./services/web-apps/prosody-filer.nix
   ./services/web-apps/readeck.nix
   ./services/web-apps/remark42.nix
   ./services/web-apps/reposilite.nix

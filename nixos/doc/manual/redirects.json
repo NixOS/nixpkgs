@@ -1087,12 +1087,6 @@
   "module-services-jitsi-configuration": [
     "index.html#module-services-jitsi-configuration"
   ],
-  "module-services-honk": [
-    "index.html#module-services-honk"
-  ],
-  "module-services-honk-basic-usage": [
-    "index.html#module-services-honk-basic-usage"
-  ],
   "module-services-hatsu": [
     "index.html#module-services-hatsu"
   ],
@@ -2952,5 +2946,10 @@
   ],
   "ch-reference": [
     "index.html#ch-reference"
+  ],
+  "sec-release-26.05-incompatibilities-services-honk-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-services-honk-removed",
+    "index.html#module-services-honk",
+    "index.html#module-services-honk-basic-usage"
   ]
 }
