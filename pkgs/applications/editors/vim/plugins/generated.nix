@@ -12283,12 +12283,12 @@ final: prev: {
 
   no-neck-pain-nvim = buildVimPlugin {
     pname = "no-neck-pain.nvim";
-    version = "2.5.3";
+    version = "3.0.0";
     src = fetchFromGitHub {
       owner = "shortcuts";
       repo = "no-neck-pain.nvim";
-      tag = "v2.5.3";
-      hash = "sha256-KNLeeaNxywouey0myeVhqRdMVxxouX/IRGOilYtWQAA=";
+      tag = "v3.0.0";
+      hash = "sha256-8YxDFzSZmcqF1yUbUwVacLZF2JnSb4Z3b630x22YOtw=";
     };
     meta.homepage = "https://github.com/shortcuts/no-neck-pain.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
