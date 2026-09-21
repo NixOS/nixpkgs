@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "nu_scripts";
-  version = "0-unstable-2026-07-19";
+  version = "0-unstable-2026-09-20";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nu_scripts";
-    rev = "381eb7577705b00bea437da7c0439c39ff05f06b";
-    hash = "sha256-b4/JOcpUa2BittwZz/w3IPUik4QPlpqcgc2dgDDbb1E=";
+    rev = "a571833566d71671151566e1a2cda4e6338f27bb";
+    hash = "sha256-LKONPdLlXfDZ03tEHiJ7rH49vwPHaiFIE0Zvi3bh+UY=";
   };
 
   nativeBuildInputs = [ installAgentSkills ];
