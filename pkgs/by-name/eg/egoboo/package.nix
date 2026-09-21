@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "3D dungeon crawling adventure";
     homepage = "https://egoboo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "egoboo";
   };
