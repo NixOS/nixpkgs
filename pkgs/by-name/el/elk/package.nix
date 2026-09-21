@@ -9,6 +9,7 @@
   stdenvNoCC,
   pnpmBuildHook,
   makeWrapper,
+  nixosTests,
 }:
 let
   pnpm = pnpm_11;
@@ -85,7 +86,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) elk-zone;
+    };
+  };
 
   meta = {
     description = "Nimble Mastodon web client";
