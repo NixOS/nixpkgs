@@ -128,6 +128,16 @@ lib.warnIf (withDocs != null)
     ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
       "--disable-nls"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # The bundled gettext overrides setlocale() on Darwin so that it consults
+      # CFLocaleCopyPreferredLanguages, which links CoreFoundation into bash.
+      # CoreFoundation is not fork-safe, so any `VAR=value cmd` temporary
+      # assignment evaluated in a forked-but-not-exec'd subshell re-enters
+      # setlocale() on teardown and faults inside CFPreferences. stdenv's
+      # isELF/isMachO/isScript do exactly that (`LANG=C read ...`) from the
+      # `find | while` loops that fixup hooks use, so builds segfault at random.
+      "--disable-nls"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
       # /dev/fd is optional on FreeBSD. we need it to work when built on a system
       # with it and transferred to a system without it! This includes linux cross.
