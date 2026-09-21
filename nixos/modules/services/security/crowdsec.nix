@@ -622,9 +622,13 @@ in
               options = {
                 enrollKeyFile = lib.mkOption {
                   type = lib.types.nullOr lib.types.path;
-                  example = "/run/crowdsec/console_token.yaml";
+                  example = "/run/crowdsec/console_token.txt";
                   description = ''
-                    The Console Token file to use.
+                    The Console Token file to use. The file should just contain the token in the first line of the file like this:
+
+                    ```
+                    hiIamAToken
+                    ```
 
                     Normally you would do `cscli enroll <token>`,
                     but you can put the token in a file instead and pass the path of that file to this option.
