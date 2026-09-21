@@ -2677,6 +2677,14 @@ with haskellLib;
   # https://github.com/fused-effects/fused-effects/issues/473
   fused-effects = doJailbreak super.fused-effects;
 
+  # https://github.com/polysemy-research/polysemy/pull/495
+  polysemy = appendPatch (fetchpatch {
+    name = "support-doctest-0.25.patch";
+    url = "https://github.com/polysemy-research/polysemy/commit/26235c0bf8bae18de44901836b9412d7c2c9603e.patch";
+    hash = "sha256-RZh+jJWB7uYL2jmCErcPZ3uT3Wm4wpeLnzmkopLDEAQ";
+    includes = [ "polysemy.cabal" ];
+  }) super.polysemy;
+
   html-charset = dontCheck super.html-charset;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
