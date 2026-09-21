@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-bnbH2oHDV2ntjOS+4SkICvuRgQi9UQrewJgmi3WFmRE=";
+    hash = "sha256-Z7pc1o6AK9XySZLYF8YNSnHyrp85nh8ZmiCw4FWCwW8=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-QzS+m8bt/4j3uVI9ox4gHkgX2X4Kpj84+jHcr+WqKh8=";
+    npmDepsHash = "sha256-hdgWZAJstRqYtzNuCTeiRIi+rjRsogulSfWXr8EP2UI=";
 
     npmFlags = [ "--force" ];
 
@@ -122,6 +122,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
+      google-re2
       googleapis-common-protos
       hiredis
       httpx
