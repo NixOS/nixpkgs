@@ -1,15 +1,21 @@
 {
   lib,
   stdenv,
-  callPackage,
+  appimageTools,
+  nix-update-script,
+  fetchurl,
+  makeWrapper,
+  undmg,
 }:
 
 let
   pname = "golden-cheetah";
   version = "3.7";
 
-  commonMeta = {
+  meta = {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
+    homepage = "https://github.com/GoldenCheetah/GoldenCheetah";
+    changelog = "https://github.com/GoldenCheetah/GoldenCheetah/releases/tag/v${version}";
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
@@ -21,16 +27,76 @@ let
     license = lib.licenses.gpl2Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://github.com/GoldenCheetah/GoldenCheetah"
+        "--version-regex=v([0-9\\.]*)"
+      ]
+      ++ (if stdenv.hostPlatform.isDarwin then [ "--subpackage=linux" ] else [ "--subpackage=darwin" ]);
+    };
+    inherit darwin linux;
+  };
+
+  darwin = stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+
+    src = fetchurl {
+      url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.dmg";
+      hash = "sha256-AA9J3wyz2huLSGVvjA/st1kb6aDT6uQA1Ut21S1GU2M=";
+    };
+
+    nativeBuildInputs = [
+      makeWrapper
+      undmg
+    ];
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p "$out/Applications/GoldenCheetah.app"
+      cp -r * "$out/Applications/GoldenCheetah.app/"
+      makeWrapper "$out/Applications/GoldenCheetah.app/Contents/MacOS/GoldenCheetah" "$out/bin/GoldenCheetah"
+      runHook postInstall
+    '';
+  };
+  linux = appimageTools.wrapType2 (finalAttrs: {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+
+    src = fetchurl {
+      url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.AppImage";
+      hash = "sha256-teWMDChmC2oWG3UJWTtHVXzIzi2khdkzMkMDFTTI6w8=";
+    };
+
+    extraPkgs = pkgs: [
+      pkgs.R
+      pkgs.zlib
+      pkgs.libusb-compat-0_1
+    ];
+
+    appimageContents = appimageTools.extract { inherit (finalAttrs) pname src version; };
+
+    extraInstallCommands = ''
+      mv $out/bin/${pname} $out/bin/GoldenCheetah
+      mkdir -p $out/share/applications
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      cp ${finalAttrs.appimageContents}/GoldenCheetah.desktop $out/share/applications/
+      substituteInPlace $out/share/applications/GoldenCheetah.desktop --replace-fail \
+        "Exec=GoldenCheetah" "Exec=env QT_PLUGIN_PATH= GoldenCheetah"
+      cp ${finalAttrs.appimageContents}/gc.png $out/share/icons/hicolor/512x512/apps/
+    '';
+  });
 in
 
-if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
-    inherit
-      stdenv
-      pname
-      commonMeta
-      version
-      ;
-  }
-else
-  callPackage ./linux.nix { inherit pname commonMeta version; }
+if stdenv.hostPlatform.isDarwin then darwin else linux
