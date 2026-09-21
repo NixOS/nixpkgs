@@ -123,7 +123,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
       fastapi
       freezegun
       html2text
-      httpx
+      httpx2
       httpx-curl-cffi
       ingredient-parser-nlp
       isodate
