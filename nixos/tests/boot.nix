@@ -66,7 +66,7 @@ let
     (import ../lib/eval-config.nix {
       system = null;
       modules = [
-        ../modules/installer/cd-dvd/installation-cd-minimal.nix
+        ../modules/installer/cd-dvd/installation-cd-graphical-base.nix
         ../modules/testing/test-instrumentation.nix
         { nixpkgs.pkgs = pkgs; }
       ];
