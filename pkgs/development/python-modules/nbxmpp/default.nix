@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitLab {
-    domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
     tag = finalAttrs.version;
@@ -49,8 +48,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "nbxmpp" ];
 
   meta = {
-    homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
-    changelog = "https://dev.gajim.org/gajim/python-nbxmpp/-/blob/${finalAttrs.src.tag}/ChangeLog";
+    homepage = "https://gitlab.com/gajim/python-nbxmpp";
+    changelog = "https://gitlab.com/gajim/python-nbxmpp/-/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Non-blocking Jabber/XMPP module";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ haansn08 ];

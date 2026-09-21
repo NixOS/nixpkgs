@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  gitMinimal,
   nix-update-script,
   nodejs_26,
   sqlite,
@@ -12,6 +13,7 @@
   makeFontsConf,
   noto-fonts-color-emoji,
   dejavu_fonts,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -33,11 +35,26 @@ buildNpmPackage (finalAttrs: {
     ./package.json.patch
   ];
 
+  # https://github.com/lklynet/aurral/pull/873
+  postPatch = ''
+    # Keep automatic ports above Fetch's highest blocked port (10080).
+    substituteInPlace .tests/helpers/backendTestHarness.js \
+      --replace-fail '4100 + Math.floor(Math.random() * 1000)' \
+      '11000 + Math.floor(Math.random() * 1000)'
+  '';
+
   npmDepsHash = "sha256-NVz5eqDDtMBKiTDl3aX0pHBYGTcYal8lmCf8mbKu31I=";
 
   nodejs = nodejs_26;
 
   env.VITE_APP_VERSION = finalAttrs.version;
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite ];
+  env.FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      noto-fonts-color-emoji
+      dejavu_fonts
+    ];
+  };
 
   npmInstallFlags = [
     "--include=optional"
@@ -45,6 +62,22 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmBuildFlags = [ "--workspace=frontend" ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    ffmpeg
+    gitMinimal
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    npm test
+    npm run test:integration
+
+    runHook postCheck
+  '';
 
   npmPruneFlags = [
     "--workspace=backend"
@@ -69,14 +102,7 @@ buildNpmPackage (finalAttrs: {
         yt-dlp
       ]
     }\''${PATH:+:}\$PATH
-    export FONTCONFIG_FILE=${
-      makeFontsConf {
-        fontDirectories = [
-          noto-fonts-color-emoji
-          dejavu_fonts
-        ];
-      }
-    }
+    export FONTCONFIG_FILE=${finalAttrs.env.FONTCONFIG_FILE}
     export APP_VERSION=${finalAttrs.version}
     export NODE_ENV=production
     case "\$1" in
@@ -97,7 +123,10 @@ buildNpmPackage (finalAttrs: {
     chmod +x $out/bin/aurral
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = nixosTests.aurral;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Aurral is the Lidarr companion for self-hosted music discovery";
