@@ -7,6 +7,11 @@
   autoPatchelfHook,
   wayland,
   libxkbcommon,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxcb,
   libGL,
   stdenv,
   makeDesktopItem,
@@ -37,6 +42,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libxkbcommon
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
