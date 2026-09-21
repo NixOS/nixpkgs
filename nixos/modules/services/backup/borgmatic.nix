@@ -174,10 +174,15 @@ in
         ) cfg.configurations;
       borgmaticCheck =
         name: f:
-        pkgs.runCommandCC "${name} validation" { } ''
-          ${pkgs.borgmatic}/bin/borgmatic -c ${f.source} config validate
-          touch $out
-        '';
+        pkgs.runCommand "${name} validation"
+          {
+            configFile = f.source;
+            nativeBuildInputs = [ pkgs.borgmatic ];
+          }
+          ''
+            borgmatic -c "$configFile" config validate > /dev/null
+            touch "$out"
+          '';
     in
     lib.mkIf cfg.enable {
 
