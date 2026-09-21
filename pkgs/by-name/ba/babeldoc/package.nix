@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       configargparse
       cryptography
       freetype-py
-      httpx
+      httpx2
       huggingface-hub
       hyperscan
       levenshtein
