@@ -47,7 +47,6 @@
   ],
   msaClientID ? null,
   textToSpeechSupport ? stdenv.hostPlatform.isLinux,
-  sandboxSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 assert lib.assertMsg (
@@ -57,10 +56,6 @@ assert lib.assertMsg (
 assert lib.assertMsg (
   textToSpeechSupport -> stdenv.hostPlatform.isLinux
 ) "textToSpeechSupport only has an effect on Linux.";
-
-assert lib.assertMsg (
-  sandboxSupport -> stdenv.hostPlatform.isLinux
-) "sandboxSupport only has an effect on Linux.";
 
 let
   pandora-launcher' = pandora-launcher-unwrapped.override { inherit msaClientID; };
@@ -112,10 +107,6 @@ symlinkJoin {
       runtimePrograms = [
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      ]
-      ++ lib.optionals sandboxSupport [
-        bubblewrap
-        xdg-dbus-proxy
       ]
       ++ additionalPrograms;
 
