@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>\""
+    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@oplist.org>\""
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.Version=${finalAttrs.version}"
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=${finalAttrs.frontend.version}"
   ];

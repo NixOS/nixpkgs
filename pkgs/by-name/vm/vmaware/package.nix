@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmaware";
-  version = "2.8.1";
+  version = "2.8.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NotRequiem";
     repo = "VMAware";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hSnN3GIowHbL+SEgsnx1jr7busZ9BPw38ODhSw9lw6I=";
+    hash = "sha256-vVB5DDzrxlrGwL+eYPGdvv3/ibYCKMFjj3+Q6UTheVA=";
   };
 
   nativeBuildInputs = [ cmake ];
