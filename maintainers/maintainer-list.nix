@@ -23078,6 +23078,12 @@
     github = "plebhash";
     githubId = 147345153;
   };
+  pltrz = {
+    name = "Piero Mantovani La Terza";
+    email = "piero@laterza.dev";
+    github = "pltrz";
+    githubId = 20757930;
+  };
   pluiedev = {
     email = "hi@pluie.me";
     github = "pluiedev";
