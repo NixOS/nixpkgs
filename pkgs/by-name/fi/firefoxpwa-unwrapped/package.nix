@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firefoxpwa-unwrapped";
-  version = "2.19.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T3VtyPmPz9u4sS9tgQxyks2w7VFLuyTjThDYFapiPOc=";
+    hash = "sha256-4Gbwfx/Gv21dvCEeS6HE1zHflD7xABRX3rAJdHWIsHU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/native";
