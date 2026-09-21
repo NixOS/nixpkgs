@@ -4,6 +4,7 @@
   fetchpatch2,
   lib,
   makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
   nwjs,
 }:
@@ -27,17 +28,21 @@ buildNpmPackage (finalAttrs: {
     })
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "onlykey";
-    exec = "onlykey";
-    icon = "onlykey";
-    desktopName = "OnlyKey";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "Utility"
-    ];
-    terminal = false;
-  };
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "onlykey";
+      exec = "onlykey";
+      icon = "onlykey";
+      desktopName = "OnlyKey";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Utility"
+      ];
+      terminal = false;
+    })
+  ];
 
   npmDepsHash = "sha256-DpjB95KEHfAc4GBxY40uUjlN7ifBMUncufVTmTXqDo8=";
 
@@ -83,8 +88,6 @@ buildNpmPackage (finalAttrs: {
     mkdir -p "$out/share"
     cp -r build "$out/share/onlykey"
     cp -r node_modules "$out/share/onlykey/node_modules"
-
-    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
 
     mkdir -p "$out/share/icons/hicolor/128x128/apps"
     install -D resources/onlykey_logo_128.png "$out/share/icons/hicolor/128x128/apps/onlykey.png"
