@@ -8377,12 +8377,12 @@ final: prev: {
 
   jupynium-nvim = buildVimPlugin {
     pname = "jupynium.nvim";
-    version = "0.2.7";
+    version = "0.2.8";
     src = fetchFromGitHub {
       owner = "kiyoon";
       repo = "jupynium.nvim";
-      tag = "v0.2.7";
-      hash = "sha256-YLM1XaWeUx4twqaIDDxASP94CYIEf3iT78zmexzRZos=";
+      tag = "v0.2.8";
+      hash = "sha256-UyFhaaGy3MpVMgQ/JdXqg0pdSgHu9PBhWuOsslYoelo=";
     };
     meta.homepage = "https://github.com/kiyoon/jupynium.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
