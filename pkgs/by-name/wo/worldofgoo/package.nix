@@ -4,6 +4,7 @@
   requireFile,
   unzip,
   makeDesktopItem,
+  copyDesktopItems,
   SDL2,
   SDL2_mixer,
   libogg,
@@ -12,16 +13,6 @@
 
 let
   arch = if stdenv.system == "x86_64-linux" then "x86_64" else "x86";
-
-  desktopItem = makeDesktopItem {
-    desktopName = "World of Goo";
-    genericName = "World of Goo";
-    categories = [ "Game" ];
-    exec = "WorldOfGoo.bin.${arch}";
-    icon = "2dboy-worldofgoo";
-    name = "worldofgoo";
-  };
-
 in
 
 stdenv.mkDerivation rec {
@@ -41,7 +32,10 @@ stdenv.mkDerivation rec {
     sha256 = "175e4b0499a765f1564942da4bd65029f8aae1de8231749c56bec672187d53ee";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
   sourceRoot = pname;
 
   libPath = lib.makeLibraryPath [
@@ -53,6 +47,17 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "World of Goo";
+      genericName = "World of Goo";
+      categories = [ "Game" ];
+      exec = "WorldOfGoo.bin.${arch}";
+      icon = "2dboy-worldofgoo";
+      name = "worldofgoo";
+    })
+  ];
+
   unpackPhase = ''
     # The game is distributed as a shell script, with a tar of mojosetup, and a
     # zip archive attached to the end. Therefore a simple unzip does the job.
@@ -62,15 +67,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/256x256/apps
 
     install -t $out/bin -m755 data/${arch}/WorldOfGoo.bin.${arch}
     cp -R data/noarch/* $out/bin
     cp data/noarch/game/gooicon.png $out/share/icons/hicolor/256x256/apps/2dboy-worldofgoo.png
-    cp ${desktopItem}/share/applications/worldofgoo.desktop \
-      $out/share/applications/worldofgoo.desktop
 
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
+
+    runHook postInstall
   '';
 
   dontStrip = true;
