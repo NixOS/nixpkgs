@@ -17,17 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gzip";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
+    hash = "sha256-mqDMeA3sFWuCgoRIM7NCq3ywjCXSzZoYac3Q3zHe/0g=";
   };
 
   patches = [
     ./0001-Don-t-add-timestamps-when-GZIP_NO_TIMESTAMPS-is-set.patch
-    ./CVE-2026-41991.patch
-    ./CVE-2026-41992.patch
+    # https://lists.gnu.org/archive/html/bug-gzip/2026-09/msg00032.html
+    ./0002-aarch64-linux-header-order.patch
   ];
 
   outputs = [
