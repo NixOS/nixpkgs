@@ -18427,6 +18427,8 @@ self: super: with self; {
 
   ruff-format = callPackage ../development/python-modules/ruff-format { };
 
+  ruida-pa = callPackage ../development/python-modules/ruida-pa { };
+
   rules = callPackage ../development/python-modules/rules { };
 
   rumps = callPackage ../development/python-modules/rumps { };
