@@ -3672,6 +3672,12 @@
     githubId = 9915675;
     keys = [ { fingerprint = "17C5 1EF9 C0FE 2EB2 FE56  BB53 FE98 AE5E C52B 1056"; } ];
   };
+  bet4it = {
+    email = "0xbet4@gmail.com";
+    github = "bet4it";
+    githubId = 16643669;
+    name = "Bet4";
+  };
   betaboon = {
     email = "betaboon@0x80.ninja";
     github = "betaboon";
