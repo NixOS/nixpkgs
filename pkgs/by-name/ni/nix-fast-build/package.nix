@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       getchoo
       mic92
     ];
