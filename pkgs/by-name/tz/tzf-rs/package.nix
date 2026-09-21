@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tzf-rs";
-  version = "2.0.0";
+  version = "2.1.2";
 
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ringsaturn";
     repo = "tzf-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t/LleWuSu8czVhs0GqvgmoL8u0A6t7hcuNKDkKAy0Hc=";
+    hash = "sha256-FeTMcaYkANW3Kd6nE9GddMCUJ3PZ08w1U9eLWA0Kvw0=";
   };
 
   buildFeatures = [
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "export-geojson"
   ];
 
-  cargoHash = "sha256-FpoXDbCufkm4FrqZHINZkJ79TA6vGDRaerousVY7HcA=";
+  cargoHash = "sha256-TmBYab6XUCLsPwZu3t1yWKjypXuLwCcILHwEUviEmFM=";
 
   passthru.updateScript = nix-update-script { };
 
