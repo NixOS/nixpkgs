@@ -5,12 +5,12 @@
   nix-update-script,
   fetchurl,
   makeWrapper,
-  undmg,
+  _7zz,
 }:
 
 let
   pname = "golden-cheetah";
-  version = "3.7";
+  version = "3.8";
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
@@ -48,13 +48,13 @@ let
       ;
 
     src = fetchurl {
-      url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.dmg";
-      hash = "sha256-AA9J3wyz2huLSGVvjA/st1kb6aDT6uQA1Ut21S1GU2M=";
+      url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_arm64.dmg";
+      hash = "sha256-mOdaYtdqR4O5IpPuZ40gng64/WtNKHVU7H86EYMk4LM=";
     };
 
     nativeBuildInputs = [
       makeWrapper
-      undmg
+      _7zz
     ];
     dontBuild = true;
 
@@ -76,7 +76,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.AppImage";
-      hash = "sha256-teWMDChmC2oWG3UJWTtHVXzIzi2khdkzMkMDFTTI6w8=";
+      hash = "sha256-qOluTrvyUEQ89B/brIKJKlZxVkZRVpswCysNW7VJFy0=";
     };
 
     extraPkgs = pkgs: [
