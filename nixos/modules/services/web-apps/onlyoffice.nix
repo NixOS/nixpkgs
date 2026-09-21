@@ -52,6 +52,16 @@ in
 
     x2t = lib.mkPackageOption pkgs "onlyoffice-documentserver.passthru.x2t" { };
 
+    stateDir = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/onlyoffice";
+      description = ''
+        Directory holding the documentserver's persistent state (document cache, etc.).
+        Set to `/var/lib/euro-office` when using the Euro-Office backend,
+        whose upstream defaults reference that path.
+      '';
+    };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
@@ -116,6 +126,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
     services = {
       nginx = {
         enable = lib.mkDefault true;
@@ -170,7 +181,7 @@ in
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
               '';
             "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
-              alias /var/lib/onlyoffice/documentserver/App_Data$1;
+              alias ${cfg.stateDir}/documentserver/App_Data$1;
               more_set_headers "Content-Disposition: attachment; filename*=UTF-8''$arg_filename";
 
               include ${cfg.securityNonceFile};
@@ -281,7 +292,7 @@ in
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
-          StateDirectory = "onlyoffice";
+          StateDirectory = builtins.baseNameOf cfg.stateDir;
           Type = "simple";
           User = "onlyoffice";
         };
@@ -301,12 +312,12 @@ in
               )
             }
             umask 077
-            mkdir -p /run/onlyoffice/config/ /var/lib/onlyoffice/documentserver/sdkjs/{slide/themes,common}/ /var/lib/onlyoffice/documentserver/{fonts,server/FileConverter/bin}/
+            mkdir -p /run/onlyoffice/config/ ${cfg.stateDir}/documentserver/sdkjs/{slide/themes,common}/ ${cfg.stateDir}/documentserver/{fonts,server/FileConverter/bin}/
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
 
-            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
-            chmod g+x /var/lib/onlyoffice/documentserver
+            # Allow members of the onlyoffice group to serve files under $stateDir/documentserver/App_Data
+            chmod g+x ${cfg.stateDir}/documentserver
 
             cp /run/onlyoffice/config/default.json{,.orig}
 
@@ -339,9 +350,21 @@ in
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json
-            jq '
-              .log.filePath = "/run/onlyoffice/config/log4js/production.json" |
-              .FileConverter.converter.x2tPath = "${cfg.package.x2t-with-fonts-and-themes}/bin/x2t"
+            jq --arg store_www "${cfg.package}/var/www/onlyoffice/documentserver" --arg store_etc "${cfg.package}/etc/onlyoffice/documentserver" --arg statedir "${cfg.stateDir}" '
+              # Euro-Office upstream defaults use euro-office paths while our store
+              # layout (shared with onlyoffice) lives under onlyoffice paths.
+              # Rewrite them to the configured locations; no-op for onlyoffice itself.
+              walk(
+                if type == "string" then
+                  gsub("/var/www/euro-office/documentserver"; $store_www)
+                  | gsub("/var/lib/euro-office"; $statedir)
+                  | gsub("/etc/euro-office/documentserver"; $store_etc)
+                else
+                  .
+                end
+              )
+              | .log.filePath = "/run/onlyoffice/config/log4js/production.json"
+              | .FileConverter.converter.x2tPath = "${cfg.package.x2t-with-fonts-and-themes}/bin/x2t"
               ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
             chmod u+w /run/onlyoffice/config/log4js/production.json
@@ -376,7 +399,7 @@ in
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
-            StateDirectory = "onlyoffice";
+            StateDirectory = builtins.baseNameOf cfg.stateDir;
             Type = "simple";
             User = "onlyoffice";
           };
