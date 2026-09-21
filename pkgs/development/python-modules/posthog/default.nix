@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.52.0";
+  version = "7.58.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "posthog-v${finalAttrs.version}";
-    hash = "sha256-EIH8CQgbnpbkMupyyxRR5+ZTiKiBBRtTyFQfbEABHV4=";
+    hash = "sha256-2HvOlaS6rlM2kyE5sM7CsocO+a6eRfZcNRt7fGWOgJY=";
   };
 
   build-system = [ setuptools ];
