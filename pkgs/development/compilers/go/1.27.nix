@@ -101,11 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     fi
 
     export PATH=$(pwd)/bin:$PATH
-
     ${lib.optionalString isCross ''
       # "Command line to run to compile C code for GOHOSTARCH."
       # Go's "host" is our buildPlatform.
       export CC=${buildPackages.stdenv.cc}/bin/cc
+    ''}
+    ${lib.optionalString (isCross && stdenv.hostPlatform.isElf) ''
       # Prefer external linker for cross when CGO is supported, since
       # we haven't taught go's internal linker to pick the correct ELF
       # interpreter for cross
