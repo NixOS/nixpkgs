@@ -107,7 +107,10 @@ symlinkJoin {
   '';
 
   passthru = {
+    inherit grammarsOverlay;
+    unwrapped = helix-unwrapped;
     updateScript = ./update.sh;
+    generateGrammars = ./generate_grammars.py;
     runtime = runtimeDir;
     tree-sitter-grammars = helixTreeSitterGrammars;
   };

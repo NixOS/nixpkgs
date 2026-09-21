@@ -52,6 +52,15 @@ let
 in
 (helix.override {
   helix-unwrapped = steelix-unwrapped;
+  lockedGrammars = lib.importJSON ./grammars.json;
+  grammarsOverlay =
+    final: prev:
+    (helix.passthru.grammarsOverlay final prev)
+    // {
+      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.override {
+        patches = [ ];
+      };
+    };
 }).overrideAttrs
   (
     _: previousAttrs: {
