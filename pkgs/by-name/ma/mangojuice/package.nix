@@ -25,13 +25,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.8.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-jlSEPUo2Y84xyIRmUdsIBYzZo7a8wQFOnRbb7oOPeok=";
+    hash = "sha256-DX8acRnHiKtrytZJBiAPUMRZGYtPwBFI0WOqmIWAED4=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Convenient alternative to GOverlay for setting up MangoHud";
     homepage = "https://github.com/radiolamp/mangojuice";
     changelog = "https://github.com/radiolamp/mangojuice/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pluiedev
