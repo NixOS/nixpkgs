@@ -94,7 +94,8 @@ stdenv.mkDerivation {
     installShellFiles
     removeReferencesTo
   ]
-  ++ nativeBuildInputs;
+  ++ nativeBuildInputs
+  ++ mapModules "nativeBuildInputs";
 
   buildInputs = [
     openssl
