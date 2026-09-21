@@ -10,9 +10,10 @@
   libpng,
   pcre,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ivan";
   version = "059-unstable-2025-02-20";
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -49,23 +51,24 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_mixer}/include/SDL2";
 
   # Create "ivan.desktop" file
-  ivanDesktop = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = "ivan.png";
-    desktopName = "IVAN";
-    genericName = pname;
-    categories = [
-      "Game"
-      "AdventureGame"
-      "RolePlaying"
-    ];
-    comment = meta.description;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = "ivan.png";
+      desktopName = "IVAN";
+      genericName = finalAttrs.pname;
+      categories = [
+        "Game"
+        "AdventureGame"
+        "RolePlaying"
+      ];
+      comment = finalAttrs.meta.description;
+    })
+  ];
 
   # Create appropriate directories. Copy icons and desktop item to these directories.
   postInstall = ''
-    mkdir -p $out/share/applications
     mkdir -p $out/share/icons/hicolor/16x16/apps
     mkdir -p $out/share/icons/hicolor/32x32/apps
     mkdir -p $out/share/icons/hicolor/128x128/apps
@@ -76,7 +79,6 @@ stdenv.mkDerivation rec {
     cp $src/Graphics/icons/shadowless.iconset/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ivan.png
     cp $src/Graphics/icons/shadowless.iconset/icon_256x256.png $out/share/icons/hicolor/256x256/apps/ivan.png
     cp $src/Graphics/icons/shadowless.iconset/icon_512x512.png $out/share/icons/hicolor/512x512/apps/ivan.png
-    cp ${ivanDesktop}/share/applications/* $out/share/applications
   '';
 
   meta = {
@@ -94,4 +96,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "ivan";
   };
-}
+})
