@@ -1,0 +1,32 @@
+From 91711507df5ad880bfcba1e11619441f7d0f9a58 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Mon, 13 Jul 2026 14:11:18 +0200
+Subject: [PATCH] Reuse constants in media auth tests
+
+---
+ frigate/test/test_media_auth.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/frigate/test/test_media_auth.py b/frigate/test/test_media_auth.py
+index d025fea614..0b106047b2 100644
+--- a/frigate/test/test_media_auth.py
++++ b/frigate/test/test_media_auth.py
+@@ -20,6 +20,7 @@
+     resolve_media_uri,
+ )
+ from frigate.config import FrigateConfig
++from frigate.const import EXPORT_DIR
+ from frigate.models import Event, Export, Recordings, ReviewSegment
+ from frigate.test.const import TEST_DB, TEST_DB_CLEANUPS
+ 
+@@ -231,8 +232,8 @@ def _insert_export(self, export_id, camera, filename):
+             camera=camera,
+             name=f"export-{export_id}",
+             date=int(datetime.datetime.now().timestamp()),
+-            video_path=f"/media/frigate/exports/{filename}",
+-            thumb_path=f"/media/frigate/exports/{filename}.jpg",
++            video_path=os.path.join(EXPORT_DIR, filename),
++            thumb_path=os.path.join(EXPORT_DIR, f"{filename}.jpg"),
+             in_progress=False,
+         ).execute()
+ 
