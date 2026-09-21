@@ -292,6 +292,10 @@ with lib.maintainers;
     github = "freedesktop";
   };
 
+  gaming = {
+    github = "gaming";
+  };
+
   gcc = {
     members = [
       vcunat
