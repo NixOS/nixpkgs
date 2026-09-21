@@ -54,6 +54,7 @@ buildGoModule (finalAttrs: {
     inherit (nixosTests.nebula)
       connectivity
       reload
+      tunless
       ;
   };
 
