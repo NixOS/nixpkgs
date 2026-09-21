@@ -4266,11 +4266,11 @@
     githubId = 1044263;
   };
   bricked = {
-    name = "bricked";
+    name = "Bricked";
     email = "hello@bricked.dev";
-    github = "brckd";
+    github = "bricked-dev";
     githubId = 92804487;
-    keys = [ { fingerprint = "58A2 81E6 2FBD 6E4E 664C  B603 7B4D 2A02 BB0E C28C"; } ];
+    keys = [ { fingerprint = "7B28 3F98 065C CDAC A4BF   F235 0448 5EA0 7F3F AB31"; } ];
   };
   bricklou = {
     name = "Bricklou";
