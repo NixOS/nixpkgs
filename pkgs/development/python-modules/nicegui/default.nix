@@ -47,14 +47,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.16.0";
+  version = "3.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YSx4+0rpC5BUueKvgHTkeak95BTM7V3EIbTASTokJcs=";
+    hash = "sha256-EUXqx8f1buYGjFBRP4WsScOdTWXwBU9WdtdOV5T3990=";
   };
 
   pythonRelaxDeps = [
