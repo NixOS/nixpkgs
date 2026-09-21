@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   python3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,12 +23,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Implementation of the `py` command for Unix-based platforms";
     homepage = "https://github.com/brettcannon/python-launcher";
     changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "py";
   };
 })
