@@ -83,7 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LadybirdBrowser";
     repo = "ladybird";
     rev = "b90af890b56cbd51c452d929fe71abcb8adaa36f";
-    hash = "sha256-CfSC0zEn1VUZaoBHi4a91n/QLTdpapygVf9c/v44X9E=";
+    hash = "sha256-hLo6Z4Q2tzkPlkPR+C6CxTjRvQZUAgpj6OB4wJFU+RY=";
+    # Normalize case-colliding test directories before hashing the source.
+    # https://github.com/LadybirdBrowser/ladybird/issues/12123
+    postFetch = ''
+      for parent in "$out"/Tests/LibWeb/Text/{input,expected}; do
+        mkdir "$parent/canvas-normalized"
+        for directory in "$parent"/[Cc]anvas; do
+          find "$directory" -mindepth 1 -maxdepth 1 \
+            -exec mv --no-clobber -t "$parent/canvas-normalized" -- {} +
+          rmdir "$directory"
+        done
+        mv "$parent/canvas-normalized" "$parent/canvas"
+      done
+    '';
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
