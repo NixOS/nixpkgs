@@ -754,6 +754,7 @@ in
       enableSharedMemory = mkOption {
         type = types.bool;
         default = useVirtiofs; # Need shared memory for virtiofs: <https://www.qemu.org/docs/master/system/devices/virtio/vhost-user.html#shared-memory-object>
+        defaultText = lib.literalExpression "hostPkgs.stdenv.hostPlatform.isLinux";
         description = "Enable shared memory";
       };
 
