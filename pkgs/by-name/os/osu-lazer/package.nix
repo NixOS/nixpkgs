@@ -21,14 +21,14 @@
   nativeWayland ? false,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
   version = "2026.921.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = "${version}-lazer";
+    tag = "${finalAttrs.version}-lazer";
     hash = "sha256-/1h23G6ag9VuApG4TXocozWiT+F7bG5WE0m1E7XLoT0=";
   };
 
@@ -80,8 +80,8 @@ buildDotnetModule rec {
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -sft $out/lib/${pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';
@@ -123,4 +123,4 @@ buildDotnetModule rec {
     ];
     mainProgram = "osu!";
   };
-}
+})
