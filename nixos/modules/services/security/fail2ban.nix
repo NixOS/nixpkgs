@@ -19,14 +19,14 @@ let
     name: attrs:
     lib.optionalAttrs (name != "DEFAULT") { inherit (attrs) enabled; }
     // lib.optionalAttrs (attrs.filter != null) {
-      filter = if (builtins.isString lib.filter) then lib.filter else mkInlineFilterName name;
+      filter = if (lib.isString attrs.filter) then attrs.filter else mkInlineFilterName name;
     }
     // attrs.settings;
 
   fail2banConf = configFormat.generate "fail2ban.local" cfg.daemonSettings;
 
-  strJails = lib.filterAttrs (_: builtins.isString) cfg.jails;
-  attrsJails = lib.filterAttrs (_: builtins.isAttrs) cfg.jails;
+  strJails = lib.filterAttrs (_: lib.isString) cfg.jails;
+  attrsJails = lib.filterAttrs (_: lib.isAttrs) cfg.jails;
 
   jailConf =
     let
