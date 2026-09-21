@@ -288,7 +288,7 @@ in
         serviceConfig = {
           # needs to be ran wrapped in FHS for now
           # because the default config refers to many FHS paths
-          ExecStart = "${lib.getExe cfg.package.fhs} ${cfg.package.fileconverter}/bin/fileconverter";
+          ExecStart = "${lib.getExe cfg.package.fhs} ${lib.getExe cfg.package.fileconverter}";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -364,7 +364,7 @@ in
                 end
               )
               | .log.filePath = "/run/onlyoffice/config/log4js/production.json"
-              | .FileConverter.converter.x2tPath = "${cfg.package.x2t-with-fonts-and-themes}/bin/x2t"
+              | .FileConverter.converter.x2tPath = "${lib.getExe cfg.package.x2t-with-fonts-and-themes}"
               ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
             chmod u+w /run/onlyoffice/config/log4js/production.json
@@ -394,7 +394,7 @@ in
             NODE_ENV = "production-linux";
           };
           serviceConfig = {
-            ExecStart = "${lib.getExe cfg.package.fhs} ${cfg.package.docservice}/bin/docservice";
+            ExecStart = "${lib.getExe cfg.package.fhs} ${lib.getExe cfg.package.docservice}";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
