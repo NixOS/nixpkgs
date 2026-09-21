@@ -3084,6 +3084,8 @@ self: super: with self; {
 
   chatlas = callPackage ../development/python-modules/chatlas { };
 
+  chatterbox-tts = callPackage ../development/python-modules/chatterbox-tts { };
+
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
   checkdmarc = callPackage ../development/python-modules/checkdmarc { };
@@ -3614,6 +3616,8 @@ self: super: with self; {
   configupdater = callPackage ../development/python-modules/configupdater { };
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
+
+  conformer = callPackage ../development/python-modules/conformer { };
 
   confusable-homoglyphs = callPackage ../development/python-modules/confusable-homoglyphs { };
 
@@ -15384,6 +15388,8 @@ self: super: with self; {
 
   pylookyloo = callPackage ../development/python-modules/pylookyloo { };
 
+  pyloudnorm = callPackage ../development/python-modules/pyloudnorm { };
+
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
   pylru = callPackage ../development/python-modules/pylru { };
@@ -18070,6 +18076,8 @@ self: super: with self; {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+  resemble-perth = callPackage ../development/python-modules/resemble-perth { };
+
   resend = callPackage ../development/python-modules/resend { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
@@ -18452,6 +18460,8 @@ self: super: with self; {
   s3-credentials = callPackage ../development/python-modules/s3-credentials { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
+
+  s3tokenizer = callPackage ../development/python-modules/s3tokenizer { };
 
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
