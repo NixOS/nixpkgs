@@ -2685,6 +2685,15 @@ with haskellLib;
     includes = [ "polysemy.cabal" ];
   }) super.polysemy;
 
+  # https://github.com/polysemy-research/polysemy/pull/495
+  polysemy-plugin = appendPatch (fetchpatch {
+    name = "support-doctest-0.25.patch";
+    url = "https://github.com/polysemy-research/polysemy/commit/c2c17a41f8284bb8fdf71b240a75f23af426e661.patch";
+    hash = "sha256-RSVfEUr6LyciT+T00ARff/3hND3neDhkGtYURHzRBzM";
+    includes = [ "polysemy-plugin.cabal" ];
+    relative = "polysemy-plugin";
+  }) super.polysemy-plugin;
+
   html-charset = dontCheck super.html-charset;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
