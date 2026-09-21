@@ -76,7 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [
+      diogotcorreia
+      oxalica
+    ];
     mainProgram = "rust-analyzer";
   };
 })
