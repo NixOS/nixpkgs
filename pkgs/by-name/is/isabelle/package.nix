@@ -20,6 +20,7 @@
   perl,
   procps,
   makeDesktopItem,
+  copyDesktopItems,
   isabelle-components,
   symlinkJoin,
   fetchhg,
@@ -149,7 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
-  nativeBuildInputs = [ java ];
+  nativeBuildInputs = [
+    java
+    copyDesktopItems
+  ];
 
   buildInputs = [
     polyml'
@@ -306,6 +310,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $TMP/$dirname $out
     cd $out/$dirname
@@ -315,23 +321,23 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
     cp "$out/Isabelle${finalAttrs.version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
 
-    # desktop item
-    mkdir -p "$out/share"
-    cp -r "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
+    runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "isabelle";
-    exec = "isabelle jedit";
-    icon = "isabelle";
-    desktopName = "Isabelle";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "Education"
-      "Science"
-      "Math"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "isabelle";
+      exec = "isabelle jedit";
+      icon = "isabelle";
+      desktopName = "Isabelle";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Education"
+        "Science"
+        "Math"
+      ];
+    })
+  ];
 
   meta = {
     description = "Generic proof assistant";
