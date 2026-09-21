@@ -234,7 +234,8 @@ buildGoModule (finalAttrs: {
       } \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
-    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+    substituteInPlace ./cmd/tailscaled/tailscale-wait-online.service --replace-fail "/usr/bin" "$out/bin"
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/{tailscaled.service,tailscale-online.target,tailscale-wait-online.service}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/tailscale"
