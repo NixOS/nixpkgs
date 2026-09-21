@@ -15,6 +15,7 @@
   makeWrapper,
   imagemagick,
   shared-mime-info,
+  copyDesktopItems,
   stdenv,
   testers,
   webkitgtk_4_1,
@@ -26,18 +27,6 @@ let
   version = "11.2.0";
   buildId = "20251212-2003";
   archiveName = "trace-compass-${version}-${buildId}-linux.gtk.x86_64.tar.gz";
-
-  desktopItem = makeDesktopItem {
-    name = "tracecompass";
-    exec = "tracecompass";
-    icon = "tracecompass";
-    comment = "Trace Compass";
-    desktopName = "Trace Compass";
-    categories = [
-      "Development"
-      "Profiling"
-    ];
-  };
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "tracecompass";
@@ -58,6 +47,21 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [
     makeWrapper
     imagemagick
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "tracecompass";
+      exec = "tracecompass";
+      icon = "tracecompass";
+      comment = "Trace Compass";
+      desktopName = "Trace Compass";
+      categories = [
+        "Development"
+        "Profiling"
+      ];
+    })
   ];
 
   postPatch = ''
@@ -100,10 +104,6 @@ stdenv.mkDerivation (finalAttrs: rec {
       --run 'if [[ " $* " != *" -configuration "* ]]; then
          set -- -configuration "$HOME/.tracecompass/${version}/configuration" "$@"
        fi'
-
-
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
 
     for size in 16 24 32 48 64 128 256; do
       dir="$out/share/icons/hicolor/''${size}x''${size}/apps"
