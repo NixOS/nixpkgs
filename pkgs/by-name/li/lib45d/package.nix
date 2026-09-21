@@ -14,6 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N/HC1OJe1Oa66KFdbIwIcCbV4Fi6FPSi0+KAtKJSjds=";
   };
 
+  patches = [
+    # https://github.com/45Drives/lib45d/pull/5
+    ./stringstream.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 
