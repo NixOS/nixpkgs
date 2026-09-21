@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-Oirgd5ffDvvWG4yoZB/3r7+npLqNqe8joZfJBTxqFXE=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v16.2.7/bookmarks-16.2.7.tar.gz",
-    "version": "16.2.7",
+    "hash": "sha256-YdFpK2RSNkIzOuiveHmlidsaxWjm1fS++pFkO9pWsCM=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v17.0.0/bookmarks-17.0.0.tar.gz",
+    "version": "17.0.0",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users, groups and teams or via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-lU1kys648f+2dE+g99KZAicimjEM1/0AAf+kchSuuG8=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.17.5/deck-v1.17.5.tar.gz",
-    "version": "1.17.5",
+    "hash": "sha256-SUauPg95OdjN1sOnLzXMyScD0sWmlFhtZc4C1yTT6qg=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.19.0/deck-v1.19.0.tar.gz",
+    "version": "1.19.0",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "files_automatedtagging": {
-    "hash": "sha256-A9cjrz0sJKMA+LinBiyUWJ5UOgvyfiJ3dLLP2NKBy50=",
-    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v4.0.0/files_automatedtagging-v4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-r3p7EcsSiTxXiB5fgsSlsaj+Qt5Wcp/WDAIVNHmkcGw=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v6.0.0/files_automatedtagging-v6.0.0.tar.gz",
+    "version": "6.0.0",
     "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
     "homepage": "https://github.com/nextcloud/files_automatedtagging",
     "licenses": [
@@ -140,13 +140,13 @@
     ]
   },
   "files_retention": {
-    "hash": "sha256-67MPooGJuSX/sL/l44z/9CYSlv5/ACVRpl1Z5QTJ/xw=",
-    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.1/files_retention-v4.0.1.tar.gz",
-    "version": "4.0.1",
+    "hash": "sha256-119E42joqgFGvozs/gt8KqU9hhlH7PoZT+Y/T+bOIEs=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v6.0.0/files_retention-v6.0.0.tar.gz",
+    "version": "6.0.0",
     "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
     "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
-      "agpl"
+      "AGPL-3.0-or-later"
     ]
   },
   "forms": {
@@ -170,13 +170,13 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-Hs3WRKLpE96LMzVgcXZg8Lp1g2MJxEY6+Fjohs3Dpow=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.15/groupfolders-v21.0.15.tar.gz",
-    "version": "21.0.15",
+    "hash": "sha256-OUnmpFlHGICQwXDGmDquEaHWYTTsMX/+e3YJBi867PM=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v23.0.1/groupfolders-v23.0.1.tar.gz",
+    "version": "23.0.1",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
-      "AGPL-3.0-or-later"
+      "agpl"
     ]
   },
   "guests": {
@@ -190,9 +190,9 @@
     ]
   },
   "impersonate": {
-    "hash": "sha256-gAitAuNsRP1EbtO7VayGbL+2IlEoFQsomrPegUEDbqg=",
-    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v4.0.0/impersonate-v4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-A/5EiGfge/Tm492V81UPige1yJaDorrxOCsc1c8KF70=",
+    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v6.0.0/impersonate-v6.0.0.tar.gz",
+    "version": "6.0.0",
     "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
     "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "integration_openai": {
-    "hash": "sha256-ygi83pCWLo+SDwDbZkqcsoajBzoWUJnzjnQuxMTaNxc=",
-    "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v4.5.2/integration_openai-v4.5.2.tar.gz",
-    "version": "4.5.2",
+    "hash": "sha256-yYC0fUYtb4SkFh4TEiJ3+gSbBlDaFCB9mAZu59W6USc=",
+    "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v5.0.0/integration_openai-v5.0.0.tar.gz",
+    "version": "5.0.0",
     "description": "⚠️ The smart pickers have been removed from this app\nas they are now included in the [Assistant app](https://apps.nextcloud.com/apps/assistant).\n\nThis app implements:\n\n* Text generation providers: Free prompt, Summarize, Headline, Context Write, Chat, and Reformulate (using any available large language model)\n* A Translation provider (using any available language model)\n* A SpeechToText provider (using Whisper)\n* An image generation provider\n\n⚠️ Context Write, Summarize, Headline and Reformulate have mainly been tested with OpenAI.\nThey might work when connecting to other services, without any guarantee.\n\nInstead of connecting to the OpenAI API for these, you can also connect to a self-hosted [LocalAI](https://localai.io) instance or [Ollama](https://ollama.com/) instance\nor to any service that implements an API similar to the OpenAI one, for example:\n[IONOS AI Model Hub](https://docs.ionos.com/cloud/ai/ai-model-hub), [Plusserver](https://www.plusserver.com/en/ai-platform/) or [MistralAI](https://mistral.ai).\n\n⚠️ This app is mainly tested with OpenAI. We do not guarantee it works perfectly\nwith other services that implement OpenAI-compatible APIs with slight differences.\n\n## Improve AI task pickup speed\n\nTo avoid task processing execution delay, setup at 4 background job workers in the main server (where Nextcloud is installed). The setup process is documented here: https://docs.nextcloud.com/server/latest/admin_manual/ai/overview.html#improve-ai-task-pickup-speed\n\n## Ethical AI Rating\n### Rating for Text generation using ChatGPT via the OpenAI API: 🔴\n\nNegative:\n* The software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* The trained model is not freely available, so the model can not be run on-premises\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n\n### Rating for Translation using ChatGPT via the OpenAI API: 🔴\n\nNegative:\n* The software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* The trained model is not freely available, so the model can not be run on-premises\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n### Rating for Image generation using DALL·E via the OpenAI API: 🔴\n\nNegative:\n* The software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* The trained model is not freely available, so the model can not be ran on-premises\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via the OpenAI API: 🟡\n\nPositive:\n* The software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can run on-premise\n\nNegative:\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n### Rating for Text-To-Speech via the OpenAI API: 🔴\n\nNegative:\n* The software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* The trained model is not freely available, so the model can not be ran on-premises\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n### Rating for Text generation via LocalAI: 🟢\n\nPositive:\n* The software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can be ran on-premises\n* The training data is freely available, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n\n### Rating for Image generation using Stable Diffusion via LocalAI : 🟡\n\nPositive:\n* The software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via LocalAI: 🟡\n\nPositive:\n* The software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* The training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/integration_openai",
     "licenses": [
@@ -259,16 +259,6 @@
       "agpl"
     ]
   },
-  "news": {
-    "hash": "sha256-qurdLAGKotjlhEMJ1cdUroukcGfwb4eg+Cr+WvJX3/g=",
-    "url": "https://github.com/nextcloud/news/releases/download/28.7.0/news.tar.gz",
-    "version": "28.7.0",
-    "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
-    "homepage": "https://github.com/nextcloud/news",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "nextpod": {
     "hash": "sha256-wgW0X2j2Cv5rp/OFa0xsuiYuE1TJr/+ooED48JcsAvo=",
     "url": "https://github.com/pbek/nextcloud-nextpod/releases/download/v0.7.12/nextpod-nc.tar.gz",
@@ -300,9 +290,9 @@
     ]
   },
   "oidc_login": {
-    "hash": "sha256-ENVhD9WxL6t2O7PFn8EZUBGl1vy/MQmRvAyftQRUH8c=",
-    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.3.4/oidc_login.tar.gz",
-    "version": "3.3.4",
+    "hash": "sha256-2E42FuhlJZwUKvbPQLbwCSIorXi+2EP4XGV19FlCiEs=",
+    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.4.0/oidc_login.tar.gz",
+    "version": "3.4.0",
     "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication\n- Optional removal of special characters in UID\n- Mapping of multiple names to a single display name\n- Mapping for birthdate",
     "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
     "licenses": [
@@ -349,32 +339,12 @@
       "agpl"
     ]
   },
-  "previewgenerator": {
-    "hash": "sha256-ip4gqIP2ciT45zlHr7R22YCb15kawM2S1/r87b5lyoc=",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.14.0/previewgenerator-v5.14.0.tar.gz",
-    "version": "5.14.0",
-    "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
-    "homepage": "https://github.com/nextcloud/previewgenerator",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "qownnotesapi": {
     "hash": "sha256-6J2o1EBZq1XOBsKAQCBFArsXg07Bvt5h+uL1zp9ddlc=",
     "url": "https://github.com/pbek/qownnotesapi/releases/download/v26.8.0/qownnotesapi-nc.tar.gz",
     "version": "26.8.0",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "quota_warning": {
-    "hash": "sha256-bX9f6Zu53lZfG8zpfEwRxvIFVxARs4y6NLNNAK3DhUI=",
-    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.24.0/quota_warning-v1.24.0.tar.gz",
-    "version": "1.24.0",
-    "description": "This app sends notifications to users when they reached 85, 90 and 95% of their quota (checked once a day).\nIn addition an email can be sent to the users. The three percentages can be changed in the admin settings.\nIt is also possible to have a link in the email and the notification for upsell options.",
-    "homepage": "https://github.com/nextcloud/quota_warning",
     "licenses": [
       "agpl"
     ]
@@ -400,9 +370,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-xNbX6tXW64yUgT2xitHYCIhO6TKkVp2kU1xlJ3nKiT8=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v10.3.1/richdocuments-v10.3.1.tar.gz",
-    "version": "10.3.1",
+    "hash": "sha256-OuP6U21EDgbzZKtmEzHcfWeNFCbM+PPRH/xwnt57hD4=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v12.0.0/richdocuments-v12.0.0.tar.gz",
+    "version": "12.0.0",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -420,13 +390,13 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-9JDMeD4j20+83nHnw8Pjj4j4JO9Gn9byLDlNrW3j0Gk=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.11/spreed-v23.0.11.tar.gz",
-    "version": "23.0.11",
+    "hash": "sha256-evrABcdya5miGVFR6wSlylDCmT2j59QW124A8JTOe0U=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v25.0.0/spreed-v25.0.0.tar.gz",
+    "version": "25.0.0",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
-      "agpl"
+      "AGPL-3.0-or-later"
     ]
   },
   "tables": {
@@ -459,16 +429,6 @@
       "agpl"
     ]
   },
-  "twofactor_admin": {
-    "hash": "sha256-IkHzIqRBhG6zr+8y5ifrRfsKl9TyMDx7G1JGogbQrDM=",
-    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.12.0/twofactor_admin-v4.12.0.tar.gz",
-    "version": "4.12.0",
-    "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
-    "homepage": "",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "twofactor_webauthn": {
     "hash": "sha256-fqNB9gtJAuW4LjQhZ7ESN6ZMyba/lYRHwNMOtVf0avg=",
     "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v2.7.1/twofactor_webauthn-v2.7.1.tar.gz",
@@ -480,21 +440,11 @@
     ]
   },
   "unroundedcorners": {
-    "hash": "sha256-0+fOJnPsuengy8TPzTKizDnDXTlZStalFDOv+dFlRgc=",
-    "url": "https://github.com/OliverParoczai/nextcloud-unroundedcorners/releases/download/v1.1.5/unroundedcorners-v1.1.5.tar.gz",
-    "version": "1.1.5",
+    "hash": "sha256-RCnXfnl2dJ0NpcNJ+0+jcSsp/h4hHemPg3fkjkFoGl0=",
+    "url": "https://github.com/OliverParoczai/nextcloud-unroundedcorners/releases/download/v1.1.6/unroundedcorners-v1.1.6.tar.gz",
+    "version": "1.1.6",
     "description": "# Unrounded Corners\nA Nextcloud app that restores the corners of buttons and widgets to their original looks by unrounding them.",
     "homepage": "https://github.com/OliverParoczai/nextcloud-unroundedcorners",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "uppush": {
-    "hash": "sha256-SRRFA1nQk0OsCm+FEaEN32bDTNCbcKyM0ZOhy5yXUEc=",
-    "url": "https://codeberg.org/NextPush/uppush/archive/2.5.0.tar.gz",
-    "version": "2.5.0",
-    "description": "Once the mobile phone is connected with NextPush, push notifications can be forwarded to applications implementing UnifiedPush.\n\nMore information about UnifiedPush at https://unifiedpush.org",
-    "homepage": "",
     "licenses": [
       "agpl"
     ]
