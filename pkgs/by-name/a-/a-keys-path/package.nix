@@ -51,15 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "a-keys-path";
-    exec = "a-keys-path";
-    icon = "a-keys-path";
-    desktopName = "a-keys-path";
-    comment = "A game where you build your way with your keys";
-    genericName = "A Key's Path";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "a-keys-path";
+      exec = "a-keys-path";
+      icon = "a-keys-path";
+      desktopName = "a-keys-path";
+      comment = "A game where you build your way with your keys";
+      genericName = "A Key's Path";
+      categories = [ "Game" ];
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -94,9 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/a-keys-path/a-keys-path
 
     install -D icon.png $out/share/icons/hicolor/256x256/apps/a-keys-path.png
-
-    install -Dm644 ${finalAttrs.desktopItem}/share/applications/a-keys-path.desktop \
-      $out/share/applications/a-keys-path.desktop
 
     runHook postInstall
   '';
