@@ -18,7 +18,7 @@ buildNpmPackage (finalAttrs: {
   inherit (mullvad) src version;
 
   nodejs = nodejs_22;
-  npmDepsHash = "sha256-9IfPNfo3MJ7Ipvvlqm76iTh1d1RYFJfVZiKlh5ia8TM=";
+  npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
 
   __structuredAttrs = true;
   strictDeps = true;
