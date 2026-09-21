@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   curl,
+  openssl,
   stdenv,
   testers,
   static-server,
@@ -11,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "static-server";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "static-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AZcNh/kF6IdAceA7qe+nhRlwU4yGh19av/S1Zt7iKIs=";
+    hash = "sha256-4VfysN1VVMKXgtnQGCluvAKrdOpFeccIl+OiWF9T/Uw=";
   };
 
   vendorHash = "sha256-1p3dCLLo+MTPxf/Y3zjxTagUi+tq7nZSj4ZB/aakJGY=";
@@ -31,7 +32,16 @@ buildGoModule (finalAttrs: {
 
   nativeCheckInputs = [
     curl
+    openssl
   ];
+
+  # the certificate bundled with the tests expired in 2025, so regenerate it
+  preCheck = ''
+    openssl ecparam -name prime256v1 -genkey -noout -out testdata/datafiles/key.pem
+    openssl req -x509 -new -key testdata/datafiles/key.pem -sha256 -days 36500 \
+      -subj "/O=Acme Co" -addext "subjectAltName=IP:127.0.0.1" \
+      -out testdata/datafiles/cert.pem
+  '';
 
   ldflags = [
     "-s"

@@ -189,11 +189,6 @@ in
         wivrn = {
           description = "WiVRn XR runtime service";
           environment = recursiveUpdate {
-            # Default options
-            # https://gitlab.freedesktop.org/monado/monado/-/blob/598080453545c6bf313829e5780ffb7dde9b79dc/src/xrt/targets/service/monado.in.service#L12
-            XRT_COMPOSITOR_LOG = "debug";
-            XRT_PRINT_OPTIONS = "on";
-            IPC_EXIT_ON_DISCONNECT = "off";
             PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = mkIf cfg.steam.importOXRRuntimes "1";
           } cfg.monadoEnvironment;
           # WiVRn scans for .desktop files in $XDG_DATA_DIRS for the application launcher,

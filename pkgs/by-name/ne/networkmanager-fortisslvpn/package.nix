@@ -90,6 +90,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NetworkManager’s FortiSSL plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
+    knownVulnerabilities = [
+      "CVE-2026-91839"
+    ];
     license = lib.licenses.gpl2Plus;
   };
 }
