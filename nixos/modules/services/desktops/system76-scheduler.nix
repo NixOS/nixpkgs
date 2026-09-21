@@ -141,6 +141,7 @@ let
       )
     );
 
+  package = cfg.package.override { useExecsnoop = cfg.useExecsnoop; };
 in
 {
   options = {
@@ -283,8 +284,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    services.dbus.packages = [ cfg.package ];
+    environment.systemPackages = [ package ];
+    services.dbus.packages = [ package ];
 
     systemd.services.system76-scheduler = {
       description = "Manage process priorities and CFS scheduler latencies for improved responsiveness on the desktop";
@@ -298,16 +299,16 @@ in
       serviceConfig = {
         Type = "dbus";
         BusName = "com.system76.Scheduler";
-        ExecStart = "${cfg.package}/bin/system76-scheduler daemon";
-        ExecReload = "${cfg.package}/bin/system76-scheduler daemon reload";
+        ExecStart = "${package}/bin/system76-scheduler daemon";
+        ExecReload = "${package}/bin/system76-scheduler daemon reload";
       };
     };
 
     environment.etc = mkMerge [
       (mkIf cfg.useStockConfig {
         # No custom settings: just use stock configuration with a fix for Pipewire
-        "system76-scheduler/config.kdl".source = "${cfg.package}/data/config.kdl";
-        "system76-scheduler/process-scheduler/00-dist.kdl".source = "${cfg.package}/data/pop_os.kdl";
+        "system76-scheduler/config.kdl".source = "${package}/data/config.kdl";
+        "system76-scheduler/process-scheduler/00-dist.kdl".source = "${package}/data/pop_os.kdl";
         "system76-scheduler/process-scheduler/01-fix-pipewire-paths.kdl".source =
           ../../../../pkgs/by-name/sy/system76-scheduler/01-fix-pipewire-paths.kdl;
       })
