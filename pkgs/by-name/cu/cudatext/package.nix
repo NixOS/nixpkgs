@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.236.0.5";
+  version = "1.237.0.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-DH4X9IsBs4a8tPjDmMgb5xoAmkfP5uBWs1eoKlmq8c4=";
+    hash = "sha256-LHF4S3Urd0sY0P38c7XYvYe+dLJBG0aQS88gDdmxNb0=";
   };
 
   patches = [ ./proc_globdata.patch ];
