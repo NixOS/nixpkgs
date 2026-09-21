@@ -32,10 +32,7 @@ let
     '';
 
     patches = [
-      (fetchpatch2 {
-        url = "https://github.com/DependencyTrack/frontend/pull/1575.patch?full_index=1";
-        hash = "sha256-Wo+6yXa/8jB/pph0DTNsFz6lK3sedvro+7yvLSKes9c=";
-      })
+      ./node22.patch
     ];
 
     npmDepsHash = "sha256-md+PGEC1/Kl2MQhhYldSErcsDSefbPvwVDsw0Yklq1E=";
