@@ -96,7 +96,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      giomf
+    ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";
