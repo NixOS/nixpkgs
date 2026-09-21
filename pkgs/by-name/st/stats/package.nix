@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "3.0.13";
+  version = "3.0.17";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exelban";
     repo = "Stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0EDQnMD/Cm2DG0bgt6MVexbVBWObRkF1OXnLwdy3TAo=";
+    hash = "sha256-PpifztjKCuRQ6uvsvf78hh04yyRhDvjPAw+Bjug0mLg=";
   };
 
   nativeBuildInputs = [
