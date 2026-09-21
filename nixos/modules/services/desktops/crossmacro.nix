@@ -23,7 +23,7 @@ in
         "alice"
         "bob"
       ];
-      description = "List of users granted permission to use CrossMacro.";
+      description = "Local or directory-service identities granted access to CrossMacro.";
     };
   };
 
@@ -32,6 +32,10 @@ in
       {
         assertion = cfg.users != [ ];
         message = "CrossMacro: You must specify at least one user. Set `services.crossmacro.users`.";
+      }
+      {
+        assertion = !config.systemd.sysusers.enable;
+        message = "CrossMacro: `services.crossmacro.users` cannot be used with systemd-sysusers because it must support NSS directory identities.";
       }
     ];
 
@@ -50,28 +54,17 @@ in
     environment.etc."polkit-1/rules.d/50-crossmacro.rules".source =
       "${cfg.daemonPackage}/share/polkit-1/rules.d/50-crossmacro.rules";
 
-    users.groups.crossmacro = { };
+    users.groups.crossmacro.members = cfg.users;
 
-    users.users =
-      lib.listToAttrs (
-        map (user: {
-          name = user;
-          value = {
-            extraGroups = [ "crossmacro" ];
-          };
-        }) cfg.users
-      )
-      // {
-        crossmacro = {
-          isSystemUser = true;
-          group = "crossmacro";
-          extraGroups = [
-            "input"
-            "uinput"
-          ];
-          description = "CrossMacro Input Daemon User";
-        };
-      };
+    users.users.crossmacro = {
+      isSystemUser = true;
+      group = "crossmacro";
+      extraGroups = [
+        "input"
+        "uinput"
+      ];
+      description = "CrossMacro Input Daemon User";
+    };
 
     systemd.services.crossmacro = {
       description = "CrossMacro Input Daemon Service";
