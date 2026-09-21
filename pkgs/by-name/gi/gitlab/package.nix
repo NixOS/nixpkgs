@@ -346,7 +346,7 @@ let
       SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
       SKIP_YARN_INSTALL = 1;
-      NODE_OPTIONS = "--max-old-space-size=8192";
+      NODE_OPTIONS = "--max-old-space-size=16384";
     };
 
     postConfigure = ''
