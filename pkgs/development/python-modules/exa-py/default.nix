@@ -8,7 +8,7 @@
 
   # deps
   httpcore,
-  httpx,
+  httpx2,
   openai,
   pydantic,
   python-dotenv,
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     httpcore
-    httpx
+    httpx2
     openai
     pydantic
     python-dotenv
