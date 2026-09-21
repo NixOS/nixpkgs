@@ -12,18 +12,13 @@
 
   # buildInputs
   alsa-lib,
-  curl,
-  expat,
   fontconfig,
   freetype,
-  libGL,
   libxcursor,
   libxext,
   libxinerama,
   libxrandr,
-  libepoxy,
   libjack2,
-  libxkbcommon,
   lv2,
 }:
 
@@ -48,22 +43,17 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
-    curl
-    expat
     fontconfig
     freetype
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
-    libGL
     libxcursor
     libxext
     libxinerama
     libxrandr
-    libepoxy
     libjack2
-    libxkbcommon
   ];
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {

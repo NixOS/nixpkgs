@@ -14,18 +14,12 @@
 
   # buildInputs
   alsa-lib,
-  curl,
-  expat,
   fontconfig,
   freetype,
-  libGL,
   libxcursor,
   libxext,
   libxinerama,
   libxrandr,
-  libepoxy,
-  libjack2,
-  libxkbcommon,
   lv2,
   # Highway is built static-dispatch only upstream (HWY_COMPILE_ONLY_STATIC is
   # forced ON), so exactly one ISA is baked in -- there is no runtime dispatch.
@@ -67,22 +61,16 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
-    curl
-    expat
     fontconfig
     freetype
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
-    libGL
     libxcursor
     libxext
     libxinerama
     libxrandr
-    libepoxy
-    libjack2
-    libxkbcommon
   ];
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
