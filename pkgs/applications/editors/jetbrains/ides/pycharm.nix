@@ -51,7 +51,7 @@ jetbrains.mkJetBrainsProduct {
     else
       null;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # keep-sorted start
     jetbrains.cythonDebugSpeedupsHook
     python3
