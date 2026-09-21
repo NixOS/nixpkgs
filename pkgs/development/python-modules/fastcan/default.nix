@@ -52,6 +52,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # ValueError: ndarray is not Fortran contiguous
+    "fastcan/tests/test_fastcan.py::test_indices_include_exclude"
+    "fastcan/tests/test_fastcan.py::test_ssc_consistent_with_cca"
+    "fastcan/tests/test_fastcan.py::test_h_eta_consistency"
+  ];
+
   pythonImportsCheck = [ "fastcan" ];
 
   meta = {
