@@ -312,41 +312,17 @@ index 59571bcdf03f..7853bc378951 100644
 
      uno::Reference<beans::XPropertySet> xStyle(
 diff --git i/sw/qa/extras/uiwriter/uiwriter4.cxx w/sw/qa/extras/uiwriter/uiwriter4.cxx
-index a4c3b4a62bbc..8a41e4a9b2ed 100644
+index 72a1b5eece2f..bea5802ebb5a 100644
 --- i/sw/qa/extras/uiwriter/uiwriter4.cxx
 +++ w/sw/qa/extras/uiwriter/uiwriter4.cxx
-@@ -94,6 +94,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
-
- CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
+@@ -116,6 +116,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
+ 
+ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98446_switch_to_single_page_on_hide_whitespace)
  {
-+    return; // assertion failed?
-     // Enable hide whitespace mode.
++    return; // test leaks state that causes issues with following tests
      createSwDoc();
-     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-@@ -552,6 +553,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96943)
-
- CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
- {
-+    return; // fails on aarch64
-     // Enable hide whitespace mode.
-     createSwDoc();
-     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-@@ -963,6 +965,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
-
- CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96961)
- {
-+    return; // fails on aarch64
-     // Insert a page break.
-     createSwDoc();
-     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-@@ -2105,6 +2108,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf106736)
-
- CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
- {
-+    return; // fails on aarch64
-     // The option is true in settings.xml
-     createSwDoc("MsWordCompTrailingBlanksTrue.odt");
-     SwDoc* pDoc = getSwDoc();
+ 
+     SwDocShell* pDocShell = getSwDocShell();
 diff --git i/vcl/qa/cppunit/pdfexport/pdfexport.cxx w/vcl/qa/cppunit/pdfexport/pdfexport.cxx
 index 7766c3aa3e76..bb00df6ba673 100644
 --- i/vcl/qa/cppunit/pdfexport/pdfexport.cxx
