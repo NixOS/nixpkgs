@@ -79,10 +79,8 @@ buildGoModule {
   };
 
   preBuild = ''
-    if [ -d vendor ]; then
-      chmod -R u+w vendor
-      cp vendor/go.mod vendor/go.sum .
-    fi
+    chmod -R u+w vendor
+    cp vendor/go.mod vendor/go.sum .
   '';
 
   passthru = {
