@@ -79,11 +79,6 @@ buildGoModule rec {
 
   passthru = {
     inherit kata-images;
-
-    # The kata-images hashes live in a separate file that the generic
-    # rewriters do not touch. Expose every architecture variant as a
-    # subpackage so a single `nix-update --subpackage` run refreshes all of
-    # them, regardless of the builder's architecture.
     kata-images-aarch64-linux = kata-images-all.aarch64-linux;
     kata-images-x86_64-linux = kata-images-all.x86_64-linux;
     updateScript = nix-update-script {

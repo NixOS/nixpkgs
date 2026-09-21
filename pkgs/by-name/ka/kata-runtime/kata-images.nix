@@ -7,10 +7,6 @@
 }:
 
 let
-  # Each entry maps a supported system to the release asset suffix for that
-  # architecture. The assets are architecture-specific, but every derivation
-  # below is instantiated with the host stdenv - only the URL and hash differ.
-  # That way a single `nix-update` run on any builder can refresh all of them.
   images = {
     x86_64-linux = {
       suffix = "amd64";
