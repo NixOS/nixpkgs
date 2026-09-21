@@ -13,19 +13,15 @@ let
     mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
   };
 
+  mkInlineFilterName = name: "nixos-${name}";
+
   mkJailConfig =
     name: attrs:
     lib.optionalAttrs (name != "DEFAULT") { inherit (attrs) enabled; }
     // lib.optionalAttrs (attrs.filter != null) {
-      filter = if (builtins.isString lib.filter) then lib.filter else name;
+      filter = if (builtins.isString lib.filter) then lib.filter else mkInlineFilterName name;
     }
     // attrs.settings;
-
-  mkFilter =
-    name: attrs:
-    lib.nameValuePair "fail2ban/filter.d/${name}.conf" {
-      source = configFormat.generate "filter.d/${name}.conf" attrs.filter;
-    };
 
   fail2banConf = configFormat.generate "fail2ban.local" cfg.daemonSettings;
 
@@ -66,6 +62,21 @@ let
 
     [DEFAULT]
   '';
+
+  mkLocal =
+    type: name: attrs:
+    lib.nameValuePair "fail2ban/${type}.d/${name}.local" {
+      source = configFormat.generate "${type}.d/${name}.local" attrs;
+    };
+  mkInlineFilter = name: attrs: mkLocal "filter" (mkInlineFilterName name) attrs.filter;
+
+  inlineFilters = (
+    lib.mapAttrs' mkInlineFilter (
+      lib.filterAttrs (_: v: v.filter != null && !lib.isString v.filter) attrsJails
+    )
+  );
+  explicitFilters = (lib.mapAttrs' (mkLocal "filter") cfg.filters);
+  explicitActions = (lib.mapAttrs' (mkLocal "action") cfg.actions);
 in
 
 {
@@ -327,11 +338,75 @@ in
           NixOS comes with a default `sshd` jail;
           for it to work well,
           [](#opt-services.openssh.settings.LogLevel) should be set to
-          `"VERBOSE"` or higher so that fail2ban
+          `"VERBOSE"` or higher so that Fail2ban
           can observe failed login attempts.
           This module sets it to `"VERBOSE"` if
-          not set otherwise, so enabling fail2ban can make SSH logs
+          not set otherwise, so enabling Fail2ban can make SSH logs
           more verbose.
+
+          IMPORTANT: When specifying multiline values make sure all lines
+          (except the first one) are indented to prevent them from being
+          parsed as separate key-value pairs by Fail2ban.
+        '';
+      };
+
+      actions = lib.mkOption {
+        default = { };
+        example = lib.literalExpression ''
+          {
+            sendmail-common.Definition = {
+              # don't send mail on startup and shutdown
+              actionstart = "";
+              actionstop = "";
+            };
+          }
+        '';
+        type = lib.types.attrsOf configFormat.type;
+        description = ''
+          The configurations of additional Fail2ban "actions", which
+          contain commands to be executed upon certain events.
+
+          The resulting configuration files have a `.local` suffix, which
+          results in actions distributed alongside Fail2ban being
+          overridden (but not replaced) should they carry the same name.
+
+          IMPORTANT: When specifying multiline values make sure all lines
+          (except the first one) are indented to prevent them from being
+          parsed as separate key-value pairs by Fail2ban.
+        '';
+      };
+
+      filters = lib.mkOption {
+        default = { };
+        example = lib.literalExpression ''
+          {
+            nextcloud = {
+              INCLUDES.before = "common.conf";
+              Definition = {
+                _groupsre = '''(?:(?:,?\s*"\w+":(?:"[^"]+"|\w+))*)''';
+                failregex = '''
+                  ^%(__prefix_line)s\{%(_groupsre)s,?\s*"remoteAddr":"<HOST>"%(_groupsre)s,?\s*"message":"Login failed:
+                    ^%(__prefix_line)s\{%(_groupsre)s,?\s*"remoteAddr":"<HOST>"%(_groupsre)s,?\s*"message":"Two-factor challenge failed:
+                    ^%(__prefix_line)s\{%(_groupsre)s,?\s*"remoteAddr":"<HOST>"%(_groupsre)s,?\s*"message":"Trusted domain error.
+                ''';
+                datepattern = ''',?\s*"time"\s*:\s*"%%Y-%%m-%%d[T ]%%H:%%M:%%S(%%z)?"''';
+                journalmatch = "_SYSTEMD_UNIT=phpfpm-nextcloud.service";
+              };
+            };
+          }
+        '';
+        type = lib.types.attrsOf configFormat.type;
+        description = ''
+          The configurations of additional Fail2ban "filters", which specify
+          how log files are processed to extract authentication failures.
+
+          The resulting configuration files have a `.local` suffix, which
+          results in filters distributed alongside Fail2ban being
+          overridden (but not replaced) should they carry the same name.
+
+          IMPORTANT: When specifying multiline values make sure all lines
+          (except the first one) are indented to prevent them from being
+          parsed as separate key-value pairs by Fail2ban.
         '';
       };
 
@@ -357,30 +432,41 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = {
-      "fail2ban/fail2ban.local".source = fail2banConf;
-      "fail2ban/jail.local".source = jailConf;
-      "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
-      "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
-      "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
-      "fail2ban/paths-nixos.conf".source = pathsConf;
-      "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
-      "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
-    }
-    // (lib.mapAttrs' mkFilter (
-      lib.filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails
-    ));
+    environment.etc = lib.mkMerge [
+      {
+        "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
+        "fail2ban/fail2ban.local".source = fail2banConf;
+        "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
+        "fail2ban/jail.local".source = jailConf;
+        "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
+        "fail2ban/paths-nixos.conf".source = pathsConf;
+        "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
+        "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+      }
+      inlineFilters
+      explicitFilters
+      explicitActions
+    ];
 
     systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
       wantedBy = [ "multi-user.target" ];
       partOf = lib.optional config.networking.firewall.enable "firewall.service";
 
-      restartTriggers = [
-        fail2banConf
-        jailConf
-        pathsConf
-      ];
+      restartTriggers =
+        let
+          generatedFiles = etcEntries: map (entry: entry.source) (lib.attrValues etcEntries);
+        in
+        lib.concatLists [
+          [
+            fail2banConf
+            jailConf
+            pathsConf
+          ]
+          (generatedFiles inlineFilters)
+          (generatedFiles explicitFilters)
+          (generatedFiles explicitActions)
+        ];
 
       path = [
         cfg.package
