@@ -8,18 +8,9 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gh-student";
-  version = "1.47.0";
+  inherit (gh-teacher) version src;
 
   __structuredAttrs = true;
-
-  # The foundation50/gh-student repo only carries the release artifacts; the
-  # source lives in the classroom50 monorepo under cli/gh-student.
-  src = fetchFromGitHub {
-    owner = "foundation50";
-    repo = "classroom50";
-    tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-tHv8jgzp6oFbUMpiFQR6iKnuN0/Vq+CGdTLrvGx5xkU=";
-  };
 
   modRoot = "cli/gh-student";
   vendorHash = "sha256-VzmXSUqRTsq/cMFumTVg0NmzYyMX8KWM5U4flmW98wI=";
