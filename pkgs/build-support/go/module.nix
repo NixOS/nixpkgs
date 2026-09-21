@@ -2,6 +2,7 @@
   go,
   cacert,
   gitMinimal,
+  threads,
   lib,
   stdenv,
 }:
@@ -213,6 +214,8 @@ lib.extendMkDerivation {
               finalAttrs.passthru.overrideModAttrs
                 or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
             );
+
+      buildInputs = lib.optional stdenv.hostPlatform.isMinGW threads.package;
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
