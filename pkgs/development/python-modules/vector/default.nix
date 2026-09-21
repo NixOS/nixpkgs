@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hHoJ8GFauswG5XCsQ4+pDbVPJvzuSz6eGx8ykUUegWk=";
+    hash = "sha256-7LssN38bnxZDc1lUp0Tq+6oNjJcA5pTkR3UHAizKvoc=";
   };
 
   build-system = [

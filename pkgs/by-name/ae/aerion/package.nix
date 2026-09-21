@@ -99,5 +99,9 @@ buildGoModule {
     license = lib.licenses.asl20;
     mainProgram = "aerion";
     maintainers = with lib.maintainers; [ curious ];
+    # Never built on darwin since first introduction in nixpkgs
+    # Fails to link on Darwin with undefined `_OBJC_CLASS_$_UTType`
+    # (likely requires linking `UniformTypeIdentifiers.framework`)
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

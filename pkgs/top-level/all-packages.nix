@@ -1985,8 +1985,6 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
-
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
   };
