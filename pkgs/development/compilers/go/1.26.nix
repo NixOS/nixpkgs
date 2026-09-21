@@ -7,7 +7,6 @@
   iana-etc,
   mailcap,
   buildPackages,
-  targetPackages,
   # for testing
   buildGo126Module,
   callPackage,
@@ -32,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .
