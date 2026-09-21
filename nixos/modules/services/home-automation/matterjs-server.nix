@@ -35,6 +35,12 @@ in
       {option}`services.matterjs-server.extraArgs`
     '';
 
+    stateDirectoryName = lib.mkOption {
+      type = lib.types.str;
+      default = "matterjs-server";
+      description = "State directory for configuration data managed by systemd under the state directory root, such as /var/lib.";
+    };
+
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -73,7 +79,7 @@ in
           ExecStart = lib.escapeShellArgs (
             [
               (lib.getExe cfg.package)
-              "--storage-path=%S/matterjs-server"
+              "--storage-path=%S/${cfg.stateDirectoryName}"
               "--listen-address=${cfg.listenAddress}"
               "--port=${toString cfg.port}"
               "--production-mode"
@@ -81,7 +87,7 @@ in
             ++ cfg.extraArgs
           );
 
-          StateDirectory = "matterjs-server";
+          StateDirectory = cfg.stateDirectoryName;
           StateDirectoryMode = "0700";
 
           DynamicUser = true;
