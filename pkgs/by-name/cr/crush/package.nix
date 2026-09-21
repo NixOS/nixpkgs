@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -9,7 +9,7 @@
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "crush";
   version = "0.92.0";
 
