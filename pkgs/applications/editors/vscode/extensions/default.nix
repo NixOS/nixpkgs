@@ -429,8 +429,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.19.0";
-          hash = "sha256-PTuOqbvhN2lutShMn76uxune/gd5sTc5KSfA2xLhmH8=";
+          version = "1.20.0";
+          hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -3502,8 +3502,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.466.0";
-          hash = "sha256-s2Ks5vhH9q7Io0jmTVGQ9jffy618W5WT1hghQCqoP5M=";
+          version = "0.469.0";
+          hash = "sha256-kvmQlazS+Zuubx67b8kvy4P8U3b5WQqRd/GCxW+0gsI=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container";
@@ -3742,8 +3742,8 @@ let
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "2.3.0";
-          hash = "sha256-vb2tTtdHRmlF/TZRqUFjZNgE+5jizX/ky+NgzJYvXUg=";
+          version = "2.4.0";
+          hash = "sha256-k67wBwqX2gibQd/uADXQZitA1FWdSnMkQkgVdKU0sBw=";
         };
       };
 
@@ -3866,6 +3866,8 @@ let
           maintainers = [ lib.maintainers.dotmobo ];
         };
       };
+
+      posit.air-vscode = callPackage ./posit.air-vscode { };
 
       prettier.prettier-vscode = callPackage ./prettier.prettier-vscode { };
 
@@ -5336,8 +5338,8 @@ let
         mktplcRef = {
           name = "csharp-ls";
           publisher = "vytautassurvila";
-          version = "0.0.35";
-          hash = "sha256-3EgC90XebG+YLWZTIJ3+5xDmGlU2Tr4bWwXL+jrt9XA=";
+          version = "0.0.36";
+          hash = "sha256-WQB6GJewHBMz9bphrJ65IZTg75kkWuBvIvA+Co9aX04=";
         };
         meta = {
           changelog = "https://github.com/vytautassurvila/vscode-csharp-ls/blob/master/CHANGELOG.md";

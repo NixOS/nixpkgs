@@ -5099,8 +5099,6 @@ with pkgs;
 
   libtool = libtool_2;
 
-  libtool_1_5 = callPackage ../development/tools/misc/libtool { };
-
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
@@ -5407,8 +5405,6 @@ with pkgs;
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
-
-  ceedling = callPackage ../development/tools/ceedling { };
 
   celt = callPackage ../development/libraries/celt { };
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
