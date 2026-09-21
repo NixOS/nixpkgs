@@ -101,6 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
       hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
     })
+    (fetchpatch {
+      name = "gtkapplication-wayland-null-check.patch";
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/221cd8e1904f2ca35d89dff3c1068616c6ce588c.patch";
+      hash = "sha256-SLMmWDZ2mLXW3/GJfFdoszthNg4Hd15yvZO2XOld4Uw=";
+    })
   ];
 
   depsBuildBuild = [
