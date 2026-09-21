@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kde-modernclock";
-  version = "0.2.0-unstable-2024-03-07";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Prayag2";
