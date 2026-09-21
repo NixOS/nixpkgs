@@ -244,7 +244,21 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" { };
+    package = mkPackageOption pkgs "systemd" { } // {
+      apply =
+        pkg:
+        pkg.overrideAttrs (prevAttrs: {
+          patches = prevAttrs.patches or [ ] ++ [
+            # Remove this with v261.5; it fixes an issue with switch-to-configuration
+            # https://github.com/NixOS/nixpkgs/pull/558350#issuecomment-5740583354
+            (pkgs.fetchpatch {
+              name = "postpone-d-bus-queue-dispatch.patch";
+              url = "https://github.com/systemd/systemd/commit/266b3e50218e2b27cd67d2371c165bf53ad3bf00.patch";
+              hash = "sha256-dEEzZUqicnmgDuXVBV1y0BxzgKbb6Q47Dmxj+O71bFE=";
+            })
+          ];
+        });
+    };
 
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''

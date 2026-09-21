@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "NetworkManager's VPNC plugin";
+    knownVulnerabilities = [
+      "CVE-2026-91840"
+      "CVE-2026-91841"
+    ];
     inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
   };
