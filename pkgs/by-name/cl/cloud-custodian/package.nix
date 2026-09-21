@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloud-custodian";
-  version = "0.9.51.0";
+  version = "0.9.52.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "cloud-custodian";
     repo = "cloud-custodian";
     tag = finalAttrs.version;
-    hash = "sha256-vL+/Sof61EkVjudwyFnYnkFi2Hggx9NFrvY8nRTaU+0=";
+    hash = "sha256-wFnw4ZVxZmkOIoefzcUtQQjy8ESuqXDskvFJ0iUWXYg=";
   };
 
   pythonRelaxDeps = [

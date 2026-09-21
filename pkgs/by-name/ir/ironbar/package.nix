@@ -32,16 +32,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-9UPBSOgiyBOlUYZlx+xQN5PTPwDWCDdYKdCAhigzHwA=";
+    hash = "sha256-JBUpT7eJTRXUe5xLmzDr/MnoFgqyp9LjfI9aY0tWqsg=";
   };
 
-  cargoHash = "sha256-ticVPKKfQnz21LpegKDwAtizi7bavIPEmpXsrZdRN48=";
+  cargoHash = "sha256-pcPHatZVGRxqu0TmZ8+ZXV/XOj829LDhg9mB1Jt7yhg=";
 
   buildInputs = [
     gtk4
