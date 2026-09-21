@@ -1529,6 +1529,8 @@ self: super: with self; {
 
   asyncua = callPackage ../development/python-modules/asyncua { };
 
+  asyncudp = callPackage ../development/python-modules/asyncudp { };
+
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
   asysocks = callPackage ../development/python-modules/asysocks { };
