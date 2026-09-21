@@ -68,12 +68,19 @@ let
         throw "Module ${mod.name} does not support nginx version ${nginxVersion}!"
     );
 
+  # Modules can adjust the nginx derivation through passthru.forNginx.
+  mkDerivation =
+    args:
+    lib.foldl (drv: mod: drv.overrideAttrs mod.forNginx) (stdenv.mkDerivation args) (
+      lib.filter (mod: mod ? forNginx) modules
+    );
+
 in
 
 assert lib.assertMsg (lib.unique moduleNames == moduleNames)
   "nginx: duplicate modules: ${lib.concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
-stdenv.mkDerivation {
+mkDerivation {
   inherit pname version nginxVersion;
 
   outputs = [
