@@ -17924,6 +17924,8 @@ self: super: with self; {
 
   refery = callPackage ../development/python-modules/refery { };
 
+  refgen-detector = callPackage ../development/python-modules/refgen-detector { };
+
   reflex = callPackage ../development/python-modules/reflex { };
 
   reflex-chakra = callPackage ../development/python-modules/reflex-chakra { };
