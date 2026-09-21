@@ -1841,6 +1841,8 @@ let
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
+        ppx_expect_nobase = callPackage ../development/ocaml-modules/ppx_expect_nobase { };
+
         ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec { };
 
         ppx_import = callPackage ../development/ocaml-modules/ppx_import { };
