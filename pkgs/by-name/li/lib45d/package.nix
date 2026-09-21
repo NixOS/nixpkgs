@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N/HC1OJe1Oa66KFdbIwIcCbV4Fi6FPSi0+KAtKJSjds=";
   };
 
+  patches = [
+    ./stringstream.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 
