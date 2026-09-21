@@ -4,16 +4,21 @@
   cmake,
   fetchFromGitHub,
   fixDarwinDylibNames,
+  pkgConfigCheckHook,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "capstone";
   version = "5.0.9";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-uAiiKWKGjEATPE0Xc3g+aOLCz5ffIlDmf+7jaGwaZ4I=";
   };
 
@@ -30,6 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  pkgConfigModules = [
+    "capstone"
+  ];
+  nativeInstallCheckInputs = [
+    pkgConfigCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Advanced disassembly library";
