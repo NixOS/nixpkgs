@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   dontWrapGApps = true;
 
@@ -87,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       pluiedev
       getchoo
     ];
+    mainProgram = "mangojuice";
   };
 })
