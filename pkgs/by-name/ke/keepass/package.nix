@@ -15,6 +15,7 @@
   unixtools,
   glib,
   makeDesktopItem,
+  copyDesktopItems,
   plugins ? [ ],
 }:
 let
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
     mono
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = [ icoutils ];
 
@@ -136,10 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "$binPaths" \
       --prefix LD_LIBRARY_PATH : "$dynlibPath"
 
-    # setup desktop item with icon
-    mkdir -p "$out/share/applications"
-    cp $desktopItem/share/applications/* $out/share/applications
-
     ${./extractWinRscIconsToStdFreeDesktopDir.sh} \
       "./Translation/TrlUtil/Resources/KeePass.ico" \
       '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
@@ -151,16 +149,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "keepass";
-    exec = "keepass";
-    comment = "Password manager";
-    icon = "keepass";
-    desktopName = "Keepass";
-    genericName = "Password manager";
-    categories = [ "Utility" ];
-    mimeTypes = [ "application/x-keepass2" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "keepass";
+      exec = "keepass";
+      comment = "Password manager";
+      icon = "keepass";
+      desktopName = "Keepass";
+      genericName = "Password manager";
+      categories = [ "Utility" ];
+      mimeTypes = [ "application/x-keepass2" ];
+    })
+  ];
 
   meta = {
     description = "GUI password manager with strong cryptography";
