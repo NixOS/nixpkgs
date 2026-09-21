@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs_24,
   makeBinaryWrapper,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -84,6 +85,16 @@ buildNpmPackage.override { inherit nodejs; } (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru = {
+    inherit brvTransportClient;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "brvTransportClient"
+      ];
+    };
+  };
 
   meta = {
     description = "The portable memory layer for autonomous coding agents (formerly Cipher)";
