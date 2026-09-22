@@ -76,6 +76,7 @@
   temurin-bin-17,
   temurin-bin-21,
   temurin-bin-25,
+  temurin-bin-27,
   jdk-bootstrap ?
     {
       "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
@@ -83,6 +84,7 @@
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
       "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
+      "27" = temurin-bin-27.__spliced.buildBuild or temurin-bin-27;
     }
     .${featureVersion},
 }:
@@ -102,6 +104,8 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
   atLeast25 = lib.versionAtLeast featureVersion "25";
+  atLeast27 = lib.versionAtLeast featureVersion "27";
+  between = old: new: lib.versionAtLeast featureVersion old && lib.versionOlder featureVersion new;
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -145,7 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (
-      if atLeast25 then
+      if atLeast27 then
+        ./27/patches/fix-java-home-jdk27.patch
+      else if atLeast25 then
         ./25/patches/fix-java-home-jdk25.patch
       else if atLeast21 then
         ./21/patches/fix-java-home-jdk21.patch
@@ -171,7 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
         ./8/patches/currency-date-range-jdk8.patch
     )
   ]
-  ++ lib.optionals atLeast11 [
+  # Not needed for the images target; do not carry this patch forward to JDK 27.
+  ++ lib.optionals (between "11" "27") [
     (
       if atLeast17 then
         ./17/patches/increase-javadoc-heap-jdk13.patch
@@ -197,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
         ./8/patches/fix-library-path-jdk8.patch
     )
   ]
-  ++ lib.optionals (atLeast17 && !atLeast23) [
+  ++ lib.optionals (between "17" "23") [
     # -Wformat etc. are stricter in newer gccs, per
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
     # so grab the work-around from
@@ -215,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
     })
   ]
-  ++ lib.optionals (atLeast11 && !atLeast25) [
+  ++ lib.optionals (between "11" "25") [
     # Fix build for gnumake-4.4.1:
     #   https://github.com/openjdk/jdk/pull/12992
     (fetchpatch {
@@ -224,12 +231,18 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
     })
   ]
-  ++ lib.optionals atLeast25 [
+  # JDK 27 already filters long make flags upstream.
+  ++ lib.optionals (between "25" "27") [
     ./25/patches/make-4.4.1.patch
   ]
   ++ lib.optionals (!headless && enableGtk) [
     (
-      if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
+      if atLeast27 then
+        ./27/patches/swing-use-gtk-jdk27.patch
+      else if atLeast17 then
+        ./17/patches/swing-use-gtk-jdk13.patch
+      else
+        ./11/patches/swing-use-gtk-jdk10.patch
     )
   ]
   ++ lib.optionals (featureVersion == "11") [
@@ -626,13 +639,18 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.java ];
     mainProgram = "java";
     platforms = [
-      "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ]
-    ++ lib.optionals atLeast11 [
+    # The Temurin 26 bootstrap is only available for 64-bit platforms.
+    ++ lib.optionals (!atLeast27) [
+      "i686-linux"
+    ]
+    ++ lib.optionals (atLeast11 && !atLeast27) [
       "armv7l-linux"
       "armv6l-linux"
+    ]
+    ++ lib.optionals atLeast11 [
       "powerpc64le-linux"
     ]
     ++ lib.optionals atLeast17 [
