@@ -10,6 +10,7 @@
   generateSplicesForMkScope,
   libuuid,
   lld,
+  llvmPackages,
   llvmPackages_19, # Needs to match the `llvmVersion` of the fork.
   python3,
   stdenv,
@@ -79,7 +80,8 @@ let
       patchesFn = patches: patches // patchOverrides;
     }).overrideScope
       (
-        final: prev: {
+        final: prev:
+        {
           version = swiftLlvmVersion;
           release_version = llvmVersion;
 
@@ -194,6 +196,21 @@ let
             # Linux tries to use a GCC stdenv to build LLDB, but the Swift headers aren’t compatible with GCC.
             # The stdenv passed in from the package set arguments is the Clang-based stdenv from `swift-packages.nix`.
             final.callPackage swiftLLDB.override { inherit stdenv; };
+        }
+        // lib.optionalAttrs (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
+          # Darwin overlays `systemLibcxxClang` when not cross-compiling, which captures compiler-rt from the bootstrap.
+          # That’s expected and necessary, but it makes replacing the compiler-rt used in the wrapper messy.
+          systemLibcxxClang = prev.systemLibcxxClang.override (old: {
+            extraPackages = [ final.compiler-rt-libc ];
+            extraBuildCommands =
+              let
+                darwinCompilerRt = lib.head old.extraPackages;
+              in
+              lib.replaceStrings
+                [ "${lib.getLib llvmPackages.libclang}" darwinCompilerRt.out.outPath ]
+                [ "${lib.getLib final.libclang}" "${final.compiler-rt-libc}" ]
+                old.extraBuildCommands;
+          });
         }
       );
 in
