@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
   coreutils,
@@ -27,7 +27,7 @@ let
         "vendorHash"
       ];
     in
-    buildGoModule (
+    buildGo127Module (
       {
         pname = "terraform";
         inherit version vendorHash;
@@ -200,9 +200,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.15.3";
-    hash = "sha256-TyPatVcWgRbvUb9nlZ1gQXR2k8AUUubJlAAOhC9QYIc=";
-    vendorHash = "sha256-aGkIsUxKHRgz8vxNO8RhXS0CH78Q14zSVANLrBGdhWw=";
+    version = "1.16.3";
+    hash = "sha256-XfVzSAMx/Y/gqDSXkRtGupGQB0ytBp907zHcsA0IUKw=";
+    vendorHash = "sha256-e3j9PSptoqUV+/CQWLcy3/0E9qhdWbXUe3f+ZB5WsHI=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;
