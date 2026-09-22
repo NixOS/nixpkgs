@@ -17,6 +17,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "retrom-service";
 
+  __structuredAttrs = true;
+
   # client and service designed for matching version
   inherit (retrom)
     version
@@ -25,11 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargoDeps
     ;
 
-  __structuredAttrs = true;
+  cargoBuildFeatures = lib.optional withEmbeddedDb "embedded_db";
 
   buildAndTestSubdir = "packages/service";
-
-  cargoBuildFeatures = lib.optional withEmbeddedDb "embedded_db";
 
   nativeBuildInputs = [
     pkg-config

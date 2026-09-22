@@ -22,7 +22,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "retrom";
-  version = "0.8.1";
+  version = "0.8.4";
 
   __structuredAttrs = true;
 
@@ -30,17 +30,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "JMBeresford";
     repo = "retrom";
     tag = "v${finalAttrs.version}";
-
-    hash = "sha256-sXduy81+C9yy33yw2u/FEGOTkrok2LcjGn710/EzIFY=";
+    hash = "sha256-R2Ls9KFRqcRv6HYDWoK5otPx/8K9O+T5xLpA8RnwkDg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-MmWCpe7NzzT8W/Ic9y1VzGAp4rk0vxoOxbz5sRRlQs0=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-5FkJc/rtptg4ZWlf1NU/57Ga8cLbW1LVc4MLxs+iyrA=";
   };
 
-  cargoHash = "sha256-13VHe4LU3R8NKhcDedhUcnnF9fQd95C3E+moh2jPnis=";
+  cargoHash = "sha256-SxA3e5mts2WMjkXuIwsyvUKM6YK0W50vi17GL++LZQY=";
 
   buildAndTestSubdir = "packages/client";
 
