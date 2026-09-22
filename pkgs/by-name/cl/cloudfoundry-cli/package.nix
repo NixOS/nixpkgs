@@ -32,8 +32,9 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryBuildDate=1970-01-01"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binarySHA=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
