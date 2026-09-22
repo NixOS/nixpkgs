@@ -84,7 +84,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "5.0.1.5";
+  version = "5.0.3.0";
 
   __structuredAttrs = true;
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-pSuKAv/Vy4k9kCotIzN1g5NbnyUG/6hDeuQQcGOt5Ow=";
+    hash = "sha256-ryKvEy4Oj6PP0WTs+XWqHSVInrVhP0tZcQqgs7gHOls=";
     fetchSubmodules = true;
     # Preserve VCS metadata needed by the build before .git is removed.
     postCheckout = ''
