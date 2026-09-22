@@ -217,6 +217,8 @@ let
 
         capnp = callPackage ../development/ocaml-modules/capnp { };
 
+        capnp-rpc = callPackage ../development/ocaml-modules/capnp-rpc { };
+
         caqti = callPackage ../development/ocaml-modules/caqti { };
 
         caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
