@@ -104,7 +104,16 @@ in
       (import ./generic.nix {
         version = "1.12.7";
         hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
-        patches = lib.optionals stdenv.hostPlatform.isDarwin [
+        patches = [
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62777
+          # Probably not needed after the next release on this branch (1.12.8+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/3e2d8ff4d016f425a894113b7b77cc3b9dcb1cec.patch";
+            hash = "sha256-Tm5DmTGKSuUl+gAwp4WhBFK83UEho5uUzwMpiSH132o=";
+          })
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch
         ];
