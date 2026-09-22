@@ -21,11 +21,37 @@
 }:
 
 let
-  swiftLlvmVersion = "17.0.0"; # From https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/utils/build_swift/build_swift/defaults.py#L51
-  llvmVersion = "19.1.5"; # From https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/cmake/Modules/LLVMVersion.cmake
+  basePatchOverrides = {
+    # Updated patch that also prevents Clang from trying to copy `clang-deps-launcher.py` to `${llvm}/bin`.
+    "clang/gnu-install-dirs.patch" = [ { path = ./patches; } ];
+    # The patch needs slightly tweaked to apply to Swift’s LLDB fork.
+    "lldb/backport-ParseTrieEntries-fixes.patch" = [ { path = ./patches; } ];
+    # Update backport of the Darwin triple changes for macOS 27.
+    "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
+    # Backport support for arm64e.x1, the new cpu subtype for A20 and M6
+    "llvm/backport-minimal-arm64e_x1-support.patch" = [ { path = ./patches; } ];
+  };
+
+  inherit
+    (
+      {
+        "6.2.4" = {
+          swiftLlvmVersion = "17.0.0";
+          llvmVersion = "19.1.5";
+          llvmPackages = llvmPackages_19;
+          patchOverrides = basePatchOverrides;
+        };
+      }
+      .${swift_release} or (throw "Unsupported Swift version: ${swift_release}.")
+    )
+    swiftLlvmVersion
+    llvmVersion
+    llvmPackages
+    patchOverrides
+    ;
 in
 
-(llvmPackages_19.override {
+(llvmPackages.override {
   officialRelease.version = llvmVersion;
 
   monorepoSrc = fetchFromGitHub {
@@ -40,19 +66,7 @@ in
     "llvmPackages"
   ];
 
-  patchesFn =
-    patches:
-    patches
-    // {
-      # Updated patch that also prevents Clang from trying to copy `clang-deps-launcher.py` to `${llvm}/bin`.
-      "clang/gnu-install-dirs.patch" = [ { path = ./patches; } ];
-      # The patch needs slightly tweaked to apply to Swift’s LLDB fork.
-      "lldb/backport-ParseTrieEntries-fixes.patch" = [ { path = ./patches; } ];
-      # Update backport of the Darwin triple changes for macOS 27.
-      "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
-      # Backport support for arm64e.x1, the new cpu subtype for A20 and M6
-      "llvm/backport-minimal-arm64e_x1-support.patch" = [ { path = ./patches; } ];
-    };
+  patchesFn = patches: patches // patchOverrides;
 }).overrideScope
   (
     final: prev: {
