@@ -21,6 +21,7 @@
   libGL,
   libxcursor,
   libxext,
+  libxi,
   libxinerama,
   libxrandr,
   libepoxy,
@@ -44,7 +45,7 @@ assert lib.assertOneOf "simdTarget" simdTarget [
 ];
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.2.2";
+  version = "1.4.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -53,7 +54,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-fIcplXdRKtCqWBm2Vw/Nm8dVDOpKnsejo2irv1xehvk=";
+    hash = "sha256-Q1eyWLt+AIz0DZmytBpgKJ/NHcwenYPIIQF6gQzP78M=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +79,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
+    libxi
     libxinerama
     libxrandr
     libepoxy
@@ -87,9 +89,15 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
     # JUCE dlopen's these at runtime, crashes without them
+    # -lXi is essential: JUCE requests the unversioned
+    # "libXi.so", which no host has already loaded, and when that dlopen fails
+    # JUCE still believes XInput2 is present (the stub for the missing
+    # XIQueryVersion returns 0, which equals Success), so it discards all core
+    # pointer events and the GUI stops responding to the mouse entirely.
     NIX_LDFLAGS = toString [
       "-lX11"
       "-lXext"
+      "-lXi"
       "-lXcursor"
       "-lXinerama"
       "-lXrandr"
