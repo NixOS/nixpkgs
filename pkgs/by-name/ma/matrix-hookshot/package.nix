@@ -22,20 +22,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.4.4";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-eF8a0v5sD3/pDrqFH1CRRTTqgUAoo3DAHXDl0b0KnXQ=";
+    hash = "sha256-X6A1+AuJyBQJGs8NteGuhUVRt6MISlb4ZtNGcAvPLdk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-PbWWJy4iWlEvCFRf8MV0K6ymynuMFvbK7bpQYDQIICE=";
+    hash = "sha256-XQfSMtV4ERo0chry9qPnc3jeOiRDUuV1QfOFUVbNlF8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -57,12 +57,24 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
+  patchPhase = ''
+    runHook prePatch
+
+    patchShebangs scripts/build-modules.sh
+
+    runHook postPatch
+  '';
+
   preBuild = ''
-    # We want nixpkgs' version of this instead
+    # We want nixpkgs' version of this instead, and yes it's included twice at different versions through different dependencies... Luckily they're all API compatible.
     rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
   '';
 
   buildPhase = ''
@@ -71,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
     pnpm run build:app
     pnpm run build:web
+    pnpm run build:modules
 
     runHook postBuild
   '';
@@ -79,19 +92,26 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     rm -r ./node_modules
-    pnpm install --production --offline --force --frozen-lockfile
+    pnpm install --production --offline --ignore-scripts --frozen-lockfile
 
     # Re-install matrix-sdk-crypto-nodejs
     rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
 
     mkdir -p $out/lib/node_modules/.pnpm/matrix-hookshot/
     mkdir $out/bin
 
     mv ./lib/* $out/lib/node_modules/.pnpm/matrix-hookshot
     mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/.pnpm/matrix-hookshot
+    # Fix symlink broken by the above mv
+    ln -sf $out/lib/node_modules/.pnpm/matrix-hookshot/public/modules/openproject/element-web \
+      $out/lib/node_modules/.pnpm/matrix-hookshot/node_modules/.pnpm/node_modules/openproject-module
 
     runHook postInstall
   '';
