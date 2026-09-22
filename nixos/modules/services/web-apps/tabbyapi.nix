@@ -457,6 +457,12 @@ in
               description = "Enables vision support if the model supports it.";
             };
 
+            warmup = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Warm up the model after loading.";
+            };
+
             vision_offload = lib.mkOption {
               type = lib.types.bool;
               default = false;
@@ -497,7 +503,7 @@ in
 
             reasoning = lib.mkOption {
               type = lib.types.bool;
-              default = false;
+              default = true;
               description = ''
                 Enable reasoning parser.
                 Do NOT enable this if the model is not a reasoning model (e.g. deepseek-r1 series).
@@ -506,14 +512,16 @@ in
 
             reasoning_start_token = lib.mkOption {
               type = lib.types.str;
-              default = "<think>";
+              default = "auto";
               description = "The start token for reasoning content.";
+              example = "<think>";
             };
 
             reasoning_end_token = lib.mkOption {
               type = lib.types.str;
-              default = "</think>";
+              default = "auto";
               description = "The end token for reasoning content.";
+              example = "</think>";
             };
 
             start_in_reasoning = lib.mkOption {
@@ -570,7 +578,7 @@ in
 
             tool_format = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
+              default = "auto";
               description = ''
                 Tool format, e.g. "qwen3_coder". See upstream docs for supported formats.
                 If null, tool calls from the model will not be parsed by the server.
