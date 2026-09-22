@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit nix;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
