@@ -10,6 +10,7 @@ let
   sqlcipher =
     let
       system-alias = {
+        aarch64-linux = "arm64.linux";
         x86_64-linux = "x64.linux";
       };
     in
@@ -23,6 +24,7 @@ let
         }.so";
         sha256 =
           {
+            _3_5_0-aarch64-linux = "sha256-m2Op1KowdxErQ9nFa1+0TIshwjBSdXdrnlsyO4mULos=";
             _3_5_0-x86_64-linux = "sha256-GH+3MhYXTwWD7WmEHzc8wecYcaOcCXsy93UWiEjh6Eo=";
           }
           .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version) + "-" + stdenv.hostPlatform.system}
