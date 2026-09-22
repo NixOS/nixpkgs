@@ -49,6 +49,24 @@ buildNodejs {
       ./use-nix-codesign.patch
 
       ./fix-temporal-integration-with-shared-icu.patch
+
+      # Upstream started requiring shared simdutf built with atomic support. Reverting that on 26.05.
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/7e3d61c416407bb5259f63a007df16bcc3c715ef.patch?full_index=1";
+        hash = "sha256-uxAPKrYXrgfF42Kh73suHc71drfkJvypHbKTdUktKnM=";
+        includes = [ "deps/v8/src/*" ];
+        revert = true;
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/f3ae4554feb2d043cdc3d24898f6173add1fcac8.patch?full_index=1";
+        hash = "sha256-+P+6pMBcG2Utcg2aPQTDdYOy/9bdkX7X/gttXNghDYM=";
+        excludes = [
+          ".github/workflows/test-shared.yml"
+          "tools/nix/*"
+          "shell.nix"
+        ];
+        revert = true;
+      })
     ]
     ++ gypPatches;
 }
