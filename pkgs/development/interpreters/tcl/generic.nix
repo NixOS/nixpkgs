@@ -222,7 +222,9 @@ stdenv.mkDerivation (finalAttrs: {
         { buildPackages }:
         makeSetupHook {
           name = "tcl-requires-check-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          substitutions = {
+            tcl_hook = ./tcl-requires-check-hook.tcl;
+          };
           meta = {
             inherit (finalAttrs.meta) maintainers platforms;
             license = lib.licenses.mit;
