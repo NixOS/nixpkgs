@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
