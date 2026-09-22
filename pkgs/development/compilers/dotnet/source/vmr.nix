@@ -29,6 +29,8 @@
   unzip,
   yq,
   installShellFiles,
+  runCommand,
+  pkgsBuildHost,
   sigtool,
 
   baseName ? "dotnet",
@@ -45,22 +47,39 @@ let
 
   inherit (stdenv)
     buildPlatform
-    targetPlatform
+    hostPlatform
     ;
   inherit (stdenv.hostPlatform) isLinux isDarwin;
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
 
   releaseManifest = lib.importJSON releaseManifestFile;
   inherit (releaseManifest) sourceRepository tag;
   release = releaseManifest.${if hasRuntime then "release" else "sdkVersion"};
 
   buildRid = dotnetCorePackages.systemToDotnetRid buildPlatform.system;
-  targetRid = dotnetCorePackages.systemToDotnetRid targetPlatform.system;
-  targetArch = lib.elemAt (lib.splitString "-" targetRid) 1;
-
+  hostRid = dotnetCorePackages.systemToDotnetRid hostPlatform.system;
+  buildArch = lib.elemAt (lib.splitString "-" buildRid) 1;
+  hostArch = lib.elemAt (lib.splitString "-" hostRid) 1;
 
   _icu = if isDarwin then darwin.ICU else icu;
 
   version = release;
+
+  runtimeDeps =
+    hostPlatform:
+    [
+      zlib
+      _icu
+      openssl
+    ]
+    ++ lib.optionals hostPlatform.isLinux [
+      krb5
+      lttng-ust_2_12
+    ]
+    ++ lib.optionals hostPlatform.isDarwin [
+      krb5
+    ];
+
 in
 stdenv.mkDerivation {
   pname = "${baseName}-vmr";
@@ -79,6 +98,13 @@ stdenv.mkDerivation {
     url = "${sourceRepository}/archive/refs/tags/${tag}.tar.gz";
     hash = tarballHash;
   };
+
+  depsBuildBuild = lib.optionals isCross (
+    [
+      pkgsBuildHost.llvmPackages_20.stdenv.cc
+    ]
+    ++ runtimeDeps stdenv.buildPlatform
+  );
 
   nativeBuildInputs = [
     # this gets copied into the tree, but we still need the sandbox profile
@@ -113,18 +139,7 @@ stdenv.mkDerivation {
     sigtool
   ];
 
-  buildInputs = [
-    zlib
-    _icu
-    openssl
-  ]
-  ++ lib.optionals isLinux [
-    krb5
-    lttng-ust_2_12
-  ]
-  ++ lib.optionals isDarwin [
-    krb5
-  ];
+  buildInputs = runtimeDeps stdenv.hostPlatform;
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -142,7 +157,10 @@ stdenv.mkDerivation {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
+    lib.optionals isCross (
+      [ ./clr-cc-cross.patch ] ++ lib.optional (lib.versionAtLeast version "11") ./fix-cross-linker.patch
+    )
+    ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
     ]
@@ -154,10 +172,12 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
-    ++ lib.optionals (lib.versionAtLeast version "11") [
-      ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
-    ]
-    ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
+    ++ lib.optionals (lib.versionAtLeast version "11") (
+      [
+        ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+      ]
+      ++ lib.optional isDarwin ./fix-cmake-darwin.patch
+    );
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
@@ -206,6 +226,11 @@ stdenv.mkDerivation {
     substituteInPlace \
       src/runtime/src/native/libs/CMakeLists.txt \
       --replace-fail 'add_compile_options(-Weverything)' 'add_compile_options(-Wall)'
+
+    # fix missing target vendor
+    substituteInPlace \
+      src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+      --replace-fail '$(CrossCompileArch)-linux-' '$(CrossCompileArch)-unknown-linux-'
   ''
   + lib.optionalString (lib.versionAtLeast version "9" && hasRuntime) (
     ''
@@ -213,7 +238,7 @@ stdenv.mkDerivation {
       xmlstarlet ed \
         --inplace \
         -s //Project -t elem -n PropertyGroup \
-        -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
+        -s \$prev -t elem -n RuntimeIdentifiers -v ${hostRid} \
         src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
 
       # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
@@ -359,7 +384,12 @@ stdenv.mkDerivation {
         src/runtime/src/mono/CMakeLists.txt \
         --replace-fail '/usr/lib/libicucore.dylib' '${darwin.ICU}/lib/libicucore.dylib'
     ''
-  );
+  )
+  + lib.optionalString (isCross && lib.versionOlder version "10") ''
+    # copy the patched script into runtime
+    # v10+ does this itself in UpdateEngCommonFiles
+    cp src/{arcade,runtime}/eng/common/native/init-compiler.sh
+  '';
 
   prepFlags = [
     "--no-artifacts"
@@ -424,6 +454,13 @@ stdenv.mkDerivation {
   // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "11") {
     # error : supplying the --target arm64-apple-macos14.0 != arm64-apple-darwin argument to a nix-wrapped compiler may not work correctly
     NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
+  }
+  // lib.optionalAttrs isCross {
+    TOOLCHAIN = stdenv.hostPlatform.config;
+    ROOTFS_DIR = runCommand "rootfs" { } ''
+      mkdir $out
+      ln -s /nix $out/
+    '';
   };
 
   buildFlags = [
@@ -436,16 +473,21 @@ stdenv.mkDerivation {
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
   ]
-  ++ [
-    "--"
-    "-p:PortableBuild=true"
-  ]
-  ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}"
   # https://github.com/dotnet/source-build/issues/5521
   ++ lib.optionals (version == "11.0.0-preview.2") [
     "--branding"
     "repodefault "
-  ];
+  ]
+  ++ lib.optionals (isCross && lib.versionAtLeast version "10") [
+    "--arch"
+    hostArch
+  ]
+  ++ [
+    "--" # msbuild args follow here
+    "-p:PortableBuild=true"
+  ]
+  ++ lib.optional (hostRid != buildRid) "-p:TargetRid=${hostRid}"
+  ++ lib.optional (isCross && !lib.versionAtLeast version "10") "-p:TargetArchitecture=${hostArch}";
 
   buildPhase = ''
     runHook preBuild
@@ -457,8 +499,14 @@ stdenv.mkDerivation {
     # CLR_CC/CXX need to be set to stop the build system from using clang-11,
     # which is unwrapped
     version= \
-    CLR_CC=$(command -v clang) \
-    CLR_CXX=$(command -v clang++) \
+    CLR_CC=$(command -v $CC) \
+    CLR_CXX=$(command -v $CXX) \
+  ''
+  + lib.optionalString isCross ''
+    CLR_CC_FOR_${buildArch}=$(command -v $CC_FOR_BUILD) \
+    CLR_CXX_FOR_${buildArch}=$(command -v $CXX_FOR_BUILD) \
+  ''
+  + ''
       ./build.sh "''${buildFlags[@]}"
 
     runHook postBuild
@@ -471,7 +519,7 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
+      assets = if (lib.versionAtLeast version "9") then "assets" else hostArch;
       # 10.0.0-preview.6 ends up creating duplicate files in .nupkgs, for example in
       # Microsoft.Internal.Runtime.AspNetCore.Transport.10.0.0-preview.6.25358.103.nupkg
       #
@@ -497,11 +545,11 @@ stdenv.mkDerivation {
     ''
     # unzip tarballs so we don't break dependency detection
     + lib.optionalString (lib.versionAtLeast version "10") ''
-      find "$out"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/assets . -name \*.gz -exec gunzip {} \;
+      find "$out"/lib/Private.SourceBuilt.Artifacts.*.${hostRid}/assets . -name \*.gz -exec gunzip {} \;
     ''
     + ''
       local -r unpacked="$PWD/.unpacked"
-      for nupkg in $out/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
+      for nupkg in $out/lib/Private.SourceBuilt.Artifacts.*.${hostRid}/{,SourceBuildReferencePackages/}*.nupkg; do
           rm -rf "$unpacked"
           unzip ${unzipFlags} "$unpacked" "$nupkg"
           chmod -R +rw "$unpacked"
@@ -533,7 +581,7 @@ stdenv.mkDerivation {
   separateDebugInfo = true;
 
   passthru = {
-    inherit releaseManifest buildRid targetRid;
+    inherit releaseManifest buildRid hostRid;
     icu = _icu;
     # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
     hasILCompiler = lib.versionAtLeast version "9";
