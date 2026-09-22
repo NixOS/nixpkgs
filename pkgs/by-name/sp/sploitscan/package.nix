@@ -8,6 +8,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sploitscan";
   version = "0.14.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
@@ -23,6 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     gitpython
     google-genai
+    httpx2
     jinja2
     openai
     requests
