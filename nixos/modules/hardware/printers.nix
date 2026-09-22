@@ -310,9 +310,10 @@ in
                 "x"
               ];
             in
-            "lpadmin ${lib.cli.toCommandLineShellGNU { } argsDpx} ${
-              lib.cli.toCommandLineShellGNU { } argsWoDpx
-            }";
+            ''
+              # shellcheck disable=SC2016
+              lpadmin ${lib.cli.toCommandLineShellGNU { } argsDpx} ${lib.cli.toCommandLineShellGNU { } argsWoDpx}
+            '';
 
         in
         ''
