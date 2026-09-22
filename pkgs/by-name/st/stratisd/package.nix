@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   cargo,
   rustc,
@@ -31,27 +30,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stratisd";
-  version = "3.8.6";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratisd";
     tag = "stratisd-v${finalAttrs.version}";
-    hash = "sha256-Kky/6sgvA8NDDGLQLS3sjPJWTCxkoTP/ow+netnK6tY=";
+    hash = "sha256-8PZiJgecssQYTSBnCj2mumUqdTZPouRRB0sW4pVrQAU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
+    hash = "sha256-tkHxokc289mgczrJWlKIQVdkNeqhGV2d68t9uJZG2oI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "0001-fixes_for_rust_1_9_2";
-      url = "https://github.com/stratis-storage/stratisd/commit/d65c3b7a7f9d7a332b4c59089b8fa96ff1fefb45.patch";
-      sha256 = "sha256-cNbx9+JgQgyO+o5YX7sLDe64qNWfpDr5itux+LZSgxs=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
@@ -98,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     [
       xfsprogs
       thin-provisioning-tools
+      cryptsetup
     ]
     ++ lib.optionals clevisSupport [
       clevis
       jose
       jq
-      cryptsetup
       curl
       tpm2-tools
       coreutils
