@@ -21,8 +21,9 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
 
-    mkdir -p $out/etc/udev/rules.d/ # https://get.vial.today/getting-started/linux-udev.html
-    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
+    mkdir -p $out/etc/udev/rules.d/
+    # https://get.vial.today/manual/linux-udev.html#universal-vial-udev-rule
+    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0600", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/59-vial.rules
   '';
 
   meta = {
