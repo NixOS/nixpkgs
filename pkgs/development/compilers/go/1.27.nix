@@ -17,10 +17,6 @@
 let
   goBootstrap = buildPackages.callPackage ./bootstrap124.nix { };
 
-  # We need a target compiler which is still runnable at build time,
-  # to handle the cross-building case where build != host == target
-  targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-
   isCross = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -37,8 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsBuildTarget = lib.optional isCross targetCC;
 
   depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
