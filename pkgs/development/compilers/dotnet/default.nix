@@ -39,6 +39,7 @@ makeScopeWithSplicing' {
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
         "aarch64-linux" = "linux-arm64";
+        "riscv64-linux" = "linux-riscv64";
         "x86_64-darwin" = "osx-x64";
         "aarch64-darwin" = "osx-arm64";
         "x86_64-windows" = "win-x64";
