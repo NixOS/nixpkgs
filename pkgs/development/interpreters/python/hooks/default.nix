@@ -182,7 +182,7 @@ in
           objprint = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-objprint-${previousPythonAttrs.pname}";
           });
-          # Test Python package pypck, whose source module is defined under the project root instead of src/
+          # Test Python package pypck, whose source module directory is defined under the project root instead of src/
           pypck = pypck.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-pypck-${previousPythonAttrs.pname}";
           });
@@ -324,6 +324,21 @@ in
               "tests/test_basic.py::TestBasic"
             ]
             ++ previousPythonAttrs.enabledTestPaths or [ ];
+          });
+          # Check if the test cases use the installed modules instead of the source modules
+          objprint-source-module-mismatched = objprint.overridePythonAttrs (previousPythonAttrs: {
+            preCheck = previousPythonAttrs.preCheck or "" + ''
+              rm -r src/objprint
+              mkdir src/objprint
+              touch src/objprint/__init__.py
+            '';
+          });
+          pypck-source-module-mismatched = pypck.overridePythonAttrs (previousPythonAttrs: {
+            preCheck = previousPythonAttrs.preCheck or "" + ''
+              rm -r pypck
+              mkdir pypck
+              touch pypck/__init__.py
+            '';
           });
         };
       };
