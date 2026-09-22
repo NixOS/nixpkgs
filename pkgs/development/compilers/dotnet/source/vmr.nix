@@ -29,6 +29,7 @@
   unzip,
   yq,
   installShellFiles,
+  sigtool,
 
   baseName ? "dotnet",
   bootstrapSdk,
@@ -56,7 +57,6 @@ let
   targetRid = dotnetCorePackages.systemToDotnetRid targetPlatform.system;
   targetArch = lib.elemAt (lib.splitString "-" targetRid) 1;
 
-  sigtool = callPackage ../sigtool.nix { };
 
   _icu = if isDarwin then darwin.ICU else icu;
 

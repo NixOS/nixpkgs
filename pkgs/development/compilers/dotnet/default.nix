@@ -76,6 +76,8 @@ makeScopeWithSplicing' {
         mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
         mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
         addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
+
+        sigtool = callPackage ./sigtool.nix { };
       };
 
     in
