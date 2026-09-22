@@ -569,6 +569,7 @@ mapAliases {
   claude-code-acp = warnAlias "'claude-code-acp' has been renamed to 'claude-agent-acp'" claude-agent-acp; # Added 2026-03-31
   claude-code-bin = warnAlias "'claude-code-bin' has been merged into 'claude-code'" claude-code; # Added 2026-04-18
   clearlyU = clearly-u; # Added 2026-02-08
+  clerk = throw "'clerk' has been removed as the upstream repository has been archived"; # Added 2026-09-21
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
   cliairplay = throw "'cliairplay' has been removed because Music-Assistant switched fully to airplay-cli"; # Added 2026-07-31
   clima = throw "'clima' has been removed, as it has been unmaintained upstream since December 2024, use glow instead"; # Added 2026-01-01
