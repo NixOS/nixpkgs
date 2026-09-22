@@ -90,6 +90,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Disable the install script for sharp to prevent it from trying to download binaries
     cat <<< $(${lib.getExe jq} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
+
+    # On macOS, Nix renames themes/ to themes~nix~case~hack~1/ when it
+    # collides with Themes/ on the case-insensitive filesystem, breaking
+    # CSS imports like `@actual-app/components/themes/dark.css`. Restore
+    # themes/ by removing the unused Themes/Theming.mdx (a Storybook file)
+    # and renaming the case-hacked directory.
+    if [ -d packages/component-library/src/themes~nix~case~hack~1 ]; then
+      rm packages/component-library/src/Themes/Theming.mdx
+      rmdir packages/component-library/src/Themes
+      mv packages/component-library/src/themes~nix~case~hack~1 \
+         packages/component-library/src/themes
+    fi
   '';
 
   buildPhase = ''
