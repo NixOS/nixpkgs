@@ -6,8 +6,9 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  httpx,
+  httpx2,
   json-repair,
+  numpy,
   openai,
   polyfactory,
   pydantic,
@@ -24,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   pname = "fnllm";
   version = "0.4.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
@@ -37,7 +39,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiolimiter
-    httpx
+    httpx2
     json-repair
     pydantic
     tenacity
@@ -55,6 +57,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    numpy
     polyfactory
     pytest-asyncio
     pytest-cov-stub
