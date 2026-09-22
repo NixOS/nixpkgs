@@ -16,11 +16,11 @@
 
 tcl.mkTclDerivation (finalAttrs: {
   pname = "remind";
-  version = "06.02.10";
+  version = "06.03.04";
 
   src = fetchzip {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
+    hash = "sha256-EIcnNTzBUreqAZK8pEUkwU9l+J07d24pvzFlOJ84Q1o=";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ tcl.mkTclDerivation (finalAttrs: {
     # as rem2pdf is currently not build since it requires the JSON::MaybeXS,
     # Pango and Cairo Perl modules.
     substituteInPlace scripts/tkremind.in \
-      --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
+      --replace-fail '@TCLSH@' '${lib.getExe' tcl "tclsh"}' \
       --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
