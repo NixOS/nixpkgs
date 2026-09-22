@@ -2,7 +2,6 @@
   appimageTools,
   lib,
   fetchurl,
-  nix-update-script,
   stdenvNoCC,
   makeWrapper,
   _7zz,
@@ -58,6 +57,8 @@ let
       meta
       ;
 
+    passthru.updateScript = ./update.sh;
+
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/${pname}.desktop \
@@ -69,8 +70,6 @@ let
       pkgs.libsecret
       pkgs.libappindicator-gtk3
     ];
-
-    passthru.updateScript = nix-update-script { };
   };
 
   darwin = stdenvNoCC.mkDerivation {
@@ -80,6 +79,8 @@ let
       version
       meta
       ;
+
+    passthru.updateScript = ./update.sh;
 
     sourceRoot = ".";
     nativeBuildInputs = [
