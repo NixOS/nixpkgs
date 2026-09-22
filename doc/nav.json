@@ -9,9 +9,6 @@
       "id": "getting-started",
       "children": [
         {
-          "file": "getting-started/getting-started.part.md"
-        },
-        {
           "file": "getting-started/first-package.chapter.md"
         },
         {
@@ -23,9 +20,6 @@
       "label": "Guides",
       "id": "guides",
       "children": [
-        {
-          "file": "using-nixpkgs.md"
-        },
         {
           "file": "channels.chapter.md"
         },
@@ -45,9 +39,6 @@
           "label": "Standard environment",
           "id": "part-stdenv",
           "children": [
-            {
-              "file": "stdenv.md"
-            },
             {
               "file": "stdenv/stdenv.chapter.md"
             },
@@ -228,16 +219,7 @@
           ]
         },
         {
-          "label": "Toolchains",
-          "id": "part-toolchains",
-          "children": [
-            {
-              "file": "toolchains.md"
-            },
-            {
-              "file": "toolchains/llvm.chapter.md"
-            }
-          ]
+          "file": "toolchains/llvm.chapter.md"
         },
         {
           "label": "Build helpers",
@@ -266,9 +248,6 @@
               "id": "chap-special",
               "children": [
                 {
-                  "file": "build-helpers/special.md"
-                },
-                {
                   "file": "build-helpers/special/buildenv.section.md"
                 },
                 {
@@ -296,9 +275,6 @@
               "id": "chap-images",
               "children": [
                 {
-                  "file": "build-helpers/images.md"
-                },
-                {
                   "file": "build-helpers/images/appimagetools.section.md"
                 },
                 {
@@ -319,7 +295,7 @@
               ]
             },
             {
-              "label": "Hooks reference",
+              "label": "Hooks",
               "id": "chap-hooks",
               "children": [
                 {
@@ -622,9 +598,6 @@
       "id": "reference",
       "children": [
         {
-          "file": "lib.md"
-        },
-        {
           "file": "functions.md"
         },
         {
@@ -653,9 +626,6 @@
           "label": "Interoperability Standards",
           "id": "part-interoperability",
           "children": [
-            {
-              "file": "interoperability.md"
-            },
             {
               "file": "interoperability/cyclonedx.md"
             }

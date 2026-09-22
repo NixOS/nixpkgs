@@ -757,7 +757,7 @@ rec {
   /**
     Define a `mkDerivation`-like function based on another `mkDerivation`-like function.
 
-    [`stdenv.mkDerivation`](#part-stdenv) gives access to
+    [`stdenv.mkDerivation`](#sec-using-stdenv) gives access to
     its final set of derivation attributes when it is passed a function,
     or when it is passed an overlay-style function in `overrideAttrs`.
 

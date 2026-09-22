@@ -1,4 +1,5 @@
 # The LLVM Toolchain {#chap-toolchains}
+[]{#part-toolchains} <!-- legacy anchor -->
 
 LLVM is a target-independent optimizer and code generator and serves as the basis for many compilers such as Haskell's GHC, rustc, Zig, and many others. It forms the base tools for Apple's Darwin platform.
 
