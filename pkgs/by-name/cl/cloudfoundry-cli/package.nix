@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -40,6 +41,14 @@ buildGoModule (finalAttrs: {
     mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Official command line client for Cloud Foundry";
