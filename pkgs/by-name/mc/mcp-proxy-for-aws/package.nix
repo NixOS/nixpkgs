@@ -2,11 +2,11 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  uv,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   __structuredAttrs = true;
+
   pname = "mcp-proxy-for-aws";
   version = "1.7.0";
 
@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
   disabled = python3Packages.pythonOlder "3.10" || python3Packages.pythonAtLeast "3.15";
   build-system = [ python3Packages.hatchling ];
-  nativeBuildInputs = [ uv ];
 
   dependencies = with python3Packages; [
     awscrt
@@ -34,12 +33,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   preBuild = ''
     export UV_CACHE_DIR="$TMPDIR/uv-cache"
-    export UV_PYTHON="${python3Packages.python.interpreter}"
   '';
 
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
+    uv
   ];
 
   disabledTestPaths = [
