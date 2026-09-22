@@ -57,6 +57,11 @@ buildPythonPackage rec {
   ]
   ++ dask.optional-dependencies.array;
 
+  # Tests want write access to the sandbox, faiil with access to .homeless-shelter otherwise
+  preCheck = ''
+    export CUPY_CACHE_DIR=$(mktemp -d)
+  '';
+
   nativeCheckInputs = [
     cupy
     pytest-xdist
