@@ -364,7 +364,17 @@ let
         "$@"
   '';
 
-  regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
+  inherit
+    (import ../../lib/store-registration-info.nix {
+      inherit hostPkgs;
+      rootPaths = config.virtualisation.additionalPaths;
+    })
+    regInfo
+    regInfoPath
+    ;
+  regInfoParam = optionalString (
+    cfg.useNixStoreImage || cfg.mountHostNixStore
+  ) " regInfo=${regInfoPath}";
 
   # Use well-defined and persistent filesystem labels to identify block devices.
   rootFilesystemLabel = "nixos";
@@ -744,6 +754,7 @@ in
       enableSharedMemory = mkOption {
         type = types.bool;
         default = useVirtiofs; # Need shared memory for virtiofs: <https://www.qemu.org/docs/master/system/devices/virtio/vhost-user.html#shared-memory-object>
+        defaultText = lib.literalExpression "hostPkgs.stdenv.hostPlatform.isLinux";
         description = "Enable shared memory";
       };
 
@@ -1313,7 +1324,7 @@ in
         mkIf cfg.directBoot.enable [
           "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
           "-initrd ${cfg.directBoot.initrd}"
-          ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
+          ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init${regInfoParam} ${consoles} $QEMU_KERNEL_PARAMS"''
         ]
       )
       (mkIf cfg.useEFIBoot [

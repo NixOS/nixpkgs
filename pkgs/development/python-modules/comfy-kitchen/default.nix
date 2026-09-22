@@ -17,7 +17,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-kitchen";
-  version = "0.2.31";
+  version = "0.2.33";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     repo = "comfy-kitchen";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-apa7N9Y0bt4fpbMTP0qRUC0QnMuJvoxoCOeWONWCExo=";
+    hash = "sha256-2wiUIF6zWSn8y/FK0czuKcuH5wD1HWNhyiQ2yC7AFT4=";
   };
 
   buildInputs = lib.optionals cudaSupport (

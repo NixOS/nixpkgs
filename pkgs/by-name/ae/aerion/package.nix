@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "hkdb";
     repo = "aerion";
     rev = "v${version}";
-    hash = "sha256-erBpAeDi5liSDLkzTCOhht8UxIX7eyTIOGwqBTMMWMQ=";
+    hash = "sha256-uiAgd1Lk4MzPS3xRhOsn5zk4NwrPqmf+SRHVVNk5WxI=";
   };
 
   frontend = buildNpmPackage {
@@ -30,7 +30,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-lIlnMIGjFEDvC0ktP88bYMMoDyghtr6SlxaJmfq0Z7o=";
+    npmDepsHash = "sha256-Ni0/fr3fIym8E79IwsYUC0BkyZDcsM5WYQi6tx8SCWE=";
 
     buildPhase = ''
       npm run build
@@ -99,5 +99,9 @@ buildGoModule {
     license = lib.licenses.asl20;
     mainProgram = "aerion";
     maintainers = with lib.maintainers; [ curious ];
+    # Never built on darwin since first introduction in nixpkgs
+    # Fails to link on Darwin with undefined `_OBJC_CLASS_$_UTType`
+    # (likely requires linking `UniformTypeIdentifiers.framework`)
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

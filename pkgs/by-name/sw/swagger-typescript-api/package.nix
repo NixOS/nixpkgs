@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swagger-typescript-api";
-  version = "13.12.4";
+  version = "13.13.0";
 
   src = fetchFromGitHub {
     owner = "acacode";
     repo = "swagger-typescript-api";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Xy67aqkZAB54dz9yabJHvOLilb2C/oe8ZCprnqfBBj4=";
+    hash = "sha256-lV24rJwgmcTODyvb/qkpKWII4EhKd+xGrs1uwjuSVq4=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHash =
       {
-        aarch64-darwin = "sha256-6ECRpzXybtVEkuk4IIkinO8fT1l5vEkQk1U+8nr5gg8=";
-        aarch64-linux = "sha256-7hR5cS8fFN1Eb82eKF+B24FdznfQn5roRqGe9dHk5H4=";
-        x86_64-linux = "sha256-0jTq1Ds8CNDGOaXZlBgtl5IspoLTGzfXwOhR9MwhoYQ=";
+        aarch64-darwin = "sha256-BBHQGnSAZ6sgVDX2cTnConqRPjY5umeDHE2lIkvuyo4=";
+        aarch64-linux = "sha256-0S9nKVlzv7WQvUXQZ8ZGU+kWhDYP7ciOIUtpdT8ehCA=";
+        x86_64-linux = "sha256-vGApFxnG7X9XBZu0z4HpyarNnVFUZk7eq+pQKXS+O5E=";
       }
       .${stdenv.hostPlatform.system}
         or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet.");

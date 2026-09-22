@@ -242,6 +242,10 @@ in
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "honk"
+    ] "The honk module has been removed.")
     (mkRemovedOptionModule
       [
         "services"
@@ -331,6 +335,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
+    '')
+    (mkRemovedOptionModule [ "services" "prosody-filer" ] ''
+      The Prosody Filer package and module have been removed because the project was discontinued upstream. Use Prosody's built-in `services.prosody.httpFileShare` support or Rusty Filer instead.
     '')
     (mkRemovedOptionModule [
       "services"

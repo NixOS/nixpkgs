@@ -274,6 +274,10 @@ in
       final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
+
+    preCheck = ''
+      LUA_PATH="${vimPlugins.nvim-dap}/lua/?.lua;${vimPlugins.nvim-dap}/lua/?/init.lua;$LUA_PATH"
+    '';
   };
 
   ldbus = prev.ldbus.overrideAttrs (old: {
