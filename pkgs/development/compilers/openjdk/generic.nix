@@ -59,11 +59,13 @@
   openjfx17,
   openjfx21,
   openjfx25,
+  openjfx27,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
       "25" = openjfx25;
+      "27" = openjfx27;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
