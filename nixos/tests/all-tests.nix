@@ -1702,6 +1702,7 @@ in
   simple-vm = runTest ./simple-vm.nix;
   sing-box = runTest ./sing-box.nix;
   sks = runTest ./sks.nix;
+  skwd-wall-v2 = runTest ./skwd-wall/skwd-wall-v2.nix;
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
