@@ -1,0 +1,26 @@
+Using ARCH_MACHINE variable or unknown if variable not present on Linux.
+
+The header `sys/sysctl.h` has been removed from glibc a long ago (since v2.30 stub, removed completely in v2.31).
+
+diff --git a/usr.bin/make/main.c b/usr.bin/make/main.c
+index c6e52a5..757fa7e 100644
+--- a/usr.bin/make/main.c
++++ b/usr.bin/make/main.c
+@@ -118,7 +118,7 @@ __RCSID("$NetBSD: main.c,v 1.273.6.1 2021/04/30 14:07:02 martin Exp $");
+ #include <sys/param.h>
+ #include <sys/resource.h>
+ #include <sys/stat.h>
+-#ifdef MAKE_NATIVE
++#if defined(MAKE_NATIVE) && !defined(linux)
+ #include <sys/sysctl.h>
+ #endif
+ #include <sys/utsname.h>
+@@ -1028,7 +1028,7 @@ main(int argc, char **argv)
+ 	}
+ 
+ 	if (!machine_arch) {
+-#ifdef MAKE_NATIVE
++#if defined(MAKE_NATIVE) && !defined(linux)
+ 	    static char machine_arch_buf[sizeof(utsname.machine)];
+ 	    const int mib[2] = { CTL_HW, HW_MACHINE_ARCH };
+ 	    size_t len = sizeof(machine_arch_buf);
