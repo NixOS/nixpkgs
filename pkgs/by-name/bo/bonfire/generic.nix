@@ -824,13 +824,18 @@ beamPkgs.mixRelease (
       # in there because `deps.nix` will be updated by then.
       preBuild = lib.concatStringsSep "\n" [
         ''
+          set -x
           mkdir -p deps
         ''
 
-        # Explanation: same but for yarn-berry assets.
+        # Description: bundles yarn-berry assets of dependencies, including build.ext bundles.
         # Note that /src is used instead of .src to be sure to have any patch applied,
         # to replace `deps/${dep}/` which must be… writable.
-        (lib.concatMapStringsSep "\n" (dep: ''
+        (let yarn-berry-offline = finalAttrs.passthru.yarn-berry.overrideAttrs (old: {
+               pname = old.pname + "-offline";
+               patches = (old.patches or [ ]) ++ finalAttrs.passthru.yarn-berry.berryOfflinePatches;
+             }); in
+        lib.concatMapStringsSep "\n" (dep: ''
           rm -rf deps/${dep}
           cp --no-preserve=mode -r \
             ${finalAttrs.mixNixDeps.${dep}}/src \
@@ -840,9 +845,16 @@ beamPkgs.mixRelease (
           missingHashes="${finalAttrs.passthru.yarnBerryOfflineCaches.${dep}.package.missingHashes}" \
           PATH="${lib.makeBinPath [ finalAttrs.passthru.yarn-berry.yarn-berry-offline ]}:$PATH" \
           yarnBerryConfigHook
+
+          echo >&2 dep=${dep}
+          if grep -q build.ext package.json; then
+            PATH="${lib.makeBinPath [ finalAttrs.passthru.yarn-berry.yarn-berry-offline ]}:$PATH" \
+            YARN_IGNORE_PATH=1 \
+            ${lib.getExe' yarn-berry-offline "yarn"} build.ext
+          fi
           popd
         '') (lib.attrNames finalAttrs.passthru.yarnBerryOfflineCaches))
-
+        
         # See: justfile#prepare-flavour-theme ${finalAttrs.env.FLAVOUR}
         ''
           sh -x ./prepare-flavour-theme.sh ${finalAttrs.env.FLAVOUR}
@@ -872,6 +884,15 @@ beamPkgs.mixRelease (
       ];
 
       postBuild = lib.concatStringsSep "\n" [
+        # Description: give access to dependencies' `node_modules`.
+        ''
+          substituteInPlace assets/package.json \
+            --replace-fail "NODE_PATH=./node_modules:./js" \
+                           "NODE_PATH=${lib.concatMapStrings
+                                         (n: "../../${n}/assets/node_modules:")
+                                         (lib.attrNames finalAttrs.passthru.yarnBerryOfflineCaches)
+                                       }./node_modules:./js"
+        ''
         # See: justfile#_rel-compile-assets
         ''
           mix bonfire.gen_tailwind_sources
@@ -894,7 +915,7 @@ beamPkgs.mixRelease (
 
       preInstall = lib.concatStringsSep "\n" [
         ''
-          cp -ra ${finalAttrs.mixNixDeps.exla}/cache cache
+          cp -ra ${finalAttrs.mixNixDeps.exla}/cache .
         ''
       ];
 
