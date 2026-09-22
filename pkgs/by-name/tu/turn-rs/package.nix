@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
-  version = "4.1.5";
+  version = "4.1.6";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GNmRf+BFn8vtAKn7pkoCM9VF8MP/ymrqWrfhKRG3hUs=";
+    hash = "sha256-b+nyQe64u8m44Ja30S9AJyEDOwDkCPRbvBQfECHYuJ0=";
   };
 
   cargoHash = "sha256-TmmVZfAe48hgeDNkCQ746lBDRnrsgfFpXD8XwJRLB1o=";
