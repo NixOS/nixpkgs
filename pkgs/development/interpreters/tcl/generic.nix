@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.tcl.tk/";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
+    mainProgram = "tclsh";
     maintainers = with lib.maintainers; [ agbrooks ];
   };
 
