@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.17.0";
+  version = "4.17.1";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-ToAez48+TBcPJUjrh8xYC84HLwbU+rCxGoor5o4gGgo=";
+    hash = "sha256-nnV4UTCASBnEZmv6lpNm7zB9OmJZomWhnBlyNIfKZB0=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7zPiu8kgZbp64ugf229hrjpwZujQHHDLwCxlGRVgH4E=";
+    hash = "sha256-ZG7bajXmzAtSHXxbgh0N8jxUyQLrm5Km9yDaAPZh/V4=";
   };
 
   nativeBuildInputs = [
