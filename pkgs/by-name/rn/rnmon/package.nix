@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rnmon";
-  version = "0.3.4";
+  version = "0.3.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "lbatalha";
     repo = "rnmon";
     tag = finalAttrs.version;
-    hash = "sha256-3ou2F8ePKzh6g63X0l9iX1fTSVe9misGBkPlCUEWpiU=";
+    hash = "sha256-Pu7kd9CUoHRWnmzrF9NSeqXxN7CRDFQslS+j3M7iNGQ=";
   };
 
   build-system = [
