@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   libxxf86vm,
@@ -70,6 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
     ./cmake-config.patch
+
+    (fetchpatch2 {
+      # https://github.com/PixarAnimationStudios/OpenSubdiv/pull/1378
+      url = "https://github.com/PixarAnimationStudios/OpenSubdiv/commit/cb1b2378c8fb370b4cc9b71079473145fed6ae35.patch?full_index=1";
+      hash = "sha256-i3dJnAVBctwqAUPB2Qu9xB+Ehjj7r3kT8KPL75KiwFY=";
+    })
   ];
 
   # It's important to set OSD_CUDA_NVCC_FLAGS,
