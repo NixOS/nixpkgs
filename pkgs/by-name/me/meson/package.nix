@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "mesonbuild";
     repo = "meson";
     tag = finalAttrs.version;
-    hash = "sha256-lnuySM7aCojPU9bQI7LPKgod8otFa+Spo9yIDFbOJVs=";
+    hash = "sha256-cQphgkEWNpjjs7DuV5+6KGDhsmQ4x09cH+FU0lfoB0Y=";
   };
 
   patches = [
