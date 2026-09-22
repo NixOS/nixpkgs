@@ -8,14 +8,15 @@
   openai,
   pydantic,
   requests,
-  types-requests,
   typing-extensions,
+  websockets,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "openai-agents";
   version = "0.18.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
@@ -27,14 +28,18 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "openai"
+  ];
+
   dependencies = [
     griffelib
     mcp
     openai
     pydantic
     requests
-    types-requests
     typing-extensions
+    websockets
   ];
 
   pythonImportsCheck = [
