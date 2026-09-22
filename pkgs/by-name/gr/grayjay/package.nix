@@ -1,7 +1,6 @@
 {
   buildDotnetModule,
   fetchFromGitLab,
-  fetchurl,
   dotnetCorePackages,
   lib,
   ffmpeg,
@@ -45,6 +44,7 @@
   _experimental-update-script-combinators,
   grayjay-frontend,
   grayjay-libcurlshim,
+  grayjay-justcef,
   unzip,
 }:
 let
@@ -54,13 +54,15 @@ let
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-dhXUjj9x8v1bfHLPxNtcysj/eKeT3kkSeVuX6PKoykE=";
     fetchSubmodules = true;
-    fetchLFS = true;
-  };
-  justcefNative = fetchurl {
-    url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
-    hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/*"
+      "!/Grayjay.ClientServer/deps/*"
+      "/Grayjay.ClientServer/deps/linux-x64/"
+      "/Grayjay.ClientServer/deps/linux-arm64/"
+    ];
+    hash = "sha256-v+NR18Hy5GyomMBrxfWusdXN1JFmCYhpkLHnI3kZyBE=";
   };
   getLibrary =
     pkg: libnm:
@@ -124,6 +126,9 @@ buildDotnetModule (finalAttrs: {
 
   nugetDeps = ./deps.json;
 
+  patches = [ ./0001-justcef-prebuilt-dir.patch ];
+  dotnetFlags = [ "-p:JustCefPrebuiltDir=${grayjay-justcef}" ];
+
   dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
     inherit
       (dotnetCorePackages.combinePackages [
@@ -141,10 +146,6 @@ buildDotnetModule (finalAttrs: {
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
     cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
-
-    mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
-    cp ${justcefNative} \
-      JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
   '';
 
   postInstall = ''
@@ -159,7 +160,7 @@ buildDotnetModule (finalAttrs: {
     ln -s ${getLibrary libsodium "sodium"} $out/lib/grayjay/libsodium.so
     ln -s ${getLibrary sqlite "sqlite3"} $out/lib/grayjay/libe_sqlite3.so
 
-    # Explicitly fetched and copied over in preBuild
+    # MSBuild's Copy task does not preserve executable bit
     chmod +x $out/lib/grayjay/cef/justcefnative
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
