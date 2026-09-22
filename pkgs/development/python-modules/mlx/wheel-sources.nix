@@ -1,5 +1,7 @@
 {
   version = "0.31.2";
+  # Hash of the upstream source used for examples and benchmarks matching the wheel version.
+  testSourceHash = "sha256-0Oxacz61WGWZrpWw+fMQjEQfwOx1l1L2d0kWl54/LrQ=";
 
   mlx = {
     "3.13-aarch64-darwin" = {

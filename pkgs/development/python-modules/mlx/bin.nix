@@ -1,10 +1,11 @@
 {
   buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
   fetchPypi,
   lib,
   mlx-metal,
   python,
-  runCommand,
   stdenv,
 }:
 
@@ -61,14 +62,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "mlx" ];
 
-  passthru.tests.linkedMetalRuntime =
-    runCommand "python${python.pythonVersion}-mlx-bin-linked-metal-runtime" { }
-      ''
-        test -L ${finalAttrs.finalPackage}/${python.sitePackages}/mlx/lib
-        test -e ${finalAttrs.finalPackage}/${python.sitePackages}/mlx/lib/libmlx.dylib
-        test -e ${finalAttrs.finalPackage}/${python.sitePackages}/mlx/lib/mlx.metallib
-        touch $out
-      '';
+  passthru.tests = callPackage ./tests.nix {
+    mlx = finalAttrs.finalPackage;
+    metalSupport = true;
+    src = fetchFromGitHub {
+      owner = "ml-explore";
+      repo = "mlx";
+      tag = "v${finalAttrs.version}";
+      hash = wheelSources.testSourceHash;
+    };
+  };
 
   meta = {
     description = "Prebuilt MLX wheel for Apple silicon with Metal runtime";

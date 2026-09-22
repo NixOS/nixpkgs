@@ -23,13 +23,10 @@
   openblas,
 
   # tests
+  callPackage,
   numpy,
   pytestCheckHook,
   python,
-  runCommand,
-
-  # passthru
-  mlx,
 }:
 
 let
@@ -151,24 +148,9 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit gguf-tools;
 
-    tests = {
-      mlxTest =
-        runCommand "run-mlx-examples"
-          {
-            buildInputs = [ mlx ];
-            nativeBuildInputs = [ python ];
-          }
-          ''
-            cp ${finalAttrs.src}/examples/python/logistic_regression.py .
-            ${python.interpreter} logistic_regression.py
-            rm logistic_regression.py
-
-            cp ${finalAttrs.src}/examples/python/linear_regression.py .
-            ${python.interpreter} linear_regression.py
-            rm linear_regression.py
-
-            touch $out
-          '';
+    tests = callPackage ./tests.nix {
+      mlx = finalAttrs.finalPackage;
+      inherit (finalAttrs) src;
     };
 
     updateScript = lib.getExe (writeShellApplication {
