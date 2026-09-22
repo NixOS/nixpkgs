@@ -4,7 +4,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_12,
   fetchFromGitHub,
   buildGo127Module,
   installShellFiles,
@@ -15,7 +15,7 @@
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
-      pnpm_11
+      pnpm_12
       fetchFromGitHub
       ;
   },

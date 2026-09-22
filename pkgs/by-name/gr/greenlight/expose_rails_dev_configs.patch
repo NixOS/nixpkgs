@@ -1,0 +1,17 @@
+diff --git a/config/environments/development.rb b/config/environments/development.rb
+index c0cba740..a4a3f4d1 100644
+--- a/config/environments/development.rb
++++ b/config/environments/development.rb
+@@ -117,6 +117,12 @@ Rails.application.configure do
+   # Suppress logger output for asset requests.
+   config.assets.quiet = true
+ 
++  # Do not dump schema after migrations.
++  config.active_record.dump_schema_after_migration = Rails.env.development? && ENV["RAILS_DUMP_SCHEMA"] != "false"
++
++  # Ensure requests are considered secure if they come through a reverse proxy with the correct headers
++  config.action_controller.forgery_protection_origin_check = ENV['FORGERY_ORIGIN_CHECK'] != 'false'
++
+   # Raises error for missing translations.
+   # config.i18n.raise_on_missing_translations = true
+ 
