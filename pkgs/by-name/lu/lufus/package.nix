@@ -44,7 +44,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
       --add-flags "-m lufus" \
       --prefix PYTHONPATH : "$out/${python313Packages.python.sitePackages}:${python313Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
 
-    install -Dm644 src/lufus/gui/assets/lufus.png $out/share/pixmaps/lufus.png
+    install -Dm644 src/lufus/gui/assets/lufus.png -t $out/share/icons/hicolor/64x64/apps
 
     copyDesktopItems
   '';
