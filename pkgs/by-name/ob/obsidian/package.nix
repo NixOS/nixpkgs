@@ -63,7 +63,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "obsidian";
+    name = "md.obsidian.Obsidian";
     desktopName = "Obsidian";
     startupWMClass = "md.obsidian.Obsidian";
     comment = "Knowledge base";
