@@ -12,6 +12,12 @@
 # Also, we must delete the libtbb.so in mkl as it ends up being used in rtech,
 # whilst we want the separate version that we compile against which does
 # have headers.
+#
+# Note: libmkl_rt.so.2 here is a GNU ld linker script (see libmkl_rt.so.in),
+# not a real ELF shared object, so it only works for build-time linking
+# (e.g. via -lmkl_rt or the mkl_rt.pc file). This means mkl-gnulibs cannot be
+# used as `blas.override { blasProvider = mkl-gnulibs; }` — that expects a
+# real .so it can `patchelf` at runtime.
 mkl.overrideAttrs (
   finalAttrs: o: {
     strictDeps = true;
@@ -38,6 +44,13 @@ mkl.overrideAttrs (
       # Need slightly different name for numpy, which special cases "mkl"
       substituteAll ${./mkl.pc.in} $out/lib/pkgconfig/mkl_rt.pc
     '';
+
+    # The postFixup above hardcodes .so extensions and relies on a Linux-only
+    # OpenMP conflict (libgomp vs libiomp5), so this only makes sense on Linux,
+    # unlike vanilla mkl which also supports Darwin.
+    meta = (o.meta or { }) // {
+      platforms = [ "x86_64-linux" ];
+    };
 
     passthru = (o.passthru or { }) // {
       isILP64 = false;

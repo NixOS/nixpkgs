@@ -18,7 +18,7 @@ int main()
 
     /* Verify Intel OpenMP is NOT loaded — its presence alongside libgomp causes the conflict
        that mkl-gnulibs exists to prevent */
-    assert(dlopen("libiomp5.so", RTLD_NOLOAD) == NULL);
+    assert(dlopen("libiomp5.so", RTLD_NOLOAD | RTLD_LAZY) == NULL);
 
     return 0;
 }
