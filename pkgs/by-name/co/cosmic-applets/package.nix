@@ -13,6 +13,7 @@
   pulseaudio,
   pipewire,
   udev,
+  lsof,
   xkeyboard_config,
   nix-update-script,
   nixosTests,
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pulseaudio
     pipewire
     udev
+    lsof
   ];
 
   dontUseJustBuild = true;
