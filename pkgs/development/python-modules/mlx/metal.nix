@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   lib,
 }:
@@ -22,6 +23,8 @@ buildPythonPackage rec {
     abi = "none";
     inherit (wheelSources.mlx-metal) platform hash;
   };
+
+  passthru.updateScript = callPackage ./update-wheels.nix { };
 
   meta = {
     description = "Prebuilt Metal runtime for MLX";

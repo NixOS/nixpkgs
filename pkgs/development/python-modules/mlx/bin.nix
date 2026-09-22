@@ -62,15 +62,22 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "mlx" ];
 
-  passthru.tests = callPackage ./tests.nix {
-    mlx = finalAttrs.finalPackage;
-    metalSupport = true;
-    src = fetchFromGitHub {
+  passthru.updateScript = callPackage ./update-wheels.nix { };
+
+  passthru.srcs = srcs // {
+    metal = mlx-metal.src;
+    testSource = fetchFromGitHub {
       owner = "ml-explore";
       repo = "mlx";
       tag = "v${finalAttrs.version}";
       hash = wheelSources.testSourceHash;
     };
+  };
+
+  passthru.tests = callPackage ./tests.nix {
+    mlx = finalAttrs.finalPackage;
+    metalSupport = true;
+    src = finalAttrs.passthru.srcs.testSource;
   };
 
   meta = {
