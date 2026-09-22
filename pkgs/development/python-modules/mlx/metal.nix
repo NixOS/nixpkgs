@@ -3,10 +3,23 @@
   callPackage,
   fetchPypi,
   lib,
+  macosVariant ? "14",
 }:
 
 let
   wheelSources = import ./wheel-sources.nix;
+  srcs = lib.mapAttrs (
+    _: source:
+    fetchPypi {
+      pname = "mlx_metal";
+      inherit (wheelSources) version;
+      format = "wheel";
+      dist = "py3";
+      python = "py3";
+      abi = "none";
+      inherit (source) platform hash;
+    }
+  ) wheelSources.mlx-metal;
 in
 buildPythonPackage rec {
   pname = "mlx-metal";
@@ -14,17 +27,12 @@ buildPythonPackage rec {
   format = "wheel";
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "mlx_metal";
-    inherit version;
-    format = "wheel";
-    dist = "py3";
-    python = "py3";
-    abi = "none";
-    inherit (wheelSources.mlx-metal) platform hash;
-  };
+  src = srcs.${macosVariant} or (throw "mlx-metal: unsupported macOS wheel variant ${macosVariant}");
 
-  passthru.updateScript = callPackage ./update-wheels.nix { };
+  passthru = {
+    inherit macosVariant srcs;
+    updateScript = callPackage ./update-wheels.nix { };
+  };
 
   meta = {
     description = "Prebuilt Metal runtime for MLX";

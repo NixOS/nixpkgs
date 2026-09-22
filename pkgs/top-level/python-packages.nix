@@ -11076,6 +11076,10 @@ self: super: with self; {
 
   mlx-metal = callPackage ../development/python-modules/mlx/metal.nix { };
 
+  mlx-metal-macos15 = self.mlx-metal.override { macosVariant = "15"; };
+
+  mlx-metal-macos26 = self.mlx-metal.override { macosVariant = "26"; };
+
   mlx-vlm = callPackage ../development/python-modules/mlx-vlm { };
 
   mlxtend = callPackage ../development/python-modules/mlxtend { };

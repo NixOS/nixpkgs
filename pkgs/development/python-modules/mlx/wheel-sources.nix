@@ -17,7 +17,18 @@
   };
 
   mlx-metal = {
-    platform = "macosx_14_0_arm64";
-    hash = "sha256-slOFvO4Y/BlAkiVbi1O5o9hInrZQ5ZFg8bV6rdB6otw=";
+    "14" = {
+      platform = "macosx_14_0_arm64";
+      hash = "sha256-slOFvO4Y/BlAkiVbi1O5o9hInrZQ5ZFg8bV6rdB6otw=";
+    };
+    "15" = {
+      platform = "macosx_15_0_arm64";
+      hash = "sha256-6dTl/ObKEKh6DjiFl/mVGa1ZTQnmdHCLUxK9i9T1mX0=";
+    };
+    # Includes NAX kernels for supported GPUs running macOS 26.2 or newer.
+    "26" = {
+      platform = "macosx_26_0_arm64";
+      hash = "sha256-hP+2DuUD8D62hPX7Fo1c/zHioWt/J8FzHq92Yr1um0Y=";
+    };
   };
 }

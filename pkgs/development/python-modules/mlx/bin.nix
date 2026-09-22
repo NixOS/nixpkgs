@@ -13,6 +13,7 @@ let
   wheelSources = import ./wheel-sources.nix;
   inherit (wheelSources) version;
   inherit (python) pythonVersion;
+  sourceKey = "${pythonVersion}-${stdenv.hostPlatform.system}";
 
   getSrcFromPypi =
     {
@@ -41,11 +42,9 @@ buildPythonPackage (finalAttrs: {
   format = "wheel";
   __structuredAttrs = true;
 
-  disabled = !(srcs ? "${pythonVersion}-${stdenv.hostPlatform.system}");
+  disabled = !(srcs ? ${sourceKey});
 
-  src =
-    srcs."${pythonVersion}-${stdenv.hostPlatform.system}"
-      or (throw "mlx-bin is only supported on Python ${builtins.concatStringsSep ", " (builtins.attrNames srcs)}");
+  src = srcs.${sourceKey} or (throw "mlx-bin: unsupported Python version or system: ${sourceKey}");
 
   # Upstream pins the Metal runtime to the same release as the Python wheel.
   dependencies =
@@ -64,8 +63,9 @@ buildPythonPackage (finalAttrs: {
 
   passthru.updateScript = callPackage ./update-wheels.nix { };
 
-  passthru.srcs = srcs // {
-    metal = mlx-metal.src;
+  passthru.srcs = {
+    mlx = srcs;
+    mlx-metal = mlx-metal.srcs;
     testSource = fetchFromGitHub {
       owner = "ml-explore";
       repo = "mlx";
