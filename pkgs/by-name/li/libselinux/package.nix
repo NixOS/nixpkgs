@@ -16,7 +16,7 @@ assert enablePython -> swig != null && python3 != null && !stdenv.hostPlatform.i
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libselinux";
-  version = "3.10";
+  version = "3.11";
   inherit (libsepol) se_url;
 
   outputs = [
@@ -29,15 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/libselinux-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HvIWxbVvt+ClHNKQl4ehdaF+45HgRniUgHhzU56+dms=";
+    hash = "sha256-c9QZxuIOh0rapAGTcsvQl+7PTSduE/J+xeZ9NcC9IDw=";
   };
-
-  patches = [
-    (fetchurl {
-      url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
-      hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
