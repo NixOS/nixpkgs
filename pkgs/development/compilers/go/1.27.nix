@@ -21,7 +21,7 @@ let
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
-  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+  isCross = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/regexp/syntax/make_perl_groups.pl
   ''
   + (
+    # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same system string
     if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
       ''
         mv bin/*_*/* bin
