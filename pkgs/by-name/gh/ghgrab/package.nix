@@ -23,6 +23,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  checkFlags = [
+    # sends request to a github.com url
+    "--skip=test_mcp_repo_info_on_actual_repo"
+  ];
+
   meta = {
     changelog = "https://github.com/abhixdd/ghgrab/releases/tag/v${finalAttrs.version}";
     description = "Simple, pretty terminal tool that lets you search and download files from GitHub without leaving your CLI";
