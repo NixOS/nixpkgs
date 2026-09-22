@@ -84,6 +84,15 @@ in
       (import ./generic.nix {
         version = "1.11.9";
         hash = "sha256-SX5jIfJfxQQfP2P5sCGtglFn+GZlOIyHgnQ3qrr8GSI=";
+        patches = [
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62776
+          # Probably not needed after the next release on this branch (1.11.10+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/6144379071697e734d374530c412e6ae3cd4715b.patch";
+            hash = "sha256-OMZ+lvm8peyYQZE+jddcJpOfS/vtmu3I06WoOplf704=";
+          })
+        ];
       })
       {
         stdenv = gcc14Stdenv;
