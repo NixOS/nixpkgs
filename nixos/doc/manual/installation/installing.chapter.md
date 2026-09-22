@@ -289,11 +289,13 @@ Use the following commands:
 
 -   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
     that you assign a unique symbolic label to the file system using the
-    option `-L label`, since this makes the file system configuration
-    independent from device changes. For example:
+    option `-L label`, since this makes the filesystem configuration
+    independent of device changes. Also, since the Nix store contains a
+    large number of small files it is recommended to lower the bytes-per-inode
+    ratio with the `-i 8192` option. For example:
 
     ```ShellSession
-    # mkfs.ext4 -L nixos /dev/sda1
+    # mkfs.ext4 -L nixos -i 8192 /dev/sda1
     ```
 
 -   For creating swap partitions: `mkswap`. Again it's recommended to
@@ -539,7 +541,7 @@ corresponding configuration Nix expression.
 With a partitioned disk.
 
 ```ShellSession
-# mkfs.ext4 -L nixos /dev/sda1
+# mkfs.ext4 -L nixos -i 8192 /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
