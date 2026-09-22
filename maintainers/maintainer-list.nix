@@ -10509,10 +10509,9 @@
     name = "Luis G. Torres";
   };
   giomf = {
-    email = "giomf@mailbox.org";
+    name = "giomf";
     github = "giomf";
     githubId = 35076723;
-    name = "Guillaume Fournier";
   };
   giorgiga = {
     email = "giorgio.gallo@bitnic.it";
