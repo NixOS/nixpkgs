@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nix-update-script,
   installShellFiles,
+  makeWrapper,
+  go,
 }:
 
 buildGoModule rec {
@@ -23,6 +25,17 @@ buildGoModule rec {
   subPackages = [ "cmd/xk6" ];
 
   ldflags = [ "-X go.k6.io/xk6/internal/cmd.version=${version}" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ go ];
+
+  # xk6 shells out to the go compiler at runtime to build k6 binaries
+  allowGoReference = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/xk6 --prefix PATH : ${lib.makeBinPath [ go ]}
+  '';
 
   passthru.updateScript = nix-update-script { };
 
