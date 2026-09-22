@@ -3702,6 +3702,7 @@ with pkgs;
   openjfx17 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "17"; };
   openjfx21 = openjfx;
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
+  openjfx27 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "27"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
