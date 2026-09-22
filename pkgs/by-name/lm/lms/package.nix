@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gtest,
-  boost,
+  boost190,
   wt,
   taglib,
   libconfig,
@@ -20,6 +20,9 @@
   onnxruntime,
 }:
 
+let
+  boost = boost190;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lms";
   version = "3.80.0";
