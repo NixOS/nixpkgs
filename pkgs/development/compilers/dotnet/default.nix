@@ -78,6 +78,7 @@ makeScopeWithSplicing' {
         addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
 
         sigtool = callPackage ./sigtool.nix { };
+        multi-cc-wrapper = buildPackages.callPackage ./multi-cc-wrapper.nix { };
       };
 
     in

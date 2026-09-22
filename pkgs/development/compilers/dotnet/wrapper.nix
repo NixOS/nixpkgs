@@ -115,7 +115,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               sdk = finalAttrs.finalPackage;
               built = stdenv.mkDerivation {
                 name = "${sdk.name}-test-${name}";
-                buildInputs = [ sdk ] ++ buildInputs ++ lib.optionals usePackageSource sdk.packages;
+                nativeBuildInputs = [ sdk ];
+                buildInputs = buildInputs ++ lib.optionals usePackageSource sdk.packages;
                 # make sure ICU works in a sandbox
                 propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
                 unpackPhase =
