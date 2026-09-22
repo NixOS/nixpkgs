@@ -16,6 +16,8 @@
   pulseaudio,
   udev,
   dav1d,
+  pciutils,
+  desktop-file-utils,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -60,6 +62,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pulseaudio
     udev
     dav1d
+    pciutils
+    desktop-file-utils
   ];
 
   dontUseJustBuild = true;
