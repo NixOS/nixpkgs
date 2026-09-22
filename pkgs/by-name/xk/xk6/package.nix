@@ -40,9 +40,9 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Build k6 with extensions";
+    description = "k6 extension development toolbox";
     mainProgram = "xk6";
-    homepage = "https://k6.io/";
+    homepage = "https://github.com/grafana/xk6";
     changelog = "https://github.com/grafana/xk6/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ szkiba ];
