@@ -21,7 +21,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-aimdo";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Comfy-Org";
     repo = "comfy-aimdo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHK1+kwPbfhCS5WBo2qCvCWH+t6B6MKvevpcsD9JflE=";
+    hash = "sha256-f5r2UgkWU49Y/sc9MBwlrmzaY3w4wcHJ0HgcFoVe3QY=";
   };
 
   postPatch = ''
