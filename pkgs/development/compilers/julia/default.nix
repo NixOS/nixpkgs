@@ -65,6 +65,13 @@ in
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
           })
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62775
+          # Probably not needed after the next release on this branch (1.10.13+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch";
+            hash = "sha256-Jzjl7aHvfm1Ot5jCcGErbybC6RWRxy4UR6JVxtB65jQ=";
+          })
         ];
       })
       {
