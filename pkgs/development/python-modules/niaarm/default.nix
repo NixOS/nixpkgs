@@ -19,21 +19,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niaarm";
   # nixpkgs-update: no auto update
   version = "0.13.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-524rJ5b9e0U1rqu1iCGMA3Tgnn9bO4biCC1FMoGNqms=";
   };
 
   pythonRelaxDeps = [
     "numpy"
+    "pandas"
     "plotly"
     "scikit-learn"
   ];
@@ -67,8 +69,8 @@ buildPythonPackage rec {
     description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
-    changelog = "https://github.com/firefly-cpp/NiaARM/releases/tag/${src.tag}";
+    changelog = "https://github.com/firefly-cpp/NiaARM/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})
