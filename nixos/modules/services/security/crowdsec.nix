@@ -310,6 +310,7 @@ in
                       "sqlite"
                       "mysql"
                       "pgx"
+                      "postgresql"
                     ];
                     default = "sqlite";
                     description = "The database type";
