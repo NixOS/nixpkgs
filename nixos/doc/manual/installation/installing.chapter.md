@@ -287,31 +287,41 @@ Once complete, you can follow with
 
 Use the following commands:
 
--   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
-    that you assign a unique symbolic label to the file system using the
-    option `-L label`, since this makes the file system configuration
-    independent from device changes. For example:
+-   For creating an ext4 partition:
 
     ```ShellSession
-    # mkfs.ext4 -L nixos /dev/sda1
+    # mkfs.ext4 -L nixos -i 8192 /dev/sda1
     ```
 
--   For creating swap partitions: `mkswap`. Again it's recommended to
-    assign a label to the swap partition: `-L label`. For example:
+    This creates an ext4 partition at `/dev/sda1`, adds the label "nixos"
+    and `-i` configures our recommended bytes-per-inode ratio.
+
+    ::: {.note}
+    Nix stores contain a large amount of small files which may exhaust the
+    default ext4 inode allocation.
+    The recommended lower bytes-per-inode ratio costs roughly 1.6% of usable
+    space but doubles the number of inodes, allowing the partition to store
+    twice as many files.
+    :::
+
+-   For creating swap partitions:
 
     ```ShellSession
     # mkswap -L swap /dev/sda2
     ```
 
--   **UEFI systems**
+    Again `-L` is used to add the "swap" Label to the partition.
 
-    For creating boot partitions: `mkfs.fat`. Again it's recommended
-    to assign a label to the boot partition: `-n label`. For
-    example:
+-   **UEFI systems**:
+
+    For creating boot partitions:
 
     ```ShellSession
     # mkfs.fat -F 32 -n boot /dev/sda3
     ```
+
+    The `-F 32` flag selects the FAT32 filesystem and `-n` assigns the "boot"
+    label to the partition.
 
 -   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
     `vgcreate`, and `lvcreate`.
@@ -539,7 +549,7 @@ corresponding configuration Nix expression.
 With a partitioned disk.
 
 ```ShellSession
-# mkfs.ext4 -L nixos /dev/sda1
+# mkfs.ext4 -L nixos -i 8192 /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
