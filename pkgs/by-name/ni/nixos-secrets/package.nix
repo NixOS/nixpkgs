@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication {
   passthru.tests = {
     inherit (nixosTests)
       nixos-secrets-basic-generators
+      nixos-secrets-failure-recovery
       ;
   };
 

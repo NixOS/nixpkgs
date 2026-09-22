@@ -5,9 +5,8 @@ from .exec import list_secrets, delete_secret, fixup_all
 
 def collect_garbage(args: SecretsArgs, config: SecretsConfig):
     for backend in config.storeBackends.values():
-        if not backend.list or not backend.delete:
-            print(f"Skipping '{backend.name}': missing 'list' or 'delete' script")
-
+        if not backend.delete:
+            print(f"Skipping '{backend.name}': missing 'delete' script")
             continue
 
         secrets = list_secrets(args, config, backend)

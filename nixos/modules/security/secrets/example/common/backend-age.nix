@@ -57,6 +57,7 @@ let
             --set PATH ${cfg.package pkgs}/bin \
             --add-flags "${ageJSONConfig} ${command}"
         '';
+        meta = { inherit (raw.meta) mainProgram; };
       }
     );
 in
