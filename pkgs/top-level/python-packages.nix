@@ -15104,6 +15104,8 @@ self: super: with self; {
 
   pygrib = callPackage ../development/python-modules/pygrib { };
 
+  pygrister = callPackage ../development/python-modules/pygrister { };
+
   pygrok = callPackage ../development/python-modules/pygrok { };
 
   pygsl = callPackage ../development/python-modules/pygsl { inherit (pkgs) gsl swig; };
