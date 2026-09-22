@@ -52,7 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     downloadPage = "https://github.com/nix-community/colmena";
     changelog = "https://github.com/nix-community/colmena/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zhaofengli ];
+    maintainers = with lib.maintainers; [
+      stepbrobd
+      zhaofengli
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "colmena";
   };
