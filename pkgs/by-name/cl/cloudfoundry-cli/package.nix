@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -41,6 +43,15 @@ buildGoModule (finalAttrs: {
     mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript
   '';
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Official command line client for Cloud Foundry";
