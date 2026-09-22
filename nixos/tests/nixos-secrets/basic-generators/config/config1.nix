@@ -5,7 +5,6 @@
   secrets = {
     store.greeting = {
       prompts.name.description = "Your name";
-
       files.greeting = { };
       generate =
         pkgs:
@@ -18,7 +17,7 @@
 
     store.derived = {
       dependencies = [ "greeting" ];
-      files.derived = { };
+      files.cow-greeting = { };
       generate =
         pkgs:
         pkgs.writeScript "gen-derived" ''
@@ -29,7 +28,7 @@
               pkgs.cowsay
             ]
           }"
-          cat $in/greeting/greeting | cowsay > $out/derived
+          cat $in/greeting/greeting | cowsay > $out/cow-greeting
         '';
     };
   };
