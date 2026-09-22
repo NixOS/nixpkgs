@@ -85,7 +85,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ml-explore/mlx";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kinnrai ];
+    maintainers = with lib.maintainers; [
+      booxter
+      kinnrai
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "aarch64-darwin" ];
   };
