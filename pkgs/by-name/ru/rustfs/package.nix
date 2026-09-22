@@ -9,7 +9,6 @@
   rustPlatform,
   protobuf,
   cacert,
-  tzdata,
   nix-update,
   nixosTests,
   writeShellApplication,
@@ -81,28 +80,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   inherit console;
 
-  env = {
-    RUSTFLAGS = "--cfg tokio_unstable";
-    # reqwest loads CA certs even if not used during tests
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    # jiff needs a time zone database to resolve zones like UTC during tests
-    TZDIR = "${tzdata}/share/zoneinfo";
-  };
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   # Only build the main rustfs binary
   cargoBuildFlags = "-p rustfs";
 
-  useNextest = true;
-  # Use debug mode to reduce test compilation time.
-  checkType = "debug";
-  cargoTestFlags = [
-    "--package"
-    "rustfs"
-    "--no-fail-fast"
-
-    "--filterset"
-    "not (test(connect::) or binary(connect_*) or test(=version::tests::test_is_head_newer_than_tag_requires_strict_descendant))"
-  ];
+  # they are to intensive on the resource usage, we are just relying on nixos vm test
+  doCheck = false;
 
   passthru = {
     tests = {
