@@ -9,6 +9,7 @@
   libsodium,
   openssl,
   xxhash,
+  nix-update-script,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
@@ -48,6 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/pijul completion fish) \
       --zsh <($out/bin/pijul completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     description = "Distributed version control system";
