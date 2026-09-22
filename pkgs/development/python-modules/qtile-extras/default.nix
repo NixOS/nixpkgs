@@ -23,7 +23,8 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.36.0";
+  version = "0.37.1";
+
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile`
   pyproject = true;
@@ -32,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H2A5Y+ukTkUqjQB5eQVuOMYpf7T8RgQlNlQ25wlWwr8=";
+    hash = "sha256-sR/+Nmd/reMSi2Cu3WBKgsBsTmNiNWsFsEhap2YHqF4=";
   };
 
   build-system = [ setuptools-scm ];
