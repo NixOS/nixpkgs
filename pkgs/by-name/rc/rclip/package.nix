@@ -3,12 +3,11 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "3.3.0";
+  version = "4.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,23 +15,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QdyqECPzZZtphtjSJAKrWGwGKcYrlbSSkJ0GHs9+K10=";
+    hash = "sha256-JP3c/OZWXqOi6Y2shBes7A2kh5jcaRS6YSRVkdzMUYY=";
   };
-
-  patches = [
-    # use pillow-heif instead of pi-heif as it has been discontinued
-    # https://github.com/bigcat88/pillow_heif/pull/431
-    (fetchpatch {
-      url = "https://github.com/yurijmikhalevich/rclip/commit/7207600d8da6aef0aacb2c2b52e90a564e3018aa.patch";
-      hash = "sha256-Bua9tIpRq2mWSQLP0dcHE8S0Ef7AZKvlOS5fXAqTcQY=";
-      revert = true;
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
-  '';
 
   build-system = with python3Packages; [
     uv-build
@@ -43,6 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pillow"
     "rawpy"
     "regex"
+    "textual-image"
   ];
   pythonRemoveDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     # unpackaged
@@ -57,6 +42,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pillow-heif
     regex
     requests
+    textual
+    textual-image
     tqdm
     rawpy
   ];
@@ -68,6 +55,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.jinja2
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
+
+  disabledTests = [
+    # requires rawpy to be built with DEMOSAIC_PACK_GPL2
+    "test_collects_native_versions_from_runtime_apis"
+    # requires rclip to be built with uv before inspecting the artifacts
+    "test_sdist_includes_compliance_inputs"
+    "test_wheel_includes_clip_legal_files"
+  ];
 
   disabledTestPaths = [
     # requires network

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "2026.07.30";
+  version = "2026.09.20";
 
   src = fetchFromGitHub {
     owner = "directvt";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ff4JwJzRZKH+XM+iH3v17RkYMOwmxLlk7OzL+1Q5QHw=";
+    hash = "sha256-MiW/dkPG2b0kmgWVcUoMS/snRfjFyqpDfq84j6BEs3U=";
   };
 
   nativeBuildInputs = [
