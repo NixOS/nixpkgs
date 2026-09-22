@@ -10,6 +10,7 @@
   python3 ? null,
   python3Packages ? null,
   fts,
+  nix-update-script,
 }:
 
 assert enablePython -> swig != null && python3 != null && !stdenv.hostPlatform.isStatic;
@@ -115,6 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -vsf selinux/_selinux.*${stdenv.hostPlatform.extensions.sharedLibrary}
     popd
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^([0-9\\.]+)$"
+    ];
+  };
 
   meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux core library";
