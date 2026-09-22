@@ -7,13 +7,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2026-09-03";
+  version = "0-unstable-2026-09-20";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "08f332ba7abe915575dd0588e7a528a774906b92";
-    hash = "sha256-klrQf+myTOUt4NwyF7T/8e01O1+fe7UeNgd6pQBE14g=";
+    rev = "24023665d1c2661addb22dce384b53d4a839727f";
+    hash = "sha256-fumCEOV8HRRQooolXc+C37WAXXZy1TJ40Mt6DtVLYE4=";
   };
 
   nativeBuildInputs = [

@@ -1190,8 +1190,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.24.67";
-          hash = "sha256-ynB3xPun4swOhvVLmNpIAue7VmfabKUzR0RCqOgpyYY=";
+          version = "3.24.72";
+          hash = "sha256-yIQALNOm9C0ji+g96oqaXDuwlbS+088+whbFTQAe5Z8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1242,8 +1242,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.17.1";
-          hash = "sha256-UWvn9Gy31/9HSKD+OCfpoE4BSGyReC4pv+4sH7higTU=";
+          version = "2.18.0";
+          hash = "sha256-Qf3o0QIW864p8BsRxB+RmGXe28N68Jqrzs+tpxeCceM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -2723,8 +2723,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.219.2";
-          hash = "sha256-LQ7UL+/FtzRxn/M85fv3oh8g622KEPS35lque3kqby8=";
+          version = "1.242.2";
+          hash = "sha256-E8SdCf5emB/ix3qmj56CfWhCGCVIm4voI8fJoyCA2kE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -3879,8 +3879,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.12.8";
-          hash = "sha256-3XJu7g8NnevBZiJ90iogqR2QMIgnCQ/HFII98RG8arI=";
+          version = "31.12.10";
+          hash = "sha256-2046raHx9ZV/yrHzY3dMDsOIGCL0R6jgaisFDa9Z5Tk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";

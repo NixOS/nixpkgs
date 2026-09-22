@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lego";
-  version = "5.4.1";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "go-acme";
     repo = "lego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LEPx725uvHUH5E5H8dwvOG0JA7DByZs0/DHHGC/nMJI=";
+    hash = "sha256-5/OBEAHkklALQR7k27pioZg6XZEgvJ3IqIw9VHMJH3E=";
   };
 
-  vendorHash = "sha256-6lvowCEYf++CIJz+AZ6ZIQC0WZxqIj7ygAoOpN01rns=";
+  vendorHash = "sha256-a9Nb3C/BN+YU8p/QZXUP2GcO3aR7vgqhIG4IyZnKav8=";
 
   doCheck = false;
 

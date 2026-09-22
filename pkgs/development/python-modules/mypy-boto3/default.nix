@@ -167,8 +167,8 @@ in
       "sha256-MOB/Ingh53OWXeT0YdKUGO3ExgPDe6N3WWe95m6twZY=";
 
   mypy-boto3-billingconductor =
-    buildMypyBoto3Package "billingconductor" "1.43.94"
-      "sha256-IjuRZtPf62Ng1ZmBaSyOOAioNf2CNUKUMyB2im3gRNQ=";
+    buildMypyBoto3Package "billingconductor" "1.43.99"
+      "sha256-YnIidLa+3LiMCoh3xcYAHI2l73cGWfmYWawY9CoA3pw=";
 
   mypy-boto3-braket =
     buildMypyBoto3Package "braket" "1.43.0"
@@ -415,8 +415,8 @@ in
       "sha256-BBZGru4kpqUd00T5fpc41jobbUyp0zVQu1tfWw4ZAjg=";
 
   mypy-boto3-docdb =
-    buildMypyBoto3Package "docdb" "1.43.0"
-      "sha256-C6J9oFEXb579bPb6dONRUrB+QVOGuHLmwpV7EsE8qlY=";
+    buildMypyBoto3Package "docdb" "1.43.99"
+      "sha256-w0femusHJeGGJc4FdT1odo97Ar51QbilTVUEqZIEXTg=";
 
   mypy-boto3-docdb-elastic =
     buildMypyBoto3Package "docdb-elastic" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.98"
-      "sha256-cNIdQu8lp6Gzlx/691kT3uO78KvGYpbl4Up2Y3uAI3A=";
+    buildMypyBoto3Package "sagemaker" "1.43.99"
+      "sha256-wYuwpDpuyoMsjmksyv/zJ6cOwHICWkKPdavS4SYAVmI=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"

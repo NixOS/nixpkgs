@@ -10899,8 +10899,6 @@ self: super: with self; {
 
   mirakuru = callPackage ../development/python-modules/mirakuru { };
 
-  misaka = callPackage ../development/python-modules/misaka { };
-
   misaki = callPackage ../development/python-modules/misaki { };
 
   misoc = callPackage ../development/python-modules/misoc { };
