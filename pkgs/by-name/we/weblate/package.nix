@@ -343,6 +343,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # djangosaml2idp2 is not packaged yet
     "weblate/utils/tests/test_djangosaml2idp.py"
 
+    # Some issue related to presumably misconfigured data directory. See #565921 for details.
+    "weblate/fonts/tests/test_models.py::FontModelTest::test_cleanup"
+
     # Don't understand why
     "weblate/trans/tests/test_alert.py::WebsiteAlertSettingTest::test_website_alerts_enabled"
   ];
