@@ -11805,6 +11805,13 @@
     githubId = 902012;
     name = "Monson Shao";
   };
+  HomieDerPrakti = {
+    github = "HomieDerPrakti";
+    githubId = 182787927;
+    name = "HomieDerPrakti";
+    matrix = "@homiederprakti:matrix.org";
+    email = "homiederprakti@proton.me";
+  };
   hongchangwu = {
     email = "wuhc85@gmail.com";
     github = "hongchangwu";
