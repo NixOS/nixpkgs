@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
   yaml-cpp,
   systemd,
-  python3Packages,
+  python313Packages,
   asciidoc,
   libxslt,
   docbook_xml_dtd_45,
@@ -20,23 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ip2unix";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
+    hash = "sha256-QWhOO2tHl8fwXy0k9W+I/XHPJI8OJyexMsgOSJes37s";
   };
-
-  patches = [
-    # https://github.com/nixcloud/ip2unix/pull/35
-    # fix out of range string_view access
-    (fetchpatch {
-      url = "https://github.com/nixcloud/ip2unix/commit/050ddf76b4b925f27e255fbb820b0700407ceb2b.patch";
-      hash = "sha256-5vaLmZmwuiMGV4KnVhuDSnXG1a390aBU51TShwpaMLs=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -48,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     libxml2.bin
     docbook5
-    python3Packages.pytest
-    python3Packages.pytest-timeout
+    python313Packages.pytest
+    python313Packages.pytest-timeout
     systemd
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];

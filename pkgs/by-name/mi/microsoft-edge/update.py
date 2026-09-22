@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3Packages.packaging python3Packages.python-debian common-updater-scripts
 
-import os
+import subprocess
 from collections import OrderedDict
 from os.path import abspath, dirname
 from urllib import request
@@ -39,8 +39,8 @@ def write_expression():
     version = Version.re_valid_version.match(latest["stable"]["Version"]).group(
         "upstream_version"
     )
-    os.system(f'update-source-version microsoft-edge "{version}"')
-    os.system(f'update-source-version msedgedriver "{version}"')
+    subprocess.run(["update-source-version", "microsoft-edge", version])
+    subprocess.run(["update-source-version", "msedgedriver", version])
 
 
 write_expression()

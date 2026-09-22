@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nerdctl";
-  version = "2.3.0";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "nerdctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DCAgxqjJruoSTTZqWKOrz/6ZbOubGi4B7tdf2Kg/UGc=";
+    hash = "sha256-4t6yyoFnYm5rGNw8SG1nfy5C0+nks/9G8pzhuZ4U0ag=";
   };
 
-  vendorHash = "sha256-gOpzsPq0w+85KKa3QMKb+rWuRSfbCFECfHB3PadJNE8=";
+  vendorHash = "sha256-hjqtwOph1grdmR2kHIbBVCxuNxNnUHPH8RJSCXo0rvU=";
 
   nativeBuildInputs = [
     makeWrapper

@@ -10,17 +10,15 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.17.2";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "wrapt";
     tag = version;
-    hash = "sha256-QduT5bncXi4LeI034h5Pqtwybru0QcQIYI7cMchLy7c=";
+    hash = "sha256-m3vjzV2aM4P+PoH3w9f8swLnp4DBLz5vfCz4An/XoMQ=";
   };
-
-  patches = [ ./pytest9-compat.patch ];
 
   build-system = [ setuptools ];
 

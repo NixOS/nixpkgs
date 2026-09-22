@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   clangStdenv,
   fetchFromGitHub,
   cmake,
@@ -9,12 +8,12 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "snmalloc";
-  version = "0.7.4";
+  version = "0.7.5";
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "snmalloc";
     tag = finalAttrs.version;
-    hash = "sha256-+UCqUrfvhnB4leiYCnGJ8ORfVkTaGimaErP56XCJ5PM=";
+    hash = "sha256-1wgQilYHYjmKqhUhxA0wXF+OBPRH+hDPgVGMgVxqj4Y=";
   };
 
   outputs = [

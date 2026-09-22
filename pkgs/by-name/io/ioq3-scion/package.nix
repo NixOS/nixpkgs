@@ -7,7 +7,7 @@
 }:
 ioquake3.overrideAttrs (old: {
   pname = "ioq3-scion";
-  version = "unstable-2024-12-14";
+  version = "0-unstable-2024-12-14";
   buildInputs = old.buildInputs ++ [
     pan-bindings
     libsodium
@@ -22,7 +22,9 @@ ioquake3.overrideAttrs (old: {
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
   meta = {
     description = "ioquake3 with support for path aware networking";
+    homepage = "https://github.com/lschulz/ioq3-scion";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 })

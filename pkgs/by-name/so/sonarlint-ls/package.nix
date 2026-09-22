@@ -7,7 +7,6 @@
   makeWrapper,
   writeShellApplication,
   curl,
-  pcre,
   common-updater-scripts,
   jq,
   gnused,
@@ -73,7 +72,6 @@ maven.buildMavenPackage rec {
       name = "update-${pname}";
       runtimeInputs = [
         curl
-        pcre
         common-updater-scripts
         jq
         gnused

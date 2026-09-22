@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.8";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-9gKpjmE8z/9PUILCiVK1utNYKD8kscbCBKxerqTO3z4=";
+    hash = "sha256-QYWDgQuSsMf8xElSK0MpthOMAB6EJXcxfOWcHrR4ODU=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-AMTSCM8dNwAddI3QZMFDzxJmJPvJ9fGK79at2I0S/pE=";
+    hash = "sha256-2qwTV9GRKnVIhK6dsSfis+JOTfjcdwW0RVdrJZa/uJc=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Realtime collaborative markdown notes on all platforms";
     license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
+    changelog = "https://github.com/hedgedoc/hedgedoc/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "hedgedoc";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;

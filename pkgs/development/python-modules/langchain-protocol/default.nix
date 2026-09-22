@@ -1,22 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-protocol";
-  version = "0.0.15";
+  version = "0.0.19";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Not available vis Github yet; required by langchain-core
-  src = fetchPypi {
-    pname = "langchain_protocol";
-    inherit (finalAttrs) version;
-    hash = "sha256-mrLRHuc5RHVPEOA35xcJjTpnlvDlivqcrdphVOdlWt4=";
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "agent-protocol";
+    tag = "langchain-protocol==${finalAttrs.version}";
+    hash = "sha256-RiTuadwE3IMhlsFzEZkVlIKMU8/c9uTTDWrXpptriGI=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/streaming/py";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling>=1.26,<1.30" "hatchling"
+  '';
 
   build-system = [
     hatchling

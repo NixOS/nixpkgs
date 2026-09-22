@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   postFixup = ''
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "${steel}/lib/steel"
+    wrapProgram "$out/bin/steel-language-server" --prefix STEEL_SEARCH_PATHS : "${steel}/lib/steel/cogs"
   '';
 
   meta = steel.meta // {

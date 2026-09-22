@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dnadd";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ joelancaster ];
+    platforms = lib.platforms.linux;
   };
 })

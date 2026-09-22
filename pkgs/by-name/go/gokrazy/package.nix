@@ -3,20 +3,20 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "gokrazy";
-  version = "0-unstable-2026-01-09";
+  version = "0-unstable-2026-09-13";
 
   src = fetchFromGitHub {
     owner = "gokrazy";
     repo = "tools";
-    rev = "8ed49b4fafc72841e5a087362d719eb8a648db9b";
-    hash = "sha256-VxRX94vmzVGt4KwC+0T/I8XCKdmftoDTLeYMISLsHoA=";
+    rev = "64f7f697dfff1a24457b00cd93ca5c30c866f34e";
+    hash = "sha256-puqXa3OpHyzPpOYuf/SicoMJTNDf0hovLE/TOhmBDSw=";
   };
 
-  vendorHash = "sha256-Khvk7Q0HVyhCg4jMvjVQdSXHRq2uuv2wHszcDTTV3qk=";
+  vendorHash = "sha256-+9i4dlxcxXw0WpeuHhnxli2qhB6IWOc4babuJXIO4wA=";
 
   ldflags = [
     "-s"
@@ -28,6 +28,8 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   postInstall = ''
     installShellCompletion --cmd gok \
       --bash <($out/bin/gok completion bash) \
@@ -36,10 +38,13 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs";
+    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi 5, Pi Zero 2 W, or amd64 PCs";
     homepage = "https://github.com/gokrazy/gokrazy";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ shayne ];
+    maintainers = with lib.maintainers; [
+      shayne
+      slashformotion
+    ];
     mainProgram = "gok";
   };
 })

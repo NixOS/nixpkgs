@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cairomm,
+  cairomm_1_0,
   cmake,
   libjack2,
   libpthread-stubs,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    cairomm
+    cairomm_1_0
     libjack2
     libpthread-stubs
     libxdmcp

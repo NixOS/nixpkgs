@@ -7,152 +7,253 @@
   pkg-config,
   protobuf,
   bzip2,
+  libclang,
   oniguruma,
   sqlite,
   xz,
   zlib,
   zstd,
+  versionCheckHook,
   buildNpmPackage,
   gitUpdater,
+  installShellFiles,
+  # Enterprise Edition ships only as a prebuilt binary
+  enableEnterprise ? false,
 }:
 
-rustPlatform.buildRustPackage (
-  finalAttrs:
-  let
-    web = buildNpmPackage {
-      inherit (finalAttrs) src version;
-      pname = "openobserve-ui";
+let
+  version = "1.0.3";
+  updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "rc";
+  };
+  commonMeta = {
+    description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
+    mainProgram = "openobserve";
+    maintainers = with lib.maintainers; [
+      EpicEric
+      happysalada
+      kashw2
+    ];
+  };
+in
 
-      sourceRoot = "${finalAttrs.src.name}/web";
+if enableEnterprise then
+  stdenv.mkDerivation (finalAttrs: {
+    pname = "openobserve-ee";
+    inherit version;
+    strictDeps = true;
+    __structuredAttrs = true;
 
-      npmDepsHash = "sha256-UNdFqUJI/pdHJjjA5Aebnvq1T7oITJ1R96rEQOBxTug=";
+    src = fetchurl {
+      url = "https://downloads.openobserve.ai/releases/o2-enterprise/v${finalAttrs.version}/openobserve-ee-v${finalAttrs.version}-linux-amd64-musl.tar.gz";
+      hash = "sha256-J6w1bpb4BfmDIdf+SkQyi1tnVPsOtWsEEshvrEUUL7E=";
+    };
 
-      preBuild = ''
-        # Patch vite config to not open the browser to visualize plugin composition
-        substituteInPlace vite.config.ts \
-          --replace "open: true" "open: false";
-      '';
+    # The tarball is a single flat `openobserve` binary.
+    sourceRoot = ".";
 
-      env = {
-        NODE_OPTIONS = "--max-old-space-size=8192";
-        # cypress tries to download binaries otherwise
-        CYPRESS_INSTALL_BINARY = 0;
+    dontConfigure = true;
+    dontBuild = true;
+
+    nativeBuildInputs = [ installShellFiles ];
+
+    installPhase = ''
+      runHook preInstall
+      installBin openobserve
+      runHook postInstall
+    '';
+
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
+
+    passthru.updateScript = updateScript;
+
+    meta = commonMeta // {
+      homepage = "https://openobserve.ai/";
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = {
+        fullName = "OpenObserve Enterprise Edition License Agreement";
+        url = "https://openobserve.ai/legal/enterprise-license/";
+        free = false;
+        redistributable = false;
+      };
+      platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    };
+  })
+else
+  rustPlatform.buildRustPackage (
+    finalAttrs:
+    let
+      o2Datasource = fetchFromGitHub {
+        owner = "openobserve";
+        repo = "o2-datasource";
+        rev = "7ea74ba2b8eabe5758c81b928a835144dc1f7f60";
+        hash = "sha256-vORes6FEbhijRLTWjEaB+KHOUls2CGBED6WzLF3stnM=";
       };
 
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/share
-        mv dist $out/share/openobserve-ui
-        runHook postInstall
+      web = buildNpmPackage {
+        inherit (finalAttrs) src version;
+        pname = "openobserve-ui";
+
+        sourceRoot = "${finalAttrs.src.name}/web";
+
+        npmDepsHash = "sha256-BXImhtpBpLKresCWdhQIhVu80HmP0WfUcjTFaStkQ4A=";
+
+        preBuild = ''
+          mkdir -p src/assets/ai-datasource-content/generated
+          cp -r ${o2Datasource}/datasource-ui-content/* src/assets/ai-datasource-content/generated/
+          cat > src/assets/ai-datasource-content/generated/.fetch.json <<EOF
+          {
+            "repo": "https://github.com/openobserve/o2-datasource",
+            "ref": "main",
+            "sha": "${o2Datasource.rev}",
+            "fetchedAt": "1970-01-01T00:00:00.000Z",
+            "count": 0,
+            "slugs": []
+          }
+          EOF
+        '';
+
+        env = {
+          NODE_OPTIONS = "--max-old-space-size=8192";
+          # cypress tries to download binaries otherwise
+          CYPRESS_INSTALL_BINARY = 0;
+          # Don't fetch o2-datasource via git
+          DS_CONTENT_FORCE = "";
+        };
+
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/share
+          cp -R dist $out/share/openobserve-ui
+          runHook postInstall
+        '';
+      };
+    in
+    {
+      pname = "openobserve";
+      inherit version;
+
+      src = fetchFromGitHub {
+        owner = "openobserve";
+        repo = "openobserve";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-lSsLW6QmDLuRD+hak1ya0cKjDJW50iiErhsDYUo4bcc=";
+      };
+
+      patches = [
+        # prevent using git to determine version info during build time
+        ./build.rs.patch
+      ];
+
+      prePatch = ''
+        # The vendored openobserve/vortex fork declares `readme = "README.md"`
+        # (inherited from the workspace) but ships no per-crate README.md, so
+        # `include_str!(concat!("../", env!("CARGO_PKG_README")))` fails for the
+        # `vortex` crate
+        for crate in "$cargoDepsCopy"/source-git-*/vortex-*/; do
+          [ -d "$crate" ] || continue
+          [ -f "$crate/README.md" ] || touch "$crate/README.md"
+        done
       '';
-    };
-  in
-  {
-    pname = "openobserve";
-    version = "0.50.3";
 
-    src = fetchFromGitHub {
-      owner = "openobserve";
-      repo = "openobserve";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-eL1Qvl6M8idBHXSNHHQsTsu6g/CbTOt8NUTTaNZuB8M=";
-    };
+      preBuild = ''
+        cp -r ${web}/share/openobserve-ui web/dist
+      '';
 
-    patches = [
-      # prevent using git to determine version info during build time
-      ./build.rs.patch
-    ];
+      cargoHash = "sha256-n1skvBCfALA3I77q0mZvqI71gbt1/q9kiYDXfsKlh0I=";
 
-    preBuild = ''
-      cp -r ${web}/share/openobserve-ui web/dist
-    '';
+      nativeBuildInputs = [
+        pkg-config
+        protobuf
+      ];
 
-    cargoHash = "sha256-d67ZeAth0Q8h8xXJZl+2Z2/+M54Ef4xFlsPT9CnrwK4=";
+      buildInputs = [
+        bzip2
+        oniguruma
+        sqlite
+        xz
+        zlib
+        zstd
+      ];
 
-    nativeBuildInputs = [
-      pkg-config
-      protobuf
-    ];
+      env = {
+        LIBCLANG_PATH = lib.makeLibraryPath [ libclang ];
 
-    buildInputs = [
-      bzip2
-      oniguruma
-      sqlite
-      xz
-      zlib
-      zstd
-    ];
+        RUSTONIG_SYSTEM_LIBONIG = true;
+        ZSTD_SYS_USE_PKG_CONFIG = true;
 
-    env = {
-      RUSTONIG_SYSTEM_LIBONIG = true;
-      ZSTD_SYS_USE_PKG_CONFIG = true;
+        RUSTC_BOOTSTRAP = 1; # uses experimental features
 
-      RUSTC_BOOTSTRAP = 1; # uses experimental features
+        # the patched build.rs file sets these variables
+        GIT_VERSION = finalAttrs.src.tag;
+        GIT_COMMIT_HASH = "builtByNix";
+        GIT_BUILD_DATE = "1970-01-01T00:00:00Z";
 
-      # the patched build.rs file sets these variables
-      GIT_VERSION = finalAttrs.src.tag;
-      GIT_COMMIT_HASH = "builtByNix";
-      GIT_BUILD_DATE = "1970-01-01T00:00:00Z";
+        RUSTFLAGS = "-C target-feature=+aes,+sse2";
 
-      RUSTFLAGS = "-C target-feature=+aes,+sse2";
+        SWAGGER_UI_DOWNLOAD_URL =
+          # When updating:
+          # - Look for the version of `utoipa-swagger-ui` at:
+          #   https://github.com/StractOrg/stract/blob/<STRACT-REV>/Cargo.toml#L183
+          # - Look at the corresponding version of `swagger-ui` at:
+          #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
+          let
+            swaggerUiVersion = "5.17.14";
+            swaggerUi = fetchurl {
+              url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
+              hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
+            };
+          in
+          "file://${swaggerUi}";
+      };
 
-      SWAGGER_UI_DOWNLOAD_URL =
-        # When updating:
-        # - Look for the version of `utoipa-swagger-ui` at:
-        #   https://github.com/StractOrg/stract/blob/<STRACT-REV>/Cargo.toml#L183
-        # - Look at the corresponding version of `swagger-ui` at:
-        #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
-        let
-          swaggerUiVersion = "5.17.14";
-          swaggerUi = fetchurl {
-            url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
-            hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
-          };
-        in
-        "file://${swaggerUi}";
-    };
+      # swagger-ui will once more be copied in the target directory during the check phase
+      # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
+      preCheck = ''
+        rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
+      '';
 
-    # swagger-ui will once more be copied in the target directory during the check phase
-    # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
-    preCheck = ''
-      rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
-    '';
+      # Skip doctests: upstream release build for v0.50.3 runs cargo build only,
+      # and the doctest examples currently fail due to async context.
+      cargoTestFlags = [
+        "--lib"
+        "--bins"
+        "--tests"
+        "--examples"
+      ];
 
-    # Skip doctests: upstream release build for v0.50.3 runs cargo build only,
-    # and the doctest examples currently fail due to async context.
-    cargoTestFlags = [
-      "--lib"
-      "--bins"
-      "--tests"
-      "--examples"
-    ];
+      # requires network access or filesystem mutations
+      checkFlags = [
+        "--skip=cli::basic::http::tests::test_node_operations_network_failure"
+        "--skip=cli::basic::http::tests::test_query_valid_time_range"
+        "--skip=common::meta::telemetry::test_telemetry::test_telemetry_send_track_event_without_base_info_or_zo_data"
+        "--skip=handler::http::router::tests::test_get_proxy_routes"
+        "--skip=tests::e2e_test"
+        "--skip=tests::test_setup_logs"
+        "--skip=handler::http::router::middlewares::compress::Compress"
+        "--skip=service::alerts::destinations::tests::test_alert_destination_requires_template"
+        "--skip=service::enrichment_table::url_processor"
+        "--skip=service::github"
+        "--skip=service::sourcemaps"
+        # Tests are not threadsafe. Most likely can only run one test at a time,
+        # due to altering shared database state.
+        # This option already in upstream code: https://github.com/openobserve/openobserve/pull/7084
+        # Also see: https://github.com/NixOS/nixpkgs/pull/457421
+        "--test-threads=1"
+      ];
 
-    # requires network access or filesystem mutations
-    checkFlags = [
-      "--skip=handler::http::router::tests::test_get_proxy_routes"
-      "--skip=tests::e2e_test"
-      "--skip=tests::test_setup_logs"
-      "--skip=handler::http::router::middlewares::compress::Compress"
-      "--skip=service::github"
-      # Tests are not threadsafe. Most likely can only run one test at a time,
-      # due to altering shared database state.
-      # This option already in upstream code: https://github.com/openobserve/openobserve/pull/7084
-      # Also see: https://github.com/NixOS/nixpkgs/pull/457421
-      "--test-threads=1"
-    ];
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [ versionCheckHook ];
 
-    passthru.updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "rc";
-    };
+      passthru.updateScript = updateScript;
 
-    meta = {
-      description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
-      homepage = "https://github.com/openobserve/openobserve";
-      changelog = "https://github.com/openobserve/openobserve/releases/tag/v${finalAttrs.version}";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ happysalada ];
-      mainProgram = "openobserve";
-    };
-  }
-)
+      meta = commonMeta // {
+        homepage = "https://github.com/openobserve/openobserve";
+        changelog = "https://github.com/openobserve/openobserve/releases/tag/v${finalAttrs.version}";
+        license = lib.licenses.asl20;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      };
+    }
+  )

@@ -5,17 +5,21 @@
   ...
 }:
 let
-  inherit (lib) mkOption types literalMD;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    literalMD
+    ;
 
   inherit (config) sshBackdoor;
 
-  inherit (hostPkgs.stdenv.hostPlatform) isLinux;
+  inherit (hostPkgs.stdenv.hostPlatform) isLinux isAarch64;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
   testDriver = config.pythonTestDriverPackage.override {
     inherit (config) enableOCR extraPythonPackages;
-    qemu_pkg = config.qemu.package;
     enableNspawn = config.containers != { };
   };
 
@@ -64,9 +68,11 @@ let
         ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.ty ]
         ++ lib.optionals (!config.skipLint) [ hostPkgs.ruff ];
         buildInputs = [ testDriver ];
-        testScript = config.testScriptString;
         preferLocalBuild = true;
-        passthru = config.passthru;
+        passthru = config.passthru // {
+          # testScript used to be a part of the derivation attributes, kept for backwards compat.
+          testScript = config.testScriptString;
+        };
         meta = config.meta // {
           mainProgram = "nixos-test-driver";
         };
@@ -78,7 +84,7 @@ let
           # prepend type hints so the test script can be type checked with ty
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
           echo "${toString typeHints}" >> testScriptWithTypes
-          echo -n "$testScript" >> testScriptWithTypes
+          cat "${config.driverConfiguration.test_script}" >> testScriptWithTypes
         ''}
 
         ${lib.optionalString (!config.skipTypeCheck) ''
@@ -117,9 +123,10 @@ in
 {
   options = {
     pythonTestDriverPackage = mkOption {
-      description = "Package containing the python NixOS test driver implemetnation";
+      description = "Package containing the python NixOS test driver implementation";
       type = types.package;
       default = hostPkgs.nixos-test-driver;
+      defaultText = literalExpression "hostPkgs.nixos-test-driver";
       readOnly = true;
     };
 
@@ -250,6 +257,10 @@ in
         #
         # If needed, this can still be turned off.
         virtualisation.qemu.enableSharedMemory = lib.mkDefault isLinux;
+        # Needed for screenshots to work (in e.g `nixosTests.login`)
+        virtualisation.qemu.options = lib.optionals (isLinux && isAarch64) [
+          "-device virtio-gpu-pci"
+        ];
 
         assertions = [
           {

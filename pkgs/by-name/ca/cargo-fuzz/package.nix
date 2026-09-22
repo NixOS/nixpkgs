@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-fuzz";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
     tag = finalAttrs.version;
-    hash = "sha256-wOzzPhAuCaJfp7uRZ1kPpzMIr03couRaIbbrjL0EyYo=";
+    hash = "sha256-DIvbxyIkmrxcFOpH0iZJGxJB60Bh5sjZX+kYUxpp/iQ=";
   };
 
-  cargoHash = "sha256-7HCdWkjIycVKZty760ZnLBtLOZ3gwPhwseIqxqf8xPQ=";
+  cargoHash = "sha256-7P3bii0Y0hf3z9RCPIH6uClFIw/CTtUSzbTbaZNQkYQ=";
 
   doCheck = false;
 

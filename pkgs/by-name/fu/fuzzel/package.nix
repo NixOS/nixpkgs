@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "fuzzel";
     maintainers = with lib.maintainers; [
-      fionera
       rodrgz
     ];
     platforms = with lib.platforms; linux;

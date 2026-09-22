@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
   };
 }

@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tdl";
-  version = "0.20.2";
+  version = "0.20.4";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xDCvZ6a7xW5kJ+3nsCQGASypzrosjihI0hlSobBWwj0=";
+    hash = "sha256-hYCxzkNJiGBLO2ZdDWJ9r4b5QZ/jBElFGNfx00JboGM=";
   };
 
-  vendorHash = "sha256-dMuDmW3WtXU1Awuw7KKSCk1o/GKpBfsrqfvb3wVNGWw=";
+  vendorHash = "sha256-nKuKmScnZLYL0SzFz8XfNOtYfoMuXYDZ+aKzH+2HYRk=";
 
   postPatch = ''
     rm go.work go.work.sum

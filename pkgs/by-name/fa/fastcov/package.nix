@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "fastcov";
-  version = "1.16";
+  version = "1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RPGillespie6";
     repo = "fastcov";
     tag = "v${version}";
-    hash = "sha256-frpX0b8jqKfsxQrts5XkOkjgKlmi7p1r/+Mu7Dl4mm8=";
+    hash = "sha256-2WrgLNC3FU4b8DdcoK3rk0+JBiv60JmlBktg0tMx6CM=";
   };
 
   build-system = with python3Packages; [

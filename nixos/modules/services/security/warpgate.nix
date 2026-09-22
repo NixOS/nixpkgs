@@ -45,6 +45,17 @@ in
         default = null;
       };
 
+      databaseEncryptionKeysFile = mkOption {
+        description = ''
+          Path to file containing encryption key(s) to encrypt target credentials stored in database.
+          Should be a env-like file: `WARPGATE_ENCRYPTION_KEY=$(openssl rand -base64 32)`.
+          If you are rotating key, move the old key to `WARPGATE_ENCRYPTION_KEY_OLD`.
+          See [Encrypting credentials at rest](https://warpgate.null.page/encryption/).
+        '';
+        type = nullOr str;
+        default = null;
+      };
+
       settings = mkOption {
         description = "Warpgate configuration.";
         type = submodule {
@@ -120,18 +131,6 @@ in
                 ]
               '';
             };
-            recordings = {
-              enable = mkOption {
-                description = "Whether to enable session recording.";
-                default = true;
-                type = bool;
-              };
-              path = mkOption {
-                description = "Path to store session recordings.";
-                default = "/var/lib/warpgate/recordings";
-                type = str;
-              };
-            };
             external_host = mkOption {
               description = ''
                 Configure the domain name of this Warpgate instance.
@@ -159,6 +158,11 @@ in
                 description = "Listen endpoint of SSH listener.";
                 default = "[::]:2222";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The SSH listener is reachable via this domain name externally.";
@@ -200,6 +204,11 @@ in
                 description = "Listen endpoint of HTTP listener.";
                 default = "[::]:8888";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The HTTP listener is reachable via this domain name externally.";
@@ -270,6 +279,88 @@ in
                 type = str;
               };
             };
+            rdp = {
+              enable = mkOption {
+                description = "Whether to enable RDP listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of RDP listener.";
+                default = "[::]:3389";
+                type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from the listener's peer.";
+                default = false;
+                type = bool;
+              };
+              external_host = mkOption {
+                description = "The RDP listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
+              external_port = mkOption {
+                description = "The RDP listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to RDP listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to RDP listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+            };
+            vnc = {
+              enable = mkOption {
+                description = "Whether to enable VNC listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of VNC listener.";
+                default = "[::]:5900";
+                type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from the listener's peer.";
+                default = false;
+                type = bool;
+              };
+              external_host = mkOption {
+                description = "The VNC listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
+              external_port = mkOption {
+                description = "The VNC listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to VNC listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to VNC listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+              enable_ard_auth = mkOption {
+                description = ''
+                  Enable Apple-DH (Apple Remote Desktop / type 30) auth, which is to ensure compatibility with Apple clients.
+                  However [connections from macOS built-in VNC client with ARD auth is not supported](https://github.com/warp-tech/warpgate/blob/47e676969a0b1e0b8456f9a5f1474d6c58648c4f/warpgate-protocol-vnc/src/server/rfb.rs#L8-L10).
+                '';
+                default = false;
+                type = bool;
+              };
+            };
             mysql = {
               enable = mkOption {
                 description = "Whether to enable MySQL listener.";
@@ -280,6 +371,11 @@ in
                 description = "Listen endpoint of MySQL listener.";
                 default = "[::]:33306";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The MySQL listener is reachable via this domain name externally.";
@@ -301,6 +397,14 @@ in
                 default = "/var/lib/warpgate/tls.key.pem";
                 type = str;
               };
+              advertised_version = mkOption {
+                description = ''
+                  The server version advertised to clients during the handshake.
+                  Warpgate can't auto-match the target's version since the target is only known after the handshake, but Warpgate's clients use it to pick a protocol dialect.
+                '';
+                default = "8.0.3-Warpgate";
+                type = str;
+              };
             };
             postgres = {
               enable = mkOption {
@@ -312,6 +416,11 @@ in
                 description = "Listen endpoint of PostgreSQL listener.";
                 default = "[::]:55432";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The PostgreSQL listener is reachable via this domain name externally.";
@@ -344,6 +453,11 @@ in
                 description = "Listen endpoint of Kubernetes listener.";
                 default = "[::]:8443";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The Kubernetes listener is reachable via this domain name externally.";
@@ -420,36 +534,45 @@ in
         any
         map
         head
+        optional
         reverseList
         ;
-      inherit (lib.strings) splitString toIntBase10;
+      inherit (lib.strings)
+        optionalString
+        splitString
+        toIntBase10
+        ;
 
-      preStartScript = pkgs.writers.writeBash "warpgate-init" ''
-        CFGFILE=/var/lib/warpgate/config.yaml
+      renderedYamlConfig = yaml.generate "warpgate-config" cfg.settings;
+
+      startupScript = pkgs.writeShellScript "warpgate-run" ''
+        CFGFILE=$STATE_DIRECTORY/config.yaml
         if [ ! -O $CFGFILE ] || [ ! -s $CFGFILE ]; then
           INITPWD=$(tr -dc 'A-Za-z0-9!?%=' </dev/urandom 2>/dev/null | head -c 16)
           ${lib.getExe cfg.package} \
             --config $CFGFILE unattended-setup \
-            --data-path /var/lib/warpgate \
+            --data-path $STATE_DIRECTORY \
             --http-port 8888 \
             --admin-password $INITPWD
         fi
-        ${
-          if cfg.databaseUrlFile != null then
-            ''
-              sed -e '/^database_url: null/d' ${yaml.generate "warpgate-config" cfg.settings} > $CFGFILE
-              cat /run/credentials/warpgate.service/databaseUrl >> $CFGFILE
-            ''
-          else
-            "cp --no-preserve=ownership ${yaml.generate "warpgate-config" cfg.settings} $CFGFILE"
-        }
+        cp --no-preserve=ownership ${renderedYamlConfig} $CFGFILE
+        ${optionalString (cfg.databaseUrlFile != null) ''
+          sed -e '/^database_url: null/d' ${renderedYamlConfig} > $CFGFILE
+          cat $CREDENTIALS_DIRECTORY/databaseUrl >> $CFGFILE
+        ''}
+        ${optionalString (cfg.databaseEncryptionKeysFile != null) ''
+          set -a
+          source $CREDENTIALS_DIRECTORY/dbEncryptionKeys
+          set +a
+        ''}
+        ${lib.getExe cfg.package} --config $CFGFILE run
       '';
       bindOnPrivilegedPorts = any (x: toIntBase10 x < 1025) (
         map (x: head (reverseList (splitString ":" x))) (
           [ cfg.settings.http.listen ]
-          ++ lib.optional cfg.settings.ssh.enable cfg.settings.ssh.listen
-          ++ lib.optional cfg.settings.mysql.enable cfg.settings.mysql.listen
-          ++ lib.optional cfg.settings.postgres.enable cfg.settings.postgres.listen
+          ++ optional cfg.settings.ssh.enable cfg.settings.ssh.listen
+          ++ optional cfg.settings.mysql.enable cfg.settings.mysql.listen
+          ++ optional cfg.settings.postgres.enable cfg.settings.postgres.listen
         )
       );
     in
@@ -467,6 +590,10 @@ in
           assertion = !(lib.hasAttr "config_provider" cfg.settings);
           message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
         }
+        {
+          assertion = !(lib.hasAttr "recordings" cfg.settings);
+          message = "`services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0. Please remove this section from your config and set it from admin UI.";
+        }
       ];
 
       environment.systemPackages = [ cfg.package ];
@@ -474,14 +601,16 @@ in
       systemd.services.warpgate = {
         description = "Warpgate smart bastion";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         startLimitBurst = 5;
         serviceConfig = {
-          LoadCredential = "${
-            if cfg.databaseUrlFile != null then "databaseUrl:${cfg.databaseUrlFile}" else ""
-          }";
-          ExecStartPre = preStartScript;
-          ExecStart = "${lib.getExe cfg.package} --config /var/lib/warpgate/config.yaml run";
+          LoadCredential =
+            optional (cfg.databaseUrlFile != null) "databaseUrl:${cfg.databaseUrlFile}"
+            ++ optional (
+              cfg.databaseEncryptionKeysFile != null
+            ) "dbEncryptionKeys:${cfg.databaseEncryptionKeysFile}";
+          ExecStart = startupScript;
           DynamicUser = true;
           RestartSec = 3;
           Restart = "on-failure";

@@ -18,7 +18,7 @@
   bintools,
   libnotify,
   dwarfs,
-  squashfsTools,
+  squashfs-tools,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -86,7 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         bintools # readelf
         libnotify # notify-send
         dwarfs # dwarfsextract, dwarfsck
-        squashfsTools # unsquashfs
+        squashfs-tools # unsquashfs
       ]
     }"
   ];

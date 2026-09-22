@@ -10,30 +10,30 @@
   replaceVars,
   yarn,
   testers,
-  typescript,
+  typescript_5,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typescript-language-server";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "typescript-language-server";
     repo = "typescript-language-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OqAhk8TG/xwF/xZE2kiMmYiYIpxCdjpn+Yx5vWeP4xs=";
+    hash = "sha256-9xK1maMfWowWlzAtmwoR3CVqQCkUf6i9uBWVsobBQPA=";
   };
 
   patches = [
     (replaceVars ./default-fallbackTsserverPath.diff {
-      typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
+      typescript = "${typescript_5}/lib/node_modules/typescript/lib/tsserver.js";
     })
   ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-7aBQwl5xdJCa3r3ZbntcC3gzOL1GrkTto0x2+Sg1Ikg=";
+    hash = "sha256-68aXoafE/wc1iS7HHwF7g/i8ZREoTj4bV/RL3XYc0Rs=";
   };
 
   nativeBuildInputs = [

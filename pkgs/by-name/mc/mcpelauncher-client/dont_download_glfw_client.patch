@@ -12,7 +12,7 @@ index 5487f32..feeb89f 100644
 -
 -FetchContent_Declare(
 -        glfw3_ext
--        URL "https://github.com/minecraft-linux/glfw/archive/fce9121962bc0a21c39e2d6f8e08bad30c566c72.zip"
+-        URL "https://github.com/minecraft-linux/glfw/archive/446707b4d9558cd2ef3024622bad320728b974c2.zip"
 -)
 -
 -FetchContent_GetProperties(glfw3_ext)

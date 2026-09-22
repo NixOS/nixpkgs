@@ -7,20 +7,21 @@
   pkg-config,
   perl,
   openssl,
+  curl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.158";
+  version = "0.3.165";
 
   src = fetchFromGitHub {
-    owner = "MarcoIeni";
+    owner = "release-plz";
     repo = "release-plz";
     rev = "release-plz-v${finalAttrs.version}";
-    hash = "sha256-AFqSj5utn5PGo7mC1LdZSdw71kDEGg1F+ELNolkBgV0=";
+    hash = "sha256-bGcODNHg7wL6ya6/EvcndiqfGYBW1vrK263MKvvxamU=";
   };
 
-  cargoHash = "sha256-0rd5ouIsdZQexyprsOA0MRy3nRMhRHk23aEyF8QaZ2o=";
+  cargoHash = "sha256-LMYadKgnHRZeqm6ULakURO4hEu/+zS3+gm+lOlt5nOU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildAndTestSubdir = "crates/release_plz";
 
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/release-plz/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -55,6 +56,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       chrjabs
     ];
     mainProgram = "release-plz";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

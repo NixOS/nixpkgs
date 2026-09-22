@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -22,16 +22,15 @@
   makeBinaryWrapper,
   runCommand,
 }:
-
 let
   pname = "plezy";
-  version = "2.0.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-Pi5M74CI6J31Pzaf7wnUFFTpbOSwOTWdKUoYuXt8+Zs=";
+    hash = "sha256-q0oGOAHco7wWS8P2sUdplZS/Rvlh4a1/MVfRbrETQ/0=";
   };
 
   simdutf = fetchurl {
@@ -46,16 +45,17 @@ let
   '';
 
   meta = {
-    description = "Modern cross-platform Plex & Jellyfin client built with Flutter";
+    description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
+    changelog = "https://github.com/edde746/plezy/releases/tag/${version}";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -63,17 +63,16 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter347.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
-    # Upstream uses a sentry-dart fork that fetches sentry-native as a zip instead of via
-    # git clone. The PR was merged and reverted upstream (getsentry/sentry-dart#3630), so
-    # we use upstream since theres no actual meaningful difference
-    patches = [ ./replace-sentry-fork.patch ];
+    patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      ./aarch64-linux.patch
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -139,7 +138,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-zkctxQIgpU9dGhv8SdVy2S4eFUQ7GgeaWzwSEvFrWWc=";
+      hash = "sha256-cQ5lGdhnWnfVUI6fqx8pk5zgdaQrZbZxD5mSwVpTbmM=";
     };
 
     nativeBuildInputs = [

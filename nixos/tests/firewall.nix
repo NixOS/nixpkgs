@@ -89,12 +89,17 @@
         else
           "nixos-firewall-tool open tcp 80";
       reset = if backend == "firewalld" then "firewall-cmd --reload" else "nixos-firewall-tool reset";
+      # https://github.com/firewalld/firewalld/issues/1571
+      waitForFirewalld = lib.optionalString (backend == "firewalld") ''
+        walled.wait_until_succeeds("firewall-cmd --state")
+      '';
     in
     ''
       start_all()
 
       walled.wait_for_unit("${unit}")
       walled.wait_for_unit("httpd")
+      ${waitForFirewalld}
       attacker.wait_for_unit("network.target")
 
       # Local connections should still work.
@@ -116,13 +121,13 @@
       walled.succeed("${reset}")
       attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
 
+      # Check whether activation of a new configuration reloads the firewall.
+      walled.succeed(
+          "/run/booted-system/specialisation/different-config/bin/switch-to-configuration test 2>&1 | grep -F ${unit}.service"
+      )
+
       # If we stop the firewall, then connections should succeed.
       walled.stop_job("${unit}")
       attacker.succeed("curl -v http://walled/ >&2")
-
-      # Check whether activation of a new configuration reloads the firewall.
-      walled.succeed(
-          "/run/booted-system/specialisation/different-config/bin/switch-to-configuration test 2>&1 | grep -qF ${unit}.service"
-      )
     '';
 }

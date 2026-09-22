@@ -6,7 +6,7 @@
   boost,
   pkg-config,
   doxygen,
-  qtbase,
+  qt5,
   libharu,
   pango,
   fcgi,
@@ -18,11 +18,13 @@
   openssl,
   harfbuzz,
   icu,
+  libice,
+  libsm,
 }:
 
 let
   generic =
-    { version, sha256 }:
+    { version, hash }:
     stdenv.mkDerivation {
       pname = "wt";
       inherit version;
@@ -30,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "emweb";
         repo = "wt";
-        rev = version;
-        inherit sha256;
+        tag = version;
+        inherit hash;
       };
 
       nativeBuildInputs = [
@@ -41,7 +43,7 @@ let
       buildInputs = [
         boost
         doxygen
-        qtbase
+        qt5.qtbase
         libharu
         pango
         fcgi
@@ -53,10 +55,18 @@ let
         openssl
         harfbuzz
         icu
+        libice
+        libsm
       ];
 
       dontWrapQtApps = true;
       cmakeFlags = [
+        "-DCMAKE_INSTALL_RPATH=${
+          lib.makeLibraryPath [
+            libice
+            libsm
+          ]
+        }"
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
       ]
@@ -70,14 +80,14 @@ let
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = lib.platforms.linux;
-        license = lib.licenses.gpl2;
+        license = lib.licenses.gpl2Only;
         maintainers = with lib.maintainers; [ juliendehos ];
       };
     };
 in
 {
   wt4 = generic {
-    version = "4.12.0";
-    sha256 = "sha256-/SM/iTp/TQU8nq647UAHexFb3S5n6pk3lDkra3AEjis=";
+    version = "4.14.3";
+    hash = "sha256-fESauuMQIQIY/pl2D9KSoRHrijzZN6g6j+S9cHB++Ps=";
   };
 }

@@ -12,8 +12,11 @@
   myst-parser,
 
   # optionals
+  arabic-reshaper,
   cryptography,
+  fonttools,
   pillow,
+  python-bidi,
 
   # tests
   fpdf2,
@@ -21,18 +24,18 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypdf";
-  version = "6.10.2";
+  version = "6.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    tag = version;
+    tag = finalAttrs.version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-f7U9kZrAnUHv0nBrcHI+Otd49jIJz0d1uWRHymWJnYo=";
+    hash = "sha256-BfscatAwiiPQfbgTSBE3CM2As2LkcNh0zkr5jIq45Ww=";
   };
 
   outputs = [
@@ -54,9 +57,14 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = rec {
-    full = crypto ++ image;
+    full = crypto ++ fonts ++ image ++ rtl_text;
     crypto = [ cryptography ];
+    fonts = [ fonttools ];
     image = [ pillow ];
+    rtl_text = [
+      arabic-reshaper
+      python-bidi
+    ];
   };
 
   pythonImportsCheck = [ "pypdf" ];
@@ -66,7 +74,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-timeout
   ]
-  ++ optional-dependencies.full;
+  ++ finalAttrs.passthru.optional-dependencies.full;
 
   disabledTestMarks = [
     # don't access the network
@@ -76,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
-    changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/pypdf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ javaes ];
   };
-}
+})

@@ -105,6 +105,26 @@ in
       };
     };
 
+  nodes.with_secret_values =
+    { pkgs, ... }:
+    {
+      config = {
+        services.sabnzbd = {
+          enable = true;
+          settings = {
+            misc.api_key = "@api_key@";
+            misc.nzb_key = "@nzb_key@";
+          };
+          secretValues = {
+            # Just for testing; don't use world readable files from the Nix
+            # store in production!
+            "@api_key@" = builtins.toFile "api_key" "dummyapikey";
+            "@nzb_key@" = builtins.toFile "nzb_key" "dummynzbkey";
+          };
+        };
+      };
+    };
+
   testScript = ''
     def wait_for_up(m):
       m.wait_for_unit("sabnzbd.service")
@@ -113,9 +133,12 @@ in
     wait_for_up(machine)
     wait_for_up(with_writeable_config)
     wait_for_up(with_raw_config_file)
+    wait_for_up(with_secret_values)
 
     machine.succeed("do_test")
     with_writeable_config.succeed("do_test")
     with_raw_config_file.succeed("do_test_2")
+    with_secret_values.succeed("grep dummyapikey /var/lib/sabnzbd/sabnzbd.ini")
+    with_secret_values.succeed("grep dummynzbkey /var/lib/sabnzbd/sabnzbd.ini")
   '';
 }

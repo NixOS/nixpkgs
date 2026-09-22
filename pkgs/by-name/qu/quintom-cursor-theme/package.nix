@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     owner = "Burning_Cube";
     repo = "quintom-cursor-theme";
     rev = "d23e57333e816033cf20481bdb47bb1245ed5d4d";
-    hash = "sha256-Sec2DSnWYal6wzYzP9W+DDuTKHsFHWdRYyMzliMU5bU=A";
+    hash = "sha256-Sec2DSnWYal6wzYzP9W+DDuTKHsFHWdRYyMzliMU5bU=";
   };
 
   installPhase = ''
@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation {
       cc-by-sa-40
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ ];
   };
 }

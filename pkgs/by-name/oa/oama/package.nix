@@ -16,6 +16,10 @@ let
     description = "OAuth credential MAnager";
     homepage = "https://github.com/pdobsan/oama";
 
+    patches = [
+      ./no-githash.patch
+    ];
+
     passthru.updateScript = ./update.sh;
 
     buildDepends = [

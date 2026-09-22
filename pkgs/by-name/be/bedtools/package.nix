@@ -6,20 +6,22 @@
   python3,
   bzip2,
   xz,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bedtools";
   version = "2.31.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
-    rev = "v${version}";
-    sha256 = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     python3
@@ -31,16 +33,28 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  cxx = if stdenv.cc.isClang then "clang++" else "g++";
-  cc = if stdenv.cc.isClang then "clang" else "gcc";
-  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";
-  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} install";
+  enableParallelBuilding = true;
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    # The Makefiles hardcode `CC = gcc` and `CXX = g++`.
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Powerful toolset for genome arithmetic";
-    license = lib.licenses.gpl2;
     homepage = "https://bedtools.readthedocs.io/en/latest/";
+    downloadPage = "https://github.com/arq5x/bedtools2";
+    changelog = "https://github.com/arq5x/bedtools2/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "bedtools";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.unix;
   };
-}
+})

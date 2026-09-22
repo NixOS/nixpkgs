@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   nix-update-script,
+  cacert,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -27,6 +29,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   doCheck = false; # no tests
 
+  # requests resolves the CA bundle via REQUESTS_CA_BUNDLE before falling back
+  # to NIX_SSL_CERT_FILE, which on Darwin points to a host path that is not
+  # available inside a sandboxed build. Set it explicitly so the package works
+  # whenever it is invoked from a sandboxed environment.
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--set"
+    "REQUESTS_CA_BUNDLE"
+    "${cacert}/etc/ssl/certs/ca-bundle.crt"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -35,7 +47,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      lucasew
       felschr
     ];
   };

@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mxnet";
   version = "1.9.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     name = "apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
     url = "mirror://apache/incubator/mxnet/${finalAttrs.version}/apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
@@ -50,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -61,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
   ++ lib.optionals cudaSupport [
     # needed for OpenCV cmake module
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [

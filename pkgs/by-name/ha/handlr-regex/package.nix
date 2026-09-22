@@ -45,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fork of handlr with support for regex";
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
     license = lib.licenses.mit;

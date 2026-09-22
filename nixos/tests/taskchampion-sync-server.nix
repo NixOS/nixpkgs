@@ -42,6 +42,13 @@
 
       # Useful for debugging
       client.copy_from_machine("/root/.task", "client")
-      server.copy_from_machine("${cfg.dataDir}", "server")
+      server.copy_from_machine(
+          # Ever since DynamicUser defaults to true[1], dataDir is a symlink
+          # into /var/lib/private, and symlink resolving is needed.
+          #
+          # [1]: https://github.com/NixOS/nixpkgs/commit/95fc26d18a19207b20acfee182db120efc36d1d3
+          server.succeed("readlink -f ${cfg.dataDir}").strip(),
+          "server",
+      )
     '';
 }

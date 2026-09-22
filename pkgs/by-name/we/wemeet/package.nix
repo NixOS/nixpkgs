@@ -20,6 +20,7 @@
   systemd,
   udev,
   libGL,
+  libglvnd,
   fontconfig,
   freetype,
   openssl,
@@ -173,6 +174,44 @@ let
     };
   };
 
+  wemeet-camera-fix = stdenv.mkDerivation {
+    pname = "wemeet-camera-fix";
+    version = "0-unstable-2026-05-20";
+
+    src = ./wemeet-camera-fix.c;
+
+    dontUnpack = true;
+    dontWrapQtApps = true;
+
+    buildInputs = [
+      libglvnd
+      libx11
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      $CC $CFLAGS -Wall -Wextra -fPIC -shared \
+        -o libwemeet-camera-fix.so $src \
+        -ldl -lEGL -lX11
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 ./libwemeet-camera-fix.so $out/lib/libwemeet-camera-fix.so
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Fix for WeMeet Wayland camera preview rendering";
+      license = lib.licenses.mit;
+    };
+  };
+
   selectSystem =
     attrs:
     attrs.${stdenv.hostPlatform.system}
@@ -284,7 +323,7 @@ stdenv.mkDerivation {
         "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
       ];
       commonWrapperArgs = baseWrapperArgs ++ [
-        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-x11-fix}/lib/libwemeet-x11-fix.so"
+        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-x11-fix}/lib/libwemeet-x11-fix.so:${wemeet-camera-fix}/lib/libwemeet-camera-fix.so"
         "--run 'if [[ $XDG_SESSION_TYPE == \"wayland\" ]]; then export LD_PRELOAD=${wemeet-wayland-screenshare}/lib/wemeet/libhook.so\${LD_PRELOAD:+:$LD_PRELOAD}; fi'"
       ];
       xwaylandWrapperArgs = baseWrapperArgs ++ [

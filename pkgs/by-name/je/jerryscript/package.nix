@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libjerry-port"
     ];
     maintainers = with lib.maintainers; [
-      RossSmyth
       wishstudio
     ];
   };

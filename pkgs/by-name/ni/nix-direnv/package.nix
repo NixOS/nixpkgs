@@ -9,13 +9,13 @@
 
 resholve.mkDerivation (finalAttrs: {
   pname = "nix-direnv";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = finalAttrs.version;
-    hash = "sha256-3qT5mSqHi+0cskdoOGPVbuSzkoWtwOHBVXUOL84dAM8=";
+    tag = finalAttrs.version;
+    hash = "sha256-dNJeSRuuqA2avtLpTse7mTTmnYdVnC5BxRsofuLXiqE=";
   };
 
   installPhase = ''
@@ -68,6 +68,7 @@ resholve.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, persistent use_nix implementation for direnv";
     homepage = "https://github.com/nix-community/nix-direnv";
+    changelog = "https://github.com/nix-community/nix-direnv/releases/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

@@ -116,9 +116,7 @@ let
           && (t == "file" -> hasSuffix ".nix" n)
         );
         prefixRegex =
-          "^"
-          + lib.strings.escapeRegex (toString pkgs.path)
-          + "($|/(modules|nixos|lib/services)($|/.*)|/lib)";
+          "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos|lib)($|/.*))";
         filteredModules = builtins.path {
           name = "source";
           inherit (pkgs) path;
@@ -132,7 +130,10 @@ let
       in
       pkgs.runCommand "lazy-options.json"
         rec {
-          libPath = filter (pkgs.path + "/lib");
+          # `lib` shares the `filteredModules` tree, so that `declarations` pointing
+          # into it are stripped by the `extraSources` of `../../doc/manual`, just
+          # like the ones pointing into `modules` and `nixos`.
+          libPath = filteredModules + "/lib";
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filteredModules + "/nixos";
           env.NIX_ABORT_ON_WARN = warningsAreErrors;
@@ -142,7 +143,6 @@ let
             + " ]";
           disallowedReferences = [
             filteredModules
-            libPath
             pkgsLibPath
           ];
           __structuredAttrs = true;

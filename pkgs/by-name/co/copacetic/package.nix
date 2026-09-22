@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "copacetic";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LuJn6DGINUMI7KVSCMMVBZyvNYWEk+DOQJqfciJ0n8E=";
+    hash = "sha256-MH3HSbJ+/5vjUrjFZQVf4Qv2+qAezOShxfkAoCJMnFU=";
   };
 
   vendorHash = "sha256-RKqaIwGDZj91lfbEJHcnG8RhIrixtR0VtieCfZD/rns=";

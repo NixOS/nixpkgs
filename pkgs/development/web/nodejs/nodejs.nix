@@ -5,12 +5,14 @@
   fetchpatch2,
   fetchFromGitHub,
   python,
+  abseil-cpp,
   ada,
   brotli,
   c-ares,
   gtest,
   hdrhistogram_c,
   libffiReal,
+  libhwy,
   libuv,
   lief,
   llhttp,
@@ -137,14 +139,15 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
+  useSharedAbseilAndHighway = lib.versionAtLeast version "26.9";
   useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
   useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
-    if majorVersion == 24 then "24.14.0" else "25.4"
+    if majorVersion == "24" then "24.14.0" else "25.4"
   );
-  useSharedNBytes = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.5");
+  useSharedNBytes = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.5");
   useSharedLief = lib.versionAtLeast version "25.6";
-  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
   useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
@@ -163,6 +166,10 @@ let
     cares = c-ares;
     http-parser = llhttp;
   }
+  // (lib.optionalAttrs useSharedAbseilAndHighway {
+    abseil = abseil-cpp;
+    highway = libhwy;
+  })
   // (lib.optionalAttrs useSharedAdaAndSimd {
     inherit
       ada
@@ -190,7 +197,8 @@ let
     inherit nbytes;
   })
   // (lib.optionalAttrs useSharedMerve {
-    inherit merve;
+    # Merve cannot be built with simdutf_6, and upstream also disables simdutf support on the 24.x branch
+    merve = if majorVersion == "24" then (merve.override { simdutf = null; }) else merve;
   })
   // (lib.optionalAttrs useSharedZstd {
     inherit zstd;
@@ -330,6 +338,7 @@ let
       ]
       ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
+      ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
@@ -347,9 +356,7 @@ let
 
       dontDisableStatic = true;
 
-      configureScript = writeScript "nodejs-configure" ''
-        exec ${python.executable} configure.py "$@"
-      '';
+      configureScript = "${python.pythonOnBuildForHost.interpreter} configure.py";
 
       # In order to support unsupported cross configurations, we copy some intermediate executables
       # from a native build and replace all the build-system tools with a script which simply touches
@@ -518,14 +525,32 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
-            # Apple SDK update broke something related to those tests, so skipping them for now
-            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isDarwin) [
-              "test-worker-track-unmanaged-fds"
-              "test-esm-import-meta-main-eval"
-              "test-worker-debug"
+            # These network/fetch/inspector tests fail on riscv64
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
+              "test-fetch"
+              "test-http2-allow-http1-upgrade-ws"
+              "test-http-proxy-fetch"
+              "test-https-proxy-fetch"
+              "test-http-set-global-proxy-from-env-fetch"
+              "test-http-set-global-proxy-from-env-fetch-default"
+              "test-http-set-global-proxy-from-env-fetch-empty"
+              "test-http-set-global-proxy-from-env-fetch-no-proxy"
+              "test-http-set-global-proxy-from-env-fetch-restore"
+              "test-http-set-global-proxy-from-env-override-fetch"
+              "test-inspector-invalid-protocol"
+              "test-inspector-network-content-type"
+              "test-inspector-network-fetch"
+              "test-inspector-network-websocket"
+              "test-report-exclude-network"
+              "test-tls-set-default-ca-certificates-append-fetch"
+              "test-tls-set-default-ca-certificates-reset-fetch"
+              "test-use-env-proxy-cli-http"
+              "test-wasm-web-api"
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+            ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
+            ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
@@ -661,6 +686,9 @@ let
           done
         done
       '';
+
+      # reduces build time from ~90 to ~15 minutes on hydra
+      requiredSystemFeatures = [ "big-parallel" ];
 
       passthru.tests = {
         version = testers.testVersion {

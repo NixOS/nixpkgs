@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.11.15";
+  version = "0.12.17";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-Nwf7DSxXG5F515LW19q+2VpXtdVLUWx2sMQr35lvsgk=";
+    hash = "sha256-e/AA9/Uou8c1usaVxGc/kzHSo5bzJOmupWOGk7L8+KI=";
   };
 
-  cargoHash = "sha256-PWkDAl6jkpZBz19mz4ZQmiA/RvgFC0KOftXQtZ0SFdk=";
+  cargoHash = "sha256-6AKm5l3snX1gmN5uAp0N9NVFd0nPBdtHz8WwZiFoYPU=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
       as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
       NixOS users can run into issues when managing Python projects.
-      See the Nixpkgs Reference Manual entry for `uv` for information on how to mitigate these issues:
+      See the Nixpkgs Manual entry for `uv` for information on how to mitigate these issues:
       https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
 
       For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.

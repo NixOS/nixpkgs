@@ -11,10 +11,6 @@
   libmysqlclient,
   libpq,
   samba,
-  withGUI ? false,
-  makeWrapper,
-  pkg-config,
-  gtk2,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,11 +39,6 @@ stdenv.mkDerivation rec {
         --replace-fail "-lcurses" "-lncurses"
     '';
 
-  nativeBuildInputs = lib.optionals withGUI [
-    pkg-config
-    makeWrapper
-  ];
-
   buildInputs = [
     zlib
     openssl
@@ -58,17 +49,11 @@ stdenv.mkDerivation rec {
     libmysqlclient
     libpq
     samba
-  ]
-  ++ lib.optional withGUI gtk2;
+  ];
 
   enableParallelBuilding = true;
 
   env.DATADIR = "/share/${pname}";
-
-  postInstall = lib.optionalString withGUI ''
-    wrapProgram $out/bin/xhydra \
-      --add-flags --hydra-path --add-flags "$out/bin/hydra"
-  '';
 
   meta = {
     description = "Very fast network logon cracker which support many different services";

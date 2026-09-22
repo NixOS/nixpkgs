@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   m4,
   which,
   yasm,
+  texinfo,
   autoreconfHook,
   fetchpatch,
   buildPackages,
@@ -14,18 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mpir";
   version = "3.0.0";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  nativeBuildInputs = [
-    m4
-    which
-    yasm
-    autoreconfHook
-  ];
-
-  src = fetchurl {
-    url = "https://mpir.org/mpir-${finalAttrs.version}.tar.bz2";
-    sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
+  src = fetchFromGitHub {
+    owner = "wbhart";
+    repo = "mpir";
+    tag = "mpir-${finalAttrs.version}";
+    hash = "sha256-Q5P3N2w6NX+s5Fu3obTDOg+tEAWnAMDgbRlzFTpolmg=";
   };
 
   patches = [
@@ -45,6 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/a67361db03777a80446ffa8e512f26edb299268f/community/mpir/gcc15.patch";
       hash = "sha256-8RqMHYqDowHytgBd4RsGEOLkk+spYS+iqWQL2kzGAtI=";
     })
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    m4
+    which
+    yasm
+    texinfo
+    autoreconfHook
   ];
 
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];

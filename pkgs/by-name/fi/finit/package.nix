@@ -4,29 +4,47 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  hwdata,
+  kmod,
   libcap,
+  libconfuse,
   libite,
   libuev,
+  libxcrypt,
   shadow,
   sysctl,
+  util-linuxMinimal,
+  udevSupport ? false,
   plymouth,
   plymouthSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
-  version = "4.17";
+  version = "5.0-rc1";
 
   src = fetchFromGitHub {
     owner = "finit-project";
     repo = "finit";
     tag = finalAttrs.version;
-    hash = "sha256-sH4xZNMEuIS+r6rVQAKnsHtSyTe2B6gdYcmH9J8eSZ0=";
+    hash = "sha256-RN1ec0SNsajmcKGFWkot550wXDCub71MDto0KsLovcY=";
   };
 
   postPatch = ''
     substituteInPlace plugins/modprobe.c --replace-fail \
       '"/lib/modules"' '"/run/booted-system/kernel-modules/lib/modules"'
+
+    substituteInPlace plugins/modules-load.c --replace-fail \
+      '"/sbin/modprobe"' '"${kmod}/bin/modprobe"'
+  ''
+  + lib.optionalString udevSupport ''
+    substituteInPlace keventd/uevent.c \
+      --replace-fail '"/sbin/modprobe", "modprobe"' '"${kmod}/bin/modprobe", "modprobe"' \
+      --replace-fail '"/usr/lib/firmware/' '"/run/current-system/firmware/lib/firmware/'
+
+    substituteInPlace keventd/builtin.c \
+      --replace-fail  '"/lib/udev/hwdb.d"' '"/run/current-system/sw/lib/udev/hwdb.d"' \
+      --replace-fail  '"/usr/share/hwdata/usb.ids"' '"${hwdata}/share/hwdata/usb.ids"'
   '';
 
   strictDeps = true;
@@ -38,9 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libcap
+    libconfuse
     libite
     libuev
-  ];
+    libxcrypt
+  ]
+  ++ lib.optionals udevSupport [ util-linuxMinimal ];
 
   outputs = [
     "out"
@@ -52,18 +73,18 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
 
+    (lib.withFeature true "libsystemd")
+    (lib.enableFeature plymouthSupport "plymouth-plugin")
+    (lib.withFeature udevSupport "keventd")
+
     # tweak default plugin list
-    "--enable-modules-load-plugin=yes"
-    "--enable-hotplug-plugin=no"
+    (lib.enableFeature false "dbus-plugin")
+    (lib.enableFeature false "hotplug-plugin")
+    (lib.enableFeature true "modules-load-plugin")
+  ];
 
-    # minimal replacement for systemd notification library
-    "--with-libsystemd"
-
-    # monitor kernel events, like ac power status
-    "--with-keventd"
-  ]
-  ++ lib.optionals plymouthSupport [
-    "--enable-plymouth-plugin=yes"
+  installFlags = [
+    "dbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (

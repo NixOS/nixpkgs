@@ -25,11 +25,11 @@ jobs:
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: |
-            ci/github-script/supportedSystems.js
+            ci/github-script
 
       - id: prepare
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -38,8 +38,8 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
-            const { classify } = require('./ci/supportedBranches.js')
-            const supportedSystems = require('./ci/github-script/supportedSystems.js')
+            const { classify } = await import('${{ github.workspace }}/ci/github-script/supportedBranches.js')
+            const { default: supportedSystems } = await import('${{ github.workspace }}/ci/github-script/supportedSystems.js')
 
             const baseBranch = (
               context.payload.merge_group?.base_ref ??
@@ -97,6 +97,7 @@ jobs:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
+      baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       systems: ${{ needs.prepare.outputs.systems }}
 
   build:

@@ -8,6 +8,7 @@
   # Configuration Options
 
   version,
+  withPluginCAPI,
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -21,8 +22,9 @@ mkMesonLibrary (finalAttrs: {
     nix-expr
   ];
 
-  mesonFlags = [
-  ];
+  mesonFlags = lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.35") (
+    lib.mesonBool "plugin-c-api" withPluginCAPI
+  );
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyflipper";
-  version = "0.21";
+  version = "0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wh00hw";
     repo = "pyFlipper";
     tag = "v${version}";
-    hash = "sha256-IMd9RzGblfsyDH4TC+ip5a2zx4gzXbzjIaWMldEy5xk=";
+    hash = "sha256-dLJxhbWKBRL6MGGXPfgY2cKS/IwxCMM7y73Iak+Sdo0=";
   };
 
   build-system = [ setuptools ];

@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/unode/firefox_decrypt";
-    description = "Tool to extract passwords from profiles of Mozilla Firefox and derivates";
+    description = "Tool to extract passwords from profiles of Mozilla Firefox and derivatives";
     mainProgram = "firefox-decrypt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

@@ -7,16 +7,17 @@
   jq,
   makeWrapper,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 buildNpmPackage rec {
   pname = "factoriolab";
-  version = "3.20.0";
+  version = "3.21.2";
 
   src = fetchFromGitHub {
     owner = "factoriolab";
     repo = "factoriolab";
     tag = "v${version}";
-    hash = "sha256-GQNDYURKJFeuXM2k99xk/5cRCoQglAUlDBS7V/NkC7s=";
+    hash = "sha256-9RmCdU2LertIZ8crZZGHQbiev6T2dIcWkuAczQyIrJg=";
     fetchLFS = true;
   };
   buildInputs = [ vips ];
@@ -48,6 +49,8 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/factoriolab/factoriolab";
     changelog = "https://github.com/factoriolab/factoriolab/releases/tag/v${version}";
     description = "Angular-based calculator for factory games like Factorio and Dyson Sphere Program";

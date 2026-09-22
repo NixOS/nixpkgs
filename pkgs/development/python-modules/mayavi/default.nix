@@ -9,9 +9,9 @@
   pyface,
   pygments,
   pyqt5,
+  qt5,
   traitsui,
   vtk,
-  wrapQtAppsHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-72nMvfWPIPGzlJMNXjoW3aSxo5rcvHb3mr0mSD0prPU=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     apptools

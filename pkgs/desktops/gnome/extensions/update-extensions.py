@@ -15,6 +15,7 @@ import subprocess
 import urllib.error
 import urllib.request
 from contextlib import contextmanager
+from datetime import datetime
 from operator import itemgetter
 from pathlib import Path
 from typing import Any
@@ -38,6 +39,11 @@ supported_versions = {
 
 # shell versions that we want to put into the gnomeExtensions attr set
 versions_to_merge = ["48", "49", "50"]
+
+# badly packaged extensions that are known to break `process_extension`
+ignored_extensions = [
+    "wandathefish@ke.labrie.gmail.com",
+]
 
 # Some type alias to increase readability of complex compound types
 PackageName = str
@@ -201,6 +207,10 @@ def process_extension(extension: dict[str, Any]) -> dict[str, Any] | None:
     """
     uuid = extension["uuid"]
 
+    # skip known bad extensions
+    if uuid in ignored_extensions:
+        return None
+
     # Yeah, there are some extensions without any releases
     if not extension["shell_version_map"]:
         return None
@@ -294,7 +304,19 @@ def scrape_extensions_index() -> list[dict[str, Any]]:
 
 
 def fetch_extensions() -> list[dict[str, Any]]:
-    raw_extensions = scrape_extensions_index()
+    raw_extensions: list[dict[str, Any]] = []
+
+    # cache the extension index, to avoid re-fetching it when processing an extension fails.
+    cache_path = f"extension-index-{datetime.today().strftime('%Y-%m-%d')}.json"
+    try:
+        with open(cache_path, "r") as f:
+            logging.info(f"Using cached extension index at {cache_path}.")
+            raw_extensions = json.load(f)
+    except FileNotFoundError:
+        logging.info("No existing extension index found, re-scraping data.")
+        raw_extensions = scrape_extensions_index()
+        with open(cache_path, "w") as f:
+            json.dump(raw_extensions, f)
 
     logging.info(f"Downloaded {len(raw_extensions)} extensions. Processing …")
     processed_extensions: list[dict[str, Any]] = []
@@ -318,7 +340,7 @@ def serialize_extensions(processed_extensions: list[dict[str, Any]]) -> None:
                 out.write("[ ")
             else:
                 out.write(", ")
-            # Dump each extension into a single-line string forst
+            # Dump each extension into a single-line string first
             serialized_extension = json.dumps(extension, ensure_ascii=False)
             # Inject line breaks for each supported version
             for version in supported_versions:

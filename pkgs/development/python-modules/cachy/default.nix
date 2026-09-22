@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   redis,
   python-memcached,
   msgpack,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cachy";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "186581f4ceb42a0bbe040c407da73c14092379b1e4c0e327fdb72ae4a9b269b1";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-GGWB9M60Kgu+BAxAfac8FAkjebHkwOMn/bcq5KmyabE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     redis
     python-memcached
     msgpack
@@ -28,10 +33,12 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
   doCheck = false;
 
+  pythonImportsCheck = [ "cachy" ];
+
   meta = {
     homepage = "https://github.com/sdispater/cachy";
     description = "Cachy provides a simple yet effective caching library";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

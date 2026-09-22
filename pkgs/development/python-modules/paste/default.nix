@@ -45,6 +45,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "paste" ];
 
   meta = {
+    broken = lib.versionAtLeast setuptools.version "82"; # pkg_resources at runtime
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
     changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";

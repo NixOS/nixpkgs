@@ -29,6 +29,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # https://github.com/beetbox/mediafile/issues/109
+    "test/test_mediafile.py::OpusTest::test_read_audio_properties"
+  ];
+
   pythonImportsCheck = [ "mediafile" ];
 
   meta = {

@@ -7,7 +7,6 @@
   libdrm,
   python3,
 }:
-
 let
   python3WithLibs = python3.withPackages (
     ps: with ps; [
@@ -17,19 +16,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.15";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tms+UNws+oBmwLvDFaDSIa/bUdSpK+CADodbsip3tRg=";
+    hash = "sha256-3g6OETXJSf6AScJ2K9F67mPlh3Wpi20Yq+f+xe78p9Y=";
   };
 
-  prePatch = ''
-    substituteInPlace module/Makefile \
-      --replace-fail '/etc/os-release' '/dev/null'
-  '';
+  patches = [
+    # Fix feature probes on kernels with allocation profiling enabled.
+    # Upstream: https://github.com/DisplayLink/evdi/pull/592
+    ./fix-conftest-probes.patch
+  ];
 
   env.CFLAGS = toString [
     "-Wno-error"

@@ -6,7 +6,7 @@
   ftfy,
   packaging,
   regex,
-  setuptools,
+  setuptools_80,
   torch,
   torchvision,
   tqdm,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     ftfy

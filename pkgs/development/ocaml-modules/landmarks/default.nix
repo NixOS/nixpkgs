@@ -2,25 +2,23 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  ocaml,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "landmarks";
-  version = "1.5";
-  minimalOCamlVersion = "4.08";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = "landmarks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eIq02D19OzDOrMDHE1Ecrgk+T6s9vj2X6B2HY+z+K8Q=";
+    hash = "sha256-9o9jf0M3zKc+Xojs4dqPRctYswSYqIo0jeOvkfdLfZ4=";
   };
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
+  doCheck = true;
 
   meta = {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/LexiFi/landmarks";
     description = "Simple Profiling Library for OCaml";
     longDescription = ''
       Landmarks is a simple profiling library for OCaml. It provides

@@ -6,7 +6,6 @@
   ninja,
   gtk3,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   jdupes,
 }:
@@ -31,7 +30,6 @@ stdenvNoCC.mkDerivation {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

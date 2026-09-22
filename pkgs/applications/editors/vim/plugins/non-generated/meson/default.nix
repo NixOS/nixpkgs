@@ -8,11 +8,9 @@ vimUtils.buildVimPlugin {
   preInstall = "cd data/syntax-highlighting/vim";
 
   meta = {
+    description = "Vim plugin for meson providing syntax highlighting";
     inherit (meson.meta)
       homepage
-      description
-      mainProgram
-      longDescription
       license
       platforms
       ;

@@ -2,28 +2,35 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   betamax,
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "betamax-serializers";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ja9isbjmzzhxdj69s0kdsvw8nkp073w6an6a4liy5vk3fdl2p1l";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-NFxBmxtzFx8pUcYqw8cBd1rEt24T6GRk6/D/KpeOSUk=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [
     betamax
     pyyaml
   ];
 
+  pythonImportsCheck = [ "betamax_serializers" ];
+
   meta = {
     homepage = "https://gitlab.com/betamax/serializers";
     description = "Set of third-party serializers for Betamax";
     license = lib.licenses.asl20;
   };
-}
+})

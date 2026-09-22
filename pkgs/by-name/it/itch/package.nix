@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "26.9.0";
+  version = "26.13.0";
 
   itch-setup = fetchzip {
     url = "https://broth.itch.zone/itch-setup/linux-amd64/1.29.0/archive.zip";
@@ -26,7 +26,7 @@ let
       owner = "itchio";
       repo = "itch";
       rev = "v${version}";
-      hash = "sha256-zTUCHpyjfPiYDAatkavNlSHekBTHadiHUa3VyLChYKE=";
+      hash = "sha256-v/2y9F+uigGaVsEy4gaa7WGTByW1wqYosti6AEOsaQQ=";
       sparseCheckout = [ sparseCheckout ];
     }
     + sparseCheckout;
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchzip {
     url = "https://github.com/itchio/itch/releases/download/v${finalAttrs.version}/itch-v${finalAttrs.version}-linux-amd64.tar.gz";
     stripRoot = false;
-    hash = "sha256-SRgaVweNqf/13C948eWncuCn9Cj82hYxDF3AzCaL5E0=";
+    hash = "sha256-//QA4aW9uwZ/yhKf1xJRthj36YqfXuu/6yU1yGXQeFo=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
-    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
+    changelog = "https://github.com/itchio/itch/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];

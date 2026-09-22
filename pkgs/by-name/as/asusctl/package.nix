@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromGitHub,
   systemd,
   coreutils,
   gnugrep,
@@ -15,19 +15,20 @@
   wayland,
   glibc,
   udevCheckHook,
+  gettext,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.7";
+  version = "6.5.0";
 
-  src = fetchFromGitLab {
-    owner = "asus-linux";
+  src = fetchFromGitHub {
+    owner = "OpenGamingCollective";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-jBO9AzQt4T4VU8aMcC9ALI7xBesAZC4beEyZ4+0cPPU=";
+    hash = "sha256-UTs9LF2EKUj5vxG0hc9V4DvCFMbyYgvA645ClxnE3WM=";
   };
 
-  cargoHash = "sha256-f/rD2zEvGwyyBFSih7G9vdwFepehYS1u38vBlKGZBFM=";
+  cargoHash = "sha256-Kujj8gQ5qsEv2iLO3T1JoK0E2q0ByOhxpuN942EvB7Q=";
 
   postPatch = ''
     files="
@@ -55,15 +56,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
-
-    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
-      --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     udevCheckHook
+    gettext
   ];
 
   buildInputs = [
@@ -103,13 +102,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
-    homepage = "https://gitlab.com/asus-linux/asusctl";
+    homepage = "https://github.com/OpenGamingCollective/asusctl";
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       k900
       aacebedo
       yuannan
+      luytan
     ];
   };
 })

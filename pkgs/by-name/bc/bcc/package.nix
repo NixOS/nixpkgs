@@ -5,7 +5,6 @@
   cmake,
   elfutils,
   fetchFromGitHub,
-  fetchpatch,
   flex,
   iperf,
   lib,
@@ -23,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.36.1";
+  version = "0.37.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
+    hash = "sha256-OfQWqZ7yyN+rs6PJP5QUIn07QdxOiBoUEetGQPp6KJo=";
   };
 
   patches = [
@@ -43,12 +42,6 @@ python3Packages.buildPythonApplication rec {
 
     (replaceVars ./absolute-ausyscall.patch {
       ausyscall = lib.getExe' audit "ausyscall";
-    })
-
-    (fetchpatch {
-      # https://github.com/iovisor/bcc/issues/5501
-      url = "https://github.com/iovisor/bcc/commit/c3f35ecca18b1ce926bd272f60f6d4465656a80b.patch";
-      hash = "sha256-Fr5SqDUpQzZj8yPST0V1QExNMCSoRbOXG5ZaChDXTZQ=";
     })
   ];
 

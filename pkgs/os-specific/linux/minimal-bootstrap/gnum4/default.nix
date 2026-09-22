@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -32,7 +31,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -71,7 +69,6 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc \
       CFLAGS=-I${linux-headers}/include
 
     # Build

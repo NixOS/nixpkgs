@@ -9,6 +9,7 @@
   # dependencies
   aiofiles,
   aiohttp,
+  aiozoneinfo,
   av,
   convertertools,
   dateparser,
@@ -38,26 +39,33 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "10.4.1";
+  version = "16.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J9SVsExFQMxUQSONsB6G8rb0nIu3sNKtHmiMdy6jpqk=";
+    hash = "sha256-8Z3ls/AOkgIPAj+NmCKm8t6fYDVwA5rwMaVTON0xUjU=";
   };
 
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    "orjson"
+    "packaging"
     "platformdirs"
+    "propcache"
     "pydantic"
+    "pyjwt"
+    "rich"
+    "typer"
   ];
 
   dependencies = [
     aiofiles
     aiohttp
+    aiozoneinfo
     av
     convertertools
     dateparser

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subunit";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "testing-cabal";
     repo = "subunit";
     tag = finalAttrs.version;
-    hash = "sha256-yM5mlYV7KyPRzPhnbDYBFLn4uiwxFFEotX2r6KcKAwA=";
+    hash = "sha256-vV/mmVruUH2siyOZOYiEQhjFgQ+xyS1EEbx5SS3Y5tA=";
   };
 
   nativeBuildInputs = [

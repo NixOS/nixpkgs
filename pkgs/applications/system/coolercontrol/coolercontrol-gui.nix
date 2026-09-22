@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     install -Dm644 "${src}/packaging/metadata/org.coolercontrol.CoolerControl.svg" -t "$out/share/icons/hicolor/scalable/apps/"
     install -Dm644 "${src}/packaging/metadata/org.coolercontrol.CoolerControl-alert.svg" -t "$out/share/icons/hicolor/scalable/apps/"
     install -Dm644 "${src}/packaging/metadata/org.coolercontrol.CoolerControl-symbolic.svg" -t "$out/share/icons/hicolor/symbolic/apps/"
-    install -Dm644 "${src}/packaging/metadata/org.coolercontrol.CoolerControl-symbolic-alert.svg" -t "$out/share/icons/hicolor/symbolic/apps/"
+    install -Dm644 "${src}/packaging/metadata/org.coolercontrol.CoolerControl-alert-symbolic.svg" -t "$out/share/icons/hicolor/symbolic/apps/"
   '';
 
   meta = meta // {

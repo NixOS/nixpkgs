@@ -43,6 +43,9 @@ buildPythonPackage rec {
     description = "Bash-like interactive mode extensions for the xonsh shell";
     homepage = "https://github.com/xonsh/xontrib-bashisms";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

@@ -178,6 +178,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    bisonException22 = {
+      spdxId = "Bison-exception-2.2";
+      fullName = "Bison exception 2.2";
+    };
+
     bitstreamCharter = {
       spdxId = "Bitstream-Charter";
       fullName = "Bitstream Charter Font License";
@@ -196,6 +201,11 @@ lib.mapAttrs mkLicense (
     bitTorrent11 = {
       spdxId = "BitTorrent-1.1";
       fullName = " BitTorrent Open Source License v1.1";
+    };
+
+    blessing = {
+      spdxId = "blessing";
+      fullName = "SQLite Blessing";
     };
 
     boehmGC = {
@@ -273,6 +283,12 @@ lib.mapAttrs mkLicense (
       fullName = "BSD 3-Clause Tso variant";
     };
 
+    bsdAskToEndorse = {
+      #spdxId = "BSD-ask-to-endorse"; # Accepted to SPDX waiting on next SPDX release
+      fullName = "BSD - ask to endorse";
+      url = "https://github.com/sudo-project/sudo/blob/c1307ea9ff340ce0538779f8e456501461fc44b7/plugins/sudoers/redblack.c#L24-L43";
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
       fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
       url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
@@ -308,6 +324,16 @@ lib.mapAttrs mkLicense (
       fullName = "Business Source License 1.1";
       free = false;
       redistributable = true;
+    };
+
+    buddy = {
+      spdxId = "Buddy";
+      fullName = "Buddy License";
+    };
+
+    bugroff = {
+      spdxId = "Bugroff";
+      fullName = "Bugroff License";
     };
 
     bzip2 = {
@@ -379,6 +405,13 @@ lib.mapAttrs mkLicense (
     cc-by-nc-30 = {
       spdxId = "CC-BY-NC-3.0";
       fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
+      free = false;
+    };
+
+    cc-by-nc-30-igo = {
+      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
+      # spdxId = "CC-BY-NC-3.0-IGO";
+      fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
       free = false;
     };
 
@@ -575,6 +608,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    enpl = {
+      fullName = "Emmi AI Non-Production License";
+      url = "https://github.com/Emmi-AI/noether/blob/main/LICENSE.txt";
+      free = false;
+      redistributable = true;
+    };
+
     epl10 = {
       spdxId = "EPL-1.0";
       fullName = "Eclipse Public License 1.0";
@@ -673,6 +713,16 @@ lib.mapAttrs mkLicense (
     g4sl = {
       fullName = "Geant4 Software License";
       url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
+    };
+
+    gccException20 = {
+      spdxId = "GCC-exception-2.0";
+      fullName = "GCC Runtime Library exception 2.0";
+    };
+
+    gccException31 = {
+      spdxId = "GCC-exception-3.1";
+      fullName = "GCC Runtime Library exception 3.1";
     };
 
     geogebra = {
@@ -906,6 +956,16 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    fsfap = {
+      spdxId = "FSFAP";
+      fullName = "FSF All Permissive License";
+    };
+
+    fsfullr = {
+      spdxId = "FSFULLR";
+      fullName = "FSF Unlimited License (with License Retention)";
+    };
+
     hl3 = {
       fullName = "Hippocratic License v3.0";
       url = "https://firstdonoharm.dev/version/3/0/core.txt";
@@ -917,6 +977,11 @@ lib.mapAttrs mkLicense (
       fullName = "Intel Simplified Software License";
       url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
       free = false;
+    };
+
+    jpl-image = {
+      fullName = "JPL Image Use Policy";
+      spdxId = "JPL-image";
     };
 
     knuth = {
@@ -995,9 +1060,9 @@ lib.mapAttrs mkLicense (
       fullName = "Licence Libre du Québec – Permissive version 1.1";
     };
 
-    llgpl21 = {
-      fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-      url = "https://opensource.franz.com/preamble.html";
+    llgplPreamble = {
+      spdxId = "LLGPL";
+      fullName = "LLGPL Preamble"; # Only used together with LGPL (clarifying C-centric terms of LGPL in context of Lisp), SPDX tracks it separately
     };
 
     llvm-exception = {
@@ -1043,6 +1108,11 @@ lib.mapAttrs mkLicense (
     mit = {
       spdxId = "MIT";
       fullName = "MIT License";
+    };
+
+    mit-click = {
+      spdxId = "MIT-Click";
+      fullName = "MIT Click License";
     };
 
     mit-cmu = {
@@ -1150,9 +1220,20 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Only if used in Netdata products.
     };
 
+    netboxLimitedUse = {
+      fullName = "NetBox Limited Use License 1.0";
+      free = false;
+      url = "https://github.com/netboxlabs/netbox-branching/blob/8465b9aee69ded23930cfe1a522695bfb8955a5a/LICENSE.md";
+    };
+
     ngpl = {
       spdxId = "NGPL";
       fullName = "Nethack General Public License";
+    };
+
+    ngrep = {
+      spdxId = "ngrep";
+      fullName = "ngrep License";
     };
 
     nistSoftware = {
@@ -1214,9 +1295,19 @@ lib.mapAttrs mkLicense (
       fullName = "Open Data Commons Open Database License v1.0";
     };
 
+    ofl10 = {
+      spdxId = "OFL-1.0";
+      fullName = "SIL Open Font License 1.0";
+    };
+
     ofl = {
       spdxId = "OFL-1.1";
       fullName = "SIL Open Font License 1.1";
+    };
+
+    ogluk30 = {
+      spdxId = "OGL-UK-3.0";
+      fullName = "Open Government Licence v3.0";
     };
 
     oml = {
@@ -1305,9 +1396,30 @@ lib.mapAttrs mkLicense (
       fullName = "Q Public License 1.0";
     };
 
+    qtGplException10 = {
+      spdxId = "Qt-GPL-exception-1.0";
+      fullName = "Qt GPL exception 1.0";
+    };
+
+    qtLgplException11 = {
+      spdxId = "Qt-LGPL-exception-1.1";
+      fullName = "Qt LPL exception 1.1";
+    };
+
     qwtException = {
       spdxId = "Qwt-exception-1.0";
       fullName = "Qwt exception 1.0";
+    };
+
+    reticulum = {
+      # The Reticulum License restricts certain fields of use, notably systems
+      # intended to harm human beings and AI/ML training datasets. Such usage
+      # restrictions are incompatible with the Open Source Definition
+      # (https://opensource.org/osd), in particular "No Discrimination Against
+      # Fields of Endeavor".
+      free = false;
+      fullName = "Reticulum License";
+      url = "https://reticulum.network/license";
     };
 
     ruby = {
@@ -1370,15 +1482,8 @@ lib.mapAttrs mkLicense (
     };
 
     stk = {
-      shortName = "stk";
-      fullName = "Synthesis Tool Kit 4.3";
-      url = "https://github.com/thestk/stk/blob/master/LICENSE";
-    };
-
-    sudo = {
-      shortName = "sudo";
-      fullName = "Sudo License (ISC-style)";
-      url = "https://www.sudo.ws/about/license/";
+      spdxId = "MIT-STK";
+      fullName = "MIT-STK License";
     };
 
     sustainableUse = {
@@ -1527,6 +1632,13 @@ lib.mapAttrs mkLicense (
       fullName = "Universal Permissive License";
     };
 
+    valveSDK = {
+      fullName = "Valve Corporation Steamworks SDK Access Agreement";
+      url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
+      free = false;
+      redistributable = true;
+    };
+
     vim = {
       spdxId = "Vim";
       fullName = "Vim License";
@@ -1541,6 +1653,8 @@ lib.mapAttrs mkLicense (
     vol-sl = {
       fullName = "Volatility Software License, Version 1.0";
       url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+      free = false;
+      redistributable = true;
     };
 
     vsl10 = {
@@ -1572,9 +1686,19 @@ lib.mapAttrs mkLicense (
       fullName = "W3C Software Notice and License (1998-07-20)";
     };
 
+    w3c-20150513 = {
+      spdxId = "W3C-20150513";
+      fullName = "W3C Software Notice and Document License (2015-05-13)";
+    };
+
     wadalab = {
       fullName = "Wadalab Font License";
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
+    };
+
+    wordnet = {
+      spdxId = "WordNet";
+      fullName = "WordNet License";
     };
 
     wtfpl = {

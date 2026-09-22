@@ -8,15 +8,15 @@
 }:
 
 let
-  version = "7.1.190";
+  version = "7.1.330";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-x64.tar.xz";
-      hash = "sha256-XoZRlFMiN5VVp3vkTwGDMekhW1KzmvuN9oYTXZFn6B4=";
+      hash = "sha256-DZ5BjNJYS0Ke7Cgc0xCjojbUWpMfOR5lKOMyN4gOhIA=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-arm64.tar.xz";
-      hash = "sha256-ChPuz8wd3SOxRmxM5bEbz3paBw7pfIVfSY23nasRI4A=";
+      hash = "sha256-oKDwECjatV/dT/cnGN6Sk6RTIVDiKI8R0AAYmRvVlmo=";
     };
   };
 
@@ -48,10 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -d $out/bin $out/share/deezer-desktop/resources $out/share/applications $out/share/icons/hicolor/scalable/apps
 
     substituteInPlace deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.desktop \
-      --replace-fail "run.sh" "deezer-desktop" \
-      --replace-fail "dev.aunetx.deezer" "deezer-desktop"
-    cp deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.desktop $out/share/applications/deezer-desktop.desktop
-    cp deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.svg $out/share/icons/hicolor/scalable/apps/deezer-desktop.svg
+      --replace-fail "run.sh" "deezer-desktop"
+    cp deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.desktop $out/share/applications/
+    cp deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.svg $out/share/icons/hicolor/scalable/apps/
     cp -r deezer-desktop-${version}-${archDir}/resources/{app.asar,linux} $out/share/deezer-desktop/resources/
 
     makeWrapper "${lib.getExe electron}" "$out/bin/deezer-desktop" \

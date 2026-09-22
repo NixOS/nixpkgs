@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch2,
   expat,
   fontconfig,
   freetype,
@@ -29,15 +30,25 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "skia";
   # Version from https://skia.googlesource.com/skia/+/refs/heads/main/RELEASE_NOTES.md
   # or https://chromiumdash.appspot.com/releases
-  # plus date of the tip of the corresponding chrome/m$version branch
-  version = "144-unstable-2025-12-02";
+  # plus the date of the selected commit on the corresponding chrome/m$version branch
+  version = "148-unstable-2026-04-14";
 
   src = fetchgit {
     url = "https://skia.googlesource.com/skia.git";
-    # Tip of the chrome/m$version branch
-    rev = "ee20d565acb08dece4a32e3f209cdd41119015ca";
-    hash = "sha256-0LiFK/8873gei70iVhNGRlcFeGIp7tjDEfxTBz1LYv8=";
+    # Revision used by Ladybird's vcpkg baseline:
+    # https://github.com/microsoft/vcpkg/blob/7f3781e19cc7d4e4882a4caec01668c6f7b5c163/ports/skia/portfile.cmake
+    rev = "e7c90ecca9444fe09598f1630ab7cee2c0ee027a";
+    hash = "sha256-2+fxWqkNBStoN6l5Y3xMqkwvh69sCU6A//wz8fMnmjY=";
   };
+
+  patches = [
+    # A tiny patch to fix build errors on loongarch64-linux using GCC (Clang works fine).
+    # https://skia-review.googlesource.com/c/skia/+/1199836
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/fonts-team/libskia/-/raw/6574ca599eab076a9cd5b8667f81aef0f67b3eeb/debian/patches/loong-build";
+      hash = "sha256-6dUCQixmll2K8fqRGwhay7ee8gvdRq1NJjUHBHxIFvo=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace BUILD.gn \
@@ -84,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
+          "loongarch64" = "loong64";
         }
         .${stdenv.hostPlatform.parsed.cpu.name};
     in
@@ -109,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals enableVulkan [
       "skia_use_vulkan=true"
+      "extra_cflags+=[\"-DSK_USE_EXTERNAL_VULKAN_HEADERS\"]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "skia_use_fontconfig=true"
@@ -168,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://skia.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
+    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64 ++ loongarch64;
     pkgConfigModules = [ "skia" ];
   };
 })

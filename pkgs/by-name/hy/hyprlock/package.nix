@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -26,15 +26,15 @@
   nix-update-script,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VFlM1cN4jmUAbfmZbeg7vL+AN9miXEUqqpk5EkHNq2c=";
+    hash = "sha256-JNDoV4tUGL6mXfXMqOjBwUl3Cg1YNIBbAPbpTYY/BpI=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc/xdg/hypr
     ln -s $out/share/hypr/hyprlock.conf $out/etc/xdg/hypr/hyprlock.conf
   '';
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   passthru.updateScript = nix-update-script { };
 

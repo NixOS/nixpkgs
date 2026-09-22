@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "VERSION=${finalAttrs.version}" ];
 
   postPatch = ''
-    sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
+    sed -i 's#COMMAND = "pass"#COMMAND = "${lib.getExe pass}"#' src/passff.py
   '';
 
   installPhase = ''

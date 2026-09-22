@@ -28,15 +28,15 @@
   networkmanager,
   tlp-pd,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlp";
-  version = "1.9.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
-    rev = version;
-    hash = "sha256-23B+KV0VrvfSneKIFB9sm9iZZm8uZRk+r60W13++J4g=";
+    tag = finalAttrs.version;
+    hash = "sha256-/xTg53eJ+AKrlG++nQGLsosaWzg1JrwGIGB2+h0MZDI=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -141,6 +141,9 @@ stdenv.mkDerivation rec {
       rm -rf $out/share/metainfo
     '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   passthru.tests = {
     inherit tlp-pd;
   };
@@ -148,7 +151,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced Power Management for Linux";
     homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
-    changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
+    changelog = "https://github.com/linrunner/TLP/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     mainProgram = "tlp";
     maintainers = with lib.maintainers; [
@@ -156,4 +159,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

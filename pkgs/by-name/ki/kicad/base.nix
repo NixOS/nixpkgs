@@ -2,12 +2,9 @@
   lib,
   stdenv,
   cmake,
-  libGLU,
-  libGL,
   zlib,
   wxGTK,
   gtk3,
-  libx11,
   gettext,
   glew,
   glm,
@@ -17,29 +14,11 @@
   boost,
   pkg-config,
   doxygen,
-  graphviz,
-  libpthread-stubs,
-  libxdmcp,
   unixodbc,
   libgit2,
   libsecret,
-  libgcrypt,
-  libgpg-error,
   ninja,
   writableTmpDirAsHomeHook,
-
-  util-linuxMinimal,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libxtst,
-  pcre2,
-  libdeflate,
 
   swig,
   python,
@@ -62,7 +41,6 @@
   debug,
   sanitizeAddress,
   sanitizeThreads,
-  templateDir ? null,
 }:
 
 assert lib.assertMsg (
@@ -122,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
     (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
     (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+    (cmakeBool "KICAD_UPDATE_CHECK" false)
   ]
   ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
@@ -133,41 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     doxygen
-    graphviz
     pkg-config
     libgit2
     libsecret
-    libgcrypt
-    libgpg-error
-  ]
-  # wanted by configuration on linux, doesn't seem to affect performance
-  # no effect on closure size
-  ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linuxMinimal
-    libselinux
-    libsepol
-    libthai
-    libdatrie
-    libxkbcommon
-    libepoxy
-    dbus
-    at-spi2-core
-    libxtst
-    pcre2
   ];
 
   buildInputs = [
-    libGLU
-    libGL
     zlib
-    libx11
     wxGTK
     gtk3
-    libxdmcp
     gettext
     glew
     glm
-    libpthread-stubs
     cairo
     curl
     openssl
@@ -176,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     python
     poppler
     unixodbc
-    libdeflate
     opencascade-occt
     protobuf_29
 
@@ -207,14 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontStrip = debug;
-
-  # KiCad looks for the stock library tables at
-  # KICAD_LIBRARY_DATA/template/{sym,fp}-lib-table, where KICAD_LIBRARY_DATA is
-  # compiled in as $out/share/kicad. Those files live in separate library packages.
-  postInstall = optionalString (templateDir != null) ''
-    rm -rf $out/share/kicad/template
-    ln -s ${templateDir} $out/share/kicad/template
-  '';
 
   meta = {
     description = "Just the built source without the libraries";

@@ -4,36 +4,35 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_11,
   nodejs,
   makeWrapper,
   callPackage,
   nixosTests,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
     tag = finalAttrs.version;
-    hash = "sha256-zyvTahfOq7KXgVqD178hrlqO7YjsjLyuw+pm6PMhJt0=";
+    hash = "sha256-0XGq4UVaNN1gTJLta0o9DnQwGwJ+S7HlGFY6DPAdGKY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-KI5ZFU8u1R4QKTXn6mGVi+ziAocgOyyutKqmUOIn+dI=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-eUAzQ+LV+RZs/QEb5r7l9cisBjjWU8eGMm2r9ZNXmX8=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     nodejs
   ];
 

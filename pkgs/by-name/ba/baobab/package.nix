@@ -15,6 +15,7 @@
   wrapGAppsHook4,
   itstool,
   gnome,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsHook4
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gtk4

@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bundlewrap";
-  version = "5.0.3";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
     tag = finalAttrs.version;
-    hash = "sha256-gncxzeAlfob0dXZ1iqMwqG5h+OyGxvPhrS0MZ+x0mbo=";
+    hash = "sha256-b3ItcHabmxIFha6ryMOFXCSvHJrhQ2/dR3EXbxElWpg=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
     description = "Easy, Concise and Decentralized Config management with Python";
     changelog = "https://github.com/bundlewrap/bundlewrap/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "bw";
-    license = [ lib.licenses.gpl3 ];
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ wamserma ];
   };
 })

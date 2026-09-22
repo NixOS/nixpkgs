@@ -31,7 +31,6 @@ let
     length
     mapAttrs
     mapAttrsToList
-    mapAttrsRecursiveCond
     min
     optional
     optionalAttrs
@@ -46,7 +45,6 @@ let
     setAttrByPath
     substring
     take
-    throwIfNot
     trace
     typeOf
     types
@@ -255,7 +253,7 @@ let
 
       # This function takes an empty attrset as an argument.
       # It could theoretically be replaced with its body,
-      # but such a binding is avoided to allow for earlier grabage collection.
+      # but such a binding is avoided to allow for earlier garbage collection.
       doCollect =
         { }:
         collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (
@@ -280,7 +278,11 @@ let
         let
 
           # For definitions that have an associated option
-          declaredConfig = mapAttrsRecursiveCond (v: !isOption v) (_: v: v.value) options;
+          declaredConfig =
+            let
+              recurse = mapAttrs (n: v: if isOption v then v.value else recurse v);
+            in
+            recurse options;
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
@@ -565,12 +567,23 @@ let
         modulesPath:
         { disabled, modules }:
         let
-          keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
+          isDisabledModule = isDisabled modulesPath disabled;
+          keyFilter = filter (attrs: !isDisabledModule attrs);
         in
-        map (attrs: attrs.module) (genericClosure {
-          startSet = keyFilter modules;
-          operator = attrs: keyFilter attrs.modules;
-        });
+        catAttrs "module" (
+          genericClosure (
+            if disabled == [ ] then
+              {
+                startSet = modules;
+                operator = attrs: attrs.modules;
+              }
+            else
+              {
+                startSet = keyFilter modules;
+                operator = attrs: keyFilter attrs.modules;
+              }
+          )
+        );
 
       toGraph =
         modulesPath:
@@ -632,6 +645,28 @@ let
     : 3\. Function argument
   */
   unifyModuleSyntax =
+    let
+      attrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "imports"
+        "options"
+        "config"
+        "meta"
+        "freeformType"
+      ];
+      shorthandAttrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "require"
+        "imports"
+        "freeformType"
+      ];
+    in
     file: key: m:
     let
       addMeta =
@@ -655,17 +690,7 @@ let
     in
     if m ? config || m ? options then
       let
-        badAttrs = removeAttrs m [
-          "_class"
-          "_file"
-          "key"
-          "disabledModules"
-          "imports"
-          "options"
-          "config"
-          "meta"
-          "freeformType"
-        ];
+        badAttrs = removeAttrs m attrsToRemove;
       in
       if badAttrs != { } then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
@@ -680,25 +705,18 @@ let
           config = addFreeformType (addMeta (m.config or { }));
         }
     else
-      # shorthand syntax
-      throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module." {
+    # shorthand syntax
+    if !isAttrs m then
+      throw "module ${file} (${key}) does not look like a module."
+    else
+      {
         _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [ ];
         imports = m.require or [ ] ++ m.imports or [ ];
         options = { };
-        config = addFreeformType (
-          removeAttrs m [
-            "_class"
-            "_file"
-            "key"
-            "disabledModules"
-            "require"
-            "imports"
-            "freeformType"
-          ]
-        );
+        config = addFreeformType (removeAttrs m shorthandAttrsToRemove);
       };
 
   applyModuleArgsIfFunction =
@@ -720,10 +738,9 @@ let
       # a module will resolve strictly the attributes used as argument but
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
-      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
         name: _:
-        addErrorContext (context name) (
+        addErrorContext ''while evaluating the module argument `${name}' in "${key}":'' (
           args.${name} or (addErrorContext
             "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
             config._module.args.${name}
@@ -875,15 +892,13 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [ name ];
-          defns = pushedDownDefinitionsByName.${name} or [ ];
           defns' = rawDefinitionsByName.${name} or [ ];
-          optionDecls = filter (
+          isOptionDecl =
             m:
             m.options ? _type
-            && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file)
-          ) decls;
+            && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file);
         in
-        if length optionDecls == length decls then
+        if all isOptionDecl decls then
           let
             opt = fixupOptionType loc (mergeOptionDecls loc decls);
           in
@@ -891,7 +906,35 @@ let
             matchedOptions = evalOptionValue loc opt defns';
             unmatchedDefns = [ ];
           }
-        else if optionDecls != [ ] then
+        # this may look like duplicate computations are performed, but testing
+        # with a minimal NixOS config (defined below):
+        #
+        # 1. in 87% of cases, the above `all isOptionDecl decls` passes and we
+        # short-circuit
+        # 2. In 12% of cases, there's only one decl and we short-circuit
+        # 3. in another 1% of cases, we loop again and short-circuit when
+        # `any isOptionDecl decls` fails
+        # 4. In the final case, we pass the `any` and have to refilter. This
+        # only triggers in 1 of the 48000 calls to this function.
+        #
+        # The minimal config was defined with this expression:
+        #
+        # let nixos = import ./nixos/lib/eval-config.nix {
+        #   modules = [
+        #     ./nixos/modules/profiles/minimal.nix
+        #     {
+        #       fileSystems."/" = {
+        #         device = "/dev/sda1";
+        #         fsType = "ext4";
+        #       };
+        #       boot.loader.grub.devices = [ "/dev/sda" ];
+        #     }
+        #   ];
+        # }; in nixos.config.system.build.toplevel
+        else if length decls != 1 && any isOptionDecl decls then
+          let
+            optionDecls = filter isOptionDecl decls;
+          in
           if
             all (x: x.options.type.name or null == "submodule") optionDecls
           # Raw options can only be merged into submodules. Merging into
@@ -919,7 +962,7 @@ let
               (head optionDecls).options.type.description or "<no description>"
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
-          mergeModules' loc decls defns
+          mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ])
       ) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
@@ -1008,52 +1051,28 @@ let
     : 2\. Function argument
   */
   mergeOptionDecls =
-    loc: opts:
+    loc:
     foldl'
       (
         res: opt:
         let
-          t = res.type;
-          t' = opt.options.type;
-          mergedType = t.typeMerge t'.functor;
-          typesMergeable = mergedType != null;
-
-          # TODO: Remove this when all downstream reliances of internals: 'functor.wrapped' are sufficiently migrated.
-          # A function that adds the deprecated wrapped message to a type.
-          addDeprecatedWrapped =
-            t:
-            t
-            // {
-              functor = t.functor // {
-                wrapped = t.functor.wrappedDeprecationMessage {
-                  inherit loc;
-                };
-              };
-            };
-
           typeSet =
-            if opt.options ? type then
-              if res ? type then
-                if typesMergeable then
-                  {
-                    type =
-                      if mergedType ? functor.wrappedDeprecationMessage then
-                        addDeprecatedWrapped mergedType
-                      else
-                        mergedType;
-                  }
-                else
-                  # Keep in sync with the same error below!
-                  throw
-                    "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
-              else if opt.options.type ? functor.wrappedDeprecationMessage then
-                { type = addDeprecatedWrapped opt.options.type; }
+            if res ? type && opt.options ? type then
+              let
+                mergedType = res.type.typeMerge opt.options.type.functor;
+              in
+              if mergedType != null then
+                {
+                  type = mergedType;
+                }
               else
-                { }
+                # Keep in sync with the same error below!
+                throw
+                  "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
             else
               { };
 
-          bothHave = k: opt.options ? ${k} && res ? ${k};
+          bothHave = k: res ? ${k} && opt.options ? ${k};
         in
         if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
           # Keep in sync with the same error above!
@@ -1098,8 +1117,7 @@ let
         declarations = [ ];
         declarationPositions = [ ];
         options = [ ];
-      }
-      opts;
+      };
 
   /**
     Merge all the definitions of an option to produce the final
@@ -1152,22 +1170,22 @@ let
           throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
-
-      # Apply the 'apply' function to the merged value. This allows options to
-      # yield a value computed from the definitions
-      value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
-
-      warnDeprecation =
-        warnIf (opt.type.deprecationMessage != null)
-          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
-
     in
-    warnDeprecation opt
+    (
+      if opt.type.deprecationMessage != null then
+        warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}" opt
+      else
+        opt
+    )
     // {
-      value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+      value = addErrorContext "while evaluating the option `${showOption loc}':" (
+        # Apply the 'apply' function to the merged value. This allows options to
+        # yield a value computed from the definitions
+        if opt ? apply then opt.apply res.mergedValue else res.mergedValue
+      );
       inherit (res.defsFinal') highestPrio;
-      definitions = map (def: def.value) res.defsFinal;
-      files = map (def: def.file) res.defsFinal;
+      definitions = catAttrs "value" res.defsFinal;
+      files = catAttrs "file" res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
       inherit (res.checkedAndMerged) valueMeta;
@@ -1204,49 +1222,16 @@ let
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defsNormalized = concatMap (
-          m:
-          map (
-            value:
-            if value._type or null == "definition" then
-              value
-            else
-              {
-                inherit (m) file;
-                inherit value;
-              }
-          ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
-
-        # Process mkOverride properties.
-        defsFiltered = filterOverrides' defsNormalized;
-
-        # Sort mkOrder properties.
-        defsSorted =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defsFiltered.values then
-            sortProperties defsFiltered.values
-          else
-            defsFiltered.values;
-      in
       # Fast path: the overwhelming majority of options have exactly one
       # definition whose value carries no property wrapper
       # (mkIf/mkMerge/mkOverride/mkOrder/definition). In that case the
-      # discharge/filter/sort pipeline above is a no-op but still allocates
-      # several intermediate lists and closures. Detect it up front and hand
-      # the original singleton straight to the type merge. The let-bindings
-      # above are lazy and thus never forced on this branch.
+      # discharge/filter/sort pipeline below is a no-op but still allocates
+      # several intermediate lists and closures. Detect it up front and hand the
+      # original singleton straight to the type merge.
       if
         length defs == 1
-        && (
-          let
-            d = head defs;
-          in
-          addErrorContext "while evaluating definitions from `${d.file}':" (
-            !(isAttrs d.value && d.value ? _type)
-          )
+        && addErrorContext "while evaluating definitions from `${(head defs).file}':" (
+          !(head defs).value ? _type
         )
       then
         {
@@ -1254,6 +1239,33 @@ let
           highestPrio = defaultOverridePriority;
         }
       else
+        let
+          # Process mkMerge and mkIf properties.
+          defsNormalized = concatMap (
+            m:
+            map (
+              value:
+              if value._type or null == "definition" then
+                value
+              else
+                {
+                  inherit (m) file;
+                  inherit value;
+                }
+            ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          ) defs;
+
+          # Process mkOverride properties.
+          defsFiltered = filterOverrides' defsNormalized;
+
+          # Sort mkOrder properties.
+          defsSorted =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") defsFiltered.values then
+              sortProperties defsFiltered.values
+            else
+              defsFiltered.values;
+        in
         {
           values = defsSorted;
           inherit (defsFiltered) highestPrio;
@@ -1365,13 +1377,16 @@ let
           val;
     in
     cfg:
-    if cfg._type or "" == "merge" then
-      concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
-      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
-      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
-    # FIXME: handle mkOrder?
+    if cfg ? _type then
+      if cfg._type == "if" then
+        map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      else if cfg._type == "merge" then
+        concatMap pushDownProperties cfg.contents
+      else if cfg._type == "override" then
+        map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      # FIXME: handle mkOrder?
+      else
+        [ cfg ]
     else
       [ cfg ];
 
@@ -1394,13 +1409,16 @@ let
   */
   dischargeProperties =
     def:
-    if def._type or "" == "merge" then
-      concatMap dischargeProperties def.contents
-    else if def._type or "" == "if" then
-      if isBool def.condition then
-        if def.condition then dischargeProperties def.content else [ ]
+    if def ? _type then
+      if def._type == "if" then
+        if isBool def.condition then
+          if def.condition then dischargeProperties def.content else [ ]
+        else
+          throw "‘mkIf’ called with a non-Boolean condition"
+      else if def._type == "merge" then
+        concatMap dischargeProperties def.contents
       else
-        throw "‘mkIf’ called with a non-Boolean condition"
+        [ def ]
     else
       [ def ];
 
@@ -1490,7 +1508,7 @@ let
   fixupOptionType =
     loc: opt:
     if opt.type.getSubModules or null == null then
-      opt // { type = opt.type or types.unspecified; }
+      if opt ? type then opt else opt // { type = types.unspecified; }
     else
       opt
       // {
@@ -1519,23 +1537,21 @@ let
   mergeAttrDefinitionsWithPrio =
     opt:
     let
-      defsByAttr = zipAttrs (
-        concatLists (
-          concatMap (
-            { value, ... }@def:
-            map (mapAttrsToList (
-              k: value: {
-                ${k} = def // {
-                  inherit value;
-                };
-              }
-            )) (pushDownProperties value)
-          ) opt.definitionsWithLocations
-        )
+      defsByAttr = concatLists (
+        concatMap (
+          { value, ... }@def:
+          map (mapAttrsToList (
+            k: value: {
+              ${k} = def // {
+                inherit value;
+              };
+            }
+          )) (pushDownProperties value)
+        ) opt.definitionsWithLocations
       );
     in
     assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
-    mapAttrs (
+    zipAttrsWith (
       k: v:
       let
         merging = mergeDefinitions (opt.loc ++ [ k ]) opt.type.nestedTypes.elemType v;
@@ -1597,6 +1613,100 @@ let
     _type = "order";
     inherit priority content;
   };
+
+  /**
+    Applies a function to the value inside a definition,
+    preserving all surrounding properties (`mkForce`, `mkOrder`, `mkIf`, etc.).
+  */
+  mapDefinitionValue =
+    f: def:
+    if def ? _type then
+      if def._type == "merge" then
+        def // { contents = map (mapDefinitionValue f) def.contents; }
+      else if def._type == "if" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "override" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "order" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "definition" then
+        def // { value = mapDefinitionValue f def.value; }
+      else
+        f def
+    else
+      f def;
+
+  /**
+    Consume the `options` metadata of the submodules typed by `attrsOf submodule`.
+
+    It also works with `lazyAttrsOf` and `attrsWith`.
+
+    # Inputs
+
+    1. A function that takes `name: { cfg, opt }:` and returns anything.
+       `name` is the attribute name at the level of `attrsOf`.
+       `cfg` is the corresponding option *value*, as typically found in `config`.
+       `opt` is the corresponding evaluated option, as typically found in `options`.
+
+    2. An `options` attribute value, e.g. `options.users.groups`.
+
+    # Output
+
+    An attribute set whose attribute names correspond to the definitions of the
+    option, and whose values are the return value of the passed function.
+
+    # Type
+
+    ```
+    mapAttrsOfSubmodule :: (String -> { cfg :: AttrSet, opt :: AttrSet } -> a) -> Option -> AttrSetOf a
+    ```
+
+    `Option` refers to an evaluated option,
+    retrievable from the `options` module argument
+    or the `options` configuration attribute returned by `evalModules`.
+    It carries attribute `_type = "option";`.
+
+    # Example
+
+    :::{.example}
+    ## Use `mapAttrsOfSubmodule` to distinguish which NixOS system services are explicitly enabled or disabled
+    ```nix
+    lib.modules.mapAttrsOfSubmodule
+      (name: { cfg, opt }:
+        {
+          isExplicit = opt.enable.highestPrio < (lib.mkOptionDefault null).priority;
+          value = cfg.enable;
+        })
+      (pkgs.nixos { }).options.systemd.services
+    =>
+    {
+      console-getty = {
+        isExplicit = true;
+        value = false;
+      };
+      "container-getty@" = {
+        isExplicit = false;
+        value = true;
+      };
+      # ...
+    }
+    ```
+
+    :::
+  */
+  mapAttrsOfSubmodule =
+    f: opt:
+    assert opt._type or null == "option";
+    assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
+    assert opt.type.nestedTypes.elemType.name == "submodule";
+
+    mapAttrs (
+      name: attrMeta:
+      f name {
+        cfg = attrMeta.configuration.config;
+        opt = attrMeta.configuration.options;
+      }
+    ) opt.valueMeta.attrs;
 
   mkBefore = mkOrder 500;
   defaultOrderPriority = 1000;
@@ -2302,6 +2412,8 @@ private
     importApply
     importJSON
     importTOML
+    mapAttrsOfSubmodule
+    mapDefinitionValue
     mergeDefinitions
     mergeAttrDefinitionsWithPrio
     mergeOptionDecls # should be private?

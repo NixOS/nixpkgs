@@ -2,23 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   twisted,
   requests,
   cryptography,
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "txrequests";
   version = "0.9.6";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "b452a1cafa4d005678f6fa47922a330feb4907d5b4732d1841ca98e89f1362e1";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tFKhyvpNAFZ49vpHkiozD+tJB9W0cy0YQcqY6J8TYuE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     twisted
     requests
     cryptography
@@ -29,10 +34,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+  pythonImportsCheck = [ "txrequests" ];
+
   meta = {
     description = "Asynchronous Python HTTP for Humans";
     homepage = "https://github.com/tardyp/txrequests";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

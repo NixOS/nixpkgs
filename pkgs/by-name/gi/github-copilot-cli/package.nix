@@ -4,36 +4,71 @@
   autoPatchelfHook,
   cacert,
   fetchurl,
+  glib,
+  libsecret,
   makeBinaryWrapper,
   bash,
   nodejs,
   versionCheckHook,
-  nix-update-script,
 }:
-
+let
+  arch =
+    if stdenv.hostPlatform.isx86_64 then
+      "x64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else
+      throw "Unsupported arch: ${stdenv.hostPlatform.system}";
+  platform = if stdenv.hostPlatform.isDarwin then "darwin-${arch}" else "linux-${arch}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.26";
+  version = "1.0.83";
 
-  # GitHub provide platform-specific SEA binaries as well as a "universal"
-  # package.  Use the universal package as it gives us a bit more flexibility
-  # about how it's configured.  In particular, the SEA binary has fixed ideas
-  # about how paths should be set up which don't reliably hold when using Nix.
   src = fetchurl {
-    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-zNO0clQRfgw6CX9K8NaJXsoOhhNjBfK7KAr0AoL7Oqo=";
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}-${platform}.tgz";
+    hash =
+      {
+        "aarch64-darwin" = "sha256-ns0TDgpzuRBacGodZrQCwK1KzFYYMeojb//lY1O0Xgc=";
+        "x86_64-linux" = "sha256-iI+Pu0V1wzWvukqIY8ZH7wT4HlEkx8eUvcrukMX6RQM=";
+        "aarch64-linux" = "sha256-NkIkBUiYKRySBVmWrgkUQ1n9GPGZ84m49IgJsQXDhg0=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
+    glib
+    libsecret
+  ];
   sourceRoot = "package";
   dontStrip = true;
-  # keytar.node and computer.node have optional system-library deps not provided
-  # here; ignore missing deps rather than fail the build.
-  autoPatchelfIgnoreMissingDeps = true;
+  # computer.node requires GUI/media libraries (X11, pipewire, libei, libjpeg,
+  # libpng) for screen-capture and input-simulation features that are not
+  # relevant for CLI use; ignore those missing deps rather than fail the build
+  # or pull in heavy dependencies.
+  autoPatchelfIgnoreMissingDeps = [
+    "libX11.so.6"
+    "libXtst.so.6"
+    "libjpeg.so.8"
+    "libpng16.so.16"
+    "libpipewire-0.3.so.0"
+    "libei.so.1"
+    "libwebkit2gtk-4.1.so.0"
+    "libjavascriptcoregtk-4.1.so.0"
+    "libgtk-3.so.0"
+    "libgdk-3.so.0"
+    "libcairo.so.2"
+    "libgdk_pixbuf-2.0.so.0"
+    "libsoup-3.0.so.0"
+    "libwayland-client.so.0"
+    "libdbus-1.so.3"
+    "libxdo.so.3"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -52,29 +87,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  # TODO are these errors still present after moving to using the "universal"
-  # package?
-  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - OpenSSL errors in sandbox
 
-  # Looks like GitHub use tags for both pre-release and actually released
-  # versions, but only the actual versions will be available as a GitHub
-  # release, so use the release endpoint rather than nix-update-script`'s
-  # default of looking for tags.
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
     homepage = "https://github.com/github/copilot-cli";
     changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # including contents of the prebuild directory
+      binaryBytecode # including WASM files
+      obfuscatedCode # including minified JavaScript
+    ];
     maintainers = with lib.maintainers; [
-      dbreyfogle
+      me-and
     ];
     mainProgram = "copilot";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

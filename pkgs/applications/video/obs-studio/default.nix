@@ -98,13 +98,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.1.2";
+  version = "32.2.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-9i7wLHpKqbcYzPlzSMF4xEpsTINQnVDPtneLJaSM+/I=";
+    hash = "sha256-JAV3UvM89asUj6P5pD9a+6/Qfa2kFIVQqVfMOZn5MJE=";
     fetchSubmodules = true;
   };
 
@@ -253,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
+    changelog = "https://github.com/obsproject/obs-studio/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jb55
       materus

@@ -27,8 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-Q5nJ+n9h5ZhCQuJ5rNFRm+7CRrmKZ21EpLKrlOnuywE=";
   };
 
-  strictDeps = true;
-
   depsBuildBuild = [
     pkg-config
   ];
@@ -68,13 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export XDG_DATA_DIRS="${glib.makeSchemaDataDirPath "$out" "$name"}:$XDG_DATA_DIRS"
     export HOME="$TEMPDIR"
   '';
-
-  # HACK: To get rid of unreproducible __pycache__ created by pythonImportsCheck.
-  # See https://github.com/NixOS/nixpkgs/issues/469081
-  deletePycachePhase = ''
-    find $out/lib -type d -name __pycache__ -prune -exec rm -vr {} \;
-  '';
-  postPhases = [ "deletePycachePhase" ];
 
   passthru = {
     updateScript = gnome.updateScript {

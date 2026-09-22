@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchurl,
@@ -11,12 +10,13 @@
   jinja2,
   numpy,
   pandas,
+  setuptools,
   tzlocal,
-  pytestCheckHook,
+  pytest9_0CheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "3.6.3";
+  version = "3.6.5";
   pyproject = true;
   pname = "rpy2-robjects";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-cxqhpJBcSyXAVk1yy/2F+SMBAvmJ56IlFYhekdTfPUA=";
+    hash = "sha256-A9CZ9DagGotR+4+L9gJCCpnHzdqMP84OOg9TLja0r+Q=";
   };
 
   patches = [
@@ -42,7 +42,9 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ipython
     jinja2
     numpy
@@ -51,11 +53,16 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest9_0CheckHook ];
 
   pytestFlags = [
     # https://github.com/rpy2/rpy2/issues/1218
     "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
+  disabledTests = [
+    # panda 3.0 type mismatch
+    "test_ri2pandas"
   ];
 
   meta = {

@@ -13,6 +13,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
@@ -24,9 +25,11 @@
   gunicorn,
   httpx,
   importlib-metadata,
+  inquirerpy,
   jinja2,
   jsonschema,
   langfuse,
+  maturin,
   mcp,
   openai,
   opentelemetry-api,
@@ -37,22 +40,22 @@
   prisma,
   prometheus-client,
   pydantic,
+  pydantic-settings,
   pyjwt,
   pynacl,
   pypdf,
   python-dotenv,
   python-multipart,
   pyyaml,
-  requests,
   resend,
   restrictedpython,
   rich,
   rq,
+  rustPlatform,
   sentry-sdk,
   soundfile,
   tiktoken,
   tokenizers,
-  uv-build,
   uvicorn,
   uvloop,
   websockets,
@@ -62,25 +65,41 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.83.14";
+  version = "1.100.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-SZow0qof9DRlohWjT3J/NHtmhe96OLLcdHt55RQ7Zmw=";
+    tag = "v${version}";
+    hash = "sha256-tJZyZKaicIs+frpOEk3x5x6I4ZC3MTZ3HaCcPoFt/dA=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  cargoRoot = "litellm-rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-BSYMyX6ZzfDEPB1UxQ2kapgjzvDyK0NZlTl1g3NsH0Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build==0.10.7" "uv_build"
+      --replace-fail "maturin==1.9.4" "maturin==${maturin.version}"
   '';
-
-  build-system = [ uv-build ];
 
   dependencies = [
     aiohttp
+    boto3
     click
     fastuuid
     httpx
@@ -89,8 +108,8 @@ buildPythonPackage rec {
     jsonschema
     openai
     pydantic
+    pydantic-settings
     python-dotenv
-    requests
     tiktoken
     tokenizers
   ];
@@ -101,11 +120,12 @@ buildPythonPackage rec {
       azure-identity
       azure-storage-blob
       backoff
-      boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
+      inquirerpy
       # FIXME package litellm-enterprise
       # FIXME package litellm-proxy-extras
       mcp
@@ -160,10 +180,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "boto3"
     "click"
     "importlib-metadata"
     "jsonschema"
     "openai"
+    "pydantic"
     "python-dotenv"
   ];
 
@@ -175,7 +197,7 @@ buildPythonPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
   };

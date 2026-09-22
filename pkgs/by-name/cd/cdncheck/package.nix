@@ -2,26 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cdncheck";
-  version = "1.2.36";
+  version = "1.3.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cdncheck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hDcGf7orlVsIOd0iROikrlXcBVsU5n9IHzfkWejXUGg=";
+    hash = "sha256-lM+sw5AhM5gkrvcLqOZXwcKEtS3UBQYMmM5pPSS4xxQ=";
   };
 
-  vendorHash = "sha256-aolS1mhIM8/fOeHeLQgiS8z/zO++U+36Th7wNpKlkFU=";
+  vendorHash = "sha256-TYCYAKhytk249YJkRrgFrH8RWl0yrxr5z0dNONKBufU=";
 
   subPackages = [ "cmd/cdncheck/" ];
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   preCheck = ''
@@ -30,6 +33,13 @@ buildGoModule (finalAttrs: {
       --replace-fail "TestCheckDomainWithFallback" "SkipTestCheckDomainWithFallback" \
       --replace-fail "TestCheckDNSResponse" "SkipTestCheckDNSResponse"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to detect various technology for a given IP address";

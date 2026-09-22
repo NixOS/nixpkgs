@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  fixDarwinDylibNames,
   removeReferencesTo,
   cppSupport ? true,
   fortranSupport ? false,
@@ -22,10 +23,6 @@
   threadsafe ? false,
   python3,
 }:
-
-# cpp and mpi options are mutually exclusive
-# "-DALLOW_UNSUPPORTED=ON" could be used to force the build.
-assert !cppSupport || !mpiSupport;
 
 let
   inherit (lib) optional optionals;
@@ -79,6 +76,7 @@ stdenv.mkDerivation rec {
     removeReferencesTo
     cmake
   ]
+  ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
   ++ optional fortranSupport fortran;
 
   buildInputs =

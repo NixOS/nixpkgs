@@ -8,7 +8,7 @@
   SDL2,
   wget,
   which,
-  ffmpeg,
+  ffmpeg-headless,
   autoAddDriverRunpath,
   makeWrapper,
   nix-update-script,
@@ -31,7 +31,7 @@
 
   withSDL ? true,
 
-  withFFmpegSupport ? false,
+  withFFmpegSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
@@ -58,7 +58,7 @@ let
     ;
 
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -81,13 +81,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.4";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YCuWKDKlrhbx+t3t2kDpAwuKt4rkipDsOXO6uqIU/W0=";
+    hash = "sha256-tW3UkERd/4PLpjSObBkZVqJPzue70oGeLDNiQDTDwSU=";
   };
 
   # The upstream download script tries to download the models to the
@@ -95,15 +95,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # inside the nix store. This patch changes the script to download
   # the models to the current directory of where it is being run from.
   patches = [ ./download-models.patch ];
-
-  postPatch = ''
-    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
-      if ! grep -q -F 'install('; then
-        echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
-        ${lib.optionalString stdenv.hostPlatform.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
-      fi
-    done
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -119,7 +110,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
-    ++ optional withFFmpegSupport ffmpeg
+    ++ optional withFFmpegSupport ffmpeg-headless
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
@@ -127,7 +118,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
     (cmakeBool "GGML_CUDA" cudaSupport)
-    (cmakeBool "GGML_HIPBLAS" rocmSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeBool "WHISPER_SDL2" withSDL)
     (cmakeBool "GGML_LTO" true)
@@ -135,7 +126,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" (!isStatic))
   ]
   ++ optionals isLinux [
-    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
+    (cmakeBool "WHISPER_COMMON_FFMPEG" withFFmpegSupport)
   ]
   ++ optionals (isx86 && !isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
@@ -172,7 +163,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withFFmpegSupport ''
     wrapProgram "$out/bin/whisper-server" \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
@@ -185,6 +176,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
     "$out/bin/whisper-cli" --help >/dev/null
+    "$out/bin/parakeet-cli" --help >/dev/null
     runHook postInstallCheck
   '';
 

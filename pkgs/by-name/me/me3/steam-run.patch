@@ -1,6 +1,24 @@
---- a/crates/cli/src/commands/launch/strategy/compat_tool.rs
-+++ b/crates/cli/src/commands/launch/strategy/compat_tool.rs
-@@ -260,10 +260,10 @@
+--- a/crates/cli/src/commands/launch/strategy/compat_tool.rs    2026-09-03 14:05:16.759188723 -0400
++++ b/crates/cli/src/commands/launch/strategy/compat_tool.rs    2026-09-03 14:06:00.351497967 -0400
+@@ -206,17 +206,6 @@
+         command.env("STEAM_COMPAT_DATA_PATH", prefix_path);
+         command.env("STEAM_COMPAT_APP_ID", app_id.to_string());
+ 
+-        let mut ld_preload = steam
+-            .path()
+-            .join("ubuntu12_64/gameoverlayrenderer.so")
+-            .into_os_string();
+-
+-        if let Some(existing_ld_preload) = std::env::var_os("LD_PRELOAD") {
+-            ld_preload.push(" ");
+-            ld_preload.push(&existing_ld_preload);
+-        }
+-
+-        command.env("LD_PRELOAD", ld_preload);
+         Ok(())
+     }
+ }
+@@ -279,10 +268,23 @@
              tool = parent_tool;
          }
  
@@ -8,10 +26,24 @@
 -            args.pop_front()
 -                .ok_or_eyre("Compat Tool produced invalid command")?,
 -        );
-+        let program = args.pop_front()
++        let mut ld_preload = OsString::from("LD_PRELOAD=");
++        ld_preload.push(steam.path().join("ubuntu12_64/gameoverlayrenderer.so"));
++
++        if let Some(existing_ld_preload) = std::env::var_os("LD_PRELOAD") {
++            ld_preload.push(" ");
++            ld_preload.push(&existing_ld_preload);
++        }
++
++        let program = args
++            .pop_front()
 +            .ok_or_eyre("Compat Tool produced invalid command")?;
++
 +        let mut command = Command::new("@steamRun@");
++        command.env_remove("LD_PRELOAD");
++        command.arg("env");
++        command.arg(ld_preload);
 +        command.arg(program);
          command.args(args);
          command.arg(exe);
          command.arg("--");
+

@@ -4,7 +4,6 @@ let
       lib,
       stdenv,
       fetchFromGitHub,
-      fetchpatch2,
       autoreconfHook269,
       util-linux,
       nukeReferences,
@@ -25,7 +24,7 @@ let
       gawk,
       gnugrep,
       gnused,
-      systemd,
+      systemdMinimal,
       smartmontools,
       enableMail ? false,
       sysstat,
@@ -100,12 +99,7 @@ let
         inherit rev hash;
       };
 
-      patches =
-        extraPatches
-        ++ lib.optional (kernel != null && lib.versionOlder kernel.version "5.14") (fetchpatch2 {
-          url = "https://github.com/openzfs/zfs/commit/58c8dc5f6926eb96903a3f38b141e8998ef9261b.patch?full_index=1";
-          hash = "sha256-eYkMhHsHBA9MKXnB/GuHpuv44g1SCGV5Or0InPBeNkU=";
-        });
+      patches = extraPatches;
 
       postPatch =
         optionalString buildKernel ''
@@ -142,7 +136,7 @@ let
                  gawk
                  gnused
                  gnugrep
-                 systemd
+                 systemdMinimal
                ]
              }"
 
@@ -211,7 +205,7 @@ let
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
         "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
-        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generators"
         "--with-mounthelperdir=$(out)/bin"
         "--libexecdir=$(out)/libexec"
         "--sysconfdir=/etc"

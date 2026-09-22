@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flake-edit";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4wy+J+xIOSmavPgxYO+Wji9gyRomOwk0ibwQOQqJBSM=";
+    hash = "sha256-xEQ+zBU31KBmv2j19KB7pX2P4a1MLPT8BDbDGXBSySk=";
   };
 
-  cargoHash = "sha256-5CBSvE1darONbZMg4PsEqyhaVBUS84xcG+BafJzeaS0=";
+  cargoHash = "sha256-QAVu/fiuV818zTrSqy2k+2GMz18oYcrf6xLY/7bii2c=";
 
   nativeBuildInputs = [
     installShellFiles

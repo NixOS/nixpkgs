@@ -44,7 +44,7 @@ let
 
     printf "%s " "''${extraDependencies[@]}" > "$out/extra-dependencies"
 
-    ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+    ${optionalString (!config.boot.isContainer) ''
       ${config.boot.bootspec.writer}
       ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
     ''}
@@ -139,8 +139,8 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.hostPlatform.linux-kernel.target;
-      defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
+      default = config.boot.kernelPackages.kernel.target;
+      defaultText = literalExpression "config.boot.kernelPackages.kernel.target";
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
@@ -354,12 +354,6 @@ in
       # but some other script might still depend on them, although unlikely.
       installBootLoader = config.system.build.installBootLoader;
       distroId = config.system.nixos.distroId;
-      perl = pkgs.perl.withPackages (
-        p: with p; [
-          ConfigIniFiles
-          FileSlurp
-        ]
-      );
       # End if legacy environment variables
 
       preSwitchCheck = lib.mkIf (

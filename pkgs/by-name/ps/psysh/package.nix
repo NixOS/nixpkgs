@@ -6,13 +6,13 @@
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "psysh";
-  version = "0.12.22";
+  version = "0.12.24";
 
   src = fetchFromGitHub {
     owner = "bobthecow";
     repo = "psysh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcK7s/CmXTvQMNXY4bAtwWudY1aOJdt0XkOKUVhIVHQ=";
+    hash = "sha256-UajpFQD0M6bpOXPgHl15/QvqcSrwVD6i9i8zc5qNk0k=";
     forceFetchGit = true;
     postFetch = ''
       cp $out/build/composer.json $out/
@@ -20,7 +20,7 @@ php.buildComposerProject2 (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-qx3FihqRXFHFOTK2dTjRfF/IP4ItHZBI6J/JqlSMp+A=";
+  vendorHash = "sha256-2lALLfk3TNkF2QIlswIYcGp1sEYWdqQpSeuvyTBKsfE=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

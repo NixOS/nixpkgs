@@ -17,7 +17,6 @@
   fribidi,
   dbus,
   libpng,
-  pcre,
   openssl,
   icu,
   lua5_4,
@@ -39,7 +38,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.23" else "1.18.7";
+  version = if enableDevel then "1.19.24" else "1.18.8";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -47,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-iqL7sXcvAeyewB0nSFvXETgODaHtB2IaP26Yx1x1i6I="
+        "sha256-q6gdzHDPkG/RqpJxIHqWsxD0n8dzKajDhAT49bjmq78="
       else
-        "sha256-fODkyn4tyWL3PUVjXS4d7OW7VnQSL+fPaytvS8iigXg=";
+        "sha256-Tgp3y120j5nqoBrDo7D9C0FcVO3TH5lf+/SoCjR+ikc=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     dbus
     libpng
-    pcre
     openssl
     icu
     lua
@@ -157,7 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.wesnoth.org/";
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      iedame
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wesnoth${suffix}";
   };

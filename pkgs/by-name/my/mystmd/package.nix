@@ -7,11 +7,12 @@
   stdenv,
   testers,
   nix-update-script,
+  makeWrapper,
   writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mystmd";
-  version = "1.9.0";
+  version = "1.9.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jupyter-book";
     repo = "mystmd";
     tag = "mystmd@${finalAttrs.version}";
-    hash = "sha256-gAUfL2sTdTmslPuOnkeTwv/GmarM5nWpxjg3KPL+1fs=";
+    hash = "sha256-SopL2yIFWWCMm7afjkMrG4Z7Ohxxb5gfCrKNRX5tyo8=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       bun
       nodejs
       writableTmpDirAsHomeHook
+      makeWrapper
     ];
 
     dontConfigure = true;
@@ -57,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       {
         x86_64-linux = "sha256-4EQkvsoji9M4VCrdwyHm+ncd4XFjgAf34Kt+YeM3qjs=";
         aarch64-linux = "sha256-xm4T1BL3AyRsYOERz4LhG4ZJQkSMzspoA+l60OND3E0=";
-        x86_64-darwin = "sha256-L+zY9O5ridMvZEhGH0R56P3XiDlYF3UrFZwmOYlqxYY=";
         aarch64-darwin = "sha256-ZUx+jF7IcEbUCnUUeW0uOFgEpO9UIJpP3/VpUJ5ulAM=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bun
     nodejs
+    makeWrapper
   ];
 
   buildInputs = [
@@ -92,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules $out/lib/
     cp -r packages $out/lib/
     install -D packages/mystmd/dist/myst.cjs $out/bin/myst
-
+    wrapProgram $out/bin/myst --prefix PATH : ${lib.makeBinPath [ nodejs ]}
     runHook postInstall
   '';
 

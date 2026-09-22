@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocketsphinx";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "cmusphinx";
     repo = "pocketsphinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DUK3zPPtv+sQhC1dfJXDmwtt3UV6DGacb3mMQUpvVpk=";
+    hash = "sha256-bB/k1KRrdP52MN5iZr2Q2MGWh0JOCsqJxccUyVu2Va0=";
   };
 
   nativeBuildInputs = [

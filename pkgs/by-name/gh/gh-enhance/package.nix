@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gh-enhance";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-enhance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sfTAhrZZPUOAyltlblDIgd/pKMSdugXQqCZ0fBqMcQM=";
+    hash = "sha256-jNOrBmB7hf/Poa8PqlU48DFk2FOzRJseLllmrflQR2M=";
   };
 
   vendorHash = "sha256-us25CXQC3cd3BTa+wOYArbBiMtwkgpfeCQoD3S7+3rU=";

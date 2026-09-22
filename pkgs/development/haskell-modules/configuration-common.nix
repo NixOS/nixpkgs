@@ -423,18 +423,6 @@ with haskellLib;
     sha256 = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
   }) super.lifted-base;
 
-  leveldb-haskell = overrideCabal (drv: {
-    version = "2024-05-05-unstable";
-    # Fix tests on mtl ≥ 2.3
-    # https://github.com/kim/leveldb-haskell/pull/42
-    src = pkgs.fetchFromGitHub {
-      owner = "kim";
-      repo = "leveldb-haskell";
-      rev = "3a505f3a7de0f5d14463538d7c2c9a9881a60eb9";
-      sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
-    };
-  }) super.leveldb-haskell;
-
   # 2025-08-08: Allow QuickCheck >= 2.15 in selective's test-suite
   # https://github.com/snowleopard/selective/pull/81
   selective = doJailbreak super.selective;
@@ -720,8 +708,12 @@ with haskellLib;
   }) super.shell-conduit;
 
   # No maintenance planned until eventual removal
+  # Throw added 2026-08-19
   # https://github.com/NixOS/nixfmt/issues/340#issuecomment-3315920564
-  nixfmt = doJailbreak super.nixfmt;
+  nixfmt =
+    lib.throwIf pkgs.config.allowAliases
+      "haskell.packages.*.nixfmt has been removed as it is deprecated and unmaintained. Consider using top-level nixfmt instead."
+      (doJailbreak super.nixfmt);
 
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35
@@ -831,6 +823,15 @@ with haskellLib;
 
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
+
+  # https://github.com/itchyny/qhs/issues/8
+  qhs = overrideSrc {
+    version = "0.4.3";
+    src = pkgs.fetchzip {
+      url = "mirror://hackage/qhs-0.4.3/qhs-0.4.3.tar.gz";
+      sha256 = "191015m47qdxzi8w5pvadgv95g8vk7v2gr76jzfgglyjy6zhb5wb";
+    };
+  } (warnAfterVersion "0.4.2" super.qhs);
 
   # Fix build with time >= 1.10 while retaining compat with time < 1.9
   mbox = appendPatch ./patches/mbox-time-1.10.patch (
@@ -1538,6 +1539,10 @@ with haskellLib;
     revision = null;
   }) super.svgcairo;
 
+  # Support GHC >= 9.12.3 || >= 9.14.1
+  # Patch from https://github.com/gtk2hs/gtk2hs/pull/349
+  glib = appendPatches [ ./patches/glib-support-rts-at-least-9.12.3-and-9.14.patch ] super.glib;
+
   # Too strict upper bound on tasty-hedgehog (<1.5)
   # https://github.com/typeclasses/ascii-predicates/pull/1
   ascii-predicates = doJailbreak super.ascii-predicates;
@@ -2029,14 +2034,25 @@ with haskellLib;
         } super.regex-compat-tdfa
       );
 
-  darcs = appendPatches [
-    # Cabal 3.12 support in Setup.hs
-    # https://hub.darcs.net/darcs/darcs-reviewed/patch/50d9b0b402a896c83aa7929a50a0e0449838600f
-    ./patches/darcs-cabal-3.12.patch
-    # GHC 9.10 patch plus lifted constraints for hashable
-    # https://hub.darcs.net/darcs/darcs-reviewed/patch/32646b190e019de21a103e950c4eccdd66f7eadc
-    ./patches/darcs-stackage-lts-23.patch
-  ] super.darcs;
+  darcs = lib.pipe (super.darcs.override { fgl = null; }) [
+    (overrideCabal (drv: {
+      # fgl isn’t used; removing it avoids cross-compilation failures.
+      #
+      # See: https://hub.darcs.net/darcs/darcs-reviewed/patch/3a8e57ef9fed776f62a3538f8842b6593546e368
+      postPatch = (drv.postPatch or "") + ''
+        substituteInPlace darcs.cabal \
+          --replace-fail "fgl               >= 5.5.2.3 && < 5.9," ""
+      '';
+    }))
+    (appendPatches [
+      # Cabal 3.12 support in Setup.hs
+      # https://hub.darcs.net/darcs/darcs-reviewed/patch/50d9b0b402a896c83aa7929a50a0e0449838600f
+      ./patches/darcs-cabal-3.12.patch
+      # GHC 9.10 patch plus lifted constraints for hashable
+      # https://hub.darcs.net/darcs/darcs-reviewed/patch/32646b190e019de21a103e950c4eccdd66f7eadc
+      ./patches/darcs-stackage-lts-23.patch
+    ])
+  ];
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
@@ -2051,12 +2067,8 @@ with haskellLib;
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
-  cabal-fmt = doJailbreak (
-    super.cabal-fmt.override {
-      # Needs newer Cabal-syntax version.
-      Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-    }
-  );
+  # https://github.com/phadej/cabal-fmt/issues/98
+  cabal-fmt = doJailbreak super.cabal-fmt;
 
   # Pick bound changes from development branch, same commit also adds support for Cabal >= 3.14
   glirc = lib.pipe super.glirc [
@@ -2317,7 +2329,7 @@ with haskellLib;
 
   # Latest release depends on crypton-connection ==0.3.2 https://github.com/ndmitchell/hoogle/issues/435
   hoogle = overrideSrc {
-    version = "unstable-2024-07-29";
+    version = "5.0.18.4-unstable-2024-07-28";
     src = pkgs.fetchFromGitHub {
       owner = "ndmitchell";
       repo = "hoogle";
@@ -2525,12 +2537,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.11";
+          version = "14.16";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-ml6yWKNA+5j0vX4gZPz08q6JdLaIh5mLW4N7uuzkl0M=";
+            hash = "sha256-lIUXBBFrnMN5IIW2cAzaE4WlXPmdiQmpBcYklxS3rI4=";
           };
         })
       ];
@@ -3396,13 +3408,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.11.1";
+    version = "1.12.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-TuvKVBX60mqyMT6OB5JqVEh1YIWtFMR/igLCaCdC9tw=";
+      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
     };
   in
   {
@@ -3421,6 +3433,7 @@ with haskellLib;
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
+          hnix-store-nar = self.hnix-store-nar;
         }
       )
     ];

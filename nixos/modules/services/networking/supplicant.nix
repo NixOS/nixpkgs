@@ -226,7 +226,7 @@ in
         The value of this option is an attribute set. Each attribute configures a
         {command}`wpa_supplicant` service, where the attribute name specifies
         the name of the interface that {command}`wpa_supplicant` operates on.
-        The attribute name can be a space separated list of interfaces.
+        The attribute name can be a space-separated list of interfaces.
         The attribute names `WLAN`, `LAN` and `DBUS`
         have a special meaning. `WLAN` and `LAN` are
         configurations for universal {command}`wpa_supplicant` service that is

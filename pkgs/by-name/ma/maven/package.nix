@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "3.9.12";
+  version = "3.9.16";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-+iyZSHKSlsI6/Rj9AakPYs3aCaRhkbVKi8N2TC7ugS4=";
+    hash = "sha256-gP/KIq7Z6LlxOiMvM5T9gdfyAyLfde/bKwR9vT46I7s=";
   };
 
   sourceRoot = ".";
@@ -47,17 +47,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         // {
           overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
         };
+
+      # Exposed so other Maven versions (e.g. maven_4) can reuse the builder
+      # without duplicating build-maven-package.nix.
+      mkBuildMavenPackage =
+        maven:
+        makeOverridableMavenPackage (
+          callPackage ./build-maven-package.nix {
+            inherit maven;
+          }
+        );
     in
     {
       buildMaven = callPackage ./build-maven.nix {
         maven = finalAttrs.finalPackage;
       };
 
-      buildMavenPackage = makeOverridableMavenPackage (
-        callPackage ./build-maven-package.nix {
-          maven = finalAttrs.finalPackage;
-        }
-      );
+      inherit mkBuildMavenPackage;
+
+      buildMavenPackage = mkBuildMavenPackage finalAttrs.finalPackage;
+
       tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;

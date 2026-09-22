@@ -249,6 +249,13 @@ in
     }
   );
 
+  # `libiconv` should be an alias for `darwin.libiconv`. Checked here and not in
+  # the Darwin stdenv because comparing derivations forces `outPath`, which is
+  # guarded behind validity, which reads `config` — a cycle during bootstrap.
+  darwin-libiconv-alias =
+    assert stdenv.hostPlatform.isDarwin -> pkgs.libiconv == pkgs.darwin.libiconv;
+    pkgs.emptyFile;
+
   outputs-no-out =
     runCommand "outputs-no-out-assert"
       {

@@ -17,12 +17,13 @@
   gitstatus,
   llhttp,
   withGssapi ? false,
+  withExperimentalSha256 ? false,
   krb5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.3";
+  version = "1.9.7";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nJrRdPs86oGNL4W2CJb16oSUgfzYr9A2i5sw9BAehME=";
+    hash = "sha256-kBQqTxMIWMCZJA1SuxVb29Y7k+V1Y2qVR2EntoY4FUo=";
   };
 
   cmakeFlags = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_HTTP_PARSER=llhttp"
     "-DUSE_SSH=ON"
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
+    (lib.cmakeBool "EXPERIMENTAL_SHA256" withExperimentalSha256)
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
@@ -89,6 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  postInstall = lib.optionalString withExperimentalSha256 ''
+    # Downstream Rust bindings (git2-rs / git2-sys) expect experimental headers
+    # to be located at 'git2/experimental.h', but upstream libgit2 installs them
+    # into 'git2-experimental/' when EXPERIMENTAL_SHA256 is enabled.
+    ln -s git2-experimental $dev/include/git2
+  '';
+
   passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
@@ -100,8 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; WITH gpl2Only gccException20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 })

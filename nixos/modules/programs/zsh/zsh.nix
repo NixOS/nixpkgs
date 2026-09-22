@@ -21,6 +21,12 @@ let
     )
   );
 
+  compInitArgs =
+    if cfg.disableCompInitDumpFile then
+      " -D"
+    else
+      lib.optionalString (cfg.compInitDumpFile != null) " -d \"${cfg.compInitDumpFile}\"";
+
   zshStartupNotes = ''
     # Note that generated /etc/zprofile and /etc/zshrc files do a lot of
     # non-standard setup to make zsh usable with no configuration by default.
@@ -57,6 +63,8 @@ in
         '';
         type = lib.types.bool;
       };
+
+      package = lib.mkPackageOption pkgs "zsh" { };
 
       shellAliases = lib.mkOption {
         default = { };
@@ -167,6 +175,26 @@ in
         type = lib.types.bool;
       };
 
+      compInitDumpFile = lib.mkOption {
+        default = null;
+        example = "$XDG_CACHE_HOME/zsh/zcompdump";
+        description = ''
+          Path passed to {command}`compinit` with the
+          `-d` option to set the completion dump file location.
+          If unset, `compinit` uses its default dump file.
+        '';
+        type = lib.types.nullOr lib.types.str;
+      };
+
+      disableCompInitDumpFile = lib.mkOption {
+        default = false;
+        description = ''
+          Disable reading and writing the completion dump file
+          by passing the `-D` option to {command}`compinit`.
+        '';
+        type = lib.types.bool;
+      };
+
       enableLsColors = lib.mkOption {
         default = true;
         description = ''
@@ -195,7 +223,7 @@ in
           . ${config.system.build.setEnvironment}
       fi
 
-      HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+      HELPDIR="${cfg.package}/share/zsh/$ZSH_VERSION/help"
 
       # Tell zsh how to find installed completions.
       for p in ''${(z)NIX_PROFILES}; do
@@ -249,8 +277,8 @@ in
         setopt ${builtins.concatStringsSep " " cfg.setOptions}
       ''}
 
-      # Alternative method of determining short and full hostname.
-      HOST=${config.networking.fqdnOrHostName}
+      # Determine current fqdn hostname
+      HOST=$(${lib.getExe pkgs.unixtools.hostname} --fqdn)
 
       # Setup command line history.
       # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
@@ -263,7 +291,7 @@ in
 
       ${lib.optionalString cfg.enableGlobalCompInit ''
         # Enable autocompletion.
-        autoload -U compinit && compinit
+        autoload -U compinit && compinit${compInitArgs}
       ''}
 
       ${lib.optionalString cfg.enableBashCompletion ''
@@ -307,7 +335,7 @@ in
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
     environment.systemPackages = [
-      pkgs.zsh
+      cfg.package
     ]
     ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
@@ -317,7 +345,7 @@ in
 
     environment.shells = [
       "/run/current-system/sw/bin/zsh"
-      "${pkgs.zsh}/bin/zsh"
+      "${cfg.package}/bin/zsh"
     ];
 
   };

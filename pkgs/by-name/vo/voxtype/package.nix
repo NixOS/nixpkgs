@@ -52,16 +52,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "0.7.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CpG/5ws9VX8ZQjwtJMxyUF0L90u+j0veHHLHGqTvoIw=";
+    hash = "sha256-OT0tVSi9x3U7NwgZU00mojXk3RRWxuFoezpdSknLmmU=";
   };
 
-  cargoHash = "sha256-gHnYssFZixWt7F8oa1yYyfqThCrRsv0U7ezgZUcq1nk=";
+  cargoHash = "sha256-kJFI9sSMzaaYHuc7ze5Lkwt3ZVskM9rB9bvTon0XguU=";
 
   buildFeatures =
     [ ]

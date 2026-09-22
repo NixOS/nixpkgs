@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -16,13 +17,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
-  version = "0.4.2";
+  version = "0.5.10";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-ozUFnUFyxQ8M0W2e2Pr+uXrinI4LJoeSEQi3ZMPwPc4=";
+    hash = "sha256-XN6lGp135VdRFlYhgZzOjLo3+QyzEP4Q8O6QMSR2wyw=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     pnpmConfigHook
     makeWrapper
+    installAgentSkills
   ];
+
+  # the monorepo vendors the same skills for many agents and packages
+  dontInstallAgentSkills = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-f3PXpCdmKh2LPD5VyFsRdLR7CEvh+GozkQFSeeNuj2c=";
+    hash = "sha256-3CaLAMU4WdmGt2YF1XQ7fc1dQh6ENP792Q9idKNYDYs=";
   };
 
   buildPhase = ''
@@ -60,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     makeWrapper ${nodejs}/bin/node $out/bin/ctx7 \
       --add-flags "$out/lib/ctx7/dist/index.js"
+
+    cp -R $src/{plugins,rules} $out
+    installSkill skills/context7-cli
+    installSkill skills/find-docs
 
     runHook postInstall
   '';

@@ -74,7 +74,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

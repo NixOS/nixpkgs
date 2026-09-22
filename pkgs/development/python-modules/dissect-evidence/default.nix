@@ -6,20 +6,22 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  pycryptodome,
   pytestCheckHook,
   pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dissect-evidence";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.evidence";
     tag = finalAttrs.version;
-    hash = "sha256-kSM2fXaK3H6os/RexwOGg2d8UptoAlHnYK7FlMTg2bI=";
+    fetchLFS = true;
+    hash = "sha256-oix0CSsVqBM5udzePa/leabw5sOB8VfLFTB9e46sTD0=";
   };
 
   build-system = [
@@ -32,7 +34,14 @@ buildPythonPackage (finalAttrs: {
     dissect-util
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    full = [ pycryptodome ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/fox-it/dissect.evidence/issues/46

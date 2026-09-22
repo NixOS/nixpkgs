@@ -32,13 +32,13 @@
 
 (resholve.mkDerivation (finalAttrs: {
   pname = "pihole";
-  version = "6.4";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "pi-hole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aBQO+wAqeuXc9ekByVFlOZQ9SBCGsozGdoS8r1qhGuk=";
+    hash = "sha256-A34LLXI+hmDNXN4MoLLlC9tW3xx+v/1La/qzFSDW0xQ=";
   };
 
   patches = [
@@ -231,6 +231,11 @@
       ];
     };
 
+  passthru = {
+    inherit stateDir;
+    tests = nixosTests.pihole-ftl;
+  };
+
   meta = {
     description = "Black hole for Internet advertisements";
     homepage = "https://pi-hole.net";
@@ -240,12 +245,11 @@
     platforms = lib.platforms.linux;
     mainProgram = "pihole";
   };
-
-  passthru.tests = nixosTests.pihole-ftl;
-
-  passthru = { inherit stateDir; };
 })).overrideAttrs
   (old: {
+    # fixes nix-update trying to update resholve instead of this package
+    inherit (old) version src;
+
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
     preFixup = ''
       scriptsDir=$out/share/pihole

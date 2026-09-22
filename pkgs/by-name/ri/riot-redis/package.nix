@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ wesnel ];
+    teams = [ lib.teams.redis ];
   };
 })

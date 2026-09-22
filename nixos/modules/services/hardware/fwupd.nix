@@ -31,11 +31,14 @@ let
   originalEtc =
     let
       mkEtcFile = n: lib.nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+      etcFiles = lib.filter (
+        f: config.boot.loader.grub.enable || f != "grub.d/35_fwupd"
+      ) cfg.package.filesInstalledToEtc;
     in
-    lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+    lib.listToAttrs (map mkEtcFile etcFiles);
   extraTrustedKeys =
     let
-      mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
+      mkName = p: "pki/fwupd/${baseNameOf p}";
       mkEtcFile = p: lib.nameValuePair (mkName p) { source = p; };
     in
     lib.listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
@@ -184,7 +187,7 @@ in
   config = lib.mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
     services.fwupd.daemonSettings = {
-      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+      EspLocation = lib.mkDefault config.boot.loader.efi.efiSysMountPoint;
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -202,8 +205,14 @@ in
     systemd = {
       packages = [ cfg.package ];
 
-      # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
-      # instead and ensure we take ownership of /var/lib/fwupd
+      # fwupd looks for its EFI app in /run/fwupd-efi so that signed variants can
+      # be placed next to it; `C+` keeps those signed files across a rebuild.
+      tmpfiles.rules = [
+        "C+ /run/fwupd-efi - - - - ${cfg.package.fwupd-efi}/libexec/fwupd/efi"
+      ];
+
+      # The upstream unit runs as User=fwupd-refresh; ensure it can take
+      # ownership of /var/lib/fwupd.
       services.fwupd-refresh.serviceConfig = {
         StateDirectory = "fwupd";
         # Better for debugging, upstream sets stderr to null for some reason..
@@ -219,7 +228,21 @@ in
     };
     users.groups.fwupd-refresh = { };
 
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      # fwupd-refresh.service has no seat, so polkit denies these actions.
+      # Upstream's TrustedUids needs a static uid which we only allocate at
+      # activation time, so grant access via a rule on the user name instead.
+      extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if ((action.id == "org.freedesktop.fwupd.get-remotes" ||
+               action.id == "org.freedesktop.fwupd.refresh-remote") &&
+              subject.user == "fwupd-refresh") {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
   };
 
   meta = {

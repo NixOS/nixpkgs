@@ -3,30 +3,23 @@
   buildLua,
   fetchFromGitHub,
   installFonts,
-  makeFontsConf,
   nix-update-script,
 }:
 buildLua (finalAttrs: {
   pname = "modernz";
-  version = "0.3.2";
+  version = "0.3.3";
 
   scriptPath = "modernz.lua";
   src = fetchFromGitHub {
     owner = "Samillion";
     repo = "ModernZ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HUbS5L0kuYYm9HZ0BEzsqFQii3PQlZtzPiVRF/rDbcY=";
+    hash = "sha256-cz6yb0jQiqmzRPo1YSsnPWLshGPzBeq39DhBv7tGJqs=";
   };
 
   nativeBuildInputs = [ installFonts ];
 
-  passthru.extraWrapperArgs = [
-    "--set"
-    "FONTCONFIG_FILE"
-    (toString (makeFontsConf {
-      fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
-    }))
-  ];
+  passthru.fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
 
   passthru.updateScript = nix-update-script { };
 

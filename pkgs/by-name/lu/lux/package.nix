@@ -40,5 +40,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/iawia002/lux/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "lux";
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })

@@ -92,6 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
+  stripDebugList = [
+    "bin"
+    "lib"
+    "share/xdp-tools"
+  ];
+
   meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";

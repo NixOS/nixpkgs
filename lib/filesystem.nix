@@ -375,6 +375,8 @@ in
         recurseIntoAttrs
         removeSuffix
         ;
+      isNixFile = hasSuffix ".nix";
+      removeNixSuffix = removeSuffix ".nix";
 
       # Generate an attrset corresponding to a given directory.
       # This function is outside `packagesFromDirectoryRecursive`'s lambda expression,
@@ -397,10 +399,10 @@ in
                 }
               );
             }
-          else if type == "regular" && hasSuffix ".nix" name then
+          else if type == "regular" && isNixFile name then
             {
               # call .nix files
-              "${removeSuffix ".nix" name}" = callPackage path { };
+              "${removeNixSuffix name}" = callPackage path { };
             }
           else if type == "regular" then
             {

@@ -7,26 +7,46 @@
   cmake,
   installShellFiles,
   versionCheckHook,
+  _experimental-update-script-combinators,
   nix-update-script,
+  python3,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  variant ? "main",
 }:
+let
+  sources = {
+    lts-36 = {
+      version = "36.0.15";
+      hash = "sha256-I+CGuTxtIOMz/VBkiQ9En5/YniskQKLHeGrmnTYa9m0=";
+      cargoHash = "sha256-68EM8hDN5dFxcBnEkqDt0sX86BYYiUZXfRaXut4WYpI=";
+    };
+    main = {
+      version = "48.0.1";
+      hash = "sha256-nvDiKIyo0/BmwjPTfNGIX1kSVVJQbmjjT4qed0dr8cc=";
+      cargoHash = "sha256-NVea5PiuFTr1NrIcyEJSq0gFf2XkDZj/VKubHwO34U4=";
+    };
+  };
+  source = sources.${variant};
+  # there is no LTS version of python3Packages.wasmtime yet
+  hasPythonBinding = variant == "main";
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "44.0.1";
+  version = source.version;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nVE18URbDKIrZr7ImPf2Zx5Ftq/oT2mZU0CMuBh+EYE=";
+    hash = source.hash;
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = "sha256-K2Y6atvbvqIuc7Upk4134fZW1y329DlG2gzm8VveyWA=";
+  cargoHash = source.cargoHash;
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -39,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
     "lib"
   ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -94,21 +116,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
+    tests = lib.optionalAttrs hasPythonBinding {
+      python3-wasmtime = python3.pkgs.wasmtime;
     };
+    updateScript = _experimental-update-script-combinators.sequence (
+      [
+        (nix-update-script {
+          extraArgs = [
+            "--version-regex"
+            "^v(\\d+\\.\\d+\\.\\d+)$"
+          ];
+        })
+      ]
+      ++ lib.optionals hasPythonBinding [
+        (nix-update-script {
+          attrPath = "python3.pkgs.wasmtime";
+        })
+      ]
+    );
   };
 
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre

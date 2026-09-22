@@ -18,6 +18,7 @@ let
   settingsFileUnsubstituted = cfg: settingsFormat.generate "mautrix-meta-config.yaml" cfg.settings;
 
   metaName = name: "mautrix-meta-${name}";
+  packageName = network: if network == "instagram" then "mautrix-instagram" else "mautrix-meta";
 
   enabledInstances = lib.filterAttrs (
     name: config: config.enable
@@ -200,8 +201,10 @@ in
                   '';
                   description = ''
                     {file}`config.yaml` configuration as a Nix attribute set.
-                    Configuration options should match those described in
-                    [example-config.yaml](https://github.com/mautrix/meta/blob/main/example-config.yaml).
+                    Configuration options should match those described in the example configuration.
+                    Get an example configuration by executing one of those commands
+                      - `mautrix-meta -c example.yaml --generate-example-config`
+                      - `mautrix-instagram -c example.yaml --generate-example-config`
 
                     Secret tokens should be specified using {option}`environmentFile`
                     instead
@@ -471,7 +474,7 @@ in
               cp '${settingsFile cfg}' '${settingsFile cfg}.tmp'
 
               echo "Generating registration file"
-              mautrix-meta \
+              ${lib.getExe' upperCfg.package (packageName cfg.settings.network.mode)} \
                 --generate-registration \
                 --config='${settingsFile cfg}.tmp' \
                 --registration='${cfg.registrationFile}'
@@ -568,7 +571,7 @@ in
               EnvironmentFile = cfg.environmentFile;
 
               ExecStart = lib.escapeShellArgs [
-                (lib.getExe upperCfg.package)
+                (lib.getExe' upperCfg.package (packageName cfg.settings.network.mode))
                 "--config=${settingsFile cfg}"
               ];
             };

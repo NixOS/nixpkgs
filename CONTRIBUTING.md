@@ -442,6 +442,7 @@ The staging workflow is used for all stable branches with corresponding names:
 - `master`/`release-YY.MM`
 - `staging`/`staging-YY.MM`
 - `staging-next`/`staging-next-YY.MM`
+- `staging-nixos`/`staging-nixos-YY.MM`
 
 [^1]: Except changes that cause no more rebuilds than kernel updates
 
@@ -505,7 +506,7 @@ These PRs go to `staging-nixos`, see [the next section for more context](#change
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
 
-Hence, these PRs should either target a `staging`-branch or `staging-nixos`, provided one of following conditions applies:
+Hence, these PRs should either target a `staging`-branch or `staging-nixos`-branch, provided one of following conditions applies:
 
 * The label `10.rebuild-nixos-tests` is set, or
 * The PR is a change affecting the Linux kernel.
@@ -570,7 +571,10 @@ If a contributor does not want committers to push to their branch, they must unc
 
 ### Release notes
 
-If you removed packages or made some major NixOS changes, write about it in the next release notes in [`nixos/doc/manual/release-notes`](./nixos/doc/manual/release-notes).
+If you add or remove a NixOS module, or make other breaking or significant NixOS changes, write about it in the next NixOS release notes in [`nixos/doc/manual/release-notes`](./nixos/doc/manual/release-notes).
+
+If you make major or breaking changes to a package (other than removal), write about it in the next Nixpkgs release notes in [`doc/release-notes`](./doc/release-notes).
+Package removals should not get a Nixpkgs release note, [a throwing alias should be added instead](./pkgs/README.md#steps-to-remove-a-package-from-nixpkgs).
 
 ### File naming and organisation
 
@@ -583,9 +587,9 @@ CI [enforces](./.github/workflows/lint.yml) all Nix files to be formatted using 
 
 You can ensure this locally using either of these commands:
 ```
-nix-shell --run treefmt
-nix develop --command treefmt
 nix fmt
+nix develop --command treefmt
+nix-shell --run treefmt
 ```
 
 If you're starting your editor in `nix-shell` or `nix develop`, you can also set it up to automatically run `treefmt` on save.
@@ -953,7 +957,6 @@ The following situations are fully or partially exempt:
 
 If you believe that someone is using automation without appropriate disclosure and review, you can politely ask them if that’s the case and point them to this policy as appropriate.
 Please assume good faith and remain civil; it’s not always possible to determine, and it is more likely that someone overlooked this policy than deliberately violated it.
-If you think someone is continuing to break the policy after this, please escalate to the [Nixpkgs core team](https://nixos.org/community/teams/nixpkgs-core/) rather than fighting over it.
 
 If a contribution is clearly in violation of the policy (e.g. the contributor admits it was not followed, or there are AI tool attributions that do not meet our required format), it can be closed or hidden, preferably after informing the contributor of the policy and giving them a chance to address the violations.
 Deliberate violations of this policy are considered to break the [Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) clause against “Wasting other people’s time with low quality contributions, including but not limited to LLM and bot spam”.

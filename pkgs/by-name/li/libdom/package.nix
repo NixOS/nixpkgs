@@ -23,11 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fixes libdom build on gcc 14 due to calloc-transposed-args warning
     # remove on next release
-    (fetchpatch {
-      name = "fix-calloc-transposed-args.patch";
-      url = "https://source.netsurf-browser.org/libdom.git/patch/?id=2687282d56dfef19e26e9639a5c0cd81de957e22";
-      hash = "sha256-1uAdLM9foplCVu8IQlMMlXh6OWHs5eUgsKp+0ZqM9yM=";
-    })
+    ./fix-calloc-transposed-args.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];

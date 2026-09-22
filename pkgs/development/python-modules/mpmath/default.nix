@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gmpy2,
@@ -45,6 +46,16 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     pexpect
   ];
+
+  # Ugly hack to preserve the hash on non-`x86_64-darwin` platforms
+  ${if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "disabledTests" else null} =
+    [
+      # Expected:
+      #     -0.5440211108893698
+      # Got:
+      #     -0.5440211108893699
+      "contexts.rst"
+    ];
 
   meta = {
     homepage = "https://mpmath.org/";

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libaribcaption";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "xqq";
     repo = "libaribcaption";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x6l0ZrTktSsqfDLVRXpQtUOruhfc8RF3yT991UVZiKA=";
+    hash = "sha256-y2POfwIcn3Fs3h7aoEYJo6IjRZNKqwDPbV3LHwPdYT8=";
   };
 
   nativeBuildInputs = [ cmake ];

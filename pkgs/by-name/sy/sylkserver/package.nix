@@ -3,41 +3,37 @@
   fetchFromGitHub,
   python3Packages,
   versionCheckHook,
-  fetchpatch2,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sylkserver";
-  version = "6.5.0";
+  version = "6.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "sylkserver";
     tag = finalAttrs.version;
-    hash = "sha256-A15EJs35ZgXy9db3+XC0q5fTlemLJsA945nvIY50Pa4=";
+    hash = "sha256-FeoyQWM4dvO1FJ6q5uXczPCtX2Aocm+jIkAy88uvPFI=";
   };
 
-  patches = [
-    # should be removed with next release
-    (fetchpatch2 {
-      url = "https://github.com/AGProjects/sylkserver/commit/c0d943b4ff4401b2892b84d66e7cd27db7e6a927.patch";
-      hash = "sha256-U0a8mRbt8c4lUcN2xYDfvXTt/sWcvi7F3/Vw5sIQPrU=";
-    })
+  build-system = with python3Packages; [
+    setuptools
   ];
-
-  build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [
     autobahn
+    cassandra-driver
     cement
     dnspython
     klein
     lxml
+    lxml-html-clean
     msrplib
     python3-eventlib
     python3-gnutls
     python3-sipsimple
+    systemd-python
     wokkel
     xcaplib
   ];
@@ -53,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "SIP/XMPP/WebRTC Application Server";
     homepage = "https://sylkserver.com/";
     downloadPage = "https://github.com/AGProjects/sylkserver";
-    changelog = "https://github.com/AGProjects/sylkserver/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/AGProjects/sylkserver/blob/${finalAttrs.src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
     mainProgram = "sylk-server";

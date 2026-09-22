@@ -14,6 +14,7 @@
   eprover-ho,
   cvc5,
   libpoly,
+  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -107,6 +108,10 @@ let
     (cvc5.override {
       libpoly = libpoly.overrideAttrs {
         version = "0.2.0";
+        __intentionallyOverridingVersion = true;
+      };
+      symfpu = symfpu.overrideAttrs {
+        version = "0-unstable-2019-05-17";
         __intentionallyOverridingVersion = true;
       };
     }).overrideAttrs
@@ -291,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/maven2/org/scala-lang/scala3-interfaces/${scala_3.version}/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/maven2/org/scala-lang/scala3-compiler_3/${scala_3.version}/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
@@ -351,7 +356,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

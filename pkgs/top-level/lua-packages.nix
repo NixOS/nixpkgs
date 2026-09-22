@@ -113,6 +113,8 @@ rec {
 
   image-nvim = callPackage ../development/lua-modules/image-nvim { };
 
+  json = callPackage ../development/lua-modules/json { };
+
   lua-https = callPackage ../development/lua-modules/lua-https { };
 
   lua-pam = callPackage (
@@ -163,13 +165,14 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.32";
+      # The version needs to fit to nginxModules.lua
+      version = "0.1.34rc3";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
+        sha256 = "sha256-+rtbaHEqKSvaba+zZwRUnUsdu3Jndi8OVGUtFC55Fts=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
@@ -257,40 +260,4 @@ rec {
   };
 
   readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
-
-  vicious = callPackage (
-    { fetchFromGitHub }:
-    stdenv.mkDerivation rec {
-      pname = "vicious";
-      version = "2.6.0";
-
-      src = fetchFromGitHub {
-        owner = "vicious-widgets";
-        repo = "vicious";
-        rev = "v${version}";
-        sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
-      };
-
-      buildInputs = [ lua ];
-
-      installPhase = ''
-        mkdir -p $out/lib/lua/${lua.luaversion}/
-        cp -r . $out/lib/lua/${lua.luaversion}/vicious/
-        printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
-      '';
-
-      meta = {
-        description = "Modular widget library for the awesome window manager";
-        homepage = "https://vicious.readthedocs.io";
-        changelog = "https://vicious.readthedocs.io/changelog.html";
-        license = lib.licenses.gpl2Plus;
-        maintainers = with lib.maintainers; [
-          makefu
-          mic92
-          McSinyx
-        ];
-        platforms = lib.platforms.linux;
-      };
-    }
-  ) { };
 }

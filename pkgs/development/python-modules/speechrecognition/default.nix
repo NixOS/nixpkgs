@@ -2,41 +2,59 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cacert,
-  cohere,
-  faster-whisper,
+
   flac,
-  google-cloud-speech,
-  groq,
-  httpx,
-  openai-whisper,
-  openai,
-  pocketsphinx,
-  pyaudio,
-  pytest-httpserver,
-  pytestCheckHook,
-  requests,
-  respx,
+
+  # build-system
   setuptools,
-  soundfile,
+
+  # dependencies
   standard-aifc,
   typing-extensions,
+
+  # optional-dependencies
+  # assemblyai
+  requests,
+  # audio
+  pyaudio,
+  # cohere
+  cohere,
+  # faster-whisper
+  faster-whisper,
+  # google-cloud
+  google-cloud-speech,
+  # grok
+  groq,
+  httpx,
+  # openai
+  openai,
+  # pocketsphinx
+  pocketsphinx,
+  # whisper-local
+  openai-whisper,
+  soundfile,
+
+  # tests
+  pytest-httpserver,
+  pytestCheckHook,
+  respx,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
-  version = "3.16.1";
+  version = "3.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = finalAttrs.version;
-    hash = "sha256-5BTwUzo2U7/VwmEqldxXddt/ByKebZKY1KhCEoIb9F8=";
+    hash = "sha256-rzCBOQ0dIfreMRDHMSgMYspJ5KyOSxN18B3mf+n9v2w=";
   };
 
+  # Remove Bundled binaries
   postPatch = ''
-    # Remove Bundled binaries
     rm speech_recognition/flac-*
     rm -r third-party
 
@@ -75,12 +93,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     groq
+    pocketsphinx
     pytest-httpserver
     pytestCheckHook
-    pocketsphinx
     respx
   ]
-  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -93,6 +111,8 @@ buildPythonPackage (finalAttrs: {
     # vosk is not available in nixpkgs
     "tests/recognizers/test_vosk.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";

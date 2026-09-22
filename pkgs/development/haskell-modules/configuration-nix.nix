@@ -134,6 +134,18 @@ builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  qhs = lib.pipe super.qhs [
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepends [ self.hspec-discover ])
+    # tests depend on executable
+    (overrideCabal (drv: {
+      preCheck = ''
+        ${drv.preCheck or ""}
+        export PATH="$PWD/dist/build/qhs:$PATH"
+      '';
+    }))
+  ];
+
   # Test suite needs executable
   agda2lagda = overrideCabal (drv: {
     preCheck = ''
@@ -392,6 +404,13 @@ builtins.intersectAttrs super {
     postInstall = ''
       ${drv.postInstall or ""}
       ln -s "''${!outputBin}/bin/pandoc" "''${!outputBin}/bin/pandoc-server"
+    ''
+    # Assert the lua and server features are enabled by default
+    # c.f. https://github.com/NixOS/nixpkgs/issues/540900
+    # FIXME: overrideCabal does not allow configuring installCheckPhase, so use postInstall
+    + lib.optionalString canExecute ''
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+lua'
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+server'
     '';
   }) super.pandoc-cli;
 
@@ -517,7 +536,9 @@ builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
+  # Upstream has switched to Lix as its supported Nix implementation.
+  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.lix; }) [
+    (enableCabalFlag "lix")
     # nix-serve-ng isn't regularly released to Hackage
     (overrideSrc {
       src = pkgs.fetchFromGitHub {
@@ -862,17 +883,6 @@ builtins.intersectAttrs super {
     "--extra-lib-dirs=${pkgs.smpeg}/lib"
     "--extra-include-dirs=${pkgs.smpeg.dev}/include/smpeg"
   ] super.SDL-mpeg;
-
-  # https://github.com/ivanperez-keera/hcwiid/pull/4
-  hcwiid = overrideCabal (drv: {
-    configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.bluez.out}/lib"
-      "--extra-lib-dirs=${pkgs.cwiid}/lib"
-      "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez.dev}/include"
-    ];
-    prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
-  }) super.hcwiid;
 
   # cabal2nix doesn't pick up some of the dependencies.
   ginsu =
@@ -1640,10 +1650,6 @@ builtins.intersectAttrs super {
 
   # there are three very heavy test suites that need external repos, one requires network access
   hevm = dontCheck super.hevm;
-
-  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
-  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
-  hadolint = disableCabalFlag "static" super.hadolint;
 
   # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
   doctest-driver-gen = dontCheck super.doctest-driver-gen;

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ euxane ];
     mainProgram = "howl";
 
-    # LuaJIT and Howl builds fail for x86_64-darwin and aarch64-linux respectively
+    # Howl builds fail for aarch64-linux
     platforms = [
       "i686-linux"
       "x86_64-linux"

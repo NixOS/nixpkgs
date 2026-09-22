@@ -1,0 +1,19 @@
+diff --git a/borkdude/deps.clj b/borkdude/deps.clj
+index 281ead5..ab8dd7a 100755
+--- a/borkdude/deps.clj
++++ b/borkdude/deps.clj
+@@ -773,6 +773,14 @@ public class ClojureToolsDownloader {
+   Otherwise, use `DEPS_CLJ_TOOLS_DIR`"
+   []
+   (or
++   ;; The default (wrapped) babashka derivation sets `NIX_DEPS_CLJ_TOOLS_DIR` to a nix-store path.
++   ;; We use this custom variable here instead of the upstream `DEPS_CLJ_TOOLS_DIR` so that we don't
++   ;; affect subprocesses spawned by babashka which may themselves use `deps.clj`. Furthermore, we
++   ;; don't use the custom variable when `DEPS_CLJ_TOOLS_VERSION` is set because `deps.clj` would
++   ;; then try to store the desired tools version in the nix-store path which would of course fail
++   ;; because it's read-only (see https://github.com/NixOS/nixpkgs/issues/431312).
++   (when-not (*getenv-fn* "DEPS_CLJ_TOOLS_VERSION")
++     (*getenv-fn* "NIX_DEPS_CLJ_TOOLS_DIR"))
+     ;; legacy name
+    (*getenv-fn* "CLOJURE_TOOLS_DIR")
+    (*getenv-fn* "DEPS_CLJ_TOOLS_DIR")

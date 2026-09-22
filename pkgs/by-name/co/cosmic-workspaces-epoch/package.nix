@@ -14,20 +14,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.13";
+  version = "1.8.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-TdV/HeqUjaQcjAUDf5IP1GVwpc1gJEuOnu3Y0MlZoVs=";
+    hash = "sha256-ntn1mW6YKpSXNZQbkZRFhUHbZur3JtJD9A/MzI+AUMQ=";
   };
 
-  cargoHash = "sha256-Z5dC3W8QoDBZWBjHwRj9MC8EScDjQwUiUcOPTRDToDA=";
+  cargoHash = "sha256-0ZvnMT7wkMyZ9zHOBGZNh+DmLaoATHvpSplSnVgC/j4=";
 
   separateDebugInfo = true;
-
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -41,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  dontCargoInstall = true;
-
   makeFlags = [
     "prefix=${placeholder "out"}"
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
+
+  dontCargoInstall = true;
 
   passthru = {
     tests = {

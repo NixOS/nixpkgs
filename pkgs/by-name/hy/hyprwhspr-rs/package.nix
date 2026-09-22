@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprwhspr-rs";
-  version = "0.3.27";
+  version = "0.3.33";
 
   src = fetchFromGitHub {
     owner = "better-slop";
     repo = "hyprwhspr-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+A+AJUMSOXwpOI+bo/g55yfdhQazdSbmHookHXVL9Xk=";
+    hash = "sha256-syi2ApzsWNs8+85v4yeafvc48TsWDuEvQRadAIxmOus=";
   };
 
-  cargoHash = "sha256-PA7lC6aQTEK566ADOIC+EvsPDYvjZRi8tc14EQ7gihE=";
+  cargoHash = "sha256-yeWUgKZ6DtBMDY6xqWXET1zzGMpXes+tTzma4A62yDs=";
 
   nativeBuildInputs = [
     pkg-config

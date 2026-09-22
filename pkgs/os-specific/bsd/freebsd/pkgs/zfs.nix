@@ -40,7 +40,6 @@ mkDerivation {
   ];
 
   meta = {
-    platforms = lib.platforms.freebsd;
     license = with lib.licenses; [
       cddl
       bsd2

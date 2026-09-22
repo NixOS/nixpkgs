@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clingo";
-  version = "5.8.0";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "clingo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-VhfWGAcrq4aN5Tgz84v7vLOWexsA89vRaang58SXVyI=";
+    sha256 = "sha256-kf3KKdzO/B3xxf1zHkuGzCJzcoITksBZOShbYxZm//k=";
   };
 
   nativeBuildInputs = [ cmake ];

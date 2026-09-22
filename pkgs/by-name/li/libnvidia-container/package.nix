@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvidia-container";
-  version = "1.17.8";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OzjcYxnWjzgmrjERyPN3Ch3EQj4t1J5/TbATluoDESg=";
+    hash = "sha256-FlHMGMyKkqqtIAl/T5nGkfZNsurcoltKwxn2lSIOq7g=";
   };
 
   patches = [
@@ -55,9 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch {
       inherit (addDriverRunpath) driverLink;
     })
-
-    # fix bogus struct declaration
-    ./0003-nvc-fix-struct-declaration.patch
   ];
 
   postPatch = ''
@@ -117,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env = {
-    NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${lib.getInclude libtirpc}/include/tirpc"
+      "-DWITH_TIRPC"
+    ];
     CGO_ENABLED = "1"; # Needed for cross-compilation
     GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
     inherit (go) GOARCH GOOS;
@@ -145,10 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "WITH_LIBELF=yes"
     "prefix=$(out)"
-    # we can't use the WITH_TIRPC=yes flag that exists in the Makefile for the
-    # same reason we patch out the static library use of libtirpc so we set the
-    # define in CFLAGS
-    "CFLAGS=-DWITH_TIRPC"
+    # We can't use WITH_TIRPC=yes because we don't build static libtirpc.
+    # NIX_CFLAGS_COMPILE sets the required define instead.
   ];
 
   postInstall =

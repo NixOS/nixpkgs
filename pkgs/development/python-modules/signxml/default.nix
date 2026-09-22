@@ -5,7 +5,6 @@
   cryptography,
   fetchFromGitHub,
   lxml,
-  pyopenssl,
   pytestCheckHook,
   hatchling,
   hatch-vcs,
@@ -13,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "signxml";
-  version = "4.4.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BExi8MQ59Vq7+X66fTKjKaSPRAbplQkAT42De/QCpvI=";
+    hash = "sha256-SvM+wqlJd2n3gg1ROzWTuUvwSlOrMQIPDO39IyVNrRA=";
   };
 
   build-system = [
@@ -32,7 +31,6 @@ buildPythonPackage (finalAttrs: {
     certifi
     cryptography
     lxml
-    pyopenssl
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

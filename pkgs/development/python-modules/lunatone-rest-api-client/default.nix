@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "lunatone-rest-api-client";
-  version = "0.9.2";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lunatone-public";
     repo = "lunatone-rest-api-client";
     tag = "v${version}";
-    hash = "sha256-hUc2cMZ2OWheqDQjg6A7mEZw0RrljestouPr1WdOl7Q=";
+    hash = "sha256-QIyXyHQdRHgdV3r58i+1gzGUtiu7VZB1UPzIkoGdKZY=";
   };
 
   build-system = [ hatchling ];

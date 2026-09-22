@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "betterdisplay";
-  version = "4.2.3";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "https://github.com/waydabber/BetterDisplay/releases/download/v${finalAttrs.version}/BetterDisplay-v${finalAttrs.version}.dmg";
-    hash = "sha256-keJkdMDO213DUl2LAVqtx1joAmcUpU336Tj8AldCoKo=";
+    hash = "sha256-I0Ei9+TsbmsA6iFD1CwScgrU7OO9mL3fl3/uvCYS4JI=";
   };
 
   dontPatch = true;
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Unlock your displays on your Mac! Flexible HiDPI scaling, XDR/HDR extra brightness, virtual screens, DDC control, extra dimming, PIP/streaming, EDID override and lots more";
     homepage = "https://betterdisplay.pro/";
     changelog = "https://github.com/waydabber/BetterDisplay/releases/tag/v${finalAttrs.version}";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = lib.platforms.darwin;

@@ -32,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipeline";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
     tag = finalAttrs.version;
-    hash = "sha256-JdAixbzq6cpnT5bxBxm1tnFnH9hhgSzULm+0hiH6bnw=";
+    hash = "sha256-8/UMZGXCwqUw1EL7QFnpRqtSA6D9sU1ycG+AeHNeaXw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-7DNhJ1qNP0uUrPXRc3BCWHst2uX4KqMbVWRqAfK0kzE=";
+    hash = "sha256-7Hod81YwKpPJ6Uk9u0zyEO75Wb8Q8xOBpiyTypefDP4=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-vaapi
     glib-networking # For GIO_EXTRA_MODULES. Fixes "TLS support is not available"
   ];
 

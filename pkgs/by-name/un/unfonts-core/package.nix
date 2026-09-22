@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,13 +14,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-OwpydPmqt+jw8ZOMAacOFYF2bVG0lLoUVoPzesVXkY4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://kldp.net/unfonts/";

@@ -17,7 +17,7 @@
   cx-oracle,
   mariadb,
   mypy,
-  mysql-connector,
+  mysql-connector-python,
   mysqlclient,
   pg8000,
   psycopg2,
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
-    mysql_connector = [ mysql-connector ];
+    mysql_connector = [ mysql-connector-python ];
     mariadb_connector = [ mariadb ];
     oracle = [ cx-oracle ];
     postgresql = [ psycopg2 ];

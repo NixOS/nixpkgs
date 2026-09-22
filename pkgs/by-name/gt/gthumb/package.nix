@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.10";
+  version = "3.12.11";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-MiI0RlPNb7XXmBtzlRrj2QxBT3QiCoschmWyVXQoTHU=";
+    sha256 = "sha256-HDGuxNoV7Ma6AcAa8LH4JTf7JQuXDIboBm1enDEfZIE=";
   };
 
   strictDeps = true;

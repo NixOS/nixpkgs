@@ -4,20 +4,22 @@
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pop";
-  version = "0.2.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "pop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e1xkUXFC1C18nj/eTo2PmHGORKZ1cmz+s0I47SOcTiM=";
+    hash = "sha256-3rXpU7R4hV5TOIiUOxBfNXlol0plecnJakBM8fbpHmg=";
   };
 
-  vendorHash = "sha256-r2kKHwjUqls1nEOF0HwBMOZksSYp2UcjN+B0c1i8MmQ=";
+  vendorHash = "sha256-rLJyyjRsEnPF4mPqWGxsI/QZWLk0fpYGadjdMAXq9uE=";
 
   env.GOWORK = "off";
 
@@ -39,6 +41,13 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/pop completion fish) \
       --zsh <($out/bin/pop completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Send emails from your terminal";

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  poetry-core,
+  uv-build,
   requests,
 
   pproxy,
@@ -12,19 +12,19 @@
   trustme,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-hardened";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saleor";
     repo = "requests-hardened";
-    tag = "v${version}";
-    hash = "sha256-tvSS3z1fhQdcxvsj5vK//mr5xYeIrLl+6/gtnWsiETk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IYHP2p5dHH8l232VVOsC3boWJYyyMI7PCuVzAlRSAh0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
   dependencies = [ requests ];
 
   nativeCheckInputs = [
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ryand56 ];
   };
-}
+})

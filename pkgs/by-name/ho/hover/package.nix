@@ -48,7 +48,7 @@ let
     meta = {
       description = "Build tool to run Flutter applications on desktop";
       homepage = "https://github.com/go-flutter-desktop/hover";
-      license = [ lib.licenses.bsd3 ];
+      license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
       maintainers = [ lib.maintainers.ericdallo ];
     };

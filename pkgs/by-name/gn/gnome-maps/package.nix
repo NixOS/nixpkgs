@@ -12,7 +12,7 @@
   gtk4,
   gobject-introspection,
   gdk-pixbuf,
-  librest_1_0,
+  librest,
   libgweather,
   geoclue2,
   wrapGAppsHook4,
@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "50.1";
+  version = "50.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Qs3wNn+UXOPbEgOmvP0dX1822crDYcgcGFZ7kxMN6es=";
+    hash = "sha256-CJyo4Vq9cqyD2zhs7xnOveBe74t26qyBkGpLBTVUTiw=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libshumate
     libgweather
     libadwaita
-    librest_1_0
+    librest
     libsecret
     libsoup_3
   ];

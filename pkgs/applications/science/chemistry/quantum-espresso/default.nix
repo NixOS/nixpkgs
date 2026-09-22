@@ -134,7 +134,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = [ lib.maintainers.costrouc ];
   };

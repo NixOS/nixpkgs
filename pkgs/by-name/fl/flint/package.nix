@@ -25,11 +25,11 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flint";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://flintlib.org/download/flint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-OYLzhfAGEKlE4BUusKKYk7I2b6ZA6PXzB2xHVkz34qY=";
+    hash = "sha256-uV4sd5L17qShyNLULECYQ0dWgy5XoJSyletd/cm0w2s=";
   };
 
   strictDeps = true;
@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast Library for Number Theory";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.smasher164 ];
+    maintainers = [
+      lib.maintainers.smasher164
+      lib.maintainers.wegank
+    ];
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
     homepage = "https://www.flintlib.org/";

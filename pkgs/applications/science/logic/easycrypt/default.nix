@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
-  version = "2026.05";
+  version = "2026.09";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-+tVGJAfngTHpn7qFGwl36verbcxOqH21zwojgOxcuuY=";
+    hash = "sha256-7ZnGZOZyV5znDGzg0c3XSsliQyOFOwJp2iyAzJtDNwk=";
   };
 
   nativeBuildInputs =
@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = with ocamlPackages; [
     batteries
+    bitwuzla-cxx
     dune-build-info
     dune-site
     markdown

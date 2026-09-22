@@ -1,28 +1,23 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  buildGoModule,
-  go,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   viceroy,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fastly";
-  version = "15.1.0";
+  version = "16.1.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bNdTvjWs43qO3gAtaKZR5CgGmOnJmNWrJUbm6Xv+q+g=";
-    # The git commit is part of the `fastly version` original output;
-    # leave that output the same in nixpkgs. Use the `.git` directory
-    # to retrieve the commit SHA, and remove the directory afterwards,
-    # since it is not needed after that.
+    hash = "sha256-xGp5Fa4ruHpc2YAAbrva0zurt4wxC6XRdSpMMQGEB7c=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -31,46 +26,34 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  subPackages = [
-    "cmd/fastly"
-  ];
+  subPackages = [ "cmd/fastly" ];
 
-  vendorHash = "sha256-gR8FIVk+D40ALLdM+AzMkIUWLsBlWgoLp3DfEQa3a0s=";
+  vendorHash = "sha256-JUYBaiAz91jv8QFrfjpHnY442+qK7T0VZJcC/rCGhD4=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
-  # Flags as provided by the build automation of the project:
-  #   https://github.com/fastly/cli/blob/7844f9f54d56f8326962112b5534e5c40e91bf09/.goreleaser.yml#L14-L18
+  preBuild = ''
+    ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
+  '';
+
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/fastly/cli/pkg/revision.AppVersion=v${finalAttrs.version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
-    "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
-    "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
   ];
-  preBuild =
-    let
-      cliConfigToml = fetchurl {
-        url = "https://web.archive.org/web/20240910172801/https://developer.fastly.com/api/internal/cli-config";
-        hash = "sha256-r4ahroyU4hyTN88UK02FvXU8OTQ6OoNInt9WrzZk7Bk=";
-      };
-    in
-    ''
-      cp ${cliConfigToml} ./pkg/config/config.toml
-      ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
-    '';
 
+  # must embed viceroy to prevent fetching binary release on `fastly compute serve` invocation
   preFixup = ''
-    wrapProgram $out/bin/fastly --prefix PATH : ${lib.makeBinPath [ viceroy ]} \
+    wrapProgram $out/bin/fastly \
+      --prefix PATH : ${lib.makeBinPath [ viceroy ]} \
       --set FASTLY_VICEROY_USE_PATH 1
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export HOME="$(mktemp -d)"
     installShellCompletion --cmd fastly \
       --bash <($out/bin/fastly --completion-script-bash) \
       --zsh <($out/bin/fastly --completion-script-zsh)
@@ -83,6 +66,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
+      stepbrobd
     ];
     mainProgram = "fastly";
   };

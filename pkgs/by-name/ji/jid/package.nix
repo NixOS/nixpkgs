@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jid";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zf1YIEhvmvO482wh8VqQhyvHp7Nz6MXQ1SG0RCG0lRI=";
+    hash = "sha256-5Bi9nPOASxuZoxVxt6i3AQxvyWfe1B3JDSjXyuOPUHk=";
   };
 
   vendorHash = "sha256-ZqnIBmziPX45wqiEzD9mq4jLLW69mgGYhDSOTj20auQ=";

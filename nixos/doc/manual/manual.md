@@ -32,21 +32,6 @@
 
 -->
 
-```{=include=} preface
-preface.md
-```
-
-```{=include=} parts
-installation/installation.md
-configuration/configuration.md
-administration/running.md
-development/development.md
-```
-
-```{=include=} chapters
-contributing-to-this-manual.chapter.md
-```
-
 ```{=include=} appendix html:into-file=//options.html
 nixos-options.md
 ```

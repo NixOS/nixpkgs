@@ -55,7 +55,7 @@ buildGoModule {
 
   tags = [ "embedui" ];
 
-  doCheck = false; # tries to modify filesytem
+  doCheck = false; # tries to modify filesystem
 
   nativeBuildInputs = [ makeWrapper ];
 

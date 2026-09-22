@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "r8168";
   # on update please verify that the source matches the realtek version
-  version = "8.056.02";
+  version = "8.057.00";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "sha256-KKfI03RrD+34+KSxwTwDkeB4sGFNY/tU/YbfrfVkTp8=";
+    sha256 = "sha256-KymQThzYKpcgCjKX3ZQ2RAWNga2d0EaWXVQmHzw8hmA=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       If you want to use this driver, you might need to blacklist the r8169 driver
       by adding "r8169" to boot.blacklistedKernelModules.
     '';
+    homepage = "https://github.com/mtorromeo/r8168";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];

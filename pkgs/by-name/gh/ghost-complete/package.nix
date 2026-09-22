@@ -8,18 +8,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghost-complete";
-  version = "0.9.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "StanMarek";
     repo = "ghost-complete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fsGrhQK28YFksI2pNiZ6fI6KjZOXxXxrhWjxOmBNk08=";
+    hash = "sha256-AOhH98qGHISf8AZw3MSMnS5ADL6wQJ5jlo4PXsw7CAo=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-kiYdMczvnauhu/2ryO0NcK3PAI1P+xmYV8nRrIWaEB8=";
+  # Upstream hardcodes `-fuse-ld=/usr/bin/ld` for darwin targets, which the
+  # Nix clang wrapper rejects ("invalid linker name"). Drop the flag and let
+  # the wrapper pick the right linker.
+  postPatch = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail '"-C", "link-arg=-fuse-ld=/usr/bin/ld",' ""
+  '';
+
+  cargoHash = "sha256-l1Gp9FVtrGhzobM2Wdq110y1W7V6PNsQsJLBJ3sgOEs=";
 
   cargoBuildFlags = [ "--package=ghost-complete" ];
 

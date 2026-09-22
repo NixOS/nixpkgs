@@ -35,6 +35,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ZOYTGklsla89I1K2sI46AWy2xGfSfBVmnBcbCdSLKkg=";
   };
 
+  # pytest-mypy-plugins 4.0 removed --mypy-only-local-stub
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '-v --mypy-only-local-stub' '-v'
+  '';
+
   build-system = [
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook

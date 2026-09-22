@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-El/aibqEyx5diVTOe/4PEFB7KRfKqUJGPar6j6hZyIc=";
   };
 
+  postPatch = ''
+    substituteInPlace requests_random_user_agent/__init__.py \
+      --replace-fail '__version__ = "2023.10.25"' '__version__ = "${finalAttrs.version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];

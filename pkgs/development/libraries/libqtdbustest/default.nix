@@ -17,24 +17,20 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbustest";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libqtdbustest";
     rev = finalAttrs.version;
-    hash = "sha256-49YIkaQ2ceJxaPLkzOg+L3bwiPzoB36xU7skRh4vYQg=";
+    hash = "sha256-bTLGL/3iy8Wu4HnPRJj2Vn3xOlPhXFbaxgyQol8Y1JY=";
   };
 
   patches = [
-    # Tests are overly pedantic when looking for launched process names in `ps`, break on python wrapper vs real python
-    # Just check if basename + arguments match, like libqtdbusmock does
-    ./less-pedantic-process-finding.patch
-
     # Disable QProcess start timeout
     (fetchpatch {
       url = "https://salsa.debian.org/ubports-team/libqtdbustest/-/raw/debian/0.3.2-3/debian/patches/1003_no-QProcess-waitForstarted-timeout.patch";

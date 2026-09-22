@@ -8,18 +8,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "asdf-vm";
-  version = "0.18.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
 
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nc9fsahzOKlGtg1oA/0hnBUEkQ0BPeDWyPpl3KoDjqA=";
+    hash = "sha256-UbD8z5jIZTLfQLEruprLqJx4eoTJi4fFCMWUvIPDjOs=";
 
   };
 
-  vendorHash = "sha256-ru0/VvtoUMw9beycgh+TOO/FN2kqszynT4I4iDuS1Lo=";
+  vendorHash = "sha256-ompvvNzfJetcKCRueJxXALiN0rOQwSiytTHJcVXFEOo=";
 
   nativeBuildInputs = [
     makeWrapper

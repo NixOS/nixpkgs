@@ -59,13 +59,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gephgui-wry";
-  version = "5.7.1";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "gephgui-pkg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpkhIfA1jTqiY+4UwonrUk2wq+wL2Rhltfhp0LSURMg=";
+    hash = "sha256-uY2m4TXy4+efRC6WzGjB5Vushgj8zkCp0ctnCJAR+FE=";
     fetchSubmodules = true;
   };
 

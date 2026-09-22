@@ -5,21 +5,33 @@
   autoreconfHook,
   go-md2man,
   pkg-config,
+  json_c,
   libcap,
   libkrun,
   libkrun-sev,
   libseccomp,
   python3,
   systemdMinimal,
-  yajl,
   nixosTests,
   criu,
   versionCheckHook,
+  wamr,
+  wasmedge,
+  wasmer,
+  wasmtime,
   withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
   withLibkrunSEV ? false,
+  withWamr ? false,
+  withWasmedge ? false,
+  withWasmer ? false,
+  withWasmtime ? false,
 }:
 
 let
+  wamrShared = wamr.overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS=ON" ];
+  });
+
   # these tests require additional permissions
   disabledTests = [
     "test_capabilities.py"
@@ -45,13 +57,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.27.1";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-cuzw0YbbV4LU5nOP2DZghLAIYhkSY3Qf1bdm+JskHZA=";
+    hash = "sha256-KmwkiExekHozW84dmkcC8OW8AP11Fsqj2t/n+ZGXpB4=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -70,27 +82,54 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     criu
+    json_c
     libcap
     libseccomp
     systemdMinimal
-    yajl
   ]
   ++ lib.optionals withLibkrun [
     libkrun
   ]
   ++ lib.optionals withLibkrunSEV [
     libkrun-sev
+  ]
+  ++ lib.optionals withWasmtime [
+    wasmtime.dev
+    wasmtime.lib
+  ]
+  ++ lib.optionals withWasmedge [
+    wasmedge
+  ]
+  ++ lib.optionals withWamr [
+    wamrShared
+  ]
+  ++ lib.optionals withWasmer [
+    wasmer
   ];
 
-  configureFlags = lib.optionals withLibkrun [
-    "--with-libkrun"
-  ];
+  configureFlags =
+    lib.optionals withLibkrun [
+      "--with-libkrun"
+    ]
+    ++ lib.optionals withWamr [
+      "--with-wamr"
+    ]
+    ++ lib.optionals withWasmedge [
+      "--with-wasmedge"
+    ]
+    ++ lib.optionals withWasmer [
+      "--with-wasmer"
+    ]
+    ++ lib.optionals withWasmtime [
+      "--with-wasmtime"
+    ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
   env = {
-    NIX_LDFLAGS = "-lcriu";
+    # wamr.c calls two functions directly instead of via dlsym (upstream bug)
+    NIX_LDFLAGS = "-lcriu" + lib.optionalString withWamr " -liwasm";
   };
 
   # we need this before autoreconfHook does its thing in order to initialize
@@ -110,6 +149,22 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString withLibkrunSEV ''
     substituteInPlace src/libcrun/handlers/krun.c \
       --replace-fail '"libkrun-sev.so.1"' '"${libkrun-sev}/lib/libkrun-sev.so.1"'
+  ''
+  + lib.optionalString withWamr ''
+    substituteInPlace src/libcrun/handlers/wamr.c \
+      --replace-fail '"libiwasm.so"' '"${wamrShared}/lib/libiwasm.so"'
+  ''
+  + lib.optionalString withWasmedge ''
+    substituteInPlace src/libcrun/handlers/wasmedge.c \
+      --replace-fail '"libwasmedge.so.0"' '"${wasmedge}/lib/libwasmedge.so.0"'
+  ''
+  + lib.optionalString withWasmer ''
+    substituteInPlace src/libcrun/handlers/wasmer.c \
+      --replace-fail '"libwasmer.so"' '"${wasmer}/lib/libwasmer.so"'
+  ''
+  + lib.optionalString withWasmtime ''
+    substituteInPlace src/libcrun/handlers/wasmtime.c \
+      --replace-fail '"libwasmtime.so"' '"${wasmtime.lib}/lib/libwasmtime.so"'
   '';
 
   doCheck = true;

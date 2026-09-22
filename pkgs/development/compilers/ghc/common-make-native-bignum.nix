@@ -325,7 +325,7 @@ stdenv.mkDerivation (
     # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
     # LLVM 19.
     #
-    # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+    # clang compiles the same file without issues without the roundtrip via assembly. Thus,
     # the solution is to backport those changes from GHC 9.6 that skip the intermediate
     # assembly step.
     #

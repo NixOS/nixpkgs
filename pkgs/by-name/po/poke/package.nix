@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poke";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchurl {
     url = "mirror://gnu/poke/poke-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qEy5F11Q1FpBHySB/QZiuDyzLOUXMWuInPtXCBlXk3M=";
+    hash = "sha256-aHPVmr6CHIERuIYj6nrZ4JCJL6lcdVYmBt2IN04vW48=";
   };
 
   outputs = [
@@ -80,13 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-poke" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<a href="...">poke 2.0</a>'
       new_version="$(curl -s https://www.jemarch.net/poke |
-          pcregrep -o1 '>poke ([0-9.]+)</a>')"
+          pcre2grep -o1 '>poke ([0-9.]+)</a>')"
       update-source-version poke "$new_version"
     '';
   };

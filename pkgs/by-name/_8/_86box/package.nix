@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   kdePackages,
   pkg-config,
@@ -21,6 +20,7 @@
   discord-gamesdk,
   libpcap,
   libslirp,
+  libserialport,
   wayland,
   wayland-scanner,
   libsndfile,
@@ -41,24 +41,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86box";
-  version = "5.3";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n68Ghhsv15TzpOMH4dBTNxa6AYwqN5s2C5pyO9VVaco=";
+    hash = "sha256-Qm7y/7LpBopti0K+jrC9TgORfFGjFYP/4rYPr7802gw=";
   };
 
   patches = [
     ./darwin.patch
-    # Fix build: Only make the fallthrough define available in C code
-    # https://github.com/86Box/86Box/issues/6607
-    (fetchpatch {
-      name = "fix-fallthrough-define-c-only.patch";
-      url = "https://github.com/86Box/86Box/commit/0092ce15de3efac108b961882f870a8c05e8c38f.patch";
-      hash = "sha256-DqjOtnyk6Zv9XHCLeuxD1wcLfvjGwGFvUWS0alXcchs=";
-    })
   ];
 
   postPatch = ''
@@ -87,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
     libpcap
     libslirp
+    libserialport
     qt5.qtbase
     qt5.qttools
     libsndfile
@@ -105,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
+    # On Darwin, 86Box ignores pkg-config for libserialport and links
+    # $LIBSERIALPORT_ROOT/lib/libserialport.dylib directly, so point it at the store path.
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DLIBSERIALPORT_ROOT=${libserialport}"
     ++ lib.optional enableNewDynarec "-DNEW_DYNAREC=ON"
     ++ lib.optional enableVncRenderer "-DVNC=ON"
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
@@ -114,9 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
 
-      for size in 48 64 72 96 128 192 256 512; do
-        install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
-          $src/src/unix/assets/"$size"x"$size"/net.86box.86Box.png
+      for icon in $src/src/unix/assets/*x*/net.86box.86Box.png; do
+        size=$(basename "$(dirname "$icon")")
+        install -Dm644 -t $out/share/icons/hicolor/"$size"/apps "$icon"
       done;
     ''
     + lib.optionalString unfreeEnableRoms ''
@@ -129,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-7/xhhT29ijGNVlW7oJXdyJuhUwVs0b4dIUjc3lVtNEY=";
+      hash = "sha256-AjFxyxW6Op4w637k5AXPtibqablVoPK03Axh2h2JWdI=";
     };
     updateScript = ./update.sh;
   };

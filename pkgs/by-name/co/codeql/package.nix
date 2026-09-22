@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.25.4";
+  version = "2.27.0";
 
   dontConfigure = true;
   dontBuild = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    hash = "sha256-YAFWw8Fb0B+O025TvwEiCZWsKXNZN7Fk+ai/eRmCSO0=";
+    hash = "sha256-8WhsburnhVWvVLTNOmAwmkjwN45exmKmw7Q5elTjYiI=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Semantic code analysis engine";
     homepage = "https://codeql.github.com";
-    maintainers = [ lib.maintainers.dump_stack ];
+    maintainers = with lib.maintainers; [
+      dump_stack
+      tree-sapii
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.unfree;
   };

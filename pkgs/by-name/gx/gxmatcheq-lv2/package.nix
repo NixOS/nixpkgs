@@ -1,20 +1,15 @@
 {
   lib,
   stdenv,
-  gcc13Stdenv,
   fetchFromGitHub,
+  fetchpatch,
   libx11,
   xorgproto,
   cairo,
   lv2,
   pkg-config,
 }:
-let
-  # see: https://github.com/brummer10/GxMatchEQ.lv2/issues/8
-  # Use gcc13 on Linux, but default stdenv (clang) elsewhere
-  buildStdenv = if stdenv.hostPlatform.isLinux then gcc13Stdenv else stdenv;
-in
-buildStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "GxMatchEQ.lv2";
   version = "0.1";
 
@@ -24,6 +19,22 @@ buildStdenv.mkDerivation (finalAttrs: {
     rev = "V${finalAttrs.version}";
     hash = "sha256-4jg6DYkNRuNuQpOnsZfwJAZljBmBRzS6NcJKjv+r7Ss=";
   };
+
+  patches = [
+    # _LV2UI_Descriptor was mistakenly used instead of LV2UI_Descriptor in one
+    # signature.
+    (fetchpatch {
+      name = "use-lv2ui_descriptor-name.patch";
+      url = "https://github.com/brummer10/GxMatchEQ.lv2/commit/4ca70be32220729a5253c0bb46f5aded5ba3d00a.patch";
+      hash = "sha256-EKlv6UptUpP+LOG7S30L21o0/upeDj6WB1PZ44XtNRU=";
+    })
+  ];
+
+  # without the Xresource.h header, compilation on gcc versions > 13 fails with
+  # gui/gx_matcheq_x11ui.c:360:27: error: implicit declaration of function 'XrmUniqueQuark' [-Wimplicit-function-declaration]
+  postPatch = ''
+    sed -e '1i #include <X11/Xresource.h>' -i gui/gx_matcheq_x11ui.c
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

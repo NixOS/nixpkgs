@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xlsatoms";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xlsatoms-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9L+hX1bAZtMmpdWykmRnCPJbkkdQaEC5BHzSaH3Mcbc=";
+    hash = "sha256-mslAAyj77/4VydlKkN7bkNCdyqnVFILvq8VbM6c24xc=";
   };
 
   strictDeps = true;

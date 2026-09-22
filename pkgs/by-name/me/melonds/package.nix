@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonds";
-  version = "1.1-unstable-2026-05-17";
+  version = "1.1-unstable-2026-08-24";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "c851d65266db262918df279fa3d67a2170782fb4";
-    hash = "sha256-EW9NrPw5jM7Zyyg0YI5E3Ln/NUw/KU2Rc/culAU2CQ8=";
+    rev = "906e9ebb27da8c6a715cd7abab4abfe8a8d29427";
+    hash = "sha256-hJFzH7qPk2NIXl9OQQyqSId6uofJ//FoslmbyX5ZjUk=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       - (WIP) GBA slot add-ons
       - and more are planned!
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "melonDS";
     maintainers = with lib.maintainers; [
       artemist

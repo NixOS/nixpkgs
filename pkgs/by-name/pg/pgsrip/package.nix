@@ -16,7 +16,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-8UzElhMdhjZERdogtAbkcfw67blk9lOTQ09vjF5SXm4=";
   };
 
-  build-system = [ python3Packages.poetry-core ];
+  pythonRelaxDeps = [
+    "click"
+    "opencv-python"
+    "setuptools"
+    "trakit"
+  ];
+
+  build-system = with python3Packages; [ poetry-core ];
 
   dependencies = with python3Packages; [
     babelfish
@@ -30,11 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     trakit
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "opencv-python"
-    "setuptools"
-  ];
+  pythonImportsCheck = [ "pgsrip" ];
 
   meta = {
     description = "Rip your PGS subtitles";

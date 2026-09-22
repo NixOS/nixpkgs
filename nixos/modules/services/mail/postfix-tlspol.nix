@@ -164,6 +164,20 @@ in
       };
       users.groups.postfix-tlspol = { };
 
+      systemd.sockets.postfix-tlspol = {
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          Accept = false;
+          ListenStream = [
+            (lib.removePrefix "unix:" cfg.settings.server.address)
+          ];
+          SocketUser = "postfix-tlspol";
+          SocketGroup = "postfix-tlspol";
+          SocketMode = cfg.settings.server.socket-permissions;
+          DirectoryMode = "0755";
+        };
+      };
+
       systemd.services.postfix-tlspol = {
         after = [
           "nss-lookup.target"
@@ -173,7 +187,6 @@ in
           "nss-lookup.target"
           "network-online.target"
         ];
-        wantedBy = [ "multi-user.target" ];
 
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
@@ -217,9 +230,6 @@ in
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
-          ]
-          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-            "AF_UNIX"
           ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
@@ -237,7 +247,7 @@ in
           RuntimeDirectory = "postfix-tlspol";
           RuntimeDirectoryMode = "1750";
           WorkingDirectory = "/var/cache/postfix-tlspol";
-          UMask = "0117";
+          UMask = "0077";
         };
       };
     })

@@ -14,24 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lan-mouse";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
     rev = "v${version}";
-    hash = "sha256-ofiNgJbmf35pfRvZB3ZmMkCJuM7yYgNL+Dd5mZZqyNk=";
-  };
-
-  # lan-mouse uses `git` to determine the version at build time and
-  # has Cargo set the `GIT_DESCRIBE` environment variable. To improve
-  # build reproducibility, we define the variable based on the package
-  # version instead.
-  prePatch = ''
-    rm build.rs
-  '';
-  env = {
-    GIT_DESCRIBE = "${version}-nixpkgs";
+    hash = "sha256-6EqA9WfiukOymUT4FkNdMvzmFKByW0LLoI/9sv4TzBU=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     libxtst
   ];
 
-  cargoHash = "sha256-+UXRBYfbkb114mwDGj36oG5ZT3TQtcEzsbyZvtWTMxM=";
+  cargoHash = "sha256-Lxs0qWvNAv4KCeJ+cDBYBzwlbJfQJshcxPRdg9w0szc=";
 
   postInstall = ''
     install -Dm444 de.feschber.LanMouse.desktop -t $out/share/applications

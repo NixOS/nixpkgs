@@ -255,8 +255,10 @@ let
             ++ lib.optional systemdSupport systemdLibs
             ++ lib.optional valgrindSupport valgrind;
 
-          CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
-          SKIP_PERF_SENSITIVE = 1;
+          env = {
+            CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+            SKIP_PERF_SENSITIVE = 1;
+          };
 
           configureFlags =
             # Disable all extensions
@@ -290,7 +292,7 @@ let
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
             ++ lib.optional staticSupport "--enable-static"
-            ++ lib.optional (!zendSignalsSupport) [ "--disable-zend-signals" ]
+            ++ lib.optionals (!zendSignalsSupport) [ "--disable-zend-signals" ]
             ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
             # Sendmail

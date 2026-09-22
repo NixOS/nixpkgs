@@ -9,18 +9,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "4.0.8";
+  version = "4.0.14";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QWPMWUT8Hv6240yEtcaoLXmgtySHNOZpzBw2soHCW8A=";
+    hash = "sha256-QdWnwjvXsABcTsf+xzIYZ7GgwukzvyPQOppm7SDCK64=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-tObBMdIjW8JUEv7tKdmhXZuB+kQryP+B856MXtsKp5U=";
+  vendorHash = "sha256-y0iwBSUVh2pBEaiS1cGmW7F0/geGDuSdSHMmvhW5c9o=";
 
   subPackages = [ "." ];
 
@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.version=v${finalAttrs.version}"
     "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
@@ -42,7 +41,6 @@ buildGoModule (finalAttrs: {
     export HOME=$(mktemp -d)
 
     # Remove tests that use networking
-    rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
     rm core/cautils/getter/downloadreleasedpolicy_test.go
     rm core/core/initutils_test.go

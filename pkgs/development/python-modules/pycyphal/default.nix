@@ -95,6 +95,13 @@ buildPythonPackage rec {
     "pycyphal/application/register/_value.py"
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # leaked tasks from prior doctest's event loop break doctest stdout capture, causing "Got nothing" on REPL-style assertions
+    "MonotonicClusteringSynchronizer"
+    "TransferIDSynchronizer"
+    "PythonCANMedia"
+  ];
+
   pythonImportsCheck = [ "pycyphal" ];
 
   meta = {

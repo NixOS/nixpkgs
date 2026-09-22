@@ -9,17 +9,19 @@
   protobuf,
   zlib,
   catch2,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
-  version = "6.2.11";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     tag = "et-v${finalAttrs.version}";
-    hash = "sha256-d3mCZQO12NUQjGIOX1FWTLUq+adMTNb9QYCSU3ibZMY=";
+    hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  checkPhase = ''
+    ctest --output-on-failure -E 'et-test\.LargeInputNoDeadlock'
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
@@ -58,7 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jshort
+      tomasrivera
     ];
+    mainProgram = "et";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

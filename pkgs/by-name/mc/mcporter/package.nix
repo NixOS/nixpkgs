@@ -15,20 +15,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcporter";
-  version = "0.10.2";
+  version = "0.13.13";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "mcporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1wBdYetYu+R04Fl50KR3zZK3QO6S95GV+PEO9k3Thhc=";
+    hash = "sha256-0RvHJlAqdH+mPM2O/0kAPDWSrW/tbekGdG6pv1lms/Q=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-TZfEoUSjba8cRz6L9uY2PGskYsR7S/xAahiKLd8dhFM=";
+    hash = "sha256-96qhsVIc5aIyow6VcZ670Us8tSLqPlocT1h7x8SbPBI=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript runtime and CLI for connecting to configured Model Context Protocol servers";
-    homepage = "https://github.com/steipete/mcporter";
-    changelog = "https://github.com/steipete/mcporter/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/openclaw/mcporter";
+    changelog = "https://github.com/openclaw/mcporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "mcporter";

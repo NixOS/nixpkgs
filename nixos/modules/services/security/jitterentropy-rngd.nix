@@ -26,6 +26,11 @@ in
       default = false;
       description = "Force SP800-90B mode for entropy reading";
     };
+    memlockLimit = lib.mkOption {
+      type = lib.types.str;
+      default = "2M";
+      description = "Set limit for lockable memory with mlock";
+    };
     verbose = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -55,6 +60,12 @@ in
           ""
           # use service from package with our configured args
           "${cfg.package}/bin/jitterentropy-rngd ${args}"
+        ];
+        LimitMEMLOCK = [
+          # clear old setting from built-in service file
+          ""
+          # use service from package with our configured limit
+          "${cfg.memlockLimit}"
         ];
       };
     };

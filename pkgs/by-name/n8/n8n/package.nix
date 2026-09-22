@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -14,6 +14,7 @@
   libkrb5,
   libmongocrypt,
   libpq,
+  sqlite,
   dart-sass,
   makeWrapper,
 }:
@@ -26,25 +27,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.20.6";
+  version = "2.39.6";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-c0O6tC+QDhHN3nmzXqNwhAM4+NoFYVO1mtO3V348hDs=";
+    hash = "sha256-fmo0xL6IF6J+D5ZamkoBXyZ4Q8s3l5MeBWaXc39OsTU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-ft7n3J7L+u2hwEiR32Jw2k0ZsHCfI5yIB+IfmtB8xMY=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-yL95w+Jd5I5R6r/qNihvAJ4MX2LMyS9ICZzJnLxHR4s=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
@@ -60,17 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libmongocrypt
     libpq
+    sqlite
   ];
 
   buildPhase = ''
     runHook preBuild
 
     # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace packages/frontend/editor-ui/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    pushd node_modules/sqlite3
-    node-gyp rebuild
+    pushd packages/cli/node_modules/sqlite3
+    npm_config_sqlite=${lib.getDev sqlite} node-gyp rebuild
     popd
 
     # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
@@ -86,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    CI=true pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod -w
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar
@@ -102,8 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/n8n}
     cp -r {packages,node_modules} $out/lib/n8n
 
+    # node must be on PATH: in internal runner mode the CLI spawns the
+    # JS task runner via `spawn('node', ...)`, and since 2.33 a failed
+    # spawn crashes n8n instead of being silently ignored
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
-      --set N8N_RELEASE_TYPE "stable"
+      --set N8N_RELEASE_TYPE "stable" \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     # JavaScript runner
     makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \

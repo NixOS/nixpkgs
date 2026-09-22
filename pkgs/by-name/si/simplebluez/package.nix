@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "OpenBluetoothToolbox";
+    owner = "simpleble";
     repo = "SimpleBLE";
     rev = "v${finalAttrs.version}";
     hash = "sha256-SWZdVWBC8udwkn195FdvsXSniMtzd8+WfnMsARLYSQ4=";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++ abstraction layer for BlueZ over DBus";
-    homepage = "https://github.com/OpenBluetoothToolbox/SimpleBLE";
+    homepage = "https://github.com/simpleble/simpleble";
     # SimpleBLE (which SimpleBluez is part of) is under the Business Source License 1.1 (BUSL-1.1)
     # since version 0.9.0
     license = lib.licenses.bsl11;

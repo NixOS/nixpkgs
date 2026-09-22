@@ -2,10 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonOlder,
   unittestCheckHook,
   cargo,
   rustc,
   rustPlatform,
+  semver,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-Yf6N615X9ZB+HDp3xehMc3kjKbdsSbIJrqARRXwCRDQ=";
   };
 
+  postPatch = ''
+    patchShebangs release.py
+    ./release.py finalize
+  '';
+
+  build-system = [
+    semver # required for release.py
+  ];
+
   nativeBuildInputs = [
     cargo
     rustPlatform.cargoSetupHook
@@ -35,6 +46,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "tests/" ]; # Not sure why it isn't autodiscovered
+
+  # pyo3-asyncio 0.20 segfaults on the python 3.14 interpreter state.
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "aiotarfile" ];
 

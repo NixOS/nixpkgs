@@ -64,19 +64,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
-  version = "1.26.05";
+  version = "1.26.06";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-UiPLownaFtuYFUlZhBl+Nl/sRZRhG9OUwepZtFTkTqc";
+    hash = "sha256-2e39qzBO63Ft+yw+tJChLsupeinalTkDwXp3WBF2wms=";
     fetchSubmodules = true;
   };
 
   docs = fetchurl {
     url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rz9b7HvxfxI978yM9wE7XvLu7DO38i/amokXBU0RjSg=";
+    hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
   };
 
   buildInputs = [
@@ -152,15 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
-    substituteInPlace Macaulay2/packages/DeterminantalRepresentations.m2 \
-      --replace-fail "eps = 1e-15" "eps = 1e-14"
-  ''
-  # ForeignFunctions.m2 uses `brew --prefix` to discover potential library paths,
-  # which fails when Homebrew is not installed.
-  # We patch it to return an empty path instead, which should be harmless
-  + ''
-    substituteInPlace Macaulay2/packages/ForeignFunctions.m2 \
-      --replace-fail 'get "!brew --prefix"' 'try get "!brew --prefix" else ""'
+    substituteInPlace configure.ac \
+      --replace-fail "[\$gfan_version], [ge], [0.8]" "[\$gfan_version], [ge], [0.6]"
+    substituteInPlace Macaulay2/packages/gfanInterface.m2 \
+      --replace-fail 'MinimumVersion => ("0.8"' 'MinimumVersion => ("0.6"'
   '';
 
   preConfigure = ''
@@ -172,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-download"
     "--enable-shared"
-    "--with-issue=nixos"
+    "--with-issue=Nix"
     "--with-boost-libdir=${boost}/lib"
     "--with-system-libs"
     "CPPFLAGS=-I${lib.getDev cddlib}/include/cddlib"
@@ -291,7 +286,8 @@ stdenv.mkDerivation (finalAttrs: {
       decomposition of ideals, integral closure of rings, and more.
     '';
     homepage = "https://macaulay2.com/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

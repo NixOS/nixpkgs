@@ -5,8 +5,10 @@
   build,
   click,
   fetchFromGitHub,
+  fetchpatch,
   pip,
   pyproject-hooks,
+  pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -29,6 +31,17 @@ buildPythonPackage rec {
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
+
+    (fetchpatch {
+      name = "pip-26-compat.patch";
+      url = "https://github.com/jazzband/pip-tools/commit/cbe3c692f8977270e7ae6061c8159450a73c13fe.patch";
+      excludes = [
+        "changelog.d/2379.feature.md"
+        "pyproject.toml"
+        "tox.ini"
+      ];
+      hash = "sha256-wDma1FBnWnrRln0o7HaizMIkoQey6VdQzGh+q84cHxE=";
+    })
   ];
 
   build-system = [ setuptools-scm ];
@@ -45,6 +58,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pytest-mock
     pytest-xdist
     pytestCheckHook
     tomli-w

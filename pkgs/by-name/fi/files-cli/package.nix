@@ -2,46 +2,31 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  files-cli,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "files-cli";
-  version = "2.15.297";
+  version = "2.15.463";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oXgAQikdzzcp0SxYSerqXvjZ4/hI8Wt9ZJio7tHlt38=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OG/fMitBklIGAOV5+ghURpWw7NdiQR3eL6tL4fJOo7s=";
   };
 
-  vendorHash = "sha256-SYi7Pq+vIMp0SH434cp0zJLV7ZkzODW3+FIarnX4ezs=";
+  vendorHash = "sha256-p9MQvNZXkvcgKpIGqSNP+hCN2iMLsXplGp3236ZP2O0=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=${finalAttrs.version}"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/files-cli --help
-
-    runHook postInstallCheck
-  '';
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = files-cli;
-      command = "files-cli -v";
-      version = "files-cli version ${finalAttrs.version}";
-    };
-  };
 
   meta = {
     description = "Files.com Command Line App for Windows, Linux, and macOS";

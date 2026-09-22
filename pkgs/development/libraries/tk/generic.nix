@@ -89,10 +89,6 @@ tcl.mkTclDerivation {
 
   inherit tcl;
 
-  env = lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
-    NIX_CFLAGS_COMPILE = "-std=gnu17";
-  };
-
   passthru = rec {
     inherit (tcl) release version;
     libPrefix = "tk${tcl.release}";
@@ -105,6 +101,5 @@ tcl.mkTclDerivation {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
     maintainers = [ ];
-    broken = stdenv.hostPlatform.isDarwin && lib.elem (lib.versions.majorMinor tcl.version) [ "8.5" ];
   };
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   makeSetupHook,
   unzip,
   zip,
@@ -11,4 +12,5 @@ makeSetupHook {
     inherit unzip zip xmlstarlet;
     stripNondeterminism = strip-nondeterminism;
   };
+  meta.license = lib.licenses.mit;
 } ./nuget-package-hook.sh

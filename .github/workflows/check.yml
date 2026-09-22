@@ -24,6 +24,10 @@ on:
       # not evaluate untrusted code.
       NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY:
         required: false
+      # Can be provided in pull requests because the job it is used in does
+      # not evaluate untrusted code.
+      NIXPKGS_CI_APP_PRIVATE_KEY:
+        required: false
       # Should only be provided in the merge queue, not in pull requests,
       # where we're evaluating untrusted code.
       CACHIX_AUTH_TOKEN_GHA:
@@ -43,7 +47,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: trusted
@@ -51,7 +55,8 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install bottleneck@2.19.5
+        run: npm ci --package-lock-only=false --no-audit bottleneck
+        working-directory: trusted/ci/github-script
 
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_COMMIT_CHECK_CLIENT_ID
@@ -75,7 +80,8 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
-            require('./trusted/ci/github-script/commits.js')({
+            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.js')
+            await commits({
               github,
               context,
               core,
@@ -92,10 +98,10 @@ jobs:
     if: inputs.baseBranch && inputs.headBranch
     permissions:
       pull-requests: write
-    runs-on: ubuntu-slim
-    timeout-minutes: 3
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 8
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: trusted
@@ -120,7 +126,8 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
-            require('./trusted/ci/github-script/manual-file-edits.js')({
+            const { default: checkManualFileEdits } = await import('${{ github.workspace }}/trusted/ci/github-script/manual-file-edits.ts')
+            await checkManualFileEdits({
               github,
               context,
               core,
@@ -133,21 +140,97 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
-  owners:
+  reminders:
+    if: inputs.baseBranch && inputs.headBranch
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          path: trusted
+          sparse-checkout: |
+            ci/github-script
+
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_CLIENT_ID
+        id: app-token
+        with:
+          client-id: ${{ vars.NIXPKGS_CI_CLIENT_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Post reminders
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const { default: postReminders } = await import('${{ github.workspace }}/trusted/ci/github-script/reminders.ts')
+            await postReminders({
+              github,
+              context,
+              core,
+              dry: context.eventName == 'pull_request',
+              repoPath: 'trusted',
+            })
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: gh api /rate_limit | jq
+
+  github-script:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Checkout merge and target commits
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
+      - name: Install dependencies to trusted/
+        run: |
+          npm ci --package-lock-only=false --no-audit
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
+        working-directory: nixpkgs/trusted/ci/github-script
+
+      - name: Link trusted/ dependencies to untrusted/
+        run: ln -s "$PWD/trusted/ci/github-script/node_modules" untrusted/ci/github-script/node_modules
+        working-directory: nixpkgs
+
+      - name: Check ci/github-script
+        run: npm test
+        working-directory: nixpkgs/untrusted/ci/github-script
+
+  owners:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
+
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
 
       - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         continue-on-error: true

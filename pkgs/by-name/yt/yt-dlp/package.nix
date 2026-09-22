@@ -32,14 +32,14 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2026.03.17";
+  version = "2026.08.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=";
+    hash = "sha256-BM5ZeGTmHq+1xH6G/zsuCtjLgYgfRA11ya0zIHK5p4g=";
   };
 
   postPatch = ''
@@ -53,6 +53,13 @@ python3Packages.buildPythonApplication rec {
         --replace-fail "path = _determine_runtime_path(self._path, '${jsRuntime.meta.mainProgram}')" "path = '${lib.getExe jsRuntime}'"
     ''}
   '';
+
+  __structuredAttrs = true;
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -80,7 +87,6 @@ python3Packages.buildPythonApplication rec {
     ];
     curl-cffi = [ python3Packages.curl-cffi ];
     secretstorage = with python3Packages; [
-      cffi
       secretstorage
     ];
   };
@@ -137,7 +143,7 @@ python3Packages.buildPythonApplication rec {
       --fish completions/fish/yt-dlp.fish \
       --zsh completions/zsh/_yt-dlp
 
-    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+    install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
   ''
   + lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
@@ -172,7 +178,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt-dlp";
     maintainers = with lib.maintainers; [
       SuperSandro2000
-      FlameFlag
+      _4evy
     ];
   };
 }

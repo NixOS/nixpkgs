@@ -1,11 +1,14 @@
 {
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
   mlflow,
 
   # build-system
   setuptools,
 
   # dependencies
+  anyio,
   cachetools,
   click,
   cloudpickle,
@@ -30,15 +33,30 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow-skinny";
-  inherit (mlflow) version src;
+  inherit (mlflow) version;
   pyproject = true;
   __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "mlflow";
+    repo = "mlflow";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2nWu+P9bGAl+1p3ZfxO2XdBMrfePJI6EBk82r99w480=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools<=82.0.1" \
+        "setuptools"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libs/skinny";
 
   build-system = [ setuptools ];
 
   dependencies = [
+    anyio
     cachetools
     click
     cloudpickle
@@ -69,5 +87,6 @@ buildPythonPackage (finalAttrs: {
   meta = mlflow.meta // {
     description = "Lightweight version of MLflow that is designed to minimize package size";
     homepage = "https://github.com/mlflow/mlflow/tree/master/libs/skinny";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

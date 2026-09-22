@@ -7,41 +7,25 @@
 let
   cfg = config.hardware.printers;
 
-  ensurePrinter =
-    p:
-    let
-      args = lib.cli.toCommandLineShellGNU { } (
-        {
-          p = p.name;
-          v = p.deviceUri;
-          m = p.model;
-        }
-        // lib.optionalAttrs (p.location != null) {
-          L = p.location;
-        }
-        // lib.optionalAttrs (p.description != null) {
-          D = p.description;
-        }
-        // lib.optionalAttrs (p.ppdOptions != { }) {
-          o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
-        }
-      );
-    in
-    ''
-      # shellcheck disable=SC2016
-      ${pkgs.cups}/bin/lpadmin ${args} -E
-    '';
+  inherit (lib)
+    concatLines
+    escapeShellArg
+    mkOption
+    ;
 
-  ensureDefaultPrinter = name: ''
-    ${pkgs.cups}/bin/lpadmin -d '${name}'
-  '';
+  inherit (lib.types)
+    attrsOf
+    listOf
+    nullOr
+    str
+    submodule
+    ;
 
   # "graph but not # or /" can't be implemented as regex alone due to missing lookahead support
   noInvalidChars = str: lib.all (c: c != "#" && c != "/") (lib.stringToCharacters str);
   printerName = (lib.types.addCheck (lib.types.strMatching "[[:graph:]]+") noInvalidChars) // {
     description = "printable string without spaces, # and /";
   };
-
 in
 {
   options = {
@@ -52,6 +36,67 @@ in
         description = ''
           Ensures the named printer is the default CUPS printer / printer queue.
         '';
+      };
+      ensureClasses = mkOption {
+        description = ''
+          Will ensure that the given CUPS classes are configured as declared.
+          Please note that it is possible for some users to temporarily override
+          these properties. If those changes conflict with this configuration,
+          the configuration will take precedence and override them at boot and
+          when a rebuild is applied. This configuration will not delete any
+          classes that have been removed from the list. In order to list classes
+          you can use {command}`lpstat -c`. It will list any classes without
+          members as having a member titled `unknown`. Print jobs to empty
+          classes will silently fail. In order to remove a class, run
+          {command}`lpadmin -x <class name>`. Classes can still be added
+          manually. For more on classes see
+          <https://www.cups.org/doc/admin.html#CLASSES>, or
+          {manpage}`lpadmin(8)`.
+        '';
+        type = attrsOf (submodule {
+          options = {
+            description = mkOption {
+              type = nullOr str;
+              description = "Optional human-readable description";
+              example = "Printers that support color printing";
+            };
+            location = mkOption {
+              type = nullOr str;
+              description = "Optional human-readable location";
+              example = "Workroom";
+            };
+            printers = mkOption {
+              type = listOf str;
+              default = [ ];
+              example = [
+                "BrotherHL_Workroom"
+                "EpsonColor_Basement"
+              ];
+              description = ''
+                A list of printers included in this class. Note that all
+                printers in this list must also be present in
+                config.hardware.printers.ensurePrinters. Specifying a symblic
+                name here that does not match any of those printers is
+                considered a hard error.
+              '';
+            };
+            classes = mkOption {
+              type = listOf str;
+              default = [ ];
+              description = ''
+                A list of classes to include in this class.
+
+                ::: {.note}
+                CUPS itself does not support nested classes. Any classes will
+                simply have all of their member printers added to this class
+                in a recursive manner. This is an abstraction that serves the
+                purpose of convenience and expressiveness, not a 1:1 mapping
+                on top of CUPS.
+                :::
+              '';
+            };
+          };
+        });
       };
       ensurePrinters = lib.mkOption {
         description = ''
@@ -130,29 +175,198 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.ensurePrinters != [ ] && config.services.printing.enable) {
-    systemd.services.ensure-printers = {
-      description = "Ensure NixOS-configured CUPS printers";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "cups.service" ];
-      after = [ "cups.service" ];
+  config = lib.mkIf config.services.printing.enable {
+    assertions = [
+      (
+        let
+          referencedClasses = lib.unique (
+            lib.flatten (
+              lib.mapAttrsToList (
+                _:
+                {
+                  classes ? [ ],
+                  ...
+                }:
+                classes
+              ) cfg.ensureClasses
+            )
+          );
+          definedClasses = lib.attrNames cfg.ensureClasses;
+          missingClasses = lib.subtractLists definedClasses referencedClasses;
+          getReferencingClasses =
+            missingClass:
+            (lib.mapAttrsToList (name: _: "`${name}`") (
+              lib.filterAttrs (
+                _:
+                {
+                  classes ? [ ],
+                  ...
+                }:
+                builtins.elem missingClass classes
+              ) cfg.ensureClasses
+            ));
+        in
+        {
+          assertion = missingClasses == [ ];
+          message = ''
+            One or more values of `config.hardware.printers.ensureClasses.<name>.classes`
+            contained values not present in `config.hardware.printers.ensureClasses`
 
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
+            Missing classes:
+            ${lib.concatMapStringsSep "\n" (
+              p: "  - `${p}` (included in class(es): ${lib.concatStringsSep ", " (getReferencingClasses p)})"
+            ) missingClasses}
+          '';
+        }
+      )
 
-      script = lib.concatStringsSep "\n" [
-        (lib.concatMapStrings ensurePrinter cfg.ensurePrinters)
-        (lib.optionalString (cfg.ensureDefaultPrinter != null) (
-          ensureDefaultPrinter cfg.ensureDefaultPrinter
-        ))
-        # Note: if cupsd is "stateless" the service can't be stopped,
-        # otherwise the configuration will be wiped on the next start.
-        (lib.optionalString (
-          with config.services.printing; startWhenNeeded && !stateless
-        ) "systemctl stop cups.service")
-      ];
+      (
+        let
+          referencedPrinters = lib.unique (
+            lib.flatten (
+              lib.mapAttrsToList (
+                _:
+                {
+                  printers ? [ ],
+                  ...
+                }:
+                printers
+              ) cfg.ensureClasses
+            )
+          );
+          definedPrinters = lib.catAttrs "name" cfg.ensurePrinters;
+          missingPrinters = lib.subtractLists definedPrinters referencedPrinters;
+          getReferencingClasses =
+            missingPrinter:
+            (lib.mapAttrsToList (name: _: "`${name}`") (
+              lib.filterAttrs (
+                _:
+                {
+                  printers ? [ ],
+                  ...
+                }:
+                builtins.elem missingPrinter printers
+              ) cfg.ensureClasses
+            ));
+        in
+        {
+          assertion = missingPrinters == [ ];
+          message = ''
+            One or more values of `config.hardware.printers.ensureClasses.<name>.printers`
+            contained values not present in `config.hardware.printers.ensurePrinters`
+
+            Missing printers:
+            ${lib.concatMapStringsSep "\n" (
+              p: "  - `${p}` (included in class(es): ${lib.concatStringsSep ", " (getReferencingClasses p)})"
+            ) missingPrinters}
+          '';
+        }
+      )
+    ]
+    ++ map (class: {
+      assertion = cfg.ensureClasses.${class}.printers != [ ] || cfg.ensureClasses.${class}.classes != [ ];
+      message = ''
+        At least one of the lists `config.hardware.printers.ensureClasses.${class}.printers`
+        and `config.hardware.printers.ensureClasses.${class}.classes` has to be non-empty.
+      '';
+    }) (builtins.attrNames cfg.ensureClasses);
+
+    systemd.services.cups = {
+      postStart =
+        let
+          getPrinters =
+            class:
+            lib.uniqueStrings (
+              lib.concatLists (
+                lib.textClosureList (lib.mapAttrs (
+                  _:
+                  {
+                    classes ? [ ],
+                    printers ? [ ],
+                    ...
+                  }:
+                  {
+                    deps = classes;
+                    text = printers;
+                  }
+                ) cfg.ensureClasses) [ class ]
+              )
+            );
+
+          classNames = builtins.attrNames cfg.ensureClasses;
+
+          lpadmin =
+            args:
+            let
+              # -d, -p and -x are subcommands that must be specified at the start.
+              argsDpx = lib.intersectAttrs {
+                d = true;
+                p = true;
+                x = true;
+              } args;
+              argsWoDpx = lib.removeAttrs args [
+                "d"
+                "p"
+                "x"
+              ];
+            in
+            "lpadmin ${lib.cli.toCommandLineShellGNU { } argsDpx} ${
+              lib.cli.toCommandLineShellGNU { } argsWoDpx
+            }";
+
+        in
+        ''
+          #### ADDING PRINTERS ####
+          ${lib.concatMapStringsSep "\n" (
+            p:
+            lpadmin {
+              p = p.name;
+              v = p.deviceUri;
+              m = p.model;
+              L = p.location;
+              D = p.description;
+              o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
+              E = true;
+            }
+          ) cfg.ensurePrinters}
+
+          #### SETTING DEFAULT PRINTER ####
+          ${lib.optionalString (cfg.ensureDefaultPrinter != null) (lpadmin {
+            d = cfg.ensureDefaultPrinter;
+          })}
+
+          #### ADDING PRINTERS TO CLASSES ####
+          ${lib.concatMapStringsSep "\n" (
+            className:
+            lib.concatMapStringsSep "\n" (
+              printer:
+              lpadmin {
+                p = printer;
+                c = className;
+              }
+            ) (getPrinters className)
+          ) classNames}
+
+          #### POPULATING CLASSES ####
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (
+              className: class:
+              lpadmin {
+                p = className;
+                L = class.location;
+                D = class.description;
+              }
+            ) cfg.ensureClasses
+          )}
+
+          #### ENABLING CLASSES ####
+          ${lib.concatMapStrings (className: ''
+            cupsenable ${escapeShellArg className}
+            cupsaccept ${escapeShellArg className}
+          '') classNames}
+
+          echo "CUPS provisioning complete."
+        '';
     };
   };
 }

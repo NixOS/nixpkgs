@@ -5,39 +5,34 @@
   nix-update-script,
   nixosTests,
   rustPlatform,
-  sonic-server,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.4.9";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
     tag = "v${version}";
-    hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
+    hash = "sha256-T+t9zEOUZ/5yBG1M4sok+jXh9qiIeL1Rq8Dj7ppa3uk=";
   };
 
-  cargoHash = "sha256-RO4wY7FMwczZeR4GOxA3mwfBJZKPToOJJKGZb48yHJA=";
+  cargoHash = "sha256-dmmwklL+KTSgJzWPcKUmILA3fpZe4lW1Xq4plTtHf/o=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
   postPatch = ''
-    substituteInPlace src/main.rs \
+    substituteInPlace server/src/main.rs \
       --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
 
-  # Fix GCC 15 compatibility
-  # error: unknown type name 'uint32_t'
-  env.CXXFLAGS = "-include cstdint";
-
   postInstall = ''
     install -Dm444 -t $out/etc/sonic config.cfg
-    install -Dm444 -t $out/lib/systemd/system debian/sonic.service
+    install -Dm444 -t $out/lib/systemd/system packaging/debian/sonic.service
 
     substituteInPlace $out/lib/systemd/system/sonic.service \
       --replace-fail /usr/bin/sonic $out/bin/sonic \
@@ -47,14 +42,11 @@ rustPlatform.buildRustPackage rec {
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests = {
-      inherit (nixosTests) sonic-server;
-      version = testers.testVersion {
-        command = "sonic --version";
-        package = sonic-server;
-      };
-    };
+    tests.sonic-server = nixosTests.sonic-server;
     updateScript = nix-update-script { };
   };
 

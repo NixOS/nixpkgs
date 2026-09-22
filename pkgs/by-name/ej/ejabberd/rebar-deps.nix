@@ -24,11 +24,11 @@ let
     };
     xmpp = builder {
       name = "xmpp";
-      version = "1.13.3";
+      version = "1.13.4";
       src = fetchHex {
         pkg = "xmpp";
-        version = "1.13.3";
-        sha256 = "sha256-BWSKpNvM/uYqqnlLKSowWEY50DyR9cCGa+jDQ0tqb0g=";
+        version = "1.13.4";
+        sha256 = "sha256-SzH/TjBtpKkwzgZ1/tTzw6+D9rOalgnootR0ffvq4NQ=";
       };
       beamDeps = [
         ezlib

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lifx-async";
-  version = "5.4.8";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "lifx-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-392gHHekZ+rfZzR21ISUqdFiLGFoQSkJeyn3oRSs3+g=";
+    hash = "sha256-MFXWleTbyrmw29s/s4j3ypRbL6g5/ibImrhuu25i8OA=";
   };
 
   build-system = [ hatchling ];

@@ -20,16 +20,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.36.0";
+  version = "1.37.3";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     tag = finalAttrs.version;
-    hash = "sha256-jc2f7Ia2c+U1cQBXmyzfQAgFMFoAPexLejs6/FKaN9I=";
+    hash = "sha256-T2sTVsBCvsvgxjlTeBPSvA96mJ7TLYqLNvldCI73by0=";
   };
 
-  cargoHash = "sha256-sjWBM9SsI/7AQ8SuFiTR19l8kqp3rhy64Uh/1TatH6A=";
+  cargoHash = "sha256-gUQxnGPo8jYTfG+Zsz8W35h8lkYDxI3mGnCdxNXYB4k=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = finalAttrs.version;

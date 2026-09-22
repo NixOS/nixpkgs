@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       There are several programs for working with Rubik's cubes, by three
       different people. Look inside the directories under /src to see
-      specific info and licensing. In summary the three contributers are:
+      specific info and licensing. In summary the three contributors are:
 
 
       Michael Reid (GPL) http://www.math.ucf.edu/~reid/Rubik/optimal_solver.html

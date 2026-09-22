@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "led-ble";
-  version = "1.1.8";
+  version = "1.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "led-ble";
-    tag = "v${version}";
-    hash = "sha256-98nAtv2p6WNxg6wwlGviVRzaKGCWGZNqPG4k3jwQpjw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NPxDcdrcscvqfsJAqq4ZJEWedsWsPKBYEsiUambU7rA=";
   };
 
   build-system = [ poetry-core ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for LED BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/led-ble";
-    changelog = "https://github.com/Bluetooth-Devices/led-ble/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/Bluetooth-Devices/led-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

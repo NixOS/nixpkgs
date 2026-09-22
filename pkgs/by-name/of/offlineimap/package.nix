@@ -14,14 +14,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "offlineimap";
-  version = "8.0.2";
+  version = "8.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mysvqltO4x2dD8V+FAGOnDw5lQ8bgDwXFK9n15fbUdI=";
+    hash = "sha256-JWWv3zpiKzQmG8FRFb9h+TnCyR+f7LY3SBgYlcZA+1A=";
   };
 
   postPatch = ''

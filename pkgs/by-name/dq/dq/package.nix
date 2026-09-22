@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dq";
-  version = "20251001";
+  version = "20260601";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "dq";
     tag = finalAttrs.version;
-    hash = "sha256-+3NGtHx9DI7s3V8aIJkW25apYAoFuLuiQ4TGsr981c8=";
+    hash = "sha256-hXDRmCtQuRWk9bViffjojaDf2S57HlHBBobuLFC9nzM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Recursive DNS/DNSCurve server and comandline tool";
+    description = "Recursive DNS/DNSCurve server and commandline tool";
     homepage = "https://github.com/janmojzis/dq";
     changelog = "https://github.com/janmojzis/dq/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [

@@ -1,22 +1,22 @@
 {
   stdenv,
   lib,
-  python3Packages,
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
   python3,
+  python3Packages,
   nodejs,
   yarnBuildHook,
   yarnConfigHook,
 }:
 let
-  version = "5.1.0";
+  version = "5.7.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-Ptg3C+5DbUiWVS8nMCmqmSFMmNI4NW8NYBF+G5xOqSg=";
+    hash = "sha256-/kCrh5CUFcurXpK8trdlW2kI1JDoKeD7n40vjvG/v4E=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-CKKGY87C5ifv0sHm9ExCzaGM3mV4C0NsWLCbw+ALqGc=";
+      hash = "sha256-Y+E1HhQRdmdQf9kfkL09W/R29oN8wCLNsMBDnNGx6T0=";
     };
 
     nativeBuildInputs = [
@@ -40,6 +40,23 @@ let
 
     dontInstall = true;
   };
+
+  python3Packages' = python3Packages.overrideScope (
+    self: super: {
+      django-treebeard = super.django-treebeard.overridePythonAttrs (
+        finalAttrs: { src, ... }: {
+          version = "4.8.0";
+          src = src.override {
+            hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+          };
+        }
+      );
+    }
+  );
+in
+let
+  # Prevent using the wrong one.
+  python3Packages = python3Packages';
 in
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -50,25 +67,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
-
-    # Fix creation of unsafe C function in postgresql migrations
-    ./postgresql_fix.patch
-
-    # Fix installing all modules with uv_build
-    # https://github.com/suitenumerique/docs/pull/2295
-    ./uv.patch
   ];
 
   # They use a old version of mistralai which exported a class
   # at the top level
   postPatch = ''
-    substituteInPlace core/services/ai_services/legacy.py \
-      --replace-fail \
-        "from mistralai import Mistral" \
-        "from mistralai.client import Mistral"
-
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
   ''
@@ -91,6 +96,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       boto3
       celery
       emoji
+      dj-database-url
       django
       django-configurations
       django-cors-headers
@@ -101,6 +107,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-lasuite
       django-parler
       django-redis
+      django-silk
       django-storages
       django-timezone-field
       django-treebeard
@@ -120,6 +127,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mozilla-django-oidc
       nested-multipart-parser
       openai
+      posthog
       psycopg
       pycrdt
       pydantic-ai-slim
@@ -129,6 +137,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       redis
       requests
       sentry-sdk
+      servestatic
       uvicorn
       whitenoise
     ]

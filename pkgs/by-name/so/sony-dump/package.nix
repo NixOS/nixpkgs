@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation {
   pname = "sony-dump";
-  version = "0-unstable-2019-11-3";
+  version = "0-unstable-2019-11-03";
 
   src = fetchFromGitHub {
     owner = "munjeni";
@@ -19,11 +19,16 @@ stdenv.mkDerivation {
 
   prePatch = ''
     tar -xzf ${zlib.src}
-    mv ${zlib.name} zlib
+    mv zlib-* zlib
   '';
 
   patches = [
     ./0001-Fix-makefile.patch
+  ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
   ];
 
   installPhase = ''

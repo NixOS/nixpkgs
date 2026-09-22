@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
@@ -18,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  patches = [
+    # https://github.com/ibireme/yyjson/pull/295
+    (fetchpatch {
+      url = "https://github.com/ibireme/yyjson/commit/bef00cb5fe1929944cc13dec13f0f23fa4ad568b.patch";
+      hash = "sha256-oRFN95sgLqiwCzxvC3G4CFsD6sJtI5NeBWp4/WeaKCc=";
+    })
   ];
 
   meta = {

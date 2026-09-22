@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "life360";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = "life360";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D7ZtC9WrGTuU7cOs37P+y9zqOrOlfa919FVicejy6n4=";
+    hash = "sha256-ySa84lUyx8D7Dgg/hdZ4o/+Znn3CR0O9rdeXBrj/k5U=";
   };
 
   build-system = [ setuptools ];

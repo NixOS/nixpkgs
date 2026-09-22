@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Silly speed painting game";
+    homepage = "https://github.com/SimonLarsen/90-Second-Portraits";
     mainProgram = "90secondportraits";
     platforms = love.meta.platforms;
     license = with lib.licenses; [

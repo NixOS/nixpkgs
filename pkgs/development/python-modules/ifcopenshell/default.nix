@@ -24,7 +24,6 @@
   mpfr,
   nlohmann_json,
   opencascade-occt_7_6,
-  pcre,
   zlib,
 
   # python deps
@@ -76,6 +75,9 @@ buildPythonPackage rec {
       url = "https://github.com/IfcOpenShell/IfcOpenShell/commit/88b861737c7c206d0e7307f90d37467e9585515c.patch";
       hash = "sha256-zMoQcBWRdtavL0xdsr53SqyG6CZoeon8/mmJhrw85lc=";
     })
+
+    # boost 1.91 made boost::optional's converting constructor explicit
+    ./boost-1.91-optional.patch
   ];
 
   nativeBuildInputs = [
@@ -101,7 +103,6 @@ buildPythonPackage rec {
     mpfr
     nlohmann_json
     opencascade-occt
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -210,6 +211,6 @@ buildPythonPackage rec {
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ autra ];
+    teams = [ lib.teams.geospatial ];
   };
 }

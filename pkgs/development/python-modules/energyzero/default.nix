@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "4.0.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-Tisng08X/jyNtT27qy1hH6qM6Nqho/X8bg1tFg1oIx8=";
+    hash = "sha256-Vkx+Exvq3gafnz/aY3Tw462rJHanPlOPh7S6oXVi07I=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Module for getting the dynamic prices from EnergyZero";
     homepage = "https://github.com/klaasnicolaas/python-energyzero";
     changelog = "https://github.com/klaasnicolaas/python-energyzero/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

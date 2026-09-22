@@ -16,24 +16,15 @@
 let
   versions = lib.importJSON ./versions.json;
   flavor = lib.head (lib.filter (x: x.version == versionFlavor) versions);
-  fetchBinary =
-    runtimeId:
-    fetchurl {
-      url = flavor.files.${runtimeId}.url;
-      sha256 = flavor.files.${runtimeId}.sha;
-    };
-  sources = {
-    "x86_64-linux" = fetchBinary "linux-x64";
-    "x86_64-darwin" = fetchBinary "osx-x64";
-  };
 in
 stdenv.mkDerivation {
   pname = "StaticSitesClient-${versionFlavor}";
   version = flavor.buildId;
 
-  src =
-    sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src = fetchurl {
+    url = flavor.files.linux-x64.url;
+    sha256 = flavor.files.linux-x64.sha;
+  };
 
   nativeBuildInputs = [
     autoPatchelfHook

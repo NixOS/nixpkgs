@@ -130,7 +130,7 @@ index 9d986d2..d63902a 100644
  	g_object_unref (settings);
  
 diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
-index 60ff97f..8535dec 100644
+index c24a37a..e5cf57e 100644
 --- a/src/addressbook/libedata-book/e-book-meta-backend.c
 +++ b/src/addressbook/libedata-book/e-book-meta-backend.c
 @@ -148,7 +148,18 @@ ebmb_is_power_saver_enabled (void)
@@ -338,7 +338,7 @@ index 94f0769..8de758b 100644
  		g_clear_object (&settings);
  
 diff --git a/src/camel/camel-utils.c b/src/camel/camel-utils.c
-index 2c0b6ef..b354332 100644
+index 3de034a..b6732ba 100644
 --- a/src/camel/camel-utils.c
 +++ b/src/camel/camel-utils.c
 @@ -363,7 +363,19 @@ void
@@ -363,10 +363,10 @@ index 2c0b6ef..b354332 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index e605049..9961fea 100644
+index e3f2391..374c72d 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5666,7 +5666,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+@@ -5682,7 +5682,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
  	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -507,10 +507,10 @@ index 3738359..f9ce2d9 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index c999d4d..e9cf7c5 100644
+index 9f56da2..f82921a 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
-@@ -93,7 +93,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
+@@ -95,7 +95,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
  	name_len = strlen (name);
  	hostname_len = strlen (hostname);
  

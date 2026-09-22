@@ -5,6 +5,7 @@
   poetry-core,
   hikari,
   sigparse,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dotenv,
   pytest-asyncio,
@@ -29,6 +30,11 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     hikari
     sigparse
+  ];
+
+  nativeBuildInputs = [
+    # .dist-info/METADATA specifies version '0'
+    pyprojectVersionPatchHook
   ];
 
   pythonImportsCheck = [ "crescent" ];

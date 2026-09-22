@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
   pkg-config,
   bzip2,
   openssl,
@@ -10,24 +12,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boa";
-  version = "0.20";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-foCIzzFoEpcE6i0QrSbiob3YHIOeTpjwpAMtcPGL8Vg=";
+    hash = "sha256-DwuLNouuFO/hBBlXWx+DgHJ88A08JJm6GnNKhx3enkI=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-PphgRSVCj724eYAC04Orpz/klYuAhphiQ3v5TRChs+w=";
+  cargoHash = "sha256-EystGcIjJV/XsQgLJqCpY9wEv9XSOru+7+K6r8dzXV8=";
+
+  # cargo-auditable fails on `dep:either`.
+  auditable = false;
 
   cargoBuildFlags = [
     "--package"
     "boa_cli"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cmake ];
 
   buildInputs = [
     bzip2
@@ -41,13 +46,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Embeddable and experimental Javascript engine written in Rust";
-    mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
-    changelog = "https://github.com/boa-dev/boa/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/boa-dev/boa/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit # or
       unlicense
     ];
-    maintainers = [ ];
+    mainProgram = "boa";
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
 })

@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.14.1";
+  version = "3.15.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BaSD21mj7rPV53qFCOxGjGMm+rVzmfCooqcLcvQZa1U=";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
 
   build-system = [
@@ -89,8 +89,8 @@ buildPythonPackage (finalAttrs: {
     # Require unpackaged `grain`
     "test_basics_grain"
     "test_fit_with_data_adapter_grain_dataloader"
-    "test_fit_with_data_adapter_grain_datast"
-    "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
     "test_image_dataset_from_directory_binary_grain"
     "test_image_dataset_from_directory_color_modes_grain"
     "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
@@ -123,6 +123,17 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
+
+    # jax >= 0.11.2 serializes StableHLO portable artifacts targeting v1.18.0, which use
+    # `vhlo.custom_call_v2`. tensorflow's `XlaCallModule` (StableHLO v1.13.7) cannot
+    # deserialize them, breaking `JaxLayer`/`FlaxLayer` native serialization.
+    "test_jax_layer_native_serialization"
+    "test_jax_layer_stateless"
+    "test_jax_layer_training_independent"
+    "test_jax_layer_training_state"
+    "test_jax_layer_training_state_dtype_policy"
+    "test_with_polymorphic_shape_more_than_26_dimension_names"
+    "test_with_structures_as_inputs_and_outputs"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Hangs forever
@@ -130,6 +141,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
     # Require unpackaged `grain`
     "keras/src/layers/preprocessing/data_layer_test.py"
     "keras/src/layers/preprocessing/discretization_test.py"

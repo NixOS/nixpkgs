@@ -22,9 +22,9 @@ let
 
   phome = "$out/lib/olympus";
   # The following variables are to be updated by the update script.
-  version = "26.05.03.05";
-  buildId = "5598"; # IMPORTANT: This line is matched with regex in update.sh.
-  rev = "772103632c3f859c0bdb03033a0898e3760df8ca";
+  version = "26.09.15.05";
+  buildId = "5878"; # IMPORTANT: This line is matched with regex in update.sh.
+  rev = "2472132ac23a30701c1eb928dbd95858113ded25";
 in
 buildDotnetModule {
   pname = "olympus-unwrapped";
@@ -37,7 +37,7 @@ buildDotnetModule {
     owner = "EverestAPI";
     repo = "Olympus";
     fetchSubmodules = true; # Required. See upstream's README.
-    hash = "sha256-P7EcVhbsrznF+PkLo0L5B59VR7f3fRY5ZGHfKQg8/Wc=";
+    hash = "sha256-pQjRiVVpF2J7qR6BfvdC/jkHGVcUJsXmq1tUTs7GmmY=";
   };
 
   nativeBuildInputs = [

@@ -9,7 +9,9 @@
 
 buildGoModule {
   pname = "go-sct";
-  version = "unstable-2022-01-32";
+  version = "1.0-unstable-2022-01-31";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "d4l3k";

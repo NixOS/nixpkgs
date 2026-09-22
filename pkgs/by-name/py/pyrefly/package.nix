@@ -10,22 +10,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "1.0.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-S3phcTwZlG9VBHdYzcbsLzj0uqBUDy4Xfy/tlp3AQZg=";
+    hash = "sha256-xZ+HxB7UQUeVaPK15M6if+7aW4M+4ub397zL7DfduIw=";
   };
 
   buildAndTestSubdir = "pyrefly";
 
-  cargoPatches = [
-    # https://github.com/facebook/pyrefly/issues/3383
-    ./fix-cargo-lock.patch
-  ];
-  cargoHash = "sha256-OfbPPANsAhrp2MbzDEHGRLWWmUkbMMGKR5B4R6lXdE4=";
+  cargoHash = "sha256-hPGV6IfgpQy+nd6jHR1bf6mFW6ppePk+Dvt1cC2dI+U=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
@@ -42,10 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMPDIR=$(mktemp -d)
   '';
 
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
-
-  passthru.updateScript = nix-update-script { };
+  # avoid autoupdates for *-dev.* tags
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([\\d.]+)$" ];
+  };
 
   meta = {
     description = "Fast type checker and IDE for Python";

@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.12.3";
+  version = "0.14.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-umxBWVM9lXIDxNQKsg1kxJKkIHbRTyHXbd0lLs7GycA=";
+    hash = "sha256-KrqAKUCbqi0XGBV1aMzfRDJ1X+qQ7adrjHs8sPo5/VU=";
   };
 
   postPatch = ''
@@ -79,7 +79,15 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/distributed/test_distributed.py"
+  ];
+
   disabledTests = [
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
+
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
     "test_tensorclass_instance_methods"
     "test_tensorclass_stub_methods"
@@ -103,18 +111,6 @@ buildPythonPackage (finalAttrs: {
     "test_map_exception"
     "test_map"
     "test_multiprocessing"
-  ];
-
-  disabledTestPaths = [
-    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-    "test/test_compile.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Hangs forever
-    "test/test_distributed.py"
-    # Hangs after testing due to pool usage
-    "test/test_h5.py"
-    "test/test_memmap.py"
   ];
 
   meta = {

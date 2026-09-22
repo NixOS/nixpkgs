@@ -6,6 +6,7 @@
   # build-system
   cython,
   pkgconfig,
+  pyprojectVersionPatchHook,
   setuptools,
   setuptools-git-versioning,
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   build-system = [
     cython
     pkgconfig
+    pyprojectVersionPatchHook
     setuptools
     setuptools-git-versioning
   ];
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/precice/python-bindings";
     changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

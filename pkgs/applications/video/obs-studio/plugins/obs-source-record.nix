@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   cmakeFlags = [ "-DBUILD_OUT_OF_TREE=On" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-source-record";
     maintainers = with lib.maintainers; [
       robbins
-      shackra
+      elzorrorebelde
     ];
     license = lib.licenses.gpl2Only;
     inherit (obs-studio.meta) platforms;

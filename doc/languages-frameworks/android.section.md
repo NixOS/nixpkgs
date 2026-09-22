@@ -116,7 +116,7 @@ options:
 For each requested system image we can specify the following options:
 
 * `systemImageTypes` specifies what kind of system images should be included.
-  Defaults to: `default`.
+  Defaults to: `google_apis`, `google_apis_playstore`, `google_apis_ps16k` and `google_apis_playstore_ps16k`.
 * `abiVersions` specifies what kind of ABI version of each system image should
   be included. Defaults to `armeabi-v7a` and `arm64-v8a`.
 

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
-  version = "1.0.0-unstable-2025-10-02";
+  version = "1.0.0-unstable-2026-09-07";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "idevicerestore";
-    rev = "f4d0f7e83105cc362527566315abee07b0840848";
-    hash = "sha256-fqTVAHTxamk2lIllr7ZNHOJ1YTJHM4JpVQylMV33CJI=";
+    rev = "60192e97f87d1bbab5c493684e0a245b0966363f";
+    hash = "sha256-RLXyjEBO1RzDQGLI9c9wyD/MSIgMVfaPsfQ+NVaXzCI=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       restore of a firmware to a device.
 
       In general, upgrades and downgrades are possible, however subject to
-      availability of SHSH blobs from Apple for signing the firmare files.
+      availability of SHSH blobs from Apple for signing the firmware files.
 
       To restore a device to some firmware, simply run the following:
       $ sudo idevicerestore -l
@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [
+      flokli
+      nh2
+    ];
     mainProgram = "idevicerestore";
   };
 })

@@ -5,25 +5,30 @@
   meson,
   ninja,
   curl,
+  mimalloc,
   nlohmann_json,
   pkg-config,
   stdenv,
   nixComponents,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-eval-jobs";
-  version = "2.34.1";
+  version = "2.35.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "nix-community";
+    owner = "NixOS";
     repo = "nix-eval-jobs";
-    tag = "v${version}";
-    hash = "sha256-OFGRoJOYhvZ3Enk5a8vMy0QNcG5ZxyzFhyHMrwKXde8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t1FbcjvTWQ1WO3hJNKN+viNXuz4BX9Pte5K4F+IJLDk=";
   };
 
   buildInputs = [
     boost
     curl
+    mimalloc
     nlohmann_json
     nixComponents.nix-store
     nixComponents.nix-fetchers
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Hydra's builtin hydra-eval-jobs as a standalone";
-    homepage = "https://github.com/nix-community/nix-eval-jobs";
+    homepage = "https://github.com/NixOS/nix-eval-jobs";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       adisbladis
@@ -64,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nix-eval-jobs";
   };
-}
+})

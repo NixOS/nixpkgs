@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/azur1s/octofetch";
-    description = "Github user information on terminal";
+    description = "GitHub user information on terminal";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "octofetch";

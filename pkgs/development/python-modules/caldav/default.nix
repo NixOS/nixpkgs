@@ -3,11 +3,12 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
+  httpx,
   icalendar,
   icalendar-searcher,
   lxml,
   manuel,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   python,
   radicale,
   recurring-ical-events,
@@ -16,6 +17,7 @@
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  pytest-asyncio,
   python-dateutil,
   pyyaml,
   toPythonModule,
@@ -25,16 +27,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "2.2.6";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
-    tag = "v${version}";
-    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FV1C8RlbkNXOTtRKSCNgiGetImW0+647JgmZtf5U+pY=";
   };
 
   build-system = [
@@ -54,20 +56,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    httpx
     manuel
     proxy-py
     pyfakefs
-    pytestCheckHook
+    pytest-asyncio
+    pytest9_0CheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
     writableTmpDirAsHomeHook
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
-  ];
-
-  disabledTests = [
-    # test contacts CalDAV servers on the internet
-    "test_rfc8764_test_conf"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -77,11 +76,11 @@ buildPythonPackage rec {
   meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       marenz
       dotlambda
     ];
   };
-}
+})

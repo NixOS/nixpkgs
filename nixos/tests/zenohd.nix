@@ -84,7 +84,7 @@
     client.wait_for_unit("multi-user.target")
 
     for be in ["fs", "rocksdb", "mem" ]:
-      client.succeed(f"mosquitto_pub -h router -t {be}/test -m hello")
+      client.succeed(f"mosquitto_pub -q 1 -h router -t {be}/test -m hello")
       client.succeed(f"curl router:8000/{be}/test | grep hello")
   '';
 }

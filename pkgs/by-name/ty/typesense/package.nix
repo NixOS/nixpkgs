@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.attrNames sources.platforms;
     maintainers = with lib.maintainers; [ oddlama ];
   };
 }

@@ -19,6 +19,8 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
+  jq,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -30,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.3";
+  version = "1.39.6";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DR/aGCfqXUOubVEVmeJYOiF71rMYRYq8k23EXqluh5k=";
+    hash = "sha256-cBYn/g6eLT5rTumo4Y24rWSHS2Sc7gFthPuCg1AQ22k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-aiLSgpK3wadrBvclrQrdCzCiSjLcxg58oeP6ijL+JbY=";
+    hash = "sha256-djiIwZie9HjQ/+bCEGniMFkJA66oI0n+9y9Iax4GHOM=";
   };
 
   postPatch = ''
@@ -58,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
+    jq
     makeWrapper
     installShellFiles
   ];
@@ -99,7 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMGENERATORDIR = "${placeholder "out"}/lib/systemd/system-generators";
   };
+
+  # Workaround for RISCV cross-compilation issue
+  # https://github.com/koverstreet/bcachefs-tools/issues/850
+  preBuild = lib.optionalString stdenv.hostPlatform.isRiscV ''
+    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS --target=riscv64-unknown-linux-gnu -march=rv64gc"
+  '';
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
@@ -151,6 +162,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
-    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

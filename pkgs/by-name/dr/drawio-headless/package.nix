@@ -41,5 +41,6 @@ writeTextFile {
       tfc
     ];
     mainProgram = "drawio";
+    license = lib.licenses.mit; # Wrapper itself is MIT
   };
 }

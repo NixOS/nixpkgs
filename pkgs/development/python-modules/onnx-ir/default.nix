@@ -14,6 +14,8 @@
   sympy,
   typing-extensions,
 
+  fetchpatch,
+
   # tests
   onnxruntime,
   parameterized,
@@ -35,6 +37,17 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-vdo8BiE7m9Qr3JktgcPGDZfykjcf/VYY39tfhtzOrpA=";
   };
+
+  patches = [
+    # safetensors 0.8.0 changed `serialize_file` to require `TensorSpec` objects instead of plain
+    # dicts, breaking `save_safetensors`
+    # https://github.com/onnx/ir-py/pull/439
+    (fetchpatch {
+      name = "fix-safetensor-0.8.0-compat";
+      url = "https://github.com/onnx/ir-py/commit/c4780478d251f839ec1bacbea72d0a0948553285.patch";
+      hash = "sha256-99MeGU1B/534shCq9/TgrAPWscp+braXVcjAtnWQ3uY=";
+    })
+  ];
 
   build-system = [
     setuptools

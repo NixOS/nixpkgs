@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.15.3";
+  version = "5.15.6";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-ZDTwC5dm9kAgT/pIHQAK56L2pjyf/PmOjDr0F+Fr+JA=";
+    hash = "sha256-xh8+X4C6QCb2Y4fbo60xCX3QuXEktbopB2DbOTfzAhA=";
   };
 
   patches = [
@@ -33,6 +33,8 @@ buildHomeAssistantComponent rec {
     ./service-to-action.patch
     # https://github.com/blakeblackshear/frigate-hass-integration/pull/1085
     ./llmcontext-user-prompt.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1096
+    ./async-publish-compat.patch
   ];
 
   dependencies = [
@@ -48,8 +50,8 @@ buildHomeAssistantComponent rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
-  ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python3Packages)
+  ++ (homeassistant.getPackages "stream" homeassistant.python3Packages);
 
   disabledTests = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/922
@@ -57,6 +59,17 @@ buildHomeAssistantComponent rec {
     "test_frigate_camera_setup_birdseye"
     "test_frigate_camera_setup_webrtc"
     "test_frigate_camera_setup_birdseye_webrtc"
+    "test_binary_sensor_device_info"
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/1121
+    "test_camera_device_info"
+    "test_get_frigate_via_device_legacy"
+    "test_entry_remove_old_devices"
+    "test_profile_select_option"
+    "test_profile_select_device_info"
+    "test_per_camerazone_device_info"
+    "test_per_camerazone_device_info"
+    "test_per_entry_device_info"
+    "test_switch_device_info"
   ];
 
   disabledTestPaths = [

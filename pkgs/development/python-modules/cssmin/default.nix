@@ -2,20 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cssmin";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1dk723nfm2yf8cp4pj785giqlwv42l0kj8rk40kczvq1hk6g04p0";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-4BLwzIQB788mIDMjOQEVZHOK4yvoyEsuQ86L6uwQZ7Y=";
   };
+
+  build-system = [ setuptools ];
 
   # no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "cssmin" ];
 
   meta = {
     description = "Python port of the YUI CSS compression algorithm";
@@ -23,4 +30,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/zacharyvoase/cssmin";
     license = lib.licenses.bsd3;
   };
-}
+})

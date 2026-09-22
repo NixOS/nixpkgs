@@ -3,6 +3,7 @@
 {
   lib,
   stdenv,
+  fetchurl,
   meson,
   ninja,
   pkg-config,

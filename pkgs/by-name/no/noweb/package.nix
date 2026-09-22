@@ -88,11 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  passthru = {
-    tlType = "run";
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
-
   meta = {
     description = "Simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";

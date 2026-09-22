@@ -238,6 +238,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./1-otb-swig-include-itk.diff
+    # GDAL >= 3.13 returns CSLConstList from GDALGetMetadata, which no longer converts to char**.
+    ./2-otb-gdal-cslconstlist.diff
   ];
 
   postPatch = ''

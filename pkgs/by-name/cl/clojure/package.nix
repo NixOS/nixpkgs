@@ -9,16 +9,18 @@
   jdk,
   rlwrap,
   makeWrapper,
-  writeScript,
+  versionCheckHook,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.5.1645";
+  version = "1.12.6.1673";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-SoYS5/1yXsjkU/hwsi1bwaaO7/d0w9eTKamF81HAuDs=";
+    hash = "sha256-/pGUhY511a8TwuKv+S1xBnTVvFEF8rQvkKfZTYLsAjw=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
@@ -69,36 +72,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   installCheckPhase = ''
+    runHook preInstallCheck
+
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${finalAttrs.version}.jar
+
+    runHook postInstallCheck
   '';
 
-  passthru.updateScript = writeScript "update-clojure" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts jq
-
-    set -euo pipefail
-    shopt -s inherit_errexit
-
-    # `jq -r '.[0].name'` results in `v0.0`
-    latest_version="$(curl \
-      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-      -fsL "https://api.github.com/repos/clojure/brew-install/tags" \
-      | jq -r '.[1].name')"
-
-    update-source-version clojure "$latest_version"
-  '';
-
-  passthru.jdk = jdk;
+  passthru = {
+    inherit jdk;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
+    mainProgram = "clojure";
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,

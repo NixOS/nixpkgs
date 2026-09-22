@@ -16,7 +16,6 @@
   glib,
   dotconf,
   libsndfile,
-  runtimeShell,
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -32,7 +31,7 @@
   pcaudiolib,
   mbrola,
   withPico ? true,
-  svox,
+  picotts,
   libsOnly ? false,
 }:
 
@@ -100,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     flite
   ]
   ++ lib.optionals withPico [
-    svox
+    picotts
   ];
 
   pythonPath = [
@@ -134,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${picotts}/share/pico/lang"
   '';
 
   installFlags = [
@@ -158,10 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      berce
-      jtojnar
-    ];
+    maintainers = with lib.maintainers; [ jtojnar ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
     platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";

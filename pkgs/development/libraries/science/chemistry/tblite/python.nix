@@ -23,6 +23,7 @@ buildPythonPackage {
     pname
     version
     src
+    postPatch
     meta
     ;
 

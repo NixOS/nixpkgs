@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "httpie";
-    repo = "httpie";
+    repo = "cli";
     tag = version;
     hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
@@ -125,7 +125,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
-    changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/httpie/cli/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       antono

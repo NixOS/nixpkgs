@@ -20,9 +20,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace setup.py --replace-fail \
       'scripts=["bin/compare50"]' 'entry_points={"console_scripts": ["compare50=compare50.__main__:main"]}'
-    # auto included in current python version, no install needed
-    substituteInPlace setup.py --replace-fail \
-      'importlib' ' '
+
+    # Fix "AttributeError: module 'importlib' has no attribute 'resources'"
+    substituteInPlace compare50/passes.py \
+      --replace-fail "import importlib" "import importlib, importlib.resources"
   '';
 
   build-system = [
@@ -45,6 +46,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "attrs"
     "numpy"
     "termcolor"
+  ];
+
+  # Safely strip out the obsolete `importlib` PyPI package
+  pythonRemoveDeps = [
+    "importlib"
   ];
 
   pythonImportsCheck = [ "compare50" ];

@@ -4,27 +4,27 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  nodejs,
+  nodejs_22,
   node-gyp,
   gnutar,
   inter,
   python3,
   srcOnly,
   removeReferencesTo,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-++aNTkLOkwgkzRxg/WdrHfchXQwUUir0qqmb7WfdZJ0=";
+    hash = "sha256-/rEVeNxLgqeoxJTyzArZAGzAbJjfOjHuG+zpOnf40Mk=";
   };
 
   patches = [
@@ -41,10 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    nodejs
+    # nodejs 22 avoids a worker crash on 24.19+ while waiting for a proper fix to https://github.com/karakeep-app/karakeep/issues/2989
+    # should be safe to revert after seeing forward movement at https://github.com/karakeep-app/karakeep/blob/main/docker/Dockerfile#L13
+    nodejs_22
     node-gyp
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildInputs = [
@@ -52,28 +54,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version;
-    pnpm = pnpm_9;
-
-    # We need to pass the patched source code, so pnpm sees the patched version
-    src = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-patched-source";
-      inherit (finalAttrs) src patches;
-      installPhase = ''
-        cp -pr --reflink=auto -- . $out
-      '';
-    };
-
-    fetcherVersion = 3;
-    hash = "sha256-+MbKG0h3cD0kZua0OkdQsUeTjAY4ysK41KXUSaOSKHA=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-0ExBj87CbzgTis9/Z0J2d82051SXlEOgwXO+jAWxCi4=";
   };
   buildPhase = ''
     runHook preBuild
 
     # Based on matrix-appservice-discord
     pushd node_modules/better-sqlite3
-    npm run build-release --offline "--nodedir=${srcOnly nodejs}"
-    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
+    npm run build-release --offline "--nodedir=${srcOnly nodejs_22}"
+    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs_22}" {} \;
     popd
 
     export CI=true
@@ -129,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
         --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
         --subst-var-by VERSION "${finalAttrs.version}" \
-        --subst-var-by NODEJS "${nodejs}"
+        --subst-var-by NODEJS "${nodejs_22}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done

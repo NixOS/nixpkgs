@@ -7,33 +7,26 @@
 }:
 
 let
-  version = "2026.5.6-8";
+  version = "3000.10.31";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-unknown-linux.tar.gz";
-      hash = "sha256-kBHRIUiMwbFIGRCkNIOSST6fwEULs8yJu3cwHq2eyac=";
+      hash = "sha256-QyGNgO5JV29PhKH/1KTOx1XFRbXKmMWybvzlNAgk8zE=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-unknown-linux.tar.gz";
-      hash = "sha256-3Kg90ec9Fdne/+OhfFV24JCoDWzwilrej3vRM52XRqI=";
+      hash = "sha256-balrnIwjN4ksDa0KEseqp+Vov+91crv1TnoOyIkWujM=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-apple-darwin.tar.gz";
-      hash = "sha256-nUb8yotP9cUrWeDw5kb+ZLZ5Ug2l7QTO6eQnYNaD9o4=";
-    };
-
-    x86_64-darwin = fetchurl {
-      url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-apple-darwin.tar.gz";
-      hash = "sha256-CN03ZsVb1gyvFqAcVnjpT4VHB/mxnAQ2PhG8PwRZSrw=";
+      hash = "sha256-BR388p4PXLXwoHx1edyXJV/ufwLOTG/qzH1AZc52tb0=";
     };
   };
-
-  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -49,17 +42,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  inherit src;
+  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
 
   sourceRoot = ".";
 
   nativeBuildInputs = [ installShellFiles ];
 
   dontConfigure = true;
-  dontStrip = true;
   dontBuild = true;
-
-  doCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -81,9 +71,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cognition's Devin Agent CLI";
-    homepage = "https://devin.ai/";
+    homepage = "https://devin.ai/cli";
     license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       nhshah15

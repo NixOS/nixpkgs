@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
+  cmake,
   installShellFiles,
   rustPlatform,
   testers,
@@ -24,16 +26,16 @@
 }:
 
 let
-  version = "2.1.2";
-  devenvNixVersion = "2.34";
-  devenvNixRev = "42d4b7de21c15f28c568410f4383fa06a8458a40";
+  version = "2.3.1";
+  devenvNixVersion = "2.35";
+  devenvNixRev = "b9b81726b38469c55b9706d80d37d6c73cc7f76c";
 
   devenvNixSrc = fetchFromGitHub {
     name = "devenv-nix-${devenvNixVersion}-source";
     owner = "cachix";
     repo = "nix";
     rev = devenvNixRev;
-    hash = "sha256-g2KEBuHpc3a56c+jPcg0+w6LSuIj6f+zzdztLCOyIhc=";
+    hash = "sha256-3NT3yTvoRT7+rxLDNovpyeTDIJkZlBoO72rcu2x9Y9o=";
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -41,23 +43,27 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v2.1.2";
-    hash = "sha256-EQnZCy7r4VMO6KDoytxHBa0mFbM1D9g1kaDfs/s0YZA=";
+    tag = "v2.3.1";
+    hash = "sha256-zZB/UVcdL0VWuAPEe/ALY7onj8Q18efSUdL3ZJlUspk=";
   };
 
-  cargoHash = "sha256-uEwxqnLqCFpyV2NbnfuUyVqKrMeVeQzoGQmElaVeGU8=";
+  cargoHash = "sha256-oaBQMX8gTj/jFliJnfl+lO4yndSrorJT/Y3p2/YoRas=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -66,9 +72,12 @@ rustPlatform.buildRustPackage {
     "devenv"
     "-p"
     "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
   ];
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     makeBinaryWrapper
     pkg-config
@@ -107,6 +116,12 @@ rustPlatform.buildRustPackage {
   '';
 
   useNextest = true;
+  # Binding a TCP socket is not permitted in the darwin sandbox.
+  checkFlags = [
+    "--skip"
+    "waits_for_previous_proxy_to_release_control_socket"
+  ];
+
   cargoTestFlags = [
     "-p"
     "devenv"

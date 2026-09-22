@@ -17,6 +17,8 @@
   threadSupport ? true,
   useBoehmgc ? false,
   boehmgc,
+  sbcl,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -37,7 +39,11 @@ stdenv.mkDerivation rec {
     automake
     texinfo
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
+
   propagatedBuildInputs = [
     libffi
     gmp
@@ -79,6 +85,9 @@ stdenv.mkDerivation rec {
       ]
     }"
   '';
+
+  # ECL is used as a bootstrap compiler for SBCL.
+  passthru.tests.sbcl = sbcl;
 
   meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";

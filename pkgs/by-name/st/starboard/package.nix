@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "starboard";
-  version = "0.15.37";
+  version = "0.15.38";
 
   __darwinAllowLocalNetworking = true; # for tests
 
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "aquasecurity";
     repo = "starboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WIgXKw+PWS1A+npYL99t0Du7BJESTvrUckWtCzq1VS4=";
+    hash = "sha256-DcNvkXPVcsS0czQhuLub7xlpZ3jfjW8Er3YclXerjMI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

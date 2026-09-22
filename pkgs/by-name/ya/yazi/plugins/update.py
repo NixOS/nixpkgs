@@ -103,26 +103,93 @@ def github_get(
         raise RuntimeError(f"Error fetching {api_url}: {e}")
 
 
-def fetch_plugin_content(
+def plugin_source_dirs(owner: str, plugin_pname: str) -> list[str]:
+    """Directories that may contain a plugin's source files."""
+    if owner == "yazi-rs":
+        return [plugin_pname, "."]
+    return [".", plugin_pname]
+
+
+def contents_api_path(dir_path: str) -> str:
+    """Map a repository directory to a GitHub contents API path."""
+    if dir_path in ("", "."):
+        return "contents"
+    return f"contents/{dir_path}"
+
+
+def decode_github_file(content_data: dict) -> str | None:
+    """Decode a GitHub contents API file payload."""
+    if "content" not in content_data:
+        return None
+    return base64.b64decode(content_data["content"]).decode("utf-8")
+
+
+def list_plugin_lua_paths(
     owner: str,
     repo: str,
     plugin_pname: str,
     ref: str,
     headers: dict[str, str],
-) -> str:
-    """Fetch the plugin's main.lua content from GitHub"""
-    plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
-    content_data = github_get(owner, repo, f"contents/{plugin_path}main.lua", headers, {"ref": ref})
-    if not isinstance(content_data, dict) or "content" not in content_data:
-        raise RuntimeError(f"Could not fetch main.lua at {ref}")
+) -> list[str]:
+    """List top-level *.lua files for a plugin at a given ref."""
+    for dir_path in plugin_source_dirs(owner, plugin_pname):
+        listing = github_get(owner, repo, contents_api_path(dir_path), headers, {"ref": ref}, allow_404=True)
+        if not isinstance(listing, list):
+            continue
 
-    return base64.b64decode(content_data["content"]).decode("utf-8")
+        lua_paths = [
+            item["path"]
+            for item in listing
+            if item.get("type") == "file" and str(item.get("name", "")).endswith(".lua")
+        ]
+        if lua_paths:
+            return sorted(lua_paths)
+
+    return []
 
 
-def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
+def fetch_plugin_lua_contents(
+    owner: str,
+    repo: str,
+    plugin_pname: str,
+    ref: str,
+    headers: dict[str, str],
+) -> list[str]:
+    """Fetch a plugin's *.lua files from GitHub."""
+    lua_paths = list_plugin_lua_paths(owner, repo, plugin_pname, ref, headers)
+    if not lua_paths:
+        raise RuntimeError(f"Could not find *.lua at {ref}")
+
+    contents = []
+    for path in lua_paths:
+        content_data = github_get(owner, repo, f"contents/{path}", headers, {"ref": ref}, allow_404=True)
+        if isinstance(content_data, dict):
+            decoded = decode_github_file(content_data)
+            if decoded is not None:
+                contents.append(decoded)
+
+    if not contents:
+        raise RuntimeError(f"Could not fetch *.lua at {ref}")
+
+    return contents
+
+
+def required_version_from_lua(plugin_content: str) -> str | None:
+    """Read a Yazi @since requirement from the first line of a Lua file."""
+    first_line = plugin_content.split("\n", 1)[0]
+    required_version_match = re.search(r"since ([0-9.]+)", first_line)
+    return required_version_match.group(1) if required_version_match else None
+
+
+def check_version_compatibility(plugin_contents: list[str], plugin_name: str, yazi_version: str) -> str:
     """Check if the plugin is compatible with the current Yazi version"""
-    required_version_match = re.search(r"since ([0-9.]+)", plugin_content.split("\n")[0])
-    required_version = required_version_match.group(1) if required_version_match else "0"
+    required_version = "0"
+    for plugin_content in plugin_contents:
+        file_required_version = required_version_from_lua(plugin_content)
+        if file_required_version is None:
+            continue
+        if required_version == "0" or version.parse(file_required_version) > version.parse(required_version):
+            required_version = file_required_version
 
     if required_version == "0":
         print(f"No version requirement found for {plugin_name}, assuming compatible with any Yazi version")
@@ -186,7 +253,7 @@ def get_commit_candidates(owner: str, repo: str, plugin_pname: str, headers: dic
             repo,
             "commits",
             headers,
-            {"path": f"{plugin_pname}/main.lua", "per_page": 100},
+            {"path": plugin_pname, "per_page": 100},
         )
         if not isinstance(commits_data, list) or not commits_data:
             raise RuntimeError(f"Could not get recent commits for {plugin_pname}")
@@ -305,8 +372,8 @@ def is_yazi_compatible(
 ) -> bool:
     """Check if a candidate supports nixpkgs' Yazi version."""
     try:
-        plugin_content = fetch_plugin_content(owner, repo, plugin_pname, candidate.rev, headers)
-        check_version_compatibility(plugin_content, plugin_name, yazi_version)
+        plugin_contents = fetch_plugin_lua_contents(owner, repo, plugin_pname, candidate.rev, headers)
+        check_version_compatibility(plugin_contents, plugin_name, yazi_version)
         return True
     except RuntimeError as e:
         print(f"Skipping {candidate.rev}: {e}")
@@ -567,7 +634,7 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     }
 
 
-def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
+def update_all_plugins(nixpkgs_dir: str, commit: bool = False) -> list[dict[str, str]]:
     """Update all available Yazi plugins
 
     Returns:
@@ -602,6 +669,8 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
                 if update_info:
                     updated_count += 1
                     updated_plugins.append(update_info)
+                    if commit:
+                        commit_plugin_change(nixpkgs_dir, update_info)
             except KeyboardInterrupt:
                 print("\nUpdate process interrupted by user")
                 sys.exit(1)
@@ -630,47 +699,58 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
     return updated_plugins
 
 
-def commit_changes(updated_plugins: list[dict[str, str]]) -> None:
-    """Commit all changes after updating plugins"""
+def get_compare_url(plugin: dict[str, str]) -> str | None:
+    if plugin["old_commit"] == "unknown" or plugin["new_commit"] is None:
+        return None
+
+    owner = plugin["owner"].strip()
+    repo = plugin["repo"].strip()
+    return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
+
+
+def commit_plugin_change(nixpkgs_dir: str, plugin: dict[str, str]) -> None:
+    """Commit the updated file for one plugin."""
+    plugin_path = f"pkgs/by-name/ya/yazi/plugins/{plugin['name']}/default.nix"
+
+    try:
+        subprocess.run(["git", "add", "--", plugin_path], cwd=nixpkgs_dir, check=True)
+        diff_result = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", plugin_path],
+            cwd=nixpkgs_dir,
+            check=False,
+        )
+        if diff_result.returncode == 0:
+            print(f"No changes to commit for {plugin['name']}")
+            return
+        if diff_result.returncode != 1:
+            raise RuntimeError(f"Could not inspect staged changes for {plugin['name']}")
+
+        subject = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} → {plugin['new_version']}"
+        commit_args = ["git", "commit", "--no-verify", "-m", subject]
+
+        compare_url = get_compare_url(plugin)
+        if compare_url:
+            commit_args.extend(["-m", f"Compare: {compare_url}"])
+
+        commit_args.extend(["--", plugin_path])
+
+        subprocess.run(commit_args, cwd=nixpkgs_dir, check=True)
+        print(f"\nCommitted {plugin['name']} with message:\n{subject}")
+        if compare_url:
+            print(f"\nCompare: {compare_url}")
+    except Exception as e:
+        print(f"Error committing changes for {plugin['name']}: {e}")
+        raise
+
+
+def commit_changes(nixpkgs_dir: str, updated_plugins: list[dict[str, str]]) -> None:
+    """Commit one change per updated plugin."""
     if not updated_plugins:
         print("No plugins were updated, skipping commit")
         return
 
-    try:
-        status_output = run_command("git status --porcelain", capture_output=True)
-        if not status_output:
-            print("No changes to commit")
-            return
-
-        current_date = run_command("date +%Y-%m-%d", capture_output=True)
-
-        def get_compare_url(plugin: dict[str, str]) -> str | None:
-            if plugin["old_commit"] != "unknown":
-                owner = plugin['owner'].strip()
-                repo = plugin['repo'].strip()
-                return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
-            return None
-
-        if len(updated_plugins) == 1:
-            plugin = updated_plugins[0]
-            commit_message = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} -> {plugin['new_version']}"
-            compare_url = get_compare_url(plugin)
-            if compare_url:
-                commit_message += f"\n\nCompare: {compare_url}"
-        else:
-            commit_message = f"yaziPlugins: update on {current_date}\n\n"
-            for plugin in sorted(updated_plugins, key=lambda x: x['name']):
-                commit_message += f"- {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}\n"
-                compare_url = get_compare_url(plugin)
-                if compare_url:
-                    commit_message += f"  Compare: {compare_url}\n"
-
-        run_command("git add pkgs/by-name/ya/yazi/plugins/", capture_output=False)
-
-        subprocess.run(["git", "commit", "--no-verify", "-m", commit_message], check=True)
-        print(f"\nCommitted changes with message:\n{commit_message}")
-    except Exception as e:
-        print(f"Error committing changes: {e}")
+    for plugin in updated_plugins:
+        commit_plugin_change(nixpkgs_dir, plugin)
 
 
 def main():
@@ -688,7 +768,7 @@ def main():
 
     if args.all:
         print("Updating all Yazi plugins...")
-        updated_plugins = update_all_plugins(nixpkgs_dir)
+        updated_plugins = update_all_plugins(nixpkgs_dir, args.commit)
 
     elif args.plugin:
         plugin_name = args.plugin
@@ -713,8 +793,8 @@ def main():
             parser.print_help()
             sys.exit(0)
 
-    if args.commit and updated_plugins:
-        commit_changes(updated_plugins)
+    if args.commit and updated_plugins and not args.all:
+        commit_changes(nixpkgs_dir, updated_plugins)
 
 
 if __name__ == "__main__":

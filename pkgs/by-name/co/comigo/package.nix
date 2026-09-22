@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "comigo";
-  version = "1.2.31";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "yumenaka";
     repo = "comigo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oQq1fPwTVuw/gzmTivkT2AUvHkMVMgECc9h+ZLg9FvA=";
+    hash = "sha256-TaEbIKjK0ctT4DX0HYaXRakWYs2++j56OQF4fXaC+u0=";
   };
 
-  vendorHash = "sha256-o8XzCcX6IYb73QxQWoVYuxHOjKRcV949g0AwtM08Pys=";
+  vendorHash = "sha256-kJ0GTLFG9YF34jKFKjlgvevWxQO6aTNJGl+a/dfTtJ8=";
 
   subPackages = [ "." ];
 

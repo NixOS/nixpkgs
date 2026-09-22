@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/silx-kit/silx/blob/main/CHANGELOG.rst";
     description = "Software to support data assessment, reduction and analysis at synchrotron radiation facilities";
     homepage = "https://github.com/silx-kit/silx";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmiddend ];
     mainProgram = "silx";
   };

@@ -9,7 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nunicode";
-  version = "1.11";
+  version = "1.12";
+
+  strictDeps = true;
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -20,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alekseyt";
     repo = "nunicode";
     tag = finalAttrs.version;
-    hash = "sha256-6255YdX7eYSAj0EAE4RgX1m4XDNIF/Nc4ZCvXzTxpag=";
+    hash = "sha256-lYGO9WWywh3nJb7yryOnivw9MLYaldmPUr5/Pq5aie8=";
   };
 
   postPatch = ''
@@ -37,43 +41,24 @@ stdenv.mkDerivation (finalAttrs: {
       'install(TARGETS nusqlite3 DESTINATION "${placeholder "sqlite"}/lib")'
   '';
 
-  nativeBuildInputs = [
-    cmake
-    sqlite
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  # avoid name-clash on case-insensitive filesystems
-  cmakeBuildDir = "build-dir";
+  buildInputs = [ sqlite ];
 
-  cmakeFlags = [
-    # fix compatibility with CMake (https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html)
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
-  ];
+  nativeCheckInputs = [ sqlite ];
+
+  cmakeFlags = [ (lib.cmakeBool "NU_BUILD_SQLITE3_EXT" true) ];
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-
-    (
-    echo running SQLite testsuite
-
-    cd sqlite3
-    RESULT=$(../../sqlite3/testsuite < ../../sqlite3/tests.sql | sqlite3)
-    grep <<<$RESULT FAILED && echo SQLite testsuite failed && false
-
-    echo SQLite testsuite succeeded
-    )
-
-    runHook postCheck
-  '';
+  checkTarget = "nusqlite3_test";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, small and portable Unicode library with SQLite extension";
     homepage = "https://bitbucket.org/alekseyt/nunicode";
-    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.version}/CHANGELOG";
+    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     platforms = lib.platforms.unix;

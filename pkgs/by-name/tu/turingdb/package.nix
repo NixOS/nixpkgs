@@ -21,20 +21,32 @@
   zlib,
   llvmPackages_20,
   versionCheckHook,
+
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 let
-  turingstdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_20.stdenv else stdenv;
+  turingstdenv =
+    if stdenv.hostPlatform.isDarwin then
+      llvmPackages_20.stdenv
+    else if cudaSupport then
+      cudaPackages.backendStdenv
+    else
+      stdenv;
 in
 turingstdenv.mkDerivation (finalAttrs: {
   pname = "turingdb";
-  version = "1.31";
+  version = "1.33";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "turing-db";
     repo = "turingdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dorRoDWylZo/QRJbqEZOUf+JNHSKCIi/s8wxZ2HwZsI=";
+    hash = "sha256-osxz5x8lxMZM5/qTc5Xx3YDMMPeGYyN2aO9pX+kERgo=";
 
     fetchSubmodules = true;
 
@@ -74,6 +86,10 @@ turingstdenv.mkDerivation (finalAttrs: {
     gitMinimal
     pkg-config
     python3
+  ]
+  ++ lib.optionals cudaSupport [
+    # Needed by transitive dependency faiss
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -89,12 +105,15 @@ turingstdenv.mkDerivation (finalAttrs: {
     pugixml
     zlib
   ]
-  ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  ++ lib.optionals turingstdenv.hostPlatform.isDarwin [ llvmPackages_20.openmp ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "NIX_BUILD" true)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-fopenmp")
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-lgomp")
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${lib.getDev flex}/include")

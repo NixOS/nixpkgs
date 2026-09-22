@@ -40,12 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "EIGEN_LEAVE_TEST_IN_ALL_TARGET" true) # Build tests in parallel
   ];
 
   # too many flaky tests
   doCheck = false;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://eigen.tuxfamily.org";

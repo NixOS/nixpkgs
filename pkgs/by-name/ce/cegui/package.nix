@@ -60,6 +60,8 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
     mainProgram = "CEGUISampleFramework-0.9999";

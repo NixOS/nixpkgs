@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cf-terraforming";
-  version = "0.24.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cf-terraforming";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jj8bU6n5dpuF9Gg+xh/JXYWODR1C+Q3Lq9oaKJRnm7E=";
+    sha256 = "sha256-jq0xBmn+ZGYF6Yup/82wVYgtuIs9RcPHviGxj9JpTF0=";
   };
 
-  vendorHash = "sha256-JrHt7Av305bwl/RUf2ORz/lRVnoZfUVE4T400DQwjl0=";
+  vendorHash = "sha256-7/VRs7BEFLCx7sqIbOFA7b7tQwlpgzeWYUdgankHNCo=";
   ldflags = [
     "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${finalAttrs.version}"
   ];

@@ -45,7 +45,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-4nwDGUBSx5jjeLQ3EGQFdPZE2MfNGcBvlTU/Sye6OIk=";
+  xcodeHash = "sha256-8Z6Goz94xP3HqAaSnFUurhZE8l3G1mK5KviXtxSPQhI=";
 
   postPatch = ''
     # Improve compatiblity with libmd in nixpkgs.

@@ -15,7 +15,6 @@ let
     {
       x86_64-linux = "linux64";
       i686-linux = "linux";
-      x86_64-darwin = "macosx64";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
@@ -23,18 +22,19 @@ let
     {
       x86_64-linux = "make64";
       i686-linux = "makefile";
-      x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
   docDir = "share/mprime/doc";
+  ccArch = stdenv.hostPlatform.gcc.arch or "x86-64";
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
   version = "31.04b02";
 
   src = fetchzip {
-    url = "https://download.mersenne.ca/gimps/v31/31.04/p95v${
+    url = "https://www.mersenne.org/download/software/v31/31.04/p95v${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
     hash = "sha256-W8ic709bgm9KbVxe1fvIEC8J8LrwwMfAajX1bKhv6EM=";
@@ -67,17 +67,30 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # The following is needed because compiling with stdenv.hostPlatform.gcc.arch
+      # set to something like "znver1" causes fatal errors during runtime due to
+      # rounding issues
+      lib.optional (stdenv.hostPlatform.isx86_64 && ccArch != "x86-64") "-march=x86-64"
+    );
+  };
+
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
     make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
     make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 -t $out/bin ${srcDir}/mprime
 
     install -Dm444 -t $out/${docDir} license.txt readme.txt stress.txt undoc.txt
+    runHook postInstall
   '';
 
   meta = {
@@ -96,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ dstremur ];
     mainProgram = "mprime";
