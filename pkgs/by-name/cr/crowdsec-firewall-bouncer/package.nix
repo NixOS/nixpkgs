@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "crowdsec-firewall-bouncer";
-  version = "0.0.36";
+  version = "0.0.37";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "cs-firewall-bouncer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MGFplf3keL5B7rr1BcS4PegPWGVAYnFVO6BmxQocBHs=";
+    hash = "sha256-YNkfyRD7gxvhUhcyhN7i1AwLLgby2T9HRo44d2nMi0Y=";
   };
 
   vendorHash = "sha256-n3Do2eCmYHRdYNYqj5L+Ohkyw0OYAAp4HcTU9RI0ncs=";
