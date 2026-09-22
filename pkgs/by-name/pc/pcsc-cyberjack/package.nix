@@ -47,7 +47,10 @@ stdenv.mkDerivation rec {
     "--bindir=${placeholder "tools"}/bin"
   ];
 
-  postInstall = "make -C tools/cjflash install";
+  postInstall = ''
+    make -C tools/cjflash install
+    install -Dm644 ${./cyberjack.rules} $out/lib/udev/rules.d/93-cyberjack.rules
+  '';
 
   meta = {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
