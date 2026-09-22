@@ -22,6 +22,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/xk6" ];
 
+  ldflags = [ "-X go.k6.io/xk6/internal/cmd.version=${version}" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
