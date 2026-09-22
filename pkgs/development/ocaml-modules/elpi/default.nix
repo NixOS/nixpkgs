@@ -18,7 +18,7 @@
   rocqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
-      "3.7.1"
+      "3.8.0"
     else if lib.versionAtLeast ocaml.version "4.08" then
       "1.20.0"
     else
@@ -34,6 +34,7 @@ in
 
 let
   fetched = rocqPackages.metaFetch {
+    release."3.8.0".hash = "sha256-hMJ9CX0CRHiWRDHM8t8oWvKSRip9Z0OyyKX4vV8vDNQ=";
     release."3.7.1".sha256 = "sha256-AQn0T9bAj17tAcVZdl3PTj4ri0fCXQJvAVN1dFn19GY=";
     release."3.6.2".sha256 = "sha256-BDE4L5qYZfaMt+6JivNBJIaJGeDSf5E+Kw1Wera/WFk=";
     release."3.6.1".sha256 = "sha256-zoVgRqNAXeCgk3zGntVkkZxIiQrCU5+ONeI97BiT674=";
@@ -108,7 +109,8 @@ buildDunePackage {
       [
         ppx_deriving_0_15
       ]
-  );
+  )
+  ++ lib.optional (lib.versionAtLeast version "3.8" || version == "dev") atdgen-runtime;
 
   passthru.updateScript = ./update.sh;
 
