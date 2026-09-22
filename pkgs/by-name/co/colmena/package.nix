@@ -1,19 +1,16 @@
 {
-  stdenv,
   lib,
-  fetchpatch,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  makeBinaryWrapper,
-  nix-eval-jobs,
-  nix,
   versionCheckHook,
+  nix-eval-jobs,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
-  version = "0.4.0";
+  version = "0.5.0";
 
   __structuredAttrs = true;
 
@@ -21,40 +18,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "colmena";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
+    hash = "sha256-YkaWZQV/OO4ZEmin+RHZ/6qFfBah/qSSXduTQMZTNR0=";
   };
 
-  cargoHash = "sha256-2OLApLD/04etEeTxv03p0cx8O4O51iGiBQTIG/iOIkU=";
-
-  nativeBuildInputs = [
-    installShellFiles
-    makeBinaryWrapper
-  ];
+  cargoHash = "sha256-4Pwql4jz8nP9jOcppSoCEXryT9gN/ZWXFtzvcrjZYVA=";
 
   buildInputs = [ nix-eval-jobs ];
+  env.NIX_EVAL_JOBS = lib.getExe nix-eval-jobs;
 
-  env.NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
-
-  patches = [
-    # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/233
-    (fetchpatch {
-      url = "https://github.com/nix-community/colmena/commit/00fd486d49170b1304c67381b3096e55d4cdc76f.patch";
-      hash = "sha256-uwL3u0gO708bzV2NV8sTt10WHaCL3HykJNqSZNp9EtA=";
-    })
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd colmena \
       --bash <($out/bin/colmena gen-completions bash) \
-      --zsh <($out/bin/colmena gen-completions zsh) \
-      --fish <($out/bin/colmena gen-completions fish)
-
-    wrapProgram $out/bin/colmena \
-      --prefix PATH ":" "${lib.makeBinPath [ nix ]}"
+      --fish <($out/bin/colmena gen-completions fish) \
+      --zsh <($out/bin/colmena gen-completions zsh)
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Recursive Nix is not stable yet
   doCheck = false;
@@ -67,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple, stateless NixOS deployment tool";
     homepage = "https://colmena.cli.rs/${finalAttrs.passthru.apiVersion}";
-    downloadPage = "https://github.com/nix-community/colmena/";
+    downloadPage = "https://github.com/nix-community/colmena";
     changelog = "https://github.com/nix-community/colmena/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
