@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  gitUpdater,
   bashNonInteractive,
   tk,
   tclPackages,
@@ -51,9 +50,7 @@ tcl.mkTclDerivation (finalAttrs: {
     ];
   };
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "-BETA";
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
