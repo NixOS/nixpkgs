@@ -89,13 +89,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MBHChIMNLrP7u8ECRroGiniRGtZGArrpRPfAdkOaOXg=";
+    hash = "sha256-5X43mZamOaqRyyMChwJ966kpfCbNYBks4O8KM+3h2L4=";
   };
 
   # Integration tests require networking. Only run the unit tests.
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bins"
   ];
 
-  cargoHash = "sha256-NDjFv0iKDfkKwOQ3RZ4gO9eQufGf/dmFaGLTcFWH5uw=";
+  cargoHash = "sha256-Jt03Xy2i0GZJcpgm35AvI+8huhidYG3FyDS1YOY2Rmw=";
 
   nativeBuildInputs = [
     pkg-config
