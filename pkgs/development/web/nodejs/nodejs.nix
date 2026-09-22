@@ -550,6 +550,7 @@ let
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
+            ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
@@ -559,10 +560,6 @@ let
             # patch does not apply
             ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
             ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
-            # https://github.com/NixOS/nixpkgs/issues/564449
-            ++ lib.optional (
-              majorVersion == "26" && !stdenv.buildPlatform.isDarwin
-            ) "test-fs-cp-async-file-modes"
           )
         }"
       ];
