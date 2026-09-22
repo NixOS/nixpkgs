@@ -79,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/modules/desktopapp_options.cmake \
       --replace-fail "ENABLE_ISOLATED_GFX ON" "ENABLE_ISOLATED_GFX OFF"
 
+    substituteInPlace src/MEGASync/platform/linux/PlatformImplementation.cpp \
+      --replace-fail "/usr/share/applications/megasync.desktop" "$out/share/applications/megasync.desktop"
+
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace-warn "/bin/bash" "${stdenv.shell}"
     done
