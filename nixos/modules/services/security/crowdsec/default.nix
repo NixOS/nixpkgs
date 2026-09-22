@@ -1016,5 +1016,7 @@ in
       tornax
       jk
     ];
+
+    doc = ./doc.md;
   };
 }
