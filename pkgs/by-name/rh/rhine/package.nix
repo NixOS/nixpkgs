@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhine";
-  version = "0.3.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sivecano";
     repo = "rhine";
     tag = finalAttrs.version;
-    hash = "sha256-1urSOudD12Ge/hy3mGFfGNQAKLjqvuyV+cO1T4HloYs=";
+    hash = "sha256-wJPwooj1f1xb+DhnxaF6iDD9NASlgQZ1OPgrtCCXtoQ=";
   };
 
   nativeBuildInputs = [

@@ -11,11 +11,10 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "tributary-0.4.0-tqCfW5fFAAC_PBxqMMwGJRlbwU8XThn9b2zIieRvQgDX";
-    path = fetchgit {
-      url = "https://codeberg.org/Sivecano/libtributary";
-      rev = "ad5ee12ecae34c6aac55c55eeffce50f85cb3856";
-      hash = "sha256-PKtVtnUbfjOkAkYOaUCaMgAT/2rplMxFESgKNL9DFJk=";
+    name = "tributary-0.4.1-tqCfWzbUAACWcbClrEM-xQIfPNogwri6nGNyWrt123vK";
+    path = fetchzip {
+      url = "https://codeberg.org/Sivecano/libtributary/archive/0.5.0.tar.gz";
+      hash = "sha256-nyJLxQdiQ54gEf31M8tnE8ZGBYbl8tN9GzXsfRrHWIE=";
     };
   }
   {
