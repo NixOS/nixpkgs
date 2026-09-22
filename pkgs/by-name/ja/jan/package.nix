@@ -55,9 +55,12 @@ let
 
     extraPkgs =
       pkgs:
-      lib.optionals cudaSupport [
-        cudaPackages.cudatoolkit
-      ];
+      lib.optionals cudaSupport (
+        with cudaPackages;
+        [
+          cuda_cudart
+        ]
+      );
 
     inherit passthru meta;
   };
