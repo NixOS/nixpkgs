@@ -144,7 +144,6 @@ stdenv.mkDerivation {
     homepage = "https://www.zerotier.com";
     license = if enableUnfree then lib.licenses.unfree else lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      sjmackenzie
       zimbatm
       obadz
       danielfullmer

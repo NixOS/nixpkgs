@@ -13,16 +13,21 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "cheating-daddy";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sohzm";
     repo = "cheating-daddy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xH3tBnZAnDr/EbewtJc0WpBirW1Obn6tka7NP0ovAc=";
+    hash = "sha256-EOAvKy9pJo4+x4xVpW10bRyyyuU5xvp0CmWfyLNvqkw=";
   };
 
-  npmDepsHash = "sha256-xoZ/qz7fGw858GsITkx/ag0FeeL4zcXh32qwb+OTLbg=";
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
+
+  npmDepsHash = "sha256-8Ah27MVHhhlNxiv5OOamqKzoVvLbW94SeDuPor+GyRA=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -35,6 +40,8 @@ buildNpmPackage (finalAttrs: {
     ONNXRUNTIME_NODE_INSTALL = "skip";
     ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
   };
 
   makeCacheWritable = true;

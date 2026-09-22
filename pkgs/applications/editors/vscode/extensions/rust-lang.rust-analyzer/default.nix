@@ -47,7 +47,7 @@ let
       pkg-config
 
     ]
-    ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     installPhase = ''

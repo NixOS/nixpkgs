@@ -10,7 +10,6 @@
   pkg-config,
   boost,
   cairo,
-  fuse,
   glib,
   libarchive,
   librsvg,
@@ -80,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fuse
     libarchive
     squashfuse
     xdg-utils-cxx

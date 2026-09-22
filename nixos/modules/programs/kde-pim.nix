@@ -40,6 +40,7 @@ in
         # Only needed when using the Merkuro Contacts widget in Plasma.
         ++ lib.optionals config.services.desktopManager.plasma6.enable [
           kcontacts
+          akonadi-contacts
         ]
       );
   };

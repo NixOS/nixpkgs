@@ -6,18 +6,17 @@
   gtk3,
   adwaita-icon-theme,
   moka-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arc-icon-theme";
   version = "20161122";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-icon-theme";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TfYtzwo69AC5hHbzEqB4r5Muqvn/eghCGSlmjMCFA7I=";
   };
 
@@ -29,7 +28,6 @@ stdenvNoCC.mkDerivation rec {
   propagatedBuildInputs = [
     moka-icon-theme
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -45,4 +43,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

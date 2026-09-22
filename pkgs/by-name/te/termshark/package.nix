@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   postFixup = ''
-    wrapProgram $out/bin/termshark --prefix PATH : ${lib.makeBinPath [ wireshark-cli ]}
+    wrapProgram $out/bin/termshark --suffix PATH : ${lib.makeBinPath [ wireshark-cli ]}
   '';
 
   ldflags = [

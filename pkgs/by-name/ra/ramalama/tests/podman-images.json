@@ -1,0 +1,15 @@
+{
+  "imageName": "quay.io/ramalama/ramalama",
+  "imageTag": "0.22",
+  "imageDigest": "sha256:01f652adb2d7bed7c3eb960ee3fe1dc9b6addff003ed58932048cee01db78302",
+  "images": {
+    "x86_64-linux": {
+      "arch": "amd64",
+      "hash": "sha256-Llykx761YUa50nsckZELxNSbjeDxBElWWshT7KQd5pE="
+    },
+    "aarch64-linux": {
+      "arch": "arm64",
+      "hash": "sha256-9It9EuYxmZ2UThQYr9FD63C/uBVS1ufP7bnZeA9psqI="
+    }
+  }
+}

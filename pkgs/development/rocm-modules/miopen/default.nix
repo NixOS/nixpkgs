@@ -44,7 +44,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.2.2";
+  version = "7.2.3";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -215,7 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGPU_ARCHS=${lib.concatStringsSep ";" supportedTargets}"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-    "-DCMAKE_BUILD_TYPE=Release"
 
     # needs to stream to stdout so bzcat rather than bunzip2
     "-DUNZIPPER=${bzip2}/bin/bzcat"
@@ -332,7 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Machine intelligence library for ROCm";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

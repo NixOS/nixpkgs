@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "vacuum-map-parser-roborock";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PiotrMachowski";
     repo = "Python-package-${pname}";
     tag = "v${version}";
-    hash = "sha256-MqsLvAs4PU/K2yBxEhVJucstZg9QFPYgOTCbgT2Uq/A=";
+    hash = "sha256-v9T9KGKi2vvxZQDjL6CBziPisgQ7sp3HnWZgZ/e8kVY=";
   };
 
   postPatch = ''

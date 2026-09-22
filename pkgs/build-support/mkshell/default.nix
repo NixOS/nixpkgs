@@ -60,5 +60,6 @@ lib.extendMkDerivation {
         '';
 
       preferLocalBuild = attrs.preferLocalBuild or true;
+      allowSubstitutes = attrs.allowSubstitutes or false;
     };
 }

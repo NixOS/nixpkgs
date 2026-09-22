@@ -84,6 +84,7 @@ in
       '';
     })
     skipTests
+    (pkg: old: { meta.mainProgram = "scheme-langserver"; })
   ];
 
   xyz-modem = joinOverrides [

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dependency-groups";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "dependency-groups";
     tag = version;
-    hash = "sha256-suuSx3zf0Y45FJdH8Cb6N7hcvPnzleREpHhtdiG2CLg=";
+    hash = "sha256-qjWvUKUfxYnSUUU3zuS27/a9lxvrHC/qams+XULvxxI=";
   };
 
   build-system = [

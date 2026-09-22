@@ -8,7 +8,7 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lambdasoup";
   version = "1.1.1";
 
@@ -16,8 +16,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "aantron";
-    repo = pname;
-    rev = version;
+    repo = "lambdasoup";
+    rev = finalAttrs.version;
     hash = "sha256-+d1JPU7OyQgt8pDTlwZraqPHH+OBQD1ycsELKpHT95Y=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

@@ -7,32 +7,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnsx";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XtjNdqUS1l6Ct5s+OXmmwvpuckKTaHD2S4tn39Tvf1Y=";
+    hash = "sha256-PYcrpcr6VfoqKh48uXtgxyBolXj/BtD9fSCMl9miBCc=";
   };
 
-  vendorHash = "sha256-ng0S/oFnrSlJ6a2UIZ3IrZx0Tb8Mru9BOuHBqH/1ctU=";
+  vendorHash = "sha256-KwZQG/rMKtu+6j7QzPTzLIGtY+fs+zVmrtaQCY1nTOg=";
 
   subPackages = [ "cmd/dnsx" ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
-
-  doInstallCheck = true;
-
-  versionCheckProgramArg = "-version";
 
   meta = {
     description = "Fast and multi-purpose DNS toolkit";

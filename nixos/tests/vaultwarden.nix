@@ -32,10 +32,11 @@ let
             }
             # python
             ''
-
+              import shutil
               from selenium.webdriver.common.by import By
               from selenium.webdriver import Firefox
               from selenium.webdriver.firefox.options import Options
+              from selenium.webdriver.firefox.service import Service
               from selenium.webdriver.support.ui import WebDriverWait
               from selenium.webdriver.support import expected_conditions as EC
               from selenium.common.exceptions import ElementClickInterceptedException
@@ -50,9 +51,11 @@ let
                           continue
 
 
+              service = Service(shutil.which("geckodriver"))
+
               options = Options()
               options.add_argument('--headless')
-              driver = Firefox(options=options)
+              driver = Firefox(options=options, service=service)
 
               driver.implicitly_wait(20)
               driver.get('https://localhost/#/signup')
@@ -87,6 +90,9 @@ let
               click_when_unobstructed((By.XPATH, "//button[contains(., 'Add it later')]"))
 
               click_when_unobstructed((By.XPATH, "//a[contains(., 'Skip to web app')]"))
+
+              # Skip the tour on first login
+              click_when_unobstructed((By.XPATH, "//button[contains(., 'Skip')]"))
 
               click_when_unobstructed((By.XPATH, "//button[contains(., 'New item')]"))
 

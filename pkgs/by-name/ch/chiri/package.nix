@@ -3,12 +3,13 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   # build tools
   cargo-tauri,
-  nodejs_22,
+  nodejs_26,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pkg-config,
   makeBinaryWrapper,
@@ -21,32 +22,35 @@
   webkitgtk_4_1,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chiri";
-  version = "0.8.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "SapphoSys";
+    owner = "chiriapp";
     repo = "chiri";
     tag = "app-v${finalAttrs.version}";
-    hash = "sha256-VrENUwkItT+8C7JowoEfqjIX4RhThTm+4hntdm9ifVk=";
+    hash = "sha256-ASmDHMlp+jNA/8uJ78SLv/2plG41KYkKdel2WpMGwq8=";
   };
 
-  cargoHash = "sha256-2CDwuZiE4b5cBUPZs8l4pf9/FyvtSpRwNwQZ5gp85zc=";
+  cargoHash = "sha256-BeEpTFKWr81vNBUhHOnfrJ/yNgpZGDExnaxvIbwkBMs=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    hash = "sha256-z2AMfMYNEK4pmjlE5YXn1DRCGyIcOO0EWCFlhXSxwrU=";
-    fetcherVersion = 3;
+    inherit pnpm;
+    hash = "sha256-IQgYbkGsPC0TbqcDxhOgVWFmpxprCCwrQI7QJx4IpAc=";
+    fetcherVersion = 4;
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    nodejs_22
-    pnpmConfigHook
-    pnpm_10
+    nodejs_26
     pkg-config
+    pnpm
+    pnpmConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook4
@@ -97,16 +101,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       ''
         mv $out/bin/Chiri $out/bin/chiri
-        substituteInPlace $out/share/applications/Chiri.desktop \
-          --replace-fail "Exec=Chiri" "Exec=chiri"
+        for desktopFile in \
+          $out/share/applications/Chiri.desktop \
+          $out/share/applications/garden.chiri.Chiri.desktop
+        do
+          if [ -f "$desktopFile" ]; then
+            substituteInPlace "$desktopFile" \
+              --replace-fail "Exec=Chiri" "Exec=chiri"
+          fi
+        done
       '';
 
   doCheck = false;
 
+  passthru.updateScript = nix-update-script;
+
   meta = {
     description = "Cross-platform CalDAV task management app";
-    homepage = "https://github.com/SapphoSys/chiri";
-    changelog = "https://github.com/SapphoSys/chiri/releases/tag/app-v${finalAttrs.version}";
+    homepage = "https://github.com/chiriapp/chiri";
+    changelog = "https://github.com/chiriapp/chiri/releases/tag/app-v${finalAttrs.version}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ SapphoSys ];
     mainProgram = "chiri";

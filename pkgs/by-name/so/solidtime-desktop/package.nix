@@ -5,11 +5,13 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
-  electron,
+  electron_41,
   xcodebuild,
   desktopToDarwinBundle,
 }:
-
+let
+  electron = electron_41;
+in
 buildNpmPackage (finalAttrs: {
   pname = "solidtime-desktop";
   version = "0.2.7";

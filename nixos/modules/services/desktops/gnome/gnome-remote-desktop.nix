@@ -22,6 +22,10 @@
   config = lib.mkIf config.services.gnome.gnome-remote-desktop.enable {
     services.pipewire.enable = true;
     services.dbus.packages = [ pkgs.gnome-remote-desktop ];
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
 
     environment.systemPackages = [ pkgs.gnome-remote-desktop ];
 

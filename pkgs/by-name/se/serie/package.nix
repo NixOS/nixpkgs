@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serie";
-  version = "0.7.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "serie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/w/LKU2ObPjoO7RQ5HehCAqWv3Hfu7a+6Rk+rPx5MSM=";
+    hash = "sha256-V1EC9moM8vXLf7YxiVaJG/EOmGCiXNz58vT/JSr9uXc=";
   };
 
-  cargoHash = "sha256-JeK2UIlG4MmOxGPxy2HbFTgpi14/zyibuFQyrQooItg=";
+  cargoHash = "sha256-p1vseh8vv2UFVhL11gxkc231iZKSmsuk+zAZYZpjXz4=";
 
   nativeCheckInputs = [ gitMinimal ];
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };

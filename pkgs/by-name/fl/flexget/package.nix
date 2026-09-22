@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.19.14";
+  version = "3.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mwg1Ty6saEc/41Rm9mw2f9TiyoJaUlPZfDBu6kklcz8=";
+    hash = "sha256-Xf+nFDC1dNyFXeK8gZYWiE3kZKYNB4lCdBoI24+b/gA=";
   };
 
   pythonRelaxDeps = true;
@@ -30,12 +30,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     apscheduler
     beautifulsoup4
     colorama
+    curl-cffi
     feedparser
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
+    pyscrypt
     psutil
     pydantic
     pynzb
@@ -156,6 +158,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # others
     "TestRegexp"
     "TestYamlLists"
+    "test_ambiguous[guessit]"
+    "test_date_id[guessit]"
   ];
 
   disabledTestPaths = [

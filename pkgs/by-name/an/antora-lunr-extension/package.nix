@@ -57,7 +57,7 @@ buildNpmPackage rec {
       key](https://docs.antora.org/antora/3.1/extend/enable-extension).
     '';
 
-    maintainers = [ lib.maintainers.naho ];
+    maintainers = [ lib.maintainers.noahbiewesch ];
     platforms = lib.platforms.all;
   };
 }

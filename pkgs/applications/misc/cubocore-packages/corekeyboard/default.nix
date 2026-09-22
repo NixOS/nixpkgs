@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corekeyboard";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corekeyboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n7QbvRPZFMeUl/P4XiGYZDglZCA8Ftf08s5uzPmSyIQ=";
+    hash = "sha256-HAkIhmQzicnOAws8M+Z8J7lCuGUqYkJeQl0H8P0EE3c=";
   };
 
   nativeBuildInputs = [

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Implementation of the XDG Base Directory Specification in C++";
+    homepage = "https://github.com/Grumbel/xdgcpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;

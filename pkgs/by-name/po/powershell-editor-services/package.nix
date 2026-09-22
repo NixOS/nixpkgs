@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "powershell-editor-services";
-  version = "4.5.0";
+  version = "4.7.0";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v${version}/PowerShellEditorServices.zip";
-    hash = "sha256-25nKcJ0Q9Kk2LEVutqxPPQvG+/hmeHsmUG01vmOsFqg=";
+    hash = "sha256-dODDDR42VONL3nf5Pg08yfPWHMswCCsgiUMNGSlUz9o=";
     stripRoot = false;
   };
 

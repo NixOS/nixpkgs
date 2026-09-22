@@ -8,15 +8,12 @@ cd "$(readlink -e "$(dirname "${BASH_SOURCE[0]}")")"
 version="1.5"
 
 aarch64_darwin_url="https://github.com/GaloisInc/saw-script/releases/download/v${version}/saw-${version}-macos-15-ARM64-with-solvers.tar.gz"
-x86_64_darwin_url="https://github.com/GaloisInc/saw-script/releases/download/v${version}/saw-${version}-macos-15-intel-X64-with-solvers.tar.gz"
 x86_64_linux_url="https://github.com/GaloisInc/saw-script/releases/download/v${version}/saw-${version}-ubuntu-22.04-X64-with-solvers.tar.gz"
 
 aarch64_darwin_hash=$(nix-prefetch-url "$aarch64_darwin_url")
-x86_64_darwin_hash=$(nix-prefetch-url "$x86_64_darwin_url")
 x86_64_linux_hash=$(nix-prefetch-url "$x86_64_linux_url")
 
 aarch64_darwin_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$aarch64_darwin_hash")
-x86_64_darwin_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$x86_64_darwin_hash")
 x86_64_linux_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$x86_64_linux_hash")
 
 sed -i "s/version = \".*\"/version = \"${version}\"/" package.nix
@@ -28,10 +25,6 @@ cat >sources.nix <<EOF
   aarch64-darwin = {
     url = "$aarch64_darwin_url";
     hash = "$aarch64_darwin_hash";
-  };
-  x86_64-darwin = {
-    url = "$x86_64_darwin_url";
-    hash = "$x86_64_darwin_hash";
   };
   x86_64-linux = {
     url = "$x86_64_linux_url";

@@ -4,8 +4,8 @@
   fetchurl,
   makeWrapper,
   makeDesktopItem,
-  genericUpdater,
   writeShellScript,
+  jq,
   atk,
   cairo,
   gdk-pixbuf,
@@ -37,11 +37,13 @@
   freetype,
   fontconfig,
   polkit,
-  polkit_gnome,
   pciutils,
   copyDesktopItems,
   pulseaudio,
   udev,
+  libxkbcommon,
+  wayland,
+  libepoxy,
 }:
 
 let
@@ -83,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     polkit
-    polkit_gnome
     pulseaudio
     libxcb
     libxkbfile
@@ -100,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libxrender
     udev
+    libxkbcommon
+    wayland
+    libepoxy
   ];
 
   nativeBuildInputs = [
@@ -158,24 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = genericUpdater {
-      versionLister =
-        let
-          arch =
-            if system == "x86_64-linux" then
-              "amd64"
-            else if system == "aarch64-linux" then
-              "arm64"
-            else
-              throw "cannot update AnyDesk on ${system}";
-        in
-        writeShellScript "anydesk-versionLister" ''
-          curl -s https://anydesk.com/en/downloads/linux \
-            | grep "https://[a-z0-9._/-]*-${arch}.tar.gz" -o \
-            | uniq \
-            | sed 's,.*/anydesk-\(.*\)-${arch}.tar.gz,\1,g'
-        '';
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -188,6 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     mainProgram = "anydesk";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fraioveio ];
   };
 })

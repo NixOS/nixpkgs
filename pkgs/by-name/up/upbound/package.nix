@@ -72,7 +72,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "CLI for interacting with Upbound Cloud, Upbound Enterprise, and Universal Crossplane (UXP)";
-    changelog = "https://docs.upbound.io/reference/cli/rel-notes/#whats-changed";
+    changelog = "https://docs.upbound.io/reference/release-notes/up-cli";
     homepage = "https://upbound.io";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [

@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Encoder for unicode to RTF 1.5 command sequences";
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
     homepage = "https://github.com/mjpieters/rtfunicode";
     changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${finalAttrs.src.tag}";

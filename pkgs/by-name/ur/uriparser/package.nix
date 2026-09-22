@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uriparser";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "uriparser";
     repo = "uriparser";
     tag = "uriparser-${finalAttrs.version}";
-    hash = "sha256-tXEcJ6NAKVoFg/GLkldRcrSlXDcGpvjp7cguM9Xqcps=";
+    hash = "sha256-BM2Nf7iKlS336RG7f+ZKBm/+yru5wB9p2TVdY7kYgKg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  nativeCheckInputs = [ gtest ];
+  checkInputs = [ gtest ];
+
+  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${finalAttrs.version}/ChangeLog";

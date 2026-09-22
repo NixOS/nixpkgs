@@ -4,6 +4,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
   freetype,
   harfbuzz,
   imlib2,
@@ -17,17 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jfbview";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "jichu4n";
     repo = "jfbview";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ASgKXk5iVqKsBc1uzakHs5ojUb6AptGm9LxNyFcDngc=";
+    hash = "sha256-X52FBg4Jgb80OETu29p4lcWpT+OSRz1xfhw+IkFZr+I=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     freetype
@@ -44,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "/") # relative to $out
   ];
 
@@ -52,11 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
-  '';
 
   passthru.updateScript = nix-update-script { };
 

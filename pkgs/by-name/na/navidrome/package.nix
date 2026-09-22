@@ -1,9 +1,8 @@
 {
-  buildGoModule,
+  buildGo127Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
-  fetchpatch,
   lib,
   nodejs_24,
   npmHooks,
@@ -16,27 +15,28 @@
   nix-update-script,
   ffmpegSupport ? true,
   versionCheckHook,
+  plugins ? [ ],
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "navidrome";
-  version = "0.61.2";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-epSgGiDdfNRUaQtWoOd4ADKtF7Ptt3p9UOqsWBzZg7I=";
+    hash = "sha256-2GUAGuwVE3i49g/mGN3zd1J1y9jVhF0g4hKGceSQwD8=";
   };
 
-  vendorHash = "sha256-RmmZudmWBxiw+c9g8KFEX+ALFD0xP/SBsYc6b6RWWO8=";
+  vendorHash = "sha256-1aKih0Xl5OfV4IO/2E0S31rHhRx356zl2QPM96jcFco=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-7hy2vLCEicKzjORpJZ0mrRS8PT3GsJ8DWdvj/7SrB70=";
+    hash = "sha256-uRF9cf6HZE0gyCvGTEZ520d2gMsxmccEYLJBgc47pMg=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,8 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ];
+
+  runtimeInputs = plugins;
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -77,6 +79,13 @@ buildGoModule (finalAttrs: {
     make buildjs
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/plugins/
+    ${lib.concatMapStringsSep "\n" (plugin: ''
+      ln -s ${plugin}/share/${plugin.pname}.ndp $out/share/plugins/
+    '') plugins}
+  '';
+
   tags = [
     "netgo"
     "sqlite_fts5"
@@ -91,6 +100,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };

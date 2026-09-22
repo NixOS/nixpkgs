@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   rustPlatform,
 }:
 
@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-gone";
   version = "1.3.1";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "swsnr";
     repo = "git-gone";
     tag = "v${finalAttrs.version}";
@@ -19,8 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Cleanup stale Git branches of merge requests";
-    homepage = "https://github.com/swsnr/git-gone";
-    changelog = "https://github.com/swsnr/git-gone/raw/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://codeberg.org/swsnr/git-gone";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cafkafk

@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hubot-sans";
   version = "1.0.1";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://github.com/github/hubot-sans/releases/download/v${finalAttrs.version}/Hubot-Sans.zip";
     hash = "sha256-EWTyoGNqyZcqlF1H1Tdcodc8muHIo8C9gbSPAjiogRk=";

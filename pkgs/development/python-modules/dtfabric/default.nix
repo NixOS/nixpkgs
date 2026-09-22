@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dtfabric";
-  version = "20260411";
+  version = "20260506";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-0hnJJ76wpINsNXecrGCQILqixo4xUhH8dW6djq9/vH4=";
+    hash = "sha256-n/z2OD3vZrEKoYC3eRVIx6XpgKwTbTaKqp2O2cg11fs=";
   };
 
   pythonRemoveDeps = [ "pip" ];

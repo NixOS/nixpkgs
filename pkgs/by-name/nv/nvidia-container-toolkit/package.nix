@@ -2,25 +2,23 @@
   lib,
   glibc,
   fetchFromGitHub,
-  makeWrapper,
   buildGoModule,
   autoAddDriverRunpath,
 }:
 
 let
-  # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
+  # From https://github.com/NVIDIA/nvidia-container-toolkit/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.18.2";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OMM7IQ65jPr9I5YUwVR3SXbuARnLjS2GSVq2j4J8uFY=";
-
+    hash = "sha256-DGu2T9RU4D9y7EfGe/7NxHUzV5b672ql1fdqXf185Dk=";
   };
 
   outputs = [
@@ -33,11 +31,15 @@ buildGoModule (finalAttrs: {
   patches = [
     # This patch causes library lookups to first attempt loading via dlopen
     # before falling back to the regular symlink location and ldcache location.
+    # Required on NixOS, where the driver libraries live outside the ldcache and
+    # the FHS paths that the upstream locators search. Upstream tried to add an
+    # equivalent locator but reverted it; tracked in
+    # https://github.com/NVIDIA/nvidia-container-toolkit/issues/1677
     ./0001-Add-dlopen-discoverer.patch
   ];
 
   postPatch = ''
-    substituteInPlace internal/config/config.go \
+    substituteInPlace api/config/v1/config.go \
       --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
@@ -55,19 +57,16 @@ buildGoModule (finalAttrs: {
   ];
 
   # Based on upstream's Makefile:
-  # https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
+  # https://github.com/NVIDIA/nvidia-container-toolkit/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
   ldflags = [
-    "-extldflags=-Wl,-z,lazy" # May be redunandant, cf. `man ld`: "Lazy binding is the default".
+    "-extldflags=-Wl,-z,lazy" # required with the incomplete NVML stub library.
     "-s" # "disable symbol table"
-
-    # "-X name=value"
     "-X ${cliVersionPackage}.version=${finalAttrs.version}"
     "-X ${cliVersionPackage}.gitCommit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [
     autoAddDriverRunpath
-    makeWrapper
   ];
 
   checkFlags =
@@ -78,7 +77,7 @@ buildGoModule (finalAttrs: {
         "TestDuplicateHook"
       ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})$" ];
 
   postInstall = ''
     mkdir -p $tools/bin
@@ -86,7 +85,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
+    homepage = "https://github.com/NVIDIA/nvidia-container-toolkit";
     description = "NVIDIA Container Toolkit";
     mainProgram = "nvidia-ctk";
     license = lib.licenses.asl20;
@@ -94,6 +93,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       cpcloud
       christoph-heiss
+      zeusec
     ];
   };
 })

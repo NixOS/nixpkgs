@@ -7,6 +7,9 @@
   # nativeBuildInputs
   installShellFiles,
 
+  # buildInputs
+  rust-jemalloc-sys,
+
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -14,14 +17,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.32";
+  version = "0.0.82";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-534/xT6JfbgEboH1q4R4JTl2/gLKKs1wU9eqoZf0Asw=";
+    hash = "sha256-7zYLPTkVXbHBluqjzUMzc0fTfpVKFRa92mNA9wR7WL0=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,9 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-uQkrvSmvQXJj+WlGLI+2fHNQeCd1eYJrJJ1z3OZSHbA=";
+  cargoHash = "sha256-2I6FhTHZhEAMruPv3gOfZTgO9TYdo3/u+zzeAM1Gq4o=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ rust-jemalloc-sys ];
 
   # `ty`'s tests use `insta-cmd`, which depends on the structure of the `target/` directory,
   # and also fails to find the environment variable `$CARGO_BIN_EXE_ty`, which leads to tests failing.
@@ -63,9 +68,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=python_environment::ty_environment_and_discovered_venv"
     "--skip=python_environment::ty_environment_is_only_environment"
     "--skip=python_environment::ty_environment_is_system_not_virtual"
+    "--skip=python_environment::ty_system_environment_and_local_venv"
 
     # flaky: unmatched assertion: revealed: Literal[1]
     "--skip=mdtest::generics/pep695/functions.md"
+
+    # flaky: https://github.com/astral-sh/ty/issues/1540
+    # fails with: Indexed project files contains '/build/.tmpOzGFH2/project/bar/baz.py' which was not expected.
+    "--skip=unix::symlink_inside_project"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -87,6 +97,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Extremely fast Python type checker and language server, written in Rust";
     homepage = "https://github.com/astral-sh/ty";
@@ -95,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      ddogfoodd
       figsoda
       GaetanLepage
     ];

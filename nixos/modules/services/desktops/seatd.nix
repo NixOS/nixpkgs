@@ -40,7 +40,6 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       seatd
-      sdnotify-wrapper
     ];
     users.groups.seat = lib.mkIf (cfg.group == "seat") { };
 
@@ -55,7 +54,7 @@ in
         Type = "notify";
         NotifyAccess = "all";
         SyslogIdentifier = "seatd";
-        ExecStart = "${pkgs.sdnotify-wrapper}/bin/sdnotify-wrapper ${pkgs.seatd.bin}/bin/seatd -n 1 -u ${cfg.user} -g ${cfg.group} -l ${cfg.logLevel}";
+        ExecStart = "${lib.getExe' pkgs.s6 "s6-notify-socket-from-fd"} ${pkgs.seatd.bin}/bin/seatd -n 1 -u ${cfg.user} -g ${cfg.group} -l ${cfg.logLevel}";
         RestartSec = 1;
         Restart = "always";
       };

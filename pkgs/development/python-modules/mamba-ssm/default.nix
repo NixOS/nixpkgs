@@ -10,7 +10,6 @@
   transformers,
   triton,
   cudaPackages,
-  rocmPackages,
   config,
   cudaSupport ? config.cudaSupport,
   which,
@@ -41,7 +40,7 @@ buildPythonPackage rec {
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
-        cuda_cccl
+        cccl
         libcusparse # cusparse.h
         libcusolver # cusolverDn.h
         cuda_nvcc

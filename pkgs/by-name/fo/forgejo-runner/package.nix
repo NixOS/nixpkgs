@@ -8,61 +8,38 @@
   nix-update-script,
   gitMinimal,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  # tests which assume network access in some form
   disabledTests = [
-    "Test_runCreateRunnerFile"
-    "Test_ping"
-
-    # The following tests were introduced in 9.x with the inclusion of act
-    # the pkgs/by-name/ac/act/package.nix just sets doCheck = false;
-
-    # Requires running Docker daemon
-    "TestDocker"
-    "TestJobExecutor"
-    "TestRunExec"
-    "TestRunner"
-    "Test_validateCmd"
-
-    # Docker network request for image
-    "TestImageExistsLocally"
-
-    # Reaches out to different websites
-    "TestFindGitRemoteURL"
-    "TestGitFindRef"
-    "TestClone"
-    "TestCloneIfRequired"
-    "TestActionCache"
-    "TestRunContext_GetGitHubContext"
-    "TestSetJobResult_SkipsBannerInChildReusableWorkflow"
-
-    # These tests rely on outbound IP address
+    # requires network
     "TestHandler"
-    "TestHandler_gcCache"
-
-    # Timeouts
-    "TestRunJob_WithConnectionFromCommandOptions"
+    "TestClone"
+    "TestRunner_ReusableWorkflowGitHubInstance"
+    "TestInitRepoIfRequired/clone"
+    "TestInitRepoIfRequired/clone_different_remote"
   ]
-  ++ lib.optionals stdenv.isDarwin [
-    # Uses docker-specific options, unsupported on Darwin
-    "TestMergeJobOptions"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # listen tcp 127.0.0.1:0: bind: operation not permitted
+    "TestNewClient"
+    # httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+    "TestNewEndpointHonoursTLSEnv"
   ];
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.9.0";
+  version = "13.2.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yhcD+FiRuo+WAvKFtgAI+36/uIci9O1s9RtXT0Q75Uo=";
+    hash = "sha256-2P3lWzC3yxcyiBltFDC1dwwv8Xx2XxEGSa16MdjnV38=";
   };
 
-  vendorHash = "sha256-CCUyL6ZxLRQy30TQUj1yOAuR7Ctp06/0jG8Q3De6/oo=";
+  vendorHash = "sha256-iyXO3LYTr4v1OoD9PS5ksEDIkCIq8hgwgtkLR0bzUZg=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -76,12 +53,25 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${finalAttrs.src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v13/internal/pkg/ver.version=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
+
+  # Upstream offers '-args -features "-"' as go test flag to skip tests that require either lxc or docker.
+  # Unfortunately, we cannot use this without patching buildGoModule, as -args passes the remainder of the
+  # command line to the test binary, and checkFlags are templated between go test and $dir, causing $dir (e.g.
+  # ./...) to be discarded, which in turn causes all tests to be skipped.
+  # TODO: Make our buildGoModule (go/module.nix) template $dir before checkFlags to allow use of -arg
+  # https://code.forgejo.org/forgejo/runner/pulls/1591
+  # https://pkg.go.dev/cmd/go/internal/test#:~:text=%2Dargs
+  preCheck = ''
+    substituteInPlace testutils/test_main.go \
+      --replace-fail 'TestFeatureDocker: {},' '// TestFeatureDocker: {},' \
+      --replace-fail 'TestFeatureLXC:    {},' '// TestFeatureLXC:    {},'
+  '';
 
   postInstall = ''
     # Fix up go-specific executable naming derived from package name, upstream
@@ -95,7 +85,10 @@ buildGoModule (finalAttrs: {
     ln -s $out/bin/forgejo-runner $out/bin/act_runner
   '';
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

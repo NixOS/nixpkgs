@@ -83,13 +83,15 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) mailpit;
       # cannot use versionCheckHook due to the extra --no-release-check flag
       # for workarounds and other solutions see https://github.com/NixOS/nixpkgs/pull/486143#discussion_r2754533347
       version = testers.testVersion {
         package = mailpit;
         command = "mailpit version --no-release-check";
       };
+    }
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      inherit (nixosTests) mailpit;
     };
 
     updateScript = {

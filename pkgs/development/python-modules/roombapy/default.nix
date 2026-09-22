@@ -1,6 +1,5 @@
 {
   lib,
-  amqtt,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    amqtt
     pytest-asyncio
     pytestCheckHook
   ];

@@ -21,14 +21,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-zarr";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
     repo = "pydantic-zarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zwC1qds2/KbwdBvoB2Eep0nL+6WLZBNEtxgKmvrRYE4=";
+    hash = "sha256-SzvYiZWnknGdJexYnGEWQaVQpHo1520RaNjuzCA4xtQ=";
   };
 
   build-system = [

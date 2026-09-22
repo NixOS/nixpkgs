@@ -17,7 +17,7 @@ let
       providing more styles and with greater coverage of Unicode.
 
       This package includes DejaVu Sans, DejaVu Serif, DejaVu Sans Mono, and
-      the TeX Gyre DejaVu Math font.
+      the DejaVu Math TeX Gyre font.
     '';
     homepage = "https://dejavu-fonts.github.io/";
 

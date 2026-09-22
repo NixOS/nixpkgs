@@ -10,22 +10,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "fast-export";
-  version = "231118";
+  pname = "git-fast-export";
+  version = "260405";
 
   src = fetchFromGitHub {
     owner = "frej";
     repo = "fast-export";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-JUy0t2yzd4bI7WPGG1E8L1topLfR5leV/WTU+u0bCyM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8bZXTW0dKdkd49KGUyHl+cdmYqUtppzkwV1cLJsUzWE=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/frej/fast-export/commit/a3d0562737e1e711659e03264e45cb47a5a2f46d.patch?full_index=1";
-      hash = "sha256-vZOHnb5lXO22ElCK4oWQKCcPIqRyZV5axWfZqa84V1Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     gitMinimal

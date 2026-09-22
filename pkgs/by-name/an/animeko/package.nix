@@ -37,7 +37,7 @@
   libkate,
   librsvg,
   libxpm,
-  libsForQt5,
+  qt5,
   libupnp,
   aalib,
   libcaca,
@@ -142,12 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   env = {
-    JAVA_HOME = jetbrains.jdk;
+    JAVA_HOME = jetbrains.jdk-21;
     ANDROID_SDK_HOME = "$(pwd)";
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jetbrains.jdk}"
+    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
   ];
 
   nativeBuildInputs = [
@@ -175,9 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     libkate
     librsvg
     libxpm
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtx11extras
+    qt5.qtsvg
+    qt5.qtbase
+    qt5.qtx11extras
     libupnp
     aalib
     libcaca
@@ -282,5 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
     ];
+    # Mark broken due to a breaking change in JetBrains JCEF
+    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
+    broken = true;
   };
 })

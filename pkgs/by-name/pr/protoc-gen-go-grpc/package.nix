@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "protoc-gen-go-grpc";
-  version = "1.6.1";
+  version = "1.6.2";
   modRoot = "cmd/protoc-gen-go-grpc";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-go";
     rev = "cmd/protoc-gen-go-grpc/v${finalAttrs.version}";
-    hash = "sha256-s6GZ9K0Wy18YF1RBL0RGDCbtCfAV2bskq6DNXwyorgg=";
+    hash = "sha256-I1sPfKhpCb/GNznKgEE2BZ11vAwJIc6HYf78/nIDRy4=";
   };
 
-  vendorHash = "sha256-+D3prb03c/Vgm+p3CxCZw14UMCvrDc1Cllzn1znZAE0=";
+  vendorHash = "sha256-lBOgdAE2FT5ZQxfG/ugqxtH5RB3946VJYjm+VUT1AEI=";
 
   ldflags = [
     "-s"

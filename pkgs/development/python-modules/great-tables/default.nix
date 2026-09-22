@@ -78,6 +78,11 @@ buildPythonPackage (finalAttrs: {
     syrupy
   ];
 
+  pytestFlags = [
+    # unused snapshots trigger an error
+    "--snapshot-warn-unused"
+  ];
+
   disabledTests = [
     # require selenium with chrome driver:
     "test_save_custom_webdriver"

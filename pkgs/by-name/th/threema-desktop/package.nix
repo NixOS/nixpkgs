@@ -10,26 +10,26 @@
 }:
 
 let
-  version = "1.2.49";
+  version = "1.2.50";
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
     tag = version;
-    hash = "sha256-8Zy+LMxszqCT17FFz8sEMAtBSTXhU/F2Nz9MfEA82xw=";
+    hash = "sha256-SVVzrgK4VdkMEVRQ9PUftB4ktchTq7JgawVz8AxMSZs=";
   };
 
   threema-web = buildNpmPackage rec {
     pname = "threema-web";
-    version = "2.6.2";
+    version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "threema-ch";
       repo = "threema-web";
       tag = "v${version}";
-      hash = "sha256-GmyWKJdDgiRS7XxNjCyvt92Bn48kpP3+ZsfRouyUCM0=";
+      hash = "sha256-yDJbTkeCsQ3ToEpLoPC9ow0fbJhrvyrkrtYqIFEuhBU=";
     };
 
-    npmDepsHash = "sha256-KDkJ2jdtHVK40b0ja/Nj6t5Bcl5frh7rzteWD74AKOM=";
+    npmDepsHash = "sha256-g6NqQYhGuMSwVq94CCDOUzC4e0GdWKqDBfQY2pfitsw=";
     npmBuildScript = "dist";
 
     nativeBuildInputs = [
@@ -54,7 +54,7 @@ let
     inherit version;
     src = electronSrc;
     sourceRoot = "${src.name}/app";
-    npmDepsHash = "sha256-Nn1WIyGRAG009GlJIedl0QUeKLalY+H3Mj8w4J1GE6I=";
+    npmDepsHash = "sha256-zSrW8/XBJejYWKuDMIkZLYnFd3M9JG8/mjxuvGWfQqw=";
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     dontNpmBuild = true;
     prePatch = ''
@@ -73,7 +73,7 @@ buildNpmPackage rec {
   inherit version;
   src = electronSrc;
 
-  npmDepsHash = "sha256-i37rIAIhoIU9tnioyhPFR1GWBfygMREZ0HCYE7ujXuE=";
+  npmDepsHash = "sha256-5HDYcJAZ06lI3ZCO2zHi3FCNUUe06vy/Vggo0K1P7q8=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

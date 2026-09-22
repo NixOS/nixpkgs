@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "bootil";
-  version = "unstable-2019-11-18";
+  version = "0-unstable-2019-11-18";
 
   src = fetchFromGitHub {
     owner = "garrynewman";
@@ -47,7 +47,6 @@ stdenv.mkDerivation {
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ abigailbuccaneer ];
     # Build uses `-msse` and `-mfpmath=sse`
-    platforms = lib.platforms.all;
-    badPlatforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.x86;
   };
 }

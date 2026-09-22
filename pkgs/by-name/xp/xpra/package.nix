@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   runCommand,
   writeText,
@@ -8,7 +9,6 @@
   withNvenc ? false,
   atk,
   cairo,
-  cudatoolkit,
   cudaPackages,
   ffmpeg,
   gdk-pixbuf,
@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.3.6";
+  version = "6.5.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
+    hash = "sha256-UDKnkynWoS1feUBRRHXl7emksUmufBL16gmVFslMHpM=";
   };
 
   patches = [
@@ -120,7 +120,7 @@ effectiveBuildPythonApplication rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace xpra/platform/posix/features.py \
+    substituteInPlace xpra/scripts/config.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
 
     patchShebangs --build fs/bin/build_cuda_kernels.py
@@ -135,13 +135,14 @@ effectiveBuildPythonApplication rec {
 
   nativeBuildInputs = [
     clang
+    cython
     gobject-introspection
     pkg-config
     wrapGAppsHook3
     pandoc
     udevCheckHook
   ]
-  ++ lib.optional withNvenc cudatoolkit;
+  ++ lib.optionals withNvenc [ cudaPackages.cudatoolkit ];
 
   buildInputs = [
     libx11
@@ -158,7 +159,6 @@ effectiveBuildPythonApplication rec {
   ]
   ++ (with gst_all_1; [
     gst-libav
-    gst-vaapi
     gst-plugins-ugly
     gst-plugins-bad
     gst-plugins-base
@@ -168,7 +168,6 @@ effectiveBuildPythonApplication rec {
   ++ [
     atk.out
     cairo
-    cython
     ffmpeg
     gdk-pixbuf
     glib
@@ -188,7 +187,7 @@ effectiveBuildPythonApplication rec {
     xxhash
     systemd
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     nvencHeaders
     nvjpegHeaders
   ];
@@ -238,7 +237,7 @@ effectiveBuildPythonApplication rec {
     "--with-pam"
     "--with-vsock"
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     "--with-nvenc"
     "--with-nvjpeg_encoder"
   ];
@@ -291,7 +290,7 @@ effectiveBuildPythonApplication rec {
 
   passthru = {
     inherit xf86videodummy;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -304,7 +303,6 @@ effectiveBuildPythonApplication rec {
     maintainers = with lib.maintainers; [
       numinit
       mvnetbiz
-      lucasew
     ];
   };
 }

@@ -30,12 +30,6 @@ let
       runtime = "armcl";
       kernel = "linuxarm";
     };
-    x86_64-darwin = {
-      arch = "darwinx86";
-      hash = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
-      runtime = "dx86cl64";
-      kernel = "darwinx8664";
-    };
     armv6l-linux = armv7l-linux;
   };
   cfg =
@@ -111,8 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   meta = {
-    # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
     homepage = "https://ccl.clozure.com/";
     license = lib.licenses.asl20;

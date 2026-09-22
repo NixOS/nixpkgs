@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.10";
+  version = "15.0.23";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-1XUWPS7GZ+V9iHRGuNGpFxCP0IKPdMIUt3rLLsD4yQ8=";
+      hash = "sha256-Bzd0atOeqHFhmIlpN3cbGogkwg6SwpNhn5m4yscpIzo=";
     };
   };
 
@@ -121,12 +121,6 @@ let
         version = "1.0";
         about = "Mullvad Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -200,7 +194,7 @@ stdenv.mkDerivation rec {
     mv mullvadbrowser.real mullvadbrowser
 
     # store state at `~/.mullvad` instead of relative to executable
-    touch "$MB_IN_STORE/system-install"
+    touch "$MB_IN_STORE/is-packaged-app"
 
     # Add bundled libraries to libPath.
     libPath=${libPath}:$MB_IN_STORE
@@ -282,7 +276,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/mullvad-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/mullvad-browser/distribution/policies.json
 
     runHook postInstall
   '';

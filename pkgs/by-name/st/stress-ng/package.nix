@@ -9,7 +9,6 @@
   libapparmor,
   libbsd,
   libcap,
-  libgcrypt,
   lksctp-tools,
   zlib,
   libglvnd,
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.21.00";
+  version = "0.22.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-kFIrbt/jJuQnuWmQUBuiFGuAfBb2pUtujhj6bwpDF4k=";
+    hash = "sha256-PzHHc7ku4B1b+ksFj/A4nJwzf9LLcglFnXwUS3jOSi4=";
   };
 
   postPatch = ''
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     judy
     libbsd
-    libgcrypt
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

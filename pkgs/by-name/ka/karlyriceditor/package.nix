@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   qt6,
-  ffmpeg_4,
+  ffmpeg_7-headless,
   pkg-config,
 }:
 
@@ -15,9 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = "karlyriceditor";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-eW5sO1gjuwIighnlylJQd9QC+07s1MZX/oPyaHIi/Qs=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     # fix build with Qt 6.10, remove after next release
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_7-headless
     qt6.qtmultimedia
   ];
 
@@ -44,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 bin/karlyriceditor $out/bin/karlyriceditor
     install -Dm644 packages/karlyriceditor.desktop $out/share/applications/karlyriceditor.desktop
-    install -Dm644 packages/karlyriceditor.png $out/share/pixmaps/karlyriceditor.png
+    install -Dm644 packages/karlyriceditor.png $out/share/icons/hicolor/24x24/apps/karlyriceditor.png
+    install -Dm644 src/images/application_icon.png $out/share/icons/hicolor/128x128/apps/karlyriceditor.png
 
     substituteInPlace $out/share/applications/karlyriceditor.desktop \
       --replace-fail 'Icon=/usr/share/pixmaps/karlyriceditor.png' 'Icon=karlyriceditor'
@@ -59,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       DPDmancul
     ];
-    mainProgram = "karlyricseditor";
+    mainProgram = "karlyriceditor";
     platforms = lib.platforms.linux;
   };
 })

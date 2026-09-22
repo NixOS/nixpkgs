@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tumbler";
-  version = "4.20.1";
+  version = "4.20.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "tumbler";
     tag = "tumbler-${finalAttrs.version}";
-    hash = "sha256-p4lAFNvCakqrsDa2FP0xbc/khx6eYqAlHwWkk8yEB7Y=";
+    hash = "sha256-jLSJr3QUl6f1gpdfKw8ycb2+hw9sr1cudBeBwJWI1mk=";
   };
 
   nativeBuildInputs = [

@@ -70,6 +70,7 @@ in
 
     services.ntpd-rs.settings = {
       observability = {
+        log-level = lib.mkDefault "warn";
         observation-path = lib.mkDefault "/var/run/ntpd-rs/observe";
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (

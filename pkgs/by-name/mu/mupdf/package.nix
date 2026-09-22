@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (enableCxx || enablePython) [
     (python3.pythonOnBuildForHost.withPackages (ps: [
       ps.setuptools
-      ps.libclang
+      ps.clang
     ]))
   ]
   ++ lib.optionals enablePython [

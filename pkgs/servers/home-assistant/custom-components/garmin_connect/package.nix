@@ -2,26 +2,28 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  garminconnect,
-  tzlocal,
+  ha-garmin,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "0.2.38";
+  version = "3.0.18";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "home-assistant-garmin_connect";
     tag = version;
-    hash = "sha256-Df/ecgePR10LIeaGy0kmIWqiP9G7j+KscL/YA3VsARE=";
+    hash = "sha256-76i6HdKdDxQq6kMPBkdTsfg+r3oCBd4X3WyQzdwi4+k=";
   };
 
   dependencies = [
-    garminconnect
-    tzlocal
+    ha-garmin
   ];
+
+  # home-assistant-garmin_connect pins an exact version of ha-garmin, but we
+  # want to allow newer, compatible versions to be used.
+  ignoreVersionRequirement = [ "ha-garmin" ];
 
   meta = {
     changelog = "https://github.com/cyberjunky/home-assistant-garmin_connect/releases/tag/${src.tag}";

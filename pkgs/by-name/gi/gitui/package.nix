@@ -9,7 +9,6 @@
   cmake,
   xclip,
   nix-update-script,
-  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.28.1";
 
   src = fetchFromGitHub {
-    owner = "extrawurst";
+    owner = "gitui-org";
     repo = "gitui";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IyDms4ke5evtSjFZrWEy0AascA0g9rG/a9RjbBNzZwg=";
@@ -63,9 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/extrawurst/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gitui-org/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Blazing fast terminal-ui for Git written in Rust";
-    homepage = "https://github.com/extrawurst/gitui";
+    homepage = "https://github.com/gitui-org/gitui";
     license = lib.licenses.mit;
     mainProgram = "gitui";
     maintainers = with lib.maintainers; [

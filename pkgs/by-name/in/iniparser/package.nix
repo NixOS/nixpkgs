@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-z10S9ODLprd7CbL5Ecgh7H4eOwTetYwFXiWBUm6fIr4=";
   };
 
-  patches = lib.optional finalAttrs.doCheck (
+  patches = lib.optional finalAttrs.finalPackage.doCheck (
     # 1. Do not fetch the Unity GitHub repository
     # 2. Lookup the Unity pkgconfig file
     # 3. Get the generate_test_runner.rb file from the Unity share directory

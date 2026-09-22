@@ -16,17 +16,19 @@
   makeWrapper,
   gsl,
   boost188,
+  libwignernj,
   autoPatchelfHook,
   enableQcmaquis ? true,
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
   enableMpi ? false,
   mpi,
-  globalarrays,
+  globalarrays-ilp64,
 }:
 
 assert blas-ilp64.isILP64;
 assert lapack-ilp64.isILP64;
+assert enableMpi -> globalarrays-ilp64.isILP64;
 
 let
   boost = boost188;
@@ -65,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmolcas";
-  version = "26.02";
+  version = "26.06";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FzO1fvMw+/r6SKiaODlhkmKlbzQ9TXLYXk+xpz/fs2I=";
+    hash = "sha256-y4eUfp8PIeWSuF4j9wT6C8z8rYFySUrNMa4ezI3/kXg=";
   };
 
   patches = [
@@ -110,10 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     blas-ilp64
     lapack-ilp64
+    libwignernj
   ]
   ++ lib.optionals enableMpi [
     mpi
-    globalarrays
+    globalarrays-ilp64
   ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
@@ -133,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     "-DLINALG=Manual"
-    (lib.strings.cmakeBool "DGA" enableMpi)
+    (lib.strings.cmakeBool "GA" enableMpi)
     (lib.strings.cmakeBool "MPI" enableMpi)
   ];
 
@@ -141,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
   ''
   + lib.optionalString enableMpi ''
-    export GAROOT=${globalarrays};
+    export GAROOT=${globalarrays-ilp64};
   '';
 
   # The Makefile will install pymolcas during the build grrr.

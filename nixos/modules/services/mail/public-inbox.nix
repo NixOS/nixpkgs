@@ -77,6 +77,8 @@ let
         BindReadOnlyPaths = [
           "/etc"
           "/run/systemd"
+        ]
+        ++ lib.optionals (config.i18n.glibcLocales != null) [
           "${config.i18n.glibcLocales}"
         ]
         ++ mapAttrsToList (name: inbox: inbox.description) cfg.inboxes

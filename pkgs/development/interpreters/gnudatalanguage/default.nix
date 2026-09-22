@@ -41,13 +41,14 @@
   # Unfree optional dependency for hdf4 and hdf5
   enableSzip ? false,
   szip,
+  libaec,
   enableHDF4 ? true,
   hdf4,
   hdf4-forced ? null,
   enableHDF5 ? true,
   # HDF5 format version (API version) 1.10 and 1.12 is not fully compatible
   # Specify if the API version should default to 1.10
-  # netcdf currently depends on hdf5 with `usev110Api=true`
+  # netcdf currently depends on hdf5 with `apiVersion = "v110"`
   # If you wish to use HDF5 API version 1.12 (`useHdf5v110Api=false`),
   # you will need to turn NetCDF off.
   useHdf5v110Api ? true,
@@ -81,14 +82,16 @@ let
     else
       hdf5.override (
         {
-          usev110Api = useHdf5v110Api;
           mpiSupport = enableMPI;
           inherit mpi;
           szipSupport = enableSzip;
-          inherit szip;
+          inherit libaec;
         }
         // lib.optionalAttrs enableMPI {
           cppSupport = false;
+        }
+        // lib.optionalAttrs useHdf5v110Api {
+          apiVersion = "v110";
         }
       );
   netcdf-custom =

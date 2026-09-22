@@ -10,6 +10,7 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
@@ -20,22 +21,22 @@
   nativeWayland ? false,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
-  version = "2026.425.0";
+  version = "2026.921.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = "${version}-lazer";
-    hash = "sha256-gYxsoMrdHQzy8Ny2pLUbJ/UMEHIZfvLnFjX4cKHa3ck=";
+    tag = "${finalAttrs.version}-lazer";
+    hash = "sha256-/1h23G6ag9VuApG4TXocozWiT+F7bG5WE0m1E7XLoT0=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -46,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -70,20 +72,16 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
-    # Disabling error reporting.
-    # https://github.com/ppy/osu/commit/48434dd683d095c42c01def8ff7cb95ce0a85ce4
-    # Unhandled exception. System.ArgumentException: Invalid DSN: No public key provided.
-
     wrapProgram $out/bin/osu! \
       ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
-      --set OSU_EXTERNAL_UPDATE_PROVIDER 1 \
-      --set OSU_DISABLE_ERROR_REPORTING 1
+      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';
@@ -109,6 +107,7 @@ buildDotnetModule rec {
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
@@ -119,7 +118,10 @@ buildDotnetModule rec {
       thiagokokada
       Guanran928
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "osu!";
   };
-}
+})

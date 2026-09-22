@@ -1,6 +1,3 @@
-let
-  name = "pam";
-in
 { pkgs, ... }:
 {
   name = "pam-file-contents";

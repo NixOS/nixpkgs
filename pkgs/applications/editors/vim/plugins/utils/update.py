@@ -24,6 +24,7 @@ import logging
 import os
 import textwrap
 from pathlib import Path
+import subprocess
 from typing import List, Tuple
 
 log = logging.getLogger("vim-updater")
@@ -95,7 +96,10 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                   fetchFromGitHub,
                   fetchgit,
                 }:
-
+                let
+                  inherit (lib.licenses) unfree;
+                  inherit (lib.meta) getLicenseFromSpdxId;
+                in
                 final: prev: {
                 """
                 )
@@ -128,9 +132,9 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                 license_spdx_id, license_spdx_id
             )
         license_nix = (
-            f"    meta.license = lib.meta.getLicenseFromSpdxId {json.dumps(license_spdx_id)};\n"
+            f"    meta.license = getLicenseFromSpdxId {json.dumps(license_spdx_id)};\n"
             if license_spdx_id
-            else "    meta.license = lib.licenses.unfree;\n"
+            else "    meta.license = unfree;\n"
         )
         content += """{buildFn} {{
     pname = "{plugin.name}";
@@ -157,7 +161,13 @@ class VimEditor(nixpkgs_plugin_update.Editor):
         # TODO this should probably be skipped when running outside a nixpkgs checkout
         if self.nvim_treesitter_updated:
             print("updating nvim-treesitter grammars")
-            generated = treesitter.update_grammars()
+            nvim_treesitter_path = subprocess.check_output(
+                ["nix-build", "-A", "vimPlugins.nvim-treesitter", "--no-out-link"],
+                text=True,
+                cwd=args.nixpkgs,
+            ).strip()
+
+            generated = treesitter.update_grammars(Path(nvim_treesitter_path))
             treesitter_generated_nix_path = os.path.join(
                 NIXPKGS_NVIMTREESITTER_FOLDER, "generated.nix"
             )

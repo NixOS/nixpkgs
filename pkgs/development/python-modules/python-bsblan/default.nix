@@ -2,7 +2,7 @@
   lib,
   aiohttp,
   aresponses,
-  backoff,
+  python-backoff,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "5.1.4";
+  version = "6.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-97Hgsu0ipX5oSAZdCikaWhj6g3gEom/Is2wnm6vpblY=";
+    hash = "sha256-W9SmN9QDbjbOPoyyWXWKJDn+s4089NSIVqRzxZTQ6pc=";
   };
 
   postPatch = ''
@@ -40,9 +40,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiohttp
-    backoff
     packaging
     pydantic
+    python-backoff
     yarl
   ];
 

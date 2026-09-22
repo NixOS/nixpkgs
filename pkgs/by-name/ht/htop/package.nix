@@ -19,13 +19,13 @@ assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "htop" + lib.optionalString withVimKeys "-vim";
-  version = "3.5.0";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = "htop";
     tag = finalAttrs.version;
-    hash = "sha256-RVJH7osffP3vU74A3e2mjGBAB0ZPMBisBL8n2kDMB+Q=";
+    hash = "sha256-8Lm8TLWsJCX2rg5J16RPjnnUvjGPOm6BWGp1aMfyHhM=";
   };
 
   patches = lib.optional withVimKeys (fetchpatch2 {

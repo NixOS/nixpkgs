@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-datacatalog";
-  version = "3.29.0";
+  version = "3.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-datacatalog-v${finalAttrs.version}";
-    hash = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
+    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-datacatalog";
@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Google Cloud Data Catalog API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-datacatalog";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-datacatalog-${finalAttrs.src.tag}/packages/google-cloud-datacatalog/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-datacatalog/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

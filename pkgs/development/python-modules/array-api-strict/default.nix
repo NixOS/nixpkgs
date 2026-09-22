@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-strict";
-  version = "2.4.1";
+  version = "2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-strict";
     tag = version;
-    hash = "sha256-m0uWaeUwHsWyAOxS7nxY8c+HWUhz+mOKNE4M0DsiClI=";
+    hash = "sha256-jDigE1bCx2JbthIPuVd3dX1tdvGqcZVOR3opJwlTme4=";
   };
 
   postPatch = ''

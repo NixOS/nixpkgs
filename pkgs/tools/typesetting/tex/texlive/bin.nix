@@ -7,6 +7,8 @@
   unzip,
   buildPackages,
   texlive,
+  gnum4,
+  jdk_headless,
   zlib,
   libiconv,
   libpng,
@@ -24,6 +26,9 @@
   perlPackages,
   python3Packages,
   pkg-config,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   ninja,
   libpaper,
@@ -141,10 +146,7 @@ let
   common = {
     # initial TeX Live 2025 release
     # src = fetchurl {
-    #   urls = [
-    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #   ];
+    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
     #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     # };
 
@@ -367,6 +369,7 @@ rec {
         veprbl
         raskin
         jwiegley
+        xworld21
       ];
       platforms = lib.platforms.all;
     };
@@ -415,7 +418,12 @@ rec {
 
     hardeningDisable = [ "format" ];
 
-    inherit (core) nativeBuildInputs depsBuildBuild;
+    inherit (core) depsBuildBuild;
+    nativeBuildInputs = core.nativeBuildInputs ++ [
+      autoconf
+      automake
+      libtool
+    ];
     buildInputs = core.buildInputs ++ [
       core
       cairo
@@ -426,11 +434,21 @@ rec {
       potrace
     ];
 
-    /*
-      deleting the unused packages speeds up configure by a considerable margin
-      and ensures we do not rebuild existing libraries by mistake
-    */
+    # autoconf 2.72 has a bug where AC_PROG_CXX would reject c++20 compilers,
+    # and attempts to switch to c++98 or c++11 instead of using the compiler's
+    # default. when using gcc 16, which defaults to c++20, this causes
+    # texlive-bin-big to be built with c++11, leading to issues with some of
+    # the included icu4c headers. this bug was fixed in autoconf 2.73, so we
+    # regenerate the autoconf declarations with the newest version of autconf.
+    # once the configure scripts distributed with the source are regenerated
+    # with autoconf 2.73+, the `reautoconf` call should be removed.
+    #
+    # deleting the unused packages speeds up configure by a considerable margin
+    # and ensures we do not rebuild existing libraries by mistake
     preConfigure = ''
+      substituteInPlace ./reautoconf --replace-fail "/bin/pwd" "pwd"
+      ./reautoconf
+
       rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
         libs/{mpfr,pixman,xpdf,zlib,zziplib} \
         texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
@@ -648,46 +666,6 @@ rec {
     enableParallelBuilding = true;
   };
 
-  pygmentex = python3Packages.buildPythonApplication rec {
-    pname = "pygmentex";
-    inherit (src) version;
-    pyproject = false;
-
-    src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
-
-    propagatedBuildInputs = with python3Packages; [
-      pygments
-      chardet
-    ];
-
-    dontBuild = true;
-
-    doCheck = false;
-
-    installPhase = ''
-      runHook preInstall
-
-      install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
-
-      runHook postInstall
-    '';
-
-    meta = {
-      homepage = "https://www.ctan.org/pkg/pygmentex";
-      description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
-      longDescription = ''
-        PygmenTeX is a Python-based LaTeX package that can be used for
-        typesetting code listings in a LaTeX document using Pygments.
-
-        Pygments is a generic syntax highlighter for general use in all kinds of
-        software such as forum systems, wikis or other applications that need to
-        prettify source code.
-      '';
-      license = lib.licenses.lppl13c;
-      maintainers = with lib.maintainers; [ romildo ];
-    };
-  };
-
   asymptote =
     let
       version = "3.09";
@@ -788,6 +766,60 @@ rec {
     preConfigure = "cd utils/xpdfopen";
 
     enableParallelBuilding = true;
+  };
+
+  # tex4ht.jar
+  # we build this as a TeX package, but under texlive.bin to avoid exposing it in texlivePackages
+  tex4htJar = stdenv.mkDerivation {
+    pname = "tex4ht-jar";
+    inherit (texlive.pkgs.tex4ht) meta version;
+
+    outputs = [ "tex" ];
+
+    src = texlive.pkgs.tex4ht.texsource + "/source/generic/tex4ht";
+
+    nativeBuildInputs = [
+      gnum4
+      jdk_headless
+      (texlive.schemes.texliveBasic.withPackages (ps: [
+        # override tex4ht-jar with an empty package to avoid a self dependency
+        { pname = "tex4ht-jar"; }
+        ps.protex
+        ps.tex4ht
+      ]))
+    ];
+
+    preHook = ''
+      export out="$tex"
+    '';
+
+    # the current Makefile is broken, so we build the artifact by hand
+    # we also use latex instead of htlatex as the latter is orders of magnitude slower
+    buildPhase = ''
+      make tex4ht-dir.tex
+
+      mkdir -p work.dir/src/tex4ht
+      for f in *-xtpipes.tex ; do
+        latex -output-directory=work.dir/src/tex4ht "\\RequirePackage{tex4ht}\\input $f"
+      done
+
+      mkdir -p work.dir/src/xtpipes
+      latex -output-directory=work.dir/src/xtpipes "\\RequirePackage{tex4ht}\\input xtpipes.tex"
+
+      mkdir -p work.dir/src/xtpipes/util
+      mv work.dir/src/xtpipes/xtpipes.java.java work.dir/src/xtpipes.java
+      mv work.dir/src/xtpipes/ScriptsManager*.java work.dir/src/xtpipes/util
+
+      mkdir -p xtpipes.dir/xtpipes/lib
+      cp work.dir/src/xtpipes/xtpipes*.{4xt,dtd} xtpipes.dir/xtpipes/lib
+
+      javac -d xtpipes.dir work.dir/src/{*,*/*,*/*/*}.java
+      jar cf tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar -C xtpipes.dir .
+    '';
+
+    installPhase = ''
+      install -D -t "$tex"/tex4ht/bin tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar
+    '';
   };
 
 } # un-indented

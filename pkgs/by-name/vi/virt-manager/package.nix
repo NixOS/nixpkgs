@@ -28,7 +28,7 @@
 let
   pythonDependencies = with python3.pkgs; [
     pygobject3
-    libvirt
+    libvirt-python
     libxml2
     requests
   ];

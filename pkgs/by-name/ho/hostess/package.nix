@@ -21,6 +21,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Idempotent command-line utility for managing your /etc/hosts* file";
+    homepage = "https://github.com/cbednarski/hostess";
     mainProgram = "hostess";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ edlimerkaj ];

@@ -11,19 +11,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypck";
-  version = "0.9.11";
+  version = "0.9.15a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = finalAttrs.version;
-    hash = "sha256-XULSgnVp7uIob/tL8zqszTBTdxMY4QIeIBruO2Augnc=";
+    hash = "sha256-ep/D0MWHnmoorCYhWxlyd/iEBiSIrWL4aEPPn4uRgDI=";
   };
-
-  postPatch = ''
-    echo "${finalAttrs.version}" > VERSION
-  '';
 
   build-system = [ setuptools ];
 

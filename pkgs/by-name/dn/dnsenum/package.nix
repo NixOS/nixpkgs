@@ -9,14 +9,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsenum";
-  version = "1.2.4.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "fwaeytens";
-    repo = "dnsenum";
-    rev = finalAttrs.version;
-    sha256 = "1bg1ljv6klic13wq4r53bg6inhc74kqwm3w210865b1v1n8wj60v";
+    owner = "SparrowOchon";
+    repo = "dnsenum2";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-I4I+HNQC7xqIF2P7NBy2Ophh3znl5qy9fSicJKIBUis=";
   };
+
+  patchPhase = ''
+    rm Makefile
+  '';
 
   propagatedBuildInputs = with perlPackages; [
     perl
@@ -35,11 +39,27 @@ stdenv.mkDerivation (finalAttrs: {
     install -vD dns.txt -t $out/share
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/dnsenum \
+      --prefix PERL5LIB : "${
+        with perlPackages;
+        makePerlPath [
+          NetIP
+          NetDNS
+          NetNetmask
+          StringRandom
+          XMLWriter
+          NetWhoisIP
+          WWWMechanize
+        ]
+      }"
+  '';
+
   meta = {
-    homepage = "https://github.com/fwaeytens/dnsenum";
+    homepage = "https://github.com/SparrowOchon/dnsenum2";
     description = "Tool to enumerate DNS information";
     mainProgram = "dnsenum";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };

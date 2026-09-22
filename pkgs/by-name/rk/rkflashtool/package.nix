@@ -15,8 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K8DsWAyqeQsK7mNDiKkRCkKbr0uT/yxPzj2atYP1Ezk=";
   };
 
+  postPatch = ''
+    # Fix cross compilation
+    substituteInPlace Makefile \
+      --replace-fail "pkg-config" "$PKG_CONFIG"
+  '';
+
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];
+
+  makeFlags = [
+    "CROSSPREFIX=${stdenv.cc.targetPrefix}"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

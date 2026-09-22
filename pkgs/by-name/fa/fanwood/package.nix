@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,12 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-OroFhhb4RxPHkx+/8PtFnxs1GQVXMPiYTd+2vnRbIjg=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Serif based on the work of a famous Czech-American type designer of yesteryear";

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vulnix";
-  version = "1.12.3";
-  format = "setuptools";
+  version = "1.12.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
     tag = finalAttrs.version;
-    hash = "sha256-q6Mktt9tuX4uDk3hNvDT1928tf+Kb6gBIgwy7w2N8nk=";
+    hash = "sha256-uz8vHabk5UTnSj969VQ9EZrha/rOQ9vxuQxfJcmx/v0=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -33,6 +33,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-cov-stub
   ];
 
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     nix
   ]
@@ -41,7 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     colorama
     pyyaml
     requests
-    setuptools
     toml
     zodb
   ]);

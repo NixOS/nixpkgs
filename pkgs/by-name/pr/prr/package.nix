@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkInputs = [ cacert ];
 
   meta = {
-    description = "Tool that brings mailing list style code reviews to Github PRs";
+    description = "Tool that brings mailing list style code reviews to GitHub PRs";
     homepage = "https://github.com/danobi/prr";
     license = lib.licenses.gpl2Only;
     mainProgram = "prr";

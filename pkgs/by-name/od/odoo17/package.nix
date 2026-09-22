@@ -55,6 +55,13 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
+  postPatch = ''
+    # hardcode the location of the unwrapped python scrip, otherwise the websocket
+    # server (called longpoll in codebase) will fail to start.
+    substituteInPlace odoo/service/server.py \
+      --replace-fail 'sys.argv[0]' "'${placeholder "out"}/bin/.odoo-wrapped'"
+  '';
+
   build-system = with python.pkgs; [
     setuptools
   ];
@@ -111,7 +118,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo17;
+      inherit (nixosTests) odoo17 odoo17-multiprocess;
     };
   };
 

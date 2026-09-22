@@ -38,6 +38,10 @@ buildHomeAssistantComponent rec {
     urlmatch
   ];
 
+  ignoreVersionRequirement = [
+    "hass-web-proxy-lib"
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp

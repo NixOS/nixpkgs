@@ -325,7 +325,7 @@ stdenv.mkDerivation (
     # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
     # LLVM 19.
     #
-    # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+    # clang compiles the same file without issues without the roundtrip via assembly. Thus,
     # the solution is to backport those changes from GHC 9.6 that skip the intermediate
     # assembly step.
     #
@@ -500,6 +500,11 @@ stdenv.mkDerivation (
     # `--with` flags for libraries needed for RTS linker
     configureFlags = [
       "--datadir=$doc/share/doc/ghc"
+    ]
+    # ghc 9.10 and later use c17 by default. we use gnu17 on darwin for older
+    # ghc versions to match this and fix build issues with newer clang.
+    ++ lib.optionals (hostPlatform.isDarwin && lib.versionOlder version "9.10") [
+      "CFLAGS=-std=gnu17"
     ]
     ++ lib.optionals enableTerminfo [
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"

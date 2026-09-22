@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "5.1.4";
+  version = "5.1.10";
 in
 
 (ffmpeg-headless.override {
@@ -17,8 +17,8 @@ in
   source = fetchFromGitHub {
     owner = "Servarr";
     repo = "FFmpeg";
-    rev = "e9230b4c9027435dd402a68833f144643a3df43a";
-    hash = "sha256-oMIblMOnnYpKvYeleCZpFZURGVc3fDAlYpOJu+u7HkU=";
+    rev = "9eecad42d64ab888b9bb366df998b5b7cac0e2bc";
+    hash = "sha256-8qXQIbBNFRX3HsEHD2m4STHyxALqTSoIkKrVLc6vX/4=";
   };
 
   buildFfmpeg = false;
@@ -38,6 +38,8 @@ in
   withCudaLLVM = false;
   withCuvid = false;
   withDrm = false;
+  withGmp = false;
+  withNetwork = false;
   withNvcodec = false;
   withFontconfig = false;
   withFreetype = false;
@@ -88,7 +90,7 @@ in
 
       # https://github.com/Servarr/ffmpeg-build/blob/bc29af6f0bf84bf9253d4d462611b1dc31ee688e/common.sh#L15-L45
 
-      # Disable unused functionnalities
+      # Disable unused functionalities
       "--disable-encoders"
       "--disable-muxers"
       "--disable-protocols"

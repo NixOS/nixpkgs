@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "ldk-node-go";
-  version = "0-unstable-2026-02-10";
+  version = "0-unstable-2026-06-08";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node-go";
-    rev = "f4fc565783308dd4835ba1473a17f25162db9c36";
-    hash = "sha256-jemAzRuZU9aQpENwWtvyGAh9EJUgeb1f1SCx/FpOOPc=";
+    rev = "5ba22268f000c78baa5cf57329eb0b1c07bd91d7";
+    hash = "sha256-+fuCvc2SuxBLXiacfc+0oNzAsBgFjUJgZ0+5B4Sy4vs=";
   };
 
   vendorHash = null;

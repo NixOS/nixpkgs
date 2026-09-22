@@ -4,22 +4,23 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
   slixmpp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioharmony";
-  version = "0.5.3";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Harmony-Libs";
     repo = "aioharmony";
-    tag = "v${version}";
-    hash = "sha256-H5zVY7LvTP8/CQtUGtXCXxOfG8GFQgdp7BY8jl9X+Gc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j4VlYxGd3I6SLZjJUOSZW9hyfSkX04L/8CGBWp7vTj0=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];
@@ -41,10 +43,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    description = "Python library for interacting with the Logitech Harmony devices";
     homepage = "https://github.com/Harmony-Libs/aioharmony";
-    description = "Python library for interacting the Logitech Harmony devices";
-    mainProgram = "aioharmony";
+    changelog = "https://github.com/Harmony-Libs/aioharmony/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oro ];
+    mainProgram = "aioharmony";
   };
-}
+})

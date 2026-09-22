@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "FORTRAN Language Server for the Language Server Protocol";
     mainProgram = "fortls";
     homepage = "https://pypi.org/project/fortran-language-server/";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sheepforce ];
   };
 })

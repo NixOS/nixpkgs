@@ -10,13 +10,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "attr";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://savannah/attr/attr-${version}.tar.gz";
-    sha256 = "sha256-Ob9nRS+kHQlIwhl2AQU/SLPXigKTiXNDMqYwmmgMbIc=";
+    url = "mirror://savannah/attr/attr-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1C+jdFExgLtIyxGkZpb0iCQOUST/HmrYiwq/9waYVhI=";
   };
 
   outputs = [
@@ -29,10 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
-  # tools/attr.c: Add missing libgen.h include for basename(3)
-  # Fixes compilation issue with musl and modern C99 compilers.
-  # See: https://bugs.gentoo.org/926294
-  patches = [ ./musl.patch ];
+  strictDeps = true;
 
   postPatch = ''
     for script in install-sh include/install-sh; do
@@ -43,6 +40,8 @@ stdenv.mkDerivation rec {
   # See nixos/tests/attr.nix
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
@@ -50,6 +49,6 @@ stdenv.mkDerivation rec {
     badPlatforms = lib.platforms.microblaze;
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.security-review ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" finalAttrs.version;
   };
-}
+})

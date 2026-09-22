@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/osd-echo";
   versionCheckProgramArg = "--help";
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Show text content with Xft/TTF fonts on X11 display";

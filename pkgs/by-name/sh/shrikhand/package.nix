@@ -1,27 +1,22 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "shrikhand";
   version = "unstable-2016-03-03";
 
-  src = fetchurl {
-    url = "https://github.com/jonpinhorn/shrikhand/raw/c11c9b0720fba977fad7cb4f339ebacdba1d1394/build/Shrikhand-Regular.ttf";
-    hash = "sha256-wHP1Bwu5Yw3a+RwDOHrmthsnuvwyCV4l6ma5EjA6EMA=";
+  src = fetchFromGitHub {
+    owner = "jonpinhorn";
+    repo = "shrikhand";
+    rev = "c11c9b0720fba977fad7cb4f339ebacdba1d1394";
+    hash = "sha256-cxYS99ZZv3FED7pF91VMiKl/M7Dr5TZr/iAiTuReQbQ=";
   };
 
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m644 $src $out/share/fonts/truetype/Shrikhand-Regular.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://jonpinhorn.github.io/shrikhand/";

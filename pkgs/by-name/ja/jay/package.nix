@@ -2,33 +2,34 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitHub,
-  libGL,
-  libinput,
-  pkgconf,
-  xkeyboard_config,
-  libgbm,
-  pango,
-  udev,
-  libglvnd,
-  vulkan-loader,
   autoPatchelfHook,
+  fetchFromGitHub,
   installShellFiles,
+  libGL,
+  libgbm,
+  libglvnd,
+  libinput,
   nix-update-script,
+  pango,
+  pkgconf,
+  sqlite,
+  udev,
+  vulkan-loader,
+  xkeyboard_config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
+    sha256 = "sha256-bdvcGO1E9fkmKiXQxc3nvISwjIAegY8g37HmxXolsmU=";
   };
 
-  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
+  cargoHash = "sha256-5yjMPDh7liaa9+KntfdCzUXz4vWzTcAhFmXrnVZ+pjM=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -38,16 +39,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libGL
-    xkeyboard_config
     libgbm
-    pango
-    udev
     libinput
+    pango
+    sqlite
+    udev
+    vulkan-loader
+    xkeyboard_config
   ];
 
   runtimeDependencies = [
     libglvnd
-    vulkan-loader
+  ];
+
+  checkFlags = [
+    # these 5 tests fail in the lix sandbox because they rely on io_uring
+    "--skip=cpu_worker::tests::cancel"
+    "--skip=cpu_worker::tests::complete"
+    "--skip=eventfd_cache::tests::test"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_kernel"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_userspace"
   ];
 
   postInstall = ''
@@ -72,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ uku3lig ];
     mainProgram = "jay";
   };
 })

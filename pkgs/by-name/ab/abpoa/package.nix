@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString enablePython "py"}abpoa";
-  version = "1.5.6";
+  version = "1.5.7.1";
 
   src = fetchFromGitHub {
     owner = "yangao07";
     repo = "abPOA";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MZ1btOcrWDXRXaSl8mALZCrZaS17/SL5PnYrrFLDcrc=";
+    hash = "sha256-MERB/TdzDOFESL1W8V32hXII7SybZZc9zhsuMXRkE4Q=";
   };
 
   patches = [ ./simd-arch.patch ];

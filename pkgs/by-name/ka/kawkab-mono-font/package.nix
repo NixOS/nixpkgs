@@ -3,16 +3,16 @@
   stdenvNoCC,
   fetchzip,
 }:
-
-stdenvNoCC.mkDerivation {
+let
   pname = "kawkab-mono";
-  version = "20151015";
-
+  version = "0.501";
   src = fetchzip {
-    url = "https://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
-    stripRoot = false;
-    hash = "sha256-arZTzXj7Ba5G4WF3eZVGNaONhOsYVPih9iBgsN/lg14=";
+    url = "https://github.com/aiaf/kawkab-mono/releases/download/v${version}/kawkab-mono-${version}.zip";
+    hash = "sha256-cDpQGTu3XzLrDtInAZtnCw6BymX7fupbbr7L4bd7kN8=";
   };
+in
+stdenvNoCC.mkDerivation {
+  inherit pname version src;
 
   installPhase = ''
     runHook preInstall
@@ -23,8 +23,11 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Arab fixed-width font";
+    description = "Monospaced Arabic typeface designed for code and text-editing";
     homepage = "https://makkuk.com/kawkab-mono/";
+    downloadPage = "https://github.com/aiaf/kawkab-mono";
+    changelog = "https://github.com/aiaf/kawkab-mono/releases/tag/v${version}";
     license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ talal ];
   };
 }

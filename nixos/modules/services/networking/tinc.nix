@@ -421,10 +421,7 @@ in
               ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
             };
             preStart = ''
-              mkdir -p /etc/tinc/${network}/hosts
-              chown tinc-${network} /etc/tinc/${network}/hosts
-              mkdir -p /etc/tinc/${network}/invitations
-              chown tinc-${network} /etc/tinc/${network}/invitations
+              install -d -o tinc-${network} /etc/tinc/${network} /etc/tinc/${network}/hosts /etc/tinc/${network}/invitations
 
               # Determine how we should generate our keys
               if type tinc >/dev/null 2>&1; then

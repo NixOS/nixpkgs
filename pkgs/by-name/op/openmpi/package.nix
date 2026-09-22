@@ -24,6 +24,9 @@
   # Enable CUDA support
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  # Enable ROCm support
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
   # Enable the Sun Grid Engine bindings
   enableSGE ? false,
   # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
@@ -37,6 +40,8 @@
   # up to AVX is enabled by default.
   avxOptions ? { },
 }:
+
+assert cudaSupport -> !rocmSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
@@ -94,6 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     ucc
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals rocmSupport (
+    with rocmPackages;
+    [
+      rocm-core
+      rocm-runtime
+      rocm-device-libs
+      clr
+    ]
+  )
   ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
   # needed for internal pmix
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
@@ -129,11 +143,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs cudaSupport "cuda" (lib.getOutput "include" cudaPackages.cuda_cudart))
     (lib.withFeatureAs cudaSupport "cuda-libdir" "${lib.getLib cudaPackages.cuda_cudart}/lib")
     (lib.enableFeature cudaSupport "dlopen")
+    (lib.withFeatureAs rocmSupport "rocm" rocmPackages.clr)
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
     # The flag --without-ofi-libdir is not supported from some reason, so we
     # don't use lib.withFeatureAs
   ]
+  ++ lib.optionals rocmSupport [ "--with-rocm-libdir=${lib.getLib rocmPackages.clr}/lib" ]
   ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
 
   enableParallelBuilding = true;
@@ -265,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
       avx2 = stdenv.hostPlatform.avx2Support;
       avx512 = stdenv.hostPlatform.avx512Support;
     };
-    inherit cudaSupport;
+    inherit cudaSupport rocmSupport;
     cudatoolkit = cudaPackages.cudatoolkit; # For backward compatibility only
   };
 

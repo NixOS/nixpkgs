@@ -109,12 +109,34 @@
       [ ];
 
   /**
+    The lowest Jetson CUDA capability which uses the `linux-sbsa` redist (rather than `linux-aarch64`) for a given
+    CUDA version. Jetson capabilities below this threshold use `linux-aarch64`.
+
+    The threshold depends on the CUDA version because NVIDIA moved Jetson onto the SBSA software stack incrementally:
+    - CUDA 12 (JetPack 6): only Thor (10.1) is SBSA; Orin (8.7) is `linux-aarch64`.
+    - CUDA 13 (JetPack 7.2): Orin (8.7) and Thor (11.0) are both SBSA.
+
+    # Type
+
+    ```
+    _getJetsonMinSbsaCapability :: (cudaMajorMinorVersion :: String) -> CudaCapability
+    ```
+
+    # Inputs
+
+    `cudaMajorMinorVersion`
+
+    : The major and minor version of CUDA (e.g. "12.6")
+  */
+  _getJetsonMinSbsaCapability =
+    cudaMajorMinorVersion: if lib.versionAtLeast cudaMajorMinorVersion "13.0" then "8.7" else "10.1";
+
+  /**
     Maps a Nix system to a NVIDIA redistributable system.
 
     NOTE: Certain Nix systems can map to multiple NVIDIA redistributable systems. In particular, ARM systems can map to
     either `linux-sbsa` (for server-grade ARM chips) or `linux-aarch64` (for Jetson devices). Complicating matters
-    further, as of CUDA 13.0, Jetson Thor devices use `linux-sbsa` instead of `linux-aarch64`. (It is unknown whether
-    NVIDIA plans to make the Orin series use `linux-sbsa` as well for the CUDA 13.0 release.)
+    further, as of CUDA 13.0, Jetson Thor and Orin devices use `linux-sbsa` instead of `linux-aarch64`.
 
     NOTE: This function *will* be called by unsupported systems because `cudaPackages` is evaluated on all systems. As
     such, we need to handle unsupported systems gracefully.
@@ -189,11 +211,13 @@
     if system == "x86_64-linux" then
       "linux-x86_64"
     else if system == "aarch64-linux" then
-      # If all the Jetson devices are at least 10.1 (Thor, CUDA 12.9; CUDA 13.0 and later use 11.0 for Thor), then
-      # we've got SBSA.
+      # If all the Jetson devices are SBSA-compatible, then we've got SBSA.
       if
+        let
+          sbsaJetsonCapability = _cuda.lib._getJetsonMinSbsaCapability cudaMajorMinorVersion;
+        in
         lib.all (
-          cap: _cuda.db.cudaCapabilityToInfo.${cap}.isJetson -> lib.versionAtLeast cap "10.1"
+          cap: _cuda.db.cudaCapabilityToInfo.${cap}.isJetson -> lib.versionAtLeast cap sbsaJetsonCapability
         ) cudaCapabilities
       then
         "linux-sbsa"

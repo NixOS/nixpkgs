@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage (final: {
     installShellCompletion --fish ${final.env.ASSET_OUT_DIR}/shell-completions/${final.meta.mainProgram}.fish
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://sequoia-pgp.gitlab.io/sequoia-git";
     license = lib.licenses.lgpl2Plus;

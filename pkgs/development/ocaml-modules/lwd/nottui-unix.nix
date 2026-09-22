@@ -3,7 +3,6 @@
   buildDunePackage,
   lwd,
   nottui,
-  notty,
 }:
 
 buildDunePackage {
@@ -14,7 +13,6 @@ buildDunePackage {
   propagatedBuildInputs = [
     lwd
     nottui
-    notty
   ];
 
   meta = {

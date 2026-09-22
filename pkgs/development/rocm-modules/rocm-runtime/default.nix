@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-runtime";
-    license = with lib.licenses; [ ncsa ];
+    license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

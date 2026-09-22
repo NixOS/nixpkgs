@@ -7,18 +7,15 @@
   installShellFiles,
 }:
 
-let
-  version = "2.5.0";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nikto";
-  inherit version;
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "sullo";
     repo = "nikto";
-    rev = version;
-    sha256 = "sha256-lWiDbWc2BWAUgyaIm0tvZytja02WogYRoc7na4sHiNM=";
+    tag = finalAttrs.version;
+    hash = "sha256-jMbVJ35f1uPNQ7xmBnOhBMmh+u4Ewpd5GJFMg8ZKIxw=";
   };
 
   # Nikto searches its configuration file based on its current path
@@ -29,8 +26,11 @@ stdenv.mkDerivation rec {
     # EXECDIR needs to be changed to the path where we copy the programs stuff
     # Forcing SSLeay is needed for SSL support (the auto mode doesn't seem to work otherwise)
     substituteInPlace program/nikto.conf.default \
-      --replace "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
-      --replace "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
+      --replace-fail "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
+      --replace-fail "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
+    # Disable update check which prompts you to do a git pull and is not applicable for nixpkg
+    substituteInPlace program/nikto.pl \
+      --replace-fail "check_updates()" ""
   '';
 
   nativeBuildInputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perlPackages.perl
     perlPackages.NetSSLeay
+    perlPackages.JSON
+    perlPackages.XMLWriter
   ];
 
   installPhase = ''
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     install -Dm 755 "program/nikto.pl" "$out/bin/nikto"
     install -Dm 644 program/nikto.conf.default "$out/etc/nikto.conf"
     installManPage documentation/nikto.1
-    install -Dm 644 README.md "$out/share/doc/${pname}/README"
+    install -Dm 644 README.md "$out/share/doc/${finalAttrs.pname}/README"
     runHook postInstall
   '';
 
@@ -61,10 +63,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web server scanner";
-    mainProgram = "nikto";
-    license = lib.licenses.gpl2Plus;
     homepage = "https://cirt.net/Nikto2";
-    changelog = "https://github.com/sullo/nikto/releases/tag/${version}";
+    changelog = "https://github.com/sullo/nikto/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tbutter ];
+    mainProgram = "nikto";
     platforms = lib.platforms.unix;
   };
-}
+})

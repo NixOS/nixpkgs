@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  fetchpatch,
   lib,
   pkg-config,
   alsa-lib,
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-e9ioPTBOji2GoliV2Nyw7wJFqN8y4nGVnNvcavObZvI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "ffmpeg-9-compatibility.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/alsa-plugins/-/raw/7f250af93b76e9b3d552af509beb8ea1356114d1/ffmpeg9.patch";
+      hash = "sha256-heAl6Ym3iYI8mhuuQpwBpc0FeFYsQZRHx4UUvqiVtBo=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -38,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Various plugins for ALSA";
-    homepage = "http://alsa-project.org/";
+    homepage = "https://alsa-project.org/";
 
     license = with lib.licenses; [
       lgpl21Plus
@@ -46,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus # attributes.m4 & usb_stream.h
     ];
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.linux;
   };
 })

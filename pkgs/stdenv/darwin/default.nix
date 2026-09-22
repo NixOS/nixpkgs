@@ -10,23 +10,20 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
   bootstrapFiles ? (config.replaceBootstrapFiles or lib.id) (
     if localSystem.isAarch64 then
       import ./bootstrap-files/aarch64-apple-darwin.nix
     else
-      import ./bootstrap-files/x86_64-apple-darwin.nix
+      throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
 
-assert crossSystem == localSystem;
-
 let
   inherit (localSystem) system;
+  genericStdenv = import ../generic { defaultConfig = config; };
 
   llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
   sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
@@ -104,14 +101,12 @@ let
 
       bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
-      thisStdenv = import ../generic {
+      thisStdenv = genericStdenv {
         name = "${name}-stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         extraBuildInputs = [ prevStage.apple-sdk ];
         inherit extraNativeBuildInputs;
@@ -261,7 +256,6 @@ let
     inherit (prevStage."llvmPackages_${llvmVersion}") compiler-rt libcxx;
   };
   llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxx; };
-  llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
     inherit (prevStage."llvmPackages_${llvmVersion}")
@@ -288,7 +282,6 @@ let
   };
   sdkDarwinPackages = prevStage: {
     inherit (prevStage.darwin)
-      Csu
       adv_cmds
       copyfile
       libiconv
@@ -343,7 +336,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
   # Create a stage with the bootstrap tools. This will be used to build the subsequent stages and
   # build up the standard environment.
   #
-  # Note: Each stage depends only on the the packages in `prevStage`. If a package is not to be
+  # Note: Each stage depends only on the packages in `prevStage`. If a package is not to be
   # rebuilt, it should be passed through by inheriting it.
   (
     prevStage:
@@ -604,6 +597,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
+          zstd = null; # Avoid infinite recursion due to zstd depending on libiconv, which depends on Python via Meson.
           enableLTO = false;
         };
 
@@ -666,7 +660,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert allDeps isBuiltByBootstrapFilesCompiler [
       (stage1Packages prevStage)
       (darwinPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmToolsDeps prevStage)
       (sdkPackages prevStage)
       (sdkDarwinPackages prevStage)
@@ -739,7 +732,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isBuiltByNixpkgsCompiler [
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
     ];
 
@@ -757,7 +749,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (stage1Packages prevStage)
           (disallowedPackages prevStage)
           (bintoolsPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (llvmToolsDeps prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
@@ -818,7 +809,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isBuiltByNixpkgsCompiler [
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (sdkPackages prevStage)
       (sdkDarwinPackages prevStage)
@@ -837,7 +827,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         mergeDisjointAttrs [
           (stage1Packages prevStage)
           (disallowedPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (sdkPackages prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
@@ -894,7 +883,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isBuiltByNixpkgsCompiler [
       (bintoolsPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (llvmToolsDeps prevStage)
       (llvmToolsPackages prevStage)
@@ -915,7 +903,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         mergeDisjointAttrs [
           (bintoolsPackages prevStage)
           (disallowedPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (llvmToolsDeps prevStage)
           (sdkPackages prevStage)
           (sdkPackagesNoCC prevStage)
@@ -965,7 +952,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       (lib.filterAttrs (_: pkg: lib.getName pkg != "pkg-config-wrapper") (stage1Packages prevStage)) # pkg-config is a wrapper
       (bintoolsPackages prevStage)
       (darwinPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (llvmToolsDeps prevStage)
       (llvmToolsPackages prevStage)
@@ -984,14 +970,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     in
     {
       inherit config overlays;
-      stdenv = import ../generic {
+      stdenv = genericStdenv {
         name = "stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         preHook = ''
           ${commonPreHook}
@@ -1071,7 +1055,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             prevStage.updateAutotoolsGnuConfigScriptsHook
             prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
-          ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
             binutils
             binutils.bintools
@@ -1099,7 +1082,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         overrides =
           self: super:
           mergeDisjointAttrs [
-            (llvmLibrariesDeps prevStage)
             (llvmToolsDeps prevStage)
             (sdkPackages prevStage)
             (sdkPackagesNoCC prevStage)
@@ -1191,9 +1173,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isFromNixpkgs prevStage.binutils-unwrapped.src;
     assert isBuiltByNixpkgsCompiler prevStage.curl;
-
-    # libiconv should be an alias for darwin.libiconv
-    assert prevStage.libiconv == prevStage.darwin.libiconv;
 
     {
       inherit (prevStage) config overlays stdenv;

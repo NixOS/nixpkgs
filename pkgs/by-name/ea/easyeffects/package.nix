@@ -33,6 +33,7 @@
   speexdsp,
   onetbb,
   webrtc-audio-processing,
+  x42-plugins,
   zam-plugins,
   zita-convolver,
   wrapGAppsHook3,
@@ -55,17 +56,18 @@ let
     kirigami-addons
     qqc2-desktop-style
     ;
+  speexdsp' = speexdsp.override { withFftw3 = false; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.2.1";
+  version = "8.2.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bGjIqts06ruwMQIW5hk4wlG7G/7GtgFVBgSr68tkIqY=";
+    hash = "sha256-K1TZiH8Ykli1dIdTbqIOZt2uWXaROMhr1tGC9wfSmiI=";
   };
 
   nativeBuildInputs = [
@@ -109,10 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     onetbb
     webrtc-audio-processing
     zita-convolver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    x42-plugins
   ];
 
   preFixup =
@@ -122,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
         zam-plugins # maximizer
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        x42-plugins # autotune
       ];
 
       ladspaPlugins = [

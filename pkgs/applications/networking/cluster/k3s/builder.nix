@@ -377,6 +377,7 @@ buildGoModule (finalAttrs: {
   pname = "k3s";
   version = k3sVersion;
   pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
+  __structuredAttrs = true;
 
   tags = [
     "libsqlite3"
@@ -392,10 +393,6 @@ buildGoModule (finalAttrs: {
     substituteInPlace scripts/package-cli \
       --replace-fail '"$LDFLAGS $STATIC" -o' \
                 '"$LDFLAGS" -o'
-
-    # Ensure the embedded tarball is reproducible: sort file order and clamp timestamps
-    substituteInPlace scripts/package-cli \
-      --replace-fail 'tar cvf' 'tar c --sort=name --mtime=@0 -vf'
 
     # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
     # build-time version detection doesn't work with a vendor directory.

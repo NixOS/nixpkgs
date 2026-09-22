@@ -8,5 +8,4 @@ mkDerivation {
   extraPaths = [ "sbin/mount" ];
   buildInputs = [ libkiconv ];
 
-  meta.platforms = lib.platforms.freebsd;
 }

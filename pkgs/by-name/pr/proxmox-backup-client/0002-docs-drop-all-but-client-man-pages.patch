@@ -1,4 +1,4 @@
-From 732dc6b91299bda441f52c6d7decddfbfd6e5517 Mon Sep 17 00:00:00 2001
+From ae84be4e56a1100583d80db03834f439833ee1f2 Mon Sep 17 00:00:00 2001
 From: Thomas Lamprecht <thomas@lamprecht.org>
 Date: Tue, 29 Nov 2022 17:20:28 +0100
 Subject: [PATCH proxmox-backup 2/2] docs: drop all but client man pages
@@ -11,7 +11,7 @@ Signed-off-by: Christoph Heiss <christoph@c8h4.io>
  2 files changed, 43 deletions(-)
 
 diff --git a/docs/Makefile b/docs/Makefile
-index 5cf5fc17..85ff3b91 100644
+index 5cf5fc179..85ff3b91e 100644
 --- a/docs/Makefile
 +++ b/docs/Makefile
 @@ -1,27 +1,8 @@
@@ -43,7 +43,7 @@ index 5cf5fc17..85ff3b91 100644
  
  MAN1_PAGES := 				\
 diff --git a/docs/conf.py b/docs/conf.py
-index 64c4f9d4..345a0170 100644
+index 64c4f9d47..345a0170d 100644
 --- a/docs/conf.py
 +++ b/docs/conf.py
 @@ -93,31 +93,7 @@ rst_epilog += f"\n..  |pbs-copyright| replace:: Copyright (C) {copyright}"
@@ -79,5 +79,5 @@ index 64c4f9d4..345a0170 100644
  
  
 -- 
-2.50.1
+2.53.0
 

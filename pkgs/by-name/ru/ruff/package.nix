@@ -16,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.15.12";
+  version = "0.16.8";
 
   __structuredAttrs = true;
 
@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-BbWOmr1/QsexDZzXPvkAstRBBcFmO0ZRrpkpXJpEXWk=";
+    hash = "sha256-vfyEulokZqx5VyQA3jlKhQhgr/flLIGHcgC7CeegGl0=";
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoHash = "sha256-vv1D3bu0zLuLLxNiRESScs7fQKvx1CNfMKrseRzzxtw=";
+  cargoHash = "sha256-aX9Vu1egtvloe9dspXHR0Amc0mEuWG67EAOQU2b3oM0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -87,6 +87,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Extremely fast Python linter and code formatter";

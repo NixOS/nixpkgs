@@ -176,15 +176,18 @@ mkWrapper type (
         --add-needed libicuuc.so \
         $out/share/dotnet/shared/Microsoft.NETCore.App/*/libcoreclr.so \
         $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host \
+        $out/share/dotnet/sdk/*/libdotnet-aot.so
       patchelf \
         --add-needed libgssapi_krb5.so \
         $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host \
+        $out/share/dotnet/sdk/*/libdotnet-aot.so
       patchelf \
         --add-needed libssl.so \
         $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host \
+        $out/share/dotnet/sdk/*/libdotnet-aot.so
     '';
 
     # fixes: Could not load ICU data. UErrorCode: 2
@@ -197,6 +200,8 @@ mkWrapper type (
 
     passthru = {
       inherit icu hasILCompiler;
+      # https://github.com/dotnet/sdk/pull/53405
+      hasCrossTargetBug = lib.versionAtLeast version "10";
     }
     // lib.optionalAttrs (type == "sdk") (
       let

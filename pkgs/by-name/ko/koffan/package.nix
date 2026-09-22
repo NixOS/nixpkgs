@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "koffan";
-  version = "2.10.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "PanSalut";
     repo = "Koffan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-euGjcluk2xC+RgryFscP29ONT2prqR0/UxeqMosb2l4=";
+    hash = "sha256-Ve0H3zm7Hp0cG015Z+JkcGTmp9IGwy5zJCCPqxzhssA=";
   };
 
-  vendorHash = "sha256-BYehi5LQQ0MIsKG/fN3DHaQwKVmxUFrvWGrKZeKj+ow=";
+  vendorHash = "sha256-qVZOnA5yA8/CQ2T56i+SViPuj7y66zcss0jZOpnx/GU=";
 
   passthru = {
     updateScript = nix-update-script { };

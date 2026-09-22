@@ -7,22 +7,22 @@
   voluptuous,
   pytestCheckHook,
   pytest-asyncio,
-  poetry-core,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "idasen";
-  version = "0.12.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "idasen";
-    tag = "v${version}";
-    hash = "sha256-TQ+DBFpG+IeZ4/dN+YKMw3AM4Dl1rpqA1kRcb3Tb3jA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ejKfXAVvHyWIkg06XqC2pKJjpPuOgHEciPzBb/TGiSU=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bleak
@@ -41,8 +41,8 @@ buildPythonPackage rec {
     description = "Python API and CLI for the ikea IDÅSEN desk";
     mainProgram = "idasen";
     homepage = "https://github.com/newAM/idasen";
-    changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/newAM/idasen/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

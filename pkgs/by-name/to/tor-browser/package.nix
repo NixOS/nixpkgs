@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.10";
+  version = "15.0.23";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-PlGjkyO2MoLWo7eAgoNMfd52dM7v9VKyfCxXbj3qqu4=";
+      hash = "sha256-D2L41lx/w03UuGy6t/yq7HOBVz3aNGrHsX5WjiK0vzk=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-rangtzd7oee+2b7zdmKYJD8al4G3FYo+bdq8JgBn5oE=";
+      hash = "sha256-EXCHkprnH1ylopayMN/kckEpYJAePWnzmUlldSqVswk=";
     };
   };
 
@@ -134,12 +134,6 @@ let
         version = "1.0";
         about = "Tor Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -173,7 +167,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "torbrowser";
+      name = "tor-browser";
       exec = "tor-browser %U";
       icon = "tor-browser";
       desktopName = "Tor Browser";
@@ -213,8 +207,8 @@ stdenv.mkDerivation rec {
     # firefox is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv firefox.real firefox
 
-    # store state at `~/.tor browser` instead of relative to executable
-    touch "$TBB_IN_STORE/system-install"
+    # store state at `~/.tor project` instead of relative to executable
+    touch "$TBB_IN_STORE/is-packaged-app"
 
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
@@ -331,7 +325,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
 
     runHook postInstall
   '';
@@ -347,7 +340,8 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
-    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
+    donationPage = "https://donate.torproject.org/";
+    changelog = "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/raw/maint-${lib.versions.majorMinor version}/projects/browser/Bundle-Data/Docs-TBB/ChangeLog.txt";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [
       c4patino

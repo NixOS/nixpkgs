@@ -280,13 +280,12 @@ in
           bindsTo = [ "glitchtip-worker.service" ];
           before = [ "glitchtip-worker.service" ];
 
-          preStart = ''
-            ${lib.getExe pkg} migrate
-            ${lib.getExe pkg} createcachetable
-            ${lib.getExe pkg} maintain_partitions
-          '';
-
           serviceConfig = commonServiceConfig // {
+            ExecStartPre = [
+              "${lib.getExe pkg} migrate"
+              "${lib.getExe pkg} createcachetable"
+              "${lib.getExe pkg} maintain_partitions"
+            ];
             ExecStart = ''
               ${lib.getExe python.pkgs.granian} \
                 --interface ${if cfg.settings.GLITCHTIP_ENABLE_MCP then "asgi" else "asginl"} \

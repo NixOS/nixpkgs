@@ -131,15 +131,15 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Install transcoders.
-        rm -rf ${cfg.home}/transcode
-        mkdir -p ${cfg.home}/transcode
-        for exe in ${toString cfg.transcoders}; do
-          ln -sf "$exe" ${cfg.home}/transcode
-        done
-      '';
       serviceConfig = {
+        # Install transcoders.
+        ExecStartPre = [
+          "${lib.getExe' pkgs.coreutils "rm"} -rf '${cfg.home}/transcode'"
+          "${lib.getExe' pkgs.coreutils "mkdir"} -p '${cfg.home}/transcode'"
+        ]
+        ++ map (
+          exe: "${lib.getExe' pkgs.coreutils "ln"} -sf '${exe}' '${cfg.home}/transcode'"
+        ) cfg.transcoders;
         ExecStart = ''
           ${cfg.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dairsonic.home=${cfg.home} \

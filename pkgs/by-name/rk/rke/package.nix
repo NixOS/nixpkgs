@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "rke";
-  version = "1.8.13";
+  version = "1.8.14";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "rke";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-urDJEpj0B6hq3M24JvYi9DTdAgwlyb0hpElisPrxbdU=";
+    hash = "sha256-wprIpvNTPu4HD4+FaBZCUpZGdveytLgXOA72loYK+6I=";
   };
 
   vendorHash = "sha256-OWC8OZhORHwntAR2YHd4KfQgB2Wtma6ayBWfY94uOA4=";

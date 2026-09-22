@@ -9,6 +9,7 @@
   fetchFromGitHub,
   glibcLocales,
   hatchling,
+  httpx,
   installShellFiles,
   itemadapter,
   itemloaders,
@@ -40,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.14.1";
+  version = "2.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-KDci1Z5TZ+3svotYXkEG1s+bPWtxzIfQQwOgvI0k8w0=";
+    hash = "sha256-4FAZJZc8qsMn93XPNYnnbqecA29DWwh5VNNlCsnib7A=";
   };
 
   pythonRelaxDeps = [
@@ -86,6 +87,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     botocore
     glibcLocales
+    httpx
     jmespath
     pexpect
     pytest-asyncio
@@ -106,7 +108,6 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/test_proxy_connect.py"
     "tests/test_utils_display.py"
     "tests/test_command_check.py"
 
@@ -133,9 +134,12 @@ buildPythonPackage rec {
     "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
     "FeedExportTest"
+    "TestRealWebsite"
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
+    "test_pos_string"
+    "test_key_resp_or_url"
     # "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"

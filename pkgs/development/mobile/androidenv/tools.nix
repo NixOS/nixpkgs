@@ -17,7 +17,7 @@ deployAndroidPackage {
   name = "androidsdk-tools";
   inherit package os arch;
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
-  buildInputs = lib.optional (os == "linux") (
+  buildInputs = lib.optionals (os == "linux") (
     (with pkgs; [
       glibc
       freetype
@@ -28,7 +28,7 @@ deployAndroidPackage {
       libxrender
       libxext
     ])
-    ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
+    ++ lib.optionals (os == "linux" && stdenv.hostPlatform.isx86_64) (
       with pkgsi686Linux;
       [
         glibc

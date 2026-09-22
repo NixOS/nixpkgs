@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -9,16 +10,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lisette";
-  version = "0.1.17";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "ivov";
     repo = "lisette";
     tag = "lisette-v${finalAttrs.version}";
-    hash = "sha256-PzQQd5tgn3g+Gq0qVe8p9FSbIIpR178fDXvGcwmdcvU=";
+    hash = "sha256-y4daDiPOf5egoAiE1y6vEZoZJfDLB2ywy7hOn75GS/Y=";
   };
 
-  cargoHash = "sha256-3g8Vqr2PydVvp1k7E2fJGrDc1n5OjSQ7Ksl/UKEwWns=";
+  cargoHash = "sha256-ARONSRqGiLF9UC5rJIc6754km7tS+9WQUSMuedRB1Fg=";
+
+  # The e2e_learn test expects to find the `lis` binary in `target/debug/lis`
+  postPatch = ''
+    substituteInPlace tests/e2e_learn.rs --replace-fail \
+      'repo.join("target/debug/lis")' \
+      'repo.join("target/${stdenv.hostPlatform.rust.cargoShortTarget}/debug/lis")'
+  '';
 
   preCheck = ''
     export NO_COLOR=true

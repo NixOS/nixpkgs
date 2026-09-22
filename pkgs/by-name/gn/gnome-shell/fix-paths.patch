@@ -31,18 +31,6 @@ index 53fd92846..89533cedc 100644
          Gio.SubprocessFlags.NONE);
  
      try {
-diff --git a/js/ui/status/keyboard.js b/js/ui/status/keyboard.js
-index 1b43e1051..a31b0a304 100644
---- a/js/ui/status/keyboard.js
-+++ b/js/ui/status/keyboard.js
-@@ -1104,6 +1104,6 @@ class InputSourceIndicator extends PanelMenu.Button {
-     _showLayout() {
-         Main.overview.hide();
- 
--        Util.spawn(['tecla']);
-+        Util.spawn(['@tecla@']);
-     }
- });
 diff --git a/subprojects/extensions-tool/src/command-install.c b/subprojects/extensions-tool/src/command-install.c
 index 11fb4b6b7..e00e4807b 100644
 --- a/subprojects/extensions-tool/src/command-install.c

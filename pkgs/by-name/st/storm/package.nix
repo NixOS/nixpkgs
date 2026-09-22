@@ -79,9 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Distributed realtime computation system";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      vizanto
-    ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 })

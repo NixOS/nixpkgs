@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "scc";
@@ -15,6 +17,15 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd scc \
+      --bash <($out/bin/scc completion bash) \
+      --fish <($out/bin/scc completion fish) \
+      --zsh <($out/bin/scc completion zsh)
+  '';
 
   # scc has a scripts/ sub-package that's for testing.
   excludedPackages = [ "scripts" ];

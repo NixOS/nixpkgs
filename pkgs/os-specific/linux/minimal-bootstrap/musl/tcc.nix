@@ -88,6 +88,7 @@ bash.runCommand "${pname}-${version}"
       CC=tcc
 
     # Build
+    # NOTE: parallel build (-j) under tcc here is unstable and broke a previous run.
     make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
 
     # Install

@@ -41,6 +41,7 @@ let
       src = fetchgit {
         url = repository;
         rev = version;
+        fetchSubmodules = true; # this is the default, but let's be explicit
         inherit sha256;
       };
     };

@@ -48,6 +48,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  pytestFlags = [ "--snapshot-warn-unused" ];
+
   enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];

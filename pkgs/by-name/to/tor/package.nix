@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.6";
+  version = "0.4.9.12";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qJq6lwUumWOmVLQN8tRr4H6Ka24k5UN5F/2BrNkKcBc=";
+    hash = "sha256-wNMHydza7khIqMpT6dbE7JKCPk8wvhJ5Cw+938ZRX1s=";
   };
 
   outputs = [
@@ -128,11 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 
   meta = {
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     description = "Anonymizing overlay network";
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a
@@ -151,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       prusnak
+      whispersofthedawn
     ];
     platforms = lib.platforms.unix;
   };

@@ -65,10 +65,7 @@ perlPackages.buildPerlPackage rec {
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      rika
-      chewblacka
-    ];
+    maintainers = with lib.maintainers; [ rika ];
   };
 
 }

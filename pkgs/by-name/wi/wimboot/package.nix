@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wimboot";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JqdOgcwOXIJDl8O7k/pHdd4MNC/rJ0fWTowtEVpJyx8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eS+Vcrwxws8p5j+U3Hg0G2psYYgPR1XP7QXyPelpxyg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -27,11 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   makeFlags = [ "wimboot.x86_64.efi" ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=array-bounds"
-  ];
-
   installPhase = ''
     mkdir -p $out/share/wimboot/
     cp wimboot.x86_64.efi $out/share/wimboot
@@ -42,10 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Windows Imaging Format bootloader";
     changelog = "https://github.com/ipxe/wimboot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
     platforms = [ "x86_64-linux" ];
   };
 })

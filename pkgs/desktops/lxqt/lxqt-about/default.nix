@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-about";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-about";
     rev = version;
-    hash = "sha256-EP0Sd/VvLufqtn/7ZQwdI/h+BJhkGks7jTlEoEqYWgk=";
+    hash = "sha256-wJ4KJ+gSj0sdlO1l68RzAaOM8HxdPP6S1gWCoRfRZ3c=";
   };
 
   nativeBuildInputs = [

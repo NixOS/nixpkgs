@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple text widget for X resembling the watch(1) command";
+    homepage = "https://github.com/sineemore/stw";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ somasis ];
     platforms = lib.platforms.unix;

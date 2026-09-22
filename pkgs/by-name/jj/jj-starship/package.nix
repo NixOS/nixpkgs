@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jj-starship";
-  version = "0.7.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "dmmulroy";
     repo = "jj-starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YfcFlJsPCRfqhN+3JUWE77c+eHIp5RAu2rq/JhSxCec=";
+    hash = "sha256-z2nEavoTW+aXc0lbBQe0dTGIP0qKachCUSqa+EbWxfo=";
   };
 
-  cargoHash = "sha256-XMz6b63raPkgmUzB6L3tOYPxTenytmGWOQrs+ikcSts=";
+  cargoHash = "sha256-N1kjoQGPmzLwmXwSXhy6kv1e4zl7uq4tBw+U5eFwgSo=";
 
   buildNoDefaultFeatures = !withGit;
 

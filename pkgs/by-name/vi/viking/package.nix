@@ -22,7 +22,7 @@
   withGeoClue ? true,
   geoclue2,
   withGeoTag ? true,
-  gexiv2,
+  gexiv2_0_10,
   withMagic ? true,
   file,
   withMapnik ? false,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     xz # liblzma
   ]
   ++ lib.optional withGeoClue geoclue2
-  ++ lib.optional withGeoTag gexiv2
+  ++ lib.optional withGeoTag gexiv2_0_10
   ++ lib.optional withMagic file
   ++ lib.optional withMapnik mapnik
   ++ lib.optional withMBTiles sqlite

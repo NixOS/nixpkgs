@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   numpy,
@@ -20,19 +21,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "8799";
+  version = "10798";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-AQWcj6FtBGKKU8DiAH/ZHH6XU/5hrBKiYvIoULpL+1g=";
+    hash = "sha256-Si0PmgDGjq8iYrSkcdS+UDmg4J2RKvtHGDQaXT8wOtc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     numpy
@@ -59,6 +62,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
+    downloadPage = "https://github.com/ggml-org/llama.cpp/releases";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mitchmindtree

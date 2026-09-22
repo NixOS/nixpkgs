@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.5.1";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     tag = "v${version}";
-    hash = "sha256-y4hPiK9M0fcbZd30JCujdFpiYKEbsjXrlH8l4LEMtuY=";
+    hash = "sha256-Fk8xh40uQY15iCkDY/0y0y4hMAHo07cfLXL1ZyFp30w=";
   };
 
   build-system = [

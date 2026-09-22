@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-cython"
   ];
 
-  doCheck = true;
+  # Tests segfault on aarch64-darwin: https://hydra.nixos.org/build/323410364
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   postFixup = lib.optionalString enablePython ''
     moveToOutput "lib/${python3.libPrefix}" "$py"

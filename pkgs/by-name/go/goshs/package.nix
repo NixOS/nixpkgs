@@ -8,16 +8,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "2.0.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
-    owner = "patrickhener";
+    owner = "goshs-labs";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OrEPu+1wJy2+LM6bFyjtfVlm2l9S0Gagao8tGn0amzY=";
+    hash = "sha256-0d4iB6Mtann0OZd/KyWnwq7+fCcWEibAzHSYe30Mce0=";
   };
 
-  vendorHash = "sha256-u98v5pYhwCQb4tTDNNC7V1F9f5Dih92cYmS3hOEWJPw=";
+  vendorHash = "sha256-E+GZn7Trnz3KqzTsEfavWxP1dhsGPx4PyYYae8wjCb4=";
+
+  patches = [
+    # No upstream fix yet; remove when updating to a release that uses goldmark 1.7.17 or later.
+    ./CVE-2026-5160.patch
+  ];
 
   ldflags = [ "-s" ];
 
@@ -43,11 +48,10 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Simple, yet feature-rich web server written in Go";
     homepage = "https://goshs.de";
-    changelog = "https://github.com/patrickhener/goshs/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/goshs-labs/goshs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
-      matthiasbeyer
       seiarotg
     ];
     mainProgram = "goshs";

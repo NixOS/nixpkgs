@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Kernel module for Nvidia NIC firmware update";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = [ lib.licenses.gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ thillux ];
     platforms = lib.platforms.linux;
   };

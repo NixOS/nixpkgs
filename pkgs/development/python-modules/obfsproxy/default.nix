@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    license = lib.licenses.bsd3;
   };
 }

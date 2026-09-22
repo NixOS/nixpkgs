@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbutl";
-  version = "0.17.0";
+  version = "0.18.1";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
+    hash = "sha256-tQl7FRJh/CJ7A5MIlxlVv5aduPy/C0shcn9l+IB1oZU=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     name = "hledger-check-fancyassertion-${version}.hs";
     url = "https://raw.githubusercontent.com/simonmichael/hledger/hledger-lib-${version}/bin/hledger-check-fancyassertions.hs";
-    hash = "sha256-Zokrrcy9CfVV2tNI1DDsjqC+PcTdlMdit4O4Y1gP1O4=";
+    hash = "sha256-ISA7ED0HgyWOxfaufaFpNb1dHfE+1+Xh4SRCZ64yM6E=";
   };
 
   dontUnpack = true;
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Complex account balance assertions for hledger journals";
     homepage = "https://hledger.org/";
-    changelog = "https://github.com/simonmichael/hledger/blob/master/CHANGES.md";
+    changelog = "https://github.com/simonmichael/hledger/blob/${version}/hledger/CHANGES.md";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.DamienCassou ];
     platforms = lib.platforms.all; # GHC can cross-compile

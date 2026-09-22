@@ -360,7 +360,7 @@ in
         ${lib.optionalString haveLocalDB ''
           if ! [ -e ${baseDir}/.db-created ]; then
             runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -- -O hydra hydra
             touch ${baseDir}/.db-created
           fi
           echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
@@ -398,6 +398,11 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
+      path = [
+        # these are used to serve logs if they are compressed with zstd or bzip2
+        pkgs.zstd
+        pkgs.bzip2
+      ];
       environment = serverEnv // {
         HYDRA_DBI = "${serverEnv.HYDRA_DBI};application_name=hydra-server";
       };

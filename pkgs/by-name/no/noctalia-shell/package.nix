@@ -68,13 +68,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noctalia-shell";
-  version = "4.7.6";
+  version = "4.7.7";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
-    repo = "noctalia-shell";
+    repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oGMYWsP0qthxQisirZc/r/vpdGTZrInwkh75AC714AE=";
+    hash = "sha256-QszLpoDPD7JEv8B/w1U2u1ksBw/CYBDmwUTLhJrekF0=";
   };
 
   nativeBuildInputs = [
@@ -113,9 +113,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/noctalia-dev/noctalia-shell/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/noctalia-dev/noctalia/releases/tag/v${finalAttrs.version}";
     description = "Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell";
-    homepage = "https://github.com/noctalia-dev/noctalia-shell";
+    homepage = "https://github.com/noctalia-dev/noctalia";
     license = lib.licenses.mit;
     mainProgram = "noctalia-shell";
     maintainers = with lib.maintainers; [ spacedentist ];

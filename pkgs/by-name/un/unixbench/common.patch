@@ -1,13 +1,13 @@
 diff --git a/UnixBench/Run b/UnixBench/Run
-index 34d2c72..130b56e 100755
+index 41637be..0b71c0b 100755
 --- a/UnixBench/Run
 +++ b/UnixBench/Run
-@@ -81,23 +81,23 @@ my $longIterCount = 10;
+@@ -86,23 +86,23 @@ my $longIterCount = 10;
  my $shortIterCount = 3;
  
  # C compiler to use in compilation tests.
 -my $cCompiler = 'gcc';
-+my $cCompiler = 'cc -w';
++my $cCompiler = 'cc -w -std=gnu89';
  
  # Establish full paths to directories.  These need to be full pathnames
  # (or do they, any more?).  They can be set in env.
@@ -29,9 +29,9 @@ index 34d2c72..130b56e 100755
 -my $TESTDIR = getDir('UB_TESTDIR', $FindBin::Bin . "/testdir");
 +my $TESTDIR = getDir('UB_TESTDIR', '@out@/share/testdir');
  
- 
- ############################################################################
-@@ -330,19 +330,19 @@ my $testParams = {
+ my $quietMode = 0;
+ my $notQuietMode = 1;
+@@ -339,19 +339,19 @@ my $testParams = {
          "logmsg" => "Shell Scripts (1 concurrent)",
          "cat"    => 'system',
          "prog" => "${BINDIR}/looper",
@@ -54,7 +54,7 @@ index 34d2c72..130b56e 100755
      },
  
      ##########################
-@@ -434,7 +434,7 @@ my $testParams = {
+@@ -443,7 +443,7 @@ my $testParams = {
          "logmsg" => "C Compiler Throughput ($cCompiler)",
          "cat"    => 'misc',
          "prog" => "${BINDIR}/looper",
@@ -63,7 +63,7 @@ index 34d2c72..130b56e 100755
      },
      "arithoh" => {
          "logmsg" => "Arithoh",
-@@ -873,16 +873,6 @@ sub preChecks {
+@@ -1037,16 +1037,6 @@ sub preChecks {
      # Set the language.
      $ENV{'LANG'} = $language;
  
@@ -80,29 +80,43 @@ index 34d2c72..130b56e 100755
      # Create a script to kill this run.
      system("echo \"kill -9 $$\" > \"${TMPDIR}/kill_run\"");
      chmod(0755, $TMPDIR . "/kill_run");
-@@ -923,7 +913,10 @@ sub parseArgs {
+@@ -1089,6 +1079,9 @@ sub parseArgs {
                  $params->{'copies'} = [ ];
              }
              push(@{$params->{'copies'}}, shift(@words));
--        } else {
 +        } elsif ($word eq "--help" || $word eq "-h") {
-+	    print "Run: please see ubench(1) for available options\n";
-+	    exit 0;
-+	}else {
++	        print "Run: please see ubench(1) for available options\n";
++	        exit 0;
+         } else {
              die("Run: unknown option $word\n");
          }
-     }
 diff --git a/UnixBench/pgms/multi.sh b/UnixBench/pgms/multi.sh
-index 72e8716..d2f5f48 100755
+index 72e8716..b5c5847 100755
 --- a/UnixBench/pgms/multi.sh
 +++ b/UnixBench/pgms/multi.sh
-@@ -15,7 +15,8 @@
+@@ -15,8 +15,11 @@
  ###############################################################################
  ID="@(#)multi.sh:3.4 -- 5/15/91 19:30:24";
  instance=1
 -sort_src=sort.src
 +sort_src=$3/sort.src
-+cd $2
  work_factor=${MULTI_SH_WORK_FACTOR:-1}
++
++cd $2
++
  if [ $work_factor -gt 1 ]; then
  	inputs=
+ 	for i in $(seq $work_factor); do inputs="$inputs $sort_src"; done
+diff --git a/UnixBench/src/syscall.c b/UnixBench/src/syscall.c
+index 97a22e8..f0e5fac 100644
+--- a/UnixBench/src/syscall.c
++++ b/UnixBench/src/syscall.c
+@@ -105,7 +105,7 @@ char	*argv[];
+                     fprintf(stderr,"%s: fork failed\n", argv[0]);
+                     exit(1);
+                 } else if (pid == 0) {
+-                    execl("/bin/true", "/bin/true", (char *) 0);
++                    execl("@coreutils@/bin/true", "@coreutils@/bin/true", (char *) 0);
+                     fprintf(stderr,"%s: exec /bin/true failed\n", argv[0]);
+                     exit(1);
+                 } else {

@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocrand${clr.gpuArchSuffix}";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Generate pseudo-random and quasi-random numbers";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocrand";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

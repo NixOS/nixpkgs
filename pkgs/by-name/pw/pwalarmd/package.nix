@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It has extensive configuration and personalization, PulseAudio
       and PipeWire support, and supports live configuration changes.
     '';
+    homepage = "https://github.com/amyipdev/pwalarmd";
     mainProgram = "pwalarmd";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;

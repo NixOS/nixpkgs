@@ -28,20 +28,6 @@ let
     };
   };
 
-  registryConfig.redis = lib.mkIf cfg.enableRedisCache {
-    addr = "${cfg.redisUrl}";
-    password = "${cfg.redisPassword}";
-    db = 0;
-    dialtimeout = "10ms";
-    readtimeout = "10ms";
-    writetimeout = "10ms";
-    pool = {
-      maxidle = 16;
-      maxactive = 64;
-      idletimeout = "300s";
-    };
-  };
-
   configFile = cfg.configFile;
 in
 {
@@ -139,6 +125,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.dockerRegistry.extraConfig = lib.mkIf cfg.enableRedisCache {
+      redis = {
+        addr = "${cfg.redisUrl}";
+        password = "${cfg.redisPassword}";
+        db = 0;
+        dialtimeout = "10ms";
+        readtimeout = "10ms";
+        writetimeout = "10ms";
+        pool = {
+          maxidle = 16;
+          maxactive = 64;
+          idletimeout = "300s";
+        };
+      };
+    };
+
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];

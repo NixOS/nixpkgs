@@ -4231,8 +4231,10 @@ let
           "systemd-networkd-wait-online@.service"
           "systemd-networkd.service"
           "systemd-networkd.socket"
-          "systemd-networkd-persistent-storage.service"
+          "systemd-networkd-resolve-hook.socket"
           "systemd-networkd-varlink-metrics.socket"
+          "systemd-networkd-varlink.socket"
+          "systemd-networkd-persistent-storage.service"
         ];
 
         systemd.sockets.systemd-networkd-varlink-metrics.wantedBy = [ "sockets.target" ];
@@ -4314,6 +4316,9 @@ let
         systemd.additionalUpstreamUnits = [
           "systemd-networkd-wait-online.service"
           "systemd-networkd.service"
+          "systemd-networkd-resolve-hook.socket"
+          "systemd-networkd-varlink-metrics.socket"
+          "systemd-networkd-varlink.socket"
           "systemd-networkd.socket"
           "systemd-network-generator.service"
           "network-online.target"

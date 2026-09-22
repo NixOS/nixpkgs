@@ -7,33 +7,41 @@
   ncurses,
   sqlite,
   check,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vnstat";
   version = "2.13";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "vergoh";
     repo = "vnstat";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Xd3s4Wrtfwis0dxRijeWhfloHcXPUNAj0P91uWi1C3M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xd3s4Wrtfwis0dxRijeWhfloHcXPUNAj0P91uWi1C3M=";
   };
 
+  strictDeps = true;
+
   postPatch = ''
-    substituteInPlace src/cfg.c --replace /usr/local $out
+    substituteInPlace src/cfg.c --replace-fail /usr/local $out
   '';
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     gd
     ncurses
     sqlite
   ];
 
-  nativeCheckInputs = [ check ];
+  checkInputs = [ check ];
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) vnstat; };
 
   meta = {
     description = "Console-based network statistics utility for Linux";
@@ -44,9 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       This means that vnStat won't actually be sniffing any traffic and also
       ensures light use of system resources.
     '';
+    mainProgram = "vnstat";
     homepage = "https://humdi.net/vnstat/";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

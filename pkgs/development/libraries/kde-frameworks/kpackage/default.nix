@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kdoctools,
   karchive,
@@ -12,6 +13,7 @@
 mkDerivation {
   pname = "kpackage";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
   ];

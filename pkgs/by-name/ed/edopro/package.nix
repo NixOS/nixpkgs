@@ -19,6 +19,7 @@
   freetype,
   irrlicht,
   libevent,
+  libdecor,
   libgit2,
   libGL,
   libGLU,
@@ -276,6 +277,7 @@ let
         --prefix PATH : ${lib.makeBinPath [ mono ]} \
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
+            libdecor
             libGL
             libx11
             libxkbcommon

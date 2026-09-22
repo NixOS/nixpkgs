@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "canfigger";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "andy5995";
     repo = "canfigger";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JphvLdBQPOu3a9DNlXTOkQyL0eFLM3FCvGZLPSvbKtA=";
+    hash = "sha256-vqNfakpouoQGKFCyNsn4Cney0UXVYBMCJhwEhaIGPrI=";
   };
 
   nativeBuildInputs = [

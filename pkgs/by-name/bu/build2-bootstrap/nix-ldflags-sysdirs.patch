@@ -1,8 +1,6 @@
-diff --git a/libbuild2/cc/common.cxx b/libbuild2/cc/common.cxx
-index f848003c..0f14f9a5 100644
 --- a/libbuild2/cc/common.cxx
 +++ b/libbuild2/cc/common.cxx
-@@ -966,6 +966,17 @@ namespace build2
+@@ -1806,6 +1806,17 @@ namespace build2
      void
      msvc_extract_library_search_dirs (const strings&, dir_paths&); // msvc.cxx
  
@@ -20,11 +18,8 @@ index f848003c..0f14f9a5 100644
      dir_paths common::
      extract_library_search_dirs (const scope& bs) const
      {
-@@ -987,8 +998,19 @@ namespace build2
-           msvc_extract_library_search_dirs (v, r);
-         else
+@@ -1829,6 +1840,16 @@ namespace build2
            gcc_extract_library_search_dirs (v, r);
-+
        };
  
 +      // NIX_LDFLAGS are implicitly used when linking,

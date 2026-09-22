@@ -105,7 +105,7 @@ rec {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-EnD0cTQSOh1fARjKdoOCR5UjpvVA96EZVVWfqlH+m48=";
+        hash = "sha256-4u1Vgwk5cMCkrGfGSk2xO7hVHiDda0ioitvX/r3KPQc=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
@@ -126,7 +126,8 @@ rec {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-wAiOyCVS7fjVqrDlJJwDFxw5ZD5spnXlYKCAQ8gctHI=";
+        fetchSubmodules = true;
+        hash = "sha256-IJrfs8q7GtX4Y+Cmg4avT5QJmLpld38tyR3TR1CcgyE=";
       };
 
       # CMake is just used for libcds

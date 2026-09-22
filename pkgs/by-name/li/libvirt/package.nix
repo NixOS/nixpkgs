@@ -15,7 +15,6 @@
   gnutls,
   iproute2,
   iptables,
-  libgcrypt,
   libpcap,
   libtasn1,
   libxml2,
@@ -37,7 +36,6 @@
   runtimeShell,
   stdenv,
   replaceVars,
-  xhtml1,
   json_c,
   writeScript,
   writeShellApplication,
@@ -121,14 +119,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "12.2.0";
+  version = "12.7.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-4F5cGEMg2TNyzt9Cmc3vLXdJnSEz4X5vPOsd0rHdpi0=";
+    hash = "sha256-5R+EYWo+ZC6F02x+MpXTYJUbo64BDg/Wtlpklo6OtWI=";
   };
 
   patches = [
@@ -227,13 +225,11 @@ stdenv.mkDerivation rec {
     dbus
     glib
     gnutls
-    libgcrypt
     libpcap
     libtasn1
     libxml2
     python3
     readline
-    xhtml1
     json_c
   ]
   ++ lib.optionals isLinux [
@@ -350,6 +346,7 @@ stdenv.mkDerivation rec {
       (feat "tests" true)
       (feat "udev" isLinux)
       (feat "json_c" true)
+      (feat "libvirtd" true)
 
       (driver "ch" (isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64)))
       (driver "esx" true)
@@ -419,7 +416,7 @@ stdenv.mkDerivation rec {
     libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     update-source-version ${pname} "$libvirtVersion"
-    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version python3Packages.libvirt-python "$libvirtVersion"
     update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
 

@@ -3,7 +3,9 @@
   lib,
   fetchFromGitHub,
   cargo,
-  extra-cmake-modules,
+  pkg-config,
+  cmake,
+  kdePackages,
   rustc,
   rustPlatform,
   fetchpatch,
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-u9fRbxKeQSou9Umw4EaqzzzDiN4zhyfx9sWnlZpfpxU=";
   };
 
@@ -91,7 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
-    extra-cmake-modules
+    pkg-config
+    cmake
+    kdePackages.extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
     qt6Packages.wrapQtAppsHook

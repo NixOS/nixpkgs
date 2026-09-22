@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grcov";
-  version = "0.9.1";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "grcov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e3RQn6wKvVm40UK8ZlgIi2gRS9eEFBnEXdmXtCgv0Go=";
+    hash = "sha256-P9JOd2Dw3MDQ6Kr9m85JiqQScYdJzEVPtIfTOAc21rs=";
   };
 
-  cargoHash = "sha256-v4laGVbWmK8WFJXX5ChtViyKyMtmwpehSgNG6F31Mn0=";
+  cargoHash = "sha256-HZXH4sirjaZmHUiVr9A3ZnyqPoMaDTJnMD54/iUYQtg=";
 
   # tests do not find grcov path correctly
   checkFlags =
@@ -29,6 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_integration_guess_single_file"
         "test_integration_zip_dir"
         "test_integration_zip_zip"
+        "test_llvm_aggregate_profraws"
+        "test_profdatas_to_lcov"
+        "test_profraws_to_lcov"
+        "test_wrong_binary_file"
       ];
     in
     builtins.map (x: "--skip=" + x) skipList;

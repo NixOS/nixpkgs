@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tarlz";
-  version = "0.29";
+  version = "0.30";
   outputs = [
     "out"
     "man"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/tarlz/tarlz-${finalAttrs.version}.tar.lz";
-    sha256 = "sha256-fhJ/HhsbYspuNBf94y864EgbpYhvVqhVOiFbGdgcbBk=";
+    sha256 = "sha256-xjOTGUE/N/xLFVsbqKWGQKf+42SYsJXTttPBPZx/KGw=";
   };
 
   enableParallelBuilding = true;

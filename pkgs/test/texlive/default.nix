@@ -239,11 +239,7 @@ rec {
     runCommand "texlive-test-texdoc"
       {
         nativeBuildInputs = [
-          (texlive.withPackages (ps: [
-            ps.luatex
-            ps.texdoc
-            ps.texdoc.texdoc
-          ]))
+          ((texlive.withPackages (ps: [ ps.texdoc ])).overrideAttrs { withDocs = true; })
         ];
       }
       ''
@@ -400,6 +396,29 @@ rec {
             {,"$schemeInfraOnly"/share/texmf-var/tex/generic/config/}"$fname" \
             | tee "$out/scheme-infraonly/$fname.patch"
         done
+      '';
+
+  # verify that l3build works correctly
+  l3build =
+    runCommand "texlive-test-l3build"
+      {
+        nativeBuildInputs = [ (texliveSmall.withPackages (ps: [ ps.l3build ])) ];
+      }
+      ''
+        cat >>build.lua <<EOF
+        module = "texlive-test-l3build"
+        typesetfiles = {"*.tex"}
+        EOF
+
+        cat >>test-l3build.tex <<EOF
+        \documentclass{article}
+        \begin{document}
+        l3build ran successfully.
+        \end{document}
+        EOF
+
+        l3build doc
+        l3build install --full --texmfhome "$out"
       '';
 
   # verify that the restricted mode gets enabled when
@@ -928,7 +947,7 @@ rec {
         scheme:
         builtins.foldl' (
           acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [ ]))
-        ) [ ] scheme.passthru.requiredTeXPackages;
+        ) [ ] scheme.passthru.includedTeXPackages;
       correctLicensesAttrNames = scheme: lib.sort lt (map licenseToAttrName (correctLicenses scheme));
 
       hasLicenseMismatch =

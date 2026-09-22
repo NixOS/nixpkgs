@@ -74,7 +74,7 @@ let
       ln -s $out/lib/yquake2/quake2 $out/bin/yquake2
       ln -s $out/lib/yquake2/q2ded $out/bin/yq2ded
       cp $src/stuff/yq2.cfg $out/share/games/quake2/baseq2
-      install -Dm644 stuff/icon/Quake2.png $out/share/pixmaps/yamagi-quake2.png;
+      install -Dm644 stuff/icon/Quake2.png $out/share/icons/hicolor/512x512/apps/yamagi-quake2.png;
       runHook postInstall
     '';
 

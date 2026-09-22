@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-fix_gcc15.patch
   ];
 
+  preConfigure = ''
+    substituteInPlace po/Makefile.in.in \
+      --replace-fail '$(GMSGFMT) -c --statistics --verbose' '$(GMSGFMT) --statistics --verbose'
+  '';
+
   # run dopewars with -f so that it finds its scoreboard file in ~/.local/share
   postInstall = ''
     wrapProgram $out/bin/dopewars \

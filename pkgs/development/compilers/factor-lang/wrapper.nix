@@ -2,6 +2,9 @@
   lib,
   stdenv,
   makeWrapper,
+  runCommandLocal,
+  buildFactorApplication,
+  buildFactorVocab,
   buildEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -10,8 +13,8 @@
   freealut,
   gdk-pixbuf,
   glib,
-  gnome2,
   gtk2-x11,
+  gtkglext,
   libGL,
   libGLU,
   librsvg,
@@ -67,8 +70,8 @@ let
       freealut
       gdk-pixbuf
       glib
-      gnome2.gtkglext
       gtk2-x11
+      gtkglext
       libGL
       libGLU
       pango
@@ -220,6 +223,16 @@ stdenv.mkDerivation (finalAttrs: {
       extraVocabs
       vocabTree
       ;
+    tests = {
+      hello-world = import ./test/hello-world {
+        inherit
+          lib
+          runCommandLocal
+          buildFactorApplication
+          buildFactorVocab
+          ;
+      };
+    };
   };
 
   meta = factor-unwrapped.meta // {

@@ -19,5 +19,5 @@ mkKdeDerivation rec {
     qtsvg
   ];
 
-  meta.license = [ lib.licenses.gpl2Only ];
+  meta.license = lib.licenses.gpl2Only;
 }

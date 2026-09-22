@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.111.1";
+  version = "0.119.0";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eAiExxvLFkHsmslfhhbQG0ogaSMF9eOeCq0u2wUimp0=";
+    hash = "sha256-rOk02ldjuSzLVU8HL8K0dXhSMotv/PUxwmUJdBO7hZk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-rsdZt+xKjIJpWS5pYx8A+ryY1D2WIKquKjsQBkxToUQ=";
+  vendorHash = "sha256-b4Wc4E7C7xl3VorXWH4YrWra4HBLXZ48r7G5sN8dHFE=";
 
   patches = [
     # several test golden files have unstable paths based on the platform
@@ -59,7 +59,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.version=${finalAttrs.version}"
     "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
@@ -82,6 +81,13 @@ buildGoModule (finalAttrs: {
 
     # patch utility script
     patchShebangs grype/db/v5/distribution/testdata/tls/generate-x509-cert-pair.sh
+
+    # test build fingerprinting expects a git repository
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+    git add .
+    git commit -m "initial commit"
   '';
 
   checkFlags =
@@ -105,8 +111,10 @@ buildGoModule (finalAttrs: {
         "Test_SarifIsValid"
         "Test_dpkgUseCPEsForEOLEnvVar"
         "Test_rpmUseCPEsForEOLEnvVar"
+        "TestMatcherGolang_GoSymbols_GHSAMerge"
+        "TestMatcherGolang_GoSymbols"
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # fails to generate x509 certificate
         # cat: /etc/ssl/openssl.cnf: Operation not permitted
         "Test_defaultHTTPClientHasCert"
@@ -129,7 +137,7 @@ buildGoModule (finalAttrs: {
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
       jk

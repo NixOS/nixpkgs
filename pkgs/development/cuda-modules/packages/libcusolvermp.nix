@@ -24,6 +24,11 @@ buildRedist {
     nccl
   ];
 
+  autoPatchelfIgnoreMissingDeps = [
+    # Needs to be dynamically loaded as it depends on the hardware
+    "libcuda.so.1"
+  ];
+
   meta = {
     description = "High-performance, distributed-memory, GPU-accelerated library that provides tools for solving dense linear systems and eigenvalue problems";
     longDescription = ''

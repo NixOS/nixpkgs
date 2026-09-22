@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
   pytestCheckHook,
 
   # build system
@@ -43,6 +44,11 @@ buildPythonPackage (finalAttrs: {
   checkInputs = [
     pytest-mypy-plugins
   ];
+
+  # expose the installed package so pytest-mypy-plugins' mypy subprocess can resolve `import obspec`
+  preCheck = ''
+    export MYPYPATH=$out/${python.sitePackages}
+  '';
 
   meta = {
     description = "Object storage interface definitions for Python";

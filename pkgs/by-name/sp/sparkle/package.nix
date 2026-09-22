@@ -2,17 +2,17 @@
   lib,
   stdenvNoCC,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  pnpm_10_29_2,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs,
   makeWrapper,
   electron,
-  dbip-asn-lite,
-  dbip-country-lite,
-  v2ray-geoip,
-  v2ray-domain-list-community,
+  dbip-asn-lite, # asn.mmdb
+  dbip-country-lite, # country.mmdb
+  v2ray-geoip, # geoip.dat
+  v2ray-domain-list-community, # geosite.dat
   sub-store,
   sub-store-frontend,
   mihomo,
@@ -22,67 +22,80 @@
 }:
 
 let
+  pnpm = pnpm_11;
+
   sparkle-service = buildGoModule {
     pname = "sparkle-service";
-    version = "0-unstable-2025-10-24";
+    version = "0-unstable-2026-08-02";
 
     src = fetchFromGitHub {
       owner = "xishang0128";
       repo = "sparkle-service";
-      rev = "fb7006438d6335c7ee9fbf4530b1821428385cab";
-      hash = "sha256-V1HwYbdUunLTWFhfW7EHDDkIQyKFq2mbUysndttIlTE=";
+      rev = "3cabb61aaf446444d71acbe06a3abdd768d2e80e";
+      hash = "sha256-djXVcBDf5whSM6U0qBydFeX+XbHnmKTVGDet6aA3a1g=";
     };
 
-    vendorHash = "sha256-1n4CJT7zh6uxg6fGAVQz/KVKqXelFoTtETFPARcbPb8=";
+    vendorHash = "sha256-GXAP6pCKyy41UyMfz1X9F8GeAbyYZi4suPXDryKINOU=";
 
     meta.mainProgram = "sparkle-service";
   };
 
-  pnpm = pnpm_10_29_2;
+  resourcesDir =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      "$out/Applications/Sparkle.app/Contents/Resources"
+    else
+      "$out/share/sparkle/resources";
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.3";
+  version = "1.26.8";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xishang0128";
     repo = "sparkle";
     tag = finalAttrs.version;
-    hash = "sha256-36eqSgXDl3ASDO4wn8cCptSE4qf3FwFyl+TEhCzhGwA=";
+    hash = "sha256-hAUc8T+xHRDwP0mj8wyd0+pNR5B5QEj4PXZVookxJeE=";
   };
 
+  npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-uiUp2YtPMvG0d9GIedxNzkY0TR/bdbWQv4IFiVZew5s=";
+    fetcherVersion = 4;
+    hash = "sha256-VTeLrZz6nVfVmVJHMwkGTfVYl7Qs2ph3uHtOE8qoq/Q=";
   };
 
   nativeBuildInputs = [
-    pnpmConfigHook
     pnpm
-    nodejs
     makeWrapper
     copyDesktopItems
   ];
+  npmConfigHook = pnpmConfigHook;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   # workaround for https://github.com/electron/electron/issues/31121
   postPatch = ''
-    sed -i "s#process\.resourcesPath#'$out/lib/sparkle/resources'#g" \
-      src/main/utils/dirs.ts
+    substituteInPlace src/main/utils/dirs.ts \
+      --replace-fail "process.resourcesPath" "'${resourcesDir}'"
   '';
 
   buildPhase = ''
     runHook preBuild
 
     npm exec electron-vite -- build
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
 
     runHook postBuild
   '';
@@ -90,27 +103,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/sparkle
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/lib/sparkle/
+    ${
+      if stdenvNoCC.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/{Applications,bin}
+          cp -r dist/mac*/Sparkle.app $out/Applications
+          makeWrapper $out/Applications/Sparkle.app/Contents/MacOS/Sparkle $out/bin/sparkle
+        ''
+      else
+        ''
+          mkdir -p $out/share/sparkle
+          install -D resources/icon.png $out/share/icons/hicolor/512x512/apps/sparkle.png
+          cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/sparkle/
+          makeWrapper ${lib.getExe electron} $out/bin/sparkle \
+            --add-flags $out/share/sparkle/resources/app.asar \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+            --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --set-default ELECTRON_IS_DEV 0 \
+            --inherit-argv0
+        ''
+    }
 
-    install -D resources/icon.png $out/share/icons/hicolor/512x512/apps/sparkle.png
-
-    mkdir -p $out/lib/sparkle/resources/{files,sidecar}
-    ln -s ${sub-store-frontend} $out/lib/sparkle/resources/files/sub-store-frontend
-    ln -s ${sub-store}/share/sub-store/sub-store.bundle.js $out/lib/sparkle/resources/files/sub-store.bundle.js
-    ln -s ${dbip-asn-lite.mmdb} $out/lib/sparkle/resources/files/ASN.mmdb
-    ln -s ${dbip-country-lite.mmdb} $out/lib/sparkle/resources/files/country.mmdb
-    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/sparkle/resources/files/geoip.dat
-    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/sparkle/resources/files/geosite.dat
-    ln -s ${lib.getExe sparkle-service} $out/lib/sparkle/resources/files/sparkle-service
-    ln -s ${lib.getExe mihomo} $out/lib/sparkle/resources/sidecar/mihomo
-
-    makeWrapper '${lib.getExe electron}' $out/bin/sparkle \
-      --add-flags $out/lib/sparkle/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
+    mkdir -p ${resourcesDir}/{files,sidecar}
+    ln -s ${sub-store-frontend} ${resourcesDir}/files/sub-store-frontend
+    ln -s ${sub-store}/share/sub-store/sub-store.bundle.js ${resourcesDir}/files/sub-store.bundle.js
+    ln -s ${dbip-asn-lite.mmdb} ${resourcesDir}/files/ASN.mmdb
+    ln -s ${dbip-country-lite.mmdb} ${resourcesDir}/files/country.mmdb
+    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat ${resourcesDir}/files/geoip.dat
+    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat ${resourcesDir}/files/geosite.dat
+    ln -s ${lib.getExe sparkle-service} ${resourcesDir}/files/sparkle-service
+    ln -s ${lib.getExe mihomo} ${resourcesDir}/sidecar/mihomo
 
     runHook postInstall
   '';
@@ -145,6 +167,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "sparkle";
     maintainers = with lib.maintainers; [ chillcicada ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

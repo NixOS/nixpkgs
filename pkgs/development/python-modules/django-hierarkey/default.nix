@@ -17,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "django-hierarkey";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-hierarkey";
     tag = version;
-    hash = "sha256-zIz7aokOGLGXV/xJnYcz8lBP7b2rxLrfaD3i/DLpFR8=";
+    hash = "sha256-ZsT696E1wBvElj99mMa6SuqVr7XD8NzJiMKGNOBOTrA=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/settings.py \
+      --replace-fail "/var/tmp" "$TMPDIR"
+  '';
 
   build-system = [ setuptools ];
 

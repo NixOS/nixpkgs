@@ -1,15 +1,11 @@
 {
   lib,
   stdenv,
-  cairo,
   expat,
   fftwSinglePrec,
   fluidsynth,
-  glib,
-  gtk2,
   libjack2,
   ladspa-header,
-  gnome2,
   lv2,
   pkg-config,
   fetchFromGitHub,
@@ -33,21 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  cmakeFlags = [ (lib.cmakeBool "WANT_GUI" false) ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   buildInputs = [
-    cairo
     expat
     fftwSinglePrec
     fluidsynth
-    glib
-    gtk2
     libjack2
     ladspa-header
-    gnome2.libglade
     lv2
   ];
 

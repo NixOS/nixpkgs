@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library and command-line utility for reading GDSII geometry files";
     mainProgram = "GDSIIConvert";
     homepage = "https://github.com/HomerReid/libGDSII";
-    license = [ lib.licenses.gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       sheepforce
       markuskowa

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lastools";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ow7zcvkenJ2j+tj2TxuEtK0dQEwzUtJ9f0wzt5/qimM=";
+    hash = "sha256-eXBrx8gKagxp1J4BOX+f2cH0GkMX0GJ8ebVZw7qqioA=";
   };
 
   patches = [

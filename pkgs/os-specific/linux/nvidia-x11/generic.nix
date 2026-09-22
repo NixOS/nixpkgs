@@ -246,13 +246,17 @@ stdenv.mkDerivation (finalAttrs: {
         );
     in
     {
-      mod = callPackage ./kernel-modules.nix {
-        open = false;
-        nvidia_x11 = finalAttrs.finalPackage;
-        # build files already patched when building the main package, so no need to patch them again
-        patches = [ ];
-        inherit broken;
-      };
+      mod =
+        if !libsOnly then
+          callPackage ./kernel-modules.nix {
+            open = false;
+            nvidia_x11 = finalAttrs.finalPackage;
+            # build files already patched when building the main package, so no need to patch them again
+            patches = [ ];
+            inherit broken;
+          }
+        else
+          { };
       open = lib.mapNullable (
         hash:
         callPackage ./kernel-modules.nix {

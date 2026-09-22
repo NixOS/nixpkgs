@@ -15,7 +15,7 @@
   qttools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.3.1",
+  version ? "2.4.0",
   qtx11extras ? null,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
-        "2.3.1" = "sha256-2PDVNMBwzDpUOkZ7GnrWDMlXBeUgCyZ6vHXurW6fr4s=";
+        "2.4.0" = "sha256-gfyskv/TpAdBES0+O1MrrkQqTDqtAGtDMIwv3NF7pnE=";
       }
       ."${finalAttrs.version}";
   };
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  postPatch = lib.optionals (version == "1.4.0") ''
+  postPatch = lib.optionalString (version == "1.4.0") ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';

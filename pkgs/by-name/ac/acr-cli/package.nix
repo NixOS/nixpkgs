@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "acr-cli";
-  version = "0.18.1";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "acr-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VxY+Hq9aJjkr6TmyuFE9i9VliNowZataQimf8yWPXp8=";
+    hash = "sha256-Tb1OVVkEH6XmYjbe5ktgqRO/Ko1jhzpbhycZFalhgVg=";
   };
 
   vendorHash = null;
@@ -27,6 +27,12 @@ buildGoModule (finalAttrs: {
   ];
 
   executable = [ "acr" ];
+
+  # Required for some tests on darwin.
+  __darwinAllowLocalNetworking = true;
+
+  # Test checks for legacy error which has been changed in newer go versions.
+  checkFlags = [ "-skip=^TestParseDuration" ];
 
   passthru.tests.version = testers.testVersion {
     package = acr-cli;

@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.26.0";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     tag = "lib/v${version}";
-    hash = "sha256-A404lYKGAigzsnqWO4BAphOK/Juj4Fa2EHXQO8N1U9I=";
+    hash = "sha256-XqsxtFwQnAJHYMaR+uO8wzlxA+GtqfllJUCIt0l1i9o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NAcCZks5N1KPqeA5v72NAcJqHGexRU99yXQHg21vkPA=";
+    hash = "sha256-ENWGL8N7shXYI31GDLu7SHqPhZUuIWWnYk/ziRoG9Gg=";
   };
 
   buildAndTestSubdir = "crates/lib";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_conjugate_pauli_by_clifford"
     "test_execute_qvm"
     "test_generate_randomized_benchmark_sequence"
-    "test_get_instruction_set_actitecture_public"
+    "test_get_instruction_set_architecture_public"
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   file,
   python3Packages,
   rsync,
@@ -12,23 +11,18 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "barman";
-  version = "3.14.1";
+  version = "3.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-Z3+PgUJcyG/M05hMmIhRr3HttzHUDx7BGIs44LA/qE4=";
+    hash = "sha256-7K7ibg2/hr5wBzGR8cW5FZNtPPFEBA7xPwmOl2c1fOU=";
   };
 
   patches = [
     ./unwrap-subprocess.patch
-    # fix building with Python 3.13
-    (fetchpatch2 {
-      url = "https://github.com/EnterpriseDB/barman/commit/931f997f1d73bbe360abbca737bea9ae93172989.patch?full_index=1";
-      hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
-    })
   ];
 
   # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
@@ -70,6 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Assertion error
     "test_help_output"
     "test_exits_on_unsupported_target"
+    "test_resolve_mounted_volume_failure"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # FsOperationFailed

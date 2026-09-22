@@ -15,21 +15,19 @@ let
 
   channels = {
     stable = {
-      version = "2.28.6";
+      version = "2.36.6";
       hash = {
-        x86_64-linux = "sha256-OBnEOR6uNCzfsnWIQupSN9JMykNbrojrkb5lcPXL1W8=";
-        x86_64-darwin = "sha256-ixI5BPxq7spPk1Un6eYVke+IkhqoIxTqDTXo5FehaEk=";
-        aarch64-linux = "sha256-w+5PMff13nUp7jAYGSQlozShWqjsF+NLKQiquxD07wc=";
-        aarch64-darwin = "sha256-nrx0Z1NdzkeQbeWzwOhpATIYnCCucG5lKRoUaRVjiQE=";
+        x86_64-linux = "sha256-VXm0K7A+aqZGqfGQhi5lo9rfpjUylrqZVT/pW4UDKcI=";
+        aarch64-linux = "sha256-jof9EX3Xb73dFr51eAOliuDPEfUnkdLul3ZdKU4Vv5w=";
+        aarch64-darwin = "sha256-vaz+mpt4hNhN9Jc39wNOnh0/Q5RjenXyGKl7BgMtj10=";
       };
     };
     mainline = {
-      version = "2.29.1";
+      version = "2.37.2";
       hash = {
-        x86_64-linux = "sha256-LxYADRdkiIsvHBaMy+MtJuUo8p5MLDKDL6pMtHaqokw=";
-        x86_64-darwin = "sha256-OwZpCTjEVzTu4M9jf0vOuTuiyn66qRc/pEO/DLD8pvg=";
-        aarch64-linux = "sha256-hNPimwzopC2Hj8i0I6KJAtvKXANACpmcN+onGvAaMvc=";
-        aarch64-darwin = "sha256-AuNFtvnG40Toll/hmEXeGuV6ZcxfuVuUTFqdtTLXRn8=";
+        x86_64-linux = "sha256-gSl6eWk4vYyCAAUCvomaiiYRUDl2wPVQ37rdHMH06zY=";
+        aarch64-linux = "sha256-HVWGvqcdPogWBo015gtxWnXM/iRLcJEO8UVAROtkHEQ=";
+        aarch64-darwin = "sha256-INFPg6wUu4O/Cr+U9o/059bfr4g3QYZWbG17DU8KeJk=";
       };
     };
   };
@@ -37,6 +35,9 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
   version = channels.${channel}.version;
+
+  __structuredAttrs = true;
+
   src = fetchurl {
     hash = (channels.${channel}.hash).${system};
 
@@ -46,7 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "linux_amd64";
             aarch64-linux = "linux_arm64";
-            x86_64-darwin = "darwin_amd64";
             aarch64-darwin = "darwin_arm64";
           }
           .${system};
@@ -55,7 +55,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "tar.gz";
             aarch64-linux = "tar.gz";
-            x86_64-darwin = "zip";
             aarch64-darwin = "zip";
           }
           .${system};
@@ -100,10 +99,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Provision remote development environments via Terraform";
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
+    platforms = lib.attrNames channels.${channel}.hash;
     mainProgram = "coder";
     maintainers = with lib.maintainers; [
-      ghuntley
+      bpmct
+      developmentcats
+      faukah
       kylecarbs
+      phorcys420
     ];
   };
 

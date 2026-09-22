@@ -8,17 +8,17 @@
 (php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2
   (finalAttrs: {
     pname = "paratest";
-    version = "7.22.3";
+    version = "7.24.1";
 
     src = fetchFromGitHub {
       owner = "paratestphp";
       repo = "paratest";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ad3/r7ndYVl1yTZoBoBMDLI7a/FbxLugENqXH1NBDRw=";
+      hash = "sha256-wNdZyZ7r9UpXCJwE4yucEg9FmWCy06HRr56s1XZQWB0=";
     };
 
     composerLock = ./composer.lock;
-    vendorHash = "sha256-o4AwINmX1lnJQmPgaQj0o++fHi0FyNNBavi1O80wfso=";
+    vendorHash = "sha256-LomuNhr/g9Fa6du0xPcRHPSEXDLRcbqEOqha9wwtY7M=";
 
     passthru.updateScript = ./update.sh;
 

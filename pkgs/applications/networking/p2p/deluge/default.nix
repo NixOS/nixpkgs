@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator,
   glib,
   gobject-introspection,
   librsvg,
@@ -29,31 +30,41 @@ let
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
+      patches = [
+        # https://github.com/deluge-torrent/deluge/pull/514
+        ./replace-pyopenssl-certificate-generation.patch
+      ];
+
       propagatedBuildInputs =
         with pypkgs;
         [
           twisted
           mako
           chardet
+          cryptography
           pyxdg
           pyopenssl
           service-identity
           libtorrent-rasterbar.dev
           libtorrent-rasterbar.python
-          setuptools
+          # pkg_resources was removed in setuptools>=82; deluge 2.2.0 still uses it
+          # standard-pkg-resources is an independent PyPI redistribution providing it
+          # TODO: remove once deluge migrates off pkg_resources
+          standard-pkg-resources
           setproctitle
           pillow
           rencode
           six
           zope-interface
           dbus-python
-          pycairo
-          librsvg
         ]
         ++ optionals withGUI [
+          pycairo
+          librsvg
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator
         ];
 
       nativeBuildInputs = [

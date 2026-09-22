@@ -10,16 +10,17 @@
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2026.3.1+0";
+  version = "2026.7.0+0";
 
   src = fetchFromGitHub {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-nUhSoqf655eOs+rKqAZB0XzPD6ePL6CIxVAnB5dmJAs=";
+    hash = "sha256-yX6Lf+7q9ptVAlx0q0Z55GnKhvAIjYvvvKR1ZZroWeo=";
   };
 
-  npmDepsHash = "sha256-dlYN2aiv6XbDXQVstfI6XIe+X5Q1lqs62eNalGTGx7k=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   nativeBuildInputs = [
     python3

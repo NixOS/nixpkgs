@@ -2,6 +2,8 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
+  runCommand,
+  sqlint,
 }:
 
 bundlerApp {
@@ -10,7 +12,13 @@ bundlerApp {
 
   exes = [ "sqlint" ];
 
-  passthru.updateScript = bundlerUpdateScript "sqlint";
+  passthru = {
+    updateScript = bundlerUpdateScript "sqlint";
+    tests.help = runCommand "sqlint-help-test" { } ''
+      ${sqlint}/bin/sqlint --help
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Simple SQL linter";

@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "boulder";
-  version = "0.20260413.0";
+  version = "0.20260504.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-8saRz7g0KsXNr5oR4a2qd4kKDR686J0TIFMzsX/zlV0=";
+    hash = "sha256-nqSBFaPhu+TRPY33Rh3El7IJbKDPI133qgsupVpx/Lg=";
   };
 
   vendorHash = null;

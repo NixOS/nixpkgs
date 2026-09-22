@@ -199,9 +199,9 @@ let
   };
 
   buildAttrs =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       buildAttrsLinux
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       buildAttrsDarwin
     else
       throw "platform not supported";

@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Command line invoice generator";
     homepage = "https://github.com/maaslalani/invoice";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "invoice";
   };
 })

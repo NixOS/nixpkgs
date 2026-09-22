@@ -40,14 +40,13 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
-    # Replace with `tag = "v${finalAttrs.version}";` in the next version. The upstream repository tagged the wrong commit.
-    rev = "6092488d1c4fc741b16a0789ef9c08ec0279333f";
-    hash = "sha256-BIdKKIp6q9Vp2DByXzT9CJzOszFhjriiWBEqFwUT28M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AadjXTjUBnSbHP8tRHKvWotW58s5tMUJGtxbdPxYg6E=";
   };
 
   patches = [ ./no-update-check.patch ];

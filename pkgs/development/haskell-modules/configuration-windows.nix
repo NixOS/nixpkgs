@@ -37,21 +37,4 @@ with haskellLib;
   # Root cause seems to be undefined references to libffi as shown by linking errors if we instead use "-Wl,--disable-auto-import"
   # See https://github.com/rust-lang/rust/issues/132226#issuecomment-2445100058
   iserv-proxy = appendConfigureFlag "--ghc-option=-optl=-Wl,--disable-runtime-pseudo-reloc" super.iserv-proxy;
-
-  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
-  # See configuration-nix.nix, where iserv-proxy and network are handled.
-  # On Windows, network depends on temporary (see above), which depends on random, which depends on splitmix.
-  inherit
-    (
-      let
-        noExternalInterpreter = overrideCabal {
-          enableExternalInterpreter = false;
-        };
-      in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) random splitmix temporary; }
-    )
-    random
-    splitmix
-    temporary
-    ;
 })

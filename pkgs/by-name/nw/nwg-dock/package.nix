@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/nwg-piotr/nwg-dock";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "nwg-dock";
   };
 })

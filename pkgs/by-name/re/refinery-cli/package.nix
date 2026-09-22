@@ -8,19 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "refinery-cli";
-  version = "0.8.14";
+  version = "0.9.2";
 
   src = fetchCrate {
     pname = "refinery_cli";
     inherit (finalAttrs) version;
-    hash = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
+    hash = "sha256-KBwEefttkIy8+NN16K6qnvOJxEe9DH+oGXuFx2/ziCw=";
   };
 
-  # The `time` crate doesn't build on Rust 1.80+
-  # https://github.com/NixOS/nixpkgs/issues/332957
-  cargoPatches = [ ./time-crate.patch ];
-
-  cargoHash = "sha256-gcPVbKcPkV0H+BpErTokvLKFxpSXhxNoptxOeuhH1FU=";
+  cargoHash = "sha256-PulFXZw/ouaYP7FWWLv7R/hemN4IatXH+2wIBJjd3oc=";
 
   nativeBuildInputs = [ pkg-config ];
 

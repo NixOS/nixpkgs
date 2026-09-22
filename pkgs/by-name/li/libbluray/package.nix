@@ -7,7 +7,7 @@
   meson,
   ninja,
   withJava ? false,
-  jdk21_headless,
+  jdk21,
   jre21_minimal, # Newer JDK's depend on a release with a fix for https://code.videolan.org/videolan/libbluray/-/issues/46
   ant,
   stripJavaArchivesHook,
@@ -31,7 +31,7 @@ let
       "java.rmi"
       "java.xml"
     ];
-    jdk = jdk21_headless;
+    jdk = jdk21;
   };
 in
 stdenv.mkDerivation rec {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ]
   ++ lib.optionals withJava [
-    jdk21_headless
+    jdk21
     ant
     stripJavaArchivesHook
   ];

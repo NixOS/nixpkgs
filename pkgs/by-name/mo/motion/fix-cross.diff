@@ -1,0 +1,31 @@
+diff --git a/configure.ac b/configure.ac
+index ef7cb3e..135a082 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -64,9 +64,9 @@ CFLAGS="$HOLD_CFLAGS"
+ ##############################################################################
+ ###  Check libmicrohttpd - Required.  Needed for stream/webcontrol
+ ##############################################################################
+-AS_IF([pkg-config libmicrohttpd ], [
+-    TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags libmicrohttpd`
+-    TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs libmicrohttpd`
++PKG_CHECK_MODULES([MICROHTTPD], [libmicrohttpd], [
++    TEMP_CPPFLAGS="$TEMP_CPPFLAGS $MICROHTTPD_CFLAGS"
++    TEMP_LIBS="$TEMP_LIBS $MICROHTTPD_LIBS"
+   ],[
+     AC_MSG_ERROR([Required package libmicrohttpd-dev not found, please check motion_guide.html and install necessary dependencies])
+   ]
+@@ -226,10 +226,10 @@ AS_IF([test "${FFMPEG}" = "no"], [
+ 
+     FFMPEG_DEPS="libavutil libavformat libavcodec libswscale libavdevice"
+     AC_MSG_CHECKING(for FFmpeg)
+-    AS_IF([pkg-config $FFMPEG_DEPS], [
++    PKG_CHECK_MODULES([TEMP_FFMPEG], [$FFMPEG_DEPS], [
+         FFMPEG_VER=`pkg-config --modversion libavformat`
+-        TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags $FFMPEG_DEPS`
+-        TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs $FFMPEG_DEPS`
++        TEMP_CFLAGS="$TEMP_CFLAGS $TEMP_FFMPEG_CFLAGS"
++        TEMP_LIBS="$TEMP_LIBS $TEMP_FFMPEG_LIBS"
+         AC_DEFINE([HAVE_FFMPEG], [1], [Define to 1 if FFMPEG is around])
+         AC_MSG_RESULT(yes)
+       ],[

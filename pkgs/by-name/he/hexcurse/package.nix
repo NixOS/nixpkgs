@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  fetchDebianPatch,
   ncurses,
 }:
 
@@ -47,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
       name = "ncurses-6.3.patch";
       url = "https://github.com/LonnyGomes/hexcurse/commit/cb70d4a93a46102f488f471fad31a7cfc9fec025.patch";
       sha256 = "19674zhhp7gc097kl4bxvi0gblq6jzjy8cw8961svbq5y3hv1v5y";
+    })
+
+    # Fix build with GCC 15 (old-style function definitions)
+    (fetchDebianPatch {
+      pname = "hexcurse";
+      version = "1.60.0";
+      debianRevision = "1";
+      patch = "gcc-15.patch";
+      hash = "sha256-nWwYjI18fsJ9LSby6OJoJ0QXENgyVbUY3LpEYWoCBkI=";
     })
   ];
 

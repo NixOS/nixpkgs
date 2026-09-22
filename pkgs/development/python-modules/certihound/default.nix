@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "certihound";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ERJ5fbYikhKLwchSIBe5s4KF/1HsXZ1O00QnYXAe+ps=";
+    hash = "sha256-uSoI4bz5h3Guy8TtfHjsk0zo9LNL2BJ5ZRFMFPk2Up0=";
   };
 
   build-system = [ setuptools ];

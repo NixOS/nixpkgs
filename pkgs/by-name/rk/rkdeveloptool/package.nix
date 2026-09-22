@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   # main.cpp:1568:36: error: '%s' directive output may be truncated writing up to 557 bytes into a region of size 5
   env.CPPFLAGS = toString (
     lib.optionals stdenv.cc.isGNU [ "-Wno-error=format-truncation" ]
-    ++ lib.optionals stdenv.isDarwin [ "-Wno-error=vla-cxx-extension" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-Wno-error=vla-cxx-extension" ]
   );
 
   meta = {

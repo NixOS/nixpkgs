@@ -9,16 +9,16 @@
 
 buildGoModule {
   pname = "mkuimage";
-  version = "0-unstable-2025-09-05";
+  version = "0-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "mkuimage";
-    rev = "9a40452f5d3ba67f236a83de54fa2c40f797b68b";
-    hash = "sha256-asC4j2DXkQnx6BZntxA8hSaM2k6p0CxraHYq3bK9vNQ=";
+    rev = "72394cd98f39c9190dcc4f2a601902d43af1ae6e";
+    hash = "sha256-0XY2oTwdKEFVbOMTnxoKoM9OoJm9Y+R/3z04VZwk2T8=";
   };
 
-  vendorHash = "sha256-KX9uv5m4N4+7gOgjhotRac9sz8tWSJ1krq98RWdsbzg=";
+  vendorHash = "sha256-PmfHdl0GG84kPPUgKiLwhKvcgbbwJLFMnX1cI//U5T8=";
 
   subPackages = [
     "cmd/gentpldeps"
@@ -53,6 +53,5 @@ buildGoModule {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "mkuimage";
-    broken = true;
   };
 }

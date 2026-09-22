@@ -7,14 +7,14 @@
   ppx_optcomp,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "kqueue";
   version = "0.4.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
-    url = "https://github.com/anuragsoni/kqueue-ml/releases/download/${version}/kqueue-${version}.tbz";
+    url = "https://github.com/anuragsoni/kqueue-ml/releases/download/${finalAttrs.version}/kqueue-${finalAttrs.version}.tbz";
     hash = "sha256-fJHhmAp0EFzR9JH93a+EHy1auwSBKZV/XcBQLCedJLc=";
   };
 
@@ -32,8 +32,8 @@ buildDunePackage rec {
   meta = {
     description = "OCaml bindings for kqueue event notification interface";
     homepage = "https://github.com/anuragsoni/kqueue-ml";
-    changelog = "https://github.com/anuragsoni/kqueue-ml/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/anuragsoni/kqueue-ml/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
-}
+})

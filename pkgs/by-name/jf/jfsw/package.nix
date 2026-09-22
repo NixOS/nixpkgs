@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jfsw";
-  version = "20240303";
+  version = "20260105";
 
   src = fetchFromGitHub {
     owner = "jonof";
     repo = "jfsw";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-bOUgRa9zWufTFEj5huXAKeRerV8PqfqQVDoVUvRrj2I=";
+    hash = "sha256-L/EtdbyU6uZbSajQkI8IclskIfzm15uikSK2EZZZHXA=";
   };
 
   nativeBuildInputs = [

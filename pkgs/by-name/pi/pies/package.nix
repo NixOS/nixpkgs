@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       notifications to the system administrator, invoking another external
       program, etc.
 
-      Pies can be used for a wide variety of tasks.  Its most obious use
-      is to put in backgound a program which normally cannot detach itself
+      Pies can be used for a wide variety of tasks.  Its most obvious use
+      is to put in background a program which normally cannot detach itself
       from the controlling terminal, such as, e.g., minicom.  It can
       launch and control components of some complex system, such as
       Jabberd or MeTA1 (and it offers much more control over them than the

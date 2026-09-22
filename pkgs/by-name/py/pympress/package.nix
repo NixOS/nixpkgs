@@ -37,9 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pycairo
       pygobject3
     ]
-    ++ lib.optional withVLC [
-      python-vlc
-    ];
+    ++ lib.optional withVLC python-vlc;
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -58,7 +56,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gst-libav
-    gst_all_1.gst-vaapi
   ];
 
   doCheck = false; # there are no tests

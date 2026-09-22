@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   '';
 
   # Tests require networking.
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
 
   postInstall = ''
     mv $out/bin/wireguard $out/bin/wireguard-go

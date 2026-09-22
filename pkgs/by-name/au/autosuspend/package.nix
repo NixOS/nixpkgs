@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
-  version = "10.1.0";
+  version = "11.3.0";
   pyproject = true;
 
   outputs = [
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "languitar";
     repo = "autosuspend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4mByuJ75hd5TEoKxVglAHlYXZSlbAldMwnIianSw8O4=";
+    hash = "sha256-KG1Cv3Fmdf3VDdZR+k0SeA97g6R+oI6+NgtaWHWPVUQ=";
   };
 
   postPatch = ''
@@ -51,10 +51,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     icalendar
     jsonpath-ng
     lxml
-    mpd2
     psutil
     pygobject3
     python-dateutil
+    python-mpd2
     requests
     requests-file
     tzdata
@@ -100,6 +100,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       bzizou
       anthonyroussel
+      adamcstephens
     ];
     mainProgram = "autosuspend";
     platforms = lib.platforms.linux;

@@ -65,6 +65,8 @@ in
         DynamicUser = true;
 
         StateDirectory = "technitium-dns-server";
+        LogsDirectory = "technitium";
+        WorkingDirectory = "%S/technitium-dns-server";
 
         Restart = "always";
         RestartSec = 10;
@@ -102,5 +104,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ fabianrig ];
+  meta.maintainers = with lib.maintainers; [
+    fabianrig
+    awildleon
+  ];
 }

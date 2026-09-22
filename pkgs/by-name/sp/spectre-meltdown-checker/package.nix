@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spectre-meltdown-checker";
-  version = "26.21.0401891";
+  version = "26.36.0602723";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "spectre-meltdown-checker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cIPM4SFP5NS2eE37fQNb+l6W7mTcmsE1viUEUF+E8SM=";
+    hash = "sha256-UPpArgFbz2nce63fS6AScitHeL8/XlA0aInyeRxN9ZM=";
   };
 
   passthru.updateScript = gitUpdater { };

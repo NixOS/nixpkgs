@@ -2,37 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cmake,
+
+  # build-system
+  ninja,
   scikit-build-core,
+
+  # nativeBuildInputs
+  cmake,
+
+  # dependencies
   torch,
+
+  # tests
   pytestCheckHook,
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deepwave";
-  version = "0.0.26";
+  version = "0.0.27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ar4";
     repo = "deepwave";
-    tag = "v${version}";
-    hash = "sha256-gjFbBn7fJiLZUm+97xf6xd7C+OkEoeFe3061tFkJhFk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zOyoycCJjx4HJEnkAD5r7d+qxO5A+d0dCgx2oRjxPuU=";
   };
 
-  # Return to project root to locate `pyproject.toml` for build
-  preBuild = ''
-    cd ..
-  '';
+  build-system = [
+    ninja
+    scikit-build-core
+  ];
 
   nativeBuildInputs = [
     cmake
   ];
-
-  build-system = [
-    scikit-build-core
-  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     torch
@@ -52,4 +59,4 @@ buildPythonPackage rec {
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

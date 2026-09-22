@@ -13,6 +13,7 @@ let
     opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
 
   sslPolicies = lib.mapAttrsToList (name: conf: ''
+    dbms.ssl.policy.${name}.enabled=${lib.boolToString conf.enable}
     dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
     dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
     ${lib.optionalString (conf.ciphers != null) ''
@@ -35,7 +36,7 @@ let
     dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
     dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
     dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
-  '') cfg.ssl.policies;
+  '') (lib.filterAttrs (_: v: v.enable) cfg.ssl.policies);
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
@@ -467,6 +468,8 @@ in
             }:
             {
               options = {
+                enable = lib.mkEnableOption "this policy";
+
                 allowKeyGeneration = lib.mkOption {
                   type = lib.types.bool;
                   default = false;
@@ -714,6 +717,6 @@ in
     };
 
   meta = {
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.c2fc2f ];
   };
 }

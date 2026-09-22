@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -14,15 +13,16 @@
   diffutils,
   findutils,
   gnutar,
+  linux-headers,
   xz,
 }:
 let
   pname = "gnum4";
-  version = "1.4.20";
+  version = "1.4.21";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.xz";
-    hash = "sha256-4jbqOhzPX2wnCxxLtgcm83H6SUWajqrryQshazKNrys=";
+    hash = "sha256-8lxqtRVIpzp1VYdC+wMeBiXWSF/l+RVZSdZIaiQIq2Y=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -31,7 +31,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -70,7 +69,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc
+      CFLAGS=-I${linux-headers}/include
 
     # Build
     make -j $NIX_BUILD_CORES

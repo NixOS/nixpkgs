@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";
-  version = "0.2.1.2";
+  version = "0.2.1.3";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openapv";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wxncN7j5p0GXpWhOx4Ix0oTgGK2sIrfJgQ45fFwmQBI=";
+    tag = "v${finalAttrs.version}-fix"; # Remove the `-fix` suffix after the next version
+    hash = "sha256-lc/x2dWh6T8c63siHB32ka+SPVYTTyaO4YrQ12EbGqw=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";
     description = "Reference implementation of the APV codec";
     homepage = "https://github.com/AcademySoftwareFoundation/openapv";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
 })

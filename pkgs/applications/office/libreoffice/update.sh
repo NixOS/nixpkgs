@@ -9,12 +9,12 @@ echoerr got fname $fname
 shift
 
 variant="$1"
-# See comment near version_major variable
-if [[ $variant == fresh ]]; then
-    head_tail=head
-elif [[ $variant == still ]]; then
-    head_tail=tail
+# not doing anything but checking correctness right now
+if [[ $variant == stable ]]; then
+    true
 elif [[ $variant == collabora ]]; then
+    true
+elif [[ $variant == collabora-coda ]]; then
     true
 else
     echoerr got unknown variant $variant
@@ -29,16 +29,13 @@ mkdir -p "$(dirname $fname)/src-$variant"
 cd "$(dirname $fname)/src-$variant"
 
 case $variant in
-(fresh|still)
-    # The pup command prints both fresh and still versions one after another, and
-    # we use either head -1 or tail -1 to get the right version, per the if elif
-    # above.
-    version_major="$(curl --silent https://www.libreoffice.org/download/download-libreoffice/ |\
-        pup '.dl_version_number text{}' | $head_tail -1)"
-    echoerr got from website ${variant}_version $version_major
+(stable)
+    version_major="$(curl --silent https://www.libreoffice.org/download/ |\
+        pup '.version_heading' 'text{}' | xargs)"
+    echoerr got from website ${variant}_version "[[$version_major]]"
     baseurl=https://download.documentfoundation.org/libreoffice/src/$version_major
     tarballs=($(curl --silent $baseurl/ |\
-        pup 'table json{}' |\
+        pup 'table' 'json{}' |\
         jq --raw-output '.. | .href? | strings' |\
         grep "$version_major.*.tar.xz$"))
 
@@ -78,12 +75,18 @@ case $variant in
     fi
     ;;
 
-(collabora)
+(collabora|collabora-coda)
     all_tags=$(git ls-remote --tags --sort -v:refname https://gerrit.libreoffice.org/core)
+    prefix="cp"
+    tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+-\d+$'
+    if [[ "$variant" == "collabora-coda" ]]; then
+        prefix="coda"
+        tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+.\d+-\d+$'
+    fi
     rev=$(grep --perl-regexp --only-matching --max-count=1 \
-        '\Krefs/tags/cp-\d+\.\d+\.\d+-\d+$' <<< "$all_tags")
-    full_version=${rev#refs/tags/cp-}
-    tag=${rev#refs/tags/}
+        "$tag_prefix" <<< "$all_tags")
+    full_version=${rev#refs/tags/$prefix-}
+    clean_rev=${rev#refs/tags/}
     echoerr full version is $full_version
     echo \"$full_version\" > version.nix
 
@@ -99,7 +102,7 @@ case $variant in
         echo "{ fetchgit, ... }:" > $t.nix
         echo "fetchgit {" >> $t.nix
         echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
-        echo "  tag = \"$tag\";" >> $t.nix
+        echo "  rev = \"$sub_rev\";" >> $t.nix
         echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
         echo "}" >> "$t.nix"
     done
@@ -108,7 +111,7 @@ case $variant in
     echo "{ fetchgit, ... }:" > main.nix
     echo "fetchgit {" >> main.nix
     echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> main.nix
-    echo "  rev = \"$rev\";" >> main.nix
+    echo "  rev = \"$clean_rev\";" >> main.nix
     echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> main.nix
     echo "  fetchSubmodules = false;" >> main.nix
     echo "}" >> main.nix

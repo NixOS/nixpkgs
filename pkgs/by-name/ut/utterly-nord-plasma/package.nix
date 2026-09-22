@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "utterly-nord-plasma";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = "utterly-nord-plasma";
-    rev = "e513b4dfeddd587a34bfdd9ba6b1d1eac8ecadf5";
-    hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
+    rev = "ae0de9d555b518226627b2d10ee5df4a18073c60";
+    hash = "sha256-lXX7Gk2QYyMP96qbYdHtommW0DM1DUK03cti1gAeBBc=";
   };
 
   dontWrapQtApps = true;
@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     libplasma.out
     plasma5support.out
     plasma-workspace.out
+    ksvg.out
   ];
 
   installPhase = ''

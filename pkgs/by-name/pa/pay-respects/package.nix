@@ -3,19 +3,21 @@
   fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
+  withRuntimeRules ? true,
+  withRequestAi ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rI4cikbZ+J6SSs5l2WroM6862yDe8IFDqpmAV4Od5ng=";
+    hash = "sha256-z7GQst70KGNTWAd3sb5eoDnMR2RAmw9RNw3qPeoLWSQ=";
   };
 
-  cargoHash = "sha256-IQMB5bYvP/1u6FItZ34GYkMBe1fVao5CK2OPGaikIbk=";
+  cargoHash = "sha256-d3RCjCxJXb5YLai1ZqWKifbb2nLG5j1psuvAorNgFGg=";
 
   env = {
     _DEF_PR_AI_API_KEY = "";
@@ -25,14 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "-p pay-respects"
-    "-p pay-respects-module-runtime-rules"
-    "-p pay-respects-module-request-ai"
-  ];
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
   cargoTestFlags = [
     "-p pay-respects"
-    "-p pay-respects-module-runtime-rules"
-    "-p pay-respects-module-request-ai"
-  ];
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -27,6 +27,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-dGcqJGRQ88vXy+x2U+ykutP4RnzTUqJlmhXmcr+4maE=";
   };
 
+  postPatch = ''
+    # https://github.com/bukson/steampy/pull/463
+    substituteInPlace ./setup.py --replace-fail \
+      '1.2.0' '1.2.1'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

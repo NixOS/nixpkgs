@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     description = "Script interpolation engine for markdown documents";
     homepage = "https://github.com/terror/present/";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ cameronfyfe ];
+    maintainers = [ ];
     mainProgram = "present";
   };
 }

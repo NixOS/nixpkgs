@@ -4,12 +4,11 @@
   fetchFromGitHub,
   glslang,
   lib,
+  libglvnd,
   libx11,
   libxcursor,
-  libglvnd,
   makeWrapper,
   ninja,
-  nix-update-script,
   stdenv,
   vulkan-headers,
   vulkan-loader,
@@ -17,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengothic";
-  version = "1.0.3549";
+  version = "1.0.3756";
 
   src = fetchFromGitHub {
     owner = "Try";
     repo = "OpenGothic";
-    tag = "opengothic-v${finalAttrs.version}";
+    rev = "refs/tags/v0.92";
     fetchSubmodules = true;
-    hash = "sha256-dXKZPfV434HHVPgulZZEKhypR6q+uACgmoNWvNQv92w=";
+    hash = "sha256-6HCBmSjzV3nVDuD/7im6NtWLkDu+V+in2lUloEhp3Cc=";
   };
 
   nativeBuildInputs = [
@@ -36,24 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    libglvnd
     libx11
     libxcursor
-    libglvnd
     vulkan-headers
     vulkan-loader
     vulkan-validation-layers
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "-Werror" ""
-  '';
-
   installPhase = ''
     runHook preInstall
 
     install -Dm755 -t $out/bin opengothic/Gothic2Notr
-    install -Dm755 -t $out/lib opengothic/libTempest.so
 
     runHook postInstall
   '';
@@ -63,15 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_PRELOAD : "${lib.getLib alsa-lib}/lib/libasound.so.2"
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^opengothic-v(.*)$" ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open source re-implementation of Gothic 2: Night of the Raven";
     homepage = "https://github.com/Try/OpenGothic";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ azahi ];
+    maintainers = [ lib.maintainers.azahi ];
     platforms = lib.platforms.linux;
     mainProgram = "Gothic2Notr";
   };

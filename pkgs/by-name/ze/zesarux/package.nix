@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zesarux";
-  version = "unstable-2023-10-31";
+  version = "13.0";
 
   src = fetchFromGitHub {
     owner = "chernandezba";
     repo = "zesarux";
-    rev = "02e734b088c3b880b2d260a9812404f029dfc92a";
-    hash = "sha256-1PWFpUNekDKyCUNuV/cNUZ7hWGZBMu0nxswD6pap8pg=";
+    tag = "ZEsarUX-${finalAttrs.version}";
+    hash = "sha256-clwYn43Xswdo11T+aX78K1Qat5BoGwH3ByCT4qaMl8A=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/chernandezba/zesarux";
     description = "ZX Second-Emulator And Released for UniX";
     mainProgram = "zesarux";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

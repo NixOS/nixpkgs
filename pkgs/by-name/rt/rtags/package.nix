@@ -7,17 +7,22 @@
   openssl,
   emacs,
   pkg-config,
+  darwin,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtags";
-  version = "2.41-unstable-2025-12-29";
+  version = "2.46";
   nativeBuildInputs = [
     cmake
     pkg-config
     llvmPackages.llvm.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
   ];
+
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
@@ -29,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "andersbakken";
     repo = "rtags";
-    rev = "b518bf30878d0804e95f60eb509c0bab9678eb68";
-    hash = "sha256-Y5oZwVyZcIBZKv4Fwpr8jIpzVZ1Wc2SEbZoe1xw6xe8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uibS9Jg9jtniiZMtc5pCauT3kbBCL2uuYjXso5wBn1w=";
     fetchSubmodules = true;
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation
@@ -44,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "C/C++ client-server indexer based on clang";

@@ -11,7 +11,7 @@
   fireworks-ai,
   langchain-core,
   openai,
-  pydantic,
+  requests,
 
   # tests
   langchain-tests,
@@ -22,19 +22,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-fireworks";
-  version = "1.1.0";
+  version = "1.6.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-fireworks==${version}";
-    hash = "sha256-gLc3pPxQZTm6PU5r1o7mxlnRI8tCeg/w9jkbbfUCSec=";
+    tag = "langchain-fireworks==${finalAttrs.version}";
+    hash = "sha256-tJduBjY+JcG9bhZYsOi7+2TdR4DTi/ZCTIaNZ87R8JM=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/fireworks";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/fireworks";
 
   build-system = [ hatchling ];
 
@@ -43,12 +44,11 @@ buildPythonPackage rec {
     fireworks-ai
     langchain-core
     openai
-    pydantic
+    requests
   ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
+    "fireworks-ai"
     "langchain-core"
   ];
 
@@ -72,11 +72,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-fireworks==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Fireworks";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/fireworks";
     license = lib.licenses.mit;
@@ -84,4 +85,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -5,25 +5,29 @@
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
   tzlocal,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gardena-bluetooth";
-  version = "2.7.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "gardena-bluetooth";
     tag = finalAttrs.version;
-    hash = "sha256-VqGcMz9tFXlrekwWQx2Wx1umbf/q3U9XkQKSkze2cCU=";
+    hash = "sha256-7f+2EpjG5Ea4kWvhFP+UWxgYvOM/V3B4ZBMAfvZpRLw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     bleak

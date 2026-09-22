@@ -5,7 +5,7 @@
   haskell,
   removeReferencesTo,
   installShellFiles,
-  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli choosen from haskellPackages.
+  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli chosen from haskellPackages.
 }:
 
 let

@@ -6,14 +6,14 @@
   cppo,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "1.2";
   pname = "ocplib-endian";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocplib-endian";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
 
@@ -33,4 +33,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

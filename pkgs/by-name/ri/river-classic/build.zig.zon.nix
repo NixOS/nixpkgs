@@ -8,6 +8,14 @@
 
 linkFarm "zig-packages" [
   {
+    name = "aro-0.0.0-JSD1Qi7QNgDnfcrdEJf82v3o6MhZySjYVrtdfEf3E4Se";
+    path = fetchgit {
+      url = "https://github.com/Vexu/arocc";
+      rev = "5f5a050569a95ecc40a426f0c3666ae7ef987ede";
+      hash = "sha256-f8Z0SXWx5Uia2TCMB5SUpcO8+xUnaWk32Oknva7xcxw=";
+    };
+  }
+  {
     name = "pixman-0.3.0-LClMnz2VAAAs7QSCGwLimV5VUYx0JFnX5xWU6HwtMuDX";
     path = fetchzip {
       url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.3.0.tar.gz";
@@ -15,17 +23,25 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "wayland-0.4.0-lQa1khbMAQAsLS2eBR7M5lofyEGPIbu2iFDmoz8lPC27";
-    path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.4.0.tar.gz";
-      hash = "sha256-ulIII5iJpM/W/VJB0HcdktEO2eb9T9J0ln2A1Z94dU4=";
+    name = "translate_c-0.0.0-Q_BUWvP1BgCjAk6PWv5286tOlvzD9-X-NkuTzh0KxY0Q";
+    path = fetchgit {
+      url = "https://codeberg.org/ziglang/translate-c/";
+      rev = "7a1a9fdc4ab00835748a6657ecbb835e3d5d45f7";
+      hash = "sha256-zdZ/it+/yNGfszHLqpXpi20Gkwm8fduMMs1/l9oaje8=";
     };
   }
   {
-    name = "wlroots-0.20.0-jmOlcmtCBADS6eoJ6mkeiSNZkibrhD-c5Qwn-LiM86r1";
+    name = "wayland-0.6.0-lQa1kqz8AQADQmdNJsNhLoNHcnEGEUjrOaPV-dtEnEmX";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.20.0.tar.gz";
-      hash = "sha256-QblQBVsDV2kSj31jqmVVi4hQUXuv8bsRgRMaCqlNxNM=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.6.0.tar.gz";
+      hash = "sha256-3m/ITNhZUJ/5uD/Tqm+0uZSktGoYgWF5oldOqOCUkIE=";
+    };
+  }
+  {
+    name = "wlroots-0.20.1-jmOlcqNVBAB3uB5oqBTzpRlwu-FmMyyZMVAWCe5kmcSt";
+    path = fetchzip {
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.20.1.tar.gz";
+      hash = "sha256-cfzHJ2ziiCkMyNlIo6I9o/NjaZGrsv22hq41WYwCnpk=";
     };
   }
   {

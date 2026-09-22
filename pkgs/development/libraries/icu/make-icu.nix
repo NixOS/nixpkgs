@@ -81,6 +81,9 @@ let
 
     enableParallelBuilding = true;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     meta = {
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
@@ -143,6 +146,7 @@ let
 
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+          substituteInPlace "$out/lib/pkgconfig/icu-uc.pc" --replace-fail "$out/lib" "$dev/lib"
         ''
       );
 

@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "https://qgroundcontrol.com/";
-    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/ChangeLog.md";
+    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

@@ -47,8 +47,10 @@ in
     # sanity check on the directory listing: we serve a directory and a file
     # via gopher, so the directory listing should have exactly two entries,
     # one with gopher file type 0 (file) and one with file type 1 (directory).
+    # note that the menu is CRLF-terminated and ends with a "." line
+    # which is not a directory entry, but the end of the response.
     dirResponse = ${gopherClient}.succeed("curl -f -s gopher://${gopherHost}")
-    dirEntries = [l[0] for l in dirResponse.split("\n") if len(l) > 0]
+    dirEntries = [l[0] for l in dirResponse.split("\r\n") if len(l) > 0 and l != "."]
     dirEntries.sort()
 
     if not (["0", "1"] == dirEntries):

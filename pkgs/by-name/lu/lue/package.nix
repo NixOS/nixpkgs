@@ -3,19 +3,18 @@
   python3,
   fetchFromGitHub,
   ffmpeg,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lue";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "superstarryeyes";
+    owner = "paulilaaso";
     repo = "lue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7uh9PSCTkT+jYxQYC4ebPkabDz3pc6JjCGtgNatIAM=";
+    hash = "sha256-tscMjgJ1YxJ96BMGbxlsa12bXJtFRTAjyxsFuvNkzYI=";
   };
 
   build-system = with python3.pkgs; [
@@ -45,11 +44,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   makeWrapperArgs = [ "--prefix PATH :${lib.makeBinPath [ ffmpeg ]}" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Terminal eBook Reader with Text-to-Speech";
-    homepage = "https://github.com/superstarryeyes/lue";
+    homepage = "https://github.com/paulilaaso/lue";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "lue";

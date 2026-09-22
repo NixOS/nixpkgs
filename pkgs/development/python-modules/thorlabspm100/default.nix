@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
+  pytestCheckHook,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thorlabspm100";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clade";
     repo = "ThorlabsPM100";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X4qEow6u4aE0sbFwZfK3YEso2RS0c9j4iaWJPHaPQV4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ThorlabsPM100" ];
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fsagbuya ];
   };
-}
+})

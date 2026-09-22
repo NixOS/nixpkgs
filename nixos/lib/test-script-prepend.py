@@ -1,31 +1,21 @@
 # This file contains type hints that can be prepended to Nix test scripts so they can be type
 # checked.
 
-from test_driver.debug import DebugAbstract
-from test_driver.driver import Driver
-from test_driver.vlan import VLan
-from test_driver.machine import BaseMachine, NspawnMachine, QemuMachine
-from test_driver.logger import AbstractLogger
-from typing import Callable, Iterator, ContextManager, Optional, List, Dict, Any, Union
-from typing_extensions import Protocol
-from pathlib import Path
+import datetime as dt
+from contextlib import contextmanager
+from typing import Any, Callable, ContextManager, Generator, List, Optional, Union
 from unittest import TestCase
 
+from test_driver.debug import DebugAbstract, DebugNop
+from test_driver.driver import Driver
+from test_driver.logger import AbstractLogger, CompositeLogger
+from typing_extensions import Protocol
 
-class RetryProtocol(Protocol):
-    def __call__(self, fn: Callable, timeout_seconds: int = 900) -> None:
-        raise Exception("This is just type information for the Nix test driver")
+from test_driver.machine import BaseMachine, NspawnMachine, QemuMachine
+from test_driver.vlan import VLan
 
 
-class PollingConditionProtocol(Protocol):
-    def __call__(
-        self,
-        fun_: Optional[Callable] = None,
-        *,
-        seconds_interval: float = 2.0,
-        description: Optional[str] = None,
-    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
-        raise Exception("This is just type information for the Nix test driver")
+# Protocols
 
 
 class CreateMachineProtocol(Protocol):
@@ -35,27 +25,118 @@ class CreateMachineProtocol(Protocol):
         *,
         name: Optional[str] = None,
         keep_machine_state: bool = False,
-        **kwargs: Any, # to allow usage of deprecated keep_vm_state
+        **kwargs: Any,  # to allow usage of deprecated keep_vm_state
     ) -> QemuMachine:
         raise Exception("This is just type information for the Nix test driver")
 
 
-start_all: Callable[[], None]
-subtest: Callable[[str], ContextManager[None]]
-retry: RetryProtocol
-test_script: Callable[[], None]
-machines: List[BaseMachine]
-machines_qemu: List[QemuMachine]
-machines_nspawn: List[NspawnMachine]
-vlans: List[VLan]
-driver: Driver
-log: AbstractLogger
-create_machine: CreateMachineProtocol
-run_tests: Callable[[], None]
-join_all: Callable[[], None]
-serial_stdout_off: Callable[[], None]
-serial_stdout_on: Callable[[], None]
-polling_condition: PollingConditionProtocol
-debug: DebugAbstract
-t: TestCase
-dump_machine_ssh: Callable[[], None]
+class PollingConditionProtocol(Protocol):
+    def __call__(
+        self,
+        fun_: Callable | None = None,
+        *,
+        seconds_interval: dt.timedelta | float | None = None,
+        interval: dt.timedelta | None = None,
+        description: str | None = None,
+    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
+        raise Exception("This is just type information for the Nix test driver")
+
+
+# Classes
+
+
+class AssertionTester(TestCase):
+    pass
+
+
+# Global Variables
+
+debug: DebugAbstract = DebugNop()
+machines: List[BaseMachine] = []
+machines_nspawn: List[NspawnMachine] = []
+machines_qemu: List[QemuMachine] = []
+t = AssertionTester()
+vlans: List[VLan] = []
+
+
+def create_fake_driver() -> Driver:
+    raise Exception("fake driver")
+
+
+driver = create_fake_driver()
+
+
+# Functions
+
+
+# these are going to be called by the testScriptWithTypes in driver.nix
+def create_fake_qemu_machine() -> QemuMachine:
+    raise Exception("fake qemu machine")
+
+
+def create_fake_nspawn_machine() -> NspawnMachine:
+    raise Exception("fake nspawn machine")
+
+
+def create_fake_vlan() -> VLan:
+    raise Exception("fake vlan")
+
+
+def create_machine(
+    start_command: str, name: str | None = None, keep_machine_state: bool = False
+) -> QemuMachine:
+    raise Exception("fake machine")
+
+
+def dump_machine_ssh() -> None:
+    return None
+
+
+def join_all() -> None:
+    return None
+
+
+log: AbstractLogger = CompositeLogger([])
+
+
+def polling_condition(
+    fun_: Callable | None = None,
+    *,
+    seconds_interval: float | dt.timedelta | None = None,
+    interval: dt.timedelta | None = None,
+    description: str | None = None,
+):
+    pass
+
+
+def retry(
+    fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
+    timeout: dt.timedelta | None = None,
+) -> None:
+    pass
+
+
+def run_tests() -> None:
+    return
+
+
+def serial_stdout_off() -> None:
+    return None
+
+
+def serial_stdout_on() -> None:
+    return None
+
+
+def start_all() -> None:
+    return
+
+
+def test_script() -> None:
+    return
+
+
+@contextmanager
+def subtest(str: str) -> Generator[None, None, None]:
+    yield

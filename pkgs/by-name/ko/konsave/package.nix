@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "konsave";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Konsave";
-    hash = "sha256-tWarqT2jFgCuSsa2NwMHRaR3/wj0khiRHidvRNMwM8M=";
+    pname = "konsave";
+    hash = "sha256-Qe+RZIsgbqvFqWhUkfACbYvHtXQcp6yK+XrvqgXnlTc=";
   };
 
   build-system = with python3Packages; [

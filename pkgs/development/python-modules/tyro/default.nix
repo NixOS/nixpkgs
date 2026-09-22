@@ -25,15 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tyro";
-  version = "1.0.13";
+  version = "1.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentyi";
     repo = "tyro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ux0bAF96KGhsy9b7NvybJpMKQP2G6BsQwnew0c44tXM=";
+    hash = "sha256-mnYVinyys21BjHRhwOLjc3n8mShH2+krEK0dK0VBWp4=";
   };
+
+  patches = [
+    ./fix-shtab-1.9.patch # reduced version of https://github.com/brentyi/tyro/pull/488
+  ];
 
   build-system = [ hatchling ];
 

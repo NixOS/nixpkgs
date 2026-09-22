@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  buildNpmPackage,
 
   # build-system
   flit-core,
@@ -22,18 +23,44 @@
   freezegun,
   python,
 }:
-
-buildPythonPackage rec {
+let
   pname = "wagtail-localize";
-  version = "1.13";
-  pyproject = true;
+
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-JhLfrK4CBdTR85JuAjf9vGByQVgCIYT3IrM6AYxxNTE=";
+    hash = "sha256-3T3o2whNNWSbsggNhPI6vnxeONGpNdD2/BMiFl/nWmo=";
   };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    npmDepsHash = "sha256-5TKYDFYF8H1UrSUWeKDd/lf0Twk1mVKrPL9ywsdSdz4=";
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
+    inherit version src;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+
+      for static_dir in src/wagtail_localize/static; do
+        cp --parents -r $static_dir $out
+      done
+
+      runHook postInstall
+    '';
+  };
+in
+
+buildPythonPackage rec {
+  inherit pname version src;
+
+  pyproject = true;
 
   build-system = [ flit-core ];
 
@@ -56,11 +83,12 @@ buildPythonPackage rec {
     google-cloud-translate
   ];
 
+  preBuild = ''
+    cp -r ${assets}/src/wagtail_localize/static src/wagtail_localize/
+  '';
+
   checkPhase = ''
     runHook preCheck
-
-    # test_translate_html fails with later Beautifulsoup releases
-    rm wagtail_localize/machine_translators/tests/test_dummy_translator.py
 
     ${python.interpreter} testmanage.py test
 

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdrm";
-  version = "2.4.131";
+  version = "2.4.134";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/libdrm/libdrm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RbqZg7UciWQGo9ZU3oHTE7lTt25jkeJ5cHPVQ8X2F9U=";
+    hash = "sha256-rF500VeDDri+5Exqa/OtSXdO8N0qcr2tdKjyAwi1KpU=";
   };
 
   outputs = [

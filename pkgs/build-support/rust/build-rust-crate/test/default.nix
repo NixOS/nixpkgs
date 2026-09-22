@@ -404,6 +404,27 @@ rec {
             "test something ... ok"
           ];
         };
+        rustLibTestsWithDevDependency =
+          let
+            devDep = mkHostCrate {
+              crateName = "dev-dep";
+              src = mkLib "src/lib.rs";
+            };
+          in
+          {
+            src = mkFile "src/lib.rs" ''
+              #[cfg(test)]
+              mod tests {
+                  #[test]
+                  fn uses_dev_dep() {
+                      assert_eq!(dev_dep::test(), 23);
+                  }
+              }
+            '';
+            devDependencies = [ devDep ];
+            buildTests = true;
+            expectedTestOutputs = [ "test tests::uses_dev_dep ... ok" ];
+          };
         rustBinTestsCombined = {
           src = symlinkJoin {
             name = "rust-bin-tests-combined";
@@ -836,6 +857,32 @@ rec {
             ];
           };
         };
+        # Default (null) inherits extraRustcOpts for proc-macros.
+        procMacroExtraOptsInherit = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(not(target_only))]
+            compile_error!("extraRustcOpts not inherited by proc-macro");
+            use proc_macro as _;
+          '';
+        };
+        # When set, extraRustcOptsForProcMacro replaces extraRustcOpts
+        # for proc-macro crates.
+        procMacroExtraOptsOverride = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          extraRustcOptsForProcMacro = [ "--cfg=host_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(target_only)]
+            compile_error!("extraRustcOpts leaked into proc-macro");
+            #[cfg(not(host_only))]
+            compile_error!("extraRustcOptsForProcMacro not applied");
+            use proc_macro as _;
+          '';
+        };
         # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
         # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
         # entries are emitted first so that higher-priority specific lints
@@ -982,6 +1029,66 @@ rec {
         ];
       };
 
+      crateWasm32TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-target-env";
+          crateBin = [ { name = "wasm32-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "wasm32-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-target-env.wasm"
+        ];
+      };
+
+      crateGnu64TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.gnu64.buildRustCrate;
+        crateArgs = {
+          crateName = "gnu64-crate-target-env";
+          crateBin = [ { name = "gnu64-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "gnu64-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("gnu".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "gnu")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/gnu64-crate-target-env"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
@@ -1042,6 +1149,75 @@ rec {
           touch $out
         '';
 
+      # `useClippy = true` plus a denied clippy lint should fail the build,
+      # proving clippy-driver (not plain rustc) compiled the crate. The
+      # `clippy::` prefix in the diagnostic is the fingerprint: rustc has no
+      # such lint group.
+      useClippyDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "useClippyDenyFails";
+            useClippy = true;
+            lints.clippy.eq_op = "deny";
+            src = mkFile "src/lib.rs" ''
+              pub fn check() -> bool {
+                1 == 1
+              }
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-useClippyDenyFails" { inherit failed; } ''
+          grep -q 'clippy::eq.op' "$failed/testBuildFailure.log"
+          grep -q 'equal expressions' "$failed/testBuildFailure.log"
+          touch $out
+        '';
+
+      # `useClippy = true` with the default `capLints` (which resolves to
+      # `"allow"` when `lints` is empty) must still build: the cap silences
+      # clippy lints just like rustc lints. Same source as the failing test
+      # above — only the `lints` table differs.
+      useClippyDefaultCapAllows = mkHostCrate {
+        crateName = "useClippyDefaultCapAllows";
+        useClippy = true;
+        src = mkFile "src/lib.rs" ''
+          pub fn check() -> bool {
+            1 == 1
+          }
+        '';
+      };
+
+      # A library compiled by clippy-driver must produce an `.rlib` that a
+      # plain-rustc dependent can link against and run. This is the property
+      # that makes `useClippy` safe to flip per-crate.
+      useClippyRlibLinkCompat =
+        let
+          libCrate = mkHostCrate {
+            crateName = "clippylib";
+            useClippy = true;
+            src = mkFile "src/lib.rs" ''
+              pub fn test() -> i32 {
+                23
+              }
+            '';
+          };
+          binCrate = mkHostCrate {
+            crateName = "clippybin";
+            dependencies = [ libCrate ];
+            src = mkBinExtern "src/main.rs" "clippylib";
+          };
+        in
+        runCommand "run-useClippyRlibLinkCompat" { nativeBuildInputs = [ binCrate ]; } (
+          if stdenv.hostPlatform == stdenv.buildPlatform then
+            ''
+              ${binCrate}/bin/clippybin && touch $out
+            ''
+          else
+            ''
+              test -x '${binCrate}/bin/clippybin' && touch $out
+            ''
+        );
+
       rcgenTest =
         let
           pkg = rcgenCrates.rootCrate.build;
@@ -1060,6 +1236,69 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
+
+      # Test that propagatedBuildInputs declared in a crate override are
+      # collected by completePropagatedBuildInputs and propagate transitively
+      # to all crates that depend on it.
+      propagatedBuildInputsTest =
+        let
+          fakeNativeLib = runCommand "fake-native-lib" { } "mkdir -p $out/lib && touch $out/lib/libfoo.a";
+
+          # Library crate that declares a native dep via propagatedBuildInputs
+          libCrate = mkHostCrate {
+            crateName = "mylib";
+            src = mkLib "src/lib.rs";
+            propagatedBuildInputs = [ fakeNativeLib ];
+          };
+
+          # Binary crate with a direct dependency on libCrate
+          binCrate = mkHostCrate {
+            crateName = "mybin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ libCrate ];
+          };
+
+          # Intermediate library that depends on libCrate
+          transitiveLib = mkHostCrate {
+            crateName = "transitivelib";
+            src = mkLib "src/lib.rs";
+            dependencies = [ libCrate ];
+          };
+
+          # Binary crate that only depends on transitiveLib (not libCrate directly)
+          transitiveBin = mkHostCrate {
+            crateName = "transitivebin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ transitiveLib ];
+          };
+        in
+        runCommand "propagated-build-inputs-test"
+          {
+            libCrateInputs = libCrate.completePropagatedBuildInputs;
+            binCrateInputs = binCrate.completePropagatedBuildInputs;
+            transitiveBinInputs = transitiveBin.completePropagatedBuildInputs;
+          }
+          ''
+            # libCrate itself should have fakeNativeLib in completePropagatedBuildInputs
+            echo "$libCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not in libCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # binCrate depends on libCrate, so fakeNativeLib should propagate
+            echo "$binCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not propagated to binCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # transitiveBin → transitiveLib → libCrate: fakeNativeLib should propagate transitively
+            echo "$transitiveBinInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not transitively propagated to transitiveBin.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            touch $out
+          '';
     }
   );
   test = releaseTools.aggregate {

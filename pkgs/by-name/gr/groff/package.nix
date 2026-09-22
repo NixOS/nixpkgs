@@ -34,6 +34,10 @@ let
     tag = "20200910";
     hash = "sha256-YQl5IDtodcbTV3D6vtJi7CwxVtHHl58fG6qCAoSaP4U=";
   };
+  nativeGroffBinPath = lib.makeBinPath [
+    buildPackages.groff
+    (lib.getOutput "perl" buildPackages.groff)
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
@@ -43,6 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/groff/groff-${finalAttrs.version}.tar.gz";
     hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
   };
+
+  patches = [
+    # This revert a upstream refactor in continuous rendering mode, but this
+    # causes a big performance regression for big manpages like
+    # `man 5 configuration.nix`.
+    ./0001-Revert-man-Fix-Savannah-65190.patch
+  ];
 
   outputs = [
     "out"
@@ -125,13 +136,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Move mom docs instead of linking them to avoid dangling symlinks
     substituteInPlace Makefile \
       --replace-fail '$(LN_S) $(exampledir)' 'mv $(exampledir)'
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # pdfmom uses GROFF_COMMAND to find the groff executable internally.
+    substituteInPlace Makefile \
+      --replace-fail 'GROFF_COMMAND=test-groff \' 'GROFF_COMMAND=$(GROFFBIN) \'
   '';
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    "GROFF_BIN_PATH=${lib.getBin buildPackages.groff}/bin"
-    "GROFFBIN=${lib.getExe buildPackages.groff}"
+    "GROFF_BIN_PATH=${nativeGroffBinPath}"
+    "GROFFBIN=${lib.getExe' buildPackages.groff "groff"}"
   ];
 
   doCheck = true;
@@ -176,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
+    mainProgram = "groff";
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting

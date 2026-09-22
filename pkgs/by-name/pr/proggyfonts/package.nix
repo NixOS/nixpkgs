@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   mkfontscale,
+  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,29 +15,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SsLzZdR5icVJNbr5rcCPbagPPtWghbqs2Jxmrtufsa4=";
   };
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [
+    mkfontscale
+    installFonts
+  ];
 
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  preInstall = ''
+    rm Speedy.pcf # duplicated as Speedy11.pcf
 
     # compress pcf fonts
-    mkdir -p $out/share/fonts/misc
-    rm Speedy.pcf # duplicated as Speedy11.pcf
     for f in *.pcf; do
-      gzip -n -9 -c "$f" > $out/share/fonts/misc/"$f".gz
+      gzip -n -9 -c "$f" > "$f".gz
     done
 
-    install -D -m 644 *.bdf -t "$out/share/fonts/misc"
-    install -D -m 644 *.ttf -t "$out/share/fonts/truetype"
+    rm *.pcf
+  '';
+
+  postInstall = ''
     install -D -m 644 Licence.txt -t "$out/share/doc/$name"
 
     mkfontscale "$out/share/fonts/truetype"
     mkfontdir   "$out/share/fonts/misc"
-
-    runHook postInstall
   '';
 
   meta = {

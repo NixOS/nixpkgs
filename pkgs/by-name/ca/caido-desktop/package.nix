@@ -9,24 +9,20 @@
 
 let
   pname = "caido-desktop";
-  version = "0.55.3";
+  version = "0.57.0";
 
   sources = {
     x86_64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-      hash = "sha256-pGRmFYE7uO5Ka94Kfjl9LR5PAwZ5dCxHqCqJKhtLPco=";
+      hash = "sha256-a+WHhJ+TvwhOqHOxU7Y5LXeXAJ6T8hk71meFuTR+ra8=";
     };
     aarch64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-aarch64.AppImage";
-      hash = "sha256-s99+HXf7Ada2wiPUZ/5M/p09JiadFn5GnKrzqo9yNPQ=";
-    };
-    x86_64-darwin = {
-      url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-x86_64.dmg";
-      hash = "sha256-V33bRaTwhxozBR/wV83bU89TZluenKpFc8GU0KaaO8w=";
+      hash = "sha256-B7dw9uoG++AqT264ZlyHxGpv68fH5SlYzDKUaIM8c14=";
     };
     aarch64-darwin = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-aarch64.dmg";
-      hash = "sha256-fEzPN84zoSvlIgUBYVmPta7SUmTDRQghoJMTZXW7eI4=";
+      hash = "sha256-GmpMnaGR7gYz1RvSO5xj9AA3xU1mn2IBInakmVkuG7A=";
     };
   };
 
@@ -49,13 +45,12 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
   linux = appimageTools.wrapType2 {
     inherit
@@ -71,6 +66,8 @@ let
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop \
         -t $out/share/applications
+      substituteInPlace $out/share/applications/caido.desktop \
+        --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/${pname} \
@@ -111,9 +108,9 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   linux
-else if stdenv.isDarwin then
+else if stdenv.hostPlatform.isDarwin then
   darwin
 else
   throw "caido-desktop: unsupported platform ${stdenv.hostPlatform.system}"

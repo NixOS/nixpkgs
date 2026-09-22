@@ -1,53 +1,71 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   rustPlatform,
-  cmake,
-  cpm-cmake,
-  fontconfig,
+  alsa-lib,
   libGL,
+  libx11,
+  libxcursor,
+  libxcb,
+  libxi,
   libxkbcommon,
-  libgbm,
   openxr-loader,
   pkg-config,
-  libxfixes,
-  libx11,
+  vulkan-loader,
+  wayland,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-server";
-  version = "0.44.1";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
+    hash = "sha256-ntVc5fc1qMjR1FDqoNq35Y6PkG9VPNDVplyTpO6VhKA=";
   };
 
-  cargoHash = "sha256-jCtMCZG3ku30tabTnVdGfgcLl5DoqhkJpLKPPliJgDU=";
+  patches = [
+    # nixosTests/flatland hits a bug:
+    # it is permissible for a client to create an xdg_toplevel
+    # before binding wl_seat; weston-presentation-shm never
+    # binds a wl_seat since it doesn't need to accept input
+    # TODO(@Pandapip1): upstream
+    ./fix-seat-unwrap-panic.patch
+  ];
 
+  cargoHash = "sha256-5HQkrkupBohmopGJh9t3JndVTU6cjbW0LgtBPb+YAr0=";
+
+  __structuredAttrs = true;
+  strictDeps = true;
   nativeBuildInputs = [
-    cmake
     pkg-config
-    rustPlatform.bindgenHook
   ];
-
   buildInputs = [
-    fontconfig
-    libGL
-    libxkbcommon
-    libgbm
-    openxr-loader
-    libx11
-    libxfixes
+    alsa-lib
+    wayland
   ];
 
-  env.CPM_SOURCE_CACHE = "./build";
-
-  postPatch = ''
-    install -D ${cpm-cmake}/share/cpm/CPM.cmake $(echo $cargoDepsCopy/*/stereokit-sys-*/StereoKit)/build/cpm/CPM_0.32.2.cmake
+  postFixup = ''
+    patchelf $out/bin/stardust-xr-server --add-rpath ${
+      lib.makeLibraryPath [
+        # wgpu-hal hardcodes ash's runtime libvulkan dlopen() path (ash does expose an optional linked feature)
+        vulkan-loader
+        # Likewise, bevy_openxr doesn't use openxr's linked feature
+        openxr-loader
+        # x11-dl via winit x11
+        libx11
+        libxcursor
+        libxi
+        libxcb
+        # x11rb via winit and xkbcommon-dl
+        libxkbcommon
+        # wgpu-hal I think
+        libGL
+      ]
+    }
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -58,10 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/StardustXR/server/releases";
     license = lib.licenses.gpl2Plus;
     mainProgram = "stardust-xr-server";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
-    platforms = lib.platforms.linux;
+    teams = with lib.teams; [ stardust-xr ];
+    platforms = lib.platforms.unix;
   };
 })

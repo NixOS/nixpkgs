@@ -112,6 +112,7 @@ let
       requests
       rich
       rpds-py
+      rsa
       scipy
       shtab
       smmap

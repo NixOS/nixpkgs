@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       gst-plugins-good
       gst-plugins-ugly
       gst-plugins-rs
+      gst-libav
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pipewire ];
 
@@ -50,7 +51,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       pygobject3
       pykka
       requests
-      setuptools
+      # Provides pkg_resources required by Mopidy 3 and affected extensions.
+      # Remove when updating to Mopidy 4.
+      setuptools_80
       tornado
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ dbus-python ];

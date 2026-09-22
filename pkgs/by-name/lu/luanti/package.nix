@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.15.2";
+  version = "5.17.0";
 
   src = fetchFromGitHub {
     owner = "luanti-org";
     repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-E7YkUFuDvEuJpmn7ReasKZnQHucl6YbTk8InUtzTi9U=";
+    hash = "sha256-PieiiJTpgUK7q0WiUY2EAp72ywHkDR2Mba1DCDkvCaY=";
   };
 
   patches = [

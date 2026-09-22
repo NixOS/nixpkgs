@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Official frugal and native macOS Syncthing application bundle";

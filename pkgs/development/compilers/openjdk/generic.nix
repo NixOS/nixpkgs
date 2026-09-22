@@ -69,7 +69,6 @@
 
   enableGtk ? true,
   gtk3,
-  gtk2,
   glib,
 
   temurin-bin-8,
@@ -87,6 +86,9 @@
     }
     .${featureVersion},
 }:
+
+assert lib.assertMsg (enableGtk -> lib.versionAtLeast featureVersion "11")
+  "GTK support in OpenJDK requires version 11.x or newer, because earlier versions would depend on GTK 2.";
 
 let
   sourceFile = ./. + "/${featureVersion}/source.json";
@@ -227,13 +229,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!headless && enableGtk) [
     (
-      if atLeast17 then
-        ./17/patches/swing-use-gtk-jdk13.patch
-      else if atLeast11 then
-        ./11/patches/swing-use-gtk-jdk10.patch
-      else
-        ./8/patches/swing-use-gtk-jdk8.patch
+      if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
     )
+  ]
+  ++ lib.optionals (featureVersion == "11") [
+    ./11/patches/fix-oopdesc-ptr-alignment-ub.patch
   ];
 
   strictDeps = true;
@@ -297,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ]
   ++ lib.optionals (!headless && enableGtk) [
-    (if atLeast11 then gtk3 else gtk2)
+    gtk3
     glib
   ];
 
@@ -353,17 +353,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21) (
-    if atLeast11 then
-      [
-        "--with-freetype=system"
-        "--with-harfbuzz=system"
-      ]
-    else
-      [
-        "--disable-freetype-bundling"
-      ]
-  )
+  ++ lib.optionals (!atLeast21 && atLeast11) [
+    "--with-freetype=system"
+    "--with-harfbuzz=system"
+  ]
   ++ lib.optionals atLeast11 [
     "--with-libjpeg=system"
     "--with-libpng=system"
@@ -481,18 +474,6 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
-  ''
-  + lib.optionalString (!atLeast11) ''
-    # Fix build w/ glibc-2.42. Oldest backport target of this fix was
-    # JDK 11.
-    # See https://bugs.openjdk.org/browse/JDK-8354941
-    substituteInPlace \
-      hotspot/src/cpu/aarch64/vm/stubGenerator_aarch64.cpp \
-      hotspot/src/cpu/aarch64/vm/assembler_aarch64.hpp \
-      hotspot/src/cpu/aarch64/vm/assembler_aarch64.cpp \
-      hotspot/src/share/vm/opto/mulnode.cpp \
-      hotspot/src/share/vm/utilities/globalDefinitions.hpp \
-      --replace-fail "uabs" "g_uabs"
   '';
 
   installPhase = ''
@@ -618,7 +599,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit jdk-bootstrap;
     inherit (source) updateScript;
   }
-  // (if atLeast11 then { inherit gtk3; } else { inherit gtk2; })
+  // lib.optionalAttrs atLeast11 { inherit gtk3; }
   // lib.optionalAttrs (!atLeast23) {
     inherit architecture;
   };

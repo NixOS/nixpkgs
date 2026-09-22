@@ -1,0 +1,13 @@
+diff --git a/src/nim_lk.nim b/src/nim_lk.nim
+index 09ced9d..45c5ddc 100644
+--- a/src/nim_lk.nim
++++ b/src/nim_lk.nim
+@@ -573,7 +573,7 @@ proc update(bom: JsonNode; bomRef: string; byName: bool): bool =
+   let comp = bom.getComponent(bomRef, byName)
+   assert not comp.isNil
+   var bomRef = comp{"bom-ref"}.getStr
+-  assert not bomRef.isNil
++  assert bomRef != ""
+   var suitableRefFound = false
+   let extRefs = comp{"externalReferences"}
+   for extRef in extRefs.elems:

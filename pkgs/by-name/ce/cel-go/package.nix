@@ -3,41 +3,21 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
-  cel-spec = buildGoModule (finalAttrs: {
-    pname = "cel-spec";
-    version = "0.25.1";
 
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "cel-spec";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-D9NHnQerquU2nDhDIheHmzV2FUwKi+MfTO+sehMXudg=";
-    };
-
-    vendorHash = "sha256-7Ngemih4jRO6VHSH2QxU/p1Q/E/ukUZ5wuUbZzRj6kA=";
-
-    installPhase = ''
-      runHook preInstall
-      cp -r . $out
-      runHook postInstall
-    '';
-  });
-in
 buildGoModule (finalAttrs: {
   pname = "cel-go";
-  version = "0.28.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "cel-expr";
     repo = "cel-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A+SiKpagf73u+dFclntoPTCNCG+7m4kutS6fpeZ+jDU=";
+    hash = "sha256-sFS6Kei7KpNFdjR5pyicTZdIDYZi5Juxab4YzgB25sM=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-obxFjr++fSKJx7TxTZ28YFhts2e/pW32BFVhOGnY7XY=";
+  vendorHash = "sha256-kJhpVH+Ak2/yICshXreVgPs5W/Cq63l+FwUMW6G1l8k=";
 
   subPackages = [
     "main"
@@ -48,24 +28,14 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  postPatch = ''
-    substituteInPlace repl/go.mod \
-      --replace-fail "../../cel-spec" "./cel-spec"
-  '';
-
-  preBuild = ''
-    mkdir cel-spec
-    cp -r ${cel-spec}/* cel-spec
-  '';
-
   postInstall = ''
     mv $out/bin/{main,cel-go}
   '';
 
   meta = {
-    changelog = "https://github.com/google/cel-go/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/cel-expr/cel-go/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
-    homepage = "https://github.com/google/cel-go";
+    homepage = "https://github.com/cel-expr/cel-go";
     license = lib.licenses.asl20;
     mainProgram = "cel-go";
     maintainers = with lib.maintainers; [ hythera ];

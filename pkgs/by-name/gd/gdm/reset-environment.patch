@@ -1,20 +1,24 @@
+diff --git a/daemon/gdm-wayland-session.c b/daemon/gdm-wayland-session.c
+index 3ca2d1496..cb9e96101 100644
 --- a/daemon/gdm-wayland-session.c
 +++ b/daemon/gdm-wayland-session.c
-@@ -285,6 +285,7 @@ spawn_session (State        *state,
+@@ -287,6 +287,7 @@ spawn_session (State        *state,
+                                                     "XAUTHORITY",
                                                      "WAYLAND_DISPLAY",
                                                      "WAYLAND_SOCKET",
-                                                     "GNOME_SHELL_SESSION_MODE",
 +                                                    "__NIXOS_SET_ENVIRONMENT_DONE",
                                                      NULL };
- 
-         g_debug ("Running wayland session");
+         /* The environment variables listed below are those we have set (or
+          * received from our own execution environment) only as a fallback to
+diff --git a/daemon/gdm-x-session.c b/daemon/gdm-x-session.c
+index ed01fbe52..06efac2df 100644
 --- a/daemon/gdm-x-session.c
 +++ b/daemon/gdm-x-session.c
-@@ -610,6 +610,7 @@ spawn_session (State        *state,
+@@ -603,6 +603,7 @@ spawn_session (State        *state,
+                                                      "XAUTHORITY",
                                                       "WAYLAND_DISPLAY",
                                                       "WAYLAND_SOCKET",
-                                                      "GNOME_SHELL_SESSION_MODE",
 +                                                     "__NIXOS_SET_ENVIRONMENT_DONE",
                                                       NULL };
- 
-         g_debug ("Running X session");
+         /* The environment variables listed below are those we have set (or
+          * received from our own execution environment) only as a fallback to

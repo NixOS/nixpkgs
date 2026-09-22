@@ -14,14 +14,14 @@ python3.pkgs.buildPythonApplication {
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "0-unstable-2023-12-16";
+  version = "0-unstable-2026-07-15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdellweg";
     repo = "pass_secret_service";
-    rev = "6335c85d9a790a6472e3de6eff87a15208caa5dc";
-    hash = "sha256-SSmI3HJCUWuwFXCu3Zg66X18POlzp3ADRj7HeE8GRio=";
+    rev = "4ba0f4b6c0667192263c385c13b5ec42a87af9ff";
+    hash = "sha256-BaAULmeTxsj6uk3Aqe7ft/uN14M/b1U3ga7S71+lE68=";
   };
 
   # Need to specify session.conf file for tests because it won't be found under

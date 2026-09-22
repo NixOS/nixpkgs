@@ -1,10 +1,18 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
+  buildPackages,
   winboat,
 }:
 
-buildGo125Module {
+let
+  go = buildPackages.go.overrideAttrs (previousAttrs: {
+    env = previousAttrs.env // {
+      CGO_ENABLED = 0;
+    };
+  });
+in
+buildGoModule.override { inherit go; } {
   inherit (winboat) version src;
   modRoot = "guest_server";
   pname = "winboat-guest-server";

@@ -3,7 +3,7 @@
   stdenvNoCC,
   runCommand,
   writers,
-  python3Packages,
+  python3,
   cargo,
   gitMinimal,
   nix-prefetch-git,
@@ -11,6 +11,14 @@
 }:
 
 let
+  python3Packages = python3.pkgs // {
+    # Break the requests -> charset-normalizer -> mypy -> ast-serialize ->
+    # fetchCargoVendor bootstrap cycle without overriding the whole Python scope.
+    requests = python3.pkgs.requests.override {
+      charset-normalizer = python3.pkgs.charset-normalizer.override { withMypyc = false; };
+    };
+  };
+
   replaceWorkspaceValues = writers.writePython3Bin "replace-workspace-values" {
     libraries = with python3Packages; [
       tomli
@@ -22,29 +30,33 @@ let
     ];
   } (builtins.readFile ./replace-workspace-values.py);
 
-  mkFetchCargoVendorUtil =
-    name: src:
-    writers.writePython3Bin name {
-      libraries =
-        with python3Packages;
-        [
-          requests
-          tomli-w
-        ]
-        ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
-      flakeIgnore = [
-        "E501"
-      ];
-    } (builtins.readFile src);
+  nix-prefetch-git' = nix-prefetch-git.override {
+    git = gitMinimal;
+    # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+    # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+    git-lfs = null;
+  };
 
-  # Separate util used only by the FOD `vendorStaging` stage below. Kept
-  # distinct from fetchCargoVendorUtil so that changes to the network-facing
-  # bits (User-Agent, download URL) don't invalidate the input-addressed
-  # `-vendor` stage and force a mass rebuild of every Rust package in nixpkgs.
-  # vendorStaging is an FOD, so swapping its util is free for consumers.
-  # TODO: unify with fetchCargoVendorUtil on the next `staging` cycle.
-  fetchCargoVendorUtilV2 = mkFetchCargoVendorUtil "fetch-cargo-vendor-util-v2" ./fetch-cargo-vendor-util-v2.py;
-  fetchCargoVendorUtil = mkFetchCargoVendorUtil "fetch-cargo-vendor-util" ./fetch-cargo-vendor-util.py;
+  removedArgs = [
+    "name"
+    "pname"
+    "version"
+    "nativeBuildInputs"
+    "hash"
+  ];
+
+  fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
+    libraries =
+      with python3Packages;
+      [
+        requests
+        tomli-w
+      ]
+      ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
+    flakeIgnore = [
+      "E501"
+    ];
+  } (builtins.readFile ./fetch-cargo-vendor-util.py);
 in
 
 {
@@ -57,14 +69,6 @@ in
 # TODO: add asserts about pname version and name
 
 let
-  removedArgs = [
-    "name"
-    "pname"
-    "version"
-    "nativeBuildInputs"
-    "hash"
-  ];
-
   vendorStaging = stdenvNoCC.mkDerivation (
     {
       name = "${name}-vendor-staging";
@@ -72,14 +76,9 @@ let
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
       nativeBuildInputs = [
-        fetchCargoVendorUtilV2
+        fetchCargoVendorUtil
         cacert
-        (nix-prefetch-git.override {
-          git = gitMinimal;
-          # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
-          # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
-          git-lfs = null;
-        })
+        nix-prefetch-git'
       ]
       ++ nativeBuildInputs;
 
@@ -90,7 +89,7 @@ let
           cd "$cargoRoot"
         fi
 
-        fetch-cargo-vendor-util-v2 create-vendor-staging ./Cargo.lock "$out"
+        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out"
 
         runHook postBuild
       '';
@@ -108,7 +107,6 @@ let
     // removeAttrs args removedArgs
   );
 in
-
 runCommand "${name}-vendor"
   {
     inherit vendorStaging;

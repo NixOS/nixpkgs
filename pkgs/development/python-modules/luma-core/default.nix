@@ -12,12 +12,12 @@
 }:
 buildPythonPackage rec {
   pname = "luma-core";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchPypi {
     pname = "luma_core";
     inherit version;
-    hash = "sha256-7PscEvwy+O5s/w9hOASyYJOHwXVH9znQAmSfLm1W7C8=";
+    hash = "sha256-PdtnP5aZoUjTzP7imFRRsB3dS06ma2WpZkzjaAbPQRw=";
   };
 
   build-system = [ setuptools ];

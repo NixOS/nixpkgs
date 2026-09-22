@@ -6,7 +6,7 @@
   cereal,
   cmake,
   eigen,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitLab,
   fmt,
   freeglut,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 

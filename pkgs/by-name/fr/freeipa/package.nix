@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   pkg-config,
   autoconf,
   automake,
@@ -60,7 +59,7 @@ let
     yubico
     setuptools
     jinja2
-    augeas
+    python-augeas
     samba
     ifaddr
   ];
@@ -75,25 +74,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeipa";
-  version = "4.12.5";
+  version = "4.13.1";
 
   src = fetchurl {
     url = "https://releases.pagure.org/freeipa/freeipa-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jvXS9Hx9VGFccFL19HogfH15JVIW7pc3/TY1pOvJglM=";
+    hash = "sha256-U1MSfXxWynK8LUWDdtRX+LDMRRzb0x3Hk5qIBY6RUnw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "support-pyca-44.0";
-      url = "https://github.com/freeipa/freeipa/pull/7619/commits/2dc4133920fe58ce414c545102c74173d40d1997.patch";
-      hash = "sha256-PROnPc/1qS3hcO8s5sel55tsyZ1VPjEKLcua8Pd4DP0=";
-    })
-    (fetchpatch {
-      name = "fix-tripledes-cipher-warnings";
-      url = "https://github.com/freeipa/freeipa/pull/7619/commits/e2bf6e4091c7b5320ec6387dab2d5cabe4a9a42d.patch";
-      hash = "sha256-AyMK0hjXMrFK4/qIcjPMFH9DKvnvYOK2QS83Otcc+l4=";
-    })
-  ];
 
   nativeBuildInputs = [
     python3Packages.wrapPython

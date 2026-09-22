@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eww";
-  version = "0.6.0-unstable-2026-03-05";
+  version = "0.6.0-unstable-2026-07-17";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "865cf631d5bbb5f9fccc99b3f4cc80b9eeada18c";
-    hash = "sha256-fL12XFMsf/efSlbzQc7cCI366CwETkM6sWpEfcF9s6A=";
+    rev = "48f5aa8b379adf29da0b0bb9ca04164f65d8bdaa";
+    hash = "sha256-qctOkZtSvJPx3Gv/BaZE6oZ6qSl7/VGWuUkIVfp3IOw=";
   };
 
   cargoHash = "sha256-Kf99eojqXvdbZ3eRS8GBgyLYNpZKJGIJtsOsvhhSVDk=";
@@ -46,9 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd eww \
       --bash <($out/bin/eww shell-completions --shell bash) \
@@ -70,7 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/elkowar/eww";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      coffeeispower
       w-lfchen
     ];
     mainProgram = "eww";

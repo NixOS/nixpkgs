@@ -11,7 +11,7 @@ let
     url = "https://github.com/iotaledger/firefly/releases/download/desktop-${version}/firefly-desktop-${version}.AppImage";
     sha256 = "sha256-MATMl5eEIauDQpz8/wqIzD7IugPVZ2HJAWCbDM4n+hA=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
 in
 appimageTools.wrapType2 {
@@ -20,12 +20,11 @@ appimageTools.wrapType2 {
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/pixmaps
-    cp ${appimageContents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
+    install -D ${appimageContents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
     substituteInPlace $out/share/applications/firefly-desktop.desktop \
-      --replace 'Exec=AppRun' 'Exec=firefly-desktop' \
-      --replace 'Icon=desktop' 'Icon=firefly-desktop'
-    cp ${appimageContents}/desktop.png $out/share/pixmaps/firefly-desktop.png
+      --replace-fail 'Exec=AppRun' 'Exec=firefly-desktop' \
+      --replace-fail 'Icon=desktop' 'Icon=firefly-desktop'
+    install -D ${appimageContents}/desktop.png $out/share/icons/firefly-desktop.png
   '';
 
   meta = {

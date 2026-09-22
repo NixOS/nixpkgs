@@ -6,14 +6,9 @@
   nix-update-script,
   stdenv,
 
-  # nativeBuildInputs
-  doxygen,
-  cmake,
-  graphviz,
-  pkg-config,
-
   # buildInputs
   fmt,
+  jrl-cmakemodules,
   mimalloc,
 
   # propagatedBuildInputs
@@ -27,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qdXZo7IvgcUFEJARwxpSaHJVRlZ6HdgRADPOiY3oCpk=";
+    hash = "sha256-OeLeNXLPUDs907DHDOUE3r0G39e+nxF7HTSQjXYEryE=";
   };
 
   outputs = [
@@ -43,15 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    graphviz
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
   buildInputs = [
     fmt
+    jrl-cmakemodules
     mimalloc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -68,10 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     gbenchmark
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
     (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
     (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time

@@ -9,6 +9,7 @@
   debugpy,
   fetchFromGitHub,
   hatchling,
+  hatch-vcs,
   keyring,
   pytest-asyncio,
   pytest-freezer,
@@ -20,17 +21,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "1.2.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CbC5ms3YcNB6n5UmCHfHKTtyJau68m8QZ5UwRyiR9MM=";
+    hash = "sha256-1wWUYhDj8lO8q8YF251z9uQDQTozTf5kIUjrNLrNdQA=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     aiohttp

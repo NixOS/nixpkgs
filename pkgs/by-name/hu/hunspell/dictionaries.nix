@@ -194,7 +194,7 @@ let
     }:
     mkDict rec {
       inherit src srcFileName dictFileName;
-      version = "2020.12.07";
+      version = "2026.02.25";
       pname = "hunspell-dict-${shortName}-wordlist";
       srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
@@ -376,8 +376,8 @@ rec {
     srcFileName = "en_US";
     dictFileName = "en_US";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2020.12.07.zip";
-      hash = "sha256-YWNIrWRacW2RyKZkUGXnEPFendo//vYM337IpOJ5da8=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_US-2026.02.25.zip";
+      hash = "sha256-rI5zMQ6VHYjFLCzyulTOrKNPhIaoFjCsinXcX5MRefk=";
     };
   };
 
@@ -388,8 +388,8 @@ rec {
     srcFileName = "en_US-large";
     dictFileName = "en_US";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2020.12.07.zip";
-      hash = "sha256-WpNhcxL/t8zMVMj9ij5nEusOnNSmnx01i4LrTTUgcrc=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_US-large-2026.02.25.zip";
+      hash = "sha256-BqtaKhLCkDPxAJiNOwpeU9ytQL8kc8y3gnBhnR2pkyE=";
     };
   };
 
@@ -400,8 +400,8 @@ rec {
     srcFileName = "en_CA";
     dictFileName = "en_CA";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2020.12.07.zip";
-      hash = "sha256-/2uR5O12g0jGGufDJuhIBZgQ+kOl1gHfaz9FrZwO9b8=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_CA-2026.02.25.zip";
+      hash = "sha256-Kf4AUECMNWFPIr6oQzi0JWliyJ9e8l2sUDgyW8uG9CQ=";
     };
   };
 
@@ -412,8 +412,8 @@ rec {
     srcFileName = "en_CA-large";
     dictFileName = "en_CA";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2020.12.07.zip";
-      hash = "sha256-RjRIkIb2QDeveqpLyo1s4X90QrZiYylW5d1MCU+Hvuo=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_CA-large-2026.02.25.zip";
+      hash = "sha256-tLe/SniF3hw1+hs6poMXIJr6WPBNYOigfhJGk0hcWeM=";
     };
   };
 
@@ -424,8 +424,8 @@ rec {
     srcFileName = "en_AU";
     dictFileName = "en_AU";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2020.12.07/hunspell-en_AU-2020.12.07.zip";
-      hash = "sha256-3CBVfEiuGXl4Tnn65vll6ZnI2y6aD4RjSOcAV/znglQ=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_AU-2026.02.25.zip";
+      hash = "sha256-+FRxWTuXRPZCmMAtB/ti1Ykmv4H7XkVS4rrGRb+kAeA=";
     };
   };
 
@@ -436,8 +436,8 @@ rec {
     srcFileName = "en_AU-large";
     dictFileName = "en_AU";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2020.12.07.zip";
-      hash = "sha256-SW5HeuewGMe+Ng5gqqL5jn8cl8eJLfk7JFcRJCTGHjE=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_AU-large-2026.02.25.zip";
+      hash = "sha256-RqJliD0dAciJtxc7ocq64MqRWqQD1qL5PO5MxmEIfbQ=";
     };
   };
 
@@ -448,8 +448,8 @@ rec {
     srcFileName = "en_GB-ise";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2020.12.07.zip";
-      hash = "sha256-LO1LLsnRiMO1QNu3W1FD9luZDa8XQ3dYcm/x+rXwGtM=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_GB-ise-2026.02.25.zip";
+      hash = "sha256-1vu5GueCTFL7AvdNe8LNkJLxMPrsYPQjJqWUN/pyR6M=";
     };
   };
 
@@ -460,8 +460,8 @@ rec {
     srcFileName = "en_GB-ize";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2020.12.07.zip";
-      hash = "sha256-hpt0nsmAW4fNBfQzB/IJmGUTMbWqWwRQZBOvDC3y8jE=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_GB-ize-2026.02.25.zip";
+      hash = "sha256-xb3ZL8HiHadQOTn+QTnzbyjwHBisNeL8kLUmobe/sJk=";
     };
   };
 
@@ -472,8 +472,8 @@ rec {
     srcFileName = "en_GB-large";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2020.12.07.zip";
-      hash = "sha256-+GvrdyKMc3yMaUaP/E6gZ1EocieIabmKXT7BjxJRB70=";
+      url = "mirror://sourceforge/wordlist/speller/2026.02.25/hunspell-en_GB-large-2026.02.25.zip";
+      hash = "sha256-cEpJQ4o6nU8RzXbbQzprIwuc6HcO4T+ihwAFLEUX3cE=";
     };
   };
 
@@ -866,6 +866,28 @@ rec {
     ];
   };
 
+  ru_RU-mozilla = ru-ru-mozilla;
+  ru-ru-mozilla = mkDict {
+    pname = "hunspell-dict-ru-ru-mozilla";
+    version = "0-unstable-2026-05-30";
+
+    src = fetchFromGitHub {
+      owner = "Goudron";
+      repo = "ru-spelling-dictionary";
+      rev = "43cc600462d8681bc6e92d1afb29874e2902ea9b";
+      hash = "sha256-EN/f5lbpBiyItEFcHTJbuwuJF3rghkB1f5T9G0a2tdk=";
+    };
+
+    dictFileName = "ru_RU";
+    readmeFile = "README.md";
+
+    meta = {
+      description = "Hunspell dictionary for Russian, updated version as used in Mozilla products";
+      homepage = "https://github.com/Goudron/ru-spelling-dictionary";
+      license = lib.licenses.mpl20;
+    };
+  };
+
   # CZECH
 
   cs_CZ = cs-cz;
@@ -874,7 +896,7 @@ rec {
     dictFileName = "cs_CZ";
     shortDescription = "Czech (Czechia)";
     readmeFile = "README_cs.txt";
-    license = with lib.licenses; [ gpl2 ];
+    license = lib.licenses.gpl2;
   };
 
   # SLOVAK
@@ -966,7 +988,7 @@ rec {
     dictFileName = "he_IL";
     shortDescription = "Hebrew (Israel)";
     readmeFile = "README_he_IL.txt";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
   };
 
   # THAI
@@ -986,7 +1008,7 @@ rec {
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
       homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
-      license = with lib.licenses; [ gpl3 ];
+      license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [ toastal ]; # looking for a native speaker
       platforms = lib.platforms.all;
     };
@@ -1031,7 +1053,7 @@ rec {
     sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Bokmål (Norway)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
   };
 
   nn_NO = nn-no;
@@ -1041,7 +1063,7 @@ rec {
     sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
   };
 
   # TOKI PONA
@@ -1099,7 +1121,7 @@ rec {
     dictFileName = "pt_BR";
     shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
-    license = with lib.licenses; [ lgpl3 ];
+    license = lib.licenses.lgpl3;
   };
 
   pt_PT = pt-pt;
@@ -1172,7 +1194,7 @@ rec {
     meta = {
       description = "Hunspell dictionary for ${shortDescription} from rospell";
       homepage = "https://sourceforge.net/projects/rospell/";
-      license = with lib.licenses; [ gpl2Only ];
+      license = lib.licenses.gpl2Only;
       maintainers = with lib.maintainers; [ Andy3153 ];
     };
   };

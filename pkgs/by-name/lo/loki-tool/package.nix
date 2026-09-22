@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   # Default build target tries to compile binary for Android
   buildPhase = ''
     runHook preBuild
-    make CC=cc loki_tool
+    make CC=${stdenv.cc.targetPrefix}cc loki_tool
     runHook postBuild
   '';
 

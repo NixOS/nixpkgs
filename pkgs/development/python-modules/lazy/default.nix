@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "lazy";
-  version = "1.6";
+  version = "2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cScyTscJ6DJPCMtGEcGr4Bd2vaU7uc5o3F36RsoO0+k=";
+    hash = "sha256-+S7A0y3WvRFd3sTjMjRz68C2gq1Yxqynjr/Z5tGqV3c=";
   };
 
   build-system = [ setuptools ];

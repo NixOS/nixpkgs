@@ -8,14 +8,14 @@
   gst_all_1,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gstreamer";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-gstreamer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0y8xi1q0ld4hrk96bn6jfh9slyjrxmnlhm662ynacp3yzalp8jji";
   };
 
@@ -40,4 +40,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

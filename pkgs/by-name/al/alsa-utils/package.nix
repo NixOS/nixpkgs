@@ -5,6 +5,7 @@
   fetchurl,
   alsa-lib,
   alsa-plugins,
+  bashNonInteractive,
   gettext,
   makeWrapper,
   pkg-config,
@@ -32,11 +33,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.14";
+  version = "1.2.16";
 
   src = fetchurl {
     url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
+    hash = "sha256-CSOZ1eh0mh1eGI45MVdSHOxLdWk7YOu3m7znKM/yIyw=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    bashNonInteractive
     alsa-lib
     ncurses
     libsamplerate
@@ -85,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.alsa-project.org/";
+    changelog = "https://github.com/alsa-project/alsa-utils/releases/tag/v${finalAttrs.version}";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and
@@ -98,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

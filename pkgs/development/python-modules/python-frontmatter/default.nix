@@ -2,42 +2,53 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   pyyaml,
-  six,
-  pytest,
-  pyaml,
+
+  # tests
+  pytestCheckHook,
+  toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-frontmatter";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eyeseast";
     repo = "python-frontmatter";
-    tag = "v${version}";
-    sha256 = "sha256-Sr0RbNVk87Zu01U7nkuPUSnl1bm6G72EZDP/eDn099s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b/ruWPPiKvDzMjcVhxiBtnAaMNWnWvy1v8GZxGeibyY=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-    pyaml # yes, it's needed
-    six
+  build-system = [ uv-build ];
+
+  dependencies = [ pyyaml ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    toml
   ];
 
-  # tries to import test.test, which conflicts with module
-  # exported by python interpreter
-  doCheck = false;
-  nativeCheckInputs = [ pytest ];
+  pytestFlags = [
+    "--doctest-glob=README.md"
+    "--doctest-modules"
+  ];
 
   pythonImportsCheck = [ "frontmatter" ];
 
   meta = {
-    homepage = "https://github.com/eyeseast/python-frontmatter";
     description = "Parse and manage posts with YAML (or other) frontmatter";
+    homepage = "https://github.com/eyeseast/python-frontmatter";
+    changelog = "https://github.com/eyeseast/python-frontmatter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

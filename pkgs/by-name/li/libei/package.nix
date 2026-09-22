@@ -11,7 +11,8 @@
   pkg-config,
   protobuf,
   protobufc,
-  systemd,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
+  systemdLibs,
   buildPackages,
   epoll-shim,
   basu,
@@ -27,14 +28,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libei";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
     rev = finalAttrs.version;
-    hash = "sha256-PqQpJz88tDzjwsBuwxpWcGAWz6Gp6A/oAOS87uxGOGs=";
+    hash = "sha256-fUeMdRK7uoRvgvY3INMorwnTleLrLA5xOeYBFp1qXeI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isBSD [
@@ -52,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
     protobufc
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
+  ++ lib.optionals systemdSupport [
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     basu

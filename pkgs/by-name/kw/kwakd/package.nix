@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Super small webserver that serves blank pages";
+    homepage = "https://github.com/fetchinson/kwakd";
     mainProgram = "kwakd";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.nicknovitski ];

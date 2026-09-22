@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "poetry-plugin-migrate";
-  version = "0.1.1";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zyf722";
     repo = "poetry-plugin-migrate";
     tag = version;
-    hash = "sha256-78H4/vHp8W7h6v6OWUdx9pX4142YiNGUFZXHoxxXw1M=";
+    hash = "sha256-ly3ydaYgQl4GEb2Iq8tefe/+0uuA9fsBdqedp971XL4=";
   };
 
   build-system = [

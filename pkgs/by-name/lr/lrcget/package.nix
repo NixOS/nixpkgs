@@ -22,13 +22,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     tag = version;
-    hash = "sha256-3dqE64IVvsrY33v3LoLUDJ+g6T5CvePIINWdqidDPdQ=";
+    hash = "sha256-cxQpCuyFsJeujcL2TPMH7n+Q6l4h+P1HvsrMoFmbWMI=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-YRPMzFChmk5laah8yyRtMaUYH/uSOLUIAtl7wTl/qU0=";
+  cargoHash = "sha256-9vyvRJsR4o7kWSLJyGIoiM/13ABWWTrRXVdyU2HfJ+E=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts
   # but has no lockfile, which is something that will probably break.

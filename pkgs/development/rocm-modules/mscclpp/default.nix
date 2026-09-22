@@ -39,4 +39,7 @@ stdenv.mkDerivation {
     "-DFETCHCONTENT_SOURCE_DIR_JSON=${nlohmann_json.src}"
   ];
   env.ROCM_PATH = clr;
+  meta = {
+    homepage = "https://github.com/microsoft/mscclpp";
+  };
 }

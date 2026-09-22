@@ -15,11 +15,10 @@ in
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
-  requireSigning = false;
-  allowAddonSideload = true;
   branding = "browser/branding/librewolf";
   inherit (librewolf-src)
     extraConfigureFlags
+    extraPreConfigure
     extraPatches
     extraPostPatch
     extraPassthru
@@ -29,9 +28,12 @@ in
     description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [
-      dwrege
+      azahi
       fpletz
       hythera
+      mBornand
+      thbemme
+      wolfgangwalther
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
@@ -47,7 +49,10 @@ in
   };
 }).override
   {
-    crashreporterSupport = false;
+    enableAddonSigning = false;
+    enableAddonSideload = true;
+
+    enableCrashReporter = false;
     # This will set `MOZILLA_OFFICIAL=1`, which is set by the mozconfig upstream, but has to
     # be set manually in our case.
     # This will not override the branding as `branding` is already set to the official

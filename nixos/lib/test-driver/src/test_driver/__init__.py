@@ -6,9 +6,11 @@ import warnings
 from pathlib import Path
 
 import ptpython.ipython
+import ptpython.repl
+from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver, DriverConfiguration, load_driver_configuration
+from test_driver.driver import Driver, load_driver_configuration
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
@@ -55,6 +57,29 @@ def writeable_dir(arg: str) -> Path:
     return path
 
 
+def formatwarning(
+    message: Warning | str,
+    category: type[Warning],
+    filename: str,
+    lineno: int,
+    line: str | None = None,
+) -> str:
+    return (
+        Style.BRIGHT
+        + Fore.YELLOW
+        + f"??? Warning ({category.__name__}): "  # ty: ignore[unsupported-operator]
+        + Style.NORMAL
+        + str(message)
+        + "\n"
+        + f'    File "{filename}", line {lineno}\n'
+        + (f"      {line}\n" if line is not None else "")
+        + Style.RESET_ALL
+    )
+
+
+warnings.formatwarning = formatwarning  # ty:ignore[invalid-assignment]
+
+
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
@@ -63,6 +88,11 @@ def main() -> None:
         help="the test driver configuration file",
         type=Path,
         required=True,
+    )
+    arg_parser.add_argument(
+        "--test-script",
+        help="path to a test script to run, taking precedence over the one defined in the config file",
+        type=Path,
     )
     arg_parser.add_argument(
         "--keep-vm-state",
@@ -138,8 +168,12 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
+    config = load_driver_configuration(args.config)
+    if args.test_script is not None:
+        config.test_script = args.test_script
+
     with Driver(
-        config=load_driver_configuration(args.config),
+        config=config,
         out_dir=output_directory,
         logger=logger,
         keep_machine_state=args.keep_machine_state,
@@ -150,6 +184,7 @@ def main() -> None:
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
+            ptpython.repl.enable_deprecation_warnings()
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,
@@ -159,30 +194,3 @@ def main() -> None:
             driver.run_tests()
             toc = time.time()
             logger.info(f"test script finished in {(toc - tic):.2f}s")
-
-
-def generate_driver_symbols() -> None:
-    """
-    This generates a file with symbols of the test-driver code that can be used
-    in user's test scripts. That list is then used by pyflakes to lint those
-    scripts.
-    """
-    d = Driver(
-        config=DriverConfiguration(
-            vms=dict(),
-            containers=dict(),
-            vlans=[],
-            global_timeout=0,
-            enable_ssh_backdoor=False,
-            test_script=(
-                Path("testScriptWithTypes")
-                if (Path("testScriptWithTypes").is_file())
-                else Path("testScriptFile")
-            ),
-        ),
-        out_dir=Path(),
-        logger=CompositeLogger([]),
-    )
-    test_symbols = d.test_symbols()
-    with open("driver-symbols", "w") as fp:
-        fp.write(",".join(test_symbols.keys()))

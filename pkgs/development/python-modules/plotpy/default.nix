@@ -117,7 +117,12 @@ buildPythonPackage rec {
   meta = {
     description = "Curve and image plotting tools for Python/Qt applications";
     homepage = "https://github.com/PlotPyStack/PlotPy";
-    changelog = "https://github.com/PlotPyStack/PlotPy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/PlotPy/blob/master/doc/release_notes/release_${lib.versions.major version}.${
+      lib.pipe version [
+        lib.versions.minor
+        (lib.fixedWidthString 2 "0")
+      ]
+    }.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

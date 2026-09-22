@@ -187,6 +187,9 @@ in
     process = {
       argv = [
         (getExe cfg.package)
+        # ghostunnel's landlock rules don't like reading the CA certs from /etc
+        # because they are links to /nix/store, which isn't part of its rules
+        "--disable-landlock"
         "server"
         "--listen"
         cfg.listen

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ytcast";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "MarcoLucidi01";
     repo = "ytcast";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iy9+MgXwP4ALz4NHJyn2ghC5boR53H3ioB2+7tcJunE=";
+    sha256 = "sha256-qFKqyBaG3+IltuJ/UDeWxlBy1NqXRZ0ENGiQoTOrWI0=";
   };
 
   vendorHash = null;
@@ -22,7 +22,10 @@ buildGoModule (finalAttrs: {
     description = "Tool to cast YouTube videos from the command-line";
     homepage = "https://github.com/MarcoLucidi01/ytcast";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ waelwindows ];
+    maintainers = with lib.maintainers; [
+      waelwindows
+      claes
+    ];
     mainProgram = "ytcast";
   };
 })

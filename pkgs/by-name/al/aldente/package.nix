@@ -37,13 +37,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "macOS tool to limit maximum charging percentage";
     homepage = "https://apphousekitchen.com";
-    changelog = "https://github.com/davidwernhart/aldente-charge-limiter/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/AppHouseKitchen/AlDente-Battery_Care_and_Monitoring/releases/tag/${finalAttrs.version}";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

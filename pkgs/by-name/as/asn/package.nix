@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "asn";
-  version = "0.81.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HPLdi5Eok06jnToWPn1bGnnAGirGV8zGFoDsKsMvrI8=";
+    hash = "sha256-d1DlPX1FZNBh1u55DN3S/7/8Q0RElJ6os5J9XlH+EOU=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/nitefood/asn";
     changelog = "https://github.com/nitefood/asn/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "asn";
   };

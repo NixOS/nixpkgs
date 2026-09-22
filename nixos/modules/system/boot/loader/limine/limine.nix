@@ -11,7 +11,7 @@ let
     builtins.toJSON {
       inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
-      efiBootMgrPath = pkgs.efibootmgr;
+      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
@@ -29,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
@@ -205,6 +205,17 @@ in
       '';
     };
 
+    extraInstallCommands = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
+      '';
+    };
+
     secureBoot = {
       enable = lib.mkEnableOption null // {
         description = ''
@@ -248,8 +259,8 @@ in
 
     style = {
       wallpapers = lib.mkOption {
-        default = [ ];
-        example = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
+        default = [ defaultWallpaper ];
+        defaultText = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
         type = lib.types.listOf lib.types.path;
         description = ''
           A list of wallpapers.
@@ -270,7 +281,8 @@ in
       };
 
       backdrop = lib.mkOption {
-        default = null;
+        default = if (cfg.style.wallpapers == [ defaultWallpaper ]) then "2F302F" else null;
+        defaultText = lib.literalMD "`2F302F` for the default wallpaper, `null` otherwise.";
         example = "7EBAE4";
         type = lib.types.nullOr lib.types.str;
         description = ''
@@ -297,9 +309,25 @@ in
 
         brandingColor = lib.mkOption {
           default = null;
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.str;
           description = ''
-            Color index of the title at the top of the screen in the range of 0-7 (Limine defaults to 6 (cyan)).
+            Color of the title at the top of the screen in RRGGBB format (Limine defaults to #00AAAA (cyan)).
+          '';
+        };
+
+        helpColor = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the help text displayed beside keybinds in RRGGBB format (Limine defaults to #00AA00 (dark green)).
+          '';
+        };
+
+        helpColorBright = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the bright help text used for the auto-boot countdown digit in RRGGBB format (Limine defaults to #55FF55 (bright green)).
           '';
         };
 
@@ -333,7 +361,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             black, red, green, brown, blue, magenta, cyan, and gray.
           '';
         };
@@ -342,7 +370,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             dark gray, bright red, bright green, yellow, bright blue, bright magenta, bright cyan, and white.
           '';
         };
@@ -399,13 +427,6 @@ in
   };
 
   config = lib.mkMerge [
-    {
-      boot.loader.limine.style.wallpapers = lib.mkDefault [ defaultWallpaper ];
-    }
-    (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
-      boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
-    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -427,14 +448,25 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.replaceVarsWith {
-          src = ./limine-install.py;
-          isExecutable = true;
-          replacements = {
-            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-            configPath = limineInstallConfig;
-          };
-        };
+        build.installBootLoader =
+          let
+            install = pkgs.replaceVarsWith {
+              src = ./limine-install.py;
+              isExecutable = true;
+              replacements = {
+                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                configPath = limineInstallConfig;
+              };
+            };
+
+            final = pkgs.writeScript "limine-install.sh" ''
+              #!${pkgs.runtimeShell}
+              set -euo pipefail
+              ${install} "$@"
+              ${cfg.extraInstallCommands}
+            '';
+          in
+          final;
       };
     })
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable) {
@@ -468,26 +500,25 @@ in
 
     # Fwupd binary needs to be signed in secure boot mode
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable && config.services.fwupd.enable) {
-      systemd.services.fwupd = {
-        environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
-      };
-
       systemd.services.fwupd-efi = {
         description = "Sign fwupd EFI app for secure boot";
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+        # /run/fwupd-efi is populated by the fwupd module.
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          RuntimeDirectory = "fwupd-efi";
         };
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          for efi in "''${fwupd_efi[@]}"; do
+            ${lib.getExe cfg.secureBoot.sbctl} sign -o "/run/fwupd-efi/$(basename "$efi").signed" "$efi"
+          done
         '';
       };
 

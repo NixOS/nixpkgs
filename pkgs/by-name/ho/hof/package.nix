@@ -17,6 +17,11 @@ buildGoModule (finalAttrs: {
     hash = "sha256-okc11mXqB/PaXd0vsRuIIL70qWSFprvsZJtE6PvCaIg=";
   };
 
+  patches = [
+    # https://github.com/hofstadter-io/hof/pull/411
+    ./go-testdeps-modulepath.patch
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   vendorHash = "sha256-mLOWnHzKw/B+jFNuswejEnYbPxFkk95I/BWeHRTH55I=";

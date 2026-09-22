@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlever";
-  version = "0.5.46";
+  version = "0.5.48";
 
   src = fetchFromGitHub {
     owner = "ad-freiburg";
     repo = "qlever";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UUfSWy1mImmyL7Ha2xCbxm9srdY/rTJS4oUJbJiDtwQ=";
+    hash = "sha256-CqrwsUXjM5VwsNkLDkXgT6ZfqFZIuz2oPKVqO4z2t3A=";
     fetchSubmodules = true;
   };
 
@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "LOGLEVEL" "INFO")
     (lib.cmakeBool "USE_PARALLEL" true)
     (lib.cmakeBool "_NO_TIMING_TESTS" true)

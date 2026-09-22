@@ -14,30 +14,38 @@
   laszip,
   mpfr,
   pcl,
-  libsForQt5,
+  qt6Packages,
+  nixosTests,
   onetbb,
   xercesc,
   wrapGAppsHook3,
+  pkg-config,
+  libusb1,
+  hidapi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
-  version = "2.13.2";
+  version = "2.13.2-unstable-2026-08-21";
+
+  scriptDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
+    rev = "be1fdb0fd05ec42d6922d7f18b22aab71c168ad6";
+    hash = "sha256-dlB3d6AE8R5SjjVUHvYv3D4FjlOnEHHLoDexejwUp6U=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
-    eigen # header-only
-    wrapGAppsHook3
     copyDesktopItems
-    libsForQt5.wrapQtAppsHook
+    eigen # header-only
+    pkg-config
+    qt6Packages.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -47,12 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     gdal
     gmp
     laszip
+    libusb1 # required together with hidapi for 3D-mouse support
     mpfr
-    pcl
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
-    libsForQt5.qttools
     onetbb
+    pcl
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qttools
     xercesc
   ];
 
@@ -71,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
     "-DPLUGIN_IO_QLAS=ON" # required for .las/.laz support
+    "-DLASZIP_INCLUDE_DIR=${lib.getInclude laszip}/include/laszip"
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 
@@ -112,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
   preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    qtWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ hidapi ]}
+    )
   '';
 
   desktopItems = [
@@ -152,11 +165,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.tests = nixosTests.cloudcompare;
+
   meta = {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nh2 ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "CloudCompare";
     platforms = with lib.platforms; linux; # only tested here; might work on others
   };

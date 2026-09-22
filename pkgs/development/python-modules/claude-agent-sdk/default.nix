@@ -8,19 +8,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  sniffio,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "claude-agent-sdk";
-  version = "0.1.68";
+  version = "0.2.153";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-agent-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m42AYi9OkII9NOSNV9D9M7GMamh2Qncpz21s7BS1E70=";
+    hash = "sha256-lGLTNY+XtudqR0SzkDw+HrU1k53mm37inmczfB5jw4I=";
   };
 
   build-system = [ hatchling ];
@@ -28,6 +29,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     anyio
     mcp
+    sniffio
     typing-extensions
   ];
 
@@ -44,6 +46,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Code not available
     "test_query_with_async_iterable"
+  ];
+
+  disabledTestPaths = [
+    # Tests require claude code with is non-free
+    "tests/test_close_cancellation.py"
   ];
 
   meta = {

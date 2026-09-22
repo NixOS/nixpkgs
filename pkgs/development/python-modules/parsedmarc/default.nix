@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
@@ -16,17 +17,10 @@
   elasticsearch-dsl,
   elasticsearch,
   expiringdict,
-  geoip2,
-  google-api-core,
-  google-api-python-client,
-  google-auth-httplib2,
-  google-auth-oauthlib,
-  google-auth,
-  imapclient,
-  kafka-python-ng,
+  kafka-python,
   lxml,
   mailsuite,
-  msgraph-core,
+  maxminddb,
   nixosTests,
   opensearch-py,
   publicsuffixlist,
@@ -38,7 +32,9 @@
   xmltodict,
 
   # test
-  unittestCheckHook,
+  iana-etc,
+  libredirect,
+  pytestCheckHook,
 }:
 
 let
@@ -47,16 +43,16 @@ let
     sha256 = "0wbihyqbb4ndjg79qs8088zgrcg88km8khjhv2474y7nzjzkf43i";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
-  version = "9.6.0";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
-    tag = version;
-    hash = "sha256-ez7QMFsSvJzxhfCPA4G6oGQhqAzcgKBTJMiMogIJvNg=";
+    tag = finalAttrs.version;
+    hash = "sha256-tPGpYIKIi5TK5t4vwo/bUpVfgq4UhYW0IAn5sFYexrs=";
   };
 
   postPatch = ''
@@ -82,17 +78,10 @@ buildPythonPackage rec {
     elasticsearch
     elasticsearch-dsl
     expiringdict
-    geoip2
-    google-api-core
-    google-api-python-client
-    google-auth
-    google-auth-httplib2
-    google-auth-oauthlib
-    imapclient
-    kafka-python-ng
+    kafka-python
     lxml
     mailsuite
-    msgraph-core
+    maxminddb
     opensearch-py
     publicsuffixlist
     pygelf
@@ -101,10 +90,25 @@ buildPythonPackage rec {
     tqdm
     urllib3
     xmltodict
-  ];
+  ]
+  ++ mailsuite.optional-dependencies.gmail
+  ++ mailsuite.optional-dependencies.msgraph;
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
+  ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '';
+
+  disabledTests = [
+    # contacts DNS servers at 1.1.1.1 and 8.8.8.8
+    "test_general_dns_settings_with_defaults"
+    # AssertionError
+    "testWithoutAssumeUtcNaiveIsLocal"
   ];
 
   pythonImportsCheck = [ "parsedmarc" ];
@@ -117,11 +121,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/domainaware/parsedmarc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
-    # https://github.com/domainaware/parsedmarc/issues/464
-    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
-}
+})

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -76,9 +77,37 @@ in
     services.greetd.settings.default_session.user = lib.mkDefault "greeter";
 
     security.pam.services.greetd = {
-      allowNullPassword = true;
-      startSession = true;
-      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+        password = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+      };
     };
 
     # This prevents nixos-rebuild from killing greetd by activating getty again

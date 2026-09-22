@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "FFT marshalling library";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipfft";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

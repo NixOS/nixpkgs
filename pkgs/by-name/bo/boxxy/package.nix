@@ -36,8 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;

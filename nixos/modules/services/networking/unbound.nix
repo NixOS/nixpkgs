@@ -115,7 +115,7 @@ in
         default = true;
         description = ''
           Whether unbound should resolve local queries (i.e. add 127.0.0.1 to
-          /etc/resolv.conf).
+          /etc/resolv.conf and set name servers to localhost respectively).
         '';
       };
 
@@ -276,6 +276,7 @@ in
       resolvconf = {
         useLocalResolver = mkDefault true;
       };
+      nameservers = lib.mkBefore ([ "127.0.0.1" ] ++ (optional config.networking.enableIPv6 "::1"));
     };
 
     environment.etc."unbound/unbound.conf".source = confFile;

@@ -6,12 +6,13 @@
   makeDesktopItem,
   copyDesktopItems,
   versionCheckHook,
+  installFonts,
   cairo,
   libGLU,
   libglvnd,
   pipewire,
   libpulseaudio,
-  dotnet-runtime_8,
+  dotnet-runtime_10,
   x11Support ? true,
   libxi,
   libxcursor,
@@ -19,7 +20,6 @@
   waylandSupport ? false,
   wayland ? null,
   libxkbcommon ? null,
-  imagemagick,
 }:
 
 assert x11Support || waylandSupport;
@@ -28,11 +28,11 @@ assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.21.7";
+  version = "1.22.7";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-zsVK6r5w7b7VBVxI3tJjtSs2uixBolXiM2oW088D84U=";
+    hash = "sha256-SDzGgnpQwIxcQczQJixvEiPBBOVMpxNcRmBSeNifXeE=";
   };
 
   __structuredAttrs = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-    imagemagick
+    installFonts
   ];
 
   desktopItems = [
@@ -67,10 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
+    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps
     cp -r * $out/share/vintagestory
-    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
-    cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
+    install -Dm444 $out/share/vintagestory/assets/gameicon.png $out/share/icons/hicolor/512x512/apps/vintagestory.png
 
     rm -rvf $out/share/vintagestory/{install,run,server}.sh
 
@@ -92,11 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
      makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$runtimeLibraryPath")
 
-     makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+     makeWrapper ${lib.meta.getExe dotnet-runtime_10} $out/bin/vintagestory \
       "''${makeWrapperArgs[@]}" \
        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+    makeWrapper ${lib.getExe dotnet-runtime_10} $out/bin/vintagestory-server \
       "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
@@ -139,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       artturin
       gigglesquid
       dtomvan
+      bubylou
     ];
     mainProgram = "vintagestory";
   };

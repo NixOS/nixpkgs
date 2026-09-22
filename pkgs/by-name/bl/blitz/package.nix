@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   pname = "blitz++";
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ToxicFrog ];
+    maintainers = [ ];
     longDescription = ''
       Blitz++ is a C++ class library for scientific computing which provides
       performance on par with Fortran 77/90. It uses template techniques to

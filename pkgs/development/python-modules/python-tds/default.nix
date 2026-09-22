@@ -29,6 +29,11 @@ buildPythonPackage rec {
       --replace-fail "version.get_git_version()" '"${version}"'
   '';
 
+  preCheck = ''
+    # upstream conftest.py crashes without pytest-mypy installed
+    rm conftest.py
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ six ];
@@ -40,6 +45,15 @@ buildPythonPackage rec {
     namedlist
     pydes
     cryptography
+  ];
+
+  disabledTestPaths = [
+    # requires live SQL Server / sqlalchemy fixtures
+    "tests/connected_test.py"
+    "tests/fedauth_test.py"
+    "tests/sqlalchemy_test.py"
+    "tests/transaction_test.py"
+    "tests/types_test.py"
   ];
 
   disabledTests = [
@@ -59,6 +73,8 @@ buildPythonPackage rec {
     "test_cert_with_san"
     "test_encrypted_socket"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pytds" ];
 

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "scruffystuffs";
+    owner = "skilly-lily";
     repo = "jfmt.rs";
     rev = "v${finalAttrs.version}";
     hash = "sha256-X3wk669G07BTPAT5xGbAfIu2Qk90aaJIi1CLmOnSG80=";
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI utility to format json files";
     mainProgram = "jfmt";
-    homepage = "https://github.com/scruffystuffs/jfmt.rs";
-    changelog = "https://github.com/scruffystuffs/jfmt.rs/blob/${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/skilly-lily/jfmt.rs";
+    changelog = "https://github.com/skilly-lily/jfmt.rs/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.psibi ];
   };

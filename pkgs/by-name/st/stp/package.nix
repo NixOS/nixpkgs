@@ -9,6 +9,7 @@
   fetchFromGitHub,
   fetchpatch,
   symlinkJoin,
+  gitMinimal,
   perl,
   python3,
   zlib,
@@ -18,6 +19,7 @@
   cadical_2,
   gtest,
   lit,
+  llvmPackages,
   outputcheck,
   nix-update-script,
   useCadical ? true,
@@ -25,21 +27,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stp";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "stp";
     repo = "stp";
-    tag = "${finalAttrs.version}_cadical";
-    hash = "sha256-fNx3/VS2bimlVwCejEZtNGDqVKnwBm0O2YkIUQm6eDM=";
+    tag = finalAttrs.version;
+    hash = "sha256-rY5YE9VJz1YXf7W0BxVedZPMnlQ9wdcI2V0ta3WEV80=";
+    fetchSubmodules = true;
   };
+
   patches = [
-    # Python 3.12+ compatibility for build: https://github.com/stp/stp/pull/450
+    # https://github.com/stp/stp/pull/704
     (fetchpatch {
-      url = "https://github.com/stp/stp/commit/fb185479e760b6ff163512cb6c30ac9561aadc0e.patch";
-      hash = "sha256-guFgeWOrxRrxkU7kMvd5+nmML0rwLYW196m1usE2qiA=";
+      name = "python-3.14-ast-constant.patch";
+      url = "https://github.com/stp/stp/commit/e5ab190e872d669b8fcd0d76e432e982707fa706.patch";
+      hash = "sha256-EKeLny9sb2XVsJHzSDh2WVvIg8jPIr0MkEqCHvctbB8=";
     })
   ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail GIT-hash-notfound "$version"
@@ -58,8 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "src/cadical.hpp" "cadical.hpp"
 
     substituteInPlace CMakeLists.txt \
-      --replace-fail "build/libcadical.a" "lib/libcadical.a" \
-      --replace-fail 'include_directories(''${CADICAL_DIR}/)' 'include_directories(''${CADICAL_DIR}/include)'
+      --replace-fail \
+      'find_path(CADICAL_INCLUDE_DIR NAMES src/cadical.hpp HINTS ''${CADICAL_DIR})' \
+      'find_path(CADICAL_INCLUDE_DIR NAMES cadical.hpp HINTS ''${CADICAL_DIR}/include)' \
+      --replace-fail "''${CADICAL_DIR}/build" "''${CADICAL_DIR}/lib"
   '';
 
   buildInputs = [
@@ -75,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     bison
     flex
+    gitMinimal
     perl
     pkg-config
   ];
@@ -100,17 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional finalAttrs.finalPackage.doCheck (lib.cmakeFeature "LIT_ARGS" "-v")
     ++ lib.optional useCadical (lib.cmakeFeature "CADICAL_DIR" (toString cadicalDependency));
 
-  # Fixes the following warning in the aarch64 build on Linux:
-  # lib/extlib-abc/aig/cnf/cnfData.c:4591:25: warning: result of comparison of
-  # constant 255 with expression of type 'signed char' is always false [-Wtautological-constant-out-of-range-compare]
-  # 4591 |         if ( pMemory[k] == (char)(-1) )
-  #
-  # This seems to cause an infinite loop in tests on aarch64-linux platforms.
-  #
-  # TODO: Remove these CFLAGS when they update to the version that pulls `abc` in with a submodule.
-  # https://github.com/stp/stp/issues/498#issuecomment-2611251631
-  env.CFLAGS = toString [ "-fsigned-char" ];
-
   outputs = [
     "dev"
     "out"
@@ -133,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     gtest
     lit
+    llvmPackages.llvm # for the `not` binary
     outputcheck
   ];
 
@@ -145,10 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Some of the gtest/gmock files were in the pkgconfig folders, which may now be empty.
     find $out/ -name pkgconfig -type d -empty -delete
-
-    # Python bindings are broken:
-    substituteInPlace $python_install_dir/**/stp.py \
-      --replace-fail "from library_path import PATHS" "from .library_path import PATHS"
   '';
 
   doInstallCheck = true;

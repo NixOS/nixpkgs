@@ -97,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/libreadline.so* $out/lib/libreadline.so
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for interactive line editing";
 

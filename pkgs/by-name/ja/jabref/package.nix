@@ -54,7 +54,7 @@ let
     url = ltwaUrl;
     hash = "sha256-jnS8Y9x8eg2L3L3RPnS6INTs19mEtwzfNIjJUw6HtIY=";
   };
-  kotlinDslVersion = "6.4.2";
+  kotlinDslVersion = "6.7.3";
 in
 stdenv.mkDerivation rec {
   version = "6.0-alpha.4";
@@ -173,8 +173,8 @@ stdenv.mkDerivation rec {
     zip -d $out/lib/javafx-web-*-*.jar "*.so"
 
     # Use postgresql from nixpkgs since the bundled binary doesn't work on NixOS
-    ARCH1=${if stdenv.isAarch64 then "arm64v8" else "amd64"}
-    ARCH2=${if stdenv.isAarch64 then "arm_64" else "x86_64"}
+    ARCH1=${if stdenv.hostPlatform.isAarch64 then "arm64v8" else "amd64"}
+    ARCH2=${if stdenv.hostPlatform.isAarch64 then "arm_64" else "x86_64"}
     mkdir postgresql
     cd postgresql
     ln -s ${postgresql}/{lib,share} ./

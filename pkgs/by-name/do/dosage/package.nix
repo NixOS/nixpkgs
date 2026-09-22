@@ -7,11 +7,11 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dosage";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "sha256-MHikoqbsQ2WkDi+S+1fhHuJy/cwzHu6PVy/JfALNJUI=";
+    sha256 = "sha256-hkk8JCR1cWrYJFOlSfZkGtSHvPQcQ9O+0MMLfq9x0us=";
   };
 
   pyproject = true;

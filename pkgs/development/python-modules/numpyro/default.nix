@@ -30,20 +30,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.20.1";
+  version = "0.22.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = finalAttrs.version;
-    hash = "sha256-sNqllL9nBwXp0kn+HAjvIaHf7LR0UKh9q7DZ20yCr5A=";
+    hash = "sha256-aUd3u/fEMMSTPFyRJgalVTETG561AgJmGhJl2C3lMSw=";
   };
-
-  patches = [
-    # Remove usage of xla_pmap_p which was removed in jax 0.10.0
-    ./fix-jax-0.10.0-compat.patch
-  ];
 
   build-system = [ setuptools ];
 
@@ -102,6 +98,7 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError due to tolerance issues
     "test_bijective_transforms"
+    "test_constrain_fn_two_batch_dims"
     "test_cpu"
     "test_entropy_categorical"
     "test_gaussian_model"

@@ -8,21 +8,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lintspec";
-  version = "0.16.0";
+  version = "0.18.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "lintspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hMBDOpmz8EMSWPKU16EleSxVZbLSbZPynqhrJifgt04=";
+    hash = "sha256-ORe9CjLB9dgq81jZ/Hbaem5H/NAZ4Rrv0uwll3bMRiE=";
   };
 
-  cargoHash = "sha256-WaMuHTvadj1GoFyT0p4II6EFp7nmN5LJN3SOO2kYujM=";
+  cargoHash = "sha256-bQP4P6Ti57JfVwYV/qwiLh2KqnqfoualH5fAxG6g4Fk=";
   cargoBuildFlags = [
     "--package"
     "lintspec"
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lintspec \

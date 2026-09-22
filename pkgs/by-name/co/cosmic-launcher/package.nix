@@ -11,17 +11,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-launcher";
-  version = "1.0.10";
+  version = "1.8.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-g2j0rh/gNe30DXSjPaGE8HH2aQ0tOW0wimSUt5D08yo=";
+    hash = "sha256-qfBP5EzI7+oVYt5MdY+WypG5SvsFvk46F78q/cwIpWo=";
   };
 
-  cargoHash = "sha256-KsiW+/WYKCfoUJB++ov0FGcmZhew2NjvzkBlcH/Vubw=";
+  cargoHash = "sha256-NwIcWFnN6ulNq0RVMYLlYfHGbMTgd71mbqzAAP5ZCKc=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
 
   nativeBuildInputs = [
     just
@@ -39,8 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
 
   passthru = {
     tests = {

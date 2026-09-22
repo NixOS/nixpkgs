@@ -37,14 +37,14 @@
   cmdliner,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "git";
   version = "3.18.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
+    url = "https://github.com/mirage/ocaml-git/releases/download/${finalAttrs.version}/git-${finalAttrs.version}.tbz";
     hash = "sha256-kleVYn5tquC0vRaqUGh53xHLIB5l/v446BN48Y1RfUs=";
   };
 
@@ -99,4 +99,4 @@ buildDunePackage rec {
     ];
     homepage = "https://github.com/mirage/ocaml-git";
   };
-}
+})

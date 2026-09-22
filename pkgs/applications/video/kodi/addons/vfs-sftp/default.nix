@@ -27,6 +27,7 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "SFTP Virtual Filesystem add-on for Kodi";
+    homepage = "https://github.com/xbmc/vfs.sftp";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];

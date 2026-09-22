@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  fetchpatch,
   perl,
   gd,
   rrdtool,
@@ -38,10 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # gcc14 broke detection of printf format specifiers
     # building from master seems to be fixed upstream, so next release can (likely) drop the patch
-    # just keep the CFLAGS below
     ./configure-long-long-format-gcc14.patch
+    # fix gcc15 build, remove after next release
+    (fetchpatch {
+      name = "fix-gcc15.patch";
+      url = "https://github.com/oetiker/mrtg/commit/a64a83210643114b3a892e70ce07ded5bd5de054.patch";
+      hash = "sha256-9k16WrCAETuk5DJf5pmeXFHc4AZD9Acmtq/7P24tpwc=";
+      excludes = [ "CHANGES" ];
+      stripLen = 2;
+      extraPrefix = "";
+    })
   ];
-  env.NIX_CFLAGS_COMPILE = "-Werror";
+
   env.NIX_CFLAGS_LINK = "-lm";
 
   postInstall = ''

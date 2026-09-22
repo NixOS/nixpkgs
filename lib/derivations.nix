@@ -6,7 +6,6 @@ let
     isString
     mapAttrs
     removeAttrs
-    throwIfNot
     ;
 
   showMaybeAttrPosPre =
@@ -108,18 +107,18 @@ in
       # attrset spine returned by lazyDerivation does not depend on it.
       # Instead, the individual derivation attributes do depend on it.
       checked =
-        throwIfNot (derivation.type or null == "derivation") "lazyDerivation: input must be a derivation."
-          throwIfNot
-          # NOTE: Technically we could require our outputs to be a subset of the
-          # actual ones, or even leave them unchecked and fail on a lazy basis.
-          # However, consider the case where an output is added in the underlying
-          # derivation, such as dev. lazyDerivation would remove it and cause it
-          # to fail as a buildInputs item, without any indication as to what
-          # happened. Hence the more stringent condition. We could consider
-          # adding a flag to control this behavior if there's a valid case for it,
-          # but the documentation must have a note like this.
-          (derivation.outputs == outputs)
-          ''
+        if derivation.type or null != "derivation" then
+          throw "lazyDerivation: input must be a derivation."
+        # NOTE: Technically we could require our outputs to be a subset of the
+        # actual ones, or even leave them unchecked and fail on a lazy basis.
+        # However, consider the case where an output is added in the underlying
+        # derivation, such as dev. lazyDerivation would remove it and cause it
+        # to fail as a buildInputs item, without any indication as to what
+        # happened. Hence the more stringent condition. We could consider
+        # adding a flag to control this behavior if there's a valid case for it,
+        # but the documentation must have a note like this.
+        else if derivation.outputs != outputs then
+          throw ''
             lib.lazyDerivation: The derivation ${derivation.name or "<unknown>"} has outputs that don't match the assumed outputs.
 
             Assumed outputs passed to lazyDerivation${showMaybeAttrPosPre ",\n    at " "outputs" args}:
@@ -142,6 +141,7 @@ in
             If none of the above works for you, replace the lib.lazyDerivation call by the
             expression in the derivation argument.
           ''
+        else
           derivation;
     in
     {

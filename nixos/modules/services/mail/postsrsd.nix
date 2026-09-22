@@ -281,7 +281,7 @@ in
       environment.etc."postsrsd.conf".source = configFile;
 
       systemd.services.postsrsd = {
-        description = "PostSRSd SRS rewriting server";
+        description = "Sender Rewriting Scheme daemon for Postfix";
         after = [
           "network.target"
           "postsrsd-generate-secrets.service"
@@ -289,13 +289,19 @@ in
         before = [ "postfix.service" ];
         wantedBy = [ "multi-user.target" ];
         requires = [ "postsrsd-generate-secrets.service" ];
-        restartTriggers = [ configFile ];
+        reloadTriggers = [ configFile ];
 
         serviceConfig = {
+          Type = "notify-reload";
           ExecStart = utils.escapeSystemdExecArgs [
             (lib.getExe cfg.package)
             "-C"
             "/etc/postsrsd.conf"
+          ];
+          ExecReload = toString [
+            (lib.getExe' pkgs.coreutils "kill")
+            "-SIGHUP"
+            "$MAINPID"
           ];
           User = cfg.user;
           Group = cfg.group;
@@ -319,7 +325,7 @@ in
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
           ProtectSystem = "strict";
-          ProtectProc = "invisible";
+          ProtectProc = "noaccess";
           ProcSubset = "pid";
           RemoveIPC = true;
           RestrictAddressFamilies =

@@ -12,7 +12,7 @@
   ppx_deriving,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "jwto";
   version = "0.4.0";
 
@@ -23,7 +23,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "sporto";
     repo = "jwto";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TOWwNyrOqboCm8Y4mM6GgtmxGO3NmyDdAX7m8CifA7Y=";
   };
 
@@ -51,4 +51,4 @@ buildDunePackage rec {
       jtcoolen
     ];
   };
-}
+})

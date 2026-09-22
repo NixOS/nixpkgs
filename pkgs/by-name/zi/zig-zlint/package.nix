@@ -2,25 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
-  zig_0_15,
+  zig_0_16,
   versionCheckHook,
 }:
 
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
-  version = "0.8.1";
+  version = "0.9.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
     owner = "DonIsaac";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjMgmO/kjLA9eBPXY+TgfVLyOLIpBtBigItJuon+t9k=";
+    hash = "sha256-EUTShGGp1M4ZckLgQJSXzGJQqFMx2r4zwt+mkRIPzPE=";
   };
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-H4fqly0jojU0cFVkGtqZinTI7p0cRoBFKTJtSNF/+Xk=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
 
   nativeBuildInputs = [
     zig
@@ -28,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     "-Dversion=v${finalAttrs.version}"
-    "--system"
-    (callPackage ./build.zig.zon.nix { })
   ];
 
   doCheck = true;

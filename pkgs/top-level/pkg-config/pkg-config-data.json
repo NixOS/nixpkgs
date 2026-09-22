@@ -131,14 +131,9 @@
         "alsa-lib"
       ]
     },
-    "appindicator-0.1": {
-      "attrPath": [
-        "libappindicator-gtk2"
-      ]
-    },
     "appindicator3-0.1": {
       "attrPath": [
-        "libappindicator-gtk3"
+        "libappindicator"
       ]
     },
     "bzip2": {
@@ -214,11 +209,6 @@
         "freetype"
       ]
     },
-    "gdk-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gdk-3.0": {
       "attrPath": [
         "gtk3"
@@ -227,11 +217,6 @@
     "gdk-pixbuf-2.0": {
       "attrPath": [
         "gdk-pixbuf"
-      ]
-    },
-    "gdk-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gdk-x11-3.0": {
@@ -319,19 +304,9 @@
         "glib"
       ]
     },
-    "gtk+-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gtk+-3.0": {
       "attrPath": [
         "gtk3"
-      ]
-    },
-    "gtk+-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gtksourceview-3.0": {
@@ -564,11 +539,6 @@
     "libsodium": {
       "attrPath": [
         "libsodium"
-      ]
-    },
-    "libsoup-gnome-2.4": {
-      "attrPath": [
-        "libsoup_2_4"
       ]
     },
     "libssh2": {

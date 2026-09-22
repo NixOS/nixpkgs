@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 
   # nativeBuildInputs
   makeWrapper,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texpresso";
-  version = "0.1-unstable-2026-04-02";
+  version = "0.1-unstable-2026-07-22";
 
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "96f008c94ece067fac8e896d0ab1808c948a4dd3";
-    hash = "sha256-ew7n3Sp4uYLv5jijRW2rRM9s63TQCeFgKXmmBXdYjx4=";
+    rev = "e8df7709077b2f86f6e16e6c86ceefb86de06f8d";
+    hash = "sha256-ijQwoQIJ6CsAd7eY9kkK2aHO/5FRFP5/tE6H9R/pngY=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -72,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
+
   installPhase = ''
     runHook preInstall
     install -D -t "$out/bin/" "build/texpresso"
@@ -82,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Live rendering and error reporting for LaTeX";
-    maintainers = with lib.maintainers; [ nickhu ];
+    changelog = "https://github.com/let-def/texpresso/blob/main/CHANGELOG.md";
+    mainProgram = "texpresso";
+    maintainers = with lib.maintainers; [
+      nickhu
+      stephen-huan
+    ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

@@ -17,7 +17,7 @@
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Thin wrapper library on top of rocPRIM or CUB";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

@@ -24,7 +24,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cambalache";
-  version = "0.99.3";
+  version = "1.0";
   pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "jpu";
     repo = "cambalache";
     tag = finalAttrs.version;
-    hash = "sha256-1X7fXYSIXoj8qhQLIfz2gMrCnNBZ7OJCeMykBSpnYD4=";
+    hash = "sha256-V1xiw6oGOlmLR1JOy82REIdoOTGfzXYMBJAAtjDJtfM=";
   };
 
   nativeBuildInputs = [

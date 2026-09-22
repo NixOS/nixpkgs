@@ -3,28 +3,28 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  zig_0_14,
+  zig_0_16,
   callPackage,
 }:
 
 let
-  zig = zig_0_14;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linuxwave";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
     tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
+    hash = "sha256-5LcAExNFCsQIeRqLHMCLO+MnK7p2q2qOA1SdMCR4nCw=";
   };
 
-  postConfigure = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigBuildFlags = [
+    "--system"
+    (callPackage ./deps.nix { })
+  ];
 
   nativeBuildInputs = [
     installShellFiles

@@ -13,21 +13,20 @@
 
   selinuxSupport ? false,
   libselinux,
-
-  acl,
 }:
 
 assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.8.0";
+  version = "0.12.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-nH0WtsVP1uwPvimpGnmWx5v0VButIFJu9K5wXsiC4cA=";
+    hash = "sha256-/Zi7/vh8hwniMxa+keYjW7KBeq3Xg2rqDlqyN2GOZN4=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -37,16 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-FMTzMgXcAg9dk7dfYG7lTOHYJxN3YHjf0R96LS7W3FI=";
+    hash = "sha256-aLnQOXiQD9IL6ZiBi/ENF0aHud0kCyHZrnetkV+ZTFE=";
   };
 
-  buildInputs =
-    lib.optionals (lib.meta.availableOn stdenv.hostPlatform acl) [
-      acl
-    ]
-    ++ lib.optionals selinuxSupport [
-      libselinux
-    ];
+  buildInputs = lib.optionals selinuxSupport [
+    libselinux
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -60,19 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     "PROFILE=release"
     "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
     "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-    # Explicitly enable acl, and if requested selinux.
     # We cannot rely on SELINUX_ENABLED here since our explicit assignment
     # overrides its effect in the makefile.
     "BUILD_SPEC_FEATURE=${
       lib.concatStringsSep "," (
-        # We can always enable acl, on non-Linux, libc provides the headers,
-        # only in Linux we need to add the acl lib to buildInputs.
-        [
-          "feat_acl"
-        ]
-        ++ (lib.optionals selinuxSupport [
+        lib.optionals selinuxSupport [
           "feat_selinux"
-        ])
+        ]
       )
     }"
     "SKIP_UTILS=${lib.optionalString stdenv.hostPlatform.isStatic "stdbuf"}"

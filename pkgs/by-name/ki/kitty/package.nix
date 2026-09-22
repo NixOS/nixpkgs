@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   python3Packages,
   libunistring,
   harfbuzz,
@@ -45,27 +46,26 @@
   makeBinaryWrapper,
   darwin,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.46.2";
+  version = "0.48.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-x+jBQrg3Iaj6PLMF1hIjS46odxv5GxPMcvC9JddYCHo=";
+    hash = "sha256-qNgVPpvMm8Y/nbBjVvWVuZ954ZXIuWmXhldP3w8MBhU=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-FaSWBeQJlvw9vXcHJ/OaFd48K8d7X86X8w7wpG84Ltw=";
+      vendorHash = "sha256-BZudfNfREwNrgalaimC5Lp+UIdFS+jHFLl9mEXcHYMI=";
     }).goModules;
 
   buildInputs = [
@@ -143,6 +143,9 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    (replaceVars ./libxkbcommon-runtime-path.patch {
+      libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
+    })
   ];
 
   hardeningDisable = [
@@ -153,6 +156,7 @@ buildPythonApplication rec {
   env = {
     CGO_ENABLED = 0;
     GOFLAGS = "-trimpath";
+    GOTOOLCHAIN = "local";
   };
 
   configurePhase = ''
@@ -215,29 +219,39 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
-      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
-      --replace test_ssh_copy no_test_ssh_copy \
-      --replace test_ssh_env_vars no_test_ssh_env_vars
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration \
-      --replace test_zsh_integration no_test_zsh_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+
+      # These depend on cgroups and other resources that don't work as the tests expect in the sandbox
+      rm kitty_tests/child.py
+    '';
 
   checkPhase = ''
     runHook preCheck

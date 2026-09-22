@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ readline ];
 
+  patches = [ ./gcc15-fixes.patch ];
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   env.NIX_CFLAGS_COMPILE = toString (

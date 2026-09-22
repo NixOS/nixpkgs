@@ -1,44 +1,47 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   testers,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gogcli";
-  version = "0.11.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hJU40ysjRx4p9SWGmbhhpToYCpk3DcMAWCnKqxHRmh0=";
+    hash = "sha256-JAIN0MaQegHkg1zBsIYf2YIh3VyeFvQdvyXe9U9AZjg=";
   };
 
-  vendorHash = "sha256-WGRlv3UsK3SVBQySD7uZ8+FiRl03p0rzjBm9Se1iITs=";
+  vendorHash = "sha256-6+/8FVPtrRdE1Hn/MkneZWUiOD/fnQkGYG/T/KD8Du8=";
 
   subPackages = [ "cmd/gog" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steipete/gogcli/internal/cmd.version=v${finalAttrs.version}"
-    "-X github.com/steipete/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
-    "-X github.com/steipete/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/openclaw/gogcli/internal/cmd.version=v${finalAttrs.version}"
+    "-X github.com/openclaw/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
+    "-X github.com/openclaw/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "gog --version";
-    version = "v${finalAttrs.version}";
+    version = "v${finalAttrs.version} (${finalAttrs.src.rev} 1970-01-01T00:00:00Z)";
   };
 
   meta = {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
-    homepage = "https://github.com/steipete/gogcli";
+    homepage = "https://github.com/openclaw/gogcli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ macalinao ];
+    maintainers = with lib.maintainers; [
+      macalinao
+      rschaffar
+    ];
     mainProgram = "gog";
   };
 })

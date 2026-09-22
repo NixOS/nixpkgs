@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cavif";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-F2b03x+jklgxa3VcRA3y0wuK7AQ2LJtCEvCa6eFeG3w=";
+    hash = "sha256-+qtNX5zxMQSugCxxCdgTABfOlTQ3KUTbAr4xKahGkO4=";
   };
 
-  cargoHash = "sha256-x/0Kgf8oWjL6m2/8ol32EJpKkWSgBRbdCTay6KYrtzg=";
+  cargoHash = "sha256-o5SEeEcMYSdMbDVGeSiVyp4S6eRQkuTAn9FURAJa3LU=";
 
   nativeBuildInputs = [ nasm ];
 

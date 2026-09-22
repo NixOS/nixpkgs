@@ -12,7 +12,6 @@
   gtk4-layer-shell,
   adwaita-icon-theme,
   libxkbcommon,
-  openssl,
   pkg-config,
   hicolor-icon-theme,
   rustPlatform,
@@ -33,16 +32,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-vhkNdvzY9xd8qmKgKtpVRTdvmS1QxnGKDFCpttqX1GE=";
+    hash = "sha256-JBUpT7eJTRXUe5xLmzDr/MnoFgqyp9LjfI9aY0tWqsg=";
   };
 
-  cargoHash = "sha256-ptzq0407IaNrXXiksQKXDUbs2wPTz4GHtnCG49EbOcY=";
+  cargoHash = "sha256-pcPHatZVGRxqu0TmZ8+ZXV/XOj829LDhg9mB1Jt7yhg=";
 
   buildInputs = [
     gtk4
@@ -58,7 +57,6 @@ rustPlatform.buildRustPackage rec {
     systemd
     dbus
   ]
-  ++ lib.optionals (hasFeature "http") [ openssl ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
   ++ lib.optionals (hasFeature "keyboard") [

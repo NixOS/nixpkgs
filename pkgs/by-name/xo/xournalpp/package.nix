@@ -11,7 +11,6 @@
 
   adwaita-icon-theme,
   alsa-lib,
-  binutils,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -20,7 +19,6 @@
   libsndfile,
   libxml2,
   libzip,
-  pcre,
   poppler,
   portaudio,
   qpdf,
@@ -33,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.4";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RNGVUgpn1Wefc48x5E88AGk4rtXyu0RovZxaS2bqQ+c=";
+    hash = "sha256-CvuHgZ824jLF/L0/PAnbT4RXFLV+Uh2RJ30DA4PEEbE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxml2
     libzip
-    pcre
     poppler
     portaudio
     qpdf
@@ -69,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLua lua5_3;
 
   buildFlags = [ "translations" ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/share/thumbnailers/com.github.xournalpp.xournalpp.thumbnailer \
+      --replace-fail "Exec=xournalpp-thumbnailer" "Exec=$out/bin/xournalpp-thumbnailer"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

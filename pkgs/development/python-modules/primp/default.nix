@@ -11,23 +11,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "primp";
-  version = "1.2.2";
+  version = "2.0.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AOMlf7Qo9CJFyEUXdtQuwnFQVBzejHTc6UHie/OlHOo=";
+    hash = "sha256-eGVmdW6Npi9tCxeMUhrL5GG3f0FgHo+9fA/+ivH2n1M=";
   };
 
-  # The Cargo.lock is not pushed upstream
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
   buildAndTestSubdir = "crates/primp-python";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-V3m7q1Gvv62VIyfJqeeDLUyNUA1FEqgVW4GCQW1+86o=";
+  };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -43,6 +44,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-asyncio
   ];
+  # pytest runs from the source root but asyncio_mode=auto is configured in
+  # crates/primp-python/pyproject.toml, which pytest doesn't pick up from there
+  pytestFlags = [
+    "--override-ini=asyncio_mode=auto"
+  ];
+
   disabledTestPaths = [
     "crates/primp-python/tests/test_impersonate.py"
     "crates/primp-python/tests/test_header_order.py"
@@ -50,7 +57,7 @@ buildPythonPackage (finalAttrs: {
 
   # Tests crash with Abort trap: 6 on Darwin due to tokio runtime
   # initialization in PyInit_pyo3_async_runtimes being blocked by the sandbox.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "primp" ];
 

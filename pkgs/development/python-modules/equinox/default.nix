@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.7";
+  version = "0.13.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vgmU8cqNCyiZYah1SSwzVtLS+YB2T1uooCC17k12+h8=";
+    hash = "sha256-JiIZKWuSkvrF09GdmegUeTyidaM5IRp4uqjJRsn86E4=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -58,6 +58,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "equinox" ];
+
+  pytestFlags = [
+    # UserWarning: Explicitly requested dtype int64 requested in ShapeDtypeStruct is not available, and will be truncated to dtype int32.
+    # To enable more dtypes, set the jax_enable_x64 configuration option or the JAX_ENABLE_X64 shell environment variable.
+    # See https://github.com/jax-ml/jax#current-gotchas for more.
+    "-Wignore::UserWarning"
+  ];
 
   disabledTests = [
     # Flaky under heavy load:

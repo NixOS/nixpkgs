@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "intel";
+    owner = "cornelisnetworks";
     repo = "opa-psm2";
     rev = "PSM2_${finalAttrs.version}";
     sha256 = "sha256-MzocxY+X2a5rJvTo+gFU0U10YzzazR1IxzgEporJyhI=";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/intel/opa-psm2";
+    homepage = "https://github.com/cornelisnetworks/opa-psm2";
     description = "PSM2 library supports a number of fabric media and stacks";
     license = with lib.licenses; [
       gpl2Only

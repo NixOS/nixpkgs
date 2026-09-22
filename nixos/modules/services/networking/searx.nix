@@ -5,44 +5,50 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRenamedOptionModule
+    optionalAttrs
+    types
+    ;
+
   runDir = "/run/searx";
 
   cfg = config.services.searx;
+  yamlFormat = pkgs.formats.yaml { };
+  tomlFormat = pkgs.formats.toml { };
 
-  settingsFile = pkgs.writeText "settings.yml" (
-    builtins.toJSON (removeAttrs cfg.settings [ "redis" ])
-  );
+  settingsFile = yamlFormat.generate "settings.yml" (builtins.removeAttrs cfg.settings [ "redis" ]);
 
-  faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
-  limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+  faviconsSettingsFile = tomlFormat.generate "favicons.toml" cfg.faviconsSettings;
+  limiterSettingsFile = tomlFormat.generate "limiter.toml" cfg.limiterSettings;
 
   generateConfig = ''
     cd ${runDir}
 
-    # write NixOS settings as JSON
+    # write NixOS settings
     (
       umask 077
-      ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
+      ${lib.getExe pkgs.envsubst} < ${settingsFile} > settings.yml
+      ${
+        if (cfg.faviconsSettings != { }) then
+          "ln -sf ${faviconsSettingsFile} favicons.toml"
+        else
+          "rm -f favicons.toml"
+      }
+      ${
+        if (cfg.limiterSettings != { }) then
+          "ln -sf ${limiterSettingsFile} limiter.toml"
+        else
+          "rm -f limiter.toml"
+      }
     )
   '';
-
-  settingType =
-    with types;
-    (oneOf [
-      bool
-      int
-      float
-      str
-      (listOf settingType)
-      (attrsOf settingType)
-    ])
-    // {
-      description = "JSON value";
-    };
 in
 {
   options = {
@@ -107,7 +113,7 @@ in
               lib.warn "Obsolete option `services.searx.settings.redis' is used. It was renamed to `services.searx.settings.valkey'" config.redis
             );
 
-            freeformType = settingType;
+            freeformType = yamlFormat.type;
           }
         );
         default = { };
@@ -136,25 +142,25 @@ in
         '';
       };
 
-      settingsFile = mkOption {
+      settingsPath = mkOption {
         type = types.path;
-        default = "${runDir}/settings.yml";
+        default = runDir;
         description = ''
-          The path of the Searx server settings.yml file.
-          If no file is specified, a default file is used (default config file has debug mode enabled).
+          The path of the SearXNG settings directory or the settings.yml file.
+          If no path is specified, a default one is used (default config file has debug mode enabled).
 
           ::: {.note}
           Setting this options overrides [](#opt-services.searx.settings).
           :::
 
           ::: {.warning}
-          This file, along with any secret key it contains, will be copied into the world-readable Nix store.
+          This path, along with any secret keys it contains, will be copied into the world-readable Nix store.
           :::
         '';
       };
 
       faviconsSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
@@ -182,18 +188,23 @@ in
       };
 
       limiterSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
-            real_ip = {
-              x_for = 1;
+            botdetection = {
               ipv4_prefix = 32;
               ipv6_prefix = 56;
-            }
-            botdetection.ip_lists.block_ip = [
-              # "93.184.216.34" # example.org
-            ];
+
+              trusted_proxies = [
+                "127.0.0.0/8"
+                "::1"
+              ];
+
+              ip_lists.block_ip = [
+                # "93.184.216.34" # example.org
+              ];
+            };
           }
         '';
         description = ''
@@ -252,6 +263,7 @@ in
   };
 
   imports = [
+    (mkRenamedOptionModule [ "services" "searx" "settingsFile" ] [ "services" "searx" "settingsPath" ])
     (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
     (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
   ];
@@ -264,17 +276,7 @@ in
       }
     ];
 
-    environment = {
-      etc = {
-        "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
-          source = faviconsSettingsFile;
-        };
-        "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-          source = limiterSettingsFile;
-        };
-      };
-      systemPackages = [ cfg.package ];
-    };
+    environment.systemPackages = [ cfg.package ];
 
     services = {
       nginx = lib.mkIf cfg.configureNginx {
@@ -338,7 +340,7 @@ in
           enable-threads = true;
           module = "searx.webapp";
           env = [
-            "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+            "SEARXNG_SETTINGS_PATH=${cfg.settingsPath}"
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
@@ -379,17 +381,60 @@ in
         after = [
           "searx-init.service"
           "network.target"
-        ];
+        ]
+        ++ lib.optionals cfg.redisCreateLocally [ "redis-searx.service" ];
         serviceConfig = {
           User = "searx";
+          DynamicUser = true;
           Group = "searx";
           ExecStart = lib.getExe cfg.package;
+
+          CacheDirectory = "searx";
+          CacheDirectoryMode = "0700";
+
+          ReadOnlyPaths = [ cfg.settingsPath ];
+          ReadWritePaths = lib.optional cfg.redisCreateLocally config.services.redis.servers.searx.unixSocket;
+
+          CapabilityBoundingSet = null;
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateIPC = true;
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
         }
         // optionalAttrs (cfg.environmentFile != null) {
           EnvironmentFile = cfg.environmentFile;
         };
         environment = {
-          SEARXNG_SETTINGS_PATH = cfg.settingsFile;
+          SEARXNG_SETTINGS_PATH = cfg.settingsPath;
         };
       };
 
@@ -398,7 +443,7 @@ in
         after = [ "searx-init.service" ];
         restartTriggers = [
           cfg.package
-          cfg.settingsFile
+          cfg.settingsPath
         ]
         ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
@@ -416,7 +461,7 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.server.port ]; };
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     SuperSandro2000
     _999eagle
   ];

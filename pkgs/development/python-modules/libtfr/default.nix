@@ -4,7 +4,7 @@
   buildPythonPackage,
 
   # build-system
-  setuptools,
+  setuptools_80,
   pkg-config,
   cython,
   pkgconfig,
@@ -19,12 +19,12 @@
 }:
 buildPythonPackage rec {
   pname = "libtfr";
-  version = "2.1.9";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GxRjkQ6ng2wNONRit8ZsCwWsVlXy//7taeU6np/5aU0=";
+    hash = "sha256-+fq5cpBiY5AJYDoxEAoQG8iEoEDfhHqChBAky1jKD/g=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [

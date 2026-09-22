@@ -17,19 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rk4CZrWQRe2wsx8/eXP0BIeaU/Gxmcb+Kry5F8t4YKQ=";
+    hash = "sha256-CN9fSo7CQFkbpxPRwFSNJovTJBAjqEhqQzwHfYirGmo=";
   };
-
-  patches = [
-    # https://github.com/mchehab/rasdaemon/pull/246
-    ./ras-mc-ctl_fix_invalid_column_in_signal_events_query.patch
-  ];
 
   strictDeps = true;
 

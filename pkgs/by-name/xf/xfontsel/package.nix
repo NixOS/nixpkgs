@@ -14,11 +14,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfontsel";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xfontsel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ekuGZYp3ASU+0P6KZkceVOTKy7pm1yePF1nTs6M6Ask=";
+    hash = "sha256-eP8Bh1fHsiE3z101Ju9ek4i8DN6tHwDa8siY4uJ0VT8=";
   };
 
   nativeBuildInputs = [

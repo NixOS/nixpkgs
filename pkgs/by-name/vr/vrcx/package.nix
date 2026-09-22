@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  nodejs_22,
-  electron_39,
+  nodejs_24,
+  electron_42,
   makeWrapper,
   fetchFromGitHub,
   buildNpmPackage,
@@ -12,45 +12,49 @@
   dotnetCorePackages,
 }:
 let
-  node = nodejs_22;
-  electron = electron_39;
-  dotnet = dotnetCorePackages.dotnet_9;
+  node = nodejs_24;
+  electron = electron_42;
+  dotnet = dotnetCorePackages.dotnet_10;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2026.02.11";
+  version = "2026.09.16";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/CMxFjIcLqk2oTnXUV519NkrImsnq3/kUGiew5E3Zyw=";
+    hash = "sha256-CNO3Ur8xp77QN+HCexCpGX+QdAKM76YOSWOG3ZHT1g0=";
   };
 
   nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-bli8TKzxcASuCegEGwiHM5siMXGK4WuzhweNr5HaCvg=";
+  npmDepsHash = "sha256-fFuqtISueODEFzuqWWL3aG4DWbrq2G4dHsXi3RWByjY=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
-  preBuild = ''
-    # Build fails at executing dart from sass-embedded
-    rm -r node_modules/sass-embedded*
+  postPatch = ''
+    # VRCX's upstream lockfile lacks `integirty` and `resolved` fields
+    # annoying but can be trivially fixed by cloning the vrcx repo locally then
+    # regenerating the lockfile with `nix run nixpkgs#npm-lockfile-fix -- package-lock.json`
+    cp ${./package-lock.json} package-lock.json
   '';
 
   buildPhase = ''
     runHook preBuild
 
     env PLATFORM=linux npm exec vite build src
-    node ./src-electron/patch-package-version.js
-    npm exec electron-builder -- --dir \
+    node ./build-scripts/patch-package-version.js
+    npm exec electron-builder -- \
+      --config electron-builder.config.js \
+      --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
-    node ./src-electron/patch-node-api-dotnet.js
+    node ./build-scripts/patch-node-api-dotnet.js
 
     runHook postBuild
   '';

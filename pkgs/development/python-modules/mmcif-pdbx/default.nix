@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mmcif-pdbx";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Electrostatics";
     repo = "mmcif_pdbx";
     tag = "v${version}";
-    hash = "sha256-ymMQ/q4IMoq+B8RvIdL0aqolKxyE/4rnVfd4bUV5OUY=";
+    hash = "sha256-HzRJ8bzUHAmF7WA20DefvgSNDxMaqJCxfgqTHrS0BqU=";
   };
 
   nativeBuildInputs = [ setuptools ];

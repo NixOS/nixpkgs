@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "gpiozero";
-  version = "2.0.1";
+  version = "2.0.1.post3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpiozero";
     repo = "gpiozero";
     tag = "v${version}";
-    hash = "sha256-ifdCFcMH6SrhKQK/TJJ5lJafSfAUzd6ZT5ANUzJGwxI=";
+    hash = "sha256-8NSGR+GLnf+7F9iu0XVK/yVYVw8L9b73FIs07OSvMj4=";
   };
 
   outputs = [

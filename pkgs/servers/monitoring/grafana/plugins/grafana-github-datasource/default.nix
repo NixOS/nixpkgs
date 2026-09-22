@@ -2,12 +2,11 @@
 
 grafanaPlugin {
   pname = "grafana-github-datasource";
-  version = "2.8.0";
+  version = "2.9.1";
   zipHash = {
-    x86_64-linux = "sha256-hKElyWX4fcQtF3eyYVRuaJjvNWY9CV2bNoNkFLeJQLc=";
-    aarch64-linux = "sha256-+ygxJc+ovlqjcs68QD71JQepINTeauA41sKrJa6h8gc=";
-    x86_64-darwin = "sha256-ZrvBxCi6gyRFly0NtTPWUWzTbH3rp92Vy0C4n1hO/pA=";
-    aarch64-darwin = "sha256-s4q+k1gbOBCeMDpkTpui0egOxzoBjbKoX63pwVqmY6A=";
+    x86_64-linux = "sha256-nesDTVcurnKkMoWTfa5aEbTk7BQ3AW5iAC1tomR0xiE=";
+    aarch64-linux = "sha256-bAuSHzwQL+633x/bCew3tvJH9BCKyjs3oi7GXmOpgtE=";
+    aarch64-darwin = "sha256-U8RT4ivKjvxMpAj6TmCrF+VRzT3PiDF/doAwi99S+eo=";
   };
   meta = {
     description = "Allows GitHub API data to be visually represented in Grafana dashboards";

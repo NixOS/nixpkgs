@@ -6,13 +6,13 @@
 }:
 postgresqlBuildExtension (finalAttrs: {
   pname = "system_stats";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "system_stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+DHfhLBoYdWBvXZVcvnWlNwceTNsQ/irEdgnklv5onA=";
+    hash = "sha256-ANv0JnxX0lG9nrzbfl0HARVxlrFTTJcIK7w8oYLmqKs=";
   };
 
   buildFlags = [ "PG_CFLAGS=-Wno-error=vla" ];

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    owner = "Decodetalkers";
+    owner = "neocmakelsp";
     repo = "neocmakelsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zhu3ka4suqvLLZMXC3/sRPW7EBg1YII5T+kVMf/zuH0=";
+    hash = "sha256-61sTd3FIjoNKzOFp/Z6UUDa9NOWJPVal4Wf9UZ66gqU=";
   };
 
-  cargoHash = "sha256-s7Lr0mViKUVNv1BzP8NN7102yAC/RDWkijgUGWgUK7M=";
+  cargoHash = "sha256-HYAVuWIFVp4Br3lDqb2r3xion2Rz6ChrgVIj3Z8wymE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
-    homepage = "https://github.com/Decodetalkers/neocmakelsp";
+    homepage = "https://github.com/neocmakelsp/neocmakelsp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

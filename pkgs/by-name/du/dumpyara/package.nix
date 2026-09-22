@@ -10,7 +10,7 @@
   cpio,
   dumpyara,
   erofs-utils,
-  squashfsTools,
+  squashfs-tools,
   zip,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           nativeBuildInputs = [
             android-tools
             dumpyara
-            squashfsTools
+            squashfs-tools
             zip
           ];
         }

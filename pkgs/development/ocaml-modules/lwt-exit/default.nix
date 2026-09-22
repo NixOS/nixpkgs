@@ -26,6 +26,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "Opinionated clean-exit and signal-handling library for Lwt programs";
+    homepage = "https://gitlab.com/nomadic-labs/lwt-exit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "meshcentral";
-  version = "1.1.57";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Ylianst";
     repo = "MeshCentral";
     tag = finalAttrs.version;
-    hash = "sha256-tXv4AWFLBoaHraSTYbEuNjdxnB3tYyAYq5xPe4jRcmw=";
+    hash = "sha256-a+vqNjmKP866O2t+UsedpgYtWFbjeoYNtuCziAa436A=";
   };
 
-  npmDepsHash = "sha256-vWCd+7SnQCf6iBhQboqMKL7TQRPxvt4DOe9+XJ8XJ1Y=";
+  npmDepsHash = "sha256-ZnSpqw4pn6OI8Gh9qLseTLH24jtj1zPGfHiMlUX+l/s=";
   # Using the npmDeps with a newer nodejs causes `npm ci` errors, also upstream
   # states they stick to the LTS version of nodejs:
   # https://meshcentral.com/docs/MeshCentral2InstallGuide.pdf
@@ -46,7 +46,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Computer management web app";
     homepage = "https://meshcentral.com/";
-    maintainers = with lib.maintainers; [ ma27 ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };

@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mullvad-compass";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "mullvad-compass";
     tag = finalAttrs.version;
-    hash = "sha256-OhaXabjkimeMXty6msqDJVvnWXu8G6jWz/E2x7ZYrDI=";
+    hash = "sha256-4Q6Pm20stbuY+KQHhIPGegCIwGiYIagduN//d+CKKXE=";
   };
 
   vendorHash = "sha256-gEdtoJjCa0nVyi7T4zzv6xUDTQCYFi4ANFaqXGeqcsI=";

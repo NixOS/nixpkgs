@@ -25,14 +25,14 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sogo";
-  version = "5.12.7";
+  version = "5.12.9";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sogo";
     rev = "SOGo-${version}";
-    hash = "sha256-HMnJQTC9P6gOVP1hViRtshIS0oWj0AKoRkeNr/udlso=";
+    hash = "sha256-Xh9Xjq+4yDnEKz5vWgUre+K6vXHTiRRFXZL6dkITbJU=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,12 @@ clangStdenv.mkDerivation rec {
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+
     # Exclude NIX_ variables
     sed -i 's/grep GNUSTEP_/grep ^GNUSTEP_/g' configure
 

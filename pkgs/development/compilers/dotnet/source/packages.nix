@@ -28,6 +28,9 @@ let
             (allow mach-lookup (global-name "com.apple.SecurityServer")
                               (global-name "com.apple.system.opendirectoryd.membership"))
           '';
+          passthru = args.passthru or { } // {
+            inherit (vmr) icu hasCrossTargetBug;
+          };
         }
       )
     );
@@ -184,7 +187,6 @@ let
 
     passthru = {
       inherit (vmr)
-        icu
         targetRid
         hasILCompiler
         ;
@@ -221,10 +223,6 @@ let
       runHook postInstall
     '';
 
-    passthru = {
-      inherit (vmr) icu;
-    };
-
     meta = vmr.meta // {
       mainProgram = "dotnet";
     };
@@ -251,10 +249,6 @@ let
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit (vmr) icu;
-    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";

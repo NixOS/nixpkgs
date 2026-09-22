@@ -7,25 +7,30 @@
   lib,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
 }:
 let
-  version = "0.25.3";
+  pnpm = pnpm_10;
+in
+buildGoModule (finalAttrs: {
+  pname = "memos";
+  version = "0.30.0";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
-    rev = "v${version}";
-    hash = "sha256-lAKzPteGjGa7fnbB0Pm3oWId5DJekbVWI9dnPEGbiBo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MXvEMJN/XyZux/qL/9qZYkbo6fQzYFeCWHxFCtN1M8o=";
   };
 
-  memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
+  memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
     pname = "memos-web";
-    inherit version src;
+    inherit (finalAttrs) version src;
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/web";
+      inherit (finalWebAttrs) pname version src;
+      inherit pnpm;
+      sourceRoot = "${finalWebAttrs.src.name}/web";
       fetcherVersion = 3;
-      hash = "sha256-xEOnxCgBD4uLypcZzCO+31S4r0sSfz8PpgEmZASeRZ4=";
+      hash = "sha256-4oUA0z6VXL0belhK23wZgwCpGmLqDnEez3nMA/uHUTw=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -44,21 +49,26 @@ let
       runHook postInstall
     '';
   });
-in
-buildGoModule {
-  pname = "memos";
-  inherit
-    version
-    src
-    memos-web
-    ;
 
-  vendorHash = "sha256-BoJxFpfKS/LByvK4AlTNc4gA/aNIvgLzoFOgyal+aF8=";
+  vendorHash = "sha256-nyUBXPC8nt+7s2jFHohF0PWBGky24ZSXWtSI4XVf2kU=";
+
+  ldflags = [
+    "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
+  ];
 
   preBuild = ''
     rm -rf server/router/frontend/dist
-    cp -r ${memos-web} server/router/frontend/dist
+    cp -r ${finalAttrs.memos-web} server/router/frontend/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestEntrypointDoesNotLoopWhenTargetUIDIsRoot" # requires root
+        "TestUserWebhookSigningSecretLifecycle" # requires internet access for example.com
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -70,7 +80,7 @@ buildGoModule {
   meta = {
     homepage = "https://usememos.com";
     description = "Lightweight, self-hosted memo hub";
-    changelog = "https://github.com/usememos/memos/releases/tag/${src.rev}";
+    changelog = "https://github.com/usememos/memos/releases/tag/${finalAttrs.src.rev}";
     maintainers = with lib.maintainers; [
       indexyz
       kuflierl
@@ -78,4 +88,4 @@ buildGoModule {
     license = lib.licenses.mit;
     mainProgram = "memos";
   };
-}
+})

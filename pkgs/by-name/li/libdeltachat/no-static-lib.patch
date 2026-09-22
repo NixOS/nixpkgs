@@ -1,30 +1,17 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5587e391..a18092f5 100644
+index 435f5e75a..26377aac8 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -20,7 +20,6 @@ endif()
- 
- add_custom_command(
- 	OUTPUT
--	"${CMAKE_BINARY_DIR}/target/release/libdeltachat.a"
- 	"${CMAKE_BINARY_DIR}/target/release/libdeltachat.${DYNAMIC_EXT}"
- 	"${CMAKE_BINARY_DIR}/target/release/pkgconfig/deltachat.pc"
-         COMMAND
-@@ -35,12 +34,10 @@ add_custom_target(
- 	lib_deltachat
- 	ALL
- 	DEPENDS
--	"${CMAKE_BINARY_DIR}/target/release/libdeltachat.a"
- 	"${CMAKE_BINARY_DIR}/target/release/libdeltachat.${DYNAMIC_EXT}"
- 	"${CMAKE_BINARY_DIR}/target/release/pkgconfig/deltachat.pc"
+@@ -39,7 +39,6 @@ add_custom_target(
  )
  
- install(FILES "deltachat-ffi/deltachat.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
--install(FILES "${CMAKE_BINARY_DIR}/target/${ARCH_DIR}/release/libdeltachat.a" DESTINATION ${CMAKE_INSTALL_LIBDIR})
- install(FILES "${CMAKE_BINARY_DIR}/target/${ARCH_DIR}/release/libdeltachat.${DYNAMIC_EXT}" DESTINATION ${CMAKE_INSTALL_LIBDIR})
- install(FILES "${CMAKE_BINARY_DIR}/target/${ARCH_DIR}/release/pkgconfig/deltachat.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+ install(FILES "deltachat-ffi/deltachat.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+-install(FILES "${CARGO_OUT_DIR}/libdeltachat.a" DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ install(FILES "${CARGO_OUT_DIR}/libdeltachat.${DYNAMIC_EXT}" DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ install(FILES "${CARGO_OUT_DIR}/pkgconfig/deltachat.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+ 
 diff --git a/deltachat-ffi/Cargo.toml b/deltachat-ffi/Cargo.toml
-index d66cb00f..48347a48 100644
+index 0e316d1a3..e09f6566d 100644
 --- a/deltachat-ffi/Cargo.toml
 +++ b/deltachat-ffi/Cargo.toml
 @@ -11,7 +11,7 @@ categories = ["cryptography", "std", "email"]
@@ -35,4 +22,4 @@ index d66cb00f..48347a48 100644
 +crate-type = ["cdylib"]
  
  [dependencies]
- deltachat = { path = "../", default-features = false }
+ deltachat = { workspace = true, default-features = false }

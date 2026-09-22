@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://libcpuid.sourceforge.net/";
-    description = "Small C library for x86 CPU detection and feature extraction";
+    description = "Small C library for CPU detection and feature extraction";
     mainProgram = "cpuid_tool";
     changelog = "https://raw.githubusercontent.com/anrieff/libcpuid/master/ChangeLog";
     license = lib.licenses.bsd2;
     maintainers = [
     ];
-    platforms = lib.platforms.x86;
+    platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
   };
 })

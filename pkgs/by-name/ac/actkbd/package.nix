@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out \
-      --replace /etc $out/etc
+      --replace-fail /usr/local $out \
+      --replace-fail /etc $out/etc
   '';
 
   postInstall = ''

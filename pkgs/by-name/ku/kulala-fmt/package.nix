@@ -1,29 +1,71 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  kulala-core,
+  makeBinaryWrapper,
+  nodejs,
+  pnpm_11,
+  pnpmConfigHook,
 }:
 
-buildGoModule (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-fmt";
-  version = "1.4.0";
+  version = "4.3.4";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sARZDtrF8JihVuE2Ix/f4h/OWIbdGW48xpVJlVmTdYY=";
   };
 
-  vendorHash = "sha256-GazDEm/qv0nh8vYT+Tf0n4QDGHlcYtbMIj5rlZBvpKo=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-wPMWFYRd3R570oAMORHTKamE0qcmIT+LFRuTiXFX97M=";
+  };
 
-  env.CGO_ENABLED = 0;
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${finalAttrs.version}"
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    nodejs
+    pnpm_11
+    pnpmConfigHook
   ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 dist/cli.cjs $out/lib/kulala-fmt/cli.cjs
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/kulala-fmt \
+      --add-flags $out/lib/kulala-fmt/cli.cjs \
+      --set KULALA_CORE_PATH ${lib.getExe kulala-core}
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/kulala-fmt --version | grep -x ${lib.escapeShellArg finalAttrs.version}
+    printf '%s\n' 'GET https://example.com' | $out/bin/kulala-fmt format --stdin | grep 'GET https://example.com'
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "Opinionated .http and .rest files linter and formatter";
@@ -31,6 +73,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CnTeng ];
     mainProgram = "kulala-fmt";
-    platforms = lib.platforms.all;
+    platforms = nodejs.meta.platforms;
   };
 })

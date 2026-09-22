@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   boost,
   gettext,
   libime,
@@ -18,6 +18,7 @@
   fmt,
   qtbase,
   luaSupport ? true,
+  nlohmann_json,
 }:
 
 let
@@ -35,18 +36,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.12";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-bAx5m+tU8hT1WdaLChpQV3J0l+QJzDLzMEPTgjEGCuw=";
+    hash = "sha256-EtAoUoZQqxb049oD7r/UgdpJdS/kenMn3t1SHv+YIkg=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
     fcitx5-lua
   ];
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     fmt
     qtbase
+    nlohmann_json
   ]
   ++ lib.optional luaSupport fcitx5-lua;
 

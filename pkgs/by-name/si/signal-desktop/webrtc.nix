@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   buildPackages,
   ninja,
   gn,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Chromium's Darwin toolchain defines _LIBCPP_HARDENING_MODE itself; keep
   # cc-wrapper from injecting a conflicting default.
-  hardeningDisable = lib.optionals stdenv.isDarwin [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "libcxxhardeningfast"
     "libcxxhardeningextensive"
   ];
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gclient2nix.gclientUnpackHook
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk
     xcodebuild
   ];
@@ -78,11 +79,40 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     pulseaudio
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.compiler-rt
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+  ];
+
+  env = {
+    BUILD_CC = "$CC_FOR_BUILD";
+    BUILD_CXX = "$CXX_FOR_BUILD";
+    BUILD_AR = "$AR_FOR_BUILD";
+    BUILD_NM = "$NM_FOR_BUILD";
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-Wno-changes-meaning";
+  };
+
+  patches = [
+    # clang++: error: unknown argument: '-fno-lifetime-dse'
+    ./chromium-147-llvm-22.patch
+
+    # Keep in sync with Chromium's LLVM 22 compatibility patches.
+    # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+    ./chromium-149-llvm-22.patch
+
+    # ninja: error: 'ar', needed by 'obj/third_party/protobuf/libprotoc_lib.a',
+    # missing and no known rule to make it
+    (fetchpatch {
+      name = "chromium-150-backport-build--Omit-ar-from-inputs-when-resolved-via--PATH.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7904982
+      url = "https://chromium.googlesource.com/chromium/src/+/60f987d8d5f7272793a40290d060b8f50933f825^!?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
+    })
   ];
 
   postPatch = ''
@@ -92,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace modules/audio_device/linux/pulseaudiosymboltable_linux.cc \
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix Darwin Python script shebangs for sandbox builds
     patchShebangs build/mac/should_use_hermetic_xcode.py build/toolchain/apple/linker_driver.py
 
@@ -105,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build/config/mac/BUILD.gn \
       --replace-fail "apple-macos" "apple-darwin"
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace modules/audio_device/linux/alsasymboltable_linux.cc \
       --replace-fail "libasound.so.2" "${alsa-lib}/lib/libasound.so.2"
   '';
@@ -116,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   gnFlags =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # webrtc uses chromium's `src/build/BUILDCONFIG.gn`. many of these flags
       # are copied from pkgs/applications/networking/browsers/chromium/common.nix.
       ''target_os="linux"''
@@ -133,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
       ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ''target_os="mac"''
       ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
       "use_sysroot=true"
@@ -164,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
       "use_custom_libcxx=false"
       ''rust_sysroot_absolute="${buildPackages.rustc}"''
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
       ''host_toolchain="//build/toolchain/linux/unbundle:host"''
       ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:host"''
     ];
@@ -182,7 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WebRTC library used by Signal";
     homepage = "https://github.com/SignalApp/webrtc";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

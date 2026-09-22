@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  env = {
+    CXXFLAGS = "-std=c++11";
+  };
+
   nativeBuildInputs = [
     cmake
   ];

@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
-  fetchpatch,
-  applyPatches,
   gitMinimal,
   makeBinaryWrapper,
+  cmake,
   installShellFiles,
   rustPlatform,
   testers,
@@ -18,6 +18,7 @@
   pkg-config,
   glibcLocalesUtf8,
   boehmgc,
+  libghostty-vt,
   llvmPackages,
   nixd,
   bash,
@@ -25,27 +26,16 @@
 }:
 
 let
-  version = "2.0.6";
-  devenvNixVersion = "2.32";
-  devenvNixRev = "e127c1c94cefe02d8ca4cca79ef66be4c527510e";
+  version = "2.3.1";
+  devenvNixVersion = "2.35";
+  devenvNixRev = "b9b81726b38469c55b9706d80d37d6c73cc7f76c";
 
-  devenvNixSrc = applyPatches {
+  devenvNixSrc = fetchFromGitHub {
     name = "devenv-nix-${devenvNixVersion}-source";
-    src = fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = devenvNixRev;
-      hash = "sha256-MRNVInSmvhKIg3y0UdogQJXe+omvKijGszFtYpd5r9k=";
-    };
-    patches = [
-      # Lowdown 3.0 compatibility; devenv's nix fork (2.32-based) predates
-      # the upstream fix.
-      (fetchpatch {
-        name = "nix-lowdown-3.0-support.patch";
-        url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
-        hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
-      })
-    ];
+    owner = "cachix";
+    repo = "nix";
+    rev = devenvNixRev;
+    hash = "sha256-3NT3yTvoRT7+rxLDNovpyeTDIJkZlBoO72rcu2x9Y9o=";
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -53,28 +43,27 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v${version}";
-    hash = "sha256-i1G6n/7Z5fO9RhplzXQSTiLyh1Cs0GhoCoEStFLARtA=";
+    tag = "v2.3.1";
+    hash = "sha256-zZB/UVcdL0VWuAPEe/ALY7onj8Q18efSUdL3ZJlUspk=";
   };
 
-  cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
-
-  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
-  postPatch = ''
-    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
-  '';
+  cargoHash = "sha256-oaBQMX8gTj/jFliJnfl+lO4yndSrorJT/Y3p2/YoRas=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -83,9 +72,12 @@ rustPlatform.buildRustPackage {
     "devenv"
     "-p"
     "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
   ];
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     makeBinaryWrapper
     pkg-config
@@ -97,6 +89,7 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
+    libghostty-vt
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c
@@ -123,6 +116,12 @@ rustPlatform.buildRustPackage {
   '';
 
   useNextest = true;
+  # Binding a TCP socket is not permitted in the darwin sandbox.
+  checkFlags = [
+    "--skip"
+    "waits_for_previous_proxy_to_release_control_socket"
+  ];
+
   cargoTestFlags = [
     "-p"
     "devenv"

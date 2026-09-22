@@ -23,7 +23,7 @@ buildPythonApplication (finalAttrs: {
   dependencies = [
     colorthief
     ffmpeg-python
-    mpd2
+    python-mpd2
     pillow
     pixcat
     requests
