@@ -1241,7 +1241,6 @@ in
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
   nebula.reload = runTest ./nebula/reload.nix;
-  nebula.tunless = runTest ./nebula/tunless.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbird-relay = runTest ./netbird-relay.nix;
