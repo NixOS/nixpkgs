@@ -70,7 +70,10 @@ let
 
   getSupportedReleases =
     let
-      desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
+      desiredCudaVariants = [
+        (_mkCudaVariant cudaMajorVersion)
+        "cuda${cudaMajorMinorVersion}"
+      ];
     in
     release:
     # Always show preference to the "source", then "linux-all" redistSystem if they are available, as they are
@@ -92,9 +95,16 @@ let
         acc
         # If the value is an attribute, and when hasCudaVariants is true it has the relevant CUDA variant,
         # then add it to the set.
-        // optionalAttrs (isAttrs value && (hasCudaVariants -> hasAttr desiredCudaVariant value)) {
-          ${name} = value.${desiredCudaVariant} or value;
-        }
+        // (
+          let
+            desiredCudaVariant = findFirst (
+              variant: isAttrs value && hasAttr variant value
+            ) null desiredCudaVariants;
+          in
+          optionalAttrs (isAttrs value && (hasCudaVariants -> desiredCudaVariant != null)) {
+            ${name} = if desiredCudaVariant == null then value else value.${desiredCudaVariant};
+          }
+        )
       ) { } release;
 
   getPreferredRelease =
