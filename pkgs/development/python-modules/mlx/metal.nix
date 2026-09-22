@@ -4,9 +4,12 @@
   lib,
 }:
 
+let
+  wheelSources = import ./wheel-sources.nix;
+in
 buildPythonPackage rec {
   pname = "mlx-metal";
-  version = "0.31.2";
+  inherit (wheelSources) version;
   format = "wheel";
   __structuredAttrs = true;
 
@@ -17,8 +20,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     abi = "none";
-    platform = "macosx_14_0_arm64";
-    hash = "sha256-slOFvO4Y/BlAkiVbi1O5o9hInrZQ5ZFg8bV6rdB6otw=";
+    inherit (wheelSources.mlx-metal) platform hash;
   };
 
   meta = {

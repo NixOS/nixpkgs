@@ -9,7 +9,8 @@
 }:
 
 let
-  version = "0.31.2";
+  wheelSources = import ./wheel-sources.nix;
+  inherit (wheelSources) version;
   inherit (python) pythonVersion;
 
   getSrcFromPypi =
@@ -31,18 +32,7 @@ let
       abi = dist;
     };
 
-  srcs = {
-    "3.13-aarch64-darwin" = getSrcFromPypi {
-      platform = "macosx_14_0_arm64";
-      dist = "cp313";
-      hash = "sha256-Gz+w3alVsNVSzle91vQrMwmrIbBn5AWH1oSEQ9MH6R8=";
-    };
-    "3.14-aarch64-darwin" = getSrcFromPypi {
-      platform = "macosx_14_0_arm64";
-      dist = "cp314";
-      hash = "sha256-oTyc4jw97vaqWgkxXnlT4aXcMR6FH6Fvx0yB+yUJwLk=";
-    };
-  };
+  srcs = lib.mapAttrs (_: source: getSrcFromPypi source) wheelSources.mlx;
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
@@ -56,7 +46,11 @@ buildPythonPackage (finalAttrs: {
     srcs."${pythonVersion}-${stdenv.hostPlatform.system}"
       or (throw "mlx-bin is only supported on Python ${builtins.concatStringsSep ", " (builtins.attrNames srcs)}");
 
-  dependencies = [ mlx-metal ];
+  # Upstream pins the Metal runtime to the same release as the Python wheel.
+  dependencies =
+    assert lib.assertMsg (mlx-metal.version == finalAttrs.version)
+      "mlx-bin ${finalAttrs.version} requires mlx-metal ${finalAttrs.version}, but got ${mlx-metal.version}";
+    [ mlx-metal ];
 
   postInstall = ''
     # The Python wheel expects libmlx.dylib and mlx.metallib to live under
