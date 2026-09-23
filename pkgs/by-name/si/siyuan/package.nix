@@ -10,7 +10,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron,
+  electron_44,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -23,6 +23,12 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
+  # Upstream's app/package.json pins packageManager: pnpm@12.3.4 since v3.8.4, and
+  # nixpkgs' pnpm_12 is exactly that version, but we cannot switch yet: fetchPnpmDeps'
+  # fixupPhase runs jq over every *.json in the pnpm store, and pnpm 12 materializes
+  # package-internal JSONC files (tsconfig.json, .vscode/launch.json) into the store on
+  # aarch64-darwin, so the pnpmDeps FOD fails there. Linux is unaffected; pnpmDeps is a
+  # single FOD shared by both platforms, so darwin red means no darwin client.
   pnpm = pnpm_11;
 
   platformIds = {
@@ -45,35 +51,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.8.2";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MzsfeAWApHLDt4+aC9/O+5Dl8OD8p0l+/8tb2ZZyTos=";
+    hash = "sha256-9B2WNwBEX4Yo5ay6SODgGDAGVT5mGGqmBdp0Mdk6kro=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-x8saxKDLeZdEbTBjNXnOBU9zkliZXm6D92Mom8CUCbs=";
+    vendorHash = "sha256-phz0jJzYBLmnakqks77hGFEWNUFyhKzVMONRJQcpoT0=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
-
-    # this patch makes it so that file permissions are not kept when copying files using the gulu package
-    # this fixes a problem where it was copying files from the store and keeping their permissions
-    # hopefully this doesn't break other functionality
-    modPostBuild = ''
-      chmod +w vendor/github.com/88250/gulu
-      substituteInPlace vendor/github.com/88250/gulu/file.go \
-          --replace-fail "os.Chmod(dest, sourceinfo.Mode())" "os.Chmod(dest, 0644)"
-    '';
 
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
@@ -118,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-ACWwXIwuiLp/e+1dwlClzAi8ZC6oEQc3ETFK/WvVnGk=";
+    hash = "sha256-oj86MLPIAIABmd6K4au0XQTSNGuSjjoRmPj8SKcJ838=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -148,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
 
-    cp -r ${electron.dist} electron-dist
+    cp -r ${electron_44.dist} electron-dist
     chmod -R u+w electron-dist
   '';
 
@@ -157,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       --dir
       --config electron-builder-${platformId}.yml
       -c.electronDist=electron-dist
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron_44.version}
       -c.mac.identity=null
     )
 
@@ -183,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
-    makeWrapper ${lib.getExe electron} $out/bin/siyuan \
+    makeWrapper ${lib.getExe electron_44} $out/bin/siyuan \
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
