@@ -15,7 +15,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.10";
+  version = "0.34";
 
   pythonDeps =
     with python3.pkgs;
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     tag = version;
-    hash = "sha256-uqXlfTFRgCN9c00iQik+IMN6k81fpeY6gNscP54Xzgs=";
+    hash = "sha256-5JCYhYIUMSho+nWKUbf5v/jxgbtOYa5IQXJvDToScdY=";
   };
 
   buildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs --build .
-    substituteInPlace ./config/configure \
+    substituteInPlace configure \
       --replace-fail 'bup_git=' 'bup_git="${lib.getExe git}" #'
   '';
 

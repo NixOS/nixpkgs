@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  userExec = "astro class greg mapping sic";
+  userExec = "astro class cube greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin
