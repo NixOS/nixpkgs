@@ -17,7 +17,7 @@ There are many ways to provide a nixos-secrets configuration to the CLI, but for
 }
 ```
 
-Here's how a basic generator might look like:
+Here's how a basic secret declaration might look like:
 
 ```nix
 {
@@ -55,7 +55,7 @@ Running fixup scripts:
 - Skipping 'plain' (no fixup script)
 ```
 
-Note that this will do nothing on further re-runs (the secrets already exist, after all!). To force a generator to be re-run, one can use the `--generate` flag:
+Note that this will do nothing on further re-runs (the secrets already exist, after all!). To force a secret to be re-generated, one can use the `--generate` flag:
 
 ```
 $ nixos-secrets generate --file /path/to/config --generate user
@@ -68,7 +68,7 @@ Running fixup scripts:
 
 ### Secret dependencies
 
-Generators can depend on other secrets. The inputs for a given generator will be available in the `$in` directory for the respective script. For example:
+Secrets can depend on other secrets. The inputs for a given secret will be available in the `$in` directory for the respective script. For example:
 
 ```nix
 {

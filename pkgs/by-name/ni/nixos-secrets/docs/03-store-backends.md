@@ -11,7 +11,7 @@ Store backends are specified in a similar manner to prompt backends:
 
 ### Get
 
-Unlike prompt backends, store backends must provide a number of different scripts. The most basic of said scripts are `get` and `set`. The former is given the secret name and the file name as an argument, and must return the content of said backend to `$out`. The CLI needs to be able to access any of the secrets at runtime in order for secret dependencies to work out. The `get` script can be omitted as long as the backend in question is never used as a dependency for another generator.
+Unlike prompt backends, store backends must provide a number of different scripts. The most basic of said scripts are `get` and `set`. The former is given the secret name and the file name as an argument, and must return the content of said backend to `$out`. The CLI needs to be able to access any of the secrets at runtime in order for secret dependencies to work out. The `get` script can be omitted as long as the backend in question is never used as a dependency for another secret.
 
 ```nix
 {
@@ -66,7 +66,7 @@ Said script can perform side effects, yet must remain idempotent. The script is 
 
 ### Deployment
 
-Backends can also provide `deploy.local` and `deploy.remote` scripts. Note that each secret file has a `deploy` flag that is on by default. Users can choose to disable deployment for any of their secrets by setting said flag to `false`. This might be useful (for example) when handling secrets that are only meant to be used as inputs to other generators, but must not have their outputs deployed right away. A backend can choose to not provide either of the scripts above.
+Backends can also provide `deploy.local` and `deploy.remote` scripts. Note that each secret file has a `deploy` flag that is on by default. Users can choose to disable deployment for any of their secrets by setting said flag to `false`. This might be useful (for example) when handling secrets that are only meant to be used as inputs to other secrets, but must not have their outputs deployed right away. A backend can choose to not provide either of the scripts above.
 
 The names of the two scripts might give away their intended purpose. The former is meant for deploying the secrets to a system that has its system root mounted to the current machine's filesystem, and will therefore receive a path to the system root as its first argument. The latter is meant for deploying to fully remote systems.
 
@@ -96,7 +96,7 @@ Backends might require additional configuration (e.g. where should the files go 
 
 ### Per-secret or per-file backend options
 
-Backends will commonly need to define custom per-generator or per-file options. While the latter can already be achieved with the aforementioned `fileModule`, the former needs to currently be done by hand. Since the NixOS module system merges submodules defined in the same location, one can achieve the above as follows:
+Backends will commonly need to define custom per-secret or per-file options. While the latter can already be achieved with the aforementioned `fileModule`, the former needs to currently be done by hand. Since the NixOS module system merges submodules defined in the same location, one can achieve the above as follows:
 
 ```nix
 {
