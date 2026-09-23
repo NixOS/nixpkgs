@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  versionCheckHook,
 
   # nativeBuildInputs
   desktopToDarwinBundle,
@@ -121,6 +122,15 @@ buildPythonPackage (finalAttrs: {
   # https://github.com/NixOS/nixpkgs/issues/149812
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
   strictDeps = false;
+
+  pythonImportsCheck = [ "gramps" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Genealogy software";
