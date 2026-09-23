@@ -27,6 +27,7 @@
   # tests
   aiosqlite,
   chex,
+  cloudpickle,
   fastapi,
   google-cloud-logging,
   greenlet,
@@ -42,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.3";
+  version = "0.12.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uyObu0UdXRN5KgJhTTdkL2vJEjF9Lh0oOjMZENH4zck=";
+    hash = "sha256-Lw1GXim5N1DjRfcZQ1lnUTaQ98RdaftMyqCPuSIBd8E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -80,6 +81,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aiosqlite
     chex
+    cloudpickle
     fastapi
     google-cloud-logging
     greenlet

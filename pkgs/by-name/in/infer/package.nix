@@ -244,6 +244,8 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kacper-uminski ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    # ocaml dependency is failing on darwin
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "infer";
   };
 }

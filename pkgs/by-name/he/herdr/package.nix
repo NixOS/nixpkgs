@@ -80,8 +80,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/herdrdev/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      kevinpita
+      agilesteel
       faukah
+      kevinpita
     ];
     mainProgram = "herdr";
     platforms = lib.platforms.unix;
