@@ -15,6 +15,7 @@
   pytestCheckHook,
   python,
   sklearn-compat,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,11 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  # upstream incorrectly says 0.15.dev0
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [
