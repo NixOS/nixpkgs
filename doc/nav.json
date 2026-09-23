@@ -365,6 +365,9 @@
                   "file": "hooks/gnome.section.md"
                 },
                 {
+                  "file": "hooks/guileImportsCheckHook.section.md"
+                },
+                {
                   "file": "hooks/haredo.section.md"
                 },
                 {
