@@ -9,21 +9,65 @@ let
 
   inherit (lib) literalExpression mkOption types;
 
-  oldRegistriesOptionsUsed = lib.any (x: x != [ ]) (
-    with cfg.registries;
-    [
-      search
-      insecure
-      block
-    ]
-  );
-
   toml = pkgs.formats.toml { };
+  json = pkgs.formats.json { };
+  mkOptions = file: {
+    rootless.settings = mkOption {
+      type = toml.type;
+      default = { };
+      description = "rootless ${file} configuration";
+    };
+    rootful.settings = mkOption {
+      type = toml.type;
+      default = { };
+      description = "rootful ${file} configuration";
+    };
+    settings = mkOption {
+      type = toml.type;
+      default = { };
+      description = "base ${file} configuration";
+    };
+  };
 in
 {
   meta = {
     teams = [ lib.teams.podman ];
   };
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "virtualisation"
+      "containers"
+      "containersConf"
+      "cniPlugins"
+    ] "Podman 6.0 removed support for CNI networking.")
+    (lib.mkRemovedOptionModule
+      [
+        "virtualisation"
+        "containers"
+        "registries"
+        "search"
+      ]
+      "Podman 6.0 dropped support for the deprecated V1 registry.conf format. Migrate to virtualisation.containers.registries.settings."
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "virtualisation"
+        "containers"
+        "registries"
+        "insecure"
+      ]
+      "Podman 6.0 dropped support for the deprecated V1 registry.conf format. Migrate to virtualisation.containers.registries.settings."
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "virtualisation"
+        "containers"
+        "registries"
+        "block"
+      ]
+      "Podman 6.0 dropped support for the deprecated V1 registry.conf format. Migrate to virtualisation.containers.registries.settings."
+    )
+  ];
 
   options.virtualisation.containers = {
 
@@ -41,90 +85,24 @@ in
       description = "Enable the OCI seccomp BPF hook";
     };
 
-    containersConf.settings = mkOption {
+    containersConf = mkOptions "containers.conf";
+    storage = mkOptions "storage.conf";
+
+    registries.settings = mkOption {
       type = toml.type;
       default = { };
-      description = "containers.conf configuration";
-    };
-
-    containersConf.cniPlugins = mkOption {
-      type = types.listOf types.package;
-      defaultText = literalExpression ''
-        [
-          pkgs.cni-plugins
-        ]
-      '';
-      example = literalExpression ''
-        [
-          pkgs.cniPlugins.dnsname
-        ]
-      '';
       description = ''
-        CNI plugins to install on the system.
+        registries.conf configuration.
+
+        Examine [containers-registries.conf(5)] for more information about the format.
+
+          [containers-registries.conf(5)]: https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md
       '';
-    };
-
-    storage.settings = mkOption {
-      type = toml.type;
-      description = "storage.conf configuration";
-    };
-
-    registries = {
-      # TODO: remove those options in 26.11
-      search = mkOption {
-        visible = false;
-        type = types.listOf types.str;
-        default = [ ];
-        description = ''
-          List of repositories to search.
-
-          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
-        '';
-      };
-
-      insecure = mkOption {
-        default = [ ];
-        visible = false;
-        type = types.listOf types.str;
-        description = ''
-          List of insecure repositories.
-
-          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
-        '';
-      };
-
-      block = mkOption {
-        default = [ ];
-        visible = false;
-        type = types.listOf types.str;
-        description = ''
-          List of blocked repositories.
-
-          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
-        '';
-      };
-
-      settings = mkOption {
-        type = toml.type;
-        default = {
-          registry = [
-            { location = "docker.io"; }
-            { location = "quay.io"; }
-          ];
-        };
-        description = ''
-          repositories.conf configuration.
-
-          Examine [containers-registries.conf(5)] for more information about the format.
-
-            [containers-registries.conf(5)]: https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md
-        '';
-      };
     };
 
     policy = mkOption {
       default = { };
-      type = types.attrs;
+      type = json.type;
       example = literalExpression ''
         {
           default = [ { type = "insecureAcceptAnything"; } ];
@@ -144,49 +122,80 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
-    warnings = lib.optional oldRegistriesOptionsUsed "the options virtualisation.containers.registries.search / insecure / block are deprecated. See virtualisation.containers.registries.settings instead.";
+  config =
+    let
+      dropIn =
+        name: scope: settings:
+        let
+          path = "${name}${lib.optionalString (scope != "") ".${scope}"}.conf";
+          filename = if scope == "" then "00-nixos.conf" else "10-nixos-${scope}.conf";
+        in
+        lib.optionalAttrs (settings != { }) {
+          "containers/${path}.d/${filename}".source = toml.generate path settings;
+        };
+    in
+    lib.mkIf cfg.enable {
+      assertions =
+        let
+          attr = name: default: lib.attrByPath [ "network" name ] default cfg.containersConf.settings;
+        in
+        [
+          {
+            assertion = (attr "default_rootless_network_cmd" "pasta") == "pasta";
+            message = "Podman 6.0 only supports pasta for rootless networking.";
+          }
+          {
+            assertion = (attr "firewall_driver" "nftables") != "iptables";
+            message = "Podman 6.0 no longer supports iptables as a firewall driver. Use nftables instead.";
+          }
+          {
+            assertion = (attr "network_backend" "netavark") == "netavark";
+            message = "Podman 6.0 no longer supports network backends other than netavark.";
+          }
+        ];
 
-    virtualisation.containers.registries.settings = lib.mkIf oldRegistriesOptionsUsed {
-      registries = {
-        block.registries = cfg.registries.block;
-        insecure.registries = cfg.registries.insecure;
-        search.registries = cfg.registries.search;
+      warnings =
+        lib.optional (lib.hasAttrByPath [ "storage" "graphroot" ] cfg.storage.settings) ''
+          virtualisation.containers.storage.settings.storage.graphroot now applies to both rootful and rootless podman and will likely not work as intended.
+          Use virtualisation.containers.storage.{rootful,rootless}.settings.storage.graphroot instead.
+        ''
+        ++ lib.optional (lib.hasAttrByPath [ "storage" "runroot" ] cfg.storage.settings) ''
+          virtualisation.containers.storage.settings.storage.runroot now applies to both rootful and rootless podman and will likely not work as intended.
+          Use virtualisation.containers.storage.{rootful,rootless}.settings.storage.runroot instead.
+        '';
+
+      virtualisation.containers = {
+        containersConf.settings = {
+          engine = lib.mkIf cfg.ociSeccompBpfHook.enable {
+            hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
+          };
+          containers = {
+            default_sysctls = lib.mkDefault [ "net.ipv4.ping_group_range=0 0" ];
+          };
+        };
+        storage = {
+          settings.storage = {
+            driver = lib.mkDefault "overlay";
+            options.overlay.mountopt = lib.mkDefault "nodev";
+          };
+        };
       };
+
+      environment.etc = lib.mkMerge [
+        (dropIn "containers" "" cfg.containersConf.settings)
+        (dropIn "containers" "rootful" cfg.containersConf.rootful.settings)
+        (dropIn "containers" "rootless" cfg.containersConf.rootless.settings)
+        (dropIn "storage" "" cfg.storage.settings)
+        (dropIn "storage" "rootful" cfg.storage.rootful.settings)
+        (dropIn "storage" "rootless" cfg.storage.rootless.settings)
+        (dropIn "registries" "" cfg.registries.settings)
+        {
+          "containers/policy.json".source =
+            if cfg.policy != { } then
+              json.generate "policy.json" cfg.policy
+            else
+              "${pkgs.skopeo.policy}/default-policy.json";
+        }
+      ];
     };
-
-    virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
-
-    virtualisation.containers.containersConf.settings = {
-      network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
-      engine = {
-        init_path = "${pkgs.catatonit}/bin/catatonit";
-      }
-      // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
-        hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
-      };
-    };
-
-    virtualisation.containers.storage.settings.storage = {
-      driver = lib.mkDefault "overlay";
-      graphroot = lib.mkDefault "/var/lib/containers/storage";
-      runroot = lib.mkDefault "/run/containers/storage";
-    };
-
-    environment.etc = {
-      "containers/containers.conf".source = toml.generate "containers.conf" cfg.containersConf.settings;
-
-      "containers/storage.conf".source = toml.generate "storage.conf" cfg.storage.settings;
-
-      "containers/registries.conf".source = toml.generate "registries.conf" cfg.registries.settings;
-
-      "containers/policy.json".source =
-        if cfg.policy != { } then
-          pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-        else
-          "${pkgs.skopeo.policy}/default-policy.json";
-    };
-
-  };
-
 }
