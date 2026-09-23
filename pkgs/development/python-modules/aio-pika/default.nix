@@ -3,6 +3,7 @@
   aiormq,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   uv-build,
   yarl,
 }:
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "aiormq" ];
 
   build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiormq
