@@ -29,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/gregl83/paq";
     changelog = "https://github.com/gregl83/paq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lafrenierejm ];
+    maintainers = with lib.maintainers; [
+      gregl83
+      lafrenierejm
+    ];
     mainProgram = "paq";
   };
 })
