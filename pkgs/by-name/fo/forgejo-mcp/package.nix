@@ -40,7 +40,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://git.b4mad.industries/agentic-forges/forgejo-mcp";
     changelog = "https://git.b4mad.industries/agentic-forges/forgejo-mcp/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malik ];
+    maintainers = with lib.maintainers; [
+      malik
+      byteflavour
+    ];
     mainProgram = "forgejo-mcp";
   };
 })
