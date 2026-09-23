@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-pooldose";
-  version = "0.9.11";
+  version = "0.9.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmaertin";
     repo = "python-pooldose";
     tag = finalAttrs.version;
-    hash = "sha256-4KHc9WUT3zlu6RvuEYTcZrKqS+Z32khRb9PDMhOz1XQ=";
+    hash = "sha256-P/pINGef0bQJ+147/heOf4l/12Vdwd6F67vany9vFZY=";
   };
 
   build-system = [ setuptools ];
