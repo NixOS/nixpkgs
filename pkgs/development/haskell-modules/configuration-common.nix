@@ -1458,6 +1458,13 @@ with haskellLib;
 
   ] super.dhall-lsp-server;
 
+  # No hackage release yet for https://github.com/reflex-frp/patch/pull/66 krank:ignore-line
+  patch = appendPatch (fetchpatch {
+    name = "bump-bounds.patch";
+    url = "https://github.com/reflex-frp/patch/commit/695eb861d0bc75331066a3324885348f0dec6cea.patch";
+    sha256 = "sha256-KNYt1MO84enSOhO4gcw/9QCasFNGbr6m9m6t1gX5o4c";
+  }) super.patch;
+
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = lib.pipe super.reflex-dom-core [
     doDistribute
