@@ -2,7 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-go";
-    rev = "cmd/protoc-gen-go-grpc/v${finalAttrs.version}";
+    tag = "cmd/protoc-gen-go-grpc/v${finalAttrs.version}";
     hash = "sha256-I1sPfKhpCb/GNznKgEE2BZ11vAwJIc6HYf78/nIDRy4=";
   };
 
@@ -24,9 +24,9 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.updateScript = ./update.py;
 
   meta = {
