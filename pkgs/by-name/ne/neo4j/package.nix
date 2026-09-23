@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  gitUpdater,
   nixosTests,
   makeWrapper,
   openjdk25,
@@ -52,7 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/neo4j-admin dbms set-initial-password neo4jadmin
   '';
 
-  passthru.tests.nixos = nixosTests.neo4j;
+  passthru = {
+    tests.nixos = nixosTests.neo4j;
+    updateScript = gitUpdater {
+      url = "https://github.com/neo4j/neo4j.git";
+      allowedVersions = "^[0-9]{4}\\.[0-9]{2}\\.[0-9]+$";
+    };
+  };
 
   meta = {
     description = "Highly scalable, robust (fully ACID) native graph database";
