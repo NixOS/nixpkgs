@@ -225,6 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
           name = "tcl-requires-check-hook";
           substitutions = {
             tcl_hook = ./tcl-requires-check-hook.tcl;
+            tclsh = lib.getExe finalAttrs.finalPackage;
           };
           meta = {
             inherit (finalAttrs.meta) maintainers platforms;

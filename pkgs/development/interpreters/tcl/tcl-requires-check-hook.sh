@@ -7,7 +7,7 @@ tclRequiresCheckPhase () {
     if [ -n "$tclRequiresCheck" ]; then
         export TCLLIBPATH="$out/lib $TCLLIBPATH" # Redundant if tcl-package-hook is also used
         # FIXME: For some reason the output gets swallowed unless we pipe it through cat‽
-        tclsh @tcl_hook@ 2>&1 | cat
+        @tclsh@ @tcl_hook@ 2>&1 | cat
     fi
 }
 
