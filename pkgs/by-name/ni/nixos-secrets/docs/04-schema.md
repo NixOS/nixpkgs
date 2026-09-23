@@ -1,6 +1,6 @@
 ## The secrets schema
 
-Throughout this section, we'll use "unevaluated NixOS configuration" to refer to configuration files containing NixOS modules (think `/etc/nixos/configuration.nix`). On the other hand, a "(pre-)evaluated NixOS configuration" is one that has already been passed to `<nixpkgs/nixos/lib/eval-config.nix>` (or `nixpkgs.lib.nixosSystem` when using flakes). Last but not least, the "target" system is the one the secrets are meant to be deployed to, and the "host" system is the one where the CLI is being run.
+Throughout this section, we'll use "unevaluated NixOS configuration" to refer to configuration files containing NixOS modules (think `/etc/nixos/configuration.nix`). On the other hand, a "(pre-)evaluated NixOS configuration" is one that has already been passed to `<nixpkgs/nixos/lib/eval-config.nix>` (or `nixpkgs.lib.nixosSystem` when using flakes).
 
 Earlier on we observed that the secrets CLI can take in NixOS configurations as an argument. Of course, this by itself can be read in multiple ways. For example — do the configurations in question need to be evaluated already? If not, where is Nixpkgs imported from?
 

@@ -187,3 +187,7 @@ Alternatively, one could write a prompt backend that caches the given values for
 ## Sandboxing
 
 Generator scripts are sandboxed by default (one can disable this by passing `--no-sandbox`), although one should not rely on this instead of checking the scripts themselves beforehand. A malicious script could, for example, generate an intentionally "weak" secret without ever leaving the confines of the sandbox!
+
+## A note on terminology
+
+When referring to the machines involved, the "target" system is the one the secrets are meant to be deployed to, and the "host" system is the one where the CLI is being run. These machines might or might not be the same, and they might or might not share an architecture. Theses terms are often used in option names used by the various backends (for example, the example `plain` backend holds both host and target paths for the secret directories).
