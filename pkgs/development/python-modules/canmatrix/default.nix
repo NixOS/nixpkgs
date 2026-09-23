@@ -28,6 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-PfegsFha7ernSqnMeaDoLf1jLx1CiOoiYi34dESEgBY=";
   };
 
+  postPatch = ''
+    # Allows to skip versioneer and use the version from nixpkgs instead
+    substituteInPlace setup.py \
+      --replace-fail 'version = versioneer.get_version(),' 'version = "${version}",'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
