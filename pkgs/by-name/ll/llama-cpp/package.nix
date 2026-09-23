@@ -48,8 +48,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "10964";
-  buildCommit = "b29c606";
+  buildNumber = "11146";
+  buildCommit = "7fe450e";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -87,7 +87,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.4.1";
+  version = "0.5.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qu/K1RdJMzOxWr+qnHorpMB4650uctBHW/Og+4oDVLM=";
+    hash = "sha256-MtSVt0qM8I0MeMzVxT7+nVkhQ7ysMS4/kbk/DxzTI2A=";
   };
 
   patches = [ ];
