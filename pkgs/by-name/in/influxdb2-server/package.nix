@@ -138,7 +138,10 @@ buildGoModule {
 
   meta = {
     description = "Open-source distributed time series database";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     homepage = "https://influxdata.com/";
     maintainers = [ ];
   };
