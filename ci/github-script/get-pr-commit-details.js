@@ -11,6 +11,7 @@ const execFile = promisify(nodeExecFile)
  *  committer: { name: string, email: string}
  *  changedPaths: string[],
  *  changedPathSegments: Set<string>,
+ *  trailers: string[],
  * }} Commit
  */
 
@@ -93,6 +94,17 @@ export async function getCommitDetailsForPR({ core, pr, repoPath }) {
           quiet: true,
         })
       ).stdout.split('\n')
+      const trailers = (
+        await runGit({
+          args: ['show', '-s', '--format=%(trailers:unfold)', sha],
+          repoPath,
+          core,
+          quiet: true,
+        })
+      ).stdout
+        .split('\n')
+        .map((trailer) => trailer.trim())
+        .filter(Boolean)
 
       const [subject, authorName, authorEmail, committerName, committerEmail] =
         result[0].split('\t')
@@ -110,6 +122,7 @@ export async function getCommitDetailsForPR({ core, pr, repoPath }) {
         committer: { name: committerName, email: committerEmail },
         changedPaths,
         changedPathSegments,
+        trailers,
       }
     }),
   )
