@@ -17,7 +17,11 @@
     ];
 
     # NOTE: do *not* do this with real keys!!! This will copy the keys to the
-    # world-readable Nix store, which is most probably not what you want!
+    # world-readable Nix store (for flake users, that is), which is most
+    # probably not what you want!
+    #
+    # We're only doing it this way in order to keep the example portable
+    # (absolute paths would break it on other people's machines!).
     settings.store.age.identity.host = toString ../common/key-host.txt;
     settings.store.age.identity.target = toString ../common/key-target.txt;
 
