@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   buildType ? "meson",
   cmake,
@@ -40,6 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Fix pkg-config, meson and cmake paths for include and lib dirs
     ./build-paths.patch
+
+    # This was not declared as part of the public API, which led to linking
+    # failures with gfortran 16.
+    (fetchpatch {
+      name = "add-get_numerical_hessian_api-to-public-api.patch";
+      url = "https://github.com/dftd4/dftd4/commit/f84dc4033d9ce036e74e709b9cf42c72249f4f52.patch";
+      hash = "sha256-mdKWIKz8A92lI0sMl5rXwhzKd2UDej0yPYiKllH1Asc=";
+    })
   ];
 
   nativeBuildInputs = [
