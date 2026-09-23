@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
+    changelog = "https://github.com/miniupnp/miniupnp/blob/master/miniupnpd/Changelog.txt";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
