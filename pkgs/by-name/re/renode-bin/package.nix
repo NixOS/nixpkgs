@@ -107,5 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       znaniye
     ];
     platforms = [ "x86_64-linux" ];
+    # custom robotframework fails to build
+    broken = true;
   };
 })
