@@ -5,6 +5,7 @@
   rustPlatform,
   libxcb,
   installShellFiles,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magic-wormhole-rs";
@@ -13,8 +14,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole.rs";
-    rev = finalAttrs.version;
-    sha256 = "sha256-23NXmXkuFGMocicw2UxsXroCZ4N0PYkrOropuQYe0d8=";
+    tag = finalAttrs.version;
+    hash = "sha256-23NXmXkuFGMocicw2UxsXroCZ4N0PYkrOropuQYe0d8=";
   };
 
   cargoHash = "sha256-LqsYyyJyMxJ97c4JOsjyL28idKLyV6GOQMccuyDRlYs=";
@@ -29,6 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/wormhole-rs completion fish) \
       --zsh <($out/bin/wormhole-rs completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Rust implementation of Magic Wormhole, with new features and enhancements";
