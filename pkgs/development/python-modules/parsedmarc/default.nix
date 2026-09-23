@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
 
   # build-system
   hatchling,
@@ -37,16 +36,15 @@
   pytestCheckHook,
 }:
 
-let
-  dashboard = fetchurl {
-    url = "https://raw.githubusercontent.com/domainaware/parsedmarc/77331b55c54cb3269205295bd57d0ab680638964/grafana/Grafana-DMARC_Reports.json";
-    sha256 = "0wbihyqbb4ndjg79qs8088zgrcg88km8khjhv2474y7nzjzkf43i";
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
   version = "11.0.2";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "dashboard"
+  ];
 
   src = fetchFromGitHub {
     owner = "domainaware";
@@ -58,6 +56,12 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires_python = ">=3.10,<3.15"' ""
+
+    substituteInPlace dashboards/grafana/Grafana-DMARC_Reports.json \
+      --replace-fail elasticsearch grafana-opensearch-datasource \
+      --replace-fail Elasticsearch OpenSearch
+
+    install -D dashboards/grafana/Grafana-DMARC_Reports.json $dashboard/DMARC_Reports.json
   '';
 
   build-system = [
@@ -114,7 +118,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "parsedmarc" ];
 
   passthru = {
-    inherit dashboard;
     tests = nixosTests.parsedmarc;
   };
 
