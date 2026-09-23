@@ -1861,7 +1861,7 @@ in
     createPartitions = ''
       installer.succeed(
         "sgdisk --zap-all /dev/vda",
-        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=1:0:+200M --typecode=0:ef00 /dev/vda", # /boot
         "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
         "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
         "udevadm settle",
