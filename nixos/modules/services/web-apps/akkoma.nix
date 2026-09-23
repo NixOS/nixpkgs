@@ -1393,6 +1393,6 @@ in
     };
   };
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ yuka ];
   meta.doc = ./akkoma.md;
 }
