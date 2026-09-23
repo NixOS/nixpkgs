@@ -19998,12 +19998,6 @@
     githubId = 6455574;
     name = "Matt Votava";
   };
-  mvs = {
-    email = "mvs@nya.yt";
-    github = "illdefined";
-    githubId = 772914;
-    name = "Mikael Voss";
-  };
   mwdomino = {
     email = "matt@dominey.io";
     github = "mwdomino";

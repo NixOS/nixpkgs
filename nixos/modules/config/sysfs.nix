@@ -261,5 +261,5 @@ in
     }) cfg;
   };
 
-  meta.maintainers = with lib.maintainers; [ mvs ];
+  meta.maintainers = [ ];
 }
