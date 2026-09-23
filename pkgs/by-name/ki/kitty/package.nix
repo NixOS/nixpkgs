@@ -46,26 +46,27 @@
   makeBinaryWrapper,
   darwin,
   cairo,
+  shader-slang,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.48.2";
+  version = "0.49.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-qNgVPpvMm8Y/nbBjVvWVuZ954ZXIuWmXhldP3w8MBhU=";
+    hash = "sha256-C1roiJ+mAm8rEoG5VAQABYUq2FSFVuusNQ0PtLP0tPI=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-BZudfNfREwNrgalaimC5Lp+UIdFS+jHFLl9mEXcHYMI=";
+      vendorHash = "sha256-G+eaFOFMIIu2Qo5Mgr3ejwoYrYmNv3EIdEEraDPIdeY=";
     }).goModules;
 
   buildInputs = [
@@ -108,11 +109,13 @@ buildPythonApplication rec {
     sphinx
     furo
     sphinx-copybutton
+    sphinx-design
     sphinxext-opengraph
     sphinx-inline-tabs
     go_1_26
     fontconfig
     makeBinaryWrapper
+    shader-slang
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -294,6 +297,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
+        shader-slang
       ]
     }"
 

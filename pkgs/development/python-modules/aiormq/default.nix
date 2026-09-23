@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pamqp,
   uv-build,
+  pyprojectVersionPatchHook,
   yarl,
 }:
 
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pamqp" ];
 
   build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     pamqp
