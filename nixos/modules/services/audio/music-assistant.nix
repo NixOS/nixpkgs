@@ -25,7 +25,7 @@ let
   cfg = config.services.music-assistant;
 
   finalPackage = cfg.package.override {
-    inherit (cfg) providers;
+    inherit (cfg) includeAppSecrets providers;
   };
 in
 
@@ -36,6 +36,27 @@ in
     enable = mkEnableOption "Music Assistant";
 
     package = mkPackageOption pkgs "music-assistant" { };
+
+    includeAppSecrets = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Whether to include the provider credentials bundled in the official Music Assistant
+        release wheel, required by some providers (e.g. `spotify`, `qobuz`, `apple_music`,
+        `theaudiodb` and `fanarttv`).
+
+        These credentials are not part of the upstream source repository and are not covered
+        by the Apache-2.0 license of the source code; their redistribution terms are unclear
+        (see <https://github.com/orgs/music-assistant/discussions/6540>). Enabling this option
+        therefore makes the package unfree and requires you to explicitly opt in by setting
+        `nixpkgs.config.allowUnfree = true` (or the `NIXPKGS_ALLOW_UNFREE=1` environment
+        variable).
+
+        As an alternative, leave this disabled and provide your own credentials through
+        `MASS_APP_VAR_*` environment variables, see
+        {option}`services.music-assistant.providers`.
+      '';
+    };
 
     extraOptions = mkOption {
       type = listOf str;
@@ -70,6 +91,22 @@ in
       ];
       description = ''
         List of provider names for which dependencies will be installed.
+
+        Providers that rely on shared provider credentials (e.g. `spotify`, `qobuz`, `apple_music`, `theaudiodb`, `fanarttv`)
+        require the credentials bundled in the official Music Assistant release wheel. They are not shipped by
+        default: set {option}`services.music-assistant.includeAppSecrets` to `true` to bundle them, which makes
+        the package unfree and requires `nixpkgs.config.allowUnfree = true`.
+
+        To use your own credentials for a provider, set the matching
+        `MASS_APP_VAR_*` environment variable, for example:
+        ```nix
+        systemd.services.music-assistant.environment = {
+          MASS_APP_VAR_SPOTIFY_CLIENT_ID = "your-client-id";
+        };
+        ```
+        or point Music Assistant at a JSON map of app variables via the `MASS_APP_VARS_FILE` environment variable.
+        See the upstream `music_assistant/helpers/app_vars.py` file and the corresponding
+        provider documentation (e.g. <https://www.music-assistant.io/music-providers/spotify/>) for the supported variables and setup steps.
       '';
     };
   };
@@ -160,7 +197,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (lib.getExe finalPackage)
           ]
           ++ cfg.extraOptions
         );
