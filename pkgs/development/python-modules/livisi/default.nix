@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "livisi";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "planbnet";
     repo = "livisi";
     tag = "v${version}";
-    hash = "sha256-dInlvC+klwLRzJyPtAPweLG+ggWINcE4ENfKy3VgP3I=";
+    hash = "sha256-EiPq2eyqClwO3kwQKw7ZsuLVrq6QG55IY4OIWSQW0WA=";
   };
 
   build-system = [ setuptools ];
