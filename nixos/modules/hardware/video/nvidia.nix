@@ -511,6 +511,11 @@ in
               ];
             };
           environment.systemPackages = [ nvidia_x11.bin ];
+          # `nvidia-settings` looks for its application-profile key
+          # documentation in the XDG data directories, and the driver ships it
+          # under the `bin` output. Linking it here puts it in
+          # `/run/current-system/sw/share`, which is one of them.
+          environment.pathsToLink = [ "/share/nvidia" ];
         }
 
         # X11
