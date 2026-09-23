@@ -4,12 +4,14 @@
   fetchurl,
   nixosTests,
   makeWrapper,
-  openjdk21,
+  openjdk25,
   which,
   gawk,
   bashNonInteractive,
 }:
-
+let
+  java = openjdk25;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
   version = "2026.08.1";
@@ -35,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
             "$out/bin/$NEO4J_SCRIPT" \
             --prefix PATH : "${
               lib.makeBinPath [
-                openjdk21
+                java
                 which
                 gawk
               ]
             }" \
-            --set JAVA_HOME "${openjdk21}"
+            --set JAVA_HOME "${java}"
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
