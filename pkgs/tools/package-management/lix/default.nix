@@ -156,7 +156,6 @@ let
           };
 
           colmena = colmena.override {
-            nix = self.lix;
             inherit (self) nix-eval-jobs;
           };
 
