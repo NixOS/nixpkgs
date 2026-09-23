@@ -3,41 +3,47 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
-  requests,
-  numpy,
-  pandas,
-  scipy,
-  statsmodels,
-  patsy,
-  scikit-learn,
-  tqdm,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cloudpickle,
   dask,
   distributed,
+  numpy,
+  pandas,
+  patsy,
+  pywavelets,
+  requests,
+  scikit-learn,
+  scipy,
+  statsmodels,
   stumpy,
-  cloudpickle,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  mock,
-  matplotlib,
-  seaborn,
+  tqdm,
+
+  # testing
   ipython,
+  matplotlib,
+  mock,
   notebook,
   pandas-datareader,
-  setuptools,
-  pywavelets,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  seaborn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tsfresh";
-  version = "0.21.1";
+  version = "0.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";
-    tag = "v${version}";
-    hash = "sha256-KwUI33t5KFcTUWdSDg81OPbNn5SYv4Gw/0dPjCB502w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rOEzcAQ2kiskHsFezPee+GNI0IuuZomqtMB6ev0uop8=";
   };
 
   patches = [
@@ -45,21 +51,33 @@ buildPythonPackage rec {
     ./remove-pyscaffold.patch
   ];
 
-  dependencies = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "requires = [\"setuptools<70\", \"wheel\", \"pyscaffold>=3.3a0,<4\"]" \
+      "requires = [\"setuptools\", \"wheel\"]" \
+  '';
+
+  build-system = [
     setuptools
-    requests
-    numpy
-    pandas
-    scipy
-    statsmodels
-    patsy
-    scikit-learn
-    tqdm
+  ];
+
+  # Upstream doesn't supply a version field anywhere, so patching it is out of the question.
+  dontCheckPythonMetadata = true;
+
+  dependencies = [
+    cloudpickle
     dask
     distributed
-    stumpy
-    cloudpickle
+    numpy
+    pandas
+    patsy
     pywavelets
+    requests
+    scikit-learn
+    scipy
+    statsmodels
+    stumpy
+    tqdm
   ]
   ++ dask.optional-dependencies.dataframe;
 
@@ -67,15 +85,15 @@ buildPythonPackage rec {
   doCheck = !pandas-datareader.disabled;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    pytest-xdist
-    mock
-    matplotlib
-    seaborn
     ipython
+    matplotlib
+    mock
     notebook
     pandas-datareader
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
+    seaborn
   ];
 
   disabledTests = [
@@ -103,8 +121,8 @@ buildPythonPackage rec {
     description = "Automatic extraction of relevant features from time series";
     mainProgram = "run_tsfresh";
     homepage = "https://github.com/blue-yonder/tsfresh";
-    changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/blue-yonder/tsfresh/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

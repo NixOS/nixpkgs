@@ -41,7 +41,8 @@ let
   };
 
   lbox-clients = buildPythonPackage {
-    inherit src version pyproject;
+    inherit src pyproject;
+    version = "1.1.2";
 
     pname = "lbox-clients";
 

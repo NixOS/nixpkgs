@@ -49,6 +49,8 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     "--pyargs"
     "hmmlearn"
+    # DeprecationWarning: Setting the shape on a NumPy array has been deprecated
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {
