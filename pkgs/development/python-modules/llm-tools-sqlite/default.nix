@@ -37,6 +37,10 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # There's only one test and it's failing due to a bad comparison
+  # https://github.com/simonw/llm-tools-sqlite/issues/4
+  doCheck = false;
+
   pythonImportsCheck = [ "llm_tools_sqlite" ];
 
   passthru.tests = llm.mkPluginTest llm-tools-sqlite;
