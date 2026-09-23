@@ -24,6 +24,8 @@ buildPythonPackage rec {
       --replace-fail "uv_build>=0.9.26,<0.10.0" uv_build
   '';
 
+  pythonRelaxDeps = [ "aiormq" ];
+
   build-system = [ uv-build ];
 
   dependencies = [
