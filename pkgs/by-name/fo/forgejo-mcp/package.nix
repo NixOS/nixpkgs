@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "forgejo-mcp";
-  version = "3.0.1";
+  version = "3.2.0";
 
   # Plain git fetch: upstream's Forgejo instance has source-archive
   # downloads disabled, so fetchFromForgejo (tarball-based) cannot be used.
   src = fetchgit {
     url = "https://git.b4mad.industries/agentic-forges/forgejo-mcp.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cq99Bj9I9oXM00fL9IBGq/EKj7Jv/fODffohR8APeik=";
+    hash = "sha256-dZ7k2c0abejHuwdRkXcOMKCnDeY193PYkIg0LVzbvII=";
   };
 
-  vendorHash = "sha256-Za1lwQQr+qeMIokRLSn2ywRg+5GxMS4KEg+99P1YHy0=";
+  vendorHash = "sha256-3RFWaohlUd6RpU531/DQH5wgVtjOi/Lh19Hyget7Bhw=";
 
   ldflags = [
     "-s"
