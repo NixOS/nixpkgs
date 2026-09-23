@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "0-unstable-2026-03-13";
+  version = "0-unstable-2026-09-23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "5174b3333331c966c38f4355d50b03ca1c1df2f9";
-    hash = "sha256-XvFlnyXCM69WscpY20EhKAaKYj1fs0eqmODZWx0NIPg=";
+    rev = "b5efa9c32e8f9b63005f5cdb1ad5527a77d2cd04";
+    hash = "sha256-QoP0yp6CxS8ImElzkHAI3R9C6d3+rLPnxCHQTRkrMiY=";
   };
 
   fontsInfo = lib.importJSON ./fonts.json;
