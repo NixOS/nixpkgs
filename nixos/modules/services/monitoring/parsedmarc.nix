@@ -408,6 +408,25 @@ in
       in
       map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
+    assertions = [
+      {
+        assertion =
+          cfg.provision.localMail.enable -> lib.versionAtLeast config.services.dovecot2.package.version "2.4";
+        message = ''
+          The `services.parsedmarc.provision.localMail.enable' option
+          relies on dovecot 2.4 or newer, but you're using ${config.services.dovecot2.package.version}.
+
+          If you haven't configured dovecot manually, setting
+
+            services.dovecot2.package = pkgs.dovecot;
+
+          should suffice. If you have, you should also check out
+          https://doc.dovecot.org/latest/installation/upgrade/2.3-to-2.4.html
+          for upgrade instructions.
+        '';
+      }
+    ];
+
     services.opensearch.enable = lib.mkDefault cfg.provision.opensearch;
 
     services.geoipupdate = lib.mkIf cfg.provision.geoIp {
@@ -424,7 +443,15 @@ in
 
     services.dovecot2 = lib.mkIf cfg.provision.localMail.enable {
       enable = true;
-      protocols = [ "imap" ];
+      enablePAM = true;
+      settings = {
+        dovecot_config_version = lib.mkDefault "2.4.3";
+        dovecot_storage_version = lib.mkDefault "2.4.3";
+        protocols.imap = true;
+        mail_driver = lib.mkDefault "maildir";
+        mail_path = lib.mkDefault "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+        "local localhost".ssl = false;
+      };
     };
 
     services.postfix = lib.mkIf cfg.provision.localMail.enable {
