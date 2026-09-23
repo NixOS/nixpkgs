@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   niapy,
@@ -42,6 +43,11 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ poetry-core ];
 
+  # Fix upstream version typo
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     niapy
     nltk
@@ -59,6 +65,9 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
+
+    # AttributeError: 'Poly3DCollection' object has no attribute '_vec'
+    "test_hill_slopes"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
