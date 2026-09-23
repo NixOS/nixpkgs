@@ -108,7 +108,7 @@ channel, so you should run `nix-channel --update` first.
 Containers can be stopped and started using `nixos-container
   stop` and `nixos-container start`, respectively, or by using
 `systemctl` on the container's service unit. To destroy a container,
-including its file system, do
+including its filesystem, do
 
 ```ShellSession
 # nixos-container destroy foo

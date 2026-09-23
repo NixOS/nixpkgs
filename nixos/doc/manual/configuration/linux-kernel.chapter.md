@@ -79,7 +79,7 @@ by `udev`. You can force a module to be loaded via
 ```
 
 If the module is required early during the boot (e.g. to mount the root
-file system), you can use [](#opt-boot.initrd.kernelModules):
+filesystem), you can use [](#opt-boot.initrd.kernelModules):
 
 ```nix
 { boot.initrd.kernelModules = [ "cifs" ]; }

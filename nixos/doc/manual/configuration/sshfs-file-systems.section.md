@@ -1,4 +1,4 @@
-# SSHFS File Systems {#sec-sshfs-file-systems}
+# SSHFS Filesystems {#sec-sshfs-file-systems}
 
 [SSHFS][sshfs] is a [FUSE][fuse] filesystem that allows easy access to directories on a remote machine using the SSH File Transfer Protocol (SFTP).
 It means that if you have SSH access to a machine, no additional setup is needed to mount a directory.
@@ -13,7 +13,7 @@ Once installed, mounting a directory interactively is simple as running:
 ```ShellSession
 $ sshfs my-user@example.com:/my-dir /mnt/my-dir
 ```
-Like any other FUSE file system, the directory is unmounted using:
+Like any other FUSE filesystem, the directory is unmounted using:
 ```ShellSession
 $ fusermount -u /mnt/my-dir
 ```
@@ -34,7 +34,7 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
 To keep the key safe, change the ownership to `root:root` and make sure the permissions are `600`:
 OpenSSH normally refuses to use the key if it's not well-protected.
 
-The file system can be configured in NixOS via the usual [fileSystems](#opt-fileSystems) option.
+The filesystem can be configured in NixOS via the usual [fileSystems](#opt-fileSystems) option.
 Here's a typical setup:
 ```nix
 {

@@ -99,7 +99,7 @@
           "file": "configuration/user-mgmt.chapter.md"
         },
         {
-          "label": "File Systems",
+          "label": "Filesystems",
           "id": "ch-file-systems",
           "children": [
             {

@@ -1,8 +1,8 @@
-# File Systems {#ch-file-systems}
+# Filesystems {#ch-file-systems}
 
-You can define file systems using the `fileSystems` configuration
+You can define filesystems using the `fileSystems` configuration
 option. For instance, the following definition causes NixOS to mount the
-Ext4 file system on device `/dev/disk/by-label/data` onto the mount
+Ext4 filesystem on device `/dev/disk/by-label/data` onto the mount
 point `/data`:
 
 ```nix
@@ -26,9 +26,9 @@ device aliases in `/dev/disk/by-label` and `/dev/disk/by-uuid`, as these
 don't change if the topology changes (e.g. if a disk is moved to another
 IDE controller).
 
-You can usually omit the file system type (`fsType`), since `mount` can
+You can usually omit the filesystem type (`fsType`), since `mount` can
 usually detect the type and load the necessary kernel module
-automatically. However, if the file system is needed at early boot (in
+automatically. However, if the filesystem is needed at early boot (in
 the initial ramdisk) and is not `ext2`, `ext3` or `ext4`, then it's best
 to specify `fsType` to ensure that the kernel module is available.
 

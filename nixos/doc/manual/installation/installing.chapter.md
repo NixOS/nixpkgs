@@ -288,7 +288,7 @@ Once complete, you can follow with
 Use the following commands:
 
 -   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
-    that you assign a unique symbolic label to the file system using the
+    that you assign a unique symbolic label to the filesystem using the
     option `-L label`, since this makes the filesystem configuration
     independent of device changes. Also, since the Nix store contains a
     large number of small files it is recommended to lower the bytes-per-inode
@@ -323,7 +323,7 @@ Use the following commands:
 ### Installing {#sec-installation-manual-installing}
 []{#sec-installation-installing} <!-- legacy anchor -->
 
-1.  Mount the target file system on which NixOS should be installed on
+1.  Mount the target filesystem on which NixOS should be installed on
     `/mnt`, e.g.
 
     ```ShellSession
@@ -332,7 +332,7 @@ Use the following commands:
 
 2.  **UEFI systems**
 
-    Mount the boot file system on `/mnt/boot`, e.g.
+    Mount the boot filesystem on `/mnt/boot`, e.g.
 
     ```ShellSession
     # mkdir -p /mnt/boot
@@ -423,7 +423,7 @@ Use the following commands:
     systems that need to be mounted by NixOS. However, you typically
     don't need to set it yourself, because `nixos-generate-config` sets
     it automatically in `/mnt/etc/nixos/hardware-configuration.nix` from
-    your currently mounted file systems. (The configuration file
+    your currently mounted filesystems. (The configuration file
     `hardware-configuration.nix` is included from `configuration.nix`
     and will be overwritten by future invocations of
     `nixos-generate-config`; thus, you generally should not modify it.)
@@ -432,12 +432,12 @@ Use the following commands:
     point or after installation.
 
     ::: {.note}
-    Depending on your hardware configuration or type of file system, you
+    Depending on your hardware configuration or type of filesystem, you
     may need to set the option `boot.initrd.kernelModules` to include
     the kernel modules that are necessary for mounting the root file
     system, otherwise the installed system will not be able to boot. (If
     this happens, boot from the installation media again, mount the
-    target file system on `/mnt`, fix `/mnt/etc/nixos/configuration.nix`
+    target filesystem on `/mnt`, fix `/mnt/etc/nixos/configuration.nix`
     and rerun `nixos-install`.) In most cases, `nixos-generate-config`
     will figure out the required modules.
     :::

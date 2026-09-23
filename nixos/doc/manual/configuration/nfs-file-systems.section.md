@@ -1,4 +1,4 @@
-# NFS File Systems {#sec-nfs-file-systems}
+# NFS Filesystems {#sec-nfs-file-systems}
 
 [NFS][nfs] (Network File System) allows you to mount directories from remote machines over the network.
 
