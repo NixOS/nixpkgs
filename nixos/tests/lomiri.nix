@@ -830,8 +830,9 @@ in
       name = "power";
       left = 2;
       ocr = [
-        "Charge"
-        "Battery"
+        "Keep screen"
+        "screen on"
+        "Battery settings"
       ];
     }
     {
