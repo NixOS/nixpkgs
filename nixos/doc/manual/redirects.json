@@ -1502,9 +1502,6 @@
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
   ],
-  "ex-gitlab-runner-podman": [
-    "index.html#ex-gitlab-runner-podman"
-  ],
   "module-forgejo": [
     "index.html#module-forgejo"
   ],
