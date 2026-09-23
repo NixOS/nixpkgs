@@ -10,17 +10,7 @@
 }:
 
 let
-  generic =
-    args:
-    let
-      imported = import ./generic.nix args;
-    in
-    callPackage imported {
-      lib32 =
-        (pkgsi686Linux.callPackage imported {
-          libsOnly = true;
-        }).out;
-    };
+  generic = callPackage ./generic.nix;
 
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
 
@@ -298,10 +288,10 @@ rec {
     in
     generic {
       version = "340.108";
-      sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
-      sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
-      settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
-      persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
+      sha256_32bit = "sha256-IDKq1hLZ868a7Pl5z9/kI9eap2kp74v406QDB29QfMo=";
+      sha256_64bit = "sha256-xnHU8bfAm8GvB5uYtEetsG1wSwT4AvcEWmEfpQEztxs=";
+      settingsSha256 = "sha256-ZPgdw7Rn3dj51veJVxFF9Xody/p2q8ymt+FW4JhMon4=";
+      persistencedSha256 = "sha256-dtq9L9hUTsCaVlHpkToBkhn+MRsj4Vqj8eH1aoftpKs=";
       modprobeSha256 = "sha256-aEVCKYliPCk8SJybZ/wcgU8bppmx7tlAUuOaAQqJgeQ=";
       useGLVND = false;
 
