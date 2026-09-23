@@ -14352,6 +14352,11 @@
     githubId = 589502;
     name = "James Szalay";
   };
+  juacamole = {
+    github = "juacamole";
+    githubId = 149398532;
+    name = "Kuan Klöthen";
+  };
   juancmuller = {
     email = "nix@juancmuller.com";
     githubId = 208500;
