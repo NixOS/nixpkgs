@@ -130,7 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ parthiv-krishna ];
+    maintainers = with lib.maintainers; [
+      parthiv-krishna
+      yvnth
+    ];
     platforms = lib.platforms.all;
   };
 })

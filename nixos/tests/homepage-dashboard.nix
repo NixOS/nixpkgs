@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "homepage-dashboard";
-  meta.maintainers = with lib.maintainers; [ parthiv-krishna ];
+  meta.maintainers = with lib.maintainers; [
+    parthiv-krishna
+    yvnth
+  ];
 
   nodes.machine = _: {
     services.homepage-dashboard = {
