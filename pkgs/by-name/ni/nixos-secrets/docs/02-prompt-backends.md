@@ -1,6 +1,6 @@
 ## Prompt backends
 
-Before jumping in to the more complex idea of store backends, we'll go over how one can specify prompt backends. Prompt backends require a single `ask` script, which is responsible for asking the user for information. The script is given four arguments:
+Before jumping in to the more complex idea of store backends, we'll go over how one can specify prompt backends. Prompt backends require a single `ask` script, which is responsible for asking the user for information. The script is given five arguments, and must write the resulting value to `$out`:
 
 1. The secret name (`user` in the previous example)
 2. The prompt name (`name` in the previous example)
