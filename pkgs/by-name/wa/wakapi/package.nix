@@ -61,7 +61,7 @@ buildGoLatestModule {
     homepage = "https://wakapi.dev/";
     changelog = "https://github.com/muety/wakapi/releases/tag/${version}";
     description = "Minimalist self-hosted WakaTime-compatible backend for coding statistics";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       t4ccer
       isabelroses
