@@ -57,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
-    ./yarn-4.14-support.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -75,12 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "";
-    # <<<<<<< HEAD
-    #     hash = "sha256-oDouMkHjvENQrGBHfgGC/+ZBRJSAdXR+f2Fb0fkM9Sw=";
-    # =======
-    #     hash = "sha256-G/ASfWCR9euEs76TWV3DUbvwVjpb73gjdPngAiDHL+w=";
-    # >>>>>>> upstream/master
+    hash = "sha256-18H8hlhMPwBptTd2oBY2pjLgAnxG9QNzcjmney4EaMc=";
   };
 
   nativeBuildInputs = [
