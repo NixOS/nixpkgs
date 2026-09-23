@@ -55,6 +55,15 @@ buildPythonPackage (finalAttrs: {
     "test_labels"
     "test_labels_and_colors"
     "test_vertex_labels"
+
+    # AttributeError: module 'matplotlib.cm' has no attribute '_ensure_cmap'
+    "test_undirected"
+    "test_directed"
+    "test_build_cmap_fun"
+    "test_simple_graph"
+    "test_edges_cmap"
+    "test_leafedges_cmap"
+    "test_init_cmap"
   ];
 
   nativeCheckInputs = [
