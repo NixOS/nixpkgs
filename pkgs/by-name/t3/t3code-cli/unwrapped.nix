@@ -1,45 +1,33 @@
 {
   cctools,
-  copyDesktopItems,
-  electron_43,
   fetchFromGitHub,
   installShellFiles,
   lib,
-  libicns,
-  libsecret,
   makeBinaryWrapper,
-  makeDesktopItem,
-  nix-update-script,
+  nix-update,
   node-gyp,
   nodejs,
-  pkg-config,
   python3,
   stdenv,
-  writeDarwinBundle,
+  writeShellScript,
   xcbuild,
   fetchPnpmDeps,
   pnpm_11,
   pnpmConfigHook,
   pnpmBuildHook,
   cacert,
+  enableDesktop ? false,
 }:
 
 stdenv.mkDerivation (
   finalAttrs:
   let
-    appName = "T3 Code (Alpha)";
-    electron = electron_43;
     pnpm = pnpm_11;
-    desktopIcon =
-      if stdenv.hostPlatform.isDarwin then
-        "assets/prod/black-macos-1024.png"
-      else
-        "assets/prod/black-universal-1024.png";
 
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.0.40";
+    version = "0.0.34";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -47,13 +35,27 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-J8kXpfMfm03/DDAiWXJuANwUNDshhiUn7Lf9tV42Xfw=";
+      hash = "sha256-dS9sDlvepbQe8ATAU/DANGcyBk+BX2mxPaoljeIUn48=";
     };
 
     postPatch = ''
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
+    ''
+    + lib.optionalString enableDesktop ''
+      # Keep the desktop-only files in a separate output tree while reusing
+      # the server-only package as the desktop backend.
+      substituteInPlace apps/desktop/src/app/DesktopEnvironment.ts \
+        --replace-fail \
+          'const serverRoot =' \
+          'const serverRoot = process.env.T3CODE_SERVER_ROOT ? process.env.T3CODE_SERVER_ROOT :'
+    ''
+    + lib.optionalString (!enableDesktop) ''
+      # `build:desktop` builds the server and desktop workspaces together;
+      # server-only builds drop the desktop workspace from the filters.
+      substituteInPlace package.json \
+        --replace-fail '--filter @t3tools/desktop --filter t3 build' '--filter t3 build'
     '';
 
     nativeBuildInputs = [
@@ -67,18 +69,10 @@ stdenv.mkDerivation (
       pnpm
       cacert
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-      pkg-config
-    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
-      libicns
-      writeDarwinBundle
       xcbuild
     ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
     pnpmWorkspaces = [
       # `...` suffix is used to also include other workspace packages that are
@@ -86,9 +80,9 @@ stdenv.mkDerivation (
       # `@t3tools/contracts` and `@t3tools/shared`.
       "@t3tools/monorepo"
       "t3..."
-      "@t3tools/desktop..."
       "@t3tools/scripts..."
-    ];
+    ]
+    ++ lib.optionals enableDesktop [ "@t3tools/desktop..." ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit pnpm;
@@ -100,7 +94,11 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 4;
-      hash = "sha256-+UsoURSM4VP+CgF1fWROBEB85EuH+iJJM/xDPFigCKk=";
+      hash =
+        if enableDesktop then
+          "sha256-y/sJIluwbn65APmJ2p07FK1ScXpetCloTHtQzZMchDU="
+        else
+          "sha256-50m7xmI66AlTVLBwOtX7RmTdazJgxzrdXi9FGvRwnrk=";
     };
 
     preBuild = ''
@@ -136,89 +134,62 @@ stdenv.mkDerivation (
     installPhase = ''
       runHook preInstall
 
-      mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
-      cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode \
-        apps/desktop/{package.json,node_modules,dist-electron} \
-        "$out"/libexec/t3code/apps/desktop
-
-      mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
-      install --mode=444 ${desktopIcon} \
-        "$out"/libexec/t3code/apps/desktop/prod-resources/icon.png
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 \
-        native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
-        "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
-    ''
-    + ''
+    + lib.optionalString (!enableDesktop) ''
+      mkdir --parents "$out"/libexec/t3code/apps
+      pnpm --offline --config.inject-workspace-packages=true \
+        --filter t3 deploy --prod "$out"/libexec/t3code/apps/server
 
       find "$out"/libexec/t3code -xtype l -delete
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3 \
         --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs
+    ''
+    + lib.optionalString enableDesktop ''
+      mkdir --parents "$out"/libexec/t3code-desktop/apps/desktop
+      cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code-desktop
+      cp --recursive --no-preserve=mode \
+        apps/desktop/{package.json,node_modules,dist-electron} \
+        "$out"/libexec/t3code-desktop/apps/desktop
 
-      makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
-        --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0
+      mkdir --parents "$out"/libexec/t3code-desktop/apps/desktop/prod-resources
+      install --mode=444 ${
+        if stdenv.hostPlatform.isDarwin then
+          "assets/prod/black-macos-1024.png"
+        else
+          "assets/prod/black-universal-1024.png"
+      } "$out"/libexec/t3code-desktop/apps/desktop/prod-resources/icon.png
+
+      find "$out"/libexec/t3code-desktop -xtype l -delete
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
       # immutable by then.
-      find "$out"/libexec/t3code \
+      find "$out"/libexec \
         -path '*/node-pty/prebuilds/darwin-*/spawn-helper' \
         -exec chmod 755 {} +
-
-      mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
-      png2icns \
-        "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
-        ${desktopIcon}
-
-      # writeDarwinBundle is a shebangless bash script; run it explicitly via
-      # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
-      ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
-        "$out" "${appName}" t3code-desktop t3code
     ''
     + ''
-      mkdir --parents \
-        "$out"/share/icons/hicolor/scalable/apps
-      install --mode=444 ${desktopIcon} \
-        "$out"/share/icons/t3code.png
-      install --mode=444 assets/prod/logo.svg \
-        "$out"/share/icons/hicolor/scalable/apps/t3code.svg
-
       runHook postInstall
     '';
 
-    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        installShellCompletion --cmd t3 --"$shell" <("$out/bin/t3" --completions "$shell")
-      done
-    '';
-
-    desktopItems = [
-      (makeDesktopItem {
-        name = "t3code";
-        desktopName = appName;
-        comment = "Minimal web GUI for coding agents";
-        exec = "t3code-desktop %U";
-        terminal = false;
-        icon = "t3code";
-        startupWMClass = "t3code";
-        categories = [ "Development" ];
-      })
-    ];
+    postInstall =
+      lib.optionalString (!enableDesktop && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+        ''
+          for shell in bash fish zsh; do
+            installShellCompletion --cmd t3 --"$shell" <("$out/bin/t3" --completions "$shell")
+          done
+        '';
 
     passthru = {
-      updateScript = nix-update-script {
-        attrPath = "t3code.unwrapped";
-        extraArgs = [ "--use-github-releases" ];
-      };
+      updateScript = writeShellScript "t3code-update" ''
+        set -eu
+        ${lib.getExe nix-update} t3code-cli.unwrapped --use-github-releases
+        ${lib.getExe nix-update} t3code-desktop.unwrapped --version=skip --no-src
+      '';
     };
 
     meta = {
-      description = "Minimal web GUI for coding agents";
       homepage = "https://t3.codes";
       downloadPage = "https://t3.codes/download";
       changelog = "https://github.com/pingdotgg/t3code/releases/tag/${finalAttrs.src.tag}";
@@ -227,7 +198,6 @@ stdenv.mkDerivation (
         iamanaws
         qweered
       ];
-      mainProgram = "t3code-desktop";
       inherit (nodejs.meta) platforms;
     };
   }
