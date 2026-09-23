@@ -292,6 +292,9 @@ let
             services.displayManager.defaultSession = lib.mkForce "lomiri";
 
             # Not setting wallpaper, as it breaks indicator OCR(?)
+            environment.variables = {
+              LOMIRI_RUNNING_IN_VM = "1";
+            };
           };
 
         enableOCR = true;
@@ -385,6 +388,10 @@ in
             greeters.lomiri.enable = true;
           };
           services.displayManager.defaultSession = lib.mkForce "none+icewm";
+
+          environment.variables = {
+            LOMIRI_RUNNING_IN_VM = "1";
+          };
         };
 
       enableOCR = true;
@@ -486,6 +493,10 @@ in
                 inherit (alacritty) meta;
               })
             ];
+
+            variables = {
+              LOMIRI_RUNNING_IN_VM = "1";
+            };
           };
 
           programs.dconf.profiles.user.databases = [
@@ -624,6 +635,8 @@ in
             etc."${wallpaperName}".source = wallpaperFile pkgs;
 
             variables = {
+              LOMIRI_RUNNING_IN_VM = "1";
+
               # So we can test what lomiri-content-hub is working behind the scenes
               LOMIRI_CONTENT_HUB_LOGGING_LEVEL = "2";
             };
@@ -779,6 +792,10 @@ in
             ];
 
             environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
+
+            environment.variables = {
+              LOMIRI_RUNNING_IN_VM = "1";
+            };
 
             programs.dconf.profiles.user.databases = [
               (lomiriWallpaperDconfSettings pkgs)
