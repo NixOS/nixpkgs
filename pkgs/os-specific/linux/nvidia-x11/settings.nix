@@ -30,7 +30,7 @@ let
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.settingsVersion;
+    tag = nvidia_x11.settingsVersion;
     inherit sha256;
   };
 
