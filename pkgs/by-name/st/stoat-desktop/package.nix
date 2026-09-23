@@ -21,14 +21,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UKMuMtBTfiA31K2i1buCFOtL9lf9xbv6BXVD5m4TARo=";
+    hash = "sha256-ouC+90Ulra+qbZbW4TeDS4IZraFULo+U/wKRYBwWR04=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     fetcherVersion = 4;
     pnpm = pnpm_11;
-    hash = "sha256-uiKTkXU0THzW46FiAfftqMWfrnFPCfgS/30ZuWmpHMI=";
+    hash = "sha256-ETP0S3H0MSzu7+5WvqnYGup2Nt4OJxQBMPUf7so92OU=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
