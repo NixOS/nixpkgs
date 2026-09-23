@@ -10,6 +10,7 @@
   redisTestHook,
   fontconfig,
   nixosTests,
+  fetchpatch,
 
   # runtime inputs
   gitSVN,
@@ -61,6 +62,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
         '_cmd: ClassVar[str] = "git"' \
         '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "typing_improvement"; # a prerequisite for the fix_migration patch
+      url = "https://github.com/WeblateOrg/weblate/commit/df5aa0fd19287feb035eaf02323c72bcce92d1ad.patch";
+      hash = "sha256-oOxCD5/g2XPwXtOKHHiiKV9caITxfoiWTzolwgwZobc=";
+    })
+    (fetchpatch {
+      name = "fix_migration"; # should be included in post-2026.9.1 release
+      url = "https://github.com/WeblateOrg/weblate/commit/7c4235779f89a421c7c6c24ee5bbbaa4f0ab50f1.patch";
+      excludes = [ "docs/changes.rst" ]; # incompatible change
+      hash = "sha256-V8HyeBALZ8HaXHmhC8PK8ktB4osf9za+FH7dFLI3xis=";
+    })
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
