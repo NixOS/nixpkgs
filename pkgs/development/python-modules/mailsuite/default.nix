@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "mailsuite" ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = finalAttrs.passthru.optional-dependencies.all ++ [
     pytestCheckHook
   ];
 
