@@ -44,4 +44,4 @@ A very simple prompt backend would look something like this:
 }
 ```
 
-One thing to note is that prompt (and by extension, store) backends will not be sandboxed (unlike generator scripts).
+One thing to note is that prompt (and by extension, store) backends are not sandboxed (unlike generator scripts).

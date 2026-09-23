@@ -85,7 +85,7 @@ Running fixup scripts:
 
 ### Secret dependencies
 
-Secrets can depend on other secrets. The inputs for a given secret will be available in the `$in` directory for the respective script. For example:
+Secrets can depend on other secrets. The inputs for a given secret are available in the `$in` directory for the respective script. For example:
 
 ```nix
 {
@@ -109,7 +109,7 @@ Secrets can depend on other secrets. The inputs for a given secret will be avail
 }
 ```
 
-Note that we did not manually specify a backend this time! In such scenarios, the module will automatically use the `secrets.backends.defaults.store` backend. Running the CLI again will generate the new secret:
+Note that we did not manually specify a backend this time! In such scenarios, the module automatically uses the `secrets.backends.defaults.store` backend. Running the CLI again will generate the new secret:
 
 ```
 $ nixos-secrets generate --file /path/to/config
@@ -184,7 +184,7 @@ It is often useful for generators to allow human (or otherwise external) input. 
 
 The `label` and `description` fields offer the user information about what prompt they are currently filling in. The `type` field tells the backend what kind of input they should ask the user for. The supported types are currently `line`, `hidden`, and `multiline`.
 
-The `backend` field works similarly to the `backend` field used by secrets (although prompt and store backends are distinct concepts!). If absent, the module will default to the `secrets.backends.defaults.prompt` option.
+The `backend` field works similarly to the `backend` field used by secrets (although prompt and store backends are distinct concepts!). If absent, the module defaults to the `secrets.backends.defaults.prompt` option.
 
 Running the above through the CLI (with the `--generate` flag!) will ask the user to type in their name before generating the rest of the secrets:
 
