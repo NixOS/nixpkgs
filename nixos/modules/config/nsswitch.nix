@@ -56,8 +56,6 @@
           List of shadow entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
         '';
         default = [ ];
       };
@@ -68,8 +66,6 @@
           List of sudoers entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
         '';
         default = [ ];
       };
@@ -133,7 +129,7 @@
       {
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
         message = ''
-          Loading NSS modules from system.nssModules (${config.system.nssModules.path}),
+          Loading most NSS modules from system.nssModules (${config.system.nssModules.path})
           requires services.nscd.enable being set to true.
 
           If disabling nscd is really necessary, it is possible to disable loading NSS modules
@@ -142,8 +138,7 @@
       }
     ];
 
-    # Name Service Switch configuration file.  Required by the C
-    # library.
+    # Name Service Switch configuration file. Required by the C library.
     environment.etc."nsswitch.conf".text = ''
       passwd:    ${lib.concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${lib.concatStringsSep " " config.system.nssDatabases.group}
