@@ -1,4 +1,4 @@
-# How to reset `data` and `etc` directories
+# How to reset `data` and `etc` directories {#sec-crowdsec-reset}
 
 This is often useful if you encounter errors from `crowdsec-setup`. Just do the following:
 
