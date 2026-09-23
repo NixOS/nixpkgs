@@ -10,17 +10,7 @@
 }:
 
 let
-  generic =
-    args:
-    let
-      imported = import ./generic.nix args;
-    in
-    callPackage imported {
-      lib32 =
-        (pkgsi686Linux.callPackage imported {
-          libsOnly = true;
-        }).out;
-    };
+  generic = callPackage ./generic.nix;
 
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
 
