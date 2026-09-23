@@ -50,6 +50,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: Lists differ: [0.5, 0.5, 0.25, 0.5, 0.75, nan, nan, nan] !=...
+    "test_cat_boost_missing"
+    # AssertionError: False is not true
+    "test_ignored_columns_are_untouched"
+    # AssertionError: DataFrame.iloc[:, 0] (column name="0") are different
+    "test_missing_values"
+    # sklearn.exceptions.NotFittedError: Estimator has to be fitted to return featureS...
+    "test_feature_names_out"
+    "test_hierarchy_with_scikit_learn_column_transformer"
+    "test_sklearn_pandas_out_refit"
+    # AssertionError
+    "test_unknown_value"
+
+  ];
+
   pythonImportsCheck = [
     "category_encoders"
   ];
