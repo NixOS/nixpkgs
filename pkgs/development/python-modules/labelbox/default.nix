@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "labelbox";
-  version = "7.9.0";
+  version = "7.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6NTrac0C1rFFVk2+/Nt82p9VH1WxwYMkgVP2uqn+j2k=";
+    hash = "sha256-a3G9Jl1IfbLyI7RZY32zZTbPg8EpSZUrNy12A01Y+Qc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/labelbox";
