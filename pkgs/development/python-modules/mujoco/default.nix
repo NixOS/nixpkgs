@@ -21,6 +21,7 @@
   numpy,
   pyopengl,
   typing-extensions,
+  websockets,
 
   perl,
   python,
@@ -39,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-U5F11dsl0Z7BRRcPomR4SmJsXssif3jRh341oKeVX2k=";
+    hash = "sha256-91oHMfb9gpOHobqcmniR7+xCkABRemw/mvmPQXNdO28=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -60,6 +61,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     pyopengl
     typing-extensions
+    websockets
   ];
 
   pythonImportsCheck = [ "mujoco" ];

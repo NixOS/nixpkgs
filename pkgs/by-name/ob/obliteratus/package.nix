@@ -85,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tests are hardware-dependent
     "test_jetson_cuda_runtime_contract"
     "test_jetson_cuda_offloaded_surgery_contract"
+    "test_policy_rejects_unknown_cpu_exclusion_gate"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
