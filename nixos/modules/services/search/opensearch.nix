@@ -39,7 +39,7 @@ in
           type = lib.types.str;
           default = "127.0.0.1";
           description = ''
-            Which port this service should listen on.
+            Which address this service should listen on.
           '';
         };
 
