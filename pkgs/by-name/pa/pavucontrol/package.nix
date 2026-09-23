@@ -6,7 +6,7 @@
   intltool,
   libpulseaudio,
   gtkmm4,
-  libsigcxx,
+  libsigcxx_2_0,
   # Since version 6.1, libcanberra is optional
   withLibcanberra ? true,
   libcanberra-gtk3,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libpulseaudio
     gtkmm4
-    libsigcxx
+    libsigcxx_2_0
     (lib.optionals withLibcanberra libcanberra-gtk3)
     json-glib
     adwaita-icon-theme

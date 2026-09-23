@@ -106,12 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMGENERATORDIR = "${placeholder "out"}/lib/systemd/system-generators";
   };
 
-  # Workaround for RISCV cross-compilation issue
-  # https://github.com/koverstreet/bcachefs-tools/issues/850
-  preBuild = lib.optionalString stdenv.hostPlatform.isRiscV ''
-    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS --target=riscv64-unknown-linux-gnu -march=rv64gc"
-  '';
-
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 

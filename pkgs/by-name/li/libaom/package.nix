@@ -23,25 +23,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libaom";
-  version = "3.12.1";
+  version = "3.15.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-AAS6wfq4rZ4frm6+gwKoIS3+NVzPhhfW428WXJQ2tQ8=";
+    hash = "sha256-TixZQP06TEZPtpHvWVOEagzHtXW9hqXWweO2yimBDG4=";
     stripRoot = false;
   };
 
   patches = [
     ./outputs.patch
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
-    # on Darwin.
-    (fetchurl {
-      name = "musl.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
-      hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -54,11 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
-    # This can be removed when we switch to libcxx from llvm 20
-    # https://github.com/llvm/llvm-project/pull/122361
-    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
-  };
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+      # This can be removed when we switch to libcxx from llvm 20
+      # https://github.com/llvm/llvm-project/pull/122361
+      NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      # _POSIX_C_SOURCE breaks system headers on Darwin; it's required on musl
+      NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE=200112L";
+    };
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -91,10 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     moveToOutput lib/libaom.a "$static"
+    substituteInPlace "$dev"/lib/cmake/*/*.cmake \
+      --replace-quiet "$out/lib/libaom.a" "$static/lib/libaom.a" \
+      --replace-quiet "$"'{_IMPORT_PREFIX}/include' "$dev/include"
   ''
   + lib.optionalString stdenv.hostPlatform.isStatic ''
     ln -s $static $out
   '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"

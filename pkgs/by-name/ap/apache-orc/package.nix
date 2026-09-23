@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_HOME = gtest.dev;
     LZ4_HOME = lz4;
     ORC_FORMAT_URL = orc-format;
-    PROTOBUF_HOME = protobuf;
+    PROTOBUF_HOME = protobuf.full; # Configure script expects to find both executables and headers at this path.
     SNAPPY_HOME = snappy.dev;
     ZLIB_HOME = zlib.dev;
     ZSTD_HOME = zstd.dev;

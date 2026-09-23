@@ -116,7 +116,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.28.6";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Zjbywiic7aUsSrqXEzjIHitXgNM4G9NnPBwRbsh1h8M=";
+    hash = "sha256-3FJTg8GLLCZbvmpD1JhlbNkYqqEwqk46vqvNqnQcP/4=";
   };
 
   patches = [

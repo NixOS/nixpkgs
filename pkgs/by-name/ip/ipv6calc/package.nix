@@ -6,6 +6,7 @@
   ip2location-c,
   openssl,
   perl,
+  fetchpatch,
   libmaxminddb ? null,
   geolite-legacy ? null,
 }:
@@ -28,6 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     ip2location-c
     openssl
     perl
+  ];
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/pbiering/ipv6calc/commit/9b6aebd3690d93b6c2f9efa9346ec72540b1a718.patch";
+      hash = "sha256-Y/XBMWdG2/Pfr/vZ2+RGYGj2JS3mWJwQGkXnKvXHArg=";
+    })
   ];
 
   postPatch = ''

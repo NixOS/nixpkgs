@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 11 Jul 2026 14:43:47 -0400
+Subject: [PATCH 10/11] Load IndexStore from the store
+
+---
+ Sources/Build/LLBuildProgressTracker.swift | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/Sources/Build/LLBuildProgressTracker.swift b/Sources/Build/LLBuildProgressTracker.swift
+index 63a6a6caa..ac9b63419 100644
+--- a/Sources/Build/LLBuildProgressTracker.swift
++++ b/Sources/Build/LLBuildProgressTracker.swift
+@@ -114,15 +114,12 @@ public final class BuildExecutionContext {
+                 // library is currently installed as `libIndexStore.dll` rather than
+                 // `IndexStore.dll`.  In the future, this may require a fallback
+                 // search, preferring `IndexStore.dll` over `libIndexStore.dll`.
+-                let indexStoreLib = self.toolsBuildParameters.toolchain.swiftCompilerPath
+-                    .parentDirectory
+-                    .appending("libIndexStore.dll")
++                let indexStoreLib = TSCAbsolutePath("@libclang@").appending(components: "lib", "libIndexStore.dll")
+                 #else
+                 let ext = self.toolsBuildParameters.triple.dynamicLibraryExtension
+-                let indexStoreLib = try toolsBuildParameters.toolchain.toolchainLibDir
+-                    .appending("libIndexStore" + ext)
++                let indexStoreLib = TSCAbsolutePath("@libclang@").appending(components: "lib", "libIndexStore" + ext)
+                 #endif
+-                return try .success(IndexStoreAPI(dylib: TSCAbsolutePath(indexStoreLib)))
++                return try .success(IndexStoreAPI(dylib: indexStoreLib))
+             } catch {
+                 return .failure(error)
+             }
+-- 
+2.54.0
+

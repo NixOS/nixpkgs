@@ -1,0 +1,22 @@
+From afdddf3098f0cd0a7340609950df4f9471a12c61 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 28 Feb 2026 13:32:37 -0500
+Subject: [PATCH] install-argument-parser-tool-info
+
+---
+ Sources/ArgumentParserToolInfo/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/ArgumentParserToolInfo/CMakeLists.txt b/Sources/ArgumentParserToolInfo/CMakeLists.txt
+index b82adb7..478f89d 100644
+--- a/Sources/ArgumentParserToolInfo/CMakeLists.txt
++++ b/Sources/ArgumentParserToolInfo/CMakeLists.txt
+@@ -7,4 +7,5 @@ target_compile_options(ArgumentParserToolInfo PRIVATE
+   $<$<BOOL:${BUILD_TESTING}>:-enable-testing>)
+ 
+ 
++_install_target(ArgumentParserToolInfo)
+ set_property(GLOBAL APPEND PROPERTY ArgumentParser_EXPORTS ArgumentParserToolInfo)
+-- 
+2.51.2
+

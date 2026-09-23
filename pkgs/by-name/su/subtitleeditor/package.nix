@@ -12,7 +12,7 @@
   gtkmm3,
   gst_all_1,
   hicolor-icon-theme,
-  libsigcxx,
+  libsigcxx_2_0,
   libxmlxx,
   xdg-utils,
   isocodes,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     hicolor-icon-theme
-    libsigcxx
+    libsigcxx_2_0
     libxmlxx
     xdg-utils
     isocodes

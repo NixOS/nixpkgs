@@ -10,12 +10,12 @@
   cairo,
   ffmpeg,
   gettext,
-  glibmm,
+  glibmm_2_4,
   libmng,
   gtk3,
   gtkmm3,
   libjack2,
-  libsigcxx,
+  libsigcxx_2_0,
   libxmlxx,
   mlt,
   imagemagick,
@@ -79,9 +79,9 @@ let
     ];
     buildInputs = [
       ETL
-      glibmm
+      glibmm_2_4
       mlt
-      libsigcxx
+      libsigcxx_2_0
       libxmlxx
       imagemagick
       harfbuzz
@@ -130,12 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
     ETL
     synfig
     cairo
-    glibmm
+    glibmm_2_4
     gtk3
     gtkmm3
     imagemagick
     libjack2
-    libsigcxx
+    libsigcxx_2_0
     libxmlxx
     mlt
     fontconfig

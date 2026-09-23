@@ -1,0 +1,18 @@
+Guard setlocale() the same way as its header include.
+
+Upstream SVN r6590. parse.c includes <locale.h> only when both
+HAVE_ICONV and HAVE_LANGINFO_H are defined, but the setlocale() call
+was guarded on HAVE_LANGINFO_H alone, breaking the build on systems
+that have langinfo.h but no working iconv (e.g. macOS).
+
+--- a/frontend/parse.c
++++ b/frontend/parse.c
+@@ -1619,7 +1619,7 @@
+     enum TextEncoding id3_tenc = TENC_LATIN1;
+ #endif
+ 
+-#ifdef HAVE_LANGINFO_H
++#if defined(HAVE_ICONV) && defined(HAVE_LANGINFO_H)
+     setlocale(LC_CTYPE, "");
+ #endif
+     inPath[0] = '\0';

@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-client/zookeeper-client-c";
 
+  # Fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

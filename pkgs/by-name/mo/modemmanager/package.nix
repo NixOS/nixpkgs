@@ -26,8 +26,8 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   polkit,
   withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     polkit
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   nativeInstallCheckInputs = [

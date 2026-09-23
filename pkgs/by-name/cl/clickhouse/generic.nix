@@ -130,6 +130,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/ utils/
+
+    substituteInPlace contrib/liburing-cmake/CMakeLists.txt \
+      --replace-fail "set (LIBURING_CONFIG_HAS_OPEN_HOW        FALSE)" "set (LIBURING_CONFIG_HAS_OPEN_HOW        TRUE)"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/tools.cmake \

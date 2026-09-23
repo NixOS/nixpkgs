@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  substitute,
   stdenv,
   yarn-berry_4,
   nodejs_24,
@@ -25,13 +26,28 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mifi";
     repo = "lossless-cut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LNh9F2aKxVegZTAPuEAqo2f78ynGMgnpwnDXEP1u2+M=";
+    hash = "sha256-E0Ds2Wpo+JUSfd+hBY7QdJM1cUlWgNWW4zEiB0rdh6w=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/mifi/lossless-cut/blob/master/package.json#L492
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   patches = [
     # fixes a few things that try to guess whether it's a dev build
     ./undev.patch
-    ./yarn-4.14-support.patch
     ./disable-update-check.patch
     # LosslessCut will retrieve a URL from mifi.no (the author's domain) and directly embed the HTML in the app.
     # This was previously used to show a Ukraine flag, which I don't have strong opinions on.
@@ -121,8 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-o0u9dAoo0sTEV+kjQg8TjRNAIcx8fqfk79HsDwAXriA=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-81pebHUkVLEAe01a5olTP9zzQkTCrGMWUvNTYBsW+Bk=";
   };
 
   postConfigure = ''

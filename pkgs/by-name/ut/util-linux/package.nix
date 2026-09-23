@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  autoconf,
-  automake116x,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
@@ -160,8 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake116x
     installShellFiles
     pkg-config
   ]

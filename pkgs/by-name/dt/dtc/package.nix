@@ -14,40 +14,43 @@
   replaceVars,
   swig,
   libyaml,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-KZCzrvdWd6zfQHppjyp4XzqNCfH2UnuRneu+BNIRVAY=";
+    hash = "sha256-l32ZGygimwSB2xmwQEvS+C2c5n86OMH92jQZ/tPI+YI=";
   };
 
   patches = [
-    # backport of https://github.com/dgibson/dtc/pull/141
-    # to 1.7.2, to drop in 1.8.
-    ./static.patch
-    # backport fix for SWIG 4.3
+    # These 4 patches fix build failures on x86_64-linux for tests/dumptrees by replacing it.
     (fetchpatch2 {
-      url = "https://github.com/dgibson/dtc/commit/9a969f3b70b07bbf1c9df44a38d7f8d1d3a6e2a5.patch";
-      hash = "sha256-YrRzc3ATNmU6LYNHEQeU8wtjt1Ap7/gNFvtRR14PQEE=";
+      url = "https://github.com/dgibson/dtc/commit/9b53b9a4c2f953a37d8f68d72f5910b20cf5aee0.patch?full_index=1";
+      hash = "sha256-HHX3zg1uwD3ZFHbHcANX85gNDpeEMVbkG7zMhyc/87k=";
     })
-    # glibc-2.41 support
     (fetchpatch2 {
-      url = "https://github.com/dgibson/dtc/commit/ce1d8588880aecd7af264e422a16a8b33617cef7.patch";
-      hash = "sha256-t1CxKnbCXUArtVcniAIdNvahOGXPbYhPCZiTynGLvfo=";
+      url = "https://github.com/dgibson/dtc/commit/f116f4800edce6cd58f680a36fbaed656018d528.patch?full_index=1";
+      hash = "sha256-XcLzfruD3DGs4girNxsqrhBW3Ct/+vAltn8OzIRyU6w=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/dgibson/dtc/commit/4df9ca4c8ddb83c40900bf13916b42914a25caf4.patch?full_index=1";
+      hash = "sha256-ap3D2DxHxLYOSJPhWAUP/nooi/n2/wLc65NfbjlYl2M=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/dgibson/dtc/commit/214372a27398121f8266cf9bb9592561508c4c0f.patch?full_index=1";
+      hash = "sha256-Fk0dA1J14NsIfd5qSknOMkB769TEwvWem8e+uEleM84=";
     })
   ]
-  ++
-    lib.optional pythonSupport
-      # Make Meson use our Python version, not the one it was built with itself
-      (
-        replaceVars ./python-path.patch {
-          python_bin = lib.getExe python;
-        }
-      );
+  ++ lib.optionals pythonSupport [
+    # Make Meson use our Python version, not the one it was built with itself
+    (replaceVars ./python-path.patch {
+      python_bin = lib.getExe python;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -55,25 +58,23 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     bison
     pkg-config
-    which
   ]
   ++ lib.optionals pythonSupport [
     python
-    python.pkgs.setuptools-scm
     swig
   ];
 
   buildInputs = [ libyaml ];
 
   postPatch = ''
-    patchShebangs setup.py
-
     # Align the name with pypi
-    sed -i "s/name='libfdt',/name='pylibfdt',/" setup.py
+    substituteInPlace pyproject.toml --replace-fail "name = 'libfdt'" "name = 'pylibfdt'"
   '';
 
   # Required for installation of Python library and is innocuous otherwise.
   env.DESTDIR = "/";
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
@@ -96,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
       # `-Dtests=disabled`; without it meson will attempt to run
       # hostPlatform binaries during the configurePhase.
       (with stdenv; buildPlatform.canExecute hostPlatform);
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Device Tree Compiler";

@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+
+      # Remove when updating since upstream updated Yarn
+      # https://github.com/laurent22/joplin/commit/071f205c44da8e2979dcf53a4105648bfa0e7f83
+      sed -i '/__metadata/{n;s/version: 8$/version: ${yarn-berry.lockfileVersion}/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };

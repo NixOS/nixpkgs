@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:59:57 -0500
+Subject: [PATCH 09/11] add-missing-libraries
+
+---
+ Sources/PackageSigning/CMakeLists.txt    | 1 +
+ Sources/SwiftBuildSupport/CMakeLists.txt | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/Sources/PackageSigning/CMakeLists.txt b/Sources/PackageSigning/CMakeLists.txt
+index 13a7b8cd5..d00c7d01e 100644
+--- a/Sources/PackageSigning/CMakeLists.txt
++++ b/Sources/PackageSigning/CMakeLists.txt
+@@ -21,6 +21,7 @@ target_link_libraries(PackageSigning PUBLIC
+   Basics
+   Crypto
+   PackageModel
++  SwiftASN1
+   TSCBasic
+   TSCUtility
+   X509)
+diff --git a/Sources/SwiftBuildSupport/CMakeLists.txt b/Sources/SwiftBuildSupport/CMakeLists.txt
+index 3bd426bbf..c926ab811 100644
+--- a/Sources/SwiftBuildSupport/CMakeLists.txt
++++ b/Sources/SwiftBuildSupport/CMakeLists.txt
+@@ -19,6 +19,7 @@ add_library(SwiftBuildSupport STATIC
+   PIFBuilder.swift
+   SwiftBuildSystem.swift)
+ target_link_libraries(SwiftBuildSupport PUBLIC
++  ArgumentParser
+   Build
+   DriverSupport
+   TSCBasic
+@@ -26,6 +27,7 @@ target_link_libraries(SwiftBuildSupport PUBLIC
+   PackageGraph
+   SwiftBuild::SwiftBuild
+   SwiftBuild::SWBBuildService
++  SwiftSystem::SystemPackage
+ )
+ 
+ set_target_properties(SwiftBuildSupport PROPERTIES
+-- 
+2.54.0
+

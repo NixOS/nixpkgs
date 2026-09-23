@@ -1,0 +1,48 @@
+From a60ea4fbf21654eac779eece5c6d304e0f7b64c8 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 09:40:18 -0500
+Subject: [PATCH] find-bundles-in-store
+
+---
+ Sources/CMakeLists.txt | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/Sources/CMakeLists.txt b/Sources/CMakeLists.txt
+index c0d0304..9df123e 100644
+--- a/Sources/CMakeLists.txt
++++ b/Sources/CMakeLists.txt
+@@ -24,18 +24,17 @@ function(SwiftBuild_Bundle)
+       ${CMAKE_COMMAND} -E copy_if_different ${BundleXCSpecs_FILES} "${CMAKE_BINARY_DIR}/share/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources/")
+ 
+ 
+-  file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/share/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources" _SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH)
++  file(TO_NATIVE_PATH "${CMAKE_INSTALL_DATADIR}/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources" _SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH)
+   file(CONFIGURE
+     OUTPUT "${CMAKE_BINARY_DIR}/resource_accessors/SwiftBuild_${BundleXCSpecs_MODULE}_resource_bundle_accessor.swift"
+     CONTENT [[
+     import Foundation
+     extension Foundation.Bundle {
+       static let module: Bundle = {
+-        let mainPath = Bundle.main.bundleURL.appendingPathComponent("SwiftBuild_@BundleXCSpecs_MODULE@.resources").path
+-        let buildPath = #"@_SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH@"#
++        let mainPath = #"@_SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH@"#
+         let preferredBundle = Bundle(path: mainPath)
+-        guard let bundle = preferredBundle ?? Bundle(path: buildPath) else {
+-          Swift.fatalError("could not load resource bundle: from \(mainPath) or \(buildPath)")
++        guard let bundle = preferredBundle else {
++          Swift.fatalError("could not load resource bundle: from \(mainPath)")
+         }
+         return bundle
+       }()
+@@ -48,7 +47,7 @@ function(SwiftBuild_Bundle)
+ 
+   install(DIRECTORY
+     "${CMAKE_BINARY_DIR}/share/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources/"
+-    DESTINATION share/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources/)
++    DESTINATION ${CMAKE_INSTALL_DATADIR}/pm/SwiftBuild_${BundleXCSpecs_MODULE}.resources/)
+ endfunction()
+ 
+ add_subdirectory(SWBCSupport)
+-- 
+2.51.2
+

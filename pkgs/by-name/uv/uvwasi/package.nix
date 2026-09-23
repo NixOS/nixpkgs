@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+vz/qTMRRDHV1VE4nny9vYYtarZHk1xoM4EZiah3jnY=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   patches = [
     # FIXME: remove when included in a release
     (fetchpatch2 {
@@ -38,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
   ];
 
   nativeBuildInputs = [

@@ -24,6 +24,7 @@
   yarn,
   yarn-berry_4,
   runCommand,
+  substitute,
 
   wrapGAppsHook3,
 
@@ -42,7 +43,7 @@ let
 
   srcHash = "sha256-0sqtKiMqw7MLXVFSCT1sKX/VO7q5BY63pJP5OnCE2zo=";
   cargoHash = "sha256-LQ5uD86ZOKXy9vGbTqPBi3Q57PZEjwQkbHR94QAIVMg=";
-  yarnHash = "sha256-bOgiZImraPXR/gVk9MB3o9GScMGvLvdhc9mLAaCA4IE=";
+  yarnHash = "sha256-mpHGclmQxFqiIuZWFTOYBKQW24ugSVhQiYMTmyyk/n4=";
   pythonDeps =
     with python3Packages;
     [
@@ -155,9 +156,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
 
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ankitects/anki/blob/main/package.json#L99
-    ./patches/yarn-4.14-support.patch
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/ankitects/anki/blob/main/package.json#L103
+    (substitute {
+      src = ./patches/yarn-fix.patch;
+      substitutions = [
+        "--replace-fail"
+        "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+        yarn-berry.lockfileVersion
+      ];
+    })
   ];
 
   inherit cargoDeps;

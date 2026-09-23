@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cunit,
+  nodejs,
   zlib,
 }:
 
@@ -26,9 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib ];
 
+  nativeCheckInputs = [ nodejs ];
+
+  checkInputs = [ cunit ];
+
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" false)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
+
+  doCheck = true;
 
   __structuredAttrs = true;
   strictDeps = true;

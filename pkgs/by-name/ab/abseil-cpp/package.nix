@@ -6,7 +6,7 @@
 # required LTS branch, leaving `abseil-cpp` as an alias.
 
 {
-  abseil-cpp_202601,
+  abseil-cpp_202608,
   cxxStandard ? null,
 }:
-abseil-cpp_202601.override { inherit cxxStandard; }
+abseil-cpp_202608.override { inherit cxxStandard; }

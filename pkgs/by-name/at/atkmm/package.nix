@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   atk,
-  glibmm,
+  glibmm_2_4,
   pkg-config,
   gnome,
   meson,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     atk
-    glibmm
+    glibmm_2_4
   ];
 
   nativeBuildInputs = [

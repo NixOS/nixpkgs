@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   nodejs,
   meson,
@@ -30,22 +31,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "JumpLink";
     repo = "Learn6502";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wttNOF1ngEK70u+6bBZkFLzvJCQaL9KMfy7EG+mfHIg=";
+    hash = "sha256-b91b+H5avQDYknDaKUSPGG+Vq6sxSwuJgSiVzdqlbh8=";
+
+    # Remove when updating since upstream migrated to gjsify
+    # https://github.com/JumpLink/Learn6502/commit/1ae86c179aede8c5785aeda66db334a29d02a7c0
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   patches = [
     ./get-yarn-from-path.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/JumpLink/Learn6502/blob/main/package.json#L36
-    ./yarn-4.14-support.patch
   ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-fWx1zawU8pJQ3Q7PYWKmJh3Ko7b8wO0m3KS6XCSd9v8=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-BIP2L6EQXKzpiYrA8qpqQEQ/NnjFrQSyHlmFg7vg1Xk=";
   };
 
   nativeBuildInputs = [
