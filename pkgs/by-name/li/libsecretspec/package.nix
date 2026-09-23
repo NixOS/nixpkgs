@@ -12,28 +12,28 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "secretspec-ffi";
-  version = "0.19.0";
+  pname = "libsecretspec";
+  version = "0.21.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "secretspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u6zfPsyLoktLQTE8OEDhK0GtiogOw/3ML4zpDVhSrX0=";
+    hash = "sha256-12jIhLZhtyQwkt2vKHqjGOuKSwwevcxzp8Ii02RTMLY=";
   };
 
-  cargoHash = "sha256-ogeNTp94FJv7p+eZgrLUK1i63VCHiqHd7BsP+jDMHVc=";
+  cargoHash = "sha256-yqBAhnHBwKbSyH8sEDo6y0xGUdKJgHd3Gsr1sTS/bRc=";
 
   nativeBuildInputs = [ cargo-c ];
 
   # Keep the static archive intact while removing non-exported symbols from the shared library.
   stripDebugFlags = if stdenv.hostPlatform.isDarwin then [ "-x" ] else [ "--strip-unneeded" ];
-  stripExclude = [ "lib/libsecretspec_ffi.a" ];
+  stripExclude = [ "lib/libsecretspec.a" ];
 
   buildPhase = ''
     runHook preBuild
-    ${buildPackages.rust.envVars.setEnv} cargo cbuild -p secretspec-ffi -j $NIX_BUILD_CORES \
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -p libsecretspec -j $NIX_BUILD_CORES \
       --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    ${buildPackages.rust.envVars.setEnv} cargo cinstall -p secretspec-ffi -j $NIX_BUILD_CORES \
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -p libsecretspec -j $NIX_BUILD_CORES \
       --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkPhase = ''
     runHook preCheck
-    ${buildPackages.rust.envVars.setEnv} cargo ctest -p secretspec-ffi -j $NIX_BUILD_CORES \
+    ${buildPackages.rust.envVars.setEnv} cargo ctest -p libsecretspec -j $NIX_BUILD_CORES \
       --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
@@ -68,8 +68,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
             buildInputs = [ finalAttrs.finalPackage ];
           }
           ''
-            $CC ${finalAttrs.src}/secretspec-ffi/tests/smoke.c \
-              $(pkg-config --cflags --libs secretspec_ffi) \
+            $CC ${finalAttrs.src}/libsecretspec/tests/smoke.c \
+              $(pkg-config --cflags --libs libsecretspec) \
               -o smoke
             ./smoke
             touch $out
@@ -86,6 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       domenkozar
       sandydoo
     ];
-    pkgConfigModules = [ "secretspec_ffi" ];
+    pkgConfigModules = [ "libsecretspec" ];
   };
 })
