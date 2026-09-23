@@ -183,7 +183,7 @@ in
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
       after = [ "tailscaled.service" ];
       wants = [ "tailscaled.service" ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "tailscaled.service" ];
       serviceConfig = {
         Type = "notify";
       };
@@ -240,7 +240,7 @@ in
         "tailscaled-autoconnect.service"
       ];
       wants = [ "tailscaled.service" ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "tailscaled.service" ];
       serviceConfig = {
         Type = "oneshot";
       };
