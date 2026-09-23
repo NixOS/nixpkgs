@@ -1,0 +1,38 @@
+diff --git a/durdraw/neofetcher.py b/durdraw/neofetcher.py
+index 27de09f..7699a2f 100644
+--- a/durdraw/neofetcher.py
++++ b/durdraw/neofetcher.py
+@@ -15,6 +15,22 @@ od_fetchers = OrderedDict({
+     "neofetch": ["neofetch", "--stdout", "--config", "none"],
+ })
+ 
++# fastfetch uses different keys than neofetch for some fields
++fastfetch_keys = {
++    'Desktop Environment': 'DE',
++    'Window Manager': 'WM',
++}
++
++def normalize_key(key, value):
++    """ Map fastfetch keys like 'GPU 1' or 'Display (Name)' to neofetch keys """
++    key = fastfetch_keys.get(key, key)
++    if re.fullmatch(r'GPU \d+', key):
++        key = 'GPU'
++    elif key.startswith('Display'):
++        key = 'Resolution'
++        value = value.split(' ')[0]
++    return key, value
++
+ def strip_escape_codes(text):
+     # 7-bit C1 ANSI sequences
+     ansi_escape = re.compile(r'''
+@@ -68,7 +84,9 @@ def run(fetcher=""):
+             #print(f"found key: {key}, new_value: {new_value}")
+         except:
+             break
+-        if key in fetch_results:
++        key, value = normalize_key(key, value)
++        # keep the first value if a key shows up more than once (eg: GPU 1, GPU 2)
++        if key in fetch_results and not fetch_results[key]:
+             fetch_results[key] = value
+     return fetch_results
+ 
