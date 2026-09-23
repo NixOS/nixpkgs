@@ -190,4 +190,4 @@ Generator scripts are sandboxed by default (one can disable this by passing `--n
 
 ## A note on terminology
 
-When referring to the machines involved, the "target" system is the one the secrets are meant to be deployed to, and the "host" system is the one where the CLI is being run. These machines might or might not be the same, and they might or might not share an architecture. Theses terms are often used in option names used by the various backends (for example, the example `plain` backend holds both host and target paths for the secret directories).
+When referring to the machines involved, the "target" system is the one the secrets are meant to be deployed to, and the "host" system is the one where the CLI is being run. These machines might or might not coincide, and they might or might not share an architecture. Theses terms are often used in option names for the various backends (for example, the example `plain` backend holds both host and target paths for the secret directories).

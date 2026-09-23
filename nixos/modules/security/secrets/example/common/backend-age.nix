@@ -1,4 +1,19 @@
 # An example age-based secret backend written in Python.
+#
+# Note that unlike agenix, this backend does not copy the secret files to the
+# Nix store, and as such requires an external deployment script. A more
+# familiar implementation of an agenix-style backend is planned as a future
+# example.
+#
+# Since we want deployments to be reasonably atomic, we create a tar file
+# containing all the required secret files and push them to the target system
+# through SSH. Do note that this means the files will stay decrypted at rest
+# while on the target machine (barring disk encryption and the like). This is
+# fine, as this is merely an example backend.
+#
+# An alternative implementation might choose to push the files as encrypted,
+# and decode them at runtime (either during an activation or a systemd script,
+# for example).
 {
   config,
   lib,
@@ -165,6 +180,13 @@ in
     delete = pkgs: ageScript pkgs "delete";
     fixup = pkgs: ageScript pkgs "fixup";
     deploy.local = pkgs: ageScript pkgs "deploy-local";
+
+    # Python is not guaranteed to be installed on the target system. We
+    # therefore write the portion of the script that runs on said system as a
+    # simple shell script. While we can't technically guarantee that the
+    # various coreutils CLIs will be in $PATH on the target system either, that
+    # is a reasonable assumption to make (at least for an example
+    # implementation).
     deploy.remote = lib.mkIf (cfg.ssh.target != null) (
       pkgs:
       pkgs.writeScript "deploy-remote" ''
