@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2026.6";
+  version = "2026.7";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EvbuvVpNlCLu+PjhHL+bP02zjz52mwIVfT600pK0ga8=";
+    hash = "sha256-R9S69gwtAd3U9MKUqHuxx6+G0ufQWr9o38/t4z/9ARo=";
   };
 
   nativeBuildInputs = [
