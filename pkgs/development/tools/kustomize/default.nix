@@ -4,8 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  kustomize,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,7 +24,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kustomize";
-    rev = "kustomize/v${finalAttrs.version}";
+    tag = "kustomize/v${finalAttrs.version}";
     hash = "sha256-IFof+h6GBlI19ygufNvQ6HgwGbmS0xR5CmrFafknHf0=";
   };
 
@@ -43,13 +42,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
-  passthru.tests = {
-    versionCheck = testers.testVersion {
-      command = "${finalAttrs.meta.mainProgram} version";
-      version = "v${finalAttrs.version}";
-      package = kustomize;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Customization of kubernetes YAML configurations";
