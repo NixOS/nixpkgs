@@ -42,7 +42,7 @@ rec {
     version = "595.112.07";
     sha256_64bit = "sha256-Gjjs1Tii2mIypzMBhAY69Z6fyUbJCMylVb0HkJhIufA=";
     sha256_aarch64 = "sha256-7qQuOKX9xS/wpKa+bEOqsS2euJjJu182vl+6UU6bxR0=";
-    openSha256 = "sha256-nQnXGCcvo4i7eGaVft3Xc9dRUPPH0v9Zi87cfI4i/Ys=";
+    openSha256 = "sha256-/uLSwBmCE3ITwprNiPzWzeh/LgvEcKv7GIFxcTXkzJU=";
     settingsSha256 = "sha256-2bWSou/9J3EojhSRXBol/+yGGu2XZ6EuCptb5qXHM14=";
     persistencedSha256 = "sha256-cGMEUXN7WPu822zZDLTSu6Owj8VXG4PNmhe9oKqMMKI=";
   };
@@ -51,7 +51,7 @@ rec {
     version = "615.78.08";
     sha256_64bit = "sha256-Pj9t3cLudnoIGFMAr3vjyyhuznZpjS3eNSRZl4LQf/4=";
     sha256_aarch64 = "sha256-UHYBE1AYHoGgMfD9AS/jX+S+N8eCDWUft6qolK9Eejc=";
-    openSha256 = "sha256-HBINiOjL0ZJLIAJeNIBYHBnwgUXtNwPPtnFpAI1YwF4=";
+    openSha256 = "sha256-4HMf9lyCUU4FkpHyiUkk4cmiCSm/pu5eAccTSRz3AjY=";
     settingsSha256 = "sha256-inDRpG02sdDgHmlqgu/DsgK8OFdOt1fZIYyXdhlGC/c=";
     persistencedSha256 = "sha256-RzeR6Ldct6MUxjnXRyThdh5Y3jjMehTVg85MtwuWNX4=";
   };
@@ -60,7 +60,7 @@ rec {
     version = "595.45.04";
     sha256_64bit = "sha256-zUllSSRsuio7dSkcbBTuxF+dN12d6jEPE0WgGvVOj14=";
     sha256_aarch64 = "sha256-jl6lQWsgF6ya22sAhYPpERJ9r+wjnWzbGnINDpUMzsk=";
-    openSha256 = "sha256-uqNfImwTKhK8gncUdP1TPp0D6Gog4MSeIJMZQiJWDoE=";
+    openSha256 = "sha256-zkNIsepBEgDwlw0GvSB0CoZk3Zozsv6peqprs62U3rU=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
   };
@@ -73,7 +73,7 @@ rec {
     settingsVersion = "595.45.04";
     sha256_64bit = "sha256-yCI8/jom9E2a9kBUK075B0yof+qHqkWBgVhG0l4hazE=";
     sha256_aarch64 = "sha256-Bg5wta9AVvk1JAss3fTvU9FJkTr1jcofjF9JDStCt2U=";
-    openSha256 = "sha256-IuiWF0Sc9BJby7cd4/ThWuXffGPNbqXApTcW/lVbCso=";
+    openSha256 = "sha256-iwSOCxcVuwfxNPRo5FK6qDlJovkBApZO0pdO24L77Bo=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
     url = "https://developer.nvidia.com/downloads/assets/gameworks/downloads/secure/Vulkan_Beta_Drivers/NVIDIA-Linux-${stdenv.hostPlatform.parsed.cpu.name}-${version}.run";
@@ -88,7 +88,7 @@ rec {
     sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
     fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
-    openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
+    openSha256 = "sha256-uGQQkQf1oKkGhOXgJ3IzQX1NkB7cGFcnl0HWuqeN8d4=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -100,7 +100,7 @@ rec {
     sha256_64bit = "sha256-CqsFGNtTz3PEEtx/MrvIUMqV6DnYkj0N5L/0LByRac4=";
     persistencedSha256 = "sha256-s7nI5BlnUwwPVoDjdete6B2wjDcoVgDd0UK9aZBrk00=";
     fabricmanagerSha256 = "sha256-94iScxCicvykcMzhBPnfdCJembwh/JOpi6xN4VZyihE=";
-    openSha256 = "sha256-vCC4RST8aILkEgmM9i29UEyLORLQ5eRvX2LgNypsO4U=";
+    openSha256 = "sha256-wzv2hJKTHHzJgHVal3qnQeJChpcwgPb07+cMqX4rxi4=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -112,7 +112,7 @@ rec {
     sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
     persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
     fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
-    openSha256 = "sha256-aTV5J4zmEgRCOavo6wLwh5efOZUG+YtoeIT/tnrC1Hg=";
+    openSha256 = "sha256-bwJQUj7eEM7XMji1bjS8T1Uw3qJtSE+fzZCtBKyHPH0=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -127,7 +127,7 @@ rec {
     version = "580.196.07";
     sha256_64bit = "sha256-CqsFGNtTz3PEEtx/MrvIUMqV6DnYkj0N5L/0LByRac4=";
     sha256_aarch64 = "sha256-W30jGaHlIoy0emfgdzOlq/thTNjUNQp1AhECI0PSfu0=";
-    openSha256 = "sha256-vCC4RST8aILkEgmM9i29UEyLORLQ5eRvX2LgNypsO4U=";
+    openSha256 = "sha256-wzv2hJKTHHzJgHVal3qnQeJChpcwgPb07+cMqX4rxi4=";
     settingsSha256 = "sha256-j7ENxh4VYIirMJSVVs2ei+NQULW5an8s4VQEwhVAqhc=";
     persistencedSha256 = "sha256-s7nI5BlnUwwPVoDjdete6B2wjDcoVgDd0UK9aZBrk00=";
   };
@@ -138,7 +138,7 @@ rec {
     version = "535.288.01";
     sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
     sha256_aarch64 = "sha256-2d3RYzU+W4uS6mUvpCNCfoVcAJA/aerNwm7Xbg0YJBo=";
-    openSha256 = "sha256-kDM8jeHjcRCyhOs8AQk+ce3Qzf2cI5RGzzIraJrSmOE=";
+    openSha256 = "sha256-cepwckGQ7L+HV5B+1vROQfGQKzVeGM0/i6exSnuy2do=";
     settingsSha256 = "sha256-hN4IWAD/M+th7brbzdBtgOQ2P1QUVrrWITgVGiuCxWw=";
     persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
   };

@@ -41,6 +41,7 @@
   pkgsi686Linux,
   fetchurl,
   fetchzip,
+  fetchFromGitHub,
   which,
   libarchive,
   jq,
@@ -237,14 +238,18 @@ stdenv.mkDerivation (finalAttrs: {
         {
           owner,
           repo,
-          rev,
+          tag,
+          nvrepo ? repo,
+          nvext ? "bz2",
           ...
         }@args:
         let
           args' = removeAttrs args [
             "owner"
             "repo"
-            "rev"
+            "tag"
+            "nvrepo"
+            "nvext"
           ];
           baseUrl = "https://github.com/${owner}/${repo}";
         in
@@ -252,12 +257,14 @@ stdenv.mkDerivation (finalAttrs: {
           args'
           // {
             urls = [
-              "${baseUrl}/archive/${rev}.tar.gz"
-              "https://download.nvidia.com/XFree86/${repo}/${repo}-${rev}.tar.bz2"
+              "${baseUrl}/archive/${tag}.tar.gz"
+              "https://download.nvidia.com/XFree86/${nvrepo}/${nvrepo}-${tag}.tar.${nvext}"
             ];
             # github and nvidia use different compression algorithms,
             #  use an invalid file extension to force detection.
             extension = "tar.??";
+            # do not try to retry 4xx errors
+            curlOptsList = [ "--no-retry-all-errors" ];
           }
         );
     in
@@ -269,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
             nvidia_x11 = finalAttrs.finalPackage;
             # build files already patched when building the main package, so no need to patch them again
             patches = [ ];
-            inherit broken;
+            inherit broken fetchFromGithubOrNvidia;
           }
         else
           { };
@@ -286,6 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
             }) patches)
             ++ patchesOpen;
           broken = brokenOpen;
+          inherit fetchFromGithubOrNvidia;
         }
       ) openSha256;
       settings =
