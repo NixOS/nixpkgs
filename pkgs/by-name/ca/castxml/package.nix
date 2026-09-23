@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nLYh6qb/dc+K1tsCVSm/iBzaJPtKPF1Q66yCpLFM6v4=";
+    hash = "sha256-WkheFGT/ZoC4IBKNDIo/iZhvuWwFEg+0hX3N68/Zaoc=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (withManual || withHTML) [ sphinx ];
