@@ -4,11 +4,15 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
+  fetchurl,
   ffmpeg_7-headless,
+  nix-update-script,
   nixosTests,
   openssl,
   replaceVars,
+  unzip,
   writableTmpDirAsHomeHook,
+  includeAppSecrets ? false,
   providers ? [ ],
 }:
 
@@ -71,6 +75,33 @@ let
   providerDependencies = lib.concatMap (
     provider: (providerPackages.${provider} pythonPackages)
   ) providers;
+
+  # The bundled provider credentials (Spotify client id, Qobuz keys, ...) are not part of
+  # the source repository: upstream provisions them from the private music-assistant/appvars
+  # repository during its release CI (see music_assistant/helpers/app_vars.py).
+  #
+  # They are not covered by the Apache-2.0 license of the source code and their redistribution
+  # terms are unclear (see https://github.com/orgs/music-assistant/discussions/6540), so they
+  # are opt-in and turn the package unfree. Consumers must set `config.allowUnfree = true`.
+  #
+  # Exposed via `passthru.appSecrets` as a fixed-output subpackage so that
+  # `nix-update --subpackage appSecrets` (see `passthru.updateScript`) can refresh the hash
+  # from the official release wheel whenever the version is bumped.
+  fetchAppSecrets =
+    version:
+    fetchurl {
+      url = "https://github.com/music-assistant/server/releases/download/${version}/music_assistant-${version}-py3-none-any.whl";
+      downloadToTemp = true;
+      recursiveHash = true;
+      nativeBuildInputs = [
+        unzip
+      ];
+      postFetch = ''
+        unzip "$downloadedFile" music_assistant/helpers/app_secrets.json -d "$out"
+      '';
+      hash = "sha256-cTH0b5kNanrpCekKyQJzKVuIR/fYbgf8RCHuDsT5aho=";
+    };
+
 in
 
 assert
@@ -88,6 +119,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-zTXe3v3TqQ1NyzuUm1g3xTUGK/BJPRUjIxrIWolfET0=";
   };
+
+  # Only passed to the builder (and hence only fetched) when explicitly opted in, see the
+  # `fetchAppSecrets` definition above and `passthru.appSecrets`.
+  appSecrets = lib.optionalDrvAttr includeAppSecrets (fetchAppSecrets finalAttrs.version);
 
   patches = [
     (replaceVars ./ffmpeg.patch {
@@ -139,6 +174,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
       music_assistant/providers/spotify/bin/librespot-*
 
+    # Copy the bundled provider credentials extracted from the official release wheel, as
+    # they are missing from the source tarball (see the appSecrets fetch above).
+  ''
+  + lib.optionalString includeAppSecrets ''
+    install -Dm644 "${finalAttrs.appSecrets}/music_assistant/helpers/app_secrets.json" music_assistant/helpers/app_secrets.json
+    test -f music_assistant/helpers/app_secrets.json
+  ''
+  + ''
     found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
     if [[ -n $found_bins ]]; then
       echo "Found binaries that should be replaced with packages built from source: $found_bins"
@@ -331,7 +374,18 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pythonPath =
       pythonPackages.makePythonPath providerDependencies
       + ":${finalAttrs.finalPackage}/${pythonPackages.python.sitePackages}";
+    # Fixed-output subpackage holding the bundled provider credentials. Exposed so that
+    # `nix-update --subpackage appSecrets` keeps its hash in sync on version bumps.
+    appSecrets = fetchAppSecrets finalAttrs.version;
     tests = nixosTests.music-assistant;
+    updateScript = nix-update-script {
+      # `appSecrets` is a plain `fetchurl`, whose `meta.position` points into
+      # `fetchurl/default.nix`, so force the file nix-update should patch.
+      extraArgs = [
+        "--subpackage=appSecrets"
+        "--override-filename=pkgs/by-name/mu/music-assistant/package.nix"
+      ];
+    };
   };
 
   meta = {
@@ -344,7 +398,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = lib.licenses.asl20;
+    license = if includeAppSecrets then lib.licenses.unfree else lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "mass";
   };
