@@ -93,8 +93,7 @@ in
     testScript =
       { nodes, ... }:
       let
-        esPort = toString nodes.parsedmarc.services.elasticsearch.port;
-        valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
+        osPort = toString nodes.parsedmarc.services.opensearch.settings."http.port";
       in
       ''
         parsedmarc.start()
@@ -102,19 +101,19 @@ in
         parsedmarc.wait_for_unit("dovecot2.service")
         parsedmarc.wait_for_unit("parsedmarc.service")
         parsedmarc.wait_until_succeeds(
-            "curl -sS -f http://localhost:${esPort}"
+            "curl -sS -f http://localhost:${osPort}"
         )
 
         parsedmarc.fail(
-            "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+            "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
             + " | tee /dev/console"
-            + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+            + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
         )
         parsedmarc.succeed("send-email")
         parsedmarc.wait_until_succeeds(
-            "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+            "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
             + " | tee /dev/console"
-            + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+            + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
         )
       '';
   };
@@ -204,8 +203,7 @@ in
       testScript =
         { nodes, ... }:
         let
-          esPort = toString nodes.parsedmarc.services.elasticsearch.port;
-          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
+          osPort = toString nodes.parsedmarc.services.opensearch.settings."http.port";
         in
         ''
           mail.start()
@@ -215,19 +213,19 @@ in
           parsedmarc.start()
           parsedmarc.wait_for_unit("parsedmarc.service")
           parsedmarc.wait_until_succeeds(
-              "curl -sS -f http://localhost:${esPort}"
+              "curl -sS -f http://localhost:${osPort}"
           )
 
           parsedmarc.fail(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
               + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
           )
           mail.succeed("send-email")
           parsedmarc.wait_until_succeeds(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
               + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
           )
         '';
     };
