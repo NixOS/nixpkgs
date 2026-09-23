@@ -396,6 +396,10 @@ in
           };
           services.displayManager.defaultSession = lib.mkForce "none+icewm";
 
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
+
           environment.variables = {
             LOMIRI_RUNNING_IN_VM = "1";
           };
@@ -417,6 +421,7 @@ in
               # Login
               machine.send_chars("${password}\n")
               machine.wait_for_x()
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.screenshot("session_launched")
         '';
     }
