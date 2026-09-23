@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-soplex";
-  version = "8.0.3";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "soplex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5UTlSfnNPVCkAE2oMVukVbbs2drbSh0HfiDqXUktBHQ=";
+    hash = "sha256-Fc/BxyCBUP+a3X/Q0MYg2mvXTzwhn6uoJONg+FvDiXc=";
   };
 
   nativeBuildInputs = [ cmake ];
