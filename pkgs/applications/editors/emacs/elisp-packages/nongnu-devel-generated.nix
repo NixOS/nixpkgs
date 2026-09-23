@@ -4816,10 +4816,10 @@
     elpaBuild {
       pname = "project-nix-store";
       ename = "project-nix-store";
-      version = "0.11.0.0.20260912.1";
+      version = "0.12.0.0.20260918.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/project-nix-store-0.11.0.0.20260912.1.tar";
-        sha256 = "0whycb961p73b5pxxi304zsihnnlrg9r7f719l5f5507vrrjhvy1";
+        url = "https://elpa.nongnu.org/nongnu-devel/project-nix-store-0.12.0.0.20260918.0.tar";
+        sha256 = "0kink7jjq5lssxmvgk6a19rhgwmyzphbkgj7xw81hrcpzglv8apy";
       };
       packageRequires = [ ];
       meta = {
