@@ -27,7 +27,11 @@ replace_sha() {
   sed -i "s|\"$1\" \"sha256-.\{44\}\"|\"$1\" \"$2\"|" "$NIX_DRV"
 }
 
-CLI_VERSION="$(curl -Ls https://app-updates.agilebits.com/product_history/CLI2 | xq -q 'article:not(.beta) h3' | head -n1)"
+CLI_VERSION="$(curl -Ls https://app-updates.agilebits.com/product_history/CLI2 | xq --no-pager -q 'article:not(.beta) h3' | head -n1)"
+if [ -z "$CLI_VERSION" ]; then
+  echo "ERROR: failed to determine latest CLI version"
+  exit 1
+fi
 
 CLI_LINUX_AARCH64_SHA256=$(fetch_linux "$CLI_VERSION" "linux_arm64")
 CLI_LINUX_I686_SHA256=$(fetch_linux "$CLI_VERSION" "linux_386")
