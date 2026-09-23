@@ -82,7 +82,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-5fGoW6TpkIQ8OIXjt2fLGzG9xhZ2TT+v2zLH1ecItII=";
+          hash = "sha256-ICMSzy8go3psdHklhX4n4fqgEESht/d+D05L8CKuKAc=";
         };
 
         dontBuild = false;
@@ -123,7 +123,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-zRw3eNj17kHVazqeuXp4CxNl1FWaXufINb3yzvVcQS0=";
+          hash = "sha256-Pl2jkn4qj+v9edjrrq2TqvUhKjnBJ5qatNKTqRzLLII=";
         };
 
         dontBuild = false;
@@ -176,7 +176,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-v6Wd0FPgL4zyAbW9iarpU6R9d45fQMOo7yt9vccXbgc=";
+          hash = "sha256-AbGa+nUf5aEmHTbAYIyPv3+E0ldeybODZsZ4EqG6eBI=";
         };
 
         postPatch = ''
@@ -332,7 +332,7 @@ let
       SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
       SKIP_YARN_INSTALL = 1;
-      NODE_OPTIONS = "--max-old-space-size=8192";
+      NODE_OPTIONS = "--max-old-space-size=16384";
     };
 
     postConfigure = ''
