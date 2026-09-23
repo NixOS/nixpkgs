@@ -25,7 +25,13 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
     forced_regens = set(args.generators + list(args.set.keys()))
     for gen_name in forced_regens:
         if gen_name not in config.generators:
-            raise SecretsError(f"Invalid secret name '{gen_name}'")
+            raise SecretsError(f"Invalid secret name '{gen_name}'.")
+    for gen_name in args.set.keys():
+        generator = config.generators[gen_name]
+        if generator.dependencies:
+            raise SecretsError(
+                f"The --set flag cannot be used on secrets that have dependencies, and yet '{generator}' does."
+            )
 
     order = execution_order(config)
     files = build_file_list(args, config)
@@ -138,6 +144,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
             if entry in args.set:
                 print(f"Importing '{entry}' from disk")
+
                 if args.dry_run:
                     continue
 
