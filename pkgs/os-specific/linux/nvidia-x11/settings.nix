@@ -19,10 +19,11 @@
   libglvnd,
   wrapGAppsHook3,
   addDriverRunpath,
-  nvidia_x11,
-  versionCheckHook,
+  platforms,
   version,
   hash,
+  useProfiles,
+  versionCheckHook,
   withGtk2 ? false,
   withGtk3 ? true,
 }:
@@ -37,7 +38,7 @@ let
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    platforms = nvidia_x11.meta.platforms;
+    inherit platforms;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
@@ -125,11 +126,11 @@ stdenv.mkDerivation {
           # fix wayland support for compositors that use wl_output version 4
           url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
           hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
-        });
-
-  postPatch = lib.optionalString nvidia_x11.useProfiles ''
-    sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
-  '';
+        })
+    ++
+      # The key documentation is installed with the driver in the XDG data
+      # directories, so look it up there instead of at a fixed path.
+      lib.optional useProfiles ./nvidia-settings-xdg-data-dirs.patch;
 
   enableParallelBuilding = true;
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
@@ -160,7 +161,6 @@ stdenv.mkDerivation {
     libxext
     libxxf86vm
     libvdpau
-    nvidia_x11
     dbus
     vulkan-headers
   ]

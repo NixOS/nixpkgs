@@ -1,0 +1,62 @@
+--- a/src/gtk+-2.x/ctkappprofile.c
++++ b/src/gtk+-2.x/ctkappprofile.c
+@@ -3830,24 +3830,51 @@
+     }
+ }
+ 
++/* The driver installs its data files in the XDG data directories, so look the
++   file up there rather than at a fixed path. */
++static char *find_driver_data_file(const char *name)
++{
++    const char * const *data_dirs;
++    int i;
++
++    if (name == NULL) {
++        return NULL;
++    }
++
++    data_dirs = g_get_system_data_dirs();
++
++    for (i = 0; data_dirs[i] != NULL; i++) {
++        char *candidate = g_build_filename(data_dirs[i], "nvidia", name, NULL);
++
++        if (access(candidate, F_OK) != -1) {
++            return candidate;
++        }
++
++        g_free(candidate);
++    }
++
++    return NULL;
++}
++
+ static char *get_default_keys_file(const char *driver_version)
+ {
+     char *file = NULL;
+-    const char *file_noversion = "/usr/share/nvidia/nvidia-application-"
+-                                 "profiles-key-documentation";
++    char *found = NULL;
++    const char *file_noversion = "nvidia-application-profiles-key-documentation";
+ 
+     if (driver_version) {
+-        file = nvstrcat("/usr/share/nvidia/nvidia-application-profiles-",
++        file = nvstrcat("nvidia-application-profiles-",
+                         driver_version, "-key-documentation", NULL);
++        found = find_driver_data_file(file);
+     }
+ 
+-    if (file && access(file, F_OK) != -1) {
+-        return file;
+-    } else if (access(file_noversion, F_OK) != -1) {
+-        /* On some systems, this file is installed without a version number */
++    if (found == NULL) {
++        found = find_driver_data_file(file_noversion);
++    }
+ 
++    if (found != NULL) {
+         free(file);
+-        return nvstrdup(file_noversion);
++        return found;
+     } else {
+         char *expected_file_paths;
+         const char *version_missing_error_str;
