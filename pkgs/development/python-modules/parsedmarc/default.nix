@@ -45,14 +45,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
-  version = "11.0.1";
+  version = "11.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = finalAttrs.version;
-    hash = "sha256-tPGpYIKIi5TK5t4vwo/bUpVfgq4UhYW0IAn5sFYexrs=";
+    hash = "sha256-e7AU09oMV5G56mQXKSYlMVrZ7is5zsa2hmj/770sWig=";
   };
 
   postPatch = ''
