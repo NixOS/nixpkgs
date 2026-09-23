@@ -87,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     moveToOutput lib/libaom.a "$static"
+    substituteInPlace "$dev"/lib/cmake/*/*.cmake \
+      --replace-quiet "$out/lib/libaom.a" "$static/lib/libaom.a" \
+      --replace-quiet "$"'{_IMPORT_PREFIX}/include' "$dev/include"
   ''
   + lib.optionalString stdenv.hostPlatform.isStatic ''
     ln -s $static $out
