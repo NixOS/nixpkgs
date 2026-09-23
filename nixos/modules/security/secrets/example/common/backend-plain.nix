@@ -34,6 +34,7 @@ let
           wrapProgram $out/bin/secrets-plain-backend \
             --add-flags "${backendJSONConfig} ${command}"
         '';
+        meta = { inherit (raw.meta) mainProgram; };
       }
     );
 in
