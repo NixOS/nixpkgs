@@ -32,8 +32,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-idpgHGvUeg7QIrc9J6IHqcxvqLUcNQNLUSiixMovIbQ=";
   };
 
-  pythonRelaxDeps = [ "mail-parser" ];
-
   build-system = [ hatchling ];
 
   dependencies = [
