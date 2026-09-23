@@ -148,7 +148,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 if args.dry_run:
                     continue
 
-                set_files_from_dir(args, config, generator, args.set[entry])
+                set_files_from_path(args, config, generator, args.set[entry])
             elif generator.generate is not None:
                 binary = build_binary(generator.generate)
 
@@ -238,7 +238,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 finally:
                     reset_terminal_state()
 
-                set_files_from_dir(args, config, generator, out_dir)
+                set_files_from_path(args, config, generator, out_dir)
             else:
                 raise SecretsError(
                     f"Secret '{entry}' has no generator script, nor a corresponding --set argument, and hence can not be updated."
@@ -259,21 +259,38 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
     fixup_all(args, config)
 
 
-def set_files_from_dir(
+def set_files_from_path(
     args: SecretsArgs,
     config: SecretsConfig,
     generator: SecretsSecret,
-    from_dir: Path,
+    source: Path,
 ):
-    for file in generator.files.values():
-        if not (from_dir / file.name).exists():
+    file_names = ", ".join(sorted(f"'{name}'" for name in generator.files))
+    if source.is_file():
+        file_count = len(generator.files.values())
+        if file_count != 1:
             raise SecretsError(
-                f"Cannot update files for '{generator.name}': missing file '{file.name}'"
+                f"The secret '{generator.name}' requires {file_count} files, yet only one was provided. Arrange the files in a directory containing files named {file_names} and try again."
+            )
+
+        file = list(generator.files.values())[0]
+        try:
+            set_secret(args, config, generator, file, source)
+            return
+        except subprocess.CalledProcessError as e:
+            raise SecretsError(
+                f"Error setting '{generator.name}/{file.name}': {e.stderr}"
+            )
+
+    for file in generator.files.values():
+        if not (source / file.name).exists():
+            raise SecretsError(
+                f"Cannot update files for '{generator.name}': missing file '{file.name}'. Arrange the files in a directory containing files named {file_names} and try again."
             )
 
     for file in generator.files.values():
         try:
-            set_secret(args, config, generator, file, from_dir / file.name)
+            set_secret(args, config, generator, file, source / file.name)
         except subprocess.CalledProcessError as e:
             raise SecretsError(
                 f"Error setting '{generator.name}/{file.name}': {e.stderr}"

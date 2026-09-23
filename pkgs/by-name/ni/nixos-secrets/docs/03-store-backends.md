@@ -11,7 +11,7 @@ Store backends are specified in a similar manner to prompt backends:
 
 ### Get
 
-Unlike prompt backends, store backends must provide a number of different scripts. The most basic of said scripts are `get` and `set`. The former is given the secret name and the file name as an argument, and must return the content of said backend to `$out`. The CLI needs to be able to access any of the secrets at runtime in order for secret dependencies to work out. The `get` script can be omitted as long as the backend in question is never used as a dependency for another secret.
+Unlike prompt backends, store backends must provide a number of different scripts. The most basic of said scripts are `get` and `set`. The former is given the secret name and the file name as an argument, and must return the content of said file to `$out`. The CLI needs to be able to access any of the secrets at runtime in order for secret dependencies to work out. The `get` script can be omitted as long as the backend in question is never used as a dependency for another secret.
 
 ```nix
 {
