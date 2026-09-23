@@ -11,6 +11,7 @@
   grpcio-tools,
   grpclib,
   httpx,
+  installAgentSkills,
   invoke,
   ipython,
   mypy,
@@ -64,6 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    installAgentSkills
     invoke
     ipython
     grpcio-tools
@@ -110,6 +112,10 @@ buildPythonPackage (finalAttrs: {
     six
     versionCheckHook
   ];
+
+  preInstall = ''
+    rm -rf build/lib/modal/skills
+  '';
 
   disabledTestPaths = [
     # Fail due to not finding /bin/bash
