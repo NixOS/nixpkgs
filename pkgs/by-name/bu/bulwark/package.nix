@@ -34,15 +34,9 @@ buildNpmPackage (finalAttrs: {
     runHook preConfigure
 
     mkdir -p app/fonts
-    cp "${
-      google-fonts.override { fonts = [ "Geist" ]; }
-    }/share/fonts/truetype/Geist[wght].ttf" app/fonts/Geist.ttf
-    cp "${
-      google-fonts.override { fonts = [ "GeistMono" ]; }
-    }/share/fonts/truetype/GeistMono[wght].ttf" app/fonts/GeistMono.ttf
-    cp "${
-      google-fonts.override { fonts = [ "HankenGrotesk" ]; }
-    }/share/fonts/truetype/HankenGrotesk[wght].ttf" app/fonts/HankenGrotesk.ttf
+    cp "${google-fonts.geist}/share/fonts/truetype/google-fonts/geist/Geist[wght].ttf" app/fonts/Geist.ttf
+    cp "${google-fonts.geist-mono}/share/fonts/truetype/google-fonts/geist-mono/GeistMono[wght].ttf" app/fonts/GeistMono.ttf
+    cp "${google-fonts.hanken-grotesk}/share/fonts/truetype/google-fonts/hanken-grotesk/HankenGrotesk[wght].ttf" app/fonts/HankenGrotesk.ttf
 
     runHook postConfigure
   '';
