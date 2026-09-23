@@ -80,6 +80,13 @@ let
 
   lomiriWallpaperDconfSettings = pkgs: {
     settings = {
+      "com/lomiri/shell" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      "com/lomiri/shell/greeter" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      # Fallback
       "org/gnome/desktop/background" = {
         picture-uri = "file://${wallpaperFile pkgs}";
       };
