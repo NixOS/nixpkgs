@@ -10,6 +10,7 @@
   bison,
   flex,
   gmp,
+  pcre2,
   nettle,
   libjpeg,
   libpng,
@@ -124,8 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-H3eF5tz/KMcyDKLD4/LPwtI2oB9JYf09zYeTgdJ9q0E=";
+    rev = "18030b5dc6b335cb34c9fdbab907a94a19f54de4";
+    hash = "sha256-AYvuuBnv+W3LW8lQXcQf2WgQsZXWht0N9eqlL3XeiRY=";
   };
 
   nativeBuildInputs = [
@@ -140,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
+    pcre2
     nettle
     libjpeg
     libpng
