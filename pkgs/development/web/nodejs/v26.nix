@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.8.2";
-  sha256 = "36b37bf5ee4d092b9d9dff2d1a90b1444f8b453eddf6ff96cabdebb97d32f41d";
+  version = "26.10.0";
+  sha256 = "7b3a546d33cb7e15a43bdd7a57e0be5d5fd5ffc553e6e4c120033e66f0ba20c5";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
@@ -49,6 +49,24 @@ buildNodejs {
       ./use-nix-codesign.patch
 
       ./fix-temporal-integration-with-shared-icu.patch
+
+      # Upstream started requiring shared simdutf built with atomic support. Reverting that on 26.05.
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/7e3d61c416407bb5259f63a007df16bcc3c715ef.patch?full_index=1";
+        hash = "sha256-uxAPKrYXrgfF42Kh73suHc71drfkJvypHbKTdUktKnM=";
+        includes = [ "deps/v8/src/*" ];
+        revert = true;
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/f3ae4554feb2d043cdc3d24898f6173add1fcac8.patch?full_index=1";
+        hash = "sha256-+P+6pMBcG2Utcg2aPQTDdYOy/9bdkX7X/gttXNghDYM=";
+        excludes = [
+          ".github/workflows/test-shared.yml"
+          "tools/nix/*"
+          "shell.nix"
+        ];
+        revert = true;
+      })
     ]
     ++ gypPatches;
 }
