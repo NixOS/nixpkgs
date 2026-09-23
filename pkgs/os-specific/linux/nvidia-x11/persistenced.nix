@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-persistenced";
-    rev = nvidia_x11.persistencedVersion;
+    tag = nvidia_x11.persistencedVersion;
     inherit sha256;
   };
 

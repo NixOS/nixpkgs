@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGithubOrNvidia,
   kernel,
   kernelModuleMakeFlags,
   nvidia_x11,
@@ -19,11 +19,15 @@ stdenv.mkDerivation {
 
   src =
     if open then
-      fetchFromGitHub {
+      fetchFromGithubOrNvidia {
         owner = "NVIDIA";
         repo = "open-gpu-kernel-modules";
         tag = nvidia_x11.version;
+        nvrepo = "NVIDIA-kernel-module-source";
+        nvext = "xz";
         inherit hash;
+        # remove files which causes hash mismatches
+        postFetch = "rm -rf $out/.github $out/CHANGELOG.md";
       }
     else
       nvidia_x11.modsrc;
