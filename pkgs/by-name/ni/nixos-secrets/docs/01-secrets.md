@@ -42,6 +42,23 @@ One important thing to note is that we never directly set `generate` to the path
 
 Scripts (be it generator or backend scripts) can be written in any language. Throughout this document we will be mostly using Bash, although that's not a hard requirement for using `nixos-secrets` (indeed, the [example backends](../../../../nixos/modules/security/secrets/example/common) are written in Python, for example!).
 
+When the secret at hand contains a single file, the generator script can also write the contents of said file directly to `$out` instead of creating the correct directory structure. Indeed, the previous example can be rewritten as:
+
+```nix
+{
+  secrets.store.user = {
+    backend = "plain";
+    files.greeting = { };
+    generate =
+      pkgs:
+      pkgs.writeScript "gen-user" ''
+        #!/bin/sh
+        echo "Hewwo world!" > "$out"
+      '';
+  };
+}
+```
+
 ### Generating secrets using the CLI
 
 The CLI accepts a few different kinds of inputs. The two most important ones are `--file` and `--flake`. We'll be using the former in this document, although the latter works very similarly. To generate the secret described above, one can use the `generate` command:
@@ -127,6 +144,16 @@ Running fixup scripts:
 ```
 
 Note that the CLI has automatically detected the need for `derived` to also be regenerated!
+
+When a secret holds a single file, `--set` also accepts a direct path to said file. Indeed, the previous example could be simplified to:
+
+```
+$ echo "Per aspera ad astra" > greeting
+$ nixos-secrets generate --file /path/to/config --set user=greeting
+Updating 'user' (forced)
+Importing 'user' from disk
+...
+```
 
 ## Prompts
 

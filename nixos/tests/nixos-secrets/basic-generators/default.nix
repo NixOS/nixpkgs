@@ -65,6 +65,12 @@
     t.assertIn("green orange", machine.succeed("cat /tmp/secrets/generators/greeting/files/greeting"))
     t.assertIn("< green orange >", machine.succeed("cat /tmp/secrets/generators/derived/files/cow-greeting"))
 
+    # --set with a single file
+    machine.succeed("echo 'white vanilla' > /tmp/greeting")
+    machine.succeed("nixos-secrets generate -f /etc/nixos/config1.nix --set greeting=/tmp/greeting")
+    t.assertIn("white vanilla", machine.succeed("cat /tmp/secrets/generators/greeting/files/greeting"))
+    t.assertIn("< white vanilla >", machine.succeed("cat /tmp/secrets/generators/derived/files/cow-greeting"))
+
     # This script is meant to always fail!
     machine.fail("nixos-secrets deploy -f /etc/nixos/config2.nix")
   '';
