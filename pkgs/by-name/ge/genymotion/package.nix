@@ -3,6 +3,8 @@
   lib,
   fetchurl,
   makeWrapper,
+  # instead of default patchelf, for bundled qemu binaries have non-contiguous PT_NOTE segments
+  patchelfUnstable,
   which,
   zlib,
   libGL,
@@ -23,6 +25,11 @@
   libxmu,
   libxi,
   libxext,
+  nss,
+  nspr,
+  expat,
+  libxcb,
+  alsa-lib,
 }:
 
 let
@@ -45,34 +52,43 @@ let
     gdk-pixbuf
     gtk3
     pixman
+    nss
+    nspr
+    expat
+    libxcb
+    alsa-lib
   ];
   libPath = lib.makeLibraryPath packages;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genymotion";
-  version = "3.8.0";
+  version = "3.10.0";
   src = fetchurl {
-    url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
-    name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-Tgp9ud/Tq0K9ADf/POr+luuFm+QBWMucjKTbELbIveo=";
+    url = "https://dl.genymotion.com/releases/genymotion-${finalAttrs.version}/genymotion-${finalAttrs.version}-linux_x64.run";
+    name = "genymotion-${finalAttrs.version}-linux_x64.run";
+    hash = "sha256-y5kkAJpRt9EOYAmgos0+X6XFPgd2z2XEtCq76vAVt8c=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     which
     xdg-utils
+    patchelfUnstable
   ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications
     export HOME=$TMP/phony-home
 
-    mkdir ${pname}
-    echo "y" | sh $src -d ${pname}
-    sourceRoot=${pname}
+    mkdir genymotion
+    sh $src --yes -d genymotion
+    sourceRoot=genymotion
 
-    substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
-      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${pname}" "$out/libexec"
+    for desktopFile in genymotion-launchpad genymotion-player; do
+      substitute phony-home/.local/share/applications/$desktopFile.desktop \
+        $out/share/applications/$desktopFile.desktop \
+        --replace-fail "$TMP/genymotion" "$out/libexec"
+    done
   '';
 
   installPhase = ''
@@ -124,6 +140,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      ulysseszhan
+    ];
   };
-}
+})
