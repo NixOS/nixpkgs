@@ -5,7 +5,7 @@
   kernel,
   kernelModuleMakeFlags,
   bashNonInteractive,
-  linuxConsoleTools,
+  linuxconsoletools,
   nix-update-script,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '/etc/udev/rules.d' "$out/lib/udev/rules.d"
 
     substituteInPlace fanatec.rules \
-      --replace-fail '/usr/bin/evdev-joystick' '${lib.getExe' linuxConsoleTools "evdev-joystick"}' \
+      --replace-fail '/usr/bin/evdev-joystick' '${lib.getExe' linuxconsoletools "evdev-joystick"}' \
       --replace-fail '/bin/sh' '${lib.getExe bashNonInteractive}'
   '';
 
