@@ -134,3 +134,7 @@ The `nixos-secrets` will attach additional metadata to each secret. The metadata
 The aforementioned metadata system should protect one's secrets from most crashes. Still, this system is not perfect. In particular, spooky things might happen if multiple instances of the CLI are invoked simultaneously (we should perhaps consider some sort of locking mechanism in the future, although that would complicate things a lot, especially when the CLI's instances are run from separate machines).
 
 More importantly, a backend's `set` script should perform the update in an atomic matter, when possible. The metadata only being partially written could cause issues for future runs of the program (although it will most likely cause the given secret to be regenerated).
+
+### Passing secrets to the backends
+
+Since backend scripts are not sandboxed (unlike generator scripts), they are free to reference secrets passed by the user through external means (be it environment variables or configuration files). For instance, the example `age` backend reads the private key to encrypt the secrets with from an absolute path passed in through the added NixOS options.
