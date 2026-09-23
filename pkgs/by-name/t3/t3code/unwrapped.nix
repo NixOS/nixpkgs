@@ -182,9 +182,9 @@ stdenv.mkDerivation (
     ''
     + ''
       mkdir --parents \
-        "$out"/share/icons/hicolor/scalable/apps
+        "$out"/share/icons/hicolor/{1024x1024,scalable}/apps
       install --mode=444 ${desktopIcon} \
-        "$out"/share/icons/t3code.png
+        "$out"/share/icons/hicolor/1024x1024/apps/t3code.png
       install --mode=444 assets/prod/logo.svg \
         "$out"/share/icons/hicolor/scalable/apps/t3code.svg
 
