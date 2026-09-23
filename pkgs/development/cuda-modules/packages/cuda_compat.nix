@@ -30,6 +30,9 @@ else
       "libnvdla_runtime.so"
       "libnvrm_gpu.so"
       "libnvrm_mem.so"
+      # Not necessary for the core function
+      "libcrypto.so.1.1"
+      "libcrypto.so.3"
     ];
 
     meta = {
