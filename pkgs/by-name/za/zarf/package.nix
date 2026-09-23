@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "zarf";
-  version = "0.83.0";
+  version = "0.86.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-is6JboqHUsKGi3SiXsTf6jG3ycD25CQy2euVZACS7Gk=";
+    hash = "sha256-pKjah93wEAJ5Lz/c7E1svz+f8RO0Q7kOIJeYvJrKwzQ=";
   };
 
   vendorHash = null;
