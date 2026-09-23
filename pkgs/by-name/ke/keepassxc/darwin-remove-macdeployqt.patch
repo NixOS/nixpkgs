@@ -1,27 +1,23 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 74b1a7ff..0a713a32 100644
+index 24213ced0d..691b2c24ca 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -307,6 +307,7 @@ if(MINGW)
-     set(PLUGIN_INSTALL_DIR ".")
+@@ -395,6 +395,7 @@
      set(DATA_INSTALL_DIR "share")
  elseif(APPLE AND WITH_APP_BUNDLE)
+     set(PROGNAME KeePassXC)
 +    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/Applications")
      set(BUNDLE_INSTALL_DIR "${PROGNAME}.app/Contents")
      set(CMAKE_INSTALL_MANDIR "${BUNDLE_INSTALL_DIR}/Resources/man")
      set(CLI_INSTALL_DIR "${BUNDLE_INSTALL_DIR}/MacOS")
-@@ -470,11 +470,6 @@ set(CMAKE_AUTORCC ON)
+@@ -473,7 +474,6 @@
+ endif()
  
  if(APPLE)
+-    set(_deployqt_exe_name macdeployqt)
      set(CMAKE_MACOSX_RPATH TRUE)
--    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
--    if(NOT MACDEPLOYQT_EXE)
--        message(FATAL_ERROR "macdeployqt is required to build on macOS")
--    endif()
--    message(STATUS "Using macdeployqt: ${MACDEPLOYQT_EXE}")
-     set(MACDEPLOYQT_EXTRA_BINARIES "")
+     list(APPEND CMAKE_INSTALL_RPATH "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib")
  elseif(WIN32)
-     find_program(WINDEPLOYQT_EXE windeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
 diff --git a/src/post_install/CMakeLists.txt b/src/post_install/CMakeLists.txt
 index 359c891f..a6a061a3 100644
 --- a/src/post_install/CMakeLists.txt
