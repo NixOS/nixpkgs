@@ -68,11 +68,6 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "elasticsearch"
-    "elasticsearch-dsl"
-  ];
-
   dependencies = [
     azure-identity
     azure-monitor-ingestion
