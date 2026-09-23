@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     PLAT_FLAGS = toString (
       [ ]
-      ++ lib.optional stdenv.hostPlatform.isx86_64 [
+      ++ lib.optionals stdenv.hostPlatform.isx86_64 [
         "-mfpmath=sse"
         "-mssse3"
       ]
