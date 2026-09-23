@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rufin";
-  version = "0.15.4";
+  version = "0.16.0";
 
   __structuredAttrs = true;
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a9F0UIFpPaDQS5reV4ISzF3TAxNuRBLE5MPLveABYbo=";
+    hash = "sha256-NsB8B24wr1heDeDdeNJFRgAIgXUB4+yJCI6BWYDx7YA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-puijPhfe548I/RD4wtlBnbS6OWabQlTv4yBRyRsCEvQ=";
+    hash = "sha256-Yc3lcdg/CBriaBI0H/9ZRF4KFlsSuyhdJCsy+A6yxxY=";
   };
 
   strictDeps = true;
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Native GTK4/libadwaita music client for Jellyfin, Subsonic, Navidrome and local libraries written in Rust";
+    description = "Native music player for Jellyfin, Navidrome/OpenSubsonic, Plex, and Emby servers;  local folders,  WebDAV including a direct Nextcloud browser login path, Samba and NAS shares";
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

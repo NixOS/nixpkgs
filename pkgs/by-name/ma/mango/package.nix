@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   pname = "mango";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-22UfPBrkTn+6Dr4VETMWcGy7B8taQMeivV3CV3KrbcU=";
+    hash = "sha256-o7azS0ibaWG4MGGZ+JZDsJe4JpCoPX78lTRuH+jioU4=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       hustlerone
       samiser
+      yvnth
     ];
     platforms = lib.platforms.linux;
   };

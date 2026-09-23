@@ -27,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch2 {
+      name = "fix-ncat-signal-propagation.patch";
+      url = "https://github.com/nmap/nmap/commit/10fc2ebd1b99c90ec668dc34ea3d7c6faf0fa5ff.patch";
+      excludes = [ "CHANGELOG" ];
+      hash = "sha256-1hvlBCpWIws/+LvE7NN9bUPnW0QI7/4o/+YGdWIITOc=";
+    })
+    (fetchpatch2 {
       name = "Do-not-call-NSE-if-compiling-without-Lua-support.patch";
       url = "https://github.com/nmap/nmap/commit/4c36cf12f246b52a8d510bdde8becd5c5b3bf8b5.patch";
       hash = "sha256-aWPHfJF1wOE5l6LQUKCqKVKxBoyNFov3r0NGEOxWpw8=";

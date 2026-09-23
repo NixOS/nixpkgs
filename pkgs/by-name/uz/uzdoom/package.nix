@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uzdoom";
-  version = "5.0.1";
+  version = "5.0.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "UZDoom";
     repo = "UZDoom";
     tag = finalAttrs.version;
-    hash = "sha256-JaAx3HlsHPFDILQrq9rz1FpO7dVsfoJgvCLvNx8+CJ0=";
+    hash = "sha256-Py3RvUQnxesB9TVM/YA74TPQURcp+z8swoeBU5Tvi+M=";
   };
 
   outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];
