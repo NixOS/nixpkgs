@@ -43,7 +43,7 @@ The `set` script, on the other hand, is mandatory. As with the `get` script, the
 
 ### Garbage collection
 
-The user might remove secrets from their configuration, yet the respective secrets will still exist on disk. The CLI offers the `collect-garbage` command for handling this exact scenario. In order to support garbage collection, a backend must provide the `list` and `delete` scripts.
+The user might remove secrets from their configuration, yet the respective secrets still exist on disk. The CLI offers the `collect-garbage` command for handling this exact scenario. In order to support garbage collection, a backend must provide the `list` and `delete` scripts.
 
 The `delete` script is given a secret and a file name as an argument, and must delete the given file (you might notice a theme here).
 
@@ -60,7 +60,7 @@ These operations are not difficult to implement in the easy case of managing a s
 
 ### Performing automatic updates
 
-Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command. This script will be run regardless of whether any of the files involved got updated/regenerated.
+Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which is to be run after each `generate` command. This script runs regardless of whether any of the files involved got updated/regenerated.
 
 Said script can perform side effects, yet must remain idempotent. The script is expected to perform the necessary updates to every file within a single invocation, and is given a list of files to act on as argument, in the same format as the output of the `list` script (although the actual content might of course be different).
 
@@ -68,15 +68,15 @@ Said script can perform side effects, yet must remain idempotent. The script is 
 
 Backends can also provide `deploy.local` and `deploy.remote` scripts. Note that each secret file has a `deploy` flag that is on by default. Users can choose to disable deployment for any of their secrets by setting said flag to `false`. This might be useful (for example) when handling secrets that are only meant to be used as inputs to other secrets, but must not have their outputs deployed right away. A backend can choose to not provide either of the scripts above.
 
-The names of the two scripts might give away their intended purpose. The former is meant for deploying the secrets to a system that has its system root mounted to the current machine's filesystem, and will therefore receive a path to the system root as its first argument. The latter is meant for deploying to fully remote systems.
+The names of the two scripts might give away their intended purpose. The former is meant for deploying the secrets to a system that has its system root mounted to the current machine's filesystem, and therefore receives a path to the system root as its first argument. The latter is meant for deploying to fully remote systems.
 
-As an example, the former will usually receive `/` as its first argument (when deploying to the current machine), although this is not always the case. For example, consider a live CD where `nixos-install` has finished running, yet the newly constructed machine is not currently running either (and thus cannot be accessible over SSH or whatnot).
+As an example, the former usually receive `/` as its first argument (when deploying to the current machine), although this is not always the case. For example, consider a live CD where `nixos-install` has finished running, yet the newly constructed machine is not currently running either (and thus cannot be accessible over SSH or whatnot).
 
 Both scripts receive a list of secrets to deploy, via standard input. The list is given in the same format used for the output of the `list` script (although the actual content might of course be different). Deployment scripts do not follow the pattern of taking in a secret and a file name as arguments. This is because batched operations are preferred in scenarios like that of a person using passphrase-protected SSH keys or touch-protected hardware keys.
 
 ### Output paths
 
-Last but not least, backends can set an optional `fileModule` that will be imported by each file corresponding to the given backend. This module is usually responsible for setting the `path` attribute, representing the location the file will be deployed to on the target machine (this can, for example, be referenced from other parts of the given NixOS config).
+Last but not least, backends can set an optional `fileModule` that is to be imported by each file corresponding to the given backend. This module is usually responsible for setting the `path` attribute, representing the location the file is to be deployed to on the target machine (this can, for example, be referenced from other parts of the given NixOS config).
 
 For example, the plain backend might work as follows:
 
@@ -96,7 +96,7 @@ Backends might require additional configuration (e.g. where should the files go 
 
 ### Per-secret or per-file backend options
 
-Backends will commonly need to define custom per-secret or per-file options. While the latter can already be achieved with the aforementioned `fileModule`, the former needs to currently be done by hand. Since the NixOS module system merges submodules defined in the same location, one can achieve the above as follows:
+Backends commonly need to define custom per-secret or per-file options. While the latter can already be achieved with the aforementioned `fileModule`, the former needs to currently be done by hand. Since the NixOS module system merges submodules defined in the same location, one can achieve the above as follows:
 
 ```nix
 {
@@ -119,7 +119,7 @@ Backends will commonly need to define custom per-secret or per-file options. Whi
 
 ### Environment variables
 
-Backends receive additional environment variables one can read when things like Git-root detection are required. In particular, `NIXOS_SECRETS_FLAKE` will contain the value passed to `--flake` and `NIXOS_SECRETS_CONFIG` will contain the path given to `--json` or `--file` respectively.
+Backends receive additional environment variables one can read when things like Git-root detection are required. In particular, `NIXOS_SECRETS_FLAKE` contains the value passed to `--flake` and `NIXOS_SECRETS_CONFIG` contains the path given to `--json` or `--file` respectively.
 
 ### Available backends
 
@@ -127,7 +127,7 @@ We are not currently planning to ship a production-ready backend alongside the C
 
 ### Metadata
 
-The `nixos-secrets` will attach additional metadata to each secret. The metadata is there in order to detect dependency changes, recover from crashes mid-generation, and so on. The metadata is stored in a file named `.nixos-secrets-metadata`. Store backends do not require special logic/scripts for handling metadata files. Indeed, to a backend, the metadata is merely another file associated with the given secret (although one the user hasn't manually declared).
+The `nixos-secrets` CLI attaches additional metadata to each secret. The metadata is there in order to detect dependency changes, recover from crashes mid-generation, and so on. The metadata is stored in a file named `.nixos-secrets-metadata`. Store backends do not require special logic/scripts for handling metadata files. Indeed, to a backend, the metadata is merely another file associated with the given secret (although one the user hasn't manually declared).
 
 ### Failure modes
 
