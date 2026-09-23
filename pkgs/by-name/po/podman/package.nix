@@ -27,7 +27,6 @@
   fuse-overlayfs,
   util-linuxMinimal,
   nftables,
-  iptables,
   iproute2,
   catatonit,
   gvproxy,
@@ -39,16 +38,17 @@
   writableTmpDirAsHomeHook,
   coreutils,
   runtimeShell,
+  fetchpatch,
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.8.7";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "podman-container-tools";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E13EjBqCK/ABVxWJSZKn6vqpYXjTqqoBR5N7YnOqURI=";
+    hash = "sha256-qqqQTDn4wZkjdjFaXiG3yOc4R2z9HGUp829A2c/1g6k=";
   };
 
   patches = [
@@ -58,6 +58,13 @@ buildGoModule (finalAttrs: {
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
+    # Fix `podman completion` in the build sandbox
+    # https://github.com/podman-container-tools/podman/pull/29832
+    (fetchpatch {
+      name = "fix-podman-completion.patch";
+      url = "https://github.com/podman-container-tools/podman/commit/7cef788844bdaae01ca672a55698d40428644eb4.patch";
+      hash = "sha256-CAECXYRFyOF4aIc9qIZQceiz5vE/gFGyitjPI48IhYU=";
+    })
   ];
 
   vendorHash = null;
@@ -163,7 +170,6 @@ buildGoModule (finalAttrs: {
       lib.optionals stdenv.hostPlatform.isLinux [
         fuse-overlayfs
         util-linuxMinimal
-        iptables
         iproute2
         nftables
       ]
@@ -182,7 +188,7 @@ buildGoModule (finalAttrs: {
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
           aardvark-dns # dns
-          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          catatonit # added here for the pause image
           netavark # networking
           passt # rootless networking
           conmon # runtime monitor
