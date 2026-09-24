@@ -1,0 +1,231 @@
+diff --git a/test/MachO/arm64-x1.s b/test/MachO/arm64-x1.s
+new file mode 100644
+index 0000000000..67b7debc47
+--- /dev/null
++++ b/test/MachO/arm64-x1.s
+@@ -0,0 +1,20 @@
++# REQUIRES: aarch64
++
++## Test that arm64.x1-macos is ignored instead of causing an error.
++## linked re-exported dylibs that only declare arm64e-macos targets, even if targeting arm64.
++# arm64 and arm64e are ABI compatible (same CPU type), and ld64 accepts this.
++
++# RUN: rm -rf %t; split-file --no-leading-lines %s %t
++
++# RUN: llvm-mc -filetype=obj -triple=arm64-apple-macos -o %t/test.o /dev/null
++
++# RUN: %no-arg-lld -syslibroot %t/sdk -lSystem -dylib -arch arm64 \
++# RUN:     -platform_version macos 15 26 %t/test.o -o /dev/null
++
++#--- sdk/usr/lib/libSystem.tbd
++--- !tapi-tbd
++tbd-version:      4
++targets:          [ arm64-macos, arm64e.x1-macos ]
++install-name:     '/usr/lib/libSystem.dylib'
++current-version:  0001.001.1
++...
+diff --git a/include/llvm/BinaryFormat/MachO.h b/include/llvm/BinaryFormat/MachO.h
+index 5dbdfb13d1..9449eb08ef 100644
+--- a/include/llvm/BinaryFormat/MachO.h
++++ b/include/llvm/BinaryFormat/MachO.h
+@@ -1643,6 +1643,7 @@
+   CPU_SUBTYPE_ARM64_ALL = 0,
+   CPU_SUBTYPE_ARM64_V8 = 1,
+   CPU_SUBTYPE_ARM64E = 2,
++  CPU_SUBTYPE_ARM64E_X1 = 12,
+ 
+   // arm64e uses the capability bits to encode ptrauth ABI information.
+   // Bit 63 marks the binary as Versioned.
+diff --git a/include/llvm/TargetParser/Triple.h b/include/llvm/TargetParser/Triple.h
+index 1bf37e519a..a6ec7696f1 100644
+--- a/include/llvm/TargetParser/Triple.h
++++ b/include/llvm/TargetParser/Triple.h
+@@ -149,6 +149,7 @@
+     ARMSubArch_v4t,
+ 
+     AArch64SubArch_arm64e,
++    AArch64SubArch_arm64e_x1,
+     AArch64SubArch_arm64ec,
+ 
+     KalimbaSubArch_v3,
+@@ -1121,6 +1122,11 @@
+            getSubArch() == Triple::AArch64SubArch_arm64e;
+   }
+ 
++  bool isArm64e_x1() const {
++    return getArch() == Triple::aarch64 &&
++           getSubArch() == Triple::AArch64SubArch_arm64e_x1;
++  }
++
+   // Tests whether the target is N32.
+   bool isABIN32() const {
+     EnvironmentType Env = getEnvironment();
+diff --git a/include/llvm/TextAPI/Architecture.def b/include/llvm/TextAPI/Architecture.def
+index 53877cf0b6..72a64b863a 100644
+--- a/include/llvm/TextAPI/Architecture.def
++++ b/include/llvm/TextAPI/Architecture.def
+@@ -37,7 +37,7 @@
+ ///
+ ARCHINFO(arm64, arm64, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64_ALL, 64)
+ ARCHINFO(arm64e, arm64e, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64E, 64)
+-
++ARCHINFO(arm64e_x1, arm64e.x1, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64E_X1, 64)
+ 
+ ///
+ /// ARM64_32 architectures sorted by cpu sub type id
+diff --git a/lib/BinaryFormat/MachO.cpp b/lib/BinaryFormat/MachO.cpp
+index f46b9d5147..ed42462379 100644
+--- a/lib/BinaryFormat/MachO.cpp
++++ b/lib/BinaryFormat/MachO.cpp
+@@ -60,6 +60,8 @@
+     return (MachO::CPUSubTypeARM64)MachO::CPU_SUBTYPE_ARM64_32_V8;
+   if (T.isArm64e())
+     return MachO::CPU_SUBTYPE_ARM64E;
++  if (T.isArm64e_x1())
++    return MachO::CPU_SUBTYPE_ARM64E_X1;
+ 
+   return MachO::CPU_SUBTYPE_ARM64_ALL;
+ }
+diff --git a/lib/Object/MachOObjectFile.cpp b/lib/Object/MachOObjectFile.cpp
+index dec390dd07..d71dd1f8b2 100644
+--- a/lib/Object/MachOObjectFile.cpp
++++ b/lib/Object/MachOObjectFile.cpp
+@@ -2808,6 +2808,12 @@
+       if (ArchFlag)
+         *ArchFlag = "arm64e";
+       return Triple("arm64e-apple-darwin");
++    case MachO::CPU_SUBTYPE_ARM64E_X1:
++      if (McpuDefault)
++        *McpuDefault = "apple-a20";
++      if (ArchFlag)
++        *ArchFlag = "arm64e.x1";
++      return Triple("arm64e.x1-apple-darwin");
+     default:
+       return Triple();
+     }
+diff --git a/lib/TargetParser/Triple.cpp b/lib/TargetParser/Triple.cpp
+index d47beca668..99981741f3 100644
+--- a/lib/TargetParser/Triple.cpp
++++ b/lib/TargetParser/Triple.cpp
+@@ -113,6 +113,8 @@
+       return "arm64ec";
+     if (SubArch == AArch64SubArch_arm64e)
+       return "arm64e";
++    if (SubArch == AArch64SubArch_arm64e_x1)
++      return "arm64e.x1";
+     break;
+   case Triple::spirv:
+     switch (SubArch) {
+@@ -580,6 +582,7 @@
+           .Case("arm64", Triple::aarch64)
+           .Case("arm64_32", Triple::aarch64_32)
+           .Case("arm64e", Triple::aarch64)
++          .Case("arm64e.x1", Triple::aarch64)
+           .Case("arm64ec", Triple::aarch64)
+           .Case("arm", Triple::arm)
+           .Case("armeb", Triple::armeb)
+@@ -802,6 +805,8 @@
+ 
+   if (SubArchName == "arm64e")
+     return Triple::AArch64SubArch_arm64e;
++  if (SubArchName == "arm64e.x1")
++    return Triple::AArch64SubArch_arm64e_x1;
+ 
+   if (SubArchName == "arm64ec")
+     return Triple::AArch64SubArch_arm64ec;
+diff --git a/test/tools/llvm-readobj/MachO/file-headers-arm64.test b/test/tools/llvm-readobj/MachO/file-headers-arm64.test
+index 9b388537f9..7995073e9e 100644
+--- a/test/tools/llvm-readobj/MachO/file-headers-arm64.test
++++ b/test/tools/llvm-readobj/MachO/file-headers-arm64.test
+@@ -13,6 +13,11 @@
+ # RUN: llvm-readobj -h %t.arm64e \
+ # RUN:  | FileCheck %s --strict-whitespace --match-full-lines -DFILE=%t.arm64e --check-prefix=ARM64 -DSUBTYPE="CPU_SUBTYPE_ARM64E (0x2)"
+ 
++## Check subtype Arm64E.X1:
++# RUN: yaml2obj %s -o %t.arm64e.x1 -DSUBTYPE=0xC
++# RUN: llvm-readobj -h %t.arm64e.x1 \
++# RUN:  | FileCheck %s --strict-whitespace --match-full-lines -DFILE=%t.arm64e.x1 --check-prefix=ARM64 -DSUBTYPE="CPU_SUBTYPE_ARM64E_X1 (0xC)"
++
+ #      ARM64:File: [[FILE]]
+ # ARM64-NEXT:Format: Mach-O arm64{{e?}}
+ # ARM64-NEXT:Arch: aarch64
+diff --git a/test/tools/llvm-readobj/macho-arm64e_x1.test b/test/tools/llvm-readobj/macho-arm64e_x1.test
+new file mode 100644
+index 0000000000..d6ea66911b
+--- /dev/null
++++ b/test/tools/llvm-readobj/macho-arm64e_x1.test
+@@ -0,0 +1,17 @@
++# RUN: yaml2obj %s -o %t.o
++# RUN: llvm-readobj -h %t.o | FileCheck %s
++
++# CHECK: Magic: Magic64 (0xFEEDFACF)
++# CHECK: CpuType: Arm64 (0x100000C)
++# CHECK: CpuSubType: CPU_SUBTYPE_ARM64E_X1 (0xC)
++
++--- !mach-o
++FileHeader:
++  magic:           0xFEEDFACF
++  cputype:         0x0100000C
++  cpusubtype:      0x0000000C
++  filetype:        0x00000001
++  ncmds:           0
++  sizeofcmds:      0
++  flags:           0x00000000
++  reserved:        0x00000000
+diff --git a/tools/llvm-objdump/MachODump.cpp b/tools/llvm-objdump/MachODump.cpp
+index 600ee8be23..452a734947 100644
+--- a/tools/llvm-objdump/MachODump.cpp
++++ b/tools/llvm-objdump/MachODump.cpp
+@@ -2320,6 +2320,10 @@
+       outs() << "    cputype CPU_TYPE_ARM64\n";
+       outs() << "    cpusubtype CPU_SUBTYPE_ARM64E\n";
+       break;
++    case MachO::CPU_SUBTYPE_ARM64E_X1:
++      outs() << "    cputype CPU_TYPE_ARM64\n";
++      outs() << "    cpusubtype CPU_SUBTYPE_ARM64E_X1\n";
++      break;
+     default:
+       printUnknownCPUType(cputype, cpusubtype);
+       break;
+@@ -8356,6 +8360,9 @@
+       case MachO::CPU_SUBTYPE_ARM64E:
+         outs() << "          E";
+         break;
++      case MachO::CPU_SUBTYPE_ARM64E_X1:
++        outs() << "       E.X1";
++        break;
+       default:
+         outs() << format(" %10d", cpusubtype & ~MachO::CPU_SUBTYPE_MASK);
+         break;
+diff --git a/tools/llvm-readobj/MachODumper.cpp b/tools/llvm-readobj/MachODumper.cpp
+index 0a23ad772e..75036d6cee 100644
+--- a/tools/llvm-readobj/MachODumper.cpp
++++ b/tools/llvm-readobj/MachODumper.cpp
+@@ -170,6 +170,7 @@
+     LLVM_READOBJ_ENUM_ENT(MachO, CPU_SUBTYPE_ARM64_ALL),
+     LLVM_READOBJ_ENUM_ENT(MachO, CPU_SUBTYPE_ARM64_V8),
+     LLVM_READOBJ_ENUM_ENT(MachO, CPU_SUBTYPE_ARM64E),
++    LLVM_READOBJ_ENUM_ENT(MachO, CPU_SUBTYPE_ARM64E_X1),
+ };
+ 
+ const EnumEntry<uint32_t> MachOHeaderCpuSubtypesSPARC[] = {
+diff --git a/unittests/BinaryFormat/MachOTest.cpp b/unittests/BinaryFormat/MachOTest.cpp
+index e10cc31126..1bee81fde7 100644
+--- a/unittests/BinaryFormat/MachOTest.cpp
++++ b/unittests/BinaryFormat/MachOTest.cpp
+@@ -66,6 +66,7 @@
+   CHECK_CPUTYPE("thumbv7-apple-darwin", MachO::CPU_TYPE_ARM);
+   CHECK_CPUTYPE("arm64-apple-darwin", MachO::CPU_TYPE_ARM64);
+   CHECK_CPUTYPE("arm64e-apple-darwin", MachO::CPU_TYPE_ARM64);
++  CHECK_CPUTYPE("arm64e.x1-apple-darwin", MachO::CPU_TYPE_ARM64);
+   CHECK_CPUTYPE("arm64_32-apple-darwin", MachO::CPU_TYPE_ARM64_32);
+ 
+   {
+@@ -107,6 +108,7 @@
+   CHECK_CPUSUBTYPE("thumbv6-apple-darwin", MachO::CPU_SUBTYPE_ARM_V6);
+   CHECK_CPUSUBTYPE("arm64-apple-darwin", MachO::CPU_SUBTYPE_ARM64_ALL);
+   CHECK_CPUSUBTYPE("arm64e-apple-darwin", MachO::CPU_SUBTYPE_ARM64E);
++  CHECK_CPUSUBTYPE("arm64e.x1-apple-darwin", MachO::CPU_SUBTYPE_ARM64E_X1);
+   CHECK_CPUSUBTYPE("arm64_32-apple-darwin", MachO::CPU_SUBTYPE_ARM64_32_V8);
+ 
+   {

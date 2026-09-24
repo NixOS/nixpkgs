@@ -1,18 +1,5 @@
 set(SyntaxModules
-    SwiftBasicFormat
-    SwiftCompilerPlugin
-    SwiftCompilerPluginMessageHandling
-    SwiftDiagnostics
-    SwiftIDEUtils
-    SwiftIfConfig
-    SwiftLexicalLookup
-    SwiftOperators
-    SwiftParser
-    SwiftParserDiagnostics
-    SwiftSyntax
-    SwiftSyntaxBuilder
-    SwiftSyntaxMacroExpansion
-    SwiftSyntaxMacros
+    @syntaxModules@
 )
 
 foreach(SyntaxModule ${SyntaxModules})

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   fetchSwiftPMDeps,
+  fetchpatch2,
   stdenv,
   swift,
   swift-docc-render,
@@ -21,10 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (swift_sources.swift-docc) hash;
   };
 
+  patches = [
+    # The DocCHTMLTests tests crash due to libxml2 thread safety issues.
+    # See: https://github.com/swiftlang/swift-docc/pull/1606 (but ot doesn’t fix the issue on 6.3, unfortunately).
+    ./patches/disable-DocCHTMLTests.patch
+  ];
+
   postPatch =
     # SignalTests.testTrappingSignal tries to access `/bin/bash`. Replace it with the shell in the stdenv.
     ''
-      substituteInPlace Tests/SwiftDocCUtilitiesTests/SignalTests.swift \
+      substituteInPlace Tests/DocCCommandLineTests/SignalTests.swift \
         --replace-fail '/bin/bash' ${lib.escapeShellArg stdenv.shell}
     '';
 
