@@ -8493,8 +8493,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "mikesmithgh";
       repo = "kitty-scrollback.nvim";
-      tag = "v9.2.1";
-      hash = "sha256-8IkvoJ8nTlP5WCqMpJqUhBsz7OYB/Mlp1lH5TJRpvOE=";
+      tag = "v9.3.1";
+      hash = "sha256-d3QGc4243XrzRpVgj0D137+x/r8VzjYdDJrElp/yv4I=";
     };
     meta.homepage = "https://github.com/mikesmithgh/kitty-scrollback.nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
