@@ -20,12 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Wno-void-pointer-to-enum-cast"
-      "-Wno-unused-but-set-variable"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-void-pointer-to-enum-cast"
+    "-Wno-unused-but-set-variable"
+  ];
 
   meta = {
     description = "Fast HTML renderer implemented as a pure C99 library with no outside dependencies";
