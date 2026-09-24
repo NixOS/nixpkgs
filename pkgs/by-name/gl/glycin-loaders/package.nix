@@ -7,7 +7,6 @@
   glib,
   gtk4,
   libglycin,
-  lcms2,
   libheif,
   libjxl,
   librsvg,
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     glib
     gtk4
-    lcms2
   ];
 
   mesonFlags = [
