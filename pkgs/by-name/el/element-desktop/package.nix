@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.26";
+  version = "1.12.28";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q9AV/jthbHnbESU/wvjdaCiMnIN6KQgAQ3cvEBvduTw=";
+    hash = "sha256-goP/f1Go7227R2euXu8aJrwHeUp84DQ+18ztyf4uXhM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-R9YuNvrMurRaBxZqUPsUtZSFlSZ8nA7Bd/hlAMfAH+M=";
+    hash = "sha256-eLTMKzVgP1oSiat80ygWUH2zGF7ukKSLvOEGay/pr9Y=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -93,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export VERSION=${finalAttrs.version}
+
+    # Not used here because we link element-web in installPhase, but electron-builder throws an error if it is not present
+    asar p ${element-web} apps/desktop/webapp.asar
 
     faketty pnpm -C apps/desktop exec nx build:ts
     faketty pnpm -C apps/desktop exec nx build:res
