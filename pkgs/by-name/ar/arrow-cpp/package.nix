@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # apache-orc looks for things in caps
       LZ4_HOME = lz4;
-      PROTOBUF_HOME = protobuf;
+      PROTOBUF_HOME = protobuf.full;
       SNAPPY_HOME = snappy.dev;
       ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
