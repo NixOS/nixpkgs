@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-ZGOjfWqPATvDU81BYXX+KF6uTD8hjKCOVLIHn/Kd3Ks=";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Sway workspaces with style";
