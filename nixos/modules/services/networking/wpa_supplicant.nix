@@ -79,6 +79,26 @@ let
       }
     '';
 
+  # Networks whose PSK is deferred via `ext:secretname` (resolved at
+  # runtime through ext_password_backend) can fail to authenticate via
+  # SAE/FT-SAE: wpa_supplicant only consults ext_password_backend for
+  # the classic (non-H2E) SAE exchange (wpa_supplicant/sme.c), not
+  # when deriving the SAE Hash-to-Element password element, which
+  # only reads ssid->sae_password/ssid->passphrase
+  # (wpa_s_setup_sae_pt() in wpa_supplicant/wpa_supplicant.c). Access
+  # points that require H2E (mandatory on the 6 GHz band) then fail
+  # these networks with "SAE: Could not find PT for group …" and keep
+  # disconnecting/reassociating instead of connecting.
+  saeExtPasswordNetworks = filter (
+    name:
+    let
+      opts = cfg.networks.${name};
+    in
+    opts.pskRaw != null
+    && hasPrefix "ext:" opts.pskRaw
+    && !mutuallyExclusive opts.authProtocols wpa3Protocols
+  ) (attrNames cfg.networks);
+
   hasDeclarative = lib.any id [
     (cfg.networks != { })
     (cfg.extraConfig != "")
@@ -438,6 +458,21 @@ in
                     passphrase or the raw pre-shared key.
                     :::
 
+                    ::: {.warning}
+                    An `ext:` reference can fail to authenticate for
+                    networks using SAE or FT-SAE (WPA3) in
+                    {var}`authProtocols` when the access point requires
+                    SAE Hash-to-Element (mandatory on the 6 GHz band, and
+                    increasingly enabled elsewhere): wpa_supplicant only
+                    resolves `ext_password_backend` secrets for the
+                    classic (non-H2E) SAE exchange, not when deriving the
+                    H2E password element, so such attempts fail with
+                    "SAE: Could not find PT for group …". If you hit
+                    this, use
+                    [](#opt-networking.wireless.extraConfigFiles) with a
+                    literal password instead for the affected network.
+                    :::
+
                     ::: {.note}
                     Mutually exclusive with {var}`psk` and {var}`auth`.
                     :::
@@ -717,6 +752,15 @@ in
         default = [ ];
         description = ''
           Extra wpa_supplicant configuration files to load.
+
+          This is one way to declare a network with a literal (rather than
+          `ext:`-referenced) secret without putting it in the Nix store:
+          point this at a file rendered by your secrets manager containing
+          `network={ … }` blocks. This works around a limitation of
+          SAE/FT-SAE (WPA3) networks, where
+          [](#opt-networking.wireless.networks._name_.pskRaw)'s `ext:`
+          mechanism can fail against access points that require SAE
+          Hash-to-Element; see its documentation.
         '';
       };
     };
@@ -785,6 +829,20 @@ in
             '';
         }
       ];
+
+    warnings = optional (saeExtPasswordNetworks != [ ]) ''
+      The following networking.wireless.networks use `pskRaw = "ext:…"` together
+      with an SAE/FT-SAE auth protocol: ${concatStringsSep ", " saeExtPasswordNetworks}.
+      wpa_supplicant only resolves `ext_password_backend` secrets for the classic
+      (non-H2E) SAE exchange; it ignores them when deriving the SAE
+      Hash-to-Element password element, which access points can require (this is
+      mandatory on the 6 GHz band). Affected networks then fail to authenticate
+      with "SAE: Could not find PT for group …" and keep
+      disconnecting/reassociating whenever an H2E BSSID is tried. If you hit
+      this, supply the password as a literal network block via
+      `networking.wireless.extraConfigFiles` instead (still outside the Nix
+      store, e.g. rendered by your secrets manager).
+    '';
 
     users.groups.wpa_supplicant = { };
     users.users.wpa_supplicant = {
