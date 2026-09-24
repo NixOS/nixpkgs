@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -37,23 +35,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "26.7.0";
+  version = "26.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-TpoTOzdD8N9IcATmMRTfbSSBWwosxCW+MBa5MDtabf8=";
+    hash = "sha256-yl3GhHKtz2QItKIDOfR8xAtzeoOVPC9Ve9xnbBv2d48=";
   };
-
-  patches = [
-    # Fixes test failures: https://github.com/scipp/plopp/pull/592
-    (fetchpatch {
-      url = "https://github.com/scipp/plopp/commit/4d2aac82d9ac42f5b74b4e12de689a627e1fc457.patch";
-      hash = "sha256-Kec+AQrwCNE8X/EfUzXMZIxD8puVbmrR3y6J7EThBlk=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -81,12 +71,6 @@ buildPythonPackage (finalAttrs: {
     scipp
     scipy
     xarray
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # https://github.com/scipp/plopp/issues/508
-    "test_move_cut"
-    "test_value_cuts"
   ];
 
   env = {
