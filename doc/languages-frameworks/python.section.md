@@ -1321,6 +1321,16 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 `pytestCheckHook` recognizes the following attributes:
 
+`pytestImportMode` (default to `"importlib"`)
+
+:   To specify how pytest imports test modules it discovers to `sys.path`.
+
+    Its value should be one of `"prepend"`, `"append"`, or `"importlib"`.
+
+    `pytestCheckHook` default to choose `"importlib"`, as it can import test modules without touching `sys.path`, making the test modules use the installed module instead of the unbuilt module in the build directory.
+
+    (For reference, pytest defaults to use the `"append"` behaviour.)
+
 `enabledTestPaths` and `disabledTestPaths`
 
 :   To specify path globs (files or directories) or test items.
