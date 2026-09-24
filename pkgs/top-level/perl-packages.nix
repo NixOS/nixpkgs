@@ -14514,10 +14514,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.70";
+    version = "1.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-XxrIe3j3b8nDAT2PRi1BpMuKDKCLqvnhvu3Fw7j0eRU=";
+      hash = "sha256-MRMP4BqIZmOQdZhfyplHjJPA1zvUEaaVZbDUeD+vX+8=";
     };
     buildInputs = [
       DateManip

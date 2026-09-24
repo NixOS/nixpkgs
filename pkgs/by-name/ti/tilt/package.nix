@@ -11,13 +11,13 @@ let
       running in development environment and try to serve assets from the
       source tree, which is not there once build completes.
     */
-    version = "0.37.6";
+    version = "0.37.7";
 
     src = fetchFromGitHub {
       owner = "tilt-dev";
       repo = "tilt";
       tag = "v${version}";
-      hash = "sha256-ECECNXxO7fkX3eyNBWMlr9yqgiJKas0XpDA48lQNnr8=";
+      hash = "sha256-0q27Tzb/kA2QWu7NzcrLFpl4HbGUXAosRuKx/9nanS8=";
 
       # Remove after upstream updates to Yarn 4.15
       # https://github.com/tilt-dev/tilt/blob/master/web/package.json#L98

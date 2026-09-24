@@ -1,4 +1,5 @@
 {
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -162,7 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open Virtual Network";

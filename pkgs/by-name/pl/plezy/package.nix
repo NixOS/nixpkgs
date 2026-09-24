@@ -24,13 +24,13 @@
 }:
 let
   pname = "plezy";
-  version = "2.20.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-q0oGOAHco7wWS8P2sUdplZS/Rvlh4a1/MVfRbrETQ/0=";
+    hash = "sha256-X5EoRR65TE+LoaKksu5+F++IUBCPtyJXavprMFO4+iY=";
   };
 
   simdutf = fetchurl {
@@ -66,7 +66,10 @@ let
   linux = flutter347.buildFlutterApplication rec {
     inherit pname version src;
 
-    pubspecLock = lib.importJSON ./pubspec.lock.json;
+    # upstream targets 3.12 until its freezed 4 migration: https://github.com/edde746/plezy/blob/2.21.0/pubspec.yaml#L6-L9
+    pubspecLock = lib.recursiveUpdate (lib.importJSON ./pubspec.lock.json) {
+      sdks.dart = ">=3.12.0 <4.0.0";
+    };
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
@@ -138,7 +141,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-cQ5lGdhnWnfVUI6fqx8pk5zgdaQrZbZxD5mSwVpTbmM=";
+      hash = "sha256-jM4qKLT1szelq6yggbOLwyn8s3iN/gkpKIb1gsCionI=";
     };
 
     nativeBuildInputs = [
