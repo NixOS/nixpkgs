@@ -175,6 +175,7 @@ in
       propagatedBuildInputs = [ pytest ];
       substitutions = {
         inherit pythonCheckInterpreter;
+        pytestCheckHookResources = ./pytest-check-hook-resources;
       };
       passthru = {
         tests =
