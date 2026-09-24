@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "6.9.0";
+  version = "6.11.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMgvgmh32CkbKzC6h/F6oYdI5iK2gdaCuoY2dVJrQp0=";
+    hash = "sha256-nccr+s1H9lYIMD32OVK+auQ+pLXAXpZwt0ePKZsIFDw=";
   };
 
-  cargoHash = "sha256-L8+fIgoGoDbgCTkQ/IG24EkDq7OwW2JShoRLoyEdJCE=";
+  cargoHash = "sha256-oYz1qm72ldEbqogQSgcghq18mKaKKk+nklxnpOsvG+0=";
 
   # Upstream's releases ship only the `usage` binary.
   cargoBuildFlags = [
