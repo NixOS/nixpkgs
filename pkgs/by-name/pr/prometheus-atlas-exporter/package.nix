@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlas-exporter";
-  version = "1.0.6";
+  version = "1.1.0";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "czerwonk";
     repo = "atlas_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xCDqu6+J2xIk+BnrR42jsDsbI+ZAr4kC+euBW0LM6Vk=";
+    hash = "sha256-6H/C/prFNfPmZD9C+kLrok/AOVgiWaY3DdjdqktHQmQ=";
   };
 
-  vendorHash = "sha256-TMpImTanecjlhCsQvIG/6TdGvs4ZAqLhX6qSO6AboMI=";
+  vendorHash = "sha256-zHLeH2ExPpvOzAfm1llAPtac49AbYmnuTdYMTUNMb1Q=";
 
   meta = {
     description = "Prometheus exporter for RIPE Atlas measurement results";
