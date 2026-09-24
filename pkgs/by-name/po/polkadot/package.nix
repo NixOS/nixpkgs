@@ -90,5 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.intersectLists lib.platforms.unix (
       lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -61,5 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soywod ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
