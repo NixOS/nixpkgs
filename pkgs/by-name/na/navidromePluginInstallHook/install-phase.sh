@@ -5,7 +5,7 @@ naviPluginInstall() {
 
   runHook preInstall
 
-  mkdir -p "$out/share"
+  mkdir -p "$out/share/plugins"
   buildDir="$(mktemp -d)"
 
   find . -type f -name "*.wasm" -exec cp {} "$buildDir/plugin.wasm" \;
