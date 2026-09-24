@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2025-01-06";
+  version = "0.9.27-unstable-2026-09-22";
 
   outputs = [
     "dev"
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "git://repo.or.cz/tinycc.git";
-    rev = "f6385c05308f715bdd2c06336801193a21d69b50";
-    hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
+    rev = "3dc99dbc82f8e07308c5d398136803e62f9676df";
+    hash = "sha256-qYsGgihowp2C6WFzbQuXEWgJG6evtu/10p5IH/ozIKY=";
   };
 
   nativeBuildInputs = [
