@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   buildPackages,
   coreutils,
@@ -31,8 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     # do not set sticky bit in nix store
-    substituteInPlace src/Makefile.in --replace 04755 0755
+    substituteInPlace src/Makefile.in --replace-fail 04755 0755
   '';
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-96512_1.patch";
+      url = "https://github.com/sudo-project/sudo/commit/db669167ca599f2a94cd8a4c5fae9e473c81a2fd.patch?full_index=1";
+      hash = "sha256-VqfWo/z7CQCtgefzE8xAehjgKn2h1It6GkEt5BUn/OQ=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-96512_2.patch";
+      url = "https://github.com/sudo-project/sudo/commit/1820a349687522f51023d1ae5925125f59679a8c.patch?full_index=1";
+      hash = "sha256-guOdOaIqmXAftpj9gpsRFaAS5g2cS4j7o5DQFqyLZv8=";
+    })
+  ];
 
   configureFlags = [
     "--with-env-editor"
