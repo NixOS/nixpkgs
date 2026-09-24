@@ -135,6 +135,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       caniko
       SuperSandro2000
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
