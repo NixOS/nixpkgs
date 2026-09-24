@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "patchelf";
-  version = "0.15.2";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+    hash = "sha256-LM4B3pNlOCn2q2iiDC7CdeHACpRhEHBKJ+ko0ubohxY=";
   };
 
   strictDeps = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NixOS/patchelf";
     license = lib.licenses.gpl3Plus;
     mainProgram = "patchelf";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ emo-mruczek ];
     platforms = lib.platforms.all;
   };
 })
