@@ -75,8 +75,8 @@ in
       "sha256-XrlXdqhPSVWqssEe+UuREy69icRZE/wCxvM5KVnHS64=";
 
   mypy-boto3-apigateway =
-    buildMypyBoto3Package "apigateway" "1.43.0"
-      "sha256-LoKLFyWsPkSm4DODnXkpqzblQse4osUJLAetitR+/VQ=";
+    buildMypyBoto3Package "apigateway" "1.43.100"
+      "sha256-rF9SUikJekEQgd/UV3AniO/mu6+zq6lTUw17bhgJwug=";
 
   mypy-boto3-apigatewaymanagementapi =
     buildMypyBoto3Package "apigatewaymanagementapi" "1.43.0"
@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.98"
-      "sha256-NmDnuX37V2soiOmcAblB0bM9+dl180Zf/DMIbT0Nvaw=";
+    buildMypyBoto3Package "ec2" "1.43.100"
+      "sha256-DABqoQz7/al+1GnoP8EjE3Gv2DhKIc2/jYFpBhnA8Ac=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.98"
-      "sha256-NCo2cg1tdT9wrRkpQR6NwY4K8Vo1a6HYf6BEQ9yszmM=";
+    buildMypyBoto3Package "glue" "1.43.100"
+      "sha256-98njw7iU/fXWsEw9fen3skt8jbn9GNrbqTyqSNMDgPE=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.84"
-      "sha256-8HQGvA7/CTOtOwi3H4zyfM9CugpMPrAsoGq+2LoRgKs=";
+    buildMypyBoto3Package "quicksight" "1.43.100"
+      "sha256-BNMNYphV2CZ4PgNGFGJv8l4Kh3WFMl/Xru9fXeB+YGQ=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
@@ -1310,8 +1310,8 @@ in
       "sha256-V1og1LY/ORrXbfFVs4vF8LYe30/kvG71F3rWwXmNSJ4=";
 
   mypy-boto3-sso-admin =
-    buildMypyBoto3Package "sso-admin" "1.43.64"
-      "sha256-wesA1gX4AOwwJs5LKmr6O+MZV8mJFpGh/Gh1wluUvgk=";
+    buildMypyBoto3Package "sso-admin" "1.43.100"
+      "sha256-F1PtwXlgC9MOK6SskXVeqlQAw7xSwFxlSNTRHBafFDw=";
 
   mypy-boto3-sso-oidc =
     buildMypyBoto3Package "sso-oidc" "1.43.0"
