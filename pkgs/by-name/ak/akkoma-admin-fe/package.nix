@@ -68,6 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Admin interface for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
   };
 })
