@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bpf-linker,
   installShellFiles,
+  nixosTests,
   nix-update-script,
   # Also build the eBPF host blocker and its privileged loader.
   withEbpf ? true,
@@ -69,6 +70,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit withEbpf;
+    tests = {
+      inherit (nixosTests) jail-ai;
+    };
     updateScript = nix-update-script { };
   };
 
