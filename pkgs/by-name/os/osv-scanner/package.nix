@@ -5,7 +5,6 @@
   testers,
   osv-scanner,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "osv-scanner";
   version = "2.5.1";
@@ -18,6 +17,12 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-5on5A933JvMfUJZjrMImNvNqGK6u9MsNxl425nv0ktU=";
+
+  # go.mod's `go` directive can outpace the Go version packaged in
+  # Nixpkgs; pin it to what's actually being built with instead.
+  prePatch = ''
+    sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/' go.mod
+  '';
 
   subPackages = [
     "cmd/osv-scanner"
