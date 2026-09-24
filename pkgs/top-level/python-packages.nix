@@ -9462,6 +9462,8 @@ self: super: with self; {
 
   lb-matching-tools = callPackage ../development/python-modules/lb-matching-tools { };
 
+  lbox-clients = callPackage ../development/python-modules/lbox-clients { };
+
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
   lcd-i2c = callPackage ../development/python-modules/lcd-i2c { };

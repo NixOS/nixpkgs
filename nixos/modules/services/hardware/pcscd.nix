@@ -109,7 +109,7 @@ in
 
     services.pcscd.plugins = [ pkgs.ccid ];
 
-    services.udev.packages = [ pkgs.ccid ];
+    services.udev.packages = [ pkgs.ccid ] ++ cfg.plugins;
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 

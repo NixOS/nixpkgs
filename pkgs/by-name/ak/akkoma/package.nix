@@ -92,7 +92,7 @@ beamPackages.mixRelease (finalAttrs: {
     homepage = "https://akkoma.social";
     changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = with lib.maintainers; [ yuka ];
     platforms = lib.platforms.unix;
   };
 })
