@@ -109,8 +109,8 @@ stdenv.mkDerivation {
       cp -a * $out/share/1password
 
       # Desktop file
-      install -Dt $out/share/applications resources/1password.desktop
-      substituteInPlace $out/share/applications/1password.desktop \
+      install -Dt $out/share/applications resources/*.desktop
+      substituteInPlace $out/share/applications/*.desktop \
         --replace-fail 'Exec=/opt/1Password/1password' 'Exec=1password'
 
     ''
