@@ -12287,8 +12287,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "shortcuts";
       repo = "no-neck-pain.nvim";
-      tag = "v3.0.0";
-      hash = "sha256-8YxDFzSZmcqF1yUbUwVacLZF2JnSb4Z3b630x22YOtw=";
+      tag = "v3.0.1";
+      hash = "sha256-RUCBdraqR1M9iYIXR8Rwp/9jj2gSPSzucAUJi5aYEUU=";
     };
     meta.homepage = "https://github.com/shortcuts/no-neck-pain.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
