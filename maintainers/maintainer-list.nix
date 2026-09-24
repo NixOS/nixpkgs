@@ -11723,7 +11723,7 @@
     keys = [ { fingerprint = "731A 7A05 AD8B 3AE5 956A  C227 4A03 18E0 4E55 5DE5"; } ];
   };
   hubble = {
-    name = "Hubble the Wolverine";
+    name = "Hubble+Koda";
     email = "hubblethewolverine@gmail.com";
     matrix = "@hubofeverything:bark.lgbt";
     github = "the-furry-hubofeverything";
