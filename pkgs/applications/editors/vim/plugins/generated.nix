@@ -1755,8 +1755,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "metalelf0";
       repo = "black-metal-theme-neovim";
-      tag = "2.0";
-      hash = "sha256-z+qJfvCIV5WEAvKIkttDKpfBDt1xDBkTYLk2EoZbnj8=";
+      tag = "v2.1.0";
+      hash = "sha256-rVZPpbakoC6AoSPi8adKoY5aYGO/syjpwGTrsXm3Yag=";
     };
     meta.homepage = "https://github.com/metalelf0/black-metal-theme-neovim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
