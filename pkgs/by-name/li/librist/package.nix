@@ -35,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # glibc 2.43 C23 const-preserving strchr/strstr macros
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  };
 
   buildInputs = [
     cjson
