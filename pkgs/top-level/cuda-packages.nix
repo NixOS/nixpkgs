@@ -218,7 +218,7 @@ let
       nvpl = "25.5";
       nvtiff = "0.5.1";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
 in
 {
