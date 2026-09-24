@@ -39,6 +39,11 @@
           ".github/workflows/*.yml"
           ".github/workflows/*.yaml"
         ];
+        options = [
+          # Support self-repository syntax
+          ''-ignore=reusable workflow call "\$/.+" at "uses" is not following the format''
+          ''-ignore=specifying action "\$/.+" in invalid format because ref is missing.''
+        ];
       };
 
       biome = {
