@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      font44
       holymonson
     ];
   };
