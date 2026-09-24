@@ -15391,8 +15391,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "project.nvim";
-      tag = "v6.3.1-1";
-      hash = "sha256-Z1m4SpTpLEp7aOgmbAQlsjCuM3JgVnRfBh2vhef2ghY=";
+      tag = "v6.4.0-1";
+      hash = "sha256-YpLFIn1Kz/WwbGlJLt9urbOyVSwvjeZlr/aRnWW4o8g=";
     };
     meta.homepage = "https://github.com/DrKJeff16/project.nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
