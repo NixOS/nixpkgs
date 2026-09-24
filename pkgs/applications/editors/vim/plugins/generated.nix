@@ -11686,8 +11686,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "rcasia";
       repo = "neotest-java";
-      tag = "v0.38.4";
-      hash = "sha256-yXS54cs+Q+zJ4rUMbhwgRTMLNZUptfVWusj2muumyIo=";
+      tag = "v0.39.0";
+      hash = "sha256-FByGkU2pig8b9w59812B7o7IgSFnEjeDM7shRzAaoi8=";
     };
     meta.homepage = "https://github.com/rcasia/neotest-java/";
     meta.license = getLicenseFromSpdxId "MIT";
