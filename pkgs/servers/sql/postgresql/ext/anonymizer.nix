@@ -53,6 +53,7 @@ buildPgrxExtension (finalAttrs: {
     maintainers = with lib.maintainers; [
       leona
       osnyx
+      anish
     ];
     license = lib.licenses.postgresql;
   };
