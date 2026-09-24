@@ -90,6 +90,9 @@ postgresqlBuildExtension (finalAttrs: {
     changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${finalAttrs.version}";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with lib.maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [
+      DerTim1
+      anish
+    ];
   };
 })
