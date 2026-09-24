@@ -18,35 +18,16 @@ symlinkJoin (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  # Create a bash associated array between
-  # the bundle names and the path to the derivation output.
-  wasm_plugins = lib.listToAttrs (
-    lib.map (p: {
-      name = p.bundleName or p.pname;
-      value = p.outPath;
-    }) wasmPlugins
-  );
-
   paths = [
     navidrome-unwrapped
-  ];
+  ]
+  ++ wasmPlugins;
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ];
 
-  postBuild = ''
-
-    for name in "''${!wasm_plugins[@]}"; do
-      # Only create the plugins dir if there is a plugin
-      mkdir -p "$out/share/plugins"
-
-      find "''${wasm_plugins["$name"]}" \
-        -type f \
-        -name "*.ndp" \
-        -exec ln -s {} "$out/share/plugins/$name.ndp" \;
-    done
-
+  postBuild = lib.optionalString ffmpegSupport ''
     makeWrapper ${lib.getExe navidrome-unwrapped} "$out/bin/navidrome" \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
