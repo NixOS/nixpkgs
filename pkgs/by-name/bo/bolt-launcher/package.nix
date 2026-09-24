@@ -25,6 +25,7 @@
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
   enableRS3 ? false,
 }:
 let
@@ -111,8 +112,6 @@ in
 buildFHSEnv {
   inherit (bolt) pname version;
 
-  passthru.originalSrc = bolt.src;
-
   targetPkgs =
     pkgs:
     [ bolt ]
@@ -151,15 +150,19 @@ buildFHSEnv {
     ln -s ${bolt}/share/icons/hicolor/256x256/apps/*.png $out/share/icons/hicolor/256x256/apps/
   '';
 
+  passthru = {
+    inherit (bolt) src;
+    unwrapped = bolt;
+    updateScript = nix-update-script { };
+  };
+
   runScript = "${bolt.name}";
 
   meta = {
     homepage = "https://codeberg.org/Adamcake/Bolt";
     changelog = "https://codeberg.org/Adamcake/Bolt/releases/tag/${bolt.version}";
     description = "Alternative launcher for RuneScape";
-    longDescription = ''
-      Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
-    '';
+    longDescription = "Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       nezia
