@@ -270,11 +270,13 @@ in
                   they guide the journey.
                 '';
                 description = ''
-                  Optional text to provide as a prompt for the first window. This can be used to provide, or
-                  "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
-                  to make it more likely to predict those word correctly.
+                  Optional text to provide as a prompt for the first window.
+                  This can be used to provide, or "prompt-engineer" a context
+                  for transcription, e.g. custom vocabularies or proper nouns to
+                  make it more likely to predict those word correctly.
 
-                  Only supported when the {option}`sttLibrary` is `faster-whisper`.
+                  Only supported when the {option}`sttLibrary` is
+                  `faster-whisper`. Not supported with Distill whisper models.
                 '';
               };
 
@@ -354,9 +356,11 @@ in
           wantedBy = [
             "multi-user.target"
           ];
-          # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
-          # https://github.com/NixOS/nixpkgs/issues/429974
-          environment."HF_HOME" = "/tmp";
+          environment = {
+            # https://github.com/OHF-Voice/wyoming-faster-whisper/blob/v3.8.1/Dockerfile#L42-L44
+            "HF_HOME" = "/tmp/huggingface";
+            "MODELSCOPE_CACHE" = "/tmp/modelscope";
+          };
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-faster-whisper";

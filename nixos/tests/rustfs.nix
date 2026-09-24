@@ -53,17 +53,20 @@ in
         );
       };
 
-      environment.systemPackages = with pkgs; [ minio-client ];
+      environment.systemPackages = with pkgs; [ rustfs-cli ];
     };
 
   testScript = /* python */ ''
     machine.wait_for_unit("rustfs.service")
 
-    machine.succeed("mc alias set rustfs http://localhost:9000 ${accessKey} ${secretKey} --api s3v4")
-    machine.succeed("mc mb rustfs/test-bucket")
+    machine.succeed("rc alias set rustfs http://localhost:9000 ${accessKey} ${secretKey}")
+    machine.succeed("rc bucket create rustfs/test-bucket")
     machine.succeed("${rustfsPythonScript}")
-    assert "test-bucket" in machine.succeed("mc ls rustfs")
-    assert "Test from Python" in machine.succeed("mc cat rustfs/test-bucket/test.txt")
-    machine.succeed("mc rb --force rustfs/test-bucket")
+    assert "test-bucket" in machine.succeed("rc bucket list rustfs")
+    assert "Test from Python" in machine.succeed("rc object show rustfs/test-bucket/test.txt")
+    machine.succeed("rc object remove rustfs/test-bucket/test.txt")
+    assert "test.txt" not in machine.succeed("rc bucket list rustfs/test-bucket")
+    machine.succeed("rc bucket remove rustfs/test-bucket")
+    assert "test-bucket" not in machine.succeed("rc bucket list rustfs")
   '';
 }

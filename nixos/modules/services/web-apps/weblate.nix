@@ -26,8 +26,12 @@ let
           # Use a settings module in dataDir, to avoid having to rebuild the package
           # when user changes settings.
           makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-            "--set PYTHONPATH  \"${settingsDir}\""
-            "--set DJANGO_SETTINGS_MODULE \"settings\""
+            "--set"
+            "PYTHONPATH"
+            settingsDir
+            "--set"
+            "DJANGO_SETTINGS_MODULE"
+            "settings"
           ];
         })
       );

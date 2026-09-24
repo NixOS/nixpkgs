@@ -61,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/KhronosGroup/KTX-Software";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bonsairobo ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
