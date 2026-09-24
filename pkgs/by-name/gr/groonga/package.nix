@@ -4,6 +4,7 @@
   cmake,
   fetchurl,
   kytea,
+  libstemmer,
   msgpack-c,
   mecab,
   pkg-config,
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     mecab
     kytea
+    libstemmer
     msgpack-c
   ]
   ++ lib.optionals lz4Support [
