@@ -17,7 +17,6 @@
   polkit,
   libgphoto2,
   avahi,
-  libarchive,
   fuse3,
   libcdio,
   libxml2,
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libgphoto2
     avahi
-    libarchive
     libimobiledevice
     libbluray
     libnfs
