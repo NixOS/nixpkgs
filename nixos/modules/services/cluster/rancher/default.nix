@@ -27,6 +27,7 @@ let
       manifestDir = "/var/lib/rancher/${name}/server/manifests";
       imageDir = "/var/lib/rancher/${name}/agent/images";
       containerdConfigTemplateFile = "/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl";
+      containerdConfigTemplateV3File = "/var/lib/rancher/${name}/agent/etc/containerd/config-v3.toml.tmpl";
       staticContentChartDir = "/var/lib/rancher/${name}/server/static/charts";
 
       manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml_1_2 { };
@@ -399,6 +400,7 @@ let
           manifestDir
           imageDir
           containerdConfigTemplateFile
+          containerdConfigTemplateV3File
           staticContentChartDir
           ;
       };
@@ -641,6 +643,30 @@ let
           description = ''
             Config template for containerd, to be placed at
             `/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl`.
+            ${name} renders this template as containerd's legacy version 2 configuration and ignores
+            it when [](#opt-services.${name}.containerdConfigTemplateV3) is set.
+            See the docs on [configuring containerd](https://docs.${name}.io/advanced#configuring-containerd).
+          '';
+        };
+
+        containerdConfigTemplateV3 = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = lib.literalExpression ''
+            # Base config
+            {{ template "base" . }}
+
+            # Add a custom runtime
+            [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.custom]
+              runtime_type = "io.containerd.runc.v2"
+            [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.custom.options]
+              BinaryName = "/path/to/custom-container-runtime"
+          '';
+          description = ''
+            Config template for containerd in its version 3 configuration format, to be placed at
+            `/var/lib/rancher/${name}/agent/etc/containerd/config-v3.toml.tmpl`.
+            ${name} uses this template instead of [](#opt-services.${name}.containerdConfigTemplate)
+            when both are set.
             See the docs on [configuring containerd](https://docs.${name}.io/advanced#configuring-containerd).
           '';
         };
@@ -890,6 +916,11 @@ let
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
+            };
+          })
+          // (lib.optionalAttrs (cfg.containerdConfigTemplateV3 != null) {
+            ${containerdConfigTemplateV3File} = {
+              "L+".argument = "${pkgs.writeText "config-v3.toml.tmpl" cfg.containerdConfigTemplateV3}";
             };
           })
           // (lib.mapAttrs' mkChartRule helmCharts);
