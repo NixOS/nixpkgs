@@ -71,10 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace pyproject.toml --replace-fail "name = 'libfdt'" "name = 'pylibfdt'"
   '';
 
-  # Required for installation of Python library and is innocuous otherwise.
-  env.DESTDIR = "/";
-  # glibc 2.43 C23 const-preserving strchr/strstr macros
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  env = {
+    # Required for installation of Python library and is innocuous otherwise.
+    DESTDIR = "/";
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
+    # glibc 2.43 C23 const-preserving strchr/strstr macros
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  };
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
