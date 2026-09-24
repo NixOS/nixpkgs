@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-piper";
-  version = "2.4.3";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "wyoming-piper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TjrH+v/s/strNSQl6LIweITDuMdL4bNIH3Jm6vz+jH4=";
+    hash = "sha256-gz/Pxf4GUZLCBsRW6ML/6l+rdcb17V4rZ7ltvjcN694=";
   };
 
   build-system = with python3Packages; [
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   optional-dependencies = with python3Packages; {
     http = wyoming.optional-dependencies.http;
+    ja = piper-tts.optional-dependencies.ja;
     # We do not follow the dependency dance upstream does as that would require overrideAttrs.
     # omnivoice = [ omnivoice ]; # not packaged, yet
     web = [ flask ];
