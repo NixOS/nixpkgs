@@ -4035,6 +4035,7 @@ with pkgs;
     cargo-pgrx_0_16_1
     cargo-pgrx_0_17_0
     cargo-pgrx_0_18_0
+    cargo-pgrx_0_19_0
     cargo-pgrx
     ;
 

@@ -18,6 +18,8 @@ let
 
       inherit version;
 
+      __structuredAttrs = true;
+
       src = fetchCrate {
         inherit version hash;
         pname = "cargo-pgrx";
@@ -42,6 +44,10 @@ let
         "--skip=object_utils::tests::parses_managed_postmasters"
         # test name in versions < 0.18
         "--skip=command::schema::tests::test_parse_managed_postmasters"
+        # requires tests/fixtures/workspace, which is not in the crate
+        "--skip=command::upgrade::tests::find_package_manifest_in_workspace"
+        "--skip=command::upgrade::tests::process_workspace_manifest"
+        "--skip=command::upgrade::tests::process_workspace_package_manifest"
       ];
 
       meta = {
