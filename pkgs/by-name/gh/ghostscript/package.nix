@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.07.1";
+  version = "10.08.0";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }/ghostscript-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HNt2bejbjx5YnIF/CcWFXqX2XfyFQORlpprBTBhBYCU=";
+    hash = "sha256-wgSSvI67lsh/ouUqCSbhzajN6V1mFF4BiscT/tXaOM8=";
   };
 
   patches = [
