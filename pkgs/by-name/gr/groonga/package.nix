@@ -12,6 +12,7 @@
   testers,
   xxhash,
   zstd,
+  versionCheckHook,
   postgresqlPackages,
   suggestSupport ? false,
   zeromq,
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    mecab # mecab-config
     pkg-config
   ];
 
@@ -63,11 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit (postgresqlPackages) pgroonga;
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       moduleNames = [ "groonga" ];
@@ -76,10 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://groonga.org/";
+    changelog = "https://groonga.org/docs/news/${lib.versions.major finalAttrs.version}.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     description = "Open-source fulltext search engine and column store";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "groonga";
     longDescription = ''
       Groonga is an open-source fulltext search engine and column store.
       It lets you write high-performance applications that requires fulltext search.
