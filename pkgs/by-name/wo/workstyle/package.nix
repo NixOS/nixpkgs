@@ -6,18 +6,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "workstyle";
-  version = "0-unstable-2023-04-15";
+  version = "0-unstable-2025-10-19";
 
   src = fetchFromGitHub {
     owner = "pierrechevalier83";
     repo = "workstyle";
-    rev = "8bde72d9a9dd67e0fc7c0545faca53df23ed3753";
-    hash = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
+    rev = "dae15018c84c4f0feaf498d3676271ca0e3bec44";
+    hash = "sha256-YcAn2oIVegAHa/mpqryRR1OIIAoJvCv+IiHB7s5mZOY=";
   };
 
-  cargoHash = "sha256-es8kS1w71TuQ1pKb4/wXtpukWEBqUJUA+GX3uXOYbtU=";
-
-  doCheck = false; # No tests
+  cargoHash = "sha256-ZGOjfWqPATvDU81BYXX+KF6uTD8hjKCOVLIHn/Kd3Ks=";
 
   meta = {
     description = "Sway workspaces with style";
