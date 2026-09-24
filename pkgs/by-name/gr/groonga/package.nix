@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     }";
     description = "Open-source fulltext search engine and column store";
     license = lib.licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ anish ];
     platforms = lib.platforms.all;
     mainProgram = "groonga";
     longDescription = ''
