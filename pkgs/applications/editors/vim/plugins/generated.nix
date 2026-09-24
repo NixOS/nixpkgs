@@ -12441,8 +12441,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "nacro90";
       repo = "numb.nvim";
-      tag = "v1.2.0";
-      hash = "sha256-MRpfVTwlWZl9eKMiLg7eSMeKyhnxSNI3ZJ/TOzW43B0=";
+      tag = "v1.2.1";
+      hash = "sha256-HlMAZhrM+HnMDwBqXhEjD26y0hkWq6orNDDuUMO0KGM=";
     };
     meta.homepage = "https://github.com/nacro90/numb.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
