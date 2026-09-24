@@ -8,6 +8,7 @@
   libvorbis,
   pkg-config,
   libmpg123,
+  libmikmod,
   flac,
   autoreconfHook,
   stdenv,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ./configure: line 5346: /usr/bin/file: No such file or directory
     autoreconfHook
     SDL # for sdl.m4
+    libmikmod # for libmikmod-config
   ];
 
   buildInputs = [
@@ -57,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libmpg123
     flac
+    libmikmod
   ];
 
   configureFlags = [
