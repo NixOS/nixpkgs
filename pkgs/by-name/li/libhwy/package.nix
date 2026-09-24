@@ -5,6 +5,7 @@
   ninja,
   gtest,
   fetchFromGitHub,
+  fetchpatch,
   testers,
   nix-update-script,
 }:
@@ -29,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./move-contrib-to-its-own-output.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # backport GCC 16/aarch64 fix
+    (fetchpatch {
+      url = "https://github.com/google/highway/commit/8a0da774fe6b3f9ab02f5f33e763b8c2133f38fc.patch";
+      hash = "sha256-uAWBtQWE/iSFK0Ht3rWV+kpSH/UPQr8nlM9AWBFu0Vg=";
+    })
   ];
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
