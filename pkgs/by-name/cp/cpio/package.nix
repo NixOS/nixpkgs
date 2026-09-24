@@ -41,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # This file determines the date shown in the infopage.
+    # It is unreproducible because CVE-2026-66486.patch touches it.
+    # We could reset it to SOURCE_DATE_EPOCH or the date of that patch.
+    touch -d $(date --utc --date="@''${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y-%m-%d) doc/cpio.texi
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     texinfo # for makeinfo
