@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     initrd = nixosTests.systemd-initrd-simple;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "Program to create or extract from cpio archives";
