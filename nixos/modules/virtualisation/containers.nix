@@ -85,6 +85,15 @@ in
       description = "Enable the OCI seccomp BPF hook";
     };
 
+    shortnames.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable the usage of a collection of common aliases for fully qualified images.
+        See https://github.com/containers/shortnames.
+      '';
+    };
+
     containersConf = mkOptions "containers.conf";
     storage = mkOptions "storage.conf";
 
@@ -196,6 +205,9 @@ in
             else
               "${pkgs.skopeo.policy}/default-policy.json";
         }
+        (lib.mkIf cfg.shortnames.enable {
+          "containers/registries.conf.d/000-shortnames.conf".source = pkgs.containers-shortnames.shortnames;
+        })
       ];
     };
 }
