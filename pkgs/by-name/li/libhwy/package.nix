@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./move-contrib-to-its-own-output.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # backport GCC 16/aarch64 fix
     (fetchpatch {
       url = "https://github.com/google/highway/commit/8a0da774fe6b3f9ab02f5f33e763b8c2133f38fc.patch";
