@@ -5,17 +5,20 @@ naviPluginInstall() {
 
   runHook preInstall
 
-  mkdir -p "$out"/share
+  mkdir -p "$out/share"
   buildDir="$(mktemp -d)"
 
   find . -type f -name "*.wasm" -exec cp {} "$buildDir/plugin.wasm" \;
 
-  cp manifest.json "$buildDir"
+  cp manifest.json "$buildDir" || {
+    echo "manifest.json for the plugin must be in the root of the build directory"
+    exit 1
+  }
 
   pushd "$buildDir"
 
   zip --must-match \
-    "$out/share/$pname.ndp" \
+    "$out/share/plugins/$bundleName.ndp" \
     plugin.wasm \
     manifest.json
 
