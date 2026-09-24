@@ -6687,8 +6687,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "moyiz";
       repo = "git-dev.nvim";
-      tag = "v0.11.1";
-      hash = "sha256-pDz0IRlnnVHQ5G3Ga8I2wF8jDcF3hiyvMo5s5fwcV88=";
+      tag = "v0.11.2";
+      hash = "sha256-locfBfG9LYjxK1toQyqvuB/dP62jsRmz0S/qfVZbZNU=";
     };
     meta.homepage = "https://github.com/moyiz/git-dev.nvim/";
     meta.license = getLicenseFromSpdxId "BSD-3-Clause";
