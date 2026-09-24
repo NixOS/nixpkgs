@@ -82,6 +82,10 @@ function runChecklist({
       noBlockingReviews,
   }
 
+  const mergeableByMaintainer = Object.values(
+    checklist['PR is at least one of:'],
+  ).some(Boolean)
+
   if (user) {
     checklist[
       `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers).`
@@ -355,13 +359,14 @@ export async function handleMerge({
       '',
     ]
 
+    // Display different Tip if this is ready to merge by a maintainer
     if (eligible.size > 0 && !eligible.has(comment.user.id)) {
       const users = await Promise.all(
         Array.from(eligible, async (id) => (await getUser(id)).login),
       )
       body.push(
         '> [!TIP]',
-        '> Maintainers eligible to merge are:',
+        `> Maintainers ${mergeableByMaintainer ? 'eligible to merge' : 'of all touched packages'} are:`,
         ...users.map((login) => `> - ${login}`),
         '',
       )
