@@ -1473,8 +1473,8 @@ let
         mktplcRef = {
           name = "protobuf-vsc";
           publisher = "DrBlury";
-          version = "1.6.14";
-          hash = "sha256-wup+gWozELTO6jcNF5HZR1oRRwnGMor/PuEtdpRGz8g=";
+          version = "1.6.15";
+          hash = "sha256-KWWjDiINAJljQnKzwqyJMZc6ZCOx4/Wq+4fNAn0v2CI=";
         };
         meta = {
           description = "Comprehensive Protocol Buffers support with syntax highlighting, IntelliSense, diagnostics and formatting";
@@ -1742,8 +1742,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "1.5.0";
-          hash = "sha256-LN1rW0IyC5BAdM6OynoHldm+adTYG8He6SaDh20fNbs=";
+          version = "1.20.0";
+          hash = "sha256-XVB6wsjvQvYNz8fymmUIZKQmprwqDf9aQskjjFe2qAk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";

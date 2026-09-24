@@ -2,8 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
   tantivy-go,
+  versionCheckHook,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
@@ -26,9 +27,11 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/anyproto/anytype-cli/core.Version=v${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

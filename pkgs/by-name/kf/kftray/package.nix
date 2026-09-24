@@ -18,6 +18,7 @@
   rustPlatform,
   stdenv,
   webkitgtk_4_1,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -25,7 +26,7 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   let
-    cargoHash = finalAttrs.cargoDeps.hash or "sha256-08k5hhMV2YRKNz/Zp+b0WhUVHYRlX7Rhb3xFQefOTw0=";
+    cargoHash = finalAttrs.cargoDeps.hash or "sha256-cbNTUQ7HkpEjWYGyzrcFXtwzEc+uAMWxzxEhqlXuCUs=";
     kftrayBinaries = rustPlatform.buildRustPackage {
       pname = "kftray-binaries";
       cargoBuildFlags = [
@@ -54,13 +55,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "kftray";
-    version = "0.27.30";
+    version = "0.27.33";
 
     src = fetchFromGitHub {
       owner = "hcavarsan";
       repo = "kftray";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-PELLoATb8T2jXhiUItVhX+cOd1JCXFRgLUagRa8LOFo=";
+      hash = "sha256-1lVTrtiM/P27GlU5jQ7GcLOUEmXU2T/O7grx4c0MJNY=";
     };
 
     cargoRoot = "./";
@@ -78,7 +79,7 @@ stdenv.mkDerivation (
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-LdhXmxdorRsMrX+hMtAbt9NiBW1opO2424bpj+J/c8E=";
+      hash = "sha256-FIfQZ5OknSFvaDZ3MbW8+36aAsjJrU+5irN2vaLpS54=";
     };
 
     buildInputs = [
@@ -159,6 +160,10 @@ stdenv.mkDerivation (
     doCheck = true;
     strictDeps = true;
     __structuredAttrs = true;
+
+    passthru = {
+      updateScript = nix-update-script { };
+    };
 
     meta = {
       description = "Kubectl port-forward manager";
