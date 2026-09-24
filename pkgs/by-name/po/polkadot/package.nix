@@ -2,6 +2,7 @@
   cacert,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   openssl,
   pkg-config,
   protobuf,
@@ -74,6 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
     PROTOC = "${protobuf}/bin/protoc";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=polkadot-stable(\\d{4}(?:-\\d+)?)$" ];
   };
 
   meta = {
