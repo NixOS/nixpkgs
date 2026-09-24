@@ -2,14 +2,14 @@
   lib,
   bash,
   autoconf,
-  mkCoqDerivation,
-  coq,
+  mkRocqDerivation,
+  rocq-core,
   stdlib,
   version ? null,
 }:
 
 let
-  derivation = mkCoqDerivation {
+  derivation = mkRocqDerivation {
     pname = "flocq";
     owner = "flocq";
     domain = "gitlab.inria.fr";
@@ -19,7 +19,7 @@ let
         case = case: out: { inherit case out; };
       in
       with lib.versions;
-      lib.switch coq.coq-version [
+      lib.switch rocq-core.rocq-version [
         (case (range "8.15" "9.3") "4.2.2")
         (case (range "8.15" "9.1") "4.2.1")
         (case (range "8.14" "8.20") "4.2.0")
@@ -51,8 +51,10 @@ let
 
     propagatedBuildInputs = [ stdlib ];
 
+    useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "4.2.2" v;
+
     meta = {
-      description = "Floating-point formalization for the Coq system";
+      description = "Floating-point formalization for the Rocq system";
       license = lib.licenses.lgpl3;
       maintainers = with lib.maintainers; [ jwiegley ];
     };
@@ -61,7 +63,7 @@ let
     o:
     lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGe "4.2.2" o.version))
       {
-        nativeBuildInputs = o.nativeBuildInputs ++ [ coq.ocamlPackages.ocaml ];
+        nativeBuildInputs = o.nativeBuildInputs ++ [ rocq-core.ocamlPackages.ocaml ];
       }
   );
 in
