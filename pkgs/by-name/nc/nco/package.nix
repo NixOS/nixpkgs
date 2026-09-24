@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nco";
-  version = "5.3.2";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "nco";
     repo = "nco";
-    rev = finalAttrs.version;
-    hash = "sha256-p7GUUgMlZFnJ5kA3x4QpcVmQUQNsjMr2Q8Mrzf6k54Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-5yavmrv3j+a1SuuQ16jJ/Z5E0enOr8+jEFi30vEO/LI=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/nco/nco_fl_utl.c \
       --replace "/bin/mv" "${coreutils}/bin/mv"
   '';
+
+  # fixes libm.so.6: error adding symbols: DSO missing from command line
+  NIX_LDFLAGS = "-lm";
 
   makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
 
