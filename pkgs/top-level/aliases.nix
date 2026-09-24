@@ -2019,6 +2019,7 @@ mapAliases {
   peruse = throw "'peruse' has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   petrifoo = throw "'petrifoo' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-12-02
   pfstools = throw "'pfstools' was removed because it was broken and depends on an old version of ImageMagick"; # added 2026-02-26
+  pg-dump-anon = throw "'pg-dump-anon' has been removed as it was removed upstream. Use pg_dump with a masked role instead"; # Added 2026-09-24
   pg_cron = throw "'pg_cron' has been removed. Use 'postgresqlPackages.pg_cron' instead."; # Added 2025-07-19
   pg_hll = throw "'pg_hll' has been removed. Use 'postgresqlPackages.pg_hll' instead."; # Added 2025-07-19
   pg_repack = throw "'pg_repack' has been removed. Use 'postgresqlPackages.pg_repack' instead."; # Added 2025-07-19
