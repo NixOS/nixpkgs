@@ -7,7 +7,6 @@
   glib,
   gobject-introspection,
   gtk4,
-  lcms2,
   libglycin,
   libseccomp,
   meson,
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     glib
     libseccomp
-    lcms2
     gtk4
   ];
 
@@ -63,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: these should not be required by .pc file
     fontconfig
     libseccomp
-    lcms2
   ];
 
   mesonFlags = [
