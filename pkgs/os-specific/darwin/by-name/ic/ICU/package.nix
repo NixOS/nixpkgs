@@ -218,7 +218,7 @@ let
     # Some tests use `log(name)`, which clang identifies as potentially insecure.
     checkFlags = [
       "CFLAGS+=-Wno-format-security"
-      "CXXFLAGS+=-Wno-format-security"
+      "CXXFLAGS+=-Wno-format-security -std=c++17"
     ];
     checkTarget = "check";
   };
