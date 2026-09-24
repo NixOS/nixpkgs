@@ -43,4 +43,12 @@ in
   jre-26 = withModernDrvAttrs (common {
     sourcePerArch = sources.jre.openjdk26;
   });
+
+  jdk-27 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jdk.openjdk27;
+    jmodsSourcePreArch = sources.jmods.openjdk27;
+  });
+  jre-27 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jre.openjdk27;
+  });
 }
