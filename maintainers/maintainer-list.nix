@@ -8504,6 +8504,12 @@
     githubId = 13485450;
     name = "Emmanuel Rosa";
   };
+  emo-mruczek = {
+    email = "krokcia1@gmail.com";
+    github = "emo-mruczek";
+    githubId = 110098604;
+    name = "Felix";
+  };
   emptyflask = {
     email = "jon@emptyflask.dev";
     github = "emptyflask";
