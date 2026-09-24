@@ -17830,7 +17830,7 @@
     name = "Maria";
   };
   marie = {
-    email = "tabmeier12+nix@gmail.com";
+    email = "marie@marie.cologne";
     github = "nycodeghg";
     githubId = 37078297;
     matrix = "@marie:marie.cologne";
