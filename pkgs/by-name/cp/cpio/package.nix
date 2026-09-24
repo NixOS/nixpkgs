@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo # for makeinfo
   ];
 
+  strictDeps = true;
+
   separateDebugInfo = true;
 
   # The code won't compile in c23 mode.
