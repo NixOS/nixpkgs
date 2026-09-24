@@ -1,7 +1,7 @@
 {
   lib,
   copyPkgconfigItems,
-  fetchFromRepoOrCz,
+  fetchgit,
   makePkgconfigItem,
   apple-sdk,
   perl,
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  src = fetchFromRepoOrCz {
-    repo = "tinycc";
+  src = fetchgit {
+    url = "git://repo.or.cz/tinycc.git";
     rev = "f6385c05308f715bdd2c06336801193a21d69b50";
     hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
   };
