@@ -8,6 +8,7 @@
   matplotlib,
   pytestCheckHook,
   isPy3k,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage {
@@ -46,5 +47,7 @@ buildPythonPackage {
     description = "Kalman filtering and optimal estimation library";
     license = lib.licenses.mit;
     maintainers = [ ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

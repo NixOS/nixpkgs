@@ -47,6 +47,8 @@ let
     license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
     homepage = "https://github.com/sambayless/monosat";
     maintainers = [ lib.maintainers.acairncross ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
   core = stdenv.mkDerivation {

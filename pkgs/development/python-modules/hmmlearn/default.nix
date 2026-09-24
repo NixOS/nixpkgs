@@ -10,6 +10,7 @@
   setuptools-scm,
   cython,
   pytestCheckHook,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -56,5 +57,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/hmmlearn/hmmlearn";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
