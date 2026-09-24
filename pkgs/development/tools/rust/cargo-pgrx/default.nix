@@ -58,6 +58,7 @@ let
         maintainers = with lib.maintainers; [
           happysalada
           matthiasbeyer
+          anish
         ];
         mainProgram = "cargo-pgrx";
       };
