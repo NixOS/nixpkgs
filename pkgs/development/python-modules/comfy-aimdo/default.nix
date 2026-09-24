@@ -6,6 +6,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  stdenv,
   comfyui,
 }:
 
@@ -58,7 +59,9 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
-  preBuild = ''
+  # The native library is Linux/Windows only; on other platforms the Python
+  # module is still importable and ComfyUI falls back to its legacy offloader.
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     ./scripts/build-linux-aimdo.sh
   '';
 
@@ -71,7 +74,7 @@ buildPythonPackage (finalAttrs: {
     description = "AI model dynamic offloader for ComfyUI";
     homepage = "https://github.com/Comfy-Org/comfy-aimdo";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     inherit (comfyui.meta) maintainers;
   };
 })
