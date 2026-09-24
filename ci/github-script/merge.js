@@ -355,7 +355,12 @@ export async function handleMerge({
       '',
     ]
 
-    if (eligible.size > 0 && !eligible.has(comment.user.id)) {
+    // Display Tip only if this is ready to merge by a maintainer
+    if (
+      Object.values(checklist['PR is at least one of:']).some(Boolean) &&
+      eligible.size > 0 &&
+      !eligible.has(comment.user.id)
+    ) {
       const users = await Promise.all(
         Array.from(eligible, async (id) => (await getUser(id)).login),
       )
