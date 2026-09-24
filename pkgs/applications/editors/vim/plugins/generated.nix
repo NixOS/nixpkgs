@@ -4134,8 +4134,8 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "zbirenbaum";
       repo = "copilot.lua";
-      tag = "v3.1.8";
-      hash = "sha256-qqunTfZsgYEMiDnXaji6eyfBSbhmhFuAnh93UR7oimE=";
+      tag = "v3.1.10";
+      hash = "sha256-zL2yBu52mnMEj52tutE1aa++O75CAYGr9uHafDH8Qv0=";
     };
     meta.homepage = "https://github.com/zbirenbaum/copilot.lua/";
     meta.license = getLicenseFromSpdxId "MIT";
