@@ -34,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FwDwUPLzuOlokKP91w8dF/BJPG2rFIlgn5kR6Tka0ws=";
   };
 
+  # Upstream does an okay job bumping these vendor dependencies, and we don't use them in nix anyways.
+  # However, we want to be sure to not accidentally use these,
+  # e.g. with automatic feature detection, so just remove them.
+  postPatch = ''
+    rm -rf external/*
+  '';
+
   nativeBuildInputs = [
     pkg-config
     # upstream configure is pre-built expecting FHS compliance:
