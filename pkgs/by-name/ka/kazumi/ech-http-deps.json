@@ -1,0 +1,10 @@
+{
+  "linux-arm64": {
+    "url": "https://github.com/Predidit/libechhttp-linux-build/releases/download/v0.1.0/libechhttp-deps-v0.1.0-linux-arm64.zip",
+    "hash": "sha256-1zSL+U7m/swIC3e204V5WZHb2gdaJ0PsnKW8UnGM3Wo="
+  },
+  "linux-x64": {
+    "url": "https://github.com/Predidit/libechhttp-linux-build/releases/download/v0.1.0/libechhttp-deps-v0.1.0-linux-x64.zip",
+    "hash": "sha256-+/Ne+vCO9fYkB3f+aV3kaFxLxohjkFLnlYS+0kQxKcQ="
+  }
+}
