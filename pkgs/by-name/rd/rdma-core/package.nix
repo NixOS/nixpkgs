@@ -12,6 +12,7 @@
   udevCheckHook,
   python3,
   perl,
+  withManPages ? !stdenv.hostPlatform.isi686,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,15 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withManPages [
     "man"
+  ]
+  ++ [
     "dev"
     "scripts"
   ];
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals withManPages [
     docutils
     pandoc
+  ]
+  ++ [
     pkg-config
     python3
     udevCheckHook
@@ -54,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+  ]
+  ++ lib.optionals (!withManPages) [
+    "-DNO_MAN_PAGES=1"
   ];
 
   postPatch = ''
