@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-viewer";
-  version = "0-unstable-2026-07-27";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-viewer";
-    rev = "6c999eb5100353260d481077f1820ef95ee68ea7";
-    hash = "sha256-KUfWA6ZZMSnzagFJNlHJoWJTcMP2jTd0j7BYTYKfBF4=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-+BpwyavhFTCSS2AC/vgfkx9FqNBaVjS3+fqE28auUIw=";
   };
 
-  cargoHash = "sha256-Ws8ozNY3hwxdkb5g6RuSDyzt3IRk1svm3byXkIpknQE=";
+  cargoHash = "sha256-vPUhFkDFIEJ+uHmCcc54jQVzks3orQdu2JUPEfIimOw=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
