@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "girara";
-  version = "2026.02.04";
+  version = "2026.07.18";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwmt";
     repo = "girara";
     tag = finalAttrs.version;
-    hash = "sha256-wTVgldfo8pWdY244nNldiogioijv/k32w1A8pEqOTRE=";
+    hash = "sha256-Q4IbB8Wecob9NH6UPqyIifyd3D+IpMCfe725U3htR+s=";
   };
 
   nativeBuildInputs = [
@@ -63,9 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" (
-      (stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.hostPlatform.isDarwin)
-    ))
   ];
 
   checkPhase = ''
