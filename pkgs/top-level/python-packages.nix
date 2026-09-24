@@ -10732,6 +10732,8 @@ self: super: with self; {
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
+  mermaid-py = callPackage ../development/python-modules/mermaid-py { };
+
   meross-iot = callPackage ../development/python-modules/meross-iot { };
 
   meshcat = callPackage ../development/python-modules/meshcat { };
