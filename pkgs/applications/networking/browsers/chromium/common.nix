@@ -4,8 +4,11 @@
   fetchpatch,
   fetchurl,
   zstd,
+  fetchFromGitHub,
   fetchFromGitiles,
   fetchNpmDeps,
+  rustPlatform,
+  buildGoModule,
   buildPackages,
   pkgsBuildBuild,
   # Channel data:
@@ -18,6 +21,7 @@
   ninja,
   bashInteractive,
   go,
+  cargo,
   pkg-config,
   python3,
   perl,
@@ -33,6 +37,7 @@
   symlinkJoin,
 
   # Build inputs:
+  openssl,
   libpng,
   bzip2,
   flac,
@@ -200,6 +205,83 @@ let
     ];
   };
 
+  crubit = rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "crubit";
+    version = "0-unstable-2026-09-11";
+
+    src = fetchFromGitiles {
+      url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
+      # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/update_rust.py#48
+      rev = "69b85cba43f85a6439dc0be86a6fe424bb07a100";
+      hash = "sha256-hSN4ZW3LsN3cerv3h3whAYLDZuoE6YaLuR9WY48P3E0=";
+    };
+
+    cargoHash = "sha256-xJWYE0gfEkf0WvrkaDkXiOYwvrlQGqa7QxkosXKH6UQ=";
+
+    buildInputs = [
+      buildPackages.rustc.llvmPackages.llvm
+    ];
+
+    cargoBuildFlags = [
+      # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/build_crubit.py#130
+      "--bin"
+      "cc_bindings_from_rs"
+    ];
+
+    cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+    # https://doc.rust-lang.org/error_codes/E0554.html
+    env.RUSTC_BOOTSTRAP = 1;
+  });
+
+  gnrt = rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "gnrt";
+    version = "0-unstable";
+
+    src = chromiumDeps."src";
+    sourceRoot = "tools/crates/gnrt";
+
+    # -vendor-staging does not inherit zstd from top-level, so we need
+    # to use rustPlatform.fetchCargoVendor despite rustPlatform.buildRustPackage
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      nativeBuildInputs = [ zstd ];
+      hash = "sha256-RO1fJ4Qgt5CxcEwtZT+7SZx7XqiaAmURK3DdEnzIP2k=";
+    };
+
+    nativeBuildInputs = [
+      zstd
+      pkg-config
+    ];
+
+    buildInputs = [
+      openssl
+    ];
+
+    meta.mainProgram = "gnrt";
+  });
+
+  # esbuild binary needs to match the version in the vendored node_modules:
+  # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
+  esbuild = buildGoModule (finalAttrs: {
+    pname = "esbuild";
+    version = "0.25.1";
+
+    src = fetchFromGitHub {
+      owner = "evanw";
+      repo = "esbuild";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
+    };
+
+    vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+  });
+
   chromiumRosettaStone = {
     cpu =
       platform:
@@ -318,6 +400,9 @@ let
     ]
     ++ lib.optionals (chromiumVersionAtLeast "151") [
       go # third_party/dawn/tools/generate-sources-gn.py
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "154") [
+      cargo
     ];
 
     depsBuildBuild = [
@@ -518,7 +603,7 @@ let
         hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
       })
     ]
-    ++ lib.optionals (!ungoogled) [
+    ++ lib.optionals (!chromiumVersionAtLeast "154" && !ungoogled) [
       # Same as the patch above, but from ungoogled-chromium and much
       # cleaner (and smaller) than reverting an endless chain of CLs.
       (fetchpatch {
@@ -526,6 +611,18 @@ let
         # https://github.com/ungoogled-software/ungoogled-chromium/blob/145.0.7632.159-1/patches/core/ungoogled-chromium/build-with-wasm-rollup.patch
         url = "https://github.com/ungoogled-software/ungoogled-chromium/raw/refs/tags/145.0.7632.159-1/patches/core/ungoogled-chromium/build-with-wasm-rollup.patch";
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "154" && !ungoogled) [
+      # Error: Cannot find module @rollup/rollup-linux-x64-gnu.
+      # Essentially build-with-wasm-rollup.patch from the not yet merged PR for M154:
+      # https://github.com/ungoogled-software/ungoogled-chromium/pull/3966
+      (fetchpatch {
+        name = "ungoogled-chromium-154-build-with-wasm-rollup.patch";
+        # https://github.com/ungoogled-software/ungoogled-chromium/blob/150.0.7871.46-1/patches/core/ungoogled-chromium/build-with-wasm-rollup.patch
+        url = "https://github.com/ungoogled-software/ungoogled-chromium/raw/refs/tags/150.0.7871.46-1/patches/core/ungoogled-chromium/build-with-wasm-rollup.patch";
+        excludes = [ "third_party/devtools-frontend/src/scripts/build/ninja/bundle.gni" ];
+        hash = "sha256-o+jpDMfelVSTGcT9Ehl6zg92GOXg0cOP25MHYzOH4RQ=";
       })
     ]
     ++ lib.optionals (!ungoogled) [
@@ -711,7 +808,7 @@ let
         hash = "sha256-xrtu5YhxJtBFlKpQCqRR1BBkJyiN/DW+aUCVB1zZVHI=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "153") [
+    ++ lib.optionals (versionRange "153" "154") [
       (fetchpatch {
         name = "chromium-153-revert-Migrate-OpenType-format-check-bindings-to-Crubit.patch";
         # https://chromium-review.googlesource.com/c/chromium/src/+/8244248
@@ -870,6 +967,30 @@ let
         mkdir -p third_party/rust-toolchain/bin
         ln -s "${buildPackages.rustc}/bin/rustc" third_party/rust-toolchain/bin/rustc
       ''
+      + lib.optionalString (chromiumVersionAtLeast "154") ''
+        mkdir -p third_party/typescript/linux-amd64/src
+        ln -sv ${buildPackages.typescript}/lib/typescript third_party/typescript/linux-amd64/src/lib
+
+        mkdir -p third_party/devtools-frontend/src/third_party/esbuild
+        ln -sv ${esbuild}/bin/esbuild third_party/devtools-frontend/src/third_party/esbuild/esbuild
+
+        mkdir -p buildtools/linux64-format
+        ln -sv ${buildPackages.rustc.llvmPackages.clang-tools}/bin/clang-format buildtools/linux64-format/clang-format
+
+        ln -sv ${buildPackages.cargo}/bin/cargo third_party/rust-toolchain/bin/cargo
+        ln -sv ${buildPackages.rustfmt}/bin/rustfmt third_party/rust-toolchain/bin/rustfmt
+        ln -sv ${crubit}/bin/* third_party/rust-toolchain/bin/
+
+        mkdir -p third_party/rust-toolchain/lib/third_party
+        ln -sv ${crubit.src} third_party/rust-toolchain/lib/third_party/crubit
+
+        mkdir -p third_party/rust-toolchain/lib/rustlib/src/rust
+        cp -r ${rustPlatform.rustcSrc}/. third_party/rust-toolchain/lib/rustlib/src/rust/
+        chmod u+w -R third_party/rust-toolchain/lib/rustlib
+        ln -sv ${rustPlatform.rustVendorSrc} third_party/rust-toolchain/lib/rustlib/src/rust/library/vendor
+
+        ${lib.getExe buildPackages.rustc} -V > third_party/rust-toolchain/VERSION
+      ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
           ''
@@ -982,8 +1103,13 @@ let
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
+      }
+      // lib.optionalAttrs (!chromiumVersionAtLeast "154") {
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
+        # Since M154 we instead copy our Rust into third_party/rust-toolchain for crubit.
         rust_sysroot_absolute = "${buildPackages.rustc}";
+      }
+      // {
         rust_bindgen_root = "${rustTools}";
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
@@ -1035,6 +1161,9 @@ let
       # error TS2352: Conversion of type 'Node[]' to type 'TSPropertySignature[]' [...]
       + lib.optionalString (chromiumVersionAtLeast "148") ''
         rm -r third_party/node/node_modules/@types/estree
+      ''
+      + lib.optionalString (chromiumVersionAtLeast "154") ''
+        ${lib.getExe gnrt} gen --for-std "third_party/rust-toolchain/lib/rustlib/src/rust"
       '';
 
     configurePhase = ''
