@@ -9008,6 +9008,11 @@
     githubId = 254565;
     name = "Jean-Paul Calderone";
   };
+  exceptionptr = {
+    github = "exceptionptr";
+    githubId = 9035310;
+    name = "Stanislaw Schlosser";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exFalso";
