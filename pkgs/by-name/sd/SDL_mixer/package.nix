@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_mixer";
-  version = "1.2.12-unstable-2026-05-11";
+  version = "1.2.12-unstable-2026-09-12";
 
   # word of caution: while there is a somewhat maintained SDL-1.2 branch on
   # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
-    rev = "50517740a3916e5ffd719c053c6e7b65f933e23a";
-    hash = "sha256-VQywKO2aaZKTAzseWsb0nywLfpS9NHxCCanNTmUsUcs=";
+    rev = "98c1b9615ee7507dbdd30c4fe3b907cc58800064";
+    hash = "sha256-FwDwUPLzuOlokKP91w8dF/BJPG2rFIlgn5kR6Tka0ws=";
   };
 
   nativeBuildInputs = [
