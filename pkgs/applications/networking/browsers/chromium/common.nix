@@ -965,8 +965,8 @@ let
         ln -s "${buildPackages.rustc}/bin/rustc" third_party/rust-toolchain/bin/rustc
       ''
       + lib.optionalString (chromiumVersionAtLeast "154") ''
-        mkdir -p third_party/typescript/linux-amd64/src
-        ln -sv ${buildPackages.typescript}/lib/typescript third_party/typescript/linux-amd64/src/lib
+        mkdir -p third_party/typescript/linux-amd64/src/lib
+        ln -sv ${buildPackages.typescript}/bin/tsc third_party/typescript/linux-amd64/src/lib/tsc
 
         mkdir -p third_party/devtools-frontend/src/third_party/esbuild
         ln -sv ${esbuild}/bin/esbuild third_party/devtools-frontend/src/third_party/esbuild/esbuild

@@ -22,6 +22,7 @@
   lib,
   libkrb5,
   widevine-cdm,
+  rustPackages_1_98,
 
   # package customization
   # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
@@ -52,16 +53,32 @@ let
   chromium = rec {
     inherit stdenv upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix {
-      inherit chromiumVersionAtLeast versionRange;
-      inherit
-        proprietaryCodecs
-        cupsSupport
-        pulseSupport
-        ungoogled
-        ;
-      gnChromium = buildPackages.gn.override upstream-info.deps.gn;
-    };
+    mkChromiumDerivation = callPackage ./common.nix (
+      {
+        inherit chromiumVersionAtLeast versionRange;
+        inherit
+          proprietaryCodecs
+          cupsSupport
+          pulseSupport
+          ungoogled
+          ;
+        gnChromium = buildPackages.gn.override upstream-info.deps.gn;
+      }
+      // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "154") {
+        buildPackages = buildPackages // {
+          inherit (buildPackages.rustPackages_1_98)
+            rustc
+            cargo
+            rustfmt
+            ;
+          typescript = buildPackages.typescript-go;
+        };
+        pkgsBuildBuild = pkgsBuildBuild // {
+          inherit (pkgsBuildBuild.rustPackages_1_98) rustc;
+        };
+        inherit (rustPackages_1_98) cargo rustPlatform;
+      }
+    );
 
     browser = callPackage ./browser.nix {
       inherit chromiumVersionAtLeast enableWideVine ungoogled;
