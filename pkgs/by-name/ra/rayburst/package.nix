@@ -15,6 +15,7 @@
   openssl,
   webkitgtk_4_1,
   libayatana-appindicator,
+  actool,
   wrapGAppsHook4,
   desktop-file-utils,
   xdg-utils,
@@ -58,7 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq
     moreutils
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ actool ];
 
   # we don't want to wrap aria2c
   dontWrapGApps = true;
