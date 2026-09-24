@@ -352,6 +352,7 @@
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
+  ./programs/unifi-endpoint.nix
   ./programs/upki.nix
   ./programs/usbtop.nix
   ./programs/vellum.nix
