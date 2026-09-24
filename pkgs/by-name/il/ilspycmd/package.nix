@@ -7,16 +7,17 @@
   powershell,
   darwin,
   glibcLocales,
+  nix-update-script,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "ilspycmd";
-  version = "9.1";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkZEStCI6Omu8HgClm5qHnXxm5pKJVILtbydY8vAFic=";
+    hash = "sha256-AaXFnAEugUdQ1MUx31rYS/9H+bUlenGCRwOxLXkIMnk=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +31,14 @@ buildDotnetModule (finalAttrs: {
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   env.LOCALE_ARCHIVE = lib.optionalString stdenvNoCC.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_11_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  # Nixpkgs restores one runtime ID at a time, while upstream locks several.
+  dotnetRestoreFlags = [ "--force-evaluate" ];
 
   projectFile = "ICSharpCode.ILSpyCmd/ICSharpCode.ILSpyCmd.csproj";
   nugetDeps = ./deps.json;
+  passthru.updateScript = nix-update-script { };
 
   # see: https://github.com/tunnelvisionlabs/ReferenceAssemblyAnnotator/issues/94
   linkNugetPackages = true;
@@ -56,6 +61,7 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       tbaldwin
+      bad3r
     ];
   };
 })
