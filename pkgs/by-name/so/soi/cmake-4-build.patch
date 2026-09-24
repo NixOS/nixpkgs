@@ -1,0 +1,60 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 1298088..73a5c2d 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -1,11 +1,11 @@
+ #CMake script for Spheres of Influence
+ #Run 'cmake <source_directory>' to generate a makefile
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ #definitions
+ set(PROJECT_NAME "Spheres\ of\ Influence")
+ set(APP_NAME soi)
+-set(PROJECT_VERSION 0 1 2)
++set(PROJECT_VERSION "0.1.2")
+ set(DESCRIPTION "A physics-based 3D puzzle game")
+ set(README README.txt)
+ set(LICENSE ${README})
+@@ -52,7 +52,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+     "${CMAKE_SOURCE_DIR}/${EXTRA_MODULES_IN}")
+ 
+ #declare the project
+-project(${PROJECT_NAME})
++project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+ 
+ #grab source files
+ file(GLOB_RECURSE HEADERS ${CMAKE_SOURCE_DIR}/src/*.h)
+@@ -105,18 +105,13 @@ endif()
+ #declare the target program
+ add_executable(${APP_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
+ 
+-#extract the proper versioning breakdown
+-list(GET PROJECT_VERSION 0 VERSION_MAJOR )
+-list(GET PROJECT_VERSION 1 VERSION_MINOR )
+-list(GET PROJECT_VERSION 2 VERSION_PATCH )
+-
+ #add some useful preprocessor defines
+ set_property(
+     TARGET ${APP_NAME} PROPERTY COMPILE_DEFINITIONS
+     ${COMPILEDEFS}
+ #     PROJECT_NAME="${PROJECT_NAME}"
+ #     AUTHOR_NAMES="${AUTHORS}"
+-#     PROJECT_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
++#     PROJECT_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+ )
+ 
+ #pass on the flags
+@@ -168,9 +163,9 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY ${PROJECT_NAME})
+ set(CPACK_PACKAGE_DESCRIPTION_FILE ${README})
+ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${DESCRIPTION})
+ set(CPACK_PACKAGE_DESCRIPTION ${DESCRIPTION})
+-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
++set(CPACK_PACKAGE_PROJECT_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
++set(CPACK_PACKAGE_PROJECT_VERSION_MINOR ${PROJECT_VERSION_MINOR})
++set(CPACK_PACKAGE_PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+ #set(CPACK_PACKAGE_EXECUTABLES "${APP_NAME}";${PROJECT_NAME})
+ set(CPACK_RESOURCE_FILE_README ${README})
+ set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/${LICENSE})

@@ -1,0 +1,12 @@
+diff -ru glibc-2.20-orig/elf/rtld.c glibc-2.20/elf/rtld.c
+--- glibc-2.20-orig/elf/rtld.c	2014-09-07 10:09:09.000000000 +0200
++++ glibc-2.20/elf/rtld.c	2014-10-27 11:32:25.203043157 +0100
+@@ -1513,7 +1513,7 @@
+      open().  So we do this first.  If it succeeds we do almost twice
+      the work but this does not matter, since it is not for production
+      use.  */
+-  static const char preload_file[] = "/etc/ld.so.preload";
++  static const char preload_file[] = "/etc/ld-nix.so.preload";
+   if (__glibc_unlikely (__access (preload_file, R_OK) == 0))
+     {
+       /* Read the contents of the file.  */

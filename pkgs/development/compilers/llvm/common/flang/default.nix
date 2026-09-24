@@ -1,0 +1,111 @@
+{
+  lib,
+  llvm_meta,
+  monorepoSrc,
+  release_version,
+  runCommand,
+  cmake,
+  libxml2,
+  libllvm,
+  ninja,
+  libffi,
+  libclang,
+  stdenv,
+  clang,
+  mlir,
+  version,
+  python3,
+  buildLlvmPackages,
+  devExtraCmakeFlags ? [ ],
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "flang";
+  inherit version;
+
+  src =
+    runCommand "${finalAttrs.pname}-src-${finalAttrs.version}"
+      {
+        inherit (monorepoSrc) passthru;
+      }
+      ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/llvm "$out"
+        cp -r ${monorepoSrc}/clang "$out"
+        cp -r ${monorepoSrc}/mlir "$out"
+        cp -r ${monorepoSrc}/third-party "$out"
+        cp -r ${monorepoSrc}/flang-rt "$out"
+        chmod -R +w $out/llvm
+      '';
+
+  patches = [ ];
+  patchFlags = [ "-p1" ];
+
+  sourceRoot = "${finalAttrs.src.name}/flang";
+
+  buildInputs = [
+    libffi
+    libxml2
+    libllvm
+    libclang
+    mlir
+  ];
+  nativeBuildInputs = [
+    cmake
+    clang
+    ninja
+    python3
+    libllvm.dev
+    mlir.dev
+  ];
+  preConfigure = ''
+    ls -l ${libllvm.dev}/lib/cmake/llvm/LLVMConfig.cmake
+    ls -l ${libclang.dev}/lib/cmake/clang/ClangConfig.cmake
+    ls -l ${mlir.dev}/lib/cmake/mlir/MLIRConfig.cmake
+  '';
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
+    (lib.cmakeFeature "LLVM_TOOLS_BINARY_DIR" "${buildLlvmPackages.tblgen}/bin/")
+    (lib.cmakeFeature "CLANG_DIR" "${libclang.dev}/lib/cmake/clang")
+    (lib.cmakeFeature "MLIR_DIR" "${mlir.dev}/lib/cmake/mlir")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeBool "MLIR_LINK_MLIR_DYLIB" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "LLVM_LIT_ARGS" "-v")
+    (lib.cmakeBool "LLVM_ENABLE_PLUGINS" false)
+    (lib.cmakeBool "FLANG_STANDALONE_BUILD" true)
+    (lib.cmakeBool "LLVM_INCLUDE_EXAMPLES" false)
+    (lib.cmakeBool "FLANG_INCLUDE_TESTS" false)
+  ]
+  ++ devExtraCmakeFlags;
+
+  passthru = {
+    # Used by cc-wrapper to determine whether or not the default setup hook is enabled.
+    langC = false;
+    langCC = false;
+    langFortran = true;
+    isClang = true;
+    isFlang = true;
+
+    hardeningUnsupportedFlags = [
+      "zerocallusedregs"
+      "stackprotector"
+      "stackclashprotection"
+    ];
+  };
+
+  postUnpack = ''
+    chmod -R u+w -- $sourceRoot/..
+  '';
+
+  outputs = [ "out" ];
+  requiredSystemFeatures = [ "big-parallel" ];
+  meta = llvm_meta // {
+    homepage = "https://flang.llvm.org/";
+    description = "LLVM-based Fortran frontend";
+    license = lib.licenses.ncsa;
+    mainProgram = "flang";
+    maintainers = with lib.maintainers; [ acture ];
+  };
+})

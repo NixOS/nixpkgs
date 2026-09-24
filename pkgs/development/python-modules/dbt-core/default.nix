@@ -1,0 +1,131 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  agate,
+  click,
+  daff,
+  dbt-adapters,
+  dbt-common,
+  dbt-extractor,
+  dbt-protos,
+  dbt-semantic-interfaces,
+  jinja2,
+  logbook,
+  mashumaro,
+  networkx,
+  packaging,
+  pathspec,
+  protobuf,
+  pydantic,
+  pydantic-settings,
+  pytz,
+  pyyaml,
+  requests,
+  snowplow-tracker,
+  sqlparse,
+  typing-extensions,
+
+  # passthru
+  callPackage,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "dbt-core";
+  version = "1.11.2";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-core";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/core";
+
+  pythonRelaxDeps = [
+    "agate"
+    "click"
+    "dbt-common"
+    "dbt-semantic-interfaces"
+    "logbook"
+    "mashumaro"
+    "networkx"
+    "pathspec"
+    "protobuf"
+    "pydantic"
+    "sqlparse"
+    "urllib3"
+  ];
+
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
+    agate
+    click
+    daff
+    dbt-adapters
+    dbt-common
+    dbt-extractor
+    dbt-protos
+    dbt-semantic-interfaces
+    jinja2
+    logbook
+    mashumaro
+    networkx
+    packaging
+    pathspec
+    protobuf
+    pydantic
+    pydantic-settings
+    pytz
+    pyyaml
+    requests
+    snowplow-tracker
+    sqlparse
+    typing-extensions
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
+
+  # tests exist for the dbt tool but not for this package specifically
+  doCheck = false;
+
+  passthru = {
+    withAdapters = callPackage ./with-adapters.nix { };
+  };
+
+  meta = {
+    description = "Enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications";
+    longDescription = ''
+      The dbt tool needs adapters to data sources in order to work. The available
+      adapters are:
+
+        dbt-bigquery
+        dbt-postgres
+        dbt-redshift
+        dbt-snowflake
+
+      An example of building this package with a few adapters:
+
+        dbt.withAdapters (adapters: [
+          adapters.dbt-bigquery
+          adapters.dbt-postgres
+        ])
+    '';
+    homepage = "https://github.com/dbt-labs/dbt-core";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      mausch
+    ];
+    mainProgram = "dbt";
+  };
+})

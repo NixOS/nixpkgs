@@ -1,0 +1,17 @@
+diff --git a/src/main.c b/src/main.c
+index b4dbf9e0..3171fa34 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -144,8 +144,7 @@ main (int    argc,
+       g_setenv("G_MESSAGES_DEBUG", "udisks", FALSE);
+     }
+ 
+-  if (g_getenv ("PATH") == NULL)
+-    g_setenv ("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", TRUE);
++  g_setenv ("PATH", "@path@", TRUE);
+ 
+   udisks_notice ("udisks daemon version %s starting", PACKAGE_VERSION);
+ 
+-- 
+2.33.1
+

@@ -1,0 +1,15 @@
+diff --git i/cmd/hare/build.ha w/cmd/hare/build.ha
+index 44b6484f..ebecfd8b 100644
+--- i/cmd/hare/build.ha
++++ w/cmd/hare/build.ha
+@@ -144,8 +144,8 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
+ 	set_arch_tags(&ctx.ctx.tags, arch);
+ 
+ 	ctx.cmds = ["",
+-		os::tryenv("HAREC", "harec"),
+-		os::tryenv("QBE", "qbe"),
++		os::tryenv("HAREC", "@harec_bin@"),
++		os::tryenv("QBE", "@qbe_bin@"),
+ 		os::tryenv("AS", arch.as_cmd),
+ 		os::tryenv("LD", arch.ld_cmd),
+ 	];

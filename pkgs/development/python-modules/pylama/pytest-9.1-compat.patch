@@ -1,0 +1,18 @@
+diff --git a/pylama/pytest.py b/pylama/pytest.py
+index 8009a51..3d1cb18 100644
+--- a/pylama/pytest.py
++++ b/pylama/pytest.py
+@@ -41,10 +41,10 @@ def pytest_sessionfinish(session):
+         config.cache.set(HISTKEY, config._pylamamtimes)
+ 
+ 
+-def pytest_collect_file(path, parent):
++def pytest_collect_file(file_path, parent):
+     config = parent.config
+-    if config.option.pylama and path.ext == ".py":
+-        return PylamaFile.from_parent(parent, path=pathlib.Path(path))
++    if config.option.pylama and file_path.ext == ".py":
++        return PylamaFile.from_parent(parent, path=pathlib.Path(file_path))
+     return None
+ 
+ 

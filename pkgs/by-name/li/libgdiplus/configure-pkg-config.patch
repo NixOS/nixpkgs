@@ -1,0 +1,17 @@
+diff --git a/configure.ac b/configure.ac
+index e47a3f1..f529e69 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -16,10 +16,8 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ 
+ AC_C_BIGENDIAN
+ 
+-AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+-if test "x$PKG_CONFIG" = "xno"; then
+-	AC_MSG_ERROR([You need to install pkg-config])
+-fi
++PKG_PROG_PKG_CONFIG
++
+ GLIB_REQUIRED_VERSION="2.2.3"
+ PKG_CHECK_MODULES(BASE_DEPENDENCIES, glib-2.0 >= $GLIB_REQUIRED_VERSION)
+ 

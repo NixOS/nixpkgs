@@ -1,0 +1,74 @@
+From af60408709d51a002944a3deb92cb4d2b242add5 Mon Sep 17 00:00:00 2001
+From: Gabriel Fontes <hi@m7.rs>
+Date: Thu, 8 Aug 2024 10:40:44 -0300
+Subject: [PATCH] fix build failure with rust 1.80
+
+---
+ Cargo.lock | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index adb78aa7..7c057bad 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -643,7 +643,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3cd91cf61412820176e137621345ee43b3f4423e589e7ae4e50d601d93e35ef8"
+ dependencies = [
+  "percent-encoding",
+- "time 0.3.30",
++ "time 0.3.36",
+  "version_check",
+ ]
+ 
+@@ -2157,6 +2157,12 @@ dependencies = [
+  "winapi",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num-integer"
+ version = "0.1.45"
+@@ -3301,12 +3307,13 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.30"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c4a34ab300f2dee6e562c10a046fc05e358b29f9bf92277f30c3c8d82275f6f5"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa",
++ "num-conv",
+  "powerfmt",
+  "serde",
+  "time-core",
+@@ -3321,10 +3328,11 @@ checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.15"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4ad70d68dba9e1f8aceda7aa6711965dfec1cac869f311a51bd08b3a2ccbce20"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 
+@@ -3539,7 +3547,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "09d48f71a791638519505cefafe162606f706c25592e4bde4d97600c0195312e"
+ dependencies = [
+  "crossbeam-channel",
+- "time 0.3.30",
++ "time 0.3.36",
+  "tracing-subscriber",
+ ]
+ 

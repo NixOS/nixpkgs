@@ -1,0 +1,348 @@
+--- a/package.json
++++ b/package.json
+@@ -87,7 +87,7 @@
+         "angularx-qrcode": "21.0.4",
+         "artplayer": "5.3.0",
+         "axios": "1.16.0",
+-        "better-sqlite3": "12.9.0",
++        "better-sqlite3": "13.0.3",
+         "date-fns": "4.1.0",
+         "drizzle-orm": "0.45.2",
+         "electron-conf": "1.3.0",
+@@ -227,7 +227,6 @@
+             "hono@4.12.0": "4.12.14",
+             "immutable@5.1.4": "5.1.5",
+             "lodash-es@4.17.22": "4.18.1",
+-            "node-abi@3.85.0": "3.92.0",
+             "node-forge@1.3.3": "1.4.0",
+             "path-to-regexp@0.1.12": "0.1.13",
+             "picomatch@2.3.1": "2.3.2",
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -17,7 +17,6 @@
+   hono@4.12.0: 4.12.14
+   immutable@5.1.4: 5.1.5
+   lodash-es@4.17.22: 4.18.1
+-  node-abi@3.85.0: 3.92.0
+   node-forge@1.3.3: 1.4.0
+   path-to-regexp@0.1.12: 0.1.13
+   picomatch@2.3.1: 2.3.2
+@@ -99,14 +98,14 @@
+         specifier: 1.16.0
+         version: 1.16.0
+       better-sqlite3:
+-        specifier: 12.9.0
+-        version: 12.9.0
++        specifier: 13.0.3
++        version: 13.0.3
+       date-fns:
+         specifier: 4.1.0
+         version: 4.1.0
+       drizzle-orm:
+         specifier: 0.45.2
+-        version: 0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@12.9.0)
++        version: 0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@13.0.3)
+       electron-conf:
+         specifier: 1.3.0
+         version: 1.3.0(electron@41.7.2)
+@@ -5300,9 +5299,9 @@
+   before-after-hook@4.0.0:
+     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
+ 
+-  better-sqlite3@12.9.0:
+-    resolution: {integrity: sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==}
+-    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
++  better-sqlite3@13.0.3:
++    resolution: {integrity: sha512-RbOBxmLBG8uvFUc15X9+9SFemKcQ0WBuISBVkpuiaUB2qblC8UWlHEjdWVoZ8AdhSwmoEgsiXKfopX0CQxaACQ==}
++    engines: {node: '>=22'}
+ 
+   big.js@5.2.2:
+     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
+@@ -5311,9 +5310,6 @@
+     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
+     engines: {node: '>=8'}
+ 
+-  bindings@1.5.0:
+-    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+-
+   bl@4.1.0:
+     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
+ 
+@@ -5509,9 +5505,6 @@
+     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
+     engines: {node: '>= 20.19.0'}
+ 
+-  chownr@1.1.4:
+-    resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
+-
+   chownr@2.0.0:
+     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
+     engines: {node: '>=10'}
+@@ -6775,10 +6768,6 @@
+     resolution: {integrity: sha512-+I6B/IkJc1o/2tiURyz/ivu/O0nKNEArIUB5O7zBrlDVJr22SCLH3xTeEry428LvFhRzIA1g8izguxJ/gbNcVQ==}
+     engines: {node: '>= 0.8.0'}
+ 
+-  expand-template@2.0.3:
+-    resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
+-    engines: {node: '>=6'}
+-
+   expand-tilde@2.0.2:
+     resolution: {integrity: sha512-A5EmesHW6rfnZ9ysHQjPdJRni0SRar0tjtG5MNtm9n5TUvsYU8oozprtRD4AqHxcZWWlVuAmQo2nWKfN9oyjTw==}
+     engines: {node: '>=0.10.0'}
+@@ -6873,9 +6862,6 @@
+     resolution: {integrity: sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==}
+     engines: {node: '>=16.0.0'}
+ 
+-  file-uri-to-path@1.0.0:
+-    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+-
+   filelist@1.0.4:
+     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
+ 
+@@ -7138,9 +7124,6 @@
+     deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
+     hasBin: true
+ 
+-  github-from-package@0.0.0:
+-    resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
+-
+   github-slugger@2.0.0:
+     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
+ 
+@@ -8768,9 +8751,6 @@
+     resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
+     engines: {node: '>= 18'}
+ 
+-  mkdirp-classic@0.5.3:
+-    resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
+-
+   mkdirp@0.5.6:
+     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
+     hasBin: true
+@@ -8834,9 +8814,6 @@
+     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+     hasBin: true
+ 
+-  napi-build-utils@2.0.0:
+-    resolution: {integrity: sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==}
+-
+   napi-postinstall@0.3.4:
+     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
+     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+@@ -8911,6 +8888,10 @@
+   node-addon-api@7.1.1:
+     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
+ 
++  node-addon-api@8.9.2:
++    resolution: {integrity: sha512-VijLXbi3UACN69I0JVXJsX4tjACjNoQDgv2gTF6sx2wWEi8tkSg2eX8p5gSIFi8z2+DL3oHmY6OyKce38SDolg==}
++    engines: {node: ^18 || ^20 || >= 21}
++
+   node-api-version@0.2.1:
+     resolution: {integrity: sha512-2xP/IGGMmmSQpI1+O/k72jF/ykvZ89JeuKX3TLJAYPDVLUalrshrLHkeVcCCZqG/eEa635cr8IBYzgnDvM2O8Q==}
+ 
+@@ -9836,12 +9817,6 @@
+     engines: {node: '>=14.0.0'}
+     hasBin: true
+ 
+-  prebuild-install@7.1.3:
+-    resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
+-    engines: {node: '>=10'}
+-    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+-    hasBin: true
+-
+   prelude-ls@1.2.1:
+     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
+     engines: {node: '>= 0.8.0'}
+@@ -10604,12 +10579,6 @@
+     resolution: {integrity: sha512-/fUgUhYghuLzVT/gaJoeVehLCgZiUxPCPMcyVNY0lIf/cTCz58K/WTI7PefDarXxp9nUKpEwg1yyz3eSBMTtgA==}
+     engines: {node: ^20.17.0 || >=22.9.0}
+ 
+-  simple-concat@1.0.1:
+-    resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
+-
+-  simple-get@4.0.1:
+-    resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
+-
+   simple-update-notifier@2.0.0:
+     resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
+     engines: {node: '>=10'}
+@@ -10944,9 +10913,6 @@
+     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
+     engines: {node: '>=6'}
+ 
+-  tar-fs@2.1.4:
+-    resolution: {integrity: sha512-mDAjwmZdh7LTT6pNleZ05Yt65HC3E+NiQzl672vQG38jIrehtJk/J3mNwIg+vShQPcLF/LV7CMnDW6vjj6sfYQ==}
+-
+   tar-stream@2.2.0:
+     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
+     engines: {node: '>=6'}
+@@ -11210,9 +11176,6 @@
+     resolution: {integrity: sha512-50QV99kCKH5P/Vs4E2Gzp7BopNV+KzTXqWeaxrfu5IQJBOULRsTIS9seSsOVT8ZnGXzCyx55nYWAi4qJzpZKEQ==}
+     engines: {node: ^20.17.0 || >=22.9.0}
+ 
+-  tunnel-agent@0.6.0:
+-    resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
+-
+   type-check@0.4.0:
+     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
+     engines: {node: '>= 0.8.0'}
+@@ -17843,19 +17806,14 @@
+ 
+   before-after-hook@4.0.0: {}
+ 
+-  better-sqlite3@12.9.0:
++  better-sqlite3@13.0.3:
+     dependencies:
+-      bindings: 1.5.0
+-      prebuild-install: 7.1.3
++      node-addon-api: 8.9.2
+ 
+   big.js@5.2.2: {}
+ 
+   binary-extensions@2.3.0: {}
+ 
+-  bindings@1.5.0:
+-    dependencies:
+-      file-uri-to-path: 1.0.0
+-
+   bl@4.1.0:
+     dependencies:
+       buffer: 5.7.1
+@@ -18146,8 +18104,6 @@
+     dependencies:
+       readdirp: 5.0.0
+ 
+-  chownr@1.1.4: {}
+-
+   chownr@2.0.0: {}
+ 
+   chownr@3.0.0: {}
+@@ -18888,10 +18844,10 @@
+     transitivePeerDependencies:
+       - supports-color
+ 
+-  drizzle-orm@0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@12.9.0):
++  drizzle-orm@0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@13.0.3):
+     optionalDependencies:
+       '@types/better-sqlite3': 7.6.13
+-      better-sqlite3: 12.9.0
++      better-sqlite3: 13.0.3
+ 
+   dset@3.1.4: {}
+ 
+@@ -19553,8 +19509,6 @@
+ 
+   exit-x@0.2.2: {}
+ 
+-  expand-template@2.0.3: {}
+-
+   expand-tilde@2.0.2:
+     dependencies:
+       homedir-polyfill: 1.0.3
+@@ -19708,8 +19662,6 @@
+     dependencies:
+       flat-cache: 4.0.1
+ 
+-  file-uri-to-path@1.0.0: {}
+-
+   filelist@1.0.4:
+     dependencies:
+       minimatch: 5.1.9
+@@ -20007,8 +19959,6 @@
+       - conventional-commits-filter
+       - conventional-commits-parser
+ 
+-  github-from-package@0.0.0: {}
+-
+   github-slugger@2.0.0: {}
+ 
+   glob-parent@5.1.2:
+@@ -22255,8 +22205,6 @@
+     dependencies:
+       minipass: 7.1.3
+ 
+-  mkdirp-classic@0.5.3: {}
+-
+   mkdirp@0.5.6:
+     dependencies:
+       minimist: 1.2.8
+@@ -22330,8 +22278,6 @@
+ 
+   nanoid@3.3.11: {}
+ 
+-  napi-build-utils@2.0.0: {}
+-
+   napi-postinstall@0.3.4: {}
+ 
+   natural-compare@1.4.0: {}
+@@ -22392,6 +22338,8 @@
+   node-addon-api@7.1.1:
+     optional: true
+ 
++  node-addon-api@8.9.2: {}
++
+   node-api-version@0.2.1:
+     dependencies:
+       semver: 7.7.4
+@@ -23409,21 +23357,6 @@
+       commander: 9.5.0
+     optional: true
+ 
+-  prebuild-install@7.1.3:
+-    dependencies:
+-      detect-libc: 2.1.2
+-      expand-template: 2.0.3
+-      github-from-package: 0.0.0
+-      minimist: 1.2.8
+-      mkdirp-classic: 0.5.3
+-      napi-build-utils: 2.0.0
+-      node-abi: 3.92.0
+-      pump: 3.0.3
+-      rc: 1.2.8
+-      simple-get: 4.0.1
+-      tar-fs: 2.1.4
+-      tunnel-agent: 0.6.0
+-
+   prelude-ls@1.2.1: {}
+ 
+   prettier@3.8.1: {}
+@@ -24385,14 +24318,6 @@
+     transitivePeerDependencies:
+       - supports-color
+ 
+-  simple-concat@1.0.1: {}
+-
+-  simple-get@4.0.1:
+-    dependencies:
+-      decompress-response: 6.0.0
+-      once: 1.4.0
+-      simple-concat: 1.0.1
+-
+   simple-update-notifier@2.0.0:
+     dependencies:
+       semver: 7.7.3
+@@ -24793,13 +24718,6 @@
+ 
+   tapable@2.3.0: {}
+ 
+-  tar-fs@2.1.4:
+-    dependencies:
+-      chownr: 1.1.4
+-      mkdirp-classic: 0.5.3
+-      pump: 3.0.3
+-      tar-stream: 2.2.0
+-
+   tar-stream@2.2.0:
+     dependencies:
+       bl: 4.1.0
+@@ -25071,10 +24989,6 @@
+       make-fetch-happen: 15.0.3
+     transitivePeerDependencies:
+       - supports-color
+-
+-  tunnel-agent@0.6.0:
+-    dependencies:
+-      safe-buffer: 5.2.1
+ 
+   type-check@0.4.0:
+     dependencies:

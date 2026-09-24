@@ -1,0 +1,18 @@
+diff --git a/src/sage/libs/gap/element.pyx b/src/sage/libs/gap/element.pyx
+index b2b0681c052..b2e5807392c 100644
+--- a/src/sage/libs/gap/element.pyx
++++ b/src/sage/libs/gap/element.pyx
+@@ -35,6 +35,13 @@ from sage.structure.coerce cimport coercion_model as cm
+ ### helper functions to construct lists and records ########################
+ ############################################################################
+ 
++
++cdef extern from *:
++    """
++    #pragma GCC optimize("O1")
++    """
++
++
+ cdef Obj make_gap_list(sage_list) except NULL:
+     """
+     Convert Sage lists into Gap lists

@@ -1,0 +1,56 @@
+diff --git a/samples/CMakeLists.txt b/samples/CMakeLists.txt
+index 46d5a23..7572b0b 100644
+--- a/samples/CMakeLists.txt
++++ b/samples/CMakeLists.txt
+@@ -17,49 +17,12 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW Examples")
+ set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW Tests")
+ set(GLFW_INSTALL OFF CACHE BOOL "GLFW Install")
+ 
+-FetchContent_Declare(
+-	glfw
+-	GIT_REPOSITORY https://github.com/glfw/glfw.git
+-	GIT_TAG 3.4
+-	GIT_SHALLOW TRUE
+-	GIT_PROGRESS TRUE
+-)
+-FetchContent_MakeAvailable(glfw)
++find_package(glfw)
+ 
+ # imgui and glfw backend for GUI
+ # https://gist.github.com/jeffamstutz/992723dfabac4e3ffff265eb71a24cd9
+ # Modified to pin to a specific imgui release
+-FetchContent_Populate(imgui
+-	URL https://github.com/ocornut/imgui/archive/refs/tags/v1.91.3.zip
+-	SOURCE_DIR ${CMAKE_SOURCE_DIR}/build/imgui
+-)
+-
+-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/build/imgui)
+-
+-add_library(imgui STATIC
+-	${IMGUI_DIR}/imconfig.h
+-	${IMGUI_DIR}/imgui.h
+-
+-	${IMGUI_DIR}/imgui.cpp
+-	${IMGUI_DIR}/imgui_draw.cpp
+-	${IMGUI_DIR}/imgui_demo.cpp
+-	${IMGUI_DIR}/imgui_tables.cpp
+-	${IMGUI_DIR}/imgui_widgets.cpp
+-
+-	${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+-	${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+-)
+-
+-target_link_libraries(imgui PUBLIC glfw glad)
+-target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+-target_compile_definitions(imgui PUBLIC IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+-# The sample app also uses stb_truetype and this keeps the symbols separate
+-target_compile_definitions(imgui PRIVATE IMGUI_STB_NAMESPACE=imgui_stb)
+-set_target_properties(imgui PROPERTIES
+-	CXX_STANDARD 20
+-    CXX_STANDARD_REQUIRED YES
+-    CXX_EXTENSIONS NO
+-)
++find_package(imgui)
+ 
+ # jsmn for json
+ set(JSMN_DIR ${CMAKE_SOURCE_DIR}/extern/jsmn)

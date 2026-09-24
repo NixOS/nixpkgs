@@ -1,0 +1,15 @@
+diff --git a/include/tolua++.h b/include/tolua++.h
+index ed53449..f57d56d 100644
+--- a/include/tolua++.h
++++ b/include/tolua++.h
+@@ -43,8 +43,8 @@ extern "C" {
+
+ typedef int lua_Object;
+
+-#include "lua.h"
+-#include "lauxlib.h"
++#include <lua.h>
++#include <lauxlib.h>
+
+ struct tolua_Error
+ {

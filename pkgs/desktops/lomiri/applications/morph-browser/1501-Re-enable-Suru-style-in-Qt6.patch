@@ -1,0 +1,73 @@
+From babdb3f2eabd0bb9a713817bd8cec6320160a53f Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 29 Apr 2026 15:37:31 +0200
+Subject: [PATCH 1/2] src/app: Re-enable Suru style in Qt6
+
+---
+ src/app/browserapplication.cpp          | 12 +++---------
+ src/app/qml-qt6/ContentExportDialog.qml |  8 --------
+ 2 files changed, 3 insertions(+), 17 deletions(-)
+
+diff --git a/src/app/browserapplication.cpp b/src/app/browserapplication.cpp
+index 0bd70309..98a50bac 100644
+--- a/src/app/browserapplication.cpp
++++ b/src/app/browserapplication.cpp
+@@ -193,21 +193,15 @@ bool BrowserApplication::initialize(const QString& qmlFileSubPath
+         qputenv("UBUNTU_WEBVIEW_DEVTOOLS_PORT", devtoolsPort.toUtf8());
+     }
+ 
+-    // FIXME re-enable Suru theme once it is available for Qt 6
+-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+     // set suru style
+     if (qgetenv("QT_QUICK_CONTROLS_STYLE") == QString())
+     {
++#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+         qputenv("QT_QUICK_CONTROLS_STYLE", "Suru");
+-    }
+ #else
+-    // This is a bit of a hack, as we don't seem to have a way to set QQC2 style
+-    // per-Qt-version...
+-    if (qgetenv("QT_QUICK_CONTROLS_STYLE") == "Suru")
+-    {
+-        qunsetenv("QT_QUICK_CONTROLS_STYLE");
+-    }
++        qputenv("QT_QUICK_CONTROLS_STYLE", "QtQuick.Controls.Suru");
+ #endif
++    }
+ 
+     const char* uri = "webbrowsercommon.private";
+     qmlRegisterSingletonType<BrowserUtils>(uri, 0, 1, "BrowserUtils", BrowserUtils_singleton_factory);
+diff --git a/src/app/qml-qt6/ContentExportDialog.qml b/src/app/qml-qt6/ContentExportDialog.qml
+index 08aac589..c90b4880 100644
+--- a/src/app/qml-qt6/ContentExportDialog.qml
++++ b/src/app/qml-qt6/ContentExportDialog.qml
+@@ -21,9 +21,7 @@ import Lomiri.Components
+ import Lomiri.Components.Popups
+ import Lomiri.Content 2.0
+ import QtQuick.Controls 2.5 as QQC2
+-/* FIXME: re-enable once Suru has been ported to Qt 6
+ import QtQuick.Controls.Suru 2.2
+-*/
+ 
+ import webbrowsercommon.private 0.1
+ 
+@@ -57,16 +55,10 @@ QQC2.Dialog {
+     closePolicy: QQC2.Popup.CloseOnEscape | QQC2.Popup.CloseOnPressOutside
+     modal: true
+ 
+-    /* FIXME: re-enable once Suru has been ported to Qt 6
+     QQC2.Overlay.modal: Rectangle {
+         color: Suru.overlayColor
+         Behavior on opacity { NumberAnimation { duration: Suru.animations.FastDuration } }
+     }
+-    */
+-    QQC2.Overlay.modal: Rectangle {
+-        color: Qt.rgba(0, 0, 0, 0.85)
+-        Behavior on opacity { NumberAnimation { duration: 165 } }
+-    }
+ 
+     function openDialog(_downloadPath, _contentType, _mimeType, _downloadURL, _fileName){
+         path = _downloadPath
+-- 
+2.51.2
+

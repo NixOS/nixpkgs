@@ -1,0 +1,20 @@
+--- a/test/python_magic_test.py
++++ b/test/python_magic_test.py
+@@ -93,7 +93,7 @@ class MagicTest(unittest.TestCase):
+                 'magic._pyc_': ('application/octet-stream', 'text/x-bytecode.python', 'application/x-bytecode.python'),
+                 'test.pdf': 'application/pdf',
+                 'test.gz': ('application/gzip', 'application/x-gzip'),
+-                'test.snappy.parquet': 'application/octet-stream',
++                'test.snappy.parquet': ('application/octet-stream', 'application/vnd.apache.parquet'),
+                 'text.txt': 'text/plain',
+                 b'\xce\xbb'.decode('utf-8'): 'text/plain',
+                 b'\xce\xbb': 'text/plain',
+@@ -123,7 +123,7 @@ class MagicTest(unittest.TestCase):
+                      ': Sun Jun 29 01:32:52 2008, from Unix, truncated'
+                      ),
+                 'text.txt': 'ASCII text',
+-                'test.snappy.parquet': ('Apache Parquet', 'Par archive data'),
++                'test.snappy.parquet': ('Apache Parquet', 'Apache Parquet file', 'Par archive data'),
+             }, buf_equals_file=False)
+         finally:
+             del os.environ['TZ']

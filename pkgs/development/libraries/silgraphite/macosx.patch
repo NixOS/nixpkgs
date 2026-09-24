@@ -1,0 +1,13 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -102,7 +102,8 @@ set_target_properties(graphite2 PROPERTIES  PUBLIC_HEADER "${GRAPHITE_HEADERS}"
+                                             VERSION ${GRAPHITE_VERSION}
+                                             LT_VERSION_CURRENT ${GRAPHITE_API_CURRENT}
+                                             LT_VERSION_REVISION ${GRAPHITE_API_REVISION}
+-                                            LT_VERSION_AGE ${GRAPHITE_API_AGE})
++                                            LT_VERSION_AGE ${GRAPHITE_API_AGE}
++                                            INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+ 
+ if (${CMAKE_BUILD_TYPE} STREQUAL "ClangASN")
+     set(GRAPHITE_LINK_FLAGS "-fsanitize=address")
+

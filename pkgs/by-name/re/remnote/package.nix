@@ -1,0 +1,52 @@
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  writeScript,
+}:
+
+appimageTools.wrapType2 (finalAttrs: {
+  pname = "remnote";
+  version = "1.28.0";
+
+  src = fetchurl {
+    url = "https://download2.remnote.io/remnote-desktop2/RemNote-${finalAttrs.version}.AppImage";
+    hash = "sha256-ufoxkQhlrf2BSf/D3whS3tfKlkfle0KHwJR/amEpads=";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  extraInstallCommands = ''
+    install -Dm444 ${finalAttrs.contents}/remnote.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/remnote.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
+    install -Dm444 ${finalAttrs.contents}/remnote.png -t $out/share/icons/hicolor/512x512/apps
+
+    wrapProgram $out/bin/remnote \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl coreutils gnused common-updater-scripts
+    set -eu -o pipefail
+    url="$(curl -ILs -w %{url_effective} -o /dev/null https://backend.remnote.com/desktop/linux)"
+    version="$(echo $url | sed -n 's/.*RemNote-\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')"
+    currentVersion=$(nix-instantiate --eval -E "with import ./. {}; remnote.version or (lib.getVersion remnote)" | tr -d '"')
+    if [[ "$version" != "$currentVersion" ]]; then
+      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
+      update-source-version remnote "$version" "$hash" --print-changes
+    fi
+  '';
+
+  meta = {
+    description = "Note-taking application focused on learning and productivity";
+    homepage = "https://remnote.com/";
+    changelog = "https://feedback.remnote.com/changelog";
+    maintainers = with lib.maintainers; [ talal ];
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "remnote";
+  };
+})

@@ -1,0 +1,66 @@
+{
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gnome,
+  versionCheckHook,
+}:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "gi-docgen";
+  version = "2026.1";
+
+  pyproject = false;
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
+    hash = "sha256-wxbWwEaZl2toI5Eqrh+ypqP/olU7Qivoj7VuuIGs9Hk=";
+  };
+
+  depsBuildBuild = [
+    python3
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
+  pythonPath = with python3.pkgs; [
+    jinja2
+    markdown
+    markupsafe
+    packaging
+    pygments
+    typogrify
+  ];
+
+  # For Python this must be placed in nativeCheckInputs instead of nativeInstallCheckInputs
+  # https://github.com/nixos/nixpkgs/issues/420531
+  nativeCheckInputs = [ versionCheckHook ];
+  # doCheck = false; # no tests - restore this after versionCheckHook can be moved
+
+  __structuredAttrs = true;
+
+  postFixup = ''
+    # Do not propagate Python
+    substituteInPlace $out/nix-support/propagated-build-inputs \
+      --replace-fail "${python3}" ""
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gi-docgen";
+    };
+  };
+
+  meta = {
+    description = "Documentation generator for GObject-based libraries";
+    mainProgram = "gi-docgen";
+    homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
+    license = lib.licenses.asl20; # OR GPL-3.0-or-later
+    teams = [ lib.teams.gnome ];
+  };
+}

@@ -1,0 +1,87 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ball=C3=B3=20Gy=C3=B6rgy?= <ballogyor@gmail.com>
+Date: Wed, 13 Nov 2024 13:39:36 +0100
+Subject: [PATCH] mainWindow: Disconnect event handler on destroy
+
+Without this, it remains active when the main window is closed and
+reopened, causing a crash.
+
+Closes: https://gitlab.gnome.org/GNOME/polari/-/issues/233
+---
+ src/mainWindow.js | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/src/mainWindow.js b/src/mainWindow.js
+index dfb2ea07dd16..7d813a881106 100644
+--- a/src/mainWindow.js
++++ b/src/mainWindow.js
+@@ -96,49 +96,50 @@ class MainWindow extends Adw.ApplicationWindow {
+             }
+         });
+ 
+-        const app = this.application;
+-        if (app.isTestInstance)
++        this._app = this.application;
++        if (this._app.isTestInstance)
+             this.add_css_class('test-instance');
+         if (GLib.get_application_name().toLowerCase().includes('snapshot'))
+             this.add_css_class('snapshot');
+ 
+         const actions = [{
+             name: 'search',
+             handler: () => this._searchButton.activate(),
+         }];
+         actions.forEach(a => {
+-            app.lookup_action(a.name).connect('activate', a.handler);
++            this._app.lookup_action(a.name).connect('activate', a.handler);
+         });
+ 
+         this._roomStack.connect('notify::view-height',
+             () => this.notify('view-height'));
+ 
+         this._accountsMonitor = AccountsMonitor.getDefault();
+         this._accountsChangedId = this._accountsMonitor.connect(
+             'accounts-changed', this._onAccountsChanged.bind(this));
+         this._onAccountsChanged(this._accountsMonitor);
+ 
+         this._accountReachableId = this._accountsMonitor.connect(
+             'account-reachable-changed', this._onAccountsReachableChanged.bind(this));
+         this._onAccountsReachableChanged();
+ 
+         this._roomManager = RoomManager.getDefault();
+         this._roomsLoadedId = this._roomManager.connect('rooms-loaded',
+             this._onRoomsLoaded.bind(this));
+         this._roomRemovedId = this._roomManager.connect('room-removed',
+             this._onRoomRemoved.bind(this));
+         this._onRoomsLoaded();
+ 
+         this._updateUserListLabel();
+ 
+-        this._userListAction = app.lookup_action('user-list');
++        this._userListAction = this._app.lookup_action('user-list');
+ 
+-        app.connect('action-state-changed::user-list', (group, name, value) => {
+-            if (value.get_boolean())
+-                this._userListPopover.popup();
+-            else
+-                this._userListPopover.popdown();
+-        });
++        this._userListActionStateChangedId =
++            this._app.connect('action-state-changed::user-list', (group, name, value) => {
++                if (value.get_boolean())
++                    this._userListPopover.popup();
++                else
++                    this._userListPopover.popdown();
++            });
+         this._userListPopover.connect('notify::visible', () => {
+             if (!this._userListPopover.visible)
+                 this._userListAction.change_state(GLib.Variant.new('b', false));
+@@ -207,6 +208,8 @@ class MainWindow extends Adw.ApplicationWindow {
+ 
+         this._roomManager.disconnect(this._roomsLoadedId);
+         this._roomManager.disconnect(this._roomRemovedId);
++
++        this._app.disconnect(this._userListActionStateChangedId);
+     }
+ 
+     _onAccountsChanged() {

@@ -1,0 +1,70 @@
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  apeye-core,
+  attrs,
+  click,
+  consolekit,
+  docutils,
+  dom-toml,
+  domdf-python-tools,
+  hatchling,
+  hatch-requirements-txt,
+  license-expression,
+  natsort,
+  packaging,
+  readme-renderer,
+  sdjson,
+  shippinglabel,
+  typing-extensions,
+}:
+buildPythonPackage rec {
+  pname = "pyproject-parser";
+  version = "0.14.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "pyproject_parser";
+    inherit version;
+    hash = "sha256-QEe9miURXkABmeZyzZ2Pi6QF2BSNZadsvzr7z3fpZuI=";
+  };
+
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
+
+  dependencies = [
+    apeye-core
+    attrs
+    dom-toml
+    domdf-python-tools
+    license-expression
+    natsort
+    packaging
+    shippinglabel
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+    cli = [
+      click
+      consolekit
+      sdjson
+    ];
+    readme = [
+      docutils
+      readme-renderer
+    ]
+    ++ readme-renderer.optional-dependencies.md;
+  };
+
+  meta = {
+    description = "Parser for ‘pyproject.toml’";
+    homepage = "https://github.com/repo-helper/pyproject-parser";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tyberius-prime ];
+  };
+}

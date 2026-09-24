@@ -1,0 +1,14 @@
+diff --git a/config/configure.in b/config/configure.in
+index f2dd838b..e1b5ed47 100644
+--- a/config/configure.in
++++ b/config/configure.in
+@@ -10,6 +10,9 @@ AC_CONFIG_SRCDIR([Makefile.config.in])
+ AC_CONFIG_HEADER(config.h)
+ AC_CONFIG_MACRO_DIR([m4])
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ CONFIGURE_RUN=yes
+ CONFIGURE_ARGUMENTS=$ac_configure_args
+ echo "Arguments to configure: $CONFIGURE_ARGUMENTS"

@@ -1,0 +1,17 @@
+diff --git a/python/lib/lng.py b/python/lib/lng.py
+index a390d920..00c3527e 100755
+--- a/python/lib/lng.py
++++ b/python/lib/lng.py
+@@ -12,11 +12,7 @@ class Lang(object):
+ 
+ class iLang(object):
+     def __init__(self):
+-        if(os.environ["DEBIAN_PACKAGE"] == "TRUE"):
+-            languages = os.listdir('/usr/share/locale')
+-        else:
+-            languages = os.listdir(Variables.playonlinux_env+'/lang/locale')
+-
++        languages = os.listdir('@out@/share/playonlinux/lang/locale')
+         if(os.environ["POL_OS"] == "Mac"):
+             wxLocale = wx.Locale().FindLanguageInfo(os.environ["RLANG"])
+ 

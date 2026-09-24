@@ -1,0 +1,12 @@
+--- a/test/tool/plinko/plinko_test.c
++++ b/test/tool/plinko/plinko_test.c
+@@ -91,8 +91,8 @@ TEST(plinko, worksOrPrintsNiceError) {
+     sigaction(SIGQUIT, &savequit, 0);
+     sigaction(SIGPIPE, &savepipe, 0);
+     sigprocmask(SIG_SETMASK, &savemask, 0);
+     execve("bin/plinko.com", (char *const[]){"bin/plinko.com", 0},
+-           (char *const[]){0});
++           (char *const[]){"PATH=@coreutils@/bin", 0});
+     _exit(127);
+   }
+   close(pfds[0][0]);

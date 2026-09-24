@@ -1,0 +1,25 @@
+From 9cf8d3f1025689f3765da2f0a27561a6bfe5c3cb Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Fri, 7 Nov 2025 00:23:44 +0800
+Subject: [PATCH] Fix SDL_main redefinition issue on macOS
+
+---
+ src/zatackax.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/zatackax.c b/src/zatackax.c
+index dad2fa9..47a8bd7 100644
+--- a/src/zatackax.c
++++ b/src/zatackax.c
+@@ -16,6 +16,8 @@
+  */
+ 
+ #include "zatackax.h"
++// override SDL_main.h redefining main to SDL_main on darwin
++#define main main
+ 
+ static const unsigned int FPS_CAP = 100;
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,24 @@
+--- origsrc/crypto/dllmain.c
++++ src/crypto/dllmain.c
+@@ -35,7 +35,9 @@
+     case DLL_THREAD_ATTACH:
+         break;
+     case DLL_THREAD_DETACH:
++# ifndef __CYGWIN__
+         OPENSSL_thread_stop();
++# endif
+         break;
+     case DLL_PROCESS_DETACH:
+         break;
+--- origsrc/providers/fips/self_test.c
++++ src/providers/fips/self_test.c
+@@ -95,7 +95,9 @@
+         init();
+         break;
+     case DLL_PROCESS_DETACH:
++# ifndef __CYGWIN__
+         cleanup();
++# endif
+         break;
+     default:
+         break;

@@ -1,0 +1,11 @@
+--- a/lib/Makefile.in
++++ b/lib/Makefile.in
+@@ -27,7 +27,7 @@ installdirs = $(libdir) $(includedir) $(includedir)/libelf
+ 
+ CC = @CC@
+ LD = @LD@
+-AR = ar
++AR ?= ar
+ MV = mv -f
+ RM = rm -f
+ LN_S = @LN_S@

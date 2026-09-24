@@ -1,0 +1,14 @@
+The $(RUSTC_SRC_DL) file already exists, but for some reason Make wants to rebuild
+this target when it has $(RUSTC_SRC_TARBALL) as a dependency.
+
+--- a/minicargo.mk
++++ b/minicargo.mk
+@@ -220,7 +220,7 @@ $(RUSTC_SRC_DL): rustc-$(RUSTC_VERSION)-src/extracted rustc-$(RUSTC_VERSION)-src
+ # - libstd, libpanic_unwind, libtest and libgetopts
+ # - libproc_macro (mrustc)
+ ifeq ($(USE_MERGED_BUILD),1)
+-$(RUSTCSRC)mrustc-stdlib/Cargo.toml: $(RUSTC_SRC_DL) minicargo.mk
++$(RUSTCSRC)mrustc-stdlib/Cargo.toml: minicargo.mk
+ 	@mkdir -p $(dir $@)
+ 	@echo "#![no_core]" > $(dir $@)/lib.rs
+ 	@echo "[package]" > $@

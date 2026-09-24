@@ -1,0 +1,112 @@
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  qt6Packages,
+  borgbackup,
+  versionCheckHook,
+  nix-update-script,
+  makeFontsConf,
+}:
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "vorta";
+  version = "0.11.5";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "borgbase";
+    repo = "vorta";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6WY1UAB5Vr+5Az6UYq2DwXwjabcQr7A3QAEQ2/aIzfg=";
+  };
+
+  nativeBuildInputs = [
+    qt6Packages.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6Packages.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    packaging
+    peewee
+    platformdirs
+    psutil
+    pyqt6
+    secretstorage
+  ];
+
+  postPatch = ''
+    substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
+    --replace-fail com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
+  '';
+
+  postInstall = ''
+    install -Dm644 src/vorta/assets/metadata/com.borgbase.Vorta.desktop $out/share/applications/com.borgbase.Vorta.desktop
+    install -Dm644 src/vorta/assets/icons/icon.svg $out/share/pixmaps/com.borgbase.Vorta-symbolic.svg
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [ borgbackup ]}
+    )
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    pytest-qt
+    pytest-mock
+    pytestCheckHook
+    versionCheckHook
+  ];
+
+  preCheck =
+    let
+      fontsConf = makeFontsConf {
+        fontDirectories = [ ];
+      };
+    in
+    ''
+      export HOME=$(mktemp -d)
+      export FONTCONFIG_FILE=${fontsConf};
+      # For tests/test_misc.py::test_autostart
+      mkdir -p $HOME/.config/autostart
+      export QT_PLUGIN_PATH="${qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}"
+      export QT_QPA_PLATFORM=offscreen
+    '';
+
+  disabledTestPaths = [
+    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
+    "tests/integration"
+    "tests/unit"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Darwin-only test
+    "tests/network_manager/test_darwin.py"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v${finalAttrs.version}";
+    description = "Desktop Backup Client for Borg";
+    homepage = "https://vorta.borgbase.com/";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ma27
+      stephsi
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "vorta";
+  };
+})

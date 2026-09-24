@@ -1,0 +1,70 @@
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+}
+code.hljs {
+    padding: 3px 5px;
+}
+/*
+  Five-color theme from a single blue hue.
+*/
+.hljs {
+    background: #eaeef3;
+    color: #00193a;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+    font-weight: bold;
+}
+.hljs-comment {
+    color: var(--color-1);
+}
+.hljs-string,
+.hljs-title,
+.hljs-section,
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-addition,
+.hljs-tag,
+.hljs-quote,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+    color: var(--color-2);
+}
+.hljs-meta,
+.hljs-subst,
+.hljs-symbol,
+.hljs-regexp,
+.hljs-attribute,
+.hljs-deletion,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-bullet {
+    color: var(--color-3);
+}
+.hljs-emphasis {
+    font-style: italic;
+}
+
+:root {
+    --color-1: #738191;
+    --color-2: #0048ab;
+    --color-3: #4c81c9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-1: #8b9caf;
+        --color-2: #3b85e7;
+        --color-3: #5795e7;
+    }
+}
