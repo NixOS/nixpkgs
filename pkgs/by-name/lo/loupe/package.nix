@@ -11,7 +11,6 @@
   rustc,
   wrapGAppsHook4,
   gtk4,
-  lcms2,
   libadwaita,
   libgweather,
   libseccomp,
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin.setupHook
     glycin-loaders
     gtk4
-    lcms2
     libadwaita
     libgweather
     libseccomp
