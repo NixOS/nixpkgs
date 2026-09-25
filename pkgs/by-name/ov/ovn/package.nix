@@ -40,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  patches = [ ./transactional-chassis-index-allocation.patch ];
+  patches = [
+    ./transactional-chassis-index-allocation.patch
+    ./use-ovn-bindir-for-appctl.patch
+  ];
 
   outputs = [
     "out"

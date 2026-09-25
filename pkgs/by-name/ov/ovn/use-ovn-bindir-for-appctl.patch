@@ -1,0 +1,23 @@
+diff --git a/utilities/ovn-lib.in b/utilities/ovn-lib.in
+index 9263127d1..0e7ff8d99 100644
+--- a/utilities/ovn-lib.in
++++ b/utilities/ovn-lib.in
+@@ -187,17 +187,17 @@ stop_ovn_daemon () {
+                     [ -e "$pid_file" ] && sleep 2 && pid=`cat "$pid_file"` 2>/dev/null
+                     if pid_exists "$pid" >/dev/null 2>&1; then :; else
+                         return 0
+                     fi
+                 fi
+                 case $action in
+                     EXIT)
+                         action "Exiting $1 ($pid)" \
+-                            ${bindir}/ovn-appctl -T 1 -t $ctl_file exit $other_args
++                            ${ovn_bindir}/ovn-appctl -T 1 -t $ctl_file exit $other_args
+                         # The above command could have resulted in delayed
+                         # daemon segfault. And if a monitor is running, it
+                         # would restart the daemon giving it a new pid.
+                         ;;
+                     TERM)
+                         action "Killing $1 ($pid)" kill $pid
+                         actiontype="force"
+                         ;;
