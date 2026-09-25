@@ -34,6 +34,6 @@ stdenvNoCC.mkDerivation {
     description = "Blob emoji from blobs.gg repacked as APNG";
     homepage = "https://blobs.gg";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
   };
 }

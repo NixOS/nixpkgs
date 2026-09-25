@@ -127,5 +127,8 @@ buildNpmPackage (finalAttrs: {
       sigmasquadron
     ];
     mainProgram = "mullvad-vpn";
+    # Never built on darwin since first introduction in nixpkgs
+    # The build is currently hardcoded for linux (pack:linux), so adding darwin support will likely require major changes
+    badPlatforms = lib.platforms.darwin;
   };
 })

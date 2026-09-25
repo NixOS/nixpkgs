@@ -58,7 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       roastiek
-      mvs
       nick-linux
     ];
 

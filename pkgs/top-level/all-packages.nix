@@ -2310,7 +2310,10 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  buildNavidromePlugin = callPackage ../by-name/na/navidrome/plugins/build-plugin.nix { };
+  buildNavidromeGoPlugin = callPackage ../by-name/na/navidrome/plugins/build-go-plugin.nix { };
+
+  buildNavidromeRustPlugin = callPackage ../by-name/na/navidrome/plugins/build-rust-plugin.nix { };
+
   navidromePlugins = recurseIntoAttrs (
     lib.makeExtensible (
       self:
@@ -2552,6 +2555,8 @@ with pkgs;
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
+
+  openbaoPlugins = callPackage ../by-name/op/openbao/plugins.nix { };
 
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
@@ -2912,9 +2917,6 @@ with pkgs;
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
-  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
-  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
-
   openconnectPackages = {
     inherit openconnect openconnect_openssl;
   };
@@ -3046,6 +3048,9 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+  temurin-bin-27 = javaPackages.compiler.temurin-bin.jdk-27;
+  temurin-jre-bin-27 = javaPackages.compiler.temurin-bin.jre-27;
+
   temurin-bin-26 = javaPackages.compiler.temurin-bin.jdk-26;
   temurin-jre-bin-26 = javaPackages.compiler.temurin-bin.jre-26;
 
@@ -4033,6 +4038,7 @@ with pkgs;
     cargo-pgrx_0_16_1
     cargo-pgrx_0_17_0
     cargo-pgrx_0_18_0
+    cargo-pgrx_0_19_0
     cargo-pgrx
     ;
 

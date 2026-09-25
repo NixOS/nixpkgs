@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/illdefined/integrity-scrub";
     description = "Scrub dm-integrity devices";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "integrity-scrub";
   };

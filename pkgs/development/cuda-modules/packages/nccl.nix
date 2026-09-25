@@ -69,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.32.3-1" = "sha256-ytAJn8F0QEHhUadiOmVKTUiL7lsUnasoP4MOv/t60xk=";
+      "2.32.3-1" = "sha256-xUllfdWAL0Ee9P9T9CZC2ddkPRnSXZXgwApgO398i6g=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";

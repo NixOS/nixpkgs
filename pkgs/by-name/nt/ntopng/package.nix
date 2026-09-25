@@ -24,29 +24,19 @@
   which,
   zeromq,
   cmake,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntopng";
-  version = "6.6";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
     tag = finalAttrs.version;
-    hash = "sha256-BYJtsEuxmo6jzqCoC/A5vDAiFSGqy8XFyqooGDTZE40=";
+    hash = "sha256-46cqNr3sLa5Xy8PbddofxRjCCvUFeHPlOihgd+5qBE0=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix CVE-2026-86091 CVE-2026-86090
-    (fetchpatch {
-      name = "CVE-2026-86090-CVE-2026-86091.patch";
-      url = "https://github.com/ntop/ntopng/commit/7d830f31af367745431c5d92e2e82fc432f6bdd8.patch";
-      hash = "sha256-8N0q/Ekd5ni1jxZh8Jatipz+z57r1jqu/77o/oI/FuE=";
-    })
-  ];
 
   preConfigure = ''
     substituteInPlace Makefile.in \

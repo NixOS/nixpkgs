@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "1.0.3";
+  version = "1.0.4";
   updateScript = gitUpdater {
     rev-prefix = "v";
     ignoredVersions = "rc";
@@ -47,7 +47,7 @@ if enableEnterprise then
 
     src = fetchurl {
       url = "https://downloads.openobserve.ai/releases/o2-enterprise/v${finalAttrs.version}/openobserve-ee-v${finalAttrs.version}-linux-amd64-musl.tar.gz";
-      hash = "sha256-J6w1bpb4BfmDIdf+SkQyi1tnVPsOtWsEEshvrEUUL7E=";
+      hash = "sha256-vp/l/22a2bgN9pWJ9ZlLZFz+D6HMNCZGnWx/Q69KsM4=";
     };
 
     # The tarball is a single flat `openobserve` binary.
@@ -139,7 +139,7 @@ else
         owner = "openobserve";
         repo = "openobserve";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-lSsLW6QmDLuRD+hak1ya0cKjDJW50iiErhsDYUo4bcc=";
+        hash = "sha256-wU0P53atAkehYkgn+wbrlbVbyMSPU0rVrJfYte4Sls8=";
       };
 
       patches = [
@@ -162,7 +162,7 @@ else
         cp -r ${web}/share/openobserve-ui web/dist
       '';
 
-      cargoHash = "sha256-n1skvBCfALA3I77q0mZvqI71gbt1/q9kiYDXfsKlh0I=";
+      cargoHash = "sha256-CGFadBE3/ooT4lT+rMCb9Bm0Jk2fJOe+Oba3AYCJK30=";
 
       nativeBuildInputs = [
         pkg-config

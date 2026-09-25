@@ -18881,6 +18881,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  undo-glow-nvim = buildVimPlugin {
+    pname = "undo-glow.nvim";
+    version = "1.13.0";
+    src = fetchFromGitHub {
+      owner = "y3owk1n";
+      repo = "undo-glow.nvim";
+      tag = "v1.13.0";
+      hash = "sha256-TpZlObtK+tasaGEDuQBcs7QdHzcM7LAnKD2oficFEF0=";
+    };
+    meta.homepage = "https://github.com/y3owk1n/undo-glow.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   undotree = buildVimPlugin {
     pname = "undotree";
     version = "6.1-unstable-2026-03-08";
