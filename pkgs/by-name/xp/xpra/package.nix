@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.5.3";
+  version = "6.5.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-UDKnkynWoS1feUBRRHXl7emksUmufBL16gmVFslMHpM=";
+    hash = "sha256-OXcZs2bt+ub59buDkw56A3gfOnDHSYP7RBAFOBvwrKY=";
   };
 
   patches = [
