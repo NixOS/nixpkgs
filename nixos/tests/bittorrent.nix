@@ -83,6 +83,7 @@ in
         networking.nat.externalInterface = "eth1";
         networking.firewall.enable = true;
         networking.firewall.trustedInterfaces = [ "eth2" ];
+        networking.nftables.enable = true;
         networking.interfaces.eth0.ipv4.addresses = [ ];
         networking.interfaces.eth1.ipv4.addresses = [
           {
