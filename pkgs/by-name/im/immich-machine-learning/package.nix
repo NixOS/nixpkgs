@@ -21,6 +21,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "huggingface-hub"
     "numpy"
+    "onnx"
     "pillow"
     "pydantic-settings"
   ];
