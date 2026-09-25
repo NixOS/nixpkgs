@@ -44,15 +44,15 @@ let
     hash = "sha256-xEpdeEeSXuqeTS0EdI1ELNKN2SmaC1cu99kerE9abOs=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5";
-  version = "5.1.22";
+  version = "5.1.23";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = pname;
-    rev = version;
-    hash = "sha256-t0Xn15su7nij9ll7EbQeIC75ScSwCoPOgPtTbuP4xN8=";
+    repo = finalAttrs.pname;
+    tag = finalAttrs.version;
+    hash = "sha256-5RDLAUqIOQiDt8CsMFXof8Y7F79Reyhpv7tcW57uw+Y=";
     fetchSubmodules = true;
   };
 
@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   passthru = {
     updateScript = ./update.py;
@@ -119,4 +120,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})
