@@ -28,6 +28,9 @@ let
         settings = {
           dht-enabled = false;
           message-level = 2;
+          # Avoid binding IPv4 HTTP requests to an automatically selected IPv6 address.
+          # https://github.com/transmission/transmission/issues/7229
+          bind-address-ipv6 = "::";
           inherit download-dir;
         };
       };
