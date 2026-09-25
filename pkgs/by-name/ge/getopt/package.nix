@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://frodo.looijaard.name/project/getopt";
     description = "Parses command-line arguments from shell scripts";
     mainProgram = "getopt";
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
 })
