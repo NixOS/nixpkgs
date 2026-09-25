@@ -110,4 +110,6 @@ in
       };
     };
   };
+
+  meta.maintainers = pkgs.miniupnpd.meta.maintainers;
 }
