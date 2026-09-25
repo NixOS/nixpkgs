@@ -153,6 +153,7 @@ in
       router.wait_for_unit("miniupnpd")
 
       # Create the torrent.
+      tracker.wait_for_unit("transmission.service")
       tracker.succeed("mkdir ${download-dir}/data")
       tracker.succeed(
           "cp ${file} ${download-dir}/data/test.tar.bz2"
@@ -177,6 +178,7 @@ in
       tracker.wait_for_unit("httpd")
       client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
+      client1.wait_for_unit("transmission.service")
       client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
       client1.wait_for_file("${download-dir}/test.tar.bz2")
       client1.succeed(
@@ -190,6 +192,7 @@ in
       # the first client created a NAT hole in the router.
       client2.systemctl("start network-online.target")
       client2.wait_for_unit("network-online.target")
+      client2.wait_for_unit("transmission.service")
       client2.succeed(
           "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
       )
