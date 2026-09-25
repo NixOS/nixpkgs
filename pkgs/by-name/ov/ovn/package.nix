@@ -8,6 +8,7 @@
   libbpf,
   libcap_ng,
   nix-update-script,
+  nixosTests,
   numactl,
   openssl,
   pkg-config,
@@ -200,9 +201,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
-
     updateScript = nix-update-script { };
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; } // {
+      inherit (nixosTests.ovn)
+        basic
+        multiple-controllers
+        raft
+        ;
+    };
   };
 
   meta = {
