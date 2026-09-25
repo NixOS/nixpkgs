@@ -18,12 +18,14 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8SrcBinding;
   },
   lld,
-  makeBinaryWrapper,
   nix-update-script,
   pkg-config,
   openssl,
+  ps,
+  replaceVars,
   ripgrep,
   versionCheckHook,
+  writeText,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   _experimental-update-script-combinators,
 }:
@@ -63,6 +65,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   patches = [
+    # Allow declared store links through daemon package validation.
+    (replaceVars ./nix-package-layout.patch {
+      ps = lib.getExe ps;
+      packageLinkRoots = lib.concatStringsSep ":" (
+        [ (toString (lib.getBin ripgrep)) ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ (toString (lib.getBin bubblewrap)) ]
+      );
+    })
     # https://github.com/openai/codex/issues/48195
     ./no-daemon_auto_start.patch
   ];
@@ -80,7 +90,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     gitMinimal
     installShellFiles
-    makeBinaryWrapper
     pkg-config
   ];
 
@@ -125,17 +134,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the future once this software stabilizes.
   doCheck = false;
 
-  postInstall = lib.optionalString installShellCompletions ''
+  # Metadata enables voice package discovery even without a daemon.
+  # Patch ps and package rg/bwrap directly: a wrapper fails the daemon's
+  # staged-vs-running executable content check.
+  postInstall = ''
+    install -Dm444 \
+      ${
+        writeText "codex-package.json" (
+          builtins.toJSON {
+            layoutVersion = 1;
+            version = finalAttrs.version;
+            target = stdenv.hostPlatform.rust.rustcTarget;
+            variant = "codex";
+            entrypoint = "bin/codex";
+            resourcesDir = "codex-resources";
+          }
+        )
+      } \
+      $out/codex-package.json
+
+    # Daemon validation requires packaged rg/bwrap despite their PATH fallback.
+    install -d $out/codex-path
+    ln -s ${lib.getExe ripgrep} $out/codex-path/rg
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -d $out/codex-resources
+    ln -s ${lib.getExe bubblewrap} $out/codex-resources/bwrap
+  ''
+  + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd codex \
       --bash <($out/bin/codex completion bash) \
       --fish <($out/bin/codex completion fish) \
       --zsh <($out/bin/codex completion zsh)
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/codex --prefix PATH : ${
-      lib.makeBinPath ([ ripgrep ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ])
-    }
   '';
 
   doInstallCheck = true;
@@ -152,6 +182,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
     ./update-librusty.sh
   ];
+
+  passthru.tests = {
+    app-server-daemon = callPackage ./test-app-server-daemon.nix { codex = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
