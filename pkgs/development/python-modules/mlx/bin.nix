@@ -53,10 +53,10 @@ buildPythonPackage (finalAttrs: {
     [ mlx-metal ];
 
   postInstall = ''
-    # The Python wheel expects libmlx.dylib and mlx.metallib to live under
-    # mlx/lib next to the extension module, but those files are shipped by the
-    # separate mlx-metal wheel.
+    # Nix installs the wheels separately, but MLX expects their files in the same package directory.
     ln -s ${mlx-metal}/${python.sitePackages}/mlx/lib $out/${python.sitePackages}/mlx/lib
+    ln -s ${mlx-metal}/${python.sitePackages}/mlx/include $out/${python.sitePackages}/mlx/include
+    ln -s ${mlx-metal}/${python.sitePackages}/mlx/share $out/${python.sitePackages}/mlx/share
   '';
 
   pythonImportsCheck = [ "mlx" ];
