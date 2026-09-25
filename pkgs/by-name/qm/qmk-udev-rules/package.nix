@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Official QMK udev rules list";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ miniharinn ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+      kaezrr
+    ];
   };
 })
