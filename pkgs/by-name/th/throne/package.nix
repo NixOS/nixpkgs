@@ -21,22 +21,24 @@
   # To get the latest revision go to the rule-set branch and get the revision of the last commit
   # Link: https://github.com/throneproj/routeprofiles/tree/rule-set
   throne-srslist-info ? {
-    rev = "bf5016b114a2dee6a31aa269093de38892fb9df4";
-    hash = "sha256-RfyFSCecfY1SfvO62nW72+4JLAP7qX8KmmWFGhRrC8I=";
+    rev = "1aa995b5fc30c26b931a61171aea2ab49c3d1711";
+    hash = "sha256-jKYUjgxpE1zwcVv+9Fdj8H1QnPZpTzmzVsMfOMOKGFw=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
     tag = finalAttrs.version;
-    hash = "sha256-fDaU3xjrpjeW8MePBaj5aNGJ2GrNQ3/M3LhtBoU+I/A=";
+    hash = "sha256-G1i8nFMabkg7qUbqYq/GYXsREXRcSXtDSO+RgiuulIE=";
   };
 
+  # NKR_ELEVATION_HINT contains spaces
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -51,20 +53,21 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qttools
   ];
 
+  cmakeFlags = [
+    # use a writable config dir
+    (lib.cmakeBool "NKR_PACKAGE" true)
+    # use ThroneCore from PATH first to make use of security wrappers
+    (lib.cmakeBool "NKR_CORE_IN_PATH" true)
+    # the Exec field of the auto-run and the scheme-handler .desktop files
+    (lib.cmakeFeature "NKR_DESKTOP_EXEC" "Throne")
+    # suid cannot be set on ThroneCore in the Nix store, so point users to the NixOS module instead
+    (lib.cmakeFeature "NKR_ELEVATION_HINT" "On NixOS, use programs.throne with tunMode.enable.")
+  ];
+
   env.INPUT_VERSION = finalAttrs.version;
 
   # suppress errors in 3rdparty/simple-protobuf
   env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
-
-  patches = [
-    # disable suid request as it cannot be applied to ThroneCore in nix store
-    # and prompt users to use NixOS module instead. And use ThroneCore from PATH
-    # to make use of security wrappers
-    ./nixos-disable-setuid-request.patch
-
-    # sets the Exec field of the auto-run and the scheme-handler .desktop files to use the Throne binary from PATH
-    ./fix-desktop-exec.patch
-  ];
 
   preBuild =
     let
@@ -87,8 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 Throne -t "$out/share/throne/"
     install -Dm644 "$src/res/public/Throne.png" -t "$out/share/icons/hicolor/512x512/apps/"
 
-    makeQtWrapper "$out/share/throne/Throne" "$out/bin/Throne" \
-      --append-flag "-appdata" # use writable config dir
+    makeQtWrapper "$out/share/throne/Throne" "$out/bin/Throne"
 
     ln -s ${finalAttrs.passthru.core}/bin/ThroneCore "$out/share/throne/ThroneCore"
 
@@ -110,17 +112,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.core = buildGoModule {
     pname = "throne-core";
     inherit (finalAttrs) version src;
-    modRoot = "./core/server";
+    modRoot = "./core";
 
-    patches = [
-      # also check cap_net_admin so we don't have to set suid
-      ./core-also-check-capabilities.patch
+    # skip cmd/schemagen, a development tool
+    subPackages = [ "." ];
 
-      # disable a security check, which hopefully is not too bad
-      ./dont-check-parent.patch
-    ];
+    # the main package has no tests, checkPhase would only rebuild all deps without -trimpath
+    doCheck = false;
 
-    vendorHash = "sha256-qr45kA/xw3NARNUAj5OMjNE1JUeYQXkEXArsyc9K5jA=";
+    vendorHash = "sha256-L189eeaYDdDKGJYT5vr412YpTgHptVfC4jpNSjNcyuk=";
 
     nativeBuildInputs = [
       protobuf
@@ -163,10 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
       "with_utls"
       "with_dhcp"
       "with_tailscale"
+      "with_openvpn"
+      "with_openconnect"
       "badlinkname"
-      "tfogo_checklinkname"
+      "tfogo_checklinkname0"
       "with_naive_outbound"
       "with_purego" # use prebuilt .so instead of prebuilt .a files for cronet-go
+      "noparentcheck" # ThroneCore and the GUI live in different store paths
     ];
   };
 
