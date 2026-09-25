@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "joplin";
+      name = "appimagekit-joplin";
       desktopName = "Joplin";
       exec = "joplin-desktop %U";
       icon = "joplin";
