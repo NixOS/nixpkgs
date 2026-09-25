@@ -79,7 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
+    # ovn-controller uses the run directory compiled into the vendored OVS.
+    ./configure \
+      --localstatedir=/var \
+      --sharedstatedir=/var \
+      --with-dbdir=/var/lib/openvswitch \
+      ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
