@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./transactional-chassis-index-allocation.patch
     ./use-ovn-bindir-for-appctl.patch
+    ./prefer-configured-binary-directories.patch
   ];
 
   outputs = [

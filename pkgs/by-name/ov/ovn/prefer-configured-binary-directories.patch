@@ -1,0 +1,16 @@
+diff --git a/utilities/ovn-ctl b/utilities/ovn-ctl
+index a66b91393..1f36caa5e 100755
+--- a/utilities/ovn-ctl
++++ b/utilities/ovn-ctl
+@@ -26,5 +26,10 @@
+     case :$PATH: in
+         *:$dir:*) ;;
+-        *) PATH=$PATH:$dir ;;
++        *)
++            case $dir in
++                $sbindir | $ovn_bindir | $bindir) PATH=$dir:$PATH ;;
++                *) PATH=$PATH:$dir ;;
++            esac
++            ;;
+     esac
+ done
