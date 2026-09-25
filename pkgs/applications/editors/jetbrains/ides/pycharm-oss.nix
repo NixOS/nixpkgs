@@ -55,7 +55,7 @@ jetbrains.mkJetBrainsProduct {
   product = "PyCharm Open Source";
   productShort = "PyCharm";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # keep-sorted start
     jetbrains.cythonDebugSpeedupsHook
     python3
