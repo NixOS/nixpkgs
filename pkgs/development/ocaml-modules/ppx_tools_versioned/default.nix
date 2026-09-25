@@ -23,7 +23,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

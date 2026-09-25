@@ -498,6 +498,12 @@
     githubId = 567653;
     name = "Andreas Schmid";
   };
+  aashiks = {
+    email = "services@inflo.ws";
+    github = "aashiks";
+    githubId = 202316;
+    name = "Ashik Salahudeen";
+  };
   abaldeau = {
     email = "andreas@baldeau.net";
     github = "baldo";
@@ -28808,6 +28814,12 @@
     github = "Th0rgal";
     githubId = 41830259;
     name = "Thomas Marchand";
+  };
+  th1nkk1d = {
+    email = "witheep@gmail.com";
+    github = "Th1nkK1D";
+    githubId = 8860448;
+    name = "Withee Poositasai";
   };
   thall = {
     email = "niclas.thall@gmail.com";
