@@ -17,16 +17,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.2.tar.gz";
-      hash = "sha256-8cxTKaet86s72IhnRBA/fTvPHKEuaZdi7Nm//lczX4s=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3.tar.gz";
+      hash = "sha256-aHUciuTUlAclHNGX33lfvtkbb9yF0QxzxGSameSWqzc=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.2-aarch64.tar.gz";
-      hash = "sha256-BLq6b7EDSuv7+G6LVRhsgYuT27vhMQEpdXGP9/cHQPU=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3-aarch64.tar.gz";
+      hash = "sha256-hzKG3WQGlxojEYJ+3WbFYGDDRVgqSmsXdOOSUYOwLsU=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.2-aarch64.dmg";
-      hash = "sha256-9KRfRRAIyGzk6TQtWTH9ichVP506tugBLadTPp/lwkk=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3-aarch64.dmg";
+      hash = "sha256-qsPNxthEG5QFJHP+43qWeSQqNvSfYP3ObM6qPnrUbjM=";
     };
   };
   # update-script-end: urls
@@ -34,15 +34,15 @@ in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
-  pname = "idea";
+  pname = "intellij-idea";
 
   wmClass = "jetbrains-idea";
   product = "IntelliJ IDEA";
   productShort = "IDEA";
 
   # update-script-start: version
-  version = "2026.2.2";
-  buildNumber = "262.10315.125";
+  version = "2026.2.3";
+  buildNumber = "262.10968.63";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

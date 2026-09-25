@@ -15,13 +15,13 @@
 
 buildPecl rec {
   pname = "mongodb";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-php-driver";
     rev = version;
-    hash = "sha256-VZ4PxZpCKoXJkoUPAEVpI4FEunfHzcai2POc4fqX9yo=";
+    hash = "sha256-zhF1YF/jZpXS0PfVwZ2uDluHY8HTqWhXVa0J1TGo5aA=";
     fetchSubmodules = true;
   };
 
