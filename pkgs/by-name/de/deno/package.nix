@@ -17,6 +17,7 @@
   zstd,
   lcms2,
   lld,
+  vulkan-loader,
   writableTmpDirAsHomeHook,
 
   # Test deps
@@ -177,10 +178,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=npm::lock_file_lock_write"
     "--skip=happy_eyeballs::tests::test_parallel_second_wins"
 
-    # GPU access
-    "--skip=js_unit_tests::webgpu_test"
-    "--skip=js_unit_tests::jupyter_test"
-
     # Use of /usr/bin
     "--skip=specs::permission::proc_self_fd"
 
@@ -265,6 +262,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} $out/bin/deno
   '';
 
   doInstallCheck = canExecute;
