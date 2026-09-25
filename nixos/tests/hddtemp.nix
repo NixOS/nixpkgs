@@ -16,7 +16,7 @@
       hardware.sensor.hddtemp = {
         enable = true;
         drives = [
-          "/dev/sda"
+          ''$(find /dev -maxdepth 1 -name "sd*" -printf "%p ")''
         ];
         extraArgs = [ "--listen=127.0.0.1" ];
         dbEntries = [
