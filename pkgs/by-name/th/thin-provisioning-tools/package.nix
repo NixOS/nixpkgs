@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hRGelBHFbyWHwV3fRecGXIEhoDzVQ+Rdj/VHGxcDH1k=";
+    hash = "sha256-eSiPm444SnV4gGRmB084RYettGw4meKRElebMuE+IFo=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  cargoHash = "sha256-y3uvPwLps8edzO9GtJ1CpB55kieclk06PjOYsYs64go=";
+  cargoHash = "sha256-2Nv9CxtXbG4QoxXgdKmPTFz0H+5kkWhYFw6+yr8RMLY=";
 
   passthru.tests = {
     inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
