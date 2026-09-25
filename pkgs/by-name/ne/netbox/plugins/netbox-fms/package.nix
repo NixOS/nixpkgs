@@ -8,7 +8,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-fms";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jsenecal";
     repo = "netbox-fms";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5RPcJFxwQYJWUipHU05gp7zovWPnviWHlkqCHEs16tw=";
+    hash = "sha256-GA3Hoq+0a/pWTp0Zwa1aMXBdfOW5P9knDNkK6UMeRJs=";
   };
 
   build-system = [ setuptools ];
