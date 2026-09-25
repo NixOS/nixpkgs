@@ -8,6 +8,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aalib";
   version = "1.4rc5";
+  __structuredAttrs = true;
 
   outputs = [
     "bin"
@@ -33,12 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin.patch
   ];
 
+  strictDeps = true;
   buildInputs = [ ncurses ];
 
   setOutputFlags = false; # Doesn't support all the flags
   configureFlags = [
     "--without-x"
     "--with-ncurses=${ncurses.dev}"
+    "--bindir=$bin/bin"
+    "--includedir=$dev/include"
+    "--libdir=$out/lib"
   ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -50,10 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Export it explicitly for __structuredAttrs.
     ''
       export system
-      appendToVar configureFlags \
-        "--bindir=$bin/bin" \
-        "--includedir=$dev/include" \
-        "--libdir=$out/lib"
     ''
     # There is a check for linux-gnu on POWER that disables shared library creation if /lib/ld.so.1 doesn't exists
     # (which it never does for us), because it assumes that it is then running on / targeting MkLinux, which supposedly
