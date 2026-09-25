@@ -13,6 +13,7 @@
   gst_all_1,
   libcap,
   libclang,
+  libopus,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -49,6 +50,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
   cargoHash = "sha256-W87rX/W2J1pwqNrihX+Rj6DfagoZYuB6C+l/S4BhyJM=";
+  cargoDeps =
+    (rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = finalAttrs.cargoHash;
+    }).overrideAttrs
+      (previousAttrs: {
+        buildCommand = previousAttrs.buildCommand + ''
+          chmod +w "$out/source-registry-0/opusic-sys-0.7.5/Cargo.toml"
+          substituteInPlace "$out/source-registry-0/opusic-sys-0.7.5/Cargo.toml" \
+            --replace-fail 'default = ["bundled"]' 'default = []'
+        '';
+      });
 
   __structuredAttrs = true;
 
@@ -99,6 +117,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals voiceSupport [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    libopus
   ]
   ++ lib.optionals (voiceSupport && stdenv.hostPlatform.isLinux) [
     alsa-lib
@@ -125,6 +144,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
     RUSTY_V8_SRC_BINDING_PATH = librusty_v8_src_binding;
     STABLE_GIT_COMMIT = finalAttrs.buildCommit;
+  }
+  // lib.optionalAttrs voiceSupport {
+    OPUS_LIB_DIR = "${lib.getLib libopus}/lib";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
