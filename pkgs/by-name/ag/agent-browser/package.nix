@@ -131,7 +131,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ codgician ];
+    maintainers = with lib.maintainers; [
+      baptiste0928
+      codgician
+    ];
     mainProgram = "agent-browser";
   };
 })
