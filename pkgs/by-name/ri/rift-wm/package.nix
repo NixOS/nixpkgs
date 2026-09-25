@@ -8,21 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rift-wm";
-  version = "0.5.5";
+  version = "0.6.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "acsandmann";
     repo = "rift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UQodikmxw6AexlPNkBjXSADX13/wRVExml387AxQp18=";
+    hash = "sha256-SxhN9f0Ekc8VISsG37VJEO3qt5MXqq8qZcBEMTD9mCY=";
   };
 
   nativeBuildInputs = [
     apple-sdk
   ];
 
-  cargoHash = "sha256-wxymypJjczFqI9oivnVX/TOnR1KuupsaryQIQQVN7Gs=";
+  cargoHash = "sha256-WId2LP/9i17ybMEPvk6Z/V/eh7xTrQNH8VXigRVLFwU=";
   checkFlags = [
     # runs into: topology invalidation must resend the hidden-window frame write instead of treating the stale target as still pending: [GetVisibleWindows]
     "--skip=actor::reactor::tests::topology_change_clears_stale_pending_hide_target_before_next_workspace_layout"
