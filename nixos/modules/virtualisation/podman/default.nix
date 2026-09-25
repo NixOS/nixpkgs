@@ -196,6 +196,28 @@ in
       '';
     };
 
+    dns = {
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = config.networking.firewall.backend != "firewalld";
+        defaultText = lib.literalExpression ''
+          config.networking.firewall.backend != "firewalld"
+        '';
+        description = ''
+          Whether to allow DNS (port 53) from all network interfaces configured in {option}`virtualisation.podman.dns.interfaces` to aardvark-dns.
+        '';
+      };
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.nonEmptyStr;
+        default = [ ];
+        description = ''
+          List of network interfaces which should have DNS (port 53) traffic allowed.
+          Auto-named interfaces (`podman0`, `podman1`, ...) are allowed by default.
+          Add custom podman networks with an explicitly set interface name here.
+        '';
+      };
+    };
+
   };
 
   config =
@@ -222,6 +244,8 @@ in
         // cfg.defaultNetwork.settings
       );
       inherit (networkConfig) dns_enabled network_interface;
+      isFirewallD = config.networking.firewall.backend == "firewalld";
+      isNftables = config.networking.firewall.backend == "nftables";
     in
     lib.mkIf cfg.enable {
       warnings = lib.optionals cfg.enableNvidia [
@@ -238,9 +262,20 @@ in
       };
 
       # containers cannot reach aardvark-dns otherwise
-      networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
-        interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
-      };
+      networking.firewall.interfaces = lib.mkIf cfg.dns.openFirewall (
+        lib.genAttrs cfg.dns.interfaces (_: {
+          allowedUDPPorts = [ 53 ];
+          allowedTCPPorts = [ 53 ];
+        })
+      );
+
+      virtualisation.podman.dns.interfaces =
+        lib.mkIf (!isFirewallD)
+          # Add `network_interface` if it doesn't match the wildcard.
+          (
+            lib.optional (dns_enabled && (!lib.hasPrefix "podman" network_interface)) network_interface
+            ++ lib.singleton (if isNftables then "podman*" else "podman+")
+          );
 
       virtualisation.containers.enable = true;
 
@@ -316,6 +351,13 @@ in
           assertion = cfg.dockerSocket.enable -> !config.virtualisation.docker.enable;
           message = ''
             The options virtualisation.podman.dockerSocket.enable and virtualisation.docker.enable conflict, because only one can serve the socket.
+          '';
+        }
+        {
+          assertion = cfg.dns.openFirewall -> !isFirewallD;
+          message = ''
+            The option `virtualisation.podman.dns.openFirewall` cannot be used with the `firewalld` firewall backend.
+            The `firewalld` backend is not affected by the DNS firewall issue the option is built for.
           '';
         }
       ];
