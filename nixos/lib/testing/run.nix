@@ -100,8 +100,8 @@ in
       description = ''
         Halt test execution after any test fail and provide the possibility to
         hook into the sandbox to connect with either the test driver via
-        `telnet localhost 4444` or with the VMs via SSH and vsocks (see also
-        `sshBackdoor.enable`).
+        `socat readline tcp:127.0.0.1:4444` or with the VMs via SSH and vsocks
+        (see also `sshBackdoor.enable`).
       '';
     };
 
@@ -162,8 +162,9 @@ in
 
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh
-          hostPkgs.inetutils
-          hostPkgs.socat # to allow SSH backdoor connections for systemd-nspawn containers
+          # For SSH backdoor connections in systemd-nspawn containers and PDB with interactive
+          # line-editing
+          hostPkgs.socat
         ];
 
         buildCommand = ''
