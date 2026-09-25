@@ -13,14 +13,14 @@
 buildPythonPackage rec {
   # NOTE that this is not https://pypi.org/project/yakh/
   pname = "python-yakh";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "yakh";
     rev = "v${version}";
-    hash = "sha256-mXG0fit+0MLOkn2ezRzLboDGKxkES/T7kyWAfaF0EQQ=";
+    hash = "sha256-r+vDwiFnMJ+C4DhsbVhcKzVhAbFqDkRaaLcmuyN2XBY=";
   };
 
   build-system = [

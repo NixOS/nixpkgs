@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ghapi";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "ghapi";
     tag = finalAttrs.version;
-    hash = "sha256-3FTAs/gZjLPZPKrB3SVEKWpwTXfkDiehkapEAbR1jZM=";
+    hash = "sha256-4nHP0vq/9ZMqLLgS3BTQ7LUCqOwHkwxjABLkRAuJatY=";
   };
 
   build-system = [ setuptools ];
