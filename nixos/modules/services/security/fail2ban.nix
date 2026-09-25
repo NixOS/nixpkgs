@@ -92,6 +92,10 @@ in
     )
   ];
 
+  meta.maintainers = with lib.maintainers; [
+    Deric-W
+  ];
+
   ###### interface
 
   options = {
