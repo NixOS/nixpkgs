@@ -132,7 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp $out/share/openvswitch/scripts
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
+    # ovn-ctl creates $OVN_SYSCONFDIR/ovn at runtime.
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --set-default OVN_SYSCONFDIR /var/lib \
       --prefix PATH : ${
         lib.makeBinPath [
           openvswitch
