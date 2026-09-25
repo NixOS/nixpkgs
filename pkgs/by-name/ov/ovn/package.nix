@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./transactional-chassis-index-allocation.patch
+    ./use-ovn-bindir-for-appctl.patch
+    ./prefer-configured-binary-directories.patch
+  ];
+
   outputs = [
     "out"
     "lib"
@@ -74,7 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
+    # ovn-controller uses the run directory compiled into the vendored OVS.
+    ./configure \
+      --localstatedir=/var \
+      --sharedstatedir=/var \
+      --with-dbdir=/var/lib/openvswitch \
+      ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
@@ -122,7 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp $out/share/openvswitch/scripts
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
+    # ovn-ctl creates $OVN_SYSCONFDIR/ovn at runtime.
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --set-default OVN_SYSCONFDIR /var/lib \
       --prefix PATH : ${
         lib.makeBinPath [
           openvswitch
