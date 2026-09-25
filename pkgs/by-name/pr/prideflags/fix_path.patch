@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 8a8b978..0f1b2e0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,7 +8,8 @@ prideflag: main.cpp
+ 	$(CXX) main.cpp -o prideflag -std=c++11 -lstdc++ -Wpedantic -Wall -Wextra -Werror -O3
+ 
+ install: prideflag
+-	sudo install -D -m 777 prideflag /usr/local/bin/
++	mkdir -p "${out}/bin" 
++	install -D -m 777 prideflag "${out}/bin/"
+ 
+ uninstall:
+ 	sudo rm -f /usr/local/bin/prideflag
