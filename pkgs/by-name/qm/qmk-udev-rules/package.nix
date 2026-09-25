@@ -10,16 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmk-udev-rules";
-  version = "0.27.13";
+  version = "0.1.23";
 
   src = fetchFromGitHub {
     owner = "qmk";
-    repo = "qmk_firmware";
-    tag = finalAttrs.version;
-    hash = "sha256-Zs508OQ0RYCg0f9wqR+VXUmVvhP/jCA3piwRq2ZpR84=";
+    repo = "qmk_udev";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LpyYjngahl4ws0e8l3cSYiPc23Okiq1uhff/oAj9uMo=";
   };
-
-  dontBuild = true;
 
   nativeBuildInputs = [
     udevCheckHook
@@ -27,17 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  installPhase = ''
-    runHook preInstall
+  installFlags = [
+    "PREFIX=$(out)"
+  ];
 
-    install -D util/udev/50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
-
-    runHook postInstall
+  postInstall = ''
+    substituteInPlace $out/lib/udev/rules.d/50-qmk.rules \
+      --replace-fail 'qmk_id %S%p' "$out/lib/udev/qmk_id %S%p"
   '';
 
   meta = {
-    homepage = "https://github.com/qmk/qmk_firmware";
-    description = "Official QMK udev rules list";
+    homepage = "https://github.com/qmk/qmk_udev";
+    description = "A small program that udev uses to identify QMK keyboards";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
