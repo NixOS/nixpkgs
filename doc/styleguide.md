@@ -2,7 +2,7 @@
 
 Use this page as a reference and style guide for our internal and external documentation.
 
-## Knowledge Expectations
+## Assumptions about the reader
 
 **Assume competence, not familiarity.**
 
