@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       "tfogo_checklinkname0"
       "with_naive_outbound"
       "with_purego" # use prebuilt .so instead of prebuilt .a files for cronet-go
-      "noparentcheck" # ThroneCore and the GUI live in different store paths
+      "noparentcheck" # ThroneCore and its security-wrapper live under a different store path than the GUI
     ];
   };
 
