@@ -22,6 +22,7 @@
 
   # For tests
   testers,
+  fetchurl,
 }:
 
 let
@@ -158,9 +159,58 @@ stdenv.mkDerivation (finalAttrs: {
         extraArgs = [ "--version=skip" ];
       })
     ];
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "7zz --help";
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "7zz --help";
+      };
+      # So dmg can be tested on Linux without
+      # macos toolchains
+      undmg = stdenv.mkDerivation {
+        pname = "test-undmg";
+        version = "none";
+
+        src = fetchurl {
+          url = "https://caido.download/releases/v0.57.0/caido-desktop-v0.57.0-mac-aarch64.dmg";
+          hash = "sha256-GmpMnaGR7gYz1RvSO5xj9AA3xU1mn2IBInakmVkuG7A=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e Contents ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
+
+      unzip = stdenv.mkDerivation {
+        pname = "test-unzip";
+        version = "none";
+
+        src = fetchurl {
+          url = "mirror://sourceforge/libjson/libjson_7.6.1.zip";
+          hash = "sha256-ByZ6OVEDjuLgLSbMQb+OJ1Zow491EkDT543JeRguc3Y=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e libjson.h ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
     };
   };
 
