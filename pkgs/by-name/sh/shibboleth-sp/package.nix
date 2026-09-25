@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shibboleth-sp";
-  version = "3.0.4.1";
+  version = "3.6.0";
 
   src = fetchFromCodeberg {
     owner = "Shibboleth";
     repo = "cpp-sp";
     tag = finalAttrs.version;
-    hash = "sha256-ub3TFKbRJKyiNy5+t5Aaiwt29ibOuBx4WiDMV/5qZOE=";
+    hash = "sha256-edcRzf95NILkQbIf6cXNefQuksDHmbqa2jR6QNn/tno=";
   };
 
   # Upgrade to Clang 19 (and thereby LLVM19) causes `std::char_traits` to now be present,
