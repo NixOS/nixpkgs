@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
     ./patches/disable-bash-arg-completion-test.patch
+    ./patches/allow-read-only-server-config.patch
   ];
 
   strictDeps = true;
