@@ -179,7 +179,10 @@ in
       client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
       client1.wait_for_unit("transmission.service")
-      client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
+      client1.wait_until_succeeds(
+          "curl --fail --output /tmp/test.torrent http://${externalTrackerAddress}/test.torrent"
+      )
+      client1.succeed("transmission-remote --add /tmp/test.torrent")
       client1.wait_for_file("${download-dir}/test.tar.bz2")
       client1.succeed(
           "cmp ${download-dir}/test.tar.bz2 ${file}"
@@ -193,8 +196,11 @@ in
       client2.systemctl("start network-online.target")
       client2.wait_for_unit("network-online.target")
       client2.wait_for_unit("transmission.service")
+      client2.wait_until_succeeds(
+          "curl --fail --output /tmp/test.torrent http://${externalTrackerAddress}/test.torrent"
+      )
       client2.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
+          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht"
       )
       client2.wait_for_file("${download-dir}/test.tar.bz2")
       client2.succeed(
