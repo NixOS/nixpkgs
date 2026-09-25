@@ -6,6 +6,7 @@
   libbpf,
   libcap_ng,
   nix-update-script,
+  nixosTests,
   numactl,
   openssl,
   pkg-config,
@@ -175,7 +176,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests.ovn)
+        basic
+        multiple-controllers
+        raft
+        ;
+    };
+  };
 
   meta = {
     description = "Open Virtual Network";

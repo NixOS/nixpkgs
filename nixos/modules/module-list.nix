@@ -2095,6 +2095,7 @@
   ./virtualisation/oci-options.nix
   ./virtualisation/openstack-options.nix
   ./virtualisation/openvswitch.nix
+  ./virtualisation/ovn.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-firmware.nix
