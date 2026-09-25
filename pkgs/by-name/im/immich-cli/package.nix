@@ -4,6 +4,7 @@
   jq,
   nodejs,
   makeWrapper,
+  runtimeShellPackage,
   stdenv,
   versionCheckHook,
   pnpmConfigHook,
@@ -11,6 +12,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich-cli";
   inherit (immich) version src pnpmDeps;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   postPatch = ''
     local -r cli_version="$(jq -r .version cli/package.json)"
@@ -24,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     immich.pnpm
+  ];
+
+  buildInputs = [
+    runtimeShellPackage
   ];
 
   buildPhase = ''
