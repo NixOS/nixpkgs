@@ -148,10 +148,11 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit gguf-tools;
 
-    tests = callPackage ./tests.nix {
-      mlx = finalAttrs.finalPackage;
-      inherit (finalAttrs) src;
-    };
+    tests.mlxTest =
+      (callPackage ./tests.nix {
+        mlx = finalAttrs.finalPackage;
+        inherit (finalAttrs) src;
+      }).mlxTest;
 
     updateScript = lib.getExe (writeShellApplication {
       name = "mlx-update";

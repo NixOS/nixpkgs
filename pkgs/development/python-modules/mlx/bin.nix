@@ -74,11 +74,12 @@ buildPythonPackage (finalAttrs: {
     };
   };
 
-  passthru.tests = callPackage ./tests.nix {
-    mlx = finalAttrs.finalPackage;
-    metalSupport = true;
-    src = finalAttrs.passthru.srcs.testSource;
-  };
+  passthru.tests.mlxTest =
+    (callPackage ./tests.nix {
+      mlx = finalAttrs.finalPackage;
+      metalSupport = true;
+      src = finalAttrs.passthru.srcs.testSource;
+    }).mlxTest;
 
   meta = {
     description = "Prebuilt MLX wheel for Apple silicon with Metal runtime";
