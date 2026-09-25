@@ -30,11 +30,12 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
   version = "0.157.0";
+  buildCommit = "00c972ed5d6ff6499317fd41b7f23605b8e6850d";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
-    tag = "rust-v${finalAttrs.version}";
+    rev = finalAttrs.buildCommit;
     hash = "sha256-/f/k77vnFjPfnnf+X2E7rY2FxUR1xAcJZiPTv9Q8JVI=";
   };
 
@@ -94,6 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # stringop-overflow in BoringSSL's a_bitstr.cc) while keeping Clang's
   # character-conversion warning-as-error disabled.
   env = {
+    CODEX_BUILD_COMMIT = finalAttrs.buildCommit;
     LIBCLANG_PATH = "${lib.getLib libclang}/lib";
     NIX_CFLAGS_COMPILE = toString (
       lib.optionals stdenv.cc.isGNU [
@@ -105,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
     RUSTY_V8_ARCHIVE = librusty_v8;
     RUSTY_V8_SRC_BINDING_PATH = librusty_v8_src_binding;
+    STABLE_GIT_COMMIT = finalAttrs.buildCommit;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
@@ -137,6 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
+    ./update-build-commit.sh
     (nix-update-script {
       extraArgs = [
         "--use-github-releases"
