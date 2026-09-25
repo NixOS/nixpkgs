@@ -49,6 +49,14 @@ buildPythonPackage {
 
   format = "wheel";
 
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "cxxdev"
+  ];
+  cudaPropagateToOutput = "cxxdev";
+
   # determine supported interpreters by the ones we have x86_64-linux wheels for
   disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
@@ -125,6 +133,8 @@ buildPythonPackage {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
+
+    mkdir -p "$cxxdev"
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/296179
@@ -153,6 +163,14 @@ buildPythonPackage {
 
   passthru.tests = callPackage ../tests {
     inherit (config) rocmSupport cudaSupport;
+  };
+
+  # Expose mostly the same attrs as the source build to stay compatible
+  passthru = {
+    inherit cudaPackages;
+    cudaSupport = stdenv.hostPlatform.isLinux;
+    rocmSupport = false;
+    cudaCapabilities = lib.optionals stdenv.hostPlatform.isLinux cudaPackages.flags.cudaCapabilities;
   };
 
   meta = {
