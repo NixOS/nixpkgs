@@ -245,6 +245,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./update-librusty.sh
   ];
 
+  passthru.tests = lib.optionalAttrs voiceSupport {
+    voice-runtime = callPackage ./test-voice-runtime.nix { codex = finalAttrs.finalPackage; };
+  };
+
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
     homepage = "https://github.com/openai/codex";
