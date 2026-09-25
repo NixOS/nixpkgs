@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "miniupnpd";
   };
 }
