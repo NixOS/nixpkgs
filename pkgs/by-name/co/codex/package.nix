@@ -5,10 +5,12 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  alsa-lib,
   bubblewrap,
   clang,
   cmake,
   gitMinimal,
+  gst_all_1,
   libcap,
   libclang,
   librusty_v8 ? callPackage ./librusty_v8.nix {
@@ -28,6 +30,10 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   _experimental-update-script-combinators,
 }:
+let
+  voiceSupport =
+    stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu);
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
   version = "0.156.1";
@@ -53,12 +59,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "codex-cli"
     "--package"
     "codex-code-mode-host"
+  ]
+  ++ lib.optionals voiceSupport [
+    "--package"
+    "codex-voice-host"
   ];
   cargoCheckFlags = [
     "--package"
     "codex-cli"
     "--package"
     "codex-code-mode-host"
+  ]
+  ++ lib.optionals voiceSupport [
+    "--package"
+    "codex-voice-host"
   ];
 
   postPatch = ''
@@ -81,6 +95,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libclang
     openssl
+  ]
+  ++ lib.optionals voiceSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]
+  ++ lib.optionals (voiceSupport && stdenv.hostPlatform.isLinux) [
+    alsa-lib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
