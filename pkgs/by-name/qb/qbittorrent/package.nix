@@ -3,7 +3,7 @@
   cmake,
   dbus,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   guiSupport ? true,
   lib,
   libtorrent-rasterbar,
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Remove with the release of version 5.3.0
   patches = [
-    (fetchpatch {
+    (fetchpatch2 {
       url = "https://github.com/qbittorrent/qBittorrent/commit/e154c1a811021ab0bd6e6f9595c2b3c6518aaea3.patch";
-      hash = "sha256-W7lgokw2R0tcjUngGrvZBAKfwSxwb8yp6bVqfguATnQ=";
+      hash = "sha256-4IMWQywt8XjZ6c8QXsJck7LLra/lI3wKHFw29W5MxZ0";
     })
   ];
 
