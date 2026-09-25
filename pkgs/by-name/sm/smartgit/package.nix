@@ -109,7 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.smartgit.dev/changelogs/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [
       jraygauthier
       tmssngr
