@@ -18,18 +18,12 @@ let
       listening_ip=${range}
     '') cfg.internalIPs}
 
-    ${lib.optionalString (firewall == "nftables") ''
-      upnp_table_name=miniupnpd
-      upnp_nat_table_name=miniupnpd
-    ''}
+    upnp_table_name=miniupnpd
+    upnp_nat_table_name=miniupnpd
 
     ${cfg.appendConfig}
   '';
-  firewall = if config.networking.nftables.enable then "nftables" else "iptables";
-  miniupnpd = pkgs.miniupnpd.override { inherit firewall; };
-  firewallScripts = lib.optionals (firewall == "iptables") (
-    [ "iptables" ] ++ lib.optional (config.networking.enableIPv6) "ip6tables"
-  );
+  miniupnpd = pkgs.miniupnpd-nftables;
 in
 {
   options = {
@@ -75,50 +69,34 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.extraCommands = lib.mkIf (firewallScripts != [ ]) (
-      builtins.concatStringsSep "\n" (
-        map (fw: ''
-          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_init.sh
-        '') firewallScripts
-      )
-    );
-
-    networking.firewall.extraStopCommands = lib.mkIf (firewallScripts != [ ]) (
-      builtins.concatStringsSep "\n" (
-        map (fw: ''
-          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_removeall.sh
-        '') firewallScripts
-      )
-    );
-
-    networking.nftables = lib.mkIf (firewall == "nftables") {
-      # see nft_init in ${miniupnpd-nftables}/etc/miniupnpd
-      tables.miniupnpd = {
-        family = "inet";
-        # The following is omitted because it's expected that the firewall is to be responsible for it.
-        #
-        # chain forward {
-        #   type filter hook forward priority filter; policy drop;
-        #   jump miniupnpd
-        # }
-        #
-        # Otherwise, it quickly gets ugly with (potentially) two forward chains with "policy drop".
-        # This means the chain "miniupnpd" never actually gets triggered and is simply there to satisfy
-        # miniupnpd. If you're doing it yourself (without networking.firewall), the easiest way to get
-        # it to work is adding a rule "ct status dnat accept" - this is what networking.firewall does.
-        # If you don't want to simply accept forwarding for all "ct status dnat" packets, override
-        # upnp_table_name with whatever your table is, create a chain "miniupnpd" in your table and
-        # jump into it from your forward chain.
-        content = ''
-          chain miniupnpd {}
-          chain prerouting_miniupnpd {
-            type nat hook prerouting priority dstnat; policy accept;
-          }
-          chain postrouting_miniupnpd {
-            type nat hook postrouting priority srcnat; policy accept;
-          }
+    assertions = [
+      {
+        assertion = config.networking.nftables.enable;
+        message = ''
+          The MiniUPnP daemon requires an nftables-based firewall.
+          networking.nftables.enable must be set to true.
         '';
-      };
+      }
+    ];
+
+    networking.nftables.tables.miniupnpd = {
+      family = "inet";
+      # miniupnpd requires the regular `miniupnpd` chain below and updates it
+      # with forwarding rules, but the NixOS firewall handles forwarding itself
+      # by accepting DNATed connections. Hooking another base chain with a drop
+      # policy into the forward path would interfere with that firewall. Custom
+      # firewalls must either accept DNATed connections or, via appendConfig,
+      # put miniupnpd's forward chain in their table and jump to it from their
+      # own forward chain.
+      content = ''
+        chain miniupnpd {}
+        chain prerouting_miniupnpd {
+          type nat hook prerouting priority dstnat; policy accept;
+        }
+        chain postrouting_miniupnpd {
+          type nat hook postrouting priority srcnat; policy accept;
+        }
+      '';
     };
 
     systemd.services.miniupnpd = {
