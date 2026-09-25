@@ -1,15 +1,8 @@
 { lib, pkgs, ... }:
 let
-  genNodeId =
-    name:
-    pkgs.runCommand "syncthing-test-certs-${name}" { } ''
-      mkdir -p $out
-      ${pkgs.syncthing}/bin/syncthing generate --home=$out
-      ${pkgs.libxml2}/bin/xmllint --xpath 'string(configuration/device/@id)' $out/config.xml > $out/id
-    '';
-  idA = genNodeId "a";
-  idB = genNodeId "b";
-  idC = genNodeId "c";
+  nodeA = ./test-nodes/a;
+  nodeB = ./test-nodes/b;
+  nodeC = ./test-nodes/c;
   testPassword = "it's a secret";
 in
 {
@@ -24,12 +17,12 @@ in
         services.syncthing = {
           enable = true;
           openDefaultPorts = true;
-          cert = "${idA}/cert.pem";
-          key = "${idA}/key.pem";
+          cert = "${nodeA}/cert.pem";
+          key = "${nodeA}/key.pem";
           guiAddress = "unix:///run/syncthing/syncthing.sock";
           settings = {
-            devices.b.id = lib.fileContents "${idB}/id";
-            devices.c.id = lib.fileContents "${idC}/id";
+            devices.b.id = lib.fileContents "${nodeB}/id";
+            devices.c.id = lib.fileContents "${nodeC}/id";
             folders.foo = {
               path = "/var/lib/syncthing/foo";
               devices = [ "b" ];
@@ -67,11 +60,11 @@ in
         services.syncthing = {
           enable = true;
           openDefaultPorts = true;
-          cert = "${idB}/cert.pem";
-          key = "${idB}/key.pem";
+          cert = "${nodeB}/cert.pem";
+          key = "${nodeB}/key.pem";
           settings = {
-            devices.a.id = lib.fileContents "${idA}/id";
-            devices.c.id = lib.fileContents "${idC}/id";
+            devices.a.id = lib.fileContents "${nodeA}/id";
+            devices.c.id = lib.fileContents "${nodeC}/id";
             folders.foo = {
               path = "/var/lib/syncthing/foo";
               devices = [ "a" ];
@@ -115,11 +108,11 @@ in
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
-        cert = "${idC}/cert.pem";
-        key = "${idC}/key.pem";
+        cert = "${nodeC}/cert.pem";
+        key = "${nodeC}/key.pem";
         settings = {
-          devices.a.id = lib.fileContents "${idA}/id";
-          devices.b.id = lib.fileContents "${idB}/id";
+          devices.a.id = lib.fileContents "${nodeA}/id";
+          devices.b.id = lib.fileContents "${nodeB}/id";
           folders.bar = {
             path = "/var/lib/syncthing/bar";
             devices = [
@@ -141,6 +134,34 @@ in
         };
       };
     };
+  };
+
+  # Run from the root of the nixpkgs repository with
+  #
+  #     nix-build -A nixosTests.syncthing-folders.genNodeData &&
+  #       ./result/bin/genNodeData.sh
+  #
+  # This generates new keys, certificates, and overall Syncthing config, and
+  # updates the certificate and key files and the ID file extracted from the
+  # overall Syncthing config file.
+  passthru.genNodeData = pkgs.writeShellApplication {
+    name = "genNodeData.sh";
+    runtimeInputs = with pkgs; [
+      syncthing
+      libxml2
+    ];
+    text = ''
+      rm -r nixos/tests/syncthing/test-nodes
+      mkdir nixos/tests/syncthing/test-nodes
+      cd nixos/tests/syncthing/test-nodes
+
+      for d in a b c; do
+        mkdir -- "$d"
+        syncthing generate --home="$d"
+        xmllint --xpath 'string(configuration/device/@id)' "$d"/config.xml >"$d"/id
+        rm -f -- "$d"/.syncthing.tmp.* "$d"/config.xml
+      done
+    '';
   };
 
   testScript = ''
