@@ -14,6 +14,9 @@
   enableExamples ? false,
   enableUtils ? true,
   libusb1,
+  protobuf,
+  grpc,
+  openssl,
   # Disable dpdk for now due to compilation issues.
   enableDpdk ? false,
   dpdk,
@@ -35,7 +38,7 @@
 }:
 
 let
-  inherit (lib) optionals cmakeBool;
+  inherit (lib) optionals cmakeBool cmakeFeature;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --arg commit true
   #
-  version = "4.10.0.0";
+  version = "4.11.0.0";
 
   outputs = [
     "out"
@@ -57,21 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-nqazjHfYIVbqFnfiHdkz1Glws4+t5rgWmojWbi0Ymk8=";
+    hash = "sha256-L8bd9KP3WauFKN6jEI5VECaTBgEuB8IcSiiLbXFMWZY=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "1pqx5ajg1z8jk1lfh44m58sqf6ypbvn9jm89walfc1h38q4ykj38";
+    sha256 = "0b5hy1bjyhd5s2b98jdjfk8r7aa939z6jwfnpl5qqp4dvhiyc9bm";
   };
-
-  patches = [
-    # Fixes detection of uhd for packages that depend on uhd, see:
-    # https://github.com/EttusResearch/uhd/pull/939
-    ./downstream-pkgs-boost1.89-fix.patch
-  ];
 
   inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {
@@ -155,17 +152,21 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
+
+    # Force protobuf into config mode instead of using CMake's builtin module, as gRPC's later re-import of Protobuf causes conflicts with libupb targets.
+    # https://github.com/protocolbuffers/protobuf/issues/18307
+    (cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (cmakeFeature "GRPC_CPP_PLUGIN" (lib.getExe' grpc "grpc_cpp_plugin"))
   ]
   ++ optionals stdenv.hostPlatform.isAarch32 [
-    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
+    (cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-psabi")
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    # Present both here and in buildInputs for cross compilation.
-    python3
-    python3.pkgs.mako
+    grpc
+    (python3.withPackages (ps: [ ps.mako ]))
     # We add this unconditionally, but actually run wrapPythonPrograms only if
     # python utilities are enabled
     python3.pkgs.wrapPython
@@ -175,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       boost
       libusb1
+      protobuf
+      openssl
     ]
     ++ optionals enableExamples [
       ncurses
