@@ -24,6 +24,7 @@
   openssl,
   ripgrep,
   versionCheckHook,
+  writeText,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   _experimental-update-script-combinators,
 }:
@@ -118,7 +119,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the future once this software stabilizes.
   doCheck = false;
 
-  postInstall = lib.optionalString installShellCompletions ''
+  postInstall = ''
+    install -Dm444 \
+      ${
+        writeText "codex-package.json" (
+          builtins.toJSON {
+            layoutVersion = 1;
+            version = finalAttrs.version;
+            target = stdenv.hostPlatform.rust.rustcTarget;
+            variant = "codex";
+            entrypoint = "bin/codex";
+            resourcesDir = "codex-resources";
+          }
+        )
+      } \
+      $out/codex-package.json
+  ''
+  + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd codex \
       --bash <($out/bin/codex completion bash) \
       --fish <($out/bin/codex completion fish) \
