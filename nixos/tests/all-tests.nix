@@ -1007,6 +1007,7 @@ in
   koito = runTest ./web-apps/koito.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
+  kosync-dotnet = runTest ./web-apps/kosync-dotnet.nix;
   krb5 = discoverTests (import ./krb5);
   krill = runTest ./krill.nix;
   ksm = runTest ./ksm.nix;
