@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   dpkg,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -13,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "cargo-deb";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KiWQq2WEAoSTuMWRi2dSWiH7yq4R80zSK6pTh0jiE/M=";
   };
 
@@ -48,6 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cargo subcommand that generates Debian packages from information in Cargo.toml";
     mainProgram = "cargo-deb";
     homepage = "https://github.com/kornelski/cargo-deb";
