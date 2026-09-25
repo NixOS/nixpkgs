@@ -1,6 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   name = "fail2ban";
+
+  meta.maintainers = with lib.maintainers; [
+    Deric-W
+  ];
 
   nodes.machine = { ... }: {
     services.fail2ban = {
