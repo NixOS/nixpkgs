@@ -690,6 +690,7 @@ mapAliases {
   deepsea = throw "deepsea has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   defuddle-cli = warnAlias "defuddle-cli has been renamed to/replaced by 'defuddle'" defuddle; # Added 2026-04-16
   degit-rs = throw "'degit-rs' has been removed because it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-07-11
+  dejavu_fontsEnv = throw "'dejavu_fontsEnv' has been removed as its content is identical to 'dejavu_fonts'."; # Added 2026-09-25
   deltachat-cursed = throw "'deltachat-cursed' has been renamed to/replaced by 'arcanechat-tui'"; # Converted to throw 2025-10-27
   deltatouch = throw "'deltatouch' has been removed as it depended on qt5 webengine which reached EOL"; # Added 2026-04-25
   desktop-postflop = throw "'desktop-postflop' has been removed as it has been unmaintained upstream since October 2023 and depended on webkitgtk 4.0"; # Added 2026-06-07
