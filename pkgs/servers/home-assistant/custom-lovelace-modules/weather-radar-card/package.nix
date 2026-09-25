@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "weather-radar-card";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "jpettitt";
     repo = "weather-radar-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NvxkVEuXrVO95qR7YBU1WSdZXTlHsOkVB39ZGwis/lw=";
+    hash = "sha256-UzmCHEVbg9Ulj4wZabe7XyM4Ao7VPKjRgQe6cxPrLKM=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsFetcherVersion = 2;
   npmFlags = [ "--legacy-peer-deps" ];
-  npmDepsHash = "sha256-/PU0e4A5RH7g5jE0+Ai2y4MvOa6D2+7G+wcsv18orYk=";
+  npmDepsHash = "sha256-BUBEMG6GXULUx7nKws9oDmqdr4IW+FQt/1ChskE3aZg=";
 
   installPhase = ''
     runHook preInstall
