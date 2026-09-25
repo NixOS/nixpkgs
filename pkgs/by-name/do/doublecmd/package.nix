@@ -9,6 +9,7 @@
   lazarus,
   libx11,
   libsForQt5,
+  lua,
   writableTmpDirAsHomeHook,
 }:
 
@@ -60,6 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install/linux/install.sh -I $out
+
+    cd $out/lib64/doublecmd
+
+    ln -vs ${lib.getLib lua}/lib/liblua.so.${lua.version}
+
+    ln -vs ./liblua.so.${lua.version} ./liblua.so
+    ln -vs ./liblua.so.${lua.version} ./liblua.so.${lib.versions.majorMinor lua.version}
 
     runHook postInstall
   '';
