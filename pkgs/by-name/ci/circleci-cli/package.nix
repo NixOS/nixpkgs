@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildGoModule,
   buildPackages,
+  go_1_27,
   installShellFiles,
   writableTmpDirAsHomeHook,
 }:
@@ -24,6 +25,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ "cmd/circleci" ];
 
   nativeBuildInputs = [
+    go_1_27
     installShellFiles
     writableTmpDirAsHomeHook
   ];
