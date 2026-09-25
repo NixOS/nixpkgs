@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "4.4.0";
+  version = "4.6.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w31B4/o/lo/0LIfrn7DR2cJ2OY6Pfe4zAMgcQfJ2q1g=";
+    hash = "sha256-VyMkvanIdytslvkH+r+7XewilbxJjX9OSebjqRh4s5k=";
   };
 
   postPatch = ''
