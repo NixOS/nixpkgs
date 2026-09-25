@@ -1,0 +1,34 @@
+diff --git a/voice-host/src/runtime.rs b/voice-host/src/runtime.rs
+index 0c795188d452..52b61449cd5e 100644
+--- a/voice-host/src/runtime.rs
++++ b/voice-host/src/runtime.rs
+@@ -20,6 +20,8 @@ type Init = unsafe extern "C" fn(*mut i32, *mut *mut *mut c_char, *mut *mut c_vo
+ type LoadPlugin = unsafe extern "C" fn(*const c_char, *mut *mut c_void) -> *mut c_void;
+ type Unref = unsafe extern "C" fn(*mut c_void);
+ 
++const NIX_RUNTIME_ROOTS: Option<&str> = option_env!("NIX_CODEX_VOICE_RUNTIME_ROOTS");
++
+ pub(super) struct Runtime {
+     _libraries: Vec<ManuallyDrop<Library>>,
+ }
+@@ -127,10 +129,18 @@ impl Runtime {
+ 
+ fn private_file(root: &Path, relative: &str) -> io::Result<PathBuf> {
+     let path = root.join(relative);
+-    if path.canonicalize()? != path || !path.is_file() {
++    let canonical = path.canonicalize()?;
++    if !path.is_file() || (canonical != path && !is_nix_runtime_file(&canonical)) {
+         return Err(runtime_error());
+     }
+-    Ok(path)
++    Ok(canonical)
++}
++
++fn is_nix_runtime_file(path: &Path) -> bool {
++    NIX_RUNTIME_ROOTS.is_some_and(|roots| {
++        std::env::split_paths(roots)
++            .any(|root| path.starts_with(&root) && path != root)
++    })
+ }
+ 
+ fn load(path: &Path) -> io::Result<ManuallyDrop<Library>> {

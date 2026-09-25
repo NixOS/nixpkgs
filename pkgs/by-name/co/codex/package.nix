@@ -34,6 +34,29 @@
 let
   voiceSupport =
     stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu);
+  voiceRuntime =
+    let
+      pluginDirectory = if stdenv.hostPlatform.isDarwin then "plugins" else "lib/gstreamer-1.0";
+      pluginSuffix = stdenv.hostPlatform.extensions.sharedLibrary;
+      plugin = package: name: {
+        source = "${lib.getLib package}/lib/gstreamer-1.0/libgst${name}${pluginSuffix}";
+        target = "${pluginDirectory}/libgst${name}${pluginSuffix}";
+      };
+      coreSuffix = if stdenv.hostPlatform.isDarwin then "0.dylib" else "so.0";
+    in
+    [
+      {
+        source = "${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.${coreSuffix}";
+        target = "lib/libgstreamer-1.0.${coreSuffix}";
+      }
+      (plugin gst_all_1.gstreamer "coreelements")
+      (plugin gst_all_1.gst-plugins-base "app")
+      (plugin gst_all_1.gst-plugins-base "audioconvert")
+      (plugin gst_all_1.gst-plugins-base "audioresample")
+      (plugin gst_all_1.gst-plugins-base "opus")
+      (plugin gst_all_1.gst-plugins-good "rtp")
+      (plugin gst_all_1.gst-plugins-good "rtpmanager")
+    ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
@@ -69,6 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       });
 
   __structuredAttrs = true;
+
+  patches = [ ./nix-voice-runtime.patch ];
 
   # Match upstream's release build for the codex binary, plus its
   # codex-code-mode-host runtime companion for out-of-process V8 execution.
@@ -117,6 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals voiceSupport [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libopus
   ]
   ++ lib.optionals (voiceSupport && stdenv.hostPlatform.isLinux) [
@@ -146,6 +172,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     STABLE_GIT_COMMIT = finalAttrs.buildCommit;
   }
   // lib.optionalAttrs voiceSupport {
+    NIX_CODEX_VOICE_RUNTIME_ROOTS = lib.concatStringsSep ":" [
+      (toString (lib.getLib gst_all_1.gstreamer))
+      (toString (lib.getLib gst_all_1.gst-plugins-base))
+      (toString (lib.getLib gst_all_1.gst-plugins-good))
+    ];
     OPUS_LIB_DIR = "${lib.getLib libopus}/lib";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -177,6 +208,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         )
       } \
       $out/codex-package.json
+  ''
+  + lib.optionalString voiceSupport ''
+    install -d $out/codex-resources/voice/bin
+    mv $out/bin/codex-voice-host $out/codex-resources/voice/bin/
+    ${lib.concatMapStringsSep "\n" (link: ''
+      install -d $out/codex-resources/voice/${builtins.dirOf link.target}
+      ln -s ${link.source} $out/codex-resources/voice/${link.target}
+    '') voiceRuntime}
   ''
   + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd codex \
