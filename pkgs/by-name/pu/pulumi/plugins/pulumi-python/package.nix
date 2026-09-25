@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-nm9749kcfio/q2Y5XxqdiQ8IwLP/2jjZOEBF9SCyJAA=";
+  vendorHash = "sha256-BOUv5EtgAA6/56GVQr8Em8HQ61hAgk3qvI1Dp4bH+KM=";
 
   ldflags = [
     "-s"
