@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazel-buildtools";
-  version = "10.0.1";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SX/QeVsAn3yqovmjAo6NDFyfetNpRxb/C72zqWwCbaE=";
+    hash = "sha256-6yWPmjKyZsYZZ73a+yryZl1xAREiPFiBANnZZJ4Qv5o=";
   };
 
   vendorHash = "sha256-bUvWtQ0DCdAQRETyPJ6gp4qlaPowlpO5l3GHFaEcH94=";
