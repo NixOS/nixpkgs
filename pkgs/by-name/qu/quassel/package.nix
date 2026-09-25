@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ninelore ];
     mainProgram =
       if monolithic then
         "quassel"
