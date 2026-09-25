@@ -1,140 +1,160 @@
 { lib, pkgs, ... }:
 let
-  nodeA = ./test-nodes/a;
-  nodeB = ./test-nodes/b;
-  nodeC = ./test-nodes/c;
+  nodeNames = [
+    "a"
+    "b"
+    "c"
+  ];
+  nodeDirs = lib.genAttrs nodeNames (n: ./test-nodes + "/${n}");
+  nodeData = lib.mapAttrs (n: v: {
+    cert = "${v}/cert.pem";
+    key = "${v}/key.pem";
+    id = lib.fileContents (v + "/id");
+  }) nodeDirs;
+
   testPassword = "it's a secret";
+
+  commonNodeConfigModule = {
+    services.syncthing = {
+      enable = true;
+      openDefaultPorts = true;
+      settings.devices = lib.mapAttrs (n: v: { inherit (v) id; }) nodeData;
+    };
+  };
+
+  nodeConfigModules = {
+    a = {
+      services.syncthing = {
+        inherit (nodeData.a) cert key;
+        guiAddress = "unix:///run/syncthing/syncthing.sock";
+      };
+    };
+    b = {
+      services.syncthing = { inherit (nodeData.b) cert key; };
+    };
+    c = {
+      services.syncthing = { inherit (nodeData.c) cert key; };
+    };
+  };
+
+  nodeFolderConfigModules = [
+    # "foo" is a folder that is synchronised only between nodes a and b.
+    rec {
+      a = {
+        services.syncthing.settings.folders.foo = {
+          path = "/var/lib/syncthing/foo";
+          devices = [
+            "a"
+            "b"
+          ];
+        };
+      };
+
+      b = a;
+
+      c = { };
+    }
+
+    # "bar" is synchronised between a and c, and between b and c, but c only
+    # gets an encrypted copy, and a and b never synchronise directly to each
+    # other.
+    rec {
+      a =
+        { config, ... }:
+        {
+          environment.etc.bar-encryption-password.text = testPassword;
+
+          services.syncthing.settings.folders.bar = {
+            path = "/var/lib/syncthing/bar";
+            devices = [
+              {
+                name = "c";
+                encryptionPasswordFile = "/etc/${config.environment.etc.bar-encryption-password.target}";
+              }
+            ];
+          };
+        };
+
+      b = a;
+
+      c = {
+        services.syncthing.settings.folders.bar = {
+          path = "/var/lib/syncthing/bar";
+          devices = [
+            "a"
+            "b"
+          ];
+          type = "receiveencrypted";
+        };
+      };
+    }
+
+    # "baz" is synchronised between all three nodes, but has filters on b and c
+    # that mean they shouldn't receive certain files.
+    {
+      a = {
+        services.syncthing.settings.folders.baz = {
+          path = "/var/lib/syncthing/baz";
+          devices = [
+            "b"
+            "c"
+          ];
+          ignorePatterns = [ ];
+        };
+      };
+
+      b = {
+        services.syncthing.settings.folders.baz = {
+          path = "/var/lib/syncthing/baz";
+          devices = [
+            "a"
+            "c"
+          ];
+          ignorePatterns = [
+            "notB"
+            # Just test that an apostrophe doesn't break the curl config
+            # commands.  See: https://github.com/NixOS/nixpkgs/issues/554744
+            "apostrophe'"
+          ];
+        };
+      };
+
+      c = {
+        services.syncthing.settings.folders.baz = {
+          path = "/var/lib/syncthing/baz";
+          devices = [
+            "a"
+            "b"
+          ];
+          ignorePatterns = [ "notC" ];
+        };
+      };
+    }
+
+    # "foo bar" tests handling whitespace in folder IDs.
+    {
+      a = {
+        services.syncthing.settings.folders."foo bar" = {
+          path = "/var/lib/syncthing/foo-bar";
+          devices = [ "b" ];
+        };
+      };
+
+      b = {
+        services.syncthing.settings.folders."foo bar" = {
+          path = "/var/lib/syncthing/foo-bar";
+          devices = [ "a" ];
+          ignorePatterns = [ "notB" ];
+        };
+      };
+
+      c = { };
+    }
+  ];
 in
 {
   name = "syncthing-folders";
   meta.maintainers = with pkgs.lib.maintainers; [ zarelit ];
-
-  nodes = {
-    a =
-      { config, ... }:
-      {
-        environment.etc.bar-encryption-password.text = testPassword;
-        services.syncthing = {
-          enable = true;
-          openDefaultPorts = true;
-          cert = "${nodeA}/cert.pem";
-          key = "${nodeA}/key.pem";
-          guiAddress = "unix:///run/syncthing/syncthing.sock";
-          settings = {
-            devices.b.id = lib.fileContents "${nodeB}/id";
-            devices.c.id = lib.fileContents "${nodeC}/id";
-            folders.foo = {
-              path = "/var/lib/syncthing/foo";
-              devices = [ "b" ];
-            };
-            folders.bar = {
-              path = "/var/lib/syncthing/bar";
-              devices = [
-                {
-                  name = "c";
-                  encryptionPasswordFile = "/etc/${config.environment.etc.bar-encryption-password.target}";
-                }
-              ];
-            };
-            folders.baz = {
-              path = "/var/lib/syncthing/baz";
-              devices = [
-                "b"
-                "c"
-              ];
-              ignorePatterns = [ ];
-            };
-            folders."foo bar" = {
-              path = "/var/lib/syncthing/foo-bar";
-              devices = [
-                "b"
-              ];
-            };
-          };
-        };
-      };
-    b =
-      { config, ... }:
-      {
-        environment.etc.bar-encryption-password.text = testPassword;
-        services.syncthing = {
-          enable = true;
-          openDefaultPorts = true;
-          cert = "${nodeB}/cert.pem";
-          key = "${nodeB}/key.pem";
-          settings = {
-            devices.a.id = lib.fileContents "${nodeA}/id";
-            devices.c.id = lib.fileContents "${nodeC}/id";
-            folders.foo = {
-              path = "/var/lib/syncthing/foo";
-              devices = [ "a" ];
-            };
-            folders.bar = {
-              path = "/var/lib/syncthing/bar";
-              devices = [
-                {
-                  name = "c";
-                  encryptionPasswordFile = "/etc/${config.environment.etc.bar-encryption-password.target}";
-                }
-              ];
-            };
-            folders.baz = {
-              path = "/var/lib/syncthing/baz";
-              devices = [
-                "a"
-                "c"
-              ];
-              ignorePatterns = [
-                "notB"
-              ];
-            };
-            # Test how we handle white spaces in folder IDs
-            folders."foo bar" = {
-              path = "/var/lib/syncthing/foo-bar";
-              devices = [
-                "a"
-              ];
-              ignorePatterns = [
-                "notB"
-                # Just test that an apostrophe doesn't break the curl config
-                # commands. See: https://github.com/NixOS/nixpkgs/issues/554744
-                "apostrophe'"
-              ];
-            };
-          };
-        };
-      };
-    c = {
-      services.syncthing = {
-        enable = true;
-        openDefaultPorts = true;
-        cert = "${nodeC}/cert.pem";
-        key = "${nodeC}/key.pem";
-        settings = {
-          devices.a.id = lib.fileContents "${nodeA}/id";
-          devices.b.id = lib.fileContents "${nodeB}/id";
-          folders.bar = {
-            path = "/var/lib/syncthing/bar";
-            devices = [
-              "a"
-              "b"
-            ];
-            type = "receiveencrypted";
-          };
-          folders.baz = {
-            path = "/var/lib/syncthing/baz";
-            devices = [
-              "a"
-              "b"
-            ];
-            ignorePatterns = [
-              "notC"
-            ];
-          };
-        };
-      };
-    };
-  };
 
   # Run from the root of the nixpkgs repository with
   #
@@ -155,7 +175,7 @@ in
       mkdir nixos/tests/syncthing/test-nodes
       cd nixos/tests/syncthing/test-nodes
 
-      for d in a b c; do
+      for d in ${lib.escapeShellArgs nodeNames}; do
         mkdir -- "$d"
         syncthing generate --home="$d"
         xmllint --xpath 'string(configuration/device/@id)' "$d"/config.xml >"$d"/id
@@ -163,6 +183,14 @@ in
       done
     '';
   };
+
+  nodes = lib.genAttrs nodeNames (n: {
+    imports = [
+      commonNodeConfigModule
+      nodeConfigModules."${n}"
+    ]
+    ++ map (builtins.getAttr n) nodeFolderConfigModules;
+  });
 
   testScript = ''
     start_all()
