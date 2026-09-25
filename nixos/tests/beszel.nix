@@ -59,6 +59,44 @@
             openFirewall = true;
           };
         };
+
+        # Only inspected by the test script, never activated: the VM has no GPU,
+        # but the generated units can still be checked.
+        specialisation."gpu-sysfs".configuration = {
+          services.beszel.agent = {
+            enable = true;
+            environment.GPU_COLLECTOR = [ "amd_sysfs" ];
+          };
+        };
+
+        specialisation."gpu-devices".configuration = {
+          services.beszel.agent = {
+            enable = true;
+            environment.GPU_COLLECTOR = [ "intel_gpu_top" ];
+          };
+        };
+
+        specialisation."gpu-smartmon".configuration = {
+          services.beszel.agent = {
+            enable = true;
+            # upstream's comma-separated form is accepted as well
+            environment.GPU_COLLECTOR = "intel_gpu_top";
+            smartmon = {
+              enable = true;
+              deviceAllow = [ "/dev/nvme0" ];
+            };
+          };
+        };
+
+        specialisation."gpu-skipped".configuration = {
+          services.beszel.agent = {
+            enable = true;
+            environment = {
+              SKIP_GPU = true;
+              GPU_COLLECTOR = [ "intel_gpu_top" ];
+            };
+          };
+        };
       };
   };
 
@@ -67,6 +105,13 @@
     let
       hubCfg = nodes.hubHost.services.beszel.hub;
       agentCfg = nodes.agentHost.specialisation."agent".configuration.services.beszel.agent;
+      # /run/current-system points at the "agent" specialisation after the switch,
+      # so the units are read from the store directly.
+      gpuUnit =
+        name:
+        "${
+          nodes.agentHost.specialisation.${name}.configuration.system.build.toplevel
+        }/etc/systemd/system/beszel-agent.service";
     in
     ''
       import json
@@ -115,5 +160,35 @@
         agentHost.wait_for_unit("beszel-agent.service")
         agentHost.wait_until_succeeds("journalctl -eu beszel-agent --grep 'SSH connection established'")
         agentHost.wait_until_succeeds(f'curl -H \'Authorization: {user["token"]}\' -f ${agentCfg.environment.HUB_URL}/api/collections/systems/records | jq -e \'.items[].status == "up"\' ')
+
+      with subtest("Agent stays sandboxed without a GPU"):
+        agentHost.succeed("systemctl show beszel-agent -p PrivateDevices --value | grep -qx yes")
+        agentHost.succeed("systemctl show beszel-agent -p PrivateUsers --value | grep -qx yes")
+
+      with subtest("GPU collectors shape the unit"):
+        # sysfs-only collector keeps the sandbox
+        sysfs = agentHost.succeed("cat ${gpuUnit "gpu-sysfs"}")
+        assert "PrivateDevices=true" in sysfs, sysfs
+        assert "PrivateUsers=true" in sysfs, sysfs
+        assert "intel-gpu-tools" not in sysfs, sysfs
+
+        # device-based collector gets its devices as an allow-list, and
+        # CAP_PERFMON/perf_event_open with the user namespace disabled
+        devices = agentHost.succeed("cat ${gpuUnit "gpu-devices"}")
+        assert "PrivateDevices=false" in devices, devices
+        assert "PrivateUsers=false" in devices, devices
+        assert "DeviceAllow=char-drm rw" in devices, devices
+        assert "CAP_PERFMON" in devices, devices
+        assert "perf_event_open" in devices, devices
+
+        # GPU devices must survive smartmon's DeviceAllow list
+        smartmon = agentHost.succeed("cat ${gpuUnit "gpu-smartmon"}")
+        assert "DeviceAllow=/dev/nvme0 r" in smartmon, smartmon
+        assert "DeviceAllow=char-drm rw" in smartmon, smartmon
+
+        # SKIP_GPU wins over an explicitly configured collector
+        skipped = agentHost.succeed("cat ${gpuUnit "gpu-skipped"}")
+        assert "PrivateDevices=true" in skipped, skipped
+        assert "intel-gpu-tools" not in skipped, skipped
     '';
 }
