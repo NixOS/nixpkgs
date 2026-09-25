@@ -1426,6 +1426,11 @@ in
   osrm-backend = runTest ./osrm-backend.nix;
   outline = runTest ./outline.nix;
   overlayfs = runTest ./overlayfs.nix;
+  ovn = {
+    basic = runTest ./ovn/basic.nix;
+    raft = runTest ./ovn/raft.nix;
+    multiple-controllers = runTest ./ovn/multiple-controllers.nix;
+  };
   owi = runTest ./owi.nix;
   owncast = runTest ./owncast.nix;
   oxidized = handleTest ./oxidized.nix { };
