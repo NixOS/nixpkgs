@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-THl8sUY7pLxFz4mY7FMj/c1hwzqLaaNNMq0qkxWkUzw=";
   };
 
+  # set_model_ghost_index was not declared as part of the public api, leading
+  # to link errors with gfortran 16.
+  postPatch = ''
+    substituteInPlace src/dftd3/api.f90 --replace-fail \
+      "public :: set_model_ewald, set_model_work_partition" \
+      "public :: set_model_ewald, set_model_ghost_index, set_model_work_partition"
+  '';
+
   patches = [
     ./cmake.patch
   ];

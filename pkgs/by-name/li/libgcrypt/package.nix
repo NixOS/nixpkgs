@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose cryptographic library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ coolcuber ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
 })

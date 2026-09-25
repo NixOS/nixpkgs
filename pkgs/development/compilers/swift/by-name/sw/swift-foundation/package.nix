@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/0001-gnu-install-dirs.patch
     ./patches/0002-Devendor-SwiftFoundationICU.patch
+    # This is needed after the Glibc 2.44 upgrade.
+    ./patches/0003-Add-missing-imports.patch
   ];
 
   postPatch = ''

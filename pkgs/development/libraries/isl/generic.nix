@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     description = "Library for manipulating sets and relations of integer points bounded by linear constraints";
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
 }

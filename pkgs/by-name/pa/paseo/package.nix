@@ -13,7 +13,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.9.1";
+  version = "0.9.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,12 +22,12 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5pjFV28DmKsptnAajWEWeOAvkur3QkJAHSJZyfiqRh4=";
+    hash = "sha256-8ko/EqTCWnAkUHnrRsVEK+dkNLCHRd89gmcoeOiVBV8=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-9UWtpZrCdyYyGq3HGNgSpU1+2Imu3oYqtSumq2DtANc=";
+  npmDepsHash = "sha256-UXnB6q5tubKpTs+A5+u/NLSzc8ZK6rAsQs+kEphEKd8=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 

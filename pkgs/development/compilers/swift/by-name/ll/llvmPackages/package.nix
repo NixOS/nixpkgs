@@ -62,6 +62,7 @@ in
       libclang =
         let
           clangWithLauncher = prev.libclang.overrideAttrs (old: {
+            separateDebugInfo = false; # Otherwise, the debug output is huge (too large for Hydra).
             postInstall = (old.postInstall or "") + ''
               moveToOutput bin/clang-deps-launcher.py "$python"
             '';

@@ -208,6 +208,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "cryptography"
     "django-bootstrap3"
     "django-compressor"
+    "django-countries"
     "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
