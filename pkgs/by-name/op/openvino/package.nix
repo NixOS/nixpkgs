@@ -92,6 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
     ./cmake-install-paths.patch
+
+    # Fix aarch64 build on GCC 16
+    # Upstream PR: https://github.com/openvinotoolkit/openvino/pull/38268/changes
+    ./gcc-16-fix.patch
   ];
 
   # Fix arm computelib ar/ranlib toolchain paths for LTO awareness
