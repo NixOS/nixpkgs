@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -40,6 +41,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hw1sOADqQYn0JX3rJcT6bCAarzRV1OaTPyuRCDv5sF4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Retry storing chassis indices and serialize concurrent allocations.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/cb3f002fcb4fa7987e63a40332bccdee96286311.patch";
+      hash = "sha256-Ol8Qj5THNM6miWhHuk95yioHhHr/W+zRWhNtXkG2nBw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/8e66599f4c152541fa69a361969ea1b70ed1c086.patch";
+      hash = "sha256-1Et1OX2MXZ9NhcJvdvK2s5VViNORpq8UF7bn5DjSGYE=";
+    })
+    # Use the configured OVN binary directories.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b09bdd1aab6b73b77ca864470c00d2760892e7e7.patch";
+      hash = "sha256-ghQEaV/7Hxd4x++UR5UtoghXJJ/xr13xat3zqGTAb2U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/196afaf300bcd5a50a68917ba6c96282752a2b02.patch";
+      hash = "sha256-4Mo3SWbFcm1GM5jPfqTp71YUDtDn/BzrU8gB7fzb640=";
+    })
+  ];
 
   outputs = [
     "out"
