@@ -1,0 +1,28 @@
+diff --git a/controller/chassis.c b/controller/chassis.c
+index 6c398bff1..70cc30d67 100644
+--- a/controller/chassis.c
++++ b/controller/chassis.c
+@@ -1117,6 +1117,7 @@ store_chassis_index_if_needed(
+     char *idx_key = xasprintf(CHASSIS_IDX_PREFIX "%s", chassis_id);
+     const char *chassis_idx = smap_get(&cfg->other_config, idx_key);
+     if (!chassis_idx) {
++        ovsrec_open_vswitch_verify_other_config(cfg);
+         /* Collect all indices so far consumed by other chassis. */
+         struct sset used_indices = SSET_INITIALIZER(&used_indices);
+         struct smap_node *node;
+diff --git a/controller/ovn-controller.c b/controller/ovn-controller.c
+index b5308a272..6ff027aba 100644
+--- a/controller/ovn-controller.c
++++ b/controller/ovn-controller.c
+@@ -8252,10 +8252,8 @@ main(int argc, char *argv[])
+             }
+         }
+
+-        static bool chassis_idx_stored = false;
+-        if (ovs_idl_txn && !chassis_idx_stored) {
++        if (ovs_idl_txn) {
+             store_chassis_index_if_needed(ovs_table);
+-            chassis_idx_stored = true;
+         }
+
+         if (ovsdb_idl_has_ever_connected(ovnsb_idl_loop.idl) &&

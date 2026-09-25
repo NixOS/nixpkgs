@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [ ./transactional-chassis-index-allocation.patch ];
+
   outputs = [
     "out"
     "lib"
