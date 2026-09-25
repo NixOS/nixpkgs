@@ -14661,10 +14661,10 @@
     githubId = 99148867;
   };
   kaezrr = {
-     name = "Anjishnu Banerjee";
-     email = "kaezr.dev@gmail.com";
-     github = "kaezrr";
-     githubId = 107052359;
+    name = "Anjishnu Banerjee";
+    email = "kaezr.dev@gmail.com";
+    github = "kaezrr";
+    githubId = 107052359;
   };
   kagehisa = {
     name = "Sven Woelfel";
