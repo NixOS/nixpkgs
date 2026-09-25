@@ -35,9 +35,7 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in Go";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-go";
-    maintainers = with lib.maintainers; [
-      tie
-      untio11
-    ];
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })

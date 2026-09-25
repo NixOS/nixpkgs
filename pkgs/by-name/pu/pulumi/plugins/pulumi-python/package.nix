@@ -54,6 +54,7 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in Python";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-python";
-    maintainers = lib.teams.pulumi.members;
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })
