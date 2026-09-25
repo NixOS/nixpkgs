@@ -4998,6 +4998,10 @@ self: super: with self; {
 
   djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
 
+  djangorestframework_3_17 =
+    callPackage ../development/python-modules/djangorestframework/3_17.nix
+      { };
+
   djangosaml2 = callPackage ../development/python-modules/djangosaml2 { };
 
   djmail = callPackage ../development/python-modules/djmail { };
