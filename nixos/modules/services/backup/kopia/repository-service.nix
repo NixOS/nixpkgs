@@ -512,6 +512,7 @@ in
           restartIfChanged = false;
           wants = lib.mkIf needsNetwork [ "network-online.target" ];
           after = lib.mkIf needsNetwork [ "network-online.target" ];
+          unitConfig.RequiresMountsFor = lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
           environment = {
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
             KOPIA_CACHE_DIRECTORY = "/var/cache/kopia/${name}";
@@ -530,7 +531,6 @@ in
             ReadWritePaths = lib.optionals (backup.repository ? filesystem) [
               backup.repository.filesystem.path
             ];
-            RequiresMountsFor = lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
             RemainAfterExit = true;
             ExecStart = startScript;
             ExecStop = "${kopiaExe} repository disconnect";

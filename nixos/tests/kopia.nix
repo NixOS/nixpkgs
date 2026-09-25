@@ -325,6 +325,12 @@ in
             " | grep -q 'yes'"
         )
 
+    with subtest("service-properties: repository waits for its filesystem mount"):
+        machine.succeed(
+            "systemctl cat kopia-repository-filesystem-basic.service"
+            " | grep -q '^RequiresMountsFor=/var/lib/kopia-repo$'"
+        )
+
     with subtest("with-timer: timer unit is active"):
         machine.require_unit_state("kopia-snapshot-with-timer-default.timer", "active")
 
