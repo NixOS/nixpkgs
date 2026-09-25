@@ -21,6 +21,7 @@
 
   # Optional features
   enableBuildstreamPlugins ? true,
+  enableBuildstreamPluginsCommunity ? true,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -59,8 +60,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ruamel-yaml-clib
     ujson
   ])
-  ++ lib.optionals enableBuildstreamPlugins [
+  ++ lib.optional enableBuildstreamPlugins [
     python3Packages.buildstream-plugins
+  ]
+  ++ lib.optional enableBuildstreamPluginsCommunity [
+    python3Packages.buildstream-plugins-community
   ];
 
   nativeBuildInputs = [
