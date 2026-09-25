@@ -260,13 +260,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "11.4.3";
+  version = "11.7.1";
 
   src = fetchFromGitHub {
     owner = "lwouis";
     repo = "alt-tab-macos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-izPiRGV8bD67rvOyNWShcpTbUujn6WHnzenPAMAlKoU=";
+    hash = "sha256-bSkuu07gPSH2Abr4E+ZhM2AKHQuOe3A4jUhr4uZaBh8=";
   };
 
   nativeBuildInputs = [
