@@ -189,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       aleksana
+      Mahdi-zarei
     ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [
