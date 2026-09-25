@@ -57,25 +57,33 @@ let
       toString s
   ) cfg.settings);
 
+  # Run manage.py through systemd, so that `environmentFile` is parsed by
+  # systemd's EnvironmentFile= parser, exactly as for the services. Sourcing it
+  # from bash instead diverges on quoting, e.g. unquoted JSON values such as
+  # PAPERLESS_SOCIALACCOUNT_PROVIDERS={"openid_connect": ...} lose their quotes.
   manage = pkgs.writeShellScriptBin "paperless-manage" ''
-    set -o allexport # Export the following env vars
-    ${lib.toShellVars env}
-    ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
-    if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && -e '${secretKeyFile}' ]]; then
-      source '${secretKeyFile}'
-    fi
-
-    cd '${cfg.dataDir}'
-    sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
+    exec ${lib.getExe' config.systemd.package "systemd-run"} \
+      --quiet --collect --wait --pipe --pty \
+      --service-type=exec \
+      --slice=system-paperless.slice \
+      --working-directory=${lib.escapeShellArg cfg.dataDir} \
+      -p User=${lib.escapeShellArg cfg.user} \
+      -p EnvironmentFile=-${lib.escapeShellArg secretKeyFile} \
       ${
-        if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
-        else
-          ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
-      }
-    fi
-    $sudo ${lib.getExe cfg.package} "$@"
+        lib.optionalString (
+          cfg.environmentFile != null
+        ) "-p EnvironmentFile=${lib.escapeShellArg cfg.environmentFile}"
+      } \
+      ${
+        # Same merge as for NixOS services (systemd-lib: globalEnvironment // environment),
+        # so the CLI also gets e.g. LOCALE_ARCHIVE and TZDIR.
+        lib.concatStringsSep " " (
+          lib.mapAttrsToList (name: value: "-E ${lib.escapeShellArg "${name}=${value}"}") (
+            lib.filterAttrs (_: v: v != null) (config.systemd.globalEnvironment // env)
+          )
+        )
+      } \
+      ${lib.getExe cfg.package} "$@"
   '';
 
   defaultServiceConfig = {
@@ -724,7 +732,14 @@ in
           serviceConfig = {
             User = cfg.user;
             WorkingDirectory = cfg.dataDir;
+            # Like the other services, and unlike paperless-manage (which needs
+            # root to start a transient unit), the exporter gets its
+            # environment from systemd directly.
+            EnvironmentFile = defaultServiceConfig.EnvironmentFile;
           };
+          environment = env;
+          requires = [ "paperless-secret-key.service" ];
+          after = [ "paperless-secret-key.service" ];
           unitConfig =
             let
               services = [
@@ -743,9 +758,8 @@ in
               OnSuccess = services;
             };
           enableStrictShellChecks = true;
-          path = [ manage ];
           script = ''
-            paperless-manage document_exporter ${cfg.exporter.directory} ${
+            ${lib.getExe cfg.package} document_exporter ${cfg.exporter.directory} ${
               lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
             }
           '';
