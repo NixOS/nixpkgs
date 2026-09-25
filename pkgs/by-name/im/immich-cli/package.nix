@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder immich.version "3.0.0") ''
     local -r cli_version="$(jq -r .version cli/package.json)"
     test "$cli_version" = ${finalAttrs.version} \
       || (echo "error: update immich-cli version to $cli_version" && exit 1)
