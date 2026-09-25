@@ -38,7 +38,10 @@ buildPythonPackage rec {
     description = "Prebuilt Metal runtime for MLX";
     homepage = "https://github.com/ml-explore/mlx";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      mit
+      asl20 # Bundled metal-cpp headers
+    ];
     maintainers = with lib.maintainers; [
       booxter
       kinnrai
