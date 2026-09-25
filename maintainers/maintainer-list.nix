@@ -26777,6 +26777,9 @@
     name = "Dom Rodriguez";
     github = "shymega";
     githubId = 1334592;
+    email = "shymega@shymega.org.uk";
+    matrix = "@dom:rodriguez.org.uk";
+    keys = [ { fingerprint = "EB0D 45E6 D0DC 1BA1 A2B5  FC24 72DC F123 1E54 BD43"; } ];
   };
   siddarthkay = {
     email = "siddarthkay@gmail.com";
