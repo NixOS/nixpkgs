@@ -216,7 +216,7 @@ stdenv.mkDerivation (
       inherit pythonEnv;
       enterpriseSrc = enterprise.src;
       enterpriseOfflineCache = enterprise.offlineCache;
-      tests.grist-core = nixosTests.grist-core;
+      tests.grist-core = nixosTests.grist;
 
       updateScript = nix-update-script {
         extraArgs = [
