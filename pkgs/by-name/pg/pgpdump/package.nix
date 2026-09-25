@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgpdump";
-  version = "0.37";
+  version = "0.38";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nB7f6VTxRidymi9RV7W1x9JbWi9Eoa/CYzYmekYDVOo=";
+    sha256 = "sha256-cZsPactb1Cm8g94LUlvLWednPIX9+osj0xCgkcC85sE=";
   };
 
   nativeBuildInputs = [
