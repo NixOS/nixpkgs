@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage rec {
   pname = "xfetch";
   version = "1.0.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "xfetch-cli";
     repo = "xfetch";
