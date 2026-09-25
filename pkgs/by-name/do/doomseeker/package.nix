@@ -2,7 +2,7 @@
   lib,
   stdenv,
   cmake,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   pkg-config,
   zlib,
   bzip2,
@@ -10,15 +10,15 @@
   qt5,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "doomseeker";
-  version = "2023-08-09";
+  version = "1.5.3";
 
-  src = fetchFromBitbucket {
-    owner = "Doomseeker";
-    repo = "doomseeker";
-    rev = "4cce0a37b134283ed38ee4814bb282773f9c2ed1";
-    hash = "sha256-J7gesOo8NUPuVaU0o4rCGzLrqr3IIMAchulWZG3HTqg=";
+  src = fetchFromGitHub {
+    owner = "DoomseekerTeam";
+    repo = "Doomseeker";
+    rev = version;
+    hash = "sha256-oTWsGLtXqate1UuVM47mlPOqIVYLOHEp8utR07sOoE4=";
   };
 
   patches = [
