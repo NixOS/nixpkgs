@@ -12,6 +12,57 @@ with lib;
 let
   cfg = config.virtualisation.vswitch;
 
+  json = builtins.toJSON;
+  externalIdArg = key: value: "external_ids:${json key}=${json value}";
+
+  markerKey = "nixos-managed-external-ids";
+  markerValue = json (lib.attrNames cfg.externalIds);
+
+  externalIds = lib.attrsToList cfg.externalIds;
+
+  configureExternalIds = pkgs.writeShellScript "configure-openvswitch-external-ids" ''
+    set -euo pipefail
+
+    previousKeys="$(
+      ${lib.getExe' cfg.package "ovs-vsctl"} --if-exists get Open_vSwitch . \
+        ${lib.escapeShellArg "external_ids:${json markerKey}"} |
+        ${lib.getExe pkgs.jq} --raw-output '
+          fromjson
+          | if type == "array" and all(.[]; type == "string") then
+              (.[] | tojson)
+            else
+              error("invalid Open vSwitch external_ids ownership marker")
+            end
+        '
+    )"
+
+    args=()
+    while IFS= read -r key; do
+      if [[ -n "$key" ]]; then
+        args+=(-- remove Open_vSwitch . external_ids "$key")
+      fi
+    done <<< "$previousKeys"
+
+    ${lib.concatMapStringsSep "\n" (entry: ''
+      args+=(-- set Open_vSwitch . ${lib.escapeShellArg (externalIdArg entry.name entry.value)})
+    '') externalIds}
+
+    ${
+      if externalIds == [ ] then
+        ''
+          args+=(-- remove Open_vSwitch . external_ids ${lib.escapeShellArg (json markerKey)})
+        ''
+      else
+        ''
+          args+=(-- set Open_vSwitch . ${lib.escapeShellArg (externalIdArg markerKey markerValue)})
+        ''
+    }
+
+    # Commands separated by -- are committed by ovs-vsctl as one transaction,
+    # so settings and their ownership manifest cannot diverge.
+    ${lib.getExe' cfg.package "ovs-vsctl"} "''${args[@]}"
+  '';
+
 in
 {
 
@@ -31,6 +82,15 @@ in
       description = ''
         Whether to reset the Open vSwitch configuration database to a default
         configuration on every start of the systemd `ovsdb.service`.
+      '';
+    };
+
+    externalIds = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = ''
+        Entries to manage in the `Open_vSwitch.external_ids` map. Entries not
+        declared through this option are left unchanged.
       '';
     };
 
@@ -56,6 +116,13 @@ in
 
     in
     {
+      assertions = [
+        {
+          assertion = !(builtins.hasAttr markerKey cfg.externalIds);
+          message = "Open vSwitch external IDs may not contain ${markerKey}.";
+        }
+      ];
+
       environment.systemPackages = [ cfg.package ];
       boot.kernelModules = [
         "tun"
@@ -140,6 +207,19 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStart = "${cfg.package}/share/openvswitch/scripts/ovs-ctl delete-transient-ports";
+        };
+      };
+
+      systemd.services.ovsdb-external-ids = {
+        description = "Configure Open vSwitch external IDs";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "ovsdb.service" ];
+        requires = [ "ovsdb.service" ];
+        partOf = [ "ovsdb.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = configureExternalIds;
         };
       };
 

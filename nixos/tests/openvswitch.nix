@@ -4,6 +4,7 @@
   nodes = {
     node1 = {
       virtualisation.vlans = [ 1 ];
+      virtualisation.vswitch.externalIds."test-key" = "test-value";
 
       networking = {
         useNetworkd = true;
@@ -53,9 +54,15 @@
       node1.start(allow_reboot=True)
       node2.start()
       node1.wait_for_unit("ovsdb.service")
+      node1.wait_for_unit("ovsdb-external-ids.service")
       node1.wait_for_unit("ovs-vswitchd.service")
       node2.wait_for_unit("ovsdb.service")
       node2.wait_for_unit("ovs-vswitchd.service")
+
+      node1.succeed(
+          "ovs-vsctl --bare get Open_vSwitch . "
+          "external_ids:test-key | grep -qx test-value"
+      )
 
       node1.wait_until_succeeds("ping -c1 10.0.0.2", timeout=30)
       node2.wait_until_succeeds("ping -c1 10.0.0.1", timeout=30)
