@@ -20,16 +20,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "navidrome";
-  version = "0.64.1";
+  version = "0.64.2";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zjg5JwpzcDe8LFvF/soE4IrsdpkNpO7psAoQrHlKCVI=";
+    hash = "sha256-6667wi23YSPdF/LL5k7VmYEAM5rxQYjqlvAtg5vJzj4=";
   };
 
-  vendorHash = "sha256-vndJx4BcXQCJewKCv3TvSrxG6sCykfBvkOQK/kVQIPk=";
+  vendorHash = "sha256-/3NhF/OHDxWrciN5GdROiO1yhjjdm5F5ntW7h6tzFGc=";
 
   npmRoot = "ui";
 
