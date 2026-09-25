@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
-  version = "3.0.1";
+  version = "3.3.1";
 
   src = fetchFromCodeberg {
     owner = "Shibboleth";
     repo = "cpp-opensaml";
     tag = finalAttrs.version;
-    hash = "sha256-iBfKM40SzCiDGHacnxc7zZdvOYbCy9NEWjhPzCvWQ1c=";
+    hash = "sha256-/9ba1/fBc1pVleGswb/UBs6bcnu1oEUb+tu+5NN9IJM=";
   };
 
   buildInputs = [
