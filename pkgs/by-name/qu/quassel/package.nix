@@ -2,7 +2,7 @@
   monolithic ? true, # build monolithic Quassel
   enableDaemon ? false, # build Quassel daemon
   client ? false, # build Quassel client
-  tag ? "-kf5", # tag added to the package name
+  tag ? "-kf6", # tag added to the package name
   static ? false, # link statically
 
   lib,
@@ -13,9 +13,13 @@
   dconf,
   boost,
   zlib,
-  libdbusmenu,
-  libsForQt5,
   openldap,
+
+  qt6,
+  qt6Packages,
+  kdePackages,
+
+  withKDE ? true, # enable KDE integration
 }:
 
 let
@@ -25,20 +29,23 @@ in
 
 assert monolithic -> !client && !enableDaemon;
 assert client || enableDaemon -> !monolithic;
+assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [ ("-D" + feature + (if flag then "=ON" else "=OFF")) ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "quassel${tag}";
-  version = "0.14.0";
+  version = "0.14.0-unstable-2026-08-09";
 
   src = fetchFromGitHub {
     owner = "quassel";
     repo = "quassel";
-    rev = version;
-    sha256 = "sha256-eulhNcyCmy9ryietOhT2yVJeJH+MMZRbTUo2XuTy9qU=";
+    rev = "15e764d9bb836f13283be80c8135936f6a1cac72"; # https://github.com/quassel/quassel/pull/631
+    sha256 = "sha256-Ogf2zv6SKnn+UwQ2meDYTk7axYkWTdnKqUhbJVMUBbo=";
+    # i18n repo
+    fetchSubmodules = true;
   };
 
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check
@@ -48,36 +55,50 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
   ]
-  ++ lib.optional buildClient libsForQt5.wrapQtAppsHook;
+  ++ lib.optionals buildClient [
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
+
   buildInputs = [
-    libsForQt5.qtbase
+    qt6.qtbase
+    qt6.qt5compat
     boost
     zlib
   ]
   ++ lib.optionals buildCore [
-    libsForQt5.qtscript
-    libsForQt5.qca-qt5
+    qt6Packages.qca
     openldap
   ]
   ++ lib.optionals buildClient [
-    libdbusmenu
+    qt6.qtwebengine
+    qt6.qtmultimedia
+  ]
+  ++ lib.optionals (buildClient && withKDE) [
+    kdePackages.extra-cmake-modules
+    kdePackages.knotifications
+    kdePackages.knotifyconfig
+    kdePackages.sonnet
+    kdePackages.ktextwidgets
+    kdePackages.kwidgetsaddons
+    kdePackages.kxmlgui
   ];
 
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
-    "-DUSE_QT5=ON"
   ]
   ++ edf static "STATIC"
   ++ edf monolithic "WANT_MONO"
   ++ edf enableDaemon "WANT_CORE"
   ++ edf enableDaemon "WITH_LDAP"
-  ++ edf client "WANT_QTCLIENT";
+  ++ edf client "WANT_QTCLIENT"
+  ++ edf withKDE "WITH_KDE";
 
   dontWrapQtApps = true;
 
   postFixup =
     lib.optionalString enableDaemon ''
-      wrapProgram "$out/bin/quasselcore" --suffix PATH : "${libsForQt5.qtbase.bin}/bin"
+      wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qt6.qtbase}/bin"
     ''
     + lib.optionalString buildClient ''
       wrapQtApp "$out/bin/quassel${lib.optionalString client "client"}" \
@@ -92,7 +113,7 @@ stdenv.mkDerivation rec {
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
+      as WeeChat, but graphical (based on Qt/KF).
     '';
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ninelore ];
@@ -103,6 +124,6 @@ stdenv.mkDerivation rec {
         "quasselclient"
       else
         "quasselcore";
-    inherit (libsForQt5.qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
   };
 }
