@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       if-loop69420
       sodiboo
       getchoo
+      mithicspirit
     ];
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;
