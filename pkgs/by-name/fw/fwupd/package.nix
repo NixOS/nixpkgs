@@ -122,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.6";
+  version = "2.1.8";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -140,21 +140,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-K8n1rPiLuHDybWPoAUQA7RY4J+Ga1fwNiaj48fHAh9A=";
+    hash = "sha256-96YywlleFv3JRNQ/qy14qJC2ryQZDTHT3kNchtyB0cE=";
   };
 
   patches = [
     ./0001-Install-fwupdplugin-to-out.patch
     ./0002-Add-output-for-installed-tests.patch
     ./0003-Add-option-for-installation-sysconfdir.patch
-
-    # The memfd seal check added in 2.1.6 rejects any file on tmpfs, since
-    # F_GET_SEALS also works on tmpfs files on recent kernels.
-    # Remove when updating to 2.1.7.
-    (fetchpatch2 {
-      url = "https://github.com/fwupd/fwupd/commit/c2ff6e0bf9e3fea5b8502ed12fdc9ab604a51518.patch";
-      hash = "sha256-Y8YbECfUGqvpNTlKCLOXgRSIZYO+MsZYIMcMgIQfkIs=";
-    })
   ];
 
   postPatch = ''
