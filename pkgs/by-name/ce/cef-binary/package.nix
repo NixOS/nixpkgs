@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchelfHook,
   glib,
   nss,
   nspr,
@@ -29,6 +30,7 @@
   libx11,
   libxshmfence,
   libxcb,
+  vulkan-loader,
   version ? "151.3.16",
   gitRevision ? "be1e15d",
   chromiumVersion ? "151.0.7922.109",
@@ -40,9 +42,29 @@
 }:
 
 let
-  gl_rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cef-binary";
+  inherit version;
 
-  rpath = lib.makeLibraryPath [
+  src = fetchurl {
+    url = "https://cef-builds.spotifycdn.com/${finalAttrs.passthru.cefDistName}.tar.bz2";
+    hash = selectSystem srcHashes;
+  };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
+
+  stripAllList = [ "Release" ];
+
+  dontPatchELF = true;
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = [
     glib
     nss
     nspr
@@ -70,47 +92,41 @@ let
     libxfixes
     libxrandr
     libxshmfence
+    vulkan-loader
+    stdenv.cc.cc
   ];
 
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
-in
-stdenv.mkDerivation {
-  pname = "cef-binary";
-  inherit version;
-
-  src = fetchurl {
-    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${
-      selectSystem {
-        aarch64-linux = "linuxarm64";
-        x86_64-linux = "linux64";
-      }
-    }_minimal.tar.bz2";
-    hash = selectSystem srcHashes;
-  };
-
-  dontStrip = true;
-
-  dontPatchELF = true;
+  postPatch = ''
+    sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
-    patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
-    patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
     cp --recursive . $out
 
     runHook postInstall
   '';
 
+  postFixup = ''
+    patchelf --add-needed libudev.so "$out/${buildType}/libcef.so"
+    patchelf --add-needed libGL.so.1 "$out/${buildType}/libGLESv2.so"
+
+    # Unvendor vulkan-loader
+    rm "$out/${buildType}/libvulkan.so.1"
+    ln -s -t "$out/${buildType}" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+    # ANGLE (libEGL/libGLESv2) and SwiftShader (libvk_swiftshader) have ABIs that
+    # change over time, so we have to rely on the vendored version
+  '';
+
   passthru = {
-    inherit buildType;
+    inherit buildType gitRevision chromiumVersion;
+    cefPlatform = selectSystem {
+      x86_64-linux = "linux64";
+      aarch64-linux = "linuxarm64";
+    };
+    cefFullVersion = "${version}+g${gitRevision}+chromium-${chromiumVersion}";
+    cefDistName = "cef_binary_${finalAttrs.passthru.cefFullVersion}_${finalAttrs.passthru.cefPlatform}_minimal";
     updateScript = ./update.sh;
   };
 
@@ -122,4 +138,4 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames srcHashes;
   };
-}
+})
