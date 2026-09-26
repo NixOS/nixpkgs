@@ -21,7 +21,6 @@
   desktopToDarwinBundle,
   isabelleComponents,
   symlinkJoin,
-  fetchhg,
   electron,
   writableTmpDirAsHomeHook,
 }:
@@ -36,29 +35,6 @@ let
   };
 
   platform = platforms."${stdenv.hostPlatform.system}";
-
-  sha1 = stdenv.mkDerivation {
-    pname = "isabelle-sha1";
-    version = "2024";
-
-    src = fetchhg {
-      url = "https://isabelle.sketis.net/repos/sha1";
-      rev = "0ce12663fe76";
-      hash = "sha256-DB/ETVZhbT82IMZA97TmHG6gJcGpFavxDKDTwPzIF80=";
-    };
-
-    buildPhase = ''
-      CFLAGS="-fPIC -I."
-      LDFLAGS="-fPIC -shared"
-      $CC $CFLAGS -c sha1.c -o sha1.o
-      $CC $LDFLAGS sha1.o -o libsha1.so
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib
-      cp libsha1.so $out/lib/
-    '';
-  };
 
   cvc5' =
     (cvc5.override {
@@ -197,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
     substituteInPlace src/Pure/General/sha1.ML \
-      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${isabelleComponents.sha1}/lib/libsha1.so"'
 
     rm -r heaps
   ''
@@ -291,7 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit platform;
     cvc5 = cvc5';
-    sha1 = sha1;
     withComponents =
       f:
       let
