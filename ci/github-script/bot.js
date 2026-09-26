@@ -300,6 +300,11 @@ export default async ({ github, context, core, dry }) => {
       '2.status: merge conflict':
         merge_commit_sha_valid && !pull_request.merge_commit_sha,
       '2.status: merge-bot eligible': merge_bot_eligible,
+      // Applied by handleStaleConflict while nudging a PR to rebase. An active
+      // PR is not being nudged, so drop the label rather than let it linger
+      // until the PR goes stale again. Setting it to false is enough: labels
+      // with a false value are left out of the setLabels call below.
+      '2.status: rebase nudge': false,
       '12.approvals: 1': approvals.size === 1,
       '12.approvals: 2': approvals.size === 2,
       '12.approvals: 3+': approvals.size >= 3,
@@ -648,6 +653,7 @@ export default async ({ github, context, core, dry }) => {
           await handleStaleConflict({
             github,
             context,
+            core,
             log,
             dry,
             item,
