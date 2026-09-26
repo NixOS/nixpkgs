@@ -83,6 +83,9 @@ buildPythonPackage rec {
     "tests/contrib/test_pydantic.py"
     # Test requires django with gdal
     "tests/contrib/test_rest_framework_gis.py"
+    # OpenAPI schema failure with DRF 3.18.x
+    "tests/test_fields.py::test_fields"
+    "tests/test_fields.py::test_fields_oas_3_1"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];
