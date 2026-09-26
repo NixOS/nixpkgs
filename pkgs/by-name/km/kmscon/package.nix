@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   meson,
   libtsm,
   systemdLibs,
@@ -21,7 +20,6 @@
   ncurses,
   libxslt,
   libgbm,
-  seatd,
   dbus,
   ninja,
   check,
@@ -61,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     systemdLibs
     libgbm
-    seatd
     dbus
     check
     # Needed for autoPatchShebangs when strictDeps = true
@@ -84,8 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
   ];
-
-  mesonFlags = [ (lib.mesonEnable "libseat" true) ];
 
   env = {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
