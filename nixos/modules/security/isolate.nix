@@ -27,9 +27,9 @@ let
     ${cfg.extraConfig}
   '';
   isolate = pkgs.symlinkJoin {
-    name = "isolate-wrapped-${pkgs.isolate.version}";
+    name = "isolate-wrapped-${cfg.package.version}";
 
-    paths = [ pkgs.isolate ];
+    paths = [ cfg.package ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -48,7 +48,7 @@ in
       Sandbox for securely executing untrusted programs
     '';
 
-    package = mkPackageOption pkgs "isolate-unwrapped" { };
+    package = mkPackageOption pkgs "isolate" { };
 
     boxRoot = mkOption {
       type = types.path;
