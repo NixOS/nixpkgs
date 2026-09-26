@@ -20421,6 +20421,11 @@
     githubId = 57151943;
     name = "aoife cassidy";
   };
+  NCBlizzard = {
+    name = "NCBlizzard";
+    github = "NCBlizzard";
+    githubId = 173630231;
+  };
   ncfavier = {
     email = "n@monade.li";
     matrix = "@ncfavier:matrix.org";
