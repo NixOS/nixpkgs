@@ -26,6 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  # These seem to rely on system state that we do not have inside nix builds
+  checkFlags = [
+    "--skip=json_apple_gpu_skips_successful_text_probe"
+    "--skip=json_apple_gpu_survives_failed_text_probe"
+    "--skip=text_probe_recovers_when_json_fails"
+  ];
+
   meta = {
     description = "TUI to find LLM models right sized for the system's RAM, CPU, and GPU";
     homepage = "https://github.com/AlexsJones/llmfit";
