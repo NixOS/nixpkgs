@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      hideyosh1
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "MestReNova";
