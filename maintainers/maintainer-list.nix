@@ -29485,6 +29485,12 @@
     githubId = 9853194;
     name = "Philipp Bartsch";
   };
+  tnmt = {
+    email = "s@tnmt.info";
+    github = "tnmt";
+    githubId = 56112;
+    name = "Shinya Tsunematsu";
+  };
   toast = {
     name = "Toast";
     github = "toast003";
