@@ -1,0 +1,14 @@
+index 91d8e1353..0aa40f5ef 100644
+--- a/src/citra_qt/CMakeLists.txt
++++ b/src/citra_qt/CMakeLists.txt
+@@ -323,7 +323,8 @@ if (NOT WIN32)
+ endif()
+ 
+ if (APPLE)
+-    target_link_libraries(citra_qt PRIVATE Qt6::QDarwinCameraPermissionPlugin)
++    find_library(QUARTZCORE_LIBRARY QuartzCore REQUIRED)
++    target_link_libraries(citra_qt PRIVATE Qt6::QDarwinCameraPermissionPlugin ${QUARTZCORE_LIBRARY})
+ elseif (UNIX)
+     target_link_libraries(citra_qt PRIVATE Qt6::DBus gamemode)
+ endif()
+
