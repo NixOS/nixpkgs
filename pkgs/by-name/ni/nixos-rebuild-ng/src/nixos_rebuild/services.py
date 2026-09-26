@@ -366,7 +366,7 @@ def list_generations(
     args: argparse.Namespace,
     profile: Profile,
 ) -> None:
-    generations = nix.list_generations(profile)
+    generations = nix.list_generations(profile=profile, elevate=args.elevator)
     if args.json:
         print(json.dumps(generations, indent=2))
     else:
