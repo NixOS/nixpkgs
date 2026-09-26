@@ -32397,6 +32397,12 @@
     githubId = 19353212;
     name = "Maxwell Anderson";
   };
+  zackmsa777-a11y = {
+    name = "zackmsa777-a11y";
+    email = "zackmsa777-a11y@users.noreply.github.com";
+    github = "zackmsa777-a11y";
+    githubId = 243164115;
+  };
   zagy = {
     email = "cz@flyingcircus.io";
     github = "zagy";
