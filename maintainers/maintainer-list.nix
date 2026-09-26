@@ -16366,6 +16366,12 @@
     githubId = 132144514;
     name = "Lev Sauliak";
   };
+  levonk = {
+    email = "277861+levonk@users.noreply.github.com";
+    github = "levonk";
+    githubId = 277861;
+    name = "levonk";
+  };
   lewo = {
     email = "lewo@abesis.fr";
     matrix = "@lewo:matrix.org";
