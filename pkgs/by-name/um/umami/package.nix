@@ -10,7 +10,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_11,
+  pnpm_12,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -21,7 +21,7 @@
   basePath ? "",
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 
   sources = lib.importJSON ./sources.json;
 
@@ -47,12 +47,12 @@ let
   # to guarantee compatibility.
   prisma-engines' = prisma-engines_7.overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "7.9.1";
+      version = "7.10.0";
       src = fetchFromGitHub {
         owner = "prisma";
         repo = "prisma-engines";
         tag = finalAttrs.version;
-        hash = "sha256-bGtVKGoWZc/3s0lhTXksp+6fM/Q461ve/HQsRPxWD0Q=";
+        hash = "sha256-GRpfrAZrpAgW06v5IaY44JguA1fGyJJ3fxC+pCfg18c=";
       };
       cargoHash = "sha256-zLl2ErsCTXZVShPFLH94GLJ0q2FrMnfnecnfKD7VDL4=";
 
@@ -70,24 +70,24 @@ let
     }).overrideAttrs
       (
         finalAttrs: prevAttrs: {
-          version = "7.9.1";
+          version = "7.10.0";
           src = fetchFromGitHub {
             owner = "prisma";
             repo = "prisma";
             tag = finalAttrs.version;
-            hash = "sha256-h89lJbGG2ZkK3Viipsqe8hqTSTZk6vEulaMLPPkgn8c=";
+            hash = "sha256-VOKqrTD18XaCDQ2l5AgND4L8r4OJ3JXJvFgQJ+h1xUw=";
           };
           pnpmDeps = prevAttrs.pnpmDeps.override {
             inherit (finalAttrs) src version;
             fetcherVersion = 4;
-            hash = "sha256-EEfVAdF6QawXV95NUmEL9IqzPqazCz47Y9Hg/F6IybU=";
+            hash = "sha256-mhE2TwouRdtg8XTTFCfx8SwImo3vNd5GVcHg01+Xhl0=";
           };
         }
       );
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.3.1";
+  version = "3.4.0";
 
   nativeBuildInputs = [
     makeWrapper
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LldK8dv3mkgEB9LWzt4X/bfh474G4LWOtJghTo5/n7A=";
+    hash = "sha256-emGRw6BT8oyxY5Xm4C0us/qGYZWvkwrcQmLI1UxoidU=";
   };
 
   postPatch = ''
@@ -116,6 +116,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Biome executable needs to be patched to run, but we don't need to format code anyway, so just skip it.
     substituteInPlace ./package.json \
       --replace-fail ' && biome format --write src/tracker/index.d.ts' '''
+    substituteInPlace ./scripts/generate-api-client.ts \
+      --replace-fail 'await format(written);' ""
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -126,7 +128,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-253jfz20wXwh/8/d7KVEl4jlaj7IURWJrW2/F0FS4BI=";
+    hash = "sha256-jzE8C+fssW6PVo/aoJU8ORrgiHpMALqE4WPrm7taIOc=";
   };
 
   env.NODE_ENV = "production";
