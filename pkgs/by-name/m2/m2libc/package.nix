@@ -7,7 +7,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m2libc";
-  version = "unstable-2023-05-22";
+  version = "0.2.1-unstable-2023-05-22";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "oriansj";
