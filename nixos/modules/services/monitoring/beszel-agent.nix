@@ -6,6 +6,76 @@
 }:
 let
   cfg = config.services.beszel.agent;
+
+  hasVideoDriver = driver: builtins.elem driver config.services.xserver.videoDrivers;
+
+  # Collector names must match `isValidCollectorSource` in upstream's agent/gpu.go.
+  # macmon and powermetrics are macOS-only and omitted here.
+  gpuCollectors = {
+    # read sysfs directly, need no package or device access
+    "amd_sysfs" = { };
+    "intel_sysfs" = { };
+    "intel_gpu_top" = {
+      package = lib.getBin pkgs.intel-gpu-tools;
+      deviceAllow = [ "char-drm rw" ];
+      capabilities = [ "CAP_PERFMON" ];
+      # perf_event_open is in @debug, not @system-service
+      systemCalls = [ "perf_event_open" ];
+    };
+    "nvidia-smi" = {
+      package = lib.getBin config.hardware.nvidia.package;
+      deviceAllow = [ "char-nvidia* rw" ];
+    };
+    "nvml" = {
+      deviceAllow = [ "char-nvidia* rw" ];
+    };
+    "nvtop" = {
+      package = lib.getBin pkgs.nvtopPackages.full;
+      deviceAllow = [
+        "char-nvidia* rw"
+        "char-drm rw"
+      ];
+    };
+    "rocm-smi" = {
+      package = lib.getBin pkgs.rocmPackages.rocm-smi;
+      deviceAllow = [
+        "char-drm rw"
+        "char-kfd rw"
+      ];
+    };
+  };
+
+  activeCollectors = lib.optionals (!cfg.environment.SKIP_GPU) cfg.environment.GPU_COLLECTOR;
+
+  collectorAttrs =
+    attr: lib.unique (lib.concatMap (name: gpuCollectors.${name}.${attr} or [ ]) activeCollectors);
+
+  gpuPackages = map (name: gpuCollectors.${name}.package) (
+    lib.filter (name: gpuCollectors.${name} ? package) activeCollectors
+  );
+
+  gpuNeedsDevices = collectorAttrs "deviceAllow" != [ ];
+
+  # capabilities granted under PrivateUsers are void on the host, see
+  # systemd.exec(5), so these collectors also need the user namespace disabled
+  gpuNeedsCapabilities = collectorAttrs "capabilities" != [ ];
+
+  # Any explicit DeviceAllow turns DevicePolicy=auto into an allow-list, so the GPU
+  # devices are omitted when smartmon relies on full /dev access.
+  deviceAllowList =
+    lib.optionals (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
+      map (device: "${device} r") cfg.smartmon.deviceAllow
+    )
+    ++ lib.optionals (!cfg.smartmon.enable || cfg.smartmon.deviceAllow != [ ]) (
+      collectorAttrs "deviceAllow"
+    );
+
+  serviceCapabilities =
+    lib.optionals cfg.smartmon.enable [
+      "CAP_SYS_RAWIO"
+      "CAP_SYS_ADMIN"
+    ]
+    ++ collectorAttrs "capabilities";
 in
 {
   meta.maintainers = with lib.maintainers; [
@@ -58,6 +128,45 @@ in
             description = ''
               Whether to disable systemd service monitoring.
               Enabling this option will skip systemd tracking and its setup in NixOS.
+            '';
+          };
+          SKIP_GPU = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable GPU monitoring.
+              Enabling this option will skip GPU tracking.
+            '';
+          };
+          GPU_COLLECTOR = lib.mkOption {
+            # upstream takes a comma-separated string, which used to be passed through as is
+            type =
+              with lib.types;
+              coercedTo str (value: map lib.trim (lib.splitString "," value)) (
+                listOf (enum (lib.attrNames gpuCollectors))
+              );
+            default =
+              lib.optionals (hasVideoDriver "nvidia") [ "nvidia-smi" ]
+              ++ lib.optionals (hasVideoDriver "amdgpu") [ "amd_sysfs" ]
+              ++ lib.optionals (hasVideoDriver "intel") [ "intel_sysfs" ];
+            defaultText = lib.literalMD ''
+              derived from {option}`services.xserver.videoDrivers`
+            '';
+            example = [
+              "nvidia-smi"
+              "intel_gpu_top"
+            ];
+            description = ''
+              GPU collectors to use, in priority order. Overrides the agent's
+              auto-detection; the packages needed by the selected collectors are added
+              to the service path. If empty, the agent auto-detects available
+              collectors. `rocm-smi` is deprecated upstream in favour of `amd_sysfs`,
+              and `intel_gpu_top` is not used on the xe driver, where `intel_sysfs` is
+              preferred.
+
+              Access to GPU device nodes is only granted for the collectors listed
+              here, so a collector provided through
+              {option}`services.beszel.agent.extraPath` has to be listed as well.
             '';
           };
         };
@@ -129,22 +238,18 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
+      # drop empty lists so an unset GPU_COLLECTOR keeps upstream auto-detection
       environment = lib.mapAttrs (
-        _: value: if lib.isBool value then (lib.boolToString value) else value
-      ) (cfg.environment // { DATA_DIR = cfg.dataDir; });
+        _: value:
+        if lib.isBool value then
+          (lib.boolToString value)
+        else if lib.isList value then
+          lib.concatStringsSep "," value
+        else
+          value
+      ) (lib.filterAttrs (_: value: value != [ ]) (cfg.environment // { DATA_DIR = cfg.dataDir; }));
 
-      path =
-        cfg.extraPath
-        ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
-        ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
-          (lib.getBin config.hardware.nvidia.package)
-        ]
-        ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.rocmPackages.rocm-smi)
-        ]
-        ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.intel-gpu-tools)
-        ];
+      path = cfg.extraPath ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ] ++ gpuPackages;
 
       serviceConfig = {
         ExecStart = ''
@@ -165,26 +270,17 @@ in
         DynamicUser = true;
         User = "beszel-agent";
 
-        # Capabilities needed for SMART monitoring
-        AmbientCapabilities = lib.mkIf cfg.smartmon.enable [
-          "CAP_SYS_RAWIO"
-          "CAP_SYS_ADMIN"
-        ];
-        CapabilityBoundingSet = lib.mkIf cfg.smartmon.enable [
-          "CAP_SYS_RAWIO"
-          "CAP_SYS_ADMIN"
-        ];
+        # Capabilities needed for SMART monitoring and GPU performance counters
+        AmbientCapabilities = serviceCapabilities;
+        CapabilityBoundingSet = serviceCapabilities;
 
-        # Device access for SMART monitoring
-        DeviceAllow = lib.mkIf (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
-          map (device: "${device} r") cfg.smartmon.deviceAllow
-        );
+        DeviceAllow = lib.mkIf (deviceAllowList != [ ]) deviceAllowList;
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable;
+        PrivateDevices = !cfg.smartmon.enable && !gpuNeedsDevices;
         PrivateTmp = true;
-        PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
+        PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD && !gpuNeedsCapabilities;
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = "read-only";
@@ -199,7 +295,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" ];
+        SystemCallFilter = [ "@system-service" ] ++ collectorAttrs "systemCalls";
         Type = "simple";
         UMask = 27;
       };
