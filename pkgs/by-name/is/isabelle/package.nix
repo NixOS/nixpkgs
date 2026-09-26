@@ -22,7 +22,7 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  isabelle-components,
+  isabelleComponents,
   symlinkJoin,
   fetchhg,
   electron,
@@ -363,7 +363,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         isabelle = finalAttrs.finalPackage;
         base = "$out/${isabelle.dirname}";
-        components = f isabelle-components;
+        components = f isabelleComponents;
       in
       symlinkJoin {
         name = "isabelle-with-components-${isabelle.version}";
