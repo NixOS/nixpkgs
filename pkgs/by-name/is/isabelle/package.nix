@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.foiltex
     isabelleComponents.javamail
     isabelleComponents.jedit
+    isabelleComponents.jfreechart
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -127,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/javamail-${isabelleComponents.javamail.version}' '${isabelleComponents.javamail.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/jedit-${isabelleComponents.jedit.version}' '${isabelleComponents.jedit.settings}' \
+      --replace-fail 'contrib/jfreechart-${isabelleComponents.jfreechart.version}' '${isabelleComponents.jfreechart.settings}' \
       --replace-fail 'contrib/kodkodi-${isabelleComponents.kodkodi.version}' '${isabelleComponents.kodkodi.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
@@ -146,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1 contrib/bib2xhtml-20190409 \
            contrib/easychair-3.5 contrib/elm-0.19.1 contrib/eptcs-1.7.0 \
            contrib/find_facts_web-20251022 contrib/foiltex-2.1.4b contrib/gnu-utils-20211030 \
-           contrib/javamail-20251022 contrib/jedit-20251128
+           contrib/javamail-20251022 contrib/jedit-20251128 contrib/jfreechart-1.5.3
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
