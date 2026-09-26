@@ -1,7 +1,10 @@
 {
   lib,
-  stdenv,
-  buildNpmPackage,
+  stdenvNoCC,
+  nodejs,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   nix-update-script,
   git,
@@ -62,28 +65,39 @@ let
         hideFromDocs = true;
       };
     } hookScript;
+
+  pnpm = pnpm_11;
 in
-buildNpmPackage (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "qwen-code";
-  version = "0.23.4";
+  version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AWmZhul7/p1atYkLZd/pojGaO80gydGfx+mnSP9SHnY=";
+    hash = "sha256-8Twmne99CJ9OE0z7t/fmPPa+FDvPDK34+8ma7ePV0aA=";
   };
 
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-tyLLtckMO/jFQHvdhHBWIE2Gx5vdHJBYHssVdq/abBU=";
-
-  makeCacheWritable = true;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-m6sOBjtFGWpwzjANu5+YEcLe6bhnSMzgkn6FpYp+y7o=";
+  };
 
   nativeBuildInputs = [
+    nodejs
+    pnpm
+    pnpmConfigHook
     pkg-config
     git
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     clang_20 # Works around node-addon-api constant expression issue with clang 21+ (keytar)
     darwinOpenptyHook
   ];
@@ -92,19 +106,30 @@ buildNpmPackage (finalAttrs: {
     ripgrep
     glib
     libsecret
+    nodejs
   ];
+
+  # replace with local pnpm to avoid fetching.
+  postPatch = ''
+    substituteInPlace scripts/build.js \
+      --replace-fail 'corepack pnpm' 'pnpm'
+  '';
+
+  env.CI = true;
 
   buildPhase = ''
     runHook preBuild
 
-    # Increase Node.js heap size on Darwin to prevent OOM during
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export NODE_OPTIONS="--max-old-space-size=8192"
-    ''}
+    # apply the ink patch manually
+    pnpm exec patch-package
 
-    # npmConfigHook only patches the root node_modules. Workspaces with
+    # pnpmConfigHook only patches the root node_modules. Workspaces with
     # nested .bin (web-shell's vite) keep /usr/bin/env otherwise.
     patchShebangs packages/*/node_modules
+
+    # Limit Node.js heap to 4 GiB to prevent tsc OOM during build.
+    # https://github.com/QwenLM/qwen-code/blob/9674d6efdc8ac16583270bd2a55cfa49e3ec254e/package.json#L43
+    export NODE_OPTIONS="--max-old-space-size=4096"
 
     npm run generate
 
@@ -133,7 +158,7 @@ buildNpmPackage (finalAttrs: {
     cp package.json $out/share/qwen-code/package.json
 
     # Install production dependencies only
-    npm prune --production
+    pnpm install --offline --prod --frozen-lockfile --ignore-scripts
     cp -r node_modules $out/share/qwen-code/
 
     # Remove broken symlinks that cause issues in Nix environment
@@ -148,6 +173,8 @@ buildNpmPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 
