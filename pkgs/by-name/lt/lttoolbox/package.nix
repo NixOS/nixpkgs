@@ -56,5 +56,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${version}";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

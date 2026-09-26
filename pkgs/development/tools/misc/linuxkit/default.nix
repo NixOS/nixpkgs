@@ -65,5 +65,7 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with lib.maintainers; [ nicknovitski ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

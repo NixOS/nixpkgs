@@ -68,5 +68,7 @@ buildNpmPackage {
     homepage = "https://github.com/Wulf/nodehun";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thomasjm ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

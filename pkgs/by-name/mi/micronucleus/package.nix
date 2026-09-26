@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Upload tool for micronucleus";
     mainProgram = "micronucleus";
     homepage = "https://github.com/micronucleus/micronucleus";

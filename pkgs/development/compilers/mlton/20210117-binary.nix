@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
           $out/bin/$e
       done
     '';
-
-  meta = import ./meta.nix { inherit lib; };
+  # last successful hydra build on darwin was in 2025
+  meta = (import ./meta.nix { inherit lib; }) // {
+    broken = stdenv.hostPlatform.isDarwin;
+  };
 }
