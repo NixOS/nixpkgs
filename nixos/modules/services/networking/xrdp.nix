@@ -149,6 +149,8 @@ in
 
     (mkIf cfg.enable {
 
+      programs.fuse.enable = true;
+
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
       # xrdp can run X11 program even if "services.xserver.enable = false"

@@ -45,14 +45,16 @@
 
       client.execute("xterm >&2 &")
       client.sleep(1)
-      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password}\n")
+      client.send_chars("xfreerdp /cert:tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password}\n")
       client.sleep(5)
       client.screenshot("localrdp")
 
+      client.succeed("mkdir -p /tmp/shared", "echo hello > /tmp/shared/marker")
       client.execute("xterm >&2 &")
       client.sleep(1)
-      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password}\n")
+      client.send_chars("xfreerdp /cert:tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password} /drive:shared,/tmp/shared\n")
       client.sleep(5)
       client.screenshot("remoterdp")
+      server.wait_until_succeeds("runuser -u ${user.name} -- grep -Fx hello ${user.home}/thinclient_drives/shared/marker")
     '';
 }
