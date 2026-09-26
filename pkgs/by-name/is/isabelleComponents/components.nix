@@ -23,6 +23,7 @@ lib.makeScope newScope (self: {
   jdk = self.callPackage ./jdk { };
   jedit = self.callPackage ./jedit { };
   jfreechart = self.callPackage ./jfreechart { };
+  jsoup = self.callPackage ./jsoup { };
   kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
