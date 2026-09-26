@@ -6339,6 +6339,12 @@
     githubId = 245394;
     name = "Hannu Hartikainen";
   };
+  danconwaydev = {
+    email = "DanConwayDev@protonmail.com";
+    github = "DanConwayDev";
+    githubId = 114834599;
+    name = "DanConwayDev";
+  };
   dandedotdev = {
     email = "contact@dande.dev";
     github = "dandedotdev";
