@@ -278,6 +278,19 @@ in
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
     controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{restart_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"cancelled\" and .runs[\"fixture-5\"].stops == 1'")
+    worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/crash-active.json")
+    crash_id = json.loads(controller.succeed("cat /run/crash-active.json"))["id"]
+    worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\"'", timeout=120)
+    controller.succeed("systemctl kill -s SIGKILL paperclip-control.service")
+    controller.wait_until_succeeds("systemctl is-failed paperclip-control.service", timeout=30)
+    controller.succeed("systemctl reset-failed paperclip-control.service")
+    controller.succeed("systemctl start paperclip-control.service")
+    controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
+    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"failed\" and .errorCode == \"process_lost\"'", timeout=120)
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
+    worker.succeed("printf 'header = \"Authorization: Bearer %s\"\\n' \"$(cat /var/lib/hermes-fixture/gateway-key)\" | curl -fsS --config - -X POST http://localhost:8642/v1/runs/fixture-6/stop > /dev/null")
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"cancelled\" and .runs[\"fixture-6\"].stops == 1 and (.runs | length) == 6'")
     controller.succeed("pid=$(systemctl show paperclip-control -p MainPID --value); ! tr '\\0' '\\n' < /proc/$pid/environ | grep -E '^(BETTER_AUTH_SECRET|DATABASE_URL|DATABASE_MIGRATION_URL)='")
   '';
 }
