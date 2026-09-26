@@ -81,5 +81,5 @@ in
     };
   };
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ tmarkus ];
 }
