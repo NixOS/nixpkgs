@@ -966,6 +966,7 @@
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
+  ./services/misc/paperclip.nix
   ./services/misc/paperless.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pinchflat.nix
