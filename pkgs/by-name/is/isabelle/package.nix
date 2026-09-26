@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.nunchaku
     isabelleComponents.bash_process
     isabelleComponents.scala
+    isabelleComponents.kodkodi
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -110,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/flatlaf-${isabelleComponents.flatlaf.version}' '${isabelleComponents.flatlaf.settings}' \
       --replace-fail 'contrib/isabelle_setup-20250613' '${isabelleComponents.setup.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
+      --replace-fail 'contrib/kodkodi-${isabelleComponents.kodkodi.version}' '${isabelleComponents.kodkodi.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/scala-${isabelleComponents.scala.version}' '${isabelleComponents.scala.settings}' \
@@ -122,10 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -rf contrib/bash_process-20240326 contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 \
            contrib/e-3.2 contrib/flatlaf-3.6.2 contrib/isabelle_setup-20250613 \
-           contrib/jdk-21.0.9 contrib/nunchaku-0.5 contrib/polyml-5.9.2-2 \
-           contrib/scala-3.3.4 contrib/spass-3.8ds-2 contrib/vampire-4.8 \
-           contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* contrib/z3-4.4.0pre-4 \
-           contrib/zipperposition-2.1-1
+           contrib/jdk-21.0.9 contrib/kodkodi-1.5.7 contrib/nunchaku-0.5 \
+           contrib/polyml-5.9.2-2 contrib/scala-3.3.4 contrib/spass-3.8ds-2 \
+           contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* \
+           contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -142,16 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString z3Available ''
     substituteInPlace etc/components \
       --replace-fail 'contrib/z3-${isabelleComponents.z3.version}' '${isabelleComponents.z3.settings}'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for d in contrib/kodkodi-*/jni/${platform}; do
-      patchelf --set-rpath "${
-        lib.concatStringsSep ":" [
-          "${isabelleComponents.jdk}/lib/openjdk/lib/server"
-          "${lib.getLib stdenv.cc.cc}/lib"
-        ]
-      }" $d/*.so
-    done
   '';
 
   buildPhase = ''
