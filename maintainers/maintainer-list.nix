@@ -17581,6 +17581,12 @@
     githubId = 85435692;
     name = "Maxwell Berg";
   };
+  Mahdi-zarei = {
+    email = "mahdi.zrei@gmail.com";
+    github = "Mahdi-zarei";
+    githubId = 80265960;
+    name = "Mahdi";
+  };
   mahe = {
     email = "matthias.mh.herrmann@gmail.com";
     github = "2chilled";
