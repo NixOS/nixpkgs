@@ -42,7 +42,7 @@ let
           pkgs.yq-go
         ];
         userConfig = builtins.toJSON { config = cfg.settings; };
-        passAsFile = [ "userConfig" ];
+        __structuredAttrs = true;
       }
       # Merge the cfg.settings into the default coolwsd.xml.
       # See https://github.com/CollaboraOnline/online/issues/10049.
@@ -53,10 +53,9 @@ let
            ${cfg.package}/etc/coolwsd/coolwsd.xml \
            > ./default_coolwsd.json
 
-        jq '.[0] * .[1] | del(..|nulls)' \
+        printf "%s" "$userConfig" | jq '.[0] * .[1] | del(..|nulls)' \
            --slurp \
            ./default_coolwsd.json \
-           $userConfigPath \
            > ./merged.json
 
         yq --output-format=xml \
