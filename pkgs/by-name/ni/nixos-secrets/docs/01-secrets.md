@@ -92,7 +92,7 @@ Secrets can depend on other secrets. The inputs for a given secret are available
   secrets.store.derived = {
     dependencies = [ "user" ];
     files.cow-greeting = { };
-    script =
+    generate =
       pkgs:
       pkgs.writeScript "gen-derived" ''
         #!/bin/sh
