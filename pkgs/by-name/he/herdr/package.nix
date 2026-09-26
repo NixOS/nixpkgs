@@ -57,12 +57,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd herdr \
-      --bash <("$out/bin/herdr" completion bash) \
-      --fish <("$out/bin/herdr" completion fish) \
-      --zsh <("$out/bin/herdr" completion zsh)
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd herdr \
+        --bash <("$out/bin/herdr" completion bash) \
+        --fish <("$out/bin/herdr" completion fish) \
+        --zsh <("$out/bin/herdr" completion zsh)
+    ''
+    # Ship the per-agent hook/plugin sources so integrations can be wired up
+    # declaratively (e.g. home-manager) instead of running
+    # `herdr integration install <agent>`.
+    + ''
+      install -d "$out/share/herdr"
+      cp -r src/integration/assets "$out/share/herdr/integrations"
+      find "$out/share/herdr/integrations" -name '*.test.ts' -delete
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
