@@ -7,27 +7,26 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "comfyui-workflow-templates-json";
-  version = "0.1.92";
+  pname = "comfyui-workflow-templates-media-assets-02";
+  version = "0.1.3";
   pyproject = true;
 
   # nixpkgs-update: no auto update
   # updated via comfyui
   src = fetchPypi {
-    pname = "comfyui_workflow_templates_json";
+    pname = "comfyui_workflow_templates_media_assets_02";
     inherit (finalAttrs) version;
-    hash = "sha256-PHq+d5L7DdQFpFCL8hxp3O1qOiy6MELE3mqslDh5T+I=";
+    hash = "sha256-VqEUtsbYFoySosWw7RySa09aFVkAr3+Bzcf9Bf1flCQ=";
   };
 
   build-system = [ setuptools ];
 
-  # Package only ships static workflow JSON assets; no tests.
   doCheck = false;
 
-  pythonImportsCheck = [ "comfyui_workflow_templates_json" ];
+  pythonImportsCheck = [ "comfyui_workflow_templates_media_assets_02" ];
 
   meta = {
-    description = "Workflow template JSON definitions for ComfyUI";
+    description = "Media assets bundle 02 for ComfyUI workflow templates";
     homepage = "https://github.com/Comfy-Org/workflow_templates";
     license = lib.licenses.mit;
     inherit (comfyui.meta) maintainers;
