@@ -91,17 +91,37 @@ let
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 
+        aeroshell-kwin-components = self.callPackage ./third-party/aeroshell-kwin-components { };
+        aeroshell-uac-polkit-agent = self.callPackage ./third-party/aeroshell-uac-polkit-agent { };
+        aerothemeplasma = self.callPackage ./third-party/aerothemeplasma { };
+        aerothemeplasma-icons = self.callPackage ./third-party/aerothemeplasma-icons { };
+        aerothemeplasma-libplasma = self.callPackage ./third-party/aerothemeplasma-libplasma { };
+        aerothemeplasma-sounds = self.callPackage ./third-party/aerothemeplasma-sounds { };
+
+        # Evaluators otherwise recurse through a second KDE package set, so hide the forked scope
+        aerothemeplasmaPackages = lib.dontRecurseIntoAttrs (
+          self.overrideScope (
+            _: _: {
+              libplasma = self.aerothemeplasma-libplasma;
+            }
+          )
+        );
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
         dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
         karousel = self.callPackage ./third-party/karousel { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
+        smod = self.callPackage ./third-party/smod { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
     );
+  scope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "kdePackages";
+    f = allPackages;
+  };
 in
-makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope "kdePackages";
-  f = allPackages;
+scope
+// {
+  aerothemeplasma = scope.aerothemeplasmaPackages.aerothemeplasma;
 }
