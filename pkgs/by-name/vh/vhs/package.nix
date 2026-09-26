@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vhs";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "vhs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bugR32sWO4xM1HxcwFb1eHrXguQG4GqHDanV13zBI9I=";
+    hash = "sha256-9O9f/3B42BhhJ5LWNyHrQtaOKwVnAZR309Dvbpx3d4g=";
   };
 
   vendorHash = "sha256-ZGlXyM4oRZSCY/Ulc55NcFylHnQKqA/TXjpcWGdmhwo=";

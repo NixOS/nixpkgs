@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "breseq";
-  version = "0.40.2";
+  version = "0.40.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "barricklab";
     repo = "breseq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-txZiyXyhMYXWO5RGrIkqgCS7Dmh34wogKXIfrE3fmms=";
+    hash = "sha256-kdePGNxv02Ac7FSiMaK9FRb9xrpw9W89F8RR2icYtlo=";
   };
 
   buildInputs = [

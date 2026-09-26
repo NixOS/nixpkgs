@@ -18,20 +18,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.18.7";
+  version = "0.18.9";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k0qpjCG0OzjVPBfwJj8rAoTEQZhhvyn/DO+KX6dOYg4=";
+    hash = "sha256-FpR79Et5et0JH93Zn+m5xg/wAL9F8lHIS+Uly2YWJ8I=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-KCpqcjFwzhYxwTg36z/HMVAqqIMzAS8xt5hk91VYRk0=";
+    hash = "sha256-BkjPCX8W1HEIJmluXRmIPTYmkx55OlNvH52KiJuyi9w=";
   };
 
   nativeBuildInputs = [

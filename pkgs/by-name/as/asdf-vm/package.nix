@@ -8,14 +8,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "asdf-vm";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
 
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UbD8z5jIZTLfQLEruprLqJx4eoTJi4fFCMWUvIPDjOs=";
+    hash = "sha256-HJRNRA98MIOEF/Q3I+cGUL8kH904j3/msI+FGDbRH7A=";
 
   };
 
