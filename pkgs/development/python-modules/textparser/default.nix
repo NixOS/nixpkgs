@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "textparser";
-  version = "0.24.0";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VvcI51qp0AKtt22CO6bvFm1+zsHj5MpMHKED+BdWgzU=";
+    hash = "sha256-hZglh2qcOPfDE+4c+ZGlnWtWIyqfZ75tzAp1jYRlT7o=";
   };
 
   build-system = [
