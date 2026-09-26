@@ -330,10 +330,9 @@ in
         in
         if valueFile != null then ''${prefix}${varName}="$(cat ${lib.escapeShellArg valueFile})"'' else "";
 
-      # Generate the connect-or-create script body for a given backend type and args variable.
-      mkConnectOrCreate = kopiaExe: backendType: argsVar: ''
-        if ! ${kopiaExe} repository connect ${backendType} ''$${argsVar}; then
-          ${kopiaExe} repository create ${backendType} ''$${argsVar}
+      mkConnectOrCreate = kopiaExe: backendType: ''
+        if ! ${kopiaExe} repository connect ${backendType} "''${REPO_ARGS[@]}"; then
+          ${kopiaExe} repository create ${backendType} "''${REPO_ARGS[@]}"
         fi
       '';
     in
@@ -415,8 +414,8 @@ in
           mkScriptBody =
             if repo ? filesystem then
               ''
-                REPO_ARGS="--path ${lib.escapeShellArg repo.filesystem.path}"
-                ${mkConnectOrCreate kopiaExe "filesystem" "REPO_ARGS"}
+                REPO_ARGS=( --path ${lib.escapeShellArg repo.filesystem.path} )
+                ${mkConnectOrCreate kopiaExe "filesystem"}
               ''
             else if repo ? s3 then
               let
@@ -435,11 +434,11 @@ in
                   varName = "AWS_SESSION_TOKEN";
                   valueFile = s3.sessionTokenFile;
                 }}
-                REPO_ARGS="--bucket ${lib.escapeShellArg s3.bucket} --endpoint ${lib.escapeShellArg s3.endpoint} --region ${lib.escapeShellArg s3.region}"
+                REPO_ARGS=( --bucket ${lib.escapeShellArg s3.bucket} --endpoint ${lib.escapeShellArg s3.endpoint} --region ${lib.escapeShellArg s3.region} )
                 ${lib.optionalString s3.disableTLS ''
-                  REPO_ARGS="$REPO_ARGS --disable-tls"
+                  REPO_ARGS+=( --disable-tls )
                 ''}
-                ${mkConnectOrCreate kopiaExe "s3" "REPO_ARGS"}
+                ${mkConnectOrCreate kopiaExe "s3"}
               ''
             else if repo ? sftp then
               let
@@ -454,16 +453,16 @@ in
                 ${lib.optionalString (sftp.host != null) ''
                   SFTP_HOST=${lib.escapeShellArg sftp.host}
                 ''}
-                REPO_ARGS="--path ${lib.escapeShellArg sftp.path} --host $SFTP_HOST --port ${toString sftp.port} --username ${lib.escapeShellArg sftp.username}"
+                REPO_ARGS=( --path ${lib.escapeShellArg sftp.path} --host "$SFTP_HOST" --port ${toString sftp.port} --username ${lib.escapeShellArg sftp.username} )
                 ${lib.optionalString (sftp.keyFile != null) ''
-                  REPO_ARGS="$REPO_ARGS --keyfile ${lib.escapeShellArg sftp.keyFile}"
+                  REPO_ARGS+=( --keyfile ${lib.escapeShellArg sftp.keyFile} )
                 ''}
-                REPO_ARGS="$REPO_ARGS --known-hosts ${lib.escapeShellArg sftp.knownHostsFile}"
+                REPO_ARGS+=( --known-hosts ${lib.escapeShellArg sftp.knownHostsFile} )
                 # TODO: waiting upstream fix(https://github.com/kopia/kopia/issues/5180)
                 ${lib.optionalString (sftp.passwordFile != null) ''
-                  REPO_ARGS="$REPO_ARGS --sftp-password $(cat ${lib.escapeShellArg sftp.passwordFile})"
+                  REPO_ARGS+=( --sftp-password "$(cat ${lib.escapeShellArg sftp.passwordFile})" )
                 ''}
-                ${mkConnectOrCreate kopiaExe "sftp" "REPO_ARGS"}
+                ${mkConnectOrCreate kopiaExe "sftp"}
               ''
             else
               let
@@ -478,12 +477,12 @@ in
                 ${lib.optionalString (dav.url != null) ''
                   WEBDAV_URL=${lib.escapeShellArg dav.url}
                 ''}
-                REPO_ARGS="--url $WEBDAV_URL"
+                REPO_ARGS=( --url "$WEBDAV_URL" )
                 ${lib.optionalString dav.flat ''
-                  REPO_ARGS="$REPO_ARGS --flat"
+                  REPO_ARGS+=( --flat )
                 ''}
                 ${lib.optionalString dav.atomicWrites ''
-                  REPO_ARGS="$REPO_ARGS --atomic-writes"
+                  REPO_ARGS+=( --atomic-writes )
                 ''}
                 ${mkCredentialFileExport {
                   varName = "KOPIA_WEBDAV_USERNAME";
@@ -496,7 +495,7 @@ in
                   varName = "KOPIA_WEBDAV_PASSWORD";
                   valueFile = dav.passwordFile;
                 }}
-                ${mkConnectOrCreate kopiaExe "webdav" "REPO_ARGS"}
+                ${mkConnectOrCreate kopiaExe "webdav"}
               '';
 
           startScript = pkgs.writeShellScript "kopia-repository-connect-${name}" ''
