@@ -174,7 +174,7 @@ buildPythonPackage {
 
   # Expose mostly the same attrs as the source build to stay compatible
   passthru = {
-    inherit cudaPackages;
+    inherit cudaPackages triton;
     cudaSupport = stdenv.hostPlatform.isLinux;
     rocmSupport = false;
     cudaCapabilities = lib.optionals stdenv.hostPlatform.isLinux cudaPackages.flags.cudaCapabilities;
