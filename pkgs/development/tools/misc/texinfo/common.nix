@@ -135,7 +135,7 @@ stdenv.mkDerivation {
   doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
 
   postFixup = optionalString crossBuildTools ''
-    for f in "$out"/bin/{pod2texi,texi2any}; do
+    for f in "$out"/{bin/{pod2texi,texi2any},share/texi2any/load_txi_modules}; do
       substituteInPlace "$f" \
         --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
     done
