@@ -6,6 +6,12 @@
   ...
 }:
 
+# Some providers (spotify, qobuz, ...) require shared provider credentials that are not
+# part of the upstream source repository. The package includes them from the official
+# release wheel by default (see pkgs/by-name/mu/music-assistant/package.nix). Users can
+# disable this or override them with MASS_APP_VAR_* environment variables, documented on
+# the providers option.
+
 let
   inherit (lib)
     mkIf
@@ -25,7 +31,7 @@ let
   cfg = config.services.music-assistant;
 
   finalPackage = cfg.package.override {
-    inherit (cfg) providers;
+    inherit (cfg) includeAppSecrets providers;
   };
 in
 
@@ -36,6 +42,16 @@ in
     enable = mkEnableOption "Music Assistant";
 
     package = mkPackageOption pkgs "music-assistant" { };
+
+    includeAppSecrets = mkOption {
+      type = bool;
+      default = true;
+      description = ''
+        Whether to include provider credentials bundled in the official Music Assistant
+        release wheel. These credentials are not part of the upstream source repository
+        and may be subject to separate terms.
+      '';
+    };
 
     extraOptions = mkOption {
       type = listOf str;
@@ -70,6 +86,21 @@ in
       ];
       description = ''
         List of provider names for which dependencies will be installed.
+
+        Providers that rely on shared provider credentials (e.g. `spotify`, `qobuz`, `apple_music`, `theaudiodb`, `fanarttv`)
+        use the credentials bundled in the official Music Assistant release wheel by default.
+        Set `services.music-assistant.includeAppSecrets` to `false` to disable them.
+
+        To use your own credentials for a provider, set the matching
+        `MASS_APP_VAR_*` environment variable, for example:
+        ```nix
+        systemd.services.music-assistant.environment = {
+          MASS_APP_VAR_SPOTIFY_CLIENT_ID = "your-client-id";
+        };
+        ```
+        or point Music Assistant at a JSON map of app variables via the `MASS_APP_VARS_FILE` environment variable.
+        See the upstream `music_assistant/helpers/app_vars.py` file and the corresponding
+        provider documentation (e.g. <https://www.music-assistant.io/music-providers/spotify/>) for the supported variables and setup steps.
       '';
     };
   };
@@ -160,7 +191,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (lib.getExe finalPackage)
           ]
           ++ cfg.extraOptions
         );
