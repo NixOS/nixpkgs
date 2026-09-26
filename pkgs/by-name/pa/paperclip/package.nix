@@ -51,6 +51,8 @@ let
   runner = rustPlatform.buildRustPackage {
     pname = "paperclip-runnerd";
     inherit version;
+    strictDeps = true;
+    __structuredAttrs = true;
     src = "${src}/packages/paperclip-runner";
     cargoRoot = "runner";
     buildAndTestSubdir = "runner";
@@ -79,6 +81,7 @@ let
     pname = "paperclip";
     inherit version src;
     strictDeps = true;
+    __structuredAttrs = true;
     nativeBuildInputs = [
       nodejs
       pnpm_10
@@ -177,6 +180,8 @@ let
       {
         pname = "paperclip";
         inherit version;
+        strictDeps = true;
+        __structuredAttrs = true;
         inherit (unwrapped) meta;
         passthru.unwrapped = unwrapped;
         dontFixup = true;
@@ -213,6 +218,8 @@ runCommand "paperclip-${version}"
   {
     pname = "paperclip";
     inherit version;
+    strictDeps = true;
+    __structuredAttrs = true;
     inherit (runtime) meta;
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
