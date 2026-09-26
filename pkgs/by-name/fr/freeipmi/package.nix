@@ -7,6 +7,7 @@
   libgcrypt,
   readline,
   libgpg-error,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) ipmi; };
 
   meta = {
     description = "Implementation of the Intelligent Platform Management Interface";
