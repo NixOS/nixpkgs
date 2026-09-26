@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   buildPackages,
   pkg-config,
   xorgproto,
@@ -25,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://xorg/individual/lib/libX11-${finalAttrs.version}.tar.xz";
     hash = "sha256-aWBvSFwsB8FO9k91t7sybUhYevM3ldmrPmB8C1+U8Rw=";
   };
+
+  patches = [
+    # fixes CVE-2026-88806 (https://gitlab.freedesktop.org/xorg/lib/libx11/-/merge_requests/309)
+    ./CVE-2026-88806.patch
+  ];
 
   strictDeps = true;
 
