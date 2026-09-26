@@ -1,12 +1,8 @@
 # Styleguide
 
-## Writing Principles
-
-A consistent style greatly increases the usability of all documentation and communication.
-
 Use this page as a reference and style guide for our internal and external documentation.
 
-### Knowledge Expectations
+## Assumptions about the reader
 
 **Assume competence, not familiarity.**
 
@@ -26,7 +22,7 @@ Write for someone who knows a great deal — up to but not including this projec
 
 If specific knowledge is required, mention it at the start of the page.
 
-#### Show, Don't Tell
+### Show, Don't Tell
 
 The fastest path to understanding is a working example.
 People learn by doing, not by reading about doing.
@@ -38,7 +34,7 @@ People learn by doing, not by reading about doing.
 - Cover edge cases or variations
 - Link to further information instead of including it
 
-#### Grammar and Style
+### Grammar and Style
 
 **Sentence structure:**
 
@@ -58,7 +54,7 @@ Users care about *detecting hardware*, not *the tool that does it*.
 
 > This command detects your hardware and saves the configuration.
 
-#### Content Organization
+### Content Organization
 
 Lead with value. State what the reader will accomplish before explaining how.
 
@@ -87,7 +83,7 @@ Use **progressive disclosure**. Introduce concepts only when needed.
 3. Explain concepts if needed
 4. Provide advanced options separately or link to the reference
 
-#### No Meta-commentary
+### No Meta-commentary
 
 Don't describe what the documentation does. Just do it.
 
@@ -101,7 +97,7 @@ Don't describe what the documentation does. Just do it.
 > Configure networking by setting:
 > Set up a web server:
 
-#### Code Examples
+### Code Examples
 
 **Keep examples focused:**
 
@@ -134,7 +130,7 @@ Paste code examples directly and without further alteration.
 }
 ```
 
-#### Lead with Practical Examples
+### Lead with Practical Examples
 
 Don't front-load theory. Readers want to accomplish something first, then understand why it works.
 
@@ -160,7 +156,7 @@ This adds nginx to your system configuration. Rebuild to apply:
 sudo nixos-rebuild switch
 ```
 
-#### Teach Nix through examples, not theory
+### Teach Nix through examples, not theory
 
 
 Users learn the NixOS module system by seeing patterns first.
@@ -170,7 +166,7 @@ Users learn the NixOS module system by seeing patterns first.
 - Link deeper concepts instead of inlining them
 - Link to `nix.dev` for optional learning
 
-#### General Rules
+### General Rules
 
 - Abbreviate keys like `ssh-ed25519 AAAAC3NzaC…`
 - Abbreviate IP addresses like `192.168.XXX.XXX`
@@ -179,7 +175,7 @@ Users learn the NixOS module system by seeing patterns first.
 - Do **not** describe missing code parts (`#elided`, `#omitted`)
 - **Machine vs Host**: use "machine" for the NixOS system identity, "host" for the physical or virtual hardware
 
-#### Capitalization
+### Capitalization
 
 - GB / RAM / HDD
 - bootable USB drive
@@ -188,7 +184,7 @@ Users learn the NixOS module system by seeing patterns first.
 - Flakes
 - git
 
-#### Headings
+### Headings
 
 Use sentence case. A reader scanning only headings should understand the page.
 
@@ -204,7 +200,7 @@ Use sentence case. A reader scanning only headings should understand the page.
 > Configure networking
 > Add a user to the system
 
-#### Imperative Mood, Voice, and Person
+### Imperative Mood, Voice, and Person
 
 Use imperative mood for instructions. Address the reader as "you", not "the user". Use active voice; in other words, make the subject do the action.
 
@@ -220,7 +216,7 @@ Use imperative mood for instructions. Address the reader as "you", not "the user
 > Update the configuration.
 > The system generates the key.
 
-#### Tense
+### Tense
 
 Use present tense for descriptions. Future tense makes documentation feel tentative.
 
@@ -234,7 +230,7 @@ Use present tense for descriptions. Future tense makes documentation feel tentat
 > This creates a new folder.
 > Running this command installs the package.
 
-#### Be Confident
+### Be Confident
 
 State facts. Don't hedge with "should," "might," "typically," or "usually" unless the behavior genuinely varies.
 
@@ -248,7 +244,7 @@ State facts. Don't hedge with "should," "might," "typically," or "usually" unles
 > This creates the configuration file.
 > The service starts automatically.
 
-#### Avoid Nominalizations
+### Avoid Nominalizations
 
 A nominalization is a verb turned into a noun, often by adding *-tion*, *-meant*, or *-ance* (e.g. "explanation", "selection"). The fix: find the hidden verb and use it directly.
 
@@ -262,7 +258,7 @@ A nominalization is a verb turned into a noun, often by adding *-tion*, *-meant*
 > Select from the list.
 > Explain the error.
 
-#### Plain Words
+### Plain Words
 
 Technical precision for technical terms; plain language for everything else.
 
@@ -274,7 +270,7 @@ Technical precision for technical terms; plain language for everything else.
 - "set up" not "establish"
 - "find out" not "ascertain"
 
-#### Filler Words and Weak Phrases
+### Filler Words and Weak Phrases
 
 Cut words and phrases that add length without meaning.
 
@@ -300,7 +296,7 @@ Delete on sight:
 
 Every word must earn its place.
 
-#### Writing Procedures
+### Writing Procedures
 
 One instruction per sentence. Don't pack multiple actions into one sentence.
 
@@ -324,7 +320,7 @@ Don't bury the negative. Key limitations should be prominent, not a footnote aft
 
 > This service does not support multiple instances.
 
-#### Consistent Terminology
+### Consistent Terminology
 
 Pick a term and stick to it. Don't swap synonyms to avoid repetition. In technical documentation, repetition is clarity.
 
@@ -336,7 +332,7 @@ Pick a term and stick to it. Don't swap synonyms to avoid repetition. In technic
 
 > Create a machine... configure the machine... deploy the machine.
 
-#### Links
+### Links
 
 Use descriptive link text. Never use "click here" or "this link."
 
@@ -363,7 +359,7 @@ Only link when the destination is directly relevant, not for generic background 
 
 > See `[database schema](url)` for the full table structure.
 
-#### UI Language
+### UI Language
 
 Match UI element names exactly: wording, casing, and spacing (even if a label seems oddly worded).
 
@@ -385,7 +381,7 @@ Consistency between documentation and interface builds confidence. Words are par
 This can be tricky as UI changes; we don't yet have a policy in place for how to handle this. We welcome comments and suggestions.
 :::
 
-#### Clean system discipline
+### Clean system discipline
 
 Your machine has things new users don't: cached credentials, installed tools, environment variables, existing configuration. When writing or updating documentation:
 
@@ -401,7 +397,7 @@ Your machine has things new users don't: cached credentials, installed tools, en
 
 Also think in combinations: WSL vs native Linux, with and without existing keys. You don't need to test every matrix square — but you need to know which ones diverge.
 
-#### Never type code — always copy-paste
+### Never type code — always copy-paste
 
 Always copy commands and code from a terminal where you just ran them successfully. Never retype from memory.
 
