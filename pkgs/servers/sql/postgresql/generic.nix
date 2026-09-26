@@ -64,7 +64,10 @@
   icu,
 
   # JIT
-  jitSupport ? stdenv.hostPlatform.canExecute stdenv.buildPlatform,
+  jitSupport ? (
+    # LLVM JIT crashes the backend on riscv64 (26/230 regress tests fail)
+    stdenv.hostPlatform.canExecute stdenv.buildPlatform && !stdenv.hostPlatform.isRiscV64
+  ),
   llvmPackages,
   nukeReferences,
   overrideCC,
