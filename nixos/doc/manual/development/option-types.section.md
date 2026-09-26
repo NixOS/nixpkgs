@@ -282,7 +282,7 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
 
-`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
+`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false, *`cancel`* ? { } }
 
 :   Like `types.submodule`, but more flexible and with better defaults.
     It has parameters
@@ -321,6 +321,26 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         With this option enabled, defining a non-`config` section
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
+
+    -   *`cancel`* A module that disables the submodule in a user-defined way.
+
+        This module is added to `modules` when the submodule has no definitions.
+
+        The motivating use case is *lazily typed attrset*, such as one produced by [`lazyAttrsOf`].
+        However, it is also used when a "bare" submodule does not have a default, e.g. `options.foo = mkOption { type = submoduleWith ...; };`.
+
+        Since a lazily typed attribute set can not make an attribute disappear
+        when the only definition is `mkIf false <...>`, you may use the `cancel`
+        parameter to provide a way to compensate for this lack of filtering.
+
+        When the submodule is asked to return a value for such a completely
+        definitionless evaluation, it will evaluate the `cancel` module instead.
+
+        A common definition is `{ enable = false; }`, but any valid module can
+        be provided here.
+
+        When all consumers of the lazy attribute set correctly [filter](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.attrsets.filterAttrs) out
+        the cancelled modules, both self-referential and `mkIf false` definitions work correctly.
 
 `types.deferredModule`
 
@@ -468,6 +488,11 @@ Composed types are types that take a type as parameter. `listOf
     that value will be returned instead of throwing an error. So if the
     type of `foo.attr` was `lazyAttrsOf (nullOr int)`, `null` would be
     returned instead for the same `mkIf false` definition.
+    :::
+
+    ::: {.warning}
+    When evaluating a `mkIf false <...>` attribute definition in `lazyAttrsOf (submoduleWith a)`,
+    neither `a.cancel` nor `a.modules` modules have access to a valid `name` module argument.
     :::
 
 `types.attrsWith` { *`elemType`*, *`lazy`* ? false, *`placeholder`* ? "name" }
@@ -864,3 +889,5 @@ The only required parameter is `name`.
     :   A binary operation that can merge the payloads of two same
         types. Defined as a function that take two payloads as
         parameters and return the payloads merged.
+
+[`lazyAttrsOf`]: #sec-option-types-composed
