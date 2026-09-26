@@ -45,6 +45,9 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
+    broken = lib.warnIf (
+      finalAttrs.version != "2.1.9"
+    ) "Is postgresql19Packages.pgactive still broken?" (lib.versionAtLeast postgresql.version "19");
     description = "Active-active Replication Extension for PostgreSQL";
     homepage = "https://github.com/aws/pgactive";
     changelog = "https://github.com/aws/pgactive/releases/tag/v${finalAttrs.version}";
