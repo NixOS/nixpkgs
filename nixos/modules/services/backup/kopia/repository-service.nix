@@ -187,11 +187,12 @@ let
       };
 
       knownHostsFile = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
+        type = lib.types.str;
         description = ''
-          Path to SSH known_hosts file for host key verification.
+          Path to SSH known_hosts file for host key verification. Kopia requires
+          this when connecting to an SFTP repository.
         '';
+        example = "/etc/ssh/ssh_known_hosts";
       };
     };
   };
@@ -457,9 +458,7 @@ in
                 ${lib.optionalString (sftp.keyFile != null) ''
                   REPO_ARGS="$REPO_ARGS --keyfile ${lib.escapeShellArg sftp.keyFile}"
                 ''}
-                ${lib.optionalString (sftp.knownHostsFile != null) ''
-                  REPO_ARGS="$REPO_ARGS --known-hosts ${lib.escapeShellArg sftp.knownHostsFile}"
-                ''}
+                REPO_ARGS="$REPO_ARGS --known-hosts ${lib.escapeShellArg sftp.knownHostsFile}"
                 # TODO: waiting upstream fix(https://github.com/kopia/kopia/issues/5180)
                 ${lib.optionalString (sftp.passwordFile != null) ''
                   REPO_ARGS="$REPO_ARGS --sftp-password $(cat ${lib.escapeShellArg sftp.passwordFile})"
@@ -512,7 +511,9 @@ in
           restartIfChanged = false;
           wants = lib.mkIf needsNetwork [ "network-online.target" ];
           after = lib.mkIf needsNetwork [ "network-online.target" ];
-          unitConfig.RequiresMountsFor = lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+          unitConfig.RequiresMountsFor = lib.optional (
+            backup.repository ? filesystem
+          ) backup.repository.filesystem.path;
           environment = {
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
             KOPIA_CACHE_DIRECTORY = "/var/cache/kopia/${name}";
