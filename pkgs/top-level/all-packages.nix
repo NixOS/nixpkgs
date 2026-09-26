@@ -2448,7 +2448,7 @@ with pkgs;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
-  miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
+  miniupnpd-nftables = miniupnpd;
 
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
