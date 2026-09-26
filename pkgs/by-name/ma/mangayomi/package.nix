@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.9.2";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-7geEJynXq2OcCLhTtm8KxvfuCagI5grCUUQ0K7jFkcY=";
+    hash = "sha256-5ZjyG3NRati8IWGI2QpV0Ywu9sAI4vrFGRJorH5MbQk=";
   };
 
   metaCommon = {
@@ -28,7 +28,7 @@ let
     description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yvnth ];
     platforms = lib.platforms.linux;
   };
 
