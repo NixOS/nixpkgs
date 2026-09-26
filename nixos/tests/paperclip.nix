@@ -156,10 +156,13 @@ in
         host = "0.0.0.0";
         port = 3115;
         openFirewall = true;
-        allowedHostnames = [ "controller" ];
+        allowedHostnames = [
+          "controller"
+          "localhost"
+        ];
         auth = {
           secretFile = "/var/lib/paperclip-control/credentials/auth";
-          publicBaseUrl = "http://controller:3115";
+          publicBaseUrl = "http://localhost:3115";
         };
         database.local.enable = true;
         bootstrap = {
@@ -217,6 +220,7 @@ in
   };
   testScript = ''
     import json
+    board_url = "http://localhost:3115"
     worker.start()
     worker.wait_for_open_port(8642)
     worker.fail("curl -fsS http://localhost:8642/v1/runs/unknown")
@@ -228,27 +232,25 @@ in
     worker.fail("test -e /var/lib/paperclip-control/credentials/auth")
     worker.fail("test -e /run/postgresql/.s.PGSQL.5432")
     controller.succeed("jq -n --rawfile password /var/lib/paperclip-control/credentials/password '{email: \"operator@example.test\", password: ($password | rtrimstr(\"\\n\"))}' > /run/login.json")
-    controller.succeed("curl -fsS -c /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data-binary @/run/login.json http://controller:3115/api/auth/sign-in/email > /run/login-response.json")
+    controller.succeed(f"curl -fsS -c /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data-binary @/run/login.json {board_url}/api/auth/sign-in/email > /run/login-response.json")
     controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/login-response.json")
-    print("Board cookie names:", controller.succeed("awk -F '\\t' 'NF == 7 { print $6 }' /run/board-cookies").strip())
-    print("Board cookie scope:", controller.succeed("awk -F '\\t' 'NF == 7 { print $1, $2, $3, $4, $6 }' /run/board-cookies").strip())
-    controller.succeed("curl -fsS -b /run/board-cookies http://controller:3115/api/auth/get-session > /run/board-session.json")
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/auth/get-session > /run/board-session.json")
     controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/board-session.json")
     bindings = json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"]
     agent_id = bindings["agent/worker"]
     controller.succeed(f"printf '%s\\n' {bindings['company/other']} > /tmp/shared/other-company")
     worker.succeed("install -m 0644 -o hermes-fixture -g hermes-fixture /tmp/shared/other-company /var/lib/hermes-fixture/other-company")
     controller.succeed("rm /tmp/shared/other-company")
-    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{\"name\":\"callback\"}}' http://controller:3115/api/agents/{agent_id}/keys > /run/callback-key.json")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{\"name\":\"callback\"}}' {board_url}/api/agents/{agent_id}/keys > /run/callback-key.json")
     key_id = json.loads(controller.succeed("cat /run/callback-key.json"))["id"]
     controller.succeed("jq -r .token /run/callback-key.json > /tmp/shared/callback-key && chmod 0600 /tmp/shared/callback-key")
     worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /tmp/shared/callback-key /var/lib/hermes-fixture/callback-key")
     controller.succeed("rm /tmp/shared/gateway-key /tmp/shared/callback-key")
 
     def invoke():
-        controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/agents/{agent_id}/heartbeat/invoke > /run/invoked.json")
+        controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/invoked.json")
         run_id = json.loads(controller.succeed("cat /run/invoked.json"))["id"]
-        controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies http://controller:3115/api/heartbeat-runs/{run_id} | jq -e '.status == \"succeeded\"'", timeout=120)
+        controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{run_id} | jq -e '.status == \"succeeded\"'", timeout=120)
         return run_id
 
     invoke()
@@ -258,23 +260,23 @@ in
     assert json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"] == bindings
     invoke()
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-2\"].callbackStatus == 200 and .runs[\"fixture-2\"].crossCompanyStatus == 403'")
-    controller.succeed(f"curl -fsS -X DELETE -b /run/board-cookies -H 'Origin: http://controller:3115' http://controller:3115/api/agents/{agent_id}/keys/{key_id} > /run/revoked.json")
+    controller.succeed(f"curl -fsS -X DELETE -b /run/board-cookies -H 'Origin: {board_url}' {board_url}/api/agents/{agent_id}/keys/{key_id} > /run/revoked.json")
     invoke()
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-3\"].callbackStatus == 401'")
     worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
-    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/agents/{agent_id}/heartbeat/invoke > /run/active.json")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/active.json")
     active_id = json.loads(controller.succeed("cat /run/active.json"))["id"]
     worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-4\"].status == \"running\"'", timeout=120)
-    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/heartbeat-runs/{active_id}/cancel > /run/cancelled.json")
-    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies http://controller:3115/api/heartbeat-runs/{active_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{active_id}/cancel > /run/cancelled.json")
+    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{active_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-4\"].status == \"cancelled\" and .runs[\"fixture-4\"].stops == 1'")
     worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
-    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/agents/{agent_id}/heartbeat/invoke > /run/restart-active.json")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/restart-active.json")
     restart_id = json.loads(controller.succeed("cat /run/restart-active.json"))["id"]
     worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"running\"'", timeout=120)
     controller.succeed("systemctl restart paperclip-control.service")
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
-    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies http://controller:3115/api/heartbeat-runs/{restart_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
+    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{restart_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"cancelled\" and .runs[\"fixture-5\"].stops == 1'")
     controller.succeed("pid=$(systemctl show paperclip-control -p MainPID --value); ! tr '\\0' '\\n' < /proc/$pid/environ | grep -E '^(BETTER_AUTH_SECRET|DATABASE_URL|DATABASE_MIGRATION_URL)='")
   '';
