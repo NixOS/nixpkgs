@@ -91,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Necessary because project uses default build dir for flatpaks/snaps
   mesonBuildDir = "nixbld";
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
