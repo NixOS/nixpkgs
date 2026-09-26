@@ -2,12 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf,
-  automake,
-  libtool,
+  meson,
+  ninja,
   removeReferencesTo,
   gitUpdater,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,14 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    automake
-    autoconf
-    libtool
+    meson
+    ninja
     removeReferencesTo
-    autoreconfHook
   ];
-
-  enableParallelBuilding = true;
 
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
