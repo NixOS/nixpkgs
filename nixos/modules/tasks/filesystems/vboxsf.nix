@@ -13,7 +13,7 @@ let
 
   package = pkgs.runCommand "mount.vboxsf" { preferLocalBuild = true; } ''
     mkdir -p $out/bin
-    cp ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf $out/bin
+    cp ${config.virtualisation.virtualbox.guest.package}/bin/mount.vboxsf $out/bin
   '';
 in
 

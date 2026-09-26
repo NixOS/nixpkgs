@@ -11,15 +11,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "porxie";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromCodeberg {
     owner = "Blooym";
     repo = "porxie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jj8NLmaYVVBNpojq3cTuNXYEgBAxQ6wcPH2sLSB5cbo=";
+    hash = "sha256-q1nb4JVmqGQ2HcjoQBZTymKmWInS80EFxrSo2IzwqVc=";
   };
-  cargoHash = "sha256-ZXNbZtqMayiVc7BOmmeRyN/Z5pKJRHJmgclaCLyVhYc=";
+  cargoHash = "sha256-WrxG3GaAwVb/2Za+ExSt12POSGZUyPfXZAgPYyZb6rA=";
 
   buildInputs = [ rust-jemalloc-sys ];
 

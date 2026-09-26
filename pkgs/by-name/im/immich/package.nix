@@ -33,6 +33,7 @@
   pango,
   perl,
   pixman,
+  runtimeShellPackage,
   vips,
   buildPackages,
 }:
@@ -111,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
   version = "3.2.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
@@ -157,6 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     # Required for sharp
     vips
+    # Required for some packages in node_modules
+    runtimeShellPackage
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;

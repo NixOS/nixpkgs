@@ -226,11 +226,11 @@ builtins.intersectAttrs super {
   cuda = overrideCabal (drv: {
     extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.linuxPackages.nvidia_x11 ];
     configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.cudatoolkit.lib}/lib"
-      "--extra-include-dirs=${pkgs.cudatoolkit}/include"
+      "--extra-lib-dirs=${pkgs.cudaPackages.cudatoolkit.lib}/lib"
+      "--extra-include-dirs=${pkgs.cudaPackages.cudatoolkit}/include"
     ];
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.cuda;
 
@@ -248,7 +248,7 @@ builtins.intersectAttrs super {
 
   nvvm = overrideCabal (drv: {
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.nvvm;
 
@@ -300,7 +300,7 @@ builtins.intersectAttrs super {
 
   cufft = overrideCabal (drv: {
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.cufft;
 

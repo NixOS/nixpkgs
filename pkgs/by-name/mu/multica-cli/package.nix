@@ -11,18 +11,18 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   pname = "multica-cli";
-  version = "0.4.43";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "multica-ai";
     repo = "multica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M/Zc9Bc/IKK2Dwc9TbNGz3OCDARmQQOXRTLPYw9iLZs=";
+    hash = "sha256-4nhCKbODP0Lbdl7pNkK0/eYgbL/HMyCUZlps+DGqbHs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  vendorHash = "sha256-a3khoppmpS5o+ZJqWjcFwLKpUSXfTG9P5/4lLdBr+tY=";
+  vendorHash = "sha256-b6elV4j+7R6L29q8tbCI3MAOY8X63ndzlmCMv7jo7mM=";
 
   subPackages = [ "cmd/multica" ];
 

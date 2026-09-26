@@ -682,6 +682,7 @@ mapAliases {
   dbus-sharp-2_0 = throw "'dbus-sharp-2_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
   dbus-sharp-glib-1_0 = throw "'dbus-sharp-glib-1_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
   dbus-sharp-glib-2_0 = throw "'dbus-sharp-glib-2_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
+  dbx = throw "'dbx' has been removed. Use 'databricks-cli' instead."; # Added 2026-09-04
   dclib = throw "'dclib' has been removed as it is unmaintained for 16 years and broken"; # Added 2025-05-25
   deadpixi-sam = throw "'deadpixi-sam' has been renamed to/replaced by 'deadpixi-sam-unstable'"; # Converted to throw 2025-10-27
   deco = throw "'deco' has been removed as it is unused"; # Added 2025-12-18
@@ -689,6 +690,7 @@ mapAliases {
   deepsea = throw "deepsea has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   defuddle-cli = warnAlias "defuddle-cli has been renamed to/replaced by 'defuddle'" defuddle; # Added 2026-04-16
   degit-rs = throw "'degit-rs' has been removed because it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-07-11
+  dejavu_fontsEnv = throw "'dejavu_fontsEnv' has been removed as its content is identical to 'dejavu_fonts'."; # Added 2026-09-25
   deltachat-cursed = throw "'deltachat-cursed' has been renamed to/replaced by 'arcanechat-tui'"; # Converted to throw 2025-10-27
   deltatouch = throw "'deltatouch' has been removed as it depended on qt5 webengine which reached EOL"; # Added 2026-04-25
   desktop-postflop = throw "'desktop-postflop' has been removed as it has been unmaintained upstream since October 2023 and depended on webkitgtk 4.0"; # Added 2026-06-07
@@ -700,6 +702,7 @@ mapAliases {
   disk-inventory-x = throw "disk-inventory-x has been removed as it only supported x86_64-darwin"; # Added 2026-07-12
   DisnixWebService = warnAlias "'DisnixWebService' has been renamed to 'disnix-web-service'" disnix-web-service; # Added 2026-01-14
   djmount = throw "'djmount' has been removed as it is no longer maintained"; # Added 2026-05-19
+  djvu2pdf = throw "'djvu2pdf' has been removed as it was unmaintained"; # Added 2026-09-20
   dleyna-connector-dbus = throw "'dleyna-connector-dbus' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-core = throw "'dleyna-core' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-renderer = throw "'dleyna-renderer' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
@@ -821,6 +824,7 @@ mapAliases {
   fastfetchMinimal = warnAlias "'fastfetchMinimal' has been renamed to 'fastfetch-unwrapped'" fastfetch-unwrapped; # Added 2026-05-18
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
+  fastpotify = warnAlias "'fastpotify' has been renamed to 'spotifast'" spotifast; # Added 2026-09-15
   faust2alsa = throw "'faust2alsa' has been removed as it depends on GTK2, which is deprecated."; # Added 2026-08-08
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
   faustStk = throw "'faustStk' has been renamed to/replaced by 'faustPhysicalModeling'"; # Converted to throw 2025-10-27
@@ -998,6 +1002,7 @@ mapAliases {
   gimp3Plugins = gimpPlugins; # Added 2025-10-03
   gio-sharp = throw "'gio-sharp' has been removed as it depended on the deprecated GTK 2 engine via Gtk# 2."; # Added 2026-08-10
   gistyc = throw "'gistyc' has been removed because it was deleted upstream and unmaintained in nixpkgs"; # Added 2026-08-15
+  git-branchstack = throw "'git-branchstack' has been removed because it is no longer maintained."; # Added 2026-09-14
   gitAndTools = throw "gitAndTools has been removed, as the packages are now available at the top level"; # Converted to throw 2025-10-26
   gitfs = throw "'gitfs' has been removed, as it is broken and unmaintained upstream"; # Added 2026-05-22
   gitversion = throw "'gitversion' has been removed because it produced a broken build and was unmaintained"; # Added 2025-08-30
@@ -1512,12 +1517,12 @@ mapAliases {
   linux_hardened = throw "linux_hardened has been removed due to lack of maintenance"; # Added 2026-03-18
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linux_lqx = throw "linux_lqx has been removed due to lack of maintenance"; # Added 2026-03-13
-  linux_rpi0 = linuxKernel.kernels.linux_rpi1;
-  linux_rpi1 = linuxKernel.kernels.linux_rpi1;
-  linux_rpi2 = linuxKernel.kernels.linux_rpi2;
-  linux_rpi02w = linuxKernel.kernels.linux_rpi3;
-  linux_rpi3 = linuxKernel.kernels.linux_rpi3;
-  linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linux_rpi0 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_rpi02w = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
   linuxPackages-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages-rt = throw "linuxPackages-rt has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages-rt_latest = throw "linuxPackages-rt_latest has been removed due to lack of maintenance"; # Added 2026-03-24
@@ -1550,12 +1555,12 @@ mapAliases {
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages_latest_xen_dom0 = throw "'linuxPackages_latest_xen_dom0' has been renamed to/replaced by 'linuxPackages_latest'"; # Converted to throw 2025-10-27
   linuxPackages_lqx = throw "linuxPackages_lqx has been removed due to lack of maintenance"; # Added 2026-03-13
-  linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
-  linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
-  linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
-  linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
-  linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
-  linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
+  linuxPackages_rpi0 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linuxPackages_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linuxPackages_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linuxPackages_rpi02w = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linuxPackages_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linuxPackages_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
   linuxPackages_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11"; # Added 2025-10-22
   linuxPackages_rt_5_10 = throw "linuxPackages_rt_5_10 has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages_rt_5_15 = throw "linuxPackages_rt_5_15 has been removed due to lack of maintenance"; # Added 2026-03-24
@@ -1978,6 +1983,8 @@ mapAliases {
   pacup = throw "'pacup' has been renamed to/replaced by 'perlPackages.pacup'"; # Converted to throw 2025-10-27
   PageEdit = throw "'PageEdit' has been renamed to/replaced by 'pageedit'"; # Converted to throw 2025-10-27
   pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
+  palemoon-bin = throw "'palemoon-bin' has been removed, as it relies on to-be-removed GTK2 for full NPAPI support"; # Added 2026-09-21
+  palemoon-gtk2-bin = throw "'palemoon-gtk2-bin' has been removed, as it relies on to-be-removed GTK2 for full NPAPI support"; # Added 2026-09-21
   pam_pgsql = pam-pgsql; # Added 2025-12-16
   pangolin = throw "pangolin has been removed due to lack of maintenance"; # Added 2025-11-17
   pangomm = throw "'pangomm' attribute has been removed from nixpkgs. Use a 'pangomm_*' attribute with an explicit ABI version instead."; # Added 2026-09-05
@@ -2227,6 +2234,7 @@ mapAliases {
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rapidsvn = throw "'rapidsvn' has been removed because upstream archived the project after development stopped in August 2021"; # Added 2026-09-02
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
+  rates = throw "'rates' has been removed as it was broken and unmaintained upstream"; # Added 2026-08-24
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
@@ -2252,6 +2260,7 @@ mapAliases {
   rHttp = rhttp; # Added 2026-07-05
   rigsofrods = throw "'rigsofrods' has been renamed to/replaced by 'rigsofrods-bin'"; # Converted to throw 2025-10-27
   rili = throw "'rili' has been dropped in favor of its maintained fork 'li-ri'"; # Added 2026-01-03
+  riot-redis = throw "'riot-redis' has been removed in favor of its successor 'riotx'"; # Added 2026-06-07
   rke2_1_29 = throw "'rke2_1_29' has been removed from nixpkgs as it has reached end of life"; # Added 2025-05-05
   rke2_1_30 = throw "'rke2_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-11-04
   rke2_1_31 = throw "'rke2_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08
