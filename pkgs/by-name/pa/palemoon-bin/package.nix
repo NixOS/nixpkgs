@@ -225,10 +225,25 @@ stdenv.mkDerivation (finalAttrs: {
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
+    knownVulnerabilities = [
+      "CVE-2026-74943"
+      "CVE-2026-74945"
+      "CVE-2026-74964"
+      "CVE-2026-74969"
+      "CVE-2026-74971"
+      "CVE-2026-74977"
+      "CVE-2026-74982"
+      "CVE-2026-92012"
+      "CVE-2026-92016"
+      "CVE-2026-92030"
+      "CVE-2026-92044"
+      "CVE-2026-92049"
+      "\"several others [security issues] that did not have a CVE designation at the time of evaluation\""
+    ];
   };
 })
