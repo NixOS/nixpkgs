@@ -699,20 +699,7 @@ rec {
   */
   filterAttrsRecursive =
     pred: set:
-    listToAttrs (
-      concatMap (
-        name:
-        let
-          v = set.${name};
-        in
-        if pred name v then
-          [
-            (nameValuePair name (if isAttrs v then filterAttrsRecursive pred v else v))
-          ]
-        else
-          [ ]
-      ) (attrNames set)
-    );
+    mapAttrs (_: v: if isAttrs v then filterAttrsRecursive pred v else v) (filterAttrs pred set);
 
   /**
     Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
@@ -1528,12 +1515,7 @@ rec {
   */
   zipAttrsWithNames =
     names: f: sets:
-    listToAttrs (
-      map (name: {
-        inherit name;
-        value = f name (catAttrs name sets);
-      }) names
-    );
+    genAttrs names (name: f name (catAttrs name sets));
 
   /**
     Merge sets of attributes and use the function `f` to merge attribute values.

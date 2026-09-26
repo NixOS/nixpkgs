@@ -44,9 +44,7 @@ let
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
-  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
-
-  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (lib.hasPrefix source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
