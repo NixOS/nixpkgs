@@ -75,7 +75,7 @@ jobs:
   check:
     name: Check
     needs: [prepare]
-    uses: ./.github/workflows/check.yml
+    uses: $/.github/workflows/check.yml
     permissions:
       # cherry-picks
       pull-requests: write
@@ -92,7 +92,7 @@ jobs:
   lint:
     name: Lint
     needs: [prepare]
-    uses: ./.github/workflows/lint.yml
+    uses: $/.github/workflows/lint.yml
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -100,7 +100,7 @@ jobs:
   eval:
     name: Eval
     needs: [prepare]
-    uses: ./.github/workflows/eval.yml
+    uses: $/.github/workflows/eval.yml
     permissions:
       # compare
       pull-requests: write
@@ -119,7 +119,7 @@ jobs:
   bot:
     name: Bot
     needs: [prepare, eval]
-    uses: ./.github/workflows/bot.yml
+    uses: $/.github/workflows/bot.yml
     permissions:
       issues: write
       pull-requests: write
@@ -131,7 +131,7 @@ jobs:
   build:
     name: Build
     needs: [prepare]
-    uses: ./.github/workflows/build.yml
+    uses: $/.github/workflows/build.yml
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
