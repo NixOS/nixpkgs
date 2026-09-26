@@ -1,0 +1,48 @@
+From 708a4247581c98c0cc46504e4abb874b4c835ffe Mon Sep 17 00:00:00 2001
+From: Jouni Malinen <jouni.malinen@oss.qualcomm.com>
+Date: Tue, 31 Mar 2026 23:24:04 +0300
+Subject: [PATCH 1/5] AP MLD: Fix link ID validation in Basic MLE parsing
+
+Link ID 15 can be indicated in the field, but that is not a valid value
+and must be rejected to avoid issues pointing beyond the array of links
+for a non-AP MLD. Without this, an invalid MLE could result in writing
+beyond the end of the buffer and causing process termination or
+unexpected behavior.
+
+Fixes: 5f5db9366cde ("AP: MLO: Process Multi-Link element from (Re)Association Request frame")
+Signed-off-by: Jouni Malinen <jouni.malinen@oss.qualcomm.com>
+---
+ src/ap/ieee802_11_eht.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/ap/ieee802_11_eht.c b/src/ap/ieee802_11_eht.c
+index b935ee889a89..804808c0dbfd 100644
+--- a/src/ap/ieee802_11_eht.c
++++ b/src/ap/ieee802_11_eht.c
+@@ -1262,6 +1262,7 @@ u16 hostapd_process_ml_assoc_req(struct hostapd_data *hapd,
+ 		size_t sub_elem_len = *(pos + 1);
+ 		size_t sta_info_len;
+ 		u16 control;
++		u8 link_id;
+ 
+ 		wpa_printf(MSG_DEBUG, "MLD: sub element len=%zu",
+ 			   sub_elem_len);
+@@ -1302,8 +1303,13 @@ u16 hostapd_process_ml_assoc_req(struct hostapd_data *hapd,
+ 			goto out;
+ 		}
+ 		control = WPA_GET_LE16(pos);
+-		link_info = &info->links[control &
+-					 EHT_PER_STA_CTRL_LINK_ID_MSK];
++		link_id = control & BASIC_MLE_STA_CTRL_LINK_ID_MASK;
++		if (link_id >= MAX_NUM_MLD_LINKS) {
++			wpa_printf(MSG_DEBUG,
++				   "MLD: Invalid Link ID in Per-STA Profile subelement");
++			goto out;
++		}
++		link_info = &info->links[link_id];
+ 		pos += 2;
+ 		ml_len -= 2;
+ 		sub_elem_len -= 2;
+-- 
+2.43.0
+
