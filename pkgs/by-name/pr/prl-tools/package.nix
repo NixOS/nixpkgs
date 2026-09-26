@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "27.0.1-58670";
+  version = "27.0.2-58673";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-ZchIQQ/FyzLmcL2ust1YAqlSsRZWJmDO3t3Ywxo39P0=";
+    hash = "sha256-/buPuva2r9dxSpLdNI9Qg/YTk0Y82XRwFt2XhF24wh0=";
   };
 
   nativeBuildInputs = [
