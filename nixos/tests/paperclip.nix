@@ -231,6 +231,7 @@ in
     controller.succeed("curl -fsS -c /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data-binary @/run/login.json http://controller:3115/api/auth/sign-in/email > /run/login-response.json")
     controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/login-response.json")
     print("Board cookie names:", controller.succeed("awk -F '\\t' 'NF == 7 { print $6 }' /run/board-cookies").strip())
+    print("Board cookie scope:", controller.succeed("awk -F '\\t' 'NF == 7 { print $1, $2, $3, $4, $6 }' /run/board-cookies").strip())
     controller.succeed("curl -fsS -b /run/board-cookies http://controller:3115/api/auth/get-session > /run/board-session.json")
     controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/board-session.json")
     bindings = json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"]
