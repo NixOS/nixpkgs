@@ -56,7 +56,9 @@ let
     src = "${src}/packages/paperclip-runner";
     cargoRoot = "runner";
     buildAndTestSubdir = "runner";
-    cargoLock.lockFile = "${src}/packages/paperclip-runner/runner/Cargo.lock";
+    # Keep the exact lockfile from the pinned source in nixpkgs: reading a
+    # fetched derivation at evaluation time fails with IFD disabled in CI.
+    cargoLock.lockFile = ./Cargo.lock;
     cargoBuildFlags = [ "--bin=paperclip-runnerd" ];
     nativeBuildInputs = [
       cmake

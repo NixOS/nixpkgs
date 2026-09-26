@@ -11,13 +11,14 @@ let
       inherit description;
     };
 in
-rec {
+{
   instanceOptions = { name, ... }: {
     options = {
       enable = lib.mkEnableOption "Paperclip instance";
       package = mkOption {
         type = types.package;
         default = pkgs.paperclip;
+        defaultText = lib.literalExpression "pkgs.paperclip";
         description = "Native Paperclip package.";
       };
       port = mkOption {
