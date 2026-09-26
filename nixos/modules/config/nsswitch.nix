@@ -56,8 +56,6 @@
           List of shadow entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
         '';
         default = [ ];
       };
@@ -68,8 +66,6 @@
           List of sudoers entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
         '';
         default = [ ];
       };
@@ -98,34 +94,23 @@
         default = [ ];
       };
 
-      subuid = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+      subid = lib.mkOption {
+        type = lib.types.str;
         description = ''
-          List of subuid entries to configure in {file}`/etc/nsswitch.conf`.
+          The subid entry to configure in {file}`/etc/nsswitch.conf`.
+          This option is understood by the `new{u,g}idmap` programs.
 
-          Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
+          Unlike the other nsswitch options, this only accepts a single entry.
         '';
-        default = [ ];
-      };
-
-      subgid = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = ''
-          List of subgid entries to configure in {file}`/etc/nsswitch.conf`.
-
-          Note that "files" is always prepended.
-
-          This option only takes effect if nscd is enabled.
-        '';
-        default = [ ];
+        default = "files";
       };
     };
   };
 
   imports = [
     (lib.mkRenamedOptionModule [ "system" "nssHosts" ] [ "system" "nssDatabases" "hosts" ])
+    (lib.mkRemovedOptionModule [ "system" "nssDatabases" "subuid" ] "use system.nssDatabases.subid")
+    (lib.mkRemovedOptionModule [ "system" "nssDatabases" "subgid" ] "use system.nssDatabases.subid")
   ];
 
   config = {
@@ -133,7 +118,7 @@
       {
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
         message = ''
-          Loading NSS modules from system.nssModules (${config.system.nssModules.path}),
+          Loading most NSS modules from system.nssModules (${config.system.nssModules.path})
           requires services.nscd.enable being set to true.
 
           If disabling nscd is really necessary, it is possible to disable loading NSS modules
@@ -142,8 +127,7 @@
       }
     ];
 
-    # Name Service Switch configuration file.  Required by the C
-    # library.
+    # Name Service Switch configuration file. Required by the C library.
     environment.etc."nsswitch.conf".text = ''
       passwd:    ${lib.concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${lib.concatStringsSep " " config.system.nssDatabases.group}
@@ -158,8 +142,7 @@
       protocols: files
       rpc:       files
 
-      subuid:    ${lib.concatStringsSep " " config.system.nssDatabases.subuid}
-      subgid:    ${lib.concatStringsSep " " config.system.nssDatabases.subgid}
+      subid:     ${config.system.nssDatabases.subid}
     '';
 
     system.nssDatabases = {
@@ -172,8 +155,6 @@
         (lib.mkOrder 1499 [ "dns" ])
       ];
       services = lib.mkBefore [ "files" ];
-      subuid = lib.mkBefore [ "files" ];
-      subgid = lib.mkBefore [ "files" ];
     };
   };
 }
