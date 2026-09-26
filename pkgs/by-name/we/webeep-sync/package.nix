@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
       ${lib.optionalString withDebug ''--set NODE_OPTIONS "--enable-source-maps"''} \
-      --add-flags "$out/lib/node_modules/${finalAttrs.pname}/.webpack/x64/main/index.js" \
+      --add-flags "$out/lib/node_modules/${finalAttrs.pname}/.webpack/${stdenvNoCC.hostPlatform.node.arch}/main/index.js" \
       --add-flags "--user-data-dir=\$HOME/.config/${finalAttrs.pname}"
 
     for size in 32 48 64 72 96 128 256; do
