@@ -15,6 +15,7 @@ lib.makeScope newScope (self: {
   eptcs = self.callPackage ./eptcs { };
   find_facts_web = self.callPackage ./find_facts_web { };
   flatlaf = self.callPackage ./flatlaf { };
+  foiltex = self.callPackage ./foiltex { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
   kodkodi = self.callPackage ./kodkodi { };
