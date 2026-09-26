@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   config,
   callPackages,
   lib,
@@ -824,7 +825,11 @@ lib.makeScope pkgs.newScope (
               ++ lib.optional (
                 !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
               ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              configureFlags =
+                lib.optional php.ztsSupport "--disable-opcache-jit"
+                ++
+                  lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+                    "ac_cv_prog_BUILD_CC=${lib.getBin buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
               zendExtension = true;
               postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
                 # Tests are flaky on darwin
