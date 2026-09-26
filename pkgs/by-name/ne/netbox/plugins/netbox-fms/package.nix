@@ -8,7 +8,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-fms";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jsenecal";
     repo = "netbox-fms";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5RPcJFxwQYJWUipHU05gp7zovWPnviWHlkqCHEs16tw=";
+    hash = "sha256-TOSrSY/5nZaLQyPVkwTZ4szz+TK4fpSgWlfJnKtZwkM=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "NetBox plugin for Fiber Management System: fiber cable management, splice planning, and circuit provisioning";
     homepage = "https://jsenecal.github.io/netbox-fms/";
-    changelog = "https://jsenecal.github.io/netbox-fms/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/jsenecal/netbox-fms/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
