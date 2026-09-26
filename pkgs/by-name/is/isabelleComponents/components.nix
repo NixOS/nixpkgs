@@ -14,4 +14,5 @@ lib.makeScope newScope (self: {
   sha1 = self.callPackage ./sha1 { };
   vampire = self.callPackage ./vampire { };
   verit = self.callPackage ./verit { };
+  vscode_extension = self.callPackage ./vscode_extension { };
 })
