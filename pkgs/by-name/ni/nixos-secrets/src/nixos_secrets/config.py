@@ -39,10 +39,10 @@ class SecretsPrompt:
 @dataclass(frozen=True)
 class SecretsStoreBackend:
     name: str
-    get: Optional[str]
+    get: str
     set: str
     delete: Optional[str]
-    list: Optional[str]
+    list: str
     fixup: Optional[str]
     deployRemote: Optional[str]
     deployLocal: Optional[str]
@@ -53,7 +53,7 @@ class SecretsStoreBackend:
             get=json["get"],
             set=json["set"],
             delete=json.get("delete"),
-            list=json.get("list"),
+            list=json["list"],
             fixup=json.get("fixup"),
             deployRemote=json["deploy"].get("remote"),
             deployLocal=json["deploy"].get("local"),
