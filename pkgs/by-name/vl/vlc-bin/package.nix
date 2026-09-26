@@ -2,12 +2,12 @@
   lib,
   fetchurl,
   makeWrapper,
-  stdenv,
+  stdenvNoCC,
   undmg,
   variant ?
-    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) then
+    if (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) then
       "arm64"
-    else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+    else if (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isx86_64) then
       "intel64"
     else
       "universal", # not reachable by normal means
@@ -18,7 +18,7 @@ assert builtins.elem variant [
   "intel64"
   "universal"
 ];
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vlc-bin-${variant}";
   version = "3.0.23";
 
@@ -43,12 +43,21 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications $out/bin
+    mkdir -p $out/Applications $out/bin $out/lib
     cp -r "VLC.app" $out/Applications
     makeWrapper "$out/Applications/VLC.app/Contents/MacOS/VLC" "$out/bin/vlc"
+    ln -s "$out/Applications/VLC.app/Contents/MacOS/lib"/* "$out/lib/"
+
+    mkdir -p "$dev"
+    cp -r "VLC.app/Contents/MacOS/include" "$dev"
 
     runHook postInstall
   '';
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Cross-platform media player and streaming server; precompiled binary for MacOS, repacked from official website";
