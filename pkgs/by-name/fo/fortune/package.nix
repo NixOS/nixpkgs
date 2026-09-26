@@ -10,6 +10,7 @@
   libxslt,
   docbook-xsl-nons,
   shlomif-cmake-modules,
+  gitUpdater,
   withOffensive ? false,
 }:
 
@@ -74,6 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (!withOffensive) ''
     rm $out/share/games/fortunes/men-women*
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "fortune-mod-";
+    };
+  };
 
   meta = {
     mainProgram = "fortune";
