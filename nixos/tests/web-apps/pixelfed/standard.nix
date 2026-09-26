@@ -17,7 +17,11 @@
               APP_KEY=adKK9EcY8Hcj3PLU7rzG9rJ6KKTOtYfA
             ''
           );
-          settings."FORCE_HTTPS_URLS" = false;
+          settings = {
+            FORCE_HTTPS_URLS = false;
+            # A value with a space and a `#` needs quotes in `.env`.
+            APP_NAME = "Pixelfed test #1";
+          };
         };
 
         # to prevent getting killed by oom
@@ -39,7 +43,7 @@
     # Wait for HTTP port
     server.wait_for_open_port(80, timeout=1800)
     # Access the homepage.
-    server.succeed("curl -H 'Host: pixelfed.local' http://localhost")
+    server.succeed("curl -H 'Host: pixelfed.local' http://localhost | grep -F 'Pixelfed test #1'")
     # Create an account
     server.succeed("pixelfed-manage user:create --name=test --username=test --email=test@test.com --password=test")
     # Create a OAuth token.
