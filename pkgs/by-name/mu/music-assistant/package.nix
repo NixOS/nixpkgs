@@ -350,6 +350,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       hexa
       emilylange
+      tebriel
     ];
     mainProgram = "mass";
   };
