@@ -1358,7 +1358,6 @@ in
   nzbhydra2 = runTest ./nzbhydra2.nix;
   obs-studio = runTest ./obs-studio.nix;
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
-  ocis = runTest ./ocis.nix;
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
