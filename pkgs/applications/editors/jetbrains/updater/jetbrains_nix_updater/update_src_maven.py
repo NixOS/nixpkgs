@@ -93,7 +93,7 @@ def get_maven_deps_for_ide(config: UpdaterConfig, ide: Ide) -> list[dict]:
                 "--out-link",
                 root_path,
                 "--attr",
-                f"jetbrains.{ide.name}.src.src",
+                f"{ide.name}.src.src",
             ],
             cwd=config.nixpkgs_root,
         )
