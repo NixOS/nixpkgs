@@ -59,6 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "codex-code-mode-host"
   ];
 
+  patches = [
+    # https://github.com/openai/codex/issues/48195
+    ./no-daemon_auto_start.patch
+  ];
+
   postPatch = ''
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "thin"' "" \

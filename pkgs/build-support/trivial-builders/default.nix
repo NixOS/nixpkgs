@@ -116,7 +116,9 @@ rec {
       in
       finalAttrs:
       {
-        name,
+        pname ? null,
+        version ? null,
+        name ? "${pname}-${version}",
         text,
         executable ? false,
         destination ? "",
@@ -126,7 +128,7 @@ rec {
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
-        pos ? builtins.unsafeGetAttrPos "name" args,
+        pos ? builtins.unsafeGetAttrPos (if pname != null then "pname" else "name") args,
       }@args:
       {
         inherit
@@ -138,6 +140,10 @@ rec {
           allowSubstitutes
           preferLocalBuild
           ;
+
+        ${if pname != null then "pname" else null} = pname;
+        ${if version != null then "version" else null} = version;
+
         destination =
           assert
             (destination != "" -> (hasRootPrefix destination && destination != "/"))
