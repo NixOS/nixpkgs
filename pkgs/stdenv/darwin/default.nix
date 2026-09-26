@@ -574,12 +574,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # Trying to add libresolv as a dependency causes an infinite recursion. Use pkgconf instead.
         pkg-config =
           (super.pkg-config.override {
-            pkg-config = self.libpkgconf.override {
-              removeReferencesTo = self.removeReferencesTo.override {
-                # Avoid an infinite recursion by using the previous stage‘s sigtool.
-                signingUtils = prevStage.darwin.signingUtils.override { inherit (prevStage.darwin) sigtool; };
-              };
-            };
+            pkg-config = self.pkgconf-lite;
             baseBinName = "pkgconf";
           }).overrideAttrs
             # Passthru the wrapped pkgconf’s stdenv to make the bootstrap assertions happy.
