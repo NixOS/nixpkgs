@@ -18,7 +18,6 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8SrcBinding;
   },
   lld,
-  makeBinaryWrapper,
   nix-update-script,
   pkg-config,
   openssl,
@@ -77,7 +76,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     gitMinimal
     installShellFiles
-    makeBinaryWrapper
     pkg-config
   ];
 
@@ -120,17 +118,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the future once this software stabilizes.
   doCheck = false;
 
-  postInstall = lib.optionalString installShellCompletions ''
+  postInstall = ''
+    install -Dm644 ${
+      builtins.toFile "codex-package.json" (
+        builtins.toJSON {
+          layoutVersion = 1;
+          version = finalAttrs.version;
+          target = stdenv.hostPlatform.rust.rustcTarget;
+          variant = "codex";
+          entrypoint = "bin/codex";
+          resourcesDir = "codex-resources";
+          pathDir = "codex-path";
+        }
+      )
+    } $out/codex-package.json
+    install -Dm755 ${lib.getExe ripgrep} $out/codex-path/rg
+    install -d $out/codex-resources
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -m755 ${lib.getExe bubblewrap} $out/codex-resources/bwrap
+    ''}
+  ''
+  + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd codex \
       --bash <($out/bin/codex completion bash) \
       --fish <($out/bin/codex completion fish) \
       --zsh <($out/bin/codex completion zsh)
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/codex --prefix PATH : ${
-      lib.makeBinPath ([ ripgrep ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ])
-    }
   '';
 
   doInstallCheck = true;
