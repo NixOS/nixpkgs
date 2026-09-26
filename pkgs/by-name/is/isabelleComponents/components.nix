@@ -5,6 +5,7 @@ lib.makeScope newScope (self: {
   addSettings = self.callPackage ./add-settings.nix { };
 
   # Components
+  csdp = self.callPackage ./csdp { };
   cvc5 = self.callPackage ./cvc5 { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };

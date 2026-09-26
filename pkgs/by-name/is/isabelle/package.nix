@@ -6,7 +6,6 @@
   net-tools,
   scala_3,
   eprover-ho,
-  csdp,
   rlwrap,
   perl,
   procps,
@@ -67,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     eprover-ho
     net-tools
     isabelleComponents.cvc5
-    csdp
+    isabelleComponents.csdp
   ];
 
   patches = [
@@ -101,26 +100,23 @@ stdenv.mkDerivation (finalAttrs: {
       E_VERSION=${eprover-ho.version}
     EOF
 
-    cat >contrib/csdp-*/etc/settings <<EOF
-      ISABELLE_CSDP=${csdp}/bin/csdp
-    EOF
-
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/e-* contrib/csdp-*; do
+    for comp in contrib/e-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
 
     substituteInPlace etc/components \
+      --replace-fail 'contrib/csdp-6.1.1-1' '${isabelleComponents.csdp.settings}' \
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}' \
       --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}'
 
-    rm -rf contrib/cvc5-1.2.0-1 contrib/jdk-21.0.9 contrib/polyml-5.9.2-2 \
-           contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3
+    rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/jdk-21.0.9 \
+           contrib/polyml-5.9.2-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
