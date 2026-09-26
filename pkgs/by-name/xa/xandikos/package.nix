@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     tag = "v${version}";
-    hash = "sha256-MXCmk2SCOZRMCyrNCTdly323EoctjHMWOM96tfI0L7o=";
+    hash = "sha256-f5x3MH8hH9lSxyh2lrLN4BCOKNDj/bT8yLRPiHaSawI=";
   };
 
   build-system = with python3Packages; [
