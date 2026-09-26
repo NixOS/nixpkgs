@@ -94,6 +94,11 @@ stdenv.mkDerivation (
       makeWrapper
       lua5_3
     ]
+    # LLDB 23 ad-hoc signs the driver on Darwin even without an identity, via
+    # `xcrun codesign`, which the sandbox lacks; sigtool provides `codesign`.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "23") [
+      darwin.sigtool
+    ]
     ++ lib.optionals enableManpages [
       python3.pkgs.sphinx
       python3.pkgs.myst-parser
@@ -129,6 +134,9 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "23") [
+      (lib.cmakeFeature "CMAKE_CODESIGN" "codesign")
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
