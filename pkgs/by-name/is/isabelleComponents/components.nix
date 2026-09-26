@@ -13,6 +13,7 @@ lib.makeScope newScope (self: {
   easychair = self.callPackage ./easychair { };
   elm = self.callPackage ./elm { };
   eptcs = self.callPackage ./eptcs { };
+  find_facts_web = self.callPackage ./find_facts_web { };
   flatlaf = self.callPackage ./flatlaf { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
