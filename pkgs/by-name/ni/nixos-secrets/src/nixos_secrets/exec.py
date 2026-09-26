@@ -57,11 +57,6 @@ def get_secret(
     out: Path,
 ):
     backend = config.storeBackends[generator.backend]
-    if backend.get is None:
-        raise SecretsError(
-            f"Backend '{backend.name}' has no 'get' script, yet the generator ''{generator.name}' requires one"
-        )
-
     binary = build_binary(backend.get)
     try:
         env = os.environ.copy()

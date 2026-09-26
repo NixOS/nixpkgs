@@ -54,7 +54,7 @@ let
           readOnly = true;
         };
 
-        get = nullableDeferredPackage ''
+        get = deferredPackage ''
           Given $1=gen_name and $2=file_name, the script retrieves the
           respective secret to $out.
         '';
