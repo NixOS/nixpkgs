@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E1xhKV3ahZ8ahCDalga2XSOiLea0UyC8b1t3Gd4P6xA=";
   };
 
@@ -94,11 +94,9 @@ buildGoModule (finalAttrs: {
     installShellCompletion helm.{bash,zsh,fish}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "helm version";
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     homepage = "https://github.com/helm/helm";

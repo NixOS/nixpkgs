@@ -14,14 +14,14 @@
 }:
 
 let
-  package = buildGoModule rec {
+  package = buildGoModule (finalAttrs: {
     pname = "opentofu";
     version = "1.12.6";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-gtbgfjnGrB1J+7smGpFGavP6r/IDrcd5MgI0hS5FzHw=";
     };
 
@@ -67,7 +67,7 @@ let
     meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
-      changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/opentofu/opentofu/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
         nickcao
@@ -75,7 +75,7 @@ let
       ];
       mainProgram = "tofu";
     };
-  };
+  });
 
   opentofu_plugins_test =
     let
