@@ -30,6 +30,7 @@ lib.makeScope newScope (self: {
   lipics = self.callPackage ./lipics { };
   llncs = self.callPackage ./llncs { };
   minisat = self.callPackage ./minisat { };
+  mlton = self.callPackage ./mlton { };
   nunchaku = self.callPackage ./nunchaku { };
   opam = self.callPackage ./opam { };
   polyml = self.callPackage ./polyml { };

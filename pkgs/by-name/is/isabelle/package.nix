@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.llncs
     isabelleComponents.opam
     isabelleComponents.minisat
+    isabelleComponents.mlton
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -146,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/llncs-2.25' '${isabelleComponents.llncs.settings}' \
       --replace-fail 'contrib/opam-2.0.7' '${isabelleComponents.opam.settings}' \
       --replace-fail 'contrib/minisat-2.2.1-2' '${isabelleComponents.minisat.settings}' \
+      --replace-fail 'contrib/mlton-20241230-1' '${isabelleComponents.mlton.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/scala-${isabelleComponents.scala.version}' '${isabelleComponents.scala.settings}' \
@@ -167,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/javamail-20251022 contrib/jedit-20251128 contrib/jfreechart-1.5.3 \
            contrib/isabelle_fonts-20241227 contrib/jsoup-1.21.2 contrib/jortho-1.0-2 \
            contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1 contrib/llncs-2.25 contrib/opam-2.0.7 \
-           contrib/minisat-2.2.1-1
+           contrib/minisat-2.2.1-1 contrib/mlton-20241230-1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
