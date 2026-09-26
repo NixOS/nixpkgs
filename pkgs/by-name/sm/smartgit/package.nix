@@ -4,6 +4,7 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   openjdk21,
   gtk3,
   glib,
@@ -23,10 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://download.smartgit.dev/smartgit/smartgit-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }-no-git-linux-amd64.tar.gz";
-    hash = "sha256-7fROWENB++s33v5TmSw94o3HimSMHr5nHsq4TJq2vac=";
+    hash = "sha256-2KjUNabcN56cIBORN++YZlx2JuiuN/JMEDVjHo0wqw8=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    copyDesktopItems
+  ];
 
   buildInputs = [
     jre
@@ -66,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -av bin/smartgit.sh $out/bin/smartgit
     ln -sfv $out/bin/smartgit $out/bin/smartgithg
 
-    cp -av $desktopItem/share/applications/* $out/share/applications/
     for icon_size in 32 48 64 128 256; do
         path=$icon_size'x'$icon_size
         icon=bin/smartgit-$icon_size.png
@@ -79,25 +82,27 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "smartgit";
-    exec = "smartgit";
-    comment = finalAttrs.meta.description;
-    icon = "smartgit";
-    desktopName = "SmartGit";
-    categories = [
-      "Development"
-      "RevisionControl"
-    ];
-    mimeTypes = [
-      "x-scheme-handler/git"
-      "x-scheme-handler/smartgit"
-      "x-scheme-handler/sourcetree"
-    ];
-    startupNotify = true;
-    startupWMClass = "smartgit";
-    keywords = [ "git" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "smartgit";
+      exec = "smartgit";
+      comment = finalAttrs.meta.description;
+      icon = "smartgit";
+      desktopName = "SmartGit";
+      categories = [
+        "Development"
+        "RevisionControl"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/git"
+        "x-scheme-handler/smartgit"
+        "x-scheme-handler/sourcetree"
+      ];
+      startupNotify = true;
+      startupWMClass = "smartgit";
+      keywords = [ "git" ];
+    })
+  ];
 
   meta = {
     description = "Git GUI client";
