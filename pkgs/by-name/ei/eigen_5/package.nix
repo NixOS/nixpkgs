@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://eigen.tuxfamily.org";
+    homepage = "https://libeigen.gitlab.io/";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     changelog = "https://gitlab.com/libeigen/eigen/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
