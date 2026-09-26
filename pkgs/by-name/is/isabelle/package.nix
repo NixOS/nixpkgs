@@ -5,7 +5,6 @@
   coreutils,
   net-tools,
   rlwrap,
-  perl,
   procps,
   makeDesktopItem,
   copyDesktopItems,
@@ -109,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/e-3.2' '${isabelleComponents.e.settings}' \
       --replace-fail 'contrib/flatlaf-${isabelleComponents.flatlaf.version}' '${isabelleComponents.flatlaf.settings}' \
+      --replace-fail 'contrib/isabelle_setup-20250613' '${isabelleComponents.setup.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
@@ -121,10 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/zipperposition-2.1-1' '${isabelleComponents.zipperposition.settings}'
 
     rm -rf contrib/bash_process-20240326 contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 \
-           contrib/e-3.2 contrib/flatlaf-3.6.2 contrib/jdk-21.0.9 contrib/nunchaku-0.5 \
-           contrib/polyml-5.9.2-2 contrib/scala-3.3.4 contrib/spass-3.8ds-2 \
-           contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* \
-           contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1
+           contrib/e-3.2 contrib/flatlaf-3.6.2 contrib/isabelle_setup-20250613 \
+           contrib/jdk-21.0.9 contrib/nunchaku-0.5 contrib/polyml-5.9.2-2 \
+           contrib/scala-3.3.4 contrib/spass-3.8ds-2 contrib/vampire-4.8 \
+           contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* contrib/z3-4.4.0pre-4 \
+           contrib/zipperposition-2.1-1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -156,28 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    setup_name=$(basename contrib/isabelle_setup*)
-
     # Stop Isabelle trying to use `/tmp`.
     user_home="$(bin/isabelle getenv -b ISABELLE_HOME_USER)"
     mkdir -p "$user_home/etc"
     echo 'ISABELLE_TMP_PREFIX="$TMPDIR/isabelle"' > "$user_home/etc/settings"
-
-    #The following is adapted from https://isabelle.sketis.net/repos/isabelle/file/Isabelle2021-1/Admin/lib/Tools/build_setup
-    TARGET_DIR="contrib/$setup_name/lib"
-    rm -rf "$TARGET_DIR"
-    mkdir -p "$TARGET_DIR/isabelle/setup"
-    declare -a ARGS=("-Xlint:unchecked")
-
-    SOURCES="$(${perl}/bin/perl -e 'while (<>) { if (m/(\S+\.java)/)  { print "$1 "; } }' "src/Tools/Setup/etc/build.props")"
-    for SRC in $SOURCES
-    do
-      ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
-    done
-    echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${isabelleComponents.scala}/lib/scala3-interfaces-${isabelleComponents.scala.version}.jar:${isabelleComponents.scala}/lib/scala3-compiler_3-${isabelleComponents.scala.version}.jar:${isabelleComponents.flatlaf}/share/java/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
-    jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
-    rm -rf "$TARGET_DIR/isabelle"
 
     bin/isabelle scala_build
 
