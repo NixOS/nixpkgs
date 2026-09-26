@@ -33,7 +33,14 @@ rustPlatform.buildRustPackage {
     description = "Base16 and base24 color scheme manager";
     homepage = "https://github.com/tinted-theming/tinty";
     changelog = "https://github.com/tinted-theming/tinty/blob/refs/tags/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Only
+        mpl20
+        bsd2
+        bsd3
+      ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       pluiedev
