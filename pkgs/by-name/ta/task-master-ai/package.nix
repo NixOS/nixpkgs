@@ -5,6 +5,7 @@
   nodejs,
   nix-update-script,
   versionCheckHook,
+  stdenv, # for meta.broken
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
@@ -49,5 +50,7 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "task-master-ai";
     maintainers = [ lib.maintainers.repparw ];
     platforms = lib.platforms.all;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

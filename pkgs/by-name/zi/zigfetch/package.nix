@@ -44,5 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "zigfetch";
     inherit (zig_0_16.meta) platforms;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
