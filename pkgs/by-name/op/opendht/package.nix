@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       taeer
       olynch
