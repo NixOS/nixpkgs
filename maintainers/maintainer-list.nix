@@ -5070,6 +5070,12 @@
     githubId = 47758554;
     name = "Charlotte Harludo";
   };
+  charly = {
+    matrix = "@charlycoste:matrix.org";
+    github = "charlycoste";
+    githubId = 352634;
+    name = "Charles-Édouard Coste";
+  };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
