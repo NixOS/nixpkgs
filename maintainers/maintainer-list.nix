@@ -31571,10 +31571,10 @@
     ];
   };
   wrench-exile-legacy = {
-    email = "user@wrench-exile-legacy.site";
+    email = "hello@wrenchd.dev";
     github = "wrench-exile-legacy";
     githubId = 280737824;
-    name = "wrench";
+    name = "wrenchd";
   };
   wrmilling = {
     name = "Winston R. Milling";
