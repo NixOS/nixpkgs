@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   darktable,
   rawtherapee,
   ffmpeg,
@@ -18,59 +17,19 @@
 }:
 
 let
-  version = "260728-bbde8f452";
+  version = "260919-28c46a116";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
+    hash = "sha256-+3zLhHTpNlDoYYD1ljDii/BhzP+72y+SCec7pa/1VNs=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
   frontend = callPackage ./frontend.nix { inherit src version; };
-
-  fetchModel =
-    { name, hash }:
-    fetchzip {
-      inherit hash;
-      extension = "zip";
-      url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
-      stripRoot = false;
-    };
-
-  # NB: needs to be a derivation with a src attribute so the update script
-  # can ensure that these hashes remain up to date
-  wrapModelForUpdate =
-    src:
-    stdenv.mkDerivation {
-      inherit pname version src;
-
-      dontUnpack = true;
-      dontBuild = true;
-
-      installPhase = ''
-        mkdir $out
-      '';
-
-      passthru.updateScript = nix-update-script { };
-    };
-
-  facenet = fetchModel {
-    name = "facenet";
-    hash = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
-  };
-
-  nasnet = fetchModel {
-    name = "nasnet";
-    hash = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
-  };
-
-  nsfw = fetchModel {
-    name = "nsfw";
-    hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
-  };
+  models = callPackage ./models.nix { inherit src version; };
 
   assets_path = "$out/share/photoprism";
 in
@@ -104,23 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
     rm ${assets_path}/models
-    mkdir -p ${assets_path}/models
-    ln -s ${frontend}/assets/models/* ${assets_path}/models/
-
     # install tensorflow models
-    ln -s ${nasnet}/nasnet ${assets_path}/models/
-    ln -s ${nsfw}/nsfw ${assets_path}/models/
-    ln -s ${facenet}/facenet ${assets_path}/models/
+    ln -s ${models} ${assets_path}/models
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit backend frontend;
-
-    facenet = wrapModelForUpdate facenet;
-    nasnet = wrapModelForUpdate nasnet;
-    nsfw = wrapModelForUpdate nsfw;
+    inherit backend frontend models;
 
     tests = {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
@@ -134,11 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         "--subpackage"
         "frontend"
         "--subpackage"
-        "facenet"
-        "--subpackage"
-        "nasnet"
-        "--subpackage"
-        "nsfw"
+        "models"
       ];
     };
   };
