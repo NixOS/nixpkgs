@@ -20,6 +20,7 @@ lib.makeScope newScope (self: {
   isabelle-linter = self.callPackage ./isabelle-linter { };
   javamail = self.callPackage ./javamail { };
   jdk = self.callPackage ./jdk { };
+  jedit = self.callPackage ./jedit { };
   kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
