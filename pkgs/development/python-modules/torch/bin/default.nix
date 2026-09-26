@@ -134,6 +134,13 @@ buildPythonPackage {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
 
+    # Any consumer that doesn't set MKL_ROOT (e.g. torchcodec) would fail RPATH_CHANGE at install time,
+    # as those paths collapse to /lib, /lib/intel64
+    (
+      cd $out/${python.sitePackages}/torch/share/cmake/Caffe2
+      patch -p2 < ${../source/disable-cmake-mkl-rpath.patch}
+    )
+
     mkdir -p "$cxxdev"
   '';
 
