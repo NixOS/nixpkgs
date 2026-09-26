@@ -95,8 +95,8 @@ in
 
         DynamicUser = true;
         StateDirectory = "glpi-agent";
-        CapabilityBoundingSet = [ "CAP_SYS_ADMIN" ];
-        AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+        AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" ];
 
         LimitCORE = 0;
         LimitNOFILE = 65535;
@@ -104,7 +104,7 @@ in
         MemorySwapMax = 0;
         MemoryZSwapMax = 0;
         PrivateTmp = true;
-        ProcSubset = "pid";
+        ProcSubset = "all";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
