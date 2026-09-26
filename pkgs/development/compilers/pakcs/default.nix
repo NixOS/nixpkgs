@@ -16,17 +16,16 @@
   gnutar,
   coreutils,
   sqlite,
+  gettext,
 }:
 
 let
   pname = "pakcs";
-  version = "3.7.2";
+  version = "3.9.0";
 
-  # Don't switch to "Current release" without a reason, because its
-  # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
-    url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
-    hash = "sha256-ZfQUgFqmPPCeDx/T5G/JdvYDq/7XbvsgxPcEX4y9HZ4=";
+    url = "https://www.curry-lang.org/pakcs/download/pakcs-${version}-src.tar.gz";
+    hash = "sha256-uiWlHJsiy1o4CQOZBa69YJacjhFBap1mSlhxEMtUDKI=";
   };
 
   curry-frontend =
@@ -38,17 +37,6 @@ let
             inherit src;
             postUnpack = "sourceRoot+=/frontend";
           }))
-          (haskell.lib.compose.appendPatch
-            # mtl 2.3 compatibility has been fixed upstream but it's not in
-            # the release yet
-            (
-              fetchpatch2 {
-                name = "fix-mtl-2.3.patch";
-                url = "https://git.ps.informatik.uni-kiel.de/curry/curry-frontend/-/commit/3b26d2826141fee676da07939c2929a049279b70.diff";
-                hash = "sha256-R3XjoUzAwTvDoUEAIIjmrSh2r4RHMqe00RMIs+7jFPY=";
-              }
-            )
-          )
         ];
       };
     }).curry-frontend;
@@ -61,6 +49,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     which
     makeWrapper
+    gettext
   ];
 
   makeFlags = [
@@ -116,7 +105,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
+    homepage = "https://www.curry-lang.org/pakcs";
     description = "Implementation of the multi-paradigm declarative language Curry";
     license = lib.licenses.bsd3;
 
