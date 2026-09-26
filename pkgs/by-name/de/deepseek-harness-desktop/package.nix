@@ -22,6 +22,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness-desktop";
   version = "0.17.2";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v${finalAttrs.version}/Deepseek.Harness.Desktop_${finalAttrs.version}_amd64.deb";
