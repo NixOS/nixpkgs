@@ -35,6 +35,7 @@ lib.makeScope newScope (self: {
   opam = self.callPackage ./opam { };
   pdfjs = self.callPackage ./pdfjs { };
   polyml = self.callPackage ./polyml { };
+  postgresql_jdbc = self.callPackage ./postgresql_jdbc { };
   prismjs = self.callPackage ./prismjs { };
   scala = self.callPackage ./scala { };
   setup = self.callPackage ./setup { };
