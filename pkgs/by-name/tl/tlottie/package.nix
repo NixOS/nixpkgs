@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tlottie";
-  version = "0-unstable-2026-09-11";
+  version = "1.0.6";
 
   __structuredAttrs = true;
 
