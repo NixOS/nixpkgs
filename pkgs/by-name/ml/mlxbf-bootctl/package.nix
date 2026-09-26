@@ -4,9 +4,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlxbf-bootctl";
   version = "1.1-6-unstable-2025-01-16";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mellanox";
@@ -16,14 +19,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
     install -D mlxbf-bootctl $out/bin/mlxbf-bootctl
+    runHook postInstall
   '';
 
   meta = {
     description = "Control BlueField boot partitions";
     homepage = "https://github.com/Mellanox/mlxbf-bootctl";
     license = lib.licenses.bsd2;
-    changelog = "https://github.com/Mellanox/mlxbf-bootctl/releases/tag/${pname}-${version}";
+    changelog = "https://github.com/Mellanox/mlxbf-bootctl/releases/tag/${finalAttrs.pname}-${finalAttrs.version}";
     # This package is supposed to only run on a BlueField. Thus aarch64-linux
     # is the only relevant platform.
     platforms = [ "aarch64-linux" ];
@@ -32,4 +37,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})
