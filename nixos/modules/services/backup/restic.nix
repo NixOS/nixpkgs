@@ -378,6 +378,15 @@ in
               fileBackup = (backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null;
               commandBackup = backup.command != [ ];
             in
+            fileBackup || commandBackup;
+          message = "services.restic.backups.${name}: please set one of `command`, `paths` or `dynamicFilesFrom`.";
+        }
+        {
+          assertion =
+            let
+              fileBackup = (backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null;
+              commandBackup = backup.command != [ ];
+            in
             !(fileBackup && commandBackup);
           message = "services.restic.backups.${name}: cannot do both a command backup and a file backup at the same time.";
         }
