@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "NetBox plugin for Fiber Management System: fiber cable management, splice planning, and circuit provisioning";
     homepage = "https://jsenecal.github.io/netbox-fms/";
-    changelog = "https://jsenecal.github.io/netbox-fms/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/jsenecal/netbox-fms/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
