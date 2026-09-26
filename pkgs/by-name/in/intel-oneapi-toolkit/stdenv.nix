@@ -30,7 +30,11 @@ let
       chmod +x $out/bin/clang
     '';
 
-    passthru.isClang = true;
+    passthru = {
+      isClang = true;
+      # cc-wrapper adds libstdc++ include paths only when this is set.
+      langCC = true;
+    };
 
     # icpx rejects these flags for the SPIR-V device target (spir64-unknown-unknown).
     hardeningUnsupportedFlags = [
