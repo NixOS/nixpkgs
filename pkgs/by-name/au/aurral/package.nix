@@ -5,6 +5,7 @@
   gitMinimal,
   nix-update-script,
   nodejs_26,
+  python3,
   sqlite,
   ffmpeg,
   yt-dlp,
@@ -16,6 +17,20 @@
   nixosTests,
 }:
 
+let
+  matcherPython = python3.withPackages (ps: [
+    (ps.beets.overrideAttrs (oldAttrs: rec {
+      version = "2.14.0";
+
+      src = fetchFromGitHub {
+        owner = "beetbox";
+        repo = "beets";
+        tag = "v${version}";
+        hash = "sha256-lhU7hGyudDgmAyKUNInxZ8nM/dd6xWLS83vp3rwZuHQ=";
+      };
+    }))
+  ]);
+in
 buildNpmPackage (finalAttrs: {
   pname = "aurral";
   version = "2.9.1";
@@ -30,23 +45,16 @@ buildNpmPackage (finalAttrs: {
   };
 
   # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
-  # Remove engine constraint not matching upstream dockerfile.
   patches = [
     ./package.json.patch
   ];
 
-  # https://github.com/lklynet/aurral/pull/873
-  postPatch = ''
-    # Keep automatic ports above Fetch's highest blocked port (10080).
-    substituteInPlace .tests/helpers/backendTestHarness.js \
-      --replace-fail '4100 + Math.floor(Math.random() * 1000)' \
-      '11000 + Math.floor(Math.random() * 1000)'
-  '';
-
+  npmDepsFetcherVersion = 2;
   npmDepsHash = "sha256-NVz5eqDDtMBKiTDl3aX0pHBYGTcYal8lmCf8mbKu31I=";
 
   nodejs = nodejs_26;
 
+  env.AURRAL_MATCHER_PYTHON = "${matcherPython}/bin/python";
   env.VITE_APP_VERSION = finalAttrs.version;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite ];
   env.FONTCONFIG_FILE = makeFontsConf {
