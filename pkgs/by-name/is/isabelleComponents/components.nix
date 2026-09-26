@@ -5,6 +5,7 @@ lib.makeScope newScope (self: {
   addSettings = self.callPackage ./add-settings.nix { };
 
   # Components
+  bash_process = self.callPackage ./bash_process { };
   csdp = self.callPackage ./csdp { };
   cvc5 = self.callPackage ./cvc5 { };
   e = self.callPackage ./e { };

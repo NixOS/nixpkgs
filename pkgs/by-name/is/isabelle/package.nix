@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.csdp
     isabelleComponents.zipperposition
     isabelleComponents.nunchaku
+    isabelleComponents.bash_process
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -103,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
     substituteInPlace etc/components \
+      --replace-fail 'contrib/bash_process-20240326' '${isabelleComponents.bash_process.settings}' \
       --replace-fail 'contrib/csdp-6.1.1-1' '${isabelleComponents.csdp.settings}' \
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/e-3.2' '${isabelleComponents.e.settings}' \
@@ -116,10 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/vscodium-${isabelleComponents.vscodium.version}' '${isabelleComponents.vscodium.settings}' \
       --replace-fail 'contrib/zipperposition-2.1-1' '${isabelleComponents.zipperposition.settings}'
 
-    rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/e-3.2 contrib/jdk-21.0.9 \
-           contrib/nunchaku-0.5 contrib/polyml-5.9.2-2 contrib/spass-3.8ds-2 \
-           contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* \
-           contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1
+    rm -rf contrib/bash_process-20240326 contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 \
+           contrib/e-3.2 contrib/jdk-21.0.9 contrib/nunchaku-0.5 contrib/polyml-5.9.2-2 \
+           contrib/spass-3.8ds-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 \
+           contrib/vscodium-* contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -138,8 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/z3-${isabelleComponents.z3.version}' '${isabelleComponents.z3.settings}'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/${platform}/bash_process
-
     for d in contrib/kodkodi-*/jni/${platform}; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
