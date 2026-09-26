@@ -17792,6 +17792,12 @@
     githubId = 34819524;
     name = "Marcel";
   };
+  marcg03 = {
+    email = "marcgrec@tuta.com";
+    github = "marcg03";
+    githubId = 134197728;
+    name = "Marc-Alexander Grec";
+  };
   MarchCraft = {
     email = "felix@dienilles.de";
     github = "MarchCraft";
