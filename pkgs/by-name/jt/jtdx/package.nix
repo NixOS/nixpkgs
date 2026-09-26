@@ -4,24 +4,26 @@
   qt5,
   lib,
 }:
-wsjtx.overrideAttrs (old: {
-  pname = "jtdx";
-  version = "159";
-  src = fetchgit {
-    url = "https://github.com/jtdx-project/jtdx.git";
-    rev = "2a0e2bea8c66c9ca94d2ea8034cf83a68cfa40eb";
-    hash = "sha256-5KlFBlzG3hKFFGO37c+VN+FvZKSnTQXvSorB+Grns8w=";
-  };
-  buildInputs = old.buildInputs ++ [ qt5.qtwebsockets ];
-  meta = {
-    description = "wsjtx fork with some extra features";
-    maintainers = with lib.maintainers; [
-      matthewcroughan
-      sarcasticadmin
-      pkharvey
-    ];
-    homepage = "https://github.com/jtdx-project/jtdx";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-  };
-})
+wsjtx.overrideAttrs (
+  finalAttrs: old: {
+    pname = "jtdx";
+    version = "159";
+    src = fetchgit {
+      url = "https://github.com/jtdx-project/jtdx.git";
+      tag = finalAttrs.version;
+      hash = "sha256-5KlFBlzG3hKFFGO37c+VN+FvZKSnTQXvSorB+Grns8w=";
+    };
+    buildInputs = old.buildInputs ++ [ qt5.qtwebsockets ];
+    meta = {
+      description = "wsjtx fork with some extra features";
+      maintainers = with lib.maintainers; [
+        matthewcroughan
+        sarcasticadmin
+        pkharvey
+      ];
+      homepage = "https://github.com/jtdx-project/jtdx";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux;
+    };
+  }
+)
