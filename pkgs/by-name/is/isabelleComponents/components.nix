@@ -18,4 +18,5 @@ lib.makeScope newScope (self: {
   vscode_extension = self.callPackage ./vscode_extension { };
   vscodium = self.callPackage ./vscodium { };
   z3 = self.callPackage ./z3 { };
+  zipperposition = self.callPackage ./zipperposition { };
 })
