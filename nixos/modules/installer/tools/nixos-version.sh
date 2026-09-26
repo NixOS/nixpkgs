@@ -20,6 +20,21 @@ case "$1" in
     fi
     echo "@configurationRevision@"
     ;;
+  --kernel-version)
+    if [[ "@kernelVersion@" =~ "@" ]]; then
+      echo "$0: kernel version is unknown" >&2
+      exit 1
+    fi
+    echo "@kernelVersion@"
+    ;;
+  --specialisations)
+    if [[ -z "@specialisations@" ]]; then
+      echo "$0: no specialisations found" >&2
+      exit 1
+    else
+      echo "@specialisations@"
+    fi
+    ;;
   --json)
     cat <<EOF
 @json@
