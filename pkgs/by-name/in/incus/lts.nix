@@ -111,7 +111,62 @@ import ./generic.nix {
       url = "https://github.com/lxc/incus/commit/9e188e31e43c21fa8f2a4cac265aa246d4c947f2.patch?full_index=1";
       hash = "sha256-KFYKB9PJK/U4/jSe3rmMeR9FWevvvi47BRy055Zj8Io=";
     })
-
+    # incus/file: Contain recursive pull symlinks
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/go-team/packages/incus/-/raw/4992bd88f727414d9f02e9966feb235daf8d755d/debian/patches/126-GHSA-wfvq-qh87-gm4j.patch";
+      hash = "sha256-hD7l9/mlUuISLV1hrvuYMyPFYe1XUWnLO15RJyO1ZlA=";
+    })
+    # incusd: Don't follow symlinks when receiving migration
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/9afa3d58ef9ffae40eb1980bd33592d00fe1feba.patch?full_index=1";
+      hash = "sha256-SJKrTdR/BKNVPa9P7Yowukfm71D3M9yGh1iGQpkhEDE=";
+    })
+    # incusd/storage: Treat volume creation with a source as a copy (sourced from stable-7.0)
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/e59d35263a0e027b4a0344ab8d05c80c622a21e2.patch?full_index=1";
+      hash = "sha256-oHM9IGGjPRwsmc5JAYaBY65HV+H3ZC1/ebqQts/tDow=";
+    })
+    # incusd/storage/drivers: Confine btrfs subvolume paths
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/99a8ba3101e91be6cd7013e80ff916f32d495b71.patch?full_index=1";
+      hash = "sha256-iwybe/E8Lucwf6ih6gWt3b/jnG3UGYep2GoqL/h4qn8=";
+    })
+    # incusd/storage: Validate dependent volume names on backup import
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/2ef78c71a5f3c9db4a6ad438563ec99497686d83.patch?full_index=1";
+      hash = "sha256-apBgxM15JA+8q/lR5mJRG85rBn+2pEuZdcgOjPn/y8g=";
+    })
+    # incusd/storage: Ignore backup project for dependent
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/10d6ea9a7163c2a7b16f9e9ccf0bd45981c3355e.patch?full_index=1";
+      hash = "sha256-5gkMiAb5Ewzsiv9LmZ2oJx+7xTdIbkVnXEkt67metlU=";
+    })
+    # incusd/storage/s3: Require x-amz-* headers to be signed
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/go-team/packages/incus/-/raw/4992bd88f727414d9f02e9966feb235daf8d755d/debian/patches/123-GHSA-mmj7-8rgf-mx2h.patch";
+      hash = "sha256-OHjdOPQ3UyNfucLElKXA4iRYVhOF6fq+m0wUnaYGoiI=";
+    })
+    # incusd/operations: Check project access on operation get and wait
+    # incusd/operations: Hide access token operations from non-admins
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/go-team/packages/incus/-/raw/bdec650ea4657450a90300c1e25e4d9b5ba71547/debian/patches/125-GHSA-mfwv-x733-9446.patch";
+      hash = "sha256-LMx5sb7rC5U9BLsXYhqN3SaW7K/d4q2H1OvcDQPNm7w=";
+    })
+    # incusd/storage/buckets: Require can_edit to read bucket keys
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/1eaf9b8bfed2b8cf09182c88fd81b10327605ade.patch?full_index=1";
+      hash = "sha256-KrQtsS8Ug7K5bMeduV9tPeunHOnCXfNNqlbpVMTNzws=";
+    })
+    # incusd/project: Restrict volume options on update and copy
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/da36896aa8af65080a79fd1a4b8abcf75d46cbd1.patch?full_index=1";
+      hash = "sha256-+W+2RXtJO/IGd+ejpkylsaNfH8JtSIMTun9bxbtbPxU=";
+    })
+    # incusd/instances: Check project restrictions on clustered refresh
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/f22d8a92dff8e4cf01260ab85405db754bcfc026.patch?full_index=1";
+      hash = "sha256-LwQRWQzZewU0QjdaerKFJb4h99RKuTLBZ80PifJONkM=";
+    })
   ];
   lts = true;
   nixUpdateExtraArgs = [

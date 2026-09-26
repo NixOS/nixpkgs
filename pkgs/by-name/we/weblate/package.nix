@@ -28,7 +28,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = _final: prev: {
-      django = prev.django_6;
+      django = prev.django_6_0;
     };
   };
   python3Packages = python.pkgs;

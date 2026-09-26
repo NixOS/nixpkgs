@@ -15999,6 +15999,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lajdre = {
+    name = "Lajdre";
+    email = "lajdre.dev@tuta.com";
+    github = "lajdre";
+    githubId = 110416923;
+  };
   lajp = {
     email = "lajp@iki.fi";
     github = "lajp";
