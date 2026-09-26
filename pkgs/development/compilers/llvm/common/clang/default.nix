@@ -12,6 +12,7 @@
   release_version,
   version,
   python3,
+  perl,
   buildLlvmPackages,
   fixDarwinDylibNames,
   enableManpages ? false,
@@ -97,6 +98,8 @@ stdenv.mkDerivation (
     buildInputs = [
       libxml2
       libllvm
+      python3
+      perl
     ];
 
     strictDeps = true;
