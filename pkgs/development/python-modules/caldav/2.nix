@@ -75,6 +75,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     description = "CalDAV (RFC4791) client library";

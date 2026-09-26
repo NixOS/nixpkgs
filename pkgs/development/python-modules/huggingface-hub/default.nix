@@ -107,6 +107,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "huggingface_hub" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
     mainProgram = "hf";

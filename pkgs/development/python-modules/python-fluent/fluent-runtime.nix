@@ -50,6 +50,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fluent.runtime" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/projectfluent/python-fluent/blob/${src.rev}/fluent.runtime/CHANGELOG.rst";
     description = "Localization library for expressive translations";

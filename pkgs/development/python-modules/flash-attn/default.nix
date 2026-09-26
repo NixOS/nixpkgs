@@ -135,9 +135,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   # Tests require access to a physical GPU
   doCheck = false;
 
-  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doInstallCheck = true;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
   };
 
   meta = {
