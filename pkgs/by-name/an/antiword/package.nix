@@ -1,20 +1,21 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "antiword";
-  version = "0.37";
+  version = "0.37-unstable-2026-06-03";
 
-  src = fetchurl {
-    url = "http://www.winfield.demon.nl/linux/antiword-${finalAttrs.version}.tar.gz";
-    sha256 = "1b7mi1l20jhj09kyh0bq14qzz8vdhhyf35gzwsq43mn6rc7h0b4f";
+  src = fetchFromGitHub {
+    owner = "grobian";
+    repo = "antiword";
+    rev = "82515aad16ceedc1061ae3777acb99c90d3d3e08";
+    hash = "sha256-f3XklzP8ANgPI6JrHWUJpgKD4ZyQ5C8vQ/q0oHc63h4=";
   };
 
   prePatch = ''
-    sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
     substituteInPlace Makefile --replace "gcc" '$(CC)'
   '';
 
@@ -22,12 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=$(out)"
   ];
 
   installTargets = [ "global_install" ];
 
   meta = {
-    homepage = "http://www.winfield.demon.nl/";
+    homepage = "https://github.com/grobian/antiword";
     description = "Convert MS Word documents to plain text or PostScript";
     license = lib.licenses.gpl2;
 
