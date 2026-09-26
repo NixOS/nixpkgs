@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-yKW2XGjNVFPBhM63odkSx8953HTwDz0aeDK9icIJ5YQ=";
+  vendorHash = "sha256-2GWqVreSaRj2ThnEWyynOp71At9Z356Bv7oaQ4LPShI=";
 
   ldflags = [
     "-s"
@@ -35,9 +35,7 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in Go";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-go";
-    maintainers = with lib.maintainers; [
-      tie
-      untio11
-    ];
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })

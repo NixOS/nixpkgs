@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-z5DBSC+61DGgrgMe/YhtNz/qlxf3NTy8y9fkWBadNCg=";
+  vendorHash = "sha256-qks3GEy5ROuEmrK+DLpYZy6qbNIk7bhHlndYAtXmYYo=";
 
   ldflags = [
     "-s"
@@ -51,6 +51,7 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in TypeScript & JavaScript (Node.js)";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-nodejs";
-    maintainers = lib.teams.pulumi.members;
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })
