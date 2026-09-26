@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
+    "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
 
   strictDeps = true;
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
+    ctest --test-dir  "src/unittests" --output-on-failure
     ./bin/legacytests
 
     runHook postCheck
