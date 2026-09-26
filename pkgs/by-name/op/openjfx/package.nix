@@ -6,6 +6,7 @@
   pkgs,
 
   gradle_8,
+  gradle_9,
   perl,
   pkg-config,
   cmake,
@@ -35,16 +36,20 @@
   jdk17_headless,
   jdk21_headless,
   jdk25_headless,
+  jdk27_headless,
   jdk-bootstrap ?
     {
       "17" = jdk17_headless;
       "21" = jdk21_headless;
       "25" = jdk25_headless;
+      "27" = jdk27_headless;
     }
     .${featureVersion},
 }:
 
 let
+  gradle = if lib.versionAtLeast featureVersion "27" then gradle_9 else gradle_8;
+
   sourceFile = ./. + "/${featureVersion}/source.json";
   source = nixpkgs-openjdk-updater.openjdkSource {
     inherit sourceFile;
@@ -63,6 +68,9 @@ stdenv.mkDerivation {
   version = lib.removePrefix "refs/tags/" source.src.rev;
 
   inherit (source) src;
+
+  __structuredAttrs = lib.versionAtLeast featureVersion "27";
+  strictDeps = lib.versionAtLeast featureVersion "27";
 
   patches =
     lib.optionals (!atLeast23) (
@@ -115,7 +123,7 @@ stdenv.mkDerivation {
     ];
 
   nativeBuildInputs = [
-    gradle_8
+    gradle
     perl
     pkg-config
     cmake
@@ -133,7 +141,7 @@ stdenv.mkDerivation {
     (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)
   ];
 
-  mitmCache = gradle_8.fetchDeps {
+  mitmCache = gradle.fetchDeps {
     attrPath = "openjfx${featureVersion}";
     pkg = pkgs."openjfx${featureVersion}".override { withWebKit = true; };
     data = ./. + "/${featureVersion}/deps.json";
@@ -170,6 +178,11 @@ stdenv.mkDerivation {
       substituteInPlace build.properties \
         --replace-fail jfx.gradle.version=7.3 jfx.gradle.version=8.4
     ''
+    + lib.optionalString (lib.versionAtLeast featureVersion "27") ''
+      # Gradle 9's DependencyHandler.project returns a dependency, not a Project.
+      substituteInPlace build.gradle \
+        --replace-fail 'testImplementation project(' 'testImplementation rootProject.project('
+    ''
     + ''
       ln -s $config gradle.properties
     '';
@@ -194,7 +207,7 @@ stdenv.mkDerivation {
 
   disallowedReferences = [
     jdk-bootstrap
-    gradle_8.jdk
+    gradle.jdk
   ];
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [

@@ -1,0 +1,13 @@
+--- a/src/hotspot/os/posix/os_posix.cpp
++++ b/src/hotspot/os/posix/os_posix.cpp
+@@ -1151,9 +1151,7 @@
+ #endif // AIX
+   char* rp = nullptr;
+   if (fname[0] != '\0') {
+-    rp = os::realpath(fname, buf, buflen);
+-  }
+-  if (rp == nullptr) {
++    snprintf(buf, buflen, "%s", fname);
+     return;
+   }
+ 
