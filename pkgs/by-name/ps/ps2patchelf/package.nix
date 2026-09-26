@@ -35,6 +35,6 @@ buildDotnetModule rec {
     description = "Very basic tool for converting PCSX2 .pnach cheats to game executable patches";
     maintainers = [ lib.maintainers.gigahawk ];
     mainProgram = "PS2PatchElf";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
   };
 }
