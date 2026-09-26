@@ -3,20 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  flit-core,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "treelog";
-  version = "1.0";
+  version = "2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "0hnivz4p4llky6djxgcsr9r3j4vr46mkjvp0ksybhpx0fsnhdi81";
+    hash = "sha256-zwsTVtrnUyncn8ezHLa/YU2JpmcI3fnC815zmFtPhk4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    flit-core
+  ];
 
   dependencies = [ typing-extensions ];
 
