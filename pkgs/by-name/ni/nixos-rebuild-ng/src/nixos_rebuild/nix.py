@@ -433,9 +433,6 @@ def get_generations(
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
     and if this is the current active profile or not.
     """
-    if not profile.path.exists():
-        raise NixOSRebuildError(f"no profile '{profile.name}' found")
-
     # `nix-env --list-generations` historically needed root to run.
     # This was fixed in https://github.com/NixOS/nix/pull/16523, but just in
     # case the user has some old `nix` version for some reason, we still
@@ -514,16 +511,18 @@ def list_generations(profile: Profile, elevate: Elevator) -> list[GenerationJson
             current=generation.current,
         )
 
-    # This can be surprisingly slow, especially with lots of generations,
-    # but it is basically IO work so we can run in parallel
-    with ThreadPoolExecutor() as executor:
-        return sorted(
-            executor.map(
-                get_generation_info,
-                get_generations(profile=profile, elevate=elevate),
-            ),
-            key=lambda x: x["generation"],
-            reverse=True,
+    if generations := get_generations(profile=profile, elevate=elevate):
+        # This can be surprisingly slow, especially with lots of generations,
+        # but it is basically IO work so we can run in parallel
+        with ThreadPoolExecutor() as executor:
+            return sorted(
+                executor.map(get_generation_info, generations),
+                key=lambda x: x["generation"],
+                reverse=True,
+            )
+    else:
+        raise NixOSRebuildError(
+            f"could not find generations for profile '{profile.name}'"
         )
 
 
