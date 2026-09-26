@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation {
   pname = "jpegexiforient";
-  version = "unstable-2002-02-17";
+  version = "0-unstable-2002-02-17";
   src = fetchurl {
     url = "http://sylvana.net/jpegcrop/jpegexiforient.c";
     sha256 = "1v0f42cvs0397g9v46p294ldgxwbp285npg6npgnlnvapk6nzh5s";
