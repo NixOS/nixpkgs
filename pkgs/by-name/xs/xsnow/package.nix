@@ -42,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    # last successful hydra build on darwin was in 2024
-    broken = stdenv.hostPlatform.isDarwin;
+    # last successful hydra build on darwin and aarch64-linux were in 2024
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "X-windows application that will let it snow on the root, in between and on windows";
     mainProgram = "xsnow";
     homepage = "https://ratrabbit.nl/ratrabbit/xsnow/";
