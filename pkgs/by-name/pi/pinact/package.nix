@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
@@ -11,18 +11,19 @@
 let
   mainProgram = "pinact";
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pinact";
-  version = "4.1.1";
+  version = "5.0.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GiwAbVKpVczugr9oIH+afV4ozlepSyyYDivJpwlJHGc=";
+    hash = "sha256-VmLQmZDFBweh8O6VHcDQsAc6Ojcriw0oQymO6SkAVpU=";
   };
 
-  vendorHash = "sha256-8bA0AEOHaOWynIyvtqI/Gr68UFuVwkZvXwWEdabyJNE=";
+  vendorHash = "sha256-mAlwYacDZruLw9hMr77z6MYNPME+iPntJROK6Yd84uI=";
 
   env.CGO_ENABLED = 0;
 
