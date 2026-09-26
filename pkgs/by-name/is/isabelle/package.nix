@@ -5,7 +5,6 @@
   coreutils,
   net-tools,
   scala_3,
-  eprover-ho,
   rlwrap,
   perl,
   procps,
@@ -63,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.polyml
     isabelleComponents.verit
     isabelleComponents.vampire
-    eprover-ho
+    isabelleComponents.e
     net-tools
     isabelleComponents.cvc5
     isabelleComponents.csdp
@@ -95,27 +94,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Pure/ML/ml_settings.scala \
       --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${isabelleComponents.polyml}/bin")'
 
-    cat >contrib/e-*/etc/settings <<EOF
-      E_HOME=${eprover-ho}/bin
-      E_VERSION=${eprover-ho.version}
-    EOF
-
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
-
-    for comp in contrib/e-*; do
-      rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
-    done
-    rm -rf contrib/*/src
 
     substituteInPlace etc/components \
       --replace-fail 'contrib/csdp-6.1.1-1' '${isabelleComponents.csdp.settings}' \
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
+      --replace-fail 'contrib/e-3.2' '${isabelleComponents.e.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}' \
       --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}'
 
-    rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/jdk-21.0.9 \
+    rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/e-3.2 contrib/jdk-21.0.9 \
            contrib/polyml-5.9.2-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3
 
     substituteInPlace lib/Tools/env \

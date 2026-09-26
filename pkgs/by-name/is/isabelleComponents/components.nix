@@ -7,6 +7,7 @@ lib.makeScope newScope (self: {
   # Components
   csdp = self.callPackage ./csdp { };
   cvc5 = self.callPackage ./cvc5 { };
+  e = self.callPackage ./e { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
   polyml = self.callPackage ./polyml { };
