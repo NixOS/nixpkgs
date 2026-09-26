@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gcp-storage-emulator";
-  version = "2024.08.03";
+  version = "2026.07.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oittaa";
     repo = "gcp-storage-emulator";
     tag = "v${version}";
-    hash = "sha256-Lp9Wvod0wSE2+cnvLXguhagT30ax9TivyR8gC/kB7w0=";
+    hash = "sha256-l9zeDcWXr5fB/aIDaOV6wEMmXnOtbydnNkqeGo1b8oA=";
   };
 
   # upstream only sets the real version from GITHUB_REF when its CI builds a tag
