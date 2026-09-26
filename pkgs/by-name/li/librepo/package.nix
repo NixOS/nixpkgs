@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.20.0";
+  version = "1.21.1";
   pname = "librepo";
 
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "librepo";
     tag = finalAttrs.version;
-    hash = "sha256-KYBHImdGQgf/IZ5FMhzrbBTeZF76AIP3RjVPT3w0oT8=";
+    hash = "sha256-NwV9u8W+2xE+cxSw0UR3qXKLBxdg5wJXYD3ysJEhT8o=";
   };
 
   nativeBuildInputs = [
