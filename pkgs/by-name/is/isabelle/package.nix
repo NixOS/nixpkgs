@@ -4,7 +4,6 @@
   fetchurl,
   coreutils,
   net-tools,
-  openjdk21,
   scala_3,
   verit,
   eprover-ho,
@@ -22,8 +21,6 @@
 }:
 
 let
-  java = openjdk21;
-
   platforms = {
     x86_64-linux = "x86_64-linux";
     aarch64-linux = "arm64-linux";
@@ -56,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
   nativeBuildInputs = [
-    java
+    isabelleComponents.jdk
     copyDesktopItems
     writableTmpDirAsHomeHook
   ]
@@ -113,14 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
       ISABELLE_CSDP=${csdp}/bin/csdp
     EOF
 
-    cat >contrib/jdk*/etc/settings <<EOF
-      ISABELLE_JAVA_PLATFORM=${stdenv.system}
-      ISABELLE_JDK_HOME=${java}
-    EOF
-
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/verit-* \
+    for comp in contrib/verit-* \
                 contrib/e-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
@@ -128,10 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace etc/components \
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
+      --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}'
 
-    rm -rf contrib/cvc5-1.2.0-1 contrib/polyml-5.9.2-2 contrib/vampire-4.8
+    rm -rf contrib/cvc5-1.2.0-1 contrib/jdk-21.0.9 contrib/polyml-5.9.2-2 contrib/vampire-4.8
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -158,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     for d in contrib/kodkodi-*/jni/${platform}; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
-          "${java}/lib/openjdk/lib/server"
+          "${isabelleComponents.jdk}/lib/openjdk/lib/server"
           "${lib.getLib stdenv.cc.cc}/lib"
         ]
       }" $d/*.so
