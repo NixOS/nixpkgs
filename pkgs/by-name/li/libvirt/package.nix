@@ -1,53 +1,46 @@
 {
+  # Nix helpers
+  fetchFromGitLab,
   lib,
+  nixosTests,
+  replaceVars,
+  runtimeShell,
+  stdenv,
+  writeScript,
+  writeShellApplication,
+
+  # Build and runtime dependencies
   bash,
   bash-completion,
-  bridge-utils,
-  coreutils,
   curl,
-  darwin,
-  dbus,
-  dnsmasq,
   docutils,
-  fetchFromGitLab,
   gettext,
   glib,
   gnutls,
-  iproute2,
-  iptables,
+  json_c,
+  libiscsi,
   libpcap,
+  libssh2,
   libtasn1,
   libxml2,
   libxslt,
   makeWrapper,
   meson,
-  nftables,
   ninja,
-  openssh,
-  passt,
+  openiscsi,
   perl,
-  perlPackages,
-  polkit,
   pkg-config,
-  pmutils,
   python3,
   readline,
   rpcsvc-proto,
-  runtimeShell,
-  stdenv,
-  replaceVars,
-  json_c,
-  writeScript,
-  writeShellApplication,
-  nixosTests,
 
-  # Linux
+  # Build and runtime dependencies, Linux
   acl ? null,
   attr ? null,
   audit ? null,
-  dmidecode ? null,
+  ceph,
   fuse3 ? null,
-  kmod ? null,
+  glusterfs,
   libapparmor ? null,
   libcap_ng ? null,
   libnl ? null,
@@ -55,28 +48,40 @@
   libtirpc ? null,
   lvm2 ? null,
   numactl ? null,
-  numad ? null,
   parted ? null,
   systemd ? null,
   util-linux ? null,
+  xen,
+  zfs,
 
-  # Darwin
-  gmp,
-  libiconv,
+  # Build and runtime dependencies, Darwin
+  darwin,
+
+  # Runtime dependencies
+  dnsmasq,
+
+  # Runtime dependencies, Linux
+  coreutils,
+  dmidecode ? null,
+  iproute2,
+  iptables,
+  kmod ? null,
+  nftables,
+  numad ? null,
+  openssh,
+  passt,
+  pmutils,
+  polkit,
+
+  # Runtime dependencies, Darwin
   qemu,
 
   # Options
   enableCeph ? false,
-  ceph,
   enableGlusterfs ? false,
-  glusterfs,
   enableIscsi ? false,
-  openiscsi,
-  libiscsi,
   enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
-  xen,
   enableZfs ? stdenv.hostPlatform.isLinux,
-  zfs,
 }:
 
 let
@@ -86,7 +91,6 @@ let
       dnsmasq
     ]
     ++ lib.optionals isLinux [
-      bridge-utils
       dmidecode
       dnsmasq
       iproute2
@@ -100,6 +104,7 @@ let
       passt
       pmutils
       systemd
+      util-linux
     ]
     ++ lib.optionals enableIscsi [
       libiscsi
@@ -146,17 +151,6 @@ stdenv.mkDerivation rec {
     # delete only the first occurrence of this
     sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
 
-  ''
-  + lib.optionalString isLinux ''
-    for binary in mount umount mkfs; do
-      substituteInPlace meson.build \
-        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
-    done
-
-  ''
-  + ''
-    substituteInPlace meson.build \
-      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   ''
   + lib.optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
@@ -212,7 +206,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     perl
-    perlPackages.XMLXPath
   ]
   ++ lib.optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
@@ -222,10 +215,10 @@ stdenv.mkDerivation rec {
     bash
     bash-completion
     curl
-    dbus
     glib
     gnutls
     libpcap
+    libssh2
     libtasn1
     libxml2
     python3
@@ -244,14 +237,9 @@ stdenv.mkDerivation rec {
     libtirpc
     lvm2
     numactl
-    numad
     parted
     systemd
     util-linux
-  ]
-  ++ lib.optionals isDarwin [
-    gmp
-    libiconv
   ]
   ++ lib.optionals enableCeph [ ceph ]
   ++ lib.optionals enableGlusterfs [ glusterfs ]
