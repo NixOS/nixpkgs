@@ -1,21 +1,23 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gh
+#!nix-shell -i bash -p curl jq
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
-if ! gh auth status --hostname github.com >/dev/null 2>&1; then
-  if [ -z "${GITHUB_TOKEN}" ] || [ $# -ne 1 ]; then
-    echo >&2 "Login to github.com with gh or provide GITHUB_TOKEN env"
-    echo >&2 "usage: GITHUB_TOKEN=… ./update.sh pulumi-version"
-    exit 1
-  fi
-fi
+# usage: ./update.sh [pulumi-version]
+#
+# Without an argument the latest Pulumi release is used, so this script can run
+# unattended as `passthru.updateScript` (e.g. by r-ryantm). Plugin versions are
+# always taken from the Pulumi registry.
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-# Version of Pulumi from
-# https://www.pulumi.com/docs/get-started/install/versions/
-VERSION=$1
+# Version of Pulumi, either given explicitly or the latest release as reported
+# by the same endpoint the official installer uses.
+VERSION="${1:-$(curl -fsSL https://www.pulumi.com/latest-version)}"
+if [ -z "${VERSION}" ]; then
+  echo >&2 "Could not determine the latest Pulumi version"
+  exit 1
+fi
 
 # An array of plugin names. The respective repository inside Pulumi's
 # GitHub organization is called pulumi-$name by convention.
@@ -36,7 +38,6 @@ pulumi_repos=(
   "datadog"
   "digitalocean"
   "docker"
-  "equinix-metal"
   "fastly"
   "gcp"
   "github"
@@ -62,18 +63,29 @@ pulumi_repos=(
   "yandex"
 )
 
-# Contains latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
+# Latest version of a plugin according to the Pulumi registry
+# (https://www.pulumi.com/registry/). Some names are also published by third
+# parties, hence the filter on publisher and source.
+function latestPluginVersion() {
+  local plug="${1}"
+  curl -fsSL "https://api.pulumi.com/api/preview/registry/packages?name=${plug}" \
+    | jq -r '.packages[] | select(.publisher == "pulumi" and .source == "pulumi") | .version' \
+    | head -n 1
+}
 
-# Dynamically builds the plugin array, using the GitHub API for getting the
-# latest version.
+# Dynamically builds the plugin array.
 plugin_num=1
 plugins=()
 for key in "${pulumi_repos[@]}"; do
-  plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
+  version=$(latestPluginVersion "${key}")
+  if [ -z "${version}" ]; then
+    printf "\n"
+    echo >&2 "Could not determine the latest version of pulumi-${key}"
+    exit 1
+  fi
+  plugin="${key}=${version}"
   printf "%20s: %s of %s\r" "${plugin}" "${plugin_num}" "${#pulumi_repos[@]}"
   plugins+=("${plugin}")
-  sleep 1
   ((++plugin_num))
 done
 printf "\n"
