@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
     downloadPage = "https://github.com/Kludex/starlette";
-    homepage = "https://www.starlette.io/";
+    homepage = "https://starlette.dev";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wd15 ];
