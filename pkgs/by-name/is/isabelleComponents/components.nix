@@ -18,6 +18,7 @@ lib.makeScope newScope (self: {
   foiltex = self.callPackage ./foiltex { };
   gnu-utils = self.callPackage ./gnu-utils { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
+  javamail = self.callPackage ./javamail { };
   jdk = self.callPackage ./jdk { };
   kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };
