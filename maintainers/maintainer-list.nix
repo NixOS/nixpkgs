@@ -12812,6 +12812,12 @@
     githubId = 5283991;
     name = "Jake Waksbaum";
   };
+  jakob1379 = {
+    email = "jakob1379@gmail.com";
+    github = "jakob1379";
+    githubId = 17257805;
+    name = "Jakob Stender Guldberg";
+  };
   jakubgs = {
     email = "jakub@gsokolowski.pl";
     github = "jakubgs";
