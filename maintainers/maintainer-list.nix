@@ -17643,6 +17643,11 @@
     githubId = 963511;
     name = "Majiir Paktu";
   };
+  makeev = {
+    github = "makeev";
+    githubId = 386896;
+    name = "Mikhail Makeev";
+  };
   makefu = {
     email = "makefu@syntax-fehler.de";
     github = "makefu";
