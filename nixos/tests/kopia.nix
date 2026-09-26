@@ -270,6 +270,17 @@ in
           };
         };
 
+        # Test: declarative policy mode without any declared entries still
+        # deletes externally-created policies.
+        with-empty-declarative-policy = {
+          repository.filesystem.path = "/var/lib/kopia-repo-empty-declarative-policy";
+          inherit passwordFile;
+          snapshots.default = {
+            path = "/opt";
+          };
+          policies.declarative = true;
+        };
+
         # Test: per-snapshot policy sugar (auto-derived into policies.entries)
         with-snapshot-policy = {
           repository.filesystem.path = "/var/lib/kopia-repo-snapshot-policy";
@@ -483,6 +494,24 @@ in
             "${kopiaEnv "with-declarative-policy"}"
             " kopia policy show /opt --json"
             " | jq -e '.retention.keepDaily == 13'"
+        )
+
+    with subtest("with-empty-declarative-policy: deletes external entries without declared ones"):
+        machine.wait_for_unit("kopia-policy-with-empty-declarative-policy.service")
+        machine.succeed(
+            "${kopiaEnv "with-empty-declarative-policy"}"
+            " kopia policy set /srv --keep-daily=99"
+        )
+        machine.succeed(
+            "${kopiaEnv "with-empty-declarative-policy"}"
+            " kopia policy export"
+            " | jq -e 'has(\"root@machine:/srv\")'"
+        )
+        machine.succeed("systemctl restart kopia-policy-with-empty-declarative-policy.service")
+        machine.succeed(
+            "${kopiaEnv "with-empty-declarative-policy"}"
+            " kopia policy export"
+            " | jq -e 'has(\"root@machine:/srv\") | not'"
         )
 
     with subtest("with-snapshot-policy: per-snapshot policy is auto-derived"):

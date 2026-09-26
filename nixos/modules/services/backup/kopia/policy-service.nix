@@ -139,6 +139,6 @@ in
               --from-file=${policyFile}
           '';
         }
-      ) (lib.filterAttrs (_: backup: effectivePolicies backup != { }) cfg.backups);
+      ) (lib.filterAttrs (_: backup: effectivePolicies backup != { } || backup.policies.declarative) cfg.backups);
     };
 }
