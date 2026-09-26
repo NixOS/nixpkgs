@@ -3,7 +3,7 @@ import sys
 import textwrap
 import uuid
 from pathlib import Path
-from subprocess import PIPE, CompletedProcess
+from subprocess import PIPE, CalledProcessError, CompletedProcess
 from typing import Any
 from unittest.mock import ANY, Mock, call, patch
 
@@ -584,9 +584,72 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
         ),
     ],
 )
-def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
-    # Probably better to test this function in a real system, this test is
-    # mostly to make sure it doesn't break horribly
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_list_generations(
+    mock_run: Mock,
+    mock_get_generations: Mock,
+    tmp_path: Path,
+) -> None:
+    mock_run.return_value = CompletedProcess(
+        args=[],
+        returncode=0,
+        stdout=json.dumps({"nixosVersion": "26.11.20260926.dirty"}),
+    )
+    assert n.list_generations(m.Profile("system", tmp_path)) == [
+        {
+            "configurationRevision": "Unknown",
+            "current": True,
+            "date": "2024-11-07 23:54:17",
+            "generation": 2,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "26.11.20260926.dirty",
+            "specialisations": [],
+        },
+        {
+            "configurationRevision": "Unknown",
+            "current": False,
+            "date": "2024-11-07 23:54:17",
+            "generation": 1,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "26.11.20260926.dirty",
+            "specialisations": [],
+        },
+    ]
+
+    mock_run.return_value = CompletedProcess(
+        args=[],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "configurationRevision": "dirty",
+                "kernelVersion": "7.2.8",
+                "nixosVersion": "26.11.20260926.dirty",
+                "specialisations": [],
+            }
+        ),
+    )
+    assert n.list_generations(m.Profile("system", tmp_path)) == [
+        {
+            "configurationRevision": "dirty",
+            "current": True,
+            "date": "2024-11-07 23:54:17",
+            "generation": 2,
+            "kernelVersion": "7.2.8",
+            "nixosVersion": "26.11.20260926.dirty",
+            "specialisations": [],
+        },
+        {
+            "configurationRevision": "dirty",
+            "current": False,
+            "date": "2024-11-07 23:54:17",
+            "generation": 1,
+            "kernelVersion": "7.2.8",
+            "nixosVersion": "26.11.20260926.dirty",
+            "specialisations": [],
+        },
+    ]
+
+    mock_run.side_effect = CalledProcessError(returncode=1, cmd=[])
     assert n.list_generations(m.Profile("system", tmp_path)) == [
         {
             "configurationRevision": "Unknown",

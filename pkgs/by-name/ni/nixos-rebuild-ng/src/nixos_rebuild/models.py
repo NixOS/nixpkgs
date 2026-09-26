@@ -5,7 +5,7 @@ from argparse import Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, Self, TypedDict, override
+from typing import Any, ClassVar, NotRequired, Self, TypedDict, override
 
 from . import nix
 from .process import Remote, run_wrapper
@@ -168,6 +168,16 @@ class GenerationJson(TypedDict):
 
 class FlakeMetadataJson(TypedDict):
     resolvedUrl: str
+
+
+class NixOSVersionJson(TypedDict):
+    nixosVersion: str
+    # Those keys are only set in nixos-version when it exists
+    configurationRevision: NotRequired[str]
+    kernelVersion: NotRequired[str]
+    # The reason this key are NotRequired even when they're always set in
+    # nixos-version is because older generations may not have them yet
+    specialisations: NotRequired[list[str]]
 
 
 @dataclass(frozen=True)
