@@ -1,4 +1,5 @@
 # buildEnv {#sec-buildEnv}
+[]{#chap-special} <!-- legacy anchor -->
 
 `buildEnv` constructs a derivation containing directories and symbolic links, which resembles the profile layout where a list of derivations or store paths are installed.
 

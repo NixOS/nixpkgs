@@ -1,4 +1,5 @@
 # Package your first application {#chap-first-package}
+[]{#getting-started}
 
 Package an application with Nixpkgs by picking the build helper for its language and setting a few attributes.
 

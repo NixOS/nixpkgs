@@ -1,4 +1,4 @@
-# Hooks reference {#chap-hooks}
+# Hooks {#chap-hooks}
 
 Nixpkgs has several hook packages that augment the stdenv phases.
 

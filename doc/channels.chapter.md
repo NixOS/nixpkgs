@@ -1,4 +1,5 @@
 # How channels work {#how-channels-work}
+[]{#part-using} <!-- legacy anchor -->
 
 nixpkgs uses the [channels feature](https://nixos.org/nix/manual/#sec-channels) of nix.
 
