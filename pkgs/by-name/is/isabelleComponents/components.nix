@@ -12,6 +12,7 @@ lib.makeScope newScope (self: {
   jdk = self.callPackage ./jdk { };
   polyml = self.callPackage ./polyml { };
   sha1 = self.callPackage ./sha1 { };
+  spass = self.callPackage ./spass { };
   vampire = self.callPackage ./vampire { };
   verit = self.callPackage ./verit { };
   vscode_extension = self.callPackage ./vscode_extension { };
