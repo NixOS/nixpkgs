@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.bash_process
     isabelleComponents.scala
     isabelleComponents.kodkodi
+    isabelleComponents.bib2xhtml
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -105,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace etc/components \
       --replace-fail 'contrib/bash_process-20240326' '${isabelleComponents.bash_process.settings}' \
+      --replace-fail 'contrib/bib2xhtml-20190409' '${isabelleComponents.bib2xhtml.settings}' \
       --replace-fail 'contrib/csdp-6.1.1-1' '${isabelleComponents.csdp.settings}' \
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/e-3.2' '${isabelleComponents.e.settings}' \
@@ -127,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/jdk-21.0.9 contrib/kodkodi-1.5.7 contrib/nunchaku-0.5 \
            contrib/polyml-5.9.2-2 contrib/scala-3.3.4 contrib/spass-3.8ds-2 \
            contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* \
-           contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1
+           contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1 contrib/bib2xhtml-20190409
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env

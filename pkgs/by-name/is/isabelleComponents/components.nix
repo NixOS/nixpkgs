@@ -6,6 +6,7 @@ lib.makeScope newScope (self: {
 
   # Components
   bash_process = self.callPackage ./bash_process { };
+  bib2xhtml = self.callPackage ./bib2xhtml { };
   csdp = self.callPackage ./csdp { };
   cvc5 = self.callPackage ./cvc5 { };
   e = self.callPackage ./e { };
