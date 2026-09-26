@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "elm-language-server";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "elm-tooling";
     repo = "elm-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-OU6VoMu5Qnawxt02vT0B/37VipiBzlLBlZbQbnu8PEE=";
+    hash = "sha256-HwTkmhA3C3ByVoVq7QtQQoAraH/jRcljooobp6Ao8Ko=";
   };
 
-  npmDepsHash = "sha256-jb59LiP2EZpTkc4o/t+9j287W01tDgbwFpAsWZCCL/k=";
+  npmDepsHash = "sha256-hj7Y0wUORN42OO4YtsZjMfivmmEMYdMyLIoAGK9jcis=";
 
   npmBuildScript = "compile";
 
