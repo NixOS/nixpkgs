@@ -124,6 +124,8 @@ buildPythonPackage (finalAttrs: {
   };
   pyproject = true;
 
+  pythonRelaxDeps = [ "lap" ];
+
   patches = extraPatches;
 
   build-system = [
