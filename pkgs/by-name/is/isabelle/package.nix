@@ -3,16 +3,12 @@
   stdenv,
   callPackage,
   fetchurl,
-  fetchFromGitHub,
   coreutils,
   net-tools,
   openjdk21,
   scala_3,
   verit,
   eprover-ho,
-  cvc5,
-  libpoly,
-  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -36,28 +32,6 @@ let
   };
 
   platform = platforms."${stdenv.hostPlatform.system}";
-
-  cvc5' =
-    (cvc5.override {
-      libpoly = libpoly.overrideAttrs {
-        version = "0.2.0";
-        __intentionallyOverridingVersion = true;
-      };
-      symfpu = symfpu.overrideAttrs {
-        version = "0-unstable-2019-05-17";
-        __intentionallyOverridingVersion = true;
-      };
-    }).overrideAttrs
-      {
-        version = "1.2.0";
-        src = fetchFromGitHub {
-          owner = "cvc5";
-          repo = "cvc5";
-          tag = "cvc5-1.2.0";
-          hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
-        };
-      };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -97,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.vampire
     eprover-ho
     net-tools
-    cvc5'
+    isabelleComponents.cvc5
     csdp
   ];
 
@@ -136,13 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
       E_VERSION=${eprover-ho.version}
     EOF
 
-    cat >contrib/cvc5-*/etc/settings <<EOF
-      CVC5_HOME=${cvc5'}
-      CVC5_VERSION=${cvc5'.version}
-      CVC5_SOLVER=${cvc5'}/bin/cvc5
-      CVC5_INSTALLED=yes
-    EOF
-
     cat >contrib/csdp-*/etc/settings <<EOF
       ISABELLE_CSDP=${csdp}/bin/csdp
     EOF
@@ -155,16 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
     for comp in contrib/jdk* contrib/verit-* \
-                contrib/e-* contrib/cvc5-* contrib/csdp-*; do
+                contrib/e-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
 
     substituteInPlace etc/components \
+      --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}'
 
-    rm -rf contrib/polyml-5.9.2-2 contrib/vampire-4.8
+    rm -rf contrib/cvc5-1.2.0-1 contrib/polyml-5.9.2-2 contrib/vampire-4.8
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -268,7 +236,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.linter = callPackage ./tests/linter.nix { isabelle = finalAttrs.finalPackage; };
     inherit platform;
-    cvc5 = cvc5';
     withComponents =
       f:
       let
