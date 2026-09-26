@@ -25499,6 +25499,12 @@
     githubId = 12877905;
     name = "Roman Volosatovs";
   };
+  rwxae = {
+    email = "wardxela@gmail.com";
+    github = "rwxae";
+    githubId = 63157919;
+    name = "Alexander";
+  };
   rwxd = {
     email = "git@rwxd.de";
     github = "rwxd";
