@@ -59,6 +59,6 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.darwin;
   };
 }
