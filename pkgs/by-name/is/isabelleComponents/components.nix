@@ -14,6 +14,7 @@ lib.makeScope newScope (self: {
   jdk = self.callPackage ./jdk { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
+  scala = self.callPackage ./scala { };
   sha1 = self.callPackage ./sha1 { };
   spass = self.callPackage ./spass { };
   vampire = self.callPackage ./vampire { };
