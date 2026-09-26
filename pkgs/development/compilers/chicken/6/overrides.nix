@@ -32,11 +32,26 @@ in
     old:
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -liconv" old);
+  cairo = addToBuildInputsWithPkgConfig pkgs.cairo;
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   ezxdisp = addToBuildInputsWithPkgConfig pkgs.libx11;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
+  lazy-ffi = addToBuildInputs pkgs.libffi;
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
+  leveldb = addToBuildInputs pkgs.leveldb;
+  mpi =
+    old:
+    (addToBuildInputs pkgs.openmpi old)
+    // {
+      preBuild = ''
+        mkdir -p $NIX_BUILD_TOP/mpi-dir
+        ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
+        ln -sf ${lib.getLib pkgs.openmpi}/lib $NIX_BUILD_TOP/mpi-dir/lib
+        export MPI_DIR=$NIX_BUILD_TOP/mpi-dir
+      '';
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
   openssl = addToBuildInputs pkgs.openssl;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
 
@@ -78,6 +93,13 @@ in
   # provide, and tkgui depends on nutils.
   nutils = brokenOnDarwin;
   tkgui = brokenOnDarwin;
+
+  # pdf-font.scm imports srfi-69, which is no longer a builtin unit in CHICKEN 6.
+  pdf = broken;
+  # depends on pdf, which is broken
+  ggplot = broken;
+  # Unresolved identifiers: the egg is not CHICKEN 6 compatible.
+  spiffy-uri-match = broken;
 
   # feathers is implemented in Tcl and its .egg declares no source for the
   # program it builds, so chicken-install falls back to a feathers.scm that the
