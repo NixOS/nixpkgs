@@ -154,5 +154,8 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ virchau13 ];
+  meta.maintainers = with maintainers; [
+    virchau13
+    hey2022
+  ];
 }
