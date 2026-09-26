@@ -1,4 +1,7 @@
-// @ts-nocheck
+import type * as actionsCore from '@actions/core'
+import type { context as actionsContext } from '@actions/github'
+import type { GitHub } from '@actions/github/lib/utils'
+
 // Two-step handling of stale PRs stuck on a merge conflict:
 //   1. Once the merge-conflict label has been present for > MERGE_CONFLICT_DAYS,
 //      post a single comment nudging the author to rebase, and record that with
@@ -7,10 +10,10 @@
 //      PR to a draft.
 // Step 2 can only run after step 1, because its timer starts at the nudge.
 //
-// Both timers are derived from label events rather than from the nudge comment,
-// so a conflict that gets resolved and later comes back starts from scratch
-// instead of inheriting the previous episode's nudge. The bot re-derives the
-// merge-conflict label on every run, so episodes are routine.
+// Both timers are derived from label events, so a conflict that gets resolved
+// and later comes back starts from scratch instead of inheriting the previous
+// episode's nudge. The bot re-derives the merge-conflict label on every run,
+// so episodes are routine.
 
 const MERGE_CONFLICT_DAYS = 30 // conflicted this long before nudging (~1 month)
 const NUDGE_TO_DRAFT_DAYS = 15 // nudged this old before drafting (~2 weeks)
@@ -18,22 +21,60 @@ const DAY_MS = 24 * 60 * 60 * 1000
 const MERGE_CONFLICT_LABEL = '2.status: merge conflict'
 const NUDGE_LABEL = '2.status: rebase nudge'
 
+// The subset of an issue timeline event we care about. Events are deliberately
+// typed structurally rather than pulled from the octokit union: the timeline
+// endpoint returns dozens of event shapes, and requiring the full union here
+// would mean every caller has to narrow all of them.
+type TimelineEvent = {
+  event?: string
+  created_at?: string
+  label?: { name?: string } | null
+}
+
+// The subset of an issue (or of a `pull_request` webhook payload) we read.
+// `item` may come from either the search API, `issues.listForRepo`, or a
+// webhook payload, so only the common ground is required.
+type StaleItem = {
+  number: number
+  node_id: string
+  draft?: boolean
+  user?: { login?: string } | null
+  pull_request?: unknown
+}
+
+type LogFn = (key: string, value: unknown, skip?: boolean) => void
+
+function errorMessage(e: unknown): string {
+  return e instanceof Error ? e.message : String(e)
+}
+
+function errorStatus(e: unknown): number | undefined {
+  if (typeof e !== 'object' || e === null || !('status' in e)) return undefined
+  return typeof e.status === 'number' ? e.status : undefined
+}
+
+// Events without a timestamp sort first, so they can never fabricate a "since"
+// date for the label we care about.
+function timestamp({ created_at }: TimelineEvent): number {
+  return created_at ? new Date(created_at).getTime() : 0
+}
+
 // Date since when `name` has been continuously applied, or null if it isn't
 // currently applied. Events are sorted because the timeline is only guaranteed
 // to be in order per page.
-function labelPresentSince(events, name) {
-  let since = null
+function labelPresentSince(events: TimelineEvent[], name: string): Date | null {
+  let since: Date | null = null
   for (const { event, label, created_at } of [...events].sort(
-    (a, b) => new Date(a.created_at) - new Date(b.created_at),
+    (a, b) => timestamp(a) - timestamp(b),
   )) {
     if (label?.name !== name) continue
-    if (event === 'labeled') since = new Date(created_at)
+    if (event === 'labeled' && created_at) since = new Date(created_at)
     else if (event === 'unlabeled') since = null
   }
   return since
 }
 
-async function handleStaleConflict({
+export async function handleStaleConflict({
   github,
   context,
   core,
@@ -41,10 +82,18 @@ async function handleStaleConflict({
   dry,
   item,
   events,
+}: {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  core: typeof actionsCore
+  log: LogFn
+  dry: boolean
+  item: StaleItem
+  events: TimelineEvent[]
 }) {
   // Best-effort bookkeeping: a 404 on removal just means the label is already
   // gone, which is the state we wanted anyway.
-  async function setLabel(name, present) {
+  async function setLabel(name: string, present: boolean): Promise<void> {
     if (dry) {
       const action = present ? 'add' : 'remove'
       return log('stale-conflict', `would ${action} '${name}' (dry)`)
@@ -64,9 +113,9 @@ async function handleStaleConflict({
         })
       }
     } catch (e) {
-      if (present || e.status !== 404) {
+      if (present || errorStatus(e) !== 404) {
         core.error(
-          `#${item.number} - stale-conflict: label '${name}' update failed: ${e.message ?? e}`,
+          `#${item.number} - stale-conflict: label '${name}' update failed: ${errorMessage(e)}`,
         )
       }
     }
@@ -92,7 +141,7 @@ async function handleStaleConflict({
   if (!conflict_since)
     return log('stale-conflict', 'merge conflict duration unknown', true)
 
-  const conflict_age_days = (Date.now() - conflict_since) / DAY_MS
+  const conflict_age_days = (Date.now() - conflict_since.getTime()) / DAY_MS
   log('stale-conflict - conflicted for (days)', conflict_age_days.toFixed(1))
   if (conflict_age_days < MERGE_CONFLICT_DAYS)
     return log('stale-conflict', 'merge conflict too recent', true)
@@ -123,7 +172,7 @@ async function handleStaleConflict({
       await setLabel(NUDGE_LABEL, true)
     } catch (e) {
       return core.error(
-        `#${item.number} - stale-conflict: rebase nudge failed: ${e.message ?? e}`,
+        `#${item.number} - stale-conflict: rebase nudge failed: ${errorMessage(e)}`,
       )
     }
     return log('stale-conflict', 'posted rebase nudge')
@@ -133,12 +182,14 @@ async function handleStaleConflict({
   if (
     events.some(
       ({ event, created_at }) =>
-        event === 'convert_to_draft' && new Date(created_at) > nudge_since,
+        event === 'convert_to_draft' &&
+        created_at !== undefined &&
+        new Date(created_at) > nudge_since,
     )
   )
     return log('stale-conflict', 'already converted to draft after nudge', true)
 
-  const nudge_age_days = (Date.now() - nudge_since) / DAY_MS
+  const nudge_age_days = (Date.now() - nudge_since.getTime()) / DAY_MS
   if (nudge_age_days < NUDGE_TO_DRAFT_DAYS)
     return log('stale-conflict', 'grace period after nudge not over yet', true)
 
@@ -168,12 +219,10 @@ async function handleStaleConflict({
     // core.error only annotates the run, unlike core.setFailed it does not
     // set a non-zero exit code.
     core.error(
-      `#${item.number} - stale-conflict: convert to draft failed: ${e.message ?? e}`,
+      `#${item.number} - stale-conflict: convert to draft failed: ${errorMessage(e)}`,
     )
     return
   }
 
   log('stale-conflict', 'converted to draft')
 }
-
-export { handleStaleConflict }

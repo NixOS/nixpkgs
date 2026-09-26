@@ -4,7 +4,7 @@ import path from 'node:path'
 import { DefaultArtifactClient } from '@actions/artifact'
 import { handleMerge } from './merge.js'
 import { handleReviewers } from './reviewers.js'
-import { handleStaleConflict } from './stale-conflict.js'
+import { handleStaleConflict } from './stale-conflict.ts'
 import { classify } from './supportedBranches.js'
 import withRateLimit from './withRateLimit.js'
 
