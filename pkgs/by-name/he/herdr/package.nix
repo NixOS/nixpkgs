@@ -24,6 +24,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-N6+kprfWRyh0AkAiopkGsNXUGGORyPVFHEaDHCpGQs8=";
   };
 
+  postPatch = ''
+    substituteInPlace vendor/libghostty-vt/pkg/apple-sdk/native_link.zig \
+      --replace-fail '"/usr/bin/xcrun"' '"xcrun"'
+
+    substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+      --replace-fail '"/bin/ln"' '"ln"'
+
+    substituteInPlace vendor/libghostty-vt/src/build/LibtoolStep.zig \
+      --replace-fail '/bin/cp ' 'cp ' \
+      --replace-fail '/usr/bin/ranlib ' 'ranlib '
+  '';
+
   cargoHash = "sha256-1VAmsDE3zeU0wMVQKleQcd/zq8/k/oor8tasrsRQfeY=";
 
   zigDeps = zig_0_16.fetchDeps {
