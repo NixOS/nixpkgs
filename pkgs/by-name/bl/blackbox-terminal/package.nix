@@ -9,7 +9,6 @@
   gtk4,
   vte-gtk4,
   json-glib,
-  sassc,
   libadwaita,
   pcre2,
   libxml2,
@@ -43,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    sassc
     wrapGAppsHook4
     python3
     desktop-file-utils # For update-desktop-database
   ];
+
   buildInputs = [
     gtk4
     vte-gtk4
