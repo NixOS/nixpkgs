@@ -36,11 +36,16 @@ in
           enable = true;
           settings = {
             PORT = 10001;
-            DB_CONNECTION_STRING = "host=/run/postgresql user=${username} database=${username}";
+            DB_CONNECTION_STRING = "postgresql:///${username}?host=/run/postgresql";
           };
           credentials = {
             inherit ENCRYPTION_KEY;
           };
+        };
+
+        systemd.services.pocket-id = {
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
         };
 
         services.postgresql = {
