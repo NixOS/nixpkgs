@@ -117,6 +117,10 @@ buildDotnetModule (finalAttrs: {
     "Grayjay.Engine/Grayjay.Engine.Tests/Grayjay.Engine.Tests.csproj"
   ];
 
+  dotnetBuildFlags = [
+    "-p:AssemblyVersion=1.${version}.0.0"
+  ];
+
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
