@@ -10,6 +10,7 @@ lib.makeScope newScope (self: {
   e = self.callPackage ./e { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
+  nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
   sha1 = self.callPackage ./sha1 { };
   spass = self.callPackage ./spass { };
