@@ -1,18 +1,78 @@
-// @ts-nocheck
 import { execFileSync } from 'node:child_process'
+import type * as actionsCore from '@actions/core'
+import type { context as actionsContext } from '@actions/github'
+import type { GitHub } from '@actions/github/lib/utils'
 import { dismissReviews, postReview } from './reviews.js'
 import { classify } from './supportedBranches.js'
 import withRateLimit from './withRateLimit.js'
 
 const dirname = import.meta.dirname
 
-export default async ({ github, context, core, dry, cherryPicks }) => {
+type PullRequestCommit = Awaited<
+  ReturnType<InstanceType<typeof GitHub>['rest']['pulls']['listCommits']>
+>['data'][number]
+
+type CommitDetails = Pick<PullRequestCommit, 'sha' | 'commit'>
+
+type CherryPick = CommitDetails & {
+  original_sha: string
+  severity?: undefined
+}
+
+type CheckResult = CommitDetails & {
+  diff?: string[]
+  colored_diff?: string
+  severity: 'important' | 'warning' | 'error' | 'info'
+  message: string
+  type?: 'no-cherry-pick' | 'no-commit-hash' | 'diff'
+}
+
+type ExtractedCommit = CheckResult | CherryPick
+
+type CheckCommitsProps = {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  core: typeof actionsCore
+  dry: boolean
+  cherryPicks: boolean
+}
+
+type CommitBranches = {
+  branches: {
+    branch: string
+  }[]
+}
+
+type RateLimitStats = {
+  prs: number
+}
+
+function isCherryPick(result: ExtractedCommit): result is CherryPick {
+  return !result.severity
+}
+
+function isIgnoredBranchError(error: unknown) {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    (error.status === 404 || error.status === 500)
+  )
+}
+
+export default async ({
+  github,
+  context,
+  core,
+  dry,
+  cherryPicks,
+}: CheckCommitsProps) => {
   const reviewKey = 'check-commits'
 
-  await withRateLimit({ github, core }, async (stats) => {
+  await withRateLimit({ github, core }, async (stats: RateLimitStats) => {
     stats.prs = 1
 
-    const pull_number = context.payload.pull_request.number
+    const pull_number = context.payload.pull_request!.number
 
     const job_url =
       context.runId &&
@@ -22,11 +82,14 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
           run_id: context.runId,
           per_page: 100,
         })
-      ).find(({ name }) => name.endsWith('Check / commits')).html_url +
+      ).find(({ name }) => name.endsWith('Check / commits'))!.html_url +
         '?pr=' +
         pull_number
 
-    async function extract({ sha, commit }) {
+    async function extract({
+      sha,
+      commit,
+    }: CommitDetails): Promise<ExtractedCommit> {
       const noCherryPick = Array.from(
         commit.message.matchAll(/^Not-cherry-picked-because: (.*)$/gm),
       ).at(0)
@@ -57,10 +120,10 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
 
       const original_sha = cherry[1]
 
-      let branches
+      let branches: string[] | undefined
       try {
         branches = (
-          await github.request({
+          await github.request<CommitBranches>({
             // This is an undocumented endpoint to fetch the branches a commit is part of.
             // There is no equivalent in neither the REST nor the GraphQL API.
             // The endpoint itself is unlikely to go away, because GitHub uses it to display
@@ -76,7 +139,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
       } catch (e) {
         // For some unknown reason a 404 error comes back as 500 without any more details in a GitHub Actions runner.
         // Ignore these to return a regular error message below.
-        if (![404, 500].includes(e.status)) throw e
+        if (!isIgnoredBranchError(e)) throw e
       }
       if (!branches?.length)
         return {
@@ -93,7 +156,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
       }
     }
 
-    function diff({ sha, commit, original_sha }) {
+    function diff({ sha, commit, original_sha }: CherryPick): CheckResult {
       const diff = execFileSync('git', [
         '-C',
         dirname,
@@ -155,7 +218,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
     const extracted = await Promise.all(commits.map(extract))
 
     const fetch = extracted
-      .filter(({ severity }) => !severity)
+      .filter(isCherryPick)
       .flatMap(({ sha, original_sha }) => [sha, original_sha])
 
     if (fetch.length > 0) {
@@ -177,8 +240,8 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
     // Log all results without truncation, with better highlighting and all whitespace changes to the job log.
     results.forEach(({ sha, commit, severity, message, colored_diff }) => {
       core.startGroup(`Commit ${sha}`)
-      core.info(`Author: ${commit.author.name} ${commit.author.email}`)
-      core.info(`Date: ${new Date(commit.author.date)}`)
+      core.info(`Author: ${commit.author!.name} ${commit.author!.email}`)
+      core.info(`Date: ${new Date(commit.author!.date!)}`)
       switch (severity) {
         case 'error':
           core.error(message)
@@ -198,7 +261,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      await dismissReviews({ github, context, dry, reviewKey })
+      await dismissReviews({ github, context, core, dry, reviewKey })
       return
     }
 
@@ -321,6 +384,14 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
     // Posting a review could fail for very long comments. This can only happen with
     // multiple commits all hitting the truncation limit for the diff. If you ever hit
     // this case, consider just splitting up those commits into multiple PRs.
-    await postReview({ github, context, core, dry, body, reviewKey })
+    await postReview({
+      github,
+      context,
+      core,
+      dry,
+      body,
+      event: 'REQUEST_CHANGES',
+      reviewKey,
+    })
   })
 }
