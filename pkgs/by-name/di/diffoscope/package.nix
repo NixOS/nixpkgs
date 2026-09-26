@@ -112,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "329";
+  version = "331";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-UPe+Mko9r4qoSTPbDurF64aZgmPLizV8iK2UlCfyfxk=";
+    hash = "sha256-x1Sc1S3PER3m1+maUZjDofoGqiOoYIm2Oso7Q5NKNtw=";
   };
 
   outputs = [
@@ -128,7 +128,6 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     ./androguard-4.1.4.patch
     ./ignore_links.patch
-    ./radare2.patch
   ];
 
   postPatch = ''

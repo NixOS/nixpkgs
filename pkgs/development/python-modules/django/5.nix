@@ -39,7 +39,7 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django";
   version = "5.2.17";
   pyproject = true;
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7it3opzsiN/hHhpipZz4ogmRKGz7E9/LmTF03/UYIB0=";
   };
 
@@ -103,7 +103,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -132,10 +132,22 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
+    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor finalAttrs.version}/releases/${finalAttrs.version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
+    identifiers = {
+      cpeParts = {
+        inherit (finalAttrs) version;
+        product = "django";
+        update = "*";
+        vendor = "djangoproject";
+      };
+      purlParts = {
+        type = "pypi";
+        spec = "django@${finalAttrs.version}";
+      };
+    };
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
