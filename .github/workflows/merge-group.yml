@@ -38,8 +38,8 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
-            const { classify } = await import('${{ github.workspace }}/ci/github-script/supportedBranches.js')
-            const { default: supportedSystems } = await import('${{ github.workspace }}/ci/github-script/supportedSystems.js')
+            const { classify } = await import('${{ github.workspace }}/ci/github-script/supportedBranches.ts')
+            const { default: supportedSystems } = await import('${{ github.workspace }}/ci/github-script/supportedSystems.ts')
 
             const baseBranch = (
               context.payload.merge_group?.base_ref ??
