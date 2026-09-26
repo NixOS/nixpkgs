@@ -6575,6 +6575,12 @@
     githubId = 130931508;
     name = "David Wolff";
   };
+  dave12311 = {
+    name = "David Horvath";
+    email = "nixpkgs.vineyard248@passmail.net";
+    github = "dave12311";
+    githubId = 17969647;
+  };
   davegallant = {
     name = "Dave Gallant";
     email = "davegallant@gmail.com";
