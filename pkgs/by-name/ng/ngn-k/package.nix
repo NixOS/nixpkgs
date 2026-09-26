@@ -96,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "k";
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.unix;
   };
 })
