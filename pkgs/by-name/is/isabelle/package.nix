@@ -13,7 +13,6 @@
   desktopToDarwinBundle,
   isabelleComponents,
   symlinkJoin,
-  electron,
   writableTmpDirAsHomeHook,
 }:
 
@@ -103,10 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}' \
-      --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}'
+      --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}' \
+      --replace-fail 'contrib/vscode_extension-20251205' "# in vscodium settings" \
+      --replace-fail 'contrib/vscodium-${isabelleComponents.vscodium.version}' '${isabelleComponents.vscodium.settings}'
 
     rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/e-3.2 contrib/jdk-21.0.9 \
-           contrib/polyml-5.9.2-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3
+           contrib/polyml-5.9.2-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 \
+           contrib/vscodium-*
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -125,10 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/${platform}/bash_process
-
-    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
-    rm contrib/vscodium-*/*/*.so{,.*}
-    rm contrib/vscodium-*/*/chrome*
 
     for d in contrib/kodkodi-*/jni/${platform}; do
       patchelf --set-rpath "${
@@ -198,6 +196,18 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "isabelle jedit";
       icon = "isabelle";
       desktopName = "Isabelle";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Education"
+        "Science"
+        "Math"
+      ];
+    })
+    (makeDesktopItem {
+      name = "isabelle_vscodium";
+      exec = "isabelle vscode";
+      icon = "isabelle";
+      desktopName = "Isabelle (VSCodium)";
       comment = finalAttrs.meta.description;
       categories = [
         "Education"

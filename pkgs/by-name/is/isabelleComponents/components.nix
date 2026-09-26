@@ -15,4 +15,5 @@ lib.makeScope newScope (self: {
   vampire = self.callPackage ./vampire { };
   verit = self.callPackage ./verit { };
   vscode_extension = self.callPackage ./vscode_extension { };
+  vscodium = self.callPackage ./vscodium { };
 })
