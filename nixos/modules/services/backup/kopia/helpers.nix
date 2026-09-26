@@ -19,4 +19,25 @@ rec {
   snapshotTarget =
     backup: snapshot:
     "${resolveSourceUser backup snapshot}@${resolveSourceHost snapshot}:${resolveSourcePath snapshot}";
+
+  # Policies that will be passed to `kopia policy import`: the union of the
+  # per-snapshot `policy` sugar and the explicit `policies.entries`, with the
+  # latter taking precedence.
+  effectivePolicies =
+    backup:
+    let
+      snapshotPolicyEntries = lib.foldl' lib.mergeAttrs { } (
+        lib.mapAttrsToList (
+          _: snapshot:
+          lib.optionalAttrs (snapshot.policy != { }) {
+            ${snapshotTarget backup snapshot} = snapshot.policy;
+          }
+        ) backup.snapshots
+      );
+    in
+    lib.recursiveUpdate snapshotPolicyEntries backup.policies.entries;
+
+  # Whether the backup needs a policy-import unit. Declarative mode needs one
+  # even with no declared policies, so that it can delete all existing ones.
+  hasPolicyService = backup: effectivePolicies backup != { } || backup.policies.declarative;
 }

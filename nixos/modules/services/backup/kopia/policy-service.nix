@@ -56,19 +56,7 @@ in
 
   config =
     let
-      effectivePolicies =
-        backup:
-        let
-          snapshotPolicyEntries = lib.foldl' lib.mergeAttrs { } (
-            lib.mapAttrsToList (
-              _: snapshot:
-              lib.optionalAttrs (snapshot.policy != { }) {
-                ${helpers.snapshotTarget backup snapshot} = snapshot.policy;
-              }
-            ) backup.snapshots
-          );
-        in
-        lib.recursiveUpdate snapshotPolicyEntries backup.policies.entries;
+      effectivePolicies = helpers.effectivePolicies;
 
       # Snapshots whose `policy` field would collide in `policies.entries`
       # because they resolve to the same `user@host:/path` source identifier.
@@ -139,6 +127,6 @@ in
               --from-file=${policyFile}
           '';
         }
-      ) (lib.filterAttrs (_: backup: effectivePolicies backup != { } || backup.policies.declarative) cfg.backups);
+      ) (lib.filterAttrs (_: helpers.hasPolicyService) cfg.backups);
     };
 }

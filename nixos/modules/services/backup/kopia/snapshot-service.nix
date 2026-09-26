@@ -209,6 +209,7 @@ in
           kopiaExe = lib.getExe cfg.package;
           user = helpers.resolveOsUser backup snapshot;
           source = helpers.snapshotTarget backup snapshot;
+          policyUnit = "kopia-policy-${backupName}.service";
           extraArgs = lib.concatStringsSep " " (
             [ "--override-source=${lib.escapeShellArg source}" ]
             ++ map lib.escapeShellArg snapshot.extraSnapshotArgs
@@ -217,12 +218,14 @@ in
         {
           "kopia-snapshot-${backupName}-${snapName}" = {
             description = "Kopia snapshot ${snapName} for ${backupName}";
-            requires = [ "kopia-repository-${backupName}.service" ];
-            wants = [ "kopia-policy-${backupName}.service" ];
+            requires = [
+              "kopia-repository-${backupName}.service"
+            ]
+            ++ lib.optional (helpers.hasPolicyService backup) policyUnit;
             after = [
               "kopia-repository-${backupName}.service"
-              "kopia-policy-${backupName}.service"
-            ];
+            ]
+            ++ lib.optional (helpers.hasPolicyService backup) policyUnit;
             environment = {
               KOPIA_CONFIG_PATH = "/var/lib/kopia/${backupName}/repository.config";
               KOPIA_CACHE_DIRECTORY = "/var/cache/kopia/${backupName}";
