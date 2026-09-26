@@ -207,13 +207,24 @@
 
         The "legacy" in `legacyPackages` doesn't imply that the packages exposed
         through this attribute are "legacy" packages. Instead, `legacyPackages`
-        is used here as a substitute attribute name for `packages`. The problem
-        with `packages` is that it makes operations like `nix flake show
-        nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
-        needs to evaluate. But when the Nix CLI sees a `legacyPackages`
-        attribute it displays `omitted` instead of evaluating all packages,
-        which keeps `nix flake show` on Nixpkgs reasonably fast, though less
-        information rich.
+        is an alternative name for the `packages` output attribute of
+        `flake.nix` files with added special handling (See
+        <https://github.com/NixOS/nix/blob/8fd18d36f67c7b23013dc1115019103423784fba/src/nix/flake.cc#L1393-L1429>).
+
+        It exists for the following reasons:
+
+        1. When calling `nix flake show nixpkgs`, the `outputs.packages`
+           flake attribute would be fully evaluated. This would stall the Nix
+           CLI due to the sheer number of packages to evaluate.
+           `outputs.legacyPackages`, on the other hand, is omitted in the
+           output and not evaluated unless the special `--legacy` CLI flag is
+           provided.
+        2. The nixpkgs repository exposes package in a tree structure, like
+           `rustPackages.cargo`. However, the children of the
+           `outputs.packages` flake attribute must follow the schema of
+           `packages.system.name`. The `name` portion allows no further
+           nesting, so tree structures would require flattening. See also
+           <https://github.com/NixOS/nix/commit/3488fa7c6cef487d3f9501e89894f9e632e678db>
 
         The reason why finding the tree structure of `legacyPackages` is slow,
         is that for each attribute in the tree, it is necessary to check whether
