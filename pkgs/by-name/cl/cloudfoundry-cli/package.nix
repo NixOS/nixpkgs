@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -32,14 +34,22 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryBuildDate=1970-01-01"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binarySHA=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
     mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Official command line client for Cloud Foundry";
