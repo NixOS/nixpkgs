@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_43,
+  electron_44,
   python3,
   makeWrapper,
   callPackage,
@@ -34,7 +34,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_43;
+  electron = electron_44;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -45,13 +45,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.26.0";
+  version = "8.28.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-GgNFy7ZNft4rwTmS+OGp4eis6izlc7RGubnmSc8OeKc=";
+    hash = "sha256-zQQ5z9abHoVSYt9d/buN7G9gsG+JhaBW1xgcja98iZI=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -84,7 +84,7 @@ let
         pnpm config set fetch-timeout 300000
       '';
       fetcherVersion = 4;
-      hash = "sha256-9LC62SFDnP4GMDqsP8NcSiACUA+BkPwnbdmNnvJ8gKg=";
+      hash = "sha256-vYMT1yBAZ+ABQN9KXfBX4j08i3xKw5BUfpG2kYqs8MY=";
     };
 
     strictDeps = true;
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpm config set fetch-timeout 300000
     '';
     fetcherVersion = 4;
-    hash = "sha256-9LC62SFDnP4GMDqsP8NcSiACUA+BkPwnbdmNnvJ8gKg=";
+    hash = "sha256-vYMT1yBAZ+ABQN9KXfBX4j08i3xKw5BUfpG2kYqs8MY=";
   };
 
   env = {
@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     SIGNAL_ENV = "production";
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
-    SOURCE_DATE_EPOCH = 1788454304;
+    SOURCE_DATE_EPOCH = 1790198139;
   };
 
   preBuild = ''
