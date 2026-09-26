@@ -9879,8 +9879,6 @@ with pkgs;
     enableUnfree = true;
   };
 
-  isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
-
   lean3 = lean;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
