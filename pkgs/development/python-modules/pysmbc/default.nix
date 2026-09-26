@@ -4,6 +4,7 @@
   fetchPypi,
   samba,
   pkg-config,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage rec {
@@ -30,5 +31,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/hamano/pysmbc";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

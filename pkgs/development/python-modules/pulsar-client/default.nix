@@ -24,6 +24,9 @@
 
   # tests
   unittestCheckHook,
+
+  # for meta.broken
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -96,5 +99,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
