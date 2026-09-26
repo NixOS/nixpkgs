@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=text_probe_recovers_when_json_fails"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "TUI to find LLM models right sized for the system's RAM, CPU, and GPU";
     homepage = "https://github.com/AlexsJones/llmfit";
