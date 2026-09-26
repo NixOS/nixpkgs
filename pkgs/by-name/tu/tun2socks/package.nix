@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/xjasonlyu/tun2socks";
     description = "Routes network traffic from any application through a proxy";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tun2socks";
   };
