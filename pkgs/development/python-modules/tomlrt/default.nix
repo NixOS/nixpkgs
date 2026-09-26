@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tomlrt";
-  version = "2.2.7";
+  version = "2.2.12";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-tfZZ0Jq/YNIAONrLNH5yC85PmX8iiteruoCMUvBriBU=";
+    hash = "sha256-/qpLtE/FnmKmAiYgA+/SHOvqHSThIf7c1dtqaNQ7nbU=";
   };
 
   build-system = [ hatchling ];
