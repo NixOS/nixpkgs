@@ -51,6 +51,7 @@ export default async function lintCommits({ github, context, core, repoPath }) {
 
   await checkCommitMessages({ commits, core })
   await checkCommitMetadata({ commits, core })
+  await checkBannedAiEmails({ commits, github, context, core, pull_number })
 }
 
 /**
@@ -218,5 +219,82 @@ async function checkCommitMetadata({ commits, core }) {
         "if you'd like.",
     )
     core.setFailed('Committers: merging is discouraged.')
+  }
+}
+
+/**
+ * @param {{
+ *  commits: Commit[],
+ *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
+ *  context: typeof import('@actions/github').context,
+ *  core: typeof import('@actions/core'),
+ *  pull_number: number,
+ * }} CheckBannedAiEmailsProps
+ */
+async function checkBannedAiEmails({
+  commits,
+  github,
+  context,
+  core,
+  pull_number,
+}) {
+  const bannedEmails = new Set([
+    '223556219+copilot@users.noreply.github.com',
+    'noreply@anthropic.com',
+    'cursoragent@cursor.com',
+    'agent@cursor.com',
+  ])
+  /** @param {string} trailer */
+  const emailFromTrailer = (trailer) =>
+    trailer.match(/<([^>]+)>/)?.[1]?.toLowerCase()
+  const failures = commits
+    .filter(
+      (commit) =>
+        !commit.trailers.some((trailer) => /^Assisted-by:/i.test(trailer)),
+    )
+    .flatMap((commit) => [
+      ...[
+        ['author', commit.author.email],
+        ['committer', commit.committer.email],
+      ]
+        .filter(([, email]) => bannedEmails.has(email?.toLowerCase()))
+        .map(([field, email]) => ({
+          commit,
+          detail: `${field} email ${email}`,
+        })),
+      ...commit.trailers
+        .filter((trailer) => {
+          const email = emailFromTrailer(trailer)
+          return email !== undefined && bannedEmails.has(email)
+        })
+        .map((trailer) => ({ commit, detail: `trailer ${trailer}` })),
+    ])
+
+  if (failures.length === 0) return
+
+  for (const { commit, detail } of failures) {
+    core.error(
+      `Commit ${commit.sha} violates the Automation/AI policy: ${detail}`,
+    )
+  }
+
+  if (context.eventName === 'pull_request_target') {
+    await github.rest.issues.createComment({
+      ...context.repo,
+      issue_number: pull_number,
+      body:
+        'This pull request was automatically closed because it violates the ' +
+        '[Nixpkgs Automation/AI policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#transparency). ' +
+        'Please review the policy and make the necessary changes before reopening it.',
+    })
+    await github.rest.pulls.update({
+      ...context.repo,
+      pull_number,
+      state: 'closed',
+    })
+    core.setFailed(
+      'Pull request closed: Nixpkgs Automation/AI policy violation detected.',
+    )
+    return
   }
 }

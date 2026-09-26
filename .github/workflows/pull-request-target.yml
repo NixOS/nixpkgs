@@ -93,6 +93,9 @@ jobs:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
+    permissions:
+      issues: write
+      pull-requests: write
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
