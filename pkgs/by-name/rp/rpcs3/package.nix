@@ -49,19 +49,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.42-unstable-2026-08-15";
+  version = "0.0.42-unstable-2026-09-19";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = "fc93d932c8560f763f5223c0a4165cc53bceeb3f";
+    rev = "9e86f165d1711b9429d48b0487e7bc5ba0cc9c6c";
     postCheckout = ''
       cd $out/3rdparty
       git submodule update --init \
         fusion/fusion asmjit/asmjit yaml-cpp/yaml-cpp SoundTouch/soundtouch stblib/stb \
         feralinteractive/feralinteractive wolfssl/wolfssl
     '';
-    hash = "sha256-3sGcpYfaxZNa6/CIRxylSf/EL+ievwIeQzEKYDOUNy8=";
+    hash = "sha256-c0P685i0vJ5nMm0IE2Pz8nza7BQMKC7ewlDsNOm3Fkc=";
   };
 
   passthru.updateScript = nix-update-script {
