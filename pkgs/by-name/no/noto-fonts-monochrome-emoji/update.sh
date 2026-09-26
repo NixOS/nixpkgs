@@ -18,7 +18,7 @@ newhash=$(nix-prefetch "{ stdenv, fetchurl }: stdenv.mkDerivation {
     owner = \"google\";
     repo = \"fonts\";
     rev = \"$newrev\";
-    sparseCheckout = [ \"ofl/notoemoji\" ];
+    rootDir = \"ofl/notoemoji\";
   };
 }")
 
