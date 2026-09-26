@@ -20,14 +20,14 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox";
-  version = "4.7.0";
+  version = "4.7.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u6gS/k2WJuziuENIF4DbepvOKFNN6kxAIyX22J9xP7Q=";
+    hash = "sha256-6IJrDD+1yBv15cbJwZOLkwiAlGZH2zRC+a/CG79C10Y=";
   };
 
   patches = [
@@ -43,7 +43,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
         django-cors-headers
         django-debug-toolbar
         django-filter
-        django-graphiql-debug-toolbar
         django-htmx
         django-mptt
         django-pgware
