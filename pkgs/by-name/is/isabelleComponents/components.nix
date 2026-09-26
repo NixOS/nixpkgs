@@ -21,6 +21,7 @@ lib.makeScope newScope (self: {
   javamail = self.callPackage ./javamail { };
   jdk = self.callPackage ./jdk { };
   jedit = self.callPackage ./jedit { };
+  jfreechart = self.callPackage ./jfreechart { };
   kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
