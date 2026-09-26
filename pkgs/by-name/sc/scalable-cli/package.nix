@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scalable-cli";
-  version = "1.0.0";
+  version = "1.1.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ScalableCapital";
     repo = "scalable-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-37ofxUflOgQfcFh5t1i+6FnrWtsRHUxafYYQbcAYgBQ=";
+    hash = "sha256-CFMA17VarZwyPDZmTWj3RWtGpIFEGtJzW8ez5D7jjR0=";
   };
 
-  cargoHash = "sha256-P3CI304NP6T8Z5dI0A4KmeglezvGoiw7EL+oqXJi9UA=";
+  cargoHash = "sha256-O8ojroRxbR2rJUIcoyzol1UK0HUPjS6+3k1GDlIQxxs=";
 
   buildFeatures = [ "channel-prod" ];
 
