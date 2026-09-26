@@ -50,7 +50,16 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     libjpeg_turbo
     libpng
     torch.cxxdev
-  ];
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcusparse # cusparse.h
+    ]
+  );
 
   dependencies = [
     numpy
