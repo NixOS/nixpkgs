@@ -7,7 +7,6 @@
   net-tools,
   openjdk21,
   scala_3,
-  polyml,
   verit,
   eprover-ho,
   cvc5,
@@ -37,27 +36,6 @@ let
   };
 
   platform = platforms."${stdenv.hostPlatform.system}";
-
-  # There have been issues with proofs failing on NixOS in the past,
-  # so we pin polyml to the exact commit that upstream isabelle uses
-  polyml' = polyml.overrideAttrs {
-    pname = "polyml-for-isabelle";
-    version = "2025-1";
-
-    src = fetchFromGitHub {
-      owner = "polyml";
-      repo = "polyml";
-      rev = "ccd3e3717f7238b9b5d295fea4b5426182dfc0b6";
-      hash = "sha256-wYW8aSvXzhW3hCDeorkD59j+1S6smzsFXHuPYeqo7z8=";
-    };
-
-    configureFlags = [
-      "--enable-intinf-as-int"
-      "--with-gmp"
-      "--disable-shared"
-    ];
-    buildFlags = [ "compiler" ];
-  };
 
   sha1 = stdenv.mkDerivation {
     pname = "isabelle-sha1";
@@ -137,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    polyml'
+    isabelleComponents.polyml
     verit
     isabelleComponents.vampire
     eprover-ho
@@ -170,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs lib/Tools/ bin/
 
     substituteInPlace src/Pure/ML/ml_settings.scala \
-      --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${polyml'}/bin")'
+      --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${isabelleComponents.polyml}/bin")'
 
     cat >contrib/verit-*/etc/settings <<EOF
       ISABELLE_VERIT=${verit}/bin/veriT
@@ -192,15 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
       ISABELLE_CSDP=${csdp}/bin/csdp
     EOF
 
-    cat >contrib/polyml-*/etc/settings <<EOF
-      ML_SYSTEM_64=true
-      ML_SYSTEM=${polyml'.name}
-      ML_PLATFORM=${stdenv.system}
-      ML_OPTIONS="--minheap 1000"
-      POLYML_HOME="\$COMPONENT"
-      ML_SOURCES="\$POLYML_HOME/src"
-    EOF
-
     cat >contrib/jdk*/etc/settings <<EOF
       ISABELLE_JAVA_PLATFORM=${stdenv.system}
       ISABELLE_JDK_HOME=${java}
@@ -208,16 +177,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* \
+    for comp in contrib/jdk* contrib/verit-* \
                 contrib/e-* contrib/cvc5-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
 
     substituteInPlace etc/components \
+      --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}'
 
-    rm -rf contrib/vampire-4.8
+    rm -rf contrib/polyml-5.9.2-2 contrib/vampire-4.8
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -283,7 +253,6 @@ stdenv.mkDerivation (finalAttrs: {
     bin/isabelle scala_build
 
     echo "Building HOL heap"
-    ln -s ${polyml'}/bin ./contrib/polyml-*/
     bin/isabelle build -v -o system_heaps -b HOL
 
     runHook postBuild
@@ -321,7 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit platform;
-    polyml = polyml';
     cvc5 = cvc5';
     sha1 = sha1;
     withComponents =
