@@ -537,7 +537,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = lib.toLower attrs.pname;
             #version = null;
             #update = null;
             edition = "*";
