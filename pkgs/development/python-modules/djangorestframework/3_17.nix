@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   setuptools,
@@ -19,7 +20,6 @@
   pyyaml,
 
   # tests
-  dj-database-url,
   pytestCheckHook,
   pytest-django,
   pytz,
@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "djangorestframework";
-  version = "3.18.1";
+  version = "3.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     tag = finalAttrs.version;
-    hash = "sha256-ZOzGJOIyN6X7NxplIDUeII87IlsXViNLPeW7f4/vIfY=";
+    hash = "sha256-hDAtICtVFeEXRgR5Shb0IdVlLkpf/TBDWw+2cOLJTfw=";
   };
 
   build-system = [ setuptools ];
@@ -56,12 +56,16 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    dj-database-url
     pytest-django
     pytestCheckHook
     pytz
   ]
   ++ finalAttrs.passthru.optional-dependencies.complete;
+
+  disabledTests = [
+    # https://github.com/encode/django-rest-framework/issues/9422
+    "test_urlpatterns"
+  ];
 
   pythonImportsCheck = [ "rest_framework" ];
 

@@ -4956,6 +4956,8 @@ self: super: with self; {
 
   django_6 = callPackage ../development/python-modules/django/6.nix { };
 
+  django_6_0 = callPackage ../development/python-modules/django/6_0.nix { };
+
   djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
 
   djangocms-alias = callPackage ../development/python-modules/djangocms-alias { };
@@ -4995,6 +4997,10 @@ self: super: with self; {
       { };
 
   djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
+
+  djangorestframework_3_17 =
+    callPackage ../development/python-modules/djangorestframework/3_17.nix
+      { };
 
   djangosaml2 = callPackage ../development/python-modules/djangosaml2 { };
 
