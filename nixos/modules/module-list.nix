@@ -1690,6 +1690,7 @@
   ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cook-cli.nix
+  ./services/web-apps/crosspoint-sync.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dashy.nix
   ./services/web-apps/davis.nix
