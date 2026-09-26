@@ -10,6 +10,8 @@
   gnused,
   openssh,
   inotify-tools,
+
+  nixosTests,
 }:
 runCommand "gitwatch"
   rec {
@@ -22,6 +24,10 @@ runCommand "gitwatch"
       hash = "sha256-O8Qk2fGBAT7NGJYd+PIGOaiDQAnexsDm1y+KFHabQEM=";
     };
     nativeBuildInputs = [ makeWrapper ];
+
+    passthru.tests = {
+      inherit (nixosTests) gitwatch;
+    };
 
     meta = {
       description = "Watch a filesystem and automatically stage changes to a git";
