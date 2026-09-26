@@ -6,6 +6,7 @@
   monorepoSrc ? null,
   version,
   release_version,
+  fetchpatch,
   runCommand,
   python3,
   python3Packages,
@@ -41,11 +42,19 @@ let
   needHdrGen = isFullBuild || lib.versionAtLeast release_version "22";
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+  inherit pname version;
 
   src = src';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
+
+  # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
+  patches =
+    patches
+    ++ lib.optional (lib.strings.versionOlder version "22.1.5") (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
+      hash = "sha256-BJwFPeYCBO+PnUMMC/3GSYPgn0vczkkbdw5qcnURPbI=";
+    });
 
   nativeBuildInputs = [
     cmake
@@ -69,10 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = ''
     cd ../${finalAttrs.pname}
     chmod -R u+w ../
+    cd ..
   '';
 
   postPatch = ''
-    cd ../runtimes
+    cd runtimes
   '';
 
   postInstall =
