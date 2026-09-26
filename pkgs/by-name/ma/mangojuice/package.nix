@@ -25,13 +25,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.8.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-jlSEPUo2Y84xyIRmUdsIBYzZo7a8wQFOnRbb7oOPeok=";
+    hash = "sha256-DX8acRnHiKtrytZJBiAPUMRZGYtPwBFI0WOqmIWAED4=";
   };
 
   patches = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   dontWrapGApps = true;
 
@@ -87,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       pluiedev
       getchoo
     ];
+    mainProgram = "mangojuice";
   };
 })
