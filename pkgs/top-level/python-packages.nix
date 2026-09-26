@@ -20187,6 +20187,8 @@ self: super: with self; {
 
   sunpy = callPackage ../development/python-modules/sunpy { };
 
+  suntime = callPackage ../development/python-modules/suntime { };
+
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
   sunweg = callPackage ../development/python-modules/sunweg { };
