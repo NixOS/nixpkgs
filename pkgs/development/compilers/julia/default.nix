@@ -65,6 +65,13 @@ in
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
           })
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62775
+          # Probably not needed after the next release on this branch (1.10.13+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch?full_index=1";
+            hash = "sha256-1Dq5gEo+MiBoIZq8xBHNONwDrwLLQ3Yr6qQh6EJKCCQ=";
+          })
         ];
       })
       {
@@ -77,6 +84,15 @@ in
       (import ./generic.nix {
         version = "1.11.9";
         hash = "sha256-SX5jIfJfxQQfP2P5sCGtglFn+GZlOIyHgnQ3qrr8GSI=";
+        patches = [
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62776
+          # Probably not needed after the next release on this branch (1.11.10+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/6144379071697e734d374530c412e6ae3cd4715b.patch?full_index=1";
+            hash = "sha256-BUNCMrduKBQtcovTCvhGKV1+liFkR1V+eKBgYT8bHkE=";
+          })
+        ];
       })
       {
         stdenv = gcc14Stdenv;
@@ -88,7 +104,16 @@ in
       (import ./generic.nix {
         version = "1.12.7";
         hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
-        patches = lib.optionals stdenv.hostPlatform.isDarwin [
+        patches = [
+          # stackwalk: derive glibc longjmp pointer mangling
+          # https://github.com/JuliaLang/julia/pull/62777
+          # Probably not needed after the next release on this branch (1.12.8+)
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/3e2d8ff4d016f425a894113b7b77cc3b9dcb1cec.patch?full_index=1";
+            hash = "sha256-R5H8Y/jksfo0HF9AzxQaEHWBYX8N7zZjzd5wFsrv4D0=";
+          })
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch
         ];
