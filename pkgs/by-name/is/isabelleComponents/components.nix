@@ -24,6 +24,7 @@ lib.makeScope newScope (self: {
   jedit = self.callPackage ./jedit { };
   jfreechart = self.callPackage ./jfreechart { };
   jortho = self.callPackage ./jortho { };
+  jsvg = self.callPackage ./jsvg { };
   jsoup = self.callPackage ./jsoup { };
   kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };

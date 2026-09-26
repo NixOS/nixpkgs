@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.fonts
     isabelleComponents.jsoup
     isabelleComponents.jortho
+    isabelleComponents.jsvg
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/jedit-${isabelleComponents.jedit.version}' '${isabelleComponents.jedit.settings}' \
       --replace-fail 'contrib/jfreechart-${isabelleComponents.jfreechart.version}' '${isabelleComponents.jfreechart.settings}' \
       --replace-fail 'contrib/jortho-1.0-2' '${isabelleComponents.jortho.settings}' \
+      --replace-fail 'contrib/jsvg-2.0.0' '${isabelleComponents.jsvg.settings}' \
       --replace-fail 'contrib/jsoup-${isabelleComponents.jsoup.version}' '${isabelleComponents.jsoup.settings}' \
       --replace-fail 'contrib/kodkodi-${isabelleComponents.kodkodi.version}' '${isabelleComponents.kodkodi.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
@@ -155,7 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/easychair-3.5 contrib/elm-0.19.1 contrib/eptcs-1.7.0 \
            contrib/find_facts_web-20251022 contrib/foiltex-2.1.4b contrib/gnu-utils-20211030 \
            contrib/javamail-20251022 contrib/jedit-20251128 contrib/jfreechart-1.5.3 \
-           contrib/isabelle_fonts-20241227 contrib/jsoup-1.21.2 contrib/jortho-1.0-2
+           contrib/isabelle_fonts-20241227 contrib/jsoup-1.21.2 contrib/jortho-1.0-2 \
+           contrib/jsvg-2.0.0
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
