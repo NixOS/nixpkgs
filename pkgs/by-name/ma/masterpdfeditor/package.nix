@@ -21,11 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
   src =
     let
       selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
+      makeUrls = url: [
+        url
+        "https://web.archive.org/web/${url}"
+      ];
     in
     fetchurl {
-      url = selectSystem {
-        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.x86_64-qt_include.tar.gz";
-        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
+      urls = selectSystem {
+        x86_64-linux = makeUrls "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.x86_64-qt_include.tar.gz";
+        aarch64-linux = makeUrls "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
         x86_64-linux = "sha256-ksVuJyuImstESVwHUmOUv6aERosg6g5bSsRvPSf5EVM=";
