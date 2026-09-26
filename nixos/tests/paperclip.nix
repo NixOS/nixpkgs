@@ -144,7 +144,7 @@ in
         pkgs.jq
       ];
     };
-    controller = { lib, ... }: {
+    controller = { lib, config, ... }: {
       virtualisation = {
         memorySize = 8192;
         cores = 4;
@@ -212,9 +212,11 @@ in
       };
       environment.systemPackages = [
         package
+        config.services.postgresql.package
         pkgs.curl
         pkgs.jq
         pkgs.python3
+        pkgs.util-linux
       ];
     };
   };
@@ -291,6 +293,18 @@ in
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
     worker.succeed("printf 'header = \"Authorization: Bearer %s\"\\n' \"$(cat /var/lib/hermes-fixture/gateway-key)\" | curl -fsS --config - -X POST http://localhost:8642/v1/runs/fixture-6/stop > /dev/null")
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"cancelled\" and .runs[\"fixture-6\"].stops == 1 and (.runs | length) == 6'")
+    controller.succeed("systemctl stop paperclip-control.service")
+    controller.succeed("runuser -u postgres -- pg_dump -Fc -f /var/lib/postgresql/paperclip-control.dump paperclip_control")
+    controller.succeed("runuser -u postgres -- dropdb --force paperclip_control")
+    controller.succeed("runuser -u postgres -- createdb -O paperclip-control-migration paperclip_control")
+    controller.succeed("runuser -u postgres -- pg_restore --no-owner --role=paperclip-control-migration -d paperclip_control /var/lib/postgresql/paperclip-control.dump")
+    controller.succeed("systemctl start paperclip-control.service")
+    controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
+    assert json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"] == bindings
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/auth/get-session | jq -e '.user.email == \"operator@example.test\"'")
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"failed\" and .errorCode == \"process_lost\"'")
+    invoke()
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-7\"].callbackStatus == 401 and (.runs | length) == 7'")
     controller.succeed("pid=$(systemctl show paperclip-control -p MainPID --value); ! tr '\\0' '\\n' < /proc/$pid/environ | grep -E '^(BETTER_AUTH_SECRET|DATABASE_URL|DATABASE_MIGRATION_URL)='")
   '';
 }
