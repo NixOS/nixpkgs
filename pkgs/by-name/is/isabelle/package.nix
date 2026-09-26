@@ -3,14 +3,12 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  gcc14Stdenv,
   coreutils,
   net-tools,
   openjdk21,
   scala_3,
   polyml,
   verit,
-  vampire,
   eprover-ho,
   cvc5,
   libpoly,
@@ -60,36 +58,6 @@ let
     ];
     buildFlags = [ "compiler" ];
   };
-
-  # Isabelle uses a branch of vampire that is not in the normal release line
-  # that adds support for higher order goals
-  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
-  vampire' =
-    (vampire.override {
-      stdenv = vampireStdenv;
-      enableZ3 = false;
-    }).overrideAttrs
-      (old: {
-        pname = "vampire-for-isabelle";
-        version = "4.8";
-
-        src = fetchFromGitHub {
-          owner = "vprover";
-          repo = "vampire";
-          tag = "v4.8HO4Sledgahammer";
-          hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
-        };
-
-        patches = [ ./vampire-add-install-directive.patch ];
-
-        postInstall = ''
-          mv $out/bin/vampire_rel $out/bin/vampire
-        '';
-
-        cmakeFlags = old.cmakeFlags ++ [
-          (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
-        ];
-      });
 
   sha1 = stdenv.mkDerivation {
     pname = "isabelle-sha1";
@@ -171,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     polyml'
     verit
-    vampire'
+    isabelleComponents.vampire
     eprover-ho
     net-tools
     cvc5'
@@ -213,12 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
       E_VERSION=${eprover-ho.version}
     EOF
 
-    cat >contrib/vampire-*/etc/settings <<EOF
-      VAMPIRE_HOME=${vampire'}/bin
-      VAMPIRE_VERSION=${vampire'.version}
-      VAMPIRE_EXTRA_OPTIONS="--mode casc"
-    EOF
-
     cat >contrib/cvc5-*/etc/settings <<EOF
       CVC5_HOME=${cvc5'}
       CVC5_VERSION=${cvc5'.version}
@@ -246,11 +208,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* \
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* \
                 contrib/e-* contrib/cvc5-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
+
+    substituteInPlace etc/components \
+      --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}'
+
+    rm -rf contrib/vampire-4.8
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -354,7 +321,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit platform;
-    vampire = vampire';
     polyml = polyml';
     cvc5 = cvc5';
     sha1 = sha1;
