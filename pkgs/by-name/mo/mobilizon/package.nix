@@ -28,7 +28,6 @@ beamPackages.mixRelease rec {
 
   nativeBuildInputs = [
     git
-    cmake
   ];
 
   mixNixDeps = import ./mix.nix {
