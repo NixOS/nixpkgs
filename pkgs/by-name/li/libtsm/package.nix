@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtsm";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "libtsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VT4dOlQT98/AaFRGd4vOoyDe8W1KRvvFRaCkr/Abu9Y=";
+    hash = "sha256-CA80Tsc6rr2NCOVnH6+vGB2fuO6jZpuoCaiz4MuJ9xM=";
   };
 
   strictDeps = true;
