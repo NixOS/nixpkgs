@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.scala
     isabelleComponents.kodkodi
     isabelleComponents.bib2xhtml
+    isabelleComponents.elm
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/cvc5-1.2.0-1' '${isabelleComponents.cvc5.settings}' \
       --replace-fail 'contrib/e-3.2' '${isabelleComponents.e.settings}' \
       --replace-fail 'contrib/easychair-3.5' '${isabelleComponents.easychair.settings}' \
+      --replace-fail 'contrib/elm-0.19.1' '${isabelleComponents.elm.settings}' \
       --replace-fail 'contrib/flatlaf-${isabelleComponents.flatlaf.version}' '${isabelleComponents.flatlaf.settings}' \
       --replace-fail 'contrib/isabelle_setup-20250613' '${isabelleComponents.setup.settings}' \
       --replace-fail 'contrib/jdk-21.0.9' '${isabelleComponents.jdk.settings}' \
@@ -131,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/polyml-5.9.2-2 contrib/scala-3.3.4 contrib/spass-3.8ds-2 \
            contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 contrib/vscodium-* \
            contrib/z3-4.4.0pre-4 contrib/zipperposition-2.1-1 contrib/bib2xhtml-20190409 \
-           contrib/easychair-3.5
+           contrib/easychair-3.5 contrib/elm-0.19.1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
