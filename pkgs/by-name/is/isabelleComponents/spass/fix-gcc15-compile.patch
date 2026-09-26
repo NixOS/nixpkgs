@@ -1,0 +1,28 @@
+--- a/nextclauseweights.c
++++ b/nextclauseweights.c
+@@ -107,7 +107,7 @@ void nextclauseweights_addClause(CLAUSE clause) {
+ 	intptr_t minrank= INT_MAX;
+ 	for (LIST scan= clause_ParentClauses(clause);!list_Empty(scan); scan= list_Cdr(scan)) {
+ 		intptr_t parentnumber= (intptr_t)list_Car(scan);
+-		hm_InsertListInsertUnique(DerivedFromThisClause,parentnumber,clausenumber);
++		hm_InsertListInsertUnique(DerivedFromThisClause,(POINTER)parentnumber,(POINTER)clausenumber);
+ 		nextclauseweights_addLabelToClauseFromClause(clausenumber,parentnumber);
+ 		intptr_t rank= (intptr_t) hm_Retrieve(ClauseNumberToRank,(POINTER)parentnumber);
+ 		if (rank < minrank && rank > 0)
+--- a/symbol.h
++++ b/symbol.h
+@@ -274,10 +274,10 @@ int symbol_GetInitialIndexVarCounter(void);
+ SYMBOL symbol_CreateIndexVariable(void);
+ SYMBOL symbol_NextIndexVariable(SYMBOL);
+ 
+-/*  SYMBOL symbol_CreateStandardVariable(void);
+-  void   symbol_SetStandardVarCounter(SYMBOL Variable);
+-  SYMBOL symbol_FirstVariable(void);
+-  void   symbol_ResetStandardVarCounter(void); */
++SYMBOL symbol_CreateStandardVariable(void);
++void   symbol_SetStandardVarCounter(SYMBOL Variable);
++SYMBOL symbol_FirstVariable(void);
++void   symbol_ResetStandardVarCounter(void);
+ BOOL   symbol_GreaterVariable(SYMBOL Var1, SYMBOL Var2);
+ 
+ void   symbol_Init(BOOL);
