@@ -16,6 +16,7 @@ lib.makeScope newScope (self: {
   find_facts_web = self.callPackage ./find_facts_web { };
   flatlaf = self.callPackage ./flatlaf { };
   foiltex = self.callPackage ./foiltex { };
+  fonts = self.callPackage ./fonts { };
   gnu-utils = self.callPackage ./gnu-utils { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   javamail = self.callPackage ./javamail { };
