@@ -15,7 +15,7 @@
   django-ninja,
   djangorestframework,
   pytest-cov-stub,
-  pytest-django,
+  pytest-django_4_12,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     django-ninja
     djangorestframework
     pytest-cov-stub
-    pytest-django
+    pytest-django_4_12
     pytest-mock
     pytest-xdist
     pytestCheckHook
