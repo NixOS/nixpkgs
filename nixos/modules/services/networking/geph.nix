@@ -40,7 +40,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         LoadCredential = "geph-config:${cfg.configFile}";
-        ExecStart = "${lib.getExe cfg.package} --config %d/geph-config";
+        ExecStart = "${lib.getBin cfg.package}/bin/geph5-client --config %d/geph-config";
 
         Restart = "on-failure";
         RestartSec = 2;
