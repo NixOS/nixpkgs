@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.34.2";
+  version = "0.35.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-4Uvc925/6RxJRHjP3SZaB7T+gqky5KlL9agHy/14Jd0=";
+    hash = "sha256-IgGnh96Xu6790UyqEv/S8CxSXCt12FeZH8gYAPUTzN4=";
   };
 
   build-system = [ hatchling ];
@@ -65,6 +65,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+  ];
+
+  disabledTests = [
+    # Docs snapshots depend on the exact black, pytest, and rich versions
+    "test_docs"
   ];
 
   meta = {
