@@ -17,6 +17,7 @@
   python3,
   desktop-file-utils,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libgee
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Elegant and customizable terminal for GNOME";
