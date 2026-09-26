@@ -13,20 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghost-cli";
-  version = "1.32.2";
+  version = "1.32.5";
 
   src = fetchFromGitHub {
     owner = "TryGhost";
     repo = "Ghost-CLI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wXdMNREukjp3ozyBOM1JuAvEAcsTf+5mvWPTTNf2+o8=";
+    hash = "sha256-NYKkMIHON/82UMV7vNruZabSZez7GofcB3txwjm6USI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-u9g/EupJEkgq7vJMh+hkwNXj8d7oD9/5y83x4fJhLII=";
+    hash = "sha256-zfjTTw94ODKZ81Hse0RyX/yhxB5ob2NgqWCmUA+kbkU=";
   };
 
   nativeBuildInputs = [
