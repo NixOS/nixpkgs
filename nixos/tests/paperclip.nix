@@ -230,6 +230,9 @@ in
     controller.succeed("jq -n --rawfile password /var/lib/paperclip-control/credentials/password '{email: \"operator@example.test\", password: ($password | rtrimstr(\"\\n\"))}' > /run/login.json")
     controller.succeed("curl -fsS -c /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data-binary @/run/login.json http://controller:3115/api/auth/sign-in/email > /run/login-response.json")
     controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/login-response.json")
+    print("Board cookie names:", controller.succeed("awk -F '\\t' 'NF == 7 { print $6 }' /run/board-cookies").strip())
+    controller.succeed("curl -fsS -b /run/board-cookies http://controller:3115/api/auth/get-session > /run/board-session.json")
+    controller.succeed("jq -e '.user.email == \"operator@example.test\"' /run/board-session.json")
     bindings = json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"]
     agent_id = bindings["agent/worker"]
     controller.succeed(f"printf '%s\\n' {bindings['company/other']} > /tmp/shared/other-company")
