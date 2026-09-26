@@ -2,76 +2,98 @@
   lib,
   stdenv,
   fetchDebianPatch,
-  fetchpatch,
   fetchurl,
-  pkg-config,
   testers,
   validatePkgConfig,
-  autoconf,
-  automake,
-  libtool,
+
+  cmake,
+  pkg-config,
 }:
+let
+  debianRevision = toString 4;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblzf";
   version = "3.6";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://dist.schmorp.de/liblzf/liblzf-${finalAttrs.version}.tar.gz";
     hash = "sha256-nF3gH3ucyuQMP2GdJqer7JmGwGw20mDBec7dBLiftGo=";
   };
 
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
+
+  prePatch =
+    let
+      debianBaseUrl = "https://sources.debian.org/data/main/libl/liblzf/${finalAttrs.version}-${debianRevision}/debian";
+
+      debianCmakeLists = fetchurl {
+        url = "${debianBaseUrl}/extras/CMakeLists.txt";
+        hash = "sha256-QlgWq7xLhgvhBvtZ1e2ngMTpA/Dp6USdVgN+RfgO5x4=";
+      };
+
+      debianCmakeConfig = fetchurl {
+        url = "${debianBaseUrl}/extras/liblzf-config.cmake.in";
+        hash = "sha256-WvQ+QAFGxaPCz80ne3OA4L5cc/vUp5iMQe/2wGfoTMw=";
+      };
+
+      debianPkgConfig = fetchurl {
+        url = "${debianBaseUrl}/extras/liblzf.pc.in";
+        hash = "sha256-0KBA1duW420/DgaXQiyNlKBkQpVBH6LPucf11e4b8go=";
+      };
+    in
+    ''
+      cp --no-preserve=mode ${debianCmakeLists} CMakeLists.txt
+      cp --no-preserve=mode ${debianCmakeConfig} liblzf-config.cmake.in
+      cp --no-preserve=mode ${debianPkgConfig} liblzf.pc.in
+    '';
+
   patches = [
     (fetchDebianPatch {
       inherit (finalAttrs) pname version;
-      debianRevision = "4";
+      inherit debianRevision;
       patch = "0001-Make-sure-that-the-library-is-linked-with-C-symbols.patch";
       hash = "sha256-Rgfp/TysRcEJaogOo/Xno+G4HZzj9Loa69DL43Bp1Ok=";
     })
-    (
-      let
-        name = "liblzf-3.6-autoconf-20140314.patch";
-      in
-      fetchpatch {
-        inherit name;
-        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${name}";
-        hash = "sha256-rkhI8w0HV3fGiDfHiXBzrnxqGDE/Yo5ntePrsscMiyg=";
-      }
-    )
+    ./cmake.patch
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+    cmake
     pkg-config
     validatePkgConfig
   ];
 
-  preConfigure = ''
-    sh ./bootstrap.sh
-  '';
-
   postInstall = ''
-    pushd $out/bin
-    ln -s lzf unlzf
-    popd
+    ln -s lzf $bin/bin/unlzf
+    ln -s liblzf/lzf.h $dev/include/lzf.h
   '';
-
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   passthru.tests = {
+    cmakeConfigTest = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "liblzf" ];
+    };
+
     pkgConfigTest = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      version = "${finalAttrs.version}.0";
       versionCheck = true;
     };
 
     exeTest = testers.runCommand {
       name = "${finalAttrs.pname}-exe-test";
-      buildInputs = [ finalAttrs.finalPackage ];
+      buildInputs = [ finalAttrs.finalPackage.bin ];
       script = ''
         lzf -h 2> /dev/null
 
@@ -89,8 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
           exit 1
         fi
 
-        echo "Decompressed output matches test string (lzf & unlzf)"
-
         touch $out
       '';
     };
@@ -101,16 +121,20 @@ stdenv.mkDerivation (finalAttrs: {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         finalAttrs.finalPackage.dev
-        finalAttrs.finalPackage
       ];
-      # tests both the library and pkg-config file
       script = ''
-        $CC -g ${./lib_test.c} -o lib_test \
+        substitute ${./lib_test.c} lib_test.c \
+          --replace-fail '#include <liblzf/lzf.h>' '#include <lzf.h>'
+        $CC -g lib_test.c -o lib_test \
           $(pkg-config --cflags --libs liblzf)
 
         ./lib_test >/dev/null
 
-        echo "Built and tested file linked against liblzf using pkg-config"
+        $CC -g ${./lib_test.c} -o lib_test-namespaced \
+          $(pkg-config --cflags --libs liblzf)
+
+        ./lib_test-namespaced >/dev/null
+
         touch $out
       '';
     };
