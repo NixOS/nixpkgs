@@ -15,6 +15,7 @@ lib.makeScope newScope (self: {
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
   scala = self.callPackage ./scala { };
+  setup = self.callPackage ./setup { };
   sha1 = self.callPackage ./sha1 { };
   spass = self.callPackage ./spass { };
   vampire = self.callPackage ./vampire { };
