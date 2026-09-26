@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "isolate";
-  meta.maintainers = with lib.maintainers; [ virchau13 ];
+  meta.maintainers = with lib.maintainers; [
+    virchau13
+    hey2022
+  ];
 
   nodes = {
     machine = {
