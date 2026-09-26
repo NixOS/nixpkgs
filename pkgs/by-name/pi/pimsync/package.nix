@@ -7,22 +7,23 @@
   installShellFiles,
   makeWrapper,
   xandikos,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.5.9";
+  version = "0.6.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bNE0YY7bws8lEGoVg/sXuepBU1/oJPWBdn1wBGzF8s8=";
+    hash = "sha256-vpmms553q1mzxfkMGEjvTddQVksEAzu50g8bVudZsXg=";
   };
 
-  cargoHash = "sha256-w3o3qxe/EADeH6LDwBxm0kvdYuwEcuj8GcoVPtBqylA=";
+  cargoHash = "sha256-UwfsLEmeSINPDR4VK4P+z4R5VU20RoWUEFC+hRG7TiA=";
 
   env.PIMSYNC_VERSION = finalAttrs.version;
 
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     xandikos
+    cacert
   ];
 
   postInstall = ''
@@ -61,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.qxrein ];
+    maintainers = [
+      lib.maintainers.qxrein
+      lib.maintainers.antonmosich
+    ];
     mainProgram = "pimsync";
   };
 })

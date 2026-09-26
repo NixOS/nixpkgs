@@ -58,10 +58,13 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    mlx-lm
   ];
+
+  optional-dependencies = {
+    metal = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      mlx-lm
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

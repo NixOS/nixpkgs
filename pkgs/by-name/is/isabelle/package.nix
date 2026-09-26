@@ -56,9 +56,9 @@ let
   vampire' =
     (vampire.override {
       stdenv = vampireStdenv;
-      z3' = null;
+      enableZ3 = false;
     }).overrideAttrs
-      (_: {
+      (old: {
         pname = "vampire-for-isabelle";
         version = "4.8";
 
@@ -75,9 +75,8 @@ let
           mv $out/bin/vampire_rel $out/bin/vampire
         '';
 
-        cmakeFlags = [
+        cmakeFlags = old.cmakeFlags ++ [
           (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
-          (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
         ];
       });
 
@@ -296,7 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/maven2/org/scala-lang/scala3-interfaces/${scala_3.version}/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/maven2/org/scala-lang/scala3-compiler_3/${scala_3.version}/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
@@ -356,7 +355,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

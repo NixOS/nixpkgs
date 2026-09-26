@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  erlang,
+  beamPackages,
   python3,
   python3Packages,
   perlPackages,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    erlang
+    beamPackages.erlang
     gnuplot
     perlPackages.perl
     perlPackages.TemplateToolkit

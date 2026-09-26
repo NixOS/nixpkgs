@@ -13,10 +13,6 @@ let
   src =
     fetchurl
       {
-        x86_64-darwin = {
-          url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-x64-${version}.dmg";
-          hash = "sha256-ewlaaaWxPHxaOdAMbkHChzbxAB5MNdZS/p8ROD/SvcQ=";
-        };
         aarch64-darwin = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-arm64-${version}.dmg";
           hash = "sha256-U6Gea89/cXY9Fd6JAWrUtf7Q4VfEXDPzbjCQcHMRjiE=";
@@ -36,7 +32,6 @@ let
     maintainers = with lib.maintainers; [ DataHearth ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };

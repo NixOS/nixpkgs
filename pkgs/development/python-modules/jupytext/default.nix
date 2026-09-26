@@ -9,7 +9,7 @@
   # build-system
   hatch-jupyter-builder,
   hatchling,
-  jupyterlab,
+  jupyter-builder,
 
   # dependencies
   markdown-it-py,
@@ -29,36 +29,38 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupytext";
-  version = "1.18.1";
+  version = "1.19.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
-    tag = "v${version}";
-    hash = "sha256-D7Ps/lHF3F/7Jm4ozcjO8YsTPA1GQPqZVpPod/riGvA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+rNSp0CKW0ZTj8szwSJniCmBYuzGatVWo097jFWBkmI=";
   };
 
-  patches = [
-    ./fix-yarn-lock-typescript.patch
-  ];
+  postPatch = ''
+    substituteInPlace tests/functional/contents_manager/test_async_and_sync_contents_manager_are_in_sync.py \
+      --replace-fail "from black import FileMode, format_str" "" \
+      --replace-fail "format_str(sync_code, mode=FileMode())" "sync_code"
+  '';
 
   nativeBuildInputs = [
     nodejs
     yarn-berry_3.yarnBerryConfigHook
   ];
 
+  # To generate:
+  # nix-shell -p yarn-berry_3.yarn-berry-fetcher --command \
+  #   "yarn-berry-fetcher missing-hashes "$(nix-build -A python3Packages.jupytext.src)/jupyterlab/yarn.lock" > pkgs/development/python-modules/jupytext/missing-hashes.json"
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    patches = [
-      ./fix-yarn-lock-typescript-offline-cache.patch
-    ];
-    sourceRoot = "${src.name}/jupyterlab";
-    hash = "sha256-k2lQnlSmCghIkp6VwNmq5KpSHS5tEbnFnsM+xqo3Ebw=";
+    inherit (finalAttrs) src missingHashes;
+    sourceRoot = "${finalAttrs.src.name}/jupyterlab";
+    hash = "sha256-jyo7hbCYntZtpecK8cCoDOSgWT4xA+MaJu+e3N+aHUU=";
   };
 
   env.HATCH_BUILD_HOOKS_ENABLE = true;
@@ -74,7 +76,7 @@ buildPythonPackage rec {
   build-system = [
     hatch-jupyter-builder
     hatchling
-    jupyterlab
+    jupyter-builder
   ];
 
   dependencies = [
@@ -96,12 +98,6 @@ buildPythonPackage rec {
     # Tests that use a Jupyter notebook require $HOME to be writable
     writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    substituteInPlace tests/functional/contents_manager/test_async_and_sync_contents_manager_are_in_sync.py \
-      --replace-fail "from black import FileMode, format_str" "" \
-      --replace-fail "format_str(sync_code, mode=FileMode())" "sync_code"
-  '';
 
   disabledTestPaths = [
     # Requires the `git` python module
@@ -125,9 +121,9 @@ buildPythonPackage rec {
   meta = {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
-    changelog = "https://github.com/mwouts/jupytext/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mwouts/jupytext/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupytext";
   };
-}
+})

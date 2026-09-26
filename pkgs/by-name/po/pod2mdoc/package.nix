@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,18 +19,25 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace-fail "-DHAVE_OHASH=1" "-DHAVE_OHASH=0"
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-    install -m 0755 pod2mdoc $out/bin
-    install -m 0444 pod2mdoc.1 $out/share/man/man1
+    runHook preInstall
+    installBin pod2mdoc
+    installManPage pod2mdoc.1
+    runHook postInstall
   '';
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://mandoc.bsd.lv/pod2mdoc/";
     description = "Converter from POD into mdoc";
+    changelog = "https://mandoc.bsd.lv/pod2mdoc/ChangeLog";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ramkromberg ];

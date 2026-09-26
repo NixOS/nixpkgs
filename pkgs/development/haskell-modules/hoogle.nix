@@ -54,8 +54,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
   # thus probably intend to substitute it.
   allowSubstitutes = true;
 
-  passAsFile = [ "buildCommand" ];
-
   buildCommand = ''
     ${
       let
@@ -122,6 +120,8 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
         --subst-var-by hoogle ${hoogle}
     chmod +x $out/bin/hoogle
   '';
+
+  __structuredAttrs = true;
 
   passthru = {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix

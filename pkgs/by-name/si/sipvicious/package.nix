@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sipvicious";
-  version = "0.3.7";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = "sipvicious";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OQq1PP0qoETu+0qs2vhkgVU5FVZA5wnWMKU+lKJrvv4=";
+    hash = "sha256-qUdK8IbLnuQU3hv6+x3R84y83Ts8lNIGsOANFgkReE0=";
   };
 
   build-system = [
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Set of tools to audit SIP based VoIP systems";
     homepage = "https://github.com/EnableSecurity/sipvicious";
     changelog = "https://github.com/EnableSecurity/sipvicious/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

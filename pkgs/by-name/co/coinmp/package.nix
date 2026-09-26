@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://projects.coin-or.org/CoinMP/";
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
+    maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.unix;
     license = lib.licenses.epl10;
   };

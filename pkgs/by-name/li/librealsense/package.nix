@@ -28,17 +28,19 @@
   enableGUI ? false,
 }:
 
-assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 assert enableGUI -> enableExamples;
 
 let
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 
-stdenv'.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "librealsense";
   version = "2.57.7";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -46,10 +48,10 @@ stdenv'.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    owner = "IntelRealSense";
+    owner = "realsenseai";
     repo = "librealsense";
-    rev = "v${version}";
-    sha256 = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
   };
 
   buildInputs = [
@@ -57,7 +59,10 @@ stdenv'.mkDerivation rec {
     gcc.cc.lib
     nlohmann_json
   ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ]
   ++ lib.optionals enablePython (
     with pythonPackages;
     [
@@ -184,7 +189,7 @@ stdenv'.mkDerivation rec {
 
   meta = {
     description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
-    homepage = "https://github.com/IntelRealSense/librealsense";
+    homepage = "https://github.com/realsenseai/librealsense";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       brian-dawn
@@ -193,4 +198,4 @@ stdenv'.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = if enableGUI then "realsense-viewer" else "rs-enumerate-devices";
   };
-}
+})

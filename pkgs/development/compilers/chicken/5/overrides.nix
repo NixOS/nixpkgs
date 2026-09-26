@@ -40,6 +40,7 @@ in
       srfi-13
     ]) old);
   cmark = addToBuildInputs pkgs.cmark;
+  crypt = addToBuildInputs pkgs.libxcrypt;
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
@@ -55,6 +56,7 @@ in
       ];
     };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
+  ephem = addToBuildInputs pkgs.libnova;
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
   expat =
     old:
@@ -78,19 +80,8 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.fuse old)
-    // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        (
-          if stdenv.cc.isClang then
-            "-Wno-error=incompatible-function-pointer-types"
-          else
-            "-Wno-error=incompatible-pointer-types"
-        )
-      ];
-    };
+  # requires fuse2
+  fuse = broken;
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
@@ -120,6 +111,7 @@ in
       ] old
     )
     // (addToBuildInputs pkgs.libglut old);
+  hypergiant = addPkgConfig;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   inotify =
@@ -127,25 +119,39 @@ in
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
+  libyaml = old: {
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  };
+  lmdb-ht = addToBuildInputs pkgs.lmdb;
   magic = addToBuildInputs pkgs.file;
   magic-pipes = addToBuildInputs pkgs.chickenPackages_5.chickenEggs.regex;
-  mdh =
-    old:
-    (addToBuildInputs pkgs.pcre old)
-    // {
-      postPatch = ''
-        substituteInPlace bmgsubs.c \
-          --replace-fail "char   *gotamatch();" "char *gotamatch(char *, int, int (*)(char *, int));" \
-          --replace-fail "int bmg_search(char *, int, int (*)());" "int bmg_search(char *, int, int (*)(char *, int));" \
-          --replace-fail "int	(*action)();" "int (*action)(char *, int);" \
-          --replace-fail "int (*action)();" "int (*action)(char *, int);"
-      '';
-    };
+  # requires PCRE
+  mdh = broken;
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
+  mpi =
+    old:
+    (addToBuildInputs pkgs.openmpi old)
+    // {
+      preBuild = ''
+        mkdir -p $NIX_BUILD_TOP/mpi-dir
+        ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
+        ln -sf ${lib.getLib pkgs.openmpi}/lib $NIX_BUILD_TOP/mpi-dir/lib
+        export MPI_DIR=$NIX_BUILD_TOP/mpi-dir
+      '';
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
+  oauthtoothy =
+    old:
+    (addToPropagatedBuildInputs [ chickenEggs.http-client ] old)
+    // {
+      postPatch = ''
+        sed -i 's/http-curl/http-client/' oauthtoothy.scm oauthtoothy.egg
+      '';
+    };
   opencl = addToBuildInputs [
     pkgs.opencl-headers
     pkgs.ocl-icd
@@ -153,6 +159,7 @@ in
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
+  pyffi = addToBuildInputsWithPkgConfig pkgs.python3;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
   # missing dependency in upstream egg
   s9fes-char-graphics-shapes = addToPropagatedBuildInputs (
@@ -209,6 +216,22 @@ in
   stemmer = old: (addToBuildInputs pkgs.libstemmer old) // (addToCscOptions "-L -lstemmer" old);
   stfl =
     old: (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old) // (addToCscOptions "-L -lncurses" old);
+  svn-client =
+    old:
+    (addToBuildInputs [ pkgs.subversion pkgs.aprutil ] old)
+    // (addToNativeBuildInputs pkgs.apr old)
+    // {
+      postPatch =
+        let
+          svnInclude = "${lib.getDev pkgs.subversion}/include/subversion-1";
+          aprUtilInclude = "${lib.getDev pkgs.aprutil}/include";
+        in
+        ''
+          substituteInPlace build-svn-client svn-client.setup \
+            --replace-fail '-I/usr/include/subversion-1' "-I${svnInclude}" \
+            --replace-fail '-I/usr/local/include/subversion-1' "-I${aprUtilInclude} -I${svnInclude}"
+        '';
+    };
   taglib =
     old:
     (addToBuildInputs [ pkgs.zlib pkgs.taglib_1 ] old)
@@ -216,6 +239,12 @@ in
       # needed for tablib-config to be in PATH
       addToNativeBuildInputs pkgs.taglib_1 old
     );
+  tokyocabinet =
+    old:
+    (addToBuildInputs pkgs.tokyocabinet old)
+    // {
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib =
@@ -243,31 +272,17 @@ in
     // {
       postPatch = ''
         substituteInPlace libgit2.scm \
-          --replace "asize" "reserved"
+          --replace-fail "asize" "reserved"
       '';
     };
-  lazy-ffi =
-    old:
-    (addToBuildInputs pkgs.libffi old)
-    // {
-      postPatch = ''
-        substituteInPlace lazy-ffi.scm \
-          --replace "ffi/ffi.h" "ffi.h"
-      '';
-    };
+  lazy-ffi = old: (addToBuildInputs pkgs.libffi old);
   opengl =
     old:
     (brokenOnDarwin old)
     // (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
       pkgs.libGL
       pkgs.libGLU
-    ]) old)
-    // {
-      postPatch = ''
-        substituteInPlace opengl.egg \
-          --replace 'framework ' 'framework" "'
-      '';
-    };
+    ]) old);
   posix-shm = old: {
     postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build.scm \
@@ -289,8 +304,8 @@ in
       preBuild = ''
         substituteInPlace \
           dbus.egg dbus.setup \
-          --replace '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
-          --replace '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
+          --replace-fail '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
+          --replace-fail '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
       '';
     };
   math = old: {
@@ -323,27 +338,12 @@ in
       ];
     };
   canvas-draw = broken;
-  coops-utils = broken;
-  crypt = broken;
-  ephem = addToBuildInputs pkgs.libnova;
   gemini = broken;
   gemini-client = broken;
-  hypergiant = broken;
   iup = broken;
   kiwi = broken;
-  libyaml = broken;
-  lmdb-ht = broken;
-  mpi = broken;
-  oauthtoothy = broken;
-  pyffi = broken;
   qt-light = broken;
-  schematra-csrf = broken;
-  schematra-session = broken;
-  srfi-174 = broken;
-  srfi-19 = broken;
   sundials = broken;
-  svn-client = broken;
-  tokyocabinet = broken;
   # webkitgtk_4_0 was removed
   webview = broken;
 

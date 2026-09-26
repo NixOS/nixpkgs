@@ -14,6 +14,7 @@
 
 let
   inherit (lib)
+    catAttrs
     concatMapStringsSep
     concatStrings
     escape
@@ -191,10 +192,15 @@ rec {
   mkArray =
     elems:
     let
-      vs = map mkValue (lib.throwIf (elems == [ ]) "Please create empty array with mkEmptyArray." elems);
-      elemType = lib.throwIfNot (lib.all (t: (head vs).type == t) (
-        map (v: v.type) vs
-      )) "Elements in a list should have same type." (head vs).type;
+      vs = map mkValue (
+        if elems == [ ] then throw "Please create empty array with mkEmptyArray." else elems
+      );
+      firstType = (head vs).type;
+      elemType =
+        if lib.any (v: v.type != firstType) vs then
+          throw "Elements in a list should have same type."
+        else
+          firstType;
     in
     mkPrimitive (type.arrayOf elemType) vs
     // {
@@ -404,7 +410,7 @@ rec {
     elems:
     let
       gvarElems = map mkValue elems;
-      tupleType = type.tupleOf (map (e: e.type) gvarElems);
+      tupleType = type.tupleOf (catAttrs "type" gvarElems);
     in
     mkPrimitive tupleType gvarElems
     // {

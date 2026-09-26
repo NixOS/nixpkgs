@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   setuptools,
   pycryptodome,
   six,
+  crc32c,
 }:
 
 let
-  version = "0.9.63";
+  version = "0.9.76";
 in
 buildPythonPackage {
   pname = "bce-python-sdk";
@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "bce_python_sdk";
     inherit version;
-    hash = "sha256-DIC8OsEooKFEuuO43/Hzl/QsMLNvdnfjo52N+Od7EIg=";
+    hash = "sha256-AcYwzo3L+L4FY9ZfGLUgHqrGvZVLPcd2BArsJo+Btv8=";
   };
 
   patches = [
@@ -38,6 +38,7 @@ buildPythonPackage {
   dependencies = [
     pycryptodome
     six
+    crc32c
   ];
 
   pythonImportsCheck = [ "baidubce" ];

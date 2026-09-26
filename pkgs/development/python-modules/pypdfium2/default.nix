@@ -6,7 +6,7 @@
   fetchFromGitHub,
   gitUpdater,
   setuptools-scm,
-  pdfium-binaries,
+  pdfium,
   numpy,
   pillow,
   pytestCheckHook,
@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.7.0";
+  version = "5.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-zc/83Ypmxul8fB3q0lUSgC9yfcdg7tJuZff+0LE0w30=";
+    hash = "sha256-b15g/FlB7lHiu19KotHXMvY1j+m0TZ4xVAy84wBXcbA=";
   };
 
   build-system = [
@@ -56,20 +56,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pdfium-binaries
+    pdfium
   ];
 
-  preBuild = ''
-    getVersion() {
-      cat ${pdfium-binaries}/VERSION | grep $1 | sed 's/.*=//'
-    }
-    export GIVEN_FULLVER="$(getVersion MAJOR).$(getVersion MINOR).$(getVersion BUILD).$(getVersion PATCH)"
-  '';
-
   env = {
-    PDFIUM_PLATFORM = "system-search:${pdfium-binaries.version}";
-    PDFIUM_HEADERS = "${pdfium-binaries}/include";
-    PDFIUM_BINARY = "${pdfium-binaries}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
+    GIVEN_FULLVER = pdfium.fullVersion;
+    PDFIUM_PLATFORM = "system-search:${pdfium.version}";
+    PDFIUM_HEADERS = "${lib.getDev pdfium}/include/public";
+    PDFIUM_BINARY = "${lib.getLib pdfium}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
     CPP = "${stdenv.cc.targetPrefix}cpp";
   };
 
@@ -82,6 +76,11 @@ buildPythonPackage rec {
     numpy
     pillow
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # does not work on ZFS with normalization
+    "tests/test_opener.py::test_open_garbled_filename"
   ];
 
   pythonImportsCheck = [

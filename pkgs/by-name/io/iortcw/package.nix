@@ -1,21 +1,20 @@
 {
   buildEnv,
-  callPackage,
   makeWrapper,
+  iortcw_sp,
 }:
 
 let
-  sp = callPackage ./sp.nix { };
-  mp = sp.overrideAttrs (oldAttrs: {
+  mp = iortcw_sp.overrideAttrs (oldAttrs: {
     sourceRoot = "${oldAttrs.src.name}/MP";
   });
 in
 buildEnv {
-  inherit (sp) version;
+  inherit (iortcw_sp) version;
   pname = "iortcw";
 
   paths = [
-    sp
+    iortcw_sp
     mp
   ];
 
@@ -30,7 +29,7 @@ buildEnv {
     done
   '';
 
-  meta = sp.meta // {
+  meta = iortcw_sp.meta // {
     description = "Game engine for Return to Castle Wolfenstein";
   };
 }

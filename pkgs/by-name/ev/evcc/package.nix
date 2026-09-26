@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   fetchNpmDeps,
   cacert,
   git,
-  go_1_26,
+  go_1_27,
   gokrazy,
   enumer,
   mockgen,
@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "0.308.0";
+  version = "0.316.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-phrTg6P/sLb3lKTVF+PBH4EGfOQ57dpt3ZfLxZ6EOew=";
+    hash = "sha256-oIdZ+BInnC9sIEPNNMmxJNvomcNq16CakvoZu3WMa1Q=";
   };
 
-  vendorHash = "sha256-UI1WyTDJA5GRgt8TmpMQi4DmYzfQFGhDd5WeitT8VnI=";
+  vendorHash = "sha256-X5MnC0lsJkgxa60IzGA2xZ+x81XqFRDmQvKqG+DnWYk=";
 
   commonMeta = {
     license = lib.licenses.mit;
@@ -34,13 +34,13 @@ let
   };
 in
 
-buildGo126Module rec {
+buildGo127Module rec {
   pname = "evcc";
   inherit version src vendorHash;
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-zMZAwO/2cch03myTGK+4sDwrEJhQzJJ8TwEg1lwxH0c=";
+    hash = "sha256-7ZU74AKVjuPZMvuvElGXK8W6JroMvdT4wMbIFrLymlo=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildGo126Module rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go_1_26
+      go_1_27
       gokrazy
       git
       cacert
@@ -65,7 +65,6 @@ buildGo126Module rec {
 
   tags = [
     "release"
-    "test"
   ];
 
   ldflags = [
@@ -75,6 +74,8 @@ buildGo126Module rec {
   ];
 
   preBuild = ''
+    export PATH="$PWD/node_modules/.bin:$PATH"
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     make ui
   '';
 
@@ -88,6 +89,10 @@ buildGo126Module rec {
         "TestOctopusConfigParse"
         "TestSessionHandlerTimezoneFilter"
         "TestTemplates"
+        # network access: mdns fails to start Avahi provider
+        "TestControlBoxGridGuardHeartbeat"
+        "TestEEBus"
+        "TestShipPairing"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];

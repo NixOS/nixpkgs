@@ -3,36 +3,24 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
+  jq,
   libarchive,
   p7zip,
-  testers,
-  mas,
+  versionCheckHook,
+  zsh,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
-  version = "6.0.1";
+  version = "7.0.0";
 
-  src =
-    let
-      # nix store prefetch-file https://github.com/mas-cli/mas/releases/download/v$VERSION/mas-$VERSION-$ARCH.pkg
-      sources =
-        {
-          x86_64-darwin = {
-            arch = "x86_64";
-            hash = "sha256-7+iDBr4GG5bdTuAlAmMQkEkIzVgLo2+DEdravClaLtQ=";
-          };
-          aarch64-darwin = {
-            arch = "arm64";
-            hash = "sha256-BZ9UE8H28kjqiMNdLDUUyC9madR4rBV1mLUGyj6ol3Y=";
-          };
-        }
-        .${stdenvNoCC.hostPlatform.system}
-          or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-    in
-    fetchurl {
-      url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-${sources.arch}.pkg";
-      inherit (sources) hash;
-    };
+  __structuredAttrs = true;
+
+  # nix store prefetch-file https://github.com/mas-cli/mas/releases/download/v$VERSION/mas-$VERSION-arm64.pkg
+  src = fetchurl {
+    url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-arm64.pkg";
+    hash = "sha256-vCGKhUyF2eHJVJapayYoe7ZgVrlWiLkPkdBPpi7SG3U=";
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -57,6 +45,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin usr/local/opt/mas/bin/mas
+    install -D --mode=755 usr/local/opt/mas/libexec/bin/mas "$out/libexec/bin/mas"
+
+    substituteInPlace "$out/bin/mas" \
+      --replace-fail "#!/bin/zsh" "#!${lib.getExe zsh}" \
+      --replace-fail "/usr/bin/jq" "${lib.getExe jq}"
 
     installManPage usr/local/opt/mas/share/man/man1/mas.1
     installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
@@ -65,12 +58,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = mas;
-      command = "mas version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Mac App Store command line interface";
@@ -79,9 +70,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "mas";
     maintainers = with lib.maintainers; [
       zachcoyle
+      tiferrei
     ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

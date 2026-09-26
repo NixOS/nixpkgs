@@ -54,10 +54,6 @@ makeScopeWithSplicing' {
       qt5
       // {
 
-        inherit
-          qt5
-          ;
-
         __internalKF5 = lib.dontRecurseIntoAttrs kdeFrameworks;
 
         ### LIBRARIES
@@ -188,6 +184,7 @@ makeScopeWithSplicing' {
         timed = callPackage ../applications/system/timed { };
       }
       // lib.optionalAttrs config.allowAliases {
+        qt5 = throw "'libsForQt5.qt5.*' attributes were removed in favor of top-level 'qt5.*' attributes"; # Added 2026-06-05
         mlt = throw "'libsForQt5.mlt' was removed due to lack of upstream support since v7.36.0, use 'qt6Packages.mlt'."; # Added 2026-06-05
         futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01
         kdb = throw "libsForQt5.kdb has been removed"; # Added 2026-05-01

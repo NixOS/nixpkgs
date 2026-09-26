@@ -238,6 +238,7 @@ fn fixup_lockfile(
                 .values_mut()
             {
                 if let Some(Value::String(resolved)) = package.get("resolved")
+                    && !resolved.starts_with("file:")
                     && let Some(Value::String(integrity)) = package.get("integrity")
                 {
                     if resolved.starts_with("git+") {
@@ -286,6 +287,7 @@ fn fixup_v1_deps(
             .as_object()
             .expect("v1 dep must be object")
             .get("resolved")
+            && !resolved.starts_with("file:")
             && let Some(Value::String(integrity)) = dep
                 .as_object()
                 .expect("v1 dep must be object")
@@ -509,6 +511,10 @@ mod tests {
                     "resolved": "git+ssh://git@github.com/NixOS/nixpkgs.git",
                     "integrity": "sha512-aaa"
                 },
+                "baz": {
+                    "resolved": "file:baz.tar.gz",
+                    "integrity": "sha512-bbb"
+                },
                 "foo-bad": {
                     "resolved": "foo",
                     "integrity": "sha1-foo"
@@ -533,6 +539,10 @@ mod tests {
                 },
                 "bar": {
                     "resolved": "git+ssh://git@github.com/NixOS/nixpkgs.git",
+                },
+                "baz": {
+                    "resolved": "file:baz.tar.gz",
+                    "integrity": "sha512-bbb"
                 },
                 "foo-bad": {
                     "resolved": "foo",

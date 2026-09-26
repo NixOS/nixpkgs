@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.17.4";
+  version = "2.18.0";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,10 +16,10 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-pcKHDZH8CvRpKPaLyWPsHx7/U50xEq8JzbnEQG/9uYI=";
+    hash = "sha256-OjspvyjD+3SQdJwkfdDRYUWY1Ryqtwr6DqrLESlqcDo=";
   };
 
-  vendorHash = "sha256-bXIbHSclJ61D3u1+nXEIRhzw611uosnnXWqT9boDMP0=";
+  vendorHash = "sha256-4hmBS/9E7YfsYpjcC7sP0MatCVPR55s9Ac/9YEe2FK8=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -61,7 +61,7 @@ buildGoLatestModule {
     homepage = "https://wakapi.dev/";
     changelog = "https://github.com/muety/wakapi/releases/tag/${version}";
     description = "Minimalist self-hosted WakaTime-compatible backend for coding statistics";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       t4ccer
       isabelroses

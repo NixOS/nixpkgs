@@ -18,6 +18,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-OOylrxjOur2L5DwX8UydP7uoPMX3rI46schuJMSyuRo=";
   };
 
+  # expect chardet.detect to return None
+  patches = [ ./chardet6-compat.patch ];
+
   build-system = [ flit-core ];
 
   dependencies = [

@@ -10,16 +10,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
-  version = "0.25.0";
+  version = "0.26.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ht+9TFugVckj5xCCHgwPHbXqeJRBP4MzBROMBIbYAYI=";
+    hash = "sha256-M7B6QLyABsGoy6dbKsCx1AKEfEoDhkY/cbzGbk59TiU=";
   };
 
-  cargoHash = "sha256-pejtrvCD1HkAZ+pMynRRLw+EV/pHwzh/7OnnoI5LHoc=";
+  cargoHash = "sha256-YYlNH95A2aGVWd0vw2vmTMXTA3ornCBHbcFrg59uh3I=";
 
   nativeBuildInputs = [
     protobuf
@@ -55,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       xrelkd
       bot-wxt1221
     ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "clipcatd";
   };
 })

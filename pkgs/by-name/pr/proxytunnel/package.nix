@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxytunnel";
-  version = "1.12.3";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "proxytunnel";
     repo = "proxytunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+IRbL3VcnW+uYLIkwvaFJ8zBYbQAkqmzVluDsCrdURk=";
+    hash = "sha256-4+EGVtohM0vL/fXHCXohwWqIBTiIUGbt6AZ7JKpRCT8=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Lightweight Communications and Marshalling (LCM)";
     homepage = "https://github.com/lcm-proj/lcm";
     license = lib.licenses.lgpl21;

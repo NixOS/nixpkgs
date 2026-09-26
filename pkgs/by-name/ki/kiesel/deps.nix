@@ -16,6 +16,14 @@ linkFarm "zig-packages" [
     };
   }
   {
+    name = "N-V-__8AALjnOQBiCk4NffYgEewZ5v9qlLlDyXO22FIyzNdf";
+    path = fetchgit {
+      url = "https://github.com/boa-dev/temporal";
+      tag = "v0.2.4";
+      hash = "sha256-0JhYANVsVvNC0OZe1E6WzGc+pH9j7Z9SGCmhk8TQanU=";
+    };
+  }
+  {
     name = "N-V-__8AAMFkNQCMS3QG2Q2vrQ1urnQq0PqKINS-iRDs1Xqc";
     path = fetchzip {
       url = "https://musl.libc.org/releases/musl-1.2.6.tar.gz";
@@ -31,14 +39,6 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "N-V-__8AAPLKOQDfJ5TYhiiy_6a_dZqUmo9K4e8Xhjfup3fd";
-    path = fetchgit {
-      url = "https://github.com/boa-dev/temporal";
-      tag = "v0.2.3";
-      hash = "sha256-wD4pTVgQZrGONgSTDm9Eq3fo3Ez7aIC0/n4Rqgksad4=";
-    };
-  }
-  {
     name = "args-0.0.0-CiLiqmvgAADyJmrzcQTP9IOYNvTzR_KGrg3ZNNsH2Qv0";
     path = fetchgit {
       url = "https://github.com/ikskuh/zig-args";
@@ -47,19 +47,19 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "bdwgc-8.3.0-8obE-IejLwCX53s54D3b3nIqlsMLiZ0ZtAF8nMvffTtR";
+    name = "bdwgc-8.3.0-8obE-Ky9LwD3G-0Hn12vdf3OhUGaCJxSUSlVxn-ScMJC";
     path = fetchgit {
       url = "https://github.com/bdwgc/bdwgc";
-      rev = "ea69934ed214cfb4e38d2a0176cc392af8055a83";
-      hash = "sha256-wippr/ilU5cf+2D6T+kXUDZC0r353wCYyad7Y0hQvdM=";
+      rev = "af6f40bf3ce6ea916d487e10eee9dd4691ed4a07";
+      hash = "sha256-x3nzPFXmsFdtZy8IGAF6F0boDRf0o3g14IZm1PRSp5U=";
     };
   }
   {
-    name = "bdwgc_zig-0.1.0-ffcEgVh8AAAhDLt3oykzvhRx_WDGdHCoqmswDTnmei6b";
+    name = "bdwgc_zig-0.1.0-ffcEgYd6AAA_rlVpPv9GN2Olt2DCBle_4Ageca2NDNUy";
     path = fetchgit {
       url = "https://github.com/bdwgc/bdwgc-zig";
-      rev = "1cfcd9ea8947e172f20b028fbc52e778632fa407";
-      hash = "sha256-bTjPgn44QAgWAjiLqP3S5CK9os7L1cex+TXgzKU2dHY=";
+      rev = "81e92063debddd226f3a660cee43665a04c926f3";
+      hash = "sha256-RZz4b9BcrLhxjkRTYI7RVbIIXXKyS1ZSIIo3hkzYjO0=";
     };
   }
   {
@@ -71,11 +71,11 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "icu4zig-0.1.0-IT7GrJalAgC00wqxu8c6JBs8A580wS-QrXBE7FJ1ZVaz";
+    name = "icu4zig-0.1.0-IT7GrO3IAgCsmavpCdZXvoJFn4MCxFYJ7vVkQyH5BfrW";
     path = fetchgit {
       url = "https://codeberg.org/linus/icu4zig";
-      rev = "13caca132022c0acd9a0c04356ebf7d758340b8a";
-      hash = "sha256-fz1YnPDDEIJVxlmxUfYq3ydksu739cT6aNK5W9N1RbA=";
+      rev = "2e207c2db48a938453d6fe518fa30b76691a407a";
+      hash = "sha256-SsVKpMiv5YMTo/dsvRV8r6U2WOX3OFvolu/s2zVWu/k=";
     };
   }
   {

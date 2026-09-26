@@ -2,39 +2,51 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
+  glib-networking,
   openssl,
   pkg-config,
   perl,
   webkitgtk_4_1,
+  wrapGAppsHook3,
   stdenv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.5.1";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rux2rToqs5GZEDTryPAkm62yGdhWfEqapTMQOGyqCRI=";
+    hash = "sha256-WCCSd20qkDtJ88ru+ufFZrNQZSKkCzYo5fZpbB7Sn7o=";
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-xza7AfuOcSUkDyliGHUx9bEd+M94d23xVrVVvZo2nas=";
+  cargoHash = "sha256-6+x5SRQHIchtkdYZAZl+b28hMCaiQHrp9i3tMsN3DhE=";
 
   nativeBuildInputs = [
     perl
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
   buildInputs = [
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
     webkitgtk_4_1
+  ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail in sandbox because netdev tries to read SystemConfiguration
+    "--skip=cli::tests::host_id_arg_sets_profile_host_id_seed"
+    "--skip=cli::tests::client_version_arg_sets_profile_client_version"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -52,7 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      binary-eater
       booxter
       m1dugh
     ];

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsh";
-  version = "5.9.1";
+  version = "5.9.2";
   outputs = [
     "out"
     "doc"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-XSC+wD+YHcTpoJ7CRedBU4j/ZB95xcXEFrUELljYKA0=";
+    sha256 = "sha256-NvpzQ3S0R4NYLOwJvNZ4IuL5ksd57BYkq1WW3weNL4E=";
   };
 
   patches = [
@@ -140,11 +140,20 @@ stdenv.mkDerivation (finalAttrs: {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = lib.licenses.mit-modern;
+    license = [
+      lib.licenses.mit-modern
+      # The upstream package includes some non-MIT-licensed third-party
+      # completion scripts, so we list those licenses here.
+      # Some of these scripts may be removed from future zsh releases:
+      # see https://www.zsh.org/mla/workers/2026/msg00725.html
+      lib.licenses.gpl2Only # _osc, _qdbus, _zypper
+      lib.licenses.gpl2Plus # _darcs
+    ];
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub
       artturin
+      doronbehar
     ];
     platforms = lib.platforms.unix;
     mainProgram = "zsh";

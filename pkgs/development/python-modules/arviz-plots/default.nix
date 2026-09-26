@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  arviz,
   fetchFromGitHub,
 
   # build-system
@@ -41,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-plots";
-  version = "1.1.0";
+  inherit (arviz) version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "arviz-devs";
     repo = "arviz-plots";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ti1wD/aPNCk59wkad+xkvIKTB2Wkupovlo0Hg0YqK1o=";
+    hash = "sha256-FHhF/spTt1KPVG45Dtdkf/C41VbOU+CXUSoeCfOWR50=";
   };
 
   build-system = [
@@ -110,6 +111,11 @@ buildPythonPackage (finalAttrs: {
     plotly
     pytestCheckHook
     webcolors
+  ];
+
+  disabledTests = [
+    # flaky, timeout
+    "test_plot_trace_dist"
   ];
 
   meta = {

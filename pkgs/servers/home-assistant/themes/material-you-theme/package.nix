@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "material-you-theme";
-  version = "5.0.13";
+  version = "5.0.15";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "material-you-theme";
     tag = version;
-    hash = "sha256-HS0KeSC5YxQ1nyRqIhpRwNpfYDUkgQxJ14TEujp5rfc=";
+    hash = "sha256-QH6g5CArk1hO5u7WVDd0JtKUAH96OpoQd44qJtO9MEQ=";
   };
 
-  npmDepsHash = "sha256-wFgmGet1imj9WL0WAW9JNBRwNnaTTy3ixLys3fUT4lE=";
+  npmDepsHash = "sha256-Cl+F9lJX9vVlwHoRkbzcRLeUAEtaRbjhcMJp7euZmTg=";
 
   installPhase = ''
     runHook preInstall

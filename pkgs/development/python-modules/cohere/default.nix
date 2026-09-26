@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "7.0.1";
+  version = "7.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-+zjMs6frZYNb5g7TFLwcUiBfWKpYqJBwBoMIcNkFt0U=";
+    hash = "sha256-iFqzWuWOKbJcvmGFEI0jt0fkBlZHlzmzZXZO7tIn638=";
   };
 
   build-system = [ poetry-core ];
@@ -45,6 +45,10 @@ buildPythonPackage rec {
     tokenizers
     types-requests
     typing-extensions
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic-core"
   ];
 
   optional-dependencies = {

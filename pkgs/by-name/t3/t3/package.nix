@@ -8,13 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "t3";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "flox";
     repo = "t3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-42T0qQ3zK1jTRU+gcBzEet5rHZ6QuknCbPdbGPNlETI=";
+    hash = "sha256-49nmFvyA5HtX0rTqG4vrCdQPo78HMF7wIN4StItShB4=";
+    postFetch = "rm -f $out/.flox/env/manifest.lock";
   };
 
   makeFlags = [

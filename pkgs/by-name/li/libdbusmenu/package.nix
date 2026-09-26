@@ -10,14 +10,13 @@
   json-glib,
   gobject-introspection,
   vala,
-  gtkVersion ? null,
-  gtk2,
+  withGtk3 ? false,
   gtk3,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libdbusmenu-${if gtkVersion == null then "glib" else "gtk${gtkVersion}"}";
+  pname = "libdbusmenu-${if withGtk3 then "gtk3" else "glib"}";
   version = "16.04.0";
 
   src =
@@ -41,13 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     json-glib
   ]
-  ++
-    lib.optional (gtkVersion != null)
-      {
-        "2" = gtk2;
-        "3" = gtk3;
-      }
-      .${gtkVersion} or (throw "unknown GTK version ${gtkVersion}");
+  ++ lib.optional withGtk3 gtk3;
 
   patches = [
     ./requires-glib.patch
@@ -70,11 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    # TODO use `lib.withFeatureAs`
-    (if gtkVersion == null then "--disable-gtk" else "--with-gtk=${gtkVersion}")
+    (if withGtk3 then "--with-gtk=3" else "--disable-gtk")
+    "--disable-dumper"
     "--disable-scrollkeeper"
-  ]
-  ++ lib.optional (gtkVersion != "2") "--disable-dumper";
+  ];
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
@@ -98,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       "dbusmenu-glib-0.4"
       "dbusmenu-jsonloader-0.4"
     ]
-    ++ lib.optional (gtkVersion == "3") "dbusmenu-gtk${gtkVersion}-0.4";
+    ++ lib.optional withGtk3 "dbusmenu-gtk3-0.4";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.msteen ];
   };

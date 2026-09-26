@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs =
-    # create meta package providing dist-info for python3Pacakges.catalyst that common cmake build does not do
+    # create meta package providing dist-info for python3Packages.catalyst that common cmake build does not do
     lib.optional pythonSupport (
       python3Packages.mkPythonMetaPackage {
         inherit (finalAttrs) pname version meta;

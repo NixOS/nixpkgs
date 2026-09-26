@@ -144,9 +144,13 @@ stdenv.mkDerivation (finalAttrs: {
     '')
 
     # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/src/browser/NativeMessageInstaller.cpp#L317
+    # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/utils/keepassxc-snap-helper.sh#L48-L58
     (lib.optionalString withKeePassBrowser ''
       mkdir -p "$out/lib/mozilla/native-messaging-hosts"
       substituteAll "${./firefox-native-messaging-host.json}" "$out/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
+
+      mkdir -p "$out/etc/chromium/native-messaging-hosts"
+      substituteAll "${./chromium-native-messaging-host.json}" "$out/etc/chromium/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
     '')
   ];
 
@@ -196,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
+    donationPage = "https://keepassxc.org/donate/";
     changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";

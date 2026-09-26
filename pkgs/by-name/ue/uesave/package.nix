@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.1";
   src = fetchFromGitHub {
     owner = "trumank";
-    repo = "uesave-rs";
+    repo = "uesave";
     rev = "v${finalAttrs.version}";
     hash = "sha256-lGtRe3AYJ59CwRaDznO6RNqVFCSKJPWVDhj0tnY5xcs=";
   };
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     maintainers = with lib.maintainers; [ xddxdd ];
     description = "Reading and writing Unreal Engine save files (commonly referred to as GVAS)";
-    homepage = "https://github.com/trumank/uesave-rs";
+    homepage = "https://github.com/trumank/uesave";
     license = lib.licenses.mit;
     mainProgram = "uesave";
   };

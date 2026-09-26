@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.13.3";
+  version = "0.5.13.5";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qDcnwSmaxMPZ1Dl5OTs6TrACddVjauAlJueXnVHW+9E=";
+    hash = "sha256-QAkBAaKkkfE+kB09SOkEFPJmNGKLm//zX/VANjwien0=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ "--with-libedit" ];
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 
@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";

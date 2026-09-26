@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "hysteria";
-  version = "2.9.1";
+  version = "2.12.3";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "hysteria";
     rev = "app/v${finalAttrs.version}";
-    hash = "sha256-pWiEY1H9iX5aX2nR/K8fNKeAbzLOCZhEe5KLk4arot4=";
+    hash = "sha256-5qmMn64yuaqHE7R+dFz8zHUYJ/lo3fP2HhndIR5hHdE=";
   };
 
-  vendorHash = "sha256-IFC/LMI28cGfUTtgTYf045OAEaMdPgd1bzhdSngQlrA=";
+  vendorHash = "sha256-slj43sduYSwMeZZSSU4eKKs8uan5udM7L/rtquxvTQ0=";
   proxyVendor = true;
 
   ldflags =

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-qube-heatpump";
-  version = "1.11.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MattieGit";
     repo = "python-qube-heatpump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eHw1nlly95ne4XbMNB8su7TgbDEKMqUXYx9WQtUZo6Y=";
+    hash = "sha256-R89CX0EiH4kjoLNpJkzknmxhBHYij5nFWE4GbYte9WQ=";
   };
 
   build-system = [ hatchling ];

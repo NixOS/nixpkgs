@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "26.03";
+  version = "26.06";
   pname = "intel-cmt-cat";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-cmt-cat";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uGSWpP5CWyUpdLX5F/Lpiqbcdb0Zldeh5XSjptUqLqY=";
+    sha256 = "sha256-4rpmbQzxLD7FrtIzE+iE4G0sU7Dvz4rWs4MSlJqZcok=";
   };
 
   enableParallelBuilding = true;

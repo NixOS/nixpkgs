@@ -1,157 +1,126 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  buildGoModule,
-  nix-update-script,
-  copyDesktopItems,
-  makeDesktopItem,
-  cargo,
-  cmake,
-  corrosion,
-  pkg-config,
-  avahi-compat,
-  ffmpeg,
-  libheif,
-  libimobiledevice,
-  libimobiledevice-glue,
-  libplist,
-  go,
-  qrencode,
-  libssh,
-  libtatsu,
-  libusbmuxd,
-  libusb1,
-  libzip,
-  openssl,
-  pugixml,
-  qt6,
-  lxqt,
   rustPlatform,
-  rustc,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  avahi,
+  avahi-compat,
+  coreutils,
+  ffmpeg,
+  fuse3,
+  glib,
+  gst_all_1,
+  ifuse,
+  libheif,
+  libplist,
+  libssh2,
+  openssl,
+  polkit,
+  qt6,
+  util-linux,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+let
+  gstPluginsGoodQt6 = gst_all_1.gst-plugins-good.override {
+    qt6Support = true;
+  };
+  gstPlugins = with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gstPluginsGoodQt6
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ];
+  runtimePrograms = [
+    coreutils
+    fuse3
+    ifuse
+    polkit
+    util-linux
+  ];
+
+  qtEnv = qt6.env "qt6-idescriptor" [ qt6.qtdeclarative ];
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "idescriptor";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "iDescriptor";
     repo = "iDescriptor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AN3CVR9WWa9cG6C6q+hiDyTomT+RebHC1ghr6XyEtAo=";
+    hash = "sha256-esvfwsWynH+E34m05/ZmV6byTwvkGbuwwNlVM9djxss=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/iDescriptor/iDescriptor/commit/fc73e3146dc4884cf9bc1f7879574ac832cc21e6.patch";
-      hash = "sha256-WqEpSY/fhbsMv0bgU2Ak5japUdohaN7zsNG1BbxJnKs=";
-    })
-  ];
-
-  cargoRoot = "src/rust";
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-PJhMb+lMiu8ubOYVX8YVkQzeQMbBO+i6NQhvuyrCujk=";
+    inherit (finalAttrs) src;
+    hash = "sha256-PzXiX6gnTB3fh5LxEJDo3n4PbczjE3pDD3TygrMGG/8=";
   };
 
-  ipatool-go-modules =
-    (buildGoModule {
-      pname = "ipatool-go";
-      inherit (finalAttrs) version src;
-      modRoot = "lib/ipatool-go";
-      vendorHash = "sha256-SGdyyZU8Ze/1lJS4tKbHyfCv2yYleGcqoyA9Uzb8r/k=";
-      proxyVendor = true;
-      doCheck = false;
-      env.GOWORK = "off";
-    }).goModules;
+  buildFeatures = [ "package_manager" ];
+
+  env = {
+    IDESCRIPTOR_PACKAGE_MANAGER_MESSAGE = "Please update iDescriptor with the Nix profile or system configuration that installed it.";
+    QT_INCLUDE_PATH = "${qtEnv}/include";
+    QT_LIBRARY_PATH = "${qtEnv}/lib";
+  };
 
   nativeBuildInputs = [
-    cargo
     cmake
-    copyDesktopItems
     pkg-config
-    go
     qt6.wrapQtAppsHook
-    rustPlatform.cargoSetupHook
-    rustc
   ];
 
   buildInputs = [
+    avahi
     avahi-compat
-    corrosion
     ffmpeg
+    glib
     libheif
-    libimobiledevice
-    libimobiledevice-glue
     libplist
-    qrencode
-    libssh
-    libtatsu
-    libusbmuxd
-    libusb1
-    libzip
+    libssh2
     openssl
-    pugixml
+    qt6.qt5compat
     qt6.qtbase
+    qt6.qtdeclarative
     qt6.qtlocation
     qt6.qtmultimedia
     qt6.qtpositioning
     qt6.qtserialport
+    qt6.qtshadertools
     qt6.qtsvg
-    qt6.qttools
-    qt6.qtwayland
-    lxqt.qtermwidget
-  ];
-
-  cxx-qt-cmake = fetchFromGitHub {
-    owner = "kdab";
-    repo = "cxx-qt-cmake";
-    tag = "0.8.1";
-    hash = "sha256-kXSIU71iHn+SSGikGoNeMbBpSrDJ6hwhnHslmskm8nY=";
-  };
-
-  cmakeFlags = [
-    "-DPACKAGE_MANAGER_MANAGED=ON"
-    "-DPACKAGE_MANAGER_HINT=nixpkgs"
-    "-DFETCHCONTENT_SOURCE_DIR_CXXQT=${finalAttrs.cxx-qt-cmake}"
-  ];
-
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-    export GOPROXY=file://${finalAttrs.ipatool-go-modules}
-    export GOSUMDB=off
-  '';
+  ]
+  ++ gstPlugins;
 
   postInstall = ''
-    install -Dm644 -t $out/lib/udev/rules.d ${./99-idevice.rules}
+    ln -s "$out/bin/idescriptor" "$out/bin/iDescriptor"
 
-    install -Dm644 $src/resources/icons/app-icon/icon.png \
-      $out/share/icons/hicolor/256x256/apps/idescriptor.png
+    install -Dm644 ${./99-idevice.rules} $out/lib/udev/rules.d/99-idevice.rules
+
+    install -Dm644 io.github.idescriptor.iDescriptor.desktop \
+      $out/share/applications/io.github.idescriptor.iDescriptor.desktop
+    install -Dm644 io.github.idescriptor.iDescriptor.metainfo.xml \
+      $out/share/metainfo/io.github.idescriptor.iDescriptor.metainfo.xml
+
+    for size in 16 32 256 512; do
+      install -Dm644 \
+        packaging/shared/resources/app-icon/icon-$size.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/io.github.idescriptor.iDescriptor.png
+    done
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "iDescriptor";
-      exec = "iDescriptor";
-      icon = "idescriptor";
-      desktopName = "iDescriptor";
-      comment = "Cross-platform iDevice management tool";
-      categories = [
-        "System"
-        "Utility"
-      ];
-    })
-  ];
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath runtimePrograms}
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.makeSearchPath "lib/gstreamer-1.0" gstPlugins}
+    )
+  '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-
-    goModules = finalAttrs.ipatool-go-modules;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/iDescriptor/iDescriptor";
@@ -160,6 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ amadejkastelic ];
-    mainProgram = "iDescriptor";
+    mainProgram = "idescriptor";
   };
 })

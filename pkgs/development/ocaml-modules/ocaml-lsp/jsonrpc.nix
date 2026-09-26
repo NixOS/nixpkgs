@@ -6,11 +6,14 @@
   yojson,
   result,
   fetchurl,
+  fetchpatch2,
   lib,
   ocaml,
   version ?
-    if lib.versionAtLeast ocaml.version "5.4" then
-      "1.25.0"
+    if lib.versionAtLeast ocaml.version "5.5" then
+      "1.27.0"
+    else if lib.versionAtLeast ocaml.version "5.4" then
+      "1.26.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
@@ -28,6 +31,16 @@
 let
   params =
     {
+      "1.27.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-BDrNaSP4pcuq2RVFI1cKsTlzuu72mOK1VTIT3WN5JxU=";
+      };
+      "1.26.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-tMgQ1mZKW/F1pvmUbIDIzCsY5GqYWTTBRQss4IDkaDI=";
+      };
       "1.25.0" = {
         name = "lsp";
         minimalOCamlVersion = "5.3";
@@ -95,6 +108,26 @@ buildDunePackage {
     inherit (params) sha256;
   };
 
+  # These jsonrpc versions define Json.t as a standalone polymorphic variant
+  # that includes `Tuple and `Variant, constructors absent from Yojson.Safe.t
+  # in yojson 3.0.0.  The lsp package aliases its own Json.t to
+  # Ppx_yojson_conv_lib.Yojson.Safe.t, so the two types must match.
+  patches =
+    lib.optionals
+      (lib.elem version [
+        "1.17.0"
+        "1.18.0"
+        "1.21.0"
+        "1.22.0"
+      ])
+      [
+        (fetchpatch2 {
+          url = "https://github.com/ocaml/ocaml-lsp/commit/ce94e15c1afcef409a07f9feb99029b4a762eaa3.patch?full_index=1";
+          includes = [ "jsonrpc/src/*" ];
+          hash = "sha256-HUClUbFYwRvhELbJ5g8DYlxPIaHb0NTc7WSLlfuqkSk=";
+        })
+      ];
+
   inherit (params) minimalOCamlVersion;
 
   buildInputs =
@@ -108,7 +141,7 @@ buildDunePackage {
       ];
 
   propagatedBuildInputs =
-    if lib.versionAtLeast version "1.23.1" then
+    if lib.versionAtLeast version "1.17.0" then
       [ yojson ]
     else if lib.versionAtLeast version "1.7.0" then
       [ ]

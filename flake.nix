@@ -199,7 +199,8 @@
         && system != "riscv64-linux"
         # Exclude x86_64-freebsd because "Package ‘go-1.22.12-freebsd-amd64-bootstrap’ in /nix/store/0yw40qnrar3lvc5hax5n49abl57apjbn-source/pkgs/development/compilers/go/binary.nix:50 is not available on the requested hostPlatform"
         && system != "x86_64-freebsd"
-      ) (forAllSystems (system: (import ./ci { inherit system; }).fmt.pkg));
+        # TODO: revert to importing fmt.pkg directly from ./ci when support for 26.05 ends
+      ) (forAllSystems (system: (import ./shell.nix { inherit system; }).formatter));
 
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
@@ -220,17 +221,25 @@
         evaluation. Evaluating the attribute value tends to require a significant
         amount of computation, even considering lazy evaluation.
       */
-      legacyPackages = forAllSystems (
-        system:
-        (import ./. {
-          inherit system;
-          overlays = import ./pkgs/top-level/impure-overlays.nix ++ [
-            (final: prev: {
-              lib = prev.lib.extend libVersionInfoOverlay;
-            })
-          ];
-        })
-      );
+      legacyPackages =
+        let
+          # We include `x86_64-darwin` here to ensure that users get a
+          # good error message for the 26.11 deprecation of the platform,
+          # while excluding it from `lib.systems.flakeExposed` so that we
+          # don’t break `nix flake check` for downstream users.
+          forAllSystems' = lib.genAttrs (lib.systems.flakeExposed ++ [ "x86_64-darwin" ]);
+        in
+        forAllSystems' (
+          system:
+          (import ./. {
+            inherit system;
+            overlays = import ./pkgs/top-level/impure-overlays.nix ++ [
+              (final: prev: {
+                lib = prev.lib.extend libVersionInfoOverlay;
+              })
+            ];
+          })
+        );
 
       /**
         Optional modules that can be imported into a NixOS configuration.

@@ -45,7 +45,7 @@ in
         default = [ ];
         description = "List of Navidrome plugins";
         example = literalExpression ''
-          with pkgs.navidromePlugins; [
+          with pkgs.pkgsCross.wasi32.navidromePlugins; [
             listenbrainz-daily-playlist
           ];
         '';
@@ -236,6 +236,8 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
+
+  meta.doc = ./navidrome.md;
   meta.maintainers = with maintainers; [
     fsnkty
     tebriel

@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "srt-xtransmit";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "maxsharabayko";
     repo = "srt-xtransmit";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-AEqVJr7TLH+MV4SntZhFFXTttnmcywda/P1EoD2px6E=";
+    hash = "sha256-v2JMkuSChO6SWh33qG1Js6JSOXAQls0FKFkg314ULUU=";
   };
 
   nativeBuildInputs = [

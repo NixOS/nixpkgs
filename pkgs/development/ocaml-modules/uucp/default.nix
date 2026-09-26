@@ -15,11 +15,11 @@
 stdenv.mkDerivation (finalAttrs: {
   name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "uucp";
-  version = "17.0.0";
+  version = "18.0.0";
 
   src = fetchurl {
     url = "https://erratique.ch/software/uucp/releases/uucp-${finalAttrs.version}.tbz";
-    hash = "sha256-mSQtTn4DYa15pYWFt0J+/BEpJRaa+6uIKnifMV4Euhs=";
+    hash = "sha256-ut7cfFg6entCN2O625f5/UuWmQa5NFyFQifDje1jI/w=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString finalAttrs.doCheck}
+    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString finalAttrs.finalPackage.doCheck}
     runHook postBuild
   '';
 

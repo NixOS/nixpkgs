@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cargo,
   cmake,
   rustc,
@@ -18,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-ppuDNObfKhneD9AlnPAvyCRHKW3BidXKglD1j/LE9CM=";
   };
+  patches = [
+    # Fix for this hard to debug issue in dependent packages:
+    # https://github.com/corrosion-rs/corrosion/issues/588
+    (fetchpatch {
+      url = "https://github.com/corrosion-rs/corrosion/commit/7dab832903ddfb0f644cbd014252d477e692012b.patch";
+      hash = "sha256-T9ILTfAd/i63v45YJQsz8F/P3NBwrP1mL2bKNU0NaLw=";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 

@@ -15,7 +15,7 @@
 }:
 
 let
-  theStdenv = if stdenv.isDarwin then gcc14Stdenv else stdenv;
+  theStdenv = if stdenv.hostPlatform.isDarwin then gcc14Stdenv else stdenv;
 in
 theStdenv.mkDerivation (finalAttrs: {
   pname = "reprepro";

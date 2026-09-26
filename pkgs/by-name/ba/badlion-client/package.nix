@@ -9,7 +9,7 @@ appimageTools.wrapAppImage rec {
   pname = "badlion-client";
   version = "4.5.4";
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       name = "badlion-client-linux";

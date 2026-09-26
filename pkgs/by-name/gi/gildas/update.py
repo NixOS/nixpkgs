@@ -80,7 +80,7 @@ def find_latest(srcVersions):
 
 def get_hash(srcVersion):
     """
-    Get the hash of a given source versionn
+    Get the hash of a given source version
 
     """
 

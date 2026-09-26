@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "cooper-hewitt";
-  version = "unstable-2014-06-09";
+  version = "1.000-unstable-2014-06-09";
 
   src = fetchzip {
     url = "https://web.archive.org/web/20221004145117/https://www.cooperhewitt.org/wp-content/uploads/fonts/CooperHewitt-OTF-public.zip";

@@ -1,11 +1,5 @@
 # nixpkgs-update: no auto update
 {
-  cargo-pgrx_0_12_6 = {
-    version = "0.12.6";
-    hash = "sha256-7aQkrApALZe6EoQGVShGBj0UIATnfOy2DytFj9IWdEA=";
-    cargoHash = "sha256-pnMxWWfvr1/AEp8DvG4awig8zjdHizJHoZ5RJA8CL08=";
-  };
-
   cargo-pgrx_0_16_0 = {
     version = "0.16.0";
     hash = "sha256-emNR7fXNVD9sY/Mdno7mwpH6l/7AD28cBUsFRn9je50=";
@@ -28,5 +22,11 @@
     version = "0.18.0";
     hash = "sha256-sBezVDNnyqFQwvFm/CkhlY1zm7Ii2NQPeTfoUQu55e0=";
     cargoHash = "sha256-/miOlhZ87fnKT1f+XVaWK4xAzHje8OGVlYl4iU0Sf34=";
+  };
+
+  cargo-pgrx_0_19_0 = {
+    version = "0.19.0";
+    hash = "sha256-1OTE+mPtR9vaJhVGvq9X3fNd1nRoedoABUaVGQvFwNU=";
+    cargoHash = "sha256-dTfbgc6pGLP3s9y3zfIk97XUkPiLngdIoilIX7UM4W8=";
   };
 }

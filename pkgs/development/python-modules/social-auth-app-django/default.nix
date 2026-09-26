@@ -9,16 +9,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "social-auth-app-django";
-  version = "5.8.0";
+  version = "6.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-app-django";
-    tag = version;
-    hash = "sha256-NAUCA+FMMgY4xMYspiRO5Kt/S2jbSKDRnBxwmATYxKo=";
+    tag = finalAttrs.version;
+    hash = "sha256-5aZQcGPX93XITzJCgL+s5Jxep+qqVbYGvzMXDRpZXdY=";
   };
 
   build-system = [ setuptools ];
@@ -40,11 +41,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    broken = lib.versionOlder django.version "5.1";
     description = "Module for social authentication/registration mechanism";
     homepage = "https://github.com/python-social-auth/social-app-django";
-    changelog = "https://github.com/python-social-auth/social-app-django/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-social-auth/social-app-django/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

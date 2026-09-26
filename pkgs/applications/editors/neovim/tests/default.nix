@@ -204,23 +204,23 @@ pkgs.lib.recurseIntoAttrs rec {
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs {
-    plugins = [
-      vimPlugins.unicode-vim
-      vimPlugins.fzf-hoogle-vim
-    ];
+  nvim_with_autoconfigure = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        vimPlugins.unicode-vim
+        vimPlugins.fzf-hoogle-vim
+      ];
+    };
     autoconfigure = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
   };
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
-    plugins = [
-      pkgs.vimPlugins.hex-nvim
-    ];
+  nvim_with_runtimeDeps = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        pkgs.vimPlugins.hex-nvim
+      ];
+    };
     autowrapRuntimeDeps = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
   };
 
   nvim_with_ftplugin =
@@ -555,6 +555,27 @@ pkgs.lib.recurseIntoAttrs rec {
       EOF
       cat > "$out/lua/require-check-ignores/meta.lua" <<'EOF'
       error("excluded meta module was required")
+      EOF
+    '';
+  };
+
+  nvim_require_check_rtp_no_duplicate = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-rtp-no-duplicate-test";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-rtp-no-duplicate-src" { } ''
+      mkdir -p "$out/lua/require-check-rtp-dedup"
+      cat > "$out/lua/require-check-rtp-dedup/init.lua" <<'EOF'
+      local target = "lua/require-check-rtp-dedup/init.lua"
+      local matches = vim.api.nvim_get_runtime_file(target, true)
+      if #matches ~= 1 then
+        error(
+          ("expected plugin on runtimepath exactly once, found %d:\n%s"):format(
+            #matches,
+            table.concat(matches, "\n")
+          )
+        )
+      end
+      return {}
       EOF
     '';
   };

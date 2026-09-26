@@ -1,38 +1,49 @@
 {
   lib,
-  rustPlatform,
-  fetchPypi,
   buildPythonPackage,
+  fetchPypi,
+  perl,
+  rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipv8-rust-tunnels";
-  version = "0.1.44";
+  version = "0.1.53";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ipv8_rust_tunnels";
-    hash = "sha256-eHk8aCrcnyVGd3JRGQ950Bwryqt+TYx84MHAM2kWTis=";
+    hash = "sha256-A95LhuZoLHCW9IcDVnL/QyHursaUKC3GCIXkYHVdwIU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-axWG5cJtNaoZl7cG+Zyo1k+eA8pXHDWFgHqpTmQNHlo=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-aPLwXECgEumulnCc9dw/18EE+UUgw4uQ7FZAbe0IKAI=";
   };
 
   # pyo3 0.23 has no python 3.14 support yet.
-  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+  env = {
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+    RUSTFLAGS = "--cfg tokio_unstable";
+  };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    perl
   ];
 
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "ipv8_rust_tunnels" ];
+
   meta = {
-    description = "A set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
+    description = "Set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
     homepage = "https://github.com/Tribler/ipv8-rust-tunnels";
+    changelog = "https://github.com/Tribler/ipv8-rust-tunnels/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ mlaradji ];
   };
-}
+})

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = lib.optionals (lib.versionAtLeast qtlocation.version "6.10") ''
+  postPatch = lib.optionalString (lib.versionAtLeast qtlocation.version "6.10") ''
     # fix build with Qt 6.10
     # included in https://github.com/maplibre/maplibre-native-qt/pull/216
     substituteInPlace CMakeLists.txt \

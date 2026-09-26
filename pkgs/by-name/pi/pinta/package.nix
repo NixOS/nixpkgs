@@ -8,14 +8,16 @@
   gtk4,
   glib,
   libadwaita,
+  pango,
   intltool,
   wrapGAppsHook4,
+  webp-pixbuf-loader,
+  gnome,
   nix-update-script,
 
   # Darwin transitive deps
   graphene,
   gettext,
-  pango,
   gdk-pixbuf,
   cairo,
   harfbuzz,
@@ -46,13 +48,13 @@ buildDotnetModule rec {
     gtk4
     glib
     libadwaita
+    pango
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Transitive dylib deps that Pinta's NativeImportResolver dlopen's by bare name.
     # These are not pulled in by wrapGAppsHook4's LD_LIBRARY_PATH on Darwin, so symlink is needed.
     graphene
     gettext
-    pango
     gdk-pixbuf
     cairo
     harfbuzz
@@ -82,6 +84,17 @@ buildDotnetModule rec {
   postBuild = ''
     intltool-merge -x po/ xdg/com.github.PintaProject.Pinta.metainfo.xml.in xdg/com.github.PintaProject.Pinta.metainfo.xml
     intltool-merge -d po/ xdg/com.github.PintaProject.Pinta.desktop.in xdg/com.github.PintaProject.Pinta.desktop
+  '';
+
+  postInstall = ''
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   postFixup = ''

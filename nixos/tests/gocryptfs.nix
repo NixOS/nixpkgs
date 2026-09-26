@@ -13,6 +13,8 @@
         pkgs.openssl
       ];
 
+      programs.fuse.enable = true;
+
       specialisation.fstab-test.configuration = {
         # This can't be fileSytems, as the qemu machinery doesn't honor it.
         virtualisation.fileSystems."/plain" = {
@@ -43,6 +45,9 @@
 
     # Wait for mounts
     machine.wait_for_unit("local-fs.target")
+
+    # Sometimes gocryptfs files are slow to appear
+    machine.wait_for_file("/plain/data.txt")
 
     # Ensure the canary is alive
     machine.succeed("grep -q success /plain/data.txt")

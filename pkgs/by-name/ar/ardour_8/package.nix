@@ -6,7 +6,7 @@
   alsa-lib,
   aubio,
   boost,
-  cairomm,
+  cairomm_1_0,
   cppunit,
   curl,
   dbus,
@@ -43,7 +43,7 @@
   lv2,
   makeWrapper,
   pango,
-  pangomm,
+  pangomm_1_4,
   perl,
   pkg-config,
   python3,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (
       alsa-lib
       aubio
       boost
-      cairomm
+      cairomm_1_0
       cppunit
       curl
       dbus
@@ -152,7 +152,7 @@ stdenv.mkDerivation (
       lrdf
       lv2
       pango
-      pangomm
+      pangomm_1_4
       perl
       python3
       qm-dsp

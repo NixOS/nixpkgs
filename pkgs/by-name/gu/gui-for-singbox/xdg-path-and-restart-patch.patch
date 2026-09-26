@@ -1,4 +1,3 @@
-diff -ruN a/bridge/bridge.go b/bridge/bridge.go
 --- a/bridge/bridge.go
 +++ b/bridge/bridge.go
 @@ -50,6 +50,7 @@
@@ -13,7 +12,7 @@ diff -ruN a/bridge/bridge.go b/bridge/bridge.go
  
  func (a *App) RestartApp() FlagResult {
  	log.Printf("RestartApp")
--	exePath := Env.BasePath + "/" + Env.AppName
+-	exePath := resolvePath(Env.AppName)
 +	exePath, err := os.Executable()
 +	if err != nil {
 +		exePath = filepath.Join(Env.BasePath, Env.AppName)
@@ -29,16 +28,6 @@ diff -ruN a/bridge/bridge.go b/bridge/bridge.go
  		OS:           Env.OS,
  		ARCH:         Env.ARCH,
  		IsPrivileged: Env.IsPrivileged,
-@@ -258,7 +263,7 @@
- }
- 
- func loadConfig() {
--	b, err := os.ReadFile(Env.BasePath + "/data/user.yaml")
-+	b, err := os.ReadFile(GetPath("data/user.yaml"))
- 	if err == nil {
- 		yaml.Unmarshal(b, &Config)
- 	}
-diff -ruN a/bridge/types.go b/bridge/types.go
 --- a/bridge/types.go
 +++ b/bridge/types.go
 @@ -21,6 +21,7 @@
@@ -49,12 +38,11 @@ diff -ruN a/bridge/types.go b/bridge/types.go
  	OS           string `json:"os"`
  	ARCH         string `json:"arch"`
  	IsPrivileged bool   `json:"isPrivileged"`
-diff -ruN a/bridge/utils.go b/bridge/utils.go
 --- a/bridge/utils.go
 +++ b/bridge/utils.go
-@@ -13,7 +13,29 @@
- 	"golang.org/x/text/encoding/simplifiedchinese"
- )
+@@ -21,7 +21,29 @@
+ 
+ var requestTransportCache sync.Map
  
 +func GetConfigPath() string {
 +	if Env.OS == "linux" {
@@ -69,7 +57,7 @@ diff -ruN a/bridge/utils.go b/bridge/utils.go
 +	return Env.BasePath
 +}
 +
- func GetPath(path string) string {
+ func resolvePath(path string) string {
 +	if Env.OS == "linux" && !filepath.IsAbs(path) {
 +		cleanPath := filepath.ToSlash(filepath.Clean(path))
 +		if cleanPath == "data" {

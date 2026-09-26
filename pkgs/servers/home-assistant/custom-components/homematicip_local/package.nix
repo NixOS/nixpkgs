@@ -8,6 +8,7 @@
   aiohomematic-test-support,
   home-assistant,
   openccu-data,
+  openccu-loom-client,
   pytest-homeassistant-custom-component,
   pytest-xdist,
   pytestCheckHook,
@@ -16,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.7.3";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-9dXvIxMMdHTOi9JbRsHbySqRUYq6dN+MzrOocq9cpdA=";
+    hash = "sha256-sL8qBrhNPWvReeGClHpk4rhT7jAI7vkGbv5avPFEA/Q=";
   };
 
   postPatch = ''
@@ -36,6 +37,7 @@ buildHomeAssistantComponent rec {
     aiohomematic
     aiohomematic-config
     openccu-data
+    openccu-loom-client
   ];
 
   nativeCheckInputs = [
@@ -47,13 +49,8 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTestPaths = [
-    # tries to write to the Nix store
-    "tests/test_blueprints.py"
-  ];
-
-  disabledTests = [
-    # custom_components.homematicip_local.support.InvalidConfig: C
-    "test_async_validate_config_and_get_system_information"
+    # zeroconf fails with: No such device
+    "tests/test_config_flow.py::TestReauthFlow::test_reauth_flow_success"
   ];
 
   meta = {

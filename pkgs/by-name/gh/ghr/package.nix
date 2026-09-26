@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ghr";
-  version = "0.18.3";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6PWvqNQfaExvO5oAhCQSEPF85hMBPWalzVrG3imtdnU=";
+    sha256 = "sha256-zgRtu8RYyfBwSRs1nCOONyFLCRS6wCKqSLmqOLdJ9H0=";
   };
 
-  vendorHash = "sha256-ZjIwmmwybkQn+GBqtYI+saU+xuWYn4Moq9zmwRQsaSA=";
+  vendorHash = "sha256-j5wa8rK4+gjjdJP7BlixDlztHdvSHzUeTuJKitQzc1M=";
 
   # Tests require a Github API token, and networking
   doCheck = false;

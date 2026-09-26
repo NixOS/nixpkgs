@@ -28,8 +28,6 @@
   withKeybinder ? false,
   libnotify,
   withLibnotify ? false,
-  libsoup_2_4,
-  withLibsoup ? false,
   libgudev,
   withGudev ? false, # experimental
   libmtp,
@@ -95,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withLibnotify libnotify
     ++ lib.optional withLastfm liblastfm-vambrose
     ++ lib.optional withGlyr glyr
-    ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp
     ++ lib.optional withXfce4ui libxfce4ui
     ++ lib.optional withTotemPlParser totem-pl-parser

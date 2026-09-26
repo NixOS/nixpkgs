@@ -13,13 +13,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-websecurityscanner";
-  version = "1.20.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
     inherit (finalAttrs) version;
-    hash = "sha256-6u7VvENhWk25oIFFyeV/9JRYVUnQSeyc5G3sWR4DBF4=";
+    hash = "sha256-8/JJV9O7aUxPJIjypmyvaAyOgGD9fvMnYrlmaAvrtcg=";
   };
 
   build-system = [ setuptools ];

@@ -5,11 +5,12 @@
   python3,
   boost,
   libevent,
-  autoreconfHook,
   db4,
   miniupnpc,
   sqlite,
   pkg-config,
+  cmake,
+  ninja,
   util-linux,
   hexdump,
   zeromq,
@@ -20,18 +21,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "namecoind";
-  version = "28.0";
+  version = "31.1";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     tag = "nc${finalAttrs.version}";
-    hash = "sha256-r6rVgPrKz7nZ07oXw7KmVhGF4jVn6L+R9YHded+3E9k=";
+    fetchSubmodules = true;
+    hash = "sha256-FeFo8KqsJ/uP2IIIHlAU5IXibFiXtKAsfeDmO49wCH0=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
     pkg-config
+    cmake
+    ninja
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
@@ -42,37 +45,36 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libevent
-    db4
     miniupnpc
     zeromq
     zlib
   ]
   ++ lib.optionals withWallet [ sqlite ]
-  # building with db48 (for legacy descriptor wallet support) is broken on Darwin
   ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db4 ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--disable-bench"
-    "--disable-gui-tests"
+  cmakeFlags = [
+    "-DBOOST_ROOT=${boost.out}"
+    "-DBUILD_BENCH=OFF"
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_GUI=OFF"
+    "-DENABLE_IPC=OFF"
   ]
   ++ lib.optionals (!withWallet) [
-    "--disable-wallet"
+    "-DENABLE_WALLET=OFF"
   ];
 
   nativeCheckInputs = [ python3 ];
 
   doCheck = true;
-
   checkFlags = [ "LC_ALL=en_US.UTF-8" ];
 
   meta = {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "https://namecoin.org";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.lukas-sgx ];
     platforms = lib.platforms.linux;
   };
 })

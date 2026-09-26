@@ -5,19 +5,22 @@
   fetchPypi,
   pybtex,
   pytestCheckHook,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "pybtex-docutils";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-On69+StZPgDowcU4qpogvKXZLYQjESRxWsyWTVHZPGs=";
   };
 
-  buildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     docutils
     pybtex
   ];

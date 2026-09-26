@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs,
   npmHooks,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   systemdMinimal,
@@ -14,27 +14,27 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.11.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-4/P7ZPVdafWQqfi7sg+9Uy1MZYeHaNDESAaUq0nrBQ8=";
+    hash = "sha256-/yU/eMWDm6kdy4z8IYGNx+7fP33c/tmaCP+Yn5LDohc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-KSPdu9v34WYxyZtcL0NtP58LWmhK0KU0be6Z/VkZjH0=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-1OUS58Eo4NVREvMuYCKTY2gOG+o43/Ix8Qs3Bh3zrO8=";
   };
 
   nativeBuildInputs = [
     nodejs
     npmHooks.npmInstallHook
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = lib.optionals withSystemd [

@@ -13,7 +13,6 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-aarch64";
-      "x86_64-darwin" = "darwin-x86-64";
       "aarch64-darwin" = "darwin-aarch64";
     }
     .${stdenv.system} or null;
@@ -81,7 +80,7 @@ maven.buildMavenPackage rec {
   '';
 
   meta = {
-    description = "Program to visualize different juggling pattens";
+    description = "Program to visualize different juggling patterns";
     homepage = "https://jugglinglab.org/";
     license = lib.licenses.gpl2Only;
     mainProgram = "jugglinglab";

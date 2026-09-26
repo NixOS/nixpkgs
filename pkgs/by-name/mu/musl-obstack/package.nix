@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "musl-obstack";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
   };
 
@@ -26,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/void-linux/musl-obstack";

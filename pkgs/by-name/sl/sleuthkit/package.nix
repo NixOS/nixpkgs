@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     export ANT_ARGS="-Doffline=true -Ddefault-jar-location=$IVY_HOME/lib"
 
     # pre-positioning these jar files allows -Doffline=true to work
-    mkdir -p source/{bindings,case-uco}/java $IVY_HOME
-    cp -r ${finalAttrs.rdeps}/bindings/java/lib source/bindings/java
-    chmod -R 755 source/bindings/java
-    cp -r ${finalAttrs.rdeps}/case-uco/java/lib source/case-uco/java
-    chmod -R 755 source/case-uco/java
+    mkdir -p ${finalAttrs.src.name}/{bindings,case-uco}/java $IVY_HOME
+    cp -r ${finalAttrs.rdeps}/bindings/java/lib ${finalAttrs.src.name}/bindings/java
+    chmod -R 755 ${finalAttrs.src.name}/bindings/java
+    cp -r ${finalAttrs.rdeps}/case-uco/java/lib ${finalAttrs.src.name}/case-uco/java
+    chmod -R 755 ${finalAttrs.src.name}/case-uco/java
     cp -r ${finalAttrs.rdeps}/lib $IVY_HOME
     chmod -R 755 $IVY_HOME
   '';

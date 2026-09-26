@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "resvg-py";
-  version = "0.3.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baseplate-admin";
     repo = "resvg-py";
     tag = finalAttrs.version;
-    hash = "sha256-jbuIRSunrs4qEVdqNEiE18UXzxxX8c/QN17MInv8DnM=";
+    hash = "sha256-MhHcI39CcaMP7a96jlMno+8/qs2tcmptEAXFQayRF18=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-OVjvOYPu0nZeQx+qmpUlkBuw7FY3dMDpABNZJjyX0XQ=";
+    hash = "sha256-jRWcdtSSoXAqIJeXk6a4G440bP+ESV/sztsSfUv4+po=";
   };
 
   build-system = [
@@ -56,6 +56,6 @@ buildPythonPackage (finalAttrs: {
     description = "High level wrapper of resvg for python";
     homepage = "https://github.com/baseplate-admin/resvg-py";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = [ ];
   };
 })

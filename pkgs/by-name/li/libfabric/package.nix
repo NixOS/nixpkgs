@@ -13,15 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfabric";
-  version = "2.5.1";
+  version = "2.6.0";
 
   enableParallelBuilding = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ofiwg";
     repo = "libfabric";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d8ZdHMo3ErwBtLtUiLetjR+wu6H9bj3jnGZDYX544Jc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/zQnXfEveIGCpPZ3lgrOLnXSS7m8U2spVjkqsXuaL0o=";
   };
 
   outputs = [

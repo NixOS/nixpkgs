@@ -18,11 +18,20 @@
   libxcb,
   ninja,
   pkg-config,
+  shaderc,
   qt5,
   qt6,
   taglib,
   vulkan-headers,
   vulkan-tools,
+  deno,
+  expat,
+  libmpg123,
+  libogg,
+  libopenmpt,
+  libsysprof-capture,
+  libvorbis,
+  pipewire,
   rubberband,
   # Configurable options
   qtVersion ? "6", # Can be 5 or 6
@@ -53,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    shaderc
   ]
   ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
   ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
@@ -74,6 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     vulkan-headers-qmplay2
     vulkan-tools
+    deno
+    expat
+    libmpg123
+    libogg
+    libopenmpt
+    libsysprof-capture
+    libvorbis
+    pipewire
   ]
   ++ lib.optionals (qtVersion == "6") [
     rubberband
@@ -87,12 +105,19 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ];
 
+  cmakeFlags = lib.optionals (qtVersion == "5") [
+    (lib.cmakeBool "BUILD_WITH_QT6" false)
+  ];
+
   strictDeps = true;
 
   # Because we think it is better to use only lowercase letters!
   # But sometimes we come across case-insensitive filesystems...
   postInstall = ''
     [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
+
+    wrapQtApp $out/bin/qmplay2 \
+      --prefix PATH : ${lib.makeBinPath [ deno ]}
   '';
 
   passthru = {

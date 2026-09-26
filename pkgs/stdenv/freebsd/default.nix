@@ -3,10 +3,8 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
   bootstrapFiles ?
     let
       table = {
@@ -19,7 +17,6 @@
     files,
 }:
 
-assert crossSystem == localSystem;
 let
   genericStdenv = import ../generic { defaultConfig = config; };
 

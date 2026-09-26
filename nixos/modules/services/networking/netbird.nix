@@ -339,8 +339,9 @@ in
                         mkdir -p "$out/share/applications"
                         substitute ${cfg.ui.package}/share/applications/netbird.desktop \
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
-                          --replace-fail 'Name=Netbird' "Name=NetBird @ ${client.service.name}" \
-                          --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/pixmaps/netbird.png"
+                          --replace-fail 'Name=NetBird' "Name=NetBird @ ${client.service.name}" \
+                          --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/icons/hicolor/256x256/apps/netbird.png" \
+                          --replace-fail 'netbird-ui' "${mkBin "netbird-ui"}"
                       '')
                     ];
                   };

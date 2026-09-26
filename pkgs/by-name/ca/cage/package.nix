@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cage";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "cage-kiosk";
     repo = "cage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NLoz11bfeZwesmwLmyytuB6/vSwIsnDWKzyAXFe+YZ0=";
+    hash = "sha256-FHIOicRBL881Kvvui4HTKy0g7K9HcQ0ineLECh6MqFI=";
   };
 
   depsBuildBuild = [

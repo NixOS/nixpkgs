@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bleach";
-  version = "6.3.0";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "bleach";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a85gLy0Ix4cWvXY0s3m+ZD+ga7en6bYu1iAA22OaSwk=";
+    hash = "sha256-2HcJIxmH78TIE4q481OZPL5ZempMqka6OChEv+BFctY=";
   };
 
   pythonRelaxDeps = [

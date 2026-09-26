@@ -11,7 +11,8 @@
   writeText,
 
   ## various stuff that can be plugged in
-  ffmpeg_7,
+  ffmpeg_8,
+  ffmpeg_9,
   libxxf86vm,
   libxxf86dga,
   libxt,
@@ -68,8 +69,9 @@ let
       wmClass ? applicationName,
       nativeMessagingHosts ? [ ],
       pkcs11Modules ? [ ],
-      useGlvnd ? (!isDarwin),
+      withGlvnd ? (!isDarwin),
       cfg ? config.${applicationName} or { },
+      appDataDir ? null,
 
       ## Following options are needed for extra prefs & policies
       # For more information about anti tracking (german website)
@@ -87,14 +89,20 @@ let
     }:
 
     let
-      ffmpegSupport = browser.ffmpegSupport or false;
-      gssSupport = browser.gssSupport or false;
-      alsaSupport = browser.alsaSupport or false;
-      pipewireSupport = browser.pipewireSupport or false;
-      sndioSupport = browser.sndioSupport or false;
-      jackSupport = browser.jackSupport or false;
+      withFFmpeg = browser.withFFmpeg or false;
+      # Firefox dlopens libavcodec by hardcoded soname, so each ffmpeg major needs
+      # explicit browser support; keep versioned pins here (never the ffmpeg alias)
+      # and add a tier when a release gains the next ABI.
+      # libavcodec 62: 146 (bug 1962139), uplifted to ESR 140.10.2 (bug 2036244).
+      # libavcodec 63: 154 (bug 2057577), uplifted to ESR 153.1 (bug 2057577).
+      ffmpegPackage = if lib.versionAtLeast browser.version "153.1" then ffmpeg_9 else ffmpeg_8;
+      withGSSAPI = browser.withGSSAPI or false;
+      withALSA = browser.withALSA or false;
+      withPipewire = browser.withPipewire or false;
+      withSndio = browser.withSndio or false;
+      withJACK = browser.withJACK or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
-      smartcardSupport = cfg.smartcardSupport or false;
+      withPCSC = cfg.smartcardSupport or false;
 
       allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
@@ -112,10 +120,10 @@ let
           ]
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
         )
-        ++ lib.optional pipewireSupport pipewire
-        ++ lib.optional ffmpegSupport ffmpeg_7
-        ++ lib.optional gssSupport libkrb5
-        ++ lib.optional useGlvnd libglvnd
+        ++ lib.optional withPipewire pipewire
+        ++ lib.optional withFFmpeg ffmpegPackage
+        ++ lib.optional withGSSAPI libkrb5
+        ++ lib.optional withGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) [
           stdenv.cc
           libx11
@@ -127,10 +135,10 @@ let
           zlib
         ]
         ++ lib.optional (config.pulseaudio or (!isDarwin)) libpulseaudio
-        ++ lib.optional alsaSupport alsa-lib
-        ++ lib.optional sndioSupport sndio
-        ++ lib.optional jackSupport libjack2
-        ++ lib.optional smartcardSupport opensc
+        ++ lib.optional withALSA alsa-lib
+        ++ lib.optional withSndio sndio
+        ++ lib.optional withJACK libjack2
+        ++ lib.optional withPCSC opensc
         ++ pkcs11Modules
         ++ lib.optionals (!isDarwin) gtk_modules;
       gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
@@ -154,7 +162,7 @@ let
       extensions =
         if nameArray != (lib.unique nameArray) then
           throw "Firefox addon name needs to be unique"
-        else if browser.requireSigning || !browser.allowAddonSideload then
+        else if browser.enableAddonSigning || !browser.enableAddonSideload then
           throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
           map (
@@ -188,7 +196,7 @@ let
               Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
             };
           }
-          // lib.optionalAttrs smartcardSupport {
+          // lib.optionalAttrs withPCSC {
             SecurityDevices = {
               "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
             };
@@ -215,6 +223,7 @@ let
     in
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
+      strictDeps = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem (
@@ -327,6 +336,11 @@ let
         "MOZ_ALLOW_DOWNGRADE"
         "1"
       ]
+      ++ lib.optionals (appDataDir != null) [
+        "--set"
+        "MOZ_APP_DATA"
+        appDataDir
+      ]
       ++ lib.optionals (!isDarwin) [
         "--suffix"
         "GTK_PATH"
@@ -434,7 +448,7 @@ let
                 ;;
               *)
                 # Copy if the symlink resolves to a Mach-O dylib
-                otool -l "$file" 2>/dev/null | grep -q 'LC_ID_DYLIB' || continue
+                otool -l "$file" 2>/dev/null | grep -F 'LC_ID_DYLIB' >/dev/null || continue
                 ;;
             esac
 
@@ -594,7 +608,6 @@ let
 
       disallowedRequisites = [ stdenv.cc ];
       meta = browser.meta // {
-        inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [ ];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package

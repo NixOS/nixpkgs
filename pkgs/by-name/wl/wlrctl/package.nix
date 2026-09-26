@@ -18,11 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~brocellous";
     repo = "wlrctl";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5mDcCSHbZMbfXbksAO4YhELznKpanse7jtbtfr09HL0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5mDcCSHbZMbfXbksAO4YhELznKpanse7jtbtfr09HL0=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
+
   depsBuildBuild = [
     pkg-config
   ];

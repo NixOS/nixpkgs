@@ -16,13 +16,13 @@
 buildHomeAssistantComponent rec {
   owner = "christaangoossens";
   domain = "auth_oidc";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "christiaangoossens";
     repo = "hass-oidc-auth";
     tag = "v${version}";
-    hash = "sha256-hA4Nic5AerghZZVEFSFRpBwX+2vl/0HhTeFgwkd3QPE=";
+    hash = "sha256-vwQDrMM4phbrXT85Syyz6hWEIhLB3TKNNTM04OdvNWk=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ buildHomeAssistantComponent rec {
   env.npmDeps = fetchNpmDeps {
     name = "${domain}-npm-deps";
     inherit src;
-    hash = "sha256-CmJ8AdD+AcqxwXK3lINJ0+8/feJM7dl9Q4cx7vftnMk=";
+    hash = "sha256-yAm08NVz2Ln6ob9LoPfxuz6U1oBS4AEydIQHhv0WpOg=";
   };
 
   nativeBuildInputs = [

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "aplpy";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aplpy";
     inherit version;
-    hash = "sha256-oUylUM7/6OyEJFrpkr9MjXilXC/ZIdBQ5au4cvyZiA0=";
+    hash = "sha256-P7PVueaMYXgVwXW+ema2ofP9QiBtaN/gQXZq0yIFJhA=";
   };
 
   build-system = [

@@ -1,51 +1,56 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  cython_0,
+  cython,
+  setuptools,
   zfs_2_3,
 }:
 
 buildPythonPackage rec {
-  pname = "py-libzfs";
-  version = "25.10.1";
-  format = "setuptools";
+  pname = "libzfs";
+  version = "2.4.1-4";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "truenas";
-    repo = "py-libzfs";
-    rev = "TS-${version}";
-    hash = "sha256-kme5qUG0Nsya8HxU/oMHP1AidoMMOob/EON8sZMzKKI=";
+    owner = "45Drives";
+    repo = "python3-libzfs";
+    rev = "v${version}";
+    hash = "sha256-0VSjCwGuo2khGKs7eTRhqpZBiFWGSwyRRyLPew4jAt8=";
   };
 
-  patches = [
-    # Upstream has open PR. Debian uses the patch.
-    # https://github.com/truenas/py-libzfs/pull/277
-    (fetchpatch2 {
-      url = "https://salsa.debian.org/python-team/packages/py-libzfs/-/raw/debian/0.0+git20240510.5ae7d5e-1/debian/patches/fix-compilation-on-gcc-14.patch";
-      hash = "sha256-KLxRx2k1LQGtmzMqJe9b84ApOnIXn8ZeBZun5BAxEjc=";
-    })
+  # Remove some leftover uses of `long`, which does not exist in Python 3
+  patches = [ ./python3.patch ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='1.1'" "version='${version}'"
+  '';
+
+  build-system = [
+    cython
+    setuptools
   ];
 
-  build-system = [ cython_0 ];
-  buildInputs = [ zfs_2_3 ];
+  # The configure script checks for ZFS headers specifically in $prefix
+  # and we don't actually use the generated install phase, so we can
+  # just lie to it in this stupid way.
+  configureFlags = [
+    "--prefix=${zfs_2_3.dev}"
+  ];
 
-  # Passing CFLAGS in configureFlags does not work, see https://github.com/truenas/py-libzfs/issues/107
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace configure \
-      --replace-fail \
-        'CFLAGS="-DCYTHON_FALLTHROUGH"' \
-        'CFLAGS="-DCYTHON_FALLTHROUGH -I${zfs_2_3.dev}/include/libzfs -I${zfs_2_3.dev}/include/libspl"' \
-      --replace-fail 'zof=false' 'zof=true'
-  '';
+  # The configure script also expects the compiler to just know where all the libraries are,
+  # so we have to help it. Also Wno-error away some constness errors.
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${zfs_2_3.dev}/include/libzfs -I${zfs_2_3.dev}/include/libspl -Wno-error=incompatible-pointer-types";
+    NIX_CFLAGS_LINK = "-L${zfs_2_3}/lib";
+  };
 
   pythonImportsCheck = [ "libzfs" ];
 
   meta = {
     description = "Python libzfs bindings";
-    homepage = "https://github.com/truenas/py-libzfs";
+    homepage = "https://github.com/45Drives/python3-libzfs";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ chuangzhu ];
     # The project also supports macOS (OpenZFS on OSX, O3X), FreeBSD and OpenSolaris

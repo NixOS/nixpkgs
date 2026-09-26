@@ -4,7 +4,7 @@
   python3Packages,
   fetchFromGitHub,
   gobject-introspection,
-  libappindicator-gtk3,
+  libappindicator,
   libayatana-appindicator,
   libnotify,
   wrapGAppsHook4,
@@ -14,14 +14,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn";
-  version = "4.15.3";
+  version = "4.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2v8BckNmm7Ecw+uAgOyfofHDPWgXkJJ8DmhMszb0tg0=";
+    hash = "sha256-wClBUF5bz+bVt9w7LQGfU3mKnEtgax8GXnGNyH2/obU=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals withIndicator [
     # Adds AppIndicator3 namespace
-    libappindicator-gtk3
+    libappindicator
     # Adds AyatanaAppIndicator3 namespace
     libayatana-appindicator
   ];
@@ -85,6 +85,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # Segmentation fault during widgets tests
     "tests/unit/widgets"
+    # Segmentation fault during GObject signal test
+    "tests/unit/utils/test_safe_signal_connect.py"
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -64,6 +64,7 @@ pnpmConfigHook() {
       rm "$STORE_PATH/v11/index.db.sql"
     fi
 
+    pnpm config set reporter append-only
     pnpm config set store-dir "$STORE_PATH"
 
     # Prevent hard linking on file systems without clone support.
@@ -71,12 +72,13 @@ pnpmConfigHook() {
     pnpm config set package-import-method clone-or-copy
 
     echo "Installing dependencies"
-    if [[ -n "$pnpmWorkspaces" ]]; then
-        local IFS=" "
-        for ws in $pnpmWorkspaces; do
-            pnpmInstallFlags+=("--filter=$ws")
-        done
-    fi
+
+    local -a pnpmWorkspacesArray
+    concatTo pnpmWorkspacesArray pnpmWorkspaces
+
+    for ws in "${pnpmWorkspacesArray[@]}"; do
+        pnpmInstallFlags+=("--filter=$ws")
+    done
 
     runHook prePnpmInstall
 
@@ -117,4 +119,6 @@ pnpmConfigHook() {
     echo "Finished pnpmConfigHook"
 }
 
-postConfigureHooks+=(pnpmConfigHook)
+if [ -z "${dontPnpmConfigure-}" ]; then
+  postConfigureHooks+=(pnpmConfigHook)
+fi

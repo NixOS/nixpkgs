@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "chardet"
+  ];
+
   dependencies = [
     chardet
     gitpython
@@ -51,7 +55,7 @@ buildPythonPackage rec {
     mainProgram = "pygount";
     homepage = "https://github.com/roskakori/pygount";
     changelog = "https://github.com/roskakori/pygount/blob/${src.tag}/docs/changes.md";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };
 }

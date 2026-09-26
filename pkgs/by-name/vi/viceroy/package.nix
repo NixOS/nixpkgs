@@ -1,21 +1,23 @@
 {
+  lib,
   rustPlatform,
   fetchFromGitHub,
-  lib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
-  version = "0.18.0";
+  version = "0.21.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WlxVXMUIby5qBsb6Uc8hiya0QJfEPKhqMSNW51JkTqs=";
+    hash = "sha256-vwoJ7PixrO68vUSo+u10wFdeD0TU2cISNWcNJ4qLTB8=";
   };
 
-  cargoHash = "sha256-K2l53MZLwLoR2I7NdTOMTBppUoM4408UvaYX2m8RyiQ=";
+  cargoHash = "sha256-dkoKFEeM6DI6Iaypgexa18YjoLySnIX1YfUItySx1Q0=";
 
   cargoTestFlags = [
     "--package"
@@ -29,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
+      stepbrobd
     ];
     platforms = lib.platforms.unix;
   };

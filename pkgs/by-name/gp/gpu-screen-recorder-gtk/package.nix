@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.7.9";
+  version = "5.8.1";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
     tag = finalAttrs.version;
-    hash = "sha256-RFY5hQqv5XkLliB3+YJX4TXLxV9y1/P8PIYMi6MCbww=";
+    hash = "sha256-LOaHYk7c8USZz5p17YdzcgGJ+FZkEt1qn15VggnQyJQ=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     wayland
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   preFixup =
     let
@@ -79,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
     platforms = lib.platforms.linux;
   };

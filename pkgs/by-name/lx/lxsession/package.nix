@@ -10,7 +10,7 @@
   libxslt,
   pkg-config,
   wrapGAppsHook3,
-  gtk2-x11,
+  gtk3,
   libx11,
   polkit,
   vala,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk2-x11
+    gtk3
     libx11
     polkit
     vala
@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-man"
     "--disable-buildin-clipboard"
     "--disable-buildin-polkit"
+    "--enable-gtk3"
   ];
 
   postPatch = ''

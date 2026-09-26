@@ -60,7 +60,10 @@ in
     };
 
     security = {
-      polkit.enable = true;
+      polkit = {
+        enable = true;
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       wrappers = lib.mkIf cfg.enableRenice {
         gamemoded = {
           owner = "root";
@@ -88,6 +91,11 @@ in
             }
           ]
         );
+
+        restartTriggers = [
+          cfg.package
+          config.environment.etc."gamemode.ini".source
+        ];
 
         serviceConfig.ExecStart = lib.mkIf cfg.enableRenice [
           "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.

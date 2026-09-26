@@ -180,10 +180,10 @@ let
         pname = name;
         # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
         # nix why-depends --precise .#rocmPackages.llvm.rocm-toolchain.linked /store/path/its/not/allowed
-        disallowedRequisites = disallowedRefsForToolchain;
+        outputChecks.out.disallowedRequisites = disallowedRefsForToolchain;
         passthru.linked = linked;
-        linkPaths = linkPaths;
-        passAsFile = [ "linkPaths" ];
+        inherit linkPaths;
+        __structuredAttrs = true;
         # TODO(@LunNova): Try to use --sysroot with clang in its original location instead of
         # relying on copying the binary?
         # $clang/bin/clang++ --sysroot=$rocm-toolchain is not equivalent
@@ -221,7 +221,7 @@ let
           builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
         } $out/ # create links *within* the sysroot to save space
 
-        for i in $(cat $linkPathsPath); do
+        for i in "''${linkPaths[@]}"; do
           ${lib.getExe lndir} -silent $i $out
         done
 
@@ -293,7 +293,29 @@ let
 in
 overrideLlvmPackagesRocm (s: {
   libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
-    patches = old.patches ++ [
+    patches = [
+      # Backport select ptr combine fixes so our LLVM 22 sdag fix backport can apply
+      (fetchpatch {
+        name = "amdgpu-add-baseline-load-select-ptr-combine-test.patch";
+        url = "https://github.com/llvm/llvm-project/commit/ac27b2455ad7c89cc1f928de7beb05933a035031.patch";
+        relative = "llvm";
+        hash = "sha256-1mine1h/oqnn2tKDYW4FntyZXu/foyifrKGkqKOHrPg=";
+      })
+      (fetchpatch {
+        name = "amdgpu-fix-treating-divergent-loads-as-uniform.patch";
+        url = "https://github.com/llvm/llvm-project/commit/d3c3c6bab5df051d9db12ea96add2211df9d81be.patch";
+        relative = "llvm";
+        hash = "sha256-9VB77d4d+nwX8s+JBq1PXmbmqT7oD6lRC0uDIrTgjjo=";
+      })
+      (fetchpatch {
+        name = "dag-allow-select-ptr-combine-for-non-0-address-spaces.patch";
+        url = "https://github.com/llvm/llvm-project/commit/0e1cb2de90aafa1d5dbd46fc9e6c4e743700fa8b.patch";
+        relative = "llvm";
+        hash = "sha256-6Pj3pRESaho60YhXWwaQxEKteSuziZseeT4FbZqZANk=";
+      })
+    ]
+    ++ old.patches
+    ++ [
       ./perf-increase-namestring-size.patch
       # v64i8 shuffle lowering inf loop on VBMI targets, hangs whisper-cpp etc
       # https://github.com/NixOS/nixpkgs/issues/497745

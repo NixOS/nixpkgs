@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "postfix_exporter";
-  version = "0.20.0";
+  version = "0.20.4";
 
   src = fetchFromGitHub {
     owner = "Hsn723";
     repo = "postfix_exporter";
     tag = "v${version}";
-    sha256 = "sha256-tW86lnSLQdyZwvRiqTU1oExZ/zDIrZUraeoAOjs35yY=";
+    sha256 = "sha256-LCjTw5nL8xP6ODwVJxj4Zg99CiFvqbzjb931fmhtk0M=";
   };
 
-  vendorHash = "sha256-T8fTvrpBKm+wDqf+iBeBJh9H1HEebAf0lOnnuF0W5fI=";
+  vendorHash = "sha256-6lqUygsV1pPGKN9SOZIouPVSZWuSOlPhqFbm16HfzGk=";
 
   ldflags = [
     "-s"
@@ -28,9 +28,9 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
   buildInputs = lib.optionals withSystemdSupport [ systemdLibs ];
-  tags = lib.optionals (!withSystemdSupport) "nosystemd";
+  tags = lib.optionals (!withSystemdSupport) [ "nosystemd" ];
 
-  postInstall = lib.optionals withSystemdSupport ''
+  postInstall = lib.optionalString withSystemdSupport ''
     wrapProgram $out/bin/postfix_exporter \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemdLibs}/lib"
   '';

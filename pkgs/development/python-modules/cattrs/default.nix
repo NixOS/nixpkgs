@@ -12,26 +12,33 @@
   msgpack,
   msgspec,
   orjson,
+  pymongo,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
   pyyaml,
+  tomli-w,
   tomlkit,
   typing-extensions,
   ujson,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cattrs";
-  version = "25.3.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = "cattrs";
-    tag = "v${version}";
-    hash = "sha256-6oQblSanvSZOMD5ossCP7fNjyxF54SRbU1cQrW1I5Ps=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i1C7TvtQhiEZPi4YELxPHkiz33nNw2rtgRTqs98PVlc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
+  '';
 
   build-system = [
     hatchling
@@ -43,57 +50,58 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    ujson = [
+      ujson
+    ];
+    orjson = [
+      orjson
+    ];
+    msgpack = [
+      msgpack
+    ];
+    pyyaml = [
+      pyyaml
+    ];
+    tomlkit = [
+      tomlkit
+    ];
+    cbor2 = [
+      cbor2
+    ];
+    bson = [
+      pymongo
+    ];
+    msgspec = [
+      msgspec
+    ];
+    tomllib = [
+      tomli-w
+    ];
+  };
+
   nativeCheckInputs = [
-    cbor2
     hypothesis
     immutables
     motor
-    msgpack
-    msgspec
-    orjson
     pytest-xdist
     pytestCheckHook
-    pyyaml
-    tomlkit
-    ujson
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
-    substituteInPlace tests/test_preconf.py \
-      --replace-fail "from orjson import dumps as orjson_dumps" "" \
-      --replace-fail "from orjson import loads as orjson_loads" ""
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Don't run benchmarking tests
     "bench"
   ];
 
-  disabledTests = [
-    # orjson is not available as it requires Rust nightly features to compile its requirements
-    "test_orjson"
-    # msgspec causes a segmentation fault for some reason
-    "test_simple_classes"
-    "test_msgspec_json_converter"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/python-attrs/cattrs/pull/543
-    "test_unstructure_deeply_nested_generics_list"
-  ];
-
   pythonImportsCheck = [ "cattr" ];
 
   meta = {
+    changelog = "https://github.com/python-attrs/cattrs/blob/${finalAttrs.src.tag}/HISTORY.md";
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
-    changelog = "https://github.com/python-attrs/cattrs/blob/${src.tag}/HISTORY.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

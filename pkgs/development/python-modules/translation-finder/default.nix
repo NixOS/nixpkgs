@@ -7,19 +7,23 @@
   ruamel-yaml,
   weblate-language-data,
   pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "translation-finder";
-  version = "2.24";
+  version = "3.4.0";
 
   pyproject = true;
+  __structuredAttrs = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "translation-finder";
     tag = finalAttrs.version;
-    hash = "sha256-OVAsw+snISVyz3ZvcfqCpv0BRfTNzYSpI+YLafW5OQg=";
+    hash = "sha256-uPX3jKQoQxvtu01TwSmmFOjxMtiZsAwBja9jilaa5+o=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +34,10 @@ buildPythonPackage (finalAttrs: {
     weblate-language-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   pythonImportsCheck = [ "translation_finder" ];
 

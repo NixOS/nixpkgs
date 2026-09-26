@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    hash = "sha256-OZ5U/4UWtVvmHutx/BMLsGOImRlpkm9Hxk0SRvozaFM=";
+    hash = "sha256-wLZ6BABiukujKRAgwc6kHKSdXSsxxR9cdW5zSiP5zAE=";
     fetchSubmodules = true;
   };
 

@@ -6,18 +6,18 @@
 buildGoModule rec {
   pname = "ocb";
   # Also update `pkgs/tools/misc/opentelemetry-collector/releases.nix`
-  # whenever that version changes.
-  version = "0.151.0";
+  # whenever this version changes.
+  version = "0.155.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    hash = "sha256-X7Ke4X6t0HXKlf0hJb1CXE18T8Ov2GZwjX4HSGJ1gtw=";
+    hash = "sha256-EG//ddcXolvILucKYWZSoeqgFCE7u3/h8v/oX3pzafk=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
-  vendorHash = "sha256-rRrLHqwLQQAB5u2vbtAjInUjvj6sGMyKPjOKVnwvQSM=";
+  vendorHash = "sha256-SeLEg/xwSEr3uPZbjlLFny+OpfovcmKVD6BxCgoosz8=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -30,6 +30,8 @@ buildGoModule rec {
   checkFlags = [
     "-skip TestGenerateAndCompile|TestReplaceStatementsAreComplete|TestVersioning|TestRunInit"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   # Rename to ocb (it's generated as "builder")
   postInstall = ''

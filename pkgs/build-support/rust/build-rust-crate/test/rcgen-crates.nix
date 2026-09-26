@@ -4347,7 +4347,7 @@ rec {
     sourceFilter =
       name: type:
       let
-        baseName = baseNameOf (toString name);
+        baseName = baseNameOf name;
       in
       !(
         # Filter out git

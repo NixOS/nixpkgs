@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bdffont";
-  version = "0.0.37";
+  version = "0.0.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "bdffont";
     tag = finalAttrs.version;
-    hash = "sha256-FC4I4gxK0Lly32WYfjs6+CtfUhfASf8kgZDTGmDp+kE=";
+    hash = "sha256-Dwma4KvHFJd1DsdB2fAbfRipZJWkY0tjlSzgaCVD58o=";
   };
 
   build-system = [ uv-build ];

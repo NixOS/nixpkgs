@@ -58,6 +58,12 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  pytestFlags = [
+    # This warning-turned-error blocks test collection
+    # E astropy.utils.data.CacheMissingWarning: /build/.home/.cache/astropy/download/url does not exist
+    "-Wignore::astropy.utils.data.CacheMissingWarning"
+  ];
+
   pythonImportsCheck = [ "asdf_astropy" ];
 
   meta = {

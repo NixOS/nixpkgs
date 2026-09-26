@@ -4,6 +4,7 @@
   cargo,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   rustc,
   rustPlatform,
@@ -33,6 +34,8 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
     rustc
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

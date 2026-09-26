@@ -3,16 +3,17 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
+  nix-update-script,
 }:
 
 let
-  version = "1.2.2-stable";
+  version = "1.5.2-stable";
 
   src = fetchFromGitHub {
     owner = "gtsteffaniak";
     repo = "filebrowser";
     tag = "v${version}";
-    hash = "sha256-MWFBoVr5WRfLhDUGEGS6ntb3v23HcOcm91x3fGriM2A=";
+    hash = "sha256-1qG6IayTqL4x3CqJyvVSG8Fu4s6ywhWI9t1j9c+wTZM=";
   };
 
   frontend = buildNpmPackage {
@@ -20,7 +21,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
-    npmDepsHash = "sha256-brW5YR/DNBOCPBDMEjSzyk+YTbrP5ppdQ0US/DLbyIs=";
+    npmDepsHash = "sha256-J1PddXU79T0GVcAgxYEW/vraqYxbTvASw8RmW8dDeOw=";
 
     buildPhase = ''
       runHook preBuild
@@ -47,7 +48,7 @@ buildGoModule {
 
   sourceRoot = "${src.name}/backend";
 
-  vendorHash = "sha256-pU5qtWvhLbMdxzXK6uKxEkvbZdb2oa4ZHKaCPm0bIwU=";
+  vendorHash = "sha256-YAMh0WMe1zDCJq8BuPcekb1J8RvRoxOmsZarKI1ZWcs=";
 
   preBuild = ''
     mkdir -p http/embed
@@ -64,6 +65,8 @@ buildGoModule {
     "-X github.com/gtsteffaniak/filebrowser/backend/version.CommitSHA=testingCommit"
     "-X github.com/gtsteffaniak/filebrowser/backend/version.Version=testing"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Access and manage your files from the web";

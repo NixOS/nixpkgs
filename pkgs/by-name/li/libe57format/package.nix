@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       chpatrick
       nh2
     ];
-    platforms = lib.platforms.linux; # because of the .so buiding in `postInstall` above
+    platforms = lib.platforms.linux; # because of the .so building in `postInstall` above
   };
 })

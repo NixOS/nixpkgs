@@ -27,6 +27,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.13.0";
   pyproject = false;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
@@ -79,7 +81,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = nix-update-script { };
 

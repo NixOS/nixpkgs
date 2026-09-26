@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pythonfinder";
-  version = "3.0.3";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "pythonfinder";
     tag = finalAttrs.version;
-    hash = "sha256-p+r/0MjxhMcc0n5gPEbdGjC2M+yGqGT/YvxlyU8xTtA=";
+    hash = "sha256-MX5o8KIMpZjUj93QwL54CDp6OjAnhw8TtuEGT8wkKtw=";
   };
 
   build-system = [ setuptools ];

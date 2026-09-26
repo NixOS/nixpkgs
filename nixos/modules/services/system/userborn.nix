@@ -31,21 +31,43 @@ let
         ;
       isNormal = opts.isNormalUser;
       shell = utils.toShellPath opts.shell;
+      autoSubIdRange = opts.autoSubUidGidRange;
+      subUidRanges = map (r: {
+        start = r.startUid;
+        inherit (r) count;
+      }) opts.subUidRanges;
+      subGidRanges = map (r: {
+        start = r.startGid;
+        inherit (r) count;
+      }) opts.subGidRanges;
     }) (lib.filterAttrs (_: u: u.enable) config.users.users);
   };
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
   userbornStaticFiles =
-    pkgs.runCommand "static-userborn" { }
-      "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
+    pkgs.runCommand "static-userborn"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      ''
+        mkdir -p $out
+        userborn ${userbornConfigJson} $out
+      '';
   previousConfigPath = "/var/lib/userborn/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
+  # The files live outside /etc and need to be linked or bind-mounted there.
+  filesOutsideEtc = !cfg.static && cfg.passwordFilesLocation != "/etc";
   # The filenames created by userborn.
   passwordFiles = [
     "group"
     "passwd"
     "shadow"
+  ];
+  # newuidmap opens these with O_NOFOLLOW, no symlinks in /etc.
+  subIdFiles = [
+    "subuid"
+    "subgid"
   ];
 
 in
@@ -86,7 +108,24 @@ in
         The primary motivation for this is an immutable `/etc`, where we cannot
         write the files directly to `/etc`.
 
-        However this an also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
+        However this can also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
+
+        The subid files are an exception: `newuidmap` rejects symlinks, so
+        they are bind-mounted into `/etc` instead of being symlinked.
+      '';
+    };
+
+    importLegacyState = lib.mkOption {
+      type = lib.types.bool;
+      default = !cfg.static;
+      defaultText = lib.literalExpression "!config.services.userborn.static";
+      description = ''
+        Whether to include one-shot migration services that import the state
+        left behind by the perl activation script (`update-users-groups.pl`),
+        so id and subid allocations survive the switch to userborn.
+
+        Disable this if you want to keep the migration tooling out of your
+        system closure.
       '';
     };
 
@@ -135,6 +174,33 @@ in
             ) userCfg.users
           );
 
+      # One-shot import of update-users-groups.pl state. Runs before
+      # userborn so removed users' ids are reserved before allocation.
+      # Remove once the perl path has been gone for two releases.
+      services.userborn-import-legacy = lib.mkIf cfg.importLegacyState {
+        wantedBy = [ "sysinit.target" ];
+        requiredBy = [ "userborn.service" ];
+        before = [
+          "userborn.service"
+          "shutdown.target"
+        ];
+        after = [ "systemd-remount-fs.service" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig = {
+          Description = "Import legacy update-users-groups.pl state for userborn";
+          DefaultDependencies = false;
+          ConditionPathExists = [
+            "/var/lib/nixos/uid-map"
+            "!/var/lib/userborn"
+          ];
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${lib.getExe pkgs.userborn-import-legacy} --nogroup-gid ${toString config.ids.gids.nogroup} ${cfg.passwordFilesLocation}";
+        };
+      };
+
       services.userborn = lib.mkIf (!cfg.static) {
         wantedBy = [ "sysinit.target" ];
         requiredBy = [ "sysinit-reactivation.target" ];
@@ -181,13 +247,16 @@ in
 
             # Make the source files writable before executing userborn.
             (lib.mkIf (!userCfg.mutableUsers) (
-              lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") passwordFiles
+              lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") (
+                passwordFiles ++ subIdFiles
+              )
             ))
           ];
 
           ExecStartPost =
             if userCfg.mutableUsers then
-              # Store the config somewhere for the next invocation
+              # Store the config so the next run can tell declarative changes
+              # from manual edits (see USERBORN_PREVIOUS_CONFIG).
               [
                 "${pkgs.coreutils}/bin/ln -sf ${userbornConfigJson} ${previousConfigPath}"
               ]
@@ -196,9 +265,33 @@ in
               (lib.map (
                 file:
                 "${pkgs.util-linux}/bin/mount --bind -o ro ${cfg.passwordFilesLocation}/${file} ${cfg.passwordFilesLocation}/${file}"
-              ) passwordFiles);
+              ) (passwordFiles ++ subIdFiles));
         };
       };
+
+      # Bind-mount the subid files into /etc when they live elsewhere,
+      # newuidmap rejects symlinks.
+      mounts = lib.mkIf filesOutsideEtc (
+        map (file: {
+          what = "${cfg.passwordFilesLocation}/${file}";
+          where = "/etc/${file}";
+          type = "none";
+          options = "bind";
+          after = [ "userborn.service" ];
+          requires = [ "userborn.service" ];
+          wantedBy = [ "sysinit.target" ];
+          requiredBy = [ "sysinit-reactivation.target" ];
+          before = [
+            "sysinit.target"
+            "sysinit-reactivation.target"
+            "shutdown.target"
+          ];
+          conflicts = [ "shutdown.target" ];
+          # Re-mount after userborn's atomic rename replaces the inode.
+          restartTriggers = [ userbornConfigJson ];
+          unitConfig.DefaultDependencies = false;
+        }) subIdFiles
+      );
     };
 
     environment.etc = lib.mkMerge [
@@ -211,11 +304,11 @@ in
               source = "${userbornStaticFiles}/${file}";
               mode = if file == "shadow" then "0000" else "0644";
             }
-          ) passwordFiles
+          ) (passwordFiles ++ subIdFiles)
         )
       ))
 
-      (lib.mkIf (!cfg.static && cfg.passwordFilesLocation != "/etc") (
+      (lib.mkIf filesOutsideEtc (
         # Statically create the symlinks to passwordFilesLocation when they're not
         # inside /etc because we will not be able to do it at runtime in case of a
         # (non-static) immutable /etc!
@@ -227,6 +320,19 @@ in
               mode = "direct-symlink";
             }
           ) passwordFiles
+        )
+      ))
+
+      (lib.mkIf filesOutsideEtc (
+        # Placeholder mount points for the subid bind mounts.
+        lib.listToAttrs (
+          lib.map (
+            file:
+            lib.nameValuePair file {
+              text = "";
+              mode = "0644";
+            }
+          ) subIdFiles
         )
       ))
     ];

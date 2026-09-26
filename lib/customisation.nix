@@ -2,6 +2,7 @@
 
 let
   inherit (builtins)
+    catAttrs
     intersectAttrs
     unsafeGetAttrPos
     ;
@@ -406,7 +407,7 @@ rec {
           ++ [
             {
               name = "all";
-              value = map (x: x.value) outputsList;
+              value = catAttrs "value" outputsList;
             }
           ]
         )
@@ -564,7 +565,7 @@ rec {
 
     # Examples
 
-    :::{#ex-makeScope .example}
+    :::{.example #ex-makeScope}
     # Create an interdependent package set on top of `pkgs`
 
     The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
@@ -593,7 +594,7 @@ rec {
     ```
     :::
 
-    :::{#ex-makeScope-callPackage .example}
+    :::{.example #ex-makeScope-callPackage}
     # Using `callPackage` from a scope
 
     ```nix

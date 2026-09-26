@@ -7,42 +7,31 @@
   versionCheckHook,
   nix-update-script,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "1.1.0";
+  version = "1.17.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MMVwypMxnFBYVlBmuJ2KWwfL1hXuro5BH7V5wrgl3lc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HWk3vw0DT8Jsjv9fM8jcQdJUDwEjjZEAYn7EP3V/OSQ=";
   };
 
-  # Otherwise these tests fail asserting that the version is 0.0.0-dev
-  postPatch = ''
-    substituteInPlace bundle/deploy/terraform/init_test.go \
-      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
-  '';
+  vendorHash = "sha256-eDFlN1dql+ojOSyP7huhzzyaH9o1tvdjHD4WxP//NwA=";
 
-  vendorHash = "sha256-OK7P+0pBaL/sn+iTrVr0m3EuqA/Pssp19JRKo6nGipk=";
-
-  excludedPackages = [
-    "bundle/internal"
-    "acceptance"
-    "integration"
-    "tools/testrunner"
-    "tools/testmask"
-    "cmd/auth"
-    "cmd/root"
-    "cmd/labs/project"
-    "libs/auth"
-    "libs/databrickscfg"
-    "libs/hostmetadata"
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildTag=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildSummary=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMajor=${lib.versions.major finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMinor=${lib.versions.minor finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildPatch=${lib.versions.patch finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildIsSnapshot=false"
   ];
 
   postBuild = ''

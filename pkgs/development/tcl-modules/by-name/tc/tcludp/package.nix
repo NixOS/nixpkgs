@@ -5,13 +5,13 @@
   tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcludp";
   version = "1.0.11";
 
   src = fetchfossil {
     url = "https://core.tcl-lang.org/tcludp";
-    rev = "ver_" + lib.replaceStrings [ "." ] [ "_" ] version;
+    rev = "ver_" + lib.replaceString "." "_" finalAttrs.version;
     hash = "sha256-PckGwUqL2r5KJEet8sS4U504G63flX84EkQEkQdMifY=";
   };
 
@@ -38,4 +38,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     broken = tcl.isTcl9;
   };
-}
+})

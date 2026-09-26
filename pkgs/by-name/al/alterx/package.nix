@@ -2,11 +2,16 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "alterx";
   version = "0.1.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -16,6 +21,19 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-13ODJNo6xbQkubaGJT3svFbOLbdsHluTCp1Gom+jYeU=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  ldflags = [ "-s" ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";

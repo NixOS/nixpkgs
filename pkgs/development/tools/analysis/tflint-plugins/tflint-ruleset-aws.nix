@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-aws";
-  version = "0.47.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QHAa8kbTZRSS5qLpX5zk4Fcal2Ah6yXv6satwfNFVLo=";
+    hash = "sha256-jR6A4/h8EZMU9WfDGWuzW+PsAKxK8Tnv7x34v/mEYHU=";
   };
 
-  vendorHash = "sha256-+FxNOrC5iYVb+PPIPTClXmnPTrm7hqT+VLrgcBHWWD4=";
+  vendorHash = "sha256-NGOXV5d9hKsI89Flhq9sfh8lGgQPhQlLbfKtWNOmYnE=";
 
   postPatch = ''
     # some automation for creating new releases on GitHub, which we don't need
@@ -46,6 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/terraform-linters/tflint-ruleset-aws/blob/v${version}/CHANGELOG.md";
     description = "TFLint ruleset plugin for Terraform AWS Provider";
     maintainers = with lib.maintainers; [ flokli ];
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
   };
 }

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "Netflix";
+    owner = "jfernandez";
     repo = "bpftop";
     tag = "v${finalAttrs.version}";
     hash = "sha256-QukcBq80tASPSHRg1yRouYiZqvca+ipp6RGzXqP2CwA=";
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
 
   meta = {
     description = "Dynamic real-time view of running eBPF programs";
-    homepage = "https://github.com/Netflix/bpftop";
+    homepage = "https://github.com/jfernandez/bpftop";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F

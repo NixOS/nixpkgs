@@ -3,6 +3,10 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Tue, 15 Oct 2024 11:46:38 +0200
 Subject: [PATCH] Add option for installation sysconfdir
 
+Since /etc is the domain of NixOS, not Nix, we cannot install files
+there. Let's install the files to $prefix/etc while still reading them
+from /etc. NixOS module for fwupd will take care of copying the files
+appropriately.
 ---
  data/bios-settings.d/meson.build |  2 +-
  data/meson.build                 |  2 +-

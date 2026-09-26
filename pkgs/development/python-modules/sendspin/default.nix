@@ -8,30 +8,32 @@
   numpy,
   pulsectl-asyncio,
   pychromecast,
+  pyprojectVersionPatchHook,
+  pytest-asyncio,
   pytestCheckHook,
   qrcode,
   readchar,
   rich,
   setuptools,
   sounddevice,
+  textual-image,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "5.9.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-g+qw3mDHij50CEDKGjltMGNZoI6/HeJQ8zq8NSvD3Ls=";
+    hash = "sha256-Oux9hEtN5AiPf3gAqXGVinDfDIuNVugchUNuLMfMoYc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -45,20 +47,24 @@ buildPythonPackage (finalAttrs: {
     readchar
     rich
     sounddevice
-  ];
+    textual-image
+  ]
+  ++ aiosendspin.optional-dependencies.server;
 
   optional-dependencies = {
     cast = [ pychromecast ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sendspin" ];
 
   disabledTests = [
-    #  AssertionError: assert None == (1, 'Digital')
-    "test_alsa_available_for_hw_device_with_mixer"
-    "test_hifiberry_dac_discovery"
+    # requires internet
+    "test_multi_worker_starts_and_serves_status"
   ];
 
   meta = {

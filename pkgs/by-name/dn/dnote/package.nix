@@ -128,9 +128,6 @@ buildGoModule rec {
     changelog = "https://github.com/dnote/dnote/blob/cli-v${version}/CHANGELOG.md";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    license = with lib.licenses; [
-      gpl3Only
-      agpl3Only
-    ];
+    license = lib.licenses.asl20;
   };
 }

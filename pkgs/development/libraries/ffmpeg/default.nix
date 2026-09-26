@@ -16,22 +16,28 @@ let
     );
 
   v4 = {
-    version = "4.4.7";
-    hash = "sha256-A/75BOHNhoal0VLJPOoQmyBHF4BIVk8iZOdM3RBU6iE=";
+    version = "4.4.8";
+    hash = "sha256-byCiCiuwrikID6hCe0CD2KyPVUYuGmas5Zs0fd6dJRQ=";
   };
 
   v6 = {
-    version = "6.1.5";
-    hash = "sha256-iLAqdv1Dn7qln8Ag5lbGKOrWQZVLNREAgXbdDbHiMjc=";
+    version = "6.1.6";
+    hash = "sha256-7Mu0D9AVR+rVfqtZMmNV9EUNpUyMr09p/PuET0muS0U=";
   };
 
   v7 = {
-    version = "7.1.4";
-    hash = "sha256-GDN0+tJY8Nap9UkNUfzqT9cGV1IVCuy5Du/64G+8QdE=";
+    version = "7.1.5";
+    hash = "sha256-DjmW5LeI9OJmPeIh61znAns4+kolxwKguEvKawgxy8I=";
   };
+
   v8 = {
-    version = "8.1";
-    hash = "sha256-FdKhhCveEo5UodEoyUh3aBHABv3OT2VXmwBXE1ce3p0=";
+    version = "8.1.2";
+    hash = "sha256-wJ3c8VVo/tK84K7bKYs/UWcln4mSO+tf/w5NLNjKhiI=";
+  };
+
+  v9 = {
+    version = "9.0.1";
+    hash = "sha256-9Vnryl9jSSXRfvt2jPsNp7vHWL0KYdWA29D2zDRAZ+0=";
   };
 in
 
@@ -55,6 +61,10 @@ rec {
   ffmpeg_8-headless = mkFFmpeg v8 "headless";
   ffmpeg_8-full = mkFFmpeg v8 "full";
 
+  ffmpeg_9 = mkFFmpeg v9 "small";
+  ffmpeg_9-headless = mkFFmpeg v9 "headless";
+  ffmpeg_9-full = mkFFmpeg v9 "full";
+
   # Please make sure this is updated to new major versions once they
   # build and work on all the major platforms. If absolutely necessary
   # due to severe breaking changes, the bump can wait a little bit to
@@ -65,7 +75,7 @@ rec {
   # unversioned aliases to allow for quicker migration to new releases,
   # but can pin one of the versioned variants if they do not work with
   # the current default version.
-  ffmpeg = ffmpeg_8;
-  ffmpeg-headless = ffmpeg_8-headless;
-  ffmpeg-full = ffmpeg_8-full;
+  ffmpeg = ffmpeg_9;
+  ffmpeg-headless = ffmpeg_9-headless;
+  ffmpeg-full = ffmpeg_9-full;
 }

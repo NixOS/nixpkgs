@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   paho-mqtt,
+  pyprojectVersionPatchHook,
   requests,
   urllib3,
   tzdata,
@@ -13,19 +14,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyworxcloud";
-  version = "6.4.0";
+  version = "6.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pyworxcloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3v9cGr3ko/ALkM56mKsPUoUv+r5hmX5hflNdyKol58=";
+    hash = "sha256-cr1zQwyavvAo9AJtTVof+Pw6BEdDAf5G+Msspx3OOZ0=";
   };
 
   pythonRelaxDeps = [ "awsiotsdk" ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp

@@ -1,15 +1,15 @@
+{ pkgs, ... }:
 {
   name = "systemd-initrd-simple";
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      testing.initrdBackdoor = true;
-      boot.initrd.systemd.enable = true;
-      virtualisation.fileSystems."/".autoResize = true;
-    };
+  nodes.machine = {
+    testing.initrdBackdoor = true;
+    boot.initrd.systemd.enable = true;
+    virtualisation.fileSystems."/".autoResize = true;
+  };
 
   testScript =
+    { nodes, ... }:
     # python
     ''
       import subprocess
@@ -43,7 +43,7 @@
           oldAvail = machine.succeed("df --output=avail / | sed 1d")
           machine.shutdown()
 
-          subprocess.check_call(["qemu-img", "resize", "vm-state-machine/machine.qcow2", "+1G"])
+          subprocess.check_call(["${nodes.machine.virtualisation.qemu.package}/bin/qemu-img", "resize", "vm-state-machine/machine.qcow2", "+1G"])
 
           machine.start()
           machine.switch_root()

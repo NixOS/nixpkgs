@@ -1,5 +1,5 @@
 diff --git a/app/adw-ding.js b/app/adw-ding.js
-index 42cb878c..929ddce2 100755
+index ad0c78e..0ca7468 100755
 --- a/app/adw-ding.js
 +++ b/app/adw-ding.js
 @@ -1,4 +1,4 @@
@@ -8,26 +8,26 @@ index 42cb878c..929ddce2 100755
  
  /* ADW-DING: Desktop Icons New Generation for GNOME Shell
   *
-@@ -535,7 +535,7 @@ const adWDingApp = GObject.registerClass(
-                 ]);
+@@ -569,7 +569,7 @@ const adWDingApp = GObject.registerClass(
+             ]);
  
-                 const updated = await GLib.spawn_command_line_async(
--                    'gtk-update-icon-cache ' +
-+                    '@gtk_update_icon_cache@ ' +
-                     '-q -t -f ' +
-                     `${iconCachePath}`
-                 );
-@@ -566,7 +566,7 @@ const adWDingApp = GObject.registerClass(
-                 // and we need to do it manually for the app to be
-                 // available sooner
-                 const updated = await GLib.spawn_command_line_async(
--                    'update-desktop-database -q ' +
-+                    '@update_desktop_database@ -q ' +
-                     `${GLib.path_get_dirname(appDesktopFile)}`
-                 );
+             const updated = await GLib.spawn_command_line_async(
+-                'gtk-update-icon-cache ' +
++                '@gtk_update_icon_cache@ ' +
+                 '-q -t -f ' +
+                 `${iconCachePath}`
+             );
+@@ -609,7 +609,7 @@ const adWDingApp = GObject.registerClass(
+             ]);
+ 
+             const updated = await GLib.spawn_command_line_async(
+-                'update-desktop-database -q ' +
++                '@update_desktop_database@ -q ' +
+                 `${applicationsPath}`
+             );
  
 diff --git a/app/enums.js b/app/enums.js
-index 5434fa7a..e36d3670 100644
+index 1d2609f..5377559 100644
 --- a/app/enums.js
 +++ b/app/enums.js
 @@ -134,7 +134,8 @@ export const THUMBNAILS_DIR = '.cache/thumbnails';
@@ -41,18 +41,18 @@ index 5434fa7a..e36d3670 100644
  export const ZIP_CMD = 'zip';
  export const ZIP_CMD_OPTIONS = '-r';
 diff --git a/app/preferences.js b/app/preferences.js
-index 95ffe60b..75370403 100644
+index 0c2a4bd..50763e6 100644
 --- a/app/preferences.js
 +++ b/app/preferences.js
-@@ -30,6 +30,7 @@ const Preferences = class {
+@@ -31,6 +31,7 @@ const Preferences = class {
          this._mainApp = Data.mainApp;
          this._Enums = Data.Enums;
          let schemaSource = GioSSS.get_default();
 +        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
          this._desktopManager = null;
- 
-         // Adw Style Manager
-@@ -52,7 +53,7 @@ const Preferences = class {
+         this._widgetState = null;
+         this._widgetStateSaving = false;
+@@ -57,7 +58,7 @@ const Preferences = class {
  
          // Gnome Files
          const schemaObj =
@@ -61,7 +61,7 @@ index 95ffe60b..75370403 100644
  
          if (!schemaObj) {
              this.nautilusSettings = null;
-@@ -69,7 +70,7 @@ const Preferences = class {
+@@ -74,7 +75,7 @@ const Preferences = class {
  
          // Compression
          const compressionSchema =
@@ -71,19 +71,19 @@ index 95ffe60b..75370403 100644
          if (!compressionSchema) {
              this.nautilusCompression = null;
 diff --git a/dingManager.js b/dingManager.js
-index 7a0de9e3..bbc23704 100644
+index ce3d2d5..489f3b5 100644
 --- a/dingManager.js
 +++ b/dingManager.js
-@@ -482,7 +482,7 @@ const DingManager = class {
+@@ -519,7 +519,7 @@ const DingManager = class {
      async _doKillAllOldDesktopProcesses() {
          const procFolder = Gio.File.new_for_path('/proc');
-         const processes = await FileUtils.enumerateDir(procFolder);
+         const processes = await FileUtils.enumerateDirOrEmpty(procFolder);
 -        const thisPath = `gjs ${GLib.build_filenamev([
 +        const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
              this.path,
              'app',
              'adw-ding.js',
-@@ -510,7 +510,7 @@ const DingManager = class {
+@@ -547,7 +547,7 @@ const DingManager = class {
  
                  if (contents.startsWith(thisPath)) {
                      let proc =
@@ -93,16 +93,16 @@ index 7a0de9e3..bbc23704 100644
                      proc.init(null);
                      console.log(`Killing old DING process ${filename}`);
 diff --git a/prefs.js b/prefs.js
-index 50430fa5..82fca2e3 100644
+index a6e36de..063c0e5 100644
 --- a/prefs.js
 +++ b/prefs.js
-@@ -34,7 +34,8 @@ export default class dingPreferences extends ExtensionPreferences {
+@@ -38,7 +38,8 @@ export default class dingPreferences extends ExtensionPreferences {
          const schemaSource = GioSSS.get_default();
          const schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
          const gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
 -        const schemaNautilus = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
 +        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
-+		const schemaNautilus = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
++        const schemaNautilus = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
          const version = this.metadata['version-name'];
  
          let nautilusSettings;

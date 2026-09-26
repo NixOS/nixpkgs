@@ -1,15 +1,24 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "navidrome";
 
   nodes.machine =
-    { ... }:
+    { pkgs, ... }:
     {
       services.navidrome = {
         enable = true;
-        plugins = with pkgs.navidromePlugins; [
+        plugins = with pkgs.pkgsCross.wasi32.navidromePlugins; [
+          # basic go plugin
           listenbrainz-daily-playlist
+          # uses bundleName instead of pname
+          apple-music
+          # rust plugin
+          lyrics-plugin
         ];
+        settings = {
+          # Disables all external network connections
+          EnableExternalServices = "false";
+        };
       };
     };
 

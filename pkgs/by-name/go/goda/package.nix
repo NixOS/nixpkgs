@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goda";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tUt/VxO3QLqPuHleFSO7txiHZ1bJ7ohGak09ZIr/62A=";
+    hash = "sha256-ARiI5varW7p7eX58N8mtS6yeXeTlZfiiTFgI8pcDD6M=";
   };
 
-  vendorHash = "sha256-ZDiDAabLUGa/NFs2EQpwWAd8ypxUZ32I8AOeYCm/ntA=";
+  vendorHash = "sha256-jtri/73UnpI5oyykW2DYiH0vra62+jk8VIHhcWT2oJA=";
 
   passthru.updateScript = nix-update-script { };
 

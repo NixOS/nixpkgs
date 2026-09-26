@@ -40,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   # Tests require `pbcopy` and `pbpaste` on darwin, which are dependencies that are not
-  # available in the build environemt.
+  # available in the build environment.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {

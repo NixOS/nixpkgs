@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-firestore";
-  version = "2.27.0";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-firestore-v${finalAttrs.version}";
-    hash = "sha256-hdUT4SRPOL+ArpU4RcsNCUCV3UCW3vQgwtHuxJiyZeU=";
+    hash = "sha256-dct5yBerIMNQgVIvOWdO9yTxSrH1JDUen6I7CYHftC0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-firestore";
@@ -70,6 +70,11 @@ buildPythonPackage (finalAttrs: {
     "tests/system/test_system_async.py"
     # Test requires credentials
     "tests/system/test_pipeline_acceptance.py"
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/unit/v1/test_base_client.py::test_baseclient__emulator_channel"
+    "tests/unit/v1/test_bundle.py::TestAsyncBundle::test_async_query"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # RuntimeError: There is no current event loop in thread 'MainThread'

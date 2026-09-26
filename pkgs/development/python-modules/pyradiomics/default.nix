@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   numpy,
   pykwalify,
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pyprojectVersionPatchHook
     setuptools
     versioneer
   ];

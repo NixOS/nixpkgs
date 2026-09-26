@@ -24,15 +24,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-ml";
   version = "2025.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DHxx0LFuJmGWYuG/WGHj+a5XHAEekBmlHUUb90rl2IY=";
   };
 
@@ -73,6 +74,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Meant as informational warnings, but treated as errors
+  pytestFlags = [
+    "-Wignore::sklearn.exceptions.SkipTestWarning"
+    "-Wignore::pandas.errors.Pandas4Warning"
+  ];
+
   disabledTestPaths = [
     # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
     # https://github.com/dask/dask-ml/issues/1016
@@ -84,6 +91,18 @@ buildPythonPackage rec {
     # MockClassifier predates sklearn 1.6 __sklearn_tags__
     "tests/model_selection/dask_searchcv/test_model_selection.py"
     "tests/model_selection/dask_searchcv/test_model_selection_sklearn.py"
+
+    # AttributeError: 'numpy.ndarray' object has no attribute 'map_blocks'
+    "tests/preprocessing/test_data.py::TestQuantileTransformer::test_basic"
+
+    #  TypeError: fmin_l_bfgs_b() got an unexpected keyword argument 'iprint'
+    "tests/linear_model/test_glm.py::test_fit_solver[lbfgs]"
+
+    # TypeError: Cannot interpret '<StringDtype(na_value=nan)>' as a data type
+    "tests/preprocessing/test_label.py::TestLabelEncoder::test_input_types"
+
+    # AssertionError on is_object_dtype
+    "tests/preprocessing/test_data.py::TestCategorizer::test_columns"
   ];
 
   disabledTests = [
@@ -131,4 +150,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

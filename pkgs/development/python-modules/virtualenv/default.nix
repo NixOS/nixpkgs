@@ -12,19 +12,20 @@
   pytest-freezer,
   pytest-mock,
   pytestCheckHook,
+  python-discovery,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.36.1";
+  version = "21.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "virtualenv";
     tag = version;
-    hash = "sha256-8fiC7+9FzQnmoI+N4cA5kKBLH9tpU7LXZ7pVj8Bz8Wc=";
+    hash = "sha256-8LOmA1Mhfqbl3hsGZa8tQutjfjEVeDlpOKyVut5rDVI=";
   };
 
   build-system = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     distlib
     filelock
     platformdirs
+    python-discovery
   ];
 
   nativeCheckInputs = [

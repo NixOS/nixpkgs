@@ -1,28 +1,34 @@
 {
   lib,
   buildNpmPackage,
-  typescript,
+  yq-go,
+  typescript_7,
   fetchFromGitHub,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-server-sequential-thinking";
-  version = "2026.1.26";
+  version = "2026.8.18";
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = finalAttrs.version;
-    hash = "sha256-uULXUEHFZpYm/fmF6PkOFCxS+B+0q3dMveLG+3JHrhk=";
+    hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
   };
 
+  postPatch = ''
+    yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+  '';
+
   nativeBuildInputs = [
-    typescript
+    yq-go
+    typescript_7
   ];
 
   dontNpmPrune = true;
   npmWorkspace = "src/sequentialthinking";
-  npmDepsHash = "sha256-jmz4JdpeHH07vJQFntBwrENbJaIcOuZMb7+qf497VOE=";
+  npmDepsHash = "sha256-psy1XH4DuZu2+tkHpe/bQw3R7uNr8nF5u/AFKoxJeTg=";
 
   # TODO: revisit this when https://github.com/NixOS/nixpkgs/pull/333759 has landed
   postInstall = ''

@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation {
   pname = "fish-irssi";
-  version = "unstable-2023-08-05";
+  version = "1.6-unstable-2023-08-05";
 
   src = fetchFromGitHub {
     owner = "falsovsky";

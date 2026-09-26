@@ -23,6 +23,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     prometheus-client
   ];
 
+  pythonRelaxDeps = [ "prometheus-client" ];
+
   nativeCheckInputs = with python3.pkgs; [
     pytest-mock
     pytestCheckHook

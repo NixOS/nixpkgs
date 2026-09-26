@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "2.3.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E1Dp0ovC2FWwsrSvhVWudHXxke2z2nCg0q8CVDg58/Y=";
+    hash = "sha256-ksym0FzurF2fkpKtIiTJ184Wzj4Xz48uCUPSBUeSgbg=";
   };
 
-  vendorHash = "sha256-uGQ1lrj+V0ndnTJTKtN6GLGLv89RPDb/Vuo58XYqV8M=";
+  vendorHash = "sha256-FUzdO47z53XVQ3DLUKXe9TF2LogsSzobz13bzEmkH1U=";
 
   ldflags = [
     "-s"
@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://www.crossplane.io/";
-    changelog = "https://github.com/crossplane/crossplane/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/crossplane/cli/releases/tag/v${finalAttrs.version}";
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
     license = lib.licenses.asl20;

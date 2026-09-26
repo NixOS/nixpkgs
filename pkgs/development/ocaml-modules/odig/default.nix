@@ -3,7 +3,6 @@
   fetchurl,
   buildTopkgPackage,
   cmdliner,
-  odoc,
   b0,
 }:
 
@@ -18,7 +17,6 @@ buildTopkgPackage rec {
 
   buildInputs = [
     cmdliner
-    odoc
     b0
   ];
 

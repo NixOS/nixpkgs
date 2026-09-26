@@ -98,9 +98,9 @@ run_require_checks() {
         if [ "$skip" = false ]; then
             echo "Attempting to require module: $name"
             if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
-                --cmd "set rtp+=$out,${deps// /,}" \
-                --cmd "set rtp+=$out,${nativeCheckInputs// /,}" \
-                --cmd "set rtp+=$out,${checkInputs// /,}" \
+                --cmd "set rtp+=${deps// /,}" \
+                --cmd "set rtp+=${nativeCheckInputs// /,}" \
+                --cmd "set rtp+=${checkInputs// /,}" \
                 "${luaPathArgs[@]}" \
                 --cmd "set packpath^=$packPathDir" \
                 --cmd "packadd testPlugin" \

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ory";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NO4F9QE0wMsHDDcmJWx+1QVg/RI7ZsqkLJDbgigZIjs=";
+    hash = "sha256-+Q+5HYb+Bi/mc9rt44FsxPojaiee7P1VbQYFq9QFI34=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     "sqlite"
   ];
 
-  vendorHash = "sha256-YoEM/dhBWLzpx2J0/uQrUhfMdRRH++9/MzycHTnHlRQ=";
+  vendorHash = "sha256-LeCZqTABbYEU4l0XOEgXXkkgIlLB0OjLw763sEbXaQM=";
   postInstall = ''
     mv $out/bin/cli $out/bin/ory
   ''

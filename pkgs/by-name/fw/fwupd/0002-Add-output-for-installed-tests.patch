@@ -3,6 +3,8 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Tue, 15 Oct 2024 14:49:53 +0200
 Subject: [PATCH] Add output for installed tests
 
+Installed tests are installed to different output we also cannot have
+fwupd-tests.conf in $out/etc since it would form a cycle.
 ---
  data/tests/meson.build             | 2 +-
  meson.build                        | 5 +++--

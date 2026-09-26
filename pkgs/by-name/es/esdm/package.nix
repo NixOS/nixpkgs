@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "drng_max_reseed_bits" (toString drngMaxReseedBits))
   ];
 
-  postFixup = lib.optionals fips140 ''
+  postFixup = lib.optionalString fips140 ''
     $out/bin/esdm-tool --fips-checkfile $out/bin/.esdm-server.hmac \
                        --fips-targetfile $out/bin/esdm-server
   '';

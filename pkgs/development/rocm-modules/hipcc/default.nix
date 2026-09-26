@@ -28,9 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
   '';
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
   postInstall = ''
     rm -r $out/hip/bin
     ln -s $out/bin $out/hip/bin
@@ -39,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Compiler driver utility that calls clang or nvcc";
     homepage = "https://github.com/ROCm/HIPCC";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

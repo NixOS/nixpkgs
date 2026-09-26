@@ -90,8 +90,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    diniamo
-    nanoyaki
-  ];
+  meta.maintainers = with lib.maintainers; [ nanoyaki ];
 }

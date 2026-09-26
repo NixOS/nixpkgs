@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ossapi";
-  version = "5.3.4";
+  version = "5.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Liam-DeVoe";
     repo = "ossapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Favez9YcEHgAPNxJg9L4J8BpEUYIx9IFhSeNToT7sv4=";
+    hash = "sha256-XppjM3WNdu4r3K0oARk/krPfPMiiCxwz2CYRCx8LphA=";
   };
 
   build-system = [ setuptools ];

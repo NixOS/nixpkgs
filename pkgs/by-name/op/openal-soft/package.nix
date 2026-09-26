@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kcat/openal-soft/blob/master/ChangeLog";
     license = lib.licenses.lgpl2;
     pkgConfigModules = [ "openal" ];
-    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

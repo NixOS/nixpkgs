@@ -40,8 +40,6 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {

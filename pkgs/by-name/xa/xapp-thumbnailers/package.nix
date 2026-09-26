@@ -12,7 +12,7 @@
   dcraw,
   gimp,
   libjxl,
-  squashfsTools,
+  squashfs-tools,
 
   # Exclude "raw" for now because dcraw is vulnerable.
   enabledThumbnailers ? [
@@ -32,14 +32,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xapp-thumbnailers";
-  version = "1.2.9";
+  version = "1.2.10";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp-thumbnailers";
     tag = finalAttrs.version;
-    hash = "sha256-XlmWenp3BmGnmLGt9jauys9P92icsezjieHuyGVMisw=";
+    hash = "sha256-6ipO1l+K9um8ShIFEHsza5G/yYQxlkBAnYtdgqFC0bI=";
   };
 
   patches = [ ./meson.patch ];
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup =
     let
       runtimeBinPackages =
-        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfsTools
+        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfs-tools
         ++ lib.optional (builtins.elem "gimp" enabledThumbnailers) gimp
         ++ lib.optional (builtins.elem "jxl" enabledThumbnailers) libjxl
         ++ lib.optional (builtins.elem "raw" enabledThumbnailers) dcraw;

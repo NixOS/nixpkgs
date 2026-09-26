@@ -15,10 +15,6 @@ let
       url = "https://raw.githubusercontent.com/ethereum/solc-bin/bdd7dd3fda6e4a00c0697d891a1a7ae9f2b3a5fd/linux-amd64/list.json";
       hash = "sha256-H6D6XbIw5sDZlbc2c51vIMRmOqs2nDIcaNzCaOvnLsw=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://raw.githubusercontent.com/ethereum/solc-bin/bdd7dd3fda6e4a00c0697d891a1a7ae9f2b3a5fd/macosx-amd64/list.json";
-      hash = "sha256-A3A6gtNb129tD5KC0tCXvlzQ11t5SrNrX8tQeq73+mY=";
-    };
     aarch64-linux = fetchurl {
       url = "https://raw.githubusercontent.com/nikitastupin/solc/99b5867237b37952d372e0dab400d6788feda315/linux/aarch64/list.json";
       hash = "sha256-u6WRAcnR9mN9ERfFdLOxxSc9ASQIQvmS8uG+Z4H6OAU=";

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyeconet";
-  version = "0.2.2";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "w1ll1am23";
     repo = "pyeconet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQXIMm5ddkqkFgTYOsy9srKxLUy505iFhrtGAbOLzc0=";
+    hash = "sha256-I7DSiV9p/+reSFrd3ENWwCbHwl+i3K1WwM+xx1+rftY=";
   };
 
   build-system = [ setuptools ];

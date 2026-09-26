@@ -9,21 +9,30 @@
   pytestCheckHook,
   pytest-asyncio,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openevse-http";
-  version = "0.3.4";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firstof9";
     repo = "python-openevse-http";
     tag = finalAttrs.version;
-    hash = "sha256-H5kRn8TmTpaX1qf94N2l1qOm03upFzHFistZDLFu/Zs=";
+    hash = "sha256-l4/ZeIi6em5Dmp7O15Wg4brd4J2kTsIxSqLSGFS/Ihs=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=10.1.1" setuptools_scm
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp

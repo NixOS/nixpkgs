@@ -7,22 +7,22 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2026-05-24";
+  version = "0-unstable-2026-09-20";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "a24c2b1bc7f573b1a8b2c4a453e989407a4d29c8";
-    hash = "sha256-3AOxUXDd6LDgBqKPnHG+3K2qfcFGzIsPW3pqnt+oNs8=";
+    rev = "24023665d1c2661addb22dce384b53d4a839727f";
+    hash = "sha256-fumCEOV8HRRQooolXc+C37WAXXZy1TJ40Mt6DtVLYE4=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  cargoHash = "sha256-MLfhuFjYv2Vi3BGJFzbmi+xhhm6M0a4oOe7wpHtfObc=";
+  cargoHash = "sha256-Fb2A9DcYCIdSWrFg4MqkZJ6ev4VQ/VwrBtZoJLEBOHc=";
 
-  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/a24c2b1bc7f573b1a8b2c4a453e989407a4d29c8
+  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/074930a23bc89a5f720a0d46ac2853f3153817c2
   postPatch = ''
     substituteInPlace tests/ground_truth.rs --replace-fail \
       '        let path = PathBuf::from(target_dir).join("debug").join(exe_name);' \

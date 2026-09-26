@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
-  version = "2.4.1";
+  version = "2.4.2";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "comma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XZB0zx4wyNzy0LggAmh2gT2aEWAqVI9NljRoOkeK0c8=";
+    hash = "sha256-5Q1CQn7kw619KWVVCJTN8HhOdVTy7DgenbmHJodhR4g=";
   };
 
-  cargoHash = "sha256-lY5HwWZm9X0xusLcC6MciAgSWEskNElrjhe9fexR6g8=";
+  cargoHash = "sha256-LQZ//9r1kmnb3TwhwYHdCny/U5hp1+QMziDC31l/zSM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,26 +36,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"fzy"' '"${lib.getExe fzy}"'
   '';
 
-  postInstall = ''
-    ln -s $out/bin/comma $out/bin/,
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      ln -s $out/bin/comma $out/bin/,
 
-    mkdir -p $out/share/comma
+      mkdir -p $out/share/comma
 
-    cp $src/etc/command-not-found.sh $out/share/comma
-    cp $src/etc/command-not-found.nu $out/share/comma
-    cp $src/etc/command-not-found.fish $out/share/comma
+      cp $src/etc/command-not-found.sh $out/share/comma
+      cp $src/etc/command-not-found.nu $out/share/comma
+      cp $src/etc/command-not-found.fish $out/share/comma
 
-    patchShebangs $out/share/comma/command-not-found.sh
-    substituteInPlace \
-      "$out/share/comma/command-not-found.sh" \
-      "$out/share/comma/command-not-found.nu" \
-      "$out/share/comma/command-not-found.fish" \
-      --replace-fail "comma --ask" "$out/bin/comma --ask"
-  ''
-  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    ${stdenv.hostPlatform.emulator buildPackages} "$out/bin/comma" --mangen > comma.1
-    installManPage comma.1
-  '';
+      patchShebangs $out/share/comma/command-not-found.sh
+      substituteInPlace \
+        "$out/share/comma/command-not-found.sh" \
+        "$out/share/comma/command-not-found.nu" \
+        "$out/share/comma/command-not-found.fish" \
+        --replace-fail "comma --ask" "$out/bin/comma --ask"
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${emulator} "$out/bin/comma" --mangen > comma.1
+      installManPage comma.1
+
+      installShellCompletion --cmd comma \
+        --bash <(${emulator} $out/bin/comma --print-completions bash) \
+        --fish <(${emulator} $out/bin/comma --print-completions fish) \
+        --zsh <(${emulator} $out/bin/comma --print-completions zsh)
+
+      installShellCompletion --cmd , \
+        --bash <(${emulator} $out/bin/, --print-completions bash) \
+        --fish <(${emulator} $out/bin/, --print-completions fish) \
+        --zsh <(${emulator} $out/bin/, --print-completions zsh)
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

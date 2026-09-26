@@ -6,7 +6,7 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -16,39 +16,49 @@
   copyDesktopItems,
   nix-update-script,
   xdg-utils,
+  zip,
   darwin,
 }:
 
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
-    "x86_64-darwin" = "darwin";
     "aarch64-darwin" = "darwin-arm64";
   };
 
   platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
+
+  # The pandoc archive that electron-builder expects for each platform. We build
+  # it from the Nix pandoc binary, so only the current platform's archive is needed.
+  pandocArchives = {
+    "linux" = "pandoc-linux-amd64.zip";
+    "linux-arm64" = "pandoc-linux-arm64.zip";
+    "darwin-arm64" = "pandoc-darwin-arm64.zip";
+  };
+
+  pandocArchive = pandocArchives.${platformId};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.6.5";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Rz8g03JHQ+52lOd92413ArE4LixioCFNSG7ytduxsA=";
+    hash = "sha256-MzsfeAWApHLDt4+aC9/O+5Dl8OD8p0l+/8tb2ZZyTos=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-WXlzUtiaphaSngWd6aXQuOHiBb3a3bCNgIHypMP4YXo=";
+    vendorHash = "sha256-x8saxKDLeZdEbTBjNXnOBU9zkliZXm6D92Mom8CUCbs=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -70,19 +80,25 @@ stdenv.mkDerivation (finalAttrs: {
       "-s"
       "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
-    tags = [ "fts5" ];
-  };
+    tags = [
+      "fts5"
+      "sqlcipher"
+    ];
 
-  # this should contain a 'packages' key, but it doesn't...
-  # we can remove it because it's not needed to build
-  postPatch = ''
-    rm pnpm-workspace.yaml
-  '';
+    env.CGO_ENABLED = "1";
+
+    # Tests are skipped here because many upstream tests make assumptions that
+    # do not hold in the Nix sandbox (system MIME table, missing model.Conf
+    # initialization, missing system fonts, our set-pandoc-path.patch, etc.).
+    # They are run as a separate derivation via passthru.tests.kernel.
+    doCheck = false;
+  };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
     pnpm
+    zip
   ]
   ++ lib.optionals isLinux [
     pnpmBuildHook
@@ -99,11 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-M2Fdie0XK2Pck/fP7Djxb7XNAQXpJO2i2kSJrDj1G0E=";
+    fetcherVersion = 4;
+    hash = "sha256-ACWwXIwuiLp/e+1dwlClzAi8ZC6oEQc3ETFK/WvVnGk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -111,8 +126,23 @@ stdenv.mkDerivation (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postConfigure = ''
-    # remove prebuilt pandoc archives
-    rm -r pandoc
+    # Remove the prebuilt pandoc archives; we provide our own built from the
+    # Nix pandoc binary below, and keep pandoc-resources for the kernel.
+    rm -f pandoc/pandoc-*.zip
+
+    # Build the current platform's pandoc archive from the Nix pandoc binary so
+    # the electron-builder afterPack hook can extract it. The kernel itself uses
+    # the Nix pandoc directly via set-pandoc-path.patch.
+    (
+      cd pandoc
+      mkdir -p .tmp/bin
+      cp ${lib.getExe pandoc} .tmp/bin/pandoc
+      (
+        cd .tmp
+        zip -qr ../${pandocArchive} bin/pandoc
+      )
+      rm -rf .tmp
+    )
 
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
@@ -176,12 +206,32 @@ stdenv.mkDerivation (finalAttrs: {
     categories = [ "Utility" ];
   });
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v(\\d+\\.\\d+\\.\\d+)$"
-      "--subpackage=kernel"
-    ];
+  passthru = {
+    kernel = finalAttrs.kernel;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+        "--subpackage=kernel"
+      ];
+    };
+
+    # Upstream kernel tests require model.Conf initialization, system fonts,
+    # pandoc, and other assumptions that do not hold in the Nix sandbox during
+    # the main build. Run them as a separate derivation so the package build
+    # stays reliable while test results remain available via
+    # nix-build -A siyuan.passthru.tests.kernel.
+    tests.kernel = finalAttrs.kernel.overrideAttrs {
+      pname = "${finalAttrs.pname}-kernel-test";
+      doCheck = true;
+      checkPhase = ''
+        runHook preCheck
+        go test -vet=off -tags=fts5,sqlcipher ./...
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
+    };
   };
 
   meta = {

@@ -3,19 +3,24 @@
   fetchFromGitHub,
   lib,
   gitUpdater,
+  numpy,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "KartoffelToby";
   domain = "better_thermostat";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "KartoffelToby";
     repo = "better_thermostat";
     tag = version;
-    hash = "sha256-jxC8Xxhr1OjcAREggNaiB89TMFSdQyDr4QfdWGcmeU4=";
+    hash = "sha256-n2U2TRUz7hVUsC0eihWdqyuhtK7uOrKOsS4A1iVxmOk=";
   };
+
+  dependencies = [
+    numpy
+  ];
 
   passthru.updateScript = gitUpdater {
     ignoredVersions = "(Alpha|Beta|alpha|beta).*";

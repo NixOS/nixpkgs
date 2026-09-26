@@ -13,29 +13,28 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-VZKvoTJ/IKxYsEJl0XhtglsggmrYdaRUlXCpDv/9fQ0=";
-        };
-        "x86_64-darwin" = {
-          arch = "darwin-x64";
-          hash = "sha256-jo+fET/IyOl2zI/xxYy3KwnyOegTOXFhO1hDg5QtWrQ=";
+          hash = "sha256-is7nNav1inG96NoND/XcVQhltT2sbvHa7qkb+wMGAC0=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-HOSKZjozJlWn++P5bSwWdK3I+fgsPtS8kyvDWHMJQAY=";
+          hash = "sha256-hsuV25YRGatyfK7QEZkdxgc4hyyC6JEfzF2ilRd8hYI=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-ABBYsSR3HQgSnnXUJXsg1DwqwFj9W6CT59/1fuqWsTc=";
+          hash = "sha256-hHrr3ni0dcSSBqbs+XRP6P9xiyWcMqDYUi1z0+WnJNk=";
         };
       };
     in
     {
       name = "visualjj";
       publisher = "visualjj";
-      version = "0.29.0";
+      version = "0.35.1";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -45,14 +44,14 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";
-    downloadPage = "https://www.visualjj.com";
     homepage = "https://www.visualjj.com";
+    downloadPage = "https://marketplace.visualstudio.com/items?itemName=visualjj.visualjj";
+    changelog = "https://marketplace.visualstudio.com/items/visualjj.visualjj/changelog";
     license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ sandarukasa ];
   };

@@ -6,13 +6,21 @@
   fetchpatch,
   fetchFromCodeberg,
   nix-update-script,
+  stdenv,
 }:
 
 let
   /**
     Set of grammar sources. See ./grammar-sources.nix to define a new grammar.
   */
-  grammar-sources = import ./grammar-sources.nix { inherit lib fetchpatch; };
+  grammar-sources = import ./grammar-sources.nix {
+    inherit
+      lib
+      fetchpatch
+      fetchFromGitLab
+      stdenv
+      ;
+  };
 
   /**
     Parse a flakeref style string to { type, owner, repo, ref }

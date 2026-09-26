@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
-  nix-update-script,
 
   cmake,
   gitMinimal,
@@ -82,7 +81,7 @@ let
   cudaLibs = [
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ];
 
   vulkanLibs = [
@@ -95,28 +94,29 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.21.1/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.31.1/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
 
-    # cuda_cccl and cuda_cudart both have a LICENSE file in their output
+    # cccl and cuda_cudart both have a LICENSE file in their output
     ignoreCollisions = true;
   };
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
 
   # Since v0.30, llama.cpp is consumed via CMake FetchContent rather than
-  # vendored in-tree. Pre-stage the pinned commit (read from upstream's
-  # `LLAMA_CPP_VERSION` file — currently `b9509`) so the FetchContent step
-  # uses our copy instead of trying to clone over the network in the sandbox.
+  # vendored in-tree. Pre-stage the pin (tracks upstream's
+  # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
+  # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b10969";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    rev = "6f3a9f3dee3c27545371044a3a38005721ac8a8e"; # tag b9509
-    hash = "sha256-bO1ucb/+vidj/EYzNCssotjte9NlVLdjC794jToNNeM=";
+    tag = llamaCppVersion;
+    hash = "sha256-kEkmOPM475O625g3AkQc+sXSHQSHqE7cacoV7KJv+08=";
   };
 
   wrapperOptions = [
@@ -152,16 +152,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.30.5";
+  version = "0.34.3";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jh/B/FkmAliCVzqc8DGCPYa5+XejE3cFZTzSuRxjPvw=";
+    hash = "sha256-+3T1hOak7X+s7glIQVMwy2yTAwLbiPJt4IzcLVfOdfE=";
   };
 
-  vendorHash = "sha256-lZdGzGb9xRjTm1Rm7/wHjqM490gLznLEndmb4mNbCX0=";
+  vendorHash = "sha256-45FfI47tNHBPYOBLRrwuhADCUtkjAhlFrExlEy9piMI=";
   proxyVendor = true;
 
   env =
@@ -204,8 +204,8 @@ goBuild (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
     ++ lib.optionals enableVulkan vulkanLibs;
 
-  # replace inaccurate version number with actual release version
   postPatch = ''
+    # replace inaccurate version number with actual release version
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
 
@@ -225,11 +225,15 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
-    cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
+    if [[ ${finalAttrs.passthru.llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${finalAttrs.passthru.llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+      exit 1
+    fi
+    cp -r ${finalAttrs.passthru.llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
-        -P $NIX_BUILD_TOP/source/llama/compat/apply-patch.cmake )
+        -P $NIX_BUILD_TOP/source/cmake/apply-git-patches.cmake )
   '';
 
   overrideModAttrs = _: _: {
@@ -301,6 +305,8 @@ goBuild (finalAttrs: {
         -DCMAKE_SKIP_BUILD_RPATH=ON \
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
+        -DOLLAMA_MLX_BACKENDS="" \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
@@ -321,7 +327,7 @@ goBuild (finalAttrs: {
   '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.21.1/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.31.1/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -337,6 +343,8 @@ goBuild (finalAttrs: {
     "-X=github.com/ollama/ollama/version.Version=${finalAttrs.version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
+
+  subPackages = [ "." ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -364,6 +372,7 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
+    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
@@ -375,7 +384,9 @@ goBuild (finalAttrs: {
       service-vulkan = nixosTests.ollama-vulkan;
     };
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+  // lib.optionalAttrs (!rocmRequested && !cudaRequested && !vulkanRequested) {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description =
@@ -392,5 +403,7 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       prusnak
     ];
+    # install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

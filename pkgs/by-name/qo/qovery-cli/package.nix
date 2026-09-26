@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "qovery-cli";
-  version = "1.162.0";
+  version = "1.171.3";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fvHkUULWBa2E8rJhKFCi400j56y3QtWq3xkPPWgsZ6Y=";
+    hash = "sha256-XGBhtyAxm9cVceYAY7YLkNbwC7sMdD8TyzKJrAc6ThU=";
   };
 
-  vendorHash = "sha256-nzfYBfXwV7jxh+oklicj2qptY6S8vrtXGVGbLAr75Gk=";
+  vendorHash = "sha256-XfvbfEVeHMTtNmxqfuOxl4PhH756rIRPnbNPRpyaSuU=";
 
   env.CGO_ENABLED = 0;
 
@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
     description = "Qovery Command Line Interface";
     homepage = "https://github.com/Qovery/qovery-cli";
     changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "qovery-cli";
   };

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-lsp";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pytest_lsp";
-    hash = "sha256-uoyVstl1o2Akn/pXaOHm9E2H0Q73dUBw07MhECckovE=";
+    hash = "sha256-zZlQ/sKZHmU2RDDdQZ2u7fVGkoeI9FfhEG1bdRrqC+g=";
   };
 
   build-system = [

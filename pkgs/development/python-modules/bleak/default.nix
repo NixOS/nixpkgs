@@ -3,16 +3,20 @@
   stdenv,
   bluez,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   bumble,
   dbus-fast,
-  fetchFromGitHub,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -68,6 +72,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/hbldh/bleak/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ rhendric ];
   };
 })

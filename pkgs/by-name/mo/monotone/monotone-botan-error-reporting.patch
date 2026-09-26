@@ -1,0 +1,17 @@
+Botan3 no longer adds the prefixes that Monotone tries to clear
+
+--- mtn-src/src/transforms.cc	2026-08-05 21:59:22.344598683 +0200
++++ mtn-src/src/transforms.cc	2026-08-05 21:59:52.318528753 +0200
+@@ -67,12 +67,7 @@
+       || typeid(e) == typeid(Botan::Invalid_Argument)
+       || typeid(e) == typeid(Botan::Integrity_Failure))
+     {
+-      // clean up the what() string a little: throw away the
+-      // "botan: TYPE: " part...
+       string w(e.what());
+-      string::size_type pos = w.find(':');
+-      pos = w.find(':', pos+1);
+-      w = string(w.begin() + pos + 2, w.end());
+ 
+       // ... downcase the rest of it and replace underscores with spaces.
+       for (string::iterator p = w.begin(); p != w.end(); p++)

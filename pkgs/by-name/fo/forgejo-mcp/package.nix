@@ -1,23 +1,24 @@
 {
   lib,
   buildGoModule,
-  fetchFromCodeberg,
+  fetchgit,
   nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "forgejo-mcp";
-  version = "2.28.0";
+  version = "3.0.1";
 
-  src = fetchFromCodeberg {
-    owner = "goern";
-    repo = "forgejo-mcp";
+  # Plain git fetch: upstream's Forgejo instance has source-archive
+  # downloads disabled, so fetchFromForgejo (tarball-based) cannot be used.
+  src = fetchgit {
+    url = "https://git.b4mad.industries/agentic-forges/forgejo-mcp.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nq5Mccz2mKWfkrEyqQXli4BB3+99NFwT3c1Mf2vZ3sc=";
+    hash = "sha256-Cq99Bj9I9oXM00fL9IBGq/EKj7Jv/fODffohR8APeik=";
   };
 
-  vendorHash = "sha256-QDJRbF4mZzBv1vxvo1ZQJaUJayRHj1jMgjaRfAmLMik=";
+  vendorHash = "sha256-Za1lwQQr+qeMIokRLSn2ywRg+5GxMS4KEg+99P1YHy0=";
 
   ldflags = [
     "-s"
@@ -35,9 +36,9 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Model Context Protocol (MCP) server for interacting with the Forgejo REST API";
-    longDescription = "This Model Context Protocol (MCP) server provides tools and resources for interacting with the Forgejo (specifically Codeberg.org) REST API";
-    homepage = "https://codeberg.org/goern/forgejo-mcp";
-    changelog = "https://codeberg.org/goern/forgejo-mcp/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
+    longDescription = "This Model Context Protocol (MCP) server provides tools and resources for interacting with the Forgejo REST API";
+    homepage = "https://git.b4mad.industries/agentic-forges/forgejo-mcp";
+    changelog = "https://git.b4mad.industries/agentic-forges/forgejo-mcp/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ malik ];
     mainProgram = "forgejo-mcp";

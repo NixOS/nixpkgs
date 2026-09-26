@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "alac";
-  version = "0.0.7-unstable-2024-10-16";
+  version = "0.0.7-unstable-2026-04-10";
 
   outputs = [
     "out"
@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = "alac";
-    rev = "1832544d27d01335d823d639b176d1cae25ecfd4";
-    hash = "sha256-xRWDeqyJ/BEaSWVlDXgaKIKJuBwM8kJDIATVTVaMn2k=";
+    rev = "5d8c5db0dfcadd5872f28e665cf4f4303447352a";
+    hash = "sha256-Wb6I5YHGvBVjVgOutICbRKH96odR3ZgmNS6HQedVahk=";
   };
 
   nativeBuildInputs = [

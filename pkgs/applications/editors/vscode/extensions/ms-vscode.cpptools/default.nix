@@ -24,7 +24,7 @@
   So, in order for debugging to work properly, you merely need to create symlinks
   to one of these terminals at the appropriate location.
 
-  The good news is the the utility library is open source and with some effort
+  The good news is the utility library is open source and with some effort
   we could build a patched version ourselves. See:
 
   <https://github.com/Microsoft/MIEngine/blob/2885386dc7f35e0f1e44827269341e786361f28e/src/MICore/TerminalLauncher.cs#L156>
@@ -42,15 +42,15 @@ let
   isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {
     x86_64-linux = {
-      hash = "sha256-5L4PrwcZ/Q3g6qlCsCebx3czLZVD2sDrDf99l9nooSo=";
+      hash = "sha256-og4lqDIo14VKViPEnwDDNzd4K/3eh0/v9Bf+LZtSwAI=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-nQNDPfk6BRHp7veyx18GMlEt3Xa8iDuqtHG7qzJcPS4=";
+      hash = "sha256-m2ni6PnptPvNpPrzQvdWKkuUce9hBvAPlxbYCKgRdVg=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-jhoa9UcYg2Uj8x9AZwAh68k7WCi6mpgNUUx2YsRIkjw=";
+      hash = "sha256-yiNgrk6+qnSqATx94D14OFlStIgHnF3NXiwL/AY9Yuo=";
       arch = "darwin-arm64";
     };
   };
@@ -63,16 +63,16 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.31.5";
+    version = "1.34.4";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
+    jq
     makeWrapper
   ];
 
   buildInputs = [
-    jq
     libkrb5
     zlib
     (lib.getLib stdenv.cc.cc)

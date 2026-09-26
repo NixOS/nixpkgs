@@ -5,6 +5,7 @@
   dateparser,
   faust-cchardet,
   fetchFromGitHub,
+  fetchpatch,
   lxml,
   pytestCheckHook,
   python-dateutil,
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-3qtksgzqcgWtUv81Aqeh0nTWYnH0PjPLG4NuYChbV0g=";
   };
+
+  patches = [
+    # https://github.com/adbar/htmldate/pull/199
+    (fetchpatch {
+      name = "fix-tests-with-dateparser-1.4.2.patch";
+      url = "https://github.com/adbar/htmldate/commit/14c70c4944f1a6950bedaf8b6e46b6ec726984b8.patch";
+      hash = "sha256-rtRUk9lGsNQyOZ5RAjvMP5JRa4WGWdo0Xzh0OvskYPs=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

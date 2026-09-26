@@ -10,8 +10,8 @@ skawarePackages.buildPackage {
   version = "2.6.4.1";
   sha256 = "sha256-FuGltaK0qYZ0tKlxlhKtt5WI48IMQIM2AnjqOPLTISk=";
 
-  description = "Set of minimalistic Linux-specific system utilities";
-  platforms = lib.platforms.linux;
+  meta.description = "Set of minimalistic Linux-specific system utilities";
+  meta.platforms = lib.platforms.linux;
 
   outputs = [
     "bin"
@@ -20,17 +20,20 @@ skawarePackages.buildPackage {
     "out"
   ];
 
+  buildInputs = [
+    skalibs
+    execline
+  ];
+
   # TODO: nsss support
   configureFlags = [
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
   ];
 
   postInstall = ''

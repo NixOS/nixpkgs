@@ -15,6 +15,7 @@
   graphviz,
   gtest,
   libapparmor,
+  libcap,
   lomiri-api,
   pkg-config,
   python3,
@@ -28,17 +29,17 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     tag = finalAttrs.version;
-    hash = "sha256-FqpTEGbSwN+2oG/G2Zf80rSfezJP/ogtIkVdIrX4FMU=";
+    hash = "sha256-2hQ7HBDFgezFLed7It9vNfKTCrWCaLFxhYeFM4pBuEs=";
   };
 
   outputs = [
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake-extras
     glog
     libapparmor
+    libcap
     lomiri-api
     qtbase
     qtdeclarative

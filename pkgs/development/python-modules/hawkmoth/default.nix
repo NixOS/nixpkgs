@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  libclang,
-  sphinx,
   clang,
+  sphinx,
+  llvmPackages,
   pytestCheckHook,
   strictyaml,
 }:
@@ -25,13 +25,13 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    libclang
+    clang
     sphinx
   ];
   propagatedBuildInputs = [ clang ];
 
   nativeCheckInputs = [
-    clang
+    llvmPackages.clang
     pytestCheckHook
     strictyaml
   ];

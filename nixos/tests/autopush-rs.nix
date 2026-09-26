@@ -33,6 +33,7 @@
           autoendpoint.settings = {
             #do not use this key in production!!!
             crypto_key = "[fZQX8jgdESUYFTYfWw3Dv5RRMuwYJPPaaPcbUgHM69Q=]";
+            auth_keys = "[fZQX8jgdESUYFTYfWw3Dv5RRMuwYJPPaaPcbUgHM69Q=]";
             db_dsn = "redis://localhost:${toString config.services.redis.servers.autopush-rs.port}";
             port = 8080;
           };

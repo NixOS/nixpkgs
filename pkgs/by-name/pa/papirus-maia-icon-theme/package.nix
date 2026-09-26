@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   gtk3,
-  gnome-icon-theme,
   papirus-icon-theme,
   hicolor-icon-theme,
   kdePackages,
@@ -28,7 +27,6 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     kdePackages.breeze-icons
-    gnome-icon-theme
     papirus-icon-theme
     hicolor-icon-theme
   ];

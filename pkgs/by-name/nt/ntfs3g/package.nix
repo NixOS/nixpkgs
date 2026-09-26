@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntfs3g";
-  version = "2026.2.25";
+  version = "2026.9.18";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tuxera";
     repo = "ntfs-3g";
     tag = finalAttrs.version;
-    hash = "sha256-uiVh87ExLXq94NVqR8MEg7Lrvamm6MrH+qP3Nosii5c=";
+    hash = "sha256-dTRJZikYfWgh8sHrgL7R0xhw/p00CME6gcpNi6VrVyA=";
   };
 
   buildInputs = [

@@ -18,11 +18,9 @@ setKV ./package.nix version $version
 # Update desktop application
 sha256_linux64=$(nix store prefetch-file --json --hash-type sha256 https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-linux-x64.zip | jq -r .hash)
 sha256_linux64_arm=$(nix store prefetch-file --json --hash-type sha256 https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-linux-arm64.zip | jq -r .hash)
-sha256_darwin64=$(nix store prefetch-file --json --hash-type sha256 https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-macos-x64.zip | jq -r .hash)
 sha256_darwin64_arm=$(nix store prefetch-file --json --hash-type sha256 https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-macos-arm64.zip | jq -r .hash)
 setKV ./package.nix x86_64-linux.hash $sha256_linux64
 setKV ./package.nix aarch64-linux.hash $sha256_linux64_arm
-setKV ./package.nix x86_64-darwin.hash $sha256_darwin64
 setKV ./package.nix aarch64-darwin.hash $sha256_darwin64_arm
 electronVersion=$(curl_github "https://raw.githubusercontent.com/TriliumNext/Trilium/v$version/apps/desktop/package.json" | jq -r ".devDependencies.electron" | sed -r 's|^\^?([0-9]+).*|\1|')
 sed -r "s|(electron_)[0-9]+|\1$electronVersion|" -i ./package.nix

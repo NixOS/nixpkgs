@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdnf";
-  version = "0.75.0";
+  version = "0.76.0";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "libdnf";
     tag = finalAttrs.version;
-    hash = "sha256-ujkJVeI6wgapTW1DBIhj4F/rXJFBb+KdREpc5jfU124=";
+    hash = "sha256-KbEPWiIhY8MRZhUpqiHdh32lJcyeFHvkQdBuYq0OFSQ=";
   };
 
   nativeBuildInputs = [
@@ -103,9 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
-      rb2k
-      katexochen
-    ];
+    maintainers = with lib.maintainers; [ katexochen ];
   };
 })

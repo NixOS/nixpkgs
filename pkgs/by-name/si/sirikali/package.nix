@@ -8,9 +8,7 @@
   pkg-config,
   qt6,
   kdePackages,
-  cryfs,
-  encfs,
-  fscrypt-experimental,
+  fscrypt,
   gocryptfs,
   sshfs,
   libgcrypt,
@@ -48,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   qtWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [
-        cryfs
-        encfs
-        fscrypt-experimental
+        fscrypt
         gocryptfs
         sshfs
       ]
@@ -67,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, fscrypt and encfs";
+    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, gocryptfs and fscrypt";
+    longDescription = "Sirikali also supports `cryfs`, but `cryfs` is no longer available in Nixpkgs.";
     homepage = "https://github.com/mhogomchungu/sirikali";
     changelog = "https://github.com/mhogomchungu/sirikali/blob/${finalAttrs.src.rev}/changelog";
     license = lib.licenses.gpl3Only;

@@ -17,14 +17,6 @@ let
   cfg = config.services.miniflux;
 
   boolToInt = b: if b then 1 else 0;
-
-  pgbin = "${config.services.postgresql.package}/bin";
-  # The hstore extension is no longer needed as of v2.2.14
-  # and would prevent Miniflux from starting.
-  preStart = pkgs.writeScript "miniflux-pre-start" ''
-    #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
-  '';
 in
 
 {
@@ -142,7 +134,9 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
-        ExecStart = preStart;
+        # The hstore extension is no longer needed as of v2.2.14
+        # and would prevent Miniflux from starting.
+        ExecStart = ''${config.services.postgresql.package}/bin/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"'';
       };
     };
 
@@ -214,7 +208,13 @@ in
       abi <abi/4.0>,
       include <tunables/global>
 
-      profile ${cfg.package}/bin/miniflux {
+      # Flag `attach_disconnected` is necessary
+      # because the PostgreSQL socket path appears
+      # as a "disconnected" path: `run/postgresql/.s.PGSQL.XXXX`,
+      # without the trailing slash, which AppArmor can't resolve.
+      # The flag prepends a `/`, which isn't recommended,
+      # but there aren't any alternative currently.
+      profile ${cfg.package}/bin/miniflux flags=(attach_disconnected) {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
@@ -222,6 +222,8 @@ in
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         ${cfg.package}/bin/miniflux r,
         /run/miniflux/** rw,
+        /run/postgresql/.s.PGSQL.* rw,
+        /run/credentials/** r,
         include if exists <local/bin.miniflux>
       }
     '';

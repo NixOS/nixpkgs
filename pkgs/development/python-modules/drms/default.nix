@@ -17,16 +17,17 @@
   pytest-doctestplus,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drms";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "drms";
-    tag = "v${version}";
-    hash = "sha256-Hd65bpJCknBeRd27JlcIkzzoZv5nGR7C6oMSGPFiyjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f5t59a24aD8iXa3/zikgBnJeuUnZ4cvvpJuOfc80Xcw=";
   };
 
   build-system = [
@@ -58,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    changelog = "https://github.com/sunpy/drms/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/sunpy/drms/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

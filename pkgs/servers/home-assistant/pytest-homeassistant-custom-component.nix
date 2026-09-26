@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.336";
+  version = "0.13.366";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -28,8 +28,13 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-TyU9w1bqCJ780AIUgvNa3XO6pYxrGAKuD28WxBvbink=";
+    hash = "sha256-XNzVIBamQGDUhABw+ml5ZT0jDP8yPSu/OLgKODZsVAc=";
   };
+
+  patches = [
+    # e2e tests should write temporary files into a temporary directory instead of into the installation directory aka the nix store
+    ./pytest-homeassistant-custom-component-tmpdir.patch
+  ];
 
   build-system = [ setuptools ];
 

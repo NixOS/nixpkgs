@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2020-08-09";
 
   src = fetchFromGitHub {
-    owner = "cmcsun";
+    owner = "chrismcfee";
     repo = "esshader";
     rev = "506eb02f3de52d3d1f4d81ac9ee145655216dee5";
     sha256 = "sha256-euxJw7CqOwi6Ndzalps37kDr5oOIL3tZICCfmxsujfk=";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Offline ShaderToy-compatible GLSL shader viewer using OpenGL ES 2.0";
-    homepage = "https://github.com/cmcsun/esshader";
+    homepage = "https://github.com/chrismcfee/esshader";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ astro ];
     platforms = lib.platforms.unix;

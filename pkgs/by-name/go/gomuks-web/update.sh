@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-# Fetch latest release infor
+# Fetch latest release info
 RELEASE=$(curl -sSL https://api.github.com/repos/tulir/gomuks/releases/latest | jq -r .name)
 
 if [ -z "$RELEASE" ]; then

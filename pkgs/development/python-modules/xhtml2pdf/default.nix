@@ -31,6 +31,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "reportlab"
+  ];
+
   dependencies = [
     arabic-reshaper
     html5lib

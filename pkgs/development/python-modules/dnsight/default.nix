@@ -34,6 +34,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cryptography"
+    "rich"
     "typer"
   ];
 

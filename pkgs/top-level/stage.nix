@@ -55,6 +55,7 @@ in
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
   stdenvNoCC ? stdenv.override {
+    name = "${stdenv.name}-no-cc";
     cc = null;
     hasCC = false;
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
@@ -117,7 +118,7 @@ let
       # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
       # host platform is our build platform, and their target platform is our host
       # platform. We only care about their host/target platforms, not their build
-      # platform, because the the former two alone affect the interface of the
+      # platform, because the former two alone affect the interface of the
       # final package; the build platform is just an implementation detail that
       # should not leak.
       pkgsBuildBuild = withFallback adjacentPackages.pkgsBuildBuild;
@@ -152,7 +153,7 @@ let
           config
           overlays
           ;
-      } res self super;
+      } self;
 
       conflictingAttrs = lib.intersectAttrs res super;
     in
@@ -309,6 +310,49 @@ let
     };
   };
 
+  # Replaces the attributes in config.attrPathsDisallowedForInternalUse with aborts.
+  # Not warnings because those wouldn't give a backtrace, which is important for debugging
+  # Not throws because those would be ignored by nix-env, which is what CI uses to evaluate everything
+  # See also ./default.nix, which removes these attributes entirely from the end result
+  internallyDisallowedAttrPathsOverlay =
+    final: prev:
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      { }
+    else
+      let
+        # Abort only when this derivation, or one of its `outputs`, is instantiated.
+        # That is, when a `drvPath`, `outPath`, or `shellPath` is evaluated.
+        # Not to be confused with `lib.warnOnInstantiate`, which warns on much more than just instantiation.
+        abortOnInstantiate =
+          msg: drv:
+          let
+            paths = lib.filter (name: drv ? ${name}) [
+              "drvPath"
+              "outPath"
+              "shellPath"
+            ];
+          in
+          drv
+          // lib.genAttrs paths (name: abort msg drv.${name})
+          // lib.genAttrs (drv.outputs or [ ]) (name: abortOnInstantiate msg drv.${name})
+          // {
+            ${if lib.isFunction (drv.override or null) then "override" else null} =
+              args: abortOnInstantiate msg (drv.override args);
+            ${if lib.isFunction (drv.overrideAttrs or null) then "overrideAttrs" else null} =
+              args: abortOnInstantiate msg (drv.overrideAttrs args);
+          };
+      in
+      lib.updateManyAttrsByPath (map (
+        { attrPath, reason }:
+        {
+          path = attrPath;
+          update = abortOnInstantiate "${lib.showAttrPath attrPath} is disallowed from being used within Nixpkgs${
+            lib.optionalString (reason != null) ", because ${reason}"
+          }";
+        }
+      ) config.attrPathsDisallowedForInternalUse) prev;
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlaid.
@@ -324,6 +368,7 @@ let
       aliases
       variants
       configOverrides
+      internallyDisallowedAttrPathsOverlay
     ]
     ++ overlays
     ++ [

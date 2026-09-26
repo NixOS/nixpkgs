@@ -1,27 +1,44 @@
 diff --git a/Makefile b/Makefile
-index 144f4e4..834c23e 100644
+index 597f167..f59bacc 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -50,22 +50,17 @@ tips:
+@@ -25,12 +25,10 @@ tips:
  preparation:
  # As SDK build needs to clone and patch openmp, we cannot support the mode that download the source from github as zip.
  # Only enable the download from git
 -	git submodule update --init --recursive
  	cd external/dcap_source/external/jwt-cpp && git apply ../0001-Add-a-macro-to-disable-time-support-in-jwt-for-SGX.patch >/dev/null 2>&1 || \
  	git apply ../0001-Add-a-macro-to-disable-time-support-in-jwt-for-SGX.patch -R --check
+ 	cd external/dcap_source/external/wasm-micro-runtime && git apply ../0001-wasm-micro-runtime.patch >/dev/null 2>&1 || \
+ 	git apply ../0001-wasm-micro-runtime.patch -R --check
 -	./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
  	cd external/openmp/openmp_code && git apply ../0001-Enable-OpenMP-in-SGX.patch >/dev/null 2>&1 ||  git apply ../0001-Enable-OpenMP-in-SGX.patch --check -R
- 	cd external/protobuf/protobuf_code && git apply ../sgx_protobuf.patch >/dev/null 2>&1 ||  git apply ../sgx_protobuf.patch --check -R
- 	cd external/protobuf/protobuf_code && git apply ../0001-bumped-protobuf-to-1.33.0.patch >/dev/null 2>&1 ||  git apply ../0001-bumped-protobuf-to-1.33.0.patch --check -R
--	cd external/protobuf/protobuf_code && git submodule update --init --recursive && cd third_party/abseil-cpp && git apply ../../../sgx_abseil.patch>/dev/null 2>&1 || git apply ../../../sgx_abseil.patch --check -R
- 	./external/sgx-emm/create_symlink.sh
- 	cd external/cbor && cp -r libcbor sgx_libcbor
- 	cd external/cbor/libcbor && git apply ../raw_cbor.patch >/dev/null 2>&1 || git apply ../raw_cbor.patch --check -R
+
+ 	# TODO refactor to remove duplication with the ./external/protobuf/Makefile.
+@@ -38,8 +36,7 @@ preparation:
+ 	# If you are adding a new patch over this one, write your patch's name to .sgx_patched
+ 	@if ! grep -q "sgx_protobuf" external/protobuf/protobuf_code/.sgx_patched 2>/dev/null; then \
+ 		cd external/protobuf/protobuf_code && \
+-		git apply ../sgx_protobuf.patch >/dev/null 2>&1 || git apply ../sgx_protobuf.patch --check -R && \
+-		git submodule update --init --recursive; \
++		git apply ../sgx_protobuf.patch >/dev/null 2>&1 || git apply ../sgx_protobuf.patch --check -R; \
+ 	fi
+ 	# If you are adding a new patch over this one, write your patch's name to .sgx_patched
+ 	@if ! grep -q "sgx_abseil" external/protobuf/abseil-cpp/.sgx_patched 2>/dev/null; then \
+@@ -52,8 +49,6 @@ preparation:
  	cd external/cbor/sgx_libcbor && git apply ../sgx_cbor.patch >/dev/null 2>&1 || git apply ../sgx_cbor.patch --check -R
  	cd external/ippcp_internal/ipp-crypto && git apply ../0001-IPP-crypto-for-SGX.patch > /dev/null 2>&1 || git apply ../0001-IPP-crypto-for-SGX.patch --check -R
  	cd external/ippcp_internal/ipp-crypto && mkdir -p build
 -	./download_prebuilt.sh
 -	./external/dcap_source/QuoteGeneration/download_prebuilt.sh
- 
+ 	cd external/libcxxrt/libcxxrt_code && git apply ../sgx_libcxxrt.patch >/dev/null 2>&1 || git apply ../sgx_libcxxrt.patch --check -R
+
  psw:
- 	$(MAKE) -C psw/ USE_OPT_LIBS=$(USE_OPT_LIBS)
+@@ -87,7 +82,6 @@ servtd_attest_preparation:
+ # Only enable the download from git
+ 	git submodule update --init --recursive external/dcap_source external/sgx-emm/emm_src external/libcxxrt/libcxxrt_code
+ 	./external/sgx-emm/create_symlink.sh
+-	./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
+ 	cd external/libcxxrt/libcxxrt_code && (git apply ../sgx_libcxxrt.patch >/dev/null 2>&1 || git apply ../sgx_libcxxrt.patch --check -R)
+
+ ipp:

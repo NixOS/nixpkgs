@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   #   Error: Unknown flag: --build=x86_64-unknown-linux-gnu
   configurePlatforms = [ ];
 
+  # ... nor the --enable-static/--disable-shared that pkgsStatic injects:
+  #   Error: Unknown flag: --enable-static
+  dontAddStaticConfigureFlags = true;
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -57,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
         appendToVar configureFlags "--with-lua-include=$lua_inc"
+    fi
+    lua_lib="${lua}/lib"
+    if test -d "$lua_lib"; then
+        appendToVar configureFlags "--with-lua-lib=$lua_lib"
     fi
   '';
 

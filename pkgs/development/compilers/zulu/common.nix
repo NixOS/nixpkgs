@@ -32,16 +32,14 @@
   ffmpeg,
 }:
 let
-  dist =
-    dists.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  dist = dists.${stdenv.hostPlatform.system} or (builtins.head (builtins.attrValues dists));
 
   arch =
     {
       "aarch64" = "aarch64";
       "x86_64" = "x64";
     }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported architecture: ${stdenv.hostPlatform.parsed.cpu.name}");
+    .${stdenv.hostPlatform.parsed.cpu.name} or "unsupported";
 
   platform =
     {
@@ -80,6 +78,9 @@ let
   jdk = stdenv.mkDerivation rec {
     pname = "zulu-${javaPackage}";
     version = dist.jdkVersion;
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     src = fetchurl {
       url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-${platform}_${arch}.tar.gz";

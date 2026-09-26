@@ -259,7 +259,7 @@ def update(version: str, commit: bool, force: bool) -> None:
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
 @click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
 def update_all(commit: bool, force: bool) -> None:
-    """Update all eletron-source releases at once
+    """Update all electron-source releases at once
 
     Args:
         commit: Whether to commit the result

@@ -12,7 +12,6 @@
   lld,
   pkg-config,
   binaryen,
-  wasm-pack,
   cargo-about,
   nodejs,
   wasm-bindgen-cli_0_2_121,
@@ -30,16 +29,16 @@
 }:
 
 let
-  version = "0-unstable-2026-05-25";
-  rev = "bbbe04903f28673a86203910b250bf12f3d38b55";
+  version = "0-unstable-2026-09-15";
+  rev = "fdf6cfe296e308c45aa5696a88a947feec2fe67a";
 
-  srcHash = "sha256-aEOH0NFUIt0iQNKNlAdKXobVPqbZbeQYB96lDzEsJ3U=";
-  shaderHash = "sha256-4lKBrGh1rfhTBczmCDvIF2KxLyEHzHdKVGgQ+jLd/Dw=";
-  cargoHash = "sha256-iW1hk67zexp/b7HO4q4le8/7ARIn+/VJIZ54RBau238=";
-  npmHash = "sha256-AX5Jqk2E+WyQJyHbgvvq74MRsYmWUju4bOkabhYoeig=";
+  srcHash = "sha256-k0C6ocP0lHwG402pmDHO0BLQ6DsK0Y4NqXLMJHHnBao=";
+  shaderHash = "sha256-LReut68Cwoz/YmXaLiVnccg+RerMrKqEWhiWGyx5k+Q=";
+  cargoHash = "sha256-/XEsrJed6rdsOpWFq6+trK9ylcH7v8g2XCExEI335jY=";
+  npmHash = "sha256-Cay+aZcZGAU2vKAs7nub/YVcQ/sxsruWhjZ9KkqXHuc=";
 
-  brandingRev = "0d004aa61e6b48d316e8e5db6d59ccc4788f192d";
-  brandingHash = "sha256-wAA6fR+NSxlCAqgwWmpiIAnji9k/jsMXpR0Vt04Ntmk=";
+  brandingRev = "6687dc6d3d8552948458d00d35e2bee3a40ab66b";
+  brandingHash = "sha256-yD4O50gz2mtby1h4o+9PqjMfYmTbBOX6XDc5Ez5fgnY=";
 
   src = fetchFromGitHub {
     owner = "GraphiteEditor";
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmConfigHook
     binaryen
     wasm-bindgen-cli_0_2_121
-    wasm-pack
     nodejs
     cargo-about
     removeReferencesTo

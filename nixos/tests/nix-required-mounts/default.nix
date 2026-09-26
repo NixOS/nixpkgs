@@ -16,6 +16,7 @@ in
       nix.settings.substituters = lib.mkForce [ ];
       nix.settings.system-features = [ "supported-feature" ];
       nix.settings.experimental-features = [ "nix-command" ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
       programs.nix-required-mounts.enable = true;
       programs.nix-required-mounts.allowedPatterns.supported-feature = {
         onFeatures = [ "supported-feature" ];

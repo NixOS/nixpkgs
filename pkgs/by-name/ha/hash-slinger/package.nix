@@ -5,6 +5,7 @@
   python3,
   unbound,
   libreswan,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   pythonPath = with python3.pkgs; [
     dnspython
     m2crypto
+    openssl
     python-gnupg
     pyunbound
   ];

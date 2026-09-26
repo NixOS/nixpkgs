@@ -16,6 +16,7 @@
 
   # tests
   datasets,
+  expecttest,
   parameterized,
   pytest-xdist,
   pytestCheckHook,
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   pname = "torchdata";
   version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
@@ -51,6 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     datasets
+    expecttest
     parameterized
     pytest-xdist
     pytestCheckHook

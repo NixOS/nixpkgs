@@ -15,13 +15,16 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.35.0";
+  version = "0.36.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VgiQ4k6HiRxemtizItL0zkTDpgTnL0ScfSOfgjMpokI=";
+    hash = "sha256-oa/4Zjw1UIOt/mTPiBGSKhokDMoBMwhrKi7l3qcKqkI=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       missingHashes
       src
       ;
-    hash = "sha256-Q7vUJrFUr8ZbDdaMZq8fnJFfIgEFYkHQiUoo2xILaKo=";
+    hash = "sha256-LAzlLQUmjdxg/NNHgCwVK499RM6p/8csrHow6UAMJUY=";
   };
 
   postPatch = ''
@@ -88,7 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
-  preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''
+  preInstallCheck = lib.optionalString (lib.versionAtLeast nodejs.version "22") ''
     # Exclude test files that require internet access.
     NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
   '';

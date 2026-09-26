@@ -22,6 +22,7 @@
               }
             ];
             networking.firewall.enable = false;
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
         };
       };
@@ -44,6 +45,7 @@
 
           config = {
             networking.firewall.enable = false;
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
         };
       };
@@ -65,6 +67,7 @@
               }
             ];
             networking.firewall.enable = false;
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
         };
       };
@@ -90,6 +93,7 @@
               }
             ];
             networking.firewall.enable = false;
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
         };
       };
@@ -116,6 +120,7 @@
               }
             ];
             networking.firewall.enable = false;
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
         };
       };

@@ -10,19 +10,22 @@
   oniguruma,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.5.0";
+  version = "0.6.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6qouGcqNau2aCBPYpn0hFdm8QXL1WjZvnowK4aspe/Q=";
+    hash = "sha256-XG7IPfl5yLToDQ+P0JkMxhfqsGd3cGWYCNrmlFf9j2Y=";
   };
 
-  cargoHash = "sha256-UPDhPKC/x0ccfm7Df74PtCn+Zt9ShCxf9uB5TVaYV6Y=";
+  cargoHash = "sha256-+7WiOmYBjTMEsIGaqnMVTIHhzTpm8ObnljNXFnDazhI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,6 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/fj completion fish) \
       --zsh <($out/bin/fj completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI application for interacting with Forgejo";

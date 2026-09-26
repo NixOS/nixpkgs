@@ -50,7 +50,22 @@
 }:
 
 let
+  # Need these pins until we bump past https://github.com/NixOS/hydra/pull/1828
   nix = nixVersions.nix_2_34;
+  nixEvalJobsVersion = "2.34.3";
+  nix-eval-jobs_2_34 =
+    (nix-eval-jobs.override {
+      nixComponents = nixVersions.nixComponents_2_34;
+    }).overrideAttrs
+      {
+        version = nixEvalJobsVersion;
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix-eval-jobs";
+          tag = "v${nixEvalJobsVersion}";
+          hash = "sha256-YaVQAgBxWbUBFHXLBLzdUyVvuA/DDw80SEnn9iq0Veo=";
+        };
+      };
 
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
@@ -172,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
-      nix-eval-jobs
+      nix-eval-jobs_2_34
       coreutils
       findutils
       pixz
@@ -210,7 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     python3
     netcat
-    nix-eval-jobs
+    nix-eval-jobs_2_34
     openldap
     postgresql
   ];
@@ -247,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name or "unknown"} \
-            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs_2_34.name or "unknown"}
     done
   '';
 

@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication {
     pycairo
     pygobject3
     six
-    xlib
+    python-xlib
   ];
 
   postPatch = ''

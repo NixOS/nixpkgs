@@ -1,21 +1,23 @@
 {
   lib,
   stdenvNoCC,
-  fetchgit,
+  fetchFromTangled,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.6.5";
+  version = "0.6.7";
 
-  src = fetchgit {
-    url = "https://tangled.org/tranquil.farm/tranquil-pds";
+  src = fetchFromTangled {
+    did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kBy982B9ZY5W02hmdKqlR86ynJAUD98b4UgaYIPaFzM=";
+    hash = "sha256-bhG5ydQZ9nHXQSlrM2jZaUpEP8ZW3Xx6r5O83vLDf8k=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 

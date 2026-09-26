@@ -6,7 +6,7 @@
   libxkbfile,
   requireFile,
   stdenvNoCC,
-  version ? "9.0.0",
+  version ? "9.0.1",
 }:
 
 let
@@ -17,9 +17,9 @@ let
     src =
       let
         sources = {
-          "9.0.0" = {
-            name = "CiscoPacketTracer_900_Ubuntu_64bit.deb";
-            hash = "sha256-3ZrA1Mf8N9y2j2J/18fm+m1CAMFEklJuVhi5vRcu2SA=";
+          "9.0.1" = {
+            name = "CiscoPacketTracer_901_Ubuntu_64bit.deb";
+            hash = "sha256-NoPdh+d5iFNyrpo1wabllNEvST5knnxpdAhynBRZR5s=";
           };
         };
       in
@@ -66,8 +66,8 @@ appimageTools.wrapType2 rec {
     ''
       mv $out/bin/${pname} $out/bin/packettracer9
 
-      install -Dm444 ${contents}/CiscoPacketTracer-9.0.0.desktop $out/share/applications/cisco-packet-tracer-9.desktop
-      install -Dm444 ${contents}/CiscoPacketTracerPtsa-9.0.0.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
+      install -Dm444 ${contents}/CiscoPacketTracer-9.0.1.desktop $out/share/applications/cisco-packet-tracer-9.desktop
+      install -Dm444 ${contents}/CiscoPacketTracerPtsa-9.0.1.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
       substituteInPlace $out/share/applications/* \
         --replace-fail "Exec=@EXEC_PATH@" "Exec=packettracer9" \
         --replace-fail "Icon=app" "Icon=cisco-packet-tracer-9"

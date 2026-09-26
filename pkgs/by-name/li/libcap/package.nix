@@ -3,7 +3,6 @@
   lib,
   buildPackages,
   fetchurl,
-  fetchpatch,
   runtimeShell,
   pkgsBuildHost,
   usePam ? !isStatic,
@@ -31,11 +30,11 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.77";
+  version = "2.78";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    hash = "sha256-iXvBi0Svwmxw54zq09uzHhVKzCS+4IWloJB5qI2/b1I=";
+    hash = "sha256-DWIeVi/ZMsz2e5Zg+wGORopoPXuCdUHfJ4EyKMmWuxE=";
   };
 
   outputs = [
@@ -74,13 +73,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals isStatic [
     "SHARED=no"
     "LIBCSTATIC=yes"
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/libs/libcap/libcap.git/patch/?id=d628b3bfe40338d4efff6b0ae50f250a0eb884c7";
-      hash = "sha256-Eiv/BOJZkduL+hOEJd8K1LQd9wvOeCKchE2GaLcerVc=";
-    })
   ];
 
   postPatch = ''

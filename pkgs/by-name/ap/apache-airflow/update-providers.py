@@ -27,6 +27,7 @@ PKG_PREFERENCES = {
     "protobuf": "protobuf",
     "pydantic": "pydantic",
     "requests_toolbelt": "requests-toolbelt",
+    "setuptools": "setuptools",
     "sqlalchemy": "sqlalchemy",
 }
 

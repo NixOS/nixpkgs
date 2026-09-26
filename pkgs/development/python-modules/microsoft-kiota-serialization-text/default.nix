@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   microsoft-kiota-abstractions,
   pytest-asyncio,
   pytest-mock,
@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-text";
-  version = "1.10.2";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-text-v${version}";
-    hash = "sha256-rj0NpuXvqS5rB6TrD3FyuMWb7Dl8/SIBcW/Lzj4cY6I=";
+    hash = "sha256-O2hwGo7f0soOcPfuwm/Iv9iQ9lLxY1drAKhL5Rl8ciA=";
   };
 
   sourceRoot = "${src.name}/packages/serialization/text/";
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     microsoft-kiota-abstractions

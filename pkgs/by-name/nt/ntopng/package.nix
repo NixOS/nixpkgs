@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntopng";
-  version = "6.6";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
     tag = finalAttrs.version;
-    hash = "sha256-BYJtsEuxmo6jzqCoC/A5vDAiFSGqy8XFyqooGDTZE40=";
+    hash = "sha256-46cqNr3sLa5Xy8PbddofxRjCCvUFeHPlOihgd+5qBE0=";
     fetchSubmodules = true;
   };
 

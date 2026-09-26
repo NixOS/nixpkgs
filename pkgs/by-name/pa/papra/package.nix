@@ -1,10 +1,11 @@
 {
   makeBinaryWrapper,
-  nodejs,
+  nodejs_26,
+  nodejs-slim_26,
   node-gyp,
   fetchPnpmDeps,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   stdenv,
   lib,
@@ -12,26 +13,30 @@
   pkg-config,
   python3,
   nix-update-script,
+  tsx,
+  nixosTests,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_26; };
+  nodejs = nodejs_26;
+  tsx' = tsx.override { nodejs-slim_24 = nodejs-slim_26; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.4.0";
+  version = "26.6.1";
 
   src = fetchFromGitHub {
     owner = "papra-hq";
     repo = "papra";
     tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-wQdDBS+QRarZhEIRmLQ4VRtq73I5YFIN2P3ZtAZWvxw=";
+    hash = "sha256-4Kcfv6bcKM7SXTmKn0cjXjhUXEZSypSFWyr7jIP/4+E=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
+    fetcherVersion = 4;
+    hash = "sha256-1Iv8vvGFQuxBFM8YB8sYulmU4SxE4G9Yyh67BBzEoZo=";
     pnpmWorkspaces = [
       "@papra/app-client..."
       "@papra/app-server..."
@@ -64,12 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm config set inject-workspace-packages true
-
-    pushd node_modules/sharp
-    pnpm run install
-    popd
-
     pnpm --filter "@papra/app-client..." run build
     pnpm --filter "@papra/app-server..." run build
 
@@ -81,7 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib}
 
-    pnpm deploy --filter=@papra/app-server --prod $out/lib/
+    pnpm config set --location=project injectWorkspacePackages true
+    pnpm deploy --ignore-script --filter=@papra/app-server --prod $out/lib/
 
     mkdir -p $out/lib/public
     cp -r apps/papra-client/dist/* $out/lib/public/
@@ -90,10 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/lib/dist/index.js" \
       --set "NODE_PATH" $out/lib/node_modules
 
+    makeWrapper "${lib.getExe tsx'}" $out/bin/papra-migrate-up \
+      --add-flags "$out/lib/src/scripts/migrate-up.script.ts"
+
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.papra;
+  };
 
   meta = {
     description = "Open-source document management platform designed to help you organize, secure, and archive your files effortlessly.";

@@ -15,20 +15,22 @@
   tornado,
   setproctitle,
 
+  # tests
+  pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "23.0.0";
+  version = "26.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
     tag = version;
-    hash = "sha256-Dq/mrQwo3II6DBvYfD1FHsKHaIlyHlJCZ+ZyrM4Efe0=";
+    hash = "sha256-duq5ghUuiuZL644jHgZ0qXHkcc8POHt7BX91m9F5BGE=";
   };
 
   build-system = [ setuptools ];
@@ -46,10 +48,21 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gunicorn" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     pytest-cov-stub
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # failure while starting a gunicorn instance
+    "TestSignalHandlingIntegration"
+  ];
+
+  disabledTestPaths = [
+    # tries to start gunicorn and fails on import
+    "tests/test_control_socket_integration.py"
+  ];
 
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";

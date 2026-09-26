@@ -5,14 +5,13 @@
   jdk8,
   unzrip,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
-  version = "1.4.58-dev_2025-10-06_20-40";
+  version = "1.4.60-dev_2026-06-28_13-19";
 
   src = fetchurl {
     url = "https://xmage.today/files/mage-full_${finalAttrs.version}.zip";
-    sha256 = "sha256-UOtxV+ykDIH+PLjLrC66Rut92IIw2iDHWwvJ2ytmUAs=";
+    sha256 = "sha256-n6g38rE19ZSyipoOp3cnLTsJirLRXeLF1ft7gvx3bVs=";
   };
 
   preferLocalBuild = true;
@@ -53,5 +52,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "http://xmage.de/";
   };
-
 })

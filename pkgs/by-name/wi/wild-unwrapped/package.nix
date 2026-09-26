@@ -11,18 +11,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wild-unwrapped";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "wild-linker";
     repo = "wild";
     tag = finalAttrs.version;
-    hash = "sha256-v4lPgZDPvRTAekkU9Vku9llgpOsaVtKt91VFUGrEeKw=";
+    hash = "sha256-jIkeR68C41jn0A3DjEpbrEYCwuqIS3n0bRed2K6c5iY=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
+  cargoHash = "sha256-GWS94lacSiUjE733wlBKVpHHbbimYIV411a812ryL3U=";
 
   cargoBuildFlags = [
     "-p"

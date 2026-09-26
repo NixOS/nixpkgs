@@ -2,94 +2,118 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+  doxygen,
   ninja,
   pkg-config,
+  qt6,
+
+  # nativeCheckInputs
+  writableTmpDirAsHomeHook,
+
+  # buildInputs (Linux and Darwin)
   gtest,
-  libei,
-  libportal,
-  libx11,
-  libxkbfile,
-  libxtst,
-  libxinerama,
-  libxi,
-  libxrandr,
-  libxkbcommon,
+  openssl,
   pugixml,
   python3,
+
+  # buildInputs (Linux-specific)
   gdk-pixbuf,
-  libnotify,
-  qt6,
-  xkeyboard_config,
-  wayland-protocols,
-  wayland,
-  libsysprof-capture,
   lerc,
-  doxygen,
-  writableTmpDirAsHomeHook,
+  libei,
+  libnotify,
+  libportal,
+  libsysprof-capture,
+  libx11,
+  libxi,
+  libxinerama,
+  libxkbcommon,
+  libxkbfile,
+  libxrandr,
+  libxtst,
+  wayland,
+  wayland-protocols,
+  xkeyboard_config,
+
+  # Update script for `passthru`.
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.25.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
+    hash = "sha256-XcSG47Ysjn+wrJH5DC/XXGXcneXcW7xIhAn6sguuv+s=";
   };
-
-  postPatch = ''
-    substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
-    substituteInPlace deploy/linux/deploy.cmake \
-      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
-  '';
 
   nativeBuildInputs = [
     cmake
+    doxygen
     ninja
     pkg-config
     qt6.wrapQtAppsHook
-    doxygen # docs
   ];
-
-  cmakeFlags = [
-    "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
-  ];
-
-  strictDeps = true;
 
   buildInputs = [
     gtest
-    libei
-    libportal
-    libx11
-    libxkbfile
-    libxinerama
-    libxi
-    libxrandr
-    libxtst
-    libxkbcommon
+    openssl
     pugixml
-    gdk-pixbuf
-    libnotify
     python3
     qt6.qtbase
-    wayland-protocols
-    qt6.qtwayland
-    qt6.qtdeclarative
     qt6.qttools
-    wayland
-    libsysprof-capture
+    qt6.qttranslations
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    gdk-pixbuf
     lerc
+    libei
+    libnotify
+    libportal
+    libsysprof-capture
+    libx11
+    libxi
+    libxinerama
+    libxkbcommon
+    libxkbfile
+    libxrandr
+    libxtst
+    qt6.qtdeclarative
+    qt6.qtwayland
+    wayland
+    wayland-protocols
+  ]);
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PATH="${qt6.qtbase}/bin:$PATH"
+  '';
+
+  postPatch = ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
+        --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
+      substituteInPlace deploy/linux/deploy.cmake \
+        --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
+    ''}
+    substituteInPlace translations/CMakeLists.txt \
+      --replace-fail 'PATHS ''${QT_ROOT_DIR} PATH_SUFFIXES "translations" "share/qt/translations"' 'PATHS "${qt6.qttranslations}/translations"'
+    substituteInPlace src/lib/net/CMakeLists.txt \
+      --replace-fail "set(OPENSSL_USE_STATIC_LIBS TRUE)" ""
+  '';
+
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
+    "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
 
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
-  ];
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms";
+
+  strictDeps = true;
 
   doCheck = true;
 
@@ -99,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
+    ctest --test-dir  "src/unittests" --output-on-failure \
+      --exclude-regex "OSX(KeyState|Clipboard)Tests"
     ./bin/legacytests
 
     runHook postCheck
@@ -119,12 +145,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ flacks ];
+    maintainers = with lib.maintainers; [
+      flacks
+      shymega
+    ];
     license = with lib.licenses; [
       gpl2Plus
-      openssl
+      lib.licenses.openssl # We have to be explicit here, as `openssl` is a buildInput.
       mit # share/applications/org.deskflow.deskflow.desktop
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

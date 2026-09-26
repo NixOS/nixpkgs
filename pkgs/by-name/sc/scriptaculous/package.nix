@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://script.aculo.us/";
     downloadPage = "https://script.aculo.us/dist/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 })

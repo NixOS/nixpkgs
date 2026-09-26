@@ -29,11 +29,11 @@
 }:
 mkDerivation {
   pname = "gren";
-  version = "0.6.5";
+  version = "0.6.6";
   src = fetchgit {
     url = "https://github.com/gren-lang/compiler.git";
-    sha256 = "1865x63y0kcp2ax49333i5512vwh845iiyq3b30jm31pr113csvr";
-    rev = "ba2a2153b78086d75fe01ba45bdd630d6f5fc2fc";
+    sha256 = "02hin22kyh2zgxn2fklnfa60iw3ppfr3xnv4z7r39vkf6c2q7fhq";
+    rev = "03c52374f82036e7a3276a94e345a4aa98738b9b";
     fetchSubmodules = true;
   };
   isLibrary = false;
@@ -83,6 +83,6 @@ mkDerivation {
   jailbreak = true;
   homepage = "https://gren-lang.org";
   description = "The `gren` command line interface";
-  license = lib.licensesSpdx."BSD-3-Clause";
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
   mainProgram = "gren";
 }

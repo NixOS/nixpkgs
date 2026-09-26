@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 5e1328e5..0f289597 100644
+--- a/package.json
++++ b/package.json
+@@ -4,9 +4,7 @@
+   "description": "Aurral artist request manager",
+   "private": true,
+   "type": "module",
+-  "engines": {
+-    "node": "22.23.x"
+-  },
++  "files": ["backend/*", "frontend/dist/*", "lib/*"],
+   "workspaces": [
+     "backend",
+     "frontend"

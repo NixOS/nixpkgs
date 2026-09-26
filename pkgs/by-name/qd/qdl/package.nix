@@ -2,35 +2,63 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
   pkg-config,
   libxml2,
   libusb1,
+  libzip,
+  nbdkit,
+  zip,
+  cmocka,
+  ninja,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.6";
+  version = "2.8";
+
+  __structuredAttrs = true;
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/lvKMC0bJdfqhPCuBYChX/6Aybpu+cPg0Vjl2HDbOeE=";
+    hash = "sha256-ysL9tO1GKvzphxezMspGMW8kkUNGHHspA1YU+v5HA/A=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
   buildInputs = [
     libxml2
     libusb1
+    libzip
+    nbdkit
+  ];
+  checkInputs = [
+    cmocka
+  ];
+  nativeCheckInputs = [
+    zip
   ];
 
-  makeFlags = [
-    "VERSION=${finalAttrs.src.rev}"
-    "prefix=${placeholder "out"}"
+  mesonFlags = [
+    "--prefix=${placeholder "out"}"
+    "-DVERSION=${finalAttrs.version}"
   ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

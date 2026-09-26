@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PaulGilmartin/django-pgpubsub";
     changelog = "https://github.com/PaulGilmartin/django-pgpubsub/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

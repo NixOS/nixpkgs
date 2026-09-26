@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  cairomm,
+  cairomm_1_0,
   cli11,
   eigen,
   hidrd,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    cairomm
+    cairomm_1_0
     cli11
     eigen
     hidrd

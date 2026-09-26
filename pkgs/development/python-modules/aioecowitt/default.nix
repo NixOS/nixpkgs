@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   meteocalc,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytestCheckHook,
   setuptools,
@@ -11,17 +12,21 @@
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2025.9.2";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioecowitt";
     tag = version;
-    hash = "sha256-lQ2t8u3+sk8wnNfCZs2yhe9nsZwiGBHXPDz95egacsI=";
+    hash = "sha256-xnF2Zn0XfV7elYGPCfY0WKzmDyFKXU3yh6Bab7llbzw=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

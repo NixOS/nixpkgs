@@ -11,8 +11,6 @@
   boost,
   cli11,
   cmake,
-  cudaPackages ? { },
-  cudaSupport ? config.cudaSupport,
   eigen,
   ffmpeg,
   freetype,
@@ -21,12 +19,12 @@
   glm,
   glslang,
   harfbuzz,
+  hexdump,
   kdePackages,
   libarchive,
   libdrm,
   libGL,
   libnotify,
-  libpulseaudio,
   librsvg,
   libva,
   libx11,
@@ -36,7 +34,6 @@
   nlohmann_json,
   opencomposite,
   openxr-loader,
-  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   pipewire,
   pkg-config,
   python3,
@@ -49,19 +46,22 @@
   vulkan-loader,
   x264,
   xrizer,
+  cudaSupport ? config.cudaSupport,
+  # WiVRn defaults to the first path but the others can be manually selected
+  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   # Only build the OpenXR client library. Useful for building the client library for a different architecture,
   # e.g. 32-bit library while running 64-bit service on host, so 32-bit apps can connect to the runtime
   clientLibOnly ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "26.2.3";
+  version = "26.9";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pU7FYPp5wa0MK0ut/BfFlnUai8yMcylpWC0CoAExAio=";
+    hash = "sha256-/kXgbku/4EeYY5YTwtY71csgxOP8bRACLqOvKXolg5g=";
   };
 
   monado = applyPatches {
@@ -69,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "723652b545a79609f9f04cb89fcbf807d9d6451a";
-      hash = "sha256-wGqvTI/X22apc8XCN3GCGQClHfBW5xk73mZnwWvHtyI=";
+      rev = "f037264d23e2472a444a157370647fcd601ed81b";
+      hash = "sha256-exHbecudAy57szL7kut7/fBYCoekEs3riZzhMtFWS/c=";
     };
 
     postPatch = ''
@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     git
     glib
     glslang
+    hexdump
     librsvg
     pkg-config
     python3
@@ -133,12 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.ki18n
     kdePackages.kiconthemes
     kdePackages.kirigami
+    kdePackages.kirigami-addons
     kdePackages.qcoro
     kdePackages.qqc2-desktop-style
     libarchive
     libdrm
     libnotify
-    libpulseaudio
     librsvg
     libva
     nlohmann_json
@@ -147,9 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qttools
     x264
-  ]
-  ++ lib.optionals (cudaSupport && !clientLibOnly) [
-    cudaPackages.cudatoolkit
   ];
 
   cmakeFlags = [
@@ -161,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
     (lib.cmakeBool "WIVRN_OPENXR_MANIFEST_ABI" clientLibOnly)
-    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
+    (lib.cmakeFeature "GIT_TAG" "v${finalAttrs.version}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
   ]
   ++ lib.optionals (!clientLibOnly) [
@@ -170,17 +168,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
     (lib.cmakeBool "WIVRN_USE_X264" true)
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
-    (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
-  ]
-  ++ lib.optionals (cudaSupport && !clientLibOnly) [
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
   ];
 
   dontWrapQtApps = true;
+  separateDebugInfo = true;
 
-  preFixup = lib.optional (!clientLibOnly) ''
+  preFixup = lib.optionalString (!clientLibOnly) ''
     wrapProgram "$out/bin/wivrn-server" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [

@@ -1,0 +1,31 @@
+diff --git a/app/(main)/layout.tsx b/app/(main)/layout.tsx
+index a8af157f..9d54eb7b 100644
+--- a/app/(main)/layout.tsx
++++ b/app/(main)/layout.tsx
+@@ -1,6 +1,6 @@
+ import type { Metadata, Viewport } from "next";
+ import { getLocaleDirection } from "@/i18n/direction";
+-import { Geist, Geist_Mono } from "next/font/google";
++import localFont from "next/font/local";
+ import { headers } from "next/headers";
+ import { getLocale, getTranslations } from "next-intl/server";
+ import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
+@@ -26,14 +26,14 @@ async function resolveRequestLocale(): Promise<string> {
+   return seg ?? (await getLocale());
+ }
+ 
+-const geistSans = Geist({
++const geistSans = localFont({
++  src: '../fonts/Geist.ttf',
+   variable: "--font-geist-sans",
+-  subsets: ["latin"],
+ });
+ 
+-const geistMono = Geist_Mono({
++const geistMono = localFont({
++  src: '../fonts/Geist.ttf',
+   variable: "--font-geist-mono",
+-  subsets: ["latin"],
+ });
+ 
+ export const viewport: Viewport = {

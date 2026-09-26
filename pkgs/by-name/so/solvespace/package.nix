@@ -23,8 +23,8 @@
   libspnav,
   libthai,
   libxkbcommon,
-  pangomm,
-  pcre,
+  pangomm_1_4,
+  pcre2,
   util-linuxMinimal, # provides libmount
   libxtst,
   libxdmcp,
@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "solvespace";
   version = "3.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
@@ -43,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+ZSAC7wDOaN51RjbSAqaQOp10JzxSME3g0ln4VdkwcA=";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -69,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     libspnav
     libthai
     libxkbcommon
-    pangomm
-    pcre
+    pangomm_1_4
+    pcre2
     util-linuxMinimal
     libpthread-stubs
     libxdmcp

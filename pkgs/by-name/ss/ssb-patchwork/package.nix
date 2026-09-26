@@ -20,7 +20,7 @@ let
     inherit pname version src;
   };
   # we only use this to extract the icon
-  appimage-contents = appimageTools.extractType2 {
+  appimage-contents = appimageTools.extract {
     inherit pname version src;
   };
 

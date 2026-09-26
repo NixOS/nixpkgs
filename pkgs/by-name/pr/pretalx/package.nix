@@ -1,9 +1,11 @@
 {
   lib,
-  buildNpmPackage,
   gettext,
   python314,
   fetchFromGitHub,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
   plugins ? [ ],
   nixosTests,
 }:
@@ -13,71 +15,57 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_6;
+
+      django-hierarkey = prev.django-hierarkey.overrideAttrs (oldAttrs: {
+        version = "2.0.1";
+
+        src = fetchFromGitHub {
+          owner = "raphaelm";
+          repo = "django-hierarkey";
+          tag = "2.0.1";
+          hash = "sha256-zIz7aokOGLGXV/xJnYcz8lBP7b2rxLrfaD3i/DLpFR8=";
+        };
+
+        postPatch = null;
+      });
     };
   };
+in
+python.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "pretalx";
+  version = "2026.2.1";
+  pyproject = true;
 
-  version = "2026.1.2";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
-    tag = "v${version}";
-    hash = "sha256-/hs2sPeHyv06aXfUn7UdaGJo9UQ2hah/nufSxG+wO5Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dsnnr9/G8i5vfcinRiqpGv1ce90LwW7Esj/SrTK1Ov4=";
   };
 
-  meta = {
-    description = "Conference planning tool: CfP, scheduling, speaker management";
-    mainProgram = "pretalx-manage";
-    homepage = "https://github.com/pretalx/pretalx";
-    changelog = "https://docs.pretalx.org/changelog/v${version}/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hexa
-      SuperSandro2000
-    ];
-    platforms = lib.platforms.linux;
+  npmRoot = "src/pretalx/frontend";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version;
+    src = "${finalAttrs.src}/src/pretalx/frontend";
+    hash = "sha256-wWGNvUT9SFIm/Gfl8wuOe9xTn1QqH6JWoOIHTiSg0rQ=";
   };
-
-  pretix-schedule-editor = buildNpmPackage {
-    pname = "pretalx-schedule-editor";
-    inherit version src;
-
-    sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
-
-    npmDepsHash = "sha256-66PA2COL3lqMspYGoF/bOJje5URRu1voQbZspM7DTxs=";
-
-    npmBuildScript = "build";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp dist/** $out/
-
-      runHook postInstall
-    '';
-
-    inherit meta;
-  };
-in
-python.pkgs.buildPythonApplication rec {
-  pname = "pretalx";
-  inherit version src;
-  pyproject = true;
 
   outputs = [
     "out"
     "static"
   ];
 
-  patches = [
-    # don't run npm during rebuild command, we already use a separate derivation
-    # to build static assets
-    ./rebuild-no-npm.patch
-  ];
+  postPatch = ''
+    # we already provide npm deps
+    sed -i "/npm.*ci/d" src/pretalx/_build.py
+  '';
 
   nativeBuildInputs = [
     gettext
+    npmHooks.npmConfigHook
+    nodejs
   ];
 
   build-system = with python.pkgs; [
@@ -97,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
     "django-formset-js-improved"
     "django-formtools"
     "django-i18nfield"
+    "django-scopes"
     "djangorestframework"
     "markdown"
     "pillow"
@@ -137,6 +126,7 @@ python.pkgs.buildPythonApplication rec {
       publicsuffixlist
       python-dateutil
       qrcode
+      redis
       reportlab
       requests
       rules
@@ -154,16 +144,10 @@ python.pkgs.buildPythonApplication rec {
     postgres = with python.pkgs; [
       psycopg2
     ];
-    redis = with python.pkgs; [
-      redis
-    ];
   };
-
   postBuild = ''
-    # link schedule-editor so it can be picked up in staticfiles lookups
-    ln -s ${pretix-schedule-editor}/** ./src/pretalx/static/
-
-    # Generate all static files, see https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
+    # Generate all static files and translations, see
+    # https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
     PYTHONPATH=$PYTHONPATH:./src python -m pretalx rebuild
   '';
 
@@ -174,7 +158,6 @@ python.pkgs.buildPythonApplication rec {
     # Copy and merge static files
     mkdir -p $static
     cp -r ./src/static.dist/** $static/
-    cp -r ${pretix-schedule-editor}/** $static/
 
     # And link them into the package for staticfiles lookups
     rm -rf $out/${python.sitePackages}/pretalx/static
@@ -200,7 +183,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       responses
     ]
-    ++ lib.concatAttrValues optional-dependencies;
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     #  assert 'tests.dummy_app' in ['pretalx_pages']
@@ -220,5 +203,16 @@ python.pkgs.buildPythonApplication rec {
     );
   };
 
-  inherit meta;
-}
+  meta = {
+    description = "Conference planning tool: CfP, scheduling, speaker management";
+    mainProgram = "pretalx-manage";
+    homepage = "https://github.com/pretalx/pretalx";
+    changelog = "https://docs.pretalx.org/changelog/v${finalAttrs.version}/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      hexa
+      SuperSandro2000
+    ];
+    platforms = lib.platforms.linux;
+  };
+})

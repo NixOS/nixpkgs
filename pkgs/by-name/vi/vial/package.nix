@@ -12,7 +12,7 @@ let
     hash = "sha256-sN8i/MOPhaLZ4iJNKz/MdpRIGTZVV/G5qD7o+ID8dAM=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
     mainProgram = "Vial";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -59,6 +59,6 @@ To make this path available, set the following option:
 
 ```nix
 {
-  nix.settings.sandbox-paths = [ "/dev/net" ];
+  nix.settings.extra-sandbox-paths = [ "/dev/net" ];
 }
 ```

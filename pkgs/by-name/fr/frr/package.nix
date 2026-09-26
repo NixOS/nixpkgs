@@ -82,13 +82,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.6.1";
+  version = "10.7.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-sSvw9tfVNUyQjEOELoUAIQkEvXg765MsWvVKM0gsYUc=";
+    hash = "sha256-TnQLkzh9K3C9HBVORCdFRGgR+zLm+/V0+zwdwpKEUNs=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp

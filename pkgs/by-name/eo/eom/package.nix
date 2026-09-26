@@ -23,6 +23,11 @@
   wrapGAppsHook3,
   yelp-tools,
   gitUpdater,
+  gnome,
+  libavif,
+  libheif,
+  libjxl,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,6 +68,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libavif
+          libheif.lib
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
 
   passthru.updateScript = gitUpdater {
     odd-unstable = true;

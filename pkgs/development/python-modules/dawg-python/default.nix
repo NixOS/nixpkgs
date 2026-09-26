@@ -2,18 +2,23 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dawg-python";
   version = "0.7.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "DAWG-Python";
     hash = "sha256-Sl4yhuYmHMoC8gXP1VFqerEBkPowxRwo00WAj1leNCE=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "dawg_python" ];
 
@@ -23,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

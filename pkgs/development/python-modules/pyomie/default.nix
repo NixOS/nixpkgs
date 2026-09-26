@@ -3,6 +3,7 @@
   aiohttp,
   aioresponses,
   buildPythonPackage,
+  click,
   deepdiff,
   fetchFromGitHub,
   poetry-core,
@@ -15,22 +16,26 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyomie";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luuuis";
     repo = "pyomie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BOaOClTXeoRxWb2aJKN6+lQRCLAShvHPXsUZBbH0mno=";
+    hash = "sha256-gsCPqKBzQ0nA47WT30PesGuJ4/jicYsFXl04KQ8H/KQ=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "typer" ];
+  pythonRelaxDeps = [
+    "click"
+    "typer"
+  ];
 
   dependencies = [
     aiohttp
+    click
     rich
     typer
   ];

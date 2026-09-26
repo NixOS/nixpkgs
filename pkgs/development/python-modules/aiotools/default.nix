@@ -1,11 +1,12 @@
 {
   lib,
+  async-lru,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
-  async-lru,
-  pytestCheckHook,
   pytest-asyncio,
+  pytestCheckHook,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     async-lru
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -34,6 +36,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "aiotools" ];
+
+  disabledTestPaths = [
+    # Fatal Python error: Segmentation fault
+    "tests/test_fork.py"
+  ];
 
   meta = {
     description = "Idiomatic asyncio utilities";

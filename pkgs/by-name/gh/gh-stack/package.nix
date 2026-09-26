@@ -4,11 +4,13 @@
   buildGoModule,
   versionCheckHook,
   nix-update-script,
+  gitMinimal,
+  installAgentSkills,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.0.4";
+  version = "0.1.1";
 
   __structuredAttrs = true;
 
@@ -16,16 +18,21 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sC8QQ4H2WsEVf4FjaWlPvMlVlVc3J6IVmdlqNbJ3M6I=";
+    hash = "sha256-jwfqiCnCOOW0AKA52hbgvCCoLzfFX+QfM+vXABkzZgw=";
   };
 
-  vendorHash = "sha256-JnuqORtdW+xz8pAGAFXdjRey8jCEj+miJiyfY7gzRSU=";
+  vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"
   ];
+
+  nativeBuildInputs = [
+    installAgentSkills
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -38,7 +45,10 @@ buildGoModule (finalAttrs: {
     downloadPage = "https://github.com/github/gh-stack/";
     changelog = "https://github.com/github/gh-stack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      antoineco
+      ethancedwards8
+    ];
     mainProgram = "gh-stack";
   };
 })

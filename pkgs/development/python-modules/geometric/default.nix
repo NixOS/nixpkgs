@@ -28,17 +28,13 @@ buildPythonPackage rec {
     six
   ];
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Geometry optimization code for molecular structures";
     mainProgram = "geometric-optimize";
     homepage = "https://github.com/leeping/geomeTRIC";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
   };
 }

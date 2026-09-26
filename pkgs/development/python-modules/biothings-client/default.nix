@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "biothings-client";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "biothings_client.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SG664xpajbLLTRfqanqYJhKdZqAOXPTDNBcfCAdlZ5M=";
+    hash = "sha256-cmYLlF4R1nfaGEtSYhexjLbsibMeT/mvD7J4EL4GVss=";
   };
 
   build-system = [ setuptools ];

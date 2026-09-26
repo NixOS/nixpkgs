@@ -41,13 +41,13 @@
 }:
 
 let
-  thirdparty_version = "2.2.0";
+  thirdparty_version = "2.2.4";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${thirdparty_version}";
-    hash = "sha256-JGDaRlKYgHADMC3C2kiRmTqoL0dHuJKXiUVAYknQsGA=";
+    hash = "sha256-knmu+ARLvbEQqRfwXYogYkfD8j5QCKy4V8YMIeEjMbU=";
   };
 
   buildIndi3rdParty =
@@ -77,7 +77,7 @@ let
           "-DRULES_INSTALL_DIR=lib/udev/rules.d"
           "-DINDI_DATA_DIR=share/indi/"
         ]
-        ++ lib.optional doCheck [
+        ++ lib.optionals doCheck [
           "-DINDI_BUILD_UNITTESTS=ON"
           "-DINDI_BUILD_INTEGTESTS=ON"
         ]
@@ -177,7 +177,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -198,7 +197,6 @@ let
         "x86_64-linux"
         "armv6l-linux"
         "armv7l-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -451,7 +449,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -538,7 +535,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };

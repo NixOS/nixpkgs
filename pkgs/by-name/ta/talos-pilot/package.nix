@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "talos-pilot";
-  version = "0.1.9";
+  version = "0.1.11";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Handfish";
     repo = "talos-pilot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZF74efMWQkZgSbOnzyygzt4pRADY1liWVpvnzWns8Y=";
+    hash = "sha256-d0LZAJufOv72T4lfukAKFEKiZOJNAibHQYXhuhFKbAU=";
   };
 
-  cargoHash = "sha256-loCYAgZhNtYs8aBbOJMLkS9i0XglOn6BrodLQROPMPQ=";
+  cargoHash = "sha256-Toa5e0euMwUpSMiMH0nJL3KW98voSlUBl3XgvbTvCFo=";
 
   nativeBuildInputs = [
     protobuf

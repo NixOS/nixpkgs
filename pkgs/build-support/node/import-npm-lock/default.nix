@@ -21,6 +21,11 @@ let
   getName = package: package.name or "unknown";
   getVersion = package: package.version or "0.0.0";
 
+  isDistTag =
+    constraint:
+    match "[a-zA-Z][a-zA-Z0-9._-]*" constraint != null
+    && match "[vxX][0-9xX.].*|[xX]" constraint == null;
+
   # Fetch a module from package-lock.json -> packages
   fetchModule =
     {
@@ -108,8 +113,8 @@ lib.fix (self: {
           # Substitute the constraint with the version of the dependency from the top-level of package-lock.
           if
             (
-              # if the version is `latest`
-              version == "latest"
+              # if the version is a dist tag
+              isDistTag version
               ||
                 # Or if it's a github reference
                 matchGitHubReference version != null

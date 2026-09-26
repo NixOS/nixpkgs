@@ -53,7 +53,7 @@ appimageTools.wrapAppImage {
   extraInstallCommands = ''
     # Add desktop convencience stuff
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
+    install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/icons/
     substituteInPlace $out/share/applications/flexoptix-app.desktop \
       --replace-fail 'Exec=AppRun' "Exec=$out/bin/${pname} --"
 
@@ -70,10 +70,7 @@ appimageTools.wrapAppImage {
     homepage = "https://www.flexoptix.net";
     changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
     platforms = [ "x86_64-linux" ];
   };
 }

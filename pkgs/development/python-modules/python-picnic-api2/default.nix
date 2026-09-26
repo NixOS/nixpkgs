@@ -3,6 +3,7 @@
   fetchFromGitHub,
   hatchling,
   lib,
+  pydantic,
   pytestCheckHook,
   pythonAtLeast,
   requests,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-picnic-api2";
-  version = "1.3.4";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codesalatdev";
     repo = "python-picnic-api";
     tag = "v${version}";
-    hash = "sha256-ytzzGr/z0jrsudtCBrcvGITo4DxxC8JCmSmQ8ybeomM=";
+    hash = "sha256-Ft/OEXkiXfsX1Kyi47PzycHk19jEIwYqyG+KP8q8x0I=";
   };
 
   postPatch = lib.optionalString (pythonAtLeast "3.14") ''
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
+    pydantic
     requests
     typing-extensions
   ];

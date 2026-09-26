@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diff-so-fancy";
-  version = "1.4.10";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mEVRwkfVK/qmOeU37hSxmO2t0z0TY4MWOjkt6hICQQ4=";
+    sha256 = "sha256-5laSG8UWsCXAK+Woiz1Opy3VViboCI7J2AsqoDiuq7k=";
   };
 
   nativeBuildInputs = [

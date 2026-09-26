@@ -48,13 +48,13 @@
   };
 
   testScript = ''
-    import os
+    import subprocess
 
     # prepare certificates
 
     def cmd(command):
       print(f"+{command}")
-      r = os.system(command)
+      r = subprocess.run(command, shell=True).returncode
       if r != 0:
         raise Exception(f"Command {command} failed with exit code {r}")
 

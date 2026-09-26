@@ -31,18 +31,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.11.2";
+  version = "0.12.0";
 
   outputs = [
     "out"
+    "bin"
     "dev"
+    "benchmark"
   ];
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-L4/BY68ZBCpebQxryR7D1CxrsneYvw8B8EvW2mkF7bA=";
+    hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -67,7 +69,6 @@ stdenv.mkDerivation rec {
   # that the cmake build can apparently use:
   #     OpenGL/GLUT (for Examples -> comparison with sjpeg)
   #     viewer (see `cmakeFlags`)
-  #     plugins like for GDK and GIMP (see `cmakeFlags`)
 
   # Vendored libraries:
   # `libjxl` currently vendors many libraries as git submodules that they
@@ -125,7 +126,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
-    # * the `gimp` one, which allows GIMP to load jpeg-xl files
     "-DJPEGXL_ENABLE_PLUGINS=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -150,18 +150,22 @@ stdenv.mkDerivation rec {
       --replace 'sh$' 'sh( -e$|$)'
   '';
 
-  postInstall =
-    lib.optionalString enablePlugins ''
-      GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
-      GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
-        gdk-pixbuf-query-loaders --update-cache
-    ''
-    # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p "$out/bin"
-      makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
-        --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
-    '';
+  # Move `benchmark_xl` into a separate output to avoid a file collision
+  # with the `benchmark_xl` binary provided by `jpegli`.
+  postInstall = ''
+    moveToOutput "bin/benchmark_xl" "$benchmark"
+  ''
+  + lib.optionalString enablePlugins ''
+    GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+  '';
 
   env = lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
     CXXFLAGS = "-mfp16-format=ieee";
@@ -169,7 +173,7 @@ stdenv.mkDerivation rec {
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
-  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
+  doCheck = with stdenv.hostPlatform; !(isi686 || isDarwin && isx86_64);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
     # https://github.com/libjxl/libjxl/issues/3629

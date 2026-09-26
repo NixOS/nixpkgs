@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   /**
-    `doCheck` controles whether tests are added as build gate for the combined package.
+    `doCheck` controls whether tests are added as build gate for the combined package.
     This includes both the unit tests and the functional tests, but not the
     integration tests that run in CI (the flake's `hydraJobs` and some of the `checks`).
   */
@@ -238,12 +238,17 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "nix";
     description = "Nix package manager";
-    longDescription = nix-cli.meta.longDescription;
-    homepage = nix-cli.meta.homepage;
-    donationPage = nix-cli.meta.donationPage;
-    license = nix-cli.meta.license;
+    inherit (nix-cli.meta)
+      longDescription
+      homepage
+      donationPage
+      license
+      platforms
+      changelog
+      ;
+
     teams = teams;
-    platforms = nix-cli.meta.platforms;
+
     outputsToInstall = [
       "out"
       "man"

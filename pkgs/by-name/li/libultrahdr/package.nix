@@ -40,6 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })
+
+    # Remove platform and architecture detection logic
+    # Also drop arch-specific compile and optimization flags to ensure
+    # packaging friendliness.
+    # Based on https://github.com/google/libultrahdr/pull/383
+    # modified to target 1.4.0 instead of main
+    ./remove-platform-and-detection-logic.patch
+
+    # fix tests on big-endian
+    # https://github.com/google/libultrahdr/pull/396
+    (fetchpatch {
+      url = "https://github.com/google/libultrahdr/commit/13a058f452d846e43d4691f6885eeeaa8b0ea8d0.patch";
+      hash = "sha256-2ZVvBMz8wQLEThuXdRJbbx5m2ouRZpxVWoH88RLmit4=";
+    })
   ];
 
   # CMake incorrect absolute include/lib paths: https://github.com/NixOS/nixpkgs/issues/144170
@@ -52,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
         'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
         'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
+
+  # use sse2 for floating point math to fix tests
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    CFLAGS = "-mfpmath=sse -msse2";
+    CXXFLAGS = "-mfpmath=sse -msse2";
+  };
 
   cmakeFlags = [
     (lib.cmakeBool "UHDR_BUILD_TESTS" true)
@@ -102,33 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       yzx9
     ];
-    # CMake script rejects non-approved platform targets
-    # https://github.com/google/libultrahdr/pull/383 would get rid of that
-    platforms =
-      let
-        # Values from the "Detect system" section in /CMakeLists.txt
-        # https://github.com/google/libultrahdr/blob/d52a0d13814ca399fc8a07e23de1d2c63f0e8404/CMakeLists.txt#L34
-        oss = [
-          "linux"
-          "windows"
-          "darwin"
-        ];
-        archs = [
-          "i686"
-          "x86_64"
-          "aarch64"
-          "armv7l"
-          "riscv64"
-          "riscv32"
-          "loongarch64"
-        ];
-      in
-      lib.lists.intersectLists lib.platforms.all (
-        lib.lists.crossLists (arch: os: "${arch}-${os}") [
-          archs
-          oss
-        ]
-      );
+    platforms = lib.platforms.all;
     license = with lib.licenses; [
       asl20
     ];

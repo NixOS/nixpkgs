@@ -9,19 +9,21 @@
   pipewire,
 
   withPipewireVisualizer ? true,
+  withAiDj ? false,
+  withMCPServer ? false,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotatui";
-  version = "0.38.6";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "LargeModGames";
     repo = "spotatui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2H/HvyGc2xxP1S0eiP2eSiBOjkzKdqyOOD+8mLVLvE0=";
+    hash = "sha256-u5gpXOVrJILp423aFdsw740J1w8oXNh9yVdhfd1JQbs=";
   };
 
-  cargoHash = "sha256-3Ht4LjwFmmf07XizPrH66V2yPkOzrY4dVvvA4GRAcTs=";
+  cargoHash = "sha256-C83fpo+ozkmnvfiZ2479nDri1PO+TZewmphXs4qVUZw=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withPipewireVisualizer rustPlatform.bindgenHook;
 
@@ -36,10 +38,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cover-art"
     "discord-rpc"
     "mpris"
+    "scripting"
     "streaming"
     "telemetry"
+    "tui"
   ]
-  ++ lib.optional withPipewireVisualizer "audio-viz";
+  ++ lib.optional withAiDj "ai-dj"
+  ++ lib.optional withPipewireVisualizer "audio-viz"
+  ++ lib.optional withMCPServer "mcp-server";
+
+  # A test is broken when using the AI DJ.  This has been reported upstream and will be fixed in the
+  # next version.
+  # See: https://github.com/LargeModGames/spotatui/issues/478
+  doCheck = !withAiDj;
 
   passthru.updateScript = nix-update-script { };
 

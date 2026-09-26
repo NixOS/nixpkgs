@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "3.30.1";
+  version = "3.36.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AS2s9OUgXc5wW73HCogCWorq3BFLydLQrE/LEir6BFc=";
+    hash = "sha256-AN2Y/6d/HKMLMLNVXru04vccVdMt2LJKCDioE1k/J94=";
   };
 
   build-system = [

@@ -15,7 +15,7 @@ in
 
 stdenv.mkDerivation {
   pname = "gl-gsync-demo";
-  version = "unstable-2020-12-27";
+  version = "1.0-unstable-2020-12-27";
 
   src = fetchFromGitHub {
     owner = "dahenry";

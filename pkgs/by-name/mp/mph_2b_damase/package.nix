@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
   fetchzip,
   installFonts,
@@ -15,5 +16,9 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ installFonts ];
 
-  meta = { };
+  meta = {
+    # Some other repositories list it as Public Domain; couldn't find evidence for this
+    license = lib.licenses.unfree;
+    homepage = "https://www.wazu.jp/gallery/views/View_MPH2BDamase.html";
+  };
 }

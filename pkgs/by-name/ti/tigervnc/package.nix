@@ -70,9 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
          --replace-fail '"/usr/bin/ssh' '"${openssh}/bin/ssh'
       source_top="$(pwd)"
     ''
+    # On Mac, do not build a .dmg, instead move the built .app to the source dir.
+    # Also drop the script's trailing `exit`: it fires an EXIT trap that
+    # `rm -rf`s the temp dir, which would delete the .app before the move we
+    # append below can run (the move would otherwise be unreachable dead code
+    # after `exit`).
     + ''
-      # On Mac, do not build a .dmg, instead copy the .app to the source dir
-      gawk -i inplace 'BEGIN { del=0 } /hdiutil/ { del=2 } del<=0 { print } /$VERSION.dmg/ { del -= 1 }' release/makemacapp.in
+      gawk -i inplace 'BEGIN { del=0 } /hdiutil/ { del=2 } /^exit$/ { next } del<=0 { print } /$VERSION.dmg/ { del -= 1 }' release/makemacapp.in
       echo "mv \"\$APPROOT\" \"\$SRCDIR/\"" >> release/makemacapp.in
     '';
 
@@ -143,10 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv 'TigerVNC Viewer ${finalAttrs.version}.app' $out/Applications/
+      mv 'TigerVNC.app' $out/Applications/
       rm $out/bin/vncviewer
       echo "#!/usr/bin/env bash
-      open $out/Applications/TigerVNC\ Viewer\ ${finalAttrs.version}.app --args \$@" >> $out/bin/vncviewer
+      open $out/Applications/TigerVNC.app --args \$@" >> $out/bin/vncviewer
       chmod +x $out/bin/vncviewer
     '';
 
@@ -219,7 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     # Prevent a store collision.
     priority = 4;
     mainProgram = "vncviewer";

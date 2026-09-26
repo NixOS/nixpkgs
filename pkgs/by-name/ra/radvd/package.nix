@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
   ];
 
+  configureFlags = [ "--sysconfdir=/etc" ];
+
   # Needed for cross-compilation
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 

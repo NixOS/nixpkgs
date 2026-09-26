@@ -55,7 +55,7 @@
 
       # Provide a little logging of polkit checks - otherwise it's
       # impossible to know what's going on.
-      security.polkit.debug = true;
+      security.polkit.extraArgs = [ "--log-level=notice" ];
       security.polkit.extraConfig = ''
         polkit.addRule(function(action, subject) {
           const ns = "org.freedesktop.RealtimeKit1.";

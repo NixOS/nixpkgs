@@ -7,7 +7,7 @@
   setuptools,
   setuptools-scm,
 
-  # dependenices
+  # dependencies
   numpy,
   packaging,
   pandas,
@@ -32,13 +32,14 @@
 
   # tests
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   h5py,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "xarray";
-  version = "2026.04.0";
+  version = "2026.07.0";
   pyproject = true;
   # Needed mainly for pytestFlags with spaces
   __structuredAttrs = true;
@@ -47,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pydata";
     repo = "xarray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
+    hash = "sha256-dj6V/HkHRm1kjHlAHUjN7pGCa1ioW11o1fdKUyxI8e0=";
   };
 
   postPatch = ''
@@ -98,8 +99,14 @@ buildPythonPackage (finalAttrs: {
       accel ++ io ++ etc ++ parallel ++ viz;
   };
 
+  preCheck = ''
+    # tests become flaky with to many cores
+    export NIX_BUILD_CORES=$((NIX_BUILD_CORES > 8 ? 8 : NIX_BUILD_CORES))
+  '';
+
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ]
   # Besides scipy, these are not strictly needed for the tests, but adding all
@@ -120,6 +127,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "xarray" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/pydata/xarray/blob/${finalAttrs.src.tag}/doc/whats-new.rst";

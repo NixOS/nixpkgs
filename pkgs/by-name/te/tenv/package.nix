@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tenv";
-  version = "4.12.2";
+  version = "4.15.1";
 
   src = fetchFromGitHub {
     owner = "tofuutils";
     repo = "tenv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gWXBxw0dvaPCB9zCODFx5QM/6duVDuZgjI3l9VCPBtQ=";
+    hash = "sha256-E4wfG9KeW+v+KcizS9ut0S5gHzvPiChaP6uGRsXfkE4=";
   };
 
-  vendorHash = "sha256-8RHWpJ6cxnaIMeX9aL1144lOFmuKf74EB8cbT1yCXJc=";
+  vendorHash = "sha256-rZBHSlP1cRB2xzVbFLyd32q9vYPytv9nCpcjQqkei+w=";
 
   excludedPackages = [ "tools" ];
 

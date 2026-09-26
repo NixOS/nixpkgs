@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -22,16 +22,15 @@
   makeBinaryWrapper,
   runCommand,
 }:
-
 let
   pname = "plezy";
-  version = "2.1.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-l09xiSTyV8MNE9ZI69nM+DTpumQ0ZOaRjhLlq4rXX0w=";
+    hash = "sha256-X5EoRR65TE+LoaKksu5+F++IUBCPtyJXavprMFO4+iY=";
   };
 
   simdutf = fetchurl {
@@ -46,16 +45,17 @@ let
   '';
 
   meta = {
-    description = "Modern cross-platform Plex & Jellyfin client built with Flutter";
+    description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
+    changelog = "https://github.com/edde746/plezy/releases/tag/${version}";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -63,17 +63,19 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter347.buildFlutterApplication rec {
     inherit pname version src;
 
-    pubspecLock = lib.importJSON ./pubspec.lock.json;
+    # upstream targets 3.12 until its freezed 4 migration: https://github.com/edde746/plezy/blob/2.21.0/pubspec.yaml#L6-L9
+    pubspecLock = lib.recursiveUpdate (lib.importJSON ./pubspec.lock.json) {
+      sdks.dart = ">=3.12.0 <4.0.0";
+    };
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
-    # Upstream uses a sentry-dart fork that fetches sentry-native as a zip instead of via
-    # git clone. The PR was merged and reverted upstream (getsentry/sentry-dart#3630), so
-    # we use upstream since theres no actual meaningful difference
-    patches = [ ./replace-sentry-fork.patch ];
+    patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      ./aarch64-linux.patch
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -139,7 +141,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-khmDHKsW8zs7ehIj86EgqortRKKDUoOfPsX7VpvnfNY=";
+      hash = "sha256-jM4qKLT1szelq6yggbOLwyn8s3iN/gkpKIb1gsCionI=";
     };
 
     nativeBuildInputs = [

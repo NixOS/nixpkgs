@@ -10,26 +10,25 @@
   openssl,
   stdenv,
 }:
-
-let
-  # udev rules are in another unversioned repo
-  udevRules = fetchurl {
-    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
-    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
-  version = "0.31.0";
+  version = "0.32.0";
+
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    # Last updated 2026-08-10
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/9cc4b7d0727cc1ad0b87d5999aa9cdbfd8021632/public/files/69-probe-rs.rules";
+    hash = "sha256-JvH56IOapIIaT1gD9XCd/mdgrha3VVNSjneVDdebnoI=";
+  };
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
+    hash = "sha256-C6ioLkU0tmCzWtThPGyOOiD/Z9n8RB5eogAxTmBwDj8=";
   };
 
-  cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
+  cargoHash = "sha256-Sfx8n9+Q9wplfnFenavoCWSaO7nlcAmRpxyyKe5Il6A=";
 
   buildAndTestSubdir = finalAttrs.pname;
 
@@ -47,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+    install -D -m 444 $udevRules $out/etc/udev/rules.d/69-probe-rs.rules
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd probe-rs \
@@ -67,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cmd::dap_server::server::debugger::test::disassemble::positive_byte_offset_that_lands_in_the_middle_of_an_instruction_unaligned_"
     "--skip=cmd::dap_server::server::debugger::test::launch_and_threads"
     "--skip=cmd::dap_server::server::debugger::test::launch_with_config_error"
-    "--skip=cmd::dap_server::server::debugger::test::test_initalize_request"
+    "--skip=cmd::dap_server::server::debugger::test::test_initialize_request"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_and_terminate"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_no_probes"
     "--skip=cmd::dap_server::server::debugger::test::wrong_request_after_init"

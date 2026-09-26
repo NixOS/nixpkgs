@@ -51,7 +51,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.4.6";
+  version = "5.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = finalAttrs.version;
-    hash = "sha256-ndL5pE332VDlCk16XYUDaXhsg/J8ndGtgDhKct+y26c=";
+    hash = "sha256-BDU0RP6NRRnSZelRadhvSm2mfsuewyMwpcRlDBPDC0E=";
   };
 
   npmDeps = fetchNpmDeps {

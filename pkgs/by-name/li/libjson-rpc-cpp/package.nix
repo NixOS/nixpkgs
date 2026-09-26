@@ -11,6 +11,7 @@
   hiredis,
   jsoncpp,
   libmicrohttpd,
+  patchelf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
     doxygen
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    patchelf
   ];
 
   buildInputs = [
@@ -70,32 +74,41 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
     cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
-             -DCMAKE_BUILD_TYPE=Release
+             -DCMAKE_INSTALL_LIBDIR=lib \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DWITH_COVERAGE=OFF \
+             ${lib.optionalString stdenv.hostPlatform.isDarwin "-DCMAKE_INSTALL_NAME_DIR=$out/lib -DCMAKE_INSTALL_RPATH=$out/lib"}
     runHook postConfigure
   '';
 
-  preInstall = ''
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      q="$p:${
-        lib.makeLibraryPath [
-          jsoncpp
-          argtable
-          libmicrohttpd
-          curl
-        ]
-      }:$out/lib"
-      patchelf --set-rpath $q $1
-    }
-
-    mkdir -p $out
-  '';
+  preInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      function fixRunPath {
+        p=$(patchelf --print-rpath $1)
+        q="$p:${
+          lib.makeLibraryPath [
+            jsoncpp
+            argtable
+            libmicrohttpd
+            curl
+          ]
+        }:$out/lib"
+        patchelf --set-rpath $q $1
+      }
+    ''
+    + ''
+      mkdir -p $out
+    '';
 
   postInstall = ''
-    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib64/pkgconfig/*.pc
-    for f in Install/lib64/*.so* $(find Install/bin -executable -type f); do
+    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib*/pkgconfig/*.pc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for f in Install/lib*/*.so* $(find Install/bin -executable -type f); do
       fixRunPath $f
     done
+  ''
+  + ''
     cp -r Install/* $out
   '';
 
@@ -110,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jsonrpcstub";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ robertrichter ];
   };

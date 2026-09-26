@@ -3,13 +3,13 @@
   name = "actual";
   meta.maintainers = [ lib.maintainers.oddlama ];
 
-  nodes.machine =
+  containers.machine =
     { ... }:
     {
       services.actual.enable = true;
     };
 
-  nodes.machine2 =
+  containers.machine2 =
     { ... }:
     {
       services.actual = {

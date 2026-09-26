@@ -6,21 +6,31 @@
   decopatch,
   packaging,
   pytest,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.9.1";
+  version = "3.10.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_cases";
     inherit version;
-    hash = "sha256-xOGB8bUlyTGjGNSBL6jeZWwsj7d/zPFXHs8Mxf6Of48=";
+    hash = "sha256-RR+ePs1dLYGkNiwQxEESb1s9GuOn769Z9gsfuTDfLWk=";
   };
 
-  build-system = [ setuptools-scm ];
+  patches = [
+    # https://github.com/smarie/python-pytest-cases/issues/385
+    # https://github.com/smarie/python-pytest-cases/pull/386
+    ./pytest-9.1-compat.patch
+  ];
+
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   dependencies = [
     decopatch

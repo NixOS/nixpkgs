@@ -2,34 +2,38 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "vulnx";
-  version = "2.0.1";
+  version = "2.0.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "vulnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HejAK/KXpQ9HouA3JpX7MoMzMUoMmKX7eEKwMGfgSx4=";
+    hash = "sha256-oIoLInhErN1AojJ8GLLfxsp4Yy/S0UjnCESrVfOGp/4=";
   };
 
-  vendorHash = "sha256-WVskArdIieEof/GDlzEZbY4QDYfAQyP0+Le24q+Kfu0=";
+  vendorHash = "sha256-xAdaTu/DRtolP6tXge42ntJvq7Wi9gDErRfX1HZposc=";
 
   subPackages = [ "cmd/vulnx/" ];
 
   ldflags = [ "-s" ];
 
-  __structuredAttrs = true;
-
   strictDeps = true;
 
-  # Issue with updater and version check
-  # nativeInstallCheckInputs = [ versionCheckHook ];
-  # doInstallCheck = true;
-  # versionCheckProgramArg = [ "version" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to work with CVEs";

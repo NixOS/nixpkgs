@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast, powerful, and feature-rich Lua formatting and checking tool";
     mainProgram = "CodeFormat";
     platforms = lib.platforms.unix;
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nobbz ];
   };
 })

@@ -58,7 +58,6 @@ mkDerivation rec {
 
   meta = {
     description = "GPU firmware for FreeBSD drm-kmod";
-    platforms = lib.platforms.freebsd;
     license =
       lib.optional withAmd lib.licenses.unfreeRedistributableFirmware
       # Intel license prohibits modification. this will wrap firmware files in an ELF

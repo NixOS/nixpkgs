@@ -9,19 +9,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.5.0";
+        version = "1.5.4";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-zx3NPuwz3ZNJeYw4CG1/q8uwbGpA7G1/hvw6VmoCNkg=";
+          hash = "sha256-ru0dAuR6Q6NoYnLtEGm9/SiXPk6u1Lw3dcckkuqB7Cs=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-ZyYGCGZHHy1YYE7O9fN1qFQbLshsRFBSrNLt1GXNyU8=";
+        vendorHash = "sha256-k0HhLDImOs+nDn7B3VfxORnWRxTRlefi01YQiaNASeY=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";
@@ -98,7 +98,7 @@ let
           description = "";
           longDescription = ''
             This package produces identical store derivations to `pkgs.${packageName}`
-            overriden and installed by the NixOS module `programs.singularity`
+            overridden and installed by the NixOS module `programs.singularity`
             with default configuration.
 
             This is for binary substitutes only. Use pkgs.${packageName} instead.

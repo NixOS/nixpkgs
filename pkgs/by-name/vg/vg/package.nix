@@ -19,7 +19,6 @@
   python3,
   util-linux,
   which,
-  whoami,
 
   # run-time
   boost,
@@ -42,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vg";
-  version = "1.74.1";
+  version = "1.75.1";
 
   src = fetchFromGitHub {
     owner = "vgteam";
     repo = "vg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CY4nUtVetdmoex/sRnoncEbvuQloV0WMZXtQpPksO1s=";
+    hash = "sha256-CPyOZ4w5b26NQ+bz5QSaB6DcwQnlyjNNHlK1hHIEu9s=";
     fetchSubmodules = true;
   };
 
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
     which
-    whoami
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux # rev, and possibly others

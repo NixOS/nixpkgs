@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "offpunk";
-  version = "3.1";
+  version = "3.2";
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RwigItHVNsgq6k3O8YrSMFBaZMJwJSzB6dfnNiYsefY=";
+    hash = "sha256-1S8iftZ34NkhTydnr8RJBWzAMu/uk0MGi14PANWv/lM=";
   };
 
   build-system = with python3Packages; [ hatchling ];

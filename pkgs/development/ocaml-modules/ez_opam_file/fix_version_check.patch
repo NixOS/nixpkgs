@@ -1,0 +1,41 @@
+diff --git a/src/ez_opam_file/dune b/src/ez_opam_file/dune
+index 2d4f448..8430268 100644
+--- a/src/ez_opam_file/dune
++++ b/src/ez_opam_file/dune
+@@ -1,35 +1,11 @@
+-(* -*- tuareg -*- *)
+-
+-let () =
+-  let version = ref "new" in
+-  let dir = Sys.getenv "OPAM_SWITCH_PREFIX" in
+-  let packages_dir = dir ^ "/.opam-switch/packages" in
+-  let packages = Sys.readdir packages_dir in
+-  Array.iter (fun package ->
+-    try
+-       let pos = String.index package '.' in
+-       let name = String.sub package 0 pos in
+-       let vers = String.sub package
+-          (pos+1) (String.length package - pos - 1) in
+-       if name = "opam-file-format" && vers < "2.1.1" then version := "old"
+-    with _ ->
+-      Printf.eprintf "package %s\n%!" package
+- ) packages;
+-
+- let version = !version in
+-  Printf.kprintf
+-    Jbuild_plugin.V1.send
+-{|
+ (library
+   (name ez_opam_file)
+   (public_name ez_opam_file)
+   (wrapped true)
+   (libraries opam-file-format
+-    (select v1.ml from ( -> v1.%s.ml))
++    (select v1.ml from ( -> v1.new.ml))
+     )
+   )
+ 
+ (documentation
+   (package ez_opam_file))
+-|}
+-version

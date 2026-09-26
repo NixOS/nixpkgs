@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Find a website's favicon";
     homepage = "https://github.com/scottwernervt/favicon";
-    changelog = "https://github.com/scottwernervt/favicon/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/scottwernervt/favicon/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
   };
 }

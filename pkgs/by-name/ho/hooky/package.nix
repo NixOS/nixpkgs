@@ -11,19 +11,14 @@ in
 
 haskellPackages.mkDerivation {
   pname = "hooky";
-  version = "1.0.3";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "brandonchinn178";
     repo = "hooky";
-    rev = "5ce665f376bc80948f45764bf3f2e0d590245938";
-    hash = "sha256-w4sWD5dZTNKwrYhrJw9RcwGoeNxpJnm/6RRqYjiIiBg=";
+    rev = "463904d439f7aa10c8f9a8aad1719df412166007";
+    hash = "sha256-g+33B9KPKQDSoBvMpRfL1MoiE1kMml2dw/Z1GwPfyd0=";
   };
-
-  postPatch = ''
-    substituteInPlace src/Hooky/Config.hs \
-      --replace-fail 'KDL.text' 'KDL.string'
-  '';
 
   isLibrary = true;
   isExecutable = true;
@@ -33,9 +28,13 @@ haskellPackages.mkDerivation {
     bytestring
     concurrent-output
     containers
+    deepseq
     directory
+    file-io
     filepath
+    Glob
     kdl-hs
+    os-string
     process
     scientific
     text
@@ -46,6 +45,7 @@ haskellPackages.mkDerivation {
     base
     containers
     directory
+    file-io
     filepath
     optparse-applicative
     process

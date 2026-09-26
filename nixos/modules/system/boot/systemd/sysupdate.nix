@@ -138,7 +138,7 @@ in
 
     systemd.services.systemd-sysupdated = {
       aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
-      path = [ pkgs.gnupg ];
+      path = [ pkgs.gnupgMinimal ];
     };
 
     systemd.timers = {

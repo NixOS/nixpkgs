@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "transmission";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ coconnor ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

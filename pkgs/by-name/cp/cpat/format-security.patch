@@ -1,0 +1,44 @@
+diff --git a/src/cpat.c b/src/cpat.c
+index 4bb5dec..6aeeca3 100644
+--- a/src/cpat.c
++++ b/src/cpat.c
+@@ -126,10 +126,10 @@ pager(char *title,char* text,int num_phrases, char **phrases)
+ 
+     /* Add title and header lines */
+     wattron(outer,A_UNDERLINE);
+-    mvwprintw(outer,2,4,title);
++    mvwprintw(outer,2,4,"%s",title);
+     xtermtitle(title);
+     wattroff(outer,A_UNDERLINE);
+-    for (i = 0;i < num_phrases;i++) mvwprintw(outer,4+i,4,phrases[i]);
++    for (i = 0;i < num_phrases;i++) mvwprintw(outer,4+i,4,"%s",phrases[i]);
+     wrefresh(outer);
+ 
+     /* Values for inner window */
+@@ -244,10 +244,10 @@ d                    Scroll forward half a page\n\
+ q                    Exit pager",-1,NULL);
+                     box(outer,0,0);
+                     wattron(outer,A_UNDERLINE);
+-                    mvwprintw(outer,2,4,title);
++                    mvwprintw(outer,2,4,"%s",title);
+                     xtermtitle(title);
+                     wattroff(outer,A_UNDERLINE);
+-                    for (i = 0;i < num_phrases;i++) mvwprintw(outer,4+i,4,phrases[i]);
++                    for (i = 0;i < num_phrases;i++) mvwprintw(outer,4+i,4,"%s",phrases[i]);
+                     wrefresh(outer);
+                     prev_line = -1; /* force page refresh */
+                     break;
+@@ -354,11 +354,11 @@ menu(char *title,char **queries,int num_queries,
+     box(outer, 0, 0);
+ 
+     wattron(outer,A_UNDERLINE);
+-    mvwprintw(outer,title_y,4,title);
++    mvwprintw(outer,title_y,4,"%s",title);
+     xtermtitle(title);
+     wattroff(outer,A_UNDERLINE);
+     for (i = 0;i < num_phrases;i++) 
+-        mvwprintw(outer,phrases_y+i,6,phrases[i]);
++        mvwprintw(outer,phrases_y+i,6,"%s",phrases[i]);
+     wrefresh(outer);
+ 
+     input = newwin(inner_h,inner_w,inner_y,inner_x);

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kwok";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kwok";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gtDGkAXbNCWUVGL4+C6mOkWwrPcik6+nGEQNrjLb57U=";
+    hash = "sha256-SXiZiDor/+58JcKSBPHOWijvuCqdFmP2vRKJzLTriw8=";
   };
 
-  vendorHash = "sha256-UNso+e/zYah0jApHZgWnQ3cUSV44HsMqPy4q4JMCyiA=";
+  vendorHash = "sha256-Y+tQKkuLPA4gGtlhQlG8rrvNB+n0whRKUpaqIf1WxX8=";
 
   doCheck = false; # docker is need for test
 
@@ -25,5 +25,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = lib.licenses.asl20;
   };
 })

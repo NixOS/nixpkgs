@@ -189,7 +189,7 @@ in
       emulatedSystems = mkOption {
         default = [ ];
         example = [
-          "wasm32-wasi"
+          "wasm32-wasip1"
           "x86_64-windows"
           "aarch64-linux"
         ];

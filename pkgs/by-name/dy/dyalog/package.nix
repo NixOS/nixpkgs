@@ -59,7 +59,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "20.0.52753";
+  version = "20.0.53963";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   passthru.sources =
@@ -79,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.x86_64.deb";
-        hash = "sha256-g5bilV2y7luWRZ1RPxe74F2mAKVHpKcytWWrX8dCuF8=";
+        hash = "sha256-4LjB/aHK40HecgZA7YUIoY/CaCnSoMOs9OoIhong8j4=";
       };
       "aarch64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.aarch64.deb";
-        hash = "sha256-DR7Kjqdp5BKW3XKUNYIdaUiR4Wd+sWkiSLtT5Ni1E4E=";
+        hash = "sha256-5uVxMK0yowLOARW+PjFDpFiUNc/0cU/5lzY8t5Z6DxY=";
       };
     };
 

@@ -180,12 +180,14 @@ in
         User = "x2go";
         Group = "x2go";
         RuntimeDirectory = "x2go";
-        StateDirectory = "x2go";
+        StateDirectory = [
+          "x2go"
+          "x2go/conf"
+        ];
       };
       preStart = ''
         if [ ! -e /var/lib/x2go/setup_ran ]
         then
-          mkdir -p /var/lib/x2go/conf
           cp -r ${cfg.package}/etc/x2go/* /var/lib/x2go/conf/
           ln -sf ${x2goServerConf} /var/lib/x2go/conf/x2goserver.conf
           ln -sf ${x2goAgentOptions} /var/lib/x2go/conf/x2goagent.options

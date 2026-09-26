@@ -121,6 +121,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postBuild = ''
+    export HOME=$(mktemp -d)
     # build docs
     mkdir -p .sphinx/deps
     ln -s ${buildPackages.python3.pkgs.swagger-ui-bundle.src} .sphinx/deps/swagger-ui

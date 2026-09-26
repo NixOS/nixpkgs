@@ -22,6 +22,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-2hS8EzaUlxAqBT0R5NMYAuj3ZMPq+x5nqJnidQOAGfM=";
   };
 
+  postPatch = ''
+    substituteInPlace sphinxfeed.py \
+      --replace-fail "__version__ = '0.3.5'" "__version__ = '${finalAttrs.version}'"
+  '';
+
   build-system = [
     hatchling
   ];

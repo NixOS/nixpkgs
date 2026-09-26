@@ -8,19 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam_tmpdir";
-  version = "0.09";
+  version = "0.11";
 
   src = fetchurl {
     url = "https://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${finalAttrs.version}.tar.gz";
-    hash = "sha256-MXa1CY6alD83E/Q+MJmsv8NaImWd0pPJKZd/7nbe4J8=";
+    hash = "sha256-SuMOKSsQ68zJBhhFi+5hgt3nkus73mh8jMPZhmMkzfM=";
   };
 
   postPatch = ''
     substituteInPlace pam_tmpdir.c \
-      --replace /sbin/pam-tmpdir-helper $out/sbin/pam-tmpdir-helper
+      --replace-fail '/usr/libexec/pam-tmpdir/pam-tmpdir-helper' "$out/libexec/pam-tmpdir/pam-tmpdir-helper"
 
     # chmod/chown fails on files in /nix/store
-    sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.{am,in}
+    sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.am
 
     # the symlinks in m4 assume FHS
     rm -rf m4

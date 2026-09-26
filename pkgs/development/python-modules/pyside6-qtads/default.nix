@@ -8,19 +8,19 @@
   qt6,
   setuptools,
   setuptools-scm,
-  shiboken6,
+  shiboken6-generator,
 }:
 
 buildPythonPackage rec {
   pname = "pyside6-qtads";
-  version = "4.5.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyside6_qtads";
     tag = "v${version}";
-    hash = "sha256-rAkv6dFyS4Nw3FDLwZ1zp0EU4BhD/xrhNgUiIIktJ8s=";
+    hash = "sha256-pSgDdfOuEnluiKKnCJjxVZbQwZld4tr7G2S8ZZXJkvo=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail @shiboken6@ ${shiboken6} \
+      --replace-fail @shiboken6@ ${shiboken6-generator} \
       --replace-fail @pyside6@ ${pyside6}
 
     # can't use pythonRelaxDepsHook because it runs postBuild but the dependency check
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   dependencies = [
     pyside6
-    shiboken6
+    shiboken6-generator
   ];
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

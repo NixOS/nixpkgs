@@ -5,7 +5,6 @@
   libiconv,
   libiconvReal,
   updateAutotoolsGnuConfigScriptsHook,
-  darwin,
 }@args:
 
 let
@@ -23,6 +22,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunistring";
   version = "1.4.2";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/libunistring-${finalAttrs.version}.tar.gz";

@@ -4,39 +4,43 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_12,
   pnpmConfigHook,
   python3,
-  electron_39,
+  electron_44,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
 }:
 
 let
-  electron = electron_39;
+  electron = electron_44;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.3";
+  version = "5.13.1";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRco2eyQrWf5jGvdWYn4mt8FD/xu1+FftQoB3wuF2Lw=";
+    hash = "sha256-bYN63EQo+c0SIz3BBIwkAS1QqS7+sg7JdpoOekVYq5Q=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-s/KllzT46L2o4SWS3z3Z7FDQD6FEEEAnPdM6tsfGRUo=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-7F1mRrNgU9Ki7yfkz46LXgw10bY5roJP12oo4wSg91s=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10_29_2
+    pnpm
     pnpmConfigHook
     makeBinaryWrapper
     copyDesktopItems
@@ -46,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    npm_config_nodedir=${electron.headers} \
-      node --run pack -- \
+    pnpm exec electron-vite build
+    npm_package_config_node_gyp_nodedir=${electron.headers} \
+      pnpm exec electron-builder --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
@@ -89,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
+    donationPage = "https://zulip.com/help/support-zulip-project";
+    downloadPage = "https://github.com/zulip/zulip-desktop";
+    changelog = "https://github.com/zulip/zulip-desktop/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;

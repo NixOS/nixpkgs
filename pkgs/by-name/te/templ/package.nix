@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "templ";
-  version = "0.3.1001";
+  version = "0.3.1020";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-146QxN+osvlzp8NTGm5TN2yvbu3cOodXfIVeIKsS+7I=";
+    hash = "sha256-wv7qKZfnavz8lxfaOaIJJySNsXsjke1ADJuv2kgQOHE=";
   };
 
-  vendorHash = "sha256-pVZjZCXT/xhBCMyZdR7kEmB9jqhTwRISFp63bQf6w5A=";
+  vendorHash = "sha256-i4uDGZb3VZUvIyO2Tt53VR1Do/3OYtj6JccGoFnnlbs=";
 
   subPackages = [ "cmd/templ" ];
 

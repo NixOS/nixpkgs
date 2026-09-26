@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "thunderkittens";
-  version = "0-unstable-2026-05-27";
+  version = "0-unstable-2026-09-12";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -15,8 +15,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "ThunderKittens";
-    rev = "34b15f7e7012de25ae162c8d9dc85296dd342676";
-    hash = "sha256-VN6AACu6LqOuCCvpNOeGGdYkQblxyWolBnCNeSxgiL4=";
+    rev = "67845f5fa48d05343dbbc1ba1403f11061f08d2d";
+    hash = "sha256-gtINdn4eqc65B6/zG0Qe/Kfaz/uq6tELldSwLtaqakI=";
   };
 
   dontBuild = true;

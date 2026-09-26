@@ -1,4 +1,5 @@
 {
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "26.03.1";
+  version = "26.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m2YEFyIBrXUo4mxdDJ9bgVeWUxefi9muJ9iGtnq3bgs=";
+    hash = "sha256-Hw1sOADqQYn0JX3rJcT6bCAarzRV1OaTPyuRCDv5sF4=";
     fetchSubmodules = true;
   };
 
@@ -162,7 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open Virtual Network";

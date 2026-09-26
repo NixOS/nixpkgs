@@ -90,10 +90,6 @@ let
 in
 
 {
-  meta = {
-    maintainers = with lib.maintainers; [ wolfgangwalther ];
-  };
-
   # TODO: Add enableServer option and corresponding pgBackRest TLS server service.
   # TODO: Write wrapper around pgbackrest to turn --repo=<name> into --repo=<number>
   # The following two are dependent on improvements upstream:

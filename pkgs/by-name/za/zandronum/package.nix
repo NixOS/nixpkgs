@@ -17,7 +17,6 @@
   fluidsynth,
   fmodex,
   openssl,
-  gtk2,
   python3,
   game-music-emu,
   copyDesktopItems,
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     fmod
     fluidsynth
     libopus
-    gtk2
   ];
 
   nativeBuildInputs = [
@@ -93,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DFORCE_INTERNAL_GME=OFF"
+    "-DNO_GTK=ON"
   ]
   ++ (if serverOnly then [ "-DSERVERONLY=ON" ] else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 

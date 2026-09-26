@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -23,6 +24,7 @@
   icu74,
   lcms,
   libavif,
+  libbacktrace,
   libdrm,
   libepoxy,
   libevent,
@@ -30,6 +32,7 @@
   libgcrypt,
   libgpg-error,
   libjpeg8,
+  libmanette,
   libopus,
   libpng,
   libsoup_3,
@@ -78,6 +81,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211
@@ -120,8 +130,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
-          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
+          x86_64-linux = "sha256-My6nSOMD2NfPGUmOJKZgWpkjktEsj+P+CPeVmKy1VAQ=";
+          aarch64-linux = "sha256-5CCcWiZN1lVoiiSEO1OvxLcuKhSOIQrD5GH1TYr7XIY=";
         }
         .${system} or throwSystem;
     };
@@ -134,6 +144,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -149,13 +160,15 @@ let
       icu74
       lcms
       libavif
+      libbacktrace
       libdrm
       libepoxy
       libevent
-      libgcc.lib
+      libgcc
       libgcrypt
       libgpg-error
       libjpeg8
+      libmanette
       libopus
       libpng
       libsoup_3
@@ -193,8 +206,7 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
-        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
+        aarch64-darwin = "sha256-EjI0TdmQfB2qT2bBtbJFpsa+bplkJ5YyyVxNoOgsnZc=";
       }
       .${system} or throwSystem;
   };
@@ -202,7 +214,6 @@ in
 {
   x86_64-linux = webkit-linux;
   aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
   aarch64-darwin = webkit-darwin;
 }
 .${system} or throwSystem

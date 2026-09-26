@@ -10,24 +10,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "1.1.15";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FfIiGULAxwnU/TOUxlnGj1IPC71TxBW9HZ57qbs0qZY=";
+    hash = "sha256-uAXfq5LLnSv62IDX9H7j+XqAtOnyofzhkj2F3AY/lws=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-01yKdVuWR16ckmwyjpk4FMjLQl+b1VvcyGP2r1KMRCc=";
+  cargoHash = "sha256-djeu78G0T44mULNieHlC4Dx/Zdrwcyf9DXG1Ia9dTao=";
 
   nativeBuildInputs = [ cmake ];
 
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";
   };
+
+  checkFlags = [
+    # fails with NotPermitted inside the build sandbox
+    "--skip=zerofs_client_tests::metadata_operations"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

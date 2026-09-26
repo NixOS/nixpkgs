@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyro5";
-  version = "5.16";
+  version = "5.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "Pyro5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8ORwfzPpcNQdGRNe1EnY0A/+9itmSY3ouvreOcc18u8=";
+    hash = "sha256-WVvUh/XPk+/1iRARAVD3fgmlJu60DZps7kRaZxuiwBo=";
   };
 
   build-system = [ setuptools ];

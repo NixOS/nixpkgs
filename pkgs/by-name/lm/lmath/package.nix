@@ -7,13 +7,13 @@
 }:
 let
   pname = "lmath";
-  version = "1.10.15";
+  version = "1.11.2";
   src = fetchurl {
     url = "https://github.com/lehtoroni/lmath-issues/releases/download/v${version}/LMath_Linux_r${version}-release.AppImage";
-    hash = "sha256-JOV+g7izjctCkHl5q/9T2PSUZzPzVPisHppbPofVYy0=";
+    hash = "sha256-NHfNnBYxKXRk4IQonQTjYtIIk3apZs45BbWGIvLfl3w=";
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
@@ -36,12 +36,7 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun' 'Exec=lmath'
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^r([0-9.]*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple notebook app with LaTeX capabilities";

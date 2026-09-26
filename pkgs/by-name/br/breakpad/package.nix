@@ -13,8 +13,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "breakpad";
-
   version = "2024.02.16";
+
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
@@ -22,7 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yk+TSzjmAr9QMTYduKVe/Aizph/NNmSS385pvGJckiQ=";
   };
 
+  strictDeps = true;
+
+  enableParallelBuilding = true;
+
   buildInputs = [ zlib ];
+
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [ "--disable-tools" ];
 
   postUnpack = ''
     ln -s ${lss} $sourceRoot/src/third_party/lss

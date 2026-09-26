@@ -1,34 +1,3 @@
-diff --git a/cuda_bindings/cuda/bindings/_bindings/cynvrtc.pyx.in b/cuda_bindings/cuda/bindings/_bindings/cynvrtc.pyx.in
-index f684be6870..9437de642b 100644
---- a/cuda_bindings/cuda/bindings/_bindings/cynvrtc.pyx.in
-+++ b/cuda_bindings/cuda/bindings/_bindings/cynvrtc.pyx.in
-@@ -8,7 +8,7 @@ cimport cuda.bindings._lib.windll as windll
- {{else}}
- cimport cuda.bindings._lib.dlfcn as dlfcn
- {{endif}}
--from cuda.pathfinder import load_nvidia_dynamic_lib
-+from ctypes import CDLL
- from libc.stdint cimport intptr_t, uintptr_t
- import threading
- 
-@@ -47,7 +47,7 @@ cdef int _cuPythonInit() except -1 nogil:
-     # Load library
-     with gil, __symbol_lock:
-         {{if 'Windows' == platform.system()}}
--        handle = load_nvidia_dynamic_lib("nvrtc")._handle_uint
-+        handle = CDLL("@libnvrtc@/lib/libnvrtc.so")._handle
- 
-         # Load function
-         {{if 'nvrtcGetErrorString' in found_functions}}
-@@ -156,7 +156,7 @@ cdef int _cuPythonInit() except -1 nogil:
-         {{endif}}
- 
-         {{else}}
--        handle = <void*><uintptr_t>(load_nvidia_dynamic_lib("nvrtc")._handle_uint)
-+        handle = <void*><uintptr_t>(CDLL("@libnvrtc@/lib/libnvrtc.so")._handle)
- 
-         # Load function
-         {{if 'nvrtcGetErrorString' in found_functions}}
 diff --git a/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx b/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx
 index 78ea77b283..0b875a6cd3 100644
 --- a/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx
@@ -96,7 +65,7 @@ index d676aac372..ed3c000566 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
-index 28f0919423..852f75e46d 100644
+index 51f6e8205b..233160cc24 100644
 --- a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 @@ -10,7 +10,7 @@ import threading
@@ -108,7 +77,7 @@ index 28f0919423..852f75e46d 100644
  
  
  ###############################################################################
-@@ -406,7 +406,7 @@ cdef void* __nvmlDeviceSetRusdSettings_v1 = NULL
+@@ -414,7 +414,7 @@ cdef void* __nvmlGpuInstanceSetVgpuSchedulerState_v2 = NULL
  
  
  cdef void* load_library() except* with gil:
@@ -117,8 +86,30 @@ index 28f0919423..852f75e46d 100644
      return <void*>handle
  
  
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
+index d3eb62be13..6d5d093c1b 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
+@@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
+ import threading
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ ###############################################################################
+ # Extern
+@@ -82,7 +82,7 @@ cdef void* __nvrtcGetPCHHeapSizeRequired = NULL
+ cdef void* __nvrtcSetFlowCallback = NULL
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvrtc")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvrtc@/lib/libnvrtc.so")._handle
+     return <void*>handle
+ 
+ cdef int _init_nvrtc() except -1 nogil:
 diff --git a/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
-index 8a84834a9a..a3ced66807 100644
+index 03ade4f939..0385da3087 100644
 --- a/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
 @@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
@@ -130,7 +121,7 @@ index 8a84834a9a..a3ced66807 100644
  
  
  ###############################################################################
-@@ -75,7 +75,7 @@ cdef void* __nvvmGetProgramLog = NULL
+@@ -76,7 +76,7 @@ cdef void* __nvvmLLVMVersion = NULL
  
  
  cdef void* load_library() except* with gil:
@@ -167,12 +158,3 @@ index 5cd65fbd96..fbbcffbbb7 100644
          {{endif}}
  
      {{if 'Windows' == platform.system()}}
-diff --git a/cuda_bindings/cuda/bindings/nvml.pyx b/cuda_bindings/cuda/bindings/nvml.pyx
-index 42c9fdcc87..0661379a68 100644
---- a/cuda_bindings/cuda/bindings/nvml.pyx
-+++ b/cuda_bindings/cuda/bindings/nvml.pyx
-@@ -27471,4 +27471,3 @@ cpdef str vgpu_type_get_name(unsigned int vgpu_type_id):
-         __status__ = nvmlVgpuTypeGetName(<nvmlVgpuTypeId_t>vgpu_type_id, vgpu_type_name, <unsigned int*>size)
-     check_status(__status__)
-     return cpython.PyUnicode_FromStringAndSize(vgpu_type_name, size[0])
--

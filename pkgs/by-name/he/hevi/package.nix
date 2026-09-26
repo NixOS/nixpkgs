@@ -1,36 +1,38 @@
 {
   callPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   lib,
   stdenv,
-  zig_0_13,
+  zig_0_16,
 }:
 
 let
-  zig = zig_0_13;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hevi";
-  version = "1.1.0";
+  version = "1.1.0-unstable-2026-05-03";
 
-  src = fetchFromGitHub {
-    owner = "Arnau478";
+  src = fetchFromCodeberg {
+    owner = "arnauc";
     repo = "hevi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wnpuM2qlbeDIupDPQPKdWmjAKepCG0+u3uxcLDFB09w=";
+    rev = "3c6f08ec73ac56673321f0449d4ae0a74b7674a9";
+    hash = "sha256-5i1Fe3/AYFu4HKQSXBWsdYDNl+FCp7QOZJ0eX1bw3f8=";
   };
 
   nativeBuildInputs = [
     zig
   ];
 
-  postConfigure = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  deps = callPackage ./deps.nix { };
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   meta = {
     description = "Hex viewer";
-    homepage = "https://github.com/Arnau478/hevi";
+    homepage = "https://codeberg.org/arnauc/hevi";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "hevi";

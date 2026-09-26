@@ -10,11 +10,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "kdf";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/kdf/releases/download/v${finalAttrs.version}/kdf-${finalAttrs.version}.tbz";
-    hash = "sha256-0WFYKw7+ZtlY3WuMnCEGjp9kVM4hg3fWz4eCPexi4M4=";
+    hash = "sha256-oyfh2qstNn11svuoX16CeIYpUiX5TAnmjiSi4qdQgQA=";
   };
 
   propagatedBuildInputs = [

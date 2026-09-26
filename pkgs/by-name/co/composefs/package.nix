@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     fsverity-utils
   ];
 
-  mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
+  mesonCheckFlags = lib.optionals enableValgrindCheck [ "--setup=valgrind" ];
 
   preCheck = ''
     patchShebangs --build ../tests/*dir ../tests/*.sh

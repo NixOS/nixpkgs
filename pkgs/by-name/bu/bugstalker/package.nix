@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
-  version = "0.4.1";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9l6IVQBjZkpSS28ai/d27JUPBWj2Q17RVhsFrrI45TM=";
+    hash = "sha256-AAeSvy/rvyylPH2jTVBGN95QIc6gumREQYuruhRo2ZI=";
   };
 
-  cargoHash = "sha256-+VvKWY9CqUUkDKzG2nLG9ibkE6xwP3StTzlovBZH8O8=";
+  cargoHash = "sha256-GGi5hnrK5WpvnXHNckpsBch/SJ4lDvH7peSlrCdk218=";
 
   # Tests require rustup.
   doCheck = false;

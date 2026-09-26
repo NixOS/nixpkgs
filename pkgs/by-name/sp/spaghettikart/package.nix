@@ -4,7 +4,6 @@
   applyPatches,
   writeTextFile,
   fetchurl,
-  fetchpatch,
   stdenv,
   replaceVars,
   yaml-cpp,
@@ -24,6 +23,7 @@
   SDL2,
   SDL2_net,
   spdlog,
+  stb,
   tinyxml-2,
   tomlplusplus,
   zenity,
@@ -83,12 +83,6 @@ let
     '';
   };
 
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
-  };
-
   stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
@@ -107,20 +101,6 @@ let
     tag = "v4.1.0";
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
   };
-
-  # Include cmake4 patch
-  # Remove when yaml-cpp.src is updated to include it
-  yaml-patched = applyPatches {
-    src = yaml-cpp.src;
-    patches = [
-      (fetchpatch {
-        name = "yaml-cpp-fix-cmake-4.patch";
-        url = "https://github.com/jbeder/yaml-cpp/commit/c2680200486572baf8221ba052ef50b58ecd816e.patch";
-        hash = "sha256-1kXRa+xrAbLEhcJxNV1oGHPmayj1RNIe6dDWXZA3mUA=";
-      })
-    ];
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
@@ -159,12 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         rev = "7e635fca68d014934b4af8a1cf874f63989352b7";
         hash = "sha256-cxTaOuLXHRU8xMz9gluYz0a93O0ez2xOxbloyc1m1ns=";
       };
-      yaml-cpp_src = fetchFromGitHub {
-        owner = "jbeder";
-        repo = "yaml-cpp";
-        rev = "28f93bdec6387d42332220afa9558060c8016795";
-        hash = "sha256-59/s4Rqiiw7LKQw0UwH3vOaT/YsNVcoq3vblK0FiO5c=";
-      };
+      yaml-cpp_src = srcOnly yaml-cpp;
       tinyxml2_src = srcOnly tinyxml-2;
     })
 
@@ -209,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TINYXML2" "${tinyxml-2}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TOMLPLUSPLUS" "${tomlplusplus.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-patched}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${srcOnly yaml-cpp}")
   ];
 
   strictDeps = true;
@@ -219,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
@@ -239,6 +214,10 @@ stdenv.mkDerivation (finalAttrs: {
     # We need to use GetAppDirectoryPath on nix or else it crashes
     substituteInPlace src/port/GameExtractor.cpp \
     --replace-fail "const std::string assets_path = Ship::Context::GetAppBundlePath();" "const std::string assets_path = Ship::Context::GetAppDirectoryPath();"
+
+    # fix building with fmt_12
+    substituteInPlace torch/lib/miniz/zip_file.hpp \
+    --replace-fail '#include <cstdint>' '#include <cstdint>''\n#include <cstring>'
   '';
 
   postBuild = ''

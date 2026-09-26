@@ -47,8 +47,6 @@ let
 
       systemd = config.systemd.package;
 
-      bootspecTools = config.boot.bootspec.package;
-
       nix = config.nix.package.out;
 
       timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;

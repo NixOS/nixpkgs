@@ -25,22 +25,21 @@
 
   # tests
   nixosTests,
+  testers,
+  kea,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "3.0.3"; # only even minor versions are stable
+  version = "3.2.0"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CXAt2weLY36F3pI2y+3T+51698bnlwJsU4tFdIrU1jE=";
+    hash = "sha256-FL9pXTe2W5sb9VD+pdCtr5gGxQ5UGe8qF2pLjpqt498=";
   };
 
   patches = [
     ./dont-create-system-paths.patch
-    # backport of an upstream fix for boost-1.89:
-    #   https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2771
-    ./boost-1.89.patch
   ];
 
   postPatch = ''
@@ -63,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "postgresql" withPostgresql)
     (lib.mesonOption "localstatedir" "/var")
     (lib.mesonOption "runstatedir" "/run")
+    (lib.mesonOption "python.platlibdir" "${placeholder "python"}/${python3.sitePackages}")
+    (lib.mesonOption "python.purelibdir" "${placeholder "python"}/${python3.sitePackages}")
   ];
 
   postConfigure = ''
@@ -105,11 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja doc
   '';
 
-  postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
-  '';
-
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
@@ -118,6 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
     networking-networkd = lib.recurseIntoAttrs {
       inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
+    };
+
+    version = testers.testVersion {
+      package = kea;
+      command = "kea-shell -v";
+      version = finalAttrs.version;
     };
   };
 

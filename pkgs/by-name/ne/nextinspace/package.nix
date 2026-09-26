@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "not-stirred";
+    owner = "gideonshaked";
     repo = "nextinspace";
     tag = "v${finalAttrs.version}";
     hash = "sha256-oEvRxaxx1pIco2+jm/3HUN0a0nqdo2VosCisM0MWTjU=";

@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   makeWrapper,
   glibc,
   adcli,
   augeas,
+  bashNonInteractive,
   dnsutils,
   c-ares,
   curl,
@@ -65,19 +67,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.13.0";
+  version = "2.13.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-/zMF7+rpQpWNq7srK2/gP99tgq8s6uFAYb/ORoPO/9w=";
+    hash = "sha256-f4abHqZ8ojNU4dVw1hkfEJC4asE/NamhYmOQyy368eI=";
   };
 
   patches = [
     # Keep in mind to check /src/external/pac_responder.m4 for Kerberos compatibility before update Kerberos !!!
     # Fix Kerberos Support version for PAC responder
     #./fix-kerberos-version.patch
+
+    # Remove once a release containing this upstream fix is packaged.
+    (fetchpatch2 {
+      name = "CVE-2026-14476.patch";
+      url = "https://github.com/SSSD/sssd/commit/ba207eab76ff5253662a763b9b6e9ea42f03d31b.patch?full_index=1";
+      hash = "sha256-55V8RfIcGF49GGebg+pgCLPU9MGY2S/7PaOGIqwNL0w=";
+    })
   ];
 
   postPatch = ''
@@ -91,11 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = true;
 
-  # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
+    ];
+    KRB5_CONFIG = lib.getExe' (lib.getDev libkrb5) "krb5-config";
+    NSUPDATE = lib.getExe' dnsutils "nsupdate";
+    XMLLINT = lib.getExe' libxml2 "xmllint";
+    XSLTPROC = lib.getExe' libxslt "xsltproc";
+  };
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
@@ -134,10 +150,18 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     doxygen
+    (python3.withPackages (
+      p: with p; [
+        setuptools
+        distutils
+        python-ldap
+      ]
+    ))
   ];
 
   buildInputs = [
     augeas
+    bashNonInteractive
     dnsutils
     c-ares
     curl
@@ -150,13 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     nfs-utils
     p11-kit
-    (python3.withPackages (
-      p: with p; [
-        setuptools
-        distutils
-        python-ldap
-      ]
-    ))
     popt
     talloc
     tdb

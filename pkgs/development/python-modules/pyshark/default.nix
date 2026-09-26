@@ -29,10 +29,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.6";
   pyproject = true;
 
-  # Almost all tests fail with:
-  # RuntimeError: There is no current event loop in thread 'MainThread'
-  disabled = pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = "pyshark";
@@ -58,6 +54,8 @@ buildPythonPackage (finalAttrs: {
     (replaceVars ./hardcode-tshark-path.patch {
       tshark = lib.getExe' wireshark-cli "tshark";
     })
+    # Compat for Python 3.14 asyncio changes
+    ./py314-compat.patch
   ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -80,6 +78,13 @@ buildPythonPackage (finalAttrs: {
     # flaky
     # KeyError: 'Packet of index 0 does not exist in capture'
     "test_getting_packet_summary"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.PicklingError: logger cannot be pickled
+    "test_iterate_empty_psml_capture"
+    # configparser.NoSectionError: No section: 'tshark'
+    # Path is mocked, and yet...
+    "test_get_tshark_path"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin

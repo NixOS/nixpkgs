@@ -39,7 +39,12 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/brimdata/super/releases/tag/v${finalAttrs.version}";
     description = "Analytics database that puts JSON and relational tables on equal footing";
     homepage = "https://superdb.org";
-    license = lib.licenses.bsd3;
+    license = {
+      free = false;
+      fullName = "SuperDB Source Available License version 1.0";
+      redistributable = true;
+      url = "https://github.com/brimdata/super/blob/5baa422ab9791bfc1a7f778b2e4354885825adf8/LICENSE.md";
+    };
     mainProgram = "super";
     maintainers = with lib.maintainers; [ hythera ];
   };

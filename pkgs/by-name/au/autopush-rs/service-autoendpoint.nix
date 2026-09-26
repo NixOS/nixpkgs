@@ -15,8 +15,8 @@ in
 {
   _class = "service";
   options = {
-    package = lib.mkPackageOption pkgs "autopush-rs.out" { };
     autoendpoint = {
+      package = lib.mkPackageOption pkgs "autopush-rs" { };
       settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = tomlFmt.type;
@@ -25,7 +25,7 @@ in
               description = "Endpoint of the database server.";
               type = lib.types.str;
               default = "";
-              example = lib.literalExpression "redis+socket://${config.services.redis.servers.autopush-rs.unixSocket}";
+              example = lib.literalExpression "redis+socket://\${config.services.redis.servers.autopush-rs.port}";
             };
           };
         };
@@ -40,7 +40,7 @@ in
     in
     {
       process.argv = [
-        "${config.package}/bin/autoendpoint"
+        "${cfg.package}/bin/autoendpoint"
         "-c"
         (toString configFile)
       ];

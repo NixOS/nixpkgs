@@ -7,14 +7,16 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "shira";
-  version = "1.8.2";
+  version = "1.8.5";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "KraXen72";
     repo = "shira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SgxEvIpjRfc0saoarqw8KySwhbk1UYCGjMcbhhWMhZg=";
+    hash = "sha256-SPR2Jtc6mYURwMl4c/v2fPGydBu7aOhrvetgFoBvjoM=";
   };
 
   build-system = [
@@ -31,12 +33,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ytmusicapi
   ];
 
+  # Needed because of:
+  # ytmusicapi==1.12.1 not satisfied by version 1.12.2
+  # yt-dlp==2026.3.17 not satisfied by version 2026.7.4
+  pythonRelaxDeps = [
+    "ytmusicapi"
+    "yt-dlp"
+  ];
+
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      ffmpeg
+    ]}"
   ];
 
   meta = {

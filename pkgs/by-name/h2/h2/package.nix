@@ -9,7 +9,7 @@
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "h2";
-  version = "2.4.240";
+  version = "2.5.252";
 
   outputs = [
     "out"
@@ -20,11 +20,11 @@ maven.buildMavenPackage (finalAttrs: {
     owner = "h2database";
     repo = "h2database";
     tag = "version-${finalAttrs.version}";
-    hash = "sha256-Cy6MoumJBhhcYT6dCHWeOfmhjGRkdNvSONdIiZaf6uU=";
+    hash = "sha256-5nzV5g5z9hxavJkOgf5Zi2j9/1iyXVGEluLwrplX2J4=";
   };
 
   mvnParameters = "-f h2/pom.xml";
-  mvnHash = "sha256-ue1X0fswi3C9uqJ/cVCf/qd2XStMve1k1qA+IsREOGk=";
+  mvnHash = "sha256-j4Uso/bl4UhQbJc7Wre0btgC+9RKvuCHkn9euQFuTxk=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   callPackage,
   fetchurl,
@@ -9,11 +8,11 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "140.11.0esr";
+  version = "140.16.0esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "d06adb3ef4de1324e3d61872d70de31ab08ac013f33903549bed28c6ebcc5b4dee94bb36388282c1935d77d1a564079f3adbf08d6bb80284a899cbb3d861300c";
+    sha512 = "fabf5b481594a9a860b6ae379d2ee89ba291b807c94334ee15bad1fe862edb47c22e890d892e33d6a6ec57fce4ab12aa9c9c6fa4a501b881ecc6211ac04bd9a0";
   };
 
   meta = {
@@ -22,12 +21,22 @@ buildMozillaMach rec {
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.unix;
-    broken = stdenv.buildPlatform.is32bit;
-    # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-    # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    identifiers = {
+      cpeParts = {
+        product = "firefox";
+        sw_edition = "esr";
+        update = "*";
+        vendor = "mozilla";
+        version = lib.removeSuffix "esr" version;
+      };
+      purlParts = {
+        type = "generic";
+        spec = "firefox@${lib.removeSuffix "esr" version}";
+      };
+    };
   };
   tests = {
     inherit (nixosTests) firefox-esr-140;

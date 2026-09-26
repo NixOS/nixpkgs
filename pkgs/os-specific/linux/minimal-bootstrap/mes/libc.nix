@@ -1,11 +1,13 @@
+let
+  sourcesJson = (builtins.fromJSON (builtins.readFile ./sources.json));
+in
+
 {
   lib,
   kaem,
   ln-boot,
   mes,
-  mes-libc,
   buildPlatform,
-  fetchurl,
 }:
 let
   pname = "mes-libc";
@@ -18,8 +20,8 @@ let
     }
     .${buildPlatform.system};
 
-  sources = (lib.importJSON ./sources.json).${arch}.linux.gcc;
-  inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
+  sources = sourcesJson."${arch}.linux.gcc";
+  inherit (sources) libtcc1_SOURCES libc_gnu1_SOURCES libc_gnu2_SOURCES;
 
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
@@ -27,14 +29,17 @@ let
   #
   # Passing this many arguments is too much for kaem so we need to split
   # the operation in two
-  firstLibc = (lib.take 100 libc_gnu_SOURCES) ++ [ ./ldexpl.c ];
-  lastLibc = lib.drop 100 libc_gnu_SOURCES;
+  #
+  # We also vendor a copy of ldexpl. We do not `fetchurl` it as the mes GitLab
+  # often has force pushes and links are thus unstable.
+  firstLibc = libc_gnu1_SOURCES + " " + ./ldexpl.c;
+  lastLibc = libc_gnu2_SOURCES;
 in
 kaem.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
-    nativeBuildInputs = [ ln-boot ];
+    extraPath = "${ln-boot}/bin";
 
     passthru.CFLAGS = "-std=c11";
 
@@ -56,8 +61,8 @@ kaem.runCommand "${pname}-${version}"
     mkdir -p ''${out}/lib/${arch}-mes
 
     # libc.c
-    catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
-    catm ''${out}/lib/libc.c ''${TMPDIR}/first.c ${lib.concatStringsSep " " lastLibc}
+    catm ''${TMPDIR}/first.c ${firstLibc}
+    catm ''${out}/lib/libc.c ''${TMPDIR}/first.c ${lastLibc}
 
     # crt{1,n,i}.c
     cp lib/linux/${arch}-mes-gcc/crt1.c ''${out}/lib
@@ -65,11 +70,11 @@ kaem.runCommand "${pname}-${version}"
     cp lib/linux/${arch}-mes-gcc/crti.c ''${out}/lib
 
     # libtcc1.c
-    catm ''${out}/lib/libtcc1.c ${lib.concatStringsSep " " libtcc1_SOURCES}
+    catm ''${out}/lib/libtcc1.c ${libtcc1_SOURCES}
 
     # getopt.c
     cp lib/posix/getopt.c ''${out}/lib/libgetopt.c
 
     # Install headers
-    ln -s ${mes.srcPrefix}/include ''${out}/include
+    ${ln-boot}/bin/ln -s ${mes.srcPrefix}/include ''${out}/include
   ''

@@ -11,6 +11,7 @@
   grpcio-tools,
   grpclib,
   httpx,
+  installAgentSkills,
   invoke,
   ipython,
   mypy,
@@ -34,18 +35,21 @@
   types-toml,
   typing-extensions,
   watchfiles,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "modal";
-  version = "1.4.2";
+  version = "1.5.5";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "modal-client";
     tag = "py/v${finalAttrs.version}";
-    hash = "sha256-MXaiei2hUBwI9qlB7HZtWbnrsZq/iLnZgqIejn2ZgX8=";
+    hash = "sha256-KHk7NWfcp+xN2VHU/k6YLxJRKGUeJR5erXC7DBDgSYo=";
   };
   sourceRoot = "${finalAttrs.src.name}/py";
 
@@ -61,6 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    installAgentSkills
     invoke
     ipython
     grpcio-tools
@@ -105,7 +110,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     python-dotenv
     six
+    versionCheckHook
   ];
+
+  preInstall = ''
+    rm -rf build/lib/modal/skills
+  '';
 
   disabledTestPaths = [
     # Fail due to not finding /bin/bash
@@ -127,6 +137,15 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Non-deterministic
     "test_queue_blocking_put"
+
+    # try to hit modal servers
+    "test_blob_upload_uses_proxy"
+    "test_grpc_control_plane_uses_prox"
+    "test_grpc_task_command_router_uses_proxy"
+    "test_socks5_proxy_via_all_proxy"
+
+    # flaky
+    "test_process_fork"
   ];
 
   __darwinAllowLocalNetworking = true;

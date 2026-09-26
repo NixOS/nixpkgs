@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "5.20.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -55,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     gtk4 # for gtk4-update-icon-cache checked during configure
+    libxml2 # xmllint
   ];
 
   buildInputs = [

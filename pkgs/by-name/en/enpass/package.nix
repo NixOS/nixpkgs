@@ -101,6 +101,7 @@ let
         "i686-linux"
       ];
       maintainers = with lib.maintainers; [ ewok ];
+      mainProgram = "Enpass";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -131,17 +132,18 @@ let
   updater = {
     update = stdenv.mkDerivation {
       name = "enpass-update-script";
-      SCRIPT = ./update_script.py;
+      SCRIPT = toString ./update_script.py;
 
       buildInputs = with python3Packages; [
         python
         requests
+        packaging
         pathlib2
         six
         attrs
       ];
       shellHook = ''
-        exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
+        exec python $SCRIPT --target pkgs/by-name/en/enpass/data.json --repo ${baseUrl}
       '';
 
     };

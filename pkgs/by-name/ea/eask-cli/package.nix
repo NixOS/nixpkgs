@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/emacs-eask/cli/blob/${finalAttrs.version}/CHANGELOG.md";
-    description = "CLI for building, runing, testing, and managing your Emacs Lisp dependencies";
+    description = "CLI for building, running, testing, and managing your Emacs Lisp dependencies";
     homepage = "https://emacs-eask.github.io/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eask";

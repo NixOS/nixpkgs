@@ -10,15 +10,15 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "safety-schemas";
-  version = "0.0.18";
+  version = "0.0.21";
   pyproject = true;
 
   src = fetchPypi {
     pname = "safety_schemas";
-    inherit version;
-    hash = "sha256-OhJ6U7ruCoglMGtdG+SGZmks+YuqzpeF0Xv2BOkGSUo=";
+    inherit (finalAttrs) version;
+    hash = "sha256-BrbSiUZK0VHDrbnoMe6jH5oigNC5vNN1A9uw0D00JfI=";
   };
 
   postPatch = ''
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

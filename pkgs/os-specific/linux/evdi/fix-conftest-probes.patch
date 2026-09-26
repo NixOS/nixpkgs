@@ -1,0 +1,10 @@
+--- a/module/conftest.sh
++++ b/module/conftest.sh
+@@ -32,6 +32,7 @@
+ 	done
+ }
+ CFLAGS=$(requote "$@")
++CFLAGS="$CFLAGS '-DKBUILD_MODNAME=\"conftest\"' '-DKBUILD_BASENAME=\"conftest\"'"
+ 
+ WORKDIR="$(mktemp -d)"
+ trap 'rm -rf "$WORKDIR"' EXIT

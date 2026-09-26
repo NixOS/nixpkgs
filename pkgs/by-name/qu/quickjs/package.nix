@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs";
-  version = "2025-09-13-2";
+  version = "2026-06-04";
 
   src = fetchurl {
     url = "https://bellard.org/quickjs/quickjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mWxrUBj8lVrU0GQm0OnLcTaFoAyCWqXAQYvVP334sLQ=";
+    hash = "sha256-s3boObMil4MT2Sn9IGY7EbpYt131pGwSbdGeovpwrSo=";
   };
 
   outputs = [
@@ -91,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://bellard.org/quickjs/";
-    description = "Small and embeddable Javascript engine";
+    description = "Small and embeddable JavaScript engine";
     longDescription = ''
-      QuickJS is a small and embeddable Javascript engine. It supports the
+      QuickJS is a small and embeddable JavaScript engine. It supports the
       ES2023 specification including modules, asynchronous generators, proxies
       and BigInt.
 
@@ -109,11 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
         generators and full Annex B support (legacy web compatibility).
       - Passes nearly 100% of the ECMAScript Test Suite tests when selecting
         the ES2023 features. A summary is available at Test262 Report.
-      - Can compile Javascript sources to executables with no external dependency.
+      - Can compile JavaScript sources to executables with no external dependency.
       - Garbage collection using reference counting (to reduce memory usage and
         have deterministic behavior) with cycle removal.
       - Command line interpreter with contextual colorization implemented in
-        Javascript.
+        JavaScript.
       - Small built-in standard library with C library wrappers.
 
     '';
@@ -121,11 +121,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;
-    # Pending upstream fix: https://github.com/bellard/quickjs/pull/483
-    knownVulnerabilities = [
-      "CVE-2026-1144"
-      "CVE-2026-1145"
-      "CVE-2026-3979"
-    ];
   };
 })

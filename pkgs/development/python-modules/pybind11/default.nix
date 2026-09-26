@@ -21,7 +21,6 @@ let
   setupHook = makeSetupHook {
     name = "pybind11-setup-hook";
     substitutions = {
-      out = placeholder "out";
       pythonInterpreter = python.pythonOnBuildForHost.interpreter;
       pythonIncludeDir = "${python}/include/${python.libPrefix}";
       pythonSitePackages = "${python}/${python.sitePackages}";

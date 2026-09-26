@@ -5,7 +5,7 @@
   setuptools,
 }:
 let
-  version = "2.2.0.20250915";
+  version = "2.2.0.20260508";
 in
 buildPythonPackage {
   inherit version;
@@ -15,7 +15,7 @@ buildPythonPackage {
   src = fetchPypi {
     inherit version;
     pname = "types_mysqlclient";
-    hash = "sha256-/nCJOVm6w38Xry/MDKGvoXtxRpg+HGzAM2oTFAzO/I0=";
+    hash = "sha256-DrNMz7yF4vf9V3JyNlGtKGPjayeHADO+/ka+crqfz+I=";
   };
 
   build-system = [ setuptools ];

@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "45.0.0";
+  version = "48.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime-py";
     tag = finalAttrs.version;
-    hash = "sha256-XlAWPJB34uE+hbEMGZ46Ll6kXP+/lZ2amTKdjslGrP4=";
+    hash = "sha256-OpA/LCCYAYNULiIqcXY070wjO5vNQ/ek35wDwgjoKj0=";
   };
 
   postPatch = ''
@@ -84,10 +84,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python WebAssembly runtime powered by Wasmtime";
     homepage = "https://github.com/bytecodealliance/wasmtime-py";
     changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/${finalAttrs.src.tag}";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
+    maintainers = [ lib.maintainers.fab ] ++ pkgs.wasmtime.meta.maintainers;
   };
 })

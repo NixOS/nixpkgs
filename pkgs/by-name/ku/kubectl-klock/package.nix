@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-klock";
-  version = "0.9.1";
+  version = "0.9.2";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "applejag";
     repo = "kubectl-klock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ro2OyyTL/D92C0m5c1YoZblFksvGPyspm2cYu+1vFrE=";
+    hash = "sha256-qd8wZMenlLIO6RCntl+EtKVGeT/bc9494i8oALFSBuk=";
   };
 
   ldflags = [
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-YjCuamn4EKJcrxfSj7Iaw1Ftyk0AzDGhZpP/wRBF92c=";
+  vendorHash = "sha256-NBAS0HhpYBWVTJiNvcQ8Q3BcCrSeBsczdZ8Agm9e9eA=";
 
   postInstall = ''
     makeWrapper $out/bin/kubectl-klock $out/bin/kubectl_complete-klock --add-flags __complete

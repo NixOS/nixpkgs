@@ -7,47 +7,46 @@
   gst_all_1,
   lib,
   libayatana-appindicator,
-  makeWrapper,
   nodejs,
   openssl,
   perl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   pnpmConfigHook,
   python3,
   rustPlatform,
   stdenv,
-  versionCheckHook,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
 
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";
-  version = "2.51.0";
+  version = "2.59.0-unstable-2026-08-15";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";
-    repo = "deltachat-desktop";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ORp8lZcHzswrSCe30cGKpZdyqZCcvqLgu2hwvadMHN0=";
+    repo = "deltachat-tauri";
+    rev = "ea854b4799578d7291e4dc9d6b76ddb5a001d2f0";
+    fetchSubmodules = true;
+    hash = "sha256-EdtSrr/5QKzBFhocCdFyAUFYHhuQUEUzMyw/fjgsIIg=";
   };
+
+  cargoHash = "sha256-Z3uZ+IARmCZbJiIotYjdQRzYZFplRwE3xO0Yb0tLbcE=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-OP+FbBxSnyFdeKvhqhmdEr1htFSX+WoPj6Ti8Q+ab/Y=";
+    fetcherVersion = 4;
+    hash = "sha256-IzMl6dZ8r8CH0eELOzHuFYVuzhQTdSS4NvYFOp7jHIs=";
   };
 
-  cargoHash = "sha256-JhsoIQZrU4GVcs/TCIug6y/84gODyEWl0Bl2jRNxL5Y=";
-
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/source-registry-0/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail libayatana-appindicator3.so.1 '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1'
   '';
 
@@ -73,7 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
       gst_all_1.gst-plugins-bad
-      gst_all_1.gst-vaapi
       gst_all_1.gstreamer
       libayatana-appindicator
       openssl
@@ -83,24 +81,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       apple-sdk_14
     ];
 
-  buildAndTestSubdir = "packages/target-tauri";
-
   env = {
-    VERSION_INFO_GIT_REF = finalAttrs.src.tag;
+    VERSION_INFO_GIT_REF = finalAttrs.src.rev;
   };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm 444 images/tray/deltachat.svg "$out/share/icons/hicolor/scalable/apps/deltachat-tauri.svg"
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
   meta = {
-    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    broken = true; # Error Found version mismatched Tauri packages.
     description = "Email-based instant messaging for Desktop";
-    homepage = "https://github.com/deltachat/deltachat-desktop";
+    homepage = "https://github.com/deltachat/deltachat-tauri";
     license = lib.licenses.gpl3Plus;
     mainProgram = "deltachat-tauri";
     maintainers = [ lib.maintainers.dotlambda ];

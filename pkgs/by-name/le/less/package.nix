@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "less";
-  version = "692";
+  version = "704";
 
   # `less` is provided by the following sources:
   # - meta.homepage
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   # homepage, and only those not marked as beta.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YTAPYDeY7PHXeGVweJ8P8/WhrPB1pvufdWg30WbjfRQ=";
+    hash = "sha256-IKCworslJfpTx+7pvrhUtMnPFy6rsgmvcCB0NUe/6fs=";
   };
 
   buildInputs = [

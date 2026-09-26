@@ -14,7 +14,8 @@
   libmilter,
   pcre2,
   libmspack,
-  systemd,
+  systemdLibs,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
   json_c,
   check,
   rustc,
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clamav";
-  version = "1.4.3";
+  version = "1.5.4";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/clamav-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2HTKvz1HZbNbUY71NWWKHm7HSAIAah1hP58SSqE0MhA=";
+    hash = "sha256-GvEReiKPG1vH+pGg2rw3hIqZ59JRiOm+gEMzLOch39M=";
   };
 
   patches = [
@@ -62,16 +63,18 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     check
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional systemdSupport systemdLibs;
 
   cmakeFlags = [
-    "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
+    "-DCVD_CERTS_DIRECTORY=${placeholder "out"}/share/clamav/certs"
+  ]
+  ++ lib.optionals systemdSupport [
+    "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
   ];
 
-  # Seems to only fail on x86_64-darwin with sandboxing
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-  __darwinAllowLocalNetworking = true;
+  # Fails on darwin with sandboxing
+  doCheck = !(stdenv.hostPlatform.isDarwin);
 
   checkInputs = [
     python3.pkgs.pytest

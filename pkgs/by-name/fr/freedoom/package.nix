@@ -20,6 +20,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-uOLyh/epVxv3/N+6P1glBX1ZkGWzHWGaERYZRSL/3AU=";
   };
 
+  postPatch = ''
+    substituteInPlace dist/freedoom \
+      --replace-fail 'DOOMWADPATH="$(echo "''${PATHS[@]}" | tr '"' '"' :)"' \
+                     "DOOMWADPATH=$out/share/games/doom"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [

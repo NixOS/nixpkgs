@@ -10,17 +10,18 @@
   opencv4,
   pkg-config,
   stdenv,
+  rsync,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.22.1";
-  hash = "sha256-20ieFrIkoz4/T4QLK2PNdGPhw9Aj1+a9PimDvTKLqpg=";
+  version = "3.23.3";
+  hash = "sha256-Liv09fgwQs6c0mA/35I+fAQV32SrG4gnFTewftfn/h8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
-    fetchSubmodules = false; # We'll use our own
+    fetchSubmodules = false; # upstream no longer uses submodules
     inherit (finalAttrs) hash;
   };
 
@@ -36,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     qt6.wrapQtAppsHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rsync
   ];
 
   buildInputs = [
@@ -47,13 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
     # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
     (lib.getOutput "cxxdev" opencv4)
 
-    kdePackages.kimageformats
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtsvg
     qt6.qttools
     kdePackages.quazip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # currently unsupported on darwin, and possibly unneeded?
+    kdePackages.kimageformats
   ];
+
+  prePatch = ''
+    substituteInPlace cmake/MacBuildTarget.cmake \
+      --replace-fail '/Applications' '${placeholder "out"}/Applications'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -65,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/{Applications,lib}
-    mv $out/nomacs.app $out/Applications/nomacs.app
-    mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
+    # prevent wrapping dylibs
+    find $out/Applications -type f -name "*.dylib" -exec chmod -x {} \;
   '';
+
   # FIXME:
   # why can't we have nomacs look in the "standard" plugin directory???
   # None of the wrap stuff worked...
   # Let's just instead move the plugin dir brute force
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/lib/nomacs-plugins $out/bin/plugins
   '';
 
@@ -97,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       between images.
     '';
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "nomacs";
     maintainers = with lib.maintainers; [
       mindavi

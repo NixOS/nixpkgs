@@ -100,9 +100,37 @@ in
 
     security.pam.services = {
       ly = {
-        startSession = true;
-        unixAuth = true;
-        enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
       };
     }
     // optionalAttrs dmcfg.autoLogin.enable {

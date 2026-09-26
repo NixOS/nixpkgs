@@ -35,6 +35,7 @@
   libxkbfile,
   nixosTests,
   gettext,
+  librsvg,
 }:
 let
   enDictVer = "20121020";
@@ -45,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.19";
+  version = "5.1.22";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-ZsGRVuUpWIJnsSqcAQcerxvwWIRaGdAO2FM1k3D3g0M=";
+    hash = "sha256-t0Xn15su7nij9ll7EbQeIC75ScSwCoPOgPtTbuP4xN8=";
     fetchSubmodules = true;
   };
 
@@ -61,13 +62,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.extra-cmake-modules
     pkg-config
     wayland-scanner
     gettext
   ];
 
   buildInputs = [
+    kdePackages.plasma-wayland-protocols
     kdePackages.extra-cmake-modules
     expat
     isocodes
@@ -94,6 +95,7 @@ stdenv.mkDerivation rec {
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+    librsvg
   ];
 
   cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

@@ -3,47 +3,63 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
+  setuptools,
+  cachetools,
+  frozendict,
+  lxml,
   requests,
 }:
 
 let
+  json-ld-api = fetchFromGitHub {
+    owner = "w3c";
+    repo = "json-ld-api";
+    rev = "b0f78df0399a3ceaee8b7a49c38eb17caa601524";
+    hash = "sha256-g0FZM9LpZGmliG5DEkKv2YDEBRiKArVXy8hJgTRIzrI=";
+  };
 
-  json-ld = fetchFromGitHub {
-    owner = "json-ld";
-    repo = "json-ld.org";
-    rev = "843a70e4523d7cd2a4d3f5325586e726eb1b123f";
-    sha256 = "05j0nq6vafclyypxjj30iw898ig0m32nvz0rjdlslx6lawkiwb2a";
+  json-ld-framing = fetchFromGitHub {
+    owner = "w3c";
+    repo = "json-ld-framing";
+    rev = "118f1a11507fb4bdbd5e517b85bc93ca741d2aeb";
+    hash = "sha256-9JiyRjkBzzawxEVAKGExRHVce7Zo+yKaHauHgNX5Pxc=";
   };
 
   normalization = fetchFromGitHub {
     owner = "json-ld";
     repo = "normalization";
-    rev = "aceeaf224b64d6880189d795bd99c3ffadb5d79e";
-    sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
+    rev = "fbcfce5730bf2726c131a84d06ffb686a190a969";
+    hash = "sha256-a44vLPbWnbbR4kZa/jklCBvrPQwsllixsg0yZclhKls=";
   };
 in
 
 buildPythonPackage rec {
   pname = "pyld";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "2.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
     repo = "pyld";
-    rev = version;
-    sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
+    tag = "v${version}";
+    hash = "sha256-XKPAGOLuLk2VOnvdICo2sNPdeoQok+oGScWXeuYmi4o=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cachetools
+    frozendict
+    lxml
+    requests # default loader
+  ];
 
   # Unfortunately PyLD does not pass all testcases in the JSON-LD corpus. We
   # check for at least a minimum amount of successful tests so we know it's not
   # getting worse, at least.
   checkPhase = ''
-    ok_min=401
-
-    if ! ${python.interpreter} tests/runtests.py -d ${json-ld}/test-suite 2>&1 | tee test.out; then
+    ok_min=1311
+    if ! ${python.interpreter} tests/runtests.py ${json-ld-api}/tests ${json-ld-framing}/tests 2>&1 | tee test.out; then
       ok_count=$(grep -F '... ok' test.out | wc -l)
       if [[ $ok_count -lt $ok_min ]]; then
         echo "Less than $ok_min tests passed ($ok_count). Failing the build."
@@ -51,8 +67,10 @@ buildPythonPackage rec {
       fi
     fi
 
-    ${python.interpreter} tests/runtests.py -d ${normalization}/tests
+    ${python.interpreter} tests/runtests.py ${normalization}/tests
   '';
+
+  pythonImportsCheck = [ "pyld" ];
 
   meta = {
     description = "Python implementation of the JSON-LD API";

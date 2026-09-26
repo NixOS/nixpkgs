@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  ffmpeg-headless,
+  ffmpeg_8-headless,
   libcdio,
   libcdio-paranoia,
   libmusicbrainz,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    ffmpeg_8-headless
     libcdio
     libcdio-paranoia
     libmusicbrainz

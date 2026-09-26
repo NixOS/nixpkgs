@@ -12,6 +12,18 @@
     "battery-time@eetumos.github.com",
     "batterytime@typeof.pw"
   ],
+  "clipboard-history": [
+    "clipboard-history@Diyar1877",
+    "clipboard-history@alexsaveau.dev"
+  ],
+  "clipboard-line-cleaner": [
+    "clipboard-line-cleaner@epiphanius.github.io",
+    "clipboard-line-cleaner@example.com"
+  ],
+  "fuzzy-clock": [
+    "FuzzyClock@fire-man-x",
+    "FuzzyClock@johngoetz"
+  ],
   "internet-speed-meter": [
     "InternetSpeedMeter@alshakib.dev",
     "speed-meter@mojahid.lunecode.com"
@@ -36,9 +48,21 @@
     "night-light-toggle@egoistpizza.github.com",
     "nightlighttoggle@sam"
   ],
+  "panel-workspace-scroll": [
+    "panel-scroll@taygun86",
+    "panel-workspace-scroll@polymeilex.github.io"
+  ],
   "persian-calendar": [
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
+  ],
+  "power-menu": [
+    "power-menu@dodog.github.io",
+    "power-menu@e6ad2020"
+  ],
+  "proxy-switcher": [
+    "ProxySwitcher@flannaghan.com",
+    "proxy-switcher@seydef"
   ],
   "public-ip-address": [
     "public-ip-address@fire-man-x",
@@ -48,10 +72,23 @@
     "System_Monitor@bghome.gmail.com",
     "sysmonitor@talhasiddique7",
     "system-monitor@axet.github.com",
-    "system-monitor@gnome-shell-extensions.gcampax.github.com"
+    "system-monitor@gnome-shell-extensions.gcampax.github.com",
+    "system-monitor@jtourteau"
+  ],
+  "system-monitor-panel": [
+    "system-monitor-panel@gnome-shell-extensions",
+    "system-monitor-panel@naimur"
+  ],
+  "systemquest": [
+    "system-rpg@conan513",
+    "system-rpg@gnome-rpg.local"
   ],
   "tailscale-qs": [
     "tailscale-gnome-qs@tailscale-qs.github.io",
     "tailscale@joaophi.github.com"
+  ],
+  "workspace-wallpapers": [
+    "workspace-wallpapers@ero",
+    "workspace-wallpapers@jonathan.aljl.eu"
   ]
 }

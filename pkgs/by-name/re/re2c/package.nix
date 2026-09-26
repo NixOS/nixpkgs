@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   doCheck = true;
   enableParallelBuilding = true;
 
@@ -47,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit ninja php spamassassin;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tool for writing very fast and very flexible scanners";

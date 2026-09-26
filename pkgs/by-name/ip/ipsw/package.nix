@@ -6,17 +6,17 @@
 }:
 
 buildGo126Module (finalAttrs: {
-  version = "3.1.672";
+  version = "3.1.673";
   pname = "ipsw";
 
   src = fetchFromGitHub {
     owner = "blacktop";
     repo = "ipsw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzxhTWd3aVB3RQLWajhKXlwgVvn/PgoL1+ovYO/IleA=";
+    hash = "sha256-oK1pEqYTA+XQObjuf9QSvXOXFR3iQH6ZwvpD0M/IIJY=";
   };
 
-  vendorHash = "sha256-cyHfH/Ljz4wuMdKkSfySSK5kPRwq9M1+C/5CG5VwHoE=";
+  vendorHash = "sha256-PELTN64zUUEQ3JhICRPWxAEM8j321T2h3q3lXb5qRQc=";
 
   ldflags = [
     "-s"

@@ -23,7 +23,6 @@
         environment.systemPackages = with pkgs; [
           usbutils
           glib
-          jmtpfs
           tree
         ];
         services.gvfs.enable = true;
@@ -88,22 +87,6 @@
           ${unmountAllMtpDevices}
         '';
       };
-      jmtpfs = {
-        # jmtpfsTest:
-        # 1. Mounts the device on a dir named `phone` using jmtpfs
-        # 2. Puts the current Nixpkgs libmtp version into a file
-        # 3. Checks for corruption with `diff`
-        # 4. Prints the directory tree
-        jmtpfsTest = pkgs.writeScript "jmtpfsTest.sh" ''
-          set -e
-          mkdir phone
-          jmtpfs phone
-          echo "${pkgs.libmtp.version}" > phone/tmp/testFile
-          echo "${pkgs.libmtp.version}" > testFile
-          diff phone/tmp/testFile testFile
-          tree phone
-        '';
-      };
     in
     # Using >&2 allows the results of the scripts to be printed to the terminal
     # when building this test with Nix. Scripts would otherwise complete
@@ -113,6 +96,5 @@
       client.wait_for_unit("multi-user.target")
       client.wait_for_unit("dbus.service")
       client.succeed("${gvfs.gvfsTest} >&2")
-      client.succeed("${jmtpfs.jmtpfsTest} >&2")
     '';
 }

@@ -5,8 +5,8 @@
   coursier,
   makeWrapper,
   setJavaClassPath,
+  callPackage,
   testers,
-  giter8,
 }:
 
 let
@@ -24,7 +24,7 @@ let
     outputHash = "sha256-MrFuyktyXADZ8lh/vzpVNi12IbKjM/Q8P7X8EE4KFNo=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   strictDeps = true;
@@ -47,16 +47,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/g8 --version | grep -q "${version}"
-  '';
+  passthru = {
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
 
-  passthru.updateScript = ./update.sh;
-
-  passthru.tests.version = testers.testVersion {
-    package = giter8;
-    command = "g8 --version";
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "g8 --version";
+    };
   };
 
   meta = {
@@ -67,5 +67,7 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.agilesteel ];
     changelog = "https://github.com/foundweekends/giter8/releases/tag/v${version}";
     mainProgram = "g8";
+    # a jar plus a launcher wrapper, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
   };
-}
+})

@@ -53,7 +53,6 @@ let
     mainProgram = "electron";
     teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
@@ -61,7 +60,7 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = lib.optional (lib.versionOlder version "40.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "42.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -83,7 +82,6 @@ let
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -170,6 +168,12 @@ let
         $out/libexec/electron/electron \
         $out/libexec/electron/chrome_crashpad_handler
 
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+
+    ''
+    + lib.optionalString (lib.versionOlder version "44") ''
       # patch libANGLE
       patchelf \
         --set-rpath "${
@@ -180,10 +184,6 @@ let
           ]
         }" \
         $out/libexec/electron/lib*GL*
-
-      # replace bundled vulkan-loader
-      rm "$out/libexec/electron/libvulkan.so.1"
-      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";

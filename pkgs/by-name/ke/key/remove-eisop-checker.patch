@@ -1,60 +1,106 @@
 diff --git a/build.gradle b/build.gradle
-index d90fe4733f..26d1e3755d 100644
+index 8399c7c8a9..162dbede9e 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -24,7 +24,6 @@ plugins {
-     id "com.diffplug.spotless" version "6.25.0"
+@@ -14,9 +14,6 @@ plugins {
+     // Code formatting
+     alias(libs.plugins.spotless)
  
-     // EISOP Checker Framework
--    id "org.checkerframework" version "0.6.43"
- }
+-    // EISOP Checker Framework
+-    alias(libs.plugins.checkerframework)
+-
+     // Plugin for publishing via the new Nexus API
+     alias(libs.plugins.maven.publish) apply false
  
- // Configure this project for use inside IntelliJ:
-@@ -56,7 +55,6 @@ subprojects {
+@@ -61,7 +58,6 @@ subprojects {
+ //    apply plugin: libs.plugins.license.report
+ 
      apply plugin: "com.diffplug.spotless"
-     apply plugin: "checkstyle"
-     apply plugin: "pmd"
 -    apply plugin: "org.checkerframework"
+     apply plugin: "com.vanniktech.maven.publish"
+     //apply plugin: "maven-publish"
  
-     group = rootProject.group
-     version = rootProject.version
-@@ -87,7 +85,6 @@ subprojects {
-         compileOnly "io.github.eisop:checker-qual:$eisop_version"
-         compileOnly "io.github.eisop:checker-util:$eisop_version"
-         testCompileOnly "io.github.eisop:checker-qual:$eisop_version"
--        checkerFramework "io.github.eisop:checker:$eisop_version"
+@@ -89,8 +85,6 @@ subprojects {
+         compileOnly(libs.checkerframework.qual)
+         compileOnly(libs.checkerframework.util)
+         testCompileOnly(libs.checkerframework.qual)
+-        checkerFramework(libs.checkerframework.qual)
+-        checkerFramework(libs.checkerframework)
  
-         testImplementation("ch.qos.logback:logback-classic:1.5.7")
-         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'
-@@ -531,6 +528,7 @@ if (jacocoEnabled.toBoolean()) {
- 
- @Memoized
- def getChangedFiles() {
-+    return []
-     // Get the target and source branch
-     def anchor = "git merge-base HEAD origin/main".execute().getText()
- 
+         testImplementation(platform(libs.junit.bom))
+         testImplementation(libs.junit.jupiter.api)
 diff --git a/key.core/build.gradle b/key.core/build.gradle
-index 054104438c..8d13452edf 100644
+index 76e116f84d..1e524cf8b6 100644
 --- a/key.core/build.gradle
 +++ b/key.core/build.gradle
-@@ -196,7 +196,7 @@ task generateVersionFiles() {
- // find names/SHAs for commits
- static def gitRevParse(String args) {
-     try {
--        return "git rev-parse $args".execute().text.trim()
-+        return "@version@"
-     } catch (Exception e) {
-         return ""
-     }
+@@ -164,8 +164,8 @@ tasks.register('generateVersionFiles') {
+     inputs.files "$project.rootDir/.git/HEAD"
+     outputs.files sha1, branch, versionf
+ 
+-    def gitRevision = gitRevParse('HEAD')
+-    def gitBranch = gitRevParse('--abbrev-ref HEAD')
++    def gitRevision = "unknown"
++    def gitBranch = "unknown"
+ 
+     doLast {
+         sha1.text = gitRevision
+diff --git a/key.ncore.calculus/build.gradle b/key.ncore.calculus/build.gradle
+index c2a26ef862..869ad03e19 100644
+--- a/key.ncore.calculus/build.gradle
++++ b/key.ncore.calculus/build.gradle
+@@ -9,19 +9,3 @@ dependencies {
+     api project(':key.ncore')
+     implementation(libs.jspecify)
+ }
+-
+-checkerFramework {
+-    if (System.getProperty("ENABLE_NULLNESS")) {
+-        checkers = [
+-                "org.checkerframework.checker.nullness.NullnessChecker",
+-        ]
+-        extraJavacArgs = [
+-                //"-AonlyDefs=^org\\.key_project\\.prover",
+-                "-Xmaxerrs", "10000",
+-                "-Astubs=$rootDir/key.util/src/main/checkerframework:permit-nullness-assertion-exception.astub",
+-                "-AstubNoWarnIfNotFound",
+-                "-Werror",
+-                "-Aversion",
+-        ]
+-    }
+-}
+\ No newline at end of file
+diff --git a/key.ncore.compiler/build.gradle b/key.ncore.compiler/build.gradle
+index a4014c8f4e..1b96b6645a 100644
+--- a/key.ncore.compiler/build.gradle
++++ b/key.ncore.compiler/build.gradle
+@@ -6,18 +6,3 @@ dependencies {
+     api project(':key.ncore.calculus')
+     implementation(libs.jspecify)
+ }
+-
+-checkerFramework {
+-    if (System.getProperty("ENABLE_NULLNESS")) {
+-        checkers = [
+-                "org.checkerframework.checker.nullness.NullnessChecker",
+-        ]
+-        extraJavacArgs = [
+-                "-Xmaxerrs", "10000",
+-                "-Astubs=$rootDir/key.util/src/main/checkerframework:permit-nullness-assertion-exception.astub",
+-                "-AstubNoWarnIfNotFound",
+-                "-Werror",
+-                "-Aversion",
+-        ]
+-    }
+-}
 diff --git a/key.ncore/build.gradle b/key.ncore/build.gradle
-index 04eabab0a8..a99e8639c1 100644
+index b89f926fd4..a96eeaa706 100644
 --- a/key.ncore/build.gradle
 +++ b/key.ncore/build.gradle
-@@ -14,19 +14,3 @@ tasks.withType(Test) {
+@@ -46,20 +46,3 @@ sourceSets.main.java.srcDirs(String.valueOf(projectDir) + '/build/generated-src/
+ tasks.withType(Test).configureEach {
      enableAssertions = true
  }
- 
+-
 -
 -checkerFramework {
 -    if(System.getProperty("ENABLE_NULLNESS")) {
@@ -72,13 +118,14 @@ index 04eabab0a8..a99e8639c1 100644
 -    }
 -}
 diff --git a/key.util/build.gradle b/key.util/build.gradle
-index 382a103b60..7187dc0236 100644
+index 70e86cef8c..4729baa9d1 100644
 --- a/key.util/build.gradle
 +++ b/key.util/build.gradle
-@@ -4,18 +4,3 @@ dependencies {
-     implementation("org.jspecify:jspecify:1.0.0")
- }
+@@ -24,19 +24,3 @@ dependencies {
  
+     testFixturesCompileOnly(libs.checkerframework.qual)
+ }
+-
 -checkerFramework {
 -    if(System.getProperty("ENABLE_NULLNESS")) {
 -        checkers = [

@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     types
@@ -24,26 +23,38 @@ let
   cfgAutoLogin = config.services.displayManager.autoLogin;
   sessionData = config.services.displayManager.sessionData;
 
+  # Miracle WM is nested under `programs.wayland.miracle-wm` unlike the rest
+  compositorOption =
+    if cfg.compositor.name == "miracle-wm" then "wayland.miracle-wm" else "${cfg.compositor.name}";
   cacheDir = "/var/lib/dms-greeter";
+
+  # Not all compositor packages match the name they use and Miracle does not have a package option
+  compositorPkg =
+    if cfg.compositor.name == "miracle-wm" then
+      pkgs.miracle-wm
+    else
+      lib.attrByPath [
+        "programs"
+        cfg.compositor.name
+        "package"
+      ] null config;
 
   greeterScript = pkgs.writeShellScriptBin "dms-greeter-start" ''
     export PATH=$PATH:${
       makeBinPath [
         cfg.quickshell.package
-        config.programs.${cfg.compositor.name}.package
+        compositorPkg
+        pkgs.glib # provides gdbus, used by the fprintd hardware probe and portal reads
       ]
     }
     ${
       escapeShellArgs (
         [
-          "sh"
-          "${cfg.package}/share/quickshell/dms/Modules/Greetd/assets/dms-greeter"
+          "${cfg.package}/bin/dms-greeter"
           "--cache-dir"
           cacheDir
           "--command"
           cfg.compositor.name
-          "-p"
-          "${cfg.package}/share/quickshell/dms"
         ]
         ++ lib.optionals (cfg.compositor.customConfig != "") [
           "-C"
@@ -101,21 +112,7 @@ in
   options.services.displayManager.dms-greeter = {
     enable = mkEnableOption "DankMaterialShell greeter";
 
-    package = mkOption {
-      type = types.package;
-      default = if cfgDms.enable then cfgDms.package else pkgs.dms-shell;
-      defaultText = literalExpression ''
-        if config.programs.dms-shell.enable
-        then config.programs.dms-shell.package
-        else pkgs.dms-shell;
-      '';
-      description = ''
-        The DankMaterialShell package to use for the greeter.
-
-        Defaults to the package from `programs.dms-shell` if it is enabled,
-        otherwise defaults to `pkgs.dms-shell`.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "dms-greeter" { };
 
     compositor = {
       name = mkOption {
@@ -123,6 +120,9 @@ in
           "niri"
           "hyprland"
           "sway"
+          "mangowc"
+          "miracle-wm"
+          "labwc"
         ];
         example = "niri";
         description = ''
@@ -135,6 +135,9 @@ in
           - niri: A scrollable-tiling Wayland compositor
           - hyprland: A dynamic tiling Wayland compositor
           - sway: An i3-compatible Wayland compositor
+          - mango: A dwm-inspired Wayland compositor with modern config options and multiple layouts
+          - miracle-wm: A keyboard-driven Wayland compositor with smooth animations and extensibility
+          - labwc: Lightweight stacking Wayland compositor inspired by Openbox
         '';
       };
 
@@ -242,12 +245,16 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.programs.${cfg.compositor.name}.enable or false;
+        assertion =
+          # Assemble the full attribute structure because miracle-wm is not nested in the same location as the others
+          lib.attrByPath (
+            [ "programs" ] ++ lib.splitString "." compositorOption ++ [ "enable" ]
+          ) false config;
         message = ''
           DankMaterialShell greeter: The compositor "${cfg.compositor.name}" is not enabled.
 
           Please enable the compositor via:
-            programs.${cfg.compositor.name}.enable = true;
+            programs.${compositorOption}.enable = true;
         '';
       }
       {
@@ -268,7 +275,7 @@ in
         };
         initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           inherit (cfgAutoLogin) user;
-          command = ''${getExe pkgs.bash} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
+          command = ''${getExe pkgs.bash} -lc "${config.systemd.package}/bin/systemd-cat $(<${autoLoginCommand})"'';
         };
       };
     };

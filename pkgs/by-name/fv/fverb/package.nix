@@ -8,13 +8,16 @@
 stdenv.mkDerivation {
   pname = "fverb";
   # no release yet: https://github.com/jpcima/fverb/issues/2
-  version = "unstable-2020-06-09";
+  version = "0-unstable-2020-06-09";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "fverb";
     rev = "462020e33e24c0204a375dc95e2c28654cc917b8";
-    sha256 = "12nl7qn7mnykk7v8q0j2n8kfq0xc46n0i45z6qcywspadwnncmd4";
+    hash = "sha256-pFVmLW/qau4ZNr+QCKwhrAPsJrJCAoz2mdPbeiw+1Io=";
     fetchSubmodules = true;
   };
 

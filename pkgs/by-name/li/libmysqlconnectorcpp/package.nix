@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    mysql84
+    mysql84.connector-c
   ];
 
   buildInputs = [
     boost
     openssl
-    mysql84
+    mysql84.connector-c
   ];
 
   strictDeps = true;

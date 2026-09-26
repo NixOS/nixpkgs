@@ -6,14 +6,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "loco";
-  version = "0.16.3";
+  version = "1.0.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-DdrLABMiTutIhUHvUw29DYZIT+YHLNJjoTT5kWMeAkU=";
+    hash = "sha256-W1V1N+zTCtX15Te7XYRQRK2X39Ji2sl0rIgn5xvQTT0=";
   };
 
-  cargoHash = "sha256-01IQxfeOzxOHqRovmNV3q/ZSdESWi7Gb6F7o51Rbkw4=";
+  cargoHash = "sha256-BjMxJenYQet9BxQ/bM5Ai8WEXYcf+sWTE/A9TKmY3Hc=";
 
   #Skip trycmd integration tests
   checkFlags = [ "--skip=cli_tests" ];

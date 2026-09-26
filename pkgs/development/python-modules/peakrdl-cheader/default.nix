@@ -4,7 +4,6 @@
   gitUpdater,
   jinja2,
   lib,
-  peakrdl,
   setuptools,
   setuptools-scm,
   systemrdl-compiler,
@@ -30,7 +29,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     jinja2
-    peakrdl
     systemrdl-compiler
   ];
 

@@ -79,7 +79,6 @@ let
     homepage = "https://www.wps.cn";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -200,10 +199,5 @@ else
       # libmysqlclient dependency
       patchelf --replace-needed libmysqlclient.so.18 libmysqlclient.so $out/opt/kingsoft/wps-office/office6/libFontWatermark.so
       patchelf --add-rpath ${libmysqlclient}/lib/mariadb $out/opt/kingsoft/wps-office/office6/libFontWatermark.so
-      # fix et/wpp/wpspdf failure to launch with no mode configured
-      for i in $out/bin/*; do
-        substituteInPlace $i \
-          --replace-fail '[ $haveConf -eq 1 ] &&' '[ ! $currentMode ] ||'
-      done
     '';
   }

@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
-    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Ettercap/ettercap/blob/master/CHANGELOG";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];

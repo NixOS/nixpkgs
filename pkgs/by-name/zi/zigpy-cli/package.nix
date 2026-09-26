@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "zigpy-cli";
-  version = "1.2.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vY6mv5R7A4kVg4Z4nWdm5hgQv6fewyIbOrvhDUuiXa0=";
+    hash = "sha256-fgIxBHJMhyjz0N1NF5iPyI8m/OZlb40kz4bnKqCZnX0=";
   };
 
   postPatch = ''
@@ -34,7 +34,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     zigpy
     zigpy-deconz
     zigpy-xbee
-    zigpy-zboss
     zigpy-zigate
     zigpy-znp
   ];

@@ -23,14 +23,14 @@
 }:
 
 let
-  version = "6.0.5504";
+  version = "6.0.5707";
 
   subsurfaceSrc = (
     fetchFromGitHub {
       owner = "Subsurface";
       repo = "subsurface";
-      rev = "28ad7132d2283a3fc06872de6526bc19c077d203";
-      hash = "sha256-PQwBfm4oPGLU1HRFIcbgTYOYLeVhmEBgN5U8fnUMMlQ=";
+      rev = "bb47bfa2834dea073e5a709051dbda8405e3de16";
+      hash = "sha256-Z/hoCNCJyPENZdT87rxbirUTCumMhf7P0jLe5OddFEk=";
       fetchSubmodules = true;
     }
   );

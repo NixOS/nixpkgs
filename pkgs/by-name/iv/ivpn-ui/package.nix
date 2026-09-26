@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron,
+  electron_42,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
@@ -11,37 +11,42 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  version = "3.15.6";
+  version = "3.15.15";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
+    hash = "sha256-CQOmVVTegOZVwWjGzSek6BehdJCQ5ddOR6M9seWqZRw=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-S/fB3MxEDLVEZ762EkBkyemYW2rgBGtCH5y/6p6nqgE=";
+  npmDepsHash = "sha256-n6O8yNGeYApew694jA26EGil9qdnwSd2ymfo2fIIrxU=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  # electron 42's install.js no longer honors ELECTRON_SKIP_BINARY_DOWNLOAD and
+  # unconditionally downloads the electron binary.
+  # install-app-deps is a no-op here, so drop the whole postinstall,
+  # that way the electron download is skipped properly.
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail '"postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",' ""
+  '';
 
   postBuild = ''
     electron_dist="$(mktemp -d)"
-    cp -r ${electron.dist}/. "$electron_dist"
+    cp -r ${electron_42.dist}/. "$electron_dist"
     chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version} \
+      -c.electronVersion=${electron_42.version} \
       --config electron-builder.config.js
   '';
 
@@ -53,7 +58,7 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm644 $src/ui/References/Linux/ui/ivpnicon.svg $out/share/icons/hicolor/scalable/apps/ivpn-ui.svg
 
-    makeWrapper ${lib.getExe electron} $out/bin/ivpn-ui \
+    makeWrapper ${lib.getExe electron_42} $out/bin/ivpn-ui \
       --prefix PATH : ${lib.makeBinPath [ ivpn-service ]} \
       --add-flags $out/share/ivpn-ui/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

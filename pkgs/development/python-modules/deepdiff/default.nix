@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "seperman";
+    owner = "qlustered";
     repo = "deepdiff";
     tag = version;
     hash = "sha256-/XRPP8O2ykoXwOZ2ou/7Yoa1x7t45dCx6G3aq30o3Wc=";
@@ -89,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Deep Difference and Search of any Python object/data";
     mainProgram = "deep";
-    homepage = "https://github.com/seperman/deepdiff";
-    changelog = "https://github.com/seperman/deepdiff/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/qlustered/deepdiff";
+    changelog = "https://github.com/qlustered/deepdiff/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mic92

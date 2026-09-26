@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   # Marker file preventing driver from being built
-  preBuild = lib.optionals (!withDriver) ''
+  preBuild = lib.optionalString (!withDriver) ''
     touch README.NO_KERNEL_DRIVER
   '';
 

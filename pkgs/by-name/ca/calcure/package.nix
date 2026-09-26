@@ -6,25 +6,23 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calcure";
-  version = "3.2.1";
+  version = "3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "calcure";
     tag = finalAttrs.version;
-    hash = "sha256-YFX70gtNcIXG5XIuMlz47nmtjt/2oHzi6cajcj+DAyQ=";
+    hash = "sha256-mKSM0+Ne/Loj2DnPHyitGiQpd8l72pB9/SgBT2oTb7g=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     holidays
     icalendar
-    jdatetime
-    taskw
   ];
 
   pythonImportsCheck = [

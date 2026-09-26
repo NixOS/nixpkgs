@@ -1,13 +1,13 @@
 {
   lib,
-  python3Packages,
+  python313Packages,
   fetchFromGitHub,
   nix-update-script,
   testers,
   icloudpd,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "icloudpd";
   version = "1.32.3";
   pyproject = true;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     certifi
     click
     flask
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wheel
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python313Packages; [ setuptools ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python313Packages; [
     freezegun
     mock
     pytest-timeout

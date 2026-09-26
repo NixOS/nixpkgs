@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-b3wwDa33fX0hkyact4v/ET0UN0PoOJ/PFaqyMRC7Q1Q=";
+    hash = "sha256-QUCW/h/aqcS4yrkPSStSt5txhe6Ihco5USFlY1/QQVo=";
   };
 
   build-system = [

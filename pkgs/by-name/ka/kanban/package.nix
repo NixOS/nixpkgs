@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanban";
-  version = "0.6.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "fulsomenko";
     repo = "kanban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6L+f4+A9mRZch7/D1koCMHrkciusKcoZhYJICEDU4b8=";
+    hash = "sha256-HJb52Qskyqzjcjp6SlM81OSL2GtpMEYxuuYWy9yLxYQ=";
   };
 
   env.GIT_COMMIT_HASH = finalAttrs.src.rev;
 
-  cargoHash = "sha256-NMFZW+LC5YYqbXCmgbmUyAx8O+M7o1TKigOC978k0/o=";
+  cargoHash = "sha256-o+C8TsE/5myoKGhSIWG+OIHliTOM5dQBY1E3a5KFcxs=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       built with Rust. Features include file persistence, keyboard-driven
       navigation, multi-select capabilities, and sprint management.
     '';
-    homepage = "https://kanban.yoon.se";
+    homepage = "https://kanban.rs";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fulsomenko ];
     mainProgram = "kanban";

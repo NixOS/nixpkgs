@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hygg";
-  version = "0.1.20";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "kruseio";
     repo = "hygg";
     tag = finalAttrs.version;
-    hash = "sha256-lqN8n51nm+FtmlI0PEgTZATE+jWE9Wc+o3Gedrdg/fo=";
+    hash = "sha256-Gu56WH7Sp1y/fXwEOOACUAe8nshvc6d2302YwPvM+ZM=";
   };
 
-  cargoHash = "sha256-x8aZKyqLaR1cdLx9JofbXGLKwgNDWORqEi2UdcSOAzI=";
+  cargoHash = "sha256-AUkwjgF/LwOvbhOWcrK8ayvL2/MSc7GFh+/bfdZ28/8=";
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook

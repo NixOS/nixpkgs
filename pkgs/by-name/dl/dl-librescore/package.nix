@@ -52,6 +52,8 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenvNoCC.hostPlatform.isDarwin;
     description = "Download sheet music";
     homepage = "https://github.com/LibreScore/dl-librescore";
     license = lib.licenses.mit;

@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
@@ -71,7 +71,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${finalAttrs.version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html

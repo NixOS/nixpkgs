@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wapiti";
-  version = "3.3.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = finalAttrs.version;
-    hash = "sha256-hUkEwyIzYhlip6vtwO8EYcUsL5B/ZVnbJKpTR6osVuc=";
+    hash = "sha256-gnZdNm6XZ2QiSppFAyCqbnpMiy06+qofVnWyUIEwDMI=";
   };
 
   pythonRelaxDeps = true;
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_escape_with_style"
     "test_explorer_extract_links"
     "test_explorer_filtering"
+    "test_explorer_for_non_existing_files"
     "test_false"
     "test_fetch_source_files_typo3"
     "test_fetch_source_files"

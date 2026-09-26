@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dumpvdl2";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "szpajder";
     repo = "dumpvdl2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SSCPJ2D5JuMEEDG+8KYoequWCwRJcd6XwZAZSprShy8=";
+    hash = "sha256-sKbJdSUmtwFdn1f6GR24L5fmUA351icLm6rsfK81+Gw=";
   };
 
   buildInputs = [

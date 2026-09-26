@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   gitUpdater,
   boost,
   cmake,
@@ -31,28 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.8.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L8fA2D1BQWhJiygHmbOmINBFk27X2Vd7zHCGnElM9EE=";
+    hash = "sha256-7ULpuecg8n5AEpWEYIln2SQV6CsGKMyO9ZHT71bDcIg=";
   };
-
-  # Fixes include errors from including minizip libraries
-  patches = [
-    (fetchpatch2 {
-      name = "0000-fix-minizip-include-archive";
-      url = "https://github.com/Rosalie241/RMG/commit/7e4e402f277803d3a998e96ea04064063bd1551a.patch";
-      hash = "sha256-uyEYv2r7J2nou9AHkezEX0LS/mOnIa6lbQqhxHY9ibo=";
-    })
-    (fetchpatch2 {
-      name = "0001-fix-minizip-include-mupen64plus-core";
-      url = "https://github.com/Rosalie241/RMG/commit/8ee3410680c247dcfee806562073626a0b7bf46b.patch";
-      hash = "sha256-29zg90ScPNizWq3BzNuM6yfCwmMXRYFfbjOg3YpCrGI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

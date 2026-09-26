@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Easy to use web application framework for C";
     homepage = "https://kore.io";
     license = lib.licenses.isc;

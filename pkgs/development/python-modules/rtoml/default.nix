@@ -2,36 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  libiconv,
+  rustPlatform,
+
+  # tests
   dirty-equals,
   pytest-benchmark,
   pytestCheckHook,
-  rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtoml";
-  version = "0.10";
+  version = "0.13";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "rtoml";
-    rev = "v${version}";
-    hash = "sha256-1movtKMQkQ6PEpKpSkK0Oy4AV0ee7XrS0P9m6QwZTaM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QrGoMxNGKQS0En2txZq+mxxWpzwLbHRxqdsAZ1J/bcc=";
   };
+
+  # The `generate-import-lib` PyO3 feature only matters when building Windows import libraries;
+  # on other platforms it just pulls in the `python3-dll-a` crate, which is not vendored.
+  # Drop it so the offline maturin build resolves.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "pyo3/generate-import-lib"' ""
+  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-/elui0Rf3XwvD2jX+NGoJgf9S3XSp16qzdwkGZbKaZg=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-qHd82jdOyaIqVFFt+ZrHIH0EPwlLJpCFCrx15DN5Rig=";
   };
 
-  build-system = with rustPlatform; [
+  nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
-
-  buildInputs = [ libiconv ];
 
   pythonImportsCheck = [ "rtoml" ];
 
@@ -43,19 +51,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  disabledTests = [
-    # TypeError: loads() got an unexpected keyword argument 'name'
-    "test_load_data_toml"
-  ];
-
-  preCheck = ''
-    rm -rf rtoml
-  '';
-
   meta = {
     description = "Rust based TOML library for Python";
     homepage = "https://github.com/samuelcolvin/rtoml";
+    changelog = "https://github.com/samuelcolvin/rtoml/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-YUPKUFfbzL/1peXEAX5EDehWq4hFwxJLkP2DBDkY23E=";
+
+  passthru.updateScript = nix-update-script { };
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "A terminal-based Markdown browser";

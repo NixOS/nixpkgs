@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Compressor with character. For jack and lv2";
     homepage = "https://github.com/magnetophon/CharacterCompressor";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
   };
 })

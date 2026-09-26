@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nim65s";
     repo = "gruppled-cursors";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ejlgdogjIYevZvB23si6bEeU6qY7rWXflaUyVk5MzqU=";
   };
 

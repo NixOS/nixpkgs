@@ -7,6 +7,7 @@
   cmake,
   ninja,
   fmt,
+  llvmPackages,
   mimalloc,
   python3,
 }:
@@ -26,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace external/CMakeLists.txt --replace-fail \
       'set(mimalloc_min_version "2.2")' \
       'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+  ''
+  # fmt 12 moved fmt::format out of fmt/core.h into fmt/format.h
+  + ''
+    substituteInPlace $(grep -rl '#include <fmt/core.h>' --include='*.cpp' --include='*.h' .) \
+      --replace-fail '#include <fmt/core.h>' '#include <fmt/format.h>'
   '';
 
   cmakeFlags = [
@@ -42,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # needs the wrapped clang-scan-deps to find the C++20 module headers
+    llvmPackages.clang-tools
   ];
 
   strictDeps = true;
@@ -54,17 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     catch2_3
   ];
 
-  # TODO: a mysterious linker error occurs when building the unittests on darwin.
-  # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   meta = {
     description = "SystemVerilog compiler and language services";
     homepage = "https://github.com/MikePopoloski/slang";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sharzy ];
+    maintainers = with lib.maintainers; [
+      sharzy
+      carlossless
+    ];
     mainProgram = "slang";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

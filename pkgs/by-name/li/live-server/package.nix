@@ -9,20 +9,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "live-server";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FKX1rbRKWkWsxzJZDicVAUqrHBwEe2o7EXIouK74UMA=";
+    hash = "sha256-CV+QUwOYGg6lzEDlAlAYoKO3RqWlF3857/6rDmdLjZQ=";
   };
 
-  cargoHash = "sha256-gaBYnhljcMqSEPViaOPMtuHjoDP8iY64UizlfK+fcQA=";
+  cargoHash = "sha256-C/uqEz8ww+YIg1QbnYgKUPNyLnIIf8Tcf8x99PGmOG4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  __darwinAllowLocalNetworking = true;
+  # Tests that require a browser
+  checkFlags = [
+    "--skip=browser_reloads_on_file_change"
+    "--skip=page_content_is_served"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

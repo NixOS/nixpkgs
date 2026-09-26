@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Choose your own safest place to store passwords";
     homepage = "https://www.enpass.io";
     changelog = "https://www.enpass.io/release-notes/macos-website-ver/";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = lib.platforms.darwin;

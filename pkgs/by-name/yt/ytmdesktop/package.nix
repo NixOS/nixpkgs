@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-3gUEdkTFaO6WT13HyVssVX0qSmluOPm4AAy1dovHw6g=";
+    hash = "sha256-fT5UdJ9YYK3hXC8GkEeJ/LK1bCyXofcKA0aCJUnjZdk=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-Vvvhi1db/ld2rNz+XhtNzlgI/4z3ym6QENG0GMlZAd0=";
+    hash = "sha256-G/ASfWCR9euEs76TWV3DUbvwVjpb73gjdPngAiDHL+w=";
   };
 
   nativeBuildInputs = [
@@ -92,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
     # force @electron/packager to use our electron instead of downloading it
     substituteInPlace node_modules/@electron/packager/dist/packager.js \
       --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    export CI="1";
 
     yarn run package
 

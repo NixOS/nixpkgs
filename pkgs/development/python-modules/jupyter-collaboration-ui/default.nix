@@ -2,31 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   hatchling,
   hatch-jupyter-builder,
+  jupyter-builder,
+
+  # passthru
   jupyter-collaboration,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration-ui";
-  version = "2.4.0";
+  version = "3.0.3";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration_ui";
     inherit (finalAttrs) version;
-    hash = "sha256-mhlC7ZD42YyDobb7wBCL9dGksUhGaLY0NkhogGyvXXw=";
+    hash = "sha256-rhzn916lgkn7K4E/9RCYYzU4ghWZv6DTeYKX/ZeA+X0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "jupyterlab>=4.0.0"' ""
-  '';
 
   build-system = [
     hatchling
     hatch-jupyter-builder
+    jupyter-builder
   ];
 
   pythonImportsCheck = [ "jupyter_collaboration_ui" ];

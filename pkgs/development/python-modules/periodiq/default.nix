@@ -2,41 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  poetry-core,
+  uv-build,
   dramatiq,
   pendulum,
-  setuptools,
   pytest-mock,
   pytestCheckHook,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "periodiq";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "bersace";
     repo = "periodiq";
-    tag = "v${version}";
-    hash = "sha256-Pyh/T3/HGPYyaXjyM0wkQ1V7p5ibqxE1Q62QwCIJ8To=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XYQ0cR0gdiX7GePqpMDG/Ml0CK+SBcNbsNB99FZ/D3I=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'poetry>=0.12' 'poetry-core' \
-      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
-  '';
+  build-system = [ uv-build ];
 
-  pythonRelaxDeps = [ "dramatiq" ];
-
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     dramatiq
     pendulum
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -45,15 +35,14 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  enabledTestPaths = [ "tests/unit" ];
-
   pythonImportsCheck = [ "periodiq" ];
 
   meta = {
     description = "Simple Scheduler for Dramatiq Task Queue";
     mainProgram = "periodiq";
-    homepage = "https://pypi.org/project/periodiq/";
+    homepage = "https://gitlab.com/bersace/periodiq";
+    changelog = "https://gitlab.com/bersace/periodiq/-/blob/${finalAttrs.src.tag}/CHANGELOG.md?ref_type=tags";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

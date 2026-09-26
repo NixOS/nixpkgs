@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation {
   pname = "bean-add";
-  version = "unstable-2018-01-08";
+  version = "0-unstable-2018-01-08";
 
   src = fetchFromGitHub {
     owner = "simon-v";
@@ -18,10 +19,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = with python3Packages; [ python ];
 
-  installPhase = ''
-    mkdir -p $out/bin/
-    cp bean-add $out/bin/bean-add
-    chmod +x $out/bin/bean-add
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installBin bean-add
   '';
 
   meta = {

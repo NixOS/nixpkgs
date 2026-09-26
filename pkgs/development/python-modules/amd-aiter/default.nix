@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     rmdir 3rdparty/composable_kernel
-    ln -sf ${rocmPackages.composable_kernel.src} 3rdparty/composable_kernel
+    ln -sf ${rocmPackages.composable_kernel.composable_kernel_src} 3rdparty/composable_kernel
 
     substituteInPlace pyproject.toml \
       --replace-fail '"flydsl==0.0.1.dev95158637"' ""
@@ -90,7 +90,6 @@ buildPythonPackage (finalAttrs: {
     BUILD_TARGET = "rocm";
     PREBUILD_KERNELS = "0";
     ROCM_PATH = "${rocmPackages.clr}";
-    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
   };
 
   build-system = [

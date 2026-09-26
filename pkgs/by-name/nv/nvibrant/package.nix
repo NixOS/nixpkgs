@@ -14,10 +14,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   passthru = {
-    nvibrantVersion = "1.2.0";
+    nvibrantVersion = "1.2.1";
 
     oldestDriverVersion = "515.43.04";
-    latestDriverVersion = "595.58.03";
+    latestDriverVersion = "610.43.02";
 
     _version = lib.concatStringsSep "-" [
       finalAttrs.passthru.nvibrantVersion
@@ -31,14 +31,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
         repo = "nvibrant";
         name = "nvibrant";
         tag = "v${finalAttrs.passthru.nvibrantVersion}";
-        hash = "sha256-OQo+VGWz8LNpsCdXbJXWWCrnVE0+t4s220uJ+pTHVKs=";
+        hash = "sha256-M83WSQiJwzFZl8ECkZjKigvLTlMkzRa6o2hqPOt1378=";
       };
       open-gpu = fetchFromGitHub {
         owner = "nvidia";
         repo = "open-gpu-kernel-modules";
         name = "open-gpu";
         tag = finalAttrs.passthru.oldestDriverVersion;
-        hash = "sha256-pSVK5oVob4QBo18ULHnQfO3UrTcC5lDDrTR9ec9pDp8=";
+        hash = "sha256-MfLR5sYSjBrENWkCChcS9rk1zSlRFfTRpof/4lQ3qow=";
 
         # since .git isn't deterministic, we can't use it to checkout tags in
         # the build phase, so instead we generate patches for each version

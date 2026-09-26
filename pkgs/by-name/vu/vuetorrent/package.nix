@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "vuetorrent";
-  version = "2.34.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "VueTorrent";
     repo = "VueTorrent";
     tag = "v${version}";
-    hash = "sha256-Zz7ZFtxT26/4HCkM/HHVyLXxbmDvhTRFaJpiXA08JPY=";
+    hash = "sha256-tbsn+MWlq2cghArB7UIr9zthzQud81p7UqSc9c8VrmQ=";
   };
 
-  npmDepsHash = "sha256-PxTe/anj3VgdEaSdv37XuBYD8N3gs9wc+idCboX8Bic=";
+  npmDepsHash = "sha256-szloFJfkV8W/bl0Bi0NqvD0g1SBN55t1xvgMHM/71o4=";
 
   installPhase = ''
     runHook preInstall

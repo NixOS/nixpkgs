@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Compile shell scripts to static binaries";
     homepage = "https://github.com/yassinebenaid/bunster";
-    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v{finalAttrs.version}";
+    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       yunz

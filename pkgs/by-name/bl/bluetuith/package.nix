@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bluetuith";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "bluetuith-org";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jxN4FLefv+edlpBnwDN/pBxZ7sHkv2w+R2tUeNCI6Tw=";
+    hash = "sha256-FoFmkc6/sPxssEkWHgwM+jtvwJzpDsTJ4T3dzYcxcVc=";
   };
 
-  vendorHash = "sha256-baSiOHiB02hfqDt95ldeKwz+tJgunXheTvREznxPUSc=";
+  vendorHash = "sha256-38yPy0dhZ99smFQK0tvQLHah+Sn6DsXvNrh8nQaR5qk=";
 
   subPackages = [ "." ];
 
@@ -30,11 +30,11 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "TUI-based bluetooth connection manager";
+    description = "TUI-based Bluetooth connection manager";
     longDescription = ''
       Bluetuith can transfer files via OBEX, perform authenticated pairing,
-      and (dis)connect different bluetooth devices. It interacts with bluetooth
-      adapters and can toogle their power and discovery state. Bluetuith can also
+      and (dis)connect different Bluetooth devices. It interacts with Bluetooth
+      adapters and can toggle their power and discovery state. Bluetuith can also
       manage Bluetooth-based networking/tethering (PANU/DUN) and remote control
       devices. The TUI has mouse support.
     '';

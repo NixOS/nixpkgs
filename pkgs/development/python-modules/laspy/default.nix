@@ -6,7 +6,7 @@
   # build-system
   hatchling,
 
-  # depenencies
+  # dependencies
   laszip,
   lazrs,
   numpy,

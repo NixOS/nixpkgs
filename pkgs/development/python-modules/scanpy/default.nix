@@ -26,6 +26,7 @@
   pynndescent,
   scikit-learn,
   scipy,
+  scverse-misc,
   seaborn,
   session-info2,
   statsmodels,
@@ -63,14 +64,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.1";
+  version = "1.12.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-r8kicjCFyEKLxQtFYuZg0NKK7gRBoaLSSFGWqcQtBqM=";
+    hash = "sha256-TToqDM4Ze5zdt9hQ/0G2SXsTmtZmzyZ7+etn1dqfH/U=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -105,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     pynndescent
     scikit-learn
     scipy
+    scverse-misc
     seaborn
     session-info2
     statsmodels
@@ -181,22 +184,25 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pytestFlags = [
-    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # UserWarning: 'where' used without 'out', expect uninitialized memory in output.
     # If this is intentional, use out=None.
     "-Wignore::UserWarning"
   ];
 
   disabledTestPaths = [
     # try to download data:
+    "tests/plotting/legacy/test_plotting.py"
     "tests/test_aggregated.py"
     "tests/test_highly_variable_genes.py"
     "tests/test_normalization.py"
     "tests/test_pca.py"
-    "tests/test_plotting.py"
-    "tests/test_plotting_embedded/"
 
     # fixture 'backed_adata' not found
     "tests/test_backed.py"
+
+    # Need `docs/`, which is resolved relatively to the installed package:
+    #   FileNotFoundError: .../docs/_static/img/Scanpy_Logo_RGB.png
+    "tests/plotting/legacy/embedded/"
   ];
 
   disabledTests = [
@@ -206,6 +212,7 @@ buildPythonPackage (finalAttrs: {
     "test_burczynski06"
     "test_clip"
     "test_doc_shape"
+    "test_download_atomic"
     "test_download_failure"
     "test_ebi_expression_atlas"
     "test_mean_var"
@@ -235,6 +242,10 @@ buildPythonPackage (finalAttrs: {
     # 'write/test.h5ad', errno = 2, error message = 'No such file or directory', flags = 13, o_flags
     # = 242)
     "test_write"
+
+    # numba thread-count assertions that depend on the host's thread settings
+    "test_numba_thread_limit_restores_previous_value"
+    "test_set_numba_threads_from_settings"
 
     # Snapshot tests failing because of warnings in output
     "scanpy.datasets._datasets.krumsiek11"

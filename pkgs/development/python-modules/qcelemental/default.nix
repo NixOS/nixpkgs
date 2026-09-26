@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.50.1";
+  version = "0.51.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QELCSkpSYxd/Hbhz2ln572l/P8TZvUg8zsv7fZBFNUk=";
+    hash = "sha256-hVjzBN8IzkAJWOaubWMuQ+9hzMpGPJ6N9PJltKYZXnk=";
   };
 
   build-system = [
@@ -73,7 +73,6 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
     homepage = "https://github.com/MolSSI/QCElemental";
     changelog = "https://github.com/MolSSI/QCElemental/blob/v${version}/docs/changelog.rst";

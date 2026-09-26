@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-ws";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-ws";
     tag = "v${version}";
-    hash = "sha256-3gSXUpHs1tF8FJ7Jz174VBoRCrepYcpYU1FZaNMpZqg=";
+    hash = "sha256-e6D3sU6eWjsZnURIv1WfkSr54AMdDP9kHd263awzNsI=";
   };
 
   # we don't need to use the hatch-regex-commit plugin

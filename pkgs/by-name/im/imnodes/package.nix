@@ -13,11 +13,14 @@
 
 stdenv.mkDerivation {
   pname = "imnodes";
-  version = "unstable-2025-06-25";
+  version = "0.5-unstable-2025-06-25";
   outputs = [
     "out"
     "dev"
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Nelarius";

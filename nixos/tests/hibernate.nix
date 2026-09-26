@@ -10,7 +10,7 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 makeTest {
-  name = "hibernate";
+  name = "hibernate" + pkgs.lib.optionalString systemdStage1 "-systemd-stage-1";
 
   nodes = {
     machine =
@@ -29,7 +29,9 @@ makeTest {
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
         virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];
+        # virtiofs doesn't support hibernation
         virtualisation.useNixStoreImage = true;
+        virtualisation.sharedDirectories = lib.mkForce { };
 
         swapDevices = lib.mkOverride 0 [
           {

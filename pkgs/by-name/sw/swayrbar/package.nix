@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export HOME=$TMPDIR
   '';
 
-  postInstall = lib.optionals withPulseaudio ''
+  postInstall = lib.optionalString withPulseaudio ''
     wrapProgram "$out/bin/swayrbar" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Status command for sway's swaybar implementing the swaybar-protocol";
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     changelog = "https://git.sr.ht/~tsdh/swayr/tree/main/item/swayrbar/NEWS.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ilkecan ];
     mainProgram = "swayrbar";

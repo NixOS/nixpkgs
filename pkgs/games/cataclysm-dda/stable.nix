@@ -1,10 +1,7 @@
 {
-  lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   pkgs,
-  wrapCDDA,
   attachPkgs,
   tiles ? true,
   debug ? false,
@@ -17,14 +14,14 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.H-2025-07-10-0402";
+    # 0.I is the latest stable release tag (https://github.com/CleverRaven/Cataclysm-DDA/releases/tag/0.I)
+    version = "0.I-2026-06-11-1250";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      # Head of 0.H-branch
       tag = "cdda-${version}";
-      sha256 = "sha256-r4cl8cij68WmQRfg+DHQIeDBIwhgwSre6kAUYZaCPR8=n";
+      hash = "sha256-DpB9OlSpg0t4L1JdMMPeQC+cLd0zs/ZkCdXSFGWgRhA=";
     };
 
     patches = [

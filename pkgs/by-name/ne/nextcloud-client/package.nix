@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "33.0.5";
+  version = "34.0.4";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YRaND3JdZQZGtuNfthliyqcPvpC742h4C6l3HBbYorI=";
+    hash = "sha256-5qHhhMpgmdfNCO88ZtEtE+HcqeTOgxPUXYb8cgC6YiA=";
   };
 
   patches = [
@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtkeychain
     qt6Packages.qtsvg
     qt6Packages.qttools
-    qt6Packages.qtwebengine
     qt6Packages.qtwebsockets
     qt6Packages.qtwayland
     sqlite

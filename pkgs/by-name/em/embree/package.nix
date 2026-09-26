@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.4.1";
 
   src = fetchFromGitHub {
-    owner = "embree";
+    owner = "RenderKit";
     repo = "embree";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ZJItp33XUmaTk5s4AbM/uzWGxSdGh5scdZAZDBYy28M=";

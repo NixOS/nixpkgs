@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "Millet";
     publisher = "azdavis";
-    version = "0.15.1";
-    hash = "sha256-5V5GG7M52ohpS9Zg2TTamEjbWyXH9kllZyy7Oezy4Iw=";
+    version = "0.15.2";
+    hash = "sha256-mtI4IW+xBIuo11ctTIv5/6LOXVStD3YqSYkIQYJWqmo=";
   };
   nativeBuildInputs = [
     jq

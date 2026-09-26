@@ -1,10 +1,10 @@
 diff --git a/apps/desktop/src-tauri/tauri.conf.json b/apps/desktop/src-tauri/tauri.conf.json
-index ed05fce..e1649e0 100644
+index 8aefc78..e56ddba 100644
 --- a/apps/desktop/src-tauri/tauri.conf.json
 +++ b/apps/desktop/src-tauri/tauri.conf.json
-@@ -31,7 +31,6 @@
-       }
-     },
+@@ -26,7 +26,6 @@
+   },
+   "bundle": {
      "active": true,
 -    "createUpdaterArtifacts": true,
      "targets": ["deb", "rpm"],

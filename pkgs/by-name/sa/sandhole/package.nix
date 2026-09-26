@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   lib,
   lld,
   perl,
@@ -10,19 +11,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.9.5";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l+9DcqAxrrjLxs/7KxY6QlfIAlwMVjQztt4lgJJMsyI=";
+    hash = "sha256-9Bs8J+aHxKoHX8ksxe/iwl297rVyKDk4nm3+vzzh7Lo=";
   };
 
-  cargoHash = "sha256-euWvpEjSW2JeDysBul5eR4M27LwkRSZDlsp57lMBpAE=";
+  cargoHash = "sha256-DQWVTI7cwVuqWSXMkAw4RwRtp1SXeJj0idP3C68QTT4=";
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
@@ -35,6 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd sandhole \
+      --bash <($out/bin/sandhole --completions bash) \
+      --fish <($out/bin/sandhole --completions fish) \
+      --zsh <($out/bin/sandhole --completions zsh)
+  '';
+
   meta = {
     description = "Expose HTTP/SSH/TCP services through SSH port forwarding";
     longDescription = ''
@@ -43,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://sandhole.com.br";
     changelog = "https://github.com/EpicEric/sandhole/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "sandhole";
     maintainers = with lib.maintainers; [ EpicEric ];
     platforms = lib.platforms.all;

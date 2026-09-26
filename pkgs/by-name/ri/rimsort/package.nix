@@ -184,12 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       gpl3Only
       # For libsteam_api.so
-      (
-        unfreeRedistributable
-        // {
-          url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
-        }
-      )
+      valveSDK
     ];
     maintainers = with lib.maintainers; [ weirdrock ];
     mainProgram = "rimsort";

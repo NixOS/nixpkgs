@@ -31,8 +31,10 @@
   libx11,
   libxext,
   livekit-libwebrtc,
+  lld,
   testers,
   writableTmpDirAsHomeHook,
+  bubblewrap,
 
   buildRemoteServer ? true,
 }:
@@ -97,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.4.4";
+  version = "1.21.0";
 
   outputs = [
     "out"
@@ -110,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ALK/ZffZ+sqMaZi5dy40nzE1dLqZrbgbxRcQaYL6AkI=";
+    hash = "sha256-RQttvkWuyWnPHsZ3FWzffklbUFjgALMYt7Kh9+N7tLE=";
   };
 
   postPatch = ''
@@ -133,13 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
-
-  cargoHash = "sha256-XHkQ9jrOsDbpt+zC96QrBqvCzEeuzC/WY4cjRdYVr9Q=";
+  cargoHash = "sha256-4Q8ig8mGlcj60N8kKYIr0CWll/766a2lJkMNDk0ZIIA=";
 
   __structuredAttrs = true;
 
@@ -152,6 +148,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    lld
     rustPlatform.bindgenHook
   ];
 
@@ -175,6 +172,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [
@@ -197,6 +198,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ finalAttrs.buildFeatures;
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     ALLOW_MISSING_LICENSES = true;
     OPENSSL_NO_VENDOR = true;
     LIBGIT2_NO_VENDOR = true;
@@ -208,6 +212,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   preBuild = ''
@@ -222,7 +231,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         wayland
       ]
     }
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${
+      lib.makeBinPath [
+        nodejs
+        bubblewrap # required for sandboxing
+      ]
+    }
   '';
 
   nativeCheckInputs = [

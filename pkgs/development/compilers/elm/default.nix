@@ -10,10 +10,7 @@ let
   fetchElmDeps = pkgs.callPackage ./lib/fetchElmDeps.nix { };
 
   # Haskell packages that require ghc 9.8
-  hs98Pkgs = import ./packages/ghc9_8 { inherit pkgs lib; };
-
-  # Haskell packages that require ghc 9.6
-  hs96Pkgs = import ./packages/ghc9_6 {
+  hs98Pkgs = import ./packages/ghc9_8 {
     inherit
       pkgs
       lib
@@ -23,7 +20,7 @@ let
       ;
   };
 
-  assembleScope = self: basics: (hs98Pkgs self).elmPkgs // (hs96Pkgs self).elmPkgs // basics;
+  assembleScope = self: basics: (hs98Pkgs self).elmPkgs // basics;
 in
 lib.makeScope pkgs.newScope (
   self:
@@ -37,8 +34,6 @@ lib.makeScope pkgs.newScope (
         inherit (pkgs) writeScriptBin stdenv;
         inherit (self) elm;
       };
-
-      elm-analyse = callPackage ./packages/elm-analyse { };
 
       elm-doc-preview = callPackage ./packages/elm-doc-preview { };
 
@@ -69,8 +64,11 @@ lib.makeScope pkgs.newScope (
       elm-xref = callPackage ./packages/elm-xref { };
 
       lamdera = callPackage ./packages/lamdera { };
+
+      elm-wrap = callPackage ./packages/elm-wrap { };
     }
     // lib.optionalAttrs config.allowAliases {
+      elm-analyse = throw "elmPackages.elm-analyse has not be released since May 2019 so it has been removed."; # Added 2026-09-16
       create-elm-app = throw "'elmPackages.create-elm-app' has not had a release since December 2020, so it was removed."; # Added 2025-11-15
       elm-pages = throw "'elmPackages.elm-pages' has been removed, as it was broken in nixpkgs and was not maintained."; # Added 2025-11-15
     }

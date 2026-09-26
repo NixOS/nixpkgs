@@ -23,6 +23,8 @@
   rustc-unwrapped,
   rust-bindgen-unwrapped,
   rustPlatform,
+  makeSetupHook,
+  xz,
 }:
 
 let
@@ -63,6 +65,19 @@ lib.makeOverridable (
     kernelPatches ? [ ],
     # The kernel .config file
     configfile,
+    target ?
+      if stdenv.hostPlatform.isx86 then
+        "bzImage"
+      else if stdenv.hostPlatform.isAarch32 then
+        "zImage"
+      else if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV then
+        "Image"
+      else if stdenv.hostPlatform.isLoongArch64 then
+        "vmlinuz.efi"
+      else
+        "vmlinux",
+    buildDTBs ?
+      stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isLoongArch64,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
     config ? lib.optionalAttrs (builtins.isPath configfile || allowImportFromDerivation) (
@@ -79,8 +94,7 @@ lib.makeOverridable (
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
-    # ignored
-    features ? null,
+    features ? { },
     lib ? lib_,
     stdenv ? stdenv_,
   }:
@@ -139,10 +153,6 @@ lib.makeOverridable (
     isModular = config.isYes "MODULES";
     withRust = config.isYes "RUST";
 
-    target = stdenv.hostPlatform.linux-kernel.target or "vmlinux";
-
-    buildDTBs = stdenv.hostPlatform.linux-kernel.DTB or false;
-
     # Dependencies that are required to build kernel modules
     moduleBuildDependencies = [
       pahole
@@ -150,6 +160,11 @@ lib.makeOverridable (
       elfutils
       # module makefiles often run uname commands to find out the kernel version
       (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+      (makeSetupHook {
+        name = "setup-module-compression";
+        substitutions = { inherit configfile modDirVersion; };
+        propagatedNativeBuildInputs = [ xz ];
+      } ./setup-module-compression.sh)
     ]
     ++ optional (lib.versionAtLeast version "5.13") zstd
     ++ optionals withRust [
@@ -204,7 +219,7 @@ lib.makeOverridable (
 
     buildFlags = [
       "KBUILD_BUILD_VERSION=1-NixOS"
-      stdenv.hostPlatform.linux-kernel.target
+      target
       "vmlinux" # for "perf" and things like that
       "scripts_gdb"
     ]
@@ -496,6 +511,8 @@ lib.makeOverridable (
         config
         kernelPatches
         configfile
+        target
+        buildDTBs
         moduleBuildDependencies
         stdenv
         commonMakeFlags
@@ -503,6 +520,9 @@ lib.makeOverridable (
       inherit
         isZen
         withRust
+        # Forwarded into passthru so features survive kernel.override() call chains
+        # used by the NixOS module system (see boot.kernelPackages apply in kernel.nix).
+        features
         ;
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;
@@ -511,7 +531,7 @@ lib.makeOverridable (
 
     # Some image types need special install targets
     installTargets = [
-      (stdenv.hostPlatform.linux-kernel.installTarget or (
+      (
         if
           (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
           && builtins.elem stdenv.hostPlatform.linuxArch [
@@ -524,7 +544,6 @@ lib.makeOverridable (
           "zinstall"
         else
           "install"
-      )
       )
     ];
 
@@ -557,7 +576,8 @@ lib.makeOverridable (
           "riscv32-linux"
           "riscv64-linux"
         ]
-        ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
+        # Generic scripts/install.sh is only available on LoongArch64 since 6.16.
+        ++ lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
       timeout = 14400; # 4 hours
       identifiers.cpeParts = {
         part = "o";

@@ -35,14 +35,14 @@
 }:
 buildPythonPackage rec {
   pname = "xclim";
-  version = "0.61.1";
+  version = "0.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ouranosinc";
     repo = "xclim";
     tag = "v${version}";
-    hash = "sha256-a1RjI8Gz2B60FEWx+PFz8RHKJlV3HRR1tIqzKudOvRE=";
+    hash = "sha256-1XuviMw8roOmrzRJZOX9x7Xf7HjElmbE1GC50RKg9XY=";
   };
 
   build-system = [

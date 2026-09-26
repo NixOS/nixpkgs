@@ -18,14 +18,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "spotiflac";
-  version = "7.1.7";
+  version = "7.2.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "afkarxyz";
+    owner = "spotbye";
     repo = "SpotiFLAC";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2bCKsgrJH8jfggluNdNqX+LdG8NLcsuhrJwkaRTXAOs=";
+    hash = "sha256-bi8V//3xd2ScVaPDARjZgm4TC2vmDNr0bnfPBdk+MZo=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalAttrs.src.name}/frontend";
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-mecNGWbUATjNl1uWByxE1W1b8tfNyPIRMndcZSBl+XM=";
+      hash = "sha256-/E8YZGW4lnOMJGnNwp3Peua/TuWoGy6lij87SLl1jCA=";
     };
     pnpmRoot = "frontend";
   };
@@ -88,7 +88,7 @@ buildGoModule (finalAttrs: {
     runHook postInstall;
   '';
 
-  vendorHash = "sha256-0H3U+i7SbbO7WkF9O8U8JoRxtroyEofzi2XrrWi6HWY=";
+  vendorHash = "sha256-B8FgP4w08imhrERyAbmLjvBIyb+5I05hhY2rF+uJoV4=";
 
   desktopItems = [
     (makeDesktopItem {
@@ -103,8 +103,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Get Spotify tracks in true FLAC from Tidal, Qobuz & Amazon Music — no account required";
-    homepage = "https://github.com/afkarxyz/SpotiFLAC/";
-    changelog = "https://github.com/afkarxyz/SpotiFLAC/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/spotbye/SpotiFLAC/";
+    changelog = "https://github.com/spotbye/SpotiFLAC/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "spotiflac";

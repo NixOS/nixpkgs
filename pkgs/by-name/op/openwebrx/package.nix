@@ -134,5 +134,7 @@ python3Packages.buildPythonApplication rec {
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
     license = lib.licenses.gpl3Only;
+    # Hasn't been updated in a long time, and is broken since 2026-07-14
+    broken = true;
   };
 }

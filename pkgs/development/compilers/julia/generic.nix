@@ -35,6 +35,11 @@ let
     "REPL"
     "ccall"
   ]
+  ++ lib.optionals (lib.versions.majorMinor version == "1.10") [
+    "LinearAlgebra/blas"
+    "ambiguous"
+    "compiler/contextual"
+  ]
   ++ lib.optionals (lib.versionAtLeast version "1.11") [
     "loading"
     "cmdlineargs"
@@ -121,6 +126,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1);x86-64-v4,-rdrnd,base(1)"
+    # OpenBLAS getarch CPU detection fails in Nix sandbox;
+    # Using NEHALEM as a baseline
+    "OPENBLAS_TARGET_ARCH=NEHALEM"
+    "OPENBLAS_DYNAMIC_ARCH=1"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"

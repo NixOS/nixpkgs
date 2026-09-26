@@ -1,28 +1,24 @@
 {
+  # keep-sorted start
+  ant,
+  callPackage,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
+  fsnotifier,
+  glibc,
+  jetbrains,
+  jetbrains-libdbm,
+  kotlin,
   lib,
   linkFarm,
   makeWrapper,
-  runCommand,
-  stdenv,
-  stdenvNoCC,
-  rustPlatform,
-  callPackage,
-
-  ant,
-  cmake,
-  fsnotifier,
-  glib,
-  glibc,
-  jetbrains,
-  kotlin,
-  libdbusmenu,
   maven,
   p7zip,
-  pkg-config,
-  libx11,
+  runCommand,
+  rustPlatform,
+  stdenvNoCC,
+  # keep-sorted end
 }:
 {
   version,
@@ -67,58 +63,10 @@ let
     cp -r ${androidSrc} $out/android
   '';
 
-  libdbusmenu-jb = libdbusmenu.overrideAttrs (old: {
-    version = "jetbrains-fork";
-    src = fetchFromGitHub {
-      owner = "jetbrains";
-      repo = "libdbusmenu";
-      rev = "d8a49303f908a272e6670b7cee65a2ba7c447875";
-      hash = "sha256-u87ZgbfeCPJ0qG8gsom3gFaZxbS5NcHEodb0EVakk60=";
-    };
-    configureFlags = old.configureFlags ++ [
-      "--enable-static"
-    ];
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib
-      cp libdbusmenu-glib/.libs/libdbusmenu-glib.a $out/lib
-
-      runHook postInstall
-    '';
+  # Use the libdbm version in our src.
+  libdbm = jetbrains-libdbm.overrideAttrs (finalAttrs: {
+    inherit src version;
   });
-
-  libdbm = stdenv.mkDerivation {
-    pname = "libdbm";
-    version = buildNumber;
-    nativeBuildInputs = [
-      cmake
-      pkg-config
-    ];
-    buildInputs = [
-      glib
-      libx11
-      libdbusmenu
-    ];
-    inherit src;
-    sourceRoot = "${src.name}/native/LinuxGlobalMenu";
-    patches = [ ../patches/libdbm-headers.patch ];
-    postPatch = ''
-      # Fix the build with CMake 4.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'cmake_minimum_required(VERSION 2.6.0)' 'cmake_minimum_required(VERSION 3.10)'
-      cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a
-    '';
-    passthru.patched-libdbusmenu = libdbusmenu-jb;
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib
-      mv libdbm.so $out/lib/libdbm.so
-
-      runHook postInstall
-    '';
-  };
 
   restarter = rustPlatform.buildRustPackage {
     pname = "restarter";
@@ -130,8 +78,10 @@ let
 
     # Allow static linking
     buildInputs = [
+      # keep-sorted start
       glibc
       glibc.static
+      # keep-sorted end
     ];
   };
 
@@ -143,9 +93,11 @@ let
     inherit src;
     sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [
+      # keep-sorted start
       ant
-      makeWrapper
       jbr
+      makeWrapper
+      # keep-sorted end
     ];
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
@@ -237,9 +189,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [
-    p7zip
+    # keep-sorted start
     jbr
     jps-bootstrap
+    p7zip
+    # keep-sorted end
   ];
   repo = mvnRepo;
 
@@ -316,8 +270,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit
       version
       buildNumber
+      # this is jetbrains-libdbm but using the sources from the IDE build.
       libdbm
-      fsnotifier
       jps-bootstrap
       ;
   };

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sentry-native";
-  version = "0.14.0";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     tag = finalAttrs.version;
-    hash = "sha256-TIKYmHSoKd3aJ3lXigcUsFLcps51Y0h7coBCa+drE1U=";
+    hash = "sha256-dUhkfYXJJrQ11hBjIqL3fa91ENPIb3jGeRC7iU0Tx9c=";
   };
 
   nativeBuildInputs = [

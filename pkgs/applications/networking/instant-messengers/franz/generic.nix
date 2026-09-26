@@ -35,7 +35,7 @@
   xdg-utils,
   libgbm,
   libglvnd,
-  libappindicator-gtk3,
+  libappindicator,
   pipewire,
   libpulseaudio,
 }:
@@ -119,7 +119,7 @@ stdenv.mkDerivation (
       (lib.getLib stdenv.cc.cc)
       (lib.getLib udev)
       libnotify
-      libappindicator-gtk3
+      libappindicator
       pipewire
       libpulseaudio
     ];

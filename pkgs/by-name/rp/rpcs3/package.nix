@@ -49,22 +49,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.40-unstable-2026-04-25";
+  version = "0.0.42-unstable-2026-08-15";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = "96f73f4497fd6fdafd40dc50f24c95c90cd4acc9";
+    rev = "fc93d932c8560f763f5223c0a4165cc53bceeb3f";
     postCheckout = ''
       cd $out/3rdparty
       git submodule update --init \
         fusion/fusion asmjit/asmjit yaml-cpp/yaml-cpp SoundTouch/soundtouch stblib/stb \
         feralinteractive/feralinteractive wolfssl/wolfssl
     '';
-    hash = "sha256-KTF2Oj1p+EplRgWQ/We8mqu60h161/1gniKWjVAvAso=";
+    hash = "sha256-3sGcpYfaxZNa6/CIRxylSf/EL+ievwIeQzEKYDOUNy8=";
   };
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--use-github-releases"
+    ];
+  };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF

@@ -17,23 +17,18 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmenuharness";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/gmenuharness";
     rev = finalAttrs.version;
-    hash = "sha256-hPlCetQ+2gmRdOoVQg7dIndiTxPEKgf8JJtZlihyIYA=";
+    hash = "sha256-H6nwpvS4zK7uR3LspGQD03+CSc67oPaZeQyeAJh03zs=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/gmenuharness/-/merge_requests/10 merged & in release
-    ./1001-gmenuharness-Fix-order-of-cmake_minimum_required-and-project.patch
-  ];
 
   strictDeps = true;
 

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "clusterctl";
-  version = "1.12.2";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AaGJhdBTyCxUK+qm++McS6rFlgAdv/7SjQHvaNRn6YU=";
+    hash = "sha256-x/u4lWacCz3GpUCyC8ty4nPPQblEs9G7vucqSJSupEQ=";
   };
 
-  vendorHash = "sha256-3dh9Y8R4OeUayyqNyrvUcrnSi/4s9x6oMrAADXR5rnw=";
+  vendorHash = "sha256-73hCBGzE9LB59L+GurlZeTV6K/FLJgtjQc3ku4JR+iM=";
 
   subPackages = [ "cmd/clusterctl" ];
 

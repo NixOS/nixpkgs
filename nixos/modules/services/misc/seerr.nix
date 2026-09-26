@@ -2,13 +2,14 @@
   config,
   pkgs,
   lib,
+  utils,
   ...
 }:
 let
   cfg = config.services.seerr;
-  # 26.05 introduced a breaking change which is guarded behind stateVersion to avoid
-  # breaking users.
-  useNewConfigLocation = lib.versionAtLeast config.system.stateVersion "26.05";
+  # 26.05 introduced a breaking change which is guarded behind stateRevision to
+  # avoid breaking users.
+  useNewConfigLocation = cfg.stateRevision >= 1;
 in
 {
   imports = [
@@ -39,7 +40,22 @@ in
     configDir = lib.mkOption {
       type = lib.types.path;
       default = if useNewConfigLocation then "/var/lib/seerr/" else "/var/lib/jellyseerr/config";
+      defaultText = lib.literalMD "{file}`/var/lib/seerr` (or {file}`/var/lib/jellyseerr/config` if {option}`services.seerr.stateRevision` < 1)";
       description = "Config data directory";
+    };
+
+    stateRevision = utils.mkStateRevisionOption {
+      descriptionName = "Seerr";
+      migrations = {
+        "26.05" = ''
+          Move {file}`/var/lib/private/jellyseerr/config` to
+          {file}`/var/lib/private/seerr`, if you have not set
+          {option}`services.seerr.configDir`. (If you have set
+          {option}`services.seerr.configDir`, you should also have forced
+          {option}`systemd.services.seerr.serviceConfig.StateDirectory`, and in
+          that case `stateRevision` does not affect your configuration.)
+        '';
+      };
     };
   };
 
@@ -81,5 +97,7 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
+
+    system.moduleStateRevisions."services.seerr.stateRevision" = cfg.stateRevision;
   };
 }

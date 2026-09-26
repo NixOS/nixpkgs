@@ -7,12 +7,11 @@
   matplotlib,
   pyclipper,
   pytestCheckHook,
-  pythonImportsCheckHook,
   setuptools,
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beziers";
   version = "0.6.0";
   pyproject = true;
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "beziers.py";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NjmWsRz/NPPwXPbiSaOeKJMrYmSyNTt5ikONyAljgvM=";
   };
 
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     dotmap
     matplotlib
     pytestCheckHook
-    pythonImportsCheckHook
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -45,7 +43,7 @@ buildPythonPackage rec {
     "test_cubic_cubic"
   ];
 
-  pythonImportsCheckFlags = [ "beziers" ];
+  pythonImportsCheck = [ "beziers" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
@@ -55,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

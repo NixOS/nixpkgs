@@ -44,7 +44,7 @@
         runtimeInputs = with pkgs; [
           config.services.rauc.package
           e2fsprogs
-          squashfsTools
+          squashfs-tools
         ];
 
         text = ''

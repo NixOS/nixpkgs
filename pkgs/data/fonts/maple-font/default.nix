@@ -3,6 +3,7 @@
   stdenv,
   unzip,
   fetchurl,
+  installFonts,
 }:
 
 let
@@ -14,6 +15,7 @@ let
       pname,
       hash,
       desc,
+      suffix,
     }:
     stdenv.mkDerivation rec {
       inherit pname;
@@ -26,12 +28,15 @@ let
       # Work around the "unpacker appears to have produced no directories"
       # case that happens when the archive doesn't have a subdirectory.
       sourceRoot = ".";
-      nativeBuildInputs = [ unzip ];
-      installPhase = ''
-        find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
-        find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
-        find . -name '*.woff2'  -exec install -Dt $out/share/fonts/woff2 {} \;
-      '';
+      nativeBuildInputs = [
+        installFonts
+        unzip
+      ];
+
+      # installFonts checks if "$webfont" exists and copies any woff files there,
+      # this is typically done with a second "webfont" output, resulting in a second derivation
+      # we set this to `placeholder "out"` to keep webfonts in the same derivation instead
+      webfont = lib.optionalString (suffix == "Woff2") (placeholder "out");
 
       meta = {
         homepage = "https://github.com/subframe7536/Maple-font";
@@ -129,6 +134,7 @@ let
             inherit pname;
             desc = "${ligVariant.desc} ${typeVariant.desc}";
             hash = hashes.${pname};
+            inherit (typeVariant) suffix;
           };
         }
       ) typeVariants
@@ -142,6 +148,7 @@ let
         inherit pname;
         inherit (value) desc;
         hash = hashes.${pname};
+        inherit (value) suffix;
       }
     ) typeVariants;
 in

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncons";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "danielaparker";
     repo = "jsoncons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OhXcHMec+cExLLl0GuXoro93u1w/BTLY5bBh+4uUK5s=";
+    hash = "sha256-Jf+RoSRCswjF1Hq4bGdDhmAYrUEkhfQ+3ikTcXvqcl0=";
   };
 
   nativeBuildInputs = [ cmake ];

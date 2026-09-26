@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   flask,
   flask-wtf,
@@ -23,6 +24,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-bWu+hCVnNRSWvXgB2pAcCdhXJQEg3mZeAfZgxUqVOkY=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 

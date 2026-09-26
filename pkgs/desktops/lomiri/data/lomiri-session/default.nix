@@ -8,23 +8,26 @@
   cmake,
   dbus,
   deviceinfo,
+  glib,
   inotify-tools,
   lomiri,
+  lomiri-schemas,
   makeWrapper,
   pkg-config,
   systemd,
+  wrapGAppsHook4,
   xdg-user-dirs,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-session";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-session";
     rev = finalAttrs.version;
-    hash = "sha256-XduE3tPUjw/wIjFCACasxtN33KO4bDLWrpl7pZcYaAA=";
+    hash = "sha256-zEH1VNBgOs9xP18toBc2VqMloDM6uL+tSIIEKZTHY0c=";
   };
 
   patches = [ ./1001-Unset-QT_QPA_PLATFORMTHEME.patch ];
@@ -41,10 +44,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail '@CMAKE_INSTALL_FULL_LIBEXECDIR@/lomiri-session/run-systemd-session' '${lib.getExe' xdg-user-dirs "xdg-user-dirs-update"} && @CMAKE_INSTALL_FULL_LIBEXECDIR@/lomiri-session/run-systemd-session'
   '';
 
+  # Checks for run-time tools at configure-time
+  strictDeps = false;
+
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
+    glib # hook for wrapper arguments
     makeWrapper
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -53,8 +63,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dbus
     inotify-tools
     lomiri
+    lomiri-schemas # for hook to pick up schemas
     systemd
   ];
+
+  dontWrapGApps = true;
 
   cmakeFlags = [
     # Requires lomiri-system-compositor -> not ported to Mir 2.x yet
@@ -63,14 +76,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = ''
     patchShebangs $out/bin/lomiri-session
-    wrapProgram $out/bin/lomiri-session \
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --prefix PATH : ${
         lib.makeBinPath [
-          deviceinfo
+          deviceinfo # device-info
+          glib # gsettings
           inotify-tools
           lomiri
+          systemd # systemd-detect-virt
         ]
       }
+    )
+  '';
+
+  postFixup = ''
+    wrapGApp $out/bin/lomiri-session
   '';
 
   passthru = {
@@ -79,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # not packaged/working yet
       # "lomiri-touch"
     ];
-    tests.lomiri = nixosTests.lomiri;
+    tests = nixosTests.lomiri;
     updateScript = gitUpdater { };
   };
 

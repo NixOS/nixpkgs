@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "0.8.0";
+  version = "0.9.0";
 
   libquickjs = fetchFromGitHub {
     owner = "quickjs-ng";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rizinorg";
     repo = "jsdec";
     rev = "v${version}";
-    hash = "sha256-Xc8FMKSGdjrp288u49R6YC0xiynwHeoZe2P/UqnfsFU=";
+    hash = "sha256-9FNsFPQf3GyREXsagWDHctfne28lct6dPH8vKvF8kpY=";
   };
 
   postUnpack = ''

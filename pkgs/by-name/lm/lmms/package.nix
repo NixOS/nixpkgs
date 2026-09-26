@@ -17,11 +17,13 @@
   libjack2,
   libogg,
   libpulseaudio,
-  libsForQt5,
   libsamplerate,
   libsoundio,
   libsndfile,
   libvorbis,
+  libxinerama,
+  libxcursor,
+  libxft,
   lilv,
   lv2,
   perl5,
@@ -73,16 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qt5.qttools
+    qt5.qttools
     pkg-config
     qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals withZyn [
+    fltk
   ];
 
   buildInputs = [
     fftwFloat
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtx11extras
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtwayland
+    qt5.qtx11extras
     libsamplerate
     libsndfile
   ]
@@ -117,9 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSoundFont [
     fluidsynth
   ]
-  ++ lib.optionals withZyn [
-    fltk
-  ]
   ++ lib.optionals (withSWH || withSID) [
     perl5
     perl5Packages.ListMoreUtils
@@ -139,6 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withWine [
     glibc_multi
     winePackages
+  ]
+  ++ lib.optionals withZyn [
+    libxinerama
+    libxcursor
+    libxft
   ];
 
   patches = [

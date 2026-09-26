@@ -7,12 +7,12 @@
 }:
 let
   pname = "redact";
-  version = "0.21.18";
+  version = "0.21.28";
   src = fetchurl {
     url = "https://update-desktop.redact.dev/build/Redact-${version}.AppImage";
-    hash = "sha256-NnOQIVv/Y4C+qR5TsXh7rQq/WOYd7Vdtfru4x78djZA=";
+    hash = "sha256-YubwGhmRLuZ74pTIZvvHybq79puK2J9xSJ4IxD3hLpw=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+  appimageContents = appimageTools.extract { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

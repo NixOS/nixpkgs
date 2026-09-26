@@ -2,7 +2,6 @@
   buildOctavePackage,
   lib,
   fetchurl,
-  mesa,
   gnuplot,
   makeFontsConf,
   writableTmpDirAsHomeHook,
@@ -10,15 +9,14 @@
 
 buildOctavePackage rec {
   pname = "image";
-  version = "2.20.0";
+  version = "2.20.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-X42X7X99GM6FSoF0u/gZ6eOnA7zRyyyosa0Vue8ylSI=";
+    sha256 = "sha256-tLaGXn9l7lucJUppEovxDpOzi8J/W8W5c/7zACF/xyU=";
   };
 
   nativeOctavePkgTestInputs = [
-    mesa
     gnuplot
     writableTmpDirAsHomeHook
   ];

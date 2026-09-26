@@ -28,6 +28,5 @@ mkDerivation {
     cp "${pciutils}/share/pci.ids" "$out/share/pci.ids"
   '';
 
-  meta.platorms = lib.platforms.freebsd;
   meta.mainProgram = "pciconf";
 }

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spotdl";
-  version = "4.5.0";
+  version = "4.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u5t8t9NJq+h/ujeLObKDCQG4brTqwdjSDslemmhePdc=";
+    hash = "sha256-qztG9q7hwajyCTVg0iTrPrvL2UYrzAPw7Z+CFOTSi/U=";
   };
 
   build-system = with python3Packages; [ hatchling ];

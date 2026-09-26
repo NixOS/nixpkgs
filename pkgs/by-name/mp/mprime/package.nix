@@ -15,7 +15,6 @@ let
     {
       x86_64-linux = "linux64";
       i686-linux = "linux";
-      x86_64-darwin = "macosx64";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
@@ -23,7 +22,6 @@ let
     {
       x86_64-linux = "make64";
       i686-linux = "makefile";
-      x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
@@ -36,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "31.04b02";
 
   src = fetchzip {
-    url = "https://download.mersenne.ca/gimps/v31/31.04/p95v${
+    url = "https://www.mersenne.org/download/software/v31/31.04/p95v${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
     hash = "sha256-W8ic709bgm9KbVxe1fvIEC8J8LrwwMfAajX1bKhv6EM=";
@@ -111,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ dstremur ];
     mainProgram = "mprime";

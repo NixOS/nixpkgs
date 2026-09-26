@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -20,19 +20,19 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.23.2";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-CEJ0yzF2smBlLgZ4EH5UWV4Pc4vA2ZH80TjoudUKWZM=";
+    hash = "sha256-yxswEVjNjU5U9EJXSq5HYc+1DbPv73C+RsoYaMhJkvg=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vollate ];
   };
 
@@ -58,7 +58,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-m9Rmc9Ww4jb2aQ+RXOwF71daZ6puspdMM/xidnk/YHs=";
+      hash = "sha256-Hkv5Ia5SxEhZYE66+9DbcxibCfON5rxi0bdMcy7Gqik=";
     };
 
     buildPhase = ''
@@ -84,12 +84,12 @@ let
   });
 in
 
-buildGo126Module {
+buildGo127Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  vendorHash = "sha256-9uWrctbQ+vujb1Q8zT7Bv7rVyNY1rCM577c9caOKRNo=";
+  vendorHash = "sha256-Znzr31mKfeY5S3XMyy0OHSMXJA64K0onizWKG7P4FrY=";
 
   nativeBuildInputs = [
     autoPatchelfHook

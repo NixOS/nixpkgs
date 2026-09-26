@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "1.3.1";
+  version = "1.3.2";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     owner = "bpozdena";
     repo = "OneDriveGUI";
     tag = "v${version}";
-    hash = "sha256-hqo3e9YjfPpR4hLRfqozxEFN0LnEcgigleROOZqY6WY=";
+    hash = "sha256-KgpQShjSjZHNBC/aovpl/VQO5zhJZ8+8GLup75m0gJo=";
   };
 
   build-system = with python3Packages; [

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collector";
-  version = "0-unstable-2026-02-04";
+  version = "0-unstable-2026-04-17";
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "collector";
-    rev = "c5d0f547f6eb31f1f17490cf412d9bcaf7c30d43";
-    hash = "sha256-ow228VINpSlIv1fVc/YqD7ZT84hNCOFFG0FAXQVDtRs=";
+    rev = "c40da4053d0274cfc3d99d0a1a3ad0935a664a34";
+    hash = "sha256-qAOcVGy9ExeitllGOZTqHQ1QnPK+2u4tPmhnwXUqHH0=";
   };
 
   nativeBuildInputs = [

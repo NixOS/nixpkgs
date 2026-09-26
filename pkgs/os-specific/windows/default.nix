@@ -30,6 +30,8 @@ makeScopeWithSplicing' {
       crossThreadsStdenv = overrideCC stdenvNoLibc (
         if stdenv.hostPlatform.useLLVM or false then
           buildPackages.llvmPackages.clangNoLibcxx
+        else if stdenv.hostPlatform.useGccNG or false then
+          buildPackages.gccNGPackages.gccWithLibcAndBasicLibgcc
         else
           buildPackages.gccWithoutTargetLibc.override (old: {
             bintools = old.bintools.override {

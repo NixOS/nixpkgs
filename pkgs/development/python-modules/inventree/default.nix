@@ -7,10 +7,8 @@
   setuptools,
 
   # dependencies
-  coveralls,
-  invoke,
-  pillow,
   requests,
+  urllib3,
 
   # tests
   pytestCheckHook,
@@ -34,10 +32,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    coveralls
-    invoke
-    pillow
     requests
+    urllib3
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

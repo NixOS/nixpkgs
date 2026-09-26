@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harmonia";
-  version = "3.1.0";
+  version = "3.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "harmonia";
     tag = "harmonia-v${finalAttrs.version}";
-    hash = "sha256-fm8PBugKnw72/dAXsRj84jf4EZK1BcVEdEWgtojIuA0=";
+    hash = "sha256-Q25ZdQ47e3SR/pUf/l9TrmEXvdW9eGSd9Vk3njnXbms=";
   };
 
-  cargoHash = "sha256-qp4frhNsWDma8uYcRe3BXmfIu6btYb8IaoXhk4oI4qM=";
+  cargoHash = "sha256-dfQDf+sJYZ0sgcGiQ9BxNQIKEFCNyvYqEmWRUq/SA10=";
 
   doCheck = false;
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "harmonia-v(.*)"
       ];
     };
-    tests = { inherit (nixosTests) harmonia; };
+    tests = { inherit (nixosTests) harmonia harmonia-gc; };
   };
 
   meta = {

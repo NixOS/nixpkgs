@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dita-ot";
-  version = "4.4";
+  version = "4.4.1";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ openjdk17 ];
 
   src = fetchzip {
     url = "https://github.com/dita-ot/dita-ot/releases/download/${finalAttrs.version}/dita-ot-${finalAttrs.version}.zip";
-    hash = "sha256-0P2E0c5HHOCk1w0/CHe3a6AH8FJIeKoQdTruuGkwo/c=";
+    hash = "sha256-RWMb2s9feFUeRVrp2J9MZmEivCf3bGsqlQcSRWEJhpM=";
   };
 
   installPhase = ''

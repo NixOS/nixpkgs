@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  version = "3.12.1";
+  version = "3.13.0";
 
   src =
     let
@@ -21,14 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
       system = selectSystem {
         x86_64-linux = "linux-x64";
         aarch64-linux = "linux-arm64";
-        x86_64-darwin = "macos-x64";
+        riscv64-linux = "linux-riscv64";
         aarch64-darwin = "macos-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-aiu/ZKEzychqYqUy29PgtNtKw2Wr1Fbp+dHF32H82/g=";
-        aarch64-linux = "sha256-tECHkwEI9tf1a/WAoC1dKpf/lFGcWiiDOZgiAuG0xIE=";
-        x86_64-darwin = "sha256-xWsyLNvBXg18NzlwwuK+U7+0OEWL1nwYKHA+dErLeRY=";
-        aarch64-darwin = "sha256-6v84I9Wgxc3LZbOK3yBOXzUpD81WDUjLR8L6x+FUe5c=";
+        x86_64-linux = "sha256-h5Alc/rNisrKx+4f5z+o0GaOBgZQFgaOLtbFyZxrHuA=";
+        aarch64-linux = "sha256-IBQaBlMyeTm7IMS4eyMSJr66ESjYqa7bswy1rxonkNQ=";
+        riscv64-linux = "sha256-VmvqaHCVsXv9W8+YdgnWAaW+THuDcc851O/6czx7WFE=";
+        aarch64-darwin = "sha256-GBLWAq7Qqc9ygck/UUoeGuz2DcNFxDN9uk/yj6jTmMo=";
       };
     in
     fetchurl {
@@ -113,8 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;

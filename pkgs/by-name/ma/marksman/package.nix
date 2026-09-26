@@ -4,6 +4,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   nix-update-script,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -29,6 +30,12 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";
+  # __darwinAllowLocalNetworking is not working with IPv4-mapped IPv6.
+  # See: https://github.com/NixOS/nix/pull/11270#issuecomment-3936740134
+  dotnetTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--environment"
+    "DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+  ];
 
   nugetDeps = ./deps.json;
 

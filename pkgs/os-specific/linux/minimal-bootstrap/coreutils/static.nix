@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -20,11 +19,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "coreutils-static";
-  version = "9.10";
+  version = "9.11";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-4L3h+2hQlEf8cjzyUX6KjH+kZ2mRm7dJDtNQoukjhWI=";
+    hash = "sha256-IDO4owScBr/0mp486nK99Gg7zQy+uXUhHdVtuvi3Nq4=";
   };
 
   configureFlags = [
@@ -36,8 +35,7 @@ let
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf"
     "--enable-single-binary=symlinks"
-    "CC=musl-gcc"
-    "CFLAGS=\"-static -I${linux-headers}/include\""
+    "CFLAGS=\"-I${linux-headers}/include\""
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -46,7 +44,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -80,5 +77,5 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES install-strip
 
     # Remove documentation not needed in the bootstrap chain.
-    rm -rf $out/share/info $out/share/man
+    rm -rf $out/share
   ''

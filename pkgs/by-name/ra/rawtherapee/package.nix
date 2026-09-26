@@ -33,27 +33,21 @@
   exiv2,
   libraw,
   libjxl,
+  fmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rawtherapee";
-  version = "5.12";
+  version = "5.13";
 
   src = fetchurl {
-    # The developers ask not to use the tarball from Github releases, see
+    # The developers ask not to use the tarball from GitHub releases, see
     # https://www.rawtherapee.com/downloads/5.12/#news-relevant-to-package-maintainers
-    url = "https://rawtherapee.com/shared/source/rawtherapee-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2abBBTfWSihbxGVnX+WaqpTOMiOCPfvs8K4slZkILVc=";
+    url = "https://github.com/RawTherapee/RawTherapee/releases/download/${finalAttrs.version}/rawtherapee-${finalAttrs.version}.tar.xz";
+    hash = "sha256-I73/SxgX4SdMEalLEdIcrFnpwbHSCXldMZRxDuc+d78=";
   };
 
   postPatch = ''
-    # https://github.com/NixOS/nixpkgs/issues/475835
-    # https://github.com/RawTherapee/RawTherapee/issues/7443#issuecomment-3014132156
-    # remove for 5.13
-    substituteInPlace rtengine/procparams.cc --replace \
-      'outputProfile(options.rtSettings.srgb),' \
-      'outputProfile("RTv4_sRGB"),'
-
     cat <<EOF > ReleaseInfo.cmake
     set(GIT_DESCRIBE ${finalAttrs.version})
     set(GIT_BRANCH ${finalAttrs.version})
@@ -102,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     libraw
     libjxl
+    fmt
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcanberra-gtk3
@@ -114,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPROC_TARGET_NUMBER=2"
     "-DCACHE_NAME_SUFFIX=\"\""
     "-DWITH_SYSTEM_LIBRAW=\"ON\""
+    "-DWITH_SYSTEM_FMT=\"ON\""
     "-DWITH_JXL=\"ON\""
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -145,6 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "RAW converter and digital photo processing software";
     homepage = "http://www.rawtherapee.com/";
     license = lib.licenses.gpl3Plus;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+    ];
     maintainers = with lib.maintainers; [
       jcumming
       mahe

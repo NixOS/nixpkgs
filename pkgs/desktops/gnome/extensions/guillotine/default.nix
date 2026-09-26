@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitLab,
   glib,
@@ -7,15 +7,15 @@
 # We package this manually because upstream stopped updating the package to
 # extensions.gnome.org. See:
 # https://gitlab.com/ente76/guillotine/-/issues/17
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-guillotine";
-  version = "26";
+  version = "27-unstable-2026-04-08";
 
   src = fetchFromGitLab {
     owner = "ente76";
     repo = "guillotine";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6RuHargk7sq6oUKj+aGPFp3t0LJCpj6RwLhNzAM5wVA=";
+    rev = "3bccda1d189ed0525daa12f6b12b4ebea4222fc5";
+    hash = "sha256-G8u+g1pnitAgGz4+yldIGSNiasgOj32P/M6CVMMDfJY=";
   };
 
   nativeBuildInputs = [ glib ];

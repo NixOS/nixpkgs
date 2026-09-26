@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "keyleds";
-  version = "unstable-2021-04-08";
+  version = "1.1.1-unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "keyleds";

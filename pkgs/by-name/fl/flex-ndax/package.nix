@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     description = "FlexRadio digital audio transport (DAX) connector for PulseAudio";
     changelog = "https://github.com/kc2g-flex-tools/nDAX/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "nDAX";
   };
 })

@@ -16,7 +16,7 @@
   dbus-fast,
   iwlib,
   libcst,
-  mpd2,
+  python-mpd2,
   prompt-toolkit,
   psutil,
   pulsectl-asyncio,
@@ -53,7 +53,6 @@
   pytest-asyncio,
   pytest-httpbin,
   pytest-rerunfailures,
-  pytest-xdist,
   writableTmpDirAsHomeHook,
   anyio,
   fontconfig,
@@ -66,12 +65,13 @@
   xvfb,
 
   # passthru.tests
+  qtile,
   nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.36.0";
+  version = "0.37.1";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile-extras`
 
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
     owner = "qtile";
     repo = "qtile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yFh9h3djV52zdZjPYwOWaMzN9ZNhFdZYyxFJreoJBCk=";
+    hash = "sha256-n45e5/XvzKjH/ehatDPA+UWIlaiwSUhYnoPQOb5cLnA=";
   };
 
   build-system = [
@@ -118,7 +118,7 @@ buildPythonPackage (finalAttrs: {
     dbus-fast
     iwlib
     libcst
-    mpd2
+    python-mpd2
     # prompt-toolkit used for qtile repl
     # see https://github.com/qtile/qtile/blob/master/libqtile/scripts/repl.py
     prompt-toolkit
@@ -149,12 +149,13 @@ buildPythonPackage (finalAttrs: {
     librsvg
   ];
 
+  doCheck = false; # The test suite is slow and tends to flaky in hydra jobs
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-httpbin
     pytest-rerunfailures
-    pytest-xdist
     writableTmpDirAsHomeHook
     anyio
     gdk-pixbuf
@@ -176,40 +177,47 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTests = [
-    # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
-    "test_defaults"
-    "test_device_actions"
-    "test_adapter_actions"
-    "test_statusnotifier_defaults"
-    "test_custom_symbols"
-    "test_statusnotifier_defaults_vertical_bar"
-    "test_default_show_battery"
-    "test_statusnotifier_icon_size"
-    "test_missing_adapter"
-    "test_statusnotifier_left_click"
-    "test_default_text"
-    "test_statusnotifier_left_click_vertical_bar"
-    "test_default_device"
-
+    # Client disconnect prematurely
+    "test_repl_server_executes_code"
+    # Import Error
+    "test_init_import_error_no_fallback"
+    # Misising corresponding device (Headphone / BT)
+    "test_defaults[1-x11]"
+    "test_device_actions[1-x11]"
+    "test_adapter_actions[1-x11]"
+    "test_custom_symbols[1-x11-bluetooth_manager0]"
+    "test_default_show_battery[1-x11-bluetooth_manager0]"
+    "test_missing_adapter[1-x11-bluetooth_manager0]"
+    "test_default_text[1-x11-bluetooth_manager0]"
+    "test_default_device[1-x11-bluetooth_manager0]"
+    # Runtime window has not appeared yet
+    "test_statusnotifier_defaults[1-x11]"
+    "test_statusnotifier_defaults_vertical_bar[1-x11]"
+    "test_statusnotifier_icon_size[1-x11-sni_config0]"
+    "test_statusnotifier_left_click[1-x11]"
+    "test_statusnotifier_left_click_vertical_bar[1-x11]"
     # PermissionError: [Errno 13] Permission denied: '/var'
     "test_thermal_zone_getting_value"
-
-    # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
-    "test_urgent_hook_fire"
   ];
 
   passthru = {
-    tests.qtile = nixosTests.qtile;
+    tests = {
+      nixosTestSession = nixosTests.qtile;
+      # overridePythonAttrs is not available in finalAttrs.finalPackage
+      withCheck = qtile.overridePythonAttrs (_: {
+        doCheck = true;
+      });
+    };
     providedSessions = [ "qtile" ];
   };
 
   postInstall = ''
-    install resources/qtile.desktop -Dt $out/share/xsessions
-    install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
+    install -Dm644 resources/qtile-generic.desktop $out/share/xsessions/qtile.desktop
+    install -Dm644 resources/qtile-generic.desktop $out/share/wayland-sessions/qtile.desktop
   '';
 
   meta = {
-    homepage = "http://www.qtile.org/";
+    homepage = "https://qtile.org/";
     license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     changelog = "https://github.com/qtile/qtile/blob/v${finalAttrs.version}/CHANGELOG";
@@ -218,7 +226,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
-      doronbehar
     ];
   };
 })

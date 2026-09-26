@@ -6,23 +6,26 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "time-decode";
-  version = "9.0.0";
+  version = "10.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kydH5WN2PELq6YnoSBFRsyVnxL+0r09WxXuqFANXuNs=";
+    hash = "sha256-MZ876fQ1Si3P+OOaO7G3uQY7WGcTQMryig5rM4nvGrc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    bbpb
     colorama
     juliandate
+    prettytable
     pyqt6
     python-dateutil
+    python-ulid
     pytz
     tzdata
   ];

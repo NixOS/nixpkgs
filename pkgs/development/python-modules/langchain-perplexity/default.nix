@@ -9,6 +9,7 @@
   # dependencies
   langchain-core,
   openai,
+  perplexityai,
 
   # tests
   langchain-tests,
@@ -23,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-perplexity";
-  version = "1.1.0";
+  version = "1.4.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-perplexity==${finalAttrs.version}";
-    hash = "sha256-bm7sIa62CIvsYNDdaN+XZKpRnCv5bg9kPZ1Ym8utFcM=";
+    hash = "sha256-DyT+pXk33GKfTAfHdjV1P/N+9JeR3R7ibMA3n92tXiQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/perplexity";
@@ -40,6 +42,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     langchain-core
     openai
+    perplexityai
   ];
 
   pythonRelaxDeps = [
@@ -65,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-perplexity==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

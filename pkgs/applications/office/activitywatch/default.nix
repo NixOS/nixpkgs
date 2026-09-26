@@ -9,9 +9,7 @@
   rust-jemalloc-sys,
   python3,
   python3Packages,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  qt6,
   xdg-utils,
   replaceVars,
   nodejs_22,
@@ -40,7 +38,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
       pynput
     ];
 
@@ -70,7 +68,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
     ];
 
     pythonRelaxDeps = [
@@ -103,14 +101,14 @@ rec {
 
     dependencies = with python3Packages; [
       aw-core
-      qtbase
-      qtsvg # Rendering icons in the trayicon menu
+      qt6.qtbase
+      qt6.qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
     ];
 
     nativeBuildInputs = [
-      wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ];
 
     # Prevent double wrapping

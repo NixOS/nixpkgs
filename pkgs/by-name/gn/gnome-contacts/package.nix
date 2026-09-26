@@ -25,6 +25,7 @@
   libadwaita,
   libglycin,
   libglycin-gtk4,
+  glycin-loaders,
   gsettings-desktop-schemas,
   gst_all_1,
   pipewire,
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libportal-gtk4
     evolution-data-server-gtk4
+    glycin-loaders
     gsettings-desktop-schemas
     folks
     libadwaita

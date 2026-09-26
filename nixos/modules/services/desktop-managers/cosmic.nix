@@ -20,7 +20,7 @@ let
     with pkgs;
     [
       cosmic-applets
-      cosmic-applibrary
+      cosmic-app-library
       cosmic-bg
       cosmic-comp
       cosmic-files
@@ -84,12 +84,14 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
           cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          cosmic-sound-theme
           glib
           hicolor-icon-theme
           networkmanagerapplet
@@ -124,16 +126,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira
@@ -146,7 +139,10 @@ in
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
     programs.dconf.enable = true;
     programs.dconf.packages = [ pkgs.cosmic-session ];
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
@@ -155,17 +151,8 @@ in
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
 
-    # geoclue2 stuff
-    services.geoclue2.enable = true;
-    # We _do_ use the demo agent in the `cosmic-settings-daemon` package,
-    # but this option also creates a systemd service that conflicts with the
-    # `cosmic-settings-daemon` package's geoclue2 agent. Therefore, disable it.
-    services.geoclue2.enableDemoAgent = false;
-    # As mentioned above, we do use the demo agent. And it needs to be
-    # whitelisted, otherwise it doesn't run.
-    services.geoclue2.whitelistedAgents = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
-
     # Good to have defaults
+    services.geoclue2.enable = lib.mkDefault true;
     hardware.bluetooth.enable = lib.mkDefault true;
     networking.networkmanager.enable = lib.mkDefault true;
     services.acpid.enable = lib.mkDefault true;
@@ -173,8 +160,9 @@ in
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
-    services.power-profiles-daemon.enable = lib.mkDefault (
-      !config.hardware.system76.power-daemon.enable
+    services.system76-scheduler.enable = lib.mkDefault true;
+    hardware.system76.power-daemon.enable = lib.mkDefault (
+      !config.services.power-profiles-daemon.enable && !config.services.tuned.enable
     );
 
     warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [

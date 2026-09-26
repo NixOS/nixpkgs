@@ -137,23 +137,23 @@ in
     systemd.services.kthxbye = {
       description = "kthxbye Alertmanager ack management daemon";
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        ${cfg.package}/bin/kthxbye \
-          -alertmanager.timeout ${cfg.alertmanager.timeout} \
-          -alertmanager.uri ${cfg.alertmanager.uri} \
-          -extend-by ${cfg.extendBy} \
-          -extend-if-expiring-in ${cfg.extendIfExpiringIn} \
-          -extend-with-prefix ${cfg.extendWithPrefix} \
-          -interval ${cfg.interval} \
-          -listen ${cfg.listenAddress}:${toString cfg.port} \
-          ${lib.optionalString cfg.logJSON "-log-json"} \
-          ${lib.optionalString (cfg.maxDuration != null) "-max-duration ${cfg.maxDuration}"} \
-          ${lib.concatStringsSep " " cfg.extraOptions}
-      '';
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         Restart = "on-failure";
+        ExecStart = ''
+          ${cfg.package}/bin/kthxbye \
+            -alertmanager.timeout ${cfg.alertmanager.timeout} \
+            -alertmanager.uri ${cfg.alertmanager.uri} \
+            -extend-by ${cfg.extendBy} \
+            -extend-if-expiring-in ${cfg.extendIfExpiringIn} \
+            -extend-with-prefix ${cfg.extendWithPrefix} \
+            -interval ${cfg.interval} \
+            -listen ${cfg.listenAddress}:${toString cfg.port} \
+            ${lib.optionalString cfg.logJSON "-log-json"} \
+            ${lib.optionalString (cfg.maxDuration != null) "-max-duration ${cfg.maxDuration}"} \
+            ${lib.concatStringsSep " " cfg.extraOptions}
+        '';
       };
     };
 

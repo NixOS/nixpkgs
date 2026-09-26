@@ -17,7 +17,7 @@ playwright_driver_file="$root/driver.nix"
 playwright_raw_repo_url="https://raw.githubusercontent.com/microsoft/playwright"
 playwright_mcp_package_file="$root/../../../by-name/pl/playwright-mcp/package.nix"
 browser_names=(chromium chromium-headless-shell firefox webkit ffmpeg)
-browser_systems=(x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin)
+browser_systems=(x86_64-linux aarch64-linux aarch64-darwin)
 
 github_api_get() {
     curl "${github_api_curl_args[@]}" -fsSL "$1"
@@ -31,8 +31,8 @@ python_version=$(github_api_get https://api.github.com/repos/microsoft/playwrigh
 # Most of the time, this should be the latest stable release of the Node-based
 # Playwright version, but upstream occasionally ships additional npm-only patch
 # releases. Resolve the latest patch in the same major.minor series.
-setup_py_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/setup.py"
-python_driver_version=$(curl -fsSL "$setup_py_url" | grep '^driver_version =' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+driver_version_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/DRIVER_VERSION"
+python_driver_version=$(curl -fsSL "$driver_version_url" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
 python_major_minor=$(major_minor "$python_driver_version")
 resolve_driver_version_latest_patch() {
     local mm_escaped
@@ -45,7 +45,7 @@ resolve_driver_version_latest_patch() {
 }
 driver_version="$(resolve_driver_version_latest_patch)"
 : "${driver_version:?failed to resolve driver version from npm for python major.minor ${python_major_minor}}"
-: "${python_driver_version:?failed to resolve driver_version from ${setup_py_url}}"
+: "${python_driver_version:?failed to resolve driver_version from ${driver_version_url}}"
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"
@@ -98,6 +98,10 @@ replace_sha() {
     local new_hash="$3"
 
     sed -i "s|$attr_name = \".\{44,52\}\"|$attr_name = \"$new_hash\"|" "$target_file"
+    if ! grep -Fq "$attr_name = \"$new_hash\"" "$target_file"; then
+        echo "replace_sha: failed to update $attr_name hash in $target_file" >&2
+        return 1
+    fi
 }
 
 prefetch_browser() {
@@ -155,7 +159,7 @@ curl -fsSL \
       .comment = "This file is kept up to date via update.sh"
       | .browsers |= (
         [.[]
-          | select(.installByDefault) | del(.installByDefault)]
+          | select(.installByDefault) | del(.installByDefault, .revisionOverrides)]
           | map({(.name): . | del(.name)})
           | add
       )

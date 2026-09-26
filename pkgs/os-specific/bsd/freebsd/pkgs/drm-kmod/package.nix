@@ -74,7 +74,6 @@ mkDerivation rec {
 
   meta = {
     description = "Linux drm driver, ported to FreeBSD";
-    platforms = lib.platforms.freebsd;
     license = with lib.licenses; [
       bsd2
       gpl2Only

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-podman";
-  version = "126";
+  version = "129";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit-podman";
     tag = finalAttrs.version;
-    hash = "sha256-E8sFBiC7kcxkBhoDOL6ZDRYD2b2ZXZ8PN2oqA+rG6G4=";
+    hash = "sha256-NFEVwDrDgFQphSh7k56wjGsWJslkerJEQ6FFm5xJsfA=";
 
     fetchSubmodules = true;
     postFetch = "cp $out/node_modules/.package-lock.json $out/package-lock.json";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cockpit-project/cockpit-podman";
     changelog = "https://github.com/cockpit-project/cockpit-podman/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.linux;
-    license = [ lib.licenses.lgpl21 ];
+    license = lib.licenses.lgpl21;
     teams = [ lib.teams.cockpit ];
   };
 })

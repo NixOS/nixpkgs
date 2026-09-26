@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.coconnor ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memcached";
   };

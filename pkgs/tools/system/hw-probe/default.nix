@@ -26,7 +26,7 @@
   perl,
   smartmontools,
   usbutils,
-  v4l-utils,
+  libv4l,
   xz,
 
   # Conditionally recommended
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
         gnugrep
         curl
         gnutar
-        v4l-utils
+        libv4l
         xz
         kmod # (lsmod)
       ];

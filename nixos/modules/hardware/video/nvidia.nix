@@ -225,7 +225,7 @@ in
 
         Example usage: `nvidia-offload sauerbraten_client`
 
-        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.offloadCmdMainProgram`.
       '';
       prime.offload.offloadCmdMainProgram = lib.mkOption {
         type = lib.types.str;
@@ -386,14 +386,12 @@ in
       moduleParams = lib.mkOption {
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
         default = { };
-        example = ''
-          {
-            nvidia = {
-              NVreg_UsePageAttributeTable = 1;
-              NVreg_RegistryDwords = "EnableBrightnessControl=1"
-            };
-          }
-        '';
+        example = {
+          nvidia = {
+            NVreg_UsePageAttributeTable = 1;
+            NVreg_RegistryDwords = "EnableBrightnessControl=1";
+          };
+        };
         description = "Additional parameters to pass to the NVIDIA kernel module.";
       };
     };
@@ -482,7 +480,7 @@ in
               combineIcdPkgs =
                 icd: pkgs:
                 pkgs.symlinkJoin {
-                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.hostPlatform.is32bit "-x32"}";
                   paths = lib.attrVals icd pkgs;
                   # Remediate reversed priorities in pre-595 drivers,
                   # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793

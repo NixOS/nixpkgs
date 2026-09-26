@@ -28,11 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ librdf_raptor2 ];
 
-  confiugureFlags = [
-    # uses 'regex.h' as a fallback, which is preferrable
-    "--disable-pcre"
-  ];
-
   postInstall = "rm -rvf $out/share/gtk-doc";
 
   nativeCheckInputs = [ perl ];

@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jfbview";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "jichu4n";
     repo = "jfbview";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-7iyDfMuGAXXLyDNz0d4jEQ+KfJ/LyUu4v1n0GcOKeEc=";
+    hash = "sha256-X52FBg4Jgb80OETu29p4lcWpT+OSRz1xfhw+IkFZr+I=";
   };
 
   __structuredAttrs = true;
@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "/") # relative to $out
   ];
 

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 
   # optionals
   genshi,
@@ -12,17 +13,21 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "static3";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rmohr";
     repo = "static3";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uFgv+57/UZs4KoOdkFxbvTEDQrJbb0iYJ5JoWWN4yFY=";
   };
+
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     KidMagic = [
@@ -38,14 +43,14 @@ buildPythonPackage rec {
     pytest-cov-stub
     webtest
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
-    changelog = "https://github.com/rmohr/static3/releases/tag/v${version}";
+    changelog = "https://github.com/rmohr/static3/releases/tag/${finalAttrs.src.tag}";
     description = "Really simple WSGI way to serve static (or mixed) content";
     mainProgram = "static";
     homepage = "https://github.com/rmohr/static3";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -5,6 +5,7 @@
   python,
   cmake,
   stdenv,
+  makeShellWrapper,
 }:
 
 let
@@ -12,12 +13,12 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6-generator";
-  version = "6.11.0";
+  version = "6.11.1";
 
   src = fetchgit {
     url = "https://code.qt.io/pyside/pyside-setup.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UbvH+wNiXjfMhaRUODx3p2cJmAz/dJ5kjPSprGKwsYg=";
+    hash = "sha256-m1vBGIUOgjx+0/MkiCASP6HaX5YM2B/txnbww7dKjCk=";
   };
 
   patches = [
@@ -33,6 +34,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.packaging
       ps.setuptools
     ]))
+    makeShellWrapper
   ];
 
   buildInputs = [
@@ -53,6 +55,12 @@ stdenv'.mkDerivation (finalAttrs: {
     python3 setup.py egg_info --build-type=shiboken6-generator
     cp -r shiboken6_generator.egg-info $out/${python.sitePackages}/
   '';
+
+  postFixup = ''
+    wrapProgramShell $out/bin/shiboken6 --add-flags '--typesystem-paths=$NIXPKGS_SHIBOKEN6_TYPESYSTEMS_PATH'
+  '';
+
+  setupHook = ./shiboken6-hook.sh;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - tools";

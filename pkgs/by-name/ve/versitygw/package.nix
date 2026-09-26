@@ -8,19 +8,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.3.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1SQE0bhv8L70Fdm6CvV2/kq945jvzZretVPsT8dGOJY=";
+    hash = "sha256-fnmhA3Et3rF0GgRdV41rdTrBZCh2b8dvRYTATaqDb18=";
   };
 
-  vendorHash = "sha256-x9KrZRso/7LfBCbBfCvwqnFKOWS4SEYw6DwxpEAHfZ8=";
+  vendorHash = "sha256-HyDY6tTDvEDQI85Z4SGb11oDPTicnp8TR1sH7n7Bbcg=";
 
-  # Require access to online S3 services
-  doCheck = false;
+  excludedPackages = [
+    # depends on cgo/cuda
+    "cmd/cuobjtest"
+    "cmd/vgwrdma"
+    "rdma"
+
+    "plugins/noop"
+    "tests/checker"
+    "tests/rest_scripts"
+  ];
 
   # Needed for "versitygw --version" to not show placeholders
   ldflags = [
@@ -29,10 +37,23 @@ buildGoModule (finalAttrs: {
     "-X main.Version=v${finalAttrs.version}"
   ];
 
+  env.CGO_ENABLED = "0";
+
+  checkFlags =
+    let
+      skippedTests = [
+        # requires real s3
+        "^TestIntegration$"
+
+        # requires extended attributes
+        "^TestObjectPublishLockHonorsContextWhileWaiting$"
+        "/xattr$"
+      ];
+    in
+    [ "-skip=${builtins.concatStringsSep "|" skippedTests}" ];
+
   doInstallCheck = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
-
   versionCheckProgramArg = "--version";
 
   passthru = {
@@ -44,7 +65,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/versity/versitygw";
     changelog = "https://github.com/versity/versitygw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      genga898
+    ];
     mainProgram = "versitygw";
   };
 })

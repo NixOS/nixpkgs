@@ -41,6 +41,7 @@ in
             };
           };
 
+          networking.useNetworkd = true;
           networking.firewall.allowedUDPPorts = [ 9999 ];
 
           systemd.network = {
@@ -72,6 +73,7 @@ in
       server = {
         imports = [ (shared server) ];
 
+        networking.useNetworkd = true;
         networking.firewall.allowedUDPPorts = [ server.wg.listen ];
 
         systemd.network.netdevs."10-${deviceName}" = {
@@ -118,7 +120,7 @@ in
   testScript =
     { ... }:
     ''
-      from os import system
+      import subprocess
 
       # Full path to rosenpass in the store, to avoid fiddling with `$PATH`.
       rosenpass = "${pkgs.rosenpass}/bin/rosenpass"
@@ -137,7 +139,10 @@ in
 
       for (name, machine, remote) in [("server", server, client), ("client", client, server)]:
           pk, sk = f"{name}.pqpk", f"{name}.pqsk"
-          system(f"{rosenpass} gen-keys --force --secret-key {sk} --public-key {pk}")
+          subprocess.run(
+              [rosenpass, "gen-keys", "--force", "--secret-key", sk, "--public-key", pk],
+              check=True,
+          )
           machine.copy_from_host(sk, f"{etc}/pqsk")
           machine.copy_from_host(pk, f"{etc}/pqpk")
           remote.copy_from_host(pk, f"{etc}/peers/{name}/pqpk")

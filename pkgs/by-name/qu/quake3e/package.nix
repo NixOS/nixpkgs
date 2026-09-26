@@ -68,11 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    install -Dm644 code/unix/quake3.svg $out/share/icons/hicolor/scalable/apps/quake3e.svg
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "Quake3e";
       exec = "quake3e";
       desktopName = "Quake3e";
+      icon = "quake3e";
       categories = [ "Game" ];
     })
   ];

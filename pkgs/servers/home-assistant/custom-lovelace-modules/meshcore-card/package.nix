@@ -7,17 +7,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "meshcore-card";
-  version = "0.3.5";
+  version = "1.0.0";
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jpettitt";
     repo = "meshcore-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XfqtCGSDrfkNIqWuH8Y8DLacJf9x7iaZXDiKDWdqzhw=";
+    hash = "sha256-B2W3B8cd9OrTOxLEWUV8Aercektfwh7/Ik3/U/Lwz48=";
   };
 
-  npmDepsHash = "sha256-KgG6PGSGw9zCOPboZjo/gpAs2OwLg3LRl3rqenIvTG8=";
+  npmDepsHash = "sha256-/CtYdDFo8Sbq3FEm6ND8b/CNcfsUgoT23F6RVfYtYDg=";
 
   installPhase = ''
     runHook preInstall

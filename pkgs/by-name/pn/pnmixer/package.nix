@@ -10,12 +10,15 @@
   glib,
   libnotify,
   libx11,
-  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnmixer";
   version = "0.7.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "nicklan";
@@ -41,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libnotify
     libx11
-    pcre
   ];
 
   meta = {

@@ -8,20 +8,17 @@
   absl-py,
   afdko,
   axisregistry,
-  babelfont,
   beautifulsoup4,
   black,
   brotli,
-  bumpfontversion,
   coreutils,
   diffenator2,
   ffmpeg-python,
-  font-v,
-  fontbakery,
   fontfeatures,
   fontmake,
   fonttools,
   gflanguages,
+  gfmetadata,
   gfsubsets,
   glyphsets,
   glyphslib,
@@ -44,8 +41,6 @@
   requests,
   rich,
   ruamel-yaml,
-  skia-pathops,
-  statmake,
   strictyaml,
   tabulate,
   ttfautohint-py,
@@ -53,7 +48,10 @@
   unidecode,
   vharfbuzz,
   vttlib,
+  gitpython,
+  freetype-py,
   python,
+  gitUpdater,
 }:
 
 let
@@ -62,14 +60,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.995";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-XnlA5u6GP8K+xxazfxMrh16Utxs9uhfxoZFV81yFOfA=";
+    hash = "sha256-EpEMvHoSuuptVu/GVk+RFmxa0jE3acg9KUYtUrodHOs=";
   };
 
   postPatch = ''
@@ -131,16 +129,14 @@ buildPythonPackage rec {
     absl-py
     afdko
     axisregistry
-    babelfont
     beautifulsoup4
     brotli
-    bumpfontversion
     ffmpeg-python
-    font-v
     fontfeatures
     fontmake
     fonttools
     gflanguages
+    gfmetadata
     gfsubsets
     glyphsets
     glyphslib
@@ -158,9 +154,6 @@ buildPythonPackage rec {
     requests
     rich
     ruamel-yaml
-    setuptools
-    skia-pathops
-    statmake
     strictyaml
     tabulate
     ttfautohint-py
@@ -168,6 +161,7 @@ buildPythonPackage rec {
     unidecode
     vharfbuzz
     vttlib
+    gitpython
   ]
   ++ fonttools.optional-dependencies.ufo
   ++ fontmake.optional-dependencies.json;
@@ -175,8 +169,8 @@ buildPythonPackage rec {
   optional-dependencies = {
     qa = [
       diffenator2
-      fontbakery
       pycairo
+      freetype-py
     ];
     test = [
       black
@@ -201,6 +195,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "gftools" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    # Miss Released version
+    ignoredVersions = "0.9991";
+  };
 
   meta = {
     description = "Misc tools for working with the Google Fonts library";

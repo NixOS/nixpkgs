@@ -12,7 +12,6 @@
   gawk,
   gnutar,
   gzip,
-  musl,
 }:
 let
   pname = "xz";
@@ -30,7 +29,6 @@ bash.runCommand "${pname}-${version}"
     nativeBuildInputs = [
       binutils
       gcc
-      musl
       gnumake
       gnused
       gnugrep
@@ -39,10 +37,12 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
+    disallowedReferences = [ gcc ];
+
     passthru.tests.get-version =
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${lib.getExe result} --version
+        ${result}/bin/xz --version
         mkdir $out
       '';
 
@@ -64,10 +64,8 @@ bash.runCommand "${pname}-${version}"
     cd xz-${version}
 
     # Configure
-    export CC=musl-gcc
-    export CFLAGS=-static
-    export CXXFLAGS=-static
-    export LDFLAGS=-static
+    export CFLAGS="-g0 -O2 -DNDEBUG"
+    export CXXFLAGS="$CFLAGS"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
@@ -78,6 +76,10 @@ bash.runCommand "${pname}-${version}"
       --disable-nls \
       --disable-shared \
       --disable-scripts \
+      --disable-doc \
+      --disable-xzdec \
+      --disable-lzmadec \
+      --disable-lzmainfo \
       --disable-assembler
 
     # Build
@@ -85,4 +87,5 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/include $out/lib $out/share
   ''
