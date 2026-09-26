@@ -24,6 +24,8 @@ let
   };
 
   platform = platforms."${stdenv.hostPlatform.system}";
+
+  z3Available = lib.meta.availableOn stdenv.hostPlatform isabelleComponents.z3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -65,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     net-tools
     isabelleComponents.cvc5
     isabelleComponents.csdp
+  ]
+  ++ lib.optionals z3Available [
+    isabelleComponents.z3
   ];
 
   patches = [
@@ -79,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The z3 version isabelle uses is only built for x86_64
   # even though it can work on apple-silicon with rosetta, leave this up to the user
-  doCheck = stdenv.hostPlatform.isx86_64;
+  doCheck = z3Available;
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -108,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -rf contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 contrib/e-3.2 contrib/jdk-21.0.9 \
            contrib/polyml-5.9.2-2 contrib/vampire-4.8 contrib/verit-2021.06.2-rmx-3 \
-           contrib/vscodium-*
+           contrib/vscodium-* contrib/z3-4.4.0pre-4
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -122,8 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -r heaps
   ''
+  + lib.optionalString z3Available ''
+    substituteInPlace etc/components \
+      --replace-fail 'contrib/z3-${isabelleComponents.z3.version}' '${isabelleComponents.z3.settings}'
+  ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for f in contrib/*/${platform}/{z3,nunchaku,SPASS,zipperposition}; do
+    for f in contrib/*/${platform}/{nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/${platform}/bash_process
@@ -136,9 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }" $d/*.so
     done
-  ''
-  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/${platform}/z3
   '';
 
   buildPhase = ''
