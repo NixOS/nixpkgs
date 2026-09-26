@@ -11,6 +11,7 @@ lib.makeScope newScope (self: {
   cvc5 = self.callPackage ./cvc5 { };
   e = self.callPackage ./e { };
   easychair = self.callPackage ./easychair { };
+  elm = self.callPackage ./elm { };
   flatlaf = self.callPackage ./flatlaf { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
