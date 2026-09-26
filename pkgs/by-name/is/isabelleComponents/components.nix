@@ -12,6 +12,7 @@ lib.makeScope newScope (self: {
   flatlaf = self.callPackage ./flatlaf { };
   isabelle-linter = self.callPackage ./isabelle-linter { };
   jdk = self.callPackage ./jdk { };
+  kodkodi = self.callPackage ./kodkodi { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
   scala = self.callPackage ./scala { };
