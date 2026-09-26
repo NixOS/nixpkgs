@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Fast CLI documentation searcher for Nix";
     homepage = "https://github.com/nix-community/manix";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       lecoqjacob
       iogamaster
