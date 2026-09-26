@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libslirp";
-  version = "4.9.3";
+  version = "4.9.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = "libslirp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Spr3dO5ehuUlzx3EnJi8najANWOirwQcTsWTVRVXYuY=";
+    hash = "sha256-iWu3/Klsm8e9MH147BJhn9Vqyneq5ROqPvll1cnieL0=";
   };
 
   separateDebugInfo = true;
