@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./multiple-configs.patch
+    ./revert-change-breaking-auth-broadcom.patch
   ]
   ++ lib.optional unprivileged ./unprivileged-daemon.patch;
 
