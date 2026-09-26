@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfstests";
-  version = "2026.09.02";
+  version = "2026.09.22";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-jnwEcGUSkKW9afGQTUsWR7CNQECWz/sYdSaDx0hY1Uo=";
+    hash = "sha256-2gh5P7Fcw3LeqvUgOXpfq+vD/agbfWEN0I3QsSIZsJ8=";
   };
 
   nativeBuildInputs = [
