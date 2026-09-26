@@ -1,0 +1,25 @@
+Fall back to SCHED_OTHER when pthread_attr_setschedpolicy() rejects
+the current scheduler policy.
+
+Linux sched_getscheduler() can return SCHED_IDLE or SCHED_BATCH, but
+pthread_attr_setschedpolicy() only accepts SCHED_OTHER, SCHED_FIFO,
+or SCHED_RR. Builders that run under the extra Linux policies otherwise
+make every TSDuck thread creation fail.
+
+--- a/src/libtscore/system/tsThread.cpp
++++ b/src/libtscore/system/tsThread.cpp
+@@ -222,8 +222,12 @@ bool ts::Thread::start()
+ 
+     // Set scheduling policy identical as current process.
+     if (::pthread_attr_setschedpolicy(&attr, ThreadAttributes::PthreadSchedulingPolicy()) != 0) {
+-        ::pthread_attr_destroy(&attr);
+-        return false;
++        // Linux sched_getscheduler() may return SCHED_IDLE or SCHED_BATCH
++        // which pthread_attr_setschedpolicy() rejects; fall back to SCHED_OTHER.
++        if (::pthread_attr_setschedpolicy(&attr, SCHED_OTHER) != 0) {
++            ::pthread_attr_destroy(&attr);
++            return false;
++        }
+     }
+ 
+     // Set scheduling priority.

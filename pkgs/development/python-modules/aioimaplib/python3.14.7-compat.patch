@@ -1,0 +1,22 @@
+diff --git a/tests/test_imapserver_imaplib.py b/tests/test_imapserver_imaplib.py
+index d4f1199..79a4d32 100644
+--- a/tests/test_imapserver_imaplib.py
++++ b/tests/test_imapserver_imaplib.py
+@@ -260,7 +260,7 @@ async def test_store(with_server):
+     imap_client = await login_user('user', 'pass', select=True)
+ 
+     result, data = await asyncio.wait_for(
+-        asyncio.get_running_loop().run_in_executor(None, functools.partial(imap_client.uid, 'store', '1', '+FLAGS.SILENT (\Seen \Answered)')), 1)
++        asyncio.get_running_loop().run_in_executor(None, functools.partial(imap_client.uid, 'store', '1', '+FLAGS.SILENT', '(\Seen \Answered)')), 1)
+     assert 'OK' == result
+ 
+     result, data = await asyncio.wait_for(
+@@ -283,7 +283,7 @@ async def test_store_and_search_by_keyword(with_server):
+     assert [b''] == data
+ 
+     result, data = await asyncio.wait_for(
+-        asyncio.get_running_loop().run_in_executor(None, functools.partial(imap_client.uid, 'store', '1', '+FLAGS (FOO)')), 1)
++        asyncio.get_running_loop().run_in_executor(None, functools.partial(imap_client.uid, 'store', '1', '+FLAGS', '(FOO)')), 1)
+     assert 'OK' == result
+ 
+     result, data = await asyncio.wait_for(

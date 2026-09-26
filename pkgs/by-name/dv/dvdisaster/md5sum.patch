@@ -1,0 +1,22 @@
+Just use md5sum
+diff --git a/regtest/common.bash b/regtest/common.bash
+index ce629ff..75abe54 100644
+--- a/regtest/common.bash
++++ b/regtest/common.bash
+@@ -33,15 +33,7 @@ TMPLOG="$LOGDIR/tmplog.txt"
+ 
+ UNAME="$(uname -s)"
+ 
+-if [ "$UNAME" = Darwin ]; then
+-    MD5SUM="md5 -r"
+-else
+-    MD5SUM=md5sum
+-fi
+-
+-if ! $MD5SUM $RNDSEQ >/dev/null 2>&1; then
+-    MD5SUM=../simple-md5sum
+-fi
++MD5SUM=md5sum
+ 
+ nbfailed=0
+ 

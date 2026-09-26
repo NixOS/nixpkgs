@@ -1,0 +1,15 @@
+diff --git a/getopt.c b/getopt.c
+index 9b27812..3fac396 100644
+--- a/getopt.c
++++ b/getopt.c
+@@ -43,9 +43,9 @@
+ #include <stdio.h>
+ /* We're ANSI now; we're guaranteed to have strchr(). */
+ #include <string.h>
++#include <unistd.h>
+ 
+ #define ERR(s, c)	if(x_opterr){\
+-	extern int write();\
+ 	char errbuf[2];\
+ 	errbuf[0] = c; errbuf[1] = '\n';\
+ 	(void) write(2, argv[0], (unsigned)strlen(argv[0]));\

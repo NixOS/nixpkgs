@@ -1,0 +1,36 @@
+diff --git a/mautrix_telegram/web/public/__init__.py b/mautrix_telegram/web/public/__init__.py
+index cde3735..d911779 100644
+--- a/mautrix_telegram/web/public/__init__.py
++++ b/mautrix_telegram/web/public/__init__.py
+@@ -23,7 +23,7 @@ import time
+ 
+ from aiohttp import web
+ from mako.template import Template
+-import pkg_resources
++from importlib.resources import files
+ 
+ from mautrix.types import UserID
+ from mautrix.util.signed_token import sign_token, verify_token
+@@ -45,11 +45,11 @@ class PublicBridgeWebsite(AuthAPI):
+         self.secret_key = "".join(random.choices(string.ascii_lowercase + string.digits, k=64))
+ 
+         self.login = Template(
+-            pkg_resources.resource_string("mautrix_telegram", "web/public/login.html.mako")
++            files("mautrix_telegram").joinpath("web/public/login.html.mako").read_bytes()
+         )
+ 
+         self.mx_login = Template(
+-            pkg_resources.resource_string("mautrix_telegram", "web/public/matrix-login.html.mako")
++            files("mautrix_telegram").joinpath("web/public/matrix-login.html.mako").read_bytes()
+         )
+ 
+         self.app = web.Application(loop=loop)
+@@ -58,7 +58,7 @@ class PublicBridgeWebsite(AuthAPI):
+         self.app.router.add_route("GET", "/matrix-login", self.get_matrix_login)
+         self.app.router.add_route("POST", "/matrix-login", self.post_matrix_login)
+         self.app.router.add_static(
+-            "/", pkg_resources.resource_filename("mautrix_telegram", "web/public/")
++            "/", str(files("mautrix_telegram").joinpath("web/public/"))
+         )
+ 
+     def make_token(self, mxid: str, endpoint: str = "/login", expires_in: int = 900) -> str:

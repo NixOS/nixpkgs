@@ -1,0 +1,63 @@
+From 879b926f90cb131e81703da107f33ed705c63519 Mon Sep 17 00:00:00 2001
+From: shin4141 <128954611+shin4141@users.noreply.github.com>
+Date: Sun, 23 Aug 2026 09:22:03 +0900
+Subject: [PATCH] Fix BFE test for C++20 stateless lambdas
+
+---
+ doc/sphinx/docs/cpp/bfe.rst |  6 ++++--
+ tests/bfe.cpp               | 20 +++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/doc/sphinx/docs/cpp/bfe.rst b/doc/sphinx/docs/cpp/bfe.rst
+index 85c2a42a9..caacf4ec9 100644
+--- a/doc/sphinx/docs/cpp/bfe.rst
++++ b/doc/sphinx/docs/cpp/bfe.rst
+@@ -46,8 +46,10 @@ Batch fitness evaluator
+    stored contiguously).
+ 
+    Additionally, UDBFEs must also be destructible and default, copy and move constructible.
+-   Note that pointers to plain C++ functions with an appropriate signature
+-   are UDBFEs, but lambda functions are not (as they currently are not default-constructible).
++   Note that pointers to plain C++ functions with an appropriate signature are UDBFEs.
++   Stateless lambdas are also UDBFEs when their closure types are default-constructible
++   (e.g., when using C++20 or later), while capturing lambdas are not default-constructible
++   and thus are not UDBFEs.
+ 
+    UDBFEs can also implement the following (optional) member functions:
+ 
+diff --git a/tests/bfe.cpp b/tests/bfe.cpp
+index cf32c2e34..4fba20d7d 100644
+--- a/tests/bfe.cpp
++++ b/tests/bfe.cpp
+@@ -455,12 +455,30 @@ BOOST_AUTO_TEST_CASE(s11n)
+     BOOST_CHECK(bfe0.extract<udbfe_a>()->state = -42);
+ }
+ 
++template <typename T>
++void test_lambda_udbfe(const T &fun)
++{
++    if constexpr (is_udbfe<T>::value) {
++        bfe bfe0{fun};
++        BOOST_CHECK(bfe0.is<T>());
++        bfe bfe1{bfe0};
++        BOOST_CHECK(bfe1.is<T>());
++        BOOST_CHECK(bfe1(problem{}, vector_double{.5}) == vector_double{1.});
++        BOOST_CHECK(bfe1(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
++    }
++}
++
+ BOOST_AUTO_TEST_CASE(lambda_std_function)
+ {
+     auto fun = [](const problem &p, const vector_double &dvs) {
+         return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
+     };
+-    BOOST_CHECK(!is_udbfe<decltype(fun)>::value);
++    BOOST_CHECK(std::is_copy_constructible<decltype(fun)>::value);
++    BOOST_CHECK(std::is_move_constructible<decltype(fun)>::value);
++    BOOST_CHECK(std::is_destructible<decltype(fun)>::value);
++    BOOST_CHECK(has_bfe_call_operator<decltype(fun)>::value);
++    BOOST_CHECK_EQUAL(is_udbfe<decltype(fun)>::value, std::is_default_constructible<decltype(fun)>::value);
++    test_lambda_udbfe(fun);
+ #if !defined(_MSC_VER)
+     BOOST_CHECK(is_udbfe<decltype(+fun)>::value);
+ #endif

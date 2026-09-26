@@ -1,0 +1,42 @@
+From 17e4e901da64971cbbba4fb310a8cc10197f0ca3 Mon Sep 17 00:00:00 2001
+From: eymeric <hatchchien@protonmail.com>
+Date: Sun, 10 May 2026 20:24:17 +0200
+Subject: [PATCH] dggui: fix non-ASCII character rendering in drawText()
+
+Painter::drawText() was passing strings directly to font.render()
+which indexes the glyph bitmap by raw byte value (Latin-1).
+Strings coming from gettext .mo files (charset=ISO-8859-1) or
+embedded resource files (UTF-8) were not converted before rendering,
+causing multi-byte UTF-8 sequences to produce garbled/missing glyphs
+for accented characters (French, etc.).
+
+Fix: convert text to Latin-1 via UTF8::toLatin1() inside drawText()
+so all text rendering paths are correctly handled in one place.
+---
+ dggui/painter.cc | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dggui/painter.cc b/dggui/painter.cc
+index c326601..1c4539e 100644
+--- a/dggui/painter.cc
++++ b/dggui/painter.cc
+@@ -29,6 +29,7 @@
+ #include <cmath>
+ #include <cassert>
+ 
++#include "utf8.h"
+ #include "pixelbuffer.h"
+ #include "font.h"
+ #include "drawable.h"
+@@ -177,7 +178,8 @@ void Painter::clear()
+ void Painter::drawText(int x0, int y0, const Font& font,
+                        const std::string& text, bool nocolour, bool rotate)
+ {
+-	PixelBufferAlpha* textbuf = font.render(text);
++	UTF8 utf8conv;
++	PixelBufferAlpha* textbuf = font.render(utf8conv.toLatin1(text));
+ 
+ 	if(!rotate)
+ 	{
+-- 
+2.53.0

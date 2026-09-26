@@ -1,0 +1,49 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index abbeead..93cac12 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -136,8 +136,7 @@ find_package(Threads) # this will set ${CMAKE_THREAD_LIBS_INIT} (ie pthreads)
+ find_path(DOUBLECONV_INCLUDE_DIR double-conversion/double-conversion.h)
+ find_library(DOUBLECONV_LIBRARY double-conversion)
+ # Glog
+-find_path(GLOG_INCLUDE_DIR glog/logging.h)
+-find_library(GLOG_LIBRARY glog)
++find_package(glog REQUIRED)
+ # Gflags
+ find_path(GFLAGS_INCLUDE_DIR gflags/gflags.h)
+ find_library(GFLAGS_LIBRARY gflags)
+@@ -174,7 +173,7 @@ endif()
+ # You can also add jemalloc to the list if you have it/want it
+ target_link_libraries(wdt_min
+   ${FOLLY_LIBRARY}
+-  ${GLOG_LIBRARY}
++  glog::glog
+   ${GFLAGS_LIBRARY}
+   ${Boost_LIBRARIES}
+   ${DOUBLECONV_LIBRARY}
+@@ -226,7 +225,7 @@ if (NOT WDT_USE_SYSTEM_FOLLY)
+   endif()
+ 
+   add_library(folly4wdt ${FOLLY_CPP_SRC})
+-  target_link_libraries(folly4wdt ${GLOG_LIBRARY} ${DOUBLECONV_LIBRARY})
++  target_link_libraries(folly4wdt glog::glog ${DOUBLECONV_LIBRARY})
+ endif()
+ 
+ # Order is important - inside fb we want the above
+@@ -234,7 +233,6 @@ endif()
+ include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ include_directories(${FOLLY_INCLUDE_DIR})
+ include_directories(${DOUBLECONV_INCLUDE_DIR})
+-include_directories(${GLOG_INCLUDE_DIR})
+ include_directories(${GFLAGS_INCLUDE_DIR})
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+ 
+@@ -336,7 +334,7 @@ if (BUILD_TESTING)
+   )
+ 
+   target_link_libraries(wdtbenchlib
+-    ${GLOG_LIBRARY}
++    glog::glog
+     ${GFLAGS_LIBRARY}
+   )
+ 

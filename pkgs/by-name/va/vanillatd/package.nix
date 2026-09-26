@@ -1,0 +1,185 @@
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchFromGitHub,
+
+  # buildInputs
+  SDL2,
+  libcxx,
+  openal,
+
+  # nativeBuildInputs
+  cmake,
+  git,
+  pkg-config,
+  imagemagick,
+  libicns,
+  copyDesktopItems,
+
+  makeDesktopItem,
+
+  # passthru
+  callPackage,
+  symlinkJoin,
+  rsync,
+  unstableGitUpdater,
+
+  appName ? "vanillatd",
+}:
+assert lib.assertOneOf "appName" appName [
+  "vanillatd"
+  "vanillara"
+];
+stdenv.mkDerivation (finalAttrs: {
+  pname = appName;
+  version = "0-unstable-2026-07-16";
+
+  src = fetchFromGitHub {
+    owner = "TheAssemblyArmada";
+    repo = "Vanilla-Conquer";
+    rev = "ce83b59edd99cccac6cebaae054ca04962c744b7";
+    hash = "sha256-jjiqW3J1XQr4+cNd86yXO0dFpt5VEKmxtMywBjTceTc=";
+
+  };
+
+  buildInputs = [
+    SDL2
+    libcxx
+    openal
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_VANILLATD" (appName == "vanillatd"))
+    (lib.cmakeBool "BUILD_VANILLARA" (appName == "vanillara"))
+    (lib.cmakeBool "BUILD_REMASTERTD" (appName == "remastertd"))
+    (lib.cmakeBool "BUILD_REMASTERRA" (appName == "remasterra"))
+  ];
+
+  # TODO: Fix this from the upstream
+  # remove the old FindSDL2.cmake logic, use cmake's built-in SDL2 support
+  # replace ${SDL2_LIBRARY} to SDL2::SDL2 in CMakeLists.txt
+  preConfigure = ''
+    rm cmake/FindSDL2.cmake
+    sed -i 's/..SDL2_LIBRARY./SDL2::SDL2/g' CMakeLists.txt
+  '';
+
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        runHook preInstall
+
+        mkdir -p $out/Applications
+        mv ${appName}.app $out/Applications
+
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
+
+        mkdir -p $out/bin
+        mv ${appName} $out/bin/${appName}
+        install -Dm644 ../resources/${appName}_icon.svg $out/share/icons/hicolor/scalable/apps/${appName}.svg
+
+        runHook postInstall
+      '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = appName;
+      desktopName = appName;
+      comment =
+        {
+          "vanillatd" = "Command & Conquer: Tiberian Dawn";
+          "vanillara" = "Command & Conquer: Red Alert";
+        }
+        ."${appName}";
+      exec = appName;
+      terminal = false;
+      icon = appName;
+      startupWMClass = appName;
+      categories = [ "Game" ];
+    })
+  ];
+
+  passthru =
+    let
+      packages = callPackage ./passthru-packages.nix { inherit appName; };
+    in
+    {
+      inherit packages;
+
+      updateScript = unstableGitUpdater {
+        # A 'latest' tag exists,
+        # but it appears to be there only for upstream to provide builds
+        # and might move around.
+        hardcodeZeroVersion = true;
+      };
+
+      withPackages =
+        cb:
+        let
+          dataDerivation = symlinkJoin {
+            name = "${appName}-data";
+            paths = if builtins.isFunction cb then cb packages else cb;
+          };
+        in
+        stdenvNoCC.mkDerivation {
+          pname = "${appName}-with-packages";
+          inherit (finalAttrs.finalPackage) version meta;
+
+          buildInputs = [ dataDerivation ] ++ finalAttrs.buildInputs;
+          nativeBuildInputs = [ rsync ];
+
+          buildCommand =
+            let
+              Default_Data_Path =
+                if stdenv.hostPlatform.isDarwin then
+                  "$out/Applications/${appName}.app/Contents/share/${appName}"
+                else
+                  "$out/share/${appName}";
+            in
+            ''
+              # The default Data_Path() is rely on the Program_Path(), which is the real path of executable, so we need to make executable non symlink here.
+              rsync --archive --mkpath --chmod=a+w ${finalAttrs.finalPackage}/ $out/
+
+              # Symlink the data derivation to the default data path
+              mkdir -p ${dirOf Default_Data_Path}
+              ln -s ${dataDerivation} ${Default_Data_Path}
+
+              # Fix `error: suspicious ownership or permission on '/nix/store/xxx-0.0.0' for output 'out'; rejecting this build output`
+              chmod 755 $out
+            '';
+        };
+    };
+
+  meta = {
+    description =
+      {
+        "vanillatd" =
+          "Vanilla Conquer is a modern, multi-platform source port of Command & Conquer: Tiberian Dawn";
+        "vanillara" =
+          "Vanilla Conquer is a modern, multi-platform source port of Command & Conquer: Red Alert";
+      }
+      ."${appName}";
+    homepage = "https://github.com/TheAssemblyArmada/Vanilla-Conquer";
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    platforms = with lib.platforms; darwin ++ linux;
+  };
+})

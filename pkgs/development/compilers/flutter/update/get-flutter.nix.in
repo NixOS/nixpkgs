@@ -1,0 +1,7 @@
+{ fetchFromGitHub }:
+fetchFromGitHub {
+  owner = "flutter";
+  repo = "flutter";
+  tag = "@flutter_version@";
+  hash = "@hash@";
+}

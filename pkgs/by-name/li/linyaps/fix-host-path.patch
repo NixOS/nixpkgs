@@ -1,0 +1,59 @@
+diff --git a/libs/oci-cfg-generators/src/linglong/oci-cfg-generators/container_cfg_builder.cpp b/libs/oci-cfg-generators/src/linglong/oci-cfg-generators/container_cfg_builder.cpp
+index 72d5890..ac63c57 100644
+--- a/libs/oci-cfg-generators/src/linglong/oci-cfg-generators/container_cfg_builder.cpp
++++ b/libs/oci-cfg-generators/src/linglong/oci-cfg-generators/container_cfg_builder.cpp
+@@ -30,6 +30,7 @@
+ #include <iomanip>
+ #include <iostream>
+ #include <sstream>
++#include <unordered_map>
+ #include <vector>
+ 
+ #include <grp.h>
+@@ -596,19 +597,36 @@ ContainerCfgBuilder &ContainerCfgBuilder::bindHostRoot() noexcept
+ 
+ ContainerCfgBuilder &ContainerCfgBuilder::bindHostStatics() noexcept
+ {
+-    std::vector<std::filesystem::path> statics{
+-        "/etc/machine-id",
+-        // FIXME: support for host /etc/ssl, ref https://github.com/p11-glue/p11-kit
+-        "/usr/lib/locale",
+-        "/usr/share/fonts",
+-        "/usr/share/icons",
+-        "/usr/share/themes",
+-        "/var/cache/fontconfig",
++    std::unordered_map<std::filesystem::path, std::string> statics{
++        { "/etc/machine-id", "" },
++        { "/var/cache/fontconfig", "" },
++
++        { "/run/current-system/sw/lib/locale", "/usr/lib/locale" },
++        { "/run/current-system/sw/share/X11/fonts", "/usr/share/fonts" },
++        { "/run/current-system/sw/share/icons", "/usr/share/icons" },
++        { "/run/current-system/sw/share/themes", "/usr/share/themes" },
++
++        // Bind the whole host store read-only instead of chasing symlinks under
++        // /run/current-system/sw/share/{X11/fonts,icons,themes} and mounting each
++        // resolved /nix/store/<hash> entry at the same volatile path inside the
++        // sandbox: whenever a system update changes any store path, ll-box would
++        // have to create the new mount point below the cached (persistent,
++        // deepin-linglong-owned) overlay layer, which fails with EACCES and
++        // leaves the container permanently unstartable. A single stable
++        // destination decouples the mount set from the host generation. This is
++        // not a sandbox boundary change: the sandbox already exposes the whole
++        // host rootfs at /run/host/rootfs.
++        { "/nix/store", "" },
+     };
+ 
+     hostStaticsMount = std::vector<Mount>{};
+-    for (const auto &loc : statics) {
+-        bindIfExist(*hostStaticsMount, loc);
++    for (const auto &[source, destination] : statics) {
++        if (!std::filesystem::exists(source)) {
++            std::cerr << "[bindHostStatics] Skipping non-existent path: " << source << std::endl;
++            continue;
++        }
++
++        bindIfExist(*hostStaticsMount, source, destination);
+     }
+ 
+     return *this;

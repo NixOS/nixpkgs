@@ -1,0 +1,1 @@
+setenv PATH $PWD/charlie:`echo "$PATH" | @sed@ "s#:$PWD/bravo##"`

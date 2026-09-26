@@ -1,0 +1,95 @@
+From 0db315c9ca1e8f2144edf020aa4dd309e889d4d1 Mon Sep 17 00:00:00 2001
+From: Jared Baur <jaredbaur@fastmail.com>
+Date: Mon, 22 Jan 2024 20:42:48 -0800
+Subject: [PATCH] Add dlopen discoverer
+
+---
+ pkg/lookup/dlopen.go  | 63 +++++++++++++++++++++++++++++++++++++++++++
+ pkg/lookup/library.go |  1 +
+ 2 files changed, 64 insertions(+)
+ create mode 100644 pkg/lookup/dlopen.go
+
+diff --git a/pkg/lookup/dlopen.go b/pkg/lookup/dlopen.go
+new file mode 100644
+index 0000000..7af8ca0
+--- /dev/null
++++ b/pkg/lookup/dlopen.go
+@@ -0,0 +1,63 @@
++package lookup
++
++// #cgo LDFLAGS: -ldl
++// #define _GNU_SOURCE
++// #include <dlfcn.h>
++// #include <stdlib.h>
++import "C"
++
++import (
++	"fmt"
++	"path/filepath"
++	"unsafe"
++)
++
++// dlopenLocator can be used to locate libraries given a system's dynamic
++// linker.
++type dlopenLocator struct {
++	file
++}
++
++// NewDlopenLocator creates a locator that can be used for locating libraries
++// through the dlopen mechanism.
++func NewDlopenLocator(opts ...Option) Locator {
++	o := NewFactory(opts...)
++	f := file{
++		logger:   o.logger,
++		filter:   o.filter,
++		count:    o.count,
++		prefixes: getSearchPrefixes(o.root, o.searchPaths...),
++	}
++	d := dlopenLocator{file: f}
++	return &d
++}
++
++// Locate finds the specified pattern if the systems' dynamic linker can find
++// it via dlopen. Note that patterns with wildcard patterns will likely not be
++// found as it is uncommon for libraries to have wildcard patterns in their
++// file name.
++func (d dlopenLocator) Locate(pattern string) ([]string, error) {
++	libname := C.CString(pattern)
++	defer C.free(unsafe.Pointer(libname))
++
++	d.logger.Debugf("Calling dlopen for %s", pattern)
++
++	handle := C.dlopen(libname, C.RTLD_LAZY)
++	if handle == nil {
++		return nil, fmt.Errorf("dlopen %s failed", pattern)
++	}
++	defer C.dlclose(handle)
++
++	libParentPath := C.CString("")
++
++	d.logger.Debugf("Calling dlinfo on handle for %s", pattern)
++	ret := C.dlinfo(handle, C.RTLD_DI_ORIGIN, unsafe.Pointer(libParentPath))
++	if ret == -1 {
++		return nil, fmt.Errorf("dlinfo on handle for %s failed", pattern)
++	}
++
++	libAbsolutePath := filepath.Join(C.GoString(libParentPath), pattern)
++	d.logger.Debugf("Found library for %s at %s", pattern, libAbsolutePath)
++
++	return []string{libAbsolutePath}, nil
++}
+diff --git a/pkg/lookup/library.go b/pkg/lookup/library.go
+index e57bd0e..adeff77 100644
+--- a/pkg/lookup/library.go
++++ b/pkg/lookup/library.go
+@@ -51,6 +51,7 @@ func NewLibraryLocator(opts ...Option) Locator {
+ 		}...),
+ 	)
+ 	l := First(
++		NewDlopenLocator(opts...),
+ 		NewSymlinkLocator(opts...),
+ 		f.newLdcacheLocator(),
+ 	)
+-- 
+2.54.0
+

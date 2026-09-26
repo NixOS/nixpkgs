@@ -1,0 +1,13 @@
+diff --git a/config/config_test.go b/config/config_test.go
+index 9f63a7e..7e790b8 100644
+--- a/config/config_test.go
++++ b/config/config_test.go
+@@ -110,7 +110,7 @@ func TestInitEmptyConfig(t *testing.T) {
+ 		Subsonic: Subsonic{},
+ 		Player: Player{
+ 			Server:                "jellyfin",
+-			LogFile:               "/tmp/jellycli.log",
++			LogFile:               "/build/jellycli.log",
+ 			LogLevel:              "info",
+ 			AudioBufferingMs:      150,
+ 			HttpBufferingS:        5,

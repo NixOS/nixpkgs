@@ -1,0 +1,13 @@
+diff --git i/yarn.lock w/yarn.lock
+index 5cd3bbfbc..b9401d3fd 100644
+--- i/yarn.lock
++++ w/yarn.lock
+@@ -2,7 +2,7 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10c0
+ 
+ "@antfu/install-pkg@npm:^1.1.0":

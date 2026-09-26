@@ -1,0 +1,39 @@
+From 85a2e0440f8af42ae02cf7fee1119255b2459016 Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Fri, 10 Jul 2026 12:21:11 +0300
+Subject: [PATCH 1/4] replace count(where:) with filter{}.count for Swift 5.10
+
+---
+ src/events/TrackpadEvents.swift                | 2 +-
+ src/switcher/main-window/StatusIconsView.swift | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/events/TrackpadEvents.swift b/src/events/TrackpadEvents.swift
+index 2f1909df..5e187064 100644
+--- a/src/events/TrackpadEvents.swift
++++ b/src/events/TrackpadEvents.swift
+@@ -76,7 +76,7 @@ class TrackpadEvents {
+         // on macOS, the finger contact surface is not exposed in NSTouch, so we can't detect big contact == palm, for example
+         // the closest thing we can do to detect resting inputs is remove touches which have .phase == .stationary
+         let activeTouches = touches.filter { !$0.isResting && ($0.phase == .began || $0.phase == .moved) }
+-        let fingersDown = touches.count { $0.phase == .began || $0.phase == .moved || $0.phase == .stationary }
++        let fingersDown = touches.filter { $0.phase == .began || $0.phase == .moved || $0.phase == .stationary }.count
+         let requiredFingers = Preferences.nextWindowGesture.isThreeFinger() ? 3 : 4
+         if SwitcherSession.isActive {
+             handleEventIfAppIsBeingUsed(fingersDown, activeTouches, requiredFingers)
+diff --git a/src/switcher/main-window/StatusIconsView.swift b/src/switcher/main-window/StatusIconsView.swift
+index beeb2a54..2f35bddc 100644
+--- a/src/switcher/main-window/StatusIconsView.swift
++++ b/src/switcher/main-window/StatusIconsView.swift
+@@ -76,7 +76,7 @@ class StatusIconsView: FlippedView {
+         icons[Self.fullscreenIdx].visible = isFullscreen
+         icons[Self.minimizedIdx].visible = isMinimized
+         icons[Self.spaceIdx].visible = showSpace
+-        visibleCount = icons.count(where: { $0.visible })
++        visibleCount = icons.filter { $0.visible }.count
+     }
+ 
+     func setSpaceStar() {
+-- 
+2.55.0
+

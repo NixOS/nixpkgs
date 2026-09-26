@@ -1,0 +1,23 @@
+From 5c158213fc3afe39ee96be84e255c12d5886ca18 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloom@riseup.net>
+Date: Sat, 1 Apr 2023 17:38:37 +0300
+Subject: [PATCH] Add a hash to the `googletest` binary.
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0a06e6f..a614025 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -434,6 +434,7 @@ include(FetchContent)
+ FetchContent_Declare(
+   googletest
+   URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
++  URL_HASH SHA256=5cf189eb6847b4f8fc603a3ffff3b0771c08eec7dd4bd961bfd45477dd13eb73
+ )
+ # For Windows: Prevent overriding the parent project's compiler/linker settings
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+--
+2.39.2

@@ -1,0 +1,13 @@
+diff --git a/windmill-worker/src/rust_executor.rs b/windmill-worker/src/rust_executor.rs
+index 95fd82210..ed7b298e1 100644
+--- a/windmill-worker/src/rust_executor.rs
++++ b/windmill-worker/src/rust_executor.rs
+@@ -29,7 +29,7 @@ use crate::SYSTEM_ROOT;
+ const NSJAIL_CONFIG_RUN_RUST_CONTENT: &str = include_str!("../nsjail/run.rust.config.proto");
+ 
+ lazy_static::lazy_static! {
+-    static ref HOME_DIR: String = std::env::var("HOME").expect("Could not find the HOME environment variable");
++    static ref HOME_DIR: String = std::env::var("HOME").unwrap_or_else(|_| format!("{}/cargo", windmill_common::worker::ROOT_CACHE_DIR));
+     static ref CARGO_HOME: String = std::env::var("CARGO_HOME").unwrap_or_else(|_| { CARGO_HOME_DEFAULT.clone() });
+     static ref RUSTUP_HOME: String = std::env::var("RUSTUP_HOME").unwrap_or_else(|_| { RUSTUP_HOME_DEFAULT.clone() });
+     static ref CARGO_PATH: String = std::env::var("CARGO_PATH").unwrap_or_else(|_| format!("{}/bin/cargo", CARGO_HOME.as_str()));

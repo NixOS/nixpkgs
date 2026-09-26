@@ -1,0 +1,95 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  shared-mime-info,
+  gtk3,
+  wrapGAppsHook3,
+  libarchive,
+  libxml2,
+  xapp,
+  xapp-symbolic-icons,
+  meson,
+  pkg-config,
+  cairo,
+  libsecret,
+  poppler,
+  libspectre,
+  libgxps,
+  ninja,
+  djvulibre,
+  backends ? [
+    "pdf"
+    "ps" # "dvi" "t1lib"
+    "djvu"
+    "tiff"
+    "pixbuf"
+    "comics"
+    "xps"
+  ],
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xreader";
+  version = "4.6.7";
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = "xreader";
+    rev = finalAttrs.version;
+    hash = "sha256-mSaEVXwX6rErIEi9KxmMrGYunZFK8AbxNCTl8EJQGTM=";
+  };
+
+  nativeBuildInputs = [
+    shared-mime-info
+    wrapGAppsHook3
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    intltool
+  ];
+
+  mesonFlags = [
+    "-Dintrospection=true"
+  ]
+  ++ (map (x: "-D${x}=true") backends);
+
+  buildInputs = [
+    glib
+    gtk3
+    xapp
+    cairo
+    libarchive
+    libxml2
+    libsecret
+    poppler
+    libspectre
+    libgxps
+    djvulibre
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/xreader.thumbnailer \
+      --replace-fail "TryExec=xreader-thumbnailer" "TryExec=$out/bin/xreader-thumbnailer" \
+      --replace-fail "Exec=xreader-thumbnailer" "Exec=$out/bin/xreader-thumbnailer"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
+  meta = {
+    description = "Document viewer capable of displaying multiple and single page
+document formats like PDF and Postscript";
+    homepage = "https://github.com/linuxmint/xreader";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
+  };
+})

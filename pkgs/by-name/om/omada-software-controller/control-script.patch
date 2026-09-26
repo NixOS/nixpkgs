@@ -1,0 +1,46 @@
+--- a/bin/control.sh
++++ b/bin/control.sh
+@@ -13,10 +13,9 @@
+ ### END INIT INFO
+
+-export XDG_CONFIG_HOME=/opt/tplink/EAPController/data/chromium
+-
+ NAME="omada"
+ DESC="Omada Network Application"
+
+ OMADA_HOME=$(dirname $(dirname $(readlink -f $0)))
++export XDG_CONFIG_HOME="${OMADA_HOME}/data/chromium"
+ LOG_DIR="${OMADA_HOME}/logs"
+ WORK_DIR="${OMADA_HOME}/work"
+@@ -32,5 +31,5 @@
+ STARTUP_INFO_PATH="${OMADA_HOME}/data/startupInfo"
+ # Define the file path to save the previous MongoDB version
+-LAST_VERSION_FILE="/opt/tplink/EAPController/data/check-mongo/LAST_MAIN_VERSION.info"
++LAST_VERSION_FILE="${OMADA_HOME}/data/check-mongo/LAST_MAIN_VERSION.info"
+ # Define a legal sequence for upgrading major versions (in order, without skipping levels)
+ VALID_VERSIONS=("3.0" "3.2" "3.4" "3.6" "4.0" "4.2" "4.4" "5.0" "6.0" "7.0" "8.0")
+@@ -39,5 +38,5 @@
+ OMADA_GROUP=$(id -gn ${OMADA_USER})
+
+-PID_FILE="/var/run/${NAME}.pid"
++PID_FILE="/run/omada/omada.pid"
+
+ help() {
+@@ -162,7 +161,4 @@
+ }
+
+-# root permission check
+-check_root_perms
+-
+ # JSVC - for running java apps as services
+ JSVC=$(command -v jsvc)
+@@ -251,4 +247,9 @@
+     fi
+
++    # copy default config files if they don't exist yet and make them user-writable
++    cp -rn ${OMADA_HOME}/defaults/data/* ${OMADA_HOME}/data
++    cp -rn ${OMADA_HOME}/defaults/properties/* ${OMADA_HOME}/properties
++    chmod -R +w ${OMADA_HOME}/{data,properties}
++
+     # Check if there are any cross version issues with MongoDB during startup compared to the previous startup
+     judge_mongo_version

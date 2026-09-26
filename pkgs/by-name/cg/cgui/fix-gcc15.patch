@@ -1,0 +1,15 @@
+diff --git a/examples/25viewer.c b/examples/25viewer.c
+index 37e4585..a0328f0 100644
+--- a/examples/25viewer.c
++++ b/examples/25viewer.c
+@@ -10,8 +10,9 @@
+ 
+ static const char *fname; /* stores name of file to open */
+ 
+-void quit()
++void quit(void *data)
+ {
++   (void)data;
+    exit(0);
+ }
+ 

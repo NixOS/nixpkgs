@@ -1,0 +1,60 @@
+https://bugzilla.redhat.com/attachment.cgi?id=265091
+
+This fixes somewhat reversed logic of trying to connect to WHOIS server.
+Tue Nov 20 2007, Lubomir Kundrak <lkundrak@redhat.com>
+
+--- jwhois-4.0/src/utils.c.connect	2007-06-26 09:00:20.000000000 +0200
++++ jwhois-4.0/src/utils.c	2007-11-20 17:05:33.000000000 +0100
+@@ -247,7 +247,7 @@ make_connect(const char *host, int port)
+     {
+       return -1;
+     }
+-  while (res)
++  for (; res; res = res->ai_next)
+     {
+       sa = res->ai_addr;
+       sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+@@ -266,15 +266,15 @@ make_connect(const char *host, int port)
+       flags = fcntl(sockfd, F_GETFL, 0);
+       if (fcntl(sockfd, F_SETFL, flags|O_NONBLOCK) == -1)
+ 	{
++	  close (sockfd);
+ 	  return -1;
+ 	}
+ 
+-
+       error = connect(sockfd, res->ai_addr, res->ai_addrlen);
+-
+       if (error < 0 && errno != EINPROGRESS)
+ 	{
+-	  break;
++	  close (sockfd);
++	  continue;
+ 	}
+ 
+       FD_ZERO(&fdset);
+@@ -283,18 +283,20 @@ make_connect(const char *host, int port)
+       error = select(FD_SETSIZE, NULL, &fdset, NULL, &timeout);
+       if (error == 0)
+ 	{
+-	  break;
++	  close (sockfd);
++	  return -1;
+ 	}
+ 
+       retlen = sizeof(retval);
+       error = getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &retval, &retlen);
+       if (error < 0 || retval)
+ 	{
+-	  break;
++	  close (sockfd);
++	  return -1;
+ 	}
+-      res = res->ai_next;
++
++      break;
+     }
+-  if (error < 0 || retval) return -1;
+ #endif
+ 
+   return sockfd;

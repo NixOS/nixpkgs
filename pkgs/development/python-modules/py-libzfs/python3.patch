@@ -1,0 +1,27 @@
+diff --git a/libzfs.pyx b/libzfs.pyx
+index 56aabfb..0ea0e9b 100644
+--- a/libzfs.pyx
++++ b/libzfs.pyx
+@@ -2428,7 +2428,7 @@ cdef class ZFSVdev(object):
+ 
+             if value.startswith(zfs.VDEV_TYPE_RAIDZ):
+                 self.nvlist['type'] = zfs.VDEV_TYPE_RAIDZ
+-                self.nvlist['nparity'] = long(value[-1])
++                self.nvlist['nparity'] = int(value[-1])
+ 
+     property guid:
+         def __get__(self):
+diff --git a/nvpair.pxi b/nvpair.pxi
+index 817cafa..6a32899 100644
+--- a/nvpair.pxi
++++ b/nvpair.pxi
+@@ -380,9 +380,6 @@ cdef class NVList(object):
+                 self.set(key, value, nvpair.DATA_TYPE_NVLIST_ARRAY)
+ 
+             if type(value[0]) is int:
+-                self.set(key, value, nvpair.DATA_TYPE_INT32_ARRAY)
+-
+-            if type(value[0]) is long:
+                 self.set(key, value, nvpair.DATA_TYPE_INT64_ARRAY)
+ 
+             if type(value[0]) is str or type(value) is unicode:

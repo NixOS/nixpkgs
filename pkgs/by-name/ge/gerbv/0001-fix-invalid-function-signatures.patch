@@ -1,0 +1,93 @@
+From ef744d7b8a663f5b9a3e40233eccf8243773e864 Mon Sep 17 00:00:00 2001
+From: Samuel Rounce <me@samuelrounce.co.uk>
+Date: Fri, 23 Jan 2026 01:55:55 +0000
+Subject: [PATCH] fix invalid function signatures
+
+---
+ src/attribute.c |  4 ++--
+ src/callbacks.c | 12 ++++++------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/attribute.c b/src/attribute.c
+index 67a622d..6d207bb 100644
+--- a/src/attribute.c
++++ b/src/attribute.c
+@@ -193,7 +193,7 @@ static void
+ ghid_spin_button (GtkWidget * box, GtkWidget ** spin_button, gfloat value,
+ 		  gfloat low, gfloat high, gfloat step0, gfloat step1,
+ 		  gint digits, gint width,
+-		  void (*cb_func) (), gpointer data, gboolean right_align,
++		  void (*cb_func) (GtkWidget *, void *), gpointer data, gboolean right_align,
+ 		  gchar * string)
+ {
+   GtkWidget *hbox = NULL, *label, *spin_but;
+@@ -248,7 +248,7 @@ ghid_check_button_connected (GtkWidget * box,
+ 			     gboolean expand,
+ 			     gboolean fill,
+ 			     gint pad,
+-			     void (*cb_func) (),
++			     void (*cb_func) (GtkToggleButton *, gboolean *),
+ 			     gpointer data, gchar * string)
+ {
+   GtkWidget *b;
+diff --git a/src/callbacks.c b/src/callbacks.c
+index 6b4c90e..9428bde 100644
+--- a/src/callbacks.c
++++ b/src/callbacks.c
+@@ -1066,7 +1066,7 @@ callbacks_toggle_layer_visibility_activate (GtkMenuItem *menuitem, gpointer user
+ 	if (screenRenderInfo.renderType <= GERBV_RENDER_TYPE_GDK_XOR) {
+ 		render_refresh_rendered_image_on_screen ();
+ 	} else {
+-		render_recreate_composite_surface (screen.drawing_area);
++		render_recreate_composite_surface ();
+ 		callbacks_force_expose_event_for_screen ();
+ 	}
+ }
+@@ -2185,7 +2185,7 @@ callbacks_layer_tree_visibility_toggled (gint index)
+ 	if (screenRenderInfo.renderType <= GERBV_RENDER_TYPE_GDK_XOR) {
+ 		render_refresh_rendered_image_on_screen ();
+ 	} else {
+-		render_recreate_composite_surface (screen.drawing_area);
++		render_recreate_composite_surface ();
+ 		callbacks_force_expose_event_for_screen ();
+ 	}
+ }
+@@ -2437,7 +2437,7 @@ callbacks_remove_layer_button_clicked (GtkButton *button, gpointer user_data)
+ 		if (screenRenderInfo.renderType <= GERBV_RENDER_TYPE_GDK_XOR) {
+ 			render_refresh_rendered_image_on_screen ();
+ 		} else {
+-			render_recreate_composite_surface (screen.drawing_area);
++			render_recreate_composite_surface ();
+ 			callbacks_force_expose_event_for_screen ();
+ 		}
+ 	}
+@@ -2468,7 +2468,7 @@ callbacks_move_layer_down_button_clicked  (GtkButton *button, gpointer   user_da
+ 			render_refresh_rendered_image_on_screen ();
+ 		}
+ 		else {
+-			render_recreate_composite_surface (screen.drawing_area);
++			render_recreate_composite_surface ();
+ 			callbacks_force_expose_event_for_screen ();
+ 		}
+ 	}
+@@ -2497,7 +2497,7 @@ callbacks_move_layer_up_button_clicked  (GtkButton *button, gpointer   user_data
+ 			render_refresh_rendered_image_on_screen();
+ 		}
+ 		else {
+-			render_recreate_composite_surface (screen.drawing_area);
++			render_recreate_composite_surface ();
+ 			callbacks_force_expose_event_for_screen ();
+ 		}
+ 	}
+@@ -2525,7 +2525,7 @@ void callbacks_layer_tree_row_inserted (GtkTreeModel *tree_model, GtkTreePath  *
+ 				render_refresh_rendered_image_on_screen();
+ 			}
+ 			else {
+-				render_recreate_composite_surface (screen.drawing_area);
++				render_recreate_composite_surface ();
+ 				callbacks_force_expose_event_for_screen ();
+ 			}
+ 			/* select the new line */
+-- 
+2.52.0
+

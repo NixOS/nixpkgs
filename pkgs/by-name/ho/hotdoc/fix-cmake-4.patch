@@ -1,0 +1,69 @@
+From 60cac435fb801b3efce4f85643ac42cef5b22805 Mon Sep 17 00:00:00 2001
+From: Saleem Abdulrasool <compnerd@compnerd.org>
+Date: Sun, 22 Dec 2019 11:32:37 -0800
+Subject: [PATCH 1/2] build: chmod -x CMakeLists.txt (NFC)
+
+Remove the unnecessary execute permission on CMakeLists.txt.
+---
+ CMakeLists.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+old mode 100755
+new mode 100644
+
+From e922e337bf405b043788dd5febf9957e19d11300 Mon Sep 17 00:00:00 2001
+From: Chris Mayo <aklhfex@gmail.com>
+Date: Wed, 13 Aug 2025 19:27:03 +0100
+Subject: [PATCH 2/2] CMake 4 compatibility
+
+All CMake versions older than 3.10 are deprecated.
+---
+ CMakeLists.txt            | 17 ++---------------
+ extensions/CMakeLists.txt |  2 +-
+ 2 files changed, 3 insertions(+), 16 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ff97419f8..83d44f0a3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,12 +1,6 @@
+-cmake_minimum_required(VERSION 2.8.9)
++cmake_minimum_required(VERSION 3.10)
+ 
+-# prevent ugly developer warnings because version is set directly, not through project()
+-# it should be redone properly by using VERSION in project() if on CMake 3.x
+-if(CMAKE_MAJOR_VERSION GREATER 2)
+-    cmake_policy(SET CMP0048 OLD)
+-endif()
+-
+-project(cmark)
++project(cmark VERSION 0.28.3)
+ 
+ include("FindAsan.cmake")
+ 
+@@ -14,13 +8,6 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+     message(FATAL_ERROR "Do not build in-source.\nPlease remove CMakeCache.txt and the CMakeFiles/ directory.\nThen: mkdir build ; cd build ; cmake .. ; make")
+ endif()
+ 
+-set(PROJECT_NAME "cmark")
+-
+-set(PROJECT_VERSION_MAJOR 0)
+-set(PROJECT_VERSION_MINOR 28)
+-set(PROJECT_VERSION_PATCH 3)
+-set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH} )
+-
+ option(CMARK_TESTS "Build cmark tests and enable testing" ON)
+ option(CMARK_STATIC "Build static libcmark library" ON)
+ option(CMARK_SHARED "Build shared libcmark library" ON)
+diff --git a/extensions/CMakeLists.txt b/extensions/CMakeLists.txt
+index e62d1550f..b6a1556e9 100644
+--- a/extensions/CMakeLists.txt
++++ b/extensions/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ set(LIBRARY "cmarkextensions")
+ set(LIBRARY_SOURCES
+     core-extensions.c

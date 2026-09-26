@@ -1,0 +1,29 @@
+From aae7b7ca818ae4f438f315c9802a44adf6992215 Mon Sep 17 00:00:00 2001
+From: qubitnano <146656568+qubitnano@users.noreply.github.com>
+Date: Sun, 25 May 2025 12:51:27 -0400
+Subject: [PATCH] revert appimage fixes
+
+This breaks loading at least on nixpkgs
+---
+ src/port/Engine.cpp | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/port/Engine.cpp b/src/port/Engine.cpp
+index d2bee9ec..47b21533 100644
+--- a/src/port/Engine.cpp
++++ b/src/port/Engine.cpp
+@@ -70,11 +70,7 @@ GameEngine::GameEngine() {
+ 
+     std::vector<std::string> archiveFiles;
+     const std::string main_path = Ship::Context::GetPathRelativeToAppDirectory("sf64.o2r");
+-#ifdef __linux__
+-    const std::string assets_path = Ship::Context::GetPathRelativeToAppBundle("starship.o2r");
+-#else
+     const std::string assets_path = Ship::Context::GetPathRelativeToAppDirectory("starship.o2r");
+-#endif
+ 
+ 
+ #ifdef _WIN32
+-- 
+2.49.0
+

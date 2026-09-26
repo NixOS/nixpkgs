@@ -1,0 +1,84 @@
+#! /usr/bin/env bash
+set -e
+
+url=$1
+rev=$2
+expHash=$3
+
+hashType="${NIX_HASH_ALGO:-sha256}"
+hashFormat=${hashFormat:-"--base32"}
+rev="${rev:-tip}"
+
+LOG() {
+  echo "$@" >&2
+}
+
+die() {
+  LOG "$@"
+  exit 1
+}
+
+if [[ -z "$url" || "$url" == "--help" ]]; then
+    die "Usage: nix-prefetch-hg URL [rev [EXPECTED-HASH]]"
+fi
+
+if [[ "${fetchSubrepos:-0}" == 1 ]]; then
+    subrepoClause=S
+else
+    subrepoClause=
+fi
+
+# If the hash was given, a file with that hash may already be in the
+# store.
+if [[ -n "$expHash" ]]; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" hg-archive)
+    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+        finalPath=
+    fi
+    hash="$expHash"
+fi
+
+
+# If we don't know the hash or a path with that hash doesn't exist,
+# download the file and add it to the store.
+if [[ -z "$finalPath" ]]; then
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir hg-checkout-tmp-XXXXXXXX)")"
+    cleanup() { x=$?; rm -rf "$tmpPath"; exit $x; }; trap cleanup EXIT
+
+    tmpArchive="$tmpPath/hg-archive"
+
+    # Perform the checkout.
+    if [[ "$url" != /* ]]; then
+      tmpClone="$tmpPath/hg-clone"
+      hg clone -q -y -U "$url" "$tmpClone" >&2
+    else
+      tmpClone=$url
+    fi
+    hg archive -q$subrepoClause -y -r "$rev" --cwd "$tmpClone" "$tmpArchive"
+    rm -f "$tmpArchive/.hg_archival.txt"
+
+    LOG "hg revision is $(cd "$tmpClone"; hg id -r "$rev" -i)"
+
+    # Compute the hash.
+    hash=$(nix-hash --type "$hashType" "$hashFormat" "$tmpArchive")
+    if [[ -z "$QUIET" ]]; then LOG "hash is $hash"; fi
+
+    # Add the downloaded file to the Nix store.
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpArchive")
+
+    if [[ -n "$expHash" && "$expHash" != "$hash" ]]; then
+        die "ERROR: hash mismatch for URL \`$url'"
+    fi
+
+
+fi
+
+if [[ -z "$QUIET" ]]; then LOG "path is $finalPath"; fi
+
+echo "$hash"
+
+if [[ -n "$PRINT_PATH" ]]; then
+    echo "$finalPath"
+fi

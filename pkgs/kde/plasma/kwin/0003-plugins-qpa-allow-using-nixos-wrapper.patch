@@ -1,0 +1,13 @@
+diff --git a/src/plugins/qpa/main.cpp b/src/plugins/qpa/main.cpp
+index c26092700a..2aa3e21e7d 100644
+--- a/src/plugins/qpa/main.cpp
++++ b/src/plugins/qpa/main.cpp
+@@ -23,7 +23,7 @@ public:
+ 
+ QPlatformIntegration *KWinIntegrationPlugin::create(const QString &system, const QStringList &paramList)
+ {
+-    if (!QCoreApplication::applicationFilePath().endsWith(QLatin1StringView("kwin_wayland")) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
++    if (!QCoreApplication::applicationFilePath().endsWith(QLatin1StringView("kwin_wayland")) && !QCoreApplication::applicationFilePath().endsWith(QLatin1String(".kwin_wayland-wrapped")) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
+         // Not KWin
+         return nullptr;
+     }

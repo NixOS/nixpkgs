@@ -1,0 +1,26 @@
+Fix comparing ELF objects when r2 is in PATH
+
+https://github.com/radareorg/radare2/issues/21201 renamed the "offset" key of
+the json output diffoscope uses to "addr". As a result running diffoscope on an
+ELF object results in this error:
+KeyError: 'offset'
+
+This patch does not include the modifications to the test suite required to
+submit it upstream.
+
+Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/work_items/432
+
+diff --git a/diffoscope/comparators/decompile.py b/diffoscope/comparators/decompile.py
+index bf85deb9..f6a5564f 100644
+--- a/diffoscope/comparators/decompile.py
++++ b/diffoscope/comparators/decompile.py
+@@ -242,6 +242,9 @@ class AsmFunction(File):
+ 
+     @property
+     def offset(self):
++        if "addr" in self.data_dict:
++            return self.data_dict["addr"]
++        # backward compat with r2 version < 5.9.0
+         return self.data_dict["offset"]
+ 
+     @property

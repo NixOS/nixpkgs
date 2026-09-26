@@ -1,0 +1,81 @@
+diff --git a/orbit/pkg/scripts/exec_nonwindows.go b/orbit/pkg/scripts/exec_nonwindows.go
+index cedbd73..b16d150 100644
+--- a/orbit/pkg/scripts/exec_nonwindows.go
++++ b/orbit/pkg/scripts/exec_nonwindows.go
+@@ -6,14 +6,49 @@ import (
+ 	"context"
+ 	"os"
+ 	"os/exec"
+ 	"path/filepath"
++	"strings"
+ 	"time"
+ 
+ 	"github.com/fleetdm/fleet/v4/server/contexts/ctxerr"
+ 	"github.com/fleetdm/fleet/v4/server/fleet"
+ )
+ 
++// patchShebang replaces common shebang paths with NixOS-style paths.
++func patchShebang(contents []byte) []byte {
++	script := string(contents)
++
++	if !strings.HasPrefix(script, "#!") {
++		return contents
++	}
++
++	firstLineEnd := strings.Index(script, "\n")
++	if firstLineEnd == -1 {
++		firstLineEnd = len(script)
++	}
++
++	shebang := script[:firstLineEnd]
++	rest := script[firstLineEnd:]
++
++	replacements := map[string]string{
++		"#!/bin/bash":        "#!/run/current-system/sw/bin/bash",
++		"#!/bin/sh":          "#!/run/current-system/sw/bin/sh",
++		"#!/bin/zsh":         "#!/run/current-system/sw/bin/zsh",
++		"#!/usr/bin/python":  "#!/run/current-system/sw/bin/python",
++		"#!/usr/bin/python3": "#!/run/current-system/sw/bin/python3",
++	}
++
++	for old, new := range replacements {
++		if strings.HasPrefix(shebang, old) {
++			shebang = new + strings.TrimPrefix(shebang, old)
++			break
++		}
++	}
++
++	return []byte(shebang + rest)
++}
++
+ func ExecCmd(ctx context.Context, scriptPath string, env []string) (output []byte, exitCode int, err error) {
+ 	// initialize to -1 in case the process never starts
+ 	exitCode = -1
+ 
+ 	contents, err := os.ReadFile(scriptPath)
+@@ -21,17 +56,25 @@ func ExecCmd(ctx context.Context, scriptPath string, env []string) (output []byt
+ 	if err != nil {
+ 		return nil, -1, ctxerr.Wrapf(ctx, err, "opening script for validation %s", scriptPath)
+ 	}
+-	directExecute, err := fleet.ValidateShebang(string(contents))
++	patchedContents := patchShebang(contents)
++	if string(patchedContents) != string(contents) {
++		err = os.WriteFile(scriptPath, patchedContents, 0o600)
++		if err != nil {
++			return nil, -1, ctxerr.Wrapf(ctx, err, "writing patched script %s", scriptPath)
++		}
++	}
++
++	directExecute, err := fleet.ValidateShebang(string(patchedContents))
+ 	if err != nil {
+ 		return nil, -1, ctxerr.Wrapf(ctx, err, "validating script %s", scriptPath)
+ 	}
+ 
+-	cmd := exec.CommandContext(ctx, "/bin/sh", scriptPath)
++	cmd := exec.CommandContext(ctx, "/run/current-system/sw/bin/sh", scriptPath)
+ 
+ 	if directExecute {
+ 		err = os.Chmod(scriptPath, 0o700) // nolint:gosec // G302
+ 		if err != nil {
+ 			return nil, -1, ctxerr.Wrapf(ctx, err, "marking script as executable %s", scriptPath)
+ 		}

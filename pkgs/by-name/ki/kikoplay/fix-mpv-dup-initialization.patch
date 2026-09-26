@@ -1,0 +1,15 @@
+diff --git a/Play/Video/mpvplayer.cpp b/Play/Video/mpvplayer.cpp
+index bf767ad..e1b1864 100644
+--- a/Play/Video/mpvplayer.cpp
++++ b/Play/Video/mpvplayer.cpp
+@@ -712,8 +712,10 @@ void MPVPlayer::initializeGL()
+         {MPV_RENDER_PARAM_INVALID, nullptr}
+     };
+ 
++    if (mpv_gl == NULL) {
+     if (mpv_render_context_create(&mpv_gl, mpv, params) < 0)
+         throw std::runtime_error("failed to initialize mpv GL context");
++    }
+     mpv_render_context_set_update_callback(mpv_gl, MPVPlayer::on_update, reinterpret_cast<void *>(this));
+ 
+     const char *version = reinterpret_cast<const char*>(glFuns->glGetString(GL_VERSION));

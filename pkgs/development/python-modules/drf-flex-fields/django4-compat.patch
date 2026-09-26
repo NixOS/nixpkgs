@@ -1,0 +1,17 @@
+diff --git a/tests/urls.py b/tests/urls.py
+index 998b0aa..62996c0 100644
+--- a/tests/urls.py
++++ b/tests/urls.py
+@@ -1,4 +1,5 @@
+-from django.conf.urls import url, include
++from django.conf.urls import include
++from django.urls import re_path
+ from rest_framework import routers
+ from tests.testapp.views import PetViewSet, TaggedItemViewSet
+ 
+@@ -7,4 +8,4 @@ router = routers.DefaultRouter()
+ router.register(r"pets", PetViewSet, basename="pet")
+ router.register(r"tagged-items", TaggedItemViewSet, basename="tagged-item")
+ 
+-urlpatterns = [url(r"^", include(router.urls))]
++urlpatterns = [re_path(r"^", include(router.urls))]

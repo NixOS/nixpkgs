@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# lists all available tags from a git repository
+
+pname=""  # package name
+attr_path="" # package attribute path
+url="" # git repository url
+file="" # file for writing debugging information
+
+while (( $# > 0 )); do
+    flag="$1"
+    shift 1
+    case "$flag" in
+        --pname=*)
+            pname="${flag#*=}"
+            ;;
+        --attr-path=*)
+            attr_path="${flag#*=}"
+            ;;
+        --url=*)
+            url="${flag#*=}"
+            ;;
+        --file=*)
+            file="${flag#*=}"
+            ;;
+        *)
+            echo "$0: unknown option ‘${flag}’"
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -z "$pname" ]]; then
+    pname="$UPDATE_NIX_PNAME"
+fi
+
+if [[ -z "$attr_path" ]]; then
+    attr_path="$UPDATE_NIX_ATTR_PATH"
+fi
+
+# By default we set url to src.url or src.meta.homepage
+if [[ -z "$url" ]]; then
+    url="$(nix-instantiate $systemArg --eval -E \
+               "with import ./. {}; $attr_path.src.meta.homepage or $attr_path.src.url" \
+        | tr -d '"')"
+fi
+
+# print a debugging message
+if [[ -n "$file" ]]; then
+    echo "# Listing tags for '$pname' at $url" >> $file
+fi
+
+# list all tags from the remote repository
+tags=$(git ls-remote --tags --refs "$url")
+
+# keep only the version part of the tag
+tags=$(echo "$tags" | cut --delimiter=/ --field=3-)
+
+echo "$tags"

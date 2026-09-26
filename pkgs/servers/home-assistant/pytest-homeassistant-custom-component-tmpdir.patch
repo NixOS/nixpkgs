@@ -1,0 +1,16 @@
+diff --git a/src/pytest_homeassistant_custom_component/common.py b/src/pytest_homeassistant_custom_component/common.py
+--- a/src/pytest_homeassistant_custom_component/common.py
++++ b/src/pytest_homeassistant_custom_component/common.py
+@@ -167,7 +167,11 @@
+ 
+ def get_test_config_dir(*add_path):
+     """Return a path to a test config dir."""
+-    return os.path.join(os.path.dirname(__file__), "testing_config", *add_path)
++    if not hasattr(get_test_config_dir, "_tmpdir"):
++        import tempfile
++        get_test_config_dir._tmpdir = tempfile.mkdtemp(prefix="pytest-hass-")
++        os.makedirs(os.path.join(get_test_config_dir._tmpdir, "testing_config"), exist_ok=True)
++    return os.path.join(get_test_config_dir._tmpdir, "testing_config", *add_path)
+ 
+ 
+ class StoreWithoutWriteLoad[_T: (Mapping[str, Any] | Sequence[Any])](storage.Store[_T]):

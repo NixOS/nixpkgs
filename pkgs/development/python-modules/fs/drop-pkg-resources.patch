@@ -1,0 +1,229 @@
+setuptools 82 dropped pkg_resources, which fs imports at run time. Move entry
+point handling to importlib.metadata and the namespace declarations to pkgutil.
+
+https://github.com/PyFilesystem/pyfilesystem2/pull/589
+https://github.com/PyFilesystem/pyfilesystem2/pull/590
+
+carrying these 2 PRs until merged
+
+--- a/fs/__init__.py
++++ b/fs/__init__.py
+@@ -1,7 +1,7 @@
+ """Python filesystem abstraction layer.
+ """
+
+-__import__("pkg_resources").declare_namespace(__name__)  # type: ignore
++__path__ = __import__("pkgutil").extend_path(__path__, __name__)
+
+ from . import path
+ from ._fscompat import fsdecode, fsencode
+--- a/fs/opener/__init__.py
++++ b/fs/opener/__init__.py
+@@ -3,7 +3,7 @@
+ """
+
+ # Declare fs.opener as a namespace package
+-__import__("pkg_resources").declare_namespace(__name__)  # type: ignore
++__path__ = __import__("pkgutil").extend_path(__path__, __name__)
+
+ # Import opener modules so that `registry.install` if called on each opener
+ from . import appfs, ftpfs, memoryfs, osfs, tarfs, tempfs, zipfs
+--- a/fs/opener/registry.py
++++ b/fs/opener/registry.py
+@@ -8,7 +8,7 @@ import typing
+
+ import collections
+ import contextlib
+-import pkg_resources
++import sys
+
+ from ..errors import ResourceReadOnly
+ from .base import Opener
+@@ -21,6 +21,30 @@ if typing.TYPE_CHECKING:
+     from ..base import FS
+
+
++if sys.version_info >= (3, 8):
++    import importlib.metadata
++
++    if sys.version_info >= (3, 10):
++
++        def entrypoints(group, name=None):
++            ep = importlib.metadata.entry_points(group=group)
++            return tuple(n for n in ep if name is None or n.name == name)
++
++    else:
++
++        def entrypoints(group, name=None):
++            ep = importlib.metadata.entry_points()
++            if name:
++                return tuple(n for n in ep.get(group, ()) if n.name == name)
++            return ep.get(group, ())
++
++else:
++    import pkg_resources
++
++    def entrypoints(group, name=None):
++        return tuple(pkg_resources.iter_entry_points(group, name))
++
++
+ class Registry(object):
+     """A registry for `Opener` instances."""
+
+@@ -74,10 +98,7 @@ class Registry(object):
+         """`list`: the list of supported protocols."""
+         _protocols = list(self._protocols)
+         if self.load_extern:
+-            _protocols.extend(
+-                entry_point.name
+-                for entry_point in pkg_resources.iter_entry_points("fs.opener")
+-            )
++            _protocols.extend(n.name for n in entrypoints("fs.opener"))
+             _protocols = list(collections.OrderedDict.fromkeys(_protocols))
+         return _protocols
+
+@@ -101,10 +122,9 @@ class Registry(object):
+         """
+         protocol = protocol or self.default_opener
+
+-        if self.load_extern:
+-            entry_point = next(
+-                pkg_resources.iter_entry_points("fs.opener", protocol), None
+-            )
++        ep = entrypoints("fs.opener", protocol)
++        if self.load_extern and ep:
++            entry_point = ep[0]
+         else:
+             entry_point = None
+
+--- a/tests/test_opener.py
++++ b/tests/test_opener.py
+@@ -3,7 +3,6 @@ from __future__ import unicode_literals
+ import sys
+
+ import os
+-import pkg_resources
+ import shutil
+ import tempfile
+ import unittest
+@@ -21,6 +20,11 @@ try:
+ except ImportError:
+     import mock
+
++if sys.version_info >= (3, 8):
++    import importlib.metadata
++else:
++    import pkg_resources
++
+
+ class TestParse(unittest.TestCase):
+     def test_registry_repr(self):
+@@ -111,14 +115,25 @@ class TestRegistry(unittest.TestCase):
+
+     def test_registry_protocols(self):
+         # Check registry.protocols list the names of all available extension
+-        extensions = [
+-            pkg_resources.EntryPoint("proto1", "mod1"),
+-            pkg_resources.EntryPoint("proto2", "mod2"),
+-        ]
+-        m = mock.MagicMock(return_value=extensions)
+-        with mock.patch.object(
+-            sys.modules["pkg_resources"], "iter_entry_points", new=m
+-        ):
++        if sys.version_info >= (3, 8):
++            extensions = (
++                importlib.metadata.EntryPoint("proto1", "mod1", "fs.opener"),
++                importlib.metadata.EntryPoint("proto2", "mod2", "fs.opener"),
++            )
++            if sys.version_info >= (3, 10):
++                m = mock.MagicMock(return_value=extensions)
++            else:
++                m = mock.MagicMock(return_value={"fs.opener": extensions})
++            patch = mock.patch("importlib.metadata.entry_points", m)
++        else:
++            extensions = [
++                pkg_resources.EntryPoint("proto1", "mod1"),
++                pkg_resources.EntryPoint("proto2", "mod2"),
++            ]
++            m = mock.MagicMock(return_value=extensions)
++            patch = mock.patch("pkg_resources.iter_entry_points", m)
++
++        with patch:
+             self.assertIn("proto1", opener.registry.protocols)
+             self.assertIn("proto2", opener.registry.protocols)
+
+@@ -129,11 +144,19 @@ class TestRegistry(unittest.TestCase):
+     def test_entry_point_load_error(self):
+
+         entry_point = mock.MagicMock()
++        entry_point.name = "test"
+         entry_point.load.side_effect = ValueError("some error")
+
+-        iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
+-
+-        with mock.patch("pkg_resources.iter_entry_points", iter_entry_points):
++        if sys.version_info >= (3, 8):
++            if sys.version_info >= (3, 10):
++                entry_points = mock.MagicMock(return_value=tuple([entry_point]))
++            else:
++                entry_points = mock.MagicMock(return_value={"fs.opener": [entry_point]})
++            patch = mock.patch("importlib.metadata.entry_points", entry_points)
++        else:
++            iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
++            patch = mock.patch("pkg_resources.iter_entry_points", iter_entry_points)
++        with patch:
+             with self.assertRaises(errors.EntryPointError) as ctx:
+                 opener.open_fs("test://")
+             self.assertEqual(
+@@ -145,10 +168,19 @@ class TestRegistry(unittest.TestCase):
+             pass
+
+         entry_point = mock.MagicMock()
++        entry_point.name = "test"
+         entry_point.load = mock.MagicMock(return_value=NotAnOpener)
+-        iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
+
+-        with mock.patch("pkg_resources.iter_entry_points", iter_entry_points):
++        if sys.version_info >= (3, 8):
++            if sys.version_info >= (3, 10):
++                entry_points = mock.MagicMock(return_value=tuple([entry_point]))
++            else:
++                entry_points = mock.MagicMock(return_value={"fs.opener": [entry_point]})
++            patch = mock.patch("importlib.metadata.entry_points", entry_points)
++        else:
++            iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
++            patch = mock.patch("pkg_resources.iter_entry_points", iter_entry_points)
++        with patch:
+             with self.assertRaises(errors.EntryPointError) as ctx:
+                 opener.open_fs("test://")
+             self.assertEqual("entry point did not return an opener", str(ctx.exception))
+@@ -162,10 +194,20 @@ class TestRegistry(unittest.TestCase):
+                 pass
+
+         entry_point = mock.MagicMock()
++        entry_point.name = "test"
+         entry_point.load = mock.MagicMock(return_value=BadOpener)
+-        iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
+
+-        with mock.patch("pkg_resources.iter_entry_points", iter_entry_points):
++        if sys.version_info >= (3, 8):
++            if sys.version_info >= (3, 10):
++                entry_points = mock.MagicMock(return_value=tuple([entry_point]))
++            else:
++                entry_points = mock.MagicMock(return_value={"fs.opener": [entry_point]})
++            patch = mock.patch("importlib.metadata.entry_points", entry_points)
++        else:
++            iter_entry_points = mock.MagicMock(return_value=iter([entry_point]))
++            patch = mock.patch("pkg_resources.iter_entry_points", iter_entry_points)
++
++        with patch:
+             with self.assertRaises(errors.EntryPointError) as ctx:
+                 opener.open_fs("test://")
+             self.assertEqual(
+@@ -218,5 +260,5 @@ class TestOpeners(unittest.TestCase):
+     def test_repr(self):
+         # Check __repr__ works
+-        for entry_point in pkg_resources.iter_entry_points("fs.opener"):
++        for entry_point in importlib.metadata.entry_points(group="fs.opener"):
+             _opener = entry_point.load()
+             repr(_opener())

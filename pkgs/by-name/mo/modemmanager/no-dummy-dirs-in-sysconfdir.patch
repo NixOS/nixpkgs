@@ -1,0 +1,31 @@
+diff --git a/data/dispatcher-connection/meson.build b/data/dispatcher-connection/meson.build
+index 2e7ef8b4..e0f4aa66 100644
+--- a/data/dispatcher-connection/meson.build
++++ b/data/dispatcher-connection/meson.build
+@@ -21,5 +21,4 @@ install_data(
+ )
+ 
+ mkdir_cmd = 'mkdir -p ${DESTDIR}@0@'
+-meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_connectiondiruser))
+ meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_connectiondirpackage))
+diff --git a/data/dispatcher-fcc-unlock/meson.build b/data/dispatcher-fcc-unlock/meson.build
+index 5dc3b6a0..25a948a1 100644
+--- a/data/dispatcher-fcc-unlock/meson.build
++++ b/data/dispatcher-fcc-unlock/meson.build
+@@ -39,5 +39,4 @@ foreach output, input: vidpids
+ endforeach
+ 
+ mkdir_cmd = 'mkdir -p ${DESTDIR}@0@'
+-meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_fccunlockdiruser))
+ meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_fccunlockdirpackage))
+diff --git a/data/dispatcher-modem-setup/meson.build b/data/dispatcher-modem-setup/meson.build
+index 812152a3..7527022b 100644
+--- a/data/dispatcher-modem-setup/meson.build
++++ b/data/dispatcher-modem-setup/meson.build
+@@ -22,5 +22,4 @@ install_data(
+ )
+ 
+ mkdir_cmd = 'mkdir -p ${DESTDIR}@0@'
+-meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_modemsetupdiruser))
+ meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_modemsetupdirpackage))
+ 

@@ -1,0 +1,48 @@
+diff --git a/src/xalanc/XMLSupport/XalanOtherEncodingWriter.hpp b/src/xalanc/XMLSupport/XalanOtherEncodingWriter.hpp
+index 8741cea49..075b1ad4f 100644
+--- a/src/xalanc/XMLSupport/XalanOtherEncodingWriter.hpp
++++ b/src/xalanc/XMLSupport/XalanOtherEncodingWriter.hpp
+@@ -301,43 +301,6 @@ public:
+         return write(chars, start, length, m_charRefFunctor);
+     }
+ 
+-    void
+-    writeSafe(
+-            const XalanDOMChar*     theChars,
+-            size_type               theLength)
+-    {
+-        for(size_type i = 0; i < theLength; ++i)
+-        {
+-            const XalanDOMChar  ch = theChars[i];
+-
+-            if (isUTF16HighSurrogate(ch) == true)
+-            {
+-                if (i + 1 >= theLength)
+-                {
+-                    throwInvalidUTF16SurrogateException(ch, 0,  getMemoryManager());
+-                }
+-                else 
+-                {
+-                    XalanUnicodeChar    value = decodeUTF16SurrogatePair(ch, theChars[i+1],  getMemoryManager());
+-
+-                    if (this->m_isPresentable(value))
+-                    {
+-                        write(value);
+-                    }
+-                    else
+-                    {
+-                        this->writeNumberedEntityReference(value);
+-                    }
+-
+-                    ++i;
+-                }
+-            }
+-            else
+-            {
+-                write(static_cast<XalanUnicodeChar>(ch));
+-            }
+-        }
+-    }
+ 
+     void
+     write(const XalanDOMChar*     theChars)

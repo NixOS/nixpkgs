@@ -1,0 +1,55 @@
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aiolimiter,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  protobuf,
+  setuptools,
+  tesla-protocol,
+  typing-extensions,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "tesla-fleet-api";
+  version = "1.13.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Teslemetry";
+    repo = "python-tesla-fleet-api";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MMbn/qjy9B5qDF1w1ckT06vz9GeU1Gy+NitnHl7uPk4=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiofiles
+    aiohttp
+    aiolimiter
+    bleak
+    bleak-retry-connector
+    cryptography
+    protobuf
+    tesla-protocol
+    typing-extensions
+  ];
+
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "tesla_fleet_api" ];
+
+  meta = {
+    description = "Python library for Tesla Fleet API and Teslemetry";
+    homepage = "https://github.com/Teslemetry/python-tesla-fleet-api";
+    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

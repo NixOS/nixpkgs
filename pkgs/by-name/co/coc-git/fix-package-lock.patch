@@ -1,0 +1,148 @@
+diff --git i/package-lock.json w/package-lock.json
+index 066c4d9..950dff5 100644
+--- i/package-lock.json
++++ w/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "coc-git",
+-  "version": "2.7.2",
++  "version": "2.7.7",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "coc-git",
+-      "version": "2.7.2",
++      "version": "2.7.7",
+       "license": "MIT",
+       "devDependencies": {
+         "@chemzqm/tsconfig": "^0.0.3",
+@@ -32,6 +32,8 @@
+     },
+     "node_modules/@chemzqm/tsconfig": {
+       "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/@chemzqm/tsconfig/-/tsconfig-0.0.3.tgz",
++      "integrity": "sha512-MjF25vbqLYR+S+JJLgBi0vn4gZqv/C87H+yPSlVKEqlIJAJOGJOgFPUFvRS7pdRHqkv2flX/oRxzxhlu2V0X1w==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -462,6 +464,8 @@
+     },
+     "node_modules/@types/colors": {
+       "version": "1.2.1",
++      "resolved": "https://registry.npmjs.org/@types/colors/-/colors-1.2.1.tgz",
++      "integrity": "sha512-7jNkpfN2lVO07nJ1RWzyMnNhH/I5N9iWuMPx9pedptxJ4MODf8rRV0lbJi6RakQ4sKQk231Fw4e2W9n3D7gZ3w==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -470,6 +474,8 @@
+     },
+     "node_modules/@types/colors/node_modules/colors": {
+       "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/colors/-/colors-1.3.3.tgz",
++      "integrity": "sha512-mmGt/1pZqYRjMxB1axhTo16/snVZ5krrKkcmMeVKxzECMMXoCgnvTPp10QgHfcbQZw8Dq2jMNG6je4JlWU0gWg==",
+       "dev": true,
+       "license": "MIT",
+       "engines": {
+@@ -478,6 +484,8 @@
+     },
+     "node_modules/@types/debounce": {
+       "version": "1.2.0",
++      "resolved": "https://registry.npmjs.org/@types/debounce/-/debounce-1.2.0.tgz",
++      "integrity": "sha512-bWG5wapaWgbss9E238T0R6bfo5Fh3OkeoSt245CM7JJwVwpw6MEBCbIxLq5z8KzsE3uJhzcIuQkyiZmzV3M/Dw==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -490,11 +498,15 @@
+     },
+     "node_modules/@types/uuid": {
+       "version": "7.0.4",
++      "resolved": "https://registry.npmjs.org/@types/uuid/-/uuid-7.0.4.tgz",
++      "integrity": "sha512-WGZCqBZZ0mXN2RxvLHL6/7RCu+OWs28jgQMP04LWfpyJlQUMTR6YU9CNJAKDgbw+EV/u687INXuLUc7FuML/4g==",
+       "dev": true,
+       "license": "MIT"
+     },
+     "node_modules/@types/which": {
+       "version": "1.3.2",
++      "resolved": "https://registry.npmjs.org/@types/which/-/which-1.3.2.tgz",
++      "integrity": "sha512-8oDqyLC7eD4HM307boe2QWKyuzdzWBj56xI/imSl2cpL+U3tCMaTAkMJ4ee5JBZ/FsOJlvRGeIShiZDAl1qERA==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -517,6 +529,8 @@
+     },
+     "node_modules/colors": {
+       "version": "1.4.0",
++      "resolved": "https://registry.npmjs.org/colors/-/colors-1.4.0.tgz",
++      "integrity": "sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==",
+       "dev": true,
+       "license": "MIT",
+       "engines": {
+@@ -525,6 +539,8 @@
+     },
+     "node_modules/debounce": {
+       "version": "1.2.0",
++      "resolved": "https://registry.npmjs.org/debounce/-/debounce-1.2.0.tgz",
++      "integrity": "sha512-mYtLl1xfZLi1m4RtQYlZgJUNQjl4ZxVnHzIR8nLLgi4q1YT8o/WM+MK/f8yfcc9s5Ir5zRaPZyZU6xs1Syoocg==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -571,6 +587,8 @@
+     },
+     "node_modules/iconv-lite": {
+       "version": "0.6.2",
++      "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.6.2.tgz",
++      "integrity": "sha512-2y91h5OpQlolefMPmUlivelittSWy0rP+oYVpn6A7GwVHNE8AWzoYOBNmlwks3LobaJxgHCYZAnyNo2GgpNRNQ==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -582,11 +600,15 @@
+     },
+     "node_modules/isexe": {
+       "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
++      "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==",
+       "dev": true,
+       "license": "ISC"
+     },
+     "node_modules/safer-buffer": {
+       "version": "2.1.2",
++      "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
++      "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -605,11 +627,15 @@
+     },
+     "node_modules/timeago.js": {
+       "version": "4.0.2",
++      "resolved": "https://registry.npmjs.org/timeago.js/-/timeago.js-4.0.2.tgz",
++      "integrity": "sha512-a7wPxPdVlQL7lqvitHGGRsofhdwtkoSXPGATFuSOA2i1ZNQEPLrGnj68vOp2sOJTCFAQVXPeNMX/GctBaO9L2w==",
+       "dev": true,
+       "license": "MIT"
+     },
+     "node_modules/typescript": {
+       "version": "4.5.4",
++      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.5.4.tgz",
++      "integrity": "sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==",
+       "dev": true,
+       "license": "Apache-2.0",
+       "bin": {
+@@ -622,6 +648,8 @@
+     },
+     "node_modules/uuid": {
+       "version": "7.0.3",
++      "resolved": "https://registry.npmjs.org/uuid/-/uuid-7.0.3.tgz",
++      "integrity": "sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==",
+       "dev": true,
+       "license": "MIT",
+       "bin": {
+@@ -630,6 +658,8 @@
+     },
+     "node_modules/which": {
+       "version": "2.0.2",
++      "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
++      "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+       "dev": true,
+       "license": "ISC",
+       "dependencies": {

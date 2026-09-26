@@ -1,0 +1,57 @@
+From b60a159fdc5bfcf9988d3a4cb6f53abe8ad5d35d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Tue, 28 Apr 2026 20:33:10 +0100
+Subject: [PATCH] unexpand: fix heap overflow
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* src/unexpand.c (unexpand): Use xinmalloc() to gracefully
+handle overflow.  Also use the runtime locale specific MB_CUR_MAX
+rather than the worst case MB_LEN_MAX.
+* tests/unexpand/mb.sh: Add a test case that fails in a default
+glibc build with either MB_CUR_MAX or MB_LEN_MAX.
+* NEWS: Mention the bug fix.
+Reported by Michał Majchrowicz.
+---
+ src/unexpand.c       | 2 +-
+ tests/unexpand/mb.sh | 8 ++++++++
+ 3 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/unexpand.c b/src/unexpand.c
+index 3cbff1b129..c859c17a3e 100644
+--- a/src/unexpand.c
++++ b/src/unexpand.c
+@@ -131,7 +131,7 @@ unexpand (void)
+   /* The worst case is a non-blank character, then one blank, then a
+      tab stop, then MAX_COLUMN_WIDTH - 1 blanks, then a non-blank; so
+      allocate MAX_COLUMN_WIDTH bytes to store the blanks.  */
+-  pending_blank = ximalloc (max_column_width * sizeof (char) * MB_LEN_MAX);
++  pending_blank = xinmalloc (max_column_width, MB_CUR_MAX);
+ 
+   while (true)
+     {
+diff --git a/tests/unexpand/mb.sh b/tests/unexpand/mb.sh
+index 76a2679035..076a1c1ae5 100755
+--- a/tests/unexpand/mb.sh
++++ b/tests/unexpand/mb.sh
+@@ -17,6 +17,7 @@
+ 
+ . "${srcdir=.}/tests/init.sh"; path_prepend_ ./src
+ print_ver_ unexpand printf
++getlimits_
+ 
+ test "$LOCALE_FR_UTF8" != none || skip_ "French UTF-8 locale not available"
+ export LC_ALL="$LOCALE_FR_UTF8"
+@@ -161,4 +162,11 @@ EOF
+ unexpand -a ./in ./in > out || fail=1
+ compare exp out > /dev/null 2>&1 || fail=1
+ 
++# Ensure overflow is handed gracefully
++# coreutils v9.11 induced a buffer overflow with mb_mul=4 (or 16).
++for mb_mul in 4 6; do
++  printf '   \n' | unexpand -t $(expr $SIZE_MAX / $mb_mul + 1) 2>err; ret=$?
++  test "$ret" = 1 || test "$ret" = 0 || { cat err; fail=1; }
++done
++
+ Exit $fail

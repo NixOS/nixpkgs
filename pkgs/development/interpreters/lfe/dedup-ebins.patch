@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 59f2c06..5ee8f6e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,7 +60,7 @@ ESRCS = $(notdir $(wildcard $(SRCDIR)/*.erl))
+ XSRCS = $(notdir $(wildcard $(SRCDIR)/*.xrl))
+ YSRCS = $(notdir $(wildcard $(SRCDIR)/*.yrl))
+ LSRCS = $(notdir $(wildcard $(LSRCDIR)/*.lfe))
+-EBINS = $(ESRCS:.erl=.beam) $(XSRCS:.xrl=.beam) $(YSRCS:.yrl=.beam)
++EBINS = $(sort $(ESRCS:.erl=.beam) $(XSRCS:.xrl=.beam) $(YSRCS:.yrl=.beam))
+ LBINS = $(LSRCS:.lfe=.beam)
+ 
+ CSRCS = $(notdir $(wildcard $(CSRCDIR)/*.c))

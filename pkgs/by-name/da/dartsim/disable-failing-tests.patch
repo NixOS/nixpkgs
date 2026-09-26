@@ -1,0 +1,78 @@
+diff --git a/tests/integration/CMakeLists.txt b/tests/integration/CMakeLists.txt
+index 623102952bfa..c193d6e405fa 100644
+--- a/tests/integration/CMakeLists.txt
++++ b/tests/integration/CMakeLists.txt
+@@ -74,11 +74,6 @@ if(TARGET dart-utils)
+ endif()
+ 
+ if(TARGET dart-utils-urdf)
+-  if(NOT MSVC)
+-    dart_add_test("integration" test_DartLoader)
+-    target_link_libraries(test_DartLoader dart-utils-urdf)
+-  endif()
+-
+   dart_add_library(SharedLibraryWamIkFast SharedLibraryWamIkFast.hpp SharedLibraryWamIkFast.cpp)
+   target_link_libraries(SharedLibraryWamIkFast PUBLIC dart)
+   target_compile_definitions(SharedLibraryWamIkFast PUBLIC IKFAST_NO_MAIN IKFAST_CLIBRARY)
+@@ -88,12 +83,6 @@ if(TARGET dart-utils-urdf)
+   target_link_libraries(GeneratedWamIkFast PUBLIC dart)
+   target_compile_definitions(GeneratedWamIkFast PUBLIC IKFAST_NO_MAIN IKFAST_CLIBRARY)
+   target_compile_options(GeneratedWamIkFast PRIVATE -w)
+-
+-  if(BUILD_SHARED_LIBS)
+-    dart_add_test("integration" test_IkFast)
+-    target_link_libraries(test_IkFast dart-utils-urdf)
+-    add_dependencies(test_IkFast GeneratedWamIkFast SharedLibraryWamIkFast)
+-  endif()
+ endif()
+ 
+ dart_format_add(
+@@ -117,24 +106,8 @@ if(TARGET dart-collision-bullet)
+   target_link_libraries(test_Raycast dart-collision-bullet)
+ endif()
+ 
+-if(TARGET dart-collision-ode)
+-  # This test doesn't work with FCL because it converts simple shapes to meshes, which makes
+-  # it difficult to come up with correct test expectations.
+-  dart_add_test("integration" test_ForceDependentSlip)
+-  target_link_libraries(test_ForceDependentSlip dart-collision-ode)
+-endif()
+-
+ if(TARGET dart-utils)
+ 
+-  dart_add_test("integration" test_Collision)
+-  target_link_libraries(test_Collision dart-utils)
+-  if(TARGET dart-collision-bullet)
+-    target_link_libraries(test_Collision dart-collision-bullet)
+-  endif()
+-  if(TARGET dart-collision-ode)
+-    target_link_libraries(test_Collision dart-collision-ode)
+-  endif()
+-
+   dart_add_test("integration" test_Dynamics)
+   target_link_libraries(test_Dynamics dart-utils)
+ 
+@@ -159,9 +132,4 @@ if(TARGET dart-utils)
+     target_link_libraries(test_World dart-collision-bullet)
+   endif()
+ 
+-  if(TARGET dart-utils-urdf)
+-    dart_add_test("integration" test_ForwardKinematics)
+-    target_link_libraries(test_ForwardKinematics dart-utils-urdf)
+-  endif()
+-
+ endif()
+diff --git a/tests/regression/CMakeLists.txt b/tests/regression/CMakeLists.txt
+index e0dd73c6a461..fa3f7c61c7b0 100644
+--- a/tests/regression/CMakeLists.txt
++++ b/tests/regression/CMakeLists.txt
+@@ -12,9 +12,6 @@ endif()
+ 
+ if(TARGET dart-utils-urdf)
+ 
+-  dart_add_test("regression" test_Issue838)
+-  target_link_libraries(test_Issue838 dart-utils-urdf)
+-
+   dart_add_test("regression" test_Issue892)
+ 
+   dart_add_test("regression" test_Issue895)

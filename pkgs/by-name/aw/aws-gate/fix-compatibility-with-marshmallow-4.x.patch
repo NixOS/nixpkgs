@@ -1,0 +1,28 @@
+From d6b05accc05abcd13aefd66c50e6f4414f098b71 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Thu, 1 Jan 2026 10:49:08 +0800
+Subject: [PATCH] fix(config.py): fix compatibility with marshmallow 4.x
+
+---
+ aws_gate/config.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/aws_gate/config.py b/aws_gate/config.py
+index bfb84bf..0a1153f 100644
+--- a/aws_gate/config.py
++++ b/aws_gate/config.py
+@@ -45,9 +45,9 @@ class HostSchema(Schema):
+ 
+ class GateConfigSchema(Schema):
+     defaults = fields.Nested(
+-        DefaultsSchema, required=False, missing={}, validate=validate_defaults
++        DefaultsSchema, required=False, load_default={}, validate=validate_defaults
+     )
+-    hosts = fields.List(fields.Nested(HostSchema), required=False, missing=[])
++    hosts = fields.List(fields.Nested(HostSchema), required=False, load_default=[])
+ 
+     # pylint: disable=unused-argument
+     @post_load
+-- 
+2.51.2
+

@@ -1,0 +1,49 @@
+From da7174958be43d69b2ed6b581c8ac8a382b59180 Mon Sep 17 00:00:00 2001
+From: Tarun Prabhu <tarun.prabhu@gmail.com>
+Date: Tue, 28 Oct 2025 19:35:27 -0600
+Subject: [PATCH] [flang][Driver] Accept (and ignore) some gfortran-specific
+ options
+
+Enable the clang_ignored_gcc_optimization_f_group in flang. These options are
+accepted by clang, but ignored after emitting a warning message. flang's
+behavior now mirrors clang.
+
+Fixes #158436
+---
+ clang/include/clang/Driver/Options.td | 3 ++-
+ clang/lib/Driver/ToolChains/Flang.cpp | 8 ++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
+index ef1c8758705f4..cac122d296624 100644
+--- a/include/clang/Driver/Options.td
++++ b/include/clang/Driver/Options.td
+@@ -316,7 +316,8 @@ def mno_mpx : Flag<["-"], "mno-mpx">, Group<clang_ignored_legacy_options_Group>;
+ 
+ // Group that ignores all gcc optimizations that won't be implemented
+ def clang_ignored_gcc_optimization_f_Group : OptionGroup<
+-  "<clang_ignored_gcc_optimization_f_Group>">, Group<f_Group>, Flags<[Ignored]>;
++  "<clang_ignored_gcc_optimization_f_Group>">,
++  Group<f_Group>, Flags<[Ignored]>, Visibility<[ClangOption, FlangOption]>;
+ 
+ class DiagnosticOpts<string base>
+   : KeyPathAndMacro<"DiagnosticOpts->", base, "DIAG_"> {}
+diff --git a/lib/Driver/ToolChains/Flang.cpp b/lib/Driver/ToolChains/Flang.cpp
+index 88bce181d40d2..2f5e93d139858 100644
+--- a/lib/Driver/ToolChains/Flang.cpp
++++ b/lib/Driver/ToolChains/Flang.cpp
+@@ -858,6 +858,14 @@ void Flang::ConstructJob(Compilation &C, const JobAction &JA,
+     if (const Arg *A = Args.getLastArg(Opt))
+       D.Diag(diag::warn_drv_invalid_argument_for_flang) << A->getSpelling();
+ 
++  // Warn about options that are ignored by flang. These are options that are
++  // accepted by gfortran, but have no equivalent in flang.
++  for (const Arg *A :
++       Args.filtered(options::OPT_clang_ignored_gcc_optimization_f_Group)) {
++    D.Diag(diag::warn_ignored_gcc_optimization) << A->getAsString(Args);
++    A->claim();
++  }
++
+   const InputInfo &Input = Inputs[0];
+   types::ID InputType = Input.getType();
+ 

@@ -1,0 +1,31 @@
+From 1d4f6917c1e71c6f4716be844bc4ef99e07a64f1 Mon Sep 17 00:00:00 2001
+From: Peder Bergebakken Sundt <pbsds@hotmail.com>
+Date: Tue, 5 May 2026 20:58:35 +0200
+Subject: [PATCH] Fix building with pybind11 v3.0.2
+
+pyrealsense2 fails to build with pybind11 v3.0.2
+
+Build error log: https://cache.nixos.org/log/kcry0khph8g0crka6zzkznn8izfvsrq1-librealsense-2.56.3.drv
+
+Cause: https://github.com/pybind/pybind11/pull/5533
+
+I based this fix on https://github.com/NGSolve/netgen/commit/ceacae3844ed2f0c48c8b6a3a82904b16c594f41
+
+I'm not very familiar with pybind11, please double check whether this fix is correct.
+---
+ wrappers/python/pyrs_frame.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wrappers/python/pyrs_frame.cpp b/wrappers/python/pyrs_frame.cpp
+index c5e07bd17f..a2a974eb1b 100644
+--- a/wrappers/python/pyrs_frame.cpp
++++ b/wrappers/python/pyrs_frame.cpp
+@@ -144,7 +144,7 @@ void init_frame(py::module &m) {
+         .def_property_readonly("frame_number", &rs2::frame::get_frame_number, "The frame number. Identical to calling get_frame_number.")
+         .def("get_data_size", &rs2::frame::get_data_size, "Retrieve data size from frame handle.")
+         .def("get_data", get_frame_data, "Retrieve data from the frame handle.", py::keep_alive<0, 1>())
+-        .def_property_readonly("data", get_frame_data, "Data from the frame handle. Identical to calling get_data.", py::keep_alive<0, 1>())
++        .def_property_readonly("data", py::cpp_function(get_frame_data, "Data from the frame handle. Identical to calling get_data.", py::keep_alive<0, 1>()))
+         .def("get_profile", &rs2::frame::get_profile, "Retrieve stream profile from frame handle.")
+         .def_property_readonly("profile", &rs2::frame::get_profile, "Stream profile from frame handle. Identical to calling get_profile.")
+         .def("keep", &rs2::frame::keep, "Keep the frame, otherwise if no refernce to the frame, the frame will be released.")

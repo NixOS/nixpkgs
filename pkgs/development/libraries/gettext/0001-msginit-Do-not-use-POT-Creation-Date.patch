@@ -1,0 +1,32 @@
+From 1e000ca711886055176a2f90197a383d09de0e67 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miguel=20=C3=81ngel=20Arruga=20Vivas?=
+ <rosen644835@gmail.com>
+Date: Fri, 18 Dec 2020 14:19:36 +0100
+Subject: [PATCH] msginit: Do not use POT-Creation-Date.
+
+* gettext-tools/src/msginit.c (po_revision_date): Do not use
+POT-Creation-Date when the file is automatically generated.
+---
+ gettext-tools/src/msginit.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gettext-tools/src/msginit.c b/gettext-tools/src/msginit.c
+index 8ca9a3b77..06e0e7195 100644
+--- a/gettext-tools/src/msginit.c
++++ b/gettext-tools/src/msginit.c
+@@ -1075,9 +1075,9 @@ static const char *
+ po_revision_date (const char *header)
+ {
+   if (no_translator)
+-    /* Because the PO file is automatically generated, we use the
+-       POT-Creation-Date, not the current time.  */
+-    return get_field (header, "POT-Creation-Date");
++    /* Because the PO file is automatically generated, we don't
++       generate PO-Revision-Date field.  */
++    return NULL;
+   else
+     {
+       /* Assume the translator will modify the PO file now.  */
+-- 
+2.29.2
+

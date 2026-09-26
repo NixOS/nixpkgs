@@ -1,0 +1,67 @@
+:100644 100644 0000000 0000000 M	Makefile.in
+:000000 100644 0000000 0000000 A	src/additionalFile.c
+:100644 100644 0000000 0000000 M	src/hello.c
+:100644 100644 0000000 0000000 M	src/system.h
+
+diff --git a/Makefile.in b/Makefile.in
+index 7bacfe1..b0f3a3d 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -500,7 +500,7 @@ am_lib_libhello_a_OBJECTS = lib/libhello_a-basename-lgpl.$(OBJEXT) \
+ 	lib/libhello_a-wctype-h.$(OBJEXT) $(am__objects_51) \
+ 	lib/libhello_a-xmalloc.$(OBJEXT) \
+ 	lib/libhello_a-xalloc-die.$(OBJEXT) \
+-	lib/libhello_a-xstriconv.$(OBJEXT)
++	lib/libhello_a-xstriconv.$(OBJEXT) src/additionalFile.$(OBJEXT)
+ lib_libhello_a_OBJECTS = $(am_lib_libhello_a_OBJECTS)
+ am_hello_OBJECTS = src/hello.$(OBJEXT)
+ hello_OBJECTS = $(am_hello_OBJECTS)
+@@ -2557,7 +2557,7 @@ lib_libhello_a_SOURCES = lib/basename-lgpl.c lib/c-ctype.h \
+ 	$(am__append_51) $(am__append_52) lib/version-etc.h \
+ 	lib/version-etc.c lib/version-etc-fsf.c lib/wctype-h.c \
+ 	$(am__append_53) lib/xmalloc.c lib/xalloc-die.c \
+-	lib/xstriconv.h lib/xstriconv.c
++	lib/xstriconv.h lib/xstriconv.c src/additionalFile.c
+ lib_libhello_a_CFLAGS = $(AM_CFLAGS) $(GL_CFLAG_GNULIB_WARNINGS) $(GL_CFLAG_ALLOW_WARNINGS)
+ lib_libhello_a_LIBADD = $(gl_libhello_LIBOBJS)
+ lib_libhello_a_DEPENDENCIES = $(gl_libhello_LIBOBJS)
+diff --git a/src/additionalFile.c b/src/additionalFile.c
+new file mode 100644
+index 0000000..34d683d
+--- /dev/null
++++ b/src/additionalFile.c
+@@ -0,0 +1,6 @@
++#include "config.h"
++#include "system.h"
++
++int somefunc() {
++    return 0;
++}
+diff --git a/src/hello.c b/src/hello.c
+index 2e7d38e..a8e36dc 100644
+--- a/src/hello.c
++++ b/src/hello.c
+@@ -146,7 +146,11 @@ main (int argc, char *argv[])
+ #endif
+ 
+   /* Having initialized gettext, get the default message. */
+-  greeting_msg = _("Hello, world!");
++  if (somefunc() == 0) {
++    greeting_msg = _("Hello, world!");
++  } else {
++    greeting_msg = _("Hello, incremental world!");
++  }
+ 
+   /* Even exiting has subtleties.  On exit, if any writes failed, change
+      the exit status.  The /dev/full device on GNU/Linux can be used for
+diff --git a/src/system.h b/src/system.h
+index d39cdb9..dc425d2 100644
+--- a/src/system.h
++++ b/src/system.h
+@@ -59,4 +59,6 @@
+     } \
+   while (0)
+ 
++int somefunc();
++
+ #endif /* HELLO_SYSTEM_H */

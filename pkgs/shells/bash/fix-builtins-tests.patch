@@ -1,0 +1,26 @@
+diff --git tests/builtins.right tests/builtins.right
+index d708c18..32b2cfd 100644
+--- tests/builtins.right
++++ tests/builtins.right
+@@ -362,7 +362,7 @@ A star (*) next to a name means that the command is disabled.
+  complete [-abcdefgjksuv] [-pr] [-DEI]>  set [-abefhkmnptuvxBCEHPT] [-o optio>
+  compopt [-o|+o option] [-DEI] [name .>  shift [n]
+  continue [n]                            shopt [-pqsu] [-o] [optname ...]
+- coproc [NAME] command [redirections]    source [-p path] filename [argument>
++ coproc [NAME] command [redirections]    source [-p path] filename [arguments>
+  declare [-aAfFgiIlnrtux] [name[=value>  suspend [-f]
+  dirs [-clpv] [+N] [-N]                  test [expr]
+  disown [-h] [-ar] [jobspec ... | pid >  time [-p] pipeline
+diff --git tests/source8.sub tests/source8.sub
+index a6826da..fc4ae8c 100644
+--- tests/source8.sub
++++ tests/source8.sub
+@@ -15,7 +15,7 @@
+ # test various uses of source -p
+ 
+ : ${THIS_SH:=./bash}
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin
++PATH="$(dirname "$(type -P mkdir)")"
+ 
+ : ${TMPDIR:=/var/tmp}
+ export TDIR=${TMPDIR}/cwd-$$

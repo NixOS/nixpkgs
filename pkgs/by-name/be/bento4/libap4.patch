@@ -1,0 +1,5 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36 +36 @@ endif()
+-add_library(ap4 STATIC ${AP4_SOURCES})
++add_library(ap4 ${AP4_SOURCES})

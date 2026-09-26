@@ -1,0 +1,242 @@
+{
+  lib,
+  stdenv,
+  llvm_meta,
+  release_version,
+  getVersionFile,
+  cmake,
+  zlib,
+  ncurses,
+  swig,
+  which,
+  libedit,
+  libxml2,
+  libllvm,
+  libclang,
+  python3,
+  version,
+  darwin,
+  lit,
+  makeWrapper,
+  lua5_3,
+  ninja,
+  runCommand,
+  src ? null,
+  monorepoSrc ? null,
+  enableManpages ? false,
+  devExtraCmakeFlags ? [ ],
+  versionCheckHook,
+}:
+
+let
+  vscodeExt = rec {
+    name = "lldb-dap";
+    version = "0.2.0";
+    uniqueId = "llvm-org.${name}-${version}";
+  };
+  canRunLldb = !enableManpages && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
+
+stdenv.mkDerivation (
+  finalAttrs:
+  {
+    pname = "lldb";
+    inherit version;
+
+    src =
+      if monorepoSrc != null then
+        runCommand "lldb-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/lldb "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+              mkdir -p "$out/llvm"
+              cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+            ''
+          )
+      else
+        src;
+
+    # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
+    # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
+    # Also, LLDB expects to find the path to `bin` relative to `lib` on Darwin.
+    outputs = [
+      "out"
+      "dev"
+    ];
+
+    sourceRoot = "${finalAttrs.src.name}/lldb";
+
+    patches = [
+      (getVersionFile "lldb/gnu-install-dirs.patch")
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "18") [
+      # Fix build with gcc15
+      # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
+      ./lldb-add-include-cstdint.patch
+    ];
+
+    nativeBuildInputs = [
+      cmake
+      ninja
+      python3
+      which
+      swig
+      lit
+      makeWrapper
+      lua5_3
+    ]
+    ++ lib.optionals enableManpages [
+      python3.pkgs.sphinx
+      python3.pkgs.myst-parser
+    ];
+
+    buildInputs = [
+      ncurses
+      zlib
+      libedit
+      libxml2
+      libllvm
+      python3
+      lua5_3
+      # Starting with LLVM 16, the resource dir patch is no longer enough to get
+      # libclang into the rpath of the lldb executables. By putting it into
+      # buildInputs cc-wrapper will set up rpath correctly for us.
+      (lib.getLib libclang)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.bootstrap_cmds
+    ];
+
+    strictDeps = true;
+
+    hardeningDisable = [ "format" ];
+
+    cmakeFlags = [
+      (lib.cmakeBool "LLDB_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
+      (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
+      (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
+      (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
+    ]
+    ++ lib.optionals enableManpages [
+      (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+      # docs reference `automodapi` but it's not added to the extensions list when
+      # only building the manpages:
+      # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
+      #
+      # so, we just ignore the resulting errors
+      (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
+    ]
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [
+      (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
+      (lib.cmakeFeature "LLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
+    ]
+    ++ devExtraCmakeFlags;
+
+    doCheck = false;
+    doInstallCheck = canRunLldb;
+
+    nativeInstallCheckInputs = lib.optionals canRunLldb [ versionCheckHook ];
+
+    preVersionCheck = ''
+      version=${release_version}
+    '';
+
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      pythonOutput=$($out/bin/lldb --batch -o 'script print(1000+100+10+1)' 2>&1)
+      echo "$pythonOutput"
+      grep -Fx 1111 <<< "$pythonOutput"
+
+      luaOutput=$($out/bin/lldb --batch --script-language lua \
+        -o 'script io.stdout:write(1000+100+10+1, "\n")' 2>&1)
+      echo "$luaOutput"
+      grep -Fx 1111 <<< "$luaOutput"
+
+      runHook postInstallCheck
+    '';
+
+    postInstall =
+      let
+        # Needed after https://github.com/llvm/llvm-project/commit/5f0f0fcd62227fb864203acc1a57e3ebf7a254a3
+        packageJsonPath =
+          if lib.versionAtLeast release_version "22" then
+            "../tools/${vscodeExt.name}/extension/package.json"
+          else
+            "../tools/${vscodeExt.name}/package.json";
+      in
+      ''
+        wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
+
+        # Editor support
+        # vscode:
+        vscodeExtDir="$out/share/vscode/extensions/${vscodeExt.uniqueId}"
+        install -D ${packageJsonPath} "$vscodeExtDir/package.json"
+        mkdir -p "$vscodeExtDir/bin"
+        ln -s $out/bin/*${vscodeExt.name} "$vscodeExtDir/bin"
+      '';
+
+    passthru = {
+      inherit monorepoSrc;
+      vscodeExtName = vscodeExt.name;
+      vscodeExtPublisher = "llvm";
+      vscodeExtUniqueId = vscodeExt.uniqueId;
+    };
+
+    __structuredAttrs = true;
+
+    meta = llvm_meta // {
+      homepage = "https://lldb.llvm.org/";
+      description = "Next-generation high-performance debugger";
+      longDescription = ''
+        LLDB is a next generation, high-performance debugger. It is built as a set
+        of reusable components which highly leverage existing libraries in the
+        larger LLVM Project, such as the Clang expression parser and LLVM
+        disassembler.
+      '';
+      mainProgram = "lldb";
+    };
+  }
+  // lib.optionalAttrs enableManpages {
+    pname = "lldb-manpages";
+
+    ninjaFlags = [ "docs-lldb-man" ];
+
+    # manually install lldb man page
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/man/man1
+      install docs/man/lldb.1 -t $out/share/man/man1/
+
+      runHook postInstall
+    '';
+
+    postInstall = null;
+
+    outputs = [ "out" ];
+
+    meta = llvm_meta // {
+      description = "man pages for LLDB ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
+    };
+  }
+)

@@ -1,0 +1,15 @@
+diff --git a/game/audio.cc b/game/audio.cc
+index da810488..d7f3d072 100644
+--- a/game/audio.cc
++++ b/game/audio.cc
+@@ -121,8 +121,8 @@ Music::Music(Audio::Files const& files, unsigned int sr, bool preview): srate(sr
+ 	suppressCenterChannel = config["audio/suppress_center_channel"].b();
+ }
+ 
+-unsigned Audio::aubio_win_size = 1536;
+-unsigned Audio::aubio_hop_size = 768;
++unsigned Audio::aubio_win_size = 2048;
++unsigned Audio::aubio_hop_size = 1024;
+ 
+ std::unique_ptr<aubio_tempo_t, void(*)(aubio_tempo_t*)> Audio::aubioTempo =
+ 					std::unique_ptr<aubio_tempo_t, void(*)(aubio_tempo_t*)>(

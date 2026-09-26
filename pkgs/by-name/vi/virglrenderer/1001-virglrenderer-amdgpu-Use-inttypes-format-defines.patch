@@ -1,0 +1,225 @@
+From 53ff47b465808d581087f8ef657378e28e6170d4 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 13 May 2026 13:30:14 +0200
+Subject: [PATCH] drm/amdgpu: Use inttypes.h format defines for *64_t types
+
+---
+ src/drm/amdgpu/amdgpu_renderer.c | 56 ++++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 24 deletions(-)
+
+diff --git a/src/drm/amdgpu/amdgpu_renderer.c b/src/drm/amdgpu/amdgpu_renderer.c
+index e7f47c34..80baf960 100644
+--- a/src/drm/amdgpu/amdgpu_renderer.c
++++ b/src/drm/amdgpu/amdgpu_renderer.c
+@@ -259,7 +259,7 @@ amdgpu_renderer_attach_resource(struct virgl_context *vctx, struct virgl_resourc
+          obj->bo = import.buf_handle;
+          amdgpu_bo_export(obj->bo, amdgpu_bo_handle_type_kms, &obj->base.handle);
+          amdgpu_object_set_res_id(ctx, obj, res->res_id);
+-         print(1, "imported dmabuf -> res_id=%u" PRIx64, res->res_id);
++         print(1, "imported dmabuf -> res_id=%u", res->res_id);
+       } else {
+          print(2, "Ignored res_id: %d (fd_type = %d)", res->res_id, fd_type);
+          if (fd_type != VIRGL_RESOURCE_FD_INVALID)
+@@ -411,7 +411,7 @@ amdgpu_renderer_get_blob(struct virgl_context *vctx, uint32_t res_id, uint64_t b
+ 
+    /* If GEM_NEW fails, we can end up here without a backing obj or if it's a dumb buffer. */
+    if (!obj) {
+-      print(0, "No object with blob_id=%ld", blob_id);
++      print(0, "No object with blob_id=%" PRIu64, blob_id);
+       return -ENOENT;
+    }
+ 
+@@ -424,7 +424,7 @@ amdgpu_renderer_get_blob(struct virgl_context *vctx, uint32_t res_id, uint64_t b
+     * to the same storage.
+     */
+    if (obj->exported) {
+-      print(0, "Already exported! blob_id:%ld", blob_id);
++      print(0, "Already exported! blob_id:%" PRIu64, blob_id);
+       return -EINVAL;
+    }
+ 
+@@ -436,7 +436,7 @@ amdgpu_renderer_get_blob(struct virgl_context *vctx, uint32_t res_id, uint64_t b
+       ret = amdgpu_bo_export(obj->bo, amdgpu_bo_handle_type_dma_buf_fd, (uint32_t *)&fd);
+ 
+       if (ret) {
+-         print(0, "Export to fd failed for blob_id:%ld r=%d (%s)", blob_id, ret, strerror(errno));
++         print(0, "Export to fd failed for blob_id:%" PRIu64 " r=%d (%s)", blob_id, ret, strerror(errno));
+          return ret;
+       }
+ 
+@@ -470,7 +470,7 @@ amdgpu_ccmd_query_info(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    struct amdgpu_ccmd_query_info_rsp *rsp;
+    unsigned rsp_len;
+    if (__builtin_add_overflow(sizeof(*rsp), req->info.return_size, &rsp_len)) {
+-      print(1, "%s: Request size overflow: %zu + %" PRIu32 " > %u",
++      print(1, "%s: Request size overflow: %zu + %u > %u",
+             __FUNCTION__, sizeof(*rsp), req->info.return_size, UINT_MAX);
+       return -EINVAL;
+    }
+@@ -510,12 +510,12 @@ amdgpu_ccmd_gem_new(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+ 
+    if (req->r.__pad) {
+       print(0, "Invalid value for struct %s_req::r::__pad: "
+-            "0x%" PRIx32, __FUNCTION__, req->r.__pad);
++            "0x%x", __FUNCTION__, req->r.__pad);
+       ret = -EINVAL;
+       goto alloc_failed;
+    }
+    if (!drm_context_blob_id_valid(dctx, req->blob_id)) {
+-      print(0, "Invalid blob_id %ld", req->blob_id);
++      print(0, "Invalid blob_id %" PRIu64, req->blob_id);
+       ret = -EINVAL;
+       goto alloc_failed;
+    }
+@@ -553,7 +553,7 @@ amdgpu_ccmd_gem_new(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+ 
+    drm_context_object_set_blob_id(dctx, &obj->base, req->blob_id);
+ 
+-   print(2, "new object blob_id: %ld heap: %08x flags: %lx size: %ld",
++   print(2, "new object blob_id: %" PRIu64 " heap: %08x flags: %" PRIx64" size: %" PRIu64,
+          req->blob_id, req->r.preferred_heap, req->r.flags, req->r.alloc_size);
+ 
+    return 0;
+@@ -562,7 +562,7 @@ va_map_failed:
+    amdgpu_bo_free(bo_handle);
+ 
+ alloc_failed:
+-   print(2, "ERROR blob_id: %ld heap: %08x flags: %lx",
++   print(2, "ERROR blob_id: %" PRIu64 " heap: %08x flags: %" PRIx64,
+          req->blob_id, req->r.preferred_heap, req->r.flags);
+    if (ctx->shmem)
+       ctx->shmem->async_error++;
+@@ -593,7 +593,10 @@ amdgpu_ccmd_bo_va_op(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    } else {
+       obj = amdgpu_get_object_from_res_id(ctx, req->res_id, __FUNCTION__);
+       if (!obj) {
+-         print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%lx size: 0x%lx va: %" PRIx64 " r=%d",
++         print(0,
++            "amdgpu_bo_va_op_raw failed: "
++               "op: %d res_id: %d offset: 0x%" PRIx64 " "
++               "size: 0x%" PRIx64 " va: %" PRIx64 " r=%d",
+             req->op, obj->base.res_id, req->offset, req->vm_map_size, req->va, rsp->ret);
+ 
+          /* This is ok. This means the guest closed the GEM already. */
+@@ -609,11 +612,16 @@ amdgpu_ccmd_bo_va_op(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+       if (ctx->shmem)
+          ctx->shmem->async_error++;
+ 
+-      print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%lx size: 0x%lx va: %" PRIx64 " r=%d",
++      print(0,
++         "amdgpu_bo_va_op_raw failed: "
++            "op: %d res_id: %d offset: 0x%" PRIx64 " "
++            "size: 0x%" PRIx64 " va: %" PRIx64 " r=%d",
+          req->op, req->res_id, req->offset, req->vm_map_size, req->va, rsp->ret);
+    } else {
+-      print(2, "va_op %d res_id: %u va: [0x%" PRIx64 ", 0x%" PRIx64 "] @offset 0x%" PRIx64,
+-            req->op, req->res_id, req->va, req->va + req->vm_map_size - 1, req->offset);
++      print(2,
++         "va_op %d res_id: %u "
++            "va: [0x%" PRIx64 ", 0x%" PRIx64 "] @offset 0x%" PRIx64,
++         req->op, req->res_id, req->va, req->va + req->vm_map_size - 1, req->offset);
+    }
+ 
+    return 0;
+@@ -646,7 +654,7 @@ amdgpu_ccmd_set_metadata(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    metadata.size_metadata = req->size_metadata;
+    if (req->size_metadata) {
+       if (req->size_metadata > sizeof(metadata.umd_metadata)) {
+-         print(0, "Metadata size is too large for target buffer: %" PRIu32 " > %zu",
++         print(0, "Metadata size is too large for target buffer: %u > %zu",
+                req->size_metadata, sizeof(metadata.umd_metadata));
+          rsp->ret = -EINVAL;
+          return -1;
+@@ -655,7 +663,7 @@ amdgpu_ccmd_set_metadata(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+                                        offsetof(struct amdgpu_ccmd_set_metadata_req,
+                                                 umd_metadata));
+       if (requested_size > hdr->len) {
+-         print(0, "Metadata size is too large for source buffer: %zu > %" PRIu32,
++         print(0, "Metadata size is too large for source buffer: %zu > %u",
+                requested_size, hdr->len);
+          rsp->ret = -EINVAL;
+          return -1;
+@@ -736,7 +744,7 @@ amdgpu_ccmd_create_ctx(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    }
+ 
+    if (req->flags & ~AMDGPU_CCMD_CREATE_CTX_DESTROY) {
+-      print(0, "Invalid flags 0x%" PRIu32, req->flags);
++      print(0, "Invalid flags 0x%u", req->flags);
+       rsp->hdr.ret = -EINVAL;
+       return -1;
+    }
+@@ -827,7 +835,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    }
+    /* Do not allocate arbitrarily large buffer. */
+    if (req->num_chunks > AMDGPU_CCMD_CS_SUBMIT_MAX_NUM_CHUNKS) {
+-      print(1, "%s: Invalid num_chunks: %" PRIu32 " > %d",
++      print(1, "%s: Invalid num_chunks: %u > %d",
+             __FUNCTION__, req->num_chunks, AMDGPU_CCMD_CS_SUBMIT_MAX_NUM_CHUNKS);
+       rsp->ret = -EINVAL;
+       return -1;
+@@ -842,7 +850,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    chunks = malloc((req->num_chunks + 1 /* syncobj_in */ + 1 /* syncobj_out */) *
+                    sizeof(*chunks));
+    if (chunks == NULL) {
+-      print(0, "Failed to allocate %" PRIu32 " chunks", req->num_chunks + 2);
++      print(0, "Failed to allocate %u chunks", req->num_chunks + 2);
+       r = -EINVAL;
+       goto end;
+    }
+@@ -858,7 +866,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+    size_t descriptors_len = size_add(offsetof(struct amdgpu_ccmd_cs_submit_req, payload),
+                                      size_mul(req->num_chunks, sizeof(struct desc)));
+    if (descriptors_len > hdr->len) {
+-      print(0, "Descriptors are out of bounds: %zu + %zu * %" PRIu32 " > %" PRIu32,
++      print(0, "Descriptors are out of bounds: %zu + %zu * %u > %u",
+             offsetof(struct amdgpu_ccmd_cs_submit_req, payload),
+             sizeof(struct desc), req->num_chunks, hdr->len);
+       r = -EINVAL;
+@@ -875,7 +883,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+       chunks[num_chunks].chunk_id = chunk_id;
+       /* Validate input. */
+       if (end > hdr->len) {
+-         print(0, "Descriptors are out of bounds: %zu > %" PRIu32, end, hdr->len);
++         print(0, "Descriptors are out of bounds: %zu > %u", end, hdr->len);
+          r = -EINVAL;
+          goto end;
+       }
+@@ -936,7 +944,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+          }
+          in = input;
+          if (in->offset % sizeof(uint64_t)) {
+-            print(0, "Invalid chunk offset %" PRIu32 " (not multiple of 8)", in->offset);
++            print(0, "Invalid chunk offset %u (not multiple of 8)", in->offset);
+             r = -EINVAL;
+             goto end;
+          }
+@@ -1043,7 +1051,7 @@ amdgpu_ccmd_cs_submit(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
+ 
+    drmSyncobjDestroy(amdgpu_device_get_fd(ctx->dev), syncobj_out.handle);
+ 
+-   print(3, "ctx: %d -> seqno={v=%d a=%ld} r=%d", req->ctx_id, hdr->seqno, seqno, r);
++   print(3, "ctx: %d -> seqno={v=%d a=%" PRIu64 "} r=%d", req->ctx_id, hdr->seqno, seqno, r);
+ 
+ end:
+    if (bo_list)
+@@ -1158,7 +1166,7 @@ amdgpu_renderer_submit_fence(struct virgl_context *vctx, uint32_t flags,
+ 
+    /* timeline is ring_idx-1 (because ring_idx 0 is host CPU timeline) */
+    if (ring_idx > AMDGPU_HW_IP_NUM) {
+-      print(0, "invalid ring_idx: %" PRIu32, ring_idx);
++      print(0, "invalid ring_idx: %u", ring_idx);
+       return -EINVAL;
+    }
+    /* ring_idx zero is used for the guest to synchronize with host CPU,
+@@ -1170,7 +1178,7 @@ amdgpu_renderer_submit_fence(struct virgl_context *vctx, uint32_t flags,
+       return 0;
+    }
+ 
+-   print(3, "ring_idx: %d fence_id: %lu", ring_idx, fence_id);
++   print(3, "ring_idx: %d fence_id: %" PRIu64, ring_idx, fence_id);
+    return drm_timeline_submit_fence(&ctx->timelines[ring_idx - 1], flags, fence_id);
+ }
+ 
+-- 
+2.51.2
+

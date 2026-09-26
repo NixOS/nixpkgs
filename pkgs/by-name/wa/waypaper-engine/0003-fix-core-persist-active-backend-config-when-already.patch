@@ -1,0 +1,30 @@
+From ec7e69c096bd2dde94d35a46994737c3adce7723 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 7 Jun 2026 22:43:51 +0530
+Subject: [PATCH] fix(core): persist active backend config when already active
+
+---
+ daemon/internal/control/controller.go | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/daemon/internal/control/controller.go b/daemon/internal/control/controller.go
+index 0782c94..811c18b 100644
+--- a/daemon/internal/control/controller.go
++++ b/daemon/internal/control/controller.go
+@@ -189,6 +189,13 @@ func (c *Controller) UpdateBackendConfig(ctx context.Context, name string, raw j
+ 
+ func (c *Controller) ActivateBackend(ctx context.Context, name string) (ActivationResult, error) {
+ 	if cur := c.registry.Active(); cur != nil && cur.Name() == name {
++		if c.cfg.GetActiveBackendType() != name {
++			_ = c.cfg.SetActiveBackendType(name)
++			c.bus.Publish(events.Event{
++				Type: events.ConfigChanged,
++				Data: map[string]any{"sections": []string{"backend"}},
++			})
++		}
+ 		return ActivationResult{Backend: name, AlreadyActive: true}, nil
+ 	}
+ 	if err := backend.SwitchActiveBackend(ctx, c.registry, name, c.cfg, backend.SwitchOpts{
+-- 
+2.54.0
+

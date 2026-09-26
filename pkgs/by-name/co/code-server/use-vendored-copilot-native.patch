@@ -1,0 +1,5 @@
+--- ./lib/vscode/build/lib/copilot.ts
++++ ./lib/vscode/build/lib/copilot.ts
+@@ -261 +261 @@
+-	materializeBuiltInCopilotSdkPlatformFiles(copilotPackagePlatformArch, tgrepPlatformArch, copilotBase, appNodeModulesDir, options);
++	materializeBuiltInCopilotSdkPlatformFiles(copilotPackagePlatformArch, tgrepPlatformArch, copilotBase, path.join(import.meta.dirname, '..', '..', 'extensions', 'copilot', 'node_modules'), options);
