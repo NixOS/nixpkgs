@@ -87,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen
+      GaetanLepage
       matthiasbeyer
     ];
   };
