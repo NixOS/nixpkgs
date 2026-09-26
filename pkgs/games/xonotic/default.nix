@@ -204,7 +204,7 @@ let
             --add-needed ${libtheora}/lib/libtheora.so \
             $out/bin/xonotic-sdl
       '';
-
+    meta.platforms = lib.platforms.linux;
     meta.mainProgram = "xonotic-${
       if withSDL then
         "sdl"
