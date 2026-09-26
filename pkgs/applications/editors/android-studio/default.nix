@@ -101,15 +101,15 @@ let
     };
   };
   latestVersion = {
-    version = "2026.2.1.5"; # "Android Studio Rabbit 1 | 2026.2.1 Canary 5"
+    version = "2026.2.2.1"; # "Android Studio Rabbit 2 | 2026.2.2 Canary 1"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-Idrpclm4yiy86SP+hhItMSbquCM8R49NB9n/Q2LXkZc=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.5/android-studio-rabbit1-canary5-linux.tar.gz";
+        sha256Hash = "sha256-m6E5gAI6hO2M5zf7nDQaQtnHmdimdXZsBYSKOVH4nbQ=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.2.1/android-studio-rabbit2-canary1-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-l3S5eFmELeIL30Tn7QoevBfhWLqauZxHtM9FeahpyXk=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.5/android-studio-rabbit1-canary5-mac_arm.dmg";
+        sha256Hash = "sha256-HfIEtxeeDM5wOBn1lBV0aPP7iYe4Ih+RUC6F2culXao=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.2.1/android-studio-rabbit2-canary1-mac_arm.dmg";
       };
     };
   };
