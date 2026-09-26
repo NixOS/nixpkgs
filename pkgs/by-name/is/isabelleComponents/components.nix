@@ -33,6 +33,7 @@ lib.makeScope newScope (self: {
   mlton = self.callPackage ./mlton { };
   nunchaku = self.callPackage ./nunchaku { };
   opam = self.callPackage ./opam { };
+  pdfjs = self.callPackage ./pdfjs { };
   polyml = self.callPackage ./polyml { };
   scala = self.callPackage ./scala { };
   setup = self.callPackage ./setup { };
