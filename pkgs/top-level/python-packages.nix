@@ -2287,7 +2287,11 @@ self: super: with self; {
 
   beancount-black = callPackage ../development/python-modules/beancount-black { };
 
+  beancount-data = callPackage ../development/python-modules/beancount-data { };
+
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
+
+  beancount-exporter = callPackage ../development/python-modules/beancount-exporter { };
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
 
@@ -13468,6 +13472,8 @@ self: super: with self; {
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
+
+  pgcopy = callPackage ../development/python-modules/pgcopy { };
 
   pglast = callPackage ../development/python-modules/pglast { };
 
