@@ -367,7 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
       in
       symlinkJoin {
         name = "isabelle-with-components-${isabelle.version}";
-        paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
+        paths = [ isabelle ];
 
         postBuild = ''
           rm $out/bin/*
@@ -383,7 +383,7 @@ stdenv.mkDerivation (finalAttrs: {
           patchShebangs $out/bin
         ''
         + lib.concatMapStringsSep "\n" (c: ''
-          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+          echo ${c.settings} >> ${base}/etc/components
         '') components;
       };
   };
