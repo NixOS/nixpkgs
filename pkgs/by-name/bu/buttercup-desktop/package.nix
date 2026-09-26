@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "Cross-Platform Passwords & Secrets Vault";
     mainProgram = "buttercup-desktop";
-    homepage = "https://buttercup.pw";
+    homepage = "https://github.com/buttercup/buttercup-desktop";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
