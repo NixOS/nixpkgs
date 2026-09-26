@@ -129,6 +129,9 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs =
     lib.optional cudaSupport cuda-redist
+    ++ lib.optional (
+      cudaSupport && lib.versionAtLeast cudaPackages.cudaMajorVersion "13"
+    ) cudaPackages.cuda_crt
     ++ lib.optionals rocmSupport (
       with rocmPackages;
       [
