@@ -1,0 +1,40 @@
+From 6ac2f207e8d8e1d16ee73198abccc64d20c5f608 Mon Sep 17 00:00:00 2001
+From: benaryorg <binary@benary.org>
+Date: Thu, 7 Nov 2024 03:27:52 +0000
+Subject: [PATCH 1/2] proper pthread return value
+
+*pthread_create(3)* states that the ways for a pthread to exit includes:
+
+> It returns from start_routine().  This is equivalent to calling pthread_exit(3) with the value supplied in the return statement.
+
+This "retval" is a void pointer which can be anything.
+In this case, since all threads are always joined with a parameter of NULL for the `void**` to store the retval this isn't really relevant for providing a meaningful return value.
+However a `void*` function must return a `void*`, otherwise compilers will complain:
+
+> pHash.cpp:416:1: warning: no return statement in function returning non-void [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreturn-type-Wreturn-type8;;]
+
+Therefore returning NULL seems reasonable.
+As for the choice of NULL vs. nullptr or any other value, NULL is already widely used in the file.
+
+Long story short: this fixes a compiler warning/error.
+
+Signed-off-by: benaryorg <binary@benary.org>
+---
+ src/pHash.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/pHash.cpp b/src/pHash.cpp
+index 07b03ad..23bbbf3 100644
+--- a/src/pHash.cpp
++++ b/src/pHash.cpp
+@@ -417,6 +417,7 @@ void *ph_image_thread(void *p)
+ 		memcpy(dp->hash, &hash, sizeof(hash));
+                 dp->hash_length = 1;
+         }
++        return NULL;
+ }
+ 
+ DP** ph_dct_image_hashes(char *files[], int count, int threads)
+-- 
+2.44.1
+

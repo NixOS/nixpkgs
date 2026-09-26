@@ -1,0 +1,11 @@
+Subject: [PATCH] remove puppeteer from dev dependencies
+---
+Index: package.json
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -47,3 +47,2 @@
+     "prettier": "^3.8.3",
+-    "puppeteer": "^25.0.0",
+     "typescript": "^6.0.3",

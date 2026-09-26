@@ -1,0 +1,44 @@
+diff --git a/src/controller/python/chip/crypto/p256keypair.py b/src/controller/python/chip/crypto/p256keypair.py
+index 30198eabee..926f55318e 100644
+--- a/src/controller/python/chip/crypto/p256keypair.py
++++ b/src/controller/python/chip/crypto/p256keypair.py
+@@ -22,7 +22,6 @@ from ctypes import (CFUNCTYPE, POINTER, _Pointer, c_bool, c_char, c_size_t, c_ui
+ from typing import TYPE_CHECKING
+ 
+ from chip import native
+-from ecdsa import ECDH, NIST256p, SigningKey  # type: ignore
+ 
+ # WORKAROUND: Create a subscriptable pointer type (with square brackets) to ensure compliance of type hinting with ctypes
+ if not TYPE_CHECKING:
+@@ -133,31 +132,3 @@ class P256Keypair:
+         format of section 2.3.3 of the SECG SEC 1 standard.
+         '''
+         raise NotImplementedError()
+-
+-
+-class TestP256Keypair(P256Keypair):
+-    ''' The P256Keypair for testing purpose. It is not safe for any productions use
+-    '''
+-
+-    def __init__(self, private_key: SigningKey = None):
+-        super().__init__()
+-
+-        if private_key is None:
+-            self._key = SigningKey.generate(NIST256p)
+-        else:
+-            self._key = private_key
+-
+-        self._pubkey = self._key.verifying_key.to_string(encoding='uncompressed')
+-
+-    @property
+-    def public_key(self) -> bytes:
+-        return self._pubkey
+-
+-    def ECDSA_sign_msg(self, message: bytes) -> bytes:
+-        return self._key.sign_deterministic(message, hashfunc=hashlib.sha256)
+-
+-    def ECDH_derive_secret(self, remote_pubkey: bytes) -> bytes:
+-        ecdh = ECDH(curve=NIST256p)
+-        ecdh.load_private_key(self._key)
+-        ecdh.load_received_public_key_bytes(remote_pubkey[1:])
+-        return ecdh.ecdh1.generate_sharedsecret_bytes()

@@ -1,0 +1,199 @@
+When libomxdynamicloader.so is loaded, it complains that RM_Deinit can't be resolved.
+Link explicitly against omxil-bellagio so that ld.so can find the reference.
+
+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+
+--- bellagio-0.9.3/src/dynamic_loader/Makefile.am.old	2012-03-23 15:07:47.379021034 +0000
++++ bellagio-0.9.3/src/dynamic_loader/Makefile.am	2012-03-23 15:08:47.563034818 +0000
+@@ -3,7 +3,7 @@
+ omxdynamicloader_LTLIBRARIES = libomxdynamicloader.la
+ libomxdynamicloader_la_SOURCES = ste_dynamic_component_loader.c ste_dynamic_component_loader.h
+ 
+-libomxdynamicloader_la_LDFLAGS =
++libomxdynamicloader_la_LDFLAGS = -L$(abs_top_srcdir)/src/.libs -lomxil-bellagio
+ libomxdynamicloader_la_CFLAGS = -I$(top_srcdir)/include \
+ 			-I$(top_srcdir)/src \
+ 			-I$(top_srcdir)/src/base \
+Fix dependency issue to allow parallel build
+
+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+
+Index: bellagio-0.9.3/src/Makefile.am
+===================================================================
+--- bellagio-0.9.3.orig/src/Makefile.am
++++ bellagio-0.9.3/src/Makefile.am
+@@ -8,6 +8,7 @@ omxregister_bellagio_SOURCES = omxregist
+ omxregister_bellagio_CFLAGS = -DOMXILCOMPONENTSPATH=\"$(plugindir)/\" \
+ 			      -I$(top_srcdir)/include
+ omxregister_bellagio_LDFLAGS = -lomxil-bellagio -L$(builddir)
++omxregister_bellagio_DEPENDENCIES = libomxil-bellagio.la
+ 
+ lib_LTLIBRARIES = libomxil-bellagio.la
+ libomxil_bellagio_la_SOURCES = component_loader.h \
+We always access globalComponentList[] at indexComponent=-1 which causes a
+segfault. Use i as the index instead.
+
+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+
+--- bellagio-0.9.3/src/omx_reference_resource_manager.c.old	2012-03-13 10:15:25.743940980 +0000
++++ bellagio-0.9.3/src/omx_reference_resource_manager.c	2012-03-13 10:18:02.201971009 +0000
+@@ -485,7 +485,6 @@
+ OMX_ERRORTYPE RM_removeFromWaitForResource(OMX_COMPONENTTYPE *openmaxStandComp) {
+ 	omx_base_component_PrivateType* omx_base_component_Private;
+ 	int i = 0;
+-	int indexComponent = -1;
+ 
+ 	DEBUG(DEB_LEV_FUNCTION_NAME, "In %s\n", __func__);
+ 	omx_base_component_Private = (omx_base_component_PrivateType*)openmaxStandComp->pComponentPrivate;
+@@ -493,16 +492,13 @@
+ 	while(listOfcomponentRegistered[i].component_name != NULL ) {
+ 		if (!strcmp(listOfcomponentRegistered[i].component_name, omx_base_component_Private->name)) {
+ 			// found component in the list of the resource manager
+-			removeElemFromList(&globalComponentList[indexComponent], openmaxStandComp);
+-			break;
++			removeElemFromList(&globalComponentList[i], openmaxStandComp);
++			DEBUG(DEB_LEV_FUNCTION_NAME, "Out of %s\n", __func__);
++			return OMX_ErrorNone;
+ 		}
+ 		i++;
+ 	}
+-	if (indexComponent <0) {
+-		// No resource to be handled
+-		DEBUG(DEB_LEV_ERR, "In %s No resource to be handled\n", __func__);
+-		return OMX_ErrorNone;
+-	}
+-	DEBUG(DEB_LEV_FUNCTION_NAME, "Out of %s\n", __func__);
++	// No resource to be handled
++	DEBUG(DEB_LEV_ERR, "In %s No resource to be handled\n", __func__);
+ 	return OMX_ErrorNone;
+ }
+ OMX_INDEXTYPE/OMX_INDEXVENDORTYPE in one switch
+ src/base/omx_base_component.c |   54 ++++++++++++++++++++++-------------------
+ 1 files changed, 29 insertions(+), 25 deletions(-)
+--- a/src/base/omx_base_component.c	
++++ a/src/base/omx_base_component.c	
+@@ -915,14 +915,6 @@ OSCL_EXPORT_REF OSCL_EXPORT_REF OMX_ERRORTYPE omx_base_component_GetParameter(
+     return OMX_ErrorBadParameter;
+   }
+   switch(nParamIndex) {
+-  case OMX_IndexParameterThreadsID:
+-	    if ((err = checkHeader(ComponentParameterStructure, sizeof(OMX_PARAM_BELLAGIOTHREADS_ID))) != OMX_ErrorNone) {
+-	      break;
+-	    }
+-	  threadID = (OMX_PARAM_BELLAGIOTHREADS_ID *)ComponentParameterStructure;
+-	  threadID->nThreadBufferMngtID = omx_base_component_Private->bellagioThreads->nThreadBufferMngtID;
+-	  threadID->nThreadMessageID = omx_base_component_Private->bellagioThreads->nThreadMessageID;
+-	  break;
+   case OMX_IndexParamAudioInit:
+   case OMX_IndexParamVideoInit:
+   case OMX_IndexParamImageInit:
+@@ -988,28 +980,40 @@ OSCL_EXPORT_REF OSCL_EXPORT_REF OMX_ERRORTYPE omx_base_component_GetParameter(
+       }
+     }
+     break;
+-  case OMX_IndexVendorCompPropTunnelFlags:
+-    pPropTunnelSetup = (OMX_VENDOR_PROP_TUNNELSETUPTYPE*)ComponentParameterStructure;
++  default:
++    /* additional switch statement for extended OMX_INDEXTYPE */
++    switch((OMX_INDEXVENDORTYPE) nParamIndex) {
++    case OMX_IndexParameterThreadsID:
++        if ((err = checkHeader(ComponentParameterStructure, sizeof(OMX_PARAM_BELLAGIOTHREADS_ID))) != OMX_ErrorNone) {
++          break;
++        }
++      threadID = (OMX_PARAM_BELLAGIOTHREADS_ID *)ComponentParameterStructure;
++      threadID->nThreadBufferMngtID = omx_base_component_Private->bellagioThreads->nThreadBufferMngtID;
++      threadID->nThreadMessageID = omx_base_component_Private->bellagioThreads->nThreadMessageID;
++      break;
++    case OMX_IndexVendorCompPropTunnelFlags:
++      pPropTunnelSetup = (OMX_VENDOR_PROP_TUNNELSETUPTYPE*)ComponentParameterStructure;
+ 
+-    if (pPropTunnelSetup->nPortIndex >= (omx_base_component_Private->sPortTypesParam[OMX_PortDomainAudio].nPorts +
+-                                         omx_base_component_Private->sPortTypesParam[OMX_PortDomainVideo].nPorts +
+-                                         omx_base_component_Private->sPortTypesParam[OMX_PortDomainImage].nPorts +
+-                                         omx_base_component_Private->sPortTypesParam[OMX_PortDomainOther].nPorts)) {
++      if (pPropTunnelSetup->nPortIndex >= (omx_base_component_Private->sPortTypesParam[OMX_PortDomainAudio].nPorts +
++                                           omx_base_component_Private->sPortTypesParam[OMX_PortDomainVideo].nPorts +
++                                           omx_base_component_Private->sPortTypesParam[OMX_PortDomainImage].nPorts +
++                                           omx_base_component_Private->sPortTypesParam[OMX_PortDomainOther].nPorts)) {
+ 
+-      DEBUG(DEB_LEV_ERR,"In %s OMX_IndexVendorCompPropTunnelFlags nPortIndex=%d Line=%d \n",
+-          __func__,(int)pPropTunnelSetup->nPortIndex,__LINE__);
++        DEBUG(DEB_LEV_ERR,"In %s OMX_IndexVendorCompPropTunnelFlags nPortIndex=%d Line=%d \n",
++            __func__,(int)pPropTunnelSetup->nPortIndex,__LINE__);
+ 
+-      return OMX_ErrorBadPortIndex;
+-    }
++        return OMX_ErrorBadPortIndex;
++      }
+ 
+-    pPort = omx_base_component_Private->ports[pPropTunnelSetup->nPortIndex];
++      pPort = omx_base_component_Private->ports[pPropTunnelSetup->nPortIndex];
+ 
+-    pPropTunnelSetup->nTunnelSetup.nTunnelFlags  = pPort->nTunnelFlags;
+-    pPropTunnelSetup->nTunnelSetup.eSupplier     = pPort->eBufferSupplier;
+-    break;
+-  default:
+-    err = OMX_ErrorUnsupportedIndex;
+-    break;
++      pPropTunnelSetup->nTunnelSetup.nTunnelFlags  = pPort->nTunnelFlags;
++      pPropTunnelSetup->nTunnelSetup.eSupplier     = pPort->eBufferSupplier;
++      break;
++    default:
++      err = OMX_ErrorUnsupportedIndex;
++      break;
++    }
+   }
+   DEBUG(DEB_LEV_FUNCTION_NAME, "Out of %s for component %p\n", __func__, hComponent);
+   return err;
+diff -up libomxil-bellagio-0.9.3/Makefile.am.nodoc libomxil-bellagio-0.9.3/Makefile.am
+--- libomxil-bellagio-0.9.3/Makefile.am.nodoc	2011-01-12 08:53:26.000000000 +0100
++++ libomxil-bellagio-0.9.3/Makefile.am	2012-04-23 13:46:15.410823381 +0200
+@@ -7,7 +7,6 @@ EXTRA_DIST = libomxil-bellagio.spec
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libomxil-bellagio.pc
+ 
+-docdir = $(DESTDIR)$(prefix)/share/doc/@PACKAGE@
+ doc_DATA = README \
+ 	   ChangeLog \
+ 	   TODO
+diff -up libomxil-bellagio-0.9.3/src/omxregister.c.unused libomxil-bellagio-0.9.3/src/omxregister.c
+--- libomxil-bellagio-0.9.3/src/omxregister.c.unused	2011-01-12 08:53:26.000000000 +0100
++++ libomxil-bellagio-0.9.3/src/omxregister.c	2012-12-10 22:02:28.621695659 +0100
+@@ -248,7 +248,15 @@ static int buildComponentsList(FILE* omx
+ 						}
+ 						fptr(stComponents);
+ 						err = fwrite(lib_absolute_path, 1, strlen(lib_absolute_path), omxregistryfp);
+-						err = fwrite("\n", 1, 1, omxregistryfp);
++						if (err != strlen(lib_absolute_path)) {
++							DEBUG(DEB_LEV_ERR, "Failed to write %zu bytes to fd %d\n", strlen(lib_absolute_path), fileno(omxregistryfp));
++							continue;
++						}
++						err = fwrite("\n", 1, strlen(buffer), omxregistryfp);
++						if (err != strlen(buffer)) {
++							DEBUG(DEB_LEV_ERR, "Failed to write %zu bytes to fd %d\n", strlen(buffer), fileno(omxregistryfp));
++							continue;
++						}
+ 
+ 
+ 						for (i = 0; i<num_of_comp; i++) {
+--- libomxil-bellagio-0.9.3/include/OMX_Types.h.orig 2011-01-12 08:53:26.000000000 +0100
++++ libomxil-bellagio-0.9.3/include/OMX_Types.h 2013-02-25 09:53:55.000000000 +0100
+@@ -314,6 +314,18 @@
+  *  platform & operating specific object used to reference the window */
+ typedef void* OMX_NATIVE_WINDOWTYPE;
+
++
++/** Define the OMX IL version that corresponds to this set of header files.
++ *  We also define a combined version that can be used to write or compare
++ *  values of the 32bit nVersion field, assuming a little endian architecture */
++#define OMX_VERSION_MAJOR 1
++#define OMX_VERSION_MINOR 1
++#define OMX_VERSION_REVISION 2
++#define OMX_VERSION_STEP 0
++
++#define OMX_VERSION ((OMX_VERSION_STEP<<24) | (OMX_VERSION_REVISION<<16) | (OMX_VERSION_MINOR<<8) | OMX_VERSION_MAJOR)
++
++
+ /** The OMX_VERSIONTYPE union is used to specify the version for
+     a structure or component.  For a component, the version is entirely
+     specified by the component vendor.  Components doing the same function

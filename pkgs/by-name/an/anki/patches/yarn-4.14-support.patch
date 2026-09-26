@@ -1,0 +1,19 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -1,2 +1,4 @@
+ nodeLinker: node-modules
+ enableScripts: false
++approvedGitRepositories:
++  - "**"
+diff --git a/yarn.lock b/yarn.lock
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,6 +2,6 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10c0
+ 

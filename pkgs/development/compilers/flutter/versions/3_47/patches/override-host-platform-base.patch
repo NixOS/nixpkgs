@@ -1,0 +1,22 @@
+diff --git a/packages/flutter_tools/lib/src/base/os.dart b/packages/flutter_tools/lib/src/base/os.dart
+index 45da89ad4c..0f7d9c2a11 100644
+--- a/packages/flutter_tools/lib/src/base/os.dart
++++ b/packages/flutter_tools/lib/src/base/os.dart
+@@ -147,7 +147,17 @@ abstract class OperatingSystemUtils {
+   /// Represents the platform of the host machine running the Flutter tool.
+   HostPlatform get hostPlatform {
++    const nixHostPlatform = String.fromEnvironment('NIX_FLUTTER_HOST_PLATFORM');
++    if (nixHostPlatform.isNotEmpty) {
++      return switch (nixHostPlatform) {
++        'x86_64-linux' => HostPlatform.linux_x64,
++        'aarch64-linux' => HostPlatform.linux_arm64,
++        'x86_64-darwin' => HostPlatform.darwin_x64,
++        'aarch64-darwin' => HostPlatform.darwin_arm64,
++        String value => throw ArgumentError.value(value, 'NIX_FLUTTER_HOST_PLATFORM', 'Unknown Nix host platform!'),
++      };
++    }
+     return switch (_currentAbi) {
+       Abi.macosX64 => HostPlatform.darwin_x64,
+       Abi.macosArm64 => HostPlatform.darwin_arm64,
+     };
+   }

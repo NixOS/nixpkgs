@@ -1,0 +1,21 @@
+From 4b5e65169f2cc5654685841fa7e7553d3aacce3f Mon Sep 17 00:00:00 2001
+From: Bob van der Linden <bobvanderlinden@gmail.com>
+Date: Mon, 13 Oct 2025 17:19:52 +0200
+Subject: [PATCH] cmake: minimum version 2.8 -> 3.10
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6d8b58f..6dff2c0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ include(CheckSymbolExists)
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ project(rofi-file-browser-extended)
+ 
+ 

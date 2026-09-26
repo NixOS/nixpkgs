@@ -1,0 +1,28 @@
+From c7eafa2d7bde0d735b125912542acec2d5896c17 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Sat, 20 Jul 2024 02:31:20 -0500
+Subject: [PATCH 3/4] remove erroneous HAVE_LIBFLTK guard
+
+---
+ src/icas.cc | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/icas.cc b/src/icas.cc
+index f91885b..17a0373 100644
+--- a/src/icas.cc
++++ b/src/icas.cc
+@@ -2407,11 +2407,7 @@ int main(int ARGC, char *ARGV[]){
+ #ifdef __APPLE__
+       startc=clock();
+ #endif
+-#ifdef HAVE_LIBFLTK
+       xcas::icas_eval(gq,e,reading_file,filename,contextptr);
+-#else
+-      e=eval(gq,1,contextptr);
+-#endif
+ #ifdef __APPLE__
+       startc=clock()-startc;
+ #endif
+-- 
+2.44.1
+

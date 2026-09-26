@@ -1,0 +1,14 @@
+PCRE2 allows longer group names than PCRE1 did.
+A failure case in .mtn-ignore became a valid lone ignoring everything.
+Make it invalid again
+
+--- mtn-src/test/func/syntax_errors_in_.mtn-ignore/mtn-ignore	2026-08-06 03:22:51.680338185 +0200
++++ mtn-src/test/func/syntax_errors_in_.mtn-ignore/mtn-ignore	2026-08-06 03:22:55.096806215 +0200
+@@ -27,6 +27,6 @@
+ (?R)
+ (?P*)
+ (?P<*>x)
+-(?P<aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa>)
++(?P<aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa>)
+ \777
+ ^ignoremetoo$

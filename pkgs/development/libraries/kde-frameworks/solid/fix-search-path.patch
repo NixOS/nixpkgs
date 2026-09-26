@@ -1,0 +1,17 @@
+diff --git a/src/solid/devices/backends/fstab/fstabhandling.cpp b/src/solid/devices/backends/fstab/fstabhandling.cpp
+index ac2a628..7ee46cc 100644
+--- a/src/solid/devices/backends/fstab/fstabhandling.cpp
++++ b/src/solid/devices/backends/fstab/fstabhandling.cpp
+@@ -275,7 +275,11 @@ bool Solid::Backends::Fstab::FstabHandling::callSystemCommand(const QString &com
+                                                               const QObject *receiver,
+                                                               std::function<void(QProcess *)> callback)
+ {
+-    static const QStringList searchPaths{QStringLiteral("/sbin"), QStringLiteral("/bin"), QStringLiteral("/usr/sbin"), QStringLiteral("/usr/bin")};
++    static const QStringList searchPaths{QStringLiteral("/run/wrappers/bin"),
++                                         QStringLiteral("/sbin"),
++                                         QStringLiteral("/bin"),
++                                         QStringLiteral("/usr/sbin"),
++                                         QStringLiteral("/usr/bin")};
+     static const QString joinedPaths = searchPaths.join(QLatin1Char(':'));
+     const QString exec = QStandardPaths::findExecutable(commandName, searchPaths);
+     if (exec.isEmpty()) {

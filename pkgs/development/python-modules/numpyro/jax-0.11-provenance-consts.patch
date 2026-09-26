@@ -1,0 +1,17 @@
+diff --git a/numpyro/ops/provenance.py b/numpyro/ops/provenance.py
+index 2f94be0..4ae4a1b 100644
+--- a/numpyro/ops/provenance.py
++++ b/numpyro/ops/provenance.py
+@@ -77,6 +77,12 @@ def eval_provenance(fn, **kwargs):
+         aval_kwargs[n] = jax.tree.map(lambda _: frozenset({n}), v)
+     provenance_inputs, _ = jax.tree.flatten(((), aval_kwargs))
+ 
++    # Since jax 0.11, `trace_to_jaxpr_dynamic` hoists the tracing-time constants into
++    # `jaxpr.invars` (prepended to the actual arguments) instead of `jaxpr.constvars`.
++    # Those constants do not depend on any input, hence an empty provenance.
++    num_consts = len(jaxpr.invars) - len(provenance_inputs)
++    provenance_inputs = [frozenset()] * num_consts + provenance_inputs
++
+     provenance_outputs = track_deps_jaxpr(jaxpr, provenance_inputs)
+     return jax.tree.unflatten(out_tree(), provenance_outputs)
+ 

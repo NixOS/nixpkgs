@@ -1,0 +1,11 @@
+--- a/src/mcmctree.c
++++ b/src/mcmctree.c
+@@ -42,7 +42,7 @@ extern double PjumpOptimum;
+
+ int GetOptions(char *ctlf);
+ int ReadTreeSeqs(FILE*fout);
+-int ProcessNodeAnnotation();
++int ProcessNodeAnnotation(int* haslabel);
+ int ReadBlengthGH(char infile[]);
+ int GenerateBlengthGH(char infile[]);
+ int GetMem(void);

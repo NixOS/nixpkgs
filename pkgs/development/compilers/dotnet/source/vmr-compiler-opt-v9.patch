@@ -1,0 +1,220 @@
+From 4e333377f97ab8f0f47ba7606844c34cb61d1db0 Mon Sep 17 00:00:00 2001
+From: Omair Majid <omajid@redhat.com>
+Date: Mon, 9 Dec 2024 17:44:10 -0500
+Subject: [PATCH 1/4] Avoid all compiler optimization on embedded apphost hash
+
+We assume that there is a single copy of the apphost hash in the apphost
+binary. And that it hasn't been modified by the compiler. However, the
+compiler can optimize the hash multiple ways, including re-ordering
+elements of the hash  or duplicating the contents of the hash. This can
+currently happen under certain compiler versions and optimization flags.
+
+Try and avoid that by marking the hash as a volatile string and
+implementing comparisons/copying/initialization that respects that.
+
+Fixes: #109611
+---
+ src/runtime/src/native/corehost/corehost.cpp | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/src/runtime/src/native/corehost/corehost.cpp b/src/runtime/src/native/corehost/corehost.cpp
+index 6de7acfbd08576..6d40a337d574a2 100644
+--- a/src/runtime/src/native/corehost/corehost.cpp
++++ b/src/runtime/src/native/corehost/corehost.cpp
+@@ -40,6 +40,24 @@
+ #define EMBED_HASH_LO_PART_UTF8 "74e592c2fa383d4a3960714caef0c4f2"
+ #define EMBED_HASH_FULL_UTF8    (EMBED_HASH_HI_PART_UTF8 EMBED_HASH_LO_PART_UTF8) // NUL terminated
+ 
++void to_non_volatile(volatile const char* cstr, char* output, size_t length)
++{
++    for (size_t i = 0; i < length; i++)
++    {
++        output[i] = cstr[i];
++    }
++}
++
++bool compare_memory_nooptimization(volatile const char* a, volatile const char* b, size_t length)
++{
++    for (size_t i = 0; i < length; i++)
++    {
++        if (*a++ != *b++)
++            return false;
++    }
++    return true;
++}
++
+ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+ {
+     constexpr int EMBED_SZ = sizeof(EMBED_HASH_FULL_UTF8) / sizeof(EMBED_HASH_FULL_UTF8[0]);
+@@ -48,18 +66,21 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+     // Contains the EMBED_HASH_FULL_UTF8 value at compile time or the managed DLL name replaced by "dotnet build".
+     // Must not be 'const' because std::string(&embed[0]) below would bind to a const string ctor plus length
+     // where length is determined at compile time (=64) instead of the actual length of the string at runtime.
+-    static char embed[EMBED_MAX] = EMBED_HASH_FULL_UTF8;     // series of NULs followed by embed hash string
++    volatile static char embed[EMBED_MAX] = EMBED_HASH_FULL_UTF8;     // series of NULs followed by embed hash string
+ 
+     static const char hi_part[] = EMBED_HASH_HI_PART_UTF8;
+     static const char lo_part[] = EMBED_HASH_LO_PART_UTF8;
+ 
+-    if (!pal::clr_palstring(embed, app_dll))
++    char working_copy_embed[EMBED_MAX];
++    to_non_volatile(embed, working_copy_embed, EMBED_MAX);
++
++    if (!pal::clr_palstring(&working_copy_embed[0], app_dll))
+     {
+         trace::error(_X("The managed DLL bound to this executable could not be retrieved from the executable image."));
+         return false;
+     }
+ 
+-    std::string binding(&embed[0]);
++    std::string binding(&working_copy_embed[0]);
+ 
+     // Check if the path exceeds the max allowed size
+     if (binding.size() > EMBED_MAX - 1) // -1 for null terminator
+@@ -74,8 +95,8 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+     size_t hi_len = (sizeof(hi_part) / sizeof(hi_part[0])) - 1;
+     size_t lo_len = (sizeof(lo_part) / sizeof(lo_part[0])) - 1;
+     if (binding.size() >= (hi_len + lo_len)
+-        && binding.compare(0, hi_len, &hi_part[0]) == 0
+-        && binding.compare(hi_len, lo_len, &lo_part[0]) == 0)
++        && compare_memory_nooptimization(binding.c_str(), hi_part, hi_len)
++        && compare_memory_nooptimization(binding.substr(hi_len).c_str(), lo_part, lo_len))
+     {
+         trace::error(_X("This executable is not bound to a managed DLL to execute. The binding value is: '%s'"), app_dll->c_str());
+         return false;
+
+From 2c67debff3f84519b7b5cba49232aaa2396a9f3e Mon Sep 17 00:00:00 2001
+From: Aaron R Robinson <arobins@microsoft.com>
+Date: Wed, 26 Mar 2025 20:40:51 -0700
+Subject: [PATCH 2/4] Apply feedback
+
+---
+ src/runtime/src/native/corehost/corehost.cpp | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/src/runtime/src/native/corehost/corehost.cpp b/src/runtime/src/native/corehost/corehost.cpp
+index 6d40a337d574a2..9d2648c0ba84fa 100644
+--- a/src/runtime/src/native/corehost/corehost.cpp
++++ b/src/runtime/src/native/corehost/corehost.cpp
+@@ -40,14 +40,9 @@
+ #define EMBED_HASH_LO_PART_UTF8 "74e592c2fa383d4a3960714caef0c4f2"
+ #define EMBED_HASH_FULL_UTF8    (EMBED_HASH_HI_PART_UTF8 EMBED_HASH_LO_PART_UTF8) // NUL terminated
+ 
+-void to_non_volatile(volatile const char* cstr, char* output, size_t length)
+-{
+-    for (size_t i = 0; i < length; i++)
+-    {
+-        output[i] = cstr[i];
+-    }
+-}
+-
++// This is a workaround for a compiler workaround that
++// causes issues with inserting multiple static strings.
++// See https://github.com/dotnet/runtime/issues/109611 for more details.
+ bool compare_memory_nooptimization(volatile const char* a, volatile const char* b, size_t length)
+ {
+     for (size_t i = 0; i < length; i++)
+@@ -66,21 +61,18 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+     // Contains the EMBED_HASH_FULL_UTF8 value at compile time or the managed DLL name replaced by "dotnet build".
+     // Must not be 'const' because std::string(&embed[0]) below would bind to a const string ctor plus length
+     // where length is determined at compile time (=64) instead of the actual length of the string at runtime.
+-    volatile static char embed[EMBED_MAX] = EMBED_HASH_FULL_UTF8;     // series of NULs followed by embed hash string
++    static char embed[EMBED_MAX] = EMBED_HASH_FULL_UTF8;     // series of NULs followed by embed hash string
+ 
+     static const char hi_part[] = EMBED_HASH_HI_PART_UTF8;
+     static const char lo_part[] = EMBED_HASH_LO_PART_UTF8;
+ 
+-    char working_copy_embed[EMBED_MAX];
+-    to_non_volatile(embed, working_copy_embed, EMBED_MAX);
+-
+-    if (!pal::clr_palstring(&working_copy_embed[0], app_dll))
++    if (!pal::clr_palstring(embed, app_dll))
+     {
+         trace::error(_X("The managed DLL bound to this executable could not be retrieved from the executable image."));
+         return false;
+     }
+ 
+-    std::string binding(&working_copy_embed[0]);
++    std::string binding(&embed[0]);
+ 
+     // Check if the path exceeds the max allowed size
+     if (binding.size() > EMBED_MAX - 1) // -1 for null terminator
+
+From 854143d39e7725d82547032f1ab47ea5da062b9f Mon Sep 17 00:00:00 2001
+From: Aaron R Robinson <arobins@microsoft.com>
+Date: Thu, 27 Mar 2025 19:04:09 -0700
+Subject: [PATCH 3/4] Feedback
+
+---
+ src/runtime/src/native/corehost/corehost.cpp | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/runtime/src/native/corehost/corehost.cpp b/src/runtime/src/native/corehost/corehost.cpp
+index 9d2648c0ba84fa..36902ccfa56c04 100644
+--- a/src/runtime/src/native/corehost/corehost.cpp
++++ b/src/runtime/src/native/corehost/corehost.cpp
+@@ -40,10 +40,10 @@
+ #define EMBED_HASH_LO_PART_UTF8 "74e592c2fa383d4a3960714caef0c4f2"
+ #define EMBED_HASH_FULL_UTF8    (EMBED_HASH_HI_PART_UTF8 EMBED_HASH_LO_PART_UTF8) // NUL terminated
+ 
+-// This is a workaround for a compiler workaround that
+-// causes issues with inserting multiple static strings.
++// This avoids compiler optimization which cause EMBED_HASH_HI_PART_UTF8 EMBED_HASH_LO_PART_UTF8
++// to be placed adjacent causing them to match EMBED_HASH_FULL_UTF8 when searched for replacing.
+ // See https://github.com/dotnet/runtime/issues/109611 for more details.
+-bool compare_memory_nooptimization(volatile const char* a, volatile const char* b, size_t length)
++static bool compare_memory_nooptimization(volatile const char* a, volatile const char* b, size_t length)
+ {
+     for (size_t i = 0; i < length; i++)
+     {
+@@ -72,10 +72,10 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+         return false;
+     }
+ 
+-    std::string binding(&embed[0]);
++    size_t binding_len = strlen(&embed[0]);
+ 
+     // Check if the path exceeds the max allowed size
+-    if (binding.size() > EMBED_MAX - 1) // -1 for null terminator
++    if (binding_len > EMBED_MAX - 1) // -1 for null terminator
+     {
+         trace::error(_X("The managed DLL bound to this executable is longer than the max allowed length (%d)"), EMBED_MAX - 1);
+         return false;
+@@ -86,9 +86,9 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+     // So use two parts of the string that will be unaffected by the edit.
+     size_t hi_len = (sizeof(hi_part) / sizeof(hi_part[0])) - 1;
+     size_t lo_len = (sizeof(lo_part) / sizeof(lo_part[0])) - 1;
+-    if (binding.size() >= (hi_len + lo_len)
+-        && compare_memory_nooptimization(binding.c_str(), hi_part, hi_len)
+-        && compare_memory_nooptimization(binding.substr(hi_len).c_str(), lo_part, lo_len))
++    if (binding_len >= (hi_len + lo_len)
++        && compare_memory_nooptimization(&embed[0], hi_part, hi_len)
++        && compare_memory_nooptimization(&embed[hi_len], lo_part, lo_len))
+     {
+         trace::error(_X("This executable is not bound to a managed DLL to execute. The binding value is: '%s'"), app_dll->c_str());
+         return false;
+
+From 842d62e499ce6511abf948cf5da8023cc6be8212 Mon Sep 17 00:00:00 2001
+From: Aaron R Robinson <arobins@microsoft.com>
+Date: Fri, 28 Mar 2025 15:44:47 -0700
+Subject: [PATCH 4/4] Feedback
+
+---
+ src/runtime/src/native/corehost/corehost.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/runtime/src/native/corehost/corehost.cpp b/src/runtime/src/native/corehost/corehost.cpp
+index 36902ccfa56c04..54eb128cb486bb 100644
+--- a/src/runtime/src/native/corehost/corehost.cpp
++++ b/src/runtime/src/native/corehost/corehost.cpp
+@@ -59,8 +59,8 @@ bool is_exe_enabled_for_execution(pal::string_t* app_dll)
+     constexpr int EMBED_MAX = (EMBED_SZ > 1025 ? EMBED_SZ : 1025); // 1024 DLL name length, 1 NUL
+ 
+     // Contains the EMBED_HASH_FULL_UTF8 value at compile time or the managed DLL name replaced by "dotnet build".
+-    // Must not be 'const' because std::string(&embed[0]) below would bind to a const string ctor plus length
+-    // where length is determined at compile time (=64) instead of the actual length of the string at runtime.
++    // Must not be 'const' because strlen below could be determined at compile time (=64) instead of the actual
++    // length of the string at runtime.
+     static char embed[EMBED_MAX] = EMBED_HASH_FULL_UTF8;     // series of NULs followed by embed hash string
+ 
+     static const char hi_part[] = EMBED_HASH_HI_PART_UTF8;

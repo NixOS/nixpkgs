@@ -1,0 +1,46 @@
+Wrap the swift compiler produced during the build
+
+--- a/tools/driver/CMakeLists.txt
++++ b/tools/driver/CMakeLists.txt
+@@ -16,6 +16,13 @@ if(${LIBSWIFT_BUILD_MODE} MATCHES "BOOTSTRAPPING.*")
+                           swiftDriverTool
+                           libswiftStub)
+ 
++  # Nix: wrap the swift build.
++  add_custom_command(
++    TARGET swift-frontend-bootstrapping0 POST_BUILD
++    COMMAND nix-swift-make-swift-wrapper $<TARGET_FILE:swift-frontend-bootstrapping0>
++    VERBATIM
++  )
++
+   swift_create_post_build_symlink(swift-frontend-bootstrapping0
+     SOURCE "swift-frontend${CMAKE_EXECUTABLE_SUFFIX}"
+     DESTINATION "swiftc${CMAKE_EXECUTABLE_SUFFIX}"
+@@ -34,6 +41,13 @@ if(${LIBSWIFT_BUILD_MODE} MATCHES "BOOTSTRAPPING.*")
+                           swiftDriverTool
+                           libswift-bootstrapping1)
+ 
++  # Nix: wrap the swift build.
++  add_custom_command(
++    TARGET swift-frontend-bootstrapping1 POST_BUILD
++    COMMAND nix-swift-make-swift-wrapper $<TARGET_FILE:swift-frontend-bootstrapping1>
++    VERBATIM
++  )
++
+   swift_create_post_build_symlink(swift-frontend-bootstrapping1
+     SOURCE "swift-frontend${CMAKE_EXECUTABLE_SUFFIX}"
+     DESTINATION "swiftc${CMAKE_EXECUTABLE_SUFFIX}"
+@@ -50,6 +64,13 @@ target_link_libraries(swift-frontend
+                         swiftDriverTool
+                         libswift)
+ 
++# Nix: wrap the swift build.
++add_custom_command(
++  TARGET swift-frontend POST_BUILD
++  COMMAND nix-swift-make-swift-wrapper $<TARGET_FILE:swift-frontend>
++  VERBATIM
++)
++
+ # Create a `swift-driver` executable adjacent to the `swift-frontend` executable
+ # to ensure that `swiftc` forwards to the standalone driver when invoked.
+ swift_create_early_driver_copies(swift-frontend)

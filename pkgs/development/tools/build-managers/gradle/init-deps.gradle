@@ -1,0 +1,10 @@
+gradle.projectsLoaded {
+  rootProject.allprojects {
+    task nixDownloadDeps {
+      doLast {
+        configurations.findAll{it.canBeResolved}.each{it.resolve()}
+        buildscript.configurations.findAll{it.canBeResolved}.each{it.resolve()}
+      }
+    }
+  }
+}

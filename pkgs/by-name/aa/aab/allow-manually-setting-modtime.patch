@@ -1,0 +1,124 @@
+diff --git a/aab/builder.py b/aab/builder.py
+index 5c3805c..7dfe595 100644
+--- a/aab/builder.py
++++ b/aab/builder.py
+@@ -77,7 +77,7 @@ class AddonBuilder:
+         self._config = Config()
+         self._path_dist_module = PATH_DIST / "src" / self._config["module_name"]
+
+-    def build(self, qt_versions: List[QtVersion], disttype="local", pyenv=None):
++    def build(self, qt_versions: List[QtVersion], disttype="local", pyenv=None, modtime=None):
+         logging.info(
+             "\n--- Building %s %s for %s ---\n",
+             self._config["display_name"],
+@@ -86,7 +86,7 @@ class AddonBuilder:
+         )
+
+         self.create_dist()
+-        self.build_dist(qt_versions=qt_versions, disttype=disttype, pyenv=pyenv)
++        self.build_dist(qt_versions=qt_versions, disttype=disttype, pyenv=pyenv, modtime=modtime)
+
+         return self.package_dist(qt_versions=qt_versions, disttype=disttype)
+
+@@ -102,7 +102,7 @@ class AddonBuilder:
+         PATH_DIST.mkdir(parents=True)
+         Git().archive(self._version, PATH_DIST)
+
+-    def build_dist(self, qt_versions: List[QtVersion], disttype="local", pyenv=None):
++    def build_dist(self, qt_versions: List[QtVersion], disttype="local", pyenv=None, modtime=None):
+         self._copy_licenses()
+         if self._path_changelog.exists():
+             self._copy_changelog()
+@@ -111,7 +111,7 @@ class AddonBuilder:
+         if self._callback_archive:
+             self._callback_archive()
+
+-        self._write_manifest(disttype)
++        self._write_manifest(disttype, modtime=modtime)
+
+         ui_builder = UIBuilder(dist=PATH_DIST, config=self._config)
+
+@@ -162,12 +162,13 @@ class AddonBuilder:
+
+         return out_path
+
+-    def _write_manifest(self, disttype):
++    def _write_manifest(self, disttype, modtime=None):
+         ManifestUtils.generate_and_write_manifest(
+             addon_properties=self._config,
+             version=self._version,
+             dist_type=disttype,
+             target_dir=self._path_dist_module,
++            modtime=modtime,
+         )
+
+     def _copy_licenses(self):
+diff --git a/aab/cli.py b/aab/cli.py
+index 2ce6425..0956e98 100644
+--- a/aab/cli.py
++++ b/aab/cli.py
+@@ -89,7 +89,7 @@ def build(args):
+     total = len(dists)
+     for dist in dists:
+         logging.info("\n=== Build task %s/%s ===", cnt, total)
+-        builder.build(qt_versions=qt_versions, disttype=dist)
++        builder.build(qt_versions=qt_versions, disttype=dist, modtime=args.modtime)
+         cnt += 1
+
+
+@@ -146,7 +146,7 @@ def build_dist(args):
+     total = len(dists)
+     for dist in dists:
+         logging.info("\n=== Build task %s/%s ===", cnt, total)
+-        builder.build_dist(qt_versions=qt_versions, disttype=dist)
++        builder.build_dist(qt_versions=qt_versions, disttype=dist, modtime=args.modtime)
+         cnt += 1
+
+
+@@ -204,6 +204,12 @@ def construct_parser():
+         default="local",
+         choices=["local", "ankiweb", "all"],
+     )
++    dist_parent.add_argument(
++        "--modtime",
++        help="Last modified timestamp",
++        type=int,
++        required=False,
++    )
+
+     build_parent = argparse.ArgumentParser(add_help=False)
+     build_parent.add_argument(
+diff --git a/aab/manifest.py b/aab/manifest.py
+index fc0038d..355e370 100644
+--- a/aab/manifest.py
++++ b/aab/manifest.py
+@@ -49,10 +49,11 @@ class ManifestUtils:
+         version: str,
+         dist_type: DistType,
+         target_dir: Path,
++        modtime=None,
+     ):
+         logging.info("Writing manifest...")
+         manifest = cls.generate_manifest_from_properties(
+-            addon_properties=addon_properties, version=version, dist_type=dist_type
++            addon_properties=addon_properties, version=version, dist_type=dist_type, modtime=modtime
+         )
+         cls.write_manifest(manifest=manifest, target_dir=target_dir)
+
+@@ -62,6 +63,7 @@ class ManifestUtils:
+         addon_properties: Config,
+         version: str,
+         dist_type: DistType,
++        modtime=None,
+     ) -> Dict[str, Any]:
+         manifest = {
+             "name": addon_properties["display_name"],
+@@ -71,7 +73,7 @@ class ManifestUtils:
+             "version": version,
+             "homepage": addon_properties.get("homepage", ""),
+             "conflicts": deepcopy(addon_properties["conflicts"]),
+-            "mod": Git().modtime(version),
++            "mod": modtime if modtime is not None else Git().modtime(version),
+         }
+
+         # Add version specifiers:

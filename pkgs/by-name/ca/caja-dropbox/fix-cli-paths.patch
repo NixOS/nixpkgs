@@ -1,0 +1,11 @@
+--- a/caja-dropbox.in
++++ b/caja-dropbox.in
+@@ -70,7 +70,7 @@ DOWNLOADING = "Downloading Dropbox... %d%%"
+ UNPACKING = "Unpacking Dropbox... %d%%"
+
+ PARENT_DIR = os.path.expanduser("~")
+-DROPBOXD_PATH = "%s/.dropbox-dist/dropboxd" % PARENT_DIR
++DROPBOXD_PATH = "@dropboxd@"
+ DESKTOP_FILE = "@DESKTOP_FILE_DIR@/caja-dropbox.desktop"
+
+ enc = locale.getpreferredencoding()

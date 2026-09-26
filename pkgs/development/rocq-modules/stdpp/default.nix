@@ -1,0 +1,59 @@
+{
+  lib,
+  mkRocqDerivation,
+  rocq-core,
+  stdlib,
+  version ? null,
+}:
+
+mkRocqDerivation {
+  pname = "stdpp";
+  inherit version;
+  domain = "gitlab.mpi-sws.org";
+  owner = "iris";
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    with lib.versions;
+    lib.switch rocq-core.rocq-version [
+      (case (range "9.0" "9.3") "1.13.0")
+      (case (range "8.19" "9.1") "1.12.0")
+      (case (range "8.18" "8.19") "1.10.0")
+      (case (range "8.16" "8.18") "1.9.0")
+      (case (range "8.13" "8.17") "1.8.0")
+      (case (range "8.12" "8.14") "1.6.0")
+      (case (range "8.11" "8.13") "1.5.0")
+      (case (range "8.8" "8.10") "1.4.0")
+    ] null;
+  release."1.13.0".sha256 = "sha256-kj8oBzarsLB4DDQ43yz4ViQbyzuISqext28wC2Fh3Sw=";
+  release."1.12.0".hash = "sha256-2o8YMkKbXrKHwtfpkdAovxl+2NZZk958GjSSd9wcEIU=";
+  release."1.11.0".hash = "sha256-yqnkaA5gUdZBJZ3JnvPYh11vKQRl0BAnior1yGowG7k=";
+  release."1.10.0".hash = "sha256-bfynevIKxAltvt76lsqVxBmifFkzEhyX8lRgTKxr21I=";
+  release."1.9.0".hash = "sha256-OXeB+XhdyzWMp5Karsz8obp0rTeMKrtG7fu/tmc9aeI=";
+  release."1.8.0".hash = "sha256-VkIGBPHevHeHCo/Q759Q7y9WyhSF/4SMht4cOPuAXHU=";
+  release."1.7.0".hash = "sha256:0447wbzm23f9rl8byqf6vglasfn6c1wy6cxrrwagqjwsh3i5lx8y";
+  release."1.6.0".hash = "sha256:1l1w6srzydjg0h3f4krrfgvz455h56shyy2lbcnwdbzjkahibl7v";
+  release."1.5.0".hash = "sha256:1ym0fy620imah89p8b6rii8clx2vmnwcrbwxl3630h24k42092nf";
+  release."1.4.0".hash = "sha256:1m6c7ibwc99jd4cv14v3r327spnfvdf3x2mnq51f9rz99rffk68r";
+  releaseRev = v: "stdpp-${v}";
+
+  propagatedBuildInputs = [ stdlib ];
+
+  preBuild = ''
+    if [[ -f coq-lint.sh ]]
+    then patchShebangs coq-lint.sh
+    fi
+  '';
+
+  useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "1.12.0" v;
+
+  meta = {
+    description = "Extended “Standard Library” for Rocq";
+    license = lib.licenses.bsd3;
+    maintainers = [
+      lib.maintainers.vbgl
+      lib.maintainers.ineol
+    ];
+  };
+}

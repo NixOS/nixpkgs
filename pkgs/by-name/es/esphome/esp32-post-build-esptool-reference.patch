@@ -1,0 +1,13 @@
+diff --git a/esphome/components/esp32/post_build.py.script b/esphome/components/esp32/post_build.py.script
+index c99521423..e29821d7e 100644
+--- a/esphome/components/esp32/post_build.py.script
++++ b/esphome/components/esp32/post_build.py.script
+@@ -88,8 +88,6 @@ def merge_factory_bin(source, target, env):
+     output_path = firmware_path.with_suffix(".factory.bin")
+     python_exe = f'"{env.subst("$PYTHONEXE")}"'
+     cmd = [
+-        python_exe,
+-        "-m",
+         "esptool",
+         "--chip",
+         chip,

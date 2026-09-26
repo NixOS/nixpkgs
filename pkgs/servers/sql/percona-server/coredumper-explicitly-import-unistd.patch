@@ -1,0 +1,12 @@
+diff --git a/extra/coredumper/src/thread_lister.c b/extra/coredumper/src/thread_lister.c
+index 15fedac..181889b 100644
+--- a/extra/coredumper/src/thread_lister.c
++++ b/extra/coredumper/src/thread_lister.c
+@@ -35,6 +35,7 @@
+
+ #include <stdio.h> /* needed for NULL on some powerpc platforms (?!) */
+ #include <sys/prctl.h>
++#include <unistd.h>
+
+ #include "linuxthreads.h"
+ /* Include other thread listers here that define THREADS macro

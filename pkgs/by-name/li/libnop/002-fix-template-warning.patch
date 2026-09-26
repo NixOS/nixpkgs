@@ -1,0 +1,54 @@
+From 199978a0fb0dc31de43b80f7504b53958fd202ee Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Sun, 4 May 2025 09:58:20 +0200
+Subject: [PATCH] C++: Fix compilation issue
+ -Wno-missing-template-arg-list-after-template-kw
+
+---
+ include/nop/rpc/interface.h | 2 +-
+ include/nop/types/variant.h | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/nop/rpc/interface.h b/include/nop/rpc/interface.h
+index 167d203..9772d06 100644
+--- a/include/nop/rpc/interface.h
++++ b/include/nop/rpc/interface.h
+@@ -245,7 +245,7 @@ struct InterfaceMethod {
+     template <typename Sender>
+     static void Invoke(Sender* sender, Status<Return>* return_value,
+                        Args... args) {
+-      sender->NOP_TEMPLATE SendMethod(InterfaceMethod::Selector, return_value,
++      sender->NOP_TEMPLATE SendMethod<>(InterfaceMethod::Selector, return_value,
+                                   std::forward_as_tuple(args...));
+     }
+ 
+diff --git a/include/nop/types/variant.h b/include/nop/types/variant.h
+index fdf8e03..af8c81e 100644
+--- a/include/nop/types/variant.h
++++ b/include/nop/types/variant.h
+@@ -239,7 +239,7 @@ class Variant {
+   // resulting type.
+   template <typename... Args>
+   void Construct(Args&&... args) {
+-    index_ = value_.NOP_TEMPLATE Construct(std::forward<Args>(args)...);
++    index_ = value_.NOP_TEMPLATE Construct<>(std::forward<Args>(args)...);
+   }
+   void Construct(EmptyVariant) {}
+ 
+@@ -256,14 +256,14 @@ class Variant {
+   // multiple element types.
+   template <typename T, typename U>
+   void Assign(TypeTag<T>, U&& value) {
+-    if (!value_.NOP_TEMPLATE Assign(TypeTag<T>{}, index_, std::forward<U>(value))) {
++    if (!value_.NOP_TEMPLATE Assign<>(TypeTag<T>{}, index_, std::forward<U>(value))) {
+       Destruct();
+       Construct(TypeTag<T>{}, std::forward<U>(value));
+     }
+   }
+   template <typename T>
+   void Assign(T&& value) {
+-    if (!value_.NOP_TEMPLATE Assign(index_, std::forward<T>(value))) {
++    if (!value_.NOP_TEMPLATE Assign<>(index_, std::forward<T>(value))) {
+       Destruct();
+       Construct(std::forward<T>(value));
+     }

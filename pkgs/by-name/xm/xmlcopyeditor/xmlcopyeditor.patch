@@ -1,0 +1,15 @@
+diff --git a/src/Makefile.in b/src/Makefile.in
+index e2b01fc..7f3a21e 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -427,8 +427,8 @@ top_srcdir = @top_srcdir@
+ # these are the headers for your project
+ noinst_HEADERS = $(srcdir)/*.h
+ xmlcopyeditordir = ${prefix}/share/xmlcopyeditor
+-pixmapdir = /usr/share/pixmaps
+-applicationsdir = /usr/share/applications
++pixmapdir = ${prefix}/share/pixmaps
++applicationsdir = ${prefix}/share/applications
+ 
+ # the application source, library search path, and link libraries
+ xmlcopyeditor_SOURCES = aboutdialog.cpp \

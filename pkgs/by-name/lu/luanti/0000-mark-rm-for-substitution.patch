@@ -1,0 +1,13 @@
+diff --git a/src/filesys.cpp b/src/filesys.cpp
+index 8881eb2ca..e02d87a9f 100644
+--- a/src/filesys.cpp
++++ b/src/filesys.cpp
+@@ -384,7 +384,7 @@ bool RecursiveDelete(const std::string &path)
+ 	if (child_pid == 0) {
+ 		// Child
+ 		std::array<const char*, 4> argv = {
+-			"rm",
++			"@RM_COMMAND@",
+ 			"-rf",
+ 			path.c_str(),
+ 			nullptr
