@@ -8372,6 +8372,8 @@ with pkgs;
 
   drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
+  dust3d-unstable = callPackage ../by-name/du/dust3d/package.nix { versionType = "unstable"; };
+
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   electrum = callPackage ../applications/misc/electrum { };
