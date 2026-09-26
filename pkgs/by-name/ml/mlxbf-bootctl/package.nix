@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mlxbf-bootctl";
-  version = "unstable-2025-01-16";
+  version = "1.1-6-unstable-2025-01-16";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
