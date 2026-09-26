@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unibilium";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "unibilium";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
+    sha256 = "sha256-x7rAjKZRKt0CvfIAAoxBeUMlHKpSgi+k3KIfvwW3oiQ=";
   };
 
   strictDeps = true;
