@@ -28,6 +28,7 @@ lib.makeScope newScope (self: {
   jsoup = self.callPackage ./jsoup { };
   kodkodi = self.callPackage ./kodkodi { };
   lipics = self.callPackage ./lipics { };
+  llncs = self.callPackage ./llncs { };
   nunchaku = self.callPackage ./nunchaku { };
   polyml = self.callPackage ./polyml { };
   scala = self.callPackage ./scala { };
