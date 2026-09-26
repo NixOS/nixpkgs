@@ -16305,6 +16305,12 @@
     githubId = 11006031;
     name = "Leona Maroni";
   };
+  leonard2901 = {
+    email = "info@leonardw.de";
+    github = "leonard2901";
+    githubId = 25386154;
+    name = "Leonard Wagner";
+  };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";
