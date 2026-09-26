@@ -5,15 +5,6 @@
 }:
 
 let
-  desktopItem = pkgsi686Linux.makeDesktopItem {
-    name = "zsnes";
-    exec = "zsnes";
-    icon = "zsnes";
-    comment = "A SNES emulator";
-    desktopName = "zsnes";
-    genericName = "zsnes";
-    categories = [ "Game" ];
-  };
 
 in
 pkgsi686Linux.stdenv.mkDerivation {
@@ -30,6 +21,10 @@ pkgsi686Linux.stdenv.mkDerivation {
   patches = [
     ./zlib-1.3.patch
     ./fortify3.patch
+  ];
+
+  nativeBuildInputs = [
+    pkgsi686Linux.copyDesktopItems
   ];
 
   buildInputs = [
@@ -65,6 +60,18 @@ pkgsi686Linux.stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  desktopItems = [
+    (pkgsi686Linux.makeDesktopItem {
+      name = "zsnes";
+      exec = "zsnes";
+      icon = "zsnes";
+      comment = "A SNES emulator";
+      desktopName = "zsnes";
+      genericName = "zsnes";
+      categories = [ "Game" ];
+    })
+  ];
+
   postInstall = ''
     function installIcon () {
         mkdir -p $out/share/icons/hicolor/$1/apps/
@@ -74,9 +81,6 @@ pkgsi686Linux.stdenv.mkDerivation {
     installIcon "32x32"
     installIcon "48x48"
     installIcon "64x64"
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
   meta = {
