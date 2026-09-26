@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.jortho
     isabelleComponents.jsvg
     isabelleComponents.lipics
+    isabelleComponents.llncs
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -140,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/jsoup-${isabelleComponents.jsoup.version}' '${isabelleComponents.jsoup.settings}' \
       --replace-fail 'contrib/kodkodi-${isabelleComponents.kodkodi.version}' '${isabelleComponents.kodkodi.settings}' \
       --replace-fail 'contrib/lipics-3.1.3-1' '${isabelleComponents.lipics.settings}' \
+      --replace-fail 'contrib/llncs-2.25' '${isabelleComponents.llncs.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/scala-${isabelleComponents.scala.version}' '${isabelleComponents.scala.settings}' \
@@ -160,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/find_facts_web-20251022 contrib/foiltex-2.1.4b contrib/gnu-utils-20211030 \
            contrib/javamail-20251022 contrib/jedit-20251128 contrib/jfreechart-1.5.3 \
            contrib/isabelle_fonts-20241227 contrib/jsoup-1.21.2 contrib/jortho-1.0-2 \
-           contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1
+           contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1 contrib/llncs-2.25
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
