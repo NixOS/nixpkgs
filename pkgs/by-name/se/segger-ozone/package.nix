@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "segger-ozone";
-  version = "3.50a";
+  version = "3.50b";
 
   src = fetchurl {
     url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
       lib.replaceString "." "" finalAttrs.version
     }_x86_64.tgz";
-    hash = "sha256-pE9uaYwE0df/bOE5kgiBEiVZjUol3lvLKHMj1cPskDc=";
+    hash = "sha256-+3/iuQ0LRDAuLVL6LqtWxHvwtkx2HpgEPaXDgF3fYs0=";
   };
 
   nativeBuildInputs = [
