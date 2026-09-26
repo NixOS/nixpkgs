@@ -1,25 +1,31 @@
 {
   lib,
   stdenv,
-  cmake,
   fetchFromGitHub,
-  pkg-config,
-  zlib,
   bzip2,
+  cmake,
+  nix-update-script,
+  pkg-config,
+  qt6,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   xxd,
-  qt5,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doomseeker";
   version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "DoomseekerTeam";
     repo = "Doomseeker";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-oTWsGLtXqate1UuVM47mlPOqIVYLOHEp8utR07sOoE4=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     ./dont_update_gitinfo.patch
@@ -28,20 +34,21 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
     cmake
-    qt5.qttools
     pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
     xxd
   ];
+
   buildInputs = [
-    qt5.qtbase
-    qt5.qtmultimedia
-    zlib
     bzip2
+    qt6.qtbase
+    qt6.qtmultimedia
+    zlib
   ];
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
+  cmakeFlags = [ (lib.cmakeFeature "Qt_PACKAGE" "Qt6") ];
 
   # Doomseeker looks for the engines in the program directory
   postInstall = ''
@@ -49,14 +56,32 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/doomseeker/doomseeker $out/bin/
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
+
+  preInstallCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+  '';
+
+  versionCheckKeepEnvironment = "HOME QT_QPA_PLATFORM";
+  versionCheckProgramArg = "--version-json";
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
-    mainProgram = "doomseeker";
+    homepage = "https://doomseeker.drdteam.org/";
+    changelog = "https://github.com/DoomseekerTeam/Doomseeker/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    mainProgram = "doomseeker";
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
