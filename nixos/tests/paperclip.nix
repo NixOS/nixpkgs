@@ -268,6 +268,14 @@ in
     controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/heartbeat-runs/{active_id}/cancel > /run/cancelled.json")
     controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies http://controller:3115/api/heartbeat-runs/{active_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-4\"].status == \"cancelled\" and .runs[\"fixture-4\"].stops == 1'")
+    worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: http://controller:3115' --data '{{}}' http://controller:3115/api/agents/{agent_id}/heartbeat/invoke > /run/restart-active.json")
+    restart_id = json.loads(controller.succeed("cat /run/restart-active.json"))["id"]
+    worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"running\"'", timeout=120)
+    controller.succeed("systemctl restart paperclip-control.service")
+    controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
+    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies http://controller:3115/api/heartbeat-runs/{restart_id} | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'", timeout=120)
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"cancelled\" and .runs[\"fixture-5\"].stops == 1'")
     controller.succeed("pid=$(systemctl show paperclip-control -p MainPID --value); ! tr '\\0' '\\n' < /proc/$pid/environ | grep -E '^(BETTER_AUTH_SECRET|DATABASE_URL|DATABASE_MIGRATION_URL)='")
   '';
 }
