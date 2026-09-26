@@ -10,6 +10,7 @@ let
     concatLists
     concatMap
     concatMapStringsSep
+    elem
     filter
     foldl'
     head
@@ -29,6 +30,8 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    attrNames
+    attrValues
     catAttrs
     optionalAttrs
     showAttrPath
@@ -36,6 +39,9 @@ let
   inherit (lib.strings)
     concatMapStrings
     concatStringsSep
+    hasInfix
+    hasPrefix
+    toLower
     ;
   inherit (lib.types)
     mkOptionType
@@ -684,10 +690,100 @@ rec {
       empty = [ ];
     } options;
 
-  /**
-    Generate documentation template as an attribute set preserving module option structure.
+  isJsonValue =
+    v:
+    let
+      t = builtins.typeOf v;
+    in
+    elem t [
+      "null"
+      "bool"
+      "int"
+      "float"
+      "string"
+    ]
+    || (t == "list" && all isJsonValue v)
+    || (t == "set" && !v ? _type && all isJsonValue (attrValues v));
 
-    Submodule sub-options are nested directly under the `"*"` wildcard key.
+  typeToSchema =
+    type: subDocs:
+    let
+      name = toLower (type.name or "");
+      nested = type.nestedTypes or { };
+      elemSchema = typeToSchema (nested.elemType or { }) subDocs;
+    in
+    if hasInfix "int" name then
+      { type = "integer"; }
+    else if hasPrefix "bool" name then
+      { type = "boolean"; }
+    else if hasInfix "float" name || hasInfix "number" name then
+      { type = "number"; }
+    else if
+      hasInfix "str" name
+      || elem name [
+        "lines"
+        "path"
+        "package"
+      ]
+    then
+      { type = "string"; }
+    else if name == "enum" then
+      {
+        type = "string";
+        enum = type.functor.payload.values or [ ];
+      }
+    else if name == "nullor" then
+      {
+        anyOf = [
+          { type = "null"; }
+          elemSchema
+        ];
+      }
+    else if name == "either" then
+      {
+        anyOf = [
+          (typeToSchema nested.left { })
+          (typeToSchema nested.right { })
+        ];
+      }
+    else if name == "coercedto" then
+      {
+        anyOf = [
+          (typeToSchema nested.coercedType { })
+          (typeToSchema nested.finalType subDocs)
+        ];
+      }
+    else if name == "listof" then
+      {
+        type = "array";
+        items = elemSchema;
+      }
+    else if hasInfix "attrsof" name then
+      {
+        type = "object";
+        additionalProperties = elemSchema;
+      }
+    else if name == "attrs" then
+      {
+        type = "object";
+        additionalProperties = true;
+      }
+    else if name == "submodule" then
+      subDocs
+      // {
+        additionalProperties =
+          if nested ? freeformType then
+            typeToSchema (nested.freeformType.nestedTypes.elemType or nested.freeformType) { }
+          else
+            false;
+      }
+    else if nested ? elemType then
+      elemSchema
+    else
+      subDocs;
+
+  /**
+    Generate documentation template as a JSON Schema compatible attribute set preserving module option structure.
 
     # Inputs
 
@@ -698,7 +794,7 @@ rec {
     # Type
 
     ```
-    optionToDoc :: (OptionSet | Option) -> { options :: AttrSet, "$defs" :: AttrSet }
+    optionToDoc :: (OptionSet | Option) -> AttrSet
     ```
 
     # Examples
@@ -708,31 +804,74 @@ rec {
     ```nix
     optionToDoc (evalModules { modules = [ module ]; }).options
     => {
-      options = {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = { };
+      type = "object";
+      properties = {
         boot = {
-          enable = {
-            _type = "option";
-            default = { _type = "literalExpression"; text = "false"; };
-            description = "Enable boot";
-            type = "boolean";
+          type = "object";
+          properties = {
+            enable = {
+              default = false;
+              defaultText = { _type = "literalExpression"; text = "false"; };
+              description = "Enable boot";
+              nixType = "boolean";
+              readOnly = false;
+              type = "boolean";
+            };
           };
         };
       };
-      "$defs" = { };
     }
     ```
     :::
   */
-  optionToDoc = options: {
-    options = foldOptionSet {
+  optionToDoc =
+    options:
+    {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = { };
+    }
+    // foldOptionSet {
       onOption =
-        doc: subDocs: _:
-        { _type = "option"; } // doc // optionalAttrs (subDocs != { }) { "*" = subDocs; };
-      onAttrSet = recurse: mapAttrs (_: recurse);
+        doc: subDocs: opt:
+        removeAttrs doc (
+          [
+            "type"
+            "default"
+          ]
+          ++ optional (doc.description == null) "description"
+        )
+        // typeToSchema opt.type subDocs
+        // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
+        // optionalAttrs (doc ? default) { defaultText = doc.default; }
+        // {
+          nixType = doc.type;
+        };
+      onAttrSet =
+        recurse: set:
+        let
+          clean = removeAttrs set [
+            "_module"
+            "_freeformOptions"
+          ];
+          req = filter (
+            n:
+            let
+              opt = clean.${n};
+            in
+            isOption opt && !(opt ? default || opt ? defaultText)
+          ) (attrNames clean);
+        in
+        {
+          type = "object";
+          properties = mapAttrs (_: recurse) clean;
+        }
+        // optionalAttrs (req != [ ]) {
+          required = req;
+        };
       empty = { };
     } options;
-    "$defs" = { };
-  };
 
   /**
     This function recursively removes all derivation attributes from
