@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  fetchpatch,
   pytestCheckHook,
 
   cffi,
@@ -13,15 +14,28 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysfcgal";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "pysfcgal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/G6yC7u2CYM7D9xO2IOB8+AjWc4ErzTIdvHmwGRxXBc=";
+    hash = "sha256-43+AFnXL5fTmLJBlkJrBC87xY5WRYwwwNJgRGfQqB3Y=";
   };
+
+  patches = [
+    # Fix test_boundary, https://gitlab.com/sfcgal/pysfcgal/-/merge_requests/246
+    (fetchpatch {
+      url = "https://gitlab.com/sfcgal/pysfcgal/-/commit/ac0f26a6860e329519ab3a1035fc5c9bc65020e4.patch";
+      hash = "sha256-vehPPX4brPWOgQg5bCk9kcMj85z70/IpC8ynGdg9Lr8=";
+    })
+    # Fix test_create_from_base_class, https://gitlab.com/sfcgal/pysfcgal/-/merge_requests/249
+    (fetchpatch {
+      url = "https://gitlab.com/sfcgal/pysfcgal/-/commit/faae666b60e1cb03f3533d89d9c30cc8cf92b14a.patch";
+      hash = "sha256-tPxVRXAouUbgwLTfZlBp0IaLdJDbzHb+Bu5bS4sJz7I=";
+    })
+  ];
 
   buildInputs = [
     sfcgal
