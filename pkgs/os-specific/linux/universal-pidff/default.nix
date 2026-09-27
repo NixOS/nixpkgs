@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
 
-    # Broken due to missing linux/minmax.h
-    broken = kernel.kernelOlder "5.10";
+    # Broken < 5.10 due to missing linux/minmax.h
+    # Broken < 5.18 because C11 required
+    broken = kernel.kernelOlder "5.18";
   };
 }
