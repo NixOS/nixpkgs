@@ -30,25 +30,23 @@
 }:
 
 let
-  mkpath = p: "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
-in
-
-let
-  caml_ld_library_path = lib.concatMapStringsSep ":" mkpath [
-    bigstringaf
-    lwt
-    ssl
-    cstruct
-    mirage-crypto
-    zarith
-    mirage-crypto-ec
-    ptime
-    mirage-crypto-rng
-    mtime
-    ca-certs
-    cryptokit
-    re
-  ];
+  caml_ld_library_path =
+    lib.makeSearchPathOutput "dev" "lib/ocaml/${ocaml.version}/site-lib/stublibs"
+      [
+        bigstringaf
+        lwt
+        ssl
+        cstruct
+        mirage-crypto
+        zarith
+        mirage-crypto-ec
+        ptime
+        mirage-crypto-rng
+        mtime
+        ca-certs
+        cryptokit
+        re
+      ];
 in
 
 buildDunePackage (finalAttrs: {
