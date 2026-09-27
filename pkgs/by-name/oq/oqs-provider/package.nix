@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oqs-provider";
-  version = "0.11.0";
+  version = "0.11.0-unstable-2026-08-28";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = "oqs-provider";
-    tag = finalAttrs.version;
-    hash = "sha256-7nPYnlq6/GokWceHk1ZcnZo9A1z6LMtLBGM61zHvcyY=";
+    rev = "dfefe2db4bca998e497bbaa132340b4a5d50e80e";
+    hash = "sha256-Fp0h04uXC+RN3IT13wK8AXxv/cRqMbyvmQrZhFUXOKY=";
   };
 
   nativeBuildInputs = [
