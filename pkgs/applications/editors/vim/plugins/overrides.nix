@@ -2858,6 +2858,15 @@ assertNoAdditions {
     ];
   };
 
+  neotest-busted = super.neotest-busted.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+    # Helper scripts are run in the project's Busted/LuaRocks environment.
+    nvimRequireCheck = "neotest-busted";
+  };
+
   neotest-ctest = super.neotest-ctest.overrideAttrs {
     dependencies = with self; [
       neotest
