@@ -28,12 +28,12 @@
   withDiscordRPC ? true,
 }:
 let
-  version = "12.0.0";
+  version = "12.1.0";
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-IefyP/sKdalt6HZR8SirFnVP+qZY6U843Jr2OoZW+xU=";
+    hash = "sha256-Fy7NGZOUsrqgaIXUHqoNgK3A2OxnbFwJZfJDERsP6KA=";
   };
 
   lrclib-solver = rustPlatform.buildRustPackage {
