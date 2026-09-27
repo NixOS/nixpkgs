@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
+    changelog = "https://github.com/linux-nvme/libnvme/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ vifino ];
     license = with lib.licenses; [ lgpl21Plus ];
     platforms = lib.platforms.linux;
