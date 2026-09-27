@@ -28,8 +28,11 @@ These features are autodetected locally, but `apple-virt` is only autodetected s
 Features of **remote builders** must additionally be configured manually on the client, e.g. on NixOS with [`nix.buildMachines.*.supportedFeatures`](https://search.nixos.org/options?show=nix.buildMachines.*.supportedFeatures&sort=alpha_asc&query=nix.buildMachines) or through general [Nix configuration](https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds).
 
 If you run the tests on a **macOS** machine, you also need a "remote" builder for Linux; possibly a VM. [nix-darwin](https://daiderd.com/nix-darwin/) users may enable [`nix.linux-builder.enable`](https://daiderd.com/nix-darwin/manual/index.html#opt-nix.linux-builder.enable) to launch such a VM.
+Container-only tests run `systemd-nspawn` inside a Linux QEMU virtual machine on macOS.
+They require the `apple-virt` system feature but do not require the macOS builder to support `uid-range`.
+Tests that use both containers and QEMU virtual machine nodes are not supported on macOS.
 
-NixOS tests using `systemd-nspawn` [`containers`](#test-opt-containers) require the Nix daemon to be
+On Linux, NixOS tests using `systemd-nspawn` [`containers`](#test-opt-containers) require the Nix daemon to be
 configured with the following settings:
 
 ```nix

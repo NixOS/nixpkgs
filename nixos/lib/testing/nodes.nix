@@ -220,6 +220,7 @@ in
     nodeDefaults = mkOption {
       description = ''
         NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes).
+        For container-only tests on Darwin, it is applied to the virtual machine in which the containers run.
       '';
       type = types.deferredModule;
       default = { };
