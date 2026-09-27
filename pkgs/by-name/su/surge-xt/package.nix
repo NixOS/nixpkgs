@@ -85,6 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXrandr"
   ];
 
+  postInstall = lib.optionalString buildStandalone ''
+    install -Dm644 -t $out/share/applications \
+      $src/scripts/installer_linux/assets/applications/Surge-XT.desktop \
+      $src/scripts/installer_linux/assets/applications/Surge-XT-FX.desktop
+
+    substituteInPlace $out/share/applications/Surge-XT.desktop \
+      --replace-fail '"/usr/bin/Surge XT"' "\"$out/bin/Surge XT\""
+    substituteInPlace $out/share/applications/Surge-XT-FX.desktop \
+      --replace-fail '"/usr/bin/Surge XT Effects"' "\"$out/bin/Surge XT Effects\""
+
+    install -Dm644 $src/scripts/installer_linux/assets/icons/scalable/apps/surge-xt.svg \
+      $out/share/icons/hicolor/scalable/apps/surge-xt.svg
+    install -Dm644 $src/scripts/installer_linux/assets/icons/scalable/apps/surge-xt-fx.svg \
+      $out/share/icons/hicolor/scalable/apps/surge-xt-fx.svg
+  '';
+
   passthru = {
     rev-prefix = "release_xt_";
     updateScript = gitUpdater {
