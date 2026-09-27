@@ -24,6 +24,7 @@ let
   # custom stage; cross compilation uses replaceCrossStdenv instead.
   bootArgs = {
     inherit lib localSystem overlays;
+    genericStdenv = import ./generic { inherit config; };
     config =
       if useCrossStdenv || useCustomStdenv then removeAttrs config [ "replaceStdenv" ] else config;
   };

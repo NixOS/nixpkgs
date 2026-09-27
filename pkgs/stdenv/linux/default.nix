@@ -113,11 +113,10 @@
         );
     in
     (config.replaceBootstrapFiles or lib.id) files,
+  genericStdenv,
 }:
 
 let
-  genericStdenv = import ../generic { defaultConfig = config; };
-
   inherit (localSystem) system;
 
   isFromNixpkgs = pkg: !(isFromBootstrapFiles pkg);
