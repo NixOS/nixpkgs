@@ -7,10 +7,11 @@ This directory houses the source files for the Nixpkgs manual.
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-When writing new docs use **Progressive Disclosure**
+When writing new docs use **Progressive Disclosure:**
 
-Start simple, pick up beginners.
-Use **examples** first to show how to get something done. Keep **Explanation** lean.
+- Start simple, pick up beginners.
+- Use **examples** first to show how to get something done.
+- Keep **explanation** lean.
 
 Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
 
