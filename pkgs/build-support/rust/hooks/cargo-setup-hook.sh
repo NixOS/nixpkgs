@@ -67,15 +67,16 @@ cargoSetupPostPatchHook() {
       fi
 
       echo
-      echo "ERROR: cargoHash or cargoSha256 is out of date"
+      echo "ERROR: Cargo.lock is not the same as in $cargoDepsCopy"
       echo
-      echo "Cargo.lock is not the same in $cargoDepsCopy"
-      echo
-      echo "To fix the issue:"
-      echo '1. Set cargoHash/cargoSha256 to an empty string: `cargoHash = "";`'
+      echo "Did you update src attribute but forgot to update cargoHash? To fix the issue:"
+      echo '1. Set cargoHash to an empty string: `cargoHash = "";`'
       echo '2. Build the derivation and wait for it to fail with a hash mismatch'
       echo '3. Copy the "got: sha256-..." value back into the cargoHash field'
       echo '   You should have: cargoHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=";'
+      echo
+      echo "Did you use patches attribute when you should have used cargoPatches? To fix the issue:"
+      echo "   Move patches affecting Cargo.lock to cargoPatches"
       echo
 
       exit 1
