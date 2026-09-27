@@ -139,10 +139,6 @@ The values will be formatted as inline `<code>` elements.
 
 These literal kinds are used mostly in NixOS option documentation.
 
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
-Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
-They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
-
 #### Admonitions
 
 Set off from the text to bring attention to something.
