@@ -4,12 +4,15 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   lz4,
   pkg-config,
   python3,
   stdenv,
   unzip,
   llvmPackages,
+  gtest,
+  hdf5,
   enablePython ? false,
 
   # for passthru.tests
@@ -17,6 +20,25 @@
   flann,
 }:
 
+let
+  hashes = {
+    cloud = "sha256-PaUn4yZ4fuidu+iCOFAFj1172YU9GjP94x/2cYuMJEU=";
+    sift10K = "sha256-nZK3YhIPDuIeHmH5bQ6IQRXwBT4du37vWaW3oBcXfxE=";
+    sift10K_byte = "sha256-X2JckKNyxAa1aLvk4lVZuSc8P2Loox9zfaNQEzWVhN4=";
+    sift100K = "sha256-qs9YIaZdv1JDNatz/YMYF6YTKcUUvkBdALlbev/zpbY=";
+    sift100K_byte = "sha256-CXKpppiR3V+7ZcV+Ef40fxP8sm5ciiGizr3BG4GDBII=";
+    brief100K = "sha256-bF81Kj86kH5wwducEEhMPoesHu2A3kshTCGjrgCqjUU=";
+  };
+  mkTestdata =
+    name:
+    fetchurl {
+      name = "${name}.h5";
+      url = "https://www.cs.ubc.ca/research/flann/uploads/FLANN/datasets/${name}.h5";
+      hash = hashes.${name};
+    };
+
+  testdata = map mkTestdata (lib.attrNames hashes);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flann";
   version = "1.9.2";
@@ -67,6 +89,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional enablePython python3 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace-fail "add_dependencies(test flann_ruby_spec)" ""
+
+    ${lib.concatMapStringsSep "\n" (d: "cp -v ${toString d} test/${d.name}") testdata}
+    chmod +w test/*.h5
+  '';
+
+  checkInputs = [
+    gtest
+    hdf5
+  ];
+
+  doCheck = true;
+
+  # 'tests' target builds test, 'test' target runs them
+  postBuild = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    make tests
+  '';
+
+  checkTarget = "test";
+  # use generic stdenv checkPhase
+  checkPhase = null;
 
   passthru.tests = {
     flann-clang = flann.override {
