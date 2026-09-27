@@ -5,7 +5,6 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  go,
   _experimental-update-script-combinators,
   nix-update-script,
   writeShellApplication,
@@ -52,8 +51,6 @@ buildDotnetModule {
     dotnetCorePackages.sdk_9_0
     dotnetCorePackages.sdk_8_0
   ];
-
-  nativeBuildInputs = [ go ];
 
   linkNuGetPackagesAndSources = true;
 
