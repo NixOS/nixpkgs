@@ -34,6 +34,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     })
     # https://github.com/sys4/tlsrpt-reporter/pull/48
     ./logging.patch
+    # Update 'From' header
+    ./update_from_header.patch
   ];
 
   nativeBuildInputs = [

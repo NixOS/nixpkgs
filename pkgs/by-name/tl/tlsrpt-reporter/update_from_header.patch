@@ -1,0 +1,13 @@
+diff --git a/tlsrpt_reporter/tlsrpt.py b/tlsrpt_reporter/tlsrpt.py
+index b438650..dbcfaf2 100644
+--- a/tlsrpt_reporter/tlsrpt.py
++++ b/tlsrpt_reporter/tlsrpt.py
+@@ -1226,7 +1226,7 @@ class TLSRPTReportd(VersionedSQLite):
+         # Call send script
+         msg = EmailReport()
+         msg['Subject'] = self.create_email_subject(dom, self.report_id(day, uniqid, dom))
+-        msg['From'] = self.cfg.sender_address
++        msg['From'] = f'"{self.cfg.organization_name}" <{self.cfg.sender_address}>'
+         msg['To'] = dest
+         msg.add_header("Message-ID", email.utils.make_msgid(domain=msg["From"].groups[0].addresses[0].domain))
+         msg.add_header("TLS-Report-Domain", dom)
