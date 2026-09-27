@@ -1,4 +1,4 @@
-# Styleguide
+# Style guide
 
 Use this page as a reference and style guide for our internal and external documentation.
 
@@ -90,11 +90,13 @@ Don't describe what the documentation does. Just do it.
 **Don't:**
 
 > This section explains how to configure networking.
+
 > The following guide walks you through setting up a web server.
 
 **Do:**
 
 > Configure networking by setting:
+
 > Set up a web server:
 
 ### Code Examples
