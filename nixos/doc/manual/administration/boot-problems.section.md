@@ -28,7 +28,7 @@ The scripted implementation of stage 1 is disabled by default and deprecated. Th
 
 `boot.debug1`
 
-: Start an interactive shell in stage 1 before anything useful has been done. That is, no modules have been loaded and no file systems have been mounted, except for `/proc` and `/sys`.
+: Start an interactive shell in stage 1 before anything useful has been done. That is, no modules have been loaded and no filesystems have been mounted, except for `/proc` and `/sys`.
 
   ::: {.note}
   systemd stage 1 alternative: `rd.systemd.break=pre-udev`
@@ -44,7 +44,7 @@ The scripted implementation of stage 1 is disabled by default and deprecated. Th
 
 `boot.debug1mounts`
 
-: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](#opt-fileSystems._name_.neededForBoot) on a file system.
+: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](#opt-fileSystems._name_.neededForBoot) on a filesystem.
 
   ::: {.note}
   systemd stage 1 alternative: `rd.systemd.break=pre-switch-root`

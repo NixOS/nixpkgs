@@ -1,8 +1,8 @@
-# LUKS-Encrypted File Systems {#sec-luks-file-systems}
+# LUKS-Encrypted Filesystems {#sec-luks-file-systems}
 
-NixOS supports file systems that are encrypted using *LUKS* (Linux
+NixOS supports filesystems that are encrypted using *LUKS* (Linux
 Unified Key Setup). For example, here is how you create an encrypted
-Ext4 file system on the device
+Ext4 filesystem on the device
 `/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d`:
 
 ```ShellSession
@@ -44,7 +44,7 @@ encrypted partition, it is necessary to add the following grub option:
 
 ## FIDO2 {#sec-luks-file-systems-fido2}
 
-NixOS also supports unlocking your LUKS-Encrypted file system using a FIDO2
+NixOS also supports unlocking your LUKS-Encrypted filesystem using a FIDO2
 compatible token.
 
 ### Without systemd in initrd {#sec-luks-file-systems-fido2-legacy}
@@ -66,7 +66,7 @@ Old password (again):
 Added to key to device /dev/sda2, slot: 2
 ```
 
-To ensure that this file system is decrypted using the FIDO2 compatible
+To ensure that this filesystem is decrypted using the FIDO2 compatible
 key, add the following to `configuration.nix`:
 
 ```nix

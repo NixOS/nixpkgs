@@ -9,7 +9,7 @@ Units can have complex dependencies; for instance, one unit can require
 that another unit must be successfully started before the first unit can
 be started. When the system boots, it starts a unit named
 `default.target`; the dependencies of this unit cause all system
-services to be started, file systems to be mounted, swap files to be
+services to be started, filesystems to be mounted, swap files to be
 activated, and so on.
 
 ## Interacting with a running systemd {#sect-nixos-systemd-general}

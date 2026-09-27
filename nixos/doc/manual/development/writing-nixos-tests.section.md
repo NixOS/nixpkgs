@@ -203,7 +203,7 @@ Some options are specific to QEMU virtual machines:
 `virtualisation.writableStore`
 
 :   By default, the Nix store in the VM is not writable. If you enable
-    this option, a writable union file system is mounted on top of the
+    this option, a writable union filesystem is mounted on top of the
     Nix store to make it appear writable. This is necessary for tests
     that run Nix operations that modify the store.
 

@@ -1,7 +1,7 @@
 # Nix Store Corruption {#sec-nix-store-corruption}
 
 After a system crash, it's possible for files in the Nix store to become
-corrupted. (For instance, the Ext4 file system has the tendency to
+corrupted. (For instance, the Ext4 filesystem has the tendency to
 replace un-synced files with zero bytes.) NixOS tries hard to prevent
 this from happening: it performs a `sync` before switching to a new
 configuration, and Nix's database is fully transactional. If corruption

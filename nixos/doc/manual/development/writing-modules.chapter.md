@@ -80,7 +80,7 @@ The meaning of each part is as follows.
 
 [Example: NixOS Module for the "locate" Service](#locate-example)
 shows a module that handles the regular update of the "locate" database,
-an index of all files in the file system. This module declares two
+an index of all files in the filesystem. This module declares two
 options that can be defined by other modules (typically the user's
 `configuration.nix`): `services.locate.enable` (whether the database should
 be updated) and `services.locate.interval` (when the update should be done).
