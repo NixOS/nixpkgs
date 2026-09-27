@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "ivsc-firmware";
-  version = "unstable-2024-06-14";
+  version = "0-unstable-2024-06-14";
 
   src = fetchFromGitHub {
     owner = "intel";
