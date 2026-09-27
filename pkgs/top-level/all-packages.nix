@@ -9862,7 +9862,7 @@ with pkgs;
 
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 
-  inherit (callPackage ../games/xonotic { })
+  inherit (callPackage ../by-name/xo/xonotic/package.nix { })
     xonotic-data
     xonotic
     ;
@@ -9870,13 +9870,13 @@ with pkgs;
   xash-dedicated = callPackage ../by-name/xa/xash3d-fwgs/package.nix { buildServer = true; };
 
   xonotic-glx =
-    (callPackage ../games/xonotic {
+    (callPackage ../by-name/xo/xonotic/package.nix {
       withSDL = false;
       withGLX = true;
     }).xonotic;
 
   xonotic-dedicated =
-    (callPackage ../games/xonotic {
+    (callPackage ../by-name/xo/xonotic/package.nix {
       withSDL = false;
       withDedicated = true;
     }).xonotic;
