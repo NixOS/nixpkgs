@@ -19,13 +19,13 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "test-drive";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = "test-drive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
+    hash = "sha256-G6PmVnZtiuWPTTXPmKlwYmIyMLbmxijF/Bjx0ShQ0fQ=";
   };
 
   patches = [
