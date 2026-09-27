@@ -51,12 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     openssl
     systemd
-    python3
   ];
 
   mesonFlags =
     lib.mapAttrsToList lib.mesonEnable {
-      python = true;
+      python = false;
       openssl = true;
       libdbus = false;
       json-c = true;
