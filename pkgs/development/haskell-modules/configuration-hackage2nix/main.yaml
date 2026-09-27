@@ -48,6 +48,9 @@ default-package-overrides:
   - http2-tls < 0.4.6
   # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
   - liquid-fixpoint == 0.9.6.3.2
+  # pin to versions compatible with liquidhaskell-boot 0.9.10.* (default GHC 9.10 stack)
+  - liquid-prelude == 0.9.10.1.2
+  - liquid-vector == 0.13.1.0.1
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
@@ -113,6 +116,11 @@ extra-packages:
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - hpack == 0.39.1                     # 2026-03-15: to match upstream stack-3.9.3
   - language-javascript == 0.7.0.0      # required by purescript
+  - liquid-fixpoint == 0.9.6.3.5        # for liquidhaskell-boot 0.9.12.2.1 (GHC 9.12)
+  - liquid-prelude == 0.9.12.2.1        # for liquidhaskell 0.9.12.* (GHC 9.12)
+  - liquid-vector == 0.13.1.0.2         # for liquidhaskell 0.9.12.*+ (GHC 9.12)
+  - liquidhaskell == 0.9.12.*           # GHC 9.12
+  - liquidhaskell-boot == 0.9.12.*      # GHC 9.12
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
