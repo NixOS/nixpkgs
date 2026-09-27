@@ -42,9 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs scripts
-    substituteInPlace test/sysfs/tree-diff.sh test/config/config-diff.sh \
-      --replace-fail /bin/bash ${bash}/bin/bash
+    chmod +x test/sysfs/tree-diff.sh test/config/config-diff.sh
+    patchShebangs --build scripts test
   '';
 
   nativeBuildInputs = [
