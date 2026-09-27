@@ -2450,6 +2450,8 @@ with pkgs;
 
   marimo = with python3Packages; toPythonApplication marimo;
 
+  mcp-atlassian = with python3Packages; toPythonApplication mcp-atlassian;
+
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };

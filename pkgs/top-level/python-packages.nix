@@ -10630,6 +10630,8 @@ self: super: with self; {
 
   mcp = callPackage ../development/python-modules/mcp { };
 
+  mcp-atlassian = callPackage ../development/python-modules/mcp-atlassian { };
+
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
