@@ -97,8 +97,10 @@
       lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-pcrphase-initrd.service"
+          "systemd-pcrosseparator.service"
         ];
         boot.initrd.systemd.services.systemd-pcrphase-initrd.wantedBy = [ "initrd.target" ];
+        boot.initrd.systemd.services.systemd-pcrosseparator.wantedBy = [ "initrd.target" ];
         boot.initrd.systemd.storePaths = [ "${cfg.package}/lib/systemd/systemd-pcrextend" ];
       }
     )
