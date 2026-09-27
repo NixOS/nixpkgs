@@ -17,7 +17,6 @@ let
     nameValuePair
     optionalAttrs
     recursiveUpdate
-    trivial
     ;
 
   inherit (lib.types)
@@ -44,6 +43,43 @@ let
     lib.mapAttrs' (
       name: value: lib.nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
     ) cfg.settings."${parent}";
+
+  pluginRegistry =
+    pkgs.runCommand "bulwark-plugin-registry.json"
+      {
+        nativeBuildInputs = [
+          pkgs.coreutils
+          pkgs.jq
+        ];
+      }
+      ''
+        ${lib.concatStringsSep "\n" (
+          lib.imap0 (index: plugin: ''
+            manifest=${lib.escapeShellArg "${plugin.package}/manifest.json"}
+            bundle=${lib.escapeShellArg "${plugin.package}/index.js"}
+            pluginId=${lib.escapeShellArg plugin.package.pluginName}
+
+            if ! jq --exit-status --arg pluginId "$pluginId" '.id == $pluginId' "$manifest" >/dev/null; then
+              echo "Bulwark plugin manifest ID does not match package pluginName: $pluginId" >&2
+              exit 1
+            fi
+
+            bundleHash=$(sha256sum "$bundle" | cut -d ' ' -f 1)
+            jq \
+              --arg bundleHash "$bundleHash" \
+              --argjson forceEnabled ${lib.escapeShellArg (builtins.toJSON plugin.forceEnabled)} \
+              '. + { enabled: true, forceEnabled: $forceEnabled, bundleHash: $bundleHash }' \
+              "$manifest" \
+              > "$TMPDIR/${toString index}.json"
+          '') cfg.plugins
+        )}
+        manifests=(
+          ${lib.concatStringsSep "\n" (
+            lib.imap0 (index: _: ''"$TMPDIR/${toString index}.json"'') cfg.plugins
+          )}
+        )
+        jq --slurp '{ plugins: . }' "''${manifests[@]}" > "$out"
+      '';
 
   brandingModule = {
     appName = mkOption {
@@ -742,16 +778,7 @@ in
                     [
                       {
                         name = "registry.json";
-                        path = format.generate "registry.json" {
-                          plugins = map (
-                            plugin:
-                            (trivial.importJSON "${plugin.package.outPath}/manifest.json")
-                            // {
-                              enabled = true;
-                              forceEnabled = plugin.forceEnabled;
-                            }
-                          ) cfg.plugins;
-                        };
+                        path = pluginRegistry;
                       }
                     ]
                     ++ (map (plugin: {
