@@ -1,0 +1,10 @@
+--- a/src/main/java/org/junit/matchers/JUnitMatchers.java
++++ b/src/main/java/org/junit/matchers/JUnitMatchers.java
+@@ -59,6 +59,7 @@ public class JUnitMatchers {
+      */
+     @Deprecated
++    @SuppressWarnings("unchecked")
+     public static <T> Matcher<Iterable<T>> everyItem(final Matcher<T> elementMatcher) {
+-        return CoreMatchers.everyItem(elementMatcher);
++        return (Matcher<Iterable<T>>) (Object) CoreMatchers.everyItem(elementMatcher);
+     }
