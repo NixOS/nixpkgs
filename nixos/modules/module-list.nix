@@ -640,6 +640,7 @@
   ./services/development/turborepo-remote-cache.nix
   ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
+  ./services/display-managers/airlock.nix
   ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/default.nix
   ./services/display-managers/dms-greeter.nix
