@@ -179,6 +179,16 @@ in
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 
+  # One jobserver for the whole derivation: without one rustc creates its own,
+  # and choose the number of jobs without regard to NIX_BUILD_CORES
+  RUSTC_JOBSERVER_FIFO="$NIX_BUILD_TOP/rustc-jobserver.fifo"
+  rm -f "$RUSTC_JOBSERVER_FIFO"
+  mkfifo "$RUSTC_JOBSERVER_FIFO"
+  exec {RUSTC_JOBSERVER_FD}<>"$RUSTC_JOBSERVER_FIFO"
+  printf '%*s' "$((NIX_BUILD_CORES > 1 ? NIX_BUILD_CORES - 1 : 0))" "" \
+    | tr ' ' '+' >&"$RUSTC_JOBSERVER_FD"
+  export CARGO_MAKEFLAGS="-j --jobserver-auth=fifo:$RUSTC_JOBSERVER_FIFO"
+
   BUILD=""
   if [[ ! -z "${build}" ]] ; then
      BUILD=${build}
