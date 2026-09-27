@@ -11,13 +11,13 @@
 
 buildDunePackage rec {
   pname = "xtmpl";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "xtmpl";
     tag = version;
-    hash = "sha256-CgVbSjHuRp+5IZdfkxGzaBP8p7pQdXu6S/MMgiPMw3E=";
+    hash = "sha256-ShKUncmdh3U0zU9AymvO6Vz0c2XalPpgjHamriu0+hI=";
   };
 
   propagatedBuildInputs = [
