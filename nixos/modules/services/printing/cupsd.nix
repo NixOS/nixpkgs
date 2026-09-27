@@ -10,9 +10,10 @@ with lib;
 let
 
   inherit (pkgs)
+    cups-filters
     cups-pk-helper
     libcupsfilters
-    cups-filters
+    nssmdns
     xdg-utils
     ;
 
@@ -378,6 +379,7 @@ in
     environment.systemPackages = [
       cups.out
       xdg-utils
+      nssmdns # https://github.com/NixOS/nixpkgs/issues/395253
     ]
     ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
