@@ -222,6 +222,7 @@ in
   };
   testScript = ''
     import json
+    from uuid import UUID
     board_url = "http://localhost:3115"
     worker.start()
     worker.wait_for_open_port(8642)
@@ -282,10 +283,12 @@ in
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"cancelled\" and .runs[\"fixture-5\"].stops == 1'")
     worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
     controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/crash-active.json")
-    crash_id = json.loads(controller.succeed("cat /run/crash-active.json"))["id"]
+    crash_id = str(UUID(json.loads(controller.succeed("cat /run/crash-active.json"))["id"]))
     worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\"'", timeout=120)
     controller.succeed("systemctl kill -s SIGKILL paperclip-control.service")
     controller.wait_until_succeeds("systemctl is-failed paperclip-control.service", timeout=30)
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
+    controller.succeed(f"runuser -u postgres -- psql -At -d paperclip_control -c \"UPDATE heartbeat_runs SET controller_lease_expires_at = clock_timestamp() - interval '1 second' WHERE id = '{crash_id}' AND status = 'running' RETURNING id\" | grep -Fx {crash_id}")
     controller.succeed("systemctl reset-failed paperclip-control.service")
     controller.succeed("systemctl start paperclip-control.service")
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
