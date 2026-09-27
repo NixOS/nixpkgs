@@ -37,10 +37,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "mygpoclient/http_test.py"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = {
