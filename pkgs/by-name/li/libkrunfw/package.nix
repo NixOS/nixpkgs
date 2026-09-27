@@ -10,6 +10,8 @@
   perl,
   elfutils,
   python3,
+  lld,
+  llvm,
   variant ? null,
 }:
 
@@ -21,11 +23,11 @@ assert lib.elem variant [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
-  version = "5.5.0";
+  version = "5.6.2";
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.91.tar.xz";
-    hash = "sha256-D/KrnhafnxlIVXRx+7RQ0wGPjFt3yvKI4aOYJYJZeWk=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.109.tar.xz";
+    hash = "sha256-VITlUqM04VAZ9K66ieW1jwRlHPL04k4E3p8VLxw44/o=";
   };
 
   __structuredAttrs = true;
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libkrun";
     repo = "libkrunfw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MF1oDqhS4xqyQJIntl4DBfDBvuqCxQn9Zdws82Tn5Gg=";
+    hash = "sha256-HklZgZPjXe+eAGzRulEwRR1eo83tGlZBTRooCv0/ADU=";
   };
 
   postPatch = ''
@@ -50,11 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     python3
     python3.pkgs.pyelftools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lld
+    llvm
   ];
 
-  buildInputs = [
-    elfutils
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ elfutils ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -64,11 +68,22 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "tdx") [
     "TDX=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "KERNEL_MAKE=make"
+    "MACOS_BUILDER=native"
   ];
 
-  # Fixes https://github.com/containers/libkrunfw/issues/55
+  # Causes the build to fail with the error:
+  # `unsupported option '-fzero-call-used-regs=used-gpr' for target 'thumbv8a-unknown-linux-gnueabi'`
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "zerocallusedregs" ];
+
   env = lib.optionalAttrs stdenv.targetPlatform.isAarch64 {
-    NIX_CFLAGS_COMPILE = "-march=armv8-a+crypto";
+    NIX_CFLAGS_COMPILE =
+      # Fixes https://github.com/containers/libkrunfw/issues/55
+      "-march=armv8-a+crypto"
+      # Fixes build failing on Darwin due to unused `-mmacos-version-min=14.0`
+      + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=unused-command-line-argument";
   };
 
   enableParallelBuilding = true;
@@ -84,11 +99,13 @@ stdenv.mkDerivation (finalAttrs: {
       nickcao
       RossComputerGuy
       nrabulinski
+      quinneden
     ];
     platforms = [
       "x86_64-linux"
     ]
     ++ lib.optionals (variant == null) [
+      "aarch64-darwin"
       "aarch64-linux"
       "riscv64-linux"
     ];
