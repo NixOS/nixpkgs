@@ -122,5 +122,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ l0b0 ];
     platforms = [ "x86_64-linux" ];
+    categories = with lib.categories; [
+      game.rpg
+      implementedIn.cSharp
+      interface._3d
+      role.program
+      scope.application
+      use.gameplaying
+    ];
   };
 })
