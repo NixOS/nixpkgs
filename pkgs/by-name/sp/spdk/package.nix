@@ -22,34 +22,47 @@
   libpcap,
   libnl,
   elfutils,
-  fetchurl,
   jansson,
-  ensureNewerSourcesForZipFilesHook,
+  isa-l,
   runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "26.01";
+  version = "26.05";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     tag = "v${version}";
-    hash = "sha256-E52VozjnoGnIC7viXrsualaaKXiUU9Fx8zGylTjBzX0=";
+    hash = "sha256-cTferOD+UW/t6ClrgmKdHKpfYc3iWwE31WedD3LsWoY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     python3
-    python3.pkgs.pip
-    python3.pkgs.hatchling
-    python3.pkgs.wheel
-    python3.pkgs.wrapPython
     pkg-config
-    ensureNewerSourcesForZipFilesHook
-  ];
+  ]
+  ++ (with python3.pkgs; [
+    build
+    grpcio
+    grpcio-tools
+    hatchling
+    ijson
+    jinja2
+    meson
+    mypy
+    pandas
+    pip
+    pyelftools
+    python-magic
+    pyyaml
+    tabulate
+    twine
+    wheel
+    wrapPython
+  ]);
 
   buildInputs = [
     cunit
@@ -71,6 +84,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
+    isa-l
   ];
 
   propagatedBuildInputs = [
@@ -81,13 +95,13 @@ stdenv.mkDerivation rec {
     patchShebangs .
     # Override uv pip install command to use hatchling directly without downloading dependencies
     substituteInPlace python/Makefile \
-      --replace-fail "uv pip install --prefix=\$(CONFIG_PREFIX)" \
-                     "python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
+      --replace-fail "uv pip install \$(USE_SYSTEM_PYTHON)"\
+                     "python3 -m pip install --no-deps --no-build-isolation "
   '';
 
   enableParallelBuilding = true;
 
-  # Required for the vendored isa-l version to find nasm
+  # Required for the vendored isa-lcrypto version to find nasm
   preConfigure = ''
     export AS=nasm
   '';
@@ -95,6 +109,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-dpdk=${dpdk}"
     "--with-crypto"
+    "--with-isal=${isa-l}"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
 
@@ -107,7 +122,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     unset patchelf
 
-    # Clean up rpaths to remove /build references to the vendored isa-l and isa-l_crypto libs
+    # bdevperf is only shipped as an example, but is generally useful
+    cp ./build/examples/bdevperf $out/bin/spdk_bdevperf
+
+    # Clean up rpaths to remove /build references to the vendored isa-l_crypto libs
     for f in $(find $out/lib $out/bin -executable -type f 2>/dev/null); do
       if patchelf --print-rpath "$f" 2>/dev/null | grep /build; then
         echo "Stripping rpath of $f"
