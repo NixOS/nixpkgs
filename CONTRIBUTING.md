@@ -506,9 +506,9 @@ These PRs go to `staging-nixos`, see [the next section for more context](#change
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
 
-Hence, these PRs should either target a `staging`-branch or `staging-nixos`-branch, provided one of following conditions applies:
+Hence, these PRs should target the `staging-nixos` branch, provided one of the following conditions applies:
 
-* The label `10.rebuild-nixos-tests` is set, or
+* The label `10.rebuild-nixos-tests` is set (but there is no mass rebuild per [the previous section][mass-rebuild], in which case use `staging`), or
 * The PR is a change affecting the Linux kernel.
 
 The branch gets merged whenever mainline kernel updates or critical security fixes land on the branch.
