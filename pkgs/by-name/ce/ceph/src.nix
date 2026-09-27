@@ -31,5 +31,6 @@ applyPatches (final: {
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
+    ./patches/skip-unsandboxable-tests.patch
   ];
 })
