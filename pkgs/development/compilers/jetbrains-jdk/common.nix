@@ -26,6 +26,7 @@
   wayland,
   udev,
   fontconfig,
+  darwin,
   debugBuild ? false,
   withJcef ? true,
 }:
@@ -36,6 +37,7 @@
   sourceDateEpoch,
   srcHash,
   jcefPackage ? null,
+  xcodePackage,
   extraBuildPhase ? "",
   vendorVersionString ? null,
   extraConfigureFlags ? [ ],
@@ -50,11 +52,19 @@ let
     {
       "aarch64-linux" = "aarch64";
       "x86_64-linux" = "x64";
+      "aarch64-darwin" = "aarch64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
   version = "${javaVersion}-b${build}";
   openjdkTag = "jbr-release-${javaVersion}b${build}";
+
+  jcefDestName = if stdenv.hostPlatform.isDarwin then "jcef_mac" else "jcef_linux_${arch}";
+  mkimagesSh =
+    if stdenv.hostPlatform.isDarwin then
+      "./jb/project/tools/mac/scripts/mkimages.sh"
+    else
+      "./jb/project/tools/linux/scripts/mkimages_${arch}.sh";
 in
 jdk.overrideAttrs (oldAttrs: {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
@@ -80,12 +90,22 @@ jdk.overrideAttrs (oldAttrs: {
 
   patches = [ ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '40i\--with-xcode-path="${xcodePackage}" \\' ./jb/project/tools/mac/scripts/mkimages.sh
+    # See https://github.com/JetBrains/JetBrainsRuntime/issues/461
+    sed \
+      -e 's/C_O_FLAG_HIGHEST_JVM="-O3"/C_O_FLAG_HIGHEST_JVM="-O1"/g' \
+      -e 's/C_O_FLAG_HIGHEST="-O3"/C_O_FLAG_HIGHEST="-O1"/g' \
+      -e 's/C_O_FLAG_HI="-O3"/C_O_FLAG_HI="-O1"/g' \
+      -i make/autoconf/flags-cflags.m4
+  '';
+
   dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    ${lib.optionalString withJcef "cp -r ${jcefPackage} jcef_linux_${arch}"}
+    ${lib.optionalString withJcef "cp -r ${jcefPackage} ${jcefDestName}"}
     ${extraBuildPhase}
 
     sed \
@@ -116,17 +136,15 @@ jdk.overrideAttrs (oldAttrs: {
     ${lib.concatMapStringsSep "\n" (flag: ''realConfigureFlags+=("${flag}")'') extraConfigureFlags}
 
     echo "computed configure flags: ''${realConfigureFlags[*]}"
-    substituteInPlace jb/project/tools/linux/scripts/mkimages_${arch}.sh --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${realConfigureFlags[*]}"
+    substituteInPlace ${mkimagesSh} --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${realConfigureFlags[*]}"
 
     sed \
         -e "s/create_image_bundle \"jb/#/" \
         -e "s/echo Creating /exit 0 #/" \
-        -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
+        -i ${mkimagesSh}
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
-      if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
-    }
+    ${mkimagesSh} ${build} ${if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")}
 
     runHook postBuild
   '';
@@ -137,18 +155,19 @@ jdk.overrideAttrs (oldAttrs: {
       debugSuffix = if debugBuild then "-fastdebug" else "";
       jcefSuffix = if debugBuild || !withJcef then "" else "_jcef";
       jbrsdkDir = "jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build}";
+      os = if stdenv.hostPlatform.isDarwin then "macosx" else "linux";
     in
     ''
       runHook preInstall
 
-      mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir}
-      rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
-      mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
+      mv build/${os}-${cpu}-server-${buildType}/images/jdk/man build/${os}-${cpu}-server-${buildType}/images/${jbrsdkDir}
+      rm -rf build/${os}-${cpu}-server-${buildType}/images/jdk
+      mv build/${os}-${cpu}-server-${buildType}/images/${jbrsdkDir} build/${os}-${cpu}-server-${buildType}/images/jdk
     ''
     + oldAttrs.installPhase
     + "runHook postInstall";
 
-  postInstall = lib.optionalString withJcef ''
+  postInstall = lib.optionalString (withJcef && stdenv.hostPlatform.isLinux) ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
   '';
 
@@ -157,25 +176,29 @@ jdk.overrideAttrs (oldAttrs: {
   postFixup = ''
     # Build the set of output library directories to rpath against
     LIBDIRS="${
-      lib.makeLibraryPath [
-        libxdamage
-        libxxf86vm
-        libxrandr
-        libxi
-        libxcursor
-        libxrender
-        libx11
-        libxext
-        libxkbcommon
-        libxcb
-        nss
-        nspr
-        libdrm
-        libgbm
-        wayland
-        udev
-        fontconfig
-      ]
+      lib.makeLibraryPath (
+        [
+          libxdamage
+          libxxf86vm
+          libxrandr
+          libxi
+          libxcursor
+          libxrender
+          libx11
+          libxext
+          libxkbcommon
+          libxcb
+          nss
+          nspr
+          fontconfig
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          udev
+          libgbm
+          libdrm
+          wayland
+        ]
+      )
     }"
     for output in ${lib.concatStringsSep " " oldAttrs.outputs}; do
       if [ "$output" = debug ]; then continue; fi
@@ -202,13 +225,23 @@ jdk.overrideAttrs (oldAttrs: {
     shaderc # glslc
   ]
   ++ extraNativeBuildInputs
-  ++ oldAttrs.nativeBuildInputs;
+  ++ oldAttrs.nativeBuildInputs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.bootstrap_cmds
+    darwin.xattr
+    xcodePackage
+  ];
 
   buildInputs = [
     vulkan-headers
   ]
   ++ extraBuildInputs
-  ++ oldAttrs.buildInputs or [ ];
+  ++ oldAttrs.buildInputs or [ ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.bootstrap_cmds
+    darwin.xattr
+    xcodePackage
+  ];
 
   meta = {
     description = "OpenJDK fork to better support Jetbrains's products";
@@ -226,8 +259,9 @@ jdk.overrideAttrs (oldAttrs: {
     inherit (jdk.meta) license mainProgram;
     maintainers = with lib.maintainers; [
       aoli-al
+      eveeifyeve # Darwin
     ];
 
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

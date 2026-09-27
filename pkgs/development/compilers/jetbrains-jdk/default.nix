@@ -10,6 +10,7 @@
   wayland-protocols,
   libxkbcommon,
   speechd-minimal,
+  darwin,
 }:
 
 let
@@ -41,6 +42,7 @@ callPackage ./common.nix
     sourceDateEpoch = 1780959777;
     srcHash = "sha256-N+7D++Cxu0RGWChEWW8gtNz7E2I8qM2AFbXv4luAXto=";
     jcefPackage = jetbrains.jcef;
+    xcodePackage = darwin.xcode_16_2;
     extraBuildPhase = ''
       cp -r ${gtk-protocols.out} gtk-shell.xml
 
