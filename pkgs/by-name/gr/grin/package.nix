@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "grin";
-  version = "1.3.0-unstable-2023-08-30";
+  version = "1.3.0";
   namePrefix = "";
   pyproject = true;
 
