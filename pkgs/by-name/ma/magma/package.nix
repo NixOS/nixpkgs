@@ -114,13 +114,13 @@ assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magma";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "icl-utk-edu";
     repo = "magma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZV50id9qiCrc1K87812Lvv1tmeU/6vhpxFCz8nj61wM=";
+    hash = "sha256-8PfTWzU6KaM2j1iUOtVoNrd3VMVHiLjt09fwM7lL0NU=";
   };
 
   # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
@@ -130,41 +130,18 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ];
 
-  patches = [
+  patches = lib.optionals cudaSupport [
+    # Reduce MAGMA's binary footprint: add -Xfatbin -compress-all and compile
+    # PTX only for the latest architecture, keeping libmagma.so under the 2 GB
+    # relocation limit.  Not yet in a release (v2.10.0 predates the merge).
+    # Upstream: https://github.com/icl-utk-edu/magma/pull/83
+    # Fixes:    https://github.com/icl-utk-edu/magma/issues/39
+    #           https://github.com/NixOS/nixpkgs/issues/239237
     (fetchpatch {
-      # [PATCH] Drop CMP0037 to fix cmake 4.0 build error
-      name = "drop-cmp0037-old.patch";
-      url = "https://github.com/icl-utk-edu/magma/commit/2fecaf3f0c811344363f713669c1fe30f6879acd.patch";
-      hash = "sha256-Dfzq2gqoLSByCLWV5xvY/lXZeVa/yQ67lDSoIAa9jUU=";
+      name = "reduce-binary-footprint.patch";
+      url = "https://github.com/icl-utk-edu/magma/pull/83.patch";
+      hash = "sha256-J+VEuTGmtAqJEBsw9vgTYKpyHo/VkQXk/acgBD1paJs=";
     })
-  ]
-  ++ lib.optionals cudaSupport [
-    # Fixes:
-    # error: 'struct cudaDeviceProp' has no member named 'clockRate'
-    # Context: https://github.com/icl-utk-edu/magma/issues/61
-    (fetchpatch {
-      name = "fix-cuda13-compat.patch";
-      url = "https://github.com/icl-utk-edu/magma/commit/235aefb7b064954fce09d035c69907ba8a87cbcd.patch";
-      hash = "sha256-i9InbxD5HtfonB/GyF9nQhFmok3jZ73RxGcIciGBGvU=";
-    })
-  ]
-  ++ lib.optionals rocmSupport [
-    # TODO: Drop both these patches on next magma release
-    (fetchpatch {
-      # ROCm 7.0 compat: use HIPBLAS_V2 types and APIs
-      # Requires building from git w/ make generate call. If applied to release tarball
-      # pre-generated hipified code will remain unpatched
-      name = "magma-ROCm-7.0-compat.patch";
-      url = "https://github.com/icl-utk-edu/magma/commit/02ecee0ccc56cce85194fdda18c9e0614797b2f9.patch";
-      hash = "sha256-vm58X30ZR02sOMsKrvxEcEF27tJYuuyZZrz+GGFNz5Q=";
-      excludes = [
-        "testing/testing_ztrsv_batched.cpp"
-        "CMakeLists.txt"
-        "Makefile"
-      ];
-    })
-    # Vendored patch with CMakeLists.txt and Makefile hunks from above commit (context differs)
-    ./magma-hipblas-v2-buildflags.patch
   ];
 
   postPatch = ''
@@ -434,11 +411,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ connorbaker ];
 
-    # Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L24-L31
+    # Cf. https://github.com/icl-utk-edu/magma/blob/v2.10.0/CMakeLists.txt#L24-L31
     broken =
-      # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
-      (cudaSupport && !static)
-      || !(cudaSupport || rocmSupport) # At least one back-end enabled
+      !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport); # Mutually exclusive
   };
 })
