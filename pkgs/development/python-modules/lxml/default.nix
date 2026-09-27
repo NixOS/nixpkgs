@@ -57,6 +57,8 @@ buildPythonPackage (finalAttrs: {
     "lxml.etree"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/lxml/lxml/blob/${finalAttrs.src.tag}/CHANGES.txt";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
