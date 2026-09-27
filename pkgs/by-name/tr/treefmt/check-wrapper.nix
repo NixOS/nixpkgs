@@ -2,7 +2,7 @@
   lib,
   gitMinimal,
   runCommandLocal,
-  stdenv,
+  stdenvNoCC,
   wrapper,
 }:
 /**
@@ -21,8 +21,8 @@ runCommandLocal "${lib.getName wrapper}-check"
     ];
     inherit project;
     env = {
-      LANG = if stdenv.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
-      LC_ALL = if stdenv.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+      LANG = if stdenvNoCC.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+      LC_ALL = if stdenvNoCC.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
     };
     meta.description = "Check that the project tree is formatted";
   }
