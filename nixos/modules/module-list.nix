@@ -254,6 +254,7 @@
   ./programs/ioquake3.nix
   ./programs/iotop.nix
   ./programs/jai-jail.nix
+  ./programs/jail-ai.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
