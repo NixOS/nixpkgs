@@ -11084,6 +11084,8 @@ self: super: with self; {
 
   mlx = callPackage ../development/python-modules/mlx { };
 
+  mlx-audio = callPackage ../development/python-modules/mlx-audio { };
+
   mlx-bin = callPackage ../development/python-modules/mlx/bin.nix { };
 
   mlx-lm = callPackage ../development/python-modules/mlx-lm { };
