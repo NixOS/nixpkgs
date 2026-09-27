@@ -1,0 +1,22 @@
+diff --git a/bin/open_jtalk.c b/bin/open_jtalk.c
+index 0215e94..dd1e46f 100644
+--- a/bin/open_jtalk.c
++++ b/bin/open_jtalk.c
+@@ -240,7 +240,7 @@ static void usage()
+    fprintf(stderr,
+            "  options:                                                                   [  def][ min-- max]\n");
+    fprintf(stderr,
+-           "    -x  dir        : dictionary directory                                    [  N/A]\n");
++           "    -x  dir        : dictionary directory [ @out@/dic]\n");
+    fprintf(stderr,
+            "    -m  htsvoice   : HTS voice files                                         [  N/A]\n");
+    fprintf(stderr,
+@@ -288,7 +288,7 @@ int main(int argc, char **argv)
+    Open_JTalk open_jtalk;
+ 
+    /* dictionary directory */
+-   char *dn_dict = NULL;
++   char *dn_dict = "@out@/dic";
+ 
+    /* HTS voice */
+    char *fn_voice = NULL;
