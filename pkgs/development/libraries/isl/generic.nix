@@ -2,7 +2,6 @@
   version,
   urls,
   sha256,
-  configureFlags ? [ ],
   patches ? [ ],
 }:
 
@@ -38,7 +37,9 @@ stdenv.mkDerivation {
     ];
   buildInputs = [ gmp ];
 
-  inherit configureFlags;
+  configureFlags = [
+    "--with-gcc-arch=${stdenv.hostPlatform.gcc.arch or "unknown"}" # https://repo.or.cz/isl.git/blob/24244001b17ffaebf3df5a668e8f6ca8697e99da:/m4/ax_gcc_archflag.m4
+  ];
 
   enableParallelBuilding = true;
 
