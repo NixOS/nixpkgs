@@ -3,9 +3,9 @@ import path from 'node:path'
 import type * as actionsCore from '@actions/core'
 import type { context as actionsContext } from '@actions/github'
 import type { GitHub } from '@actions/github/lib/utils'
-import { getCommitDetailsForPR } from './get-pr-commit-details.js'
-import { dismissReviews, postReview } from './reviews.js'
-import { classify } from './supportedBranches.js'
+import { getCommitDetailsForPR } from './get-pr-commit-details.ts'
+import { dismissReviews, postReview } from './reviews.ts'
+import { classify } from './supportedBranches.ts'
 
 /**
  * Reminders to post as a non-blocking review when a pull request touches
