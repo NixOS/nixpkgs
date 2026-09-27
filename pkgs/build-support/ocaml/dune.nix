@@ -45,6 +45,23 @@ lib.extendMkDerivation {
 
         strictDeps = true;
 
+        # OCaml libraries, and the dependencies they propagate, are only needed
+        # to build other packages. Install them into "dev", so that they stay
+        # out of the runtime closure of "out". Packages with a custom
+        # installPhase have to opt in by setting outputs themselves.
+        outputs =
+          args.outputs or (
+            if args ? installPhase then
+              [ "out" ]
+            else
+              [
+                "out"
+                "dev"
+              ]
+          );
+        # Dune packages that ship a configure script don't expect autoconf flags.
+        setOutputFlags = args.setOutputFlags or false;
+
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
         configurePlatforms = [ ];
@@ -66,12 +83,15 @@ lib.extendMkDerivation {
         installPhase =
           args.installPhase or ''
             runHook preInstall
+            export OCAMLFIND_DESTDIR="''${!outputDev}/lib/ocaml/${ocaml.version}/site-lib/"
             dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${lib.concatStringsSep " " dunePackages} \
              ${lib.optionalString (lib.versionAtLeast Dune.version "2.9") ''
                --docdir "''${!outputDoc}/share/doc" --mandir "''${!outputMan}/share/man" \
              ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
                --bindir "''${!outputBin}/bin"
              ''}
+            # Libraries without executables or docs don't install anything into $out.
+            mkdir -p "$out"
             runHook postInstall
           '';
 
