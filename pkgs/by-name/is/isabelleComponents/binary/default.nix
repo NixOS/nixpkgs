@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.stack
     isabelleComponents.xz-java
     isabelleComponents.zstd-jni
+    isabelleComponents.naproche
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -159,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/minisat-2.2.1-2' '${isabelleComponents.minisat.settings}' \
       --replace-fail 'contrib/mlton-20241230-1' '${isabelleComponents.mlton.settings}' \
       --replace-fail 'contrib/pdfjs-5.4.394' '${isabelleComponents.pdfjs.settings}' \
+      --replace-fail 'contrib/naproche-20251110' '${isabelleComponents.naproche.settings}' \
       --replace-fail 'contrib/nunchaku-0.5' '${isabelleComponents.nunchaku.settings}' \
       --replace-fail 'contrib/polyml-5.9.2-2' '${isabelleComponents.polyml.settings}' \
       --replace-fail 'contrib/prismjs-1.30.0' '${isabelleComponents.prismjs.settings}' \
@@ -192,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/minisat-2.2.1-1 contrib/mlton-20241230-1 contrib/pdfjs-5.4.394 \
            contrib/prismjs-1.30.0 contrib/postgresql-42.7.8 contrib/rsync-3.2.7-1 \
            contrib/smbc-0.4.1 contrib/solr-9.9.0 contrib/sqlite-3.51.0.0 contrib/stack-2.15.7 \
-           contrib/xz-java-1.10 contrib/zstd-jni-1.5.7-6
+           contrib/xz-java-1.10 contrib/zstd-jni-1.5.7-6 contrib/naproche-20251110
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
