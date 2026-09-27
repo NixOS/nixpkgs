@@ -53,4 +53,5 @@ lib.makeScope newScope (self: {
   xz-java = self.callPackage ./xz-java { };
   z3 = self.callPackage ./z3 { };
   zipperposition = self.callPackage ./zipperposition { };
+  zstd-jni = self.callPackage ./zstd-jni { };
 })
