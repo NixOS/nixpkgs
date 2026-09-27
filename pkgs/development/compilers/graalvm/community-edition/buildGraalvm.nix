@@ -20,6 +20,8 @@
   libxext,
   libx11,
   zlib,
+}:
+{
   # extra params
   extraCLibs ? [ ],
   gtkSupport ? stdenv.hostPlatform.isLinux,
@@ -29,34 +31,9 @@
 
 let
   extraArgs = removeAttrs args [
-    "lib"
-    "stdenv"
-    "alsa-lib"
-    "autoPatchelfHook"
-    "cairo"
-    "cups"
-    "darwin"
-    "darwinMinVersionHook"
-    "fontconfig"
-    "glib"
-    "glibc"
-    "gtk3"
-    "makeWrapper"
-    "musl"
-    "runCommandCC"
-    "setJavaClassPath"
-    "unzip"
-    "libxtst"
-    "libxrender"
-    "libxi"
-    "libxext"
-    "libx11"
-    "zlib"
     "extraCLibs"
     "gtkSupport"
     "useMusl"
-    "passthru"
-    "meta"
   ];
 
   cLibs = lib.optionals stdenv.hostPlatform.isLinux (
@@ -88,7 +65,7 @@ let
   );
 
   graalvm-ce = stdenv.mkDerivation (
-    {
+    lib.recursiveUpdate {
       pname = "graalvm-ce";
 
       unpackPhase = ''
@@ -259,29 +236,22 @@ let
           ./update.sh
           "graalvm-ce"
         ];
-      }
-      // (args.passhtru or { });
+      };
 
-      meta =
-
-        (
-          {
-            homepage = "https://www.graalvm.org/";
-            description = "High-Performance Polyglot VM";
-            license = with lib.licenses; [
-              upl
-              gpl2
-              classpathException20
-              bsd3
-            ];
-            sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-            mainProgram = "java";
-            teams = [ lib.teams.graalvm-ce ];
-          }
-          // (args.meta or { })
-        );
-    }
-    // extraArgs
+      meta = {
+        homepage = "https://www.graalvm.org/";
+        description = "High-Performance Polyglot VM";
+        license = with lib.licenses; [
+          upl
+          gpl2
+          classpathException20
+          bsd3
+        ];
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        mainProgram = "java";
+        teams = [ lib.teams.graalvm-ce ];
+      };
+    } extraArgs
   );
 in
 graalvm-ce
