@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stax";
-  version = "0.102.2";
+  version = "0.113.1";
 
   src = fetchFromGitHub {
     owner = "cesarferreira";
     repo = "stax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ItRt0J2nR94nmg9L6Pion/OB7wW7mmMFE5CHZmr2Yvs=";
+    hash = "sha256-ncu3Q80+P2vJYsLjWvjxGxUL+bs191CNWaj0+vyFZQo=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  cargoHash = "sha256-/jDIsdlCFXkvyuurZUes/+7/dX1BoHcWCDAkJwIwawI=";
+  cargoHash = "sha256-dlB5qWm+neOlAkNXuW7Ui5jQUurpRYxy/iCv+RH/3jU=";
 
   doInstallCheck = true;
   doCheck = false;
