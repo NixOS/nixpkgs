@@ -457,10 +457,12 @@ in
       "f  ${dataDir}/sympa_transport   0600 ${user} ${group} - -"
 
       # force-copy static_content so it's up to date with package
-      # set permissions for wwsympa which needs write access (...)
-      "R  ${dataDir}/static_content    -    -       -        - -"
-      "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
-      "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
+      # set permissions for wwsympa which needs write access to css and
+      # pictures. All the other paths are recopied from pkg content.
+      "d  ${dataDir}/static_content/css      0711 ${user} ${group} - -"
+      "d  ${dataDir}/static_content/pictures 0711 ${user} ${group} - -"
+      "R  ${dataDir}/static_content          -    -       -        - -"
+      "C+ ${dataDir}/static_content          0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
 
       "d  /run/sympa                   0755 ${user} ${group} - -"
     ]
