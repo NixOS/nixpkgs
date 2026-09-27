@@ -92,6 +92,29 @@ in
       default = !config.boot.isContainer;
     };
 
+    displayTargets = lib.mkOption {
+      internal = true;
+      default = [ ];
+      description = "Displays provided by this test machine.";
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            backend = lib.mkOption {
+              type = lib.types.enum [ "x11" ];
+            };
+            display = lib.mkOption {
+              type = lib.types.str;
+              default = ":0";
+            };
+            xauthority = lib.mkOption {
+              type = lib.types.str;
+              default = "/root/.Xauthority";
+            };
+          };
+        }
+      );
+    };
+
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
       boot.initrd.systemd.enable to be enabled. Boot will pause in
@@ -230,7 +253,16 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xwininfo ];
+    environment.systemPackages = [
+      pkgs.xwininfo
+    ]
+    ++ lib.optionals config.boot.isNspawnContainer [
+      # Unlike a QEMU machine, an nspawn container has no monitor that can
+      # capture its display or inject keyboard input, so the test driver uses
+      # `xwd' and `xdotool' inside the container instead.
+      pkgs.xdotool
+      pkgs.xwd
+    ];
 
     # Log everything to the serial console.
     services.journald.settings.Journal = {

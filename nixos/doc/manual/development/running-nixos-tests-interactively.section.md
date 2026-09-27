@@ -41,6 +41,34 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
+## Graphical tests {#sec-nixos-test-interactive-graphical}
+
+When a graphical host display is available, QEMU machines open their regular
+display window. For `systemd-nspawn` containers, `.driverInteractive` opens a
+VNC viewer for each X11 display declared by the test. The viewer shows the same
+display used by the test and accepts keyboard and mouse input.
+
+Because the nspawn driver must run as root, preserve the host graphical-session
+variables when starting it. For X11, use:
+
+```ShellSession
+$ sudo --preserve-env=DISPLAY,XAUTHORITY \
+    ./result/bin/nixos-test-driver
+```
+
+For Wayland, use:
+
+```ShellSession
+$ sudo --preserve-env=WAYLAND_DISPLAY,XDG_RUNTIME_DIR \
+    ./result/bin/nixos-test-driver
+```
+
+If neither `DISPLAY` nor `WAYLAND_DISPLAY` is set, the driver does not open
+graphical viewers.
+
+See the [interactive display architecture](#sec-test-driver-display-architecture)
+for how display targets, exporters, and viewers are connected.
+
 ## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
 
 ::: {.warning}
