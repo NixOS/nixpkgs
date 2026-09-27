@@ -23,6 +23,7 @@ FAKE_DEPENDENCY_FOR_INDEPENDENT_PACKAGES: Final[str] = (
 
 class CalledProcessError(Exception):
     process: asyncio.subprocess.Process
+    stdout: bytes | None
     stderr: bytes | None
 
 
@@ -46,6 +47,7 @@ async def check_subprocess_output(*args: str, **kwargs: Any) -> bytes:
     if process.returncode != 0:
         error = CalledProcessError()
         error.process = process
+        error.stdout = stdout
         error.stderr = stderr
 
         raise error
@@ -250,24 +252,23 @@ async def run_update_script(
             "--run",
             " ".join([ shlex.quote(s) for s in update_script_command ]),
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
             cwd=worktree,
         )
-        await merge_changes(merge_lock, package, update_info, temp_dir)
     except KeyboardInterrupt as e:
         eprint("Cancelling…")
         raise asyncio.exceptions.CancelledError()
     except CalledProcessError as e:
         eprint(f" - {package['name']}: ERROR")
-        if e.stderr is not None:
+        if e.stdout is not None:
             eprint()
             eprint(
                 f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------"
             )
             eprint()
-            eprint(e.stderr.decode("utf-8"))
+            eprint(e.stdout.decode("utf-8"))
             with open(f"{package['pname']}.log", "wb") as logfile:
-                logfile.write(e.stderr)
+                logfile.write(e.stdout)
             eprint()
             eprint(
                 f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------"
@@ -277,6 +278,8 @@ async def run_update_script(
             raise UpdateFailedException(
                 f"The update script for {package['name']} failed with exit code {e.process.returncode}"
             )
+    else:
+        await merge_changes(merge_lock, package, update_info, temp_dir)
 
 
 @contextlib.contextmanager
