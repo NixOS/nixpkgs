@@ -5,8 +5,9 @@
 
   pytestCheckHook,
 
-  setuptools,
   cython,
+  pkg-resources-backport,
+  setuptools,
 
   symspellpy,
   numpy,
@@ -26,8 +27,9 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
     cython
+    pkg-resources-backport
+    setuptools
   ];
 
   # error: infinite recursion encountered
