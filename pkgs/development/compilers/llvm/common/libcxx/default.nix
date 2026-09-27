@@ -157,6 +157,22 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs utils/cat_files.py
   '';
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/aaad35a3876eba9c336449cb9a0012978e45a00e.patch";
+      hash = "sha256-oHS4X1DkdIuiY0hxKrSKuk8/sOfScYx8QaaRv1Eu32I=";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/93b261436572e4caab9a7f162c8dc12527951670.patch";
+      hash = "sha256-4w4MqBhxxV5tY5GdEkQSWmd3N+ItEocSV7kKRcf8r3Q=";
+    })
+  ]
+  ++ lib.optional (lib.versionOlder version "23.1.0") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/77b7183542f7f6b3b47a271324c2ac93feb8f811.patch";
+    hash = "sha256-XKC85UG3dMiH10rzsyjX143p6As1u7SQBRIJNPKZvrQ=";
+    includes = [ "runtimes/CMakeLists.txt" ];
+  });
+
   nativeBuildInputs = [
     cmake
     ninja
