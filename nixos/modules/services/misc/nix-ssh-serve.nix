@@ -6,11 +6,42 @@
 }:
 let
   cfg = config.nix.sshServe;
-  command =
-    if cfg.protocol == "ssh" then
-      "nix-store --serve ${lib.optionalString cfg.write "--write"}"
-    else
-      "nix-daemon --stdio";
+  template =
+    input: command: "    ${lib.escapeShellArg input})\n      ${lib.escapeShellArgs command}\n      ;;";
+  buildCommand =
+    commands:
+    pkgs.writeShellApplication {
+      name = "nix-serve-forcecommand";
+      text = ''
+        runCommand() {
+          case "$1" in
+        ${builtins.concatStringsSep "\n" (
+          builtins.map ({ input, command }: template input command) commands
+        )}
+            # some implementations use "exec", emulate this
+            "exec "*)
+              runCommand "''${1##"exec "}"
+              exit
+              ;;
+            # other commands are prohibited
+            *)
+              printf "not running unknown command '%s'\\n" "$1" >&2
+              exit 1
+          esac
+        }
+
+        # implementations may pass a command directly, however some implementations pass "bash" as the command to run interactively
+        if test -n "''${SSH_ORIGINAL_COMMAND:+x}" && test "$SSH_ORIGINAL_COMMAND" != bash; then
+          runCommand "$SSH_ORIGINAL_COMMAND"
+        else
+          while read -r line; do
+            runCommand "$line"
+          done
+        fi
+      '';
+      runtimeInputs = [ config.nix.package ];
+    };
+  command = buildCommand cfg.allowed-commands;
 in
 {
   options = {
@@ -51,8 +82,81 @@ in
         description = "The specific Nix-over-SSH protocol to use.";
       };
 
-    };
+      allowed-commands = lib.mkOption {
+        description = ''
+          List of commands to handle in the SSH *ForceCommand*.
 
+          Since some implementations use multiple commands (such as `echo started` as a ready-check)
+          it is important to be able to handle multiple commands.
+          Additionally those commands may be presented multiple ways (as arguments, on stdin, etc.).
+          This is a complete list of input/command pairs where the verbatim input triggers the
+          corresponding command.
+        '';
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              input = lib.mkOption {
+                type = lib.types.str;
+                description = "Raw input string as passed to the *ForceCommand*.";
+                example = "nix-store --serve";
+              };
+              command = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                description = ''
+                  Command as an array of strings to exec.
+
+                  If you need to shell out (e.g. to run multiple commands), use `[ "sh" "-c" "my_code" ]` or similar.
+                '';
+                example = [
+                  "nix-store"
+                  "--serve"
+                ];
+              };
+            };
+          }
+        );
+        defaultText = ''
+          Depending on the chosen protocol and whether write support is enabled, appropriate commands are enabled:
+
+          - `nix-store --serve`
+          - `nix-store --serve --write`
+          - `nix-daemon --stdio`
+        '';
+        default = (
+          [
+            {
+              input = "echo started";
+              command = [
+                "echo"
+                "started"
+              ];
+            }
+          ]
+          ++ lib.optional (cfg.protocol == "ssh") {
+            input = "nix-store --serve";
+            command = [
+              "nix-store"
+              "--serve"
+            ];
+          }
+          ++ lib.optional (cfg.protocol == "ssh" && cfg.write) {
+            input = "nix-store --serve --write";
+            command = [
+              "nix-store"
+              "--serve"
+              "--write"
+            ];
+          }
+          ++ lib.optional (cfg.protocol == "ssh-ng") {
+            input = "nix-daemon --stdio";
+            command = [
+              "nix-daemon"
+              "--stdio"
+            ];
+          }
+        );
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -76,7 +180,7 @@ in
         PermitTTY no
         PermitTunnel no
         X11Forwarding no
-        ForceCommand ${config.nix.package.out}/bin/${command}
+        ForceCommand ${command.out}/bin/nix-serve-forcecommand
       Match All
     '';
 
