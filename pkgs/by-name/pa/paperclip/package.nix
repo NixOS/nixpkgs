@@ -28,7 +28,7 @@
   wget,
 }:
 let
-  version = "0.3.1-unstable-2026-09-26";
+  version = "0.3.1-unstable-2026-09-27";
   # Draft packaging source. Replace with a paperclipai release before merging.
   src = fetchFromGitHub {
     owner = "caniko";
