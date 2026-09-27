@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "telegraf";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mic92 ];
+  meta = {
+    inherit (pkgs.telegraf.meta) maintainers;
   };
 
   containers.machine =
