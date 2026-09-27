@@ -36,7 +36,7 @@ npmInstallHook() {
 
         find node_modules -maxdepth 1 -type d -empty -delete
 
-        cp -r node_modules "$nodeModulesPath"
+        cp -rL node_modules "$nodeModulesPath"
     fi
 
     runHook postInstall
