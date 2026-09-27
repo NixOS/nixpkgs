@@ -1,56 +1,62 @@
 {
+  lib,
+  stdenv,
+  fetchurl,
+
+  # build-time
+  autoPatchelfHook,
+  buildPackages,
+
+  # run-time
   alsa-lib,
   at-spi2-core,
   atk,
-  autoPatchelfHook,
   buildEnv,
-  buildPackages,
   cairo,
   cups,
   dbus,
   expat,
-  fetchurl,
   ffmpeg,
   fontconfig,
   freetype,
   gdk-pixbuf,
   glib,
   gtk3,
-  lib,
+  libGL,
   libcap,
   libdrm,
-  libGL,
+  libgbm,
   libnotify,
   libuuid,
+  libx11,
   libxcb,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libgbm,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
+  libxshmfence,
+  libxtst,
   nspr,
   nss,
   pango,
-  sdk ? false,
   sqlite,
-  stdenv,
   systemd,
   udev,
-  libxtst,
-  libxscrnsaver,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcursor,
-  libxcomposite,
-  libx11,
-  libxshmfence,
 
   # update script
   writeShellApplication,
   common-updater-scripts,
   curl,
   jq,
+
+  # options
+  sdk ? false,
 }:
 
 let
@@ -69,27 +75,27 @@ let
       gdk-pixbuf
       glib
       gtk3
+      libGL
       libcap
       libdrm
-      libGL
-      libnotify
-      libxkbcommon
       libgbm
-      nspr
-      nss
-      pango
+      libnotify
       libx11
-      libxscrnsaver
       libxcomposite
       libxcursor
       libxdamage
       libxext
       libxfixes
       libxi
+      libxkbcommon
       libxrandr
       libxrender
-      libxtst
+      libxscrnsaver
       libxshmfence
+      libxtst
+      nspr
+      nss
+      pango
       # libnw-specific (not chromium dependencies)
       ffmpeg
       libxcb
@@ -131,11 +137,14 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
-  buildInputs = [ nwEnv ];
+  buildInputs = [
+    nwEnv
+  ];
+
   appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
     nwEnv
-    stdenv.cc.libc
     stdenv.cc.cc
+    stdenv.cc.libc
   ];
 
   preFixup = ''
