@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.13.1";
+  version = "5.13.2";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bYN63EQo+c0SIz3BBIwkAS1QqS7+sg7JdpoOekVYq5Q=";
+    hash = "sha256-QFKyslnO+C64ursHyFWFbBzOqFHFXwiavDNfA13eJww=";
   };
 
   __structuredAttrs = true;

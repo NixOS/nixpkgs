@@ -5091,6 +5091,12 @@
     githubId = 1689801;
     name = "Mikhail Chekan";
   };
+  chemonke = {
+    email = "nixpkgs@chemonke.ch";
+    github = "chemonke";
+    githubId = 183837749;
+    name = "Curdin Bosshart";
+  };
   chen = {
     email = "i@cuichen.cc";
     github = "cu1ch3n";
@@ -12150,6 +12156,12 @@
     github = "Ilosariph";
     githubId = 71074737;
     name = "Simon Wick";
+  };
+  ilovelinux = {
+    email = "nix+nixpkgs@ilovelinux.dev";
+    github = "ilovelinux";
+    githubId = 9268789;
+    name = "Antonio Spadaro";
   };
   ilya-epifanov = {
     email = "mail@ilya.network";
@@ -28991,6 +29003,13 @@
     email = "thelissimus@tuta.io";
     github = "thelissimus";
     githubId = 70096720;
+  };
+  thelolcoder2007 = {
+    name = "thelolcoder2007";
+    github = "thelolcoder2007";
+    githubId = 52106896;
+    matrix = "@erents:dapperepoging.nl";
+    keys = [ { fingerprint = "E374 815F C754 462B 1C34  3562 FDC3 99DE 8F7E 200B"; } ];
   };
   themadbit = {
     name = "Mark Tanui";

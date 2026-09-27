@@ -3729,6 +3729,8 @@ self: super: with self; {
 
   courlan = callPackage ../development/python-modules/courlan { };
 
+  covdefaults = callPackage ../development/python-modules/covdefaults { };
+
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
@@ -15012,8 +15014,6 @@ self: super: with self; {
 
   pyfreshr = callPackage ../development/python-modules/pyfreshr { };
 
-  pyfribidi = callPackage ../development/python-modules/pyfribidi { };
-
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
   pyfronius = callPackage ../development/python-modules/pyfronius { };
@@ -18782,6 +18782,8 @@ self: super: with self; {
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
 
   selenium-wire-roadtx = callPackage ../development/python-modules/selenium-wire-roadtx { };
+
+  selfies = callPackage ../development/python-modules/selfies { };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
