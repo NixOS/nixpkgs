@@ -29,7 +29,7 @@ merging is handled.
 `types.pathInStore`
 
 :   A path that is contained in the Nix store. This can be a top-level store
-    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+    path like `pkgs.hello` or a descendant like `lib.getExe pkgs.hello`.
 
 `types.externalPath`
 

@@ -196,7 +196,7 @@ running NixOS integration tests on the builder (macOS 15+, M3 or newer).
               ];
 
               launchd.daemons.darwin-builder = {
-                command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
+                command = nixpkgs.lib.getExe darwin-builder.config.system.build.macos-builder-installer;
                 serviceConfig = {
                   KeepAlive = true;
                   RunAtLoad = true;

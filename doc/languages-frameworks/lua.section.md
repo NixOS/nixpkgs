@@ -210,7 +210,7 @@ The Nix expressions for the interpreters can be found in `pkgs/development/inter
 
 Each interpreter has the following attributes:
 
-- `interpreter`. Alias for `${pkgs.lua}/bin/lua`.
+- `interpreter`. Alias for `${lib.getExe pkgs.lua}`.
 - `buildEnv`. Function to build lua interpreter environments with extra packages bundled together. See section *lua.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`.
 - `pkgs`. Set of Lua packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
