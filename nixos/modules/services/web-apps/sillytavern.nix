@@ -36,8 +36,8 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = "${cfg.package}/lib/node_modules/sillytavern/config.yaml";
-        defaultText = lib.literalExpression "\${cfg.package}/lib/node_modules/sillytavern/config.yaml";
+        default = "${cfg.package}/lib/node_modules/sillytavern/default/config.yaml";
+        defaultText = lib.literalExpression "\${cfg.package}/lib/node_modules/sillytavern/default/config.yaml";
         description = ''
           Path to the SillyTavern configuration file.
         '';
