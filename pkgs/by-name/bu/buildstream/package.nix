@@ -20,7 +20,10 @@
   versionCheckHook,
 
   # Optional features
+  buildstream-plugins ? python3Packages.buildstream-plugins,
+  buildstream-plugins-community ? python3Packages.buildstream-plugins-community,
   enableBuildstreamPlugins ? true,
+  enableBuildstreamPluginsCommunity ? false,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -60,7 +63,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ujson
   ])
   ++ lib.optionals enableBuildstreamPlugins [
-    python3Packages.buildstream-plugins
+    buildstream-plugins
+  ]
+  ++ lib.optionals enableBuildstreamPluginsCommunity [
+    buildstream-plugins-community
   ];
 
   nativeBuildInputs = [
