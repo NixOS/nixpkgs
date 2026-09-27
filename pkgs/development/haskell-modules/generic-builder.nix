@@ -127,10 +127,10 @@ in
     !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
-  # TODO enable shared libs for cross-compiling
+  # TODO enable shared libs for non-wasm cross-compiling
   enableSharedExecutables ? false,
   enableSharedLibraries ?
-    !stdenv.hostPlatform.isStatic
+    (!stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isWasm)
     && (ghc.enableShared or false)
     && !stdenv.hostPlatform.useAndroidPrebuilt, # TODO: figure out why /build leaks into RPATH
   enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
@@ -1109,6 +1109,11 @@ lib.fix (
       // optionalAttrs (args ? changelog) { inherit changelog; }
       // optionalAttrs (args ? mainProgram) { inherit mainProgram; };
 
+    }
+    # The static stdenv adapter appends --enable-static and --disable-shared
+    # to configureFlags, overriding shared libraries requested above.
+    // optionalAttrs (stdenv.hostPlatform.isStatic && enableSharedLibraries) {
+      dontAddStaticConfigureFlags = true;
     }
     // optionalAttrs (args ? sourceRoot) { inherit sourceRoot; }
     // optionalAttrs (args ? setSourceRoot) { inherit setSourceRoot; }
