@@ -1,0 +1,24 @@
+diff --git a/crates/vite_global_cli/src/commands/env/config.rs b/crates/vite_global_cli/src/commands/env/config.rs
+index 84b07ac..a072386 100644
+--- a/crates/vite_global_cli/src/commands/env/config.rs
++++ b/crates/vite_global_cli/src/commands/env/config.rs
+@@ -21,9 +21,9 @@ const CONFIG_FILE: &str = "config.json";
+ #[serde(rename_all = "snake_case")]
+ pub enum ShimMode {
+     /// Shims always use vite-plus managed Node.js
+-    #[default]
+     Managed,
+     /// Shims prefer system Node.js, fallback to managed if not found
++    #[default]
+     SystemFirst,
+ }
+ 
+@@ -41,7 +41,7 @@ pub struct Config {
+ 
+ /// Check if shim mode is the default (for skip_serializing_if)
+ fn is_default_shim_mode(mode: &ShimMode) -> bool {
+-    *mode == ShimMode::Managed
++    *mode == ShimMode::SystemFirst
+ }
+ 
+ /// Version resolution result
