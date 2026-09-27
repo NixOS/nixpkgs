@@ -7,6 +7,9 @@
   copyDesktopItems,
   makeWrapper,
   jdk17_headless,
+  pkg-config,
+  libsodium,
+  mpv,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -17,17 +20,17 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.17";
+  version = "4.4.24";
 
   src = fetchFromGitHub {
     owner = "ente";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-qnjOrct70TaaO91QBHcbRIkzLZGH6mbpuLAAKE9k/es=";
+    hash = "sha256-9TEFLkDkknsSfG1IWcQd4ZzuDZotdICwK4qIJ9PXrqM=";
   };
 
-  sourceRoot = "${src.name}/mobile/apps/auth";
+  sourceRoot = "${src.name}/mobile";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -42,7 +45,7 @@ flutter.buildFlutterApplication rec {
       inherit (src) passthru;
       pname = "ente_strings";
       sourceRoot = "${src.name}/mobile/packages/strings";
-      pubspecLock = lib.importJSON ./strings.pubspec.lock.json;
+      pubspecLock = lib.importJSON ./pubspec.lock.json;
 
       buildPhase = ''
         runHook preBuild
@@ -67,6 +70,7 @@ flutter.buildFlutterApplication rec {
     };
 
   postPatch = ''
+    pushd apps/auth
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
   '';
@@ -74,20 +78,28 @@ flutter.buildFlutterApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
     libayatana-appindicator
+    libsodium
     # The networking client used by ente-auth (native_dio_adapter)
     # introduces a transitive dependency on Java, which technically
     # is only needed for the Android implementation.
     # Unfortunately, attempts to remove it from the build entirely were
     # unsuccessful.
     jdk17_headless # JDK version used by upstream CI
+    # TODO: I doubt this is needed by ente-auth, seems to be pollution from ente-photos
+    # because of the shared workspace lockfile.
+    mpv
   ];
 
-  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+  env = {
+    LIBSODIUM_USE_PKGCONFIG = "1";
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+  };
 
   flutterBuildFlags = [
     # Disable update notifications and auto-update functionality
