@@ -24,6 +24,8 @@
   nspr,
   nss,
   pango,
+  pipewire,
+  replaceVars,
   systemd,
   fetchurl,
   autoPatchelfHook,
@@ -86,6 +88,38 @@ stdenv.mkDerivation {
   runtimeDependencies = [
     systemd
   ];
+
+  patches = [
+    (replaceVars ./pipewire-system-audio.patch {
+      pipewire = lib.getBin pipewire;
+    })
+  ];
+
+  postPatch = ''
+    main="usr/lib/tana/resources/app/build/main.js"
+
+    unsupportedBranch='else Ox=()=>(console.warn("System audio capture not supported on this platform"),"denied"),Dx=async()=>(console.warn("System audio capture not supported on this platform"),"denied"),Nx=async()=>{throw console.warn("System audio capture not supported on this platform"),new Error("System audio capture not supported on this platform")};var HM=require("electron")'
+    pipewireBranch='else { let systemAudio = require("./nix-pipewire-system-audio.js"); Ox = systemAudio.getSystemAudioPermission; Dx = systemAudio.requestSystemAudioPermission; Nx = systemAudio.recordSystemAudio; } var HM=require("electron")'
+
+    # Tana ships minified Electron code. Keep these checks strict so version
+    # bumps fail loudly if upstream changes the audio capture implementation.
+    grep -Fq -- "$unsupportedBranch" "$main" || {
+      echo "Tana system-audio patch target not found" >&2
+      exit 1
+    }
+
+    substituteInPlace "$main" \
+      --replace-fail "$unsupportedBranch" "$pipewireBranch"
+
+    loopbackCount="$(grep -oF 'audio:"loopback"' "$main" | wc -l | tr -d ' ')"
+    if [ "$loopbackCount" -ne 2 ]; then
+      echo "Expected 2 Tana loopback targets, found $loopbackCount" >&2
+      exit 1
+    fi
+
+    substituteInPlace "$main" \
+      --replace-fail 'audio:"loopback"' 'audio:n.frame'
+  '';
 
   installPhase = ''
     runHook preInstall
