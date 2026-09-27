@@ -150,7 +150,7 @@ let
                 "sdk" = mkSdkDependencySource;
               }
               .${details.source}
-              name
+                name
             )
               details
           ))
