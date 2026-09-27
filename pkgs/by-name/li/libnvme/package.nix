@@ -54,11 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  mesonFlags = [
-    "-Ddocs=man"
-    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
-    (lib.mesonBool "docs-build" withDocs)
-  ];
+  mesonFlags =
+    lib.mapAttrsToList lib.mesonEnable {
+      python = true;
+      openssl = true;
+      libdbus = false;
+      json-c = true;
+      keyutils = true;
+      liburing = false;
+    }
+    ++ lib.mapAttrsToList lib.mesonBool {
+      tests = finalAttrs.finalPackage.doCheck;
+      docs-build = withDocs;
+      examples = false;
+    }
+    ++ [ (lib.mesonOption "docs" "man") ];
 
   preConfigure = ''
     export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
