@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-billing";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_billing";
     inherit version;
-    hash = "sha256-jgplxlEQtTpCk35b7WrgDvydYgaXLZa/1KdOgMhcLXs=";
+    hash = "sha256-j5AvIdJJPm/Fw8iU1SoHg/w0gPRYDjWUiVgDFvfO98Y=";
   };
 
   build-system = [ setuptools ];
