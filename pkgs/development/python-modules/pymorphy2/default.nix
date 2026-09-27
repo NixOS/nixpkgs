@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  isPy3k,
   python,
   dawg-python,
   docopt,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pymorphy2";
   version = "0.9.1";
   format = "setuptools";
-
-  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
