@@ -1,0 +1,26 @@
+--- a/__init__.py
++++ b/__init__.py
+@@ -25,23 +25,6 @@
+ with open(data_file, "r") as fp:
+     data = json.load(fp)
+ 
+-# Update languages
+-new_languages = update_available_languages(data["languages"])
+-if new_languages:
+-    with open(data_file, "w") as fp:
+-        json.dump(data, fp, indent=4)
+-    from . import showInfo
+-
+-    update_message = (
+-        f"<h3>AnkiPA Update</h3><br> These {len(new_languages)} new languages "
+-        "was added to the addon:<br><br>"
+-    )
+-    for lang in new_languages:
+-        update_message += f"&#x2022; {lang}<br>"
+-    showInfo(update_message)
+-
+-fp.close()
+-
+ # Load HTML template
+ with open(os.path.join(addon, "template.html"), "r") as ft:
+     html_template = ft.read()
