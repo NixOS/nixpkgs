@@ -18,6 +18,12 @@
     "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.applicationinsights/2.22.0/microsoft.applicationinsights.2.22.0.nupkg"
   },
   {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "6.0.0",
+    "hash": "sha256-49+H/iFwp+AfCICvWcqo9us4CzxApPKC37Q5Eqrw+JU=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg"
+  },
+  {
     "pname": "Microsoft.Build.Tasks.Git",
     "version": "1.0.0-beta2-19554-01",
     "hash": "sha256-iFiNU39SAPMfjk/TjTv7AaVIPuermvM68y1ubqfax+c=",
@@ -79,27 +85,27 @@
   },
   {
     "pname": "Microsoft.Identity.Client",
-    "version": "4.77.1",
-    "hash": "sha256-Kj+pzEEhnr+ulzETuvOKmxmRfdYv5ZfToHc3AvyQEr0=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client/4.77.1/microsoft.identity.client.4.77.1.nupkg"
+    "version": "4.85.1",
+    "hash": "sha256-ltjJjzQBEmff+ghE+sg9kuI5zwMLdC0yx+2syV6dQdM=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client/4.85.1/microsoft.identity.client.4.85.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.Broker",
-    "version": "4.77.1",
-    "hash": "sha256-ZttD8DujZB3HUx+oeADnkiMDLe8Wb2eFw03vlAtOLz4=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.broker/4.77.1/microsoft.identity.client.broker.4.77.1.nupkg"
+    "version": "4.85.1",
+    "hash": "sha256-rt1xLAAwXg2afAFpYLqQ4GoLiVVqwVco5bJW6nL/r40=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.broker/4.85.1/microsoft.identity.client.broker.4.85.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.Extensions.Msal",
-    "version": "4.77.1",
-    "hash": "sha256-s1JeDN3H3auUz2Js+ladXfwz0Z0AKIWxLPTb5+zE1TM=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.extensions.msal/4.77.1/microsoft.identity.client.extensions.msal.4.77.1.nupkg"
+    "version": "4.85.1",
+    "hash": "sha256-JKYdsvy8xd89WbO8KfPUejiIJrRjUBEn9KOAWbILz7c=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.extensions.msal/4.85.1/microsoft.identity.client.extensions.msal.4.85.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.NativeInterop",
-    "version": "0.19.4",
-    "hash": "sha256-f4FmUEUZ5O20itkik7noUzQdawKKVlmVsgebFE4PvWA=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.19.4/microsoft.identity.client.nativeinterop.0.19.4.nupkg"
+    "version": "0.20.6",
+    "hash": "sha256-PbaN21Juuh5fnfp84uX+QtGXJ0NmFGEQE/WjylnWD8M=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.20.6/microsoft.identity.client.nativeinterop.0.20.6.nupkg"
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
@@ -349,9 +355,9 @@
   },
   {
     "pname": "System.Formats.Asn1",
-    "version": "6.0.1",
-    "hash": "sha256-gfGxcaWpVO92BJrl24pXi09KSgW2rSy3HGv0+V8hGgo=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.formats.asn1/6.0.1/system.formats.asn1.6.0.1.nupkg"
+    "version": "8.0.1",
+    "hash": "sha256-may/Wg+esmm1N14kQTG4ESMBi+GQKPp0ZrrBo/o6OXM=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.formats.asn1/8.0.1/system.formats.asn1.8.0.1.nupkg"
   },
   {
     "pname": "System.IO.FileSystem.AccessControl",
@@ -372,10 +378,22 @@
     "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.memory/4.5.4/system.memory.4.5.4.nupkg"
   },
   {
+    "pname": "System.Memory",
+    "version": "4.5.5",
+    "hash": "sha256-EPQ9o1Kin7KzGI5O3U3PUQAZTItSbk9h/i4rViN3WiI=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.memory/4.5.5/system.memory.4.5.5.nupkg"
+  },
+  {
     "pname": "System.Numerics.Vectors",
     "version": "4.4.0",
     "hash": "sha256-auXQK2flL/JpnB/rEcAcUm4vYMCYMEMiWOCAlIaqu2U=",
     "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.numerics.vectors/4.4.0/system.numerics.vectors.4.4.0.nupkg"
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.5.0",
+    "hash": "sha256-qdSTIFgf2htPS+YhLGjAGiLN8igCYJnCCo6r78+Q+c8=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg"
   },
   {
     "pname": "System.Reflection.Metadata",
@@ -418,6 +436,12 @@
     "version": "6.0.0",
     "hash": "sha256-qOyWEBbNr3EjyS+etFG8/zMbuPjA+O+di717JP9Cxyg=",
     "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.security.accesscontrol/6.0.0/system.security.accesscontrol.6.0.0.nupkg"
+  },
+  {
+    "pname": "System.Security.Cryptography.Cng",
+    "version": "5.0.0",
+    "hash": "sha256-nOJP3vdmQaYA07TI373OvZX6uWshETipvi5KpL7oExo=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.security.cryptography.cng/5.0.0/system.security.cryptography.cng.5.0.0.nupkg"
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
@@ -466,6 +490,12 @@
     "version": "6.0.10",
     "hash": "sha256-UijYh0dxFjFinMPSTJob96oaRkNm+Wsa+7Ffg6mRnsc=",
     "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.text.json/6.0.10/system.text.json.6.0.10.nupkg"
+  },
+  {
+    "pname": "System.Threading.Tasks.Extensions",
+    "version": "4.5.4",
+    "hash": "sha256-owSpY8wHlsUXn5xrfYAiu847L6fAKethlvYx97Ri1ng=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
   },
   {
     "pname": "System.Windows.Extensions",
