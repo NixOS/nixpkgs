@@ -33,7 +33,7 @@ in
 
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/beszel-hub";
+      default = /var/lib/beszel-hub;
       description = "Data directory of beszel-hub.";
     };
 
