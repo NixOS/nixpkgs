@@ -32,9 +32,9 @@ in
     enable = mkEnableOption "VMWare Guest Support";
     headless = mkOption {
       type = types.bool;
-      default = !config.services.xserver.enable;
-      defaultText = literalExpression "!config.services.xserver.enable";
-      description = "Whether to disable X11-related features.";
+      default = !(config.services.xserver.enable || config.services.graphical-desktop.enable);
+      defaultText = literalExpression "!(config.services.xserver.enable || config.services.graphical-desktop.enable)";
+      description = "Whether to disable graphical desktop features such as copy/paste and drag-and-drop.";
     };
 
     package = mkOption {
@@ -92,6 +92,15 @@ in
 
     environment.etc.vmware-tools.source = "${cfg.package}/etc/vmware-tools/*";
 
+    # Shadow the package's autostart entry to use the setuid wrapper.
+    environment.etc."xdg/autostart/vmware-user.desktop" = mkIf (!cfg.headless) {
+      source = pkgs.runCommand "vmware-user.desktop" { } ''
+        substitute ${cfg.package}/etc/xdg/autostart/vmware-user.desktop $out \
+          --replace-fail "${getExe' cfg.package "vmware-user-suid-wrapper"}" \
+            "${config.security.wrapperDir}/vmware-user-suid-wrapper"
+      '';
+    };
+
     services.xserver = mkIf (!cfg.headless) {
       modules = optionals pkgs.stdenv.hostPlatform.isx86 [ pkgs.xf86-input-vmmouse ];
 
@@ -105,7 +114,7 @@ in
       '';
 
       displayManager.sessionCommands = ''
-        ${getExe' cfg.package "vmware-user-suid-wrapper"}
+        ${config.security.wrapperDir}/vmware-user-suid-wrapper
       '';
     };
 
