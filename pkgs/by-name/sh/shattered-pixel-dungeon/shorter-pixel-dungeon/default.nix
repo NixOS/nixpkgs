@@ -5,14 +5,16 @@
 
 callPackage ../generic.nix rec {
   pname = "shorter-pixel-dungeon";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Shorter-Pixel-Dungeon";
     rev = "Short-${version}";
-    hash = "sha256-y4DKSdq0LofKxlAi6RoaF8q+QD5KrTcmCmx9cpBxGgs=";
+    hash = "sha256-zRvCth2I/22c0llYWCnlG/NaZJt/T5idN9zRBdOrWEw=";
   };
+
+  patches = [ ];
 
   desktopName = "Shorter Pixel Dungeon";
 
