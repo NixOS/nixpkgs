@@ -45,6 +45,7 @@ lib.makeScope newScope (self: {
   solr = self.callPackage ./solr { };
   spass = self.callPackage ./spass { };
   sqlite = self.callPackage ./sqlite { };
+  stack = self.callPackage ./stack { };
   vampire = self.callPackage ./vampire { };
   verit = self.callPackage ./verit { };
   vscode_extension = self.callPackage ./vscode_extension { };
