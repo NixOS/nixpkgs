@@ -12,6 +12,9 @@ let
     name: extraConfig:
     lib.mkMerge [
       {
+        # Don't make the VMs too slow
+        virtualisation.cores = 2;
+
         # Expose nebula for doing cert signing.
         environment.systemPackages = [
           pkgs.dig
@@ -28,6 +31,8 @@ let
           ca = "/etc/nebula/ca.crt";
           cert = "/etc/nebula/${name}.crt";
           key = "/etc/nebula/${name}.key";
+          # 10s (the default) times out too much, so speed things along
+          settings.lighthouse.interval = 1;
           listen = {
             host = "::";
             port =
@@ -319,46 +324,72 @@ in
 
       # Never do this for anything security critical! (Thankfully it's just a test.)
       # Restart Nebula right after the mutual block and/or restore so the state is fresh.
-      blockTrafficBetweenV4 = nodeA: nodeB: ''
+      #
+      # The rule-only helpers just mutate the underlay firewall; callers are
+      # responsible for restarting nebula afterwards. This lets the combined
+      # (V4 + V6) helpers restart each node a single time instead of restarting
+      # it once per address family in quick succession, which previously churned
+      # nebula hard enough that relayed tunnels never reconverged.
+      restartNebula = name: ''
+        ${name}.systemctl("restart nebula@smoke.service")
+      '';
+      blockRulesV4 = nodeA: nodeB: ''
         node_a_4 = ${getPublicIpv4 nodeA}
         node_b_4 = ${getPublicIpv4 nodeB}
         ${nodeA}.succeed("iptables -I INPUT -s " + node_b_4 + " -j DROP")
         ${nodeB}.succeed("iptables -I INPUT -s " + node_a_4 + " -j DROP")
-        ${nodeA}.systemctl("restart nebula@smoke.service")
-        ${nodeB}.systemctl("restart nebula@smoke.service")
       '';
-      allowTrafficBetweenV4 = nodeA: nodeB: ''
+      allowRulesV4 = nodeA: nodeB: ''
         node_a_4 = ${getPublicIpv4 nodeA}
         node_b_4 = ${getPublicIpv4 nodeB}
         ${nodeA}.succeed("iptables -D INPUT -s " + node_b_4 + " -j DROP")
         ${nodeB}.succeed("iptables -D INPUT -s " + node_a_4 + " -j DROP")
-        ${nodeA}.systemctl("restart nebula@smoke.service")
-        ${nodeB}.systemctl("restart nebula@smoke.service")
       '';
-      blockTrafficBetweenV6 = nodeA: nodeB: ''
+      blockRulesV6 = nodeA: nodeB: ''
         node_a_6 = ${getPublicIpv6 nodeA}
         node_b_6 = ${getPublicIpv6 nodeB}
         ${nodeA}.succeed("ip6tables -I INPUT -i eth1 -s " + node_b_6 + " -j DROP")
         ${nodeB}.succeed("ip6tables -I INPUT -i eth1 -s " + node_a_6 + " -j DROP")
-        ${nodeA}.systemctl("restart nebula@smoke.service")
-        ${nodeB}.systemctl("restart nebula@smoke.service")
       '';
-      allowTrafficBetweenV6 = nodeA: nodeB: ''
+      allowRulesV6 = nodeA: nodeB: ''
         node_a_6 = ${getPublicIpv6 nodeA}
         node_b_6 = ${getPublicIpv6 nodeB}
         ${nodeA}.succeed("ip6tables -D INPUT -i eth1 -s " + node_b_6 + " -j DROP")
         ${nodeB}.succeed("ip6tables -D INPUT -i eth1 -s " + node_a_6 + " -j DROP")
-        ${nodeA}.systemctl("restart nebula@smoke.service")
-        ${nodeB}.systemctl("restart nebula@smoke.service")
+      '';
+
+      blockTrafficBetweenV4 = nodeA: nodeB: ''
+        ${blockRulesV4 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
+      '';
+      allowTrafficBetweenV4 = nodeA: nodeB: ''
+        ${allowRulesV4 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
+      '';
+      blockTrafficBetweenV6 = nodeA: nodeB: ''
+        ${blockRulesV6 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
+      '';
+      allowTrafficBetweenV6 = nodeA: nodeB: ''
+        ${allowRulesV6 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
       '';
 
       blockTrafficBetween = nodeA: nodeB: ''
-        ${blockTrafficBetweenV4 nodeA nodeB}
-        ${blockTrafficBetweenV6 nodeA nodeB}
+        ${blockRulesV4 nodeA nodeB}
+        ${blockRulesV6 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
       '';
       allowTrafficBetween = nodeA: nodeB: ''
-        ${allowTrafficBetweenV4 nodeA nodeB}
-        ${allowTrafficBetweenV6 nodeA nodeB}
+        ${allowRulesV4 nodeA nodeB}
+        ${allowRulesV6 nodeA nodeB}
+        ${restartNebula nodeA}
+        ${restartNebula nodeB}
       '';
     in
     ''
@@ -468,39 +499,48 @@ in
       allowToLighthouse.fail("ping -c3 -W1 10.0.100.3")
       allowToLighthouse.fail("ping -c3 -W1 2001:db8::3")
 
-      # allowAny can ping allowFromLighthouse now that allowFromLighthouse pinged it first
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      # allowAny still cannot initiate to allowFromLighthouse even though allowFromLighthouse
+      # pinged it first: allowFromLighthouse's inbound firewall only allows the lighthouse
+      # group, and since nebula 1.11.0 conntracks ICMP by echo identifier, a prior ping from
+      # allowFromLighthouse no longer opens a hole for a fresh reverse ping.
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
+      allowAny.fail("ping -c3 -W1 2001:db8::3")
 
-      # block allowAny <-> allowFromLighthouse, and allowAny -> allowFromLighthouse should still work.
+      # block allowAny <-> allowFromLighthouse on the underlay. allowFromLighthouse -> allowAny
+      # still reconverges over the relay, but allowAny -> allowFromLighthouse stays blocked by
+      # allowFromLighthouse's inbound firewall.
       ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
+      allowAny.fail("ping -c3 -W1 2001:db8::3")
       ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
+      allowAny.fail("ping -c3 -W1 2001:db8::3")
 
-      # allowToLighthouse can ping allowAny if allowAny pings it first
+      # allowAny can ping allowToLighthouse, but allowToLighthouse cannot ping back even after
+      # allowAny pings it first: its outbound firewall only allows the lighthouse group, and
+      # ICMP is conntracked per echo identifier, so allowAny's ping opens no reverse hole.
       allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
       allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
+      allowToLighthouse.fail("ping -c3 -W1 2001:db8::2")
 
-      # block allowToLighthouse <-> allowAny, and allowAny <-> allowToLighthouse should still work.
+      # block allowAny <-> allowToLighthouse on the underlay. allowAny -> allowToLighthouse still
+      # reconverges over the relay, but allowToLighthouse -> allowAny stays blocked by
+      # allowToLighthouse's outbound firewall.
       ${blockTrafficBetween "allowAny" "allowToLighthouse"}
       allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
       allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
+      allowToLighthouse.fail("ping -c3 -W1 2001:db8::2")
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
       allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
       allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
+      allowToLighthouse.fail("ping -c3 -W1 2001:db8::2")
 
       # block lighthouse <-> allowFromLighthouse and allowAny <-> allowFromLighthouse; allowFromLighthouse won't get to allowAny
       ${blockTrafficBetween "allowFromLighthouse" "lighthouse"}
@@ -527,8 +567,8 @@ in
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
       allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
+      allowAny.fail("ping -c3 -W1 2001:db8::3")
       allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
       allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
 
@@ -542,6 +582,7 @@ in
       ${allowTrafficBetween "allowToLighthouse" "lighthouse"}
       ${allowTrafficBetween "allowToLighthouse" "allowAny"}
       allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      # allowToLighthouse -> allowAny stays blocked by allowToLighthouse's outbound firewall.
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
     '';
 }
