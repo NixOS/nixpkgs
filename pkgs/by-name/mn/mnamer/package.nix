@@ -1,19 +1,20 @@
 {
+  lib,
   python3Packages,
   fetchFromGitHub,
-  lib,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnamer";
-  version = "2.6.0";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     tag = finalAttrs.version;
-    sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
+    hash = "sha256-GH5HTN8JjvYDKuiqSNsv6Nbmj1ERNyQN+qPDKcpY0fI=";
   };
 
   build-system = with python3Packages; [
@@ -32,14 +33,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
-  patches = [
-    # https://github.com/jkwill87/mnamer/pull/291
-    ./cached_session_error.patch
-    # https://github.com/jkwill87/mnamer/pull/333
-    ./fix-requests-cache-version-check.patch
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    versionCheckHook
   ];
-
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   # disable test that fail (networking, etc)
   disabledTests = [
