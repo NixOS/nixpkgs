@@ -9,7 +9,7 @@
   lib,
   libGL,
   libpulseaudio,
-  mesa-demos,
+  mesa-utils,
   nix-update-script,
   pkg-config,
   rustPlatform,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       runtimeDependencies = [
         gamescope
         hwdata
-        mesa-demos
+        mesa-utils
         udev
         upower
       ];

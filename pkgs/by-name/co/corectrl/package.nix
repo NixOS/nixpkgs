@@ -7,7 +7,7 @@
   lib,
   libdrm,
   kdePackages,
-  mesa-demos,
+  mesa-utils,
   polkit,
   procps,
   pugixml,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtsvg
     kdePackages.qttools
     kdePackages.quazip
-    mesa-demos
+    mesa-utils
     polkit
     procps
     pugixml
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeInputs = [
     hwdata
-    mesa-demos
+    mesa-utils
     procps
     util-linux
     vulkan-tools

@@ -7,7 +7,7 @@
   libdisplay-info,
   libusb1,
   lm_sensors,
-  mesa-demos,
+  mesa-utils,
   mkKdeDerivation,
   pkg-config,
   pciutils,
@@ -26,8 +26,8 @@ let
     clinfo = lib.getExe clinfo;
     di_edid_decode = lib.getExe libdisplay-info;
     dmidecode = lib.getExe' dmidecode "dmidecode";
-    eglinfo = lib.getExe' mesa-demos "eglinfo";
-    glxinfo = lib.getExe' mesa-demos "glxinfo";
+    eglinfo = lib.getExe' mesa-utils "eglinfo";
+    glxinfo = lib.getExe' mesa-utils "glxinfo";
     ip = lib.getExe' iproute2 "ip";
     lsblk = lib.getExe' util-linux "lsblk";
     lspci = lib.getExe' pciutils "lspci";

@@ -10,7 +10,7 @@
     {
 
       environment.systemPackages = with pkgs; [
-        mesa-demos
+        mesa-utils
         procps # for `pkill`, `pidof` in the test
         scrot # for screenshotting Xorg
         turbovnc

@@ -5451,7 +5451,7 @@ with pkgs;
       intel-media-driver
       intel-vaapi-driver
       mesa
-      mesa-demos
+      mesa-utils
       libva-vdpau-driver
       libvdpau-va-gl
       vdpauinfo
