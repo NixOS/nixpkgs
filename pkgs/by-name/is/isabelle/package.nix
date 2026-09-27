@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.solr
     isabelleComponents.sqlite
     isabelleComponents.stack
+    isabelleComponents.xz-java
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -172,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}' \
       --replace-fail 'contrib/vscode_extension-20251205' "# in vscodium settings" \
       --replace-fail 'contrib/vscodium-${isabelleComponents.vscodium.version}' '${isabelleComponents.vscodium.settings}' \
+      --replace-fail 'contrib/xz-java-${isabelleComponents.xz-java.version}' '${isabelleComponents.xz-java.settings}' \
       --replace-fail 'contrib/zipperposition-2.1-1' '${isabelleComponents.zipperposition.settings}'
 
     rm -rf contrib/bash_process-20240326 contrib/csdp-6.1.1-1 contrib/cvc5-1.2.0-1 \
@@ -187,7 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1 contrib/llncs-2.25 contrib/opam-2.0.7 \
            contrib/minisat-2.2.1-1 contrib/mlton-20241230-1 contrib/pdfjs-5.4.394 \
            contrib/prismjs-1.30.0 contrib/postgresql-42.7.8 contrib/rsync-3.2.7-1 \
-           contrib/smbc-0.4.1 contrib/solr-9.9.0 contrib/sqlite-3.51.0.0 contrib/stack-2.15.7
+           contrib/smbc-0.4.1 contrib/solr-9.9.0 contrib/sqlite-3.51.0.0 contrib/stack-2.15.7 \
+           contrib/xz-java-1.10
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
