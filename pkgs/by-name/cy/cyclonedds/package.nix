@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyclonedds";
-  version = "0.10.5";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds";
     rev = finalAttrs.version;
-    sha256 = "sha256-MQVUZ7PkxauoPpfxlhhAtsKztMe9tcZOpOzshuz/eb8=";
+    sha256 = "sha256-+p1J6xEwrUPLheuQL4gm4x1e6rH/+qYsWc9eeJrmRR4=";
   };
-
-  patches = [
-    ./0001-Use-full-path-in-pkgconfig.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 
