@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2026.07.27.00";
+  version = "2026.08.31.00";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fb303";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-euqoTxNizn4cA9UY/U6X6m2bV1owEuqEQIDEiDM9n5w=";
+    hash = "sha256-ptMhbmStPbQKbRwCjAFS9aO3CBk5gv/15OJEBoxXhFA=";
   };
 
   nativeBuildInputs = [
