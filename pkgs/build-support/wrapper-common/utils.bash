@@ -150,6 +150,14 @@ expandResponseParams() {
     done
 }
 
+function escapeResponseArgs() {
+    for i in "$@"; do
+        # Wrap the argument in double quotes and escape all backslashes and
+        # double quotes.
+        echo '"'"${i//[\\\"]/\\&}"'"'
+    done
+}
+
 checkLinkType() {
     local arg
     type="dynamic"
