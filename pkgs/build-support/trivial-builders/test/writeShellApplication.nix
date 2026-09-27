@@ -160,6 +160,16 @@ linkFarm "writeShellApplication-tests" {
     '';
   };
 
+  test-run-shell-check = writeShellApplication {
+    name = "test-run-shell-check";
+    runShellCheck = false;
+    text = ''
+      # Triggers SC2016: Expressions don't expand in single quotes, use double
+      # quotes for that.
+      echo '$SHELL'
+    '';
+  };
+
   test-bash-options-pipefail = checkShellApplication {
     name = "test-bash-options-pipefail";
     text = ''
