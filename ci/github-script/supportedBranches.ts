@@ -2,11 +2,12 @@
 /*
 #!nix-shell -i node -p nodejs
 */
-// @ts-nocheck
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const typeConfig = {
+type BranchType = 'channel' | 'development' | 'primary' | 'secondary'
+
+const typeConfig: Record<string, BranchType[]> = {
   master: ['development', 'primary'],
   release: ['development', 'primary'],
   staging: ['development', 'secondary'],
@@ -19,7 +20,7 @@ const typeConfig = {
 
 // "order" ranks the development branches by how likely they are the intended base branch
 // when they are an otherwise equally good fit according to ci/github-script/prepare.js.
-const orderConfig = {
+const orderConfig: Record<string, number> = {
   master: 0,
   release: 1,
   staging: 2,
@@ -28,15 +29,30 @@ const orderConfig = {
   'staging-next': 4,
 }
 
-function split(branch) {
-  return {
-    ...branch.match(
-      /(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/,
-    ).groups,
-  }
+type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+type Version = `${Digit}${Digit}.${Digit}${Digit}` | 'unstable'
+interface SplitResult {
+  prefix: string
+  version: Version
+  suffix?: string
 }
 
-function classify(branch) {
+function split(branch: string) {
+  const groups = branch.match(
+    /(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/,
+  )!.groups!
+  return groups as unknown as SplitResult
+}
+
+interface BranchClassification {
+  branch: string
+  order: number
+  stable: boolean
+  type: BranchType[]
+  version: Version
+}
+
+function classify(branch: string): BranchClassification {
   const { prefix, version } = split(branch)
   return {
     branch,
@@ -55,7 +71,7 @@ if (
   fileURLToPath(import.meta.url) === resolve(process.argv[1])
 ) {
   console.log('split(branch)')
-  function testSplit(branch) {
+  function testSplit(branch: string) {
     console.log(branch, split(branch))
   }
   testSplit('master')
@@ -72,7 +88,7 @@ if (
   console.log('')
 
   console.log('classify(branch)')
-  function testClassify(branch) {
+  function testClassify(branch: string) {
     console.log(branch, classify(branch))
   }
   testClassify('master')

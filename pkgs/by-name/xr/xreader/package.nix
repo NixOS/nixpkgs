@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   glib,
   gobject-introspection,
   intltool,
@@ -45,6 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-wycQmScxuSlo6Ln6piSBF7kmzvi6FnTm/ES/Ds+/h8I=";
   };
+
+  patches = [
+    # ev-poppler.cc: Only read a link destination for GOTO_DEST
+    # Fixes CVE-2026-19772
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xreader/commit/28ee72cc2779a3716b7d00da1aa87da992648d24.patch";
+      hash = "sha256-pd0kyfwsph+H9lii7CfndETsKTYSWyYw2tb9bMOHRX8=";
+    })
+  ];
 
   nativeBuildInputs = [
     shared-mime-info

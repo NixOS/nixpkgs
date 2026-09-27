@@ -6,8 +6,8 @@ import {
   evaluateTargetBranchPolicy,
   getTargetBranchPolicy,
 } from './check-target-branch-policy.ts'
-import { dismissReviews, postReview } from './reviews.js'
-import { split } from './supportedBranches.js'
+import { dismissReviews, postReview } from './reviews.ts'
+import { split } from './supportedBranches.ts'
 
 // TODO: should this be combined with the branch checks in prepare.js?
 // They do seem quite similar, but this needs to run after eval,

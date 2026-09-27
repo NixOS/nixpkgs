@@ -1,17 +1,23 @@
-import { getCommitDetailsForPR } from './get-pr-commit-details.js'
-import { classify } from './supportedBranches.js'
+import { type Commit, getCommitDetailsForPR } from './get-pr-commit-details.ts'
+import { classify } from './supportedBranches.ts'
 
-/** @typedef {import('./get-pr-commit-details.js').Commit} Commit */
+type GitHub = InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+type Context = typeof import('@actions/github').context
+type Core = typeof import('@actions/core')
 
-/**
- * @param {{
- *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
- *  context: typeof import('@actions/github').context,
- *  core: typeof import('@actions/core'),
- *  repoPath?: string,
- * }} LintCommitsProps
- */
-export default async function lintCommits({ github, context, core, repoPath }) {
+interface LintCommitsProps {
+  github: GitHub
+  context: Context
+  core: Core
+  repoPath?: string
+}
+
+export default async function lintCommits({
+  github,
+  context,
+  core,
+  repoPath,
+}: LintCommitsProps) {
   // This check should only be run when we have the pull_request context.
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
@@ -53,13 +59,15 @@ export default async function lintCommits({ github, context, core, repoPath }) {
   await checkCommitMetadata({ commits, core })
 }
 
-/**
- * @param {{
- *  commits: Commit[],
- *  core: typeof import('@actions/core'),
- * }} CheckCommitMessagesProps
- */
-async function checkCommitMessages({ commits, core }) {
+interface CheckCommitMessagesProps {
+  commits: Commit[]
+  core: Core
+}
+
+async function checkCommitMessages({
+  commits,
+  core,
+}: CheckCommitMessagesProps) {
   const failures = new Set()
 
   const conventionalCommitTypes = [
@@ -80,10 +88,13 @@ async function checkCommitMessages({ commits, core }) {
   ]
 
   /**
-   * @param {string[]} types e.g. ["fix", "feat"]
-   * @param {string?} sha commit hash
+   * @param types e.g. ["fix", "feat"]
+   * @param sha commit hash
    */
-  function makeConventionalCommitRegex(types, sha = null) {
+  function makeConventionalCommitRegex(
+    types: string[],
+    sha: string | null = null,
+  ) {
     core.info(
       `${
         sha
@@ -166,17 +177,15 @@ async function checkCommitMessages({ commits, core }) {
   }
 }
 
-/**
- * @param {{
- *  commits: Commit[],
- *  core: typeof import('@actions/core'),
- * }} CheckGitFieldsProps
- */
-async function checkCommitMetadata({ commits, core }) {
+interface CheckGitFieldsProps {
+  commits: Commit[]
+  core: Core
+}
+
+async function checkCommitMetadata({ commits, core }: CheckGitFieldsProps) {
   const failures = new Set()
 
-  /** @type {(s: string) => boolean} */
-  const isEmail = (s) => /^.+@.*$/.test(s)
+  const isEmail = (s: string) => /^.+@.*$/.test(s)
 
   for (const commit of commits) {
     if (!commit.author.name) {
