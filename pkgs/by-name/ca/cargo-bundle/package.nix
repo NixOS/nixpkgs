@@ -1,49 +1,47 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchCrate,
   pkg-config,
   stdenv,
   libxkbcommon,
   wayland,
   openssl,
-  squashfs-tools,
-  makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bundle";
-  version = "0.9.0";
+  version = "0.12.0";
 
-  src = fetchFromGitHub {
-    owner = "burtonageo";
-    repo = "cargo-bundle";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8Ulah5NtjQh5dIB/nhTrDstnaub4LS9iH33E1iv1JpY=";
+  __structuredAttrs = true;
+
+  # git source doesn't ship a cargo.lock
+  src = fetchCrate {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9H4FtNjyXGr7Dkw7hepy2Du9u83CjLTPMflGXUI8GG0=";
   };
 
-  cargoHash = "sha256-qE0ZDq0UJHfsivvI1W44u/pVjKMDGrghSl7sfau/pIY=";
+  cargoHash = "sha256-w35I7+GxlquxbqR5xl+5kn1sSzi2U38dgCy/X6CTFUY=";
 
-  nativeBuildInputs = [
+  # let the integration tests pick up the prebuilt release binary instead of
+  # assuming a cargo debug-build layout (target/debug/cargo-bundle)
+  patches = [ ./tests-env.patch ];
+
+  # native-tls links openssl on Linux, found via pkg-config; on darwin it
+  # uses the Security/system-libs framework instead
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+
+    # linked by the winit dev-dependency when tests build
     libxkbcommon
     wayland
-    openssl
   ];
-
-  # squashfs tools are needed to build appimages for Linux
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/cargo-bundle \
-      --prefix PATH : ${lib.makeBinPath [ squashfs-tools ]}
-  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -53,12 +51,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Wrap rust executables in OS-specific app bundles";
-    mainProgram = "cargo-bundle";
+    longDescription = ''
+      cargo-bundle is a tool used to generate installers or app bundles for
+      executables built with cargo. It can create .app and .dmg bundles for
+      macOS, .deb packages and AppImage bundles for Linux, and .msi
+      installers for Windows (iOS and Windows support is experimental).
+    '';
     homepage = "https://github.com/burtonageo/cargo-bundle";
+    changelog = "https://github.com/burtonageo/cargo-bundle/tags";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
+    mainProgram = "cargo-bundle";
+    platforms = lib.platforms.unix;
   };
 })
