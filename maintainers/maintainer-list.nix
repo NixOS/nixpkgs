@@ -29028,6 +29028,12 @@
     githubId = 11761863;
     name = "Theo Paris";
   };
+  theodoreehrenborg = {
+    name = "Theodore Ehrenborg";
+    email = "theodore.ehrenborg@gmail.com";
+    github = "TheodoreEhrenborg";
+    githubId = 46494248;
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
