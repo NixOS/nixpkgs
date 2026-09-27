@@ -4,6 +4,7 @@
   fetchFromGitHub,
   writeShellScript,
   makeWrapper,
+  nixosTests,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
@@ -71,6 +72,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
+    tests = { inherit (nixosTests) umap; };
     pythonPath = "${finalAttrs.finalPackage}/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}";
   };
 
