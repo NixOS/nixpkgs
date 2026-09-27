@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     tag = "v${version}";
-    hash = "sha256-BPQFndikPSsKU4HPauTAewab32IumckG/y3lhUUNbMU=";
+    hash = "sha256-N98UR6WC9ICQyBuAVejR8yrzZEBaE92EO7jY65SnaKg=";
   };
 
   nativeBuildInputs = [
