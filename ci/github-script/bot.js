@@ -491,7 +491,7 @@ export default async ({ github, context, core, dry }) => {
           ),
         ).map((id) => parseInt(id))
 
-        prLabels['7.unmaintained'] =
+        prLabels['7.no default reviewers'] =
           user_maintainers.length === 0 &&
           team_maintainers.length === 0 &&
           owners.length === 0
