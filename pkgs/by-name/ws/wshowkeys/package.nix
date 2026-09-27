@@ -19,10 +19,10 @@ stdenv.mkDerivation {
   version = "2021-08-01";
 
   src = fetchFromGitHub {
-    owner = "ammgws";
+    owner = "repparw";
     repo = "wshowkeys";
-    rev = "e8bfc78f08ebdd1316daae59ecc77e62bba68b2b";
-    hash = "sha256-/HvNCQWsXOJZeCxHWmsLlbBDhBzF7XP/SPLdDiWMDC4=";
+    rev = "27cedb85628051969ea6a96bf83d95d80c0c8955";
+    hash = "sha256-+CWHCajznhOq27CdV7QRknluy76faswbdngS26z87Ww=";
   };
 
   strictDeps = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       permissions are dropped after startup. The NixOS module provides such a
       setuid binary (use "programs.wshowkeys.enable = true;").
     '';
-    homepage = "https://github.com/ammgws/wshowkeys";
+    homepage = "https://github.com/repparw/wshowkeys";
     license = with lib.licenses; [
       gpl3Only
       mit
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       berbiche
+      repparw
     ];
     mainProgram = "wshowkeys";
   };
