@@ -3,16 +3,16 @@
   fetchFromGitHub,
   fetchpatch,
   lib,
-  pyserial-asyncio-fast,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  serialx,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "enocean-async";
-  version = "0.4.2";
+  version = "0.13.5";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -21,13 +21,13 @@ buildPythonPackage (finalAttrs: {
     owner = "henningkerstan";
     repo = "enocean-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VBBZwNPBgJ9rXUaAVtRzgdebeDtfJCt7R1zOu3Eom80=";
+    hash = "sha256-D0ocHDr75cwPK7Ci3sq+I1bk/152m2dL+jXgGBNQjMc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    pyserial-asyncio-fast
+    serialx
   ];
 
   pythonImportsCheck = [ "enocean_async" ];
@@ -35,11 +35,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # tests have broken imports, fixed in 0.12.4
-    "tests/test_eep.py"
   ];
 
   meta = {
