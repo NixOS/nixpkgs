@@ -55,6 +55,10 @@ buildDunePackage (finalAttrs: {
   version = "7.0.0";
   pname = "ocsigenserver";
 
+  # ocsigenserver dynamically loads its extensions from its library directory,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
+
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
