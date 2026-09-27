@@ -5,7 +5,7 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "passfail2";
-  version = "0.3.0-unstable-2024-10-17";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "lambdadog";
     repo = "passfail2";
