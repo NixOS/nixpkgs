@@ -4,18 +4,20 @@
   fetchPypi,
   hatchling,
   networkx,
+  numpy,
   pytestCheckHook,
   pytest-cov-stub,
   pydot,
+  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phart";
-  version = "1.1.4";
+  version = "2.0.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JpHjEVKpOPSNUdUjZxWBHt6AFCpci1nSRWhDXxG6nyw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-PSYth5QlxvSmrMIehIAS4Pv307x6XluMg0JMSq1TZnE=";
   };
 
   pyproject = true;
@@ -28,32 +30,16 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  postPatch = ''
-    # pythonRelaxDeps = true; didn't work
-    substituteInPlace pyproject.toml \
-      --replace-fail 'hatchling==1.26.3' 'hatchling'
-
-    # This line makes the cli tool not work, removing it fixes it
-    substituteInPlace src/phart/cli.py \
-      --replace-fail "renderer.options.use_ascii = args.ascii" ""
-  '';
-
   dependencies = [
     networkx
   ];
 
-  disabledTestPaths = [
-    # Many of the tests are stale
-    "tests/test_cli.py"
-  ];
-
   nativeCheckInputs = [
+    numpy
     pytestCheckHook
     pytest-cov-stub
     pydot
   ];
-
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
 
   pythonImportsCheck = [
     "phart"
@@ -64,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scottvr/phart";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
+    broken = !pythonAtLeast "3.14";
   };
-}
+})
