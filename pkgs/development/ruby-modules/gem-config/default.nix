@@ -828,6 +828,57 @@ in
     '';
   };
 
+  osv = attrs: {
+    # Basic config
+    dontBuild = false;
+    CARGO_HOME = "${placeholder "out"}/.cargo";
+
+    # Build inputs
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+
+    # Cargo dependencies
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      pname = "osv-deps-cargo-tarball";
+      version = attrs.version;
+      hash = "sha256-4foO8KxVhbi/8mFn9fMxBg0JwFCdevIbdyseG40K1+U=";
+      src = stdenv.mkDerivation {
+        inherit (buildRubyGem {
+          inherit (attrs) gemName version source;
+        })
+          name
+          src
+          unpackPhase
+          nativeBuildInputs
+          ;
+        installPhase = ''
+          mkdir -p $out/ext/osv/.cargo
+          cp -R ./Cargo.* $out/
+          cp -R ./ext/osv/* $out/ext/osv/
+        '';
+      };
+    };
+
+    # Build hooks
+    preBuild = ''
+      mkdir -p $CARGO_HOME/.cargo
+      cp ../.cargo/config.toml $CARGO_HOME/config.toml
+    '';
+
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
+
+    # Cleanup
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
+  };
+
   ovirt-engine-sdk = attrs: {
     buildInputs = [
       curl
@@ -871,6 +922,57 @@ in
 
   patron = attrs: {
     buildInputs = [ curl ];
+  };
+
+  parquet = attrs: {
+    # Basic config
+    dontBuild = false;
+    CARGO_HOME = "${placeholder "out"}/.cargo";
+
+    # Build inputs
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+
+    # Cargo dependencies
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      pname = "parquet-deps-cargo-tarball";
+      version = attrs.version;
+      hash = "sha256-jfx6cpu11rkwBhhh37cWI/6hrzsw/YCWW9+5aoezzww=";
+      src = stdenv.mkDerivation {
+        inherit (buildRubyGem {
+          inherit (attrs) gemName version source;
+        })
+          name
+          src
+          unpackPhase
+          nativeBuildInputs
+          ;
+        installPhase = ''
+          mkdir -p $out/ext/parquet/.cargo
+          cp -R ./Cargo.* $out/
+          cp -R ./ext/parquet/* $out/ext/parquet/
+        '';
+      };
+    };
+
+    # Build hooks
+    preBuild = ''
+      mkdir -p $CARGO_HOME/.cargo
+      cp ../.cargo/config.toml $CARGO_HOME/config.toml
+    '';
+
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
+
+    # Cleanup
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
   };
 
   pcaprub = attrs: {
