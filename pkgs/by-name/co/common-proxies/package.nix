@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Set of rewrite proxies and gateways for UnifiedPush";
-    homepage = "https://github.com/UnifiedPush/common-proxies";
+    homepage = "https://codeberg.org/UnifiedPush/common-proxies";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimward ];
     mainProgram = "common-proxies";
