@@ -40,6 +40,8 @@ in
 
 lib.makeOverridable (
   lib.extendMkDerivation {
+    calculateExpectDrvArgs = true;
+
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
