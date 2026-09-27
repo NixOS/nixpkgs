@@ -1,0 +1,12 @@
+--- a/rtl/aarch64/aarch64.inc
++++ b/rtl/aarch64/aarch64.inc
+@@ -131,6 +131,9 @@
+     setfpsr(getfpsr and not(fpu_exception_mask shr fpu_exception_mask_to_status_mask_shift));
+     { enable invalid operations and division by zero exceptions. }
+     setfpcr(((getfpcr and not(fpu_exception_mask)) or fpu_dze or fpu_ofe or fpu_ioe));
++{$IFDEF DARWIN}
++    setfpcr(getfpcr and not(fpu_dze or fpu_ofe or fpu_ioe));
++{$ENDIF}
+     softfloat_exception_mask:=[float_flag_underflow,float_flag_inexact,float_flag_denormal];
+     softfloat_exception_flags:=[];
+   end;
