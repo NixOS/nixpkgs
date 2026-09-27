@@ -775,26 +775,51 @@ rec {
     # Inputs
 
     `extendMkDerivation`-specific configurations
-    : `constructDrv` (required)
-      : Base build helper, the `mkDerivation`-like build helper to extend.
+    : - Core configurations
 
-      `excludeDrvArgNames` (default to `[ ]`)
-      : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
-        It doesn't apply to the updating arguments returned by `extendDrvArgs`.
+        `constructDrv` (required)
+        : Base build helper, the `mkDerivation`-like build helper to extend.
 
-      `excludeFunctionArgNames` (default to `[ ]`)
-      : `__functionArgs` attribute names to remove from the result build helper.
-        `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+        `extendDrvArgs` (required)
+        : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
 
-      `extendDrvArgs` (required)
-      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+        `excludeDrvArgNames` (default to `[ ]`)
+        : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
+          It doesn't apply to the updating arguments returned by `extendDrvArgs`.
 
-      `inheritFunctionArgs` (default to `true`)
-      : Whether to inherit `__functionArgs` from the base build helper.
+        `transformDrv` (default to `lib.id`)
+        : Function to apply to the result derivation.
+
+      - `__functionArgs` configurations
+
+        `inheritFunctionArgs` (default to `true`)
+        : Whether to inherit `__functionArgs` from the base build helper.
         Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
 
-      `transformDrv` (default to `lib.id`)
-      : Function to apply to the result derivation.
+        `excludeFunctionArgNames` (default to `[ ]`)
+        : `__functionArgs` attribute names to remove from the result build helper.
+          `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+
+      - `expectDrvArgs` configurations
+
+        `calculateExpectDrvArgs` (default to `false`)
+        : Calculate the expected arguments passing down to the bottom build helper (usually `stdenv.mkDerivation`).
+
+          If `calculateExpectDrvArgs == true` or `expectDrvArgs != null`,
+          `expectDrvArgs` will be attached to the result build helper,
+          whose attributes are the arguments the bottom build helper could accept,
+          while its boolean value indicate if the value will definitely be passed.
+
+        `expectDrvArgs` (default to `null`)
+        : Manually specify the `expectDrvArgs` attribute value.
+
+          The default value `null` means not manually specifying `expectDrvArgs`.
+
+        `expectDrvArgsExtraArgs` (default to `null`)
+        : Manual update to the pseudo `args` to calculate `expectDrvArgs`,
+          which will be appended to the automatically-generated pseudo `args` from the result build helper's __functionArgs (before `excludeFunctionArgNames` exclusion).
+
+          The default value `null` means `{ derivationArgs = { }; }` if the function takes `derivationArgs` else `{ }`.
 
     # Type
 
@@ -802,8 +827,11 @@ rec {
     extendMkDerivation ::
       {
         constructDrv :: (FixedPointArgs | AttrSet) -> Derivation;
+        calculateExpectDrvArgs :: Bool;
         excludeDrvArgNames :: [String];
         excludeFunctionArgNames :: [String];
+        expectDrvArgs :: { :: Bool };
+        expectDrvArgsExtraArgs :: AttrSet;
         extendDrvArgs :: AttrSet -> AttrSet -> AttrSet;
         inheritFunctionArgs :: Bool;
         transformDrv :: Derivation -> Derivation;
@@ -850,16 +878,64 @@ rec {
     direct [attribute set update](https://nixos.org/manual/nix/stable/language/operators#update)
     and [`lib.extendDerivation`](#function-library-lib.customisation.extendDerivation).
     :::
+
+    :::{.example}
+    ## `lib.customisation.extendMkDerivation` providing `expectedDrvArgs` usage example
+    ```nix-repl
+    mkLocalDerivationNoEllipsis = lib.extendMkDerivation {
+      constructDrv = pkgs.stdenv.mkDerivation;
+      excludeDrvArgNames = [
+        "derivationArgs"
+        "specialArg"
+      ];
+      extendDrvArgs =
+        finalAttrs:
+        args@{
+          preferLocalBuild ? true,
+          allowSubstitute ? false,
+          specialArg ? (_: false),
+          derivationArgs ? { },
+        }:
+        derivationArgs
+        // {
+          inherit
+            preferLocalBuild
+            allowSubstitute
+            ;
+          passthru = { inherit specialArg; } // args.passthru or { };
+        };
+      inheritFunctionArgs = false; # No ellipsis
+      calculateExpectDrvArgs = true;
+    }
+
+    mkLocalDerivationNoEllipsis.__functionArgs
+    => { allowSubstitute = true; derivationArgs = true; preferLocalBuild = true; specialArg = true; }
+
+    mkLocalDerivation.expectDrvArgs
+    => { allowSubstitute = true; passthru = true; preferLocalBuild = true; }
+    ```
+    :::
   */
   extendMkDerivation =
     {
       constructDrv,
+      extendDrvArgs,
+      calculateExpectDrvArgs ? false,
       excludeDrvArgNames ? [ ],
       excludeFunctionArgNames ? [ ],
-      extendDrvArgs,
+      expectDrvArgs ? null,
+      expectDrvArgsExtraArgs ? null,
       inheritFunctionArgs ? true,
       transformDrv ? id,
     }:
+    let
+      finalAttrsStub = { };
+      faAll =
+        # Inherit the __functionArgs from the base build helper
+        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+        # Recover the __functionArgs from the derived build helper
+        // functionArgs (extendDrvArgs finalAttrsStub);
+    in
     {
       # Adds the fixed-point style support
       __functor =
@@ -874,12 +950,7 @@ rec {
           )
         );
 
-      __functionArgs = removeAttrs (
-        # Inherit the __functionArgs from the base build helper
-        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-        # Recover the __functionArgs from the derived build helper
-        // functionArgs (extendDrvArgs { })
-      ) excludeFunctionArgNames;
+      __functionArgs = removeAttrs faAll excludeFunctionArgNames;
 
       inherit
         # Expose to the result build helper.
@@ -888,6 +959,43 @@ rec {
         extendDrvArgs
         transformDrv
         ;
+
+      ${if calculateExpectDrvArgs || expectDrvArgs != null then "expectDrvArgs" else null} =
+        let
+          faRequired = lib.filterAttrs (n: v: !v) faAll;
+          argsStubAll = faAll // expectDrvArgsExtraArgs';
+          argsStubRequired = faRequired // expectDrvArgsExtraArgs';
+          expectDrvArgsExtraArgs' =
+            if expectDrvArgsExtraArgs != null then
+              expectDrvArgsExtraArgs
+            else if !faRequired ? derivationArgs then
+              { derivationArgs = { }; }
+            else
+              { };
+        in
+        if expectDrvArgs != null then
+          expectDrvArgs
+        else if constructDrv ? expectDrvArgs then
+          lib.zipAttrsWith (_: lib.any lib.id) [
+            constructDrv.expectDrvArgs
+            (
+              lib.mapAttrs (n: _: false) (extendDrvArgs finalAttrsStub argsStubAll).derivationArgs or { }
+              // lib.mapAttrs (n: _: true) (extendDrvArgs finalAttrsStub argsStubRequired).derivationArgs or { }
+            )
+          ]
+        else if !constructDrv ? constructDrv then
+          lib.zipAttrsWith (_: lib.any lib.id) [
+            (lib.mapAttrs (n: v: !v) (removeAttrs faAll excludeDrvArgNames))
+            (
+              lib.mapAttrs (n: _: false) (extendDrvArgs finalAttrsStub argsStubAll)
+              // lib.mapAttrs (n: _: true) (extendDrvArgs finalAttrsStub argsStubRequired)
+            )
+          ]
+        else
+          throw ''
+            extendMkDerivation failed to calculate expectDrvArgs, as constructDrv is constructed with lib.extendMkDerivation but doesn't provide expectDrvArgs.
+              Specify expectDrvArgs manually or specify/calculate expectDrvArgs for constructDrv to fix this error.
+          '';
     };
 
   /**
