@@ -25,13 +25,13 @@
 let
   nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.9.2";
+    version = "2.9.3";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-rjLF0nTRuPKVyxXjNlkHG6k4SdcSwjNOW26u/qlP8uA=";
+      hash = "sha256-ud2XcAxUUYenNrGyrh4B9LrDcMZ6eJfPkL60lDcanDI=";
     };
 
     nativeBuildInputs = [
