@@ -554,6 +554,23 @@ rec {
         '';
       };
 
+      restartOnStaleEtc = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the service should be restarted during a NixOS
+          configuration switch when its mount namespace still uses the
+          previous `/etc`. This can happen with
+          {option}`system.etc.overlay.enable` when the service's `/etc`
+          has namespace-local submounts, e.g. from `BindPaths=` or
+          `ConfigurationDirectory=`, which prevent the mount replacement
+          from propagating into the service's mount namespace.
+
+          Services with {option}`restartIfChanged` set to `false` are
+          never restarted for a stale `/etc`.
+        '';
+      };
+
       reloadIfChanged = mkOption {
         type = types.bool;
         default = false;
