@@ -112,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     asar pack tmp-app "$packed"
 
+    # element-web is linked into the output during installPhase.
+    find ./dist -name webapp.asar -delete
+
     runHook postBuild
   '';
 

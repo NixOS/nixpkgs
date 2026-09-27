@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.42.0";
+  version = "5.43.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-vt6OtR7qqmulrVaB2YQnwA7Xzbm1QCEDx4YGEpUKeq8=";
+    hash = "sha256-eh3LitCEVqd60rZ+C9yh+3vnTNYlEziQzj7on/rTkIU=";
   };
 
   postPatch = ''
@@ -95,6 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     huaweicloudsdkkms
     huaweicloudsdkobs
     huaweicloudsdkrds
+    huaweicloudsdksmn
     huaweicloudsdkvpc
     huaweicloudsdkwaf
     jsonschema

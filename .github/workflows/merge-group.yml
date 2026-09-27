@@ -63,7 +63,7 @@ jobs:
   check:
     name: Check
     needs: [prepare]
-    uses: ./.github/workflows/check.yml
+    uses: $/.github/workflows/check.yml
     permissions:
       pull-requests: write # cherry-picks: unused in merge queue but required for check workflow
     secrets:
@@ -75,7 +75,7 @@ jobs:
   lint:
     name: Lint
     needs: [prepare]
-    uses: ./.github/workflows/lint.yml
+    uses: $/.github/workflows/lint.yml
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
@@ -85,7 +85,7 @@ jobs:
   eval:
     name: Eval
     needs: [prepare]
-    uses: ./.github/workflows/eval.yml
+    uses: $/.github/workflows/eval.yml
     # The eval workflow requests these permissions so we must explicitly allow them,
     # even though they are unused when working with the merge queue.
     permissions:
@@ -103,7 +103,7 @@ jobs:
   build:
     name: Build
     needs: [prepare]
-    uses: ./.github/workflows/build.yml
+    uses: $/.github/workflows/build.yml
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:

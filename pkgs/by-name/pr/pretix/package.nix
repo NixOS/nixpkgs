@@ -19,6 +19,7 @@ let
     packageOverrides = self: super: {
       chardet = super.chardet_5;
       django = super.django_5;
+      djangorestframework = super.djangorestframework_3_17;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.0";

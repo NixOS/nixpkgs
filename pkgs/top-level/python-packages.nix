@@ -3533,6 +3533,10 @@ self: super: with self; {
     callPackage ../development/python-modules/comfyui-workflow-templates-media-assets-01
       { };
 
+  comfyui-workflow-templates-media-assets-02 =
+    callPackage ../development/python-modules/comfyui-workflow-templates-media-assets-02
+      { };
+
   comfyui-workflow-templates-media-image =
     callPackage ../development/python-modules/comfyui-workflow-templates-media-image
       { };
@@ -4549,8 +4553,6 @@ self: super: with self; {
   # LTS with mainsteam support
   django = self.django_5;
 
-  django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
-
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
   django-agnocomplete = callPackage ../development/python-modules/django-agnocomplete { };
@@ -4958,6 +4960,8 @@ self: super: with self; {
 
   django_6 = callPackage ../development/python-modules/django/6.nix { };
 
+  django_6_0 = callPackage ../development/python-modules/django/6_0.nix { };
+
   djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
 
   djangocms-alias = callPackage ../development/python-modules/djangocms-alias { };
@@ -4997,6 +5001,10 @@ self: super: with self; {
       { };
 
   djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
+
+  djangorestframework_3_17 =
+    callPackage ../development/python-modules/djangorestframework/3_17.nix
+      { };
 
   djangosaml2 = callPackage ../development/python-modules/djangosaml2 { };
 

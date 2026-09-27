@@ -1,43 +1,58 @@
 [
   {
     "pname": "BouncyCastle.Cryptography",
-    "version": "2.6.2",
-    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
+    "version": "2.7.0",
+    "hash": "sha256-8JH/zKtNA5k+Zgus4ndlmnne4JcvVNfx9L1G1oCWYkE="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.OpenIdConnect",
-    "version": "10.0.9",
-    "hash": "sha256-+fRq6oetJlK32C2R/nRBThcO+S6HTX6AIcfg12keAxU="
+    "version": "10.0.12",
+    "hash": "sha256-W3pYq6kIZR6brxV8cWBsgD+lyzVstN0vQ1579WC6Xd4="
+  },
+  {
+    "pname": "Microsoft.Bcl.Cryptography",
+    "version": "10.0.2",
+    "hash": "sha256-+OYtcWsd1qZcEXadYeA4t6+pyADg1APQCxpKUtP002M="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.0.1",
-    "hash": "sha256-zPWUKTCfGm4MWcYPU037NzezsFE1g8tEijjQkw5iooI="
+    "version": "8.19.2",
+    "hash": "sha256-vNGK6u6V+S0MIaYTg+sSkRF4XUjM1K+cKuR1a9aRCLs="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.0.1",
-    "hash": "sha256-Xv9MUnjb66U3xeR9drOcSX5n2DjOCIJZPMNSKjWHo9Y="
+    "version": "8.19.2",
+    "hash": "sha256-j9ai0NrgytDsfQiIijp1Ib4jRGX9lgREQBoE6XW9SOc="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.0.1",
-    "hash": "sha256-FfwrH/2eLT521Kqw+RBIoVfzlTNyYMqlWP3z+T6Wy2Y="
+    "version": "8.19.2",
+    "hash": "sha256-ja8PAYUNwlfIrkL6EOuZ7SgZfRJwIORGG/ETDD1BtRE="
   },
   {
     "pname": "Microsoft.IdentityModel.Protocols",
-    "version": "8.0.1",
-    "hash": "sha256-v3DIpG6yfIToZBpHOjtQHRo2BhXGDoE70EVs6kBtrRg="
+    "version": "8.19.2",
+    "hash": "sha256-soADEUQsOp1Hytt1qLo+jOOeq7uy7I7tUOWogXeQXFY="
   },
   {
     "pname": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
-    "version": "8.0.1",
-    "hash": "sha256-ZHKaZxqESk+OU1SFTFGxvZ71zbdgWqv1L6ET9+fdXX0="
+    "version": "8.19.2",
+    "hash": "sha256-uSrN5xlG+SXlxg4NACFU2FSlC3V3hYojdhU8lUc687o="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.0.1",
-    "hash": "sha256-beVbbVQy874HlXkTKarPTT5/r7XR1NGHA/50ywWp7YA="
+    "version": "8.19.2",
+    "hash": "sha256-POi3SzcK3+iB3104wXYh3ooVD1GbltwTUf+KMj//UYU="
   },
   {
     "pname": "Microsoft.Win32.SystemEvents",
@@ -50,13 +65,18 @@
     "hash": "sha256-UvOeFFxUZ/bddmDs6IamiYGDIfgxybE/CSpPyy5DMxI="
   },
   {
+    "pname": "System.DirectoryServices.Protocols",
+    "version": "10.0.12",
+    "hash": "sha256-tpYNScocWAml3NqO4hHvpJr3ULd2rdHxijTcVDIxiEo="
+  },
+  {
     "pname": "System.Drawing.Common",
     "version": "6.0.0",
     "hash": "sha256-/9EaAbEeOjELRSMZaImS1O8FmUe8j4WuFUw1VOrPyAo="
   },
   {
     "pname": "System.IdentityModel.Tokens.Jwt",
-    "version": "8.0.1",
-    "hash": "sha256-hW4f9zWs0afxPbcMqCA/FAGvBZbBFSkugIOurswomHg="
+    "version": "8.19.2",
+    "hash": "sha256-kEqfEiWkotfDUDphn0MsMqhOc82qQLXlbo5XYg58/io="
   }
 ]
