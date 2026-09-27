@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tau-radio";
-  version = "0.2.3";
+  version = "0.2.101";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tau-org";
     repo = "tau-radio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1SKlZ+htlCsO7ClZDbFbKyw8v9zgV5pKDEtL57D49f8=";
+    hash = "sha256-uRrUH1BflX5xsCs3ATplMhry6b4hqnpZSQ/3HQ9npVQ=";
   };
 
-  cargoHash = "sha256-X1uHKYgt9ddvr/cBDW9HaHawG5uv2sU416jyL/XTPF4=";
+  cargoHash = "sha256-zqucj1iNsUdA06D+tDyYkevF/gio31JmcP00bk5PC18=";
 
   nativeBuildInputs = [
     pkg-config
