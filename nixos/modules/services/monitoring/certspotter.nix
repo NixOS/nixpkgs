@@ -131,7 +131,7 @@ in
 
     systemd.services.certspotter = {
       description = "Cert Spotter - Certificate Transparency Monitor";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       environment.CERTSPOTTER_CONFIG_DIR = configDir;
       environment.SENDMAIL_PATH =
@@ -150,6 +150,8 @@ in
       serviceConfig = {
         User = "certspotter";
         Group = "certspotter";
+        Restart = "on-failure";
+        RestartSec = "10s";
         StateDirectory = "certspotter";
       };
     };
