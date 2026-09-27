@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "libnvme";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M+SkxzNrRSBu5EmdK82Qh8MPDqGO7fKbdrU9irScARY=";
   };
 
