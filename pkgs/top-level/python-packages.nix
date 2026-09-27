@@ -12426,6 +12426,8 @@ self: super: with self; {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  odl-renderer = callPackage ../development/python-modules/odl-renderer { };
+
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   odsgenerator = callPackage ../development/python-modules/odsgenerator { };
