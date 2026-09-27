@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Database management in a single PHP file";
-    homepage = "https://docs.adminerevo.org";
+    homepage = "https://github.com/adminerevo/adminerevo";
     license = with lib.licenses; [
       asl20
       gpl2Only

@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "https://blog.lxde.org/category/pcmanfm/";
+    homepage = "https://github.com/lxde/libfm";
     license = lib.licenses.lgpl21Plus;
     description = "Glib-based library for file management";
     maintainers = [ ];

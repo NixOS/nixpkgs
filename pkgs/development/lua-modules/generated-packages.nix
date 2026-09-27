@@ -591,7 +591,7 @@ final: prev: {
       propagatedBuildInputs = [ lpeg ];
 
       meta = {
-        homepage = "http://cosmo.luaforge.net";
+        homepage = "https://github.com/mascarenhas/cosmo";
         license = lib.licenses.AND [
           lib.licenses.mit
           lib.licenses.x11
@@ -1610,7 +1610,7 @@ final: prev: {
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "http://www.myriabit.com/ljsyscall/";
+        homepage = "https://github.com/justincormack/ljsyscall";
         maintainers = with lib.maintainers; [ lblasc ];
         license = lib.licenses.mit;
         description = "LuaJIT Linux syscall FFI";
@@ -6735,7 +6735,7 @@ final: prev: {
       disabled = luaOlder "5.1";
 
       meta = {
-        homepage = "https://vicious.rtfd.io";
+        homepage = "https://vicious.readthedocs.io/";
         license = lib.licenses.gpl2Plus;
         description = "Modular widget library for the \"awesome\" window manager";
       };

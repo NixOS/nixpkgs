@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Scalable & friendly temporary file upload system";
-    homepage = "https://plik.root.gg/";
+    homepage = "https://github.com/root-gg/plik";
     license = lib.licenses.mit;
     mainProgram = "plikd";
     maintainers = [ ];

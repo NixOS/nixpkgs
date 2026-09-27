@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
     mainProgram = "wflinfo";
-    homepage = "https://www.waffle-gl.org/";
+    homepage = "https://gitlab.freedesktop.org/mesa/waffle";
     license = lib.licenses.bsd2;
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];

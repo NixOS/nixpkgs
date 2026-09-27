@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
-    homepage = "https://meli.delivery";
+    homepage = "https://meli-email.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       _0x4A6F

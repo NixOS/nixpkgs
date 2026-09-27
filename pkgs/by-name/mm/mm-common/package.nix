@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       control repository. An installation of mm-common is not required for
       building tarball releases, unless configured to use maintainer-mode.
     '';
-    homepage = "https://www.gtkmm.org";
+    homepage = "https://gitlab.gnome.org/GNOME/mm-common";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;

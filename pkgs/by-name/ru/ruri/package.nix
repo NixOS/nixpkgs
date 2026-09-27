@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Self-contained Linux container implementation";
-    homepage = "https://wiki.crack.moe/ruri";
+    homepage = "https://ruri.zip";
     downloadPage = "https://github.com/RuriOSS/ruri";
     changelog = "https://github.com/RuriOSS/ruri/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "ruri";

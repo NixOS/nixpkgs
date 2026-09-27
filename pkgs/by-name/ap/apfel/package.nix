@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "PDF Evolution Library";
-    homepage = "https://apfel.mi.infn.it/";
+    homepage = "https://github.com/scarrazza/apfel";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.unix;

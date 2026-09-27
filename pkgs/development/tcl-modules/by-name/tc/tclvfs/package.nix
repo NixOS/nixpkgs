@@ -15,7 +15,7 @@ mkTclDerivation {
 
   meta = {
     description = "Tcl extension that exposes Tcl's Virtual File System (VFS) subsystem to the script level";
-    homepage = "https://core.tcl.tk/tclvfs";
+    homepage = "https://core.tcl-lang.org/tclvfs";
     license = lib.licenses.tcltk;
     longDescription = ''
       The TclVfs project aims to provide an extension to the Tcl language which

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
     mainProgram = "ephoto";
-    homepage = "https://www.smhouston.us/ephoto/";
+    homepage = "https://enlightenment.org/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];

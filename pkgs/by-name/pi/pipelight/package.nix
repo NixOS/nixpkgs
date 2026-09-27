@@ -78,7 +78,7 @@ stdenv'.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://pipelight.net/";
+    homepage = "https://bitbucket.org/mmueller2012/pipelight";
     license = with lib.licenses; [
       mpl11
       gpl2Only

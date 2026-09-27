@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    homepage = "https://unqlite.org/";
+    homepage = "https://github.com/symisc/unqlite";
     description = "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
     longDescription = ''
       UnQLite is a in-process software library which implements a

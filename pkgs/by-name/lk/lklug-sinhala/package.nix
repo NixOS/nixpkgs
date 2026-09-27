@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Unicode Sinhala font by Lanka Linux User Group";
-    homepage = "http://www.lug.lk/fonts/lklug";
+    homepage = "https://sinhala.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;

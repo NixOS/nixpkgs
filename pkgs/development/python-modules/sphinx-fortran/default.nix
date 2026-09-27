@@ -37,7 +37,7 @@ buildPythonPackage {
 
   meta = {
     description = "Fortran domain and autodoc extensions to Sphinx";
-    homepage = "http://sphinx-fortran.readthedocs.org/";
+    homepage = "http://sphinx-fortran.readthedocs.io/";
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [ loicreynier ];
   };

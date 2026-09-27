@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "For uzbek state web identity proving & key signing";
     mainProgram = "e-imzo";
     platforms = with lib.platforms; linux ++ darwin;
-    homepage = "https://e-imzo.soliq.uz";
+    homepage = "https://git.oss.uzinfocom.uz/xinux/e-imzo-manager";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [

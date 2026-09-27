@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Dragon Labs CR-8 Host Driver and Utilities";
-    homepage = "https://dragnlabs.com/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ noderyos ];

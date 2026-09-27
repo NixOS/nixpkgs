@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Display Ships in TAK - AIS to TAK Gateway";
-    homepage = "https://aircot.rtfd.io";
+    homepage = "https://aircot.readthedocs.io";
     changelog = "https://github.com/snstac/aircot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];

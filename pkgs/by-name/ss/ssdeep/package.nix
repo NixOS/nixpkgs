@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Program for calculating fuzzy hashes";
     mainProgram = "ssdeep";
-    homepage = "http://www.ssdeep.sf.net";
+    homepage = "https://ssdeep-project.github.io/ssdeep/index.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];

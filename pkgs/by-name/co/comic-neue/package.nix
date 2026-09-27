@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://comicneue.com/";
+    homepage = "https://github.com/crozynski/comicneue";
     description = "Casual type face: Make your lemonade stand look like a fortune 500 company";
     longDescription = ''
       ComicNeue is inspired by Comic Sans but more regular. It was

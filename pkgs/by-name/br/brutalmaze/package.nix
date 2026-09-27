@@ -36,7 +36,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Minimalist thrilling shoot 'em up game";
     mainProgram = "brutalmaze";
-    homepage = "https://brutalmaze.rtfd.io";
+    homepage = "https://brutalmaze.readthedocs.io";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
   };

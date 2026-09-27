@@ -14913,7 +14913,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."2.3.0"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-2.3.0.tar.gz"
@@ -14925,7 +14924,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."2.2.0"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-2.2.0.tar.gz"
@@ -14937,7 +14935,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."2.1.2"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-2.1.2.tar.gz"
@@ -14949,7 +14946,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."2.0.5"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-2.0.5.tar.gz"
@@ -14961,7 +14957,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."2.0.2"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-2.0.2.tar.gz"
@@ -14973,7 +14968,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."1.2.3"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-1.2.3.tar.gz"
@@ -14985,7 +14979,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."1.2.2"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-1.2.2.tar.gz"
@@ -14997,7 +14990,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."1.2.0"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-1.2.0.tar.gz"
@@ -15009,7 +15001,6 @@ description = "BA or MA thesis at FH JOANNEUM"
 license = [
     "MIT",
 ]
-homepage = "https://git-iit.fh-joanneum.at/oss/thesis-template"
 
 [fh-joanneum-iit-thesis."1.1.0"]
 url = "https://packages.typst.org/preview/fh-joanneum-iit-thesis-1.1.0.tar.gz"
@@ -28822,7 +28813,6 @@ description = "📄 Thesis Template for HKUST-GZ in typst"
 license = [
     "MIT",
 ]
-homepage = "https://gitlab.hkust-gz.edu.cn/jlu625/typst-thesis-template"
 
 [modern-hkust-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/modern-hkust-thesis-0.1.0.tar.gz"
@@ -28838,7 +28828,6 @@ description = "📄 Thesis Template for HKUST-GZ in typst"
 license = [
     "MIT",
 ]
-homepage = "https://gitlab.hkust-gz.edu.cn/jlu625/typst-thesis-template"
 
 [modern-hsh-thesis."1.1.2"]
 url = "https://packages.typst.org/preview/modern-hsh-thesis-1.1.2.tar.gz"
@@ -28994,7 +28983,7 @@ description = "An unofficial lab report template for the School of Cyber Science
 license = [
     "GPL-3.0-or-later",
 ]
-homepage = "https://tangled.dzming.li/dzming.li/hust-cse-report"
+homepage = "https://github.com/DzmingLi/hust-cse-report"
 
 [modern-hust-cse-report."0.1.1"]
 url = "https://packages.typst.org/preview/modern-hust-cse-report-0.1.1.tar.gz"

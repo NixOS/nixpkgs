@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       DocuCentre-VI C2271/C3370/C3371/C4471/C5571/C6671/C7771
       DocuPrint 3205 d/3208 d/3505 d/3508 d/4405 d/4408 d
     '';
-    homepage = "https://onlinesupport.fujixerox.com";
+    homepage = "https://www.support.xerox.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ ];
