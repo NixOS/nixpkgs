@@ -112,11 +112,13 @@ Return test result, a list of values.  Each is non-nil if the test passes."
      ;; Run the non-batch test and return test result.
      (eval-in-non-batch-emacs `(,test-name)))))
 
-(defmacro define-with-packages-non-batch-ert-test (test-name)
-  "See `with-packages--run-non-batch-test' for how the test is run."
-  (declare (indent 1) (debug (symbolp)))
+(defmacro define-with-packages-non-batch-ert-test (test-name &rest ert-forms)
+  "See `with-packages--run-non-batch-test' for how the test is run.
+ERT-FORMS are placed at the start of the ERT test."
+  (declare (indent 1) (debug (symbolp &rest sexp)))
   (cl-check-type test-name symbol)
   `(ert-deftest ,test-name ()
+     ,@ert-forms
      (should (stringp with-packages-non-batch-emacs-socket))
      (should (file-readable-p with-packages-non-batch-emacs-socket))
      (let ((test-result (with-packages--run-non-batch-test (quote ,test-name))))
@@ -153,6 +155,13 @@ Return test result, a list of values.  Each is non-nil if the test passes."
                                       nil
                                       t)))))))
 
+(defun with-packages-fonts-of-requested-packages-are-available ()
+  (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
+    (unwind-protect
+        (list (display-graphic-p graphical-frame)
+              (member "Hack" (font-family-list graphical-frame)))
+      (delete-frame graphical-frame))))
+
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
@@ -177,6 +186,11 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
   with-packages-early-default-is-loaded-before-default
   with-packages-unwrapped-site-start-is-loaded-quietly
   with-packages-no-jit-native-comp)
+
+(define-with-packages-non-batch-ert-test
+  with-packages-fonts-of-requested-packages-are-available
+  :expected-result (if (eq system-type 'darwin) :failed :passed)
+  (skip-unless (fboundp 'x-create-frame)))
 
 (provide 'with-packages)
 
