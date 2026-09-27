@@ -50,6 +50,7 @@ lib.makeScope newScope (self: {
   verit = self.callPackage ./verit { };
   vscode_extension = self.callPackage ./vscode_extension { };
   vscodium = self.callPackage ./vscodium { };
+  xz-java = self.callPackage ./xz-java { };
   z3 = self.callPackage ./z3 { };
   zipperposition = self.callPackage ./zipperposition { };
 })
