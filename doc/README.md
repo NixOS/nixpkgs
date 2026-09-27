@@ -15,7 +15,8 @@ When writing new docs use **Progressive Disclosure:**
 
 Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
-Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
+Documentation about Nixpkgs belongs here.
+This includes getting started guides and onboarding guides for *using* Nixpkgs and the language frameworks it ships.
 
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
