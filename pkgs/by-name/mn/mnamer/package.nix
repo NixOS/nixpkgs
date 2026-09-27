@@ -50,6 +50,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Intelligent and highly configurable media organization utility";
     mainProgram = "mnamer";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.quantenzitrone ];
   };
 })
