@@ -20,18 +20,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.10.1";
+  version = "11.1.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
+    hash = "sha256-gZ3epZY9gbrX/pzHc4YpoSqWkKcRLlw41ERGNO3UOvg=";
   };
 
   patches = lib.optional (
     lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing
   ) ./fix-findliburing.patch;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -73,9 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
   ]
+  ++ lib.optional sse42Support "-DFORCE_SSE42=1"
   ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
@@ -119,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     if [ -f "$out"/lib/pkgconfig/rocksdb.pc ]; then
       substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
-        --replace '="''${prefix}//' '="/'
+        --replace-fail '="''${prefix}//' '="/'
     fi
   '';
 
@@ -131,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       adev
+      debtquity
     ];
   };
 })
