@@ -1,5 +1,6 @@
 { lib, config, ... }:
 let
+  facterLib = import ../lib.nix lib;
   inherit (config.hardware.facter) report;
   cfg = config.hardware.facter.detected.networking.intel;
 in
@@ -49,9 +50,26 @@ in
     };
   };
 
-  config = lib.mkIf config.hardware.facter.enable {
-    networking.enableIntel2200BGFirmware = lib.mkIf cfg._2200BG.enable (lib.mkDefault true);
-    hardware.enableRedistributableFirmware = lib.mkIf cfg._3945ABG.enable (lib.mkDefault true);
-  };
+  config = lib.mkIf config.hardware.facter.enable (
+    lib.mkMerge [
+      (lib.mkIf cfg._2200BG.enable (
+        facterLib.mkFacterAssignment {
+          moduleName = "networking-intel";
+          path = "networking.enableIntel2200BGFirmware";
+          value = lib.mkDefault true;
+          facterValue = true;
+        }
+      ))
+
+      (lib.mkIf cfg._3945ABG.enable (
+        facterLib.mkFacterAssignment {
+          moduleName = "networking-intel";
+          path = "hardware.enableRedistributableFirmware";
+          value = lib.mkDefault true;
+          facterValue = true;
+        }
+      ))
+    ]
+  );
 
 }
