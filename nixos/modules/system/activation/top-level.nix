@@ -191,7 +191,13 @@ in
     };
 
     system.systemBuilderArgs = mkOption {
-      type = types.attrsOf types.unspecified;
+      # The laziness of this type is required to keep the WHNF of
+      # `system.build.toplevel` (e.g. its `name` attribute) from forcing
+      # the attribute values, which typically reference store paths.
+      # Attributes whose definitions are disabled by `mkIf` evaluate to
+      # `null` (via the `emptyValue` of `nullOr`) instead of being
+      # removed from the attribute set as `attrsOf` would do.
+      type = types.lazyAttrsOf (types.nullOr types.unspecified);
       internal = true;
       default = { };
       description = ''
