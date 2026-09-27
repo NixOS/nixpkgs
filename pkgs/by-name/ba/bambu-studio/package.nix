@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  callPackage,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -135,7 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-cereal.patch
     # Cmake 4 support
     ./patches/cmake.patch
-    # Disable nodejs
+    # Removes the `device_page_build` CMake target: it downloads Node + pnpm
+    # and runs `pnpm install`/`pnpm run build` at build time, which the
+    # sandbox can't do. `devicePage` below rebuilds that bundle offline and
+    # is wired back in through `postInstall`.
     ./patches/no-device-web-node-download.patch
   ];
 
@@ -232,7 +236,34 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
     mv $out/README.md $out/share/BambuStudio/README.md
+
+    # SLIC3R_FHS_RESOURCES ($out/share/BambuStudio) is baked into the binary
+    # at compile time (src/BambuStudio.cpp), so the bundle has to live inside
+    # *this* derivation's own $out. `web/device_page/` already exists at this
+    # point (it ships a README.md in the git tree; only `dist/` is gitignored
+    # and never produced), so only `dist` itself is added here.
+    mkdir -p $out/share/BambuStudio/web/device_page
+    cp -r --no-preserve=mode,ownership \
+      ${finalAttrs.passthru.devicePage} $out/share/BambuStudio/web/device_page/dist
   '';
+
+  # Guards against a regression of the postInstall wiring above becoming
+  # silent: without it, the failure only shows up as a runtime modal box.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    test -f "$out/share/BambuStudio/web/device_page/dist/index.html"
+    runHook postInstallCheck
+  '';
+
+  passthru = {
+    # The device_page (Filament Manager) web bundle upstream's own
+    # `device_page_build` CMake target would otherwise produce; see the
+    # `no-device-web-node-download.patch` comment above.
+    devicePage = callPackage ./device-page.nix {
+      inherit (finalAttrs) src version;
+    };
+  };
 
   meta = {
     description = "PC Software for BambuLab's 3D printers";
