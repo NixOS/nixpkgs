@@ -1,0 +1,24 @@
+diff --git a/Rhythia.csproj b/Rhythia.csproj
+index 041d012..fc42bde 100644
+--- a/Rhythia.csproj
++++ b/Rhythia.csproj
+@@ -1,4 +1,4 @@
+-﻿<Project Sdk="Godot.NET.Sdk/4.6.1">
++﻿<Project Sdk="Godot.NET.Sdk/4.6.3">
+ 	<PropertyGroup>
+ 		<TargetFramework>net10.0</TargetFramework>
+ 		<TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net10.0</TargetFramework>
+@@ -10,10 +10,10 @@
+ 	</ItemGroup>
+ 	<ItemGroup>
+ 		<PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
+-		<PackageReference Include="Godot.NET.Sdk" Version="4.5.0" />
++		<PackageReference Include="Godot.NET.Sdk" Version="4.6.3" />
+ 		<PackageReference Include="Semver" Version="3.0.0" />
+ 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+ 		<PackageReference Include="Tomlyn" Version="0.20.0" />
+ 		<PackageReference Include="Updatum" Version="1.3.2" />
+ 	</ItemGroup>
+-</Project>
+\ No newline at end of file
++</Project>
