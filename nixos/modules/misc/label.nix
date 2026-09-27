@@ -7,6 +7,49 @@ in
 
   options.system = {
 
+    nixos.bootEntryLabel = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        Display label of the boot menu entry.
+
+        If you only want to modify the version part of the boot entry label
+        use {option}`system.nixos.label` instead.
+
+        In the label the string `{generation}` is replaced by the generation
+        number and `{build_date}` is replaced by the date the configuration
+        was built.  (Since Nix expressions are pure, these cannot be filled
+        in by Nix like the kernel version.)
+
+        The default entry label is
+        ```
+        Generation {generation} ''${config.system.nixos.distroName} ''${config.system.nixos.codeName} ''${config.system.nixos.label} (Linux ''${config.boot.kernelPackages.kernel.modDirVersion}), built on {build_date}
+        ```
+        and looks like
+        ```
+        Generation 1234 NixOS Emu 16.03.1160.f2d4ee1 (Linux 28.12.69), built on 2016-03-14
+        ```
+
+        Can be overridden by setting {env}`NIXOS_BOOT_ENTRY_LABEL`.
+
+        Useful for not loosing track of configurations built from different
+        nixos branches/revisions, e.g.:
+
+        ```
+        #!/bin/sh
+        today=`date +%Y%m%d`
+        branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
+        revision=`(cd nixpkgs ; git rev-parse HEAD)`
+        export NIXOS_BOOT_ENTRY_LABEL="{generation}. NixOS $today.$branch-''${revision:0:7}"
+        nixos-rebuild switch
+        ```
+
+        Note: Only used by boot loaders which follow the Bootspec RFC
+        [RFC 0125].
+
+        [RFC 0125]: https://github.com/NixOS/rfcs/blob/master/rfcs/0125-bootspec.md
+      '';
+    };
+
     nixos.label = lib.mkOption {
       type = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
       description = ''
@@ -14,7 +57,8 @@ in
         outputs and boot labels.
 
         If you ever wanted to influence the labels in your GRUB menu,
-        this is the option for you.
+        this is the option for you.  For more control over the label
+        use option {option}`system.nixos.bootEntryLabel`.
 
         It can only contain letters, numbers and the following symbols:
         `:`, `_`, `.` and `-`.
@@ -72,6 +116,8 @@ in
         )
       )
     );
+    system.nixos.bootEntryLabel = lib.mkDefault (
+      lib.maybeEnv "NIXOS_BOOT_ENTRY_LABEL" "Generation {generation} ${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion}), built on {build_date}"
+    );
   };
-
 }
