@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.12.6";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    hash = "sha256-iKxvrZcwzUoh+TVsmx8jVjwHeklT1+dqzhY4kBbOB8Q=";
+    hash = "sha256-GpRVd6ArkNRqy+CJppZmtUtFedbhXDphE0H6JFuvDlQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ helsinki-Jo ];
     mainProgram = "icingacli";
     platforms = lib.platforms.all;
