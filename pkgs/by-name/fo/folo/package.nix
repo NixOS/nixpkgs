@@ -15,13 +15,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
     tag = "desktop/v${finalAttrs.version}";
-    hash = "sha256-lK371YSqYcYzVjDJCfAbrl+wdAbDzmT6R4SlZXjiZLc=";
+    hash = "sha256-16hKEgTv2pWDsoxMG7Ct2xCvjCnmbPK2bymyutb1uW8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-bdqcY+ylviWHnbIvPxwRZimenXWFS5bJfDeFxMtOVM0=";
+    hash = "sha256-6ExELKJr6oAkywYSjsw+c24IHtipJ213N74aSzhEUTs=";
   };
 
   __structuredAttrs = true;
