@@ -105,6 +105,7 @@ buildGoModule (finalAttrs: {
         syncthing-guiPasswordFile
         syncthing-init
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };
