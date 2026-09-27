@@ -685,6 +685,11 @@ with haskellLib;
         # TODO(@sternenseemann): submit upstreamable patch resolving this
         # (this should be possible by also taking PREFIX into account).
         ./patches/git-annex-no-usr-prefix.patch
+        # bup 0.34 only accepts host:path or ssh:// / bup:// URLs for --remote, so
+        # passing a local-path buprepo via -r fails with "has no colon". Address
+        # local repositories with --bup-dir (-d) instead. Not fixed upstream as of
+        # 10.20260901. https://github.com/NixOS/nixpkgs/issues/566500
+        ./patches/git-annex-bup-0.34-local-repo.patch
       ];
 
       postPatch = ''

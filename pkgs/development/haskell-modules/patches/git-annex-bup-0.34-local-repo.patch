@@ -1,0 +1,22 @@
+diff --git a/Remote/Bup.hs b/Remote/Bup.hs
+--- a/Remote/Bup.hs
++++ b/Remote/Bup.hs
+@@ -146,9 +146,16 @@
+ 
+ 	return (c', u)
+ 
++{- Since bup 0.34, --remote only accepts host:path or a ssh:// or bup://
++ - url, so a local repository is specified with --bup-dir instead,
++ - which older versions of bup also support. An empty buprepo is still
++ - passed as --remote, which makes bup use its default repository. -}
+ bupParams :: String -> BupRepo -> [CommandParam] -> [CommandParam]
+-bupParams command buprepo params = 
+-	Param command : [Param "-r", Param buprepo] ++ params
++bupParams command buprepo params
++	| bupLocal buprepo && not (null buprepo) =
++		Param "-d" : Param buprepo : Param command : params
++	| otherwise =
++		Param command : [Param "-r", Param buprepo] ++ params
+ 
+ bup :: String -> BupRepo -> [CommandParam] -> Annex Bool
+ bup command buprepo params = do
