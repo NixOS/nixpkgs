@@ -3,19 +3,12 @@
   stdenv,
   perl,
   writeTextFile,
-  fetchFromGitHub,
+  isabelle,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bash_process";
-  version = "2025-2";
-
-  src = fetchFromGitHub {
-    owner = "isabelle-prover";
-    repo = "mirror-isabelle";
-    rev = "8d9ad3f2984ab945542dad1a0802f0c1b0517337";
-    hash = "sha256-/akl9akzL4DFKyZYW7WGLTx20QQiogoNYz1rw79f0o0=";
-  };
+  inherit (isabelle) src version;
 
   nativeBuildInputs = [
     perl
