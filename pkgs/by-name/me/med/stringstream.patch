@@ -1,0 +1,22 @@
+diff -ru a/src/med/Process.cpp b/src/med/Process.cpp
+--- a/src/med/Process.cpp
++++ b/src/med/Process.cpp
+@@ -6,6 +6,7 @@
+ #include <iostream>
+ #include <regex>
+ #include <signal.h>
++#include <sstream>
+ #include <sys/ptrace.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+diff -ru a/src/med/ScanCommand.cpp b/src/med/ScanCommand.cpp
+--- a/src/med/ScanCommand.cpp
++++ b/src/med/ScanCommand.cpp
+@@ -1,6 +1,7 @@
+ #include <regex>
+ #include <algorithm>
+ #include <cstring>
++#include <sstream>
+ #include "med/ScanCommand.hpp"
+ #include "med/MemOperator.hpp"
+ #include "med/MedCommon.hpp"
