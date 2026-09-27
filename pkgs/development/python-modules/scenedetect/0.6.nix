@@ -1,3 +1,7 @@
+# scenedetect 0.7 is a breaking API change. dvr-scan 1.8.2 (the latest release) is
+# only compatible with the 0.6 series; upstream migrated to scenedetect 0.7 on the
+# unreleased 2.0 branch. This pin keeps dvr-scan building until dvr-scan 2.0 is
+# released, at which point this file and the scenedetect_0_6 alias can be removed.
 {
   lib,
   buildPythonPackage,
@@ -16,26 +20,29 @@ let
   testsResources = fetchFromGitHub {
     owner = "Breakthrough";
     repo = "PySceneDetect";
-    rev = "a1f226e2f4ec2f8cabb8aa4ac74d5c9d238dec6b";
-    hash = "sha256-7Xp2RsFhswumRzWy+oQPj//u16cygUw5V1Lg5Gs9NZI=";
+    rev = "94389267a344785643980a2e0bb18179dcca01d3";
+    hash = "sha256-7ws7F7CkEJAa0PgfMEOwnpF4Xl2BQCn9+qFQb5MMlZ0=";
   };
 in
 buildPythonPackage (finalAttrs: {
   pname = "scenedetect";
-  version = "0.7";
+  version = "0.6.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Breakthrough";
     repo = "PySceneDetect";
     tag = "v${finalAttrs.version}-release";
-    hash = "sha256-LvxnbPBWoHGrIWjRVR4aqxCKXeVe17xIbkhAagNa7J4=";
+    hash = "sha256-bLR04wn4O23fHC12ZvWwDI7gLGvMhm+YnBOy4zYMPSM=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
     av
     click
@@ -51,11 +58,6 @@ buildPythonPackage (finalAttrs: {
     cp -r ${testsResources}/tests/resources tests/
     chmod -R +w tests/resources
   '';
-
-  disabledTests = [
-    # Requires the optional MoviePy backend, which is not packaged here.
-    "test_cli_moviepy_accepts_frame_rate_override"
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
