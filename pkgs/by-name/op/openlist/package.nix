@@ -7,6 +7,7 @@
   iana-etc,
   installShellFiles,
   libredirect,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -102,7 +103,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
+  passthru = {
+    tests = nixosTests.openlist;
+    updateScript = lib.getExe (callPackage ./update.nix { });
+  };
 
   meta = {
     description = "AList Fork to Anti Trust Crisis";
