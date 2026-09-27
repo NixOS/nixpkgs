@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "rst2ansi";
-  version = "0.1.5-unstable-2025-02-12";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
