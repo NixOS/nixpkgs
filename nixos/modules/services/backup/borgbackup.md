@@ -150,9 +150,15 @@ To backup your home directory to borgbase you have to:
                 environment = { BORG_RSH = "ssh -i /run/keys/id_ed25519_borgbase"; };
                 compression = "auto,lzma";
                 startAt = "daily";
+                persistentTimer = true;
             };
           };
-        }}
+        }
+
+    The
+    [persistentTimer](https://search.nixos.org/options?show=services.borgbackup.jobs.%3Cname%3E.persistentTimer)
+    option is recommended for remote backups since this instructs the
+    backup timer to wait before the network is online.
 
 ## Vorta backup client for the desktop {#opt-services-backup-borgbackup-vorta}
 
