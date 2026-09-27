@@ -5,7 +5,8 @@ index 48da640..bca1958 100644
 @@ -84,16 +84,8 @@ tasks.register("installStandaloneDeps") {
  repositories {
  	mavenLocal()
- 	mavenCentral()
+-	mavenCentral()
++	maven { url = uri("@maven-repository@") }
 -	maven {
 -		name = "boricj's binary-file-toolkit"
 -		url = uri("https://maven.pkg.github.com/boricj/binary-file-toolkit")
