@@ -10,7 +10,7 @@
   libpng,
   libtirpc,
   liblxi,
-  libsigcxx,
+  libsigcxx_2_0,
   zlib,
   wrapGAppsHook3,
   makeBinaryWrapper,
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     hidapi
     liblxi
     libpng
-    libsigcxx
+    libsigcxx_2_0
     vulkan-headers
     vulkan-loader
     yaml-cpp

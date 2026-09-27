@@ -8,6 +8,8 @@
   libgnurx ? windows.libgnurx,
   updateAutotoolsGnuConfigScriptsHook,
   testers,
+  pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
+  versionCheckHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -49,22 +51,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
 
-  # https://bugs.astron.com/view.php?id=382
-  doCheck = !stdenv.buildPlatform.isMusl;
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # In native builds, it will use the newly-compiled file instead.
   makeFlags = lib.optional (
     !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
   ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    musl = pkgsMusl.file or null;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   __structuredAttrs = true;
 
   meta = {
     homepage = "https://darwinsys.com/file";
     description = "Program that shows the type of files";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      mdaniels5757
+    ];
     license = lib.licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];
     platforms = lib.platforms.all;

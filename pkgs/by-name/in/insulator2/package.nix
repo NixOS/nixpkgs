@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
 
   cargo,
@@ -31,19 +32,29 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "andrewinci";
     repo = "insulator2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3eDA+pwchnwWtweGeSDlf+Vt0Hoylmanf4hnvJ2YOGU=";
-  };
+    hash = "sha256-QCoDiFEgVuF/+MqgzcMTXqjC/nDA+A2v3l01kZyviDs=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
+    # Remove after upstream updates to Yarn 4.15
     # https://github.com/andrewinci/insulator2/blob/main/package.json#L105
-    ./yarn-4.14-support.patch
-  ];
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-IechRla3epfANBESCYgti5/8B3QaPCv6Gp2I4eZNiyI=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-2w1fMVwQFClyrpNmJrjJoDqbU2nxRZh9NkBIcMUEjec=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -24,26 +24,6 @@
   openssl,
   simdjson,
   simdutf,
-  simdutf_6 ? (
-    simdutf.overrideAttrs (
-      {
-        version = "6.5.0";
-
-        src = fetchFromGitHub {
-          owner = "simdutf";
-          repo = "simdutf";
-          rev = "v6.5.0";
-          hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-        };
-      }
-      // (lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        # Fix build on darwin
-        postPatch = ''
-          substituteInPlace tools/CMakeLists.txt --replace-fail '-Wl,--gc-sections' ""
-        '';
-      })
-    )
-  ),
   sqlite,
   temporal_capi,
   uvwasi,
@@ -140,7 +120,8 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedAbseilAndHighway = lib.versionAtLeast version "26.9";
-  useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedAdaAndSimdjson = lib.versionAtLeast version "22.2";
+  useSharedSimdutf = lib.versionAtLeast version "26.10";
   useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
     if majorVersion == "24" then "24.14.0" else "25.4"
@@ -170,12 +151,14 @@ let
     abseil = abseil-cpp;
     highway = libhwy;
   })
-  // (lib.optionalAttrs useSharedAdaAndSimd {
+  // (lib.optionalAttrs useSharedAdaAndSimdjson {
     inherit
       ada
       simdjson
       ;
-    simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
+  })
+  // (lib.optionalAttrs useSharedSimdutf {
+    inherit simdutf;
   })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;

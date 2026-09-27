@@ -29,10 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dconf";
   version = "0.49.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "lib"
     "dev"
+    "man"
   ]
   ++ lib.optional withDocs "devdoc";
 

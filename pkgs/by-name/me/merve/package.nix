@@ -15,6 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "merve";
   version = "1.2.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "merve";

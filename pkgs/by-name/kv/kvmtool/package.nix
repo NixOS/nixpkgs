@@ -19,6 +19,9 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isAarch64 [ dtc ];
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   enableParallelBuilding = true;
 
   makeFlags = [

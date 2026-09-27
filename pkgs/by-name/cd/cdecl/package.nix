@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;
     mainProgram = "cdecl";
+    broken = true;
   };
 })

@@ -92,7 +92,22 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
     ./cmake-install-paths.patch
+
+    # Fix aarch64 build on GCC 16
+    # Upstream PR: https://github.com/openvinotoolkit/openvino/pull/38268/changes
+    ./gcc-16-fix.patch
   ];
+
+  # Fix arm computelib ar/ranlib toolchain paths for LTO awareness
+  postPatch = ''
+    substituteInPlace src/plugins/intel_cpu/thirdparty/ComputeLibrary/SConstruct \
+      --replace-fail \
+        "env['AR'] = toolchain_prefix + \"ar\"" \
+        "env['AR'] = \"${lib.getExe' stdenv.cc.cc "gcc-ar"}\"" \
+      --replace-fail \
+        "env['RANLIB'] = toolchain_prefix + \"ranlib\"" \
+        "env['RANLIB'] = \"${lib.getExe' stdenv.cc.cc "gcc-ranlib"}\""
+  '';
 
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
@@ -127,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_CPU" true)
     (cmakeBool "ENABLE_INTEL_GPU" true)
     (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)

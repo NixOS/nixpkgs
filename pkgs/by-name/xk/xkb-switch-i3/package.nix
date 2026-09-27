@@ -5,7 +5,7 @@
   fetchFromGitHub,
   i3,
   jsoncpp,
-  libsigcxx,
+  libsigcxx_2_0,
   libx11,
   libxkbfile,
   pkg-config,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     i3
     jsoncpp
-    libsigcxx
+    libsigcxx_2_0
     libx11
     libxkbfile
   ];

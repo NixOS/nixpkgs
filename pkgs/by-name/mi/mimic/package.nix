@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=free-nonheap-object"
+    # Fix build w/ glibc-2.44
+    "-Wno-error=discarded-qualifiers"
   ];
 
   postInstall = ''

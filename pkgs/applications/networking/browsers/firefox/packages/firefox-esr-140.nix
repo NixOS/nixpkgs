@@ -37,6 +37,7 @@ buildMozillaMach rec {
         spec = "firefox@${lib.removeSuffix "esr" version}";
       };
     };
+    broken = true; # doesn't build on glibc 2.44
   };
   tests = {
     inherit (nixosTests) firefox-esr-140;

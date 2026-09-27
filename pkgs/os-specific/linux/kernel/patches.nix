@@ -27,4 +27,9 @@
     name = "request-key-helper";
     patch = ./request-key-helper.patch;
   };
+
+  libbpf_C23_compat = {
+    name = "c23-compat-libbpf";
+    patch = ./C23-compat-6.1.patch;
+  };
 }

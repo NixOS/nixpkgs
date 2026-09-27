@@ -5,7 +5,7 @@
   fetchpatch,
   pkg-config,
   file,
-  glibmm,
+  glibmm_2_4,
   gst_all_1,
   gnome,
   apple-sdk_gstreamer,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    glibmm
+    glibmm_2_4
     gst_all_1.gst-plugins-base
   ];
 

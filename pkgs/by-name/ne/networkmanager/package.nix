@@ -37,9 +37,9 @@
   polkit,
   readline,
   slang,
-  systemd,
+  systemdMinimal,
   udev,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 
   # external deps
   bluez5,
@@ -222,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     ppp
     readline
     slang
-    (if withSystemd then systemd else udev)
+    (if withSystemd then systemdMinimal else udev)
   ]
   ++ lib.optionals withNbft [
     libnvme
@@ -246,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withSystemd ''
     substituteInPlace data/NetworkManager.service.in \
-      --replace-fail /usr/bin/busctl ${lib.getExe' systemd "busctl"}
+      --replace-fail /usr/bin/busctl ${lib.getExe' systemdMinimal "busctl"}
   '';
 
   preBuild = ''

@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=stringop-overflow"
       "-Wno-error=unterminated-string-initialization"
+      "-Wno-error=discarded-qualifiers"
     ];
   };
 

@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 15 Jul 2026 00:02:16 -0400
+Subject: [PATCH 07/10] Help Swift JIT find the separate stdlib and frameworks
+
+This is needed because the stdlib and several frameworks are all built
+separately then symlinked into the final Swift toolchain.
+---
+ lib/Immediate/Immediate.cpp | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/lib/Immediate/Immediate.cpp b/lib/Immediate/Immediate.cpp
+index 7d24b0d473e..bfd8ae3a129 100644
+--- a/lib/Immediate/Immediate.cpp
++++ b/lib/Immediate/Immediate.cpp
+@@ -45,6 +45,8 @@
+ #include "llvm/Support/Path.h"
+ #include "llvm/Transforms/IPO.h"
+ 
++#include <filesystem>
++
+ // TODO: Replace pass manager
+ //       Removed in: d623b2f95fd559901f008a0588dddd0949a8db01
+ /* #include "llvm/Transforms/IPO/PassManagerBuilder.h" */
+@@ -83,6 +85,21 @@ static void *loadRuntimeLib(StringRef sharedLibName,
+   for (auto &runtimeLibPath : runtimeLibPaths) {
+     if (void *handle = loadRuntimeLibAtPath(sharedLibName, runtimeLibPath))
+       return handle;
++    else {
++      // Runtime libraries may also be located in `lib` for `lib/swift/<platform>`.
++      std::filesystem::path libPath = runtimeLibPath;
++      
++      if (libPath.filename() != "@swiftPlatform@")
++        continue;
++      libPath = libPath.parent_path();
++      
++      if (libPath.filename() != "swift")
++        continue;
++      libPath = libPath.parent_path();
++      
++      if (void *handle = loadRuntimeLibAtPath(sharedLibName, libPath.string()))
++        return handle;
++    }
+   }
+   return nullptr;
+ }
+-- 
+2.54.0
+

@@ -8,7 +8,7 @@
   elfutils,
   file,
   jansson,
-  libbpf_0,
+  libbpf,
   libcap_ng,
   libevent,
   libmaxminddb,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     elfutils
     jansson
-    libbpf_0
+    libbpf
     libcap_ng
     libevent
     libmagic

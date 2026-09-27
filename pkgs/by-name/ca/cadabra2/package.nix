@@ -11,7 +11,7 @@
   nix-update-script,
 
   boost,
-  glibmm,
+  glibmm_2_4,
   gmpxx,
   gtkmm3,
   jsoncpp,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    glibmm
+    glibmm_2_4
     gmpxx
     jsoncpp
     onetbb

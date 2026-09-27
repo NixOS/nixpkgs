@@ -8,7 +8,7 @@
   libjpeg,
   wxwidgets_3_2,
   libxml2,
-  libsigcxx,
+  libsigcxx_2_0,
   libpng,
   openal,
   libvorbis,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     wxwidgets_3_2
     libxml2
-    libsigcxx
+    libsigcxx_2_0
     libpng
     openal
     libvorbis

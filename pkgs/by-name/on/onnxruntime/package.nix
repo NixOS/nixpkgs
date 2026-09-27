@@ -300,6 +300,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+    # GCC 16 implemented P0952R2, which changes the output of libstdc++'s
+    # std::generate_canonical. Some of onnxruntime('s tests) rely on this old
+    # behavior, so we restore the old behavior with the provided macro. Based
+    # on a fix suggested by upstream at
+    # https://github.com/microsoft/onnxruntime/pull/31346#issuecomment-5688923246
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-D_GLIBCXX_USE_OLD_GENERATE_CANONICAL")
   ]
   ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)

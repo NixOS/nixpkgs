@@ -1,0 +1,196 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:37:05 -0500
+Subject: [PATCH 01/10] Read C and C++ stdlib flags from the wrapped compiler
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On most platforms supported by Nixpkgs, the C and C++ standard libraries
+are located separately and are not part of the sysroot, but Swift’s
+ClangImporter assumes they are part of the sysroot by default.
+
+While it is possible to create a sysroot for use with Swift, this has
+negative affects on every package that wants to use Swift and compile
+C++ code. The C++ library must be removed from the standard platform
+configuration, which makes adding Swift as a dependency too disruptive.
+---
+ include/swift/ClangImporter/ClangImporter.h |  3 +-
+ lib/ClangImporter/ClangImporter.cpp         |  8 ++++
+ lib/ClangImporter/ClangIncludePaths.cpp     | 18 ++++++--
+ lib/ClangImporter/ClangIncludePaths.h       | 51 +++++++++++++++++++++
+ lib/Frontend/CompilerInvocation.cpp         |  2 +-
+ 5 files changed, 76 insertions(+), 6 deletions(-)
+
+diff --git a/include/swift/ClangImporter/ClangImporter.h b/include/swift/ClangImporter/ClangImporter.h
+index 274c659d54c..d478fbbccec 100644
+--- a/include/swift/ClangImporter/ClangImporter.h
++++ b/include/swift/ClangImporter/ClangImporter.h
+@@ -231,7 +231,8 @@ public:
+   static llvm::opt::InputArgList
+   createClangArgs(const ClangImporterOptions &ClangImporterOpts,
+                   const SearchPathOptions &SearchPathOpts,
+-                  clang::driver::Driver &clangDriver);
++                  clang::driver::Driver &clangDriver,
++                  bool enableCXXInterop);
+ 
+   ClangImporter(const ClangImporter &) = delete;
+   ClangImporter(ClangImporter &&) = delete;
+diff --git a/lib/ClangImporter/ClangImporter.cpp b/lib/ClangImporter/ClangImporter.cpp
+index 47361b38a0f..1b50ea3ab44 100644
+--- a/lib/ClangImporter/ClangImporter.cpp
++++ b/lib/ClangImporter/ClangImporter.cpp
+@@ -564,7 +564,15 @@ void importer::getNormalInvocationArguments(
+     });
+   }
+ 
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(invocationArgStrs, "libc-cflags");
++  
+   if (LangOpts.EnableCXXInterop) {
++    // Ensure the libc++ headers are available. The C++ standard library is separate
++    // from the sysroot on most platforms in Nixpkgs.
++    addFlagsFromNixCC(invocationArgStrs, "libcxx-cxxflags");
++
+     if (auto path = getCxxShimModuleMapPath(searchPathOpts, LangOpts, triple)) {
+       invocationArgStrs.push_back((Twine("-fmodule-map-file=") + *path).str());
+     }
+diff --git a/lib/ClangImporter/ClangIncludePaths.cpp b/lib/ClangImporter/ClangIncludePaths.cpp
+index 948b99876f0..b46ec2980f0 100644
+--- a/lib/ClangImporter/ClangIncludePaths.cpp
++++ b/lib/ClangImporter/ClangIncludePaths.cpp
+@@ -178,12 +178,22 @@ static std::optional<Path> findFirstIncludeDir(
+ llvm::opt::InputArgList
+ ClangImporter::createClangArgs(const ClangImporterOptions &ClangImporterOpts,
+                                const SearchPathOptions &SearchPathOpts,
+-                               clang::driver::Driver &clangDriver) {
++                               clang::driver::Driver &clangDriver,
++                               bool enableCXXInterop) {
+   // Flags passed to Swift with `-Xcc` might affect include paths.
+   std::vector<const char *> clangArgs;
+   for (const auto &each : ClangImporterOpts.ExtraArgs) {
+     clangArgs.push_back(each.c_str());
+   }
++
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(clangArgs, "libc-cflags");
++  
++  if (enableCXXInterop) {
++    addFlagsFromNixCC(clangArgs, "libcxx-cxxflags");
++  }
++
+   llvm::opt::InputArgList clangDriverArgs =
+       parseClangDriverArgs(clangDriver, clangArgs);
+   // If an SDK path was explicitly passed to Swift, make sure to pass it to
+@@ -207,7 +217,7 @@ getLibcFileMapping(const ASTContext &ctx, StringRef modulemapFileName,
+   auto [clangDriver, clangDiagEngine] = ClangImporter::createClangDriver(
+       ctx.LangOpts, ctx.ClangImporterOpts, vfs);
+   auto clangDriverArgs = ClangImporter::createClangArgs(
+-      ctx.ClangImporterOpts, ctx.SearchPathOpts, clangDriver);
++      ctx.ClangImporterOpts, ctx.SearchPathOpts, clangDriver, ctx.LangOpts.EnableCXXInterop);
+ 
+   llvm::opt::ArgStringList includeArgStrings;
+   const auto &clangToolchain =
+@@ -286,7 +296,7 @@ static void getLibStdCxxFileMapping(
+   auto [clangDriver, clangDiagEngine] = ClangImporter::createClangDriver(
+       ctx.LangOpts, ctx.ClangImporterOpts, vfs);
+   auto clangDriverArgs = ClangImporter::createClangArgs(
+-      ctx.ClangImporterOpts, ctx.SearchPathOpts, clangDriver);
++      ctx.ClangImporterOpts, ctx.SearchPathOpts, clangDriver, ctx.LangOpts.EnableCXXInterop);
+ 
+   llvm::opt::ArgStringList stdlibArgStrings;
+   const auto &clangToolchain =
+@@ -467,7 +477,7 @@ void GetWindowsFileMappings(
+   auto [Driver, clangDiagEngine] = ClangImporter::createClangDriver(
+       Context.LangOpts, Context.ClangImporterOpts, driverVFS);
+   const llvm::opt::InputArgList Args = ClangImporter::createClangArgs(
+-      Context.ClangImporterOpts, Context.SearchPathOpts, Driver);
++      Context.ClangImporterOpts, Context.SearchPathOpts, Driver, Context.LangOpts.EnableCXXInterop);
+   const clang::driver::ToolChain &ToolChain = Driver.getToolChain(Args, Triple);
+   llvm::vfs::FileSystem &VFS = ToolChain.getVFS();
+ 
+diff --git a/lib/ClangImporter/ClangIncludePaths.h b/lib/ClangImporter/ClangIncludePaths.h
+index 7f08397fa7d..69be98357d9 100644
+--- a/lib/ClangImporter/ClangIncludePaths.h
++++ b/lib/ClangImporter/ClangIncludePaths.h
+@@ -14,6 +14,8 @@
+ #define SWIFT_CLANG_INCLUDE_PATHS_H
+ 
+ #include "swift/AST/ASTContext.h"
++#include "llvm/ADT/StringRef.h"
++#include "llvm/Support/CommandLine.h"
+ 
+ namespace swift {
+ 
+@@ -23,4 +25,53 @@ getCxxShimModuleMapPath(SearchPathOptions &opts, const LangOptions &langOpts,
+ 
+ } // namespace swift
+ 
++template<typename T>
++void addFlagsFromNixCC(std::vector<T> &invocationArgStrs, const char* flagFile) {
++  auto swiftPath = llvm::sys::fs::getMainExecutable(nullptr, nullptr);
++
++  if (swiftPath != "") {
++    llvm::BumpPtrAllocator allocator;
++    llvm::StringSaver saver(allocator);
++    
++    // Read `flagFile` from Clang’s `nix-support` folder by finding it relative to the store
++    // location of `clang`, which is expected to be adjacent to Swift in `$out/bin`.
++    llvm::SmallString<256> clangPath = llvm::StringRef(swiftPath);
++    llvm::sys::path::remove_filename(clangPath);
++    llvm::sys::path::append(clangPath, "clang");
++    
++    llvm::SmallString<256> path;
++   
++    // This shouldn’t happen, but if `real_path` fails to resolve `clang`, give up.
++    if (llvm::sys::fs::real_path(clangPath, path, /*expand_tilde*/ true)) { return; }
++
++    llvm::sys::path::remove_filename(path);
++    llvm::sys::path::remove_filename(path);
++    llvm::sys::path::append(path, "nix-support", flagFile);
++
++    // Treat `flagFile` as a response file for Clang. Because Clang expects response
++    // files to be expanded already at this point, it has to be expanded manually.
++    if (auto buffer = llvm::vfs::getRealFileSystem()->getBufferForFile(path)) {
++      auto contents = (*buffer)->getMemBufferRef().getBuffer();
++      llvm::SmallVector<const char*> args;
++#if _WIN32
++      llvm::cl::TokenizeWindowsCommandLineNoCopy(contents, saver, args);
++#else
++      llvm::cl::TokenizeGNUCommandLine(contents, saver, args);
++#endif
++      for (auto arg : args) {
++        auto arg_str = [&arg = arg]() constexpr {
++          if constexpr (std::is_same<T, const char *>::value) {
++            // This leaks, but there doesn’t seem to be a better way.
++            auto len = std::strlen(arg) + 1;
++            return std::strncpy(new char[len], arg, len);
++          } else {
++            return arg;
++          }
++        }();
++        invocationArgStrs.push_back(arg_str);
++      }
++    }
++  }
++}
++
+ #endif // SWIFT_CLANG_INCLUDE_PATHS_H
+diff --git a/lib/Frontend/CompilerInvocation.cpp b/lib/Frontend/CompilerInvocation.cpp
+index ed413f2be91..f866b49ba3a 100644
+--- a/lib/Frontend/CompilerInvocation.cpp
++++ b/lib/Frontend/CompilerInvocation.cpp
+@@ -401,7 +401,7 @@ void CompilerInvocation::computeCXXStdlibOptions() {
+     auto [clangDriver, clangDiagEngine] =
+         ClangImporter::createClangDriver(LangOpts, ClangImporterOpts);
+     auto clangDriverArgs = ClangImporter::createClangArgs(
+-        ClangImporterOpts, SearchPathOpts, clangDriver);
++        ClangImporterOpts, SearchPathOpts, clangDriver, LangOpts.EnableCXXInterop);
+     auto &clangToolchain =
+         clangDriver.getToolChain(clangDriverArgs, LangOpts.Target);
+     auto cxxStdlibKind = clangToolchain.GetCXXStdlibType(clangDriverArgs);
+-- 
+2.54.0
+

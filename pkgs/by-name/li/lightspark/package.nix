@@ -17,7 +17,7 @@
   xz,
   nasm,
   llvm,
-  glibmm,
+  glibmm_2_4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     nasm
     llvm
-    glibmm
+    glibmm_2_4
   ];
 
   meta = {

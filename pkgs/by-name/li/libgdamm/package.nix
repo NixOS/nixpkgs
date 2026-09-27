@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  glibmm,
+  glibmm_2_4,
   libgda5,
   libxml2,
   gnome,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glibmm
+    glibmm_2_4
     libxml2
   ];
   propagatedBuildInputs = [ gda ];

@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=address"
       "-Wno-error=use-after-free"
       "-std=gnu17"
+      # Fix build w/ glibc-2.44
+      "-Wno-error=discarded-qualifiers"
     ]
     ++ [
       "-Wno-error=deprecated-declarations"

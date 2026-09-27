@@ -12,17 +12,18 @@
   udevCheckHook,
   python3,
   perl,
+  withManPages ? !stdenv.hostPlatform.isi686,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "64.0";
+  version = "65.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y0pCGkvCjZ1F9Ojouesozn2Lxj+x7/0ck6/9tJmdkWw=";
+    hash = "sha256-cAaWVE6/JU8ezjx+XrxNI6Su6VKxb2Jxl29sxU/yepI=";
   };
 
   __structuredAttrs = true;
@@ -30,15 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withManPages [
     "man"
+  ]
+  ++ [
     "dev"
     "scripts"
   ];
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals withManPages [
     docutils
     pandoc
+  ]
+  ++ [
     pkg-config
     python3
     udevCheckHook
@@ -54,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+  ]
+  ++ lib.optionals (!withManPages) [
+    "-DNO_MAN_PAGES=1"
   ];
 
   postPatch = ''

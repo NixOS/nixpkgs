@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   libxml2,
-  glibmm,
+  glibmm_2_4,
   perl,
   gnome,
   meson,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     dblatex
   ];
 
-  buildInputs = [ glibmm ];
+  buildInputs = [ glibmm_2_4 ];
 
   propagatedBuildInputs = [ libxml2 ];
 

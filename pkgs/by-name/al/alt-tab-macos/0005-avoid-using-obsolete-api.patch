@@ -1,0 +1,53 @@
+diff --git a/src/macos/SystemPermissions.swift b/src/macos/SystemPermissions.swift
+index 4a98ef9461..ae983eb73a 100644
+--- a/src/macos/SystemPermissions.swift
++++ b/src/macos/SystemPermissions.swift
+@@ -158,24 +158,7 @@
+     // their return value is not updated during the app lifetime
+     // note: shows the system prompt if there's no permission
+     private static func isGrantedOnSomeDisplay() -> Bool {
+-        if #available(macOS 12.3, *) {
+-            return checkWithSCShareableContent()
+-        } else {
+-            let mainDisplayID = CGMainDisplayID()
+-            if checkWithCGDisplayStream(mainDisplayID) {
+-                return true
+-            }
+-            // maybe the main screen can't produce a CGDisplayStream, but another screen can
+-            // a positive on any screen must mean that the permission is granted; we try on the other screens
+-            for screen in NSScreen.screens {
+-                if let id = screen.number(), id != mainDisplayID {
+-                    if checkWithCGDisplayStream(id) {
+-                        return true
+-                    }
+-                }
+-            }
+-            return false
+-        }
++        return checkWithSCShareableContent()
+     }
+ 
+     @available(macOS 12.3, *)
+@@ -193,22 +176,6 @@
+         }
+     }
+ 
+-    private static func checkWithCGDisplayStream(_ id: CGDirectDisplayID) -> Bool {
+-        return runWithTimeout { completion in
+-            // this initializer can actually block for a while
+-            // it's undocumented but has been proven by spindumps shared by AltTab users
+-            let displayStream = CGDisplayStream(
+-                dispatchQueueDisplay: id,
+-                outputWidth: 1,
+-                outputHeight: 1,
+-                pixelFormat: Int32(kCVPixelFormatType_32BGRA),
+-                properties: nil,
+-                queue: .global()
+-            ) { _, _, _, _ in }
+-            completion(displayStream != nil)
+-        }
+-    }
+-
+     private static func runWithTimeout(_ block: @escaping (@escaping (Bool) -> Void) -> Void) -> Bool {
+         let semaphore = DispatchSemaphore(value: 0)
+         var result = false

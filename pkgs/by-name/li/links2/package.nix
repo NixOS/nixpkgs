@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "links";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    broken = true;
   };
 })

@@ -29,6 +29,7 @@
   cyrus_sasl,
   openldap,
   antlr,
+  fetchpatch,
 }:
 
 let
@@ -66,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     # No openssl bundling on macOS. It's not working.
     # See https://github.com/mysql/mysql-shell/blob/5b84e0be59fc0e027ef3f4920df15f7be97624c1/cmake/ssl.cmake#L53
     ./no-openssl-bundling.patch
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-shell/commit/4ce8746d8a7eecf9ae66d4d500c84d57cc4fbdbb.patch";
+      hash = "sha256-LUGC7gnNQ3zhmWUm2xogsOAmx8QSngQBHVJMWHFtWz0=";
+    })
   ];
 
   postPatch = ''

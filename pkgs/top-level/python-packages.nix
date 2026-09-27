@@ -16516,6 +16516,8 @@ self: super: with self; {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-django_4_12 = callPackage ../development/python-modules/pytest-django_4_12 { };
+
   pytest-docker = callPackage ../development/python-modules/pytest-docker { };
 
   pytest-docker-tools = callPackage ../development/python-modules/pytest-docker-tools { };
@@ -22668,6 +22670,8 @@ self: super: with self; {
   whool = callPackage ../development/python-modules/whool { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
+
+  whoosh-compat = callPackage ../development/python-modules/whoosh-compat { };
 
   whoosh-reloaded = callPackage ../development/python-modules/whoosh-reloaded { };
 
