@@ -2649,12 +2649,12 @@ with haskellLib;
         ])
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "16.2";
+          version = "16.4";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-smeK6VEKgzopGTiEaax/6H30+uC6P1SeBiFRa9ytsME=";
+            hash = "sha256-5hAVzFbbkgMiEjq/3/vwBjfFW2560RugNgAR6sns9dE=";
           };
         })
       ];
