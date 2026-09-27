@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   removeReferencesTo,
+  testers,
   zlib,
   libjpeg,
   libpng,
@@ -177,6 +178,11 @@ stdenv.mkDerivation (finalAttrs: {
       printing-service-notcp
       printing-socket-notcp
       ;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
   };
 
   meta = {
@@ -185,5 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "cups" ];
   };
 })
