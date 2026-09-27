@@ -125,36 +125,25 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/regexp/syntax/make_perl_groups.pl
   ''
   + (
-    # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same system string
-    if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
-      ''
-        mv bin/*_*/* bin
-        rmdir bin/*_*
-        ${lib.optionalString
-          (
-            !(
-              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
-            )
-          )
-          ''
-            rm -rf pkg/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH} pkg/tool/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH}
-          ''
-        }
-      ''
-    else
-      lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-        rm -rf bin/*_*
-        ${lib.optionalString
-          (
-            !(
-              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
-            )
-          )
-          ''
-            rm -rf pkg/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH} pkg/tool/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH}
-          ''
-        }
-      ''
+    let
+      inherit (finalAttrs.env)
+        GOHOSTOS
+        GOHOSTARCH
+        GOOS
+        GOARCH
+        ;
+      # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same GOOS/GOARCH
+      # Specifically exclude GOARM; it doesn't appear in the folder output names
+      isCrossGo = GOHOSTOS != GOOS || GOHOSTARCH != GOARCH;
+    in
+    # When we're cross-compiling to another OS or architecture, Go puts our architecture's binaries as bin/go{,fmt},
+    # and their binaries as bin/$goos_$goarch/go{,fmt}. We only want the host binaries, so when build/host GOOS/GOARCH differ,
+    # move the host binaries over the build binaries. Also remove other stuff just for the build platform.
+    lib.optionalString isCrossGo ''
+      mv bin/*_*/* bin
+      rmdir bin/*_*
+      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ''
   );
 
   installPhase = ''
