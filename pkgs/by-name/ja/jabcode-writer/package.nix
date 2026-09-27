@@ -1,11 +1,13 @@
 {
+  lib,
   jabcode,
   ...
 }@args:
 
-jabcode.override (
-  {
+lib.customisation.overrideVariant {
+  basePackage = jabcode;
+  variantOverrides = {
     subproject = "writer";
-  }
-  // removeAttrs args [ "jabcode" ]
-)
+  };
+  variantArgs = args;
+}
