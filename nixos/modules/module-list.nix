@@ -968,6 +968,8 @@
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
+  ./services/misc/pelican-panel.nix
+  ./services/misc/pelican-wings.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pinchflat.nix
   ./services/misc/pinnwand.nix
