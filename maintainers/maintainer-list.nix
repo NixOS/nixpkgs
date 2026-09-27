@@ -14884,6 +14884,12 @@
     github = "keenanweaver";
     githubId = 37268985;
   };
+  keithxc = {
+    name = "Keith";
+    email = "keithxc@users.noreply.github.com";
+    github = "keithxc";
+    githubId = 75361919;
+  };
   keksgesicht = {
     name = "Jan Braun";
     email = "git@keksgesicht.de";
