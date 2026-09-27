@@ -15692,6 +15692,10 @@ self: super: with self; {
 
   pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
 
+  pyobjc-framework-SystemConfiguration =
+    callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration
+      { };
+
   pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
 
   pyobjc-framework-libdispatch =
