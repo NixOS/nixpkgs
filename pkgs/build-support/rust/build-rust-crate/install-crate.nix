@@ -48,6 +48,15 @@ else
         -executable \
         -print0 | xargs --no-run-if-empty --null install --target $out/tests;
     fi
+    # Emit a manifest mapping each binary in $out/tests back to the cargo
+    # target it was compiled from (kind, target name, source file). The
+    # output filenames don't match cargo's naming for lib tests
+    # (metadata-hash suffix) or, historically, multi-file integration
+    # tests; recording the mapping at build time saves consumers from
+    # reverse-engineering lib.sh. Dotfile so existing $out/tests/* globs
+    # don't pick it up.
+    [ -f target/test-targets.jsonl ] || : > target/test-targets.jsonl
+    jq -s '.' target/test-targets.jsonl > $out/tests/.target-manifest.json
     # Real (non-test) binaries that integration tests may exec via
     # CARGO_BIN_EXE_<name>.
     if [ -d target/cargo-bin-exe ]; then
