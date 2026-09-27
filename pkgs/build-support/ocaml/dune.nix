@@ -39,8 +39,9 @@ lib.extendMkDerivation {
       # OCaml libraries, and the dependencies they propagate, are only needed
       # to build other packages. Unless the package chooses its outputs or
       # installs itself, install them into "dev", so that they stay out of the
-      # runtime closure of "out".
-      splitDev = !(args ? outputs || args ? installPhase);
+      # runtime closure of "out". Man pages and documentation go to "man" and
+      # "doc".
+      splitOutputs = !(args ? outputs || args ? installPhase);
     in
 
     if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion then
@@ -51,7 +52,15 @@ lib.extendMkDerivation {
 
         strictDeps = true;
 
-        outputs = args.outputs or ([ "out" ] ++ lib.optional splitDev "dev");
+        outputs =
+          args.outputs or (
+            [ "out" ]
+            ++ lib.optionals splitOutputs [
+              "dev"
+              "man"
+              "doc"
+            ]
+          );
 
         # The findlib setup hook always points OCAMLFIND_DESTDIR at $out.
         postHook = ''
@@ -86,8 +95,10 @@ lib.extendMkDerivation {
              ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
                --bindir "''${!outputBin}/bin" --datadir "$out/share"
              ''}
-            # Libraries without executables or docs don't install anything into $out.
-            mkdir -p "$out"
+            # Not every package installs something into each output.
+            for output in $(getAllOutputNames); do
+              mkdir -p "''${!output}"
+            done
             runHook postInstall
           '';
 
@@ -98,11 +109,17 @@ lib.extendMkDerivation {
             runHook postCheck
           '';
 
-        meta = (args.meta or { }) // {
-          platforms = args.meta.platforms or ocaml.meta.platforms;
-        };
+        meta =
+          (args.meta or { })
+          // {
+            platforms = args.meta.platforms or ocaml.meta.platforms;
+          }
+          # meta is often copied from another package, which may have other outputs.
+          // lib.optionalAttrs (args.meta or { } ? outputsToInstall) {
+            outputsToInstall = lib.intersectLists finalAttrs.outputs args.meta.outputsToInstall;
+          };
       }
-      // lib.optionalAttrs splitDev {
+      // lib.optionalAttrs splitOutputs {
         # Dune packages that ship a configure script don't expect autoconf flags.
         setOutputFlags = args.setOutputFlags or false;
       };

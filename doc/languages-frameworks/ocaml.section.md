@@ -140,13 +140,15 @@ buildDunePackage (finalAttrs: {
 ```
 
 Unless the package sets `outputs` or overrides `installPhase`, `buildDunePackage`
-builds two outputs, and points `$OCAMLFIND_DESTDIR` to `dev`:
+builds separate outputs, and points `$OCAMLFIND_DESTDIR` to `dev`:
 
-- `out` contains what the package produces for use at runtime: executables, man
-  pages and documentation.
+- `out` contains what the package produces for use at runtime, such as
+  executables.
 - `dev` contains the OCaml libraries and the propagated dependencies needed to
   build other packages against them. It is selected automatically when the
   package is used as a build input.
+- `man` contains the man pages. Like `out`, it is installed by default.
+- `doc` contains the documentation, such as the README and license files.
 
 This keeps build-time only OCaml dependencies out of the runtime closure of
 executables. Code that refers to the library directory of such a package must
