@@ -31,7 +31,7 @@ let
 
     paths = [ cfg.package ];
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
 
     postBuild = ''
       wrapProgram $out/bin/isolate \
