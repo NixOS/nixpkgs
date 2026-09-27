@@ -2,8 +2,8 @@ import { execFileSync } from 'node:child_process'
 import type * as actionsCore from '@actions/core'
 import type { context as actionsContext } from '@actions/github'
 import type { GitHub } from '@actions/github/lib/utils'
-import { dismissReviews, postReview } from './reviews.js'
-import { classify } from './supportedBranches.js'
+import { dismissReviews, postReview } from './reviews.ts'
+import { classify } from './supportedBranches.ts'
 import withRateLimit from './withRateLimit.js'
 
 const dirname = import.meta.dirname

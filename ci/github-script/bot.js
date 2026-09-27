@@ -4,7 +4,7 @@ import path from 'node:path'
 import { DefaultArtifactClient } from '@actions/artifact'
 import { handleMerge } from './merge.js'
 import { handleReviewers } from './reviewers.js'
-import { classify } from './supportedBranches.js'
+import { classify } from './supportedBranches.ts'
 import withRateLimit from './withRateLimit.js'
 
 export default async ({ github, context, core, dry }) => {

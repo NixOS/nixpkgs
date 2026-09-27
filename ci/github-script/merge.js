@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { classify } from './supportedBranches.js'
+import { classify } from './supportedBranches.ts'
 
 function runChecklist({
   committers,
