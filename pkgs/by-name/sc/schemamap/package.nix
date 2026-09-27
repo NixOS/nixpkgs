@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/schemamap/schemamap/releases/tag/v${version}";
     description = "Instant batch data import for Postgres";
-    homepage = "https://schemamap.io";
+    homepage = "https://github.com/schemamap/schemamap";
     license = lib.licenses.mit;
     mainProgram = "schemamap";
     maintainers = with lib.maintainers; [ thenonameguy ];

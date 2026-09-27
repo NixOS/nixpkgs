@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.impallari.com/quattrocento/";
+    homepage = "https://fonts.google.com/specimen/Quattrocento";
     description = "Classic, elegant, sober and strong serif typeface";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
