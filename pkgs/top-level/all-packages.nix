@@ -7519,6 +7519,18 @@ with pkgs;
     web = (callPackages ../servers/monitoring/zabbix/web.nix { }).${version};
     agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix { }).${version};
 
+    plugins = {
+      ember-plus =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/ember-plus.nix { }).${version};
+      mongodb =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mongodb.nix { }).${version};
+      mssql = (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mssql.nix { }).${version};
+      nvidia-gpu =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/nvidia-gpu.nix { }).${version};
+      postgresql =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/postgresql.nix { }).${version};
+    };
+
     # backwards compatibility
     server = server-pgsql;
   };
