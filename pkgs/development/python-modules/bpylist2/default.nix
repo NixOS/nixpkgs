@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "bpylist2";
-  version = "4.1.1";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
