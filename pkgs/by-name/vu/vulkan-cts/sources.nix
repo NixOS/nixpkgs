@@ -46,8 +46,8 @@ rec {
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "6019efe93eca7bfa7a692316d91a9465eb457d60";
-    hash = "sha256-zZOxL3XOCzlTsCuAm/+5SrDk6jPJpTY+nAL6H9knyPU=";
+    rev = "4abe0260bbd8e59930786eed645481808a3fe6f1";
+    hash = "sha256-sHjTKekQINFoAk9jSibu4shHBMJj5RHaxL/AZTbMYiA=";
   };
 
   vulkan-validationlayers = fetchFromGitHub {
