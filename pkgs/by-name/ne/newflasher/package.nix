@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newflasher";
-  version = "60";
+  version = "61";
 
   src = fetchFromGitHub {
     owner = "munjeni";
     repo = "newflasher";
     tag = "${finalAttrs.version}";
-    hash = "sha256-YmFY0WPT92f5zN10TEfuRv2mzhEweqeZEpzWCK4otYg=";
+    hash = "sha256-9qEGFzA5sMn+1MOKNTJeBukurzytksXitgXraPL0KDU=";
   };
 
   buildInputs = [
