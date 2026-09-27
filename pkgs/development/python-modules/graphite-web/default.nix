@@ -121,6 +121,8 @@ buildPythonPackage {
   };
 
   meta = {
+    # pyproject_hooks._impl.BackendUnavailable: Cannot import 'setuptools.build_meta'
+    broken = true;
     description = "Enterprise scalable realtime graphing";
     homepage = "http://graphiteapp.org/";
     license = lib.licenses.asl20;
