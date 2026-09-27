@@ -314,7 +314,7 @@ The different target SDK and hooks are mangled based on role:
 
 - `DEVELOPER_DIR_FOR_BUILD` and `MACOSX_DEPLOYMENT_TARGET_FOR_BUILD` for the build platform;
 - `DEVELOPER_DIR` and `MACOSX_DEPLOYMENT_TARGET` for the host platform; and
-- `DEVELOPER_DIR_FOR_TARGET` and `MACOSX_DEPLOYMENT_TARGET_FOR_TARGET` for the build platform.
+- `DEVELOPER_DIR_FOR_TARGET` and `MACOSX_DEPLOYMENT_TARGET_FOR_TARGET` for the target platform.
 
 In static compilation situations, it is possible for the build and host platform to be the same platform but have different SDKs with the same version (one dynamic and one static).
 cc-wrapper and bintools-wrapper take care of handling this distinction.
