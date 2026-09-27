@@ -1054,6 +1054,15 @@ mapAliases {
   gnome2.libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # Added 2026-07-23
   gnome2.libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # Added 2026-07-23
   gnome2.ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # Added 2026-07-23
+  gnome38Extensions = throw "'gnome38Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 38"; # Added 2026-09-27
+  gnome40Extensions = throw "'gnome40Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 40"; # Added 2026-09-27
+  gnome41Extensions = throw "'gnome41Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 41"; # Added 2026-09-27
+  gnome42Extensions = throw "'gnome42Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 42"; # Added 2026-09-27
+  gnome43Extensions = throw "'gnome43Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 43"; # Added 2026-09-27
+  gnome44Extensions = throw "'gnome44Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 44"; # Added 2026-09-27
+  gnome45Extensions = throw "'gnome45Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 45"; # Added 2026-09-27
+  gnome46Extensions = throw "'gnome46Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 46"; # Added 2026-09-27
+  gnome47Extensions = throw "'gnome47Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 47"; # Added 2026-09-27
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
