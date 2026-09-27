@@ -175,7 +175,7 @@ interface PostReviewProps {
   core: typeof import('@actions/core')
   dry: boolean
   body: string
-  event: keyof typeof eventToState
+  event?: keyof typeof eventToState
   reviewKey: string
 }
 

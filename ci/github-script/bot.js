@@ -5,7 +5,7 @@ import { DefaultArtifactClient } from '@actions/artifact'
 import { handleMerge } from './merge.js'
 import { handleReviewers } from './reviewers.js'
 import { classify } from './supportedBranches.ts'
-import withRateLimit from './withRateLimit.js'
+import withRateLimit from './withRateLimit.ts'
 
 export default async ({ github, context, core, dry }) => {
   const artifactClient = new DefaultArtifactClient()

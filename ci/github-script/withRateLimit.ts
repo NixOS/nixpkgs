@@ -1,8 +1,28 @@
-// @ts-nocheck
 import Bottleneck from 'bottleneck'
 
-export default async ({ github, core, maxConcurrent = 1 }, callback) => {
-  const stats = {
+type GitHub = InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+type Core = typeof import('@actions/core')
+
+export interface Stats {
+  issues: number
+  prs: number
+  requests: number
+  artifacts: number
+}
+
+export default async (
+  {
+    github,
+    core,
+    maxConcurrent = 1,
+  }: {
+    github: GitHub
+    core: Core
+    maxConcurrent?: number
+  },
+  callback: (stats: Stats) => Promise<void>,
+) => {
+  const stats: Stats = {
     issues: 0,
     prs: 0,
     requests: 0,
@@ -30,12 +50,12 @@ export default async ({ github, core, maxConcurrent = 1 }, callback) => {
     if (options.url.startsWith('/search/')) return request(options)
     stats.requests++
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
-      return writeLimits.schedule(request.bind(null, options))
-    else return allLimits.schedule(request.bind(null, options))
+      return writeLimits.schedule(async () => request(options))
+    else return allLimits.schedule(async () => request(options))
   })
 
   async function updateReservoir() {
-    let response
+    let response: Awaited<ReturnType<typeof github.rest.rateLimit.get>>
     try {
       response = await github.rest.rateLimit.get()
     } catch (err) {
