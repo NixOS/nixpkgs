@@ -187,8 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
-  # Only the CPU variant is guaranteed to run without a GPU/device present, so
-  # restrict the smoke check to it. GPU variants are validated on real hardware.
+  # Only the CPu variant can run without a GPU
   doInstallCheck = backend == "cpu";
   installCheckPhase = ''
     runHook preInstallCheck
