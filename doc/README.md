@@ -49,9 +49,7 @@ If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.
 
 ### Development environment
 
-To reduce repetition, consider using tools from the provided development environment:
-
-Load it from the Nixpkgs documentation directory with
+To reduce repetition, consider using tools from the documentation development environment:
 
 ```ShellSession
 $ cd /path/to/nixpkgs/doc
