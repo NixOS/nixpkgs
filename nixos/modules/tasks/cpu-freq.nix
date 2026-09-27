@@ -34,6 +34,14 @@ in
     };
 
     cpufreq = {
+      epp = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "balance_performance";
+        description = ''
+          Configure the energy performance preference for the available CPUs.
+        '';
+      };
 
       max = mkOption {
         type = types.nullOr types.ints.unsigned;
@@ -61,11 +69,25 @@ in
   config =
     let
       governorEnable = cfg.cpuFreqGovernor != null;
+      eppEnable = cfg.cpufreq.epp != null;
       maxEnable = cfg.cpufreq.max != null;
       minEnable = cfg.cpufreq.min != null;
+      pstateActive = any (p: elem p config.boot.kernelParams) [
+        "amd_pstate=active"
+        "intel_pstate=active"
+      ];
       enable = !config.boot.isContainer && (governorEnable || maxEnable || minEnable);
     in
     mkIf enable {
+      assertions = [
+        {
+          assertion = !eppEnable || (cfg.cpuFreqGovernor == "powersave" && pstateActive);
+          message = ''
+            cpufreq.epp can only be used with the \"powersave\" governor and with either
+            amd_pstate or intel_pstate in active mode.
+          '';
+        }
+      ];
 
       boot.kernelModules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
 
@@ -83,11 +105,15 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = "yes";
-          ExecStart =
-            "${cpupower}/bin/cpupower frequency-set "
-            + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
-            + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
-            + optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
+          ExecStart = [
+            (
+              "${cpupower}/bin/cpupower frequency-set "
+              + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
+              + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
+              + optionalString minEnable "--min ${toString cfg.cpufreq.min} "
+            )
+          ]
+          ++ lib.optional eppEnable "${cpupower}/bin/cpupower set -e ${cfg.cpufreq.epp}";
           SuccessExitStatus = "0 237";
         };
       };
