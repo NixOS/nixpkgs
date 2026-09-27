@@ -11,6 +11,10 @@
 
 let
   sources = {
+    "19" = {
+      version = "1.8.0-rc0";
+      hash = "sha256-tEWWn2Wtz30N18pfvW+R3TEylustFeII7kBE1aiJw80=";
+    };
     "18" = {
       version = "1.8.0-rc0";
       hash = "sha256-QtcH0lUWvey/URZm/cqh1TempMU2Vnerzu6SQg+yofA=";
