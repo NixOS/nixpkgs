@@ -93,6 +93,10 @@ let
     makeTest {
       name = "boot-" + name;
       nodes = { };
+      meta = {
+        # NixOS VM tests cannot run on darwin.
+        platforms = lib.platforms.linux;
+      };
       testScript = ''
         machine = create_machine("${startCommand}")
         machine.start()
@@ -147,6 +151,10 @@ let
     makeTest {
       name = "boot-netboot-" + name;
       nodes = { };
+      meta = {
+        # NixOS VM tests cannot run on darwin.
+        platforms = lib.platforms.linux;
+      };
       testScript = ''
         machine = create_machine("${startCommand}")
         machine.start()
