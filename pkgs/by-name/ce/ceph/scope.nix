@@ -2,7 +2,9 @@
 
 # the README.md in the same directory contains further information on why this requires a scope
 lib.makeScope pkgs.newScope (self: {
-  ceph-rocksdb = self.callPackage ./rocksdb.nix { };
+  # 7.9 is the last version Ceph manages to compile (and run) against
+  # This will likely remain vendored until Ceph itself bumps its *src/rocksdb* submodule to something newer.
+  ceph-rocksdb = self.callPackage ./rocksdb { };
 
   # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
   ceph-python = self.callPackage ({ python312 }: python312) { };
