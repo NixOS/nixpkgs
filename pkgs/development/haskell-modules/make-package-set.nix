@@ -9,6 +9,21 @@
   # build-time uses.
   buildHaskellPackages,
 
+  # Splice the scope even when `pkgs == buildPackages`, where `splicePackages`
+  # would otherwise short-circuit to the identity.
+  #
+  # That short-circuit assumes the build set and this set coincide whenever the
+  # platforms do. For a set that bootstraps they do not: `ghc/ng`'s stage2 is
+  # built by stage1 and compiles its `Setup.hs` files with the tools rung,
+  # natively as much as cross. Without this, `setupHaskellDepends` and
+  # `libraryToolDepends` resolve to this set's own copies -- libraries the
+  # build compiler cannot read, and tools it would have to build with the
+  # compiler under construction.
+  #
+  # Off by default: forcing it where the indices genuinely coincide buys
+  # nothing and costs an attribute-set merge per package.
+  alwaysSplice ? false,
+
   # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs,
 
@@ -53,10 +68,12 @@ let
   mkDerivationImpl = pkgs.callPackage builder (
     {
       inherit stdenv;
-      inherit (self)
-        buildHaskellPackages
-        ghc
-        ;
+      inherit (self) buildHaskellPackages;
+      # `compiler`, not `self.ghc`. In a set that builds GHC from its own
+      # packages, `self.ghc` is the `ghc` *library* -- `compiler/ghc.cabal`, a
+      # Hackage package name like any other -- and every package in the set
+      # would otherwise try to compile with it. See the note on `compiler`.
+      ghc = compiler;
       inherit (self.buildHaskellPackages) jailbreak-cabal;
     }
     // lib.optionalAttrs (!(ghc.isMhs or false)) {
@@ -157,21 +174,46 @@ let
     in
     lib.makeOverridable drvScope (auto // manualArgs);
 
+  # The compiler this set compiles with, as opposed to `self.ghc`, which is
+  # merely the attribute currently sitting at that name.
+  #
+  # `ghc` is a Hackage package name -- it is GHC's own API library, built from
+  # `compiler/ghc.cabal`. A set that builds GHC from its constituent packages
+  # therefore has a real `ghc` *library* under that name, and every package in
+  # the set would otherwise try to compile with it. Taking the compiler from
+  # the function argument instead of from `self` keeps the two apart.
+  #
+  # For every existing set this is exactly the value `self.ghc` already had, so
+  # behaviour is unchanged.
+  compiler = ghc // {
+    withPackages = self.ghcWithPackages;
+    withHoogle = self.ghcWithHoogle;
+  };
+
   mkScope =
     scope:
     let
       ps = pkgs.__splicedPackages;
       scopeSpliced =
-        pkgs.splicePackages {
-          pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
-          pkgsBuildHost = scope.buildHaskellPackages;
-          pkgsBuildTarget = { };
-          pkgsHostHost = { };
-          pkgsHostTarget = scope;
-          pkgsTargetTarget = { };
-        }
+        pkgs.splicePackages (
+          {
+            pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
+            pkgsBuildHost = scope.buildHaskellPackages;
+            pkgsBuildTarget = { };
+            pkgsHostHost = { };
+            pkgsHostTarget = scope;
+            pkgsTargetTarget = { };
+          }
+          // lib.optionalAttrs alwaysSplice { actuallySplice = true; }
+        )
         // {
           # Don't splice these
+          #
+          # NB: `scope.ghc` here, deliberately. This is what a *package's* `ghc`
+          # argument resolves to, and a package that depends on `ghc` means the
+          # GHC API library -- `ghc-bin` is exactly that. The compiler goes to
+          # `generic-builder` through `mkDerivationImpl` instead; see the note
+          # on `compiler`.
           inherit (scope) ghc buildHaskellPackages;
         };
     in
@@ -205,7 +247,7 @@ let
       ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+        cabal2nix --compiler=${compiler.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
       '';
 
   # Given a package name and version, e.g. name = "async", version = "2.2.4",
@@ -672,9 +714,18 @@ package-set { inherit pkgs lib callPackage; } self
       }
     );
 
-  ghc = ghc // {
-    withPackages = self.ghcWithPackages;
-    withHoogle = self.ghcWithHoogle;
+  # The compiler, as an attribute of the set. Kept as `ghc` for compatibility,
+  # and also exposed as `_wrappers.ghc`.
+  #
+  # These are not interchangeable once a set defines the GHC *library* -- see
+  # the note on `compiler` above `mkScope`. Anything that means "the compiler
+  # that builds this set" should say `_wrappers.ghc`; `ghc` may have been
+  # overlaid with the `ghc` package from Hackage.
+  ghc = compiler;
+
+  _wrappers = {
+    inherit compiler;
+    ghc = compiler;
   };
 
   wrapMhs = pkgs.callPackage ../compilers/microhs/wrapper.nix { };
@@ -773,11 +824,11 @@ package-set { inherit pkgs lib callPackage; } self
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
     buildTools =
       drv.buildTools or [ ]
-      ++ [ self.ghc.llvmPackages.llvm ]
+      ++ [ compiler.llvmPackages.llvm ]
       # GHC >= 9.10 needs LLVM specific assembler, i.e. clang
       # On Darwin clang is always required
-      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.10" || stdenv.hostPlatform.isDarwin) [
-        self.ghc.llvmPackages.clang
+      ++ lib.optionals (lib.versionAtLeast compiler.version "9.10" || stdenv.hostPlatform.isDarwin) [
+        compiler.llvmPackages.clang
       ];
   });
 }
