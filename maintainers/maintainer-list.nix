@@ -8050,6 +8050,12 @@
     name = "Daniel Ebbert";
     keys = [ { fingerprint = "E765 FCA3 D9BF 7FDB 856E  AD73 47BC 1559 27CB B9C7"; } ];
   };
+  EchoDelfino = {
+    email = "echodelfino@proton.me";
+    github = "EchoDelfino";
+    githubId = 270178292;
+    name = "EchoDelfino";
+  };
   ecklf = {
     email = "ecklf@icloud.com";
     github = "ecklf";
