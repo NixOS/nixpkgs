@@ -8,17 +8,25 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mygpoclient";
   version = "1.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "mygpoclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-g4iPw6i8Gy3kvIjHCyGLJNHNb+osaCmc46hIryrodi8=";
   };
+
+  # Use fork instead of forkserver to avoid server not being started yet
+  # before test
+  postPatch = ''
+    substituteInPlace mygpoclient/http_test.py \
+      --replace-fail "multiprocessing.Process(" 'multiprocessing.get_context("fork").Process('
+  '';
 
   build-system = [ setuptools ];
 
@@ -27,10 +35,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     minimock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "mygpoclient/http_test.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -45,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})
