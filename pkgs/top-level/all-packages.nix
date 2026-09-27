@@ -9931,15 +9931,6 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome38Extensions
-    gnome40Extensions
-    gnome41Extensions
-    gnome42Extensions
-    gnome43Extensions
-    gnome44Extensions
-    gnome45Extensions
-    gnome46Extensions
-    gnome47Extensions
     gnome48Extensions
     gnome49Extensions
     gnome50Extensions
