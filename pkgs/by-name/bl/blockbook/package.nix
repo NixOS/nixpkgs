@@ -18,19 +18,19 @@ let
 in
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.5.0";
+  version = "0.6.0";
   commit = "657cbcf";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    hash = "sha256-8/tyqmZE9NJWGg7zYcdei0f1lpXfehy6LM6k5VHW33g=";
+    hash = "sha256-4cam14agB782AwxUWaBlIqrGUnkD8etB4cARodCnAIw=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-W29AvzfleCYC2pgHj2OB00PWBTcD2UUDbDH/z5A3bQ4=";
+  vendorHash = "sha256-Vz9voiRi2J2nlWfzt3eNkFp5M11CirHbp9YBxsPGnhk=";
 
   nativeBuildInputs = [ pkg-config ];
 
