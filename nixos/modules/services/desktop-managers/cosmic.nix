@@ -41,6 +41,9 @@ let
       # providing XWayland support? Doesn't make sense. Add `xwayland` to the
       # `corePkgs` list.
       xwayland
+      # cosmic-comp runs `xrdb -merge` on the Xwayland display to set the X11
+      # cursor size and theme; like xwayland, it is looked up on $PATH.
+      xrdb
     ];
 in
 {

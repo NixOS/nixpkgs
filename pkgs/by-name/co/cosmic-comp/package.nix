@@ -12,10 +12,12 @@
   seatd,
   udev,
   systemd,
+  xrdb,
   nix-update-script,
   nixosTests,
 
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withXWayland ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -59,6 +61,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontCargoInstall = true;
+
+  # With Xwayland, cosmic-comp calls out to `xrdb -merge` to set
+  # `Xcursor.size` and `Xcursor.theme` for X11 clients (src/xwayland.rs,
+  # upstream pop-os/cosmic-comp#1976). Without it on PATH it logs
+  # "`xrdb` not found, cannot update Xresources." and X11 clients fall back
+  # to libXcursor's screen-derived default cursor size.
+  preFixup = lib.optionalString withXWayland ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xrdb ]})
+  '';
 
   passthru = {
     tests = {
