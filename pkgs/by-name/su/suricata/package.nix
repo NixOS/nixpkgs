@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "suricata";
-  version = "8.0.3";
+  version = "8.0.7";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/suricata-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PZp7gDuXwR4GDzNJsXm+qv1vlrjIqVCF2f3AjIIoF9k=";
+    hash = "sha256-qdRqnI9A6B+KbfPswsWpqOjamFh2KZEI2S2lR8ATuow=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.is64bit [
