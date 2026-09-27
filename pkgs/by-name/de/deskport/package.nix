@@ -31,6 +31,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskport";
   version = "0.6.3";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keithxc";
@@ -76,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qmake
     qt6.wrapQtAppsHook
     pkg-config
-    vulkan-headers
   ];
 
   buildInputs = [
+    vulkan-headers
     pipewire
     SDL2
     SDL2_ttf
