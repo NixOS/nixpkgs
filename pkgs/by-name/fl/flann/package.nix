@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flann";
   version = "1.9.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
+
   src = fetchFromGitHub {
     owner = "flann-lib";
     repo = "flann";
