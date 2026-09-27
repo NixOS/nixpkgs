@@ -25,19 +25,16 @@ let
     osd0 = {
       name = "0";
       ip = "192.168.1.2";
-      key = "AQBCEJNa3s8nHRAANvdsr93KqzBznuIWm2gOGg==";
       uuid = "55ba2294-3e24-478f-bee0-9dca4c231dd9";
     };
     osd1 = {
       name = "1";
       ip = "192.168.1.3";
-      key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
       uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
     osd2 = {
       name = "2";
       ip = "192.168.1.4";
-      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
     # Client that mounts CephFS using the in-kernel client.
@@ -297,15 +294,43 @@ let
         "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
         "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
         "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
-        "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
+        # Create the monmap with both a msgr2 (v2) and a legacy (v1) address.
+        # Using plain `--add` yields a v1-only monmap, which leaves the cluster
+        # in HEALTH_WARN with MON_MSGR2_NOT_ENABLED. Running `ceph mon
+        # enable-msgr2` afterwards is not enough: it rewrites the monmap (a
+        # subsequent `ceph mon dump` does show the v2 address), but the health
+        # check keeps reporting the mon as v1-only indefinitely.
+        #
+        # For the CephFS variant, `--auth-allowed-ciphers` additionally permits
+        # the legacy `aes` cipher next to the default `aes256k`, which is
+        # required by the in-kernel CephFS client; see the `client.kclient`
+        # credential. Daemons still use `aes256k`: only that one client key is
+        # `aes`, and only in that variant.
+        # TODO: Switch this to the safer `aes256k` once our kernel supports that.
+        "monmaptool --create --addv ${cfg.monA.name} '[v2:${cfg.monA.ip}:3300,v1:${cfg.monA.ip}:6789]'${lib.optionalString withCephfs " --auth-allowed-ciphers=aes,aes256k"} --fsid ${cfg.clusterId} /tmp/monmap",
         "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
         "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
         "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
         "systemctl start ceph-mon-${cfg.monA.name}",
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
-    monA.succeed("ceph mon enable-msgr2")
     monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
+
+    ${lib.optionalString withCephfs ''
+      # Permitting the legacy `aes` cipher for the in-kernel CephFS client (see
+      # `--auth-allowed-ciphers` above and the `client.kclient` credential below)
+      # makes the monitors report that they allow, and can create, keys with an
+      # insecure cipher. Both are informational warnings about the deliberate
+      # configuration above rather than about anything being broken, but they
+      # would keep the cluster in HEALTH_WARN forever, so mute them.
+      # `--sticky` is required because the alerts must be muted before they are
+      # first raised; muting an alert that is not currently raised fails with
+      # ENOENT ("health alert ... is not currently raised") otherwise.
+      monA.succeed(
+          "ceph health mute --sticky AUTH_INSECURE_KEYS_ALLOWED",
+          "ceph health mute --sticky AUTH_INSECURE_KEYS_CREATABLE",
+      )
+    ''}
 
     # Can't check ceph status until a mon is up
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
@@ -327,27 +352,24 @@ let
     osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
 
     # Bootstrap the BlueStore OSDs.
-    osd0.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd0.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-    )
-    osd1.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd1.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-    )
-    osd2.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd2.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd2.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
-    )
+    for machine, osd_name, osd_uuid in [
+        (osd0, "${cfg.osd0.name}", "${cfg.osd0.uuid}"),
+        (osd1, "${cfg.osd1.name}", "${cfg.osd1.uuid}"),
+        (osd2, "${cfg.osd2.name}", "${cfg.osd2.uuid}"),
+    ]:
+        machine.succeed(
+            f"mkdir -p /var/lib/ceph/osd/ceph-{osd_name}",
+            f"echo bluestore > /var/lib/ceph/osd/ceph-{osd_name}/type",
+            f"ln -sf /dev/vdb /var/lib/ceph/osd/ceph-{osd_name}/block",
+            f"ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-{osd_name}/keyring --name osd.{osd_name} --gen-key",
+        )
+        # Register the OSD with the generated key read back from its keyring.
+        key = machine.succeed(
+            f"ceph-authtool --print-key /var/lib/ceph/osd/ceph-{osd_name}/keyring --name osd.{osd_name}"
+        ).strip()
+        machine.succeed(
+            f"echo '{{\"cephx_secret\": \"{key}\"}}' | ceph osd new {osd_uuid} -i -"
+        )
 
     # We `sync` so that the config survives the forced crashes below.
     osd0.succeed(
@@ -451,19 +473,44 @@ let
     # Wait for the MDS to claim the filesystem and become active.
     monA.wait_until_succeeds("ceph fs status cephfs | grep -e 'active'", timeout=60)
 
-    # Distribute the admin keyring (and a plain secret file for the kernel
-    # client) to both client machines, so that they can authenticate.
-    monA.succeed(
-        "cp /etc/ceph/ceph.client.admin.keyring /tmp/shared",
-        "ceph-authtool -p /etc/ceph/ceph.client.admin.keyring > /tmp/shared/admin.secret",
-    )
+    # Distribute the admin keyring to both client machines, so that they can
+    # authenticate.
+    monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
     kclient.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
     fuseclient.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    kclient.succeed("cp /tmp/shared/admin.secret /etc/ceph/admin.secret")
+
+    # The in-kernel CephFS client cannot use the `aes256k` cipher that Ceph
+    # creates keys with by default: `libceph` rejects the resulting 32-byte
+    # secret with "libceph: secret too big 32" and the mount fails with
+    # "adding ceph secret key to kernel failed: Invalid argument".
+    # Upstream's fix is to have up-to-date client software (see
+    # https://docs.ceph.com/en/tentacle/rados/configuration/auth-config-ref/#cephx-upgrade),
+    # but `ceph.ko`/`libceph.ko` ship with the kernel rather than with Ceph, so
+    # that is not something a Ceph version bump can provide.
+    # Until the kernel supports 32-byte secrets, give *only* this client a key
+    # with the legacy `aes` cipher (permitted via `--auth-allowed-ciphers`
+    # above). Once `libceph` copes with `aes256k`, drop `--key-type=aes`, the
+    # extra cipher in the monmap and the health mute below, and let the kernel
+    # client use `client.admin` like the FUSE client does.
+    monA.succeed(
+        "ceph auth get-or-create --key-type=aes client.kclient mon 'allow r' mds 'allow rw' osd 'allow rw' > /tmp/shared/ceph.client.kclient.keyring",
+        "ceph-authtool -p /tmp/shared/ceph.client.kclient.keyring -n client.kclient > /tmp/shared/kclient.secret",
+        # A client key with an insecure cipher raises AUTH_INSECURE_CLIENT_KEY_TYPE
+        # (only a warning, unlike the HEALTH_ERR for service keys), see
+        # https://docs.ceph.com/en/tentacle/rados/operations/health-checks/#auth-insecure-client-key-type
+        #  Muting it is what upstream recommends when a legacy client cannot
+        # be upgraded, and keeps the HEALTH_OK assertions below meaningful.
+        # As above, `--sticky` avoids depending on the alert already being raised.
+        "ceph health mute --sticky AUTH_INSECURE_CLIENT_KEY_TYPE",
+    )
+    kclient.succeed(
+        "cp /tmp/shared/ceph.client.kclient.keyring /etc/ceph",
+        "cp /tmp/shared/kclient.secret /etc/ceph/kclient.secret",
+    )
 
     # Mount CephFS on the kernel client.
     # We force the messenger v2 protocol via "ms_mode=secure"; the cluster
-    # has msgr2 enabled (see "ceph mon enable-msgr2" above) and the legacy v1
+    # has msgr2 enabled (the monmap is created with a v2 address above) and the legacy v1
     # protocol apparently does not reconnect reliably after the servers are restarted.
     # The msgr2 monitor listens on port 3300 (instead of legacy v1 port 6789),
     # so we have to point the device string at that port explicitly.
@@ -475,7 +522,7 @@ let
     # but for this test, discarding stale sessions is good enough.
     kclient.succeed("mkdir -p /mnt/cephfs")
     kclient.wait_until_succeeds(
-        "mount -t ceph ${cfg.monA.ip}:3300:/ /mnt/cephfs -o name=admin,secretfile=/etc/ceph/admin.secret,ms_mode=secure,recover_session=clean"
+        "mount -t ceph ${cfg.monA.ip}:3300:/ /mnt/cephfs -o name=kclient,secretfile=/etc/ceph/kclient.secret,ms_mode=secure,recover_session=clean"
     )
     kclient.succeed("mountpoint /mnt/cephfs")
 
