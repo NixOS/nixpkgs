@@ -2,69 +2,98 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  rustPlatform,
   meson,
   ninja,
   pkg-config,
-  flex,
+  cargo,
+  rustc,
+  glib,
+  gettext,
   itstool,
-  wrapGAppsHook3,
+  gobject-introspection,
+  wrapGAppsHook4,
   desktop-file-utils,
+  gtk4,
+  vte-gtk4,
+  gdk-pixbuf,
   exiv2,
   libgsf,
   taglib,
   poppler,
-  samba,
-  gtest,
+  xdg-terminal-exec,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-commander";
-  version = "1.18.6";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-commander";
     tag = finalAttrs.version;
-    hash = "sha256-nn4vKmMR6JS/HEHS8VOX7bM7z0WJlHM2+V7s+UvWQrA=";
+    hash = "sha256-oul7NQ5LJkzCorkIIsmzriJlVU3pffOIKsQ3iEn3+90=";
   };
 
-  # hard-coded schema paths
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lLyDzGn3+C7qAuq41Ncx+B4+mOzy+r99ZN5taVcgUR0=";
+  };
+
   postPatch = ''
-    substituteInPlace src/gnome-cmd-data.cc plugins/fileroller/file-roller-plugin.cc \
+    # hard-coded schema path
+    substituteInPlace plugins/fileroller/file-roller-plugin.cc \
       --replace-fail \
         '/share/glib-2.0/schemas' \
         '/share/gsettings-schemas/${finalAttrs.finalPackage.name}/glib-2.0/schemas'
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    flex
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    glib
+    gettext
     itstool
-    wrapGAppsHook3
+    gobject-introspection
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
   buildInputs = [
+    glib
+    gtk4
+    vte-gtk4
+    gdk-pixbuf
     exiv2
     libgsf
     taglib
     poppler
-    samba
   ];
 
-  mesonFlags = [ (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck) ];
+  # The `terminal-cmd`/`terminal-exec-cmd` defaults invoke xdg-terminal-exec by
+  # name. Put it on PATH rather than substituting a store path into the gschema:
+  # the options dialog writes every command back to dconf verbatim, which would
+  # pin a store path that goes stale on the next garbage collection.
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ xdg-terminal-exec ]}
+    )
+  '';
 
-  checkInputs = [ gtest ];
-
-  doCheck = false; # gtest requires C/C++17 but the project is written in C/C++11
+  # These tests need a display to run
+  doCheck = false;
 
   meta = {
     description = "Fast and powerful twin-panel file manager for the Linux desktop";
-    homepage = "https://gcmd.github.io";
-    license = lib.licenses.gpl2Plus;
+    homepage = "https://gnome.pages.gitlab.gnome.org/gnome-commander/";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "gnome-commander";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
