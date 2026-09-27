@@ -90,7 +90,7 @@ let
       in
       import ../../.. (
         {
-          inherit (cfg) config overlays;
+          inherit (cfg) config crossOverlays overlays;
         }
         // systemArgs
       )
@@ -98,6 +98,7 @@ let
       import ../../.. {
         inherit (cfg)
           config
+          crossOverlays
           overlays
           localSystem
           crossSystem
@@ -172,6 +173,12 @@ in
 
         Ignored when {option}`nixpkgs.pkgs` is set.
       '';
+    };
+
+    crossOverlays = lib.mkOption {
+      default = [ ];
+      description = "Like overlays, but applied only in cross-compilation";
+      type = lib.types.listOf overlayType;
     };
 
     overlays = lib.mkOption {
