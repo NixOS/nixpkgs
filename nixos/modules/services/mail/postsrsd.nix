@@ -122,6 +122,15 @@ in
               '';
             };
 
+            milter = lib.mkOption {
+              type = with lib.types; nullOr (strMatching "^(unix|inet):.+");
+              default = "unix:/run/postsrsd/milter";
+              example = "inet:localhost:9997";
+              description = ''
+                Milter listener configuration in `unix:/path/to/socket` or `inet:host:port` format.
+              '';
+            };
+
             secrets-file = lib.mkOption {
               type = lib.types.str;
               default = "\${CREDENTIALS_DIRECTORY}/secrets-file";
@@ -168,11 +177,11 @@ in
             };
 
             socketmap = lib.mkOption {
-              type = lib.types.strMatching "^(unix|inet):.+";
-              default = "unix:/run/postsrsd/socket";
+              type = with lib.types; nullOr (strMatching "^(unix|inet):.+");
+              default = "unix:/run/postsrsd/socketmap";
               example = "inet:localhost:10003";
               description = ''
-                Listener configuration in socket map format native to Postfix configuration.
+                Socketmap listener configuration in `unix:/path/to/socket` or `inet:host:port` format.
               '';
             };
 
@@ -212,10 +221,15 @@ in
       };
 
       configurePostfix = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
+        type = lib.types.enum [
+          "none"
+          "socketmap"
+          "milter"
+        ];
+        default = "socketmap";
+        example = "milter";
         description = ''
-          Whether to configure the required settings to use postsrsd in the local Postfix instance.
+          Whether and how to integrate postsrsd into the local Postfix instance.
         '';
       };
 
@@ -234,17 +248,33 @@ in
   };
 
   config = lib.mkMerge [
-    (lib.mkIf (cfg.enable && cfg.configurePostfix && config.services.postfix.enable) {
-      services.postfix.settings.main = {
-        # https://github.com/roehling/postsrsd#configuration
-        sender_canonical_maps = "socketmap:${cfg.settings.socketmap}:forward";
-        sender_canonical_classes = "envelope_sender";
-        recipient_canonical_maps = "socketmap:${cfg.settings.socketmap}:reverse";
-        recipient_canonical_classes = [
-          "envelope_recipient"
-          "header_recipient"
-        ];
-      };
+    (lib.mkIf (cfg.enable && cfg.configurePostfix != "none" && config.services.postfix.enable) {
+      assertions = [
+        {
+          assertion = cfg.configurePostfix == "milter" -> cfg.settings.milter != null;
+          message = "Configuring Postfix `smtpd_milters` requires `services.postsrsd.settings.milter` to be set.";
+        }
+        {
+          assertion = cfg.configurePostfix == "socketmap" -> cfg.settings.socketmap != null;
+          message = "Configuring Postfix canonical maps requires `services.postsrsd.settings.socketmap` to be set.";
+        }
+      ];
+
+      services.postfix.settings.main =
+        lib.optionalAttrs (cfg.configurePostfix == "socketmap") {
+          # https://github.com/roehling/postsrsd#configuration
+          sender_canonical_maps = "socketmap:${cfg.settings.socketmap}:forward";
+          sender_canonical_classes = "envelope_sender";
+          recipient_canonical_maps = "socketmap:${cfg.settings.socketmap}:reverse";
+          recipient_canonical_classes = [
+            "envelope_recipient"
+            "header_recipient"
+          ];
+        }
+        // lib.optionalAttrs (cfg.configurePostfix == "milter") {
+          # https://github.com/roehling/postsrsd/tree/main#milter-support
+          smtpd_milters = [ cfg.settings.milter ];
+        };
 
       users.users.postfix.extraGroups = [ cfg.group ];
     })
