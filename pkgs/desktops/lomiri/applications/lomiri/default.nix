@@ -63,13 +63,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
     tag = finalAttrs.version;
-    hash = "sha256-BzkQNvQLDzeai8b3qZytmq6F/PwiRJ/F0XCB+NiKpm0=";
+    hash = "sha256-bjaZj78XZntYAZn8wZUgky4m4D56AZ9JgV7B43ZCNqc=";
   };
 
   patches = [
@@ -99,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Reduce desyncing of cursor
     (fetchpatch {
       name = "1005-lomiri-cursor-always-follow-cursor-position-from-mir.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/f3ba943006f5469a8a7aa24f232d6383afb3bc74/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
-      hash = "sha256-FYWRHt3//gm3jT9dr35tH4PlZssMMA/zBhjkszgqTYo=";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/84cde8264050d7c7995dc317a3f3d6688e80c839/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
+      hash = "sha256-BDu3/XWG5GLXWleEJ1yXfuAKxzhojtyiTl2Iae01AI0=";
     })
 
     ./9901-lomiri-Disable-Wizard.patch
@@ -109,37 +109,43 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
+  postPatch =
     # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'qt5mir2server' 'qtmirserver'
-
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'qt5mir2server' 'qtmirserver'
+    ''
     # Need to replace prefix
-    substituteInPlace data/systemd-user/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
-
+    + ''
+      substituteInPlace data/systemd-user/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+    ''
     # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
-    substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
-      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
-
+    + ''
+      substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
+    ''
     # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
     # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
-    substituteInPlace tests/mocks/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(QtMir/Application)' ""
-
+    + ''
+      substituteInPlace tests/mocks/CMakeLists.txt \
+        --replace-fail 'add_subdirectory(QtMir/Application)' ""
+    ''
     # Seems like the Debian patch that added this didn't read the lightdm greeter entry properly, so everything gets passed twice
-    substituteInPlace data/lomiri-greeter.desktop.in.in \
-      --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
-    substituteInPlace data/lomiri-greeter-wrapper \
-      --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
-
+    + ''
+      substituteInPlace data/lomiri-greeter.desktop.in.in \
+        --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
+      substituteInPlace data/lomiri-greeter-wrapper \
+        --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
+    ''
     # Look up default wallpaper in current system
-    substituteInPlace plugins/Utils/constants.cpp \
-      --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/whitespace/check_whitespace.py
-  '';
+    + ''
+      substituteInPlace plugins/Utils/constants.cpp \
+        --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/whitespace/check_whitespace.py
+    '';
 
   strictDeps = true;
 
