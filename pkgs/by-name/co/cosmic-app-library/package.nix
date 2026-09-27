@@ -1,36 +1,27 @@
-# SPDX-License-Identifier: MIT
-# SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
-# Portions of this code are adapted from nixos-cosmic
-# https://github.com/lilyinstarlight/nixos-cosmic
 {
   lib,
+  fetchFromGitHub,
   stdenv,
   rustPlatform,
-  fetchFromGitHub,
   libcosmicAppHook,
   just,
-  bash,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "cosmic-idle";
+  pname = "cosmic-applibrary";
   version = "1.2.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-idle";
+    repo = "cosmic-applibrary";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-0tcrOfVT5b57ev3b5F2U78F2QPGFwp94bqFVNyKH0Yk=";
+    hash = "sha256-TZncRQer4lXunUwdQ2xDP3DmF5B7UmfhSQvEwVodc98=";
   };
 
-  postPatch = ''
-    substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
-  '';
-
-  cargoHash = "sha256-wAjFC6qAC3nllbnZf0KVaZTEztNYo6GTvwcp5FYmXLw=";
+  cargoHash = "sha256-qGx/3w78mgIMqRo1wJA+ULFHWdNW2LKe2Sej4f9KbVs=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -71,12 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Idle daemon for the COSMIC Desktop Environment";
-    homepage = "https://github.com/pop-os/cosmic-idle";
+    homepage = "https://github.com/pop-os/cosmic-applibrary";
+    description = "Application Template for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    mainProgram = "cosmic-idle";
     teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    platforms = [ ];
+    mainProgram = "cosmic-app-library";
   };
 })
