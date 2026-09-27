@@ -1,84 +1,99 @@
 {
   lib,
   stdenv,
-  ailment,
-  archinfo,
   buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+
+  # build-system
+  setuptools-rust,
+
+  # dependencies
+  archinfo,
   cachetools,
   capstone,
   cffi,
   claripy,
   cle,
-  cppheaderparser,
   cxxheaderparser,
-  dpkt,
-  fetchFromGitHub,
   gitpython,
-  itanium-demangler,
+  lmdb,
+  msgspec,
   mulpyplexer,
-  nampa,
   networkx,
-  progressbar2,
   protobuf,
   psutil,
   pycparser,
-  pyformlang,
   pydemumble,
+  pypcode,
   pyvex,
   rich,
-  rpyc,
-  setuptools,
   sortedcontainers,
-  sqlalchemy,
   sympy,
+  typing-extensions,
+
+  # optional-dependencies
+  sqlalchemy,
   unicorn-angr,
-  unique-log-filter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "angr";
-  version = "9.2.193";
+  version = "9.2.212";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    tag = "v${version}";
-    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wEIfmO3VGCEJnHENghG4o90r/kkZWjS/XiTyAl6zD9w=";
   };
 
-  pythonRelaxDeps = [ "capstone" ];
+  build-system = [
+    pyvex
+    setuptools-rust
+  ];
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-WPMBFVb+D8eWkF25doTYcFM7s8XRgkoaHXL0rtLwoqk=";
+  };
+
+  pythonRelaxDeps = [
+    "capstone"
+    "lmdb"
+  ];
 
   dependencies = [
-    ailment
     archinfo
     cachetools
     capstone
     cffi
     claripy
     cle
-    cppheaderparser
     cxxheaderparser
-    dpkt
     gitpython
-    itanium-demangler
+    lmdb
+    msgspec
     mulpyplexer
-    nampa
     networkx
-    progressbar2
     protobuf
     psutil
     pycparser
-    pyformlang
     pydemumble
+    pypcode
     pyvex
     rich
-    rpyc
     sortedcontainers
     sympy
-    unique-log-filter
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -106,7 +121,8 @@ buildPythonPackage rec {
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
+    downloadPage = "https://github.com/angr/angr";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
