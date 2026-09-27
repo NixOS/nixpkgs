@@ -1328,12 +1328,12 @@ in
   tmux-nova = mkTmuxPlugin rec {
     pluginName = "tmux-nova";
     rtpFilePath = "nova.tmux";
-    version = "1.2.0";
+    version = "1.2.1";
     src = fetchFromGitHub {
       owner = "o0th";
       repo = "tmux-nova";
       rev = "v${version}";
-      hash = "sha256-0LIql8as2+OendEHVqR0F3pmQTxC1oqapwhxT+34lJo=";
+      hash = "sha256-jveaXbOL3vbI0DzDxeftCDN3D3PA8POA1Gf3cHDr49s=";
     };
     meta = {
       homepage = "https://github.com/o0th/tmux-nova";
