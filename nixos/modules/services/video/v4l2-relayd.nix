@@ -52,6 +52,16 @@ let
           '';
         };
 
+        bufferCount = mkOption {
+          type = types.ints.positive;
+          default = 8;
+          description = ''
+            How many buffers to allocate for the v4l2loopback device. The
+            module default of 2 is too few for GStreamer to keep writing
+            while a consumer holds one.
+          '';
+        };
+
         cardLabel = mkOption {
           type = types.str;
           description = ''
@@ -195,7 +205,7 @@ in
 
         preStart = ''
           mkdir -p $(dirname $V4L2_DEVICE_FILE)
-          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -n "${instance.cardLabel}" > $V4L2_DEVICE_FILE
+          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -b ${toString instance.bufferCount} -n "${instance.cardLabel}" > $V4L2_DEVICE_FILE
         '';
 
         postStop = ''
