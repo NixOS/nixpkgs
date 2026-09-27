@@ -1,0 +1,11 @@
+diff --git a/lib/src/linux/collation_ffi.dart b/lib/src/linux/collation_ffi.dart
+--- a/lib/src/linux/collation_ffi.dart
++++ b/lib/src/linux/collation_ffi.dart
+@@ -203,6 +203,7 @@
+     '/usr/lib/$multiarchTriplet',
+     '/lib/$multiarchTriplet',
+     '/app/lib', // Flatpak runtime layout
++    '@icuLib@',
+   ];
+
+   /// Candidate paths in resolution order: unversioned soname, then the
