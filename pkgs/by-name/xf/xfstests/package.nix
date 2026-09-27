@@ -4,6 +4,7 @@
   attr,
   autoconf,
   automake,
+  pkg-config,
   bash,
   bc,
   coreutils,
@@ -29,22 +30,24 @@
   which,
   writeScript,
   xfsprogs,
+  nix-update-script,
   runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfstests";
-  version = "2023.05.14";
+  version = "2026.05.17";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+    hash = "sha256-vfK4PcPdd1121lcjhjP63RyS6YdFfgZ6Nsauv02b1S8=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    pkg-config
   ];
   buildInputs = [
     acl
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+      --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
@@ -154,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     }:$PATH
     exec ./check "$@"
   '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Torture test suite for filesystems";
