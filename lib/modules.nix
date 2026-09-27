@@ -1595,17 +1595,76 @@ let
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
+  /**
+    Labels a definition with a priority.
+    See the documentation of `filterOverrides` for the interpretation of the priority value.
+    Nesting this function usually leads to an invalid definition.
+    `mkDefault`, `mkOptionDefault`, and `mkForce` partially apply `mkOverride` with common priorities used in the NixOS module system.
+
+    # Inputs
+
+    `priority`
+
+    : A numeric value representing the precedence.
+      See the documentation of `filterOverrides` for the interpretation of this value.
+
+    `content`
+
+    : The definition to be labeled with a given priority.
+
+    # Examples
+    :::{.example}
+    ## `lib.modules.mkOverride` usage example
+
+    ```nix
+    mkOverride 1000 "hello, world!"
+    => { _type = "override"; content = "hello, world!"; priority = 1000; }
+    ```
+
+    ```nix
+    (lib.evalModules {
+      modules = [
+        { options.foo = lib.mkOption { }; }
+        { config.foo = lib.mkOverride 20 1; }
+        { config.foo = lib.mkOverride 10 2; }
+      ];
+    }).config
+    => { foo = 2; }
+    ```
+    :::
+  */
   mkOverride = priority: content: {
     _type = "override";
     inherit priority content;
   };
 
-  mkOptionDefault = mkOverride 1500; # priority of option defaults
-  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  /**
+    Labels a definition with the priority of option declaration defaults.
+  */
+  mkOptionDefault = mkOverride 1500;
+
+  /**
+    Labels a definition with the priority used in config sections of non-user modules to set a default.
+  */
+  mkDefault = mkOverride 1000;
+
   defaultOverridePriority = 100;
-  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
+
+  /**
+    Labels a definition with the priority used in image media profiles.
+    Image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow users to `mkForce`.
+  */
+  mkImageMediaOverride = mkOverride 60;
+
+  /**
+    Labels a definition with a high priority (low value).
+  */
   mkForce = mkOverride 50;
-  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  /**
+    Labels a definition with used by {command}`nixos-rebuild build-vm`.
+  */
+  mkVMOverride = mkOverride 10;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
