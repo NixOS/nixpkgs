@@ -198,6 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Remove Info files already provided by Binutils and other packages.
     rm -v $out/share/info/bfd.info
+
+    # Make sure pyc files are generated before fixup
+    python3 -m compileall $out/share/gdb/python/gdb
   '';
 
   doInstallCheck = true;
