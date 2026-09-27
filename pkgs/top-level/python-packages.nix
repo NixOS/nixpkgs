@@ -14093,6 +14093,8 @@ self: super: with self; {
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
+  proxbox-api = callPackage ../development/python-modules/proxbox-api { };
+
   proxmox-sdk = callPackage ../development/python-modules/proxmox-sdk { };
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
