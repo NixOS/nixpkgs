@@ -13,14 +13,14 @@
   yq,
 }:
 let
-  version = "4.8.0";
+  version = "4.15.2";
   templatesVersion = "3.1.1648";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-functions-core-tools";
     tag = version;
-    hash = "sha256-OY2FPzST1ejU+OPccv7Qvd8cM3gtiiL2CQNj2APDIx0=";
+    hash = "sha256-ZhXRM+z/mJUvaHrjpiOKaFQ3Tsbqr5lYDibPHRSiy9w=";
   };
 
   # This contains project templates for non-dotnet languages.
