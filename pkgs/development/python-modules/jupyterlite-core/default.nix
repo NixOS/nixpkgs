@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterlite-core";
-  version = "0.8.0";
+  version = "0.9.0a1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterlite";
     repo = "jupyterlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LERWOeOvGdefbgQxbA8GAFZq1OD/Hhl2Q9hNVCS3Et4=";
+    hash = "sha256-UU6fbWYC0sAv6Z3Lilzemy6nZd5vwN2IgpbLFjS3YoA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/jupyterlite-core";
