@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pybcj";
-  version = "1.0.3";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "pybcj";
     tag = "v${version}";
-    hash = "sha256-ExSt7E7ZaVEa0NwAQHU0fOaXJW9jYmEUUy/1iUilGz8=";
+    hash = "sha256-2hNkOEnNmzyzzSMr2qxIcFxMjcNndwTLLgVGBnKhNtQ=";
   };
 
   build-system = [
