@@ -1,0 +1,1 @@
+This directory contains a bunch of examples of how one might use the `nixos-secrets` module. These are placed here such that the associated nixos-test(s) can reference the example backends via the `modulesPath` (as suggested by Lassulus).

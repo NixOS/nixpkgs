@@ -1,0 +1,29 @@
+error: builder for '/nix/store/9yp6gsvp9r4accq958h6jb1kg6kjlilm-nixos-secrets.drv' failed with exit code 1;
+       last 25 log lines:
+       > adding 'nixos_secrets/error.py'
+       > adding 'nixos_secrets/eval.py'
+       > adding 'nixos_secrets/exec.py'
+       > adding 'nixos_secrets/gc.py'
+       > adding 'nixos_secrets/generate.py'
+       > adding 'nixos_secrets/list.py'
+       > adding 'nixos_secrets/meta.py'
+       > adding 'nixos_secrets/secrets-config.schema.json'
+       > adding 'nixos_secrets/nix/jsonify.nix'
+       > adding 'nixos_secrets-0.1.0.dist-info/METADATA'
+       > adding 'nixos_secrets-0.1.0.dist-info/WHEEL'
+       > adding 'nixos_secrets-0.1.0.dist-info/entry_points.txt'
+       > adding 'nixos_secrets-0.1.0.dist-info/top_level.txt'
+       > adding 'nixos_secrets-0.1.0.dist-info/RECORD'
+       > removing build/bdist.linux-x86_64/wheel
+       > Successfully built nixos_secrets-0.1.0-py3-none-any.whl
+       > Finished creating a wheel...
+       > Finished executing pypaBuildPhase
+       > Running phase: pythonRuntimeDepsCheckHook
+       > Executing pythonRuntimeDepsCheck
+       > Checking runtime dependencies for nixos_secrets-0.1.0-py3-none-any.whl
+       > Traceback (most recent call last):
+       >   File "/nix/store/3fqlfqqb53qif2b17005n2qvkjq5d8v8-python-runtime-deps-check-hook.py", line 18, in <module>
+       >     from packaging.metadata import Metadata, parse_email
+       > ModuleNotFoundError: No module named 'packaging'
+       For full logs, run:
+              nix log /nix/store/9yp6gsvp9r4accq958h6jb1kg6kjlilm-nixos-secrets.drv
