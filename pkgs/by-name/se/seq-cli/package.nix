@@ -8,21 +8,21 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "seq-cli";
-  version = "2024.3.922";
+  version = "2025.2.02447";
 
   src = fetchFromGitHub {
     owner = "datalust";
     repo = "seqcli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qqvuxG/QkkYjYw+p5QxLBWYHyltKDWT3JT167bEAdEI=";
+    hash = "sha256-ghGd7divD+vLb8+4Z6fsQePxgQNEHME6KLPEo+EFnQI=";
   };
 
   projectFile = "src/SeqCli/SeqCli.csproj";
   nugetDeps = ./deps.json;
-  dotnetInstallFlags = "-f net8.0";
+  dotnetInstallFlags = "-f net9.0";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   executables = [ "seqcli" ];
 
