@@ -1,0 +1,84 @@
+diff --git a/src/appleseed.python/gillocks.cpp b/src/appleseed.python/gillocks.cpp
+index b40691838..5ae29c38a 100644
+--- a/src/appleseed.python/gillocks.cpp
++++ b/src/appleseed.python/gillocks.cpp
+@@ -31,27 +31,21 @@
+ #include "gillocks.h"
+ 
+ ScopedGILLock::ScopedGILLock()
+-  : m_threads_initialized(PyEval_ThreadsInitialized() ? true : false)
+ {
+-    if (m_threads_initialized)
+-        m_state = PyGILState_Ensure();
++    m_state = PyGILState_Ensure();
+ }
+ 
+ ScopedGILLock::~ScopedGILLock()
+ {
+-    if (m_threads_initialized)
+-        PyGILState_Release(m_state);
++    PyGILState_Release(m_state);
+ }
+ 
+ ScopedGILUnlock::ScopedGILUnlock()
+-  : m_threads_initialized(PyEval_ThreadsInitialized() ? true : false)
+ {
+-    if (m_threads_initialized)
+-        m_state = PyEval_SaveThread();
++    m_state = PyEval_SaveThread();
+ }
+ 
+ ScopedGILUnlock::~ScopedGILUnlock()
+ {
+-    if (m_threads_initialized)
+-        PyEval_RestoreThread(m_state);
+-}
++    PyEval_RestoreThread(m_state);
++}
+\ No newline at end of file
+diff --git a/src/appleseed.python/gillocks.h b/src/appleseed.python/gillocks.h
+index d680bc2ea..98cbc8505 100644
+--- a/src/appleseed.python/gillocks.h
++++ b/src/appleseed.python/gillocks.h
+@@ -43,7 +43,6 @@ class ScopedGILLock
+     ~ScopedGILLock();
+ 
+   private:
+-    bool                m_threads_initialized;
+     PyGILState_STATE    m_state;
+ };
+ 
+@@ -57,6 +56,5 @@ class ScopedGILUnlock
+     ~ScopedGILUnlock();
+ 
+   private:
+-    bool                m_threads_initialized;
+     PyThreadState*      m_state;
+ };
+diff --git a/src/appleseed.studio/python/studio/plugins.py b/src/appleseed.studio/python/studio/plugins.py
+index 73951fc53..ad0334193 100644
+--- a/src/appleseed.studio/python/studio/plugins.py
++++ b/src/appleseed.studio/python/studio/plugins.py
+@@ -27,7 +27,7 @@
+ #
+ 
+ import os
+-import imp
++import importlib.util
+ import traceback
+ 
+ 
+@@ -57,8 +57,11 @@ def load_plugin(plugin_path):
+     name, ext = os.path.splitext(name)
+ 
+     try:
+-        file, filename, data = imp.find_module(name, [path])
+-        plugin_module = imp.load_module(name, file, filename, data)
++        spec = importlib.util.find_spec(name, path)
++        if spec is None:
++            raise ImportError(f"No module named '{name}'")
++        plugin_module = importlib.util.module_from_spec(spec)
++        spec.loader.exec_module(plugin_module)
+     except ImportError as e:
+         print("Plugin '{0}' could not be imported: {1}".format(name, e))
+         return
