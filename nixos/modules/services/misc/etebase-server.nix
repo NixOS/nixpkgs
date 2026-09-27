@@ -188,7 +188,7 @@ in
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
     ]
     ++ lib.optionals (cfg.unixSocket != null) [
-      "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      "d '${dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
     ];
 
     systemd.services.etebase-server = {

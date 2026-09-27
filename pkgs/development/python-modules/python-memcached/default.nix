@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-Qko4Qr9WofeklU0uRRrSPrT8YaBYMCy0GP+TF7YZHLI=";
   };
 
+  postPatch = ''
+    substituteInPlace memcache.py \
+      --replace-fail '__version__ = "1.60"' '__version__ = "${version}"'
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
@@ -40,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "memcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure python memcached client";
     homepage = "https://github.com/linsomniac/python-memcached";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

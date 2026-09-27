@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-protocol data management library by CERN";
     longDescription = ''
       GFAL (Grid File Access Library )
@@ -171,9 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       behind a simple common POSIX API.
     '';
     homepage = "https://github.com/cern-fts/gfal2";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "gfal2";
   };
 })

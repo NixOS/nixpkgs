@@ -2,32 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlite-fts4";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "sqlite-fts4";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ibiows3DSnzjIUv7U9tYNVnDaecBBxjXzDqxbIlNhhU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sqlite_fts4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom Python functions for working with SQLite FTS4";
     homepage = "https://github.com/simonw/sqlite-fts4";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ meatcar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ meatcar ];
   };
-}
+})

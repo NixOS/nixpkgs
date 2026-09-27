@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -27,24 +26,18 @@
   cvxpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qutip";
-  version = "5.2.1";
+  version = "5.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
-    tag = "v${version}";
-    hash = "sha256-iM+RptMvLFF51v7OJPESYFB4WaYF5HxnfpqjYWAjAKU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MegIeAI1euGRV0MymhDp6/ncyvFHoIz0td68hZzhNGs=";
   };
-
-  postPatch =
-    # build-time constraint, used to ensure forward and backward compat
-    ''
-      substituteInPlace pyproject.toml setup.cfg \
-        --replace-fail "numpy>=2.0.0" "numpy"
-    '';
 
   build-system = [
     cython
@@ -63,14 +56,13 @@ buildPythonPackage rec {
     pytest-rerunfailures
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
   # This is due to the Cython-compiled modules not being in the correct location
   # of the source tree.
   preCheck = ''
-    export OMP_NUM_THREADS=$NIX_BUILD_CORES
     mkdir -p test && cd test
   '';
 
@@ -95,9 +87,9 @@ buildPythonPackage rec {
   meta = {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
-    changelog = "https://github.com/qutip/qutip/releases/tag/${src.tag}";
+    changelog = "https://github.com/qutip/qutip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
     badPlatforms = [
       # Tests fail at ~80%
       # ../tests/test_animation.py::test_result_state Fatal Python error: Aborted
@@ -108,4 +100,4 @@ buildPythonPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -1,77 +1,43 @@
 {
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   stdenvNoCC,
   nix-update-script,
   nodejs,
   lib,
-  pnpm,
-  buf,
-  cacert,
-  grpc-gateway,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  protoc-gen-validate,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
 }:
 let
-  version = "0.25.2";
+  pnpm = pnpm_11;
+in
+buildGo127Module (finalAttrs: {
+  pname = "memos";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
-    rev = "v${version}";
-    hash = "sha256-Yag+OxhlWEhWumnB620QREm4G99osKzQNlGN+1YBMTQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O6r+M+T6zDr9getunGgNSXJlmt3ZsSwTCYoSpVgDcM4=";
   };
 
-  memos-protobuf-gen = stdenvNoCC.mkDerivation {
-    pname = "memos-protobuf-gen";
-    inherit version src;
-
-    nativeBuildInputs = [
-      buf
-      cacert
-      grpc-gateway
-      protoc-gen-go
-      protoc-gen-go-grpc
-      protoc-gen-validate
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-      pushd proto
-      HOME=$TMPDIR buf generate
-      popd
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/{proto,web/src/types}
-      cp -r {.,$out}/proto/gen
-      cp -r {.,$out}/web/src/types/proto
-      runHook postInstall
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-j9jBxhDi1COowOh5sDjOuVJdHf2/RSwZ0cQUD/j2jt0=";
-  };
-
-  memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
+  memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
     pname = "memos-web";
-    inherit version src;
-    pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/web";
-      fetcherVersion = 1;
-      hash = "sha256-qvxOY7ASAlYbT5Ju/8b3qiE9KgXkDIj1MZuVH0hmCOA=";
+    inherit (finalAttrs) version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalWebAttrs) pname version src;
+      inherit pnpm;
+      sourceRoot = "${finalWebAttrs.src.name}/web";
+      fetcherVersion = 4;
+      hash = "sha256-GkLRGTefn85bZ652/sW4xrBHZ6QsVn/cTBb7UoU8UQQ=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
     ];
-    preBuild = ''
-      cp -r {${memos-protobuf-gen},.}/web/src/types/proto
-    '';
     buildPhase = ''
       runHook preBuild
       pnpm -C web build
@@ -83,37 +49,39 @@ let
       runHook postInstall
     '';
   });
-in
-buildGoModule {
-  pname = "memos";
-  inherit
-    version
-    src
-    memos-web
-    memos-protobuf-gen
-    ;
 
-  vendorHash = "sha256-Eihp7Kcu8AiPL2VEypxx8+8JwjHI8htoOv69xGrp560=";
+  vendorHash = "sha256-AJkTk34kYa2I24F+naj9GX8b2YYhqTuK6i9MvDUoBU0=";
+
+  ldflags = [
+    "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
+  ];
 
   preBuild = ''
-    rm -rf server/router/frontend/dist
-    cp -r ${memos-web} server/router/frontend/dist
-    cp -r {${memos-protobuf-gen},.}/proto/gen
+    rm -rf server/frontend/dist
+    cp -r ${finalAttrs.memos-web} server/frontend/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestEntrypointDoesNotLoopWhenTargetUIDIsRoot" # requires root
+        "TestUserWebhookSigningSecretLifecycle" # requires internet access for example.com
+        "TestDetectAttachmentMimeType" # REMOVE NEXT RELEASE: bug in test, fixed by https://github.com/usememos/memos/pull/6353
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"
       "memos-web"
-      "--subpackage"
-      "memos-protobuf-gen"
     ];
   };
 
   meta = {
     homepage = "https://usememos.com";
     description = "Lightweight, self-hosted memo hub";
-    changelog = "https://github.com/usememos/memos/releases/tag/${src.rev}";
+    changelog = "https://github.com/usememos/memos/releases/tag/${finalAttrs.src.rev}";
     maintainers = with lib.maintainers; [
       indexyz
       kuflierl
@@ -121,4 +89,4 @@ buildGoModule {
     license = lib.licenses.mit;
     mainProgram = "memos";
   };
-}
+})

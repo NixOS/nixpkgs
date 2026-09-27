@@ -1,10 +1,7 @@
 { pkgs, ... }:
 {
   name = "cloudlog";
-  meta = {
-    maintainers = with pkgs.lib.maintainers; [ melling ];
-  };
-  nodes = {
+  containers = {
     machine = {
       services.mysql.package = pkgs.mariadb;
       services.cloudlog.enable = true;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyarrow,
   cython,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "geoarrow-c";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-c";
@@ -44,8 +41,6 @@ buildPythonPackage rec {
     rm -v ./bootstrap.py
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     pytestCheckHook
     pyarrow
@@ -54,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.c" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental C and C++ implementation of the GeoArrow specification";
     homepage = "https://github.com/geoarrow/geoarrow-c";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];

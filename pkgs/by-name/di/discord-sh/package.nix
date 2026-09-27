@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.0.1";
 
   src = fetchFromGitHub {
-    owner = "ChaoticWeg";
+    owner = "fieu";
     repo = "discord.sh";
     rev = "v${version}";
     sha256 = "sha256-z57uMbH6PI68aTMAjA8UIPEefV8sQRR4cS0eK6Ypxuk=";
@@ -58,12 +58,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Write-only command-line Discord webhook integration written in 100% Bash script";
     mainProgram = "discord.sh";
-    homepage = "https://github.com/ChaoticWeg/discord.sh";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewcroughan ];
+    homepage = "https://github.com/fieu/discord.sh";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

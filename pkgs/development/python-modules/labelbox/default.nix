@@ -6,7 +6,7 @@
   google-api-core,
   hatchling,
   imagesize,
-  mypy,
+  lbox-clients,
   nbconvert,
   nbformat,
   numpy,
@@ -20,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  pyyaml,
   requests,
   shapely,
   strenum,
@@ -28,50 +29,22 @@
   typing-extensions,
 }:
 
-let
-  version = "7.2.0";
+buildPythonPackage (finalAttrs: {
+  pname = "labelbox";
+  version = "7.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    tag = "v${version}";
-    hash = "sha256-2of/yiw+wBHc0BFLKFdWV4Xm1Dcs4SsT8DkpmruaLT0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a3G9Jl1IfbLyI7RZY32zZTbPg8EpSZUrNy12A01Y+Qc=";
   };
 
-  lbox-clients = buildPythonPackage {
-    inherit src version pyproject;
-
-    pname = "lbox-clients";
-
-    sourceRoot = "${src.name}/libs/lbox-clients";
-
-    build-system = [ hatchling ];
-
-    dependencies = [
-      google-api-core
-      requests
-    ];
-
-    nativeCheckInputs = [
-      pytestCheckHook
-      pytest-cov-stub
-    ];
-
-    doCheck = true;
-
-    __darwinAllowLocalNetworking = true;
-  };
-in
-buildPythonPackage rec {
-  inherit src version pyproject;
-
-  pname = "labelbox";
-
-  sourceRoot = "${src.name}/libs/labelbox";
+  sourceRoot = "${finalAttrs.src.name}/libs/labelbox";
 
   pythonRelaxDeps = [
-    "mypy"
+    "lbox-clients"
     "python-dateutil"
   ];
 
@@ -86,7 +59,7 @@ buildPythonPackage rec {
     strenum
     tqdm
     geojson
-    mypy
+    pyyaml
   ];
 
   optional-dependencies = {
@@ -112,7 +85,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ optional-dependencies.data;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [
     # Requires network access
@@ -122,8 +95,6 @@ buildPythonPackage rec {
     "tests/unit/test_label_data_type.py"
   ];
 
-  doCheck = true;
-
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "labelbox" ];
@@ -131,8 +102,8 @@ buildPythonPackage rec {
   meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

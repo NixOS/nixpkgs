@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index 2c11703cb3ff..302a006bbf75 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -13444,8 +13444,6 @@ then
+         fi
+     fi
+ 
+-    qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
+-    qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+     qt5_platformsdir="`$QMAKE5 -query QT_INSTALL_PLUGINS`/platforms"
+     QT5_PLATFORMS_SRCDIR="$qt5_platformsdir"
+ 
+@@ -13585,8 +13583,6 @@ then
+         AC_MSG_NOTICE([Detected Qt6 version: $qmake6_test_ver])
+     fi
+ 
+-    qt6_incdirs="`$QMAKE6 -query QT_INSTALL_HEADERS` $qt6_incdirs"
+-    qt6_libdirs="`$QMAKE6 -query QT_INSTALL_LIBS` $qt6_libdirs"
+     qt6_platformsdir="`$QMAKE6 -query QT_INSTALL_PLUGINS`/platforms"
+     QT6_PLATFORMS_SRCDIR="$qt6_platformsdir"
+ 

@@ -7,7 +7,7 @@
 
 with python3.pkgs;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "noteshrink";
   version = "0.1.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mzucker";
     repo = "noteshrink";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0xhrvg3d8ffnbbizsrfppcd2y98znvkgxjdmvbvin458m2rwccka";
   };
 
@@ -26,11 +26,11 @@ buildPythonApplication rec {
     pillow
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert scans of handwritten notes to beautiful, compact PDFs";
     homepage = "https://mzucker.github.io/2016/09/20/noteshrink.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
     mainProgram = "noteshrink";
   };
-}
+})

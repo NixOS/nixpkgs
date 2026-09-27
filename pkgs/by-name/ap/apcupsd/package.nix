@@ -17,12 +17,12 @@
 
 assert enableCgiScripts -> gd != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apcupsd";
   version = "3.14.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/apcupsd/apcupsd-${finalAttrs.version}.tar.gz";
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
@@ -98,11 +98,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.smoke = nixosTests.apcupsd;
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for controlling APC UPSes";
     homepage = "http://www.apcupsd.com/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

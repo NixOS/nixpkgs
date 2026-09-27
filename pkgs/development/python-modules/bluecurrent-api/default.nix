@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytz,
   websockets,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -13,17 +13,19 @@
 
 buildPythonPackage rec {
   pname = "bluecurrent-api";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bluecurrent";
     repo = "HomeAssistantAPI";
     tag = "v${version}";
-    hash = "sha256-a0IqtRj761h1P8Q3xrFY1XPFl6J6HaArv6IfO88OJco=";
+    hash = "sha256-px4kZOvMUP5aGOQ1uxWnY6w77Woie/hVVdyylW8uSX4=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -31,6 +33,8 @@ buildPythonPackage rec {
     pytz
     websockets
   ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   pythonImportsCheck = [ "bluecurrent_api" ];
 

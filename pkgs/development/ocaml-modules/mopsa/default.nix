@@ -17,7 +17,7 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mopsa";
   version = "1.1";
 
@@ -26,7 +26,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "mopsa";
     repo = "mopsa-analyzer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lO5dtGAl1dq8oJco/hPXrAbN05rKc62Zrci/8CLrQ0c=";
   };
 
@@ -79,4 +79,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

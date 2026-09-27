@@ -11,7 +11,7 @@
 
   This is useful so that libraries can find schemas even though Nix lacks
   a standard location like /usr/share, where GSettings system could look for schemas.
-  The derivation is is somewhat dependency-heavy so it is best used as part of an update script.
+  The derivation is somewhat dependency-heavy so it is best used as part of an update script.
 
   For each schema id referenced in the source code (e.g. org.gnome.evolution),
   a variable name such as `EVOLUTION` must be provided.

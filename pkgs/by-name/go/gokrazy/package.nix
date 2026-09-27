@@ -2,34 +2,49 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokrazy";
-  version = "0-unstable-2024-09-27";
+  version = "0-unstable-2026-09-13";
 
   src = fetchFromGitHub {
     owner = "gokrazy";
     repo = "tools";
-    rev = "6bec690fe5cdabca7aeec52257118d4ff7d7b060";
-    hash = "sha256-EJ0qEsXhBssWUrzyhtL0So0Yaxzr843QNwoE0tppeuk=";
+    rev = "64f7f697dfff1a24457b00cd93ca5c30c866f34e";
+    hash = "sha256-puqXa3OpHyzPpOYuf/SicoMJTNDf0hovLE/TOhmBDSw=";
   };
 
-  vendorHash = "sha256-B/46VGCbLE/6LgW2wfKoHI9cyveE6hE/AfAZzIG5J+g=";
+  vendorHash = "sha256-+9i4dlxcxXw0WpeuHhnxli2qhB6IWOc4babuJXIO4wA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/gok" ];
 
-  meta = with lib; {
-    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs";
+  nativeBuildInputs = [ installShellFiles ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  postInstall = ''
+    installShellCompletion --cmd gok \
+      --bash <($out/bin/gok completion bash) \
+      --fish <($out/bin/gok completion fish) \
+      --zsh <($out/bin/gok completion zsh)
+  '';
+
+  meta = {
+    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi 5, Pi Zero 2 W, or amd64 PCs";
     homepage = "https://github.com/gokrazy/gokrazy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ shayne ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      shayne
+      slashformotion
+    ];
     mainProgram = "gok";
   };
-}
+})

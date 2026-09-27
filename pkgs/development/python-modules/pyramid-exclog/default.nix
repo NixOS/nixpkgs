@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyramid_exclog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package which logs to a Python logger when an exception is raised by a Pyramid application";
     homepage = "https://docs.pylonsproject.org/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

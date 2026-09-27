@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqwikswitch";
   version = "0.94";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IpyWz+3EMr0I+xULBJJhBgdnQHNPJIM1SqKFLpszhQc=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests in sdist
 
-  meta = with lib; {
+  meta = {
     description = "QwikSwitch USB Modem API binding for Python";
     homepage = "https://github.com/kellerza/pyqwikswitch";
-    license = licenses.mit;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.home-assistant ];
   };
-}
+})

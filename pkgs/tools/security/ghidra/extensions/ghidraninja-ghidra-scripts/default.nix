@@ -5,31 +5,41 @@
   binwalk,
   swift,
   yara,
+  useSwift ? false,
 }:
 
 buildGhidraScripts {
   pname = "ghidraninja-ghidra-scripts";
-  version = "unstable-2020-10-07";
+  version = "0-unstable-2020-10-08";
 
   src = fetchFromGitHub {
     owner = "ghidraninja";
     repo = "ghidra_scripts";
     rev = "99f2a8644a29479618f51e2d4e28f10ba5e9ac48";
-    sha256 = "aElx0mp66/OHQRfXwTkqdLL0gT2T/yL00bOobYleME8=";
+    hash = "sha256-aElx0mp66/OHQRfXwTkqdLL0gT2T/yL00bOobYleME8=";
   };
 
   postPatch = ''
     # Replace subprocesses with store versions
-    substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${binwalk}/bin/binwalk"'
-    substituteInPlace swift_demangler.py --replace-fail '"swift"' '"${swift}/bin/swift"'
-    substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${yara}/bin/yara"'
-    substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${yara}/bin/yara "'
-  '';
+    substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${lib.getExe binwalk}"'
+    substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${lib.getExe yara}"'
+    substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${lib.getExe yara} "'
+  ''
+  + (
+    if useSwift then
+      ''
+        substituteInPlace swift_demangler.py --replace-fail '"swift"' '"${lib.getExe' swift "swift"}"'
+      ''
+    else
+      ''
+        rm swift_demangler.py
+      ''
+  );
 
-  meta = with lib; {
+  meta = {
     description = "Scripts for the Ghidra software reverse engineering suite";
     homepage = "https://github.com/ghidraninja/ghidra_scripts";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       gpl2Only
     ];

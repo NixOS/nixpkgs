@@ -1,13 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
+  qt5,
   symlinkJoin,
-  qmake,
   diffPlugins,
-  qtbase,
-  qtmultimedia,
   taglib,
   libmediainfo,
   libzen,
@@ -19,8 +17,8 @@ let
   rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
   sha256 = "0dl2qp686vbs160b3i9qypb7sv37phy2wn21kgzljbk3wnci3yv4";
   buildInputs = [
-    qtbase
-    qtmultimedia
+    qt5.qtbase
+    qt5.qtmultimedia
     taglib
     libmediainfo
     libzen
@@ -46,9 +44,11 @@ let
         inherit rev sha256;
       };
     in
-    mkDerivation {
+    stdenv.mkDerivation {
       name = "${src.name}-patched";
       inherit src;
+
+      nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
       dontInstall = true;
 
@@ -80,11 +80,13 @@ let
 
   buildPlugin =
     name:
-    mkDerivation {
+    stdenv.mkDerivation {
       name = "ultrastar-manager-${name}-plugin-${version}";
       src = patchedSrc;
 
-      buildInputs = [ qmake ] ++ buildInputs;
+      nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+      buildInputs = [ qt5.qmake ] ++ buildInputs;
 
       postPatch = ''
         sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
@@ -107,7 +109,7 @@ let
   };
 
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ultrastar-manager";
   inherit version;
   src = patchedSrc;
@@ -134,14 +136,18 @@ mkDerivation {
     make install
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
+
   inherit buildInputs;
 
-  meta = with lib; {
+  meta = {
     description = "Ultrastar karaoke song manager";
     mainProgram = "UltraStar-Manager";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

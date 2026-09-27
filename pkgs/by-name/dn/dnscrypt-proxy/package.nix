@@ -6,9 +6,9 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnscrypt-proxy";
-  version = "2.1.14";
+  version = "2.1.18";
 
   vendorHash = null;
 
@@ -17,14 +17,14 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
-    rev = version;
-    hash = "sha256-JPBAlRpJw6Oy4f3twyhX95XqWFtUTEFPjwyVaNMSHmQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-Ol1S2dNVLvXjRbKFf+rlTHtbvybu8fO6DcMoJIgUArY=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dnscrypt-proxy/-/raw/main/0001-Make-configuration-file-hierarchy-compliant.patch";
-      hash = "sha256-qsbKcgeB/g388TERH8nYy/kfMSN5a21fbUoa80ZMgW4=";
+      hash = "sha256-DDHDEd812ko7qYgu0zTn4toek9KZRVQEarxZIe1Mrcg=";
     })
   ];
 
@@ -35,16 +35,16 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy; };
 
-  meta = with lib; {
+  meta = {
     description = "Tool that provides secure DNS resolution";
 
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://dnscrypt.info/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atemu
       waynr
     ];
     mainProgram = "dnscrypt-proxy";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
-}
+})

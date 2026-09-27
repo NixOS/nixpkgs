@@ -34,6 +34,13 @@ In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <handle>`.
 
+Once the PR is merged you will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
+By joining, we will be able to ping you for review, and you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others and managing labels, as well as invoke the merge bot on eligible PRs.
+
+> [!NOTE]
+> The automatic GitHub team invite is usually only sent by email, and is only valid for one week!
+> Should it expire, please request a new one by following the instructions [here](https://github.com/NixOS/rfc39-record/blob/main/README.md#requesting-a-new-invitation).
+
 ### Losing maintainer status
 
 Maintainers who have become inactive can be removed.
@@ -51,13 +58,8 @@ The maintainer is welcome to come back at any time.
 When a pull request is made against a package, nixpkgs CI will notify the appropriate maintainer(s) by trying to correlate the files the PR touches with the packages that need rebuilding.
 This process is subject to error however, so we encourage PR authors to notify the appropriate people.
 
-Maintainers can also invoke the [nixpkgs-merge-bot](https://github.com/nixos/nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](https://github.com/NixOS/nixpkgs-merge-bot/blob/main/README.md#constraints).
+Maintainers can also invoke the [nixpkgs-merge-bot](../ci/README.md#nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](../ci/README.md#merge-bot-constraints).
 Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-2789382120) and [#377027](https://github.com/NixOS/nixpkgs/pull/377027#issuecomment-2614510869)
-
-New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
-By joining, you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others, and managing labels.
-However, the GitHub team invite is usually only sent by email, and is only valid for one week!
-Should it expire, please ask for a re-invite in the [GitHub org owners help desk Matrix channel](https://matrix.to/#/#org_owners:nixos.org).
 
 ### Unofficial maintainer tooling
 
@@ -145,18 +147,11 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 Feel free to create a new maintainer team in [`team-list.nix`](./team-list.nix) when a group is collectively responsible for a collection of packages.
 Use taste and personal judgment when deciding if a team is warranted.
 
-Teams are allowed to define their own rules about membership.
+Teams should be organised around areas of maintenance interest and expertise, rather than employer or participation in another project or organization.
+For example, a team dedicated to maintaining support for a desktop environment or programming language in Nixpkgs makes sense, as does a team to maintain packaging of software from a given vendor, but a team exclusive to employees of a company or maintainers of another project does not.
 
-For example, some teams will represent a business or other group which wants to carefully track its members.
-Other teams may be very open about who can join, and allow anybody to participate.
-
-When reviewing changes to a team, read the team's scope and the context around the member list for indications about the team's membership policy.
-
-In any case, request reviews from the existing team members.
-If the team lists no specific membership policy, feel free to merge changes to the team after giving the existing members a few days to respond.
-
-> [!IMPORTANT]
-> If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
+When reviewing changes to a team, request reviews from the existing team members.
+Feel free to merge changes to the team if the existing members are unresponsive.
 
 #### Synced GitHub teams
 
@@ -167,7 +162,7 @@ Once approved, the team will have the right privileges to be pinged and requeste
 > [!TIP]
 > The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
 
-After the first [weekly team sync](../.github/workflows/team-sync.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
+After the first [weekly team sync](../.github/workflows/teams.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
 # Maintainer scripts
 
@@ -176,7 +171,7 @@ See its [README](./scripts/README.md) for further information.
 
 # nixpkgs-merge-bot
 
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in `pkgs/by-name`, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
 The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request.
 Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 

@@ -6,7 +6,6 @@
   ninja,
   lowdown-unsandboxed,
   mdbook,
-  mdbook-linkcheck,
   jq,
   python3,
   rsync,
@@ -30,22 +29,19 @@ mkMesonDerivation (finalAttrs: {
     "man"
   ];
 
-  # Hack for sake of the dev shell
-  passthru.externalNativeBuildInputs = [
+  nativeBuildInputs = [
     meson
     ninja
     (lib.getBin lowdown-unsandboxed)
     mdbook
-    mdbook-linkcheck
     jq
     python3
     rsync
   ]
-  ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") [
+  ++ lib.optionals (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") [
     json-schema-for-humans
-  ];
-
-  nativeBuildInputs = finalAttrs.passthru.externalNativeBuildInputs ++ [
+  ]
+  ++ [
     nix-cli
   ];
 

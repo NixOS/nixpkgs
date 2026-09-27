@@ -2,22 +2,34 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gettext,
   libsepol,
   libselinux,
   libsemanage,
   libxcrypt,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "policycoreutils";
-  version = "3.8.1";
+  version = "3.11";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
-    hash = "sha256-7vIxlrUB0UHLlfX8Uu8acon0WbZeRBXqD+mu7cXYDvI=";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/policycoreutils-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BU5B7AOXMaXua3l6jguNbjRu4dCpusLyUttIwj+aixs=";
   };
+
+  patches = [
+    # https://nvd.nist.gov/vuln/detail/CVE-2026-19079
+    (fetchpatch {
+      name = "CVE-2026-19079.patch";
+      url = "https://github.com/SELinuxProject/selinux/commit/a556538c2d5d2583273e025b45c02651fef47679.patch";
+      stripLen = 1;
+      hash = "sha256-na/4xfW1R5VwvwHTUHXSs23pOD8Z/ClbBET+oxJe+uA=";
+    })
+  ];
 
   postPatch = ''
     # Fix install references
@@ -26,7 +38,10 @@ stdenv.mkDerivation rec {
     substituteInPlace newrole/Makefile --replace /usr/share /share
   '';
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+  ];
   buildInputs = [
     libsepol
     libselinux
@@ -43,9 +58,9 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(out)/share/man/man5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
-}
+})

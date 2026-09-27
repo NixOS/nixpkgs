@@ -9,12 +9,10 @@
   sphinx,
   acl,
   curl,
-  fuse,
   libselinux,
   udev,
   xz,
   zstd,
-  fuseSupport ? true,
   selinuxSupport ? true,
   udevSupport ? true,
   glibcLocales,
@@ -39,7 +37,6 @@ stdenv.mkDerivation {
     xz
     zstd
   ]
-  ++ lib.optionals fuseSupport [ fuse ]
   ++ lib.optionals selinuxSupport [ libselinux ]
   ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
@@ -64,11 +61,14 @@ stdenv.mkDerivation {
     patchShebangs test/http-server.py
   '';
 
-  PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
-  mesonFlags =
-    lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
-    ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
-    ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
+  env.PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+
+  mesonFlags = [
+    # fuse2 only, https://github.com/systemd/casync/issues/269
+    "-Dfuse=false"
+  ]
+  ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
+  ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''
@@ -77,12 +77,12 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Content-Addressable Data Synchronizer";
     mainProgram = "casync";
     homepage = "https://github.com/systemd/casync";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

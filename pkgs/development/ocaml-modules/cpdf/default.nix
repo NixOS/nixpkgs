@@ -5,17 +5,18 @@
   ocaml,
   findlib,
   camlpdf,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-cpdf";
-  version = "2.8";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "cpdf-source";
-    rev = "v${version}";
-    hash = "sha256-DvTY5EQcvnL76RlQTcVqBiycqbCdGQCXzarSMH2P/pg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uhgriPA/y5nElQjbNtzx8CJ8O6ZORKCJAzXYrIOWd60=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +36,17 @@ stdenv.mkDerivation rec {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "PDF Command Line Tools";
     homepage = "https://www.coherentpdf.com/";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.vbgl ];
+    changelog = "https://github.com/johnwhitington/cpdf-source/blob/${finalAttrs.src.rev}/Changes.txt";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ vbgl ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "cpdf";
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.10";
   };
-}
+})

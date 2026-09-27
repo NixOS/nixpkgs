@@ -3,8 +3,10 @@
   stdenv,
   fetchurl,
   dpkg,
+  unzip,
   autoPatchelfHook,
   makeWrapper,
+  runtimeShell,
   glibc,
   gcc,
   glib,
@@ -18,7 +20,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   alsa-lib,
   expat,
   libxkbcommon,
@@ -27,43 +35,48 @@
   systemd,
   libGL,
   krb5,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.3.4";
+  version = "6.1.1";
 
   src =
     let
       selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
-      arch = selectSystem {
-        x86_64-linux = "amd64";
-        aarch64-linux = "arm64";
+      asset = selectSystem {
+        x86_64-linux = "beekeeper-studio_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "beekeeper-studio_${finalAttrs.version}_arm64.deb";
+        aarch64-darwin = "Beekeeper-Studio-${finalAttrs.version}-arm64-mac.zip";
       };
     in
     fetchurl {
-      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
+      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-JSgZ/rDR3d2aKWuclE9tB5538fcMSShjx9gkzkp/7GA=";
-        aarch64-linux = "sha256-RsBw4jXcTA2WS1eMleAdljdw8ur0kf2WoQW3dNol2FA=";
+        x86_64-linux = "sha256-sYfAxxBHDV+D+9EcbHP24/n1Ua97e3eScqz/+DMuceg=";
+        aarch64-linux = "sha256-EGPJPQ+CUVni2wXtLJUkmNthOQnC+rQW5A4LyNPgmqY=";
+        aarch64-darwin = "sha256-LIEgs56Qszl9lZc4GJe8EOy9+eF2nOp1oGN/1D8o5b0=";
       };
     };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
     libxkbcommon
     glibc
     gcc
@@ -84,13 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     krb5
+    unixodbc
   ];
 
-  runtimeDependencies = map lib.getLib [ systemd ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     cp -r usr $out
     substituteInPlace $out/share/applications/beekeeper-studio.desktop \
       --replace-fail '"/opt/Beekeeper Studio/beekeeper-studio"' "beekeeper-studio"
@@ -98,11 +113,24 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r opt/"Beekeeper Studio" $out/opt/beekeeper-studio
     makeWrapper $out/opt/beekeeper-studio/beekeeper-studio-bin $out/bin/beekeeper-studio \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications" "$out/bin"
+    cp -R . "$out/Applications/Beekeeper Studio.app"
+    # Create a launcher script to run from the command line
+    cat > "$out/bin/beekeeper-studio" << EOF
+    #!${runtimeShell}
+    open -na "$out/Applications/Beekeeper Studio.app" --args "\$@"
+    EOF
+    chmod +x "$out/bin/beekeeper-studio"
+  ''
+  + ''
     runHook postInstall
   '';
 
-  preFixup = ''
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-needed libGL.so.1 \
       --add-needed libEGL.so.1 \
       --add-rpath ${
@@ -118,17 +146,21 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more";
     homepage = "https://www.beekeeperstudio.io";
     changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "beekeeper-studio";
     maintainers = with lib.maintainers; [
       milogert
       alexnortung
+      iamanaws
     ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
+      "aarch64-darwin"
     ];
-    knownVulnerabilities = [ "Electron version 31 is EOL" ];
+    knownVulnerabilities = [
+      "Uses Electron 39.8.1, which was EOL on March 13 2026, with several known CVEs"
+    ];
   };
 })

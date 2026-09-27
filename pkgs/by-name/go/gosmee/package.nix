@@ -4,24 +4,38 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosmee";
-  version = "0.28.3";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "gosmee";
-    rev = "v${version}";
-    hash = "sha256-97Z/q0cOX4zPGYaeAKqxm3sb7WfJ1fpUcMhuqHsPG1c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qdp36Z6p+4mSafPjJjF/gswpWpglzinYsMyApGd3k3Q=";
   };
+
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestRunExecCommand"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   postPatch = ''
-    printf ${version} > gosmee/templates/version
+    printf ${finalAttrs.version} > gosmee/templates/version
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -31,13 +45,20 @@ buildGoModule rec {
       --zsh <($out/bin/gosmee completion zsh)
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Command line server and client for webhooks deliveries (and https://smee.io)";
     homepage = "https://github.com/chmouel/gosmee";
+    changelog = "https://github.com/chmouel/gosmee/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       vdemeester
       chmouel
     ];
+    mainProgram = "gosmee";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mxml";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "mxml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-l7GUA+vlSECi/72eU3Y9COpGtLTRh3vYcHUi+uRkCn8=";
   };
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small XML library";
     homepage = "https://www.msweet.org/mxml/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

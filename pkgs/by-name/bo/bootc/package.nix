@@ -12,7 +12,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootc";
   version = "1.6.0";
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
 
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ thesola10 ];
     platforms = lib.platforms.linux;
   };
-}
+})

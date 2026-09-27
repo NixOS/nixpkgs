@@ -7,13 +7,13 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icmake";
   version = "9.03.01";
 
   src = fetchFromGitLab {
     sha256 = "05r0a69w0hv2qhjpb2bxd0lmp2vv5r2d4iggg6ly4miam0i318jy";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "icmake";
     owner = "fbb-git";
   };
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
      --prefix PATH : ${ncurses}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program maintenance (make) utility using a C-like grammar";
     homepage = "https://fbb-git.gitlab.io/icmake/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
-}
+})

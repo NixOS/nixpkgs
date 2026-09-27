@@ -1,26 +1,30 @@
 {
   lib,
   replaceVars,
-  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   buildNpmPackage,
   openapi-generator-cli,
   nixosTests,
+  nix-update-script,
+  perl,
+  withRDPLegacyTLSBackend ? false,
 }:
 rustPlatform.buildRustPackage (
   finalAttrs:
   let
-    warpgate-web = buildNpmPackage {
-      pname = "${finalAttrs.pname}-web";
+    webUi = buildNpmPackage {
+      pname = "warpgate-web";
       version = finalAttrs.version;
 
       src = finalAttrs.src;
       sourceRoot = "${finalAttrs.src.name}/warpgate-web";
 
-      patches = [ ./web-ui-package-json.patch ];
+      patches = [
+        ./web-ui-package-json.patch
+      ];
 
-      npmDepsHash = "sha256-1zCxKAH2IAKSFdL8Pyd8dJi0i8Y5mgYcWNKVpiQszc0=";
+      npmDepsHash = "sha256-BfmYRfsxdJZuS/c7bGccXXYktsjQ76mjwTFKLvNsGAg=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -35,42 +39,60 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.17.0";
+    version = "0.29.0";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-nr0z8c0o5u4Rqs9pFUaxnasRHUhwT3qQe5+JNV+LObg=";
+      hash = "sha256-OXVFsscGU+euamUvgyisN2I3kH/SwSo+eag+S+3YW/w=";
     };
 
-    cargoHash = "sha256-pIr5Z7rp+dYOuKYnlsBdya6MqAdL0U2gUhwXvLfmM34=";
+    cargoHash = "sha256-zlECC2p2hs5w1zkKc8ikoMyVFp/jie2HsqXGDLAEW7E=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
-      ./disable-rust-reproducible-build.patch
     ];
+
+    env = {
+      # uses nightly feature: gethostname, once_cell_try
+      RUSTC_BOOTSTRAP = true;
+      RUSTFLAGS = "--cfg tokio_unstable";
+    };
+
+    nativeBuildInputs = lib.optional withRDPLegacyTLSBackend perl;
 
     buildFeatures = [
       "postgres"
       "mysql"
       "sqlite"
-    ];
+    ]
+    ++ lib.optional withRDPLegacyTLSBackend "rdp-openssl-tls";
 
-    preBuild = ''ln -rs "${warpgate-web}" warpgate-web/dist'';
+    preBuild = ''
+      rm -rf .cargo/
+      ln -rs "${webUi}" warpgate-web/dist
+    '';
 
     # skip check, project included tests require python stuff and docker
     doCheck = false;
 
-    passthru.tests = {
-      inherit (nixosTests) warpgate;
+    passthru = {
+      inherit webUi;
+      tests = {
+        inherit (nixosTests) warpgate;
+      };
+      updateScript = nix-update-script {
+        extraArgs = [ "--subpackage=webUi" ];
+      };
     };
 
     meta = {
       description = "Smart SSH, HTTPS, MySQL and Postgres bastion that requires no additional client-side software";
       homepage = "https://warpgate.null.page";
+      changelog = "https://github.com/warp-tech/warpgate/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.asl20;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "warpgate";
       maintainers = with lib.maintainers; [ alemonmk ];
     };

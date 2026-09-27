@@ -16,9 +16,9 @@
   upscayl-ncnn,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upscaler";
-  version = "1.6.2";
+  version = "1.6.5";
 
   pyproject = false; # meson instead of pyproject
 
@@ -26,8 +26,8 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Upscaler";
-    rev = version;
-    hash = "sha256-Mt0bFPidg0/bxd3NP+1jVgWzRemaGKlU/l5orKbziB0=";
+    rev = finalAttrs.version;
+    hash = "sha256-+u17fUdYMCuDS4vgayZCpj9KO5o/x5PaUYT2jbNmMUw=";
   };
 
   passthru.updateScript = gitUpdater { };
@@ -36,8 +36,6 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace upscaler/window.py \
       --replace-fail '"upscayl-bin",' '"${lib.getExe upscayl-ncnn}",'
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -89,4 +87,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "upscaler";
     platforms = lib.platforms.linux;
   };
-}
+})

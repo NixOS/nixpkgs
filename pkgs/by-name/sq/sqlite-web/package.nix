@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite-web";
   version = "0.6.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/Asqu2XEVCS5sFW2GB/W/int1gCZIIgZq8yrevoQ7Yo=";
   };
 
@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sqlite_web" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web-based SQLite database browser";
     mainProgram = "sqlite_web";
     homepage = "https://github.com/coleifer/sqlite-web";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.costrouc ];
   };
-}
+})

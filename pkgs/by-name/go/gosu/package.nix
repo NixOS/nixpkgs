@@ -6,14 +6,14 @@
   gosu,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosu";
   version = "1.19";
 
   src = fetchFromGitHub {
     owner = "tianon";
     repo = "gosu";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Kl7roHOoKVPhWX4TWXP65brxV+bVBOAyphmWVpAQ15E=";
   };
 
@@ -29,12 +29,12 @@ buildGoModule rec {
     package = gosu;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     mainProgram = "gosu";
     homepage = "https://github.com/tianon/gosu";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

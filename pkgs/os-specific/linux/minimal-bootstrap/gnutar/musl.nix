@@ -4,6 +4,7 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   tinycc,
   gnumake,
   gnugrep,
@@ -12,6 +13,7 @@
 let
   # gnutar with musl preserves modify times, allowing make to not try
   # rebuilding pregenerated files
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnutar-musl";
   version = "1.12";
 
@@ -22,9 +24,10 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
+      coreutils
       tinycc.compiler
       gnumake
       gnused
@@ -37,15 +40,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/tar --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -53,6 +47,14 @@ bash.runCommand "${pname}-${version}"
     untar --file tar.tar
     rm tar.tar
     cd tar-${version}
+
+    # untar drops mtimes and +x on autotools helpers, restore them so
+    # parallel builds don't trip into automake regeneration.
+    touch Makefile.in Makefile aclocal.m4 config.h.in configure 2>/dev/null || true
+    for f in */Makefile.in; do touch "$f" 2>/dev/null || true; done
+    chmod +x configure config.guess config.sub install-sh missing compile \
+      depcomp mkinstalldirs help2man 2>/dev/null || true
+    [ -d build-aux ] && chmod +x build-aux/* 2>/dev/null || true
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
@@ -64,9 +66,11 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --disable-nls
 
     # Build
+    # NOTE: parallel build (-j) under tcc-musl is unstable; keep serial.
     make AR="tcc -ar"
 
     # Install

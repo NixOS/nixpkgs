@@ -55,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Various code metrics for Python code";
     homepage = "https://radon.readthedocs.org";
     changelog = "https://github.com/rubik/radon/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
     mainProgram = "radon";
   };
 }

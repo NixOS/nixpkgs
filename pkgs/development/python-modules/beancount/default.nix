@@ -5,6 +5,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  fetchpatch2,
   flex,
   gnupg,
   meson,
@@ -15,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
+  version = "3.2.3";
   pname = "beancount";
   pyproject = true;
 
@@ -23,8 +24,15 @@ buildPythonPackage rec {
     owner = "beancount";
     repo = "beancount";
     tag = version;
-    hash = "sha256-XWTgaBvB4/SONL44afvprZwJUVrkoda5XLGNxad0kec=";
+    hash = "sha256-WM8SM2ZHphafzXHyVi4Fo9tgsClAnmLsZKZUsf2Twmg=";
   };
+
+  postPatch = ''
+    # We don't need the python binary wrappers, since we provide them via nativeBuildInputs
+    substituteInPlace pyproject.toml \
+      --replace-fail "'flex-bin ; sys_platform == \"linux\" or sys_platform == \"darwin\"'," "" \
+      --replace-fail "'bison-bin ; sys_platform == \"linux\" or sys_platform == \"darwin\"'," ""
+  '';
 
   build-system = [
     meson

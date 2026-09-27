@@ -23,7 +23,7 @@ in
       description = "Nix top-level packages to be compiled using CCache";
       default = [ ];
       example = [
-        "wxGTK32"
+        "wxwidgets_3_2"
         "ffmpeg"
         "libav_all"
       ];

@@ -6,18 +6,32 @@
   cairo,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inav-blackbox-tools";
-  version = "unstable-2021-04-22";
+  version = "9.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iNavFlight";
     repo = "blackbox-tools";
-    rev = "0109e2fb9b44d593e60bca4cef4098d83c55c373";
-    sha256 = "1rdlw74dqq0hahnka2w2pgvs172vway2x6v8byxl2s773l22k4ln";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DAHSYK/r4Cwgg1X/4HofDu1Z0+xxGHgWFtUcjMqhV5g=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '$(shell git diff --shortstat)' '1'
+  '';
+
+  makeFlags = [
+    "BLACKBOX_COMMIT=1918a75"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [ cairo ];
 
@@ -30,12 +44,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for working with blackbox flight logs";
     homepage = "https://github.com/inavflight/blackbox-tools";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/inav-blackbox-tools.x86_64-darwin
   };
-}
+})

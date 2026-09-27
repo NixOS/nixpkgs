@@ -6,20 +6,24 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pg-schema-diff";
-  version = "1.0.2";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "pg-schema-diff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u0niTTqrzsI4u0OGY5qkgbitadcbEK/ElFGnPJsEMwo=";
+    hash = "sha256-ycp4dM7PwuKH71Od4qqcwJ5JOJfSHv/hq4jrRYljfjM=";
   };
+
+  subPackages = [
+    "cmd/pg-schema-diff"
+  ];
 
   nativeCheckInputs = [
     postgresql
   ];
 
-  vendorHash = "sha256-Hs3xrGP8eJwW3rQ9nViB9sqC8spjHV6rCoy1u/SYHak=";
+  vendorHash = "sha256-9tronDAe3/5bBtiMW04YGSgxww/F7xlq84sjYFTfxnk=";
 
   meta = {
     description = "Go library for diffing Postgres schemas and generating SQL migrations";

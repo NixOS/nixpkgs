@@ -1,7 +1,7 @@
 import json
 
 
-class IncusHost(Machine):
+class IncusHost(QemuMachine):
     def __init__(self, base):
         with subtest("Wait for startup"):
             base.wait_for_unit("incus.service")

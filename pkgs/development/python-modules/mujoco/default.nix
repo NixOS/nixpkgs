@@ -21,24 +21,26 @@
   numpy,
   pyopengl,
   typing-extensions,
+  websockets,
 
   perl,
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mujoco";
   inherit (mujoco) version;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via
   # <https://github.com/google-deepmind/mujoco/blob/main/python/make_sdist.sh>
   # in the project's CI.
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lw28RAEzccLeZF+cN6m0Hxi0/DaK3IxfgFeYgSG+YQs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-91oHMfb9gpOHobqcmniR7+xCkABRemw/mvmPQXNdO28=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -59,9 +61,10 @@ buildPythonPackage rec {
     numpy
     pyopengl
     typing-extensions
+    websockets
   ];
 
-  pythonImportsCheck = [ "${pname}" ];
+  pythonImportsCheck = [ "mujoco" ];
 
   env.MUJOCO_PATH = "${mujoco}";
   env.MUJOCO_PLUGIN_PATH = "${mujoco}/lib";
@@ -85,11 +88,20 @@ buildPythonPackage rec {
       in
       ''
         ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
-        ${lib.getExe perl} -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
+      ''
+      # In 3.13.0, lodepng moved from simulate/CMakeLists.txt to
+      # cmake/third_party_deps/lodepng.cmake and uses fetchpackage (same-line args)
+      + ''
+        ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO[^\n]*\n[^\n]*GIT_TAG[^\n]*\n//g" mujoco/cmake/third_party_deps/lodepng.cmake
 
-        build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
+        build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps
-        ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+      ''
+      # lodepng needs a custom CMakeLists.txt copied into its source dir by FindOrFetch, so it must
+      # be writable
+      + ''
+        cp -r ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+        chmod -R +w $build/_deps/lodepng-src
         ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
         ln -s ${mujoco.pin.abseil-cpp} $build/_deps/abseil-cpp-src
       ''
@@ -103,4 +115,4 @@ buildPythonPackage rec {
       tmplt
     ];
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-favicon";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tcmetzger";
     repo = "sphinx-favicon";
     tag = "v${version}";
-    hash = "sha256-Arcjj+6WWuSfufh8oqrDyAtjp07j1JEuw2YlmFcfL3U=";
+    hash = "sha256-8zKG145BttlE8HYJ0H8O762TYC9KeIO8L9UfgNDs+i8=";
   };
 
   build-system = [

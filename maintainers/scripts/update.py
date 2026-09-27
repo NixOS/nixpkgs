@@ -307,7 +307,7 @@ async def commit_changes(
             commit_message = "{attrPath}: {oldVersion} -> {newVersion}".format(**change)
             if "commitMessage" in change:
                 commit_message = change["commitMessage"]
-            elif "commitBody" in change:
+            if "commitBody" in change:
                 commit_message = commit_message + "\n\n" + change["commitBody"]
             await check_subprocess_output(
                 "git",

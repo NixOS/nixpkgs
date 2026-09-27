@@ -1,7 +1,7 @@
 ## How to upgrade llvm_git
 
 - Run `update-git.py`.
-  This will set the github revision and sha256 for `llvmPackages_git.llvm` to whatever the latest chromium build is using.
+  This will set the GitHub revision and sha256 for `llvmPackages_git.llvm` to whatever the latest chromium build is using.
   For a more recent commit, run `nix-prefetch-github` and change the rev and sha256 accordingly.
 
 - That was the easy part.
@@ -41,12 +41,12 @@
      The lines above show us that the `purity.patch` failed on `lib/Driver/ToolChains/Gnu.cpp` when compiling `clang`.
 
  3. The task now is to cross reference the hunks in the purity patch with
-    `lib/Driver/ToolCahins/Gnu.cpp.orig` to see why the patch failed.
+    `lib/Driver/ToolChains/Gnu.cpp.orig` to see why the patch failed.
     The `.orig` file will be in the build directory referenced in the line `note: keeping build directory ...`;
     this message results from the `--keep-failed` flag.
 
  4. Now you should be able to open whichever patch failed, and the `foo.orig` file that it failed on.
-    Correct the patch by adapting it to the new code and be mindful of whitespace;
+    Correct the patch by adapting it to the new code and be mindful of whitespace,
     which can be an easily missed reason for failures.
     For cases where the hunk is no longer needed you can simply remove it from the patch.
 

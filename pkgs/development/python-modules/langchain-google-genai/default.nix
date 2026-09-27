@@ -4,13 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   filetype,
   google-api-core,
   google-auth,
-  google-generativeai,
+  google-genai,
   langchain-core,
   pydantic,
 
@@ -27,33 +27,28 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "3.0.0";
+  version = "4.3.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
-    tag = "libs/genai/v${version}";
-    hash = "sha256-9Z0iRSICApA5/iHB7NTVYGpkktaoynG74W2mvn9zeMg=";
+    tag = "libs/genai/v${finalAttrs.version}";
+    hash = "sha256-w0N9xRvBWaWpOH+i3Oz+3TnBxt+jibqDNtfP6LY4Aeg=";
   };
 
-  sourceRoot = "${src.name}/libs/genai";
+  sourceRoot = "${finalAttrs.src.name}/libs/genai";
 
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     filetype
     google-api-core
     google-auth
-    google-generativeai
+    google-genai
     langchain-core
     pydantic
   ];
@@ -68,7 +63,22 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_serialize"
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for GenerateContentResponse
+    # extra inputs are not permitted
+    "test_grounding_metadata_to_citations_conversion"
+  ];
+
+  disabledTestPaths = [
+    # AssertionError: assert {'google_maps...s': None, ...} == {'google_maps...a'...
+    # https://github.com/langchain-ai/langchain-google/issues/1791
+    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata"
+  ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
@@ -77,11 +87,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "libs/genai/v";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain integrations for Google Gemini";
     homepage = "https://github.com/langchain-ai/langchain-google/tree/main/libs/genai";
     license = lib.licenses.mit;
@@ -90,4 +101,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -5,10 +5,10 @@
   cmake,
   cubeb,
   curl,
-  extra-cmake-modules,
-  ffmpeg,
+  kdePackages,
+  ffmpeg_8,
   gtk3,
-  libXrandr,
+  libxrandr,
   libaio,
   libbacktrace,
   libpcap,
@@ -17,6 +17,7 @@
   lz4,
   pkg-config,
   qt6,
+  rapidyaml,
   shaderc,
   soundtouch,
   strip-nondeterminism,
@@ -35,8 +36,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "9b193aa0a61f5e93d3bd4124b111e8f296ef9fa8";
-    hash = "sha256-1hhdjFxJCNfeO/FIAnjRHESfiyzkErYddZqpRxzG7VQ=";
+    rev = "57e7089511430020ad9a8b22c6d27a593057d50a";
+    hash = "sha256-tua44ywpqCsbMMhS8G5K4nJJyQNIUvB35EBkTf7WurI=";
   };
 
   inherit (qt6)
@@ -49,35 +50,33 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.4.0";
+  version = "2.8.2";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+BdywkZKxR/+Z+o1512O3A1mg9A6s7i+JZjFyUbJVs=";
+    hash = "sha256-sXVeOTVkd/c04M6BduPl34inqSUoJwfJoWCvpFdR4VQ=";
   };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
-
     ./remove-cubeb-vendor.patch
-
-    # Based on https://github.com/PCSX2/pcsx2/commit/8dffc857079e942ca77b091486c20c3c6530e4ed which doesn't apply cleanly
-    ./fix-qt-6.10.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapGAppsHook3
@@ -86,14 +85,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     curl
-    ffmpeg
+    ffmpeg_8
     gtk3
     libaio
     libbacktrace
     libpcap
     libwebp
-    libXrandr
+    libxrandr
     lz4
     qtbase
     qtsvg
@@ -103,6 +103,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     plutovg
     plutosvg
     kddockwidgets
+    rapidyaml
     shaderc
     soundtouch
     vulkan-headers
@@ -114,7 +115,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postInstall = ''
-    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
     zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
@@ -160,7 +161,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
       _0david0mp
-      hrdinka
       govanify
       matteopacini
     ];

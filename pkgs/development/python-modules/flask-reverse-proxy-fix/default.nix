@@ -33,14 +33,11 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Flask middleware for applications running under a reverse proxy";
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     homepage = "https://github.com/antarctica/flask-reverse-proxy-fix";
 
-    license = {
-      fullName = "Open Government Licence";
-      url = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
-    };
+    license = lib.licenses.ogluk30;
   };
 }

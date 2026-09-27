@@ -11,17 +11,17 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mousam";
-  version = "1.4.0";
+  version = "2.0.2";
   # built with meson, not a python format
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "amit9838";
     repo = "mousam";
-    tag = "v${version}";
-    hash = "sha256-wJcexOyQqLQJLCathpt6D0SEJP1AvfLPfhAfNzhknUQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3x4bi3P8zw+A+MUaBd4ByESrzCEP21Qa9CLaUYGARew=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful and lightweight weather app based on Python and GTK4";
     homepage = "https://amit9838.github.io/mousam";
-    license = with licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "mousam";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,17 +9,17 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubikey-touch-detector";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
-    owner = "maximbaz";
+    owner = "max-baz";
     repo = "yubikey-touch-detector";
-    tag = version;
-    hash = "sha256-aHR/y8rAKS+dMvRdB3oAmOiI7hTA6qlF4Z05OjwYOO4=";
+    tag = finalAttrs.version;
+    hash = "sha256-GaahrYx5ySUIAM073JknQGPwC2pw2VXj3D25sEZANJk=";
   };
-  vendorHash = "sha256-oHEcpu3QvcVC/YCtGtP7nNT9++BSU8BPT5pf8NdLrOo=";
+  vendorHash = "sha256-Uvybz2i2i/EWJvmvlb4VcJo/2SNaDAuj8t997sxlvtY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,10 +50,10 @@ buildGoModule rec {
 
   meta = {
     description = "Tool to detect when your YubiKey is waiting for a touch";
-    homepage = "https://github.com/maximbaz/yubikey-touch-detector";
+    homepage = "https://github.com/max-baz/yubikey-touch-detector";
     maintainers = with lib.maintainers; [ sumnerevans ];
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     mainProgram = "yubikey-touch-detector";
   };
-}
+})

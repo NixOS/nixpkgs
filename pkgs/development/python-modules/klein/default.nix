@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "klein";
   version = "24.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twisted";
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "klein" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/twisted/klein/releases/tag/${version}";
     description = "Klein Web Micro-Framework";
     homepage = "https://github.com/twisted/klein";
-    license = licenses.mit;
-    maintainers = with maintainers; [ exarkun ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exarkun ];
   };
 }

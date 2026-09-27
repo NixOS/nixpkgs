@@ -5,7 +5,6 @@
   wheel,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,12 +13,12 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # uses the removed asyncore module
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "JoelBender";
     repo = "bacpypes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BHCHI36nTqBj2dkHB/Y5qkC4uJCmzbHGzSFWKNsIdbc=";
   };
 
@@ -40,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bacpypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the BACnet application layer and network layer";
     homepage = "https://github.com/JoelBender/bacpypes";
     changelog = "https://github.com/JoelBender/bacpypes/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
   };
 }

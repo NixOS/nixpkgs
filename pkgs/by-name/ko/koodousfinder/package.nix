@@ -10,10 +10,10 @@ python3.pkgs.buildPythonApplication {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "teixeira0xfffff";
+    owner = "HuntDownProject";
     repo = "KoodousFinder";
-    # Not properly tagged, https://github.com/teixeira0xfffff/KoodousFinder/issues/7
-    #rev = "refs/tags/v${version}";
+    # Not properly tagged, https://github.com/HuntDownProject/KoodousFinder/issues/7
+    #tag = "v${version}";
     rev = "d9dab5572f44e5cd45c04e6fcda38956897855d1";
     hash = "sha256-skCbt2lDKgSyZdHY3WImbr6CF0icrDPTIXNV1736gKk=";
   };
@@ -32,10 +32,10 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "koodousfinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to allows users to search for and analyze Android apps";
-    homepage = "https://github.com/teixeira0xfffff/KoodousFinder";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/HuntDownProject/KoodousFinder";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   lzfse,
+  gcc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "img4lib";
@@ -17,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xCWovBJ9cxT17u1uo+aUQnxDoYFQXYy9Qer0mD45aOU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
   buildInputs = [
     lzfse
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # No licensing information available
     # https://github.com/xerub/img4lib/issues/14
     license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "img4";
   };

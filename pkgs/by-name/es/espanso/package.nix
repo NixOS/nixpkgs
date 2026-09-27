@@ -4,12 +4,13 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  extra-cmake-modules,
+  kdePackages,
   dbus,
-  libX11,
+  kdotool,
+  libx11,
   libxcb,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libnotify,
   libxkbcommon,
   libpng,
@@ -18,7 +19,7 @@
   xdotool,
   setxkbmap,
   wl-clipboard,
-  wxGTK32,
+  wxwidgets_3_2,
   makeWrapper,
   securityWrapperPath ? null,
   nix-update-script,
@@ -35,22 +36,22 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WvFV+WZxwaGCfMVEbfHrQZS0LtgJElmOtSXK9jEeaDk=";
+    hash = "sha256-hfdR0XzZqF/l0jU5Ma4VnnHd4Rfw0d57ufxMyvsEBi4=";
   };
 
-  cargoHash = "sha256-E3z8NfKZiQsaYqDKXSIltETa4cSL0ShHnUMymjH5pas=";
+  cargoHash = "sha256-JFXCsTV9DAIP5T3QouQ2bzSlVVa+LIgQBOE68Z7UVe4=";
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     makeWrapper
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
@@ -70,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libpng
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
@@ -82,21 +83,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wl-clipboard
   ]
   ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
+    libxi
+    libxtst
+    libx11
     libxcb
     xclip
     xdotool
-  ];
-
-  patches = [
-    # remove when version > 2.3.0
-    (fetchpatch {
-      name = "fix-welcome-screen-expansion.patch";
-      url = "https://github.com/espanso/espanso/commit/5d5fc84df695d628d1d9c3e7e3854c2991a64d64.patch";
-      hash = "sha256-dhoqq0V8b8mGvZvPInHiHKGmGDDFO/SH5HqMY7EA134=";
-    })
   ];
 
   postPatch =
@@ -124,6 +116,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ''
     else
       ''
+        install -Dm644 espanso/src/res/linux/espanso.desktop $out/share/applications/espanso.desktop
+        install -Dm644 espanso/src/res/linux/espanso.png $out/share/pixmaps/espanso.png
         wrapProgram $out/bin/espanso \
           --prefix PATH : ${
             lib.makeBinPath (
@@ -132,6 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                 setxkbmap
               ]
               ++ lib.optionals waylandSupport [
+                kdotool
                 wl-clipboard
               ]
               ++ lib.optionals x11Support [
@@ -152,16 +147,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Text Expander written in Rust";
     mainProgram = "espanso";
     homepage = "https://espanso.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kimat
       n8henrie
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';

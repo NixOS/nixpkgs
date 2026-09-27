@@ -9,13 +9,13 @@
   pkg-config,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plus42";
-  version = "1.3.12";
+  version = "1.3.15";
 
   src = fetchurl {
-    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${version}.tgz";
-    hash = "sha256-IBXQu1hI0bJZISL9wInAzf2z8zbynXXP15oG/od+MC8=";
+    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${finalAttrs.version}.tgz";
+    hash = "sha256-qJteqxEDVdqgPdIQCOsNvdPS7S7pq/nVfavfXdOrnAQ=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1
     make -C gtk clean
     make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1 BCD_MATH=1
+    make --jobs=$NIX_BUILD_CORES -C gtk raw2txt txt2raw
 
     runHook postBuild
   '';
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
                         $out/share/icons/hicolor/48x48/apps \
                         $out/share/icons/hicolor/128x128/apps
 
-    install -m755 gtk/plus42dec gtk/plus42bin $out/bin
+    install -m755 gtk/plus42dec gtk/plus42bin gtk/raw2txt gtk/txt2raw $out/bin
     install -m644 README $out/share/doc/plus42/README
 
     install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/plus42.png
@@ -112,9 +113,9 @@ stdenv.mkDerivation rec {
     homepage = "https://thomasokken.com/plus42/";
     changelog = "https://thomasokken.com/plus42/history.html";
     description = "Software clone of the HP-42S calculator (enhanced version)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;
   };
-}
+})

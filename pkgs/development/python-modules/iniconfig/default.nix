@@ -1,28 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  replaceVars,
   fetchPypi,
-  hatchling,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OrvS4ws2cz/uePnH9zCPLQBQ6I8Ah/0lwmRfY8dz4cc=";
+    hash = "sha256-x2MVx32waGUNScW1YxR3SngE3xb+5EAsHxnW0V2MRzA=";
   };
 
-  build-system = [ hatchling ];
-
-  patches = [
-    # Cannot use hatch-vcs, due to an infinite recursion
-    (replaceVars ./version.patch {
-      inherit version;
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
   pythonImportsCheck = [ "iniconfig" ];
@@ -31,10 +27,10 @@ buildPythonPackage rec {
   # recursion. See also: https://github.com/NixOS/nixpkgs/issues/63168
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

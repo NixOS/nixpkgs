@@ -120,7 +120,17 @@ let
       + ''
         substituteInPlace $out/nix-support/cc-cflags \
           --replace-fail " -resource-dir=$out/resource-root" ""
-      '';
+      ''
+      +
+        lib.optionalString
+          (targetPlatform.isLinux && targetPlatform.isx86 && lib.versionAtLeast (lib.getVersion clang) "19.1")
+          ''
+            # Swift bundles Clang 16, which predates -mtls-dialect=gnu2
+            # support (added in Clang 19.1). The cc-wrapper adds it based
+            # on the system Clang version, so strip it here.
+            substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
+              --replace-fail "'-mtls-dialect=gnu2'" ""
+          '';
   });
 
   # Build a tool used during the build to create a custom clang wrapper, with
@@ -339,6 +349,7 @@ stdenv.mkDerivation {
         inherit (builtins) storeDir;
       }
     }
+    patch -p1 -d swift -i ${./patches/swift-Frontend-Fix-a-small-unique_ptr-array-access.patch}
 
     # This patch needs to know the lib output location, so must be substituted
     # in the same derivation as the compiler.
@@ -347,6 +358,17 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i $TMPDIR/swift-separate-lib.patch
 
     patch -p1 -d llvm-project/llvm -i ${./patches/llvm-module-cache.patch}
+    for root in llvm-project/llvm swift/stdlib; do
+      patch -p1 -d $root -i ${
+        (fetchpatch {
+          name = "fix-SmallVector-compile-error.patch";
+          url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+          stripLen = 1;
+          hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+        })
+      }
+    done
+    patch -p2 -d llvm-project/llvm -i ${./patches/llvm-fix-X86MCTargetDesc-compile-error.patch}
 
     for lldbPatch in ${
       lib.escapeShellArgs [
@@ -361,6 +383,12 @@ stdenv.mkDerivation {
           url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
           stripLen = 1;
           hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+        })
+        (fetchpatch {
+          name = "LLDB-Add-cstdint-to-AddressableBits-102110.patch";
+          url = "https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314.patch";
+          stripLen = 1;
+          hash = "sha256-+CcmZRxCaozFe1Kuf2HX+kGKuh/PDuoFBEFA/t7tL9A=";
         })
       ]
     }; do
@@ -801,7 +829,12 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift";
     teams = [ lib.teams.swift ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.

@@ -1,49 +1,58 @@
 {
+  coreutils,
   fetchFromGitHub,
   gamemode,
+  gawk,
+  gnugrep,
   gobject-introspection,
+  gst_all_1,
   icoextract,
-  imagemagick,
   lib,
-  libayatana-appindicator,
-  libcanberra-gtk3,
+  libadwaita,
+  libgudev,
+  libmanette,
+  lsfg-vk,
   meson,
   ninja,
   nix-update-script,
   python3Packages,
   umu-launcher,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   xdg-utils,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "1.10.4";
+  version = "2.3.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
-    tag = version;
-    hash = "sha256-FmbAlvjzUEjKDFEI1O9TJGpKl8/WJaCYUVT75+oG2vc=";
+    tag = finalAttrs.version;
+    hash = "sha256-fD4mvz4zSYzyp9MCTKjYvaYMa/Hc7IRrirnF/GNF6p8=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook3
+    meson
+    ninja
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    libayatana-appindicator
-  ];
-
-  build-system = [
-    meson
-    ninja
-  ];
+    libadwaita
+    libmanette
+    libgudev
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   dependencies = with python3Packages; [
-    filelock
+    dbus-python
     pillow
     psutil
     pygobject3
@@ -52,29 +61,26 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace faugus_launcher.py \
-      --replace-fail "PathManager.find_binary('faugus-run')" "'$out/bin/.faugus-run-wrapped'" \
-      --replace-fail "PathManager.find_binary('faugus-proton-manager')" "'$out/bin/.faugus-proton-manager-wrapped'" \
-      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
-      --replace-fail 'Exec={faugus_run}' 'Exec=faugus-run'
+    substituteInPlace faugus-launcher \
+      --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
 
-    substituteInPlace faugus_run.py \
-      --replace-fail "PathManager.find_binary('faugus-components')" "'$out/bin/.faugus-components-wrapped'" \
+    substituteInPlace faugus/path_manager.py \
       --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
-      --replace-fail "PathManager.find_library('libgamemode.so.0')" "'${lib.getLib gamemode}/lib/libgamemode.so.0'" \
-      --replace-fail "PathManager.find_library('libgamemodeauto.so.0')" "'${lib.getLib gamemode}/lib/libgamemodeauto.so.0'"
+      --replace-fail "/usr/lib/extensions/vulkan/lsfgvk/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so" \
+      --replace-fail "/usr/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so"
   '';
 
-  dontWrapGApps = true;
-
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
+    gappsWrapperArgs+=(
+      --set PYTHONPATH "$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
+      --set LD_PRELOAD "libgamemode.so:$LD_PRELOAD"
+      --set LD_LIBRARY_PATH "${lib.getLib gamemode}/lib:$LD_LIBRARY_PATH"
       --suffix PATH : "${
         lib.makeBinPath [
+          coreutils
+          gawk
+          gnugrep
           icoextract
-          imagemagick
-          libcanberra-gtk3
           umu-launcher
           xdg-utils
         ]
@@ -82,15 +88,20 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
+  # has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "faugus" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple and lightweight app for running Windows games using UMU-Launcher";
     homepage = "https://github.com/Faugus/faugus-launcher";
-    changelog = "https://github.com/Faugus/faugus-launcher/releases/tag/${version}";
+    changelog = "https://github.com/Faugus/faugus-launcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ RoGreat ];
     mainProgram = "faugus-launcher";
     platforms = lib.platforms.linux;
   };
-}
+})

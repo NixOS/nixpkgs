@@ -6,12 +6,12 @@
   gdk-pixbuf,
   popt,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icon-slicer";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/icon-slicer/releases/icon-slicer-${version}.tar.gz";
+    url = "https://freedesktop.org/software/icon-slicer/releases/icon-slicer-${finalAttrs.version}.tar.gz";
     sha256 = "0kdnc08k2rs8llfg7xgvnrsk60x59pv5fqz6kn2ifnn2s1nj3w05";
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gdk-pixbuf ];
 
-  meta = with lib; {
-    description = "Utility for generating icon themes and libXcursor cursor themes";
+  meta = {
+    description = "Utility for generating icon themes and libxcursor cursor themes";
     homepage = "https://www.freedesktop.org/wiki/Software/icon-slicer/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zaninime ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zaninime ];
+    platforms = lib.platforms.linux;
     mainProgram = "icon-slicer";
   };
-}
+})

@@ -10,12 +10,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c";
   version = "1.12.1";
 
   src = fetchurl {
-    url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";
+    url = "mirror://apache/avro/avro-${finalAttrs.version}/c/avro-c-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-tk4xuUcZSZVJYiqpLx2W0XQpZ87SYaCTG2O+O76Qfyw=";
   };
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lblasc ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lblasc ];
+    platforms = lib.platforms.all;
   };
-}
+})

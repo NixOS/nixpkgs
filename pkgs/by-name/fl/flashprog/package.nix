@@ -17,12 +17,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.4";
+  version = "1.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mpSmPZ306DedRi3Dcck/cDqoumgwFYpljiJtma+LZz4=";
+    hash = "sha256-Ih6cRUbmKIKRt8dIGNBbaLDomNvVdcl5P/lRBAzwwTI=";
   };
 
   nativeBuildInputs = [
@@ -64,16 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
     allowedVersions = "^[0-9\\.]+$";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     changelog = "https://flashprog.org/wiki/Flashprog/v${finalAttrs.version}";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       felixsinger
       funkeleinhorn
+      jmbaur
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "flashprog";
   };
 })

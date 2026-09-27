@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "beanprice";
   version = "2.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanprice";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lhr8CRysZbI6dpPwRSN6DgvnKrxsIzH5YyZXRLU1l3Q=";
   };
 
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ alapshin ];
     mainProgram = "bean-price";
   };
-}
+})

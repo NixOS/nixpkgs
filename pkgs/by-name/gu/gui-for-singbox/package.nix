@@ -1,13 +1,17 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
+  glib-networking,
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  wrapGAppsHook3,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -16,20 +20,20 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.15.1";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
+    hash = "sha256-yxswEVjNjU5U9EJXSq5HYc+1DbPv73C+RsoYaMhJkvg=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vollate ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -37,20 +41,24 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
+    patches = [ ./frontend-runtime-path.patch ];
+
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-Hkv5Ia5SxEhZYE66+9DbcxibCfON5rxi0bdMcy7Gqik=";
     };
 
     buildPhase = ''
@@ -76,27 +84,25 @@ let
   });
 in
 
-buildGoModule {
+buildGo127Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
+  vendorHash = "sha256-Znzr31mKfeY5S3XMyy0OHSMXJA64K0onizWKG7P4FrY=";
 
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
     pkg-config
     wails
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist

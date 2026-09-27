@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gperf";
   version = "3.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gperf/gperf-${finalAttrs.version}.tar.gz";
     hash = "sha256-/Yfgq6fkOuBUg3r9bNTbA6PyaT3rNhkIXm7Z2NlgStg=";
   };
 
@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/gperf/";
     platforms = lib.platforms.unix;
     mainProgram = "gperf";
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
-}
+})

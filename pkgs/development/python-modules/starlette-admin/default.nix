@@ -3,89 +3,112 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  aiosqlite,
-  arrow,
-  babel,
-  cacert,
-  colour,
-  fasteners,
-  httpx,
+
+  # dependencies
+  itsdangerous,
   jinja2,
+  python-multipart,
+  starlette,
+
+  # optional-dependencies
+  aiobotocore,
+  babel,
+  email-validator,
+  nh3,
+  reportlab,
+
+  # tests
+  arrow,
+  boto3,
+  httpx2,
+  markdown,
+  minio,
   mongoengine,
-  motor,
-  passlib,
-  phonenumbers,
+  openpyxl,
   pillow,
-  psycopg2,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  python-multipart,
-  requests,
   sqlalchemy,
   sqlalchemy-file,
   sqlalchemy-utils,
-  sqlmodel,
-  starlette,
+  tablib,
+  testcontainers,
+  tinydb,
 }:
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.15.1";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
     tag = version;
-    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
+    hash = "sha256-Gc5CGQhJx55BJmbcxDO8M5JpQULWtXQqQv/9+7J0X6A=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
+    itsdangerous
     jinja2
     python-multipart
     starlette
   ];
 
   optional-dependencies = {
+    email = [ email-validator ];
     i18n = [ babel ];
+    pdf = [ reportlab ];
+    s3 = [ aiobotocore ];
+    tinymce = [ nh3 ];
   };
 
   nativeCheckInputs = [
-    aiosqlite
+    aiobotocore
     arrow
     babel
-    cacert
-    colour
-    fasteners
-    httpx
+    boto3
+    email-validator
+    httpx2
+    markdown
+    minio
     mongoengine
-    motor
-    passlib
-    phonenumbers
+    openpyxl
     pillow
-    psycopg2
     pydantic
     pytest-asyncio
     pytestCheckHook
-    requests
     sqlalchemy
     sqlalchemy-file
     sqlalchemy-utils
-    sqlmodel
-  ];
+    tablib
+    testcontainers
+    tinydb
+    reportlab
+  ]
+  ++ tablib.optional-dependencies.all;
 
-  preCheck = ''
-    # used in get_test_container in tests/sqla/utils.py
-    # fixes FileNotFoundError: [Errno 2] No such file or directory: '/tmp/storage/...'
-    mkdir .storage
-    export LOCAL_PATH="$PWD/.storage"
-  '';
+  # exclude cookicutter tests
+  pytestFlags = [ "tests/" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # requires docker
+    "test_build_response_with_file_field_returns_zip"
+    "test_storage_save_returns_file_info"
+    "test_storage_save_never_overwrites"
+    "test_storage_delete_is_idempotent"
+    "test_storage_url_contains_key"
+    "test_storage_serve_returns_response"
+    "test_storage_serve_returns_response"
+    "test_s3_presigned_url"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky, depends on test order
     "test_ensuring_pk"
     # flaky, of-by-one
@@ -93,36 +116,42 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # odmantic is not packaged
-    "tests/odmantic"
-    # beanie is not packaged
-    "tests/beanie"
-    # needs mongodb running on port 27017
-    "tests/mongoengine"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # very flaky, sandbox issues?
-    # libcloud.storage.types.ContainerDoesNotExistError
-    # sqlite3.OperationalError: attempt to write a readonly database
-    "tests/sqla/test_sync_engine.py"
-    "tests/sqla/test_async_engine.py"
+    # not packaged
+    "tests/unit/beanie"
+    "tests/unit/tortoise"
+    # slow, requires a huge build closure
+    "tests/integration"
+    # requires various services running or docker
+    "tests/e2e"
   ];
 
   pythonImportsCheck = [
     "starlette_admin"
     "starlette_admin.actions"
+    "starlette_admin.auth"
     "starlette_admin.base"
+    "starlette_admin.converters"
+    "starlette_admin.cookies"
+    "starlette_admin.events"
+    "starlette_admin.exceptions"
+    "starlette_admin.export"
     "starlette_admin.fields"
+    "starlette_admin.filters"
+    "starlette_admin.flash"
     "starlette_admin.i18n"
+    "starlette_admin.routing"
+    "starlette_admin.security"
+    "starlette_admin.storage"
+    "starlette_admin.theme"
     "starlette_admin.tools"
     "starlette_admin.views"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
     changelog = "https://jowilf.github.io/starlette-admin/changelog/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

@@ -5,18 +5,14 @@
   fetchFromGitHub,
   gitMinimal,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
@@ -27,7 +23,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ ruamel-yaml ];
 
   nativeCheckInputs = [
     gitMinimal
@@ -50,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pre_commit_hooks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
     changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

@@ -6,19 +6,37 @@
   six,
   pypblib,
   pytestCheckHook,
+  fetchurl,
 }:
-buildPythonPackage rec {
+let
+  kissat404src = fetchurl {
+    url = "https://github.com/arminbiere/kissat/archive/refs/tags/rel-4.0.4.tar.gz";
+    hash = "sha256-v+k+qmMjtIAR5LH890s/LiD53lRHZ+coAJ5bIBgpYZM=";
+  };
+  minisatepsrc = fetchurl {
+    url = "https://github.com/hchenqide/minisat/archive/90305f7b9ab9c9c9c560238f16b47c26506d0750.zip";
+    hash = "sha256-eS5+wPrcZ00DRZMaJp4yZOZ1uz72Auin6FK6G2SId64=";
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.8.dev24";
+  version = "1.9.dev15";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-f9NnaPcHdNNInWTvpkg91ieaYejJ29kAAOLcbnbDmM0=";
+    hash = "sha256-WipYAiJIziz5OVtWBoUYXkdzxFKinrCuhmLWdhEzbNM=";
   };
+
+  # The kissat source archive is not included in the repo and pysat attempts to
+  # download it at build time. We therefore prefetch and link it.
+  prePatch = ''
+    ln -s ${kissat404src} solvers/kissat404.tar.gz
+    ln -s ${minisatepsrc} solvers/minisatep.zip
+  '';
 
   preBuild = ''
     export MAKEFLAGS="-j$NIX_BUILD_CORES"
@@ -46,15 +64,15 @@ buildPythonPackage rec {
     rm -r pysat
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.marius851000
-      maintainers.chrjabs
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
   };
-}
+})

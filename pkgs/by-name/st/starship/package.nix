@@ -8,17 +8,18 @@
   gitMinimal,
   nixosTests,
   buildPackages,
+  tzdata,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yWG06l/Gu2/u4NNAyCYjxlmEKIsDAaxWGp6fmqXvNl8=";
+    hash = "sha256-pStNE8SMMVavL3ld6RO+5QQRJPXpqlU3asccS2tUoMQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -27,10 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  env.TZDIR = "${tzdata}/share/zoneinfo";
+
   postInstall = ''
     presetdir=$out/share/starship/presets/
     mkdir -p $presetdir
     cp docs/public/presets/toml/*.toml $presetdir
+    install -Dm644 .github/config-schema.json $out/share/starship/config-schema.json
   ''
   + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
@@ -40,19 +44,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd starship \
         --bash <(${emulator} $out/bin/starship completions bash) \
         --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
         --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
   );
 
-  cargoHash = "sha256-F7tzrMqF2xY8Ow+bAFbP0mQPomSe/oOHiQWHRHDmHio=";
+  cargoHash = "sha256-IO/H75FKU3/2oAJ8AKerGujMDfun8w4fV7gETMxWOt0=";
 
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) starship;
+  passthru = {
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
+    };
+    tests = {
+      inherit (nixosTests) starship;
+    };
   };
 
   meta = {
@@ -62,8 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      danth
-      Br1ght0ne
       Frostman
       da157
       sigmasquadron

@@ -1,0 +1,34 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  comfyui,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "comfyui-workflow-templates-media-assets-01";
+  version = "0.1.47";
+  pyproject = true;
+
+  # nixpkgs-update: no auto update
+  # updated via comfyui
+  src = fetchPypi {
+    pname = "comfyui_workflow_templates_media_assets_01";
+    inherit (finalAttrs) version;
+    hash = "sha256-R8AUUFfROKiw1jr2b+kxwwkYJdVS6Cs48UCW59CVUFI=";
+  };
+
+  build-system = [ setuptools ];
+
+  doCheck = false;
+
+  pythonImportsCheck = [ "comfyui_workflow_templates_media_assets_01" ];
+
+  meta = {
+    description = "Media assets bundle 01 for ComfyUI workflow templates";
+    homepage = "https://github.com/Comfy-Org/workflow_templates";
+    license = lib.licenses.mit;
+    inherit (comfyui.meta) maintainers;
+  };
+})

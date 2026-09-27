@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "4.6.10";
+  version = "4.7.6";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = "helm-secrets";
     rev = "v${version}";
-    hash = "sha256-hno6+kik+U9XA7Mr9OnuuVidfc/xoqWRjMbBMI6M3QA=";
+    hash = "sha256-gCsXnZCvQqc5PIQGheOdzZ1YSUNDhbMvJIROMGA65Jg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -dm755 $out/helm-secrets $out/helm-secrets/scripts
-    install -m644 -Dt $out/helm-secrets plugin.yaml
-    cp -r scripts/* $out/helm-secrets/scripts
+    install -m644 -Dt $out/helm-secrets plugins/helm-secrets-cli/plugin.yaml
+    cp -r plugins/helm-secrets-cli/scripts/* $out/helm-secrets/scripts
     wrapProgram $out/helm-secrets/scripts/run.sh \
         --prefix PATH : ${
           lib.makeBinPath [
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that helps manage secrets";
     homepage = "https://github.com/jkroepke/helm-secrets";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yurrriq ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -3,22 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pkg-resources-backport,
   poetry-core,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nats-python";
   version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "nats-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7/AGQfPEuSeoRGUXeyDZNbLhapfQa7vhrSPHRruf+sg=";
   };
 
@@ -33,18 +31,21 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ setuptools ];
+  dependencies = [
+    pkg-resources-backport
+    setuptools
+  ];
 
   # Tests require a running NATS server
   doCheck = false;
 
   pythonImportsCheck = [ "pynats" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for NATS messaging system";
     homepage = "https://github.com/Gr1N/nats-python";
-    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.virtualisation.virtualbox.guest;
-  kernel = config.boot.kernelPackages;
 
   mkVirtualBoxUserService = serviceArgs: verbose: {
     description = "VirtualBox Guest User Services ${serviceArgs}";
@@ -25,7 +24,7 @@ let
     preStart = "${pkgs.bash}/bin/bash -c \"if [ -z $DISPLAY ]; then exit 1; fi\"";
     serviceConfig = {
       ExecStart =
-        "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient"
+        "@${cfg.package}/bin/VBoxClient"
         + (lib.strings.optionalString verbose " --verbose")
         + " --foreground ${serviceArgs}";
       # Wait after a failure, hoping that the display environment is ready after waiting
@@ -66,6 +65,10 @@ in
       description = "Whether to enable the VirtualBox service and other guest additions.";
     };
 
+    package = lib.mkPackageOption config.boot.kernelPackages "virtualboxGuestAdditions" {
+      pkgsText = "config.boot.kernelPackages";
+    };
+
     clipboard = lib.mkOption {
       default = true;
       type = lib.types.bool;
@@ -95,6 +98,12 @@ in
       type = lib.types.bool;
       description = "Whether to load vboxsf";
     };
+
+    use3rdPartyModules = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to use the kernel modules provided by VirtualBox instead of the ones from the upstream kernel.";
+    };
   };
 
   ###### implementation
@@ -109,9 +118,9 @@ in
           }
         ];
 
-        environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
+        environment.systemPackages = [ cfg.package ];
 
-        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = lib.mkIf cfg.use3rdPartyModules [ cfg.package ];
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
@@ -122,17 +131,24 @@ in
 
           unitConfig.ConditionVirtualization = "oracle";
 
-          serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
+          serviceConfig.ExecStart = "@${cfg.package}/bin/VBoxService VBoxService --foreground";
         };
 
-        services.udev.extraRules = ''
-          # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
-          # should restrict this to logged-in users.
-          KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+        users.groups.vboxuserdev = { };
 
-          # Allow systemd dependencies on vboxguest.
-          SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
-        '';
+        services.udev.packages = lib.singleton (
+          pkgs.writeTextFile {
+            name = "virtualboxGuestAdditions";
+            text = ''
+              # /dev/vboxuser is necessary for VBoxClient to work
+              KERNEL=="vboxuser", OWNER="root", GROUP="vboxuserdev", MODE="0660", TAG+="uaccess"
+
+              # Allow systemd dependencies on vboxguest.
+              SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
+            '';
+            destination = "/etc/udev/rules.d/70-virtualboxGuestAdditions.rules";
+          }
+        );
 
         systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
       }

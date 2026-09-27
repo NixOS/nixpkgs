@@ -9,15 +9,15 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iqtree";
-  version = "2.3.6";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "iqtree";
-    repo = "iqtree2";
-    tag = "v${version}";
-    hash = "sha256-8d5zqZIevv3bnq7z7Iyo/x8i445y1RAFtRMeK8s/ieQ=";
+    repo = "iqtree3";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fWTqgx0TL1uSrO2Iix1wLgz4ft7+qELBXw+l9Rf2M3M=";
     fetchSubmodules = true;
   };
 
@@ -32,15 +32,16 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ];
 
-  meta = with lib; {
-    homepage = "http://www.iqtree.org/";
+  cmakeFlags = [
+    (lib.cmakeBool "USE_CMAPLE" false) # tries to download googletest
+  ];
+
+  meta = {
+    homepage = "https://iqtree.github.io/";
     description = "Efficient and versatile phylogenomic software by maximum likelihood";
-    mainProgram = "iqtree2";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ bzizou ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
+    mainProgram = "iqtree3";
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ bzizou ];
+    platforms = lib.platforms.linux;
   };
-}
+})

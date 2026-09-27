@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   pcsclite,
   nix-update-script,
@@ -9,19 +9,18 @@
   rsop,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsop";
-  version = "0.9.1";
+  version = "0.11.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "heiko";
     repo = "rsop";
-    rev = "rsop/v${version}";
-    hash = "sha256-LlTKPiBqc0mED3co/d4elo/QkBOhjppOQrrsn3Kwfv4=";
+    rev = "rsop/v${finalAttrs.version}";
+    hash = "sha256-RqrHJuqgO+m6bWjDcjDaiAgnIJoyUEPxGG/VWQOc8KM=";
   };
 
-  cargoHash = "sha256-UFgGMmDeeIKK3L/1f+UCaZKykC7ORIFpMU31Pi1JtHQ=";
+  cargoHash = "sha256-mWjPIsir3h/OOHqAaEd64s+2CrowlmXpNa9U9LGKpuA=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,10 +39,10 @@ rustPlatform.buildRustPackage rec {
     description = "Stateless OpenPGP (SOP) based on rpgp";
     license = with lib.licenses; [
       mit
-      apsl20
+      asl20
       cc0
     ];
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "rsop";
   };
-}
+})

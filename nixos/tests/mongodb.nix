@@ -1,5 +1,10 @@
 # This test starts mongodb and runs a query using mongo shell
-{ config, lib, ... }:
+{
+  testName,
+  config,
+  lib,
+  ...
+}:
 let
   # required for test execution on darwin
   pkgs = config.node.pkgs;
@@ -10,9 +15,8 @@ let
   mongoshExe = lib.getExe pkgs.mongosh;
 in
 {
-  name = "mongodb";
+  name = testName;
   meta.maintainers = with pkgs.lib.maintainers; [
-    offline
     phile314
     niklaskorz
   ];

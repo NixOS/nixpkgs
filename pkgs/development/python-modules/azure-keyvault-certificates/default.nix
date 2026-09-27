@@ -5,22 +5,19 @@
   azure-common,
   azure-core,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.10.0";
+  version = "4.11.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_keyvault_certificates";
     inherit version;
-    hash = "sha256-AE/0enMVL59A9njloHcZt1OjyobwRgv+qvaiMwSHLgU=";
+    hash = "sha256-H7wd8a4bm1tJpbWRX4JuwLFmLs/ukJzHV601IIOYv70=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.keyvault.certificates" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Certificates Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-certificates";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-keyvault-certificates_${version}/sdk/keyvault/azure-keyvault-certificates/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

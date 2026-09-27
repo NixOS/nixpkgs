@@ -8,7 +8,7 @@
   genome-collector,
   matplotlib,
   numpy,
-  primer3,
+  primer3-py,
   proglog,
   pytestCheckHook,
   python-codon-tables,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    primer3
+    primer3-py
     genome-collector
     matplotlib
     pytestCheckHook
@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dnachisel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
     changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

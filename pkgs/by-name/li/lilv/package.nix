@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.26";
+  version = "0.28.0";
 
   outputs = [
     "out"
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-Iv7tMLwPlSOEolwvb0sE5tQ4NkCHmO1lqKk0wFXV2Kw=";
+    url = "https://download.drobilla.net/lilv-${version}.tar.xz";
+    hash = "sha256-jctwrbXPByM1EVprCR9BE3EL3HOrqtqj+enB5VlXsUk=";
   };
 
   nativeBuildInputs = [
@@ -74,11 +74,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://drobilla.net/software/lilv";
+    changelog = "https://gitlab.com/lv2/lilv/-/blob/v${version}/NEWS";
     description = "C library to make the use of LV2 plugins";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

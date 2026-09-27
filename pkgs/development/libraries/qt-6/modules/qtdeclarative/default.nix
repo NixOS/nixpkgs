@@ -10,6 +10,7 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
+  fetchpatch,
 }:
 
 qtModule {
@@ -35,6 +36,13 @@ qtModule {
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+
+    # revert codesigning change on Darwin that doesn't work with our signing tools
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/a7084abd9778b955d80e7419e82f6f7b92f7978d.diff";
+      hash = "sha256-ESy35OlmsvI4yFQ/rFT8oelOUBCwCmlcbQJvwcTrCig=";
+      revert = true;
+    })
   ];
 
   cmakeFlags = [

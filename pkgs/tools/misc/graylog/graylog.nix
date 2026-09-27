@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/graylogctl $makeWrapperArgs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source log management solution";
     homepage = "https://www.graylog.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     inherit license;
     inherit maintainers;
     mainProgram = "graylogctl";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

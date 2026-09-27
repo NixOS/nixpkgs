@@ -1011,7 +1011,7 @@ in
             PrivateDevices = true;
             ProtectSystem = "full";
             CapabilityBoundingSet = [ "~CAP_NET_ADMIN CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_MODULE" ];
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = false; # pcre2 jit
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
@@ -1279,7 +1279,7 @@ in
       [ "services" "postfix" "settings" "main" "recipient_delimiter" ]
     )
     (lib.mkRenamedOptionModule
-      [ "services" "postfix" "tlsTrustedAuthoriies" ]
+      [ "services" "postfix" "tlsTrustedAuthorities" ]
       [ "services" "postfix" "settings" "main" "smtp_tls_CAfile" ]
     )
     (lib.mkRenamedOptionModule
@@ -1296,6 +1296,5 @@ in
       [ "services" "postfix" "settings" "main" "smtp_tls_security_level" ]
       (config: lib.mkIf config.services.postfix.useDane "dane")
     )
-    (lib.mkRenamedOptionModule [ "services" "postfix" "useSrs" ] [ "services" "pfix-srsd" "enable" ])
   ];
 }

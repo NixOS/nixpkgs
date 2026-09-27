@@ -12,14 +12,14 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klick";
   version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "Allfifthstuning";
     repo = "klick";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jHyeVCmyy9ipbVaF7GSW19DOVpU9EQJoLcGq9uos+eY=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "klick";
   };
-}
+})

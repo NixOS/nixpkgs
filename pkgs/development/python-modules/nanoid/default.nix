@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nanoid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny, secure, URL-friendly, unique string ID generator for Python";
     homepage = "https://github.com/puyuan/py-nanoid";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

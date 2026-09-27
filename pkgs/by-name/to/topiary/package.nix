@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topiary";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "topiary";
     repo = "topiary";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9jBgZd8RD/yhxoqOIh1yYd8brnmcLcybgQQeMPOCvj0=";
+    hash = "sha256-3zHO+a/m4Rv+pUm0Y1dBjFfHPZCfjsyAq56EiHSGJ1Y=";
   };
 
-  cargoHash = "sha256-opNXJqR+q/f7ip6CWZ+QCdmDHvDFH/WVAwCnwZGVQKk=";
+  cargoHash = "sha256-oJoRuWzaP4F+bS2xdFsOWcuLGyTEcCIHLRdPjG8X2CU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -81,14 +81,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
-    homepage = "https://github.com/tweag/topiary";
-    changelog = "https://github.com/tweag/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/topiary/topiary";
+    changelog = "https://github.com/topiary/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       nartsiss

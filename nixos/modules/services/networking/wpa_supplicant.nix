@@ -48,31 +48,6 @@ let
     else
       networkList;
 
-  # Content of wpa_supplicant.conf
-  generatedConfig = concatStringsSep "\n" (
-    (map mkNetwork allNetworks)
-    ++ optional cfg.userControlled.enable (
-      concatStringsSep "\n" [
-        "ctrl_interface=/run/wpa_supplicant"
-        "ctrl_interface_group=${cfg.userControlled.group}"
-        "update_config=1"
-      ]
-    )
-    ++ [ "pmf=1" ]
-    ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
-    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
-    ++ optional (cfg.extraConfig != "") cfg.extraConfig
-  );
-
-  configIsGenerated = with cfg; networks != { } || extraConfig != "" || userControlled.enable;
-
-  # the original configuration file
-  configFile =
-    if configIsGenerated then
-      pkgs.writeText "wpa_supplicant.conf" generatedConfig
-    else
-      "/etc/wpa_supplicant.conf";
-
   # Creates a network block for wpa_supplicant.conf
   mkNetwork =
     opts:
@@ -104,6 +79,12 @@ let
       }
     '';
 
+  hasDeclarative = lib.any id [
+    (cfg.networks != { })
+    (cfg.extraConfig != "")
+    cfg.userControlled
+  ];
+
   # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
   mkUnit =
     iface:
@@ -114,9 +95,11 @@ let
       configStr =
         (
           if cfg.allowAuxiliaryImperativeNetworks then
-            "-c /etc/wpa_supplicant.conf -I ${configFile}"
+            "-c /etc/wpa_supplicant/imperative.conf -I /etc/wpa_supplicant/nixos.conf"
+          else if hasDeclarative then
+            "-c /etc/wpa_supplicant/nixos.conf"
           else
-            "-c ${configFile}"
+            "-c /etc/wpa_supplicant/imperative.conf"
         )
         + lib.concatMapStrings (p: " -I " + p) cfg.extraConfigFiles;
     in
@@ -128,32 +111,132 @@ let
       wants = [ "network.target" ];
       requires = deviceUnit;
       wantedBy = [ "multi-user.target" ];
+
       stopIfChanged = false;
+      restartTriggers = [ config.environment.etc."wpa_supplicant/nixos.conf".source ];
+
+      # OpenSSL's dynamic engine loader only searches its own store path,
+      # which does not contain the pkcs11 engine (it is built separately,
+      # in libp11), so ENGINE_by_id("pkcs11") fails unless the search path
+      # is redirected to the libp11 package
+      environment = lib.optionalAttrs cfg.pkcs11.enable (
+        {
+          OPENSSL_ENGINES = "${cfg.pkcs11.package}/lib/engines";
+        }
+        # security.tpm2.tctiEnvironment exports its variables only to login
+        # shells, not to systemd units, so mirror the TCTI selection here for
+        # the TPM2 PKCS11 module
+        // lib.optionalAttrs config.security.tpm2.tctiEnvironment.enable {
+          inherit (config.environment.variables) TPM2_PKCS11_TCTI;
+        }
+      );
 
       path = [ pkgs.wpa_supplicant ];
-      # if `userControl.enable`, the supplicant automatically changes the permissions
-      #  and owning group of the runtime dir; setting `umask` ensures the generated
-      #  config file isn't readable (except to root);  see nixpkgs#267693
-      serviceConfig.UMask = "066";
-      serviceConfig.RuntimeDirectory = "wpa_supplicant";
-      serviceConfig.RuntimeDirectoryMode = "700";
+      serviceConfig = {
+        RuntimeDirectory = "wpa_supplicant";
+        ExecStartPre =
+          lib.optionals (cfg.allowAuxiliaryImperativeNetworks || !hasDeclarative) [
+            # set up imperative config file
+            "+${pkgs.coreutils}/bin/touch /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chmod 664 /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /etc/wpa_supplicant/imperative.conf"
+          ]
+          ++ lib.optionals cfg.userControlled [
+            # set up client sockets directory
+            "+${pkgs.coreutils}/bin/mkdir -p /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
+          ];
+      }
+      // lib.optionalAttrs cfg.enableHardening {
+        User = "wpa_supplicant";
+        Group = "wpa_supplicant";
+        AmbientCapabilities = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        RootDirectory = "/run/wpa_supplicant";
+        RootDirectoryStartOnly = true;
+        BindPaths = [
+          "/etc/wpa_supplicant" # to write wpa_supplicant.conf{,.tmp}
+          "/run/wpa_supplicant" # to make control sockets
+          # to set up interfaces
+          "/proc/sys/net"
+          "/dev/rfkill"
+        ]
+        ++ lib.optional cfg.dbusControlled "/run/dbus"
+        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant"
+        # token access for the PKCS#11 backends
+        ++ lib.optionals cfg.pkcs11.enable [
+          "-${config.security.tpm2.tctiEnvironment.deviceConf}"
+          "-/run/pcscd"
+          "-/etc/tpm2_pkcs11"
+        ];
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "/etc/"
+        ]
+        ++ cfg.extraConfigFiles
+        ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
+        DeviceAllow = [
+          "/dev/rfkill rw"
+        ]
+        ++ lib.optional cfg.pkcs11.enable "${config.security.tpm2.tctiEnvironment.deviceConf} rw";
+        # Grant tss group for tpm2 access if pkcs11 is enabled.
+        SupplementaryGroups = lib.optional (
+          cfg.pkcs11.enable && config.security.tpm2.enable && config.security.tpm2.tssGroup != null
+        ) config.security.tpm2.tssGroup;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = false;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        IPAddressDeny = "any";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_PACKET"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallFilter = [
+          "@system-service"
+          "~@keyring"
+          "~@resources"
+        ];
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+      };
 
       script = ''
-        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
-          if [ -f /etc/wpa_supplicant.conf ]; then
-            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-          fi
-        ''}
-
-        # ensure wpa_supplicant.conf exists, or the daemon will fail to start
-        ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
-          touch /etc/wpa_supplicant.conf
-        ''}
-
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
-
         ${
-          if iface == null then
+          if iface != null then
+            ''
+              # add known interface to the daemon arguments
+              args="-i${iface} $iface_args"
+            ''
+          else if cfg.autoDetectInterfaces then
             ''
               # detect interfaces automatically
 
@@ -176,15 +259,14 @@ let
               done
             ''
           else
-            ''
-              # add known interface to the daemon arguments
-              args="-i${iface} $iface_args"
-            ''
+            "args=$iface_args"
         }
 
         # finally start daemon
+        # shellcheck disable=SC2086
         exec wpa_supplicant $args
       '';
+      enableStrictShellChecks = true;
     };
 
   systemctl = "/run/current-system/systemd/bin/systemctl";
@@ -203,13 +285,18 @@ in
           "wlan1"
         ];
         description = ''
-          The interfaces {command}`wpa_supplicant` will use. If empty, it will
+          The interfaces {command}`wpa_supplicant` will use. If empty and
+          [](#opt-networking.wireless.autoDetectInterfaces) is true it will
           automatically use all wireless interfaces.
 
           ::: {.note}
           A separate wpa_supplicant instance will be started for each interface.
           :::
         '';
+      };
+
+      autoDetectInterfaces = mkEnableOption "automatic detection of wireless interfaces" // {
+        default = true;
       };
 
       driver = mkOption {
@@ -501,27 +588,36 @@ in
         '';
       };
 
-      userControlled = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
-            This is useful for laptop users that switch networks a lot and don't want
-            to depend on a large package such as NetworkManager just to pick nearby
-            access points.
+      userControlled = mkOption {
+        type =
+          with types;
+          coercedTo attrs (
+            val:
+            if builtins.isAttrs val && val ? enable then
+              warn "Obsolete option `networking.wireless.userControlled.enable' is used. It was renamed to networking.wireless.userControlled" val.enable
+            else if builtins.isAttrs val && val ? group then
+              warn
+                "The option definition `networking.wireless.userControlled.group' no longer has any effect. The group is now fixed to `wpa_supplicant'."
+                (val.enable or false)
+            else if builtins.isBool val then
+              val
+            else
+              false
+          ) bool;
+        default = false;
+        description = ''
+          Allow users of the `wpa_supplicant` group to control wpa_supplicant
+          through wpa_gui or wpa_cli.
+          This is useful for laptop users that switch networks a lot and don't want
+          to depend on a large package such as NetworkManager just to pick nearby
+          access points.
 
-            When using a declarative network specification you cannot persist any
-            settings via wpa_gui or wpa_cli.
-          '';
-        };
-
-        group = mkOption {
-          type = types.str;
-          default = "wheel";
-          example = "network";
-          description = "Members of this group can control wpa_supplicant.";
-        };
+          ::: {.note}
+          When networks are configured declaratively, you cannot persist any settings
+          via wpa_gui or wpa_cli, unless {option}`allowAuxiliaryImperativeNetworks`
+          is used.
+          :::
+        '';
       };
 
       dbusControlled = mkOption {
@@ -534,8 +630,76 @@ in
         '';
       };
 
+      enableHardening = mkOption {
+        default = true;
+        description = ''
+          Whether to apply security hardening measures to wpa_supplicant.
+          These include limiting access to the filesystem, devices and network
+          capabilities.
+
+          ::: {.note}
+          Disabling this will increase the potential attack surface if the
+          wpa_supplicant daemon becomes compromised, but it may be necessary
+          for more complex enterprise networks (for example requiring
+          access to mutable files, smart cards or TPM devices).
+          :::
+        '';
+      };
+
+      pkcs11 = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to make the OpenSSL pkcs11 engine available to
+            wpa_supplicant, for EAP-TLS authentication with client keys on
+            PKCS#11 tokens such as smartcards or a TPM.
+
+            ::: {.note}
+            With {option}`networking.wireless.enableHardening` enabled,
+            the service is additionally granted:
+              - Membership in {option}`security.tpm2.tssGroup`.
+              - Access to the TPM device configured by
+                {option}`security.tpm2.tctiEnvironment.deviceConf`.
+              - pcscd socket for smartcard readers.
+              - Access to default system-wide token store `/etc/tpm2_pkcs11`.
+                Note that the hardened service by default has no home directory,
+                so only the system store location applies.
+
+            The store must be writable by {option}`security.tpm2.tssGroup`.
+            Enable {option}`security.tpm2.pkcs11.enable` option to grant
+            tss group access to the store.
+            :::
+
+            ::: {.note}
+            wpa_supplicant loads the engine through OpenSSL's dynamic engine
+            mechanism, which only searches OpenSSL's own store path;
+            This option points the search path (the `OPENSSL_ENGINES` environment
+            variable) at the configured libp11 package instead,
+            which shadows OpenSSL's built-in engine directory rather than extending it.
+
+            wpa_supplicant never requests the engines shipped there (afalg,
+            capi, loader_attic, padlock), so this is normally invisible.
+            A configuration that nevertheless loads one of them by name
+            inside this service (e.g. through a custom `OPENSSL_CONF`) can
+            restore the union of both directories:
+
+            ```nix
+            networking.wireless.pkcs11.package = pkgs.symlinkJoin {
+              name = "wpa-supplicant-engines";
+              paths = [ pkgs.libp11 ];
+              postBuild = "ln -s ''${pkgs.openssl.out}/lib/engines-3/*.so $out/lib/engines/";
+            };
+            ```
+            :::
+          '';
+        };
+
+        package = mkPackageOption pkgs "libp11" { };
+      };
+
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = ''
           p2p_disabled=1
@@ -622,9 +786,33 @@ in
         }
       ];
 
+    users.groups.wpa_supplicant = { };
+    users.users.wpa_supplicant = {
+      isSystemUser = true;
+      group = "wpa_supplicant";
+      description = "WPA Supplicant user";
+    };
+
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.systemPackages = [ pkgs.wpa_supplicant ];
+
+    # NixOS-generated configuration files
+    environment.etc."wpa_supplicant/nixos.conf".text = concatStringsSep "\n" (
+      (map mkNetwork allNetworks)
+      ++ optional cfg.userControlled (
+        concatStringsSep "\n" [
+          "ctrl_interface=/run/wpa_supplicant/control"
+          "ctrl_interface_group=wpa_supplicant"
+          "update_config=1"
+        ]
+      )
+      ++ [ "pmf=1" ]
+      ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
+      ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+      ++ optional (cfg.extraConfig != "") cfg.extraConfig
+    );
+
     services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
 
     systemd.services =
@@ -632,12 +820,6 @@ in
         { wpa_supplicant = mkUnit null; }
       else
         listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
-
-    # Restart wpa_supplicant after resuming from sleep
-    powerManagement.resumeCommands = concatStringsSep "\n" (
-      optional (cfg.interfaces == [ ]) "${systemctl} try-restart wpa_supplicant"
-      ++ map (i: "${systemctl} try-restart wpa_supplicant-${i}") cfg.interfaces
-    );
 
     # Restart wpa_supplicant when a wlan device appears or disappears. This is
     # only needed when an interface hasn't been specified by the user.

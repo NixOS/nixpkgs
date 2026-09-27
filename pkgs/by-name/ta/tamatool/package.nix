@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Clinux"
     "VERSION=${finalAttrs.version}"
     "CFLAGS+=-I${lib.getInclude SDL2}/include/SDL2"
-    "CFLAGS+=-I${SDL2_image}/include/SDL2"
+    "CFLAGS+=-I${lib.getInclude SDL2_image}/include/SDL2"
     "DIST_PATH=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
@@ -70,12 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Tamagotchi P1 explorer";
     homepage = "https://github.com/jcrona/tamatool";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "tamatool";
   };
 })

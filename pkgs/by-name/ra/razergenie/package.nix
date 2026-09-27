@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TxW6IUHmEaNdJPeEGwo57a3EGH6MMyitVTmzStVmZjc=";
   };
 
-  postUnpack = ''ln -s ${libopenrazer} libopenrazer'';
+  postUnpack = "ln -s ${libopenrazer} libopenrazer";
 
   nativeBuildInputs = [
     pkg-config
@@ -74,9 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      f4814n
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

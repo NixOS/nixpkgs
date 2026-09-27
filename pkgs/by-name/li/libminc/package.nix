@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libminc";
-  version = "2.4.07";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "libminc";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-F5c0S4fybkrdpDJQ0nz6MvTdjq1qM1nJVxXuxXbCeSI=";
+    hash = "sha256-IQS8JDkZwLR73I5GpWKRT07zj7Ek2tdZ2TOjy02OjaQ=";
   };
 
   postPatch = ''
@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     ctest -j1 --output-on-failure
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/libminc";
     description = "Medical imaging library based on HDF5";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 })

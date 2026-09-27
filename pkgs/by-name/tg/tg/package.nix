@@ -6,16 +6,15 @@
   libnotify,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tg";
   version = "0.22.0";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "paul-nameless";
     repo = "tg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qzqYkksocR86QFmP75ZE93kMSVmdel+OTxPgt9uZHLI=";
   };
 
@@ -44,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

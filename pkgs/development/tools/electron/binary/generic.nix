@@ -24,7 +24,14 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   pango,
   systemd,
   pciutils,
@@ -39,22 +46,21 @@ version: hashes:
 let
   pname = "electron";
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron";
-    teams = [ teams.electron ];
+    teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "42.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -76,7 +82,6 @@ let
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -101,14 +106,14 @@ let
     gtk4
     nss
     nspr
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxkbfile
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxkbfile
     pango
     pciutils
     stdenv.cc.cc
@@ -163,6 +168,12 @@ let
         $out/libexec/electron/electron \
         $out/libexec/electron/chrome_crashpad_handler
 
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+
+    ''
+    + lib.optionalString (lib.versionOlder version "44") ''
       # patch libANGLE
       patchelf \
         --set-rpath "${
@@ -173,13 +184,12 @@ let
           ]
         }" \
         $out/libexec/electron/lib*GL*
-
-      # replace bundled vulkan-loader
-      rm "$out/libexec/electron/libvulkan.so.1"
-      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = finalAttrs: {

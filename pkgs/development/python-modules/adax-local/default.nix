@@ -2,29 +2,31 @@
   lib,
   aiohttp,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "adax-local";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAdaxLocal";
     tag = version;
-    hash = "sha256-HdhatjlN4oUzBV1cf/PfgOJbEks4KBdw4vH8Y/z6efQ=";
+    hash = "sha256-8gVpUYQoE4V3ATR6zFAz/sARyEmHu9lYyGchTpS1eX8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     aiohttp
     bleak
+    bleak-retry-connector
     async-timeout
   ];
 
@@ -33,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adax_local" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for local access to Adax";
     homepage = "https://github.com/Danielhiversen/pyAdaxLocal";
     changelog = "https://github.com/Danielhiversen/pyAdaxLocal/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

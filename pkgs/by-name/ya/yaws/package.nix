@@ -2,28 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  erlang,
+  beamPackages,
   pam,
   perl,
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaws";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "erlyaws";
     repo = "yaws";
-    rev = "yaws-${version}";
-    hash = "sha256-acO8Vc8sZJl22HUml2kTxVswLEirqMbqHQdRIbkkcvs=";
+    rev = "yaws-${finalAttrs.version}";
+    hash = "sha256-JuQ1En9PwplW28n7H3degRFYzpqlqVzJZUCBvbl3Ev0=";
   };
 
   configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    erlang
+    beamPackages.erlang
     pam
     perl
   ];
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
     sed -i "s#which #type -P #" $out/bin/yaws
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webserver for dynamic content written in Erlang";
     mainProgram = "yaws";
     homepage = "https://github.com/erlyaws/yaws";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 
-}
+})

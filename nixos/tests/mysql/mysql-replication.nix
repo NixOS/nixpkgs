@@ -20,9 +20,11 @@ let
     }:
     makeTest {
       name = "${name}-replication";
-      meta = {
-        maintainers = lib.teams.helsinki-systems.members;
-      };
+      meta.maintainers = with lib.maintainers; [
+        conni2461
+        das_j
+        helsinki-Jo
+      ];
 
       nodes = {
         primary = {

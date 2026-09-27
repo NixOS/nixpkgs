@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "helm-schema";
-  version = "2.3.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "losisin";
     repo = "helm-values-schema-json";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q5A+tCnuHTtUyejP4flID7XhsoBfWGge2jCgsL0uEOc=";
+    hash = "sha256-DTxVVf8p9IHYPIC5TevnvvLWTQx2VIy3WNPXSczTkSs=";
   };
 
-  vendorHash = "sha256-xmj2i1WNI/9ItbxRk8mPIygjq83xuvNu6THyPqZsysY=";
+  vendorHash = "sha256-XSaTTzSoKnwoiZu/FqHYOas6dMtr5C4+F5jy4FX1ot8=";
 
   ldflags = [
     "-s"
@@ -46,7 +46,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/helm-schema/bin/schema";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

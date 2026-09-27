@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kamilalisp";
   version = "0.3.0.1";
 
   src = fetchurl {
-    url = "https://github.com/kspalaiologos/kamilalisp/releases/download/v${version}/kamilalisp-${version}.jar";
+    url = "https://github.com/kspalaiologos/kamilalisp/releases/download/v${finalAttrs.version}/kamilalisp-${finalAttrs.version}.jar";
     hash = "sha256-SW0U483eHptkYw+yJV/2cImfK3uEjkl8ma54yeagF6s=";
   };
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -pv $out/share/java $out/bin
-    cp ${src} $out/share/java/kamilalisp-${version}.jar
+    cp ${finalAttrs.src} $out/share/java/kamilalisp-${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/kamilalisp \
-      --add-flags "-jar $out/share/java/kamilalisp-${version}.jar" \
+      --add-flags "-jar $out/share/java/kamilalisp-${finalAttrs.version}.jar" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
       --set _JAVA_AWT_WM_NONREPARENTING 1
   '';
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ cafkafk ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
-}
+})

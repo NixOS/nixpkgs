@@ -4,23 +4,19 @@
   docker,
   fetchFromGitHub,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-docker-tools";
-  version = "3.1.9";
+  version = "3.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "pytest-docker-tools";
-    tag = "v${version}";
-    hash = "sha256-WYfgO7Ch1hCj9cE43jgI+2JEwDOzNvuMtkVV3PdMiBs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P2aga2Wz6CtXGESHWxyFGJfw3gjMsxwzP1edCHDdsD4=";
   };
 
   build-system = [ setuptools ];
@@ -34,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_docker_tools" ];
 
-  meta = with lib; {
-    description = "Opionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
+  meta = {
+    description = "Opinionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
     homepage = "https://github.com/Jc2k/pytest-docker-tools";
-    changelog = "https://github.com/Jc2k/pytest-docker-tools/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Jc2k/pytest-docker-tools/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

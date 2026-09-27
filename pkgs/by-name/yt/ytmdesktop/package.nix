@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.10";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -36,13 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-CA3Vb7Wp4WrsWSVtIwDxnEt1pWYb73WnhyoMVKoqvOE=";
+    hash = "sha256-fT5UdJ9YYK3hXC8GkEeJ/LK1bCyXofcKA0aCJUnjZdk=";
   };
 
   patches = [
     # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
+    ./yarn-4.14-support.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -56,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-1jlnVY4KWm+w3emMkCkdwUtkqRB9ZymPPGuvgfQolrA=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-G/ASfWCR9euEs76TWV3DUbvwVjpb73gjdPngAiDHL+w=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
     # force @electron/packager to use our electron instead of downloading it
     substituteInPlace node_modules/@electron/packager/dist/packager.js \
       --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    export CI="1";
 
     yarn run package
 

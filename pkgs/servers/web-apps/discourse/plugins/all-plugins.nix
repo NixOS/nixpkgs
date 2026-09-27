@@ -5,6 +5,7 @@ in
 {
   discourse-bbcode-color = callPackage ./discourse-bbcode-color { };
   discourse-docs = callPackage ./discourse-docs { };
+  discourse-events = callPackage ./discourse-events { };
   discourse-ldap-auth = callPackage ./discourse-ldap-auth { };
   discourse-prometheus = callPackage ./discourse-prometheus { };
   discourse-saved-searches = callPackage ./discourse-saved-searches { };

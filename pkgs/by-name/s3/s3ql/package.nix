@@ -28,7 +28,7 @@ let
     ;
 in
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "s3ql";
   version = "5.3.0";
   pyproject = true;
@@ -36,12 +36,12 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s3ql";
     repo = "s3ql";
-    tag = "s3ql-${version}";
+    tag = "s3ql-${finalAttrs.version}";
     hash = "sha256-SVB+VB508hGXvdHZo5lt09yssjjwHS1tsDU8M4j+swc=";
   };
 
   patches = [
-    (replaceVars ./0001-setup.py-remove-self-reference.patch { inherit version; })
+    (replaceVars ./0001-setup.py-remove-self-reference.patch { inherit (finalAttrs) version; })
   ];
 
   build-system = [ setuptools ];
@@ -90,9 +90,9 @@ buildPythonApplication rec {
   meta = {
     description = "Full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
-    changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${version}";
+    changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rushmorem ];
     platforms = lib.platforms.linux;
   };
-}
+})

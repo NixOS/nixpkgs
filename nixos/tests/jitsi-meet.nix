@@ -1,9 +1,11 @@
 { pkgs, ... }:
 {
   name = "jitsi-meet";
-  meta = with pkgs.lib; {
-    maintainers = teams.jitsi.members;
+  meta = {
+    maintainers = pkgs.lib.teams.jitsi.members;
   };
+
+  node.pkgsReadOnly = false;
 
   nodes = {
     client =
@@ -11,11 +13,15 @@
       {
       };
     server =
-      { config, pkgs, ... }:
+      { config, ... }:
       {
+        # jitsi-meet inherits olm's known vulnerabilities
+        nixpkgs.config.permittedInsecurePackages = [ pkgs.jitsi-meet.name ];
+
         services.jitsi-meet = {
           enable = true;
           hostName = "server";
+          jigasi.enable = true;
         };
         services.jitsi-videobridge.openFirewall = true;
 
@@ -53,6 +59,7 @@
     ''
       server.wait_for_unit("jitsi-videobridge2.service")
       server.wait_for_unit("jicofo.service")
+      server.wait_for_unit("jigasi.service")
       server.wait_for_unit("nginx.service")
       server.wait_for_unit("prosody.service")
 

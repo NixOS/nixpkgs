@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cabextract,
+  installFonts,
 }:
 
 let
@@ -66,15 +67,20 @@ stdenv.mkDerivation {
   pname = "corefonts";
   version = "1";
 
-  exes = map (
-    { name, hash }:
-    fetchurl {
-      url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
-      inherit hash;
-    }
-  ) fonts;
+  env.exes = toString (
+    map (
+      { name, hash }:
+      fetchurl {
+        url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
+        inherit hash;
+      }
+    ) fonts
+  );
 
-  nativeBuildInputs = [ cabextract ];
+  nativeBuildInputs = [
+    cabextract
+    installFonts
+  ];
 
   buildCommand = ''
     for i in $exes; do
@@ -122,7 +128,9 @@ stdenv.mkDerivation {
     mv webdings.ttf  Webdings.ttf.tmp
     mv Webdings.ttf.tmp  Webdings.ttf
 
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
+    # using buildCommand means no phases are run
+    # so we run the function ourselves
+    installFonts
 
     # Also put the EULA there to be on the safe side.
     cp ${eula} $out/share/fonts/truetype/eula.html
@@ -137,11 +145,13 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
-    platforms = platforms.all;
-    license = licenses.unfreeRedistributable;
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfreeRedistributable;
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;

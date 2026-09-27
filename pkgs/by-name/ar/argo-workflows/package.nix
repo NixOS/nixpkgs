@@ -7,18 +7,18 @@
   pkgsBuildBuild,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argo-workflows";
-  version = "3.6.10";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
-    repo = "argo";
-    tag = "v${version}";
-    hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
+    repo = "argo-workflows";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UmkUFuYFeuyqgdf/ByZkkulkVRregp53bvcyyEKgZQo=";
   };
 
-  vendorHash = "sha256-Y/2+ykzcJdA5uwP1v9Z1wZtF3hBV2x7XZc7+FhPJP64=";
+  vendorHash = "sha256-UTBM1zd+HrC5bUadn0VSsO52HhqdPGzZwipQv7WOrNU=";
 
   doCheck = false;
 
@@ -30,23 +30,32 @@ buildGoModule rec {
     installShellFiles
   ];
 
+  preBuild = ''
+    mkdir -p ui/dist/app
+    # This build target could act as a web server, but this is just
+    # acting as a CLI.
+    # Provide a dummy UI file to allow the build to embed something
+    # without actually building the web content
+    echo "Built without static files" > ui/dist/app/index.html
+  '';
+
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
-    "-X github.com/argoproj/argo-workflows/v3.gitCommit=${src.rev}"
-    "-X github.com/argoproj/argo-workflows/v3.gitTag=${src.rev}"
-    "-X github.com/argoproj/argo-workflows/v3.gitTreeState=clean"
-    "-X github.com/argoproj/argo-workflows/v3.version=${version}"
+    "-X github.com/argoproj/argo-workflows/v4.buildDate=unknown"
+    "-X github.com/argoproj/argo-workflows/v4.gitCommit=${finalAttrs.src.rev}"
+    "-X github.com/argoproj/argo-workflows/v4.gitTag=${finalAttrs.src.rev}"
+    "-X github.com/argoproj/argo-workflows/v4.gitTreeState=clean"
+    "-X github.com/argoproj/argo-workflows/v4.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       ${
         if (stdenv.buildPlatform == stdenv.hostPlatform) then
           "$out/bin/argo"
         else
-          "${pkgsBuildBuild.argo}/bin/argo"
+          "${pkgsBuildBuild.argo-workflows}/bin/argo"
       } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done
@@ -55,10 +64,13 @@ buildGoModule rec {
   meta = {
     description = "Container native workflow engine for Kubernetes";
     mainProgram = "argo";
-    homepage = "https://github.com/argoproj/argo";
-    changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/argoproj/argo-workflows";
+    changelog = "https://github.com/argoproj/argo-workflows/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ groodt ];
+    maintainers = with lib.maintainers; [
+      groodt
+      joibel
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

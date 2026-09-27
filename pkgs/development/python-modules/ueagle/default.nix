@@ -2,35 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ueagle";
   version = "0.0.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jcalbert";
     repo = "uEagle";
-    rev = version;
-    sha256 = "1hxwk5alalvmhc31y917dxsnbiwq1xci2krma3235581319xr3w7";
+    tag = finalAttrs.version;
+    hash = "sha256-h4/cUxgBlTLEUDVPEVkPmMdldW8nJB8Gg3VTRVWZvMM=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "uEagle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library Rainforest EAGLE devices";
     homepage = "https://github.com/jcalbert/uEagle";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

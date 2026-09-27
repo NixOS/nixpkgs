@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  typescript,
+  typescript_5,
   esbuild,
   makeWrapper,
   nodejs,
@@ -22,7 +22,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-HB4boWgZWoG+ib+cCoQbUmrrV5rECR3dMwj2lCyJjT0=";
   nativeBuildInputs = [
     esbuild
-    typescript
+    typescript_5
     makeWrapper
   ];
 
@@ -48,11 +48,11 @@ buildNpmPackage rec {
       --prefix PATH : "${lib.makeBinPath [ nodejs ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opcua client with blessed (ncurses)";
     homepage = "https://github.com/node-opcua/opcua-commander";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonboh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jonboh ];
     mainProgram = "opcua-commander";
   };
 }

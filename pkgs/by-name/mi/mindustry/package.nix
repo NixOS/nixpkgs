@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "152.2";
+  version = "160.5";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-DRH6Gd/NOXvTZAMu3qcpEk6Ii1l7NMPLd8+RLUyt7yE=";
+    hash = "sha256-mXcRjGdge3gdAS4+iQRymj7CClcCqcKHCY/LOX6aM90=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-TfDgzApR9LlnVVUOgIZu5pSLzbGlqrsXqzUN88lYN8s=";
+    hash = "sha256-eddeIEpI8EEKeZgUq/vzsFN6hMgCQZILxL18yNXynoU=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
-    # This is pinned in Arc's arc-core/build.gradle
-    tag = "v0.11";
-    hash = "sha256-jybIILdK3cqyZ2LIuoWDfZWocVTbKszekKCLil0WXRY=";
+    # This is pinned in Arc's build.gradle
+    tag = "2026.09.04";
+    hash = "sha256-g8ZELw+hB9x7/HnmNzvXihGTBqpigdtScvYbrhvlZVM=";
   };
 
   desktopItem = makeDesktopItem {
@@ -92,14 +92,45 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-  ];
-
   postPatch = ''
     # Ensure the prebuilt shared objects don't accidentally get shipped
     rm -r Arc/natives/natives-*/libs/*
     rm -r Arc/backends/backend-*/libs/*
+    rm -f Arc/arc-core/unsafe/unsafe.jar
+
+    # Remove unbuildable Android
+    substituteInPlace Arc/settings.gradle \
+      --replace-fail 'include ":natives:natives-android"' ""
+    rm Arc/backends/backend-android/build.gradle
+
+    # avoid a circular dependency with rebuilding those
+    pushd Arc/arc-core/unsafe/
+    javac --target 8 --source 8 -d . UnsafeBuffers.java
+    javac --target 16 --source 16 -d . Java16Buffers.java
+    jar cvf unsafe.jar arc
+    rm -r arc
+    popd
+
+    # We need to mock those as otherwise mitmCache tries to download them
+    pushd Arc/backends/backend-sdl/
+    mkdir -p build/jnigen/sources/
+    touch build/jnigen/sources/glew.zip
+    touch build/jnigen/sources/sdlmingw.tar.gz
+    popd
+
+    # force jnigen to use nixpkgs cc-wrapper
+    for file in \
+      Arc/arc-core/build.gradle \
+      Arc/extensions/freetype/build.gradle \
+      Arc/extensions/filedialogs/build.gradle
+    do
+      substituteInPlace "$file" \
+        --replace-fail "addLinux(x64, x86)" "addLinux(x64, x86)
+            each({it.os == Linux}){ compilerPrefix = '${stdenv.cc}/bin/' }"
+    done
+    substituteInPlace Arc/backends/backend-sdl/build.gradle \
+      --replace-fail "addLinux(x64, x86){" "addLinux(x64, x86){
+          compilerPrefix = '${stdenv.cc}/bin/'"
 
     cd Mindustry
 
@@ -155,16 +186,17 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    gradle jnigenBuild
-    gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    gradle jnigenBuildLinux_x86_64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/build/natives/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/build/natives/*/* natives/natives-freetype-desktop/libs/
+    cp extensions/filedialogs/build/natives/*/* natives/natives-filedialogs/libs/
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed $glewlib \
-      --add-needed $sdllib
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+      --add-needed "${lib.getLib glew}/lib/libGLEW.so" \
+      --add-needed "${lib.getLib SDL2}/lib/libSDL2.so"
+    gradle jnigenPackageAllDesktop
     popd
 
     gradle desktop:dist
@@ -239,9 +271,8 @@ stdenv.mkDerivation {
     ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      chkno
       fgaz
-      thekostins
+      indium114
     ];
     platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin

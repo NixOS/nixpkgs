@@ -7,16 +7,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "oterm";
-  version = "0.14.6";
+  version = "0.14.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
-    tag = version;
-    hash = "sha256-Awixn456RGMNfyhPN1rEzyptzUW6AEkxBKgIk5c8kIc=";
+    tag = finalAttrs.version;
+    hash = "sha256-f8UUWQtn+lG0mzO7i6LWDoNwGBLFbIbGdqAptNgoek4=";
   };
 
   pythonRelaxDeps = [
@@ -61,7 +61,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -70,9 +69,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Text-based terminal client for Ollama";
     homepage = "https://github.com/ggozad/oterm";
-    changelog = "https://github.com/ggozad/oterm/releases/tag/${src.tag}";
+    changelog = "https://github.com/ggozad/oterm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelj ];
     mainProgram = "oterm";
   };
-}
+})

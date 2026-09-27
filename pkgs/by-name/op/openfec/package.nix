@@ -6,12 +6,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfec";
   version = "1.4.2.12";
 
   src = fetchzip {
-    url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
+    url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     hash = "sha256-KOP3LqCZHdEgm+XhzBdNxnJipGC4gpvA57T7mIeSyaE=";
   };
 
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application-level Forward Erasure Correction codes";
     homepage = "https://github.com/roc-streaming/openfec";
-    license = licenses.cecill-c;
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    license = lib.licenses.cecill-c;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
-}
+})

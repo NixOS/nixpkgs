@@ -7,13 +7,13 @@
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "wasm";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "nneonneo";
     repo = "ghidra-wasm-plugin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JFUPhh4WUcfxYow3kLMyva1Ni/cQBIit983o/KbbKps=";
+    hash = "sha256-2JNenzUac/OpjQ+fN1MkP8E2KIT1Ifn+C/18buSpqrE=";
   };
 
   nativeBuildInputs = [ ant ];
@@ -36,5 +36,6 @@ buildGhidraExtension (finalAttrs: {
     changelog = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.BonusPlay ];
+    broken = true; # Until updated to support 12.1.2
   };
 })

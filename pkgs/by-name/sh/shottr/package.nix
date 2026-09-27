@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shottr";
-  version = "1.9";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://shottr.cc/dl/Shottr-${finalAttrs.version}.dmg";
-    hash = "sha256-Zk2VAjQGx/qH2IwUmgMC+4q0O7Sq3zx/epvJpER4BbA=";
+    hash = "sha256-iaZMZhXNOVUzYijpT/rx10zGne+IxwAW5X35tI2sI6U=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://shottr.cc/";
     license = lib.licenses.unfree;
     mainProgram = "shottr";
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [ _4evy ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

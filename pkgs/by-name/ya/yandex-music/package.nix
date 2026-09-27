@@ -102,7 +102,6 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram "$out/bin/yandex-music"                                        \
       --set-default YANDEX_MUSIC_CONFIG "$CONFIG_FILE"
 
-    install -Dm644 "./app/favicon.png" "$out/share/pixmaps/yandex-music.png"
     install -Dm644 "./app/favicon.png" "$out/share/icons/hicolor/48x48/apps/yandex-music.png"
     install -Dm644 "./app/favicon.svg" "$out/share/icons/hicolor/scalable/apps/yandex-music.svg"
 

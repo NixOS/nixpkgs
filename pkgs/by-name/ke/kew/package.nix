@@ -9,6 +9,7 @@
   faad2,
   fetchFromGitHub,
   fftwFloat,
+  gdk-pixbuf,
   glib,
   libogg,
   libopus,
@@ -33,13 +34,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.6.4";
+  version = "4.3.6";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PhNBAy+XS1wpU91GNoRc4jume9razD03xmmUER0p8I0=";
+    hash = "sha256-Gp/A1UrbzjUFT2Og5OjaO1sHEcIYRkKSMluGdUBUA5g=";
   };
 
   postPatch = ''
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat.dev
     chafa
     curl.dev
+    gdk-pixbuf
     glib.dev
     libopus
     opusfile
@@ -81,14 +83,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
-    "PREFIX=${placeholder "out"}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -102,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       demine
+      ddogfoodd
       matteopacini
     ];
     mainProgram = "kew";

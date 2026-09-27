@@ -5,6 +5,7 @@
   python3,
   unbound,
   libreswan,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   pythonPath = with python3.pkgs; [
     dnspython
     m2crypto
+    openssl
     python-gnupg
     pyunbound
   ];
@@ -56,9 +58,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Various tools to generate special DNS records";
     homepage = "https://github.com/letoams/hash-slinger";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

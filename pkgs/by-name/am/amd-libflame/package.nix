@@ -13,15 +13,15 @@
   withAMDOpt ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amd-libflame";
-  version = "5.1";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
-    tag = version;
-    hash = "sha256-9Z0e6RCJfqQlq3oT4fBu8rwPH1OWEKQ52rVDa0Y0rJU=";
+    tag = finalAttrs.version;
+    hash = "sha256-Zl9qw8pb2z7+SKJujHg3/NVt0m2gdmFE6cVXS7wGzAI=";
   };
 
   postPatch = ''
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libflame.so $out/lib/liblapacke.so.3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

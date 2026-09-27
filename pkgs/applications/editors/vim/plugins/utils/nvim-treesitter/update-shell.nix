@@ -5,9 +5,9 @@
 with pkgs;
 
 let
-  pythonWithPackages = python3.withPackages (
+  luaWithPackages = luajit.withPackages (
     ps: with ps; [
-      requests
+      json
     ]
   );
 in
@@ -15,6 +15,8 @@ in
 mkShell {
   packages = [
     nurl
-    pythonWithPackages
+    python3
+    luaWithPackages
   ];
+  env.NVIM_TREESITTER = vimPlugins.nvim-treesitter;
 }

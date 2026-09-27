@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Utility for translation of strings and f-strings in Python files";
     homepage = "https://github.com/janezd/trubar";
     changelog = "https://github.com/janezd/trubar/releases/tag/${version}";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

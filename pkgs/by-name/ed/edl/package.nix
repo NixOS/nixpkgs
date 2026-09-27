@@ -8,23 +8,22 @@
 
 python3Packages.buildPythonPackage {
   pname = "edl";
-  version = "3.52.1-unstable-2025-09-10";
+  version = "3.52.1-unstable-2025-12-17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "edl";
-    rev = "334028cd887a2960867750c403dbcad9cbe8c46b";
+    rev = "dffc6833ad51fb7e561c7c2bd26057edd18d9f7a";
     fetchSubmodules = true;
-    hash = "sha256-OYrncVbCJkeONeztfj7cB3QW1Q0tlF1b/LeuMqKiblk=";
+    hash = "sha256-wdcA+pw7kUA7kSWIv6Wi+vmFFWGuC5LLds1oeEeGpOE=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     pyusb
     pyserial
     docopt
-    pylzma
-    pycryptodome
+    pycryptodomex
     lxml
     colorama
     capstone
@@ -49,12 +48,12 @@ python3Packages.buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bkerler/edl";
     description = "Qualcomm EDL tool (Sahara / Firehose / Diag)";
     # See https://github.com/NixOS/nixpkgs/issues/348931
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       lorenz
       xddxdd
     ];

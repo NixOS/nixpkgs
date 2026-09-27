@@ -8,7 +8,6 @@
   httpx,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   starlette,
   trio,
   uvicorn,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-ws";
-  version = "0.7.2";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-ws";
     tag = "v${version}";
-    hash = "sha256-ixaD7X6V/tUalZbYtic7D9lRqv8yGnwl+j5m832n/hQ=";
+    hash = "sha256-e6D3sU6eWjsZnURIv1WfkSr54AMdDP9kHd263awzNsI=";
   };
 
   # we don't need to use the hatch-regex-commit plugin
@@ -61,11 +58,11 @@ buildPythonPackage rec {
     "tests/test_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
-    changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/frankie567/httpx-ws/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

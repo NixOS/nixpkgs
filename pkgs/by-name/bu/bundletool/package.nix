@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bundletool";
-  version = "1.18.2";
+  version = "1.18.3";
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
-    sha256 = "sha256-N4tUNM0TeL72srxSe4x/D/JYSyc4MDNbzlTW0IE8hYQ=";
+    sha256 = "sha256-oJnPoVQ/VVk7wu0Wpwp8Z/5UsXR7tzAfN/39bZECjik=";
   };
 
   dontUnpack = true;
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://developer.android.com/studio/command-line/bundletool";
     changelog = "https://github.com/google/bundletool/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     platforms = jre_headless.meta.platforms;
     license = lib.licenses.asl20;
   };

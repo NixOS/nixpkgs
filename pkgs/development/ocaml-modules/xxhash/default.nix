@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  xxHash,
+  pkgs,
   ctypes,
   ctypes-foreign,
   dune-configurator,
@@ -33,7 +33,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ctypes
     ctypes-foreign
-    xxHash
+    pkgs.xxhash
   ];
 
   doCheck = true;
@@ -45,7 +45,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/314eter/ocaml-xxhash";
     description = "Bindings for xxHash, an extremely fast hash algorithm";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toastal ];
   };
 }

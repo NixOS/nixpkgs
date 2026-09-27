@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.simple = callPackage ./test.nix { frog = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
     homepage = "https://languagemachines.github.io/frog";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ roberth ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ roberth ];
 
     longDescription = ''
       Frog is an integration of memory-based natural language processing (NLP) modules developed for Dutch. All NLP modules are based on Timbl, the Tilburg memory-based learning software package. Most modules were created in the 1990s at the ILK Research Group (Tilburg University, the Netherlands) and the CLiPS Research Centre (University of Antwerp, Belgium). Over the years they have been integrated into a single text processing tool, which is currently maintained and developed by the Language Machines Research Group and the Centre for Language and Speech Technology at Radboud University Nijmegen. A dependency parser, a base phrase chunker, and a named-entity recognizer module were added more recently. Where possible, Frog makes use of multi-processor support to run subtasks in parallel.

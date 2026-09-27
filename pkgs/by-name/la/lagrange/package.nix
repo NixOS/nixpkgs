@@ -9,7 +9,7 @@
   harfbuzz,
   libogg,
   libwebp,
-  libX11,
+  libx11,
   mpg123,
   opusfile,
   SDL2,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.19.3";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GyX4LKe2SHRlHqRfh7yAkOyISo/N3rhpkARevUmuLbc=";
+    hash = "sha256-n/zM3+10Ns2RDhOIqzuanvotsCHfoC1CqLQug0xJF9E=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libogg
     libwebp
-    libX11
+    libx11
     mpg123
     opusfile
     SDL2
@@ -71,12 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { attrPath = "lagrange"; };
   };
 
   meta = {
     description = "Beautiful Gemini Client";
     homepage = "https://gmi.skyjake.fi/lagrange/";
+    mainProgram = "lagrange";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;

@@ -15,7 +15,6 @@
   # tests
   beautifulsoup4,
   brotli,
-  calmjs,
   csscompressor,
   django-sekizai,
   jinja2,
@@ -52,7 +51,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     brotli
-    calmjs
     csscompressor
     django-sekizai
     jinja2
@@ -68,14 +66,16 @@ buildPythonPackage rec {
   disabledTests = [
     # we set mtime to 1980-01-02
     "test_css_mtimes"
+    # calmjs removed from test deps, because it requires pkg_resources at runtime
+    "test_calmjs_filter"
   ];
 
   pythonImportsCheck = [ "compressor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
     homepage = "https://django-compressor.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

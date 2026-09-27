@@ -7,13 +7,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lexbor";
-  version = "2.6.0";
+
+  # https://github.com/lexbor/lexbor/blob/${finalAttr.src.rev}/source/lexbor/core/base.h#L29-L31
+  version = "3.1.0-unstable-2026-09-17";
 
   src = fetchFromGitHub {
     owner = "lexbor";
     repo = "lexbor";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-l+pIUjHqt+pOyEUKoPQm0i9soQUkxLzLMQDStIiycAw=";
+    rev = "61ef2bc586e1a8a42d257b5b3e6a83689d4b8bce";
+    hash = "sha256-XwalZYWJ33t92ld7MlhKefm8BK6zdsZzJp/KIpRQG+Y=";
   };
 
   nativeBuildInputs = [
@@ -23,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source HTML Renderer library";
     homepage = "https://github.com/lexbor/lexbor";
-    changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     mainProgram = "lexbor";
     platforms = lib.platforms.all;
   };

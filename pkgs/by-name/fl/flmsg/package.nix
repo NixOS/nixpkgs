@@ -2,28 +2,36 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.0.23";
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.0.24";
   pname = "flmsg";
-
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3eR0wrzkNjlqm5xW5dtgihs33cVUmZeS0/rf+xnPeRY=";
+    url = "mirror://sourceforge/fldigi/flmsg-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-kzQHmND5zK/Hy40Z0RRstnJ5x5cjxDax0l2idjmeBpQ=";
   };
 
+  #This has been reported to upstream via email : w1hkj@w1hkj.com
+  patches = [
+    ./add-missing-pthread-include.patch
+  ];
+
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 
   nativeBuildInputs = [
     pkg-config
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Digital modem message program";
@@ -33,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "flmsg";
   };
-}
+})

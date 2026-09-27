@@ -89,9 +89,9 @@ in
         ]
         ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
-        ExecStart = ''${pkgs.containerd}/bin/containerd ${
+        ExecStart = "${pkgs.containerd}/bin/containerd ${
           lib.concatStringsSep " " (lib.cli.toCommandLineGNU { } cfg.args)
-        }'';
+        }";
         Delegate = "yes";
         KillMode = "process";
         Type = "notify";

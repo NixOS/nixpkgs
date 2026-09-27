@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library for import of reflowable e-book formats";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ raskin ];

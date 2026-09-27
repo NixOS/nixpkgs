@@ -9,15 +9,15 @@
   libconfuse,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "watchdogd";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "watchdogd";
-    rev = version;
-    hash = "sha256-JNJj0CJGJXuIRpob2RXYqDRrU4Cn20PRxOjQ6TFsVYQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-Q3j16hxDwusZdmIjHm/CVi7VrwRziPGERAvJ3F/Bvdg=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced system & process supervisor for Linux";
     homepage = "https://troglobit.com/watchdogd.html";
-    changelog = "https://github.com/troglobit/watchdogd/releases/tag/${version}";
+    changelog = "https://github.com/troglobit/watchdogd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ vifino ];
   };
-}
+})

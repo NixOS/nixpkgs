@@ -12,6 +12,7 @@
 
   # buildInputs
   libopus,
+  oniguruma,
   openssl,
   sentencepiece,
   alsa-lib,
@@ -42,18 +43,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moshi";
-  version = "0.2.5";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "moshi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MkZsLRQE5Swdyp9l/cvPvznWxRfKuYecj+TTgb3ufKU=";
+    tag = "moshi-v${finalAttrs.version}";
+    hash = "sha256-Q+3amcF3T53z/ViCBmjpyfJmZVoRAGzP4yBsnorjxU8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
 
-  cargoHash = "sha256-BxV8oZlN+6cVb3GwhY7TKWxHEpY3WVEhN6A6+5NMOyU=";
+  cargoHash = "sha256-C8q0WaDYrLopuuVNjtmXJaPSCojGHfPv+VwWGbY5VBU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -74,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libopus
+    oniguruma
     openssl
     sentencepiece
   ]
@@ -81,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals config.cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
@@ -92,7 +94,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isDarwin [ "metal" ]
     ++ lib.optionals config.cudaSupport [ "cuda" ];
 
-  env = lib.optionalAttrs config.cudaSupport {
+  env = {
+    # use system oniguruma
+    RUSTONIG_SYSTEM_LIBONIG = true;
+
+    # Otherwise the build fails with python>=3.14
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+  }
+  // lib.optionalAttrs config.cudaSupport {
     CUDA_COMPUTE_CAP = cudaCapability';
 
     # We already list CUDA dependencies in buildInputs
@@ -114,7 +123,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       );
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--generate-lockfile" ];
+      extraArgs = [
+        "--generate-lockfile"
+        "--version-regex=moshi-v(.*)"
+      ];
     };
   };
 
@@ -123,9 +135,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/kyutai-labs/moshi";
     # The rust implementation is licensed under Apache
     # https://github.com/kyutai-labs/moshi/tree/main/rust#license
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;
     mainProgram = "moshi-cli";
+    problems = lib.optionalAttrs (config.cudaSupport && (cudaPackages.cudaAtLeast "12.9")) {
+      unsupported-cuda-version = {
+        message = ''
+          cudaPackages is too new (${cudaPackages.cudaMajorMinorVersion}).
+          Version 0.16.2 of the cudarc crate asks for a CUDA version older than 12.9.
+          Please override cudaPackages with an older version.
+        '';
+        kind = "broken";
+      };
+    };
   };
 })

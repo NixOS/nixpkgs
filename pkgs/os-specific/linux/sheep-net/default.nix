@@ -6,7 +6,8 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "sheep_net";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "sheep_net";
   version = basiliskii.version;
   src = basiliskii.src;
   sourceRoot = "${finalAttrs.src.name}/BasiliskII/src/Unix/Linux/NetDriver";
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/kanjitalk755/macemu";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;

@@ -5,14 +5,14 @@
   pkg-config,
   installShellFiles,
   buildGoModule,
+  buildPackages,
   gpgme,
-  lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
   libselinux,
+  # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
   systemd,
-  go-md2man,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -21,6 +21,7 @@
   extraPackages ? [ ],
   crun,
   runc,
+  krunkit,
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
@@ -41,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "5.8.7";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-container-tools";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
+    hash = "sha256-E13EjBqCK/ABVxWJSZKn6vqpYXjTqqoBR5N7YnOqURI=";
   };
 
   patches = [
@@ -70,7 +71,6 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    go-md2man
     installShellFiles
     makeBinaryWrapper
     python3
@@ -82,13 +82,13 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    lvm2
     systemd
   ];
 
   env = {
     HELPER_BINARIES_DIR = "${placeholder "out"}/libexec/podman"; # used in buildPhase & installPhase
     PREFIX = "${placeholder "out"}";
+    GOMD2MAN = "${buildPackages.go-md2man}/bin/go-md2man";
   };
 
   buildPhase = ''
@@ -146,7 +146,6 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -156,6 +155,8 @@ buildGoModule (finalAttrs: {
         podman-tls-ghostunnel
         ;
       oci-containers-podman = nixosTests.oci-containers.podman;
+      oci-containers-podman-rootless-conmon = nixosTests.oci-containers.podman-rootless-conmon;
+      oci-containers-podman-rootless-healthy = nixosTests.oci-containers.podman-rootless-healthy;
     };
     # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
     binPath = lib.makeBinPath (
@@ -166,9 +167,8 @@ buildGoModule (finalAttrs: {
         iproute2
         nftables
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        vfkit
-      ]
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform vfkit) vfkit
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
       ++ extraPackages
     );
 
@@ -176,18 +176,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns # dns
+          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
+        ]
+        ++ extraRuntimes;
     };
   };
 
@@ -199,9 +200,10 @@ buildGoModule (finalAttrs: {
 
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
-    changelog = "https://github.com/containers/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
+    changelog = "https://github.com/podman-container-tools/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.unix;
   };
 })

@@ -14,8 +14,8 @@ in
     ];
   };
 
-  nodes = {
-    victoriametrics =
+  containers = {
+    vmserver =
       { pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.jq ];
@@ -34,7 +34,7 @@ in
         services.vmagent = {
           enable = true;
           remoteWrite = {
-            url = "http://victoriametrics:8428/api/v1/write";
+            url = "http://vmserver:8428/api/v1/write";
             basicAuthUsername = username;
             basicAuthPasswordFile = toString passwordFile;
           };
@@ -71,13 +71,13 @@ in
     node.wait_for_unit("prometheus-node-exporter")
     node.wait_for_open_port(9100)
 
-    victoriametrics.wait_for_unit("victoriametrics")
-    victoriametrics.wait_for_open_port(8428)
+    vmserver.wait_for_unit("victoriametrics")
+    vmserver.wait_for_open_port(8428)
 
     vmagent.wait_for_unit("vmagent")
 
     # check remote write
-    victoriametrics.wait_until_succeeds(
+    vmserver.wait_until_succeeds(
       "curl --user '${username}:${password}' -sf 'http://localhost:8428/api/v1/query?query=node_exporter_build_info\{instance=\"node:9100\"\}' | "
       + "jq '.data.result[0].value[1]' | grep '\"1\"'"
     )

@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poselib";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "PoseLib";
     repo = "PoseLib";
-    rev = "v${final.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fARRKT2UoPuuk9FOOsBdrACwGiGXWg/mLV4R0QIjeak=";
   };
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation (final: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "A collection of minimal solvers for camera pose estimation";
     homepage = "https://github.com/PoseLib/PoseLib";
-    changelog = "https://github.com/PoseLib/PoseLib/releases/tag/v${final.version}";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ usertam ];
+    changelog = "https://github.com/PoseLib/PoseLib/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ usertam ];
   };
 })

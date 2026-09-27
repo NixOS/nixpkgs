@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "toml-adapt";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
@@ -34,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "toml_adapt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Command-line interface for manipulating toml files";
     homepage = "https://github.com/firefly-cpp/toml-adapt";
     changelog = "https://github.com/firefly-cpp/toml-adapt/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
     mainProgram = "toml-adapt";
   };
 }

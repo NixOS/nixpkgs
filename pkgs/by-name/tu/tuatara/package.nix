@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ zig_0_13.hook ];
+  nativeBuildInputs = [ zig_0_13 ];
 
   preBuild = ''
     export ZIG_LOCAL_CACHE_DIR=$TMPDIR/zig-cache

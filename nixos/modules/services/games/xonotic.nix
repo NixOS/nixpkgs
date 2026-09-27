@@ -22,7 +22,7 @@ let
 
           value = (
             if lib.isList option then
-              builtins.concatStringsSep " " (builtins.map (x: toValue x) option)
+              builtins.concatStringsSep " " (map (x: toValue x) option)
             else
               toValue option
           );

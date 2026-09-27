@@ -8,7 +8,7 @@
   valgrind,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lockdep";
 
   # it would be nice to be able to pick a kernel version in sync with something
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "5.0.21";
   fullver = "5.0.21";
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+    url = "mirror://kernel/linux/kernel/v5.x/linux-${finalAttrs.version}.tar.xz";
     sha256 = "1my2m9hvnvdrvzcg0fgqgaga59y2cd5zlpv7xrfj2nn98sjhglwq";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   lib,
 }:
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "prodict";
   version = "0.8.6";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramazanpolat";
@@ -20,7 +18,7 @@ buildPythonPackage rec {
   };
 
   # make setuptools happy on case-sensitive filesystems
-  postPatch = ''if [[ ! -f README.md ]]; then mv README.MD README.md; fi'';
+  postPatch = "if [[ ! -f README.md ]]; then mv README.MD README.md; fi";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

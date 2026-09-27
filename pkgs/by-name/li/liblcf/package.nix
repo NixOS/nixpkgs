@@ -10,7 +10,7 @@
   inih,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblcf";
   # When updating this package, you should probably also update
   # easyrpg-player and libretro.easyrpg
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jIk55+n8wSk3Z3FPR18SE7U3OuWwmp2zJgvSZQBB2l0=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
     homepage = "https://github.com/EasyRPG/liblcf";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

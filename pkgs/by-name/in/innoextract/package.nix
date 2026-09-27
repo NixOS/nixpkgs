@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   makeWrapper,
-  boost,
+  boost188,
   xz,
   libiconv,
   withGog ? false,
@@ -25,7 +25,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     xz
-    boost
+    # pin to oplder boost188 as boost189
+    # fails to find cmake bits: https://github.com/dscharrer/innoextract/pull/199
+    boost188
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -48,12 +50,12 @@ stdenv.mkDerivation {
   # use unstable as latest release does not yet support cmake-4
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "innoextract";
   };
 }

@@ -1,45 +1,71 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  deno,
-  makeWrapper,
-  nixosTests,
+  fetchFromGitHub,
+  buildNpmPackage,
+  rustPlatform,
+  replaceVars,
+  versionCheckHook,
 }:
-stdenv.mkDerivation (finalAttrs: {
-  pname = "silverbullet";
-  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-O0QuzbY/ZdhOZvsUcgpZ55E+CSxbAsRxJmBQird5vCk=";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "silverbullet";
+  version = "2.11.0";
+
+  src = fetchFromGitHub {
+    owner = "silverbulletmd";
+    repo = "silverbullet";
+    rev = finalAttrs.version;
+    hash = "sha256-aEqmvxtWzvXM8Cv8YrHK9o0G2jlbeqqahAveKr6M+Ps=";
   };
 
-  dontUnpack = true;
+  cargoHash = "sha256-t2RDrdZsCMReDGUUu3r59OAosZNY3TMlvjo/uM2xL8g=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  cargoBuildFlags = [
+    "-p"
+    "silverbullet"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/{bin,lib}
-    cp $src $out/lib/silverbullet.js
-    makeWrapper ${lib.getExe deno} $out/bin/silverbullet \
-        --set DENO_NO_UPDATE_CHECK "1" \
-        --add-flags "run -A --unstable-kv --unstable-worker-options ${placeholder "out"}/lib/silverbullet.js"
-    runHook postInstall
+  frontend = buildNpmPackage {
+    pname = "silverbullet-frontend";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-EseKAqUJbpIAfJhG1hNlvLgMie/jsXbbVqwea8bEuJQ=";
+
+    patches = [
+      (replaceVars ./override-version.patch { inherit (finalAttrs) version; })
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r client_bundle version.json $out/
+
+      runHook postInstall
+    '';
+  };
+
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/client_bundle .
+    cp ${finalAttrs.frontend}/version.json .
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) silverbullet;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
+    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/docs/CHANGELOG.md";
     description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aorith ];
+    maintainers = with lib.maintainers; [
+      aorith
+      CnTeng
+    ];
     mainProgram = "silverbullet";
-    inherit (deno.meta) platforms;
   };
 })

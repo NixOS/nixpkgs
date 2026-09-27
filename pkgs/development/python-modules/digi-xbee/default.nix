@@ -1,25 +1,28 @@
 {
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pyserial,
   srp,
   lib,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "digi-xbee";
   version = "1.5.0";
-  format = "setuptools";
-  disabled = isPy27;
+
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchPypi {
     pname = "digi_xbee";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-amUrhHIpeRHuShD0cxb2sbbRTpJQZ9/b8otsa1Bo+bI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyserial
     srp
   ];
@@ -45,10 +48,11 @@ buildPythonPackage rec {
     "digi.xbee.xsocket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
+    changelog = "https://github.com/digidotcom/xbee-python/blob/${finalAttrs.version}/CHANGELOG.rst";
     homepage = "https://github.com/digidotcom/xbee-python";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ jefflabonte ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ jefflabonte ];
   };
-}
+})

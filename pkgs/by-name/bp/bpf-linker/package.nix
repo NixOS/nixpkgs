@@ -1,40 +1,42 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   btfdump,
   rustc,
+  # Override this if you are compiling your BPF programs with a version of
+  # rustc that uses a different LLVM version, for example when using a rust
+  # overlay.
+  llvmPackagesForLinker ? rustc.llvmPackages,
   zlib,
   libxml2,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.15";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = "bpf-linker";
     tag = "v${version}";
-    hash = "sha256-5HXYtAn6KaFXsiA3Nt0IwmFLOXBhZWYrD8cMZ8rZ1fk=";
+    hash = "sha256-qo5cJBZQHsbKSL+6YA0vcmPCo76pg2soekWziysXTDM=";
   };
 
-  cargoHash = "sha256-coIcd6WjVQM/b51jwkG8It/wubXx6wuuPlzzelPFE38=";
+  cargoHash = "sha256-uiJQZ4U3lW2Vs1Dbb1v+eIgSNaLnd5MKpZi0O8KwGRE=";
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "llvm-${lib.versions.major rustc.llvm.version}" ];
-
-  nativeBuildInputs = [ rustc.llvm ];
+  buildFeatures = [ "llvm-${lib.versions.major llvmPackagesForLinker.llvm.version}" ];
 
   buildInputs = [
     zlib
     libxml2
+    (lib.getLib llvmPackagesForLinker.llvm)
   ];
 
   nativeCheckInputs = [
     btfdump
-    rustc.llvmPackages.clang.cc
+    llvmPackagesForLinker.clang.cc
+    llvmPackagesForLinker.llvm
   ];
 
   meta = {
@@ -46,8 +48,5 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ nickcao ];
-    # llvm-sys crate locates llvm by calling llvm-config
-    # which is not available when cross compiling
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

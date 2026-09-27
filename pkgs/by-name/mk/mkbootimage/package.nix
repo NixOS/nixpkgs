@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   elfutils,
-  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/NixOS/nixpkgs/pull/271568
   buildInputs = [
     elfutils
-    pcre
   ];
 
   postPatch = ''
@@ -39,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source replacement of the Xilinx bootgen application";
     homepage = "https://github.com/antmicro/zynq-mkbootimage";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.fsagbuya ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.fsagbuya ];
     mainProgram = "mkbootimage";
   };
 })

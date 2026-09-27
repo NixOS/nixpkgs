@@ -2,8 +2,8 @@
 {
   name = "peering-manager";
 
-  meta = with lib.maintainers; {
-    maintainers = [ yuka ];
+  meta = {
+    maintainers = with lib.maintainers; [ yureka-wdz ];
   };
 
   nodes.machine =
@@ -18,7 +18,7 @@
     };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     ''
       machine.start()
       machine.wait_for_unit("peering-manager.target")

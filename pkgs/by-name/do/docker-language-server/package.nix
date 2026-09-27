@@ -1,15 +1,18 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
   docker,
   gotestsum,
   versionCheckHook,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "docker-language-server";
   version = "0.20.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
@@ -19,6 +22,10 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-ztA+/4l180UKTKrsqTyysDcD4oQSDgnBYUaiKDF6LvI=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     docker
@@ -51,8 +58,14 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd '${finalAttrs.meta.mainProgram}' \
+      --bash <("$out/bin/${finalAttrs.meta.mainProgram}" completion bash) \
+      --zsh <("$out/bin/${finalAttrs.meta.mainProgram}" completion zsh) \
+      --fish <("$out/bin/${finalAttrs.meta.mainProgram}" completion fish)
+  '';
 
   meta = {
     description = "Language server for providing language features for file types in the Docker ecosystem (Dockerfiles, Compose files, and Bake files)";

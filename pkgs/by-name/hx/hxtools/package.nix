@@ -1,44 +1,43 @@
 {
   lib,
+  stdenv,
+  fetchFromCodeberg,
+  pkg-config,
+  autoreconfHook,
   bash,
-  fetchurl,
-  libHX,
-  makeWrapper,
   perl,
   perlPackages,
-  stdenv,
-  pkg-config,
-  zstd,
+  libhx,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hxtools";
-  version = "20250309";
+  version = "20251011";
 
-  src = fetchurl {
-    url = "https://inai.de/files/hxtools/hxtools-${finalAttrs.version}.tar.zst";
-    hash = "sha256-2ItcEiMe0GzgJ3MxZ28wjmXGSbZtc7BHpkpKIAodAwA=";
+  src = fetchFromCodeberg {
+    tag = "rel-${finalAttrs.version}";
+    owner = "jengelh";
+    repo = "hxtools";
+    hash = "sha256-qwo8QfC1ZEvMTU7g2ZnIX3WQM+xjSPb6Y/inPI20x/g=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    autoreconfHook
     pkg-config
-    zstd
   ];
 
   buildInputs = [
     # Perl and Bash are pulled to make patchShebangs work.
     perl
     bash
-    libHX
-  ];
-
-  postInstall = ''
-    wrapProgram $out/bin/man2html \
-      --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TextCSV_XS ]}"
-  '';
+    libhx
+  ]
+  ++ (with perlPackages; [ TextCSV_XS ]);
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://inai.de/projects/hxtools/";
@@ -50,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ meator ];
+    maintainers = with lib.maintainers; [
+      meator
+      chillcicada
+    ];
     platforms = lib.platforms.all;
   };
 })

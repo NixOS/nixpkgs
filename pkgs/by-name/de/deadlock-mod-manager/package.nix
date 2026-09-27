@@ -4,8 +4,11 @@
   rustPlatform,
   cargo-tauri,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
+  protobuf,
   wrapGAppsHook3,
   desktop-file-utils,
   webkitgtk_4_1,
@@ -23,29 +26,30 @@
   fontconfig,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
-  version = "0.10.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "deadlock-mod-manager";
     repo = "deadlock-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/84P9ONG25Ia1BnRcbzQuJKt8HwstCzf0bkx1Xc9VgU=";
+    hash = "sha256-TqMChiww+Do16T3rJDkRIjILg/DuWx0tphGeQiMSHkA=";
   };
 
   cargoRoot = "apps/desktop";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-wVsr6GwCGuuveTDT6oS1keejx+y+oSuE6dGAjvNRrdE=";
+  cargoHash = "sha256-/Y0f0FRv3DNfoxAbf9FGLTQ6ZplGrD40HRpHf1qsMDE=";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
     pkg-config
+    protobuf
     wrapGAppsHook3
   ];
 
@@ -68,37 +72,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   pnpmRoot = ".";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
-    fetcherVersion = 2;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
     sourceRoot = "source";
-    hash = "sha256-7HhMW28hl2hHi8epcKMTbfuVjKYj+U1N/d2tMcu4aQg=";
+    hash = "sha256-ZxlP6zOwY9Fxa4BCqnUoCmci3lviHn7H3HU5SnmdrSU=";
   };
 
   patches = [
     ./no-updater-artifacts.patch
-    ./disable-update-notice.patch
   ];
 
-  VITE_API_URL = "https://api.deadlockmods.app";
+  env.VITE_API_URL = "https://api.deadlockmods.app";
 
-  # Skip tests that require network access
   checkFlags = [
+    # Requires network access
     "--skip=download_manager::downloader::tests::test_download_file"
+    # Asserts that set_steam_dir rejects a non-Steam directory, but steamlocate
+    # 2.1.0's SteamDir::from_dir only checks that the path is a directory
+    # (further validation is an upstream TODO), so this fails in any environment.
+    "--skip=mod_manager::steam_manager::tests::set_steam_dir_rejects_invalid_directory"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(
       --set FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf"
       --set TAURI_DIST_DIR "$out/share/deadlock-modmanager/dist"
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set DISABLE_UPDATE_DESKTOP_DATABASE 1
       --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
+      --add-flags "--disable-auto-update"
     )
   '';
 

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   setuptools,
   click,
   requests,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cffconvert";
-  version = "2.0.0-unstable-2024-02-12";
+  version = "2.0.0-unstable-2024-04-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "citation-file-format";
     repo = "cffconvert";
-    rev = "5295f87c0e261da61a7b919fc754e3a77edd98a7";
-    hash = "sha256-/2qhWVNylrqPSf1KmuZQahzq+YH860cohVSfJsDm1BE=";
+    rev = "b6045d78aac9e02b039703b030588d54d53262ac";
+    hash = "sha256-zgH9q/Jj/AFoTqi9GJQognngIKtzPvYSWJWVsBdL6xg=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +46,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cffconvert" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     changelog = "https://github.com/citation-file-format/cffconvert/blob/${src.rev}/CHANGELOG.md";

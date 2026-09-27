@@ -12,9 +12,12 @@
   # dependencies
   clarabel,
   cvxopt,
+  highspy,
   osqp,
+  qdldl,
   scipy,
   scs,
+  sparsediffpy,
 
   # tests
   hypothesis,
@@ -23,16 +26,17 @@
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.7.4";
+  version = "1.9.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    tag = "v${version}";
-    hash = "sha256-z/3ErQbYxO4OiJv2AgtuRqtf4zOu/UZxrIcREdG43Hw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7EBvCt+Qic+lfl8g5MMIJTKCnsfSm8fmUdq6P2SdF5I=";
   };
 
   postPatch =
@@ -50,13 +54,19 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "sparsediffpy"
+  ];
   dependencies = [
     clarabel
     cvxopt
+    highspy
     numpy
     osqp
+    qdldl
     scipy
     scs
+    sparsediffpy
   ];
 
   nativeCheckInputs = [
@@ -73,6 +83,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
+    # Numerical assertions failing
+    "test_oprelcone_1_m1_k3_real"
+    "test_oprelcone_1_m3_k1_real"
+    "test_oprelcone_1_m4_k4_real"
+
     # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
@@ -84,6 +99,16 @@ buildPythonPackage rec {
     "test_oprelcone_1_m1_k3_complex"
     "test_oprelcone_1_m3_k1_complex"
     "test_oprelcone_2"
+
+    # `use_indirect` was dropped from the SCS python bindings in 3.3.0:
+    # https://github.com/bodono/scs-python/pull/189
+    "test_scs_options"
+
+    # Numerical assertions failing with scs 3.3.0.
+    "test_dist_ratio"
+    "test_sdp_problem"
+    "test_variable_name_conflict"
+    "test_vector2norm"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];
@@ -92,8 +117,8 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
-}
+})

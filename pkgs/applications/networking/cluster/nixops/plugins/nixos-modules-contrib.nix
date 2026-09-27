@@ -37,10 +37,10 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Useful NixOS modules which may not belong in the Nixpkgs repository itself";
     homepage = "https://github.com/nix-community/nixos-modules-contrib";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
 }

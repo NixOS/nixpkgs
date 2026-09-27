@@ -4,13 +4,13 @@
   fetchFromSourcehut,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qcal";
   version = "0.9.3";
   src = fetchFromSourcehut {
     owner = "~psic4t";
     repo = "qcal";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VnUbell8/9nnx+FBfXSV+jwQ4SwaX0kzZsp9MeD8uT4=";
   };
   vendorHash = null;
@@ -27,12 +27,12 @@ buildGoModule rec {
     cp config-sample.json $out/share/qcal/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI calendar application for CalDAV servers written in Go";
     homepage = "https://git.sr.ht/~psic4t/qcal";
-    changelog = "https://git.sr.ht/~psic4t/qcal/refs/${version}";
-    license = licenses.gpl3;
+    changelog = "https://git.sr.ht/~psic4t/qcal/refs/${finalAttrs.version}";
+    license = lib.licenses.gpl3;
     mainProgram = "qcal";
-    maintainers = with maintainers; [ antonmosich ];
+    maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

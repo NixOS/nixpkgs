@@ -14,12 +14,12 @@ let
   utf8Locale = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mandoc";
   version = "1.14.6";
 
   src = fetchurl {
-    url = "https://mandoc.bsd.lv/snapshots/mandoc-${version}.tar.gz";
+    url = "https://mandoc.bsd.lv/snapshots/mandoc-${finalAttrs.version}.tar.gz";
     sha256 = "8bf0d570f01e70a6e124884088870cbed7537f36328d512909eb10cd53179d9c";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.man;
   };
 
-  meta = with lib; {
+  meta = {
     # check if we can execute binaries for the host platform on the build platform
     # even though the platforms aren't the same. mandoc can't be cross compiled
     # (easily) because of its configurePhase which executes compiled programs
@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     homepage = "https://mandoc.bsd.lv/";
     description = "Suite of tools compiling mdoc and man";
     downloadPage = "http://mandoc.bsd.lv/snapshots/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ramkromberg
       sternenseemann
     ];
     mainProgram = "man";
   };
-}
+})

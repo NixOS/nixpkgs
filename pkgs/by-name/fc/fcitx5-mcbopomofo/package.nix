@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   gettext,
   json_c,
   icu,
@@ -13,24 +14,26 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-mcbopomofo";
-  version = "2.9.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
-    rev = version;
-    hash = "sha256-2TWJsEScC5rMz5dowJOQHA2Mjzsq+d9n2lKXdEWiELU=";
+    rev = finalAttrs.version;
+    hash = "sha256-v4EHYcNEjISsY338a+qsq2yoXEpQ6yTZ7fLW1GILP5M=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     fcitx5
     fmt
     gtest
@@ -39,10 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -53,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ shiphan ];
     platforms = lib.platforms.linux;
   };
-}
+})

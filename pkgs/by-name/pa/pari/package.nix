@@ -3,15 +3,15 @@
   stdenv,
   fetchurl,
   gmp,
-  libX11,
-  libpthreadstubs,
+  libx11,
+  libpthread-stubs,
   perl,
   readline,
   texliveBasic,
   withThread ? true,
 }:
 
-assert withThread -> libpthreadstubs != null;
+assert withThread -> libpthread-stubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp
-    libX11
+    libx11
     perl
     readline
     texliveBasic
   ]
   ++ lib.optionals withThread [
-    libpthreadstubs
+    libpthread-stubs
   ];
 
   configureScript = "./Configure";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "all" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pari.math.u-bordeaux.fr";
     description = "Computer algebra system for high-performance number theory computations";
     longDescription = ''
@@ -77,9 +77,9 @@ stdenv.mkDerivation rec {
         GP language.
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
-    license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "gp";
   };
 }

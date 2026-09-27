@@ -23,10 +23,10 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Functions for server CLI applications used by humans";
     homepage = "https://github.com/joeyespo/path-and-address";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

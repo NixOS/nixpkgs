@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-L2750DW printer driver";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = map (arch: "${arch}-linux") arches;
-    maintainers = [ maintainers.lovesegfault ];
+    maintainers = [ lib.maintainers.lovesegfault ];
   };
 }

@@ -54,10 +54,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
   # thus probably intend to substitute it.
   allowSubstitutes = true;
 
-  inherit docPackages;
-
-  passAsFile = [ "buildCommand" ];
-
   buildCommand = ''
     ${
       let
@@ -125,8 +121,12 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/hoogle
   '';
 
+  __structuredAttrs = true;
+
   passthru = {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
+
+    inherit docPackages;
 
     # The path to the Hoogle database.
     database = "${finalAttrs.finalPackage}/${databasePath}";
@@ -144,6 +144,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     description = "Local Hoogle database";
     platforms = ghc.meta.platforms;
     hydraPlatforms = with lib.platforms; none;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 })

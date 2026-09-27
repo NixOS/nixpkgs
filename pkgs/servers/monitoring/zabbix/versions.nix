@@ -1,18 +1,14 @@
 generic: {
   v74 = generic {
-    version = "7.4.5";
-    hash = "sha256-Pq5LxxL1MLLfZiTLoDziPimyoRrvrAttTCemTUJf38g=";
-  };
-  v72 = generic {
-    version = "7.2.14";
-    hash = "sha256-KgXP+c5x0R+dFBtPAJSirJVWmsy1awGWMfyEdQrqCVA=";
+    version = "7.4.14";
+    hash = "sha256-795fbxmJbwIAu1JF44ZgNWZyccex6EYm0mCV8kpvu0I=";
   };
   v70 = generic {
-    version = "7.0.21";
-    hash = "sha256-p/gsFhC8AuSsQvUlfAJl+S4ytR+14EtK0p9y6XGJ0+8=";
+    version = "7.0.30";
+    hash = "sha256-wMpAeRGa3uxBNeM1HRuEkVet4HbDUsAGco5zLxcHIyw=";
   };
   v60 = generic {
-    version = "6.0.42";
-    hash = "sha256-Ale517dbuqzjmBMYqJlAtY01F9Bd+W7spegjTHyTJWA=";
+    version = "6.0.48";
+    hash = "sha256-cIibBi7O1e5YKjznoyli/lq7gX/UhoPEc8K8a1kDZJw=";
   };
 }

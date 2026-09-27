@@ -1,25 +1,23 @@
 {
-  stdenv,
   buildGoModule,
   lib,
   fetchFromGitHub,
   versionCheckHook,
-  installShellFiles,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pyroscope";
-  version = "1.13.4";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pyroscope";
-    rev = "v1.13.4";
-    hash = "sha256-nyb91BO4zzJl3AG/ojBO+q7WiicZYmOtztW6FTlQHMM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kKqIe+3q+qHcgKhEXtVxLLIE822G5ryFW7SD0pEWznY=";
   };
 
-  vendorHash = "sha256-GZMoXsoE3pL0T3tkWY7i1f9sGy5uVDqeurCvBteqV9A=";
+  vendorHash = "sha256-KBdVCQZA2mDynpsWBzF06MMHb0rX++mXpFTHW0SFN9U=";
   proxyVendor = true;
 
   subPackages = [
@@ -28,10 +26,10 @@ buildGoModule (finalAttrs: {
   ];
 
   ldflags = [
-    "-X=github.com/grafana/pyroscope/pkg/util/build.Branch=${finalAttrs.src.rev}"
-    "-X=github.com/grafana/pyroscope/pkg/util/build.Version=${finalAttrs.version}"
-    "-X=github.com/grafana/pyroscope/pkg/util/build.Revision=${finalAttrs.src.rev}"
-    "-X=github.com/grafana/pyroscope/pkg/util/build.BuildDate=1970-01-01T00:00:00Z"
+    "-X=github.com/grafana/pyroscope/v2/pkg/util/build.Branch=${finalAttrs.src.rev}"
+    "-X=github.com/grafana/pyroscope/v2/pkg/util/build.Version=${finalAttrs.version}"
+    "-X=github.com/grafana/pyroscope/v2/pkg/util/build.Revision=${finalAttrs.src.rev}"
+    "-X=github.com/grafana/pyroscope/v2/pkg/util/build.BuildDate=1970-01-01T00:00:00Z"
   ];
 
   # We're overriding the version in 'ldFlags', so we should check that the
@@ -39,15 +37,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
-
-  nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd pyroscope \
-      --bash <($out/bin/pyroscope completion bash) \
-      --fish <($out/bin/pyroscope completion fish) \
-      --zsh <($out/bin/pyroscope completion zsh)
-  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -56,7 +45,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/grafana/pyroscope";
     changelog = "https://github.com/grafana/pyroscope/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
     mainProgram = "pyroscope";
   };
 })

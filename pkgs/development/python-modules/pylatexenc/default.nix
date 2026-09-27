@@ -2,30 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylatexenc";
-  version = "2.10";
-  format = "setuptools";
+  version = "2.11";
+
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phfaist";
     repo = "pylatexenc";
-    rev = "v${version}";
-    hash = "sha256-3Ho04qrmCtmmrR+BUJNbtdCZcK7lXhUGJjm4yfCTUkM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Zv3Sjx0YpSCnoHHf3CSiGaFMS7FNgUUwvIxNX/k9tOg=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "pylatexenc" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple LaTeX parser providing latex-to-unicode and unicode-to-latex conversion";
     homepage = "https://pylatexenc.readthedocs.io";
     downloadPage = "https://www.github.com/phfaist/pylatexenc/releases";
     changelog = "https://pylatexenc.readthedocs.io/en/latest/changes/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.10.4";
 
   src = fetchFromGitHub {
-    owner = "filiptibell";
+    owner = "lune-org";
     repo = "lune";
     tag = "v${version}";
     hash = "sha256-AbviyCy2nn6WHC575JKl/t3bM/4Myb+Wx5/buTvB4MY=";
@@ -44,12 +44,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::process_exec_cwd"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Standalone Luau script runtime";
     mainProgram = "lune";
     homepage = "https://github.com/lune-org/lune";
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ lammermann ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ lammermann ];
   };
 }

@@ -4,16 +4,16 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "t1utils";
   version = "1.42";
 
   src = fetchurl {
-    url = "https://www.lcdf.org/type/t1utils-${version}.tar.gz";
+    url = "https://www.lcdf.org/type/t1utils-${finalAttrs.version}.tar.gz";
     sha256 = "YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of simple Type 1 font manipulation programs";
     longDescription = ''
       t1utils is a collection of simple type-1 font manipulation programs.
@@ -24,13 +24,8 @@ stdenv.mkDerivation rec {
       file from a PFA or PFB font.
     '';
     homepage = "https://www.lcdf.org/type/";
-    license = {
-      shortName = "Click"; # README.md says BSD-like, see LICENSE
-      url = "https://github.com/kohler/t1utils/blob/master/LICENSE";
-      free = true;
-      redistributable = true;
-    };
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.mit-click;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

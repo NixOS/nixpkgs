@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dynalite-devices";
   version = "0.1.48";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ziv1234";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
   # it would use the erroneous tag v0.47
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Dynalite DyNET interface creating devices";
     homepage = "https://github.com/ziv1234/python-dynalite-devices";
     changelog = "https://github.com/ziv1234/python-dynalite-devices/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

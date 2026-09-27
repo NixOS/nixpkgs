@@ -23,6 +23,8 @@ mkDerivation (
     extraPaths = [
       "sys/crypto"
       "sys/sys"
+      "sys/kern"
+      "lib/libc/Versions.def"
     ]
     ++ extraSrc;
 
@@ -33,6 +35,8 @@ mkDerivation (
     ];
 
     noLibc = !bootstrapInstallation;
+
+    MK_TESTS = "no";
 
     buildInputs =
       lib.optionals (!bootstrapInstallation) [
@@ -66,6 +70,8 @@ mkDerivation (
             cp "$f" "$man/share/man/$f"
           done
         '';
+
+    meta.platforms = lib.platforms.unix;
   }
   // lib.optionalAttrs bootstrapInstallation {
     nativeBuildInputs = [

@@ -1,13 +1,15 @@
 {
   "dart_leap": "sha256-oO5851cIdrW/asgOePxvwUgjn1XchkH9CKJUruvlLYI=",
   "irondash_engine_context": "sha256-SaF2vZUEbamhLotu3XQhCGrDZDk9S/vQ8TGPkvJXVkw=",
-  "lw_file_system": "sha256-lvrS0CH0qbEqDthPMOZChRBmBGVvVAiOnz0iF8Db46g=",
-  "lw_file_system_api": "sha256-ozp/mJq2o5pzQgFcTWLzG67XgHZRHoIRW+W0QDLCTFM=",
-  "lw_sysapi": "sha256-4Bqw04vepkC0DCGexWGFQdpdsnlG/0Sh1aZVDAugqcA=",
-  "material_leap": "sha256-mWNbQ6S9Ftn7i+SMPTZPXQP7XjjMkohn22aUoW5I4L4=",
-  "networker": "sha256-YqCl/FODv8QZFnz1qVHoJLIioYhcluPiY4pP09MzvNE=",
-  "networker_crypto": "sha256-8I/qBdxxbIse7un4W9MjaifbK7TqsyYrFnIbaTuezo0=",
-  "networker_socket": "sha256-8I/qBdxxbIse7un4W9MjaifbK7TqsyYrFnIbaTuezo0=",
-  "super_native_extensions": "sha256-Bs83FAguu1qDnbSxXc5W2IMyAZ8pNUAh5wuu6amLKQ4=",
-  "swamp_api": "sha256-74Zr2qUeS8JnWcqqU7zAwaD8ygnni76OuTOwQqobhCk="
+  "keybinder": "sha256-fEKJ9tK8peI07ecxz1NWBjg7li8Db46LzL8wEHKL0a0=",
+  "lw_file_system": "sha256-sSoVMgOIWIS37r2gAX2g8PNkft84aoOmHeRWVN5lz2k=",
+  "lw_file_system_api": "sha256-AMnuK6jA40lmYpYy7XASyNsGfgAqfJsEZzDbQPNo6zk=",
+  "lw_sysapi": "sha256-CQglT1gUn8sA2Agrb0KdsqSJx492tV7sRjltmwtF/bs=",
+  "material_leap": "sha256-EuuueH4gyWX9L0jzExY7/ugaxmkJkWb0pO+9QMpu8T0=",
+  "networker": "sha256-+mZjq6rdmc9e1TXY5N4g29bBLC2NFhB0NlRTBMcyBWU=",
+  "networker_crypto": "sha256-GEQUfVl0ivG5jtIj/2i/+6VLEudpcOOR7iHfNPkrJx8=",
+  "networker_socket": "sha256-GEQUfVl0ivG5jtIj/2i/+6VLEudpcOOR7iHfNPkrJx8=",
+  "phosphor_flutter": "sha256-Z5iikuoGDjRGE73Iig8WGORtedQf1EpVoxeD+B7S57c=",
+  "super_native_extensions": "sha256-HVT1s2TM9vmvuT9TxkJ24TGsUeNWnafBTD7EWJHEmos=",
+  "swamp_api": "sha256-YZhRSevfGpyV7F2dL34waca7OyzG4a7BcQekz3uJa2Q="
 }

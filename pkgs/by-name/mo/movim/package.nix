@@ -3,6 +3,7 @@
   fetchFromGitHub,
   writeShellScript,
   dash,
+  gitMinimal,
   php,
   phpCfg ? null,
   withPostgreSQL ? true, # “strongly recommended” according to docs
@@ -44,13 +45,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.32.1";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1sNStxgvP8iaiINIa4UOFz8RGeQlFvJK5+RGlK/3Xa8=";
+    hash = "sha256-dZCfBDFKlzai3g/XV74l9ualI+WpKXTETH/Gaek5OO8=";
   };
 
   php = php.buildEnv (
@@ -88,12 +89,31 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-t95OVDUb7hJfbokFhSOyGP02laVcTTJX7bK/reYJ99I=";
+  # Composer ≥2.8 defaults preferred-install to
+  # dist only (not auto), which prevents fallback
+  # to git clone when dist downloads fail (such as
+  # MS GitHub’s codeload.* in the build sandbox).
+  composerVendor = php.mkComposerVendor {
+    inherit (finalAttrs)
+      pname
+      src
+      version
+      vendorHash
+      php
+      ;
+
+    postPatch = ''
+      composer config preferred-install auto
+    '';
+    nativeBuildInputs = [ gitMinimal ];
+  };
+
+  vendorHash = "sha256-uZONS52DLCkaxU2T5xu+sOJYgnG1oGXN9TDPe6gk9Rs=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
     # replacing `$configuration` with actually-used flags.
-    substituteInPlace src/Movim/Daemon/Session.php \
+    substituteInPlace src/Movim/Daemon/SessionsWorker.php \
       --replace-fail \
         "'exec ' . PHP_BINARY . ' ' . \$configuration . '" \
         "'exec ' . PHP_BINARY . ' -dopcache.enable=1 -dopcache.enable_cli=1 ' . '"

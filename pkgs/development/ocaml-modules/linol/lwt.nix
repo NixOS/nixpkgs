@@ -2,17 +2,15 @@
   buildDunePackage,
   linol,
   lwt,
-  yojson,
 }:
 
 buildDunePackage {
   pname = "linol-lwt";
-  inherit (linol) version src;
+  inherit (linol) version src patches;
 
   propagatedBuildInputs = [
     linol
     lwt
-    yojson
   ];
 
   meta = linol.meta // {

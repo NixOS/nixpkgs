@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   libdwarf,
+  libunwind,
   gtest,
   callPackage,
   zstd,
@@ -32,9 +33,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ (lib.getDev libdwarf) ];
+  buildInputs = [
+    (lib.getDev libdwarf)
+    libunwind
+  ];
 
-  propagatedBuildInputs = [ zstd ] ++ (lib.optionals static [ libdwarf ]);
+  propagatedBuildInputs = [
+    zstd
+  ]
+  ++ (lib.optionals static [
+    libdwarf
+    libunwind
+  ]);
 
   cmakeFlags = [
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
@@ -42,9 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_GTEST" true)
+    (lib.cmakeBool "CPPTRACE_UNWIND_WITH_LIBUNWIND" true)
   ];
 
   checkInputs = [ gtest ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    dsymutil unittest
+  '';
 
   doCheck = true;
 

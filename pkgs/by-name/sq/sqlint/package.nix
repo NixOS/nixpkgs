@@ -2,6 +2,8 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
+  runCommand,
+  sqlint,
 }:
 
 bundlerApp {
@@ -10,17 +12,23 @@ bundlerApp {
 
   exes = [ "sqlint" ];
 
-  passthru.updateScript = bundlerUpdateScript "sqlint";
+  passthru = {
+    updateScript = bundlerUpdateScript "sqlint";
+    tests.help = runCommand "sqlint-help-test" { } ''
+      ${sqlint}/bin/sqlint --help
+      touch $out
+    '';
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Simple SQL linter";
     homepage = "https://github.com/purcell/sqlint";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ariutta
       nicknovitski
       purcell
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

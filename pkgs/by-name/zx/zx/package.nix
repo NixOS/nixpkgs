@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   esbuild,
+  nodejs_22,
   versionCheckHook,
   nix-update-script,
 }:
@@ -45,6 +46,8 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-yr4oPr4tTFfl+uUc2RJnVkmzSVHrw2adzWuZ+R2bQaU=";
 
+  nodejs = nodejs_22;
+
   makeCacheWritable = true;
 
   npmFlags = [ "--legacy-peer-deps" ];
@@ -54,8 +57,6 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

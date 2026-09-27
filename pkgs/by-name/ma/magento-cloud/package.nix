@@ -39,7 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {

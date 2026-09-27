@@ -3,6 +3,7 @@
   stdenv,
   unzip,
   fetchurl,
+  installFonts,
 }:
 
 let
@@ -14,10 +15,11 @@ let
       pname,
       hash,
       desc,
+      suffix,
     }:
     stdenv.mkDerivation rec {
       inherit pname;
-      version = "7.6";
+      version = "7.9";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit hash;
@@ -26,21 +28,24 @@ let
       # Work around the "unpacker appears to have produced no directories"
       # case that happens when the archive doesn't have a subdirectory.
       sourceRoot = ".";
-      nativeBuildInputs = [ unzip ];
-      installPhase = ''
-        find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
-        find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
-        find . -name '*.woff2'  -exec install -Dt $out/share/fonts/woff2 {} \;
-      '';
+      nativeBuildInputs = [
+        installFonts
+        unzip
+      ];
 
-      meta = with lib; {
+      # installFonts checks if "$webfont" exists and copies any woff files there,
+      # this is typically done with a second "webfont" output, resulting in a second derivation
+      # we set this to `placeholder "out"` to keep webfonts in the same derivation instead
+      webfont = lib.optionalString (suffix == "Woff2") (placeholder "out");
+
+      meta = {
         homepage = "https://github.com/subframe7536/Maple-font";
         description = ''
           Open source ${desc} font with round corner and ligatures for IDE and command line
         '';
-        license = licenses.ofl;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ oluceps ];
+        license = lib.licenses.ofl;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ oluceps ];
       };
     };
 
@@ -129,6 +134,7 @@ let
             inherit pname;
             desc = "${ligVariant.desc} ${typeVariant.desc}";
             hash = hashes.${pname};
+            inherit (typeVariant) suffix;
           };
         }
       ) typeVariants
@@ -142,6 +148,7 @@ let
         inherit pname;
         inherit (value) desc;
         hash = hashes.${pname};
+        inherit (value) suffix;
       }
     ) typeVariants;
 in

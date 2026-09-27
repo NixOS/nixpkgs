@@ -1,0 +1,57 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -121,7 +121,6 @@
+   ${QET_DIR}/sources/NameList
+   ${QET_DIR}/sources/NameList/ui
+   ${QET_DIR}/sources/utils
+-  ${QET_DIR}/pugixml/src
+   ${QET_DIR}/sources/dataBase
+   ${QET_DIR}/sources/dataBase/ui
+   ${QET_DIR}/sources/factory/ui
+--- a/cmake/qet_compilation_vars.cmake
++++ b/cmake/qet_compilation_vars.cmake
+@@ -421,10 +421,6 @@
+   ${QET_DIR}/sources/PropertiesEditor/propertieseditorwidget.cpp
+   ${QET_DIR}/sources/PropertiesEditor/propertieseditorwidget.h
+ 
+-  ${QET_DIR}/pugixml/src/pugiconfig.hpp
+-  ${QET_DIR}/pugixml/src/pugixml.cpp
+-  ${QET_DIR}/pugixml/src/pugixml.hpp
+-
+   ${QET_DIR}/sources/qetgraphicsitem/conductor.cpp
+   ${QET_DIR}/sources/qetgraphicsitem/conductor.h
+   ${QET_DIR}/sources/qetgraphicsitem/conductortextitem.cpp
+--- a/sources/diagramcontext.h
++++ b/sources/diagramcontext.h
+@@ -17,7 +17,7 @@
+ */
+ #ifndef DIAGRAM_CONTEXT_H
+ #define DIAGRAM_CONTEXT_H
+-#include "pugixml/src/pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #include <QDomElement>
+ #include <QHash>
+--- a/sources/ElementsCollection/elementslocation.h
++++ b/sources/ElementsCollection/elementslocation.h
+@@ -20,7 +20,7 @@
+ 
+ #include "../NameList/nameslist.h"
+ #include "../diagramcontext.h"
+-#include "pugixml/src/pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #include <QIcon>
+ #include <QString>
+--- a/sources/NameList/nameslist.h
++++ b/sources/NameList/nameslist.h
+@@ -17,7 +17,7 @@
+ */
+ #ifndef NAMES_LIST_H
+ #define NAMES_LIST_H
+-#include "pugixml/src/pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #include <QtXml>
+ /**
+

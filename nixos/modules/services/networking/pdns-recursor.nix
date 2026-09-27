@@ -48,23 +48,6 @@ let
     }
   );
 
-  configFile =
-    if cfg.old-settings != { } then
-      # Convert recursor.conf to recursor.yml and merge it
-      let
-        conf = pkgs.writeText "recursor.conf" (
-          concatStringsSep "\n" (mapAttrsToList (name: val: "${name}=${serialize val}") cfg.old-settings)
-        );
-
-        yaml = settingsFormat.generate "recursor.yml" cfg.yaml-settings;
-      in
-      pkgs.runCommand "recursor-merged.yml" { } ''
-        ${pkgs.pdns-recursor}/bin/rec_control show-yaml --config ${conf} > override.yml
-        ${pkgs.yq-go}/bin/yq '. *= load("override.yml")' ${yaml} > $out
-      ''
-    else
-      settingsFormat.generate "recursor.yml" cfg.yaml-settings;
-
 in
 {
   options.services.pdns-recursor = {
@@ -110,6 +93,13 @@ in
         IP address ranges of clients allowed to make DNS queries.
       '';
     };
+
+    api.enable = mkEnableOption ''
+      the built-in webserver. It serves the REST API (which additionally needs
+      an API key set via {option}`services.pdns-recursor.settings.webservice.api_key`)
+      and, at `/metrics`, statistics in Prometheus format. Without this the
+      `api.address`, `api.port` and `api.allowFrom` options have no effect, as
+      the webserver stays disabled'';
 
     api.address = mkOption {
       type = types.str;
@@ -196,30 +186,7 @@ in
       '';
     };
 
-    old-settings = mkOption {
-      type = configType;
-      default = { };
-      example = literalExpression ''
-        {
-          loglevel = 8;
-          log-common-errors = true;
-        }
-      '';
-      description = ''
-        Older PowerDNS Recursor settings. Use this option to configure
-        Recursor settings not exposed in a NixOS option or to bypass one.
-        See the full documentation at
-        <https://doc.powerdns.com/recursor/settings.html>
-        for the available options.
-
-        ::: {.warning}
-        This option is provided for backward compatibility only
-        and will be removed in the next release of NixOS.
-        :::
-      '';
-    };
-
-    yaml-settings = mkOption {
+    settings = mkOption {
       type = settingsFormat.type;
       default = { };
       example = literalExpression ''
@@ -249,11 +216,12 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."/pdns-recursor/recursor.yml".source = configFile;
+    environment.etc."/pdns-recursor/recursor.yml".source =
+      settingsFormat.generate "recursor.yml" cfg.settings;
 
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-    services.pdns-recursor.yaml-settings = {
+    services.pdns-recursor.settings = {
       incoming = mkDefaultAttrs {
         listen = cfg.dns.address;
         port = cfg.dns.port;
@@ -261,6 +229,7 @@ in
       };
 
       webservice = mkDefaultAttrs {
+        webserver = cfg.api.enable;
         address = cfg.api.address;
         port = cfg.api.port;
         allow_from = cfg.api.allowFrom;
@@ -301,15 +270,6 @@ in
 
     users.groups.pdns-recursor = { };
 
-    warnings = lib.optional (cfg.old-settings != { }) ''
-      pdns-recursor has changed its configuration file format from pdns-recursor.conf
-      (mapped to `services.pdns-recursor.old-settings`) to the newer pdns-recursor.yml
-      (mapped to `services.pdns-recursor.yaml-settings`).
-
-      Support for the older format will be removed in a future version, so please migrate
-      your settings over. See <https://doc.powerdns.com/recursor/yamlsettings.html>.
-    '';
-
   };
 
   imports = [
@@ -323,13 +283,29 @@ in
       [
         "services"
         "pdns-recursor"
+        "yaml-settings"
+      ]
+      [
+        "services"
+        "pdns-recursor"
         "settings"
       ]
+    )
+
+    (mkRemovedOptionModule
       [
         "services"
         "pdns-recursor"
         "old-settings"
       ]
+      ''
+        pdns-recursor has changed its configuration file format from pdns-recursor.conf
+        (mapped to `services.pdns-recursor.old-settings`) to the newer pdns-recursor.yml
+        (mapped to `services.pdns-recursor.settings`).
+
+        Support for the older format has been removed, please migrate your settings over.
+        See <https://doc.powerdns.com/recursor/yamlsettings.html>.
+      ''
     )
   ];
 

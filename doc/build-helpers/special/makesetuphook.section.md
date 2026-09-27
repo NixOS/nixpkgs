@@ -1,6 +1,6 @@
 # pkgs.makeSetupHook {#sec-pkgs.makeSetupHook}
 
-`pkgs.makeSetupHook` is a build helper that produces hooks that go in to `nativeBuildInputs`
+`pkgs.makeSetupHook` is a build helper that produces hooks that go into `nativeBuildInputs`
 
 ## Usage {#sec-pkgs.makeSetupHook-usage}
 

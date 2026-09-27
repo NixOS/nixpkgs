@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clint" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kennethreitz/clint";
     description = "Python Command Line Interface Tools";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helm-docs";
   version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "norwoodj";
     repo = "helm-docs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a7alzjh+vjJPw/g9yaYkOUvwpgiqCrtKTBkV1EuGYtk=";
   };
 
@@ -21,14 +21,14 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/norwoodj/helm-docs";
     description = "Tool for automatically generating markdown documentation for Helm charts";
     mainProgram = "helm-docs";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sagikazarmark ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sagikazarmark ];
   };
-}
+})

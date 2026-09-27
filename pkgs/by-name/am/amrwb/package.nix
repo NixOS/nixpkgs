@@ -5,18 +5,21 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amrwb";
   version = "11.0.0.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   srcAmr = fetchurl {
     url = "http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip";
-    sha256 = "1v4zhs6f1mf1xkrzhljh05890in0rpr5d5pcak9h4igxhd2c91f8";
+    hash = "sha256-yIXERIP9RQLTVOyWVvLNwEaQUAFQUvjz7MHV4IyGn+w=";
   };
 
   src = fetchurl {
-    url = "http://www.penguin.cz/~utx/ftp/amr/amrwb-${version}.tar.bz2";
-    sha256 = "1p6m9nd08mv525w14py9qzs9zwsa5i3vxf5bgcmcvc408jqmkbsw";
+    url = "https://slackware.uk/sbosrcarch/by-name/audio/amrwb/amrwb-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-XK9ZsUSAsM0qe6u4vkcsSvOf9MfJXxJ4EWVXBJpN1dw=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -38,4 +41,4 @@ stdenv.mkDerivation rec {
     # some countries, not redistributable.
     license = lib.licenses.unfree;
   };
-}
+})

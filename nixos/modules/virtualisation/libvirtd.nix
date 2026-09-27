@@ -394,6 +394,11 @@ in
         The backend used to setup virtual network firewall rules.
       '';
     };
+
+    dbus = {
+      enable = mkEnableOption "exposing libvirtd APIs over D-Bus";
+      package = mkPackageOption pkgs "libvirt-dbus" { };
+    };
   };
 
   ###### implementation
@@ -416,7 +421,7 @@ in
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [
-        libressl.nc
+        netcat
         config.networking.firewall.package
         cfg.package
         cfg.qemu.package
@@ -426,15 +431,28 @@ in
 
     boot.kernelModules = [ "tun" ];
 
-    users.groups.libvirtd.gid = config.ids.gids.libvirtd;
-
-    # libvirtd runs qemu as this user and group by default
-    users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
-    users.extraUsers.qemu-libvirtd = {
-      uid = config.ids.uids.qemu-libvirtd;
-      isNormalUser = false;
-      group = "qemu-libvirtd";
-    };
+    users = lib.mkMerge [
+      {
+        # libvirtd runs qemu as this user and group by default
+        users.qemu-libvirtd = {
+          uid = config.ids.uids.qemu-libvirtd;
+          isNormalUser = false;
+          group = "qemu-libvirtd";
+        };
+        groups = {
+          libvirtd.gid = config.ids.gids.libvirtd;
+          qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
+        };
+      }
+      (lib.mkIf cfg.dbus.enable {
+        users.libvirtdbus = {
+          isSystemUser = true;
+          group = "libvirtdbus";
+          description = "Libvirt D-Bus bridge";
+        };
+        groups.libvirtdbus = { };
+      })
+    ];
 
     security.wrappers.qemu-bridge-helper = {
       setuid = true;
@@ -449,7 +467,7 @@ in
 
     services.firewalld.packages = [ cfg.package ];
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ] ++ lib.optional cfg.dbus.enable cfg.dbus.package;
 
     systemd.services.libvirtd-config = {
       description = "Libvirt Virtual Machine Management Daemon - configuration";
@@ -512,7 +530,10 @@ in
           "nix-helpers"
           "nix-ovmf"
         ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+        StateDirectory = subDirs [
+          "dnsmasq"
+          "secrets"
+        ];
       };
     };
 
@@ -549,13 +570,14 @@ in
       enableStrictShellChecks = true;
     };
 
-    systemd.services.virtchd = {
-      path = [ pkgs.cloud-hypervisor ];
-    };
+    systemd.services.virtchd =
+      lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.cloud-hypervisor)
+        {
+          path = [ pkgs.cloud-hypervisor ];
+        };
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
       after = [ "libvirtd.service" ];
       path = with pkgs; [
         coreutils
@@ -623,11 +645,13 @@ in
       '';
     };
 
-    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssModules = optional (cfg.nss.enable || cfg.nss.enableGuest) cfg.package;
     system.nssDatabases.hosts = mkMerge [
       # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
       (mkIf cfg.nss.enableGuest (mkOrder 432 [ "libvirt_guest" ]))
     ];
+
+    services.dbus.packages = lib.optional cfg.dbus.enable cfg.dbus.package;
   };
 }

@@ -5,22 +5,21 @@
   openssl,
   libevent,
   pkg-config,
-  libprom,
   libmicrohttpd,
   sqlite,
   nixosTests,
   systemdMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coturn";
-  version = "4.7.0";
+  version = "4.17.2";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    tag = version;
-    hash = "sha256-nvImelAvcbHpv6JTxX+sKpldVXG6u9Biu+VDt95r9I4=";
+    tag = finalAttrs.version;
+    hash = "sha256-YbAa3sRYqnREVcI//vIFedScXuvxAhKlej/MnFxgm5c=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     (libevent.override { inherit openssl; })
-    libprom
     libmicrohttpd
     sqlite.dev
   ]
@@ -40,10 +38,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
-
-    # Don't call setgroups unconditionally in mainrelay
-    # https://github.com/coturn/coturn/pull/1508
-    ./dont-call-setgroups-unconditionally.patch
   ];
 
   configureFlags = [
@@ -63,10 +57,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "TURN server";
     homepage = "https://coturn.net/";
-    changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/coturn/coturn/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
-}
+})

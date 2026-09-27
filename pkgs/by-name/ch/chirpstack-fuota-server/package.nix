@@ -5,7 +5,7 @@
   versionCheckHook,
   unstableGitUpdater,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chirpstack-fuota-server";
   version = "3.0.0-test.4-unstable-2025-08-26";
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-fuota-server";
   };
-}
+})

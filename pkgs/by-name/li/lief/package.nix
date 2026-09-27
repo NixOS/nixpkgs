@@ -6,6 +6,10 @@
   cmake,
   ninja,
   nix-update-script,
+  testers,
+  validatePkgConfig,
+  withPython ? true,
+  withRust ? true,
 }:
 
 let
@@ -18,49 +22,57 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lief";
-  version = "0.17.0";
+  version = "0.17.6";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     tag = finalAttrs.version;
-    hash = "sha256-icwRW9iY/MiG/x3VHqRfAU2Yk4q2hXLJsfN5Lwx37gw=";
+    hash = "sha256-WcWKGIQIGngfzW+VnrZEnRPX2w4syNw+so2aqwSgecw=";
   };
 
   outputs = [
     "out"
+    "dev"
+  ]
+  ++ lib.optionals withPython [
     "py"
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
   ];
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = with python3.pkgs; [
-    python
-    build
-    pathspec
-    pip
-    pydantic
-    scikit-build-core
-  ];
+  buildInputs =
+    with python3.pkgs;
+    lib.optionals withPython [
+      python
+      build
+      pathspec
+      pip
+      pydantic
+      scikit-build-core
+    ];
 
   cmakeFlags = [
-    (lib.cmakeBool "LIEF_PYTHON_API" true)
+    (lib.cmakeBool "LIEF_PYTHON_API" withPython)
+    (lib.cmakeBool "LIEF_RUST_API" withRust)
     (lib.cmakeBool "LIEF_EXAMPLES" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "Python_EXECUTABLE" pyEnv.interpreter)
   ];
 
-  postBuild = ''
+  postBuild = lib.optionalString withPython ''
     pushd ../api/python
     ${pyEnv.interpreter} -m build --no-isolation --wheel --skip-dependency-check --config-setting=--parallel=$NIX_BUILD_CORES
     popd
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString withPython ''
     pushd ../api/python
     ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
     popd
@@ -68,16 +80,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "lief" ];
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+  };
+
+  __structuredAttrs = true;
+
+  meta = {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
-    license = [ licenses.asl20 ];
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       lassulus
-      genericnerdyusername
     ];
+    pkgConfigModules = [ "LIEF" ];
   };
 })

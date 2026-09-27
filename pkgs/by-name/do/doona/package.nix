@@ -5,7 +5,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doona";
   version = "0-unstable-2019-03-08";
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r ${src}/bedmod $out/bin/bedmod
-    cp ${src}/doona.pl $out/bin/doona
+    cp -r ${finalAttrs.src}/bedmod $out/bin/bedmod
+    cp ${finalAttrs.src}/doona.pl $out/bin/doona
     chmod +x $out/bin/doona
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wireghoul/doona";
     description = "Fork of the Bruteforce Exploit Detector Tool (BED)";
     mainProgram = "doona";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       A fork of the Bruteforce Exploit Detector Tool (BED).
       BED is a program which is designed to check daemons for potential buffer overflows, format string bugs etc.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})

@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "4.8.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -70,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     gobject-introspection
     vala
+    libxml2 # xmllint
   ];
 
   buildInputs = [
@@ -100,9 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "if generate_vapi" "if false"
   '';
 
-  # Broken by PCRE 2 bump in GLib.
-  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
-  doCheck = false;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck
@@ -126,12 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-4" ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

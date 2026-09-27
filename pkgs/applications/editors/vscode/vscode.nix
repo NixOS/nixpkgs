@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   srcOnly,
@@ -10,14 +10,13 @@
   # sourceExecutableName is the name of the binary in the source archive over
   # which we have no control and it is needed to run the insider version as
   # documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
-  # On MacOS the insider binary is still called code instead of code-insiders as
+  # On macOS the insider binary is still called code instead of code-insiders as
   # of 2023-08-06.
   sourceExecutableName ?
     "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders",
   commandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -25,7 +24,6 @@ let
   plat =
     {
       x86_64-linux = "linux-x64";
-      x86_64-darwin = "darwin";
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       armv7l-linux = "linux-armhf";
@@ -36,22 +34,26 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-V9vnuZJaa1FiBYE6bggYgQQDQJh34BYfVRmM52eGB84=";
-      x86_64-darwin = "sha256-xBhyFJogXzo74+XTqPBJIEB6B2JTHmB/eNyT9NSBPNo=";
-      aarch64-linux = "sha256-bAuuk1V+kIRmAcvtq1KJuv2ikSIu4pCLW1NYTGlT44g=";
-      aarch64-darwin = "sha256-Nd1DiAjd4d0fZUkP/ncT7WQQIyTAgJ777AtOsoCbIYs=";
-      armv7l-linux = "sha256-V/0fQQ/yRtCVJAme/pHtcNmpvcshaM5KYtxkybIN2AM=";
+      x86_64-linux = "sha256-DJy86gcOmg/GLeXHj+4BqA+OMveK2mZNlzH2xRdQO34=";
+      aarch64-linux = "sha256-1SM07NDHqmsbS/PDvfFlMKBLzgE8lfEG03L2Xg9uW8U=";
+      aarch64-darwin = "sha256-kjCAvrwZTsF4wqBrYbyxODdndkBsI7i9Pk/DKG+Ry6I=";
+      armv7l-linux = "sha256-3jVAei1IX2Ij7FY7z++22bui9yIEr2qZUXtQzgAmgq0=";
     }
     .${system} or throwSystem;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.106.3";
+  version = "1.139.1";
+
+  # The update server (update.code.visualstudio.com) expects the version path
+  # segment in X.Y.Z form, so we normalize X.Y to X.Y.0 (e.g. "1.110" → "1.110.0").
+  # Upstream GitHub release tags may use X.Y, which is why this normalization is needed.
+  downloadVersion = lib.versions.pad 3 version;
 
   # This is used for VS Code - Remote SSH test
-  rev = "bf9252a2fb45be6893dd8870c0bf37e2e1766d61";
+  rev = "04c0d99f4fb0d8afe6ce4f0c58e31e183ac3e4b1";
 in
-callPackage ./generic.nix {
+buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -66,8 +68,8 @@ callPackage ./generic.nix {
     ;
 
   src = fetchurl {
-    name = "VSCode_${version}_${plat}.${archive_fmt}";
-    url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
+    name = "VSCode_${downloadVersion}_${plat}.${archive_fmt}";
+    url = "https://update.code.visualstudio.com/${downloadVersion}/${plat}/stable";
     inherit hash;
   };
 
@@ -82,7 +84,7 @@ callPackage ./generic.nix {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      hash = "sha256-PpOLH4OOx3QrDULSxnUxsxuzbcdIk8FYXdLKItC5Z10=";
+      hash = "sha256-4s41uMC5DPIX/u6Yc6GcHi7kFM8BpZidZ8h+DvhBaJQ=";
     };
     stdenv = stdenvNoCC;
   };
@@ -109,18 +111,21 @@ callPackage ./generic.nix {
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
+    changelog = "https://code.visualstudio.com/updates/v${
+      lib.replaceString "." "_" (lib.versions.majorMinor version)
+    }";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       eadwu
-      synthetica
       bobby285271
       johnrtitor
       jefflabonte
       wetrustinprize
+      oenu
+      yuannan
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7l-linux"

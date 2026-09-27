@@ -13,9 +13,9 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
-  pcre,
+  pcre2,
   python3,
   SDL2,
   sqlite,
@@ -33,18 +33,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.6.0";
+  version = "10.9.0";
 
   src = fetchFromGitHub {
-    owner = "sjrc6";
-    repo = "taterclient-ddnet";
+    owner = "TaterClient";
+    repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-Z5W+IBiNhEXyBVk6w2YzotBlHam1fELmr3ojJ0q4Ge8=";
+    hash = "sha256-QlLxY1k9S9mvRJ0LL7/jpBfIn638eEEnQQ6tKvT/MJY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
+    hash = "sha256-n+1SlgmjSe0ul/iuK3kjTGSvyYwdxwcRrCAnZyavZA8=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libnotify
-    pcre
+    pcre2
     sqlite
     freetype
     libGLU
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-tools
     glew
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 
@@ -100,10 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
+  env = {
+    # It is also to avoid to the client being banned on some Teeworlds servers.
+    #
+    # The hash below has been generated with the command line below.
+    # git rev-parse --short=32 HEAD
+    #
+    # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
+    DDNET_GIT_SHORTREV_HASH = "6b4118bf0ec86822dea43cc3e97b0645";
+  };
+
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.6.0/CMakeLists.txt#L3179
+  # See https://github.com/TaterClient/TClient/blob/V10.8.6/CMakeLists.txt#L3260
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

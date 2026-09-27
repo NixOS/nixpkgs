@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.6.1";
+  version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     tag = "v${version}";
-    hash = "sha256-qqe/h633uEbJPpdsuCzZKW86Z6BQUmPdCju1vg7OLXc=";
+    hash = "sha256-smpdmmut4wYekVew13KZXluI71lSUdZriPejUumkLNU=";
   };
 
   outputs = [
@@ -57,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohappyeyeballs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Happy Eyeballs for pre-resolved hosts";
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
     changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
-    license = licenses.psfl;
-    maintainers = with maintainers; [
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

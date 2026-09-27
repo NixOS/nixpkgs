@@ -4,52 +4,38 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapGAppsHook3,
 
   curl,
   freetype,
-  glew,
-  gtk3,
   libGL,
   libjpeg,
   libpng,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2025.04.05";
+  version = "2026.09.19";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
-    rev = finalAttrs.version;
-    hash = "sha256-cXtc1E4iJf3//UyzZzhky/NV7zk4959xSwGLHdCeyk0=";
+    tag = finalAttrs.version;
+    hash = "sha256-376lezpSdl1m19W5NnyPWiYDvqCG8OovBxmfGJJmC+k=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
   ];
 
   buildInputs = [
     curl
     freetype
-    glew
-    gtk3
     libGL
     libjpeg
     libpng
-    SDL2
-    SDL2_gfx
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
+    sdl3
   ];
 
   cmakeFlags = [
@@ -57,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://principia-web.se/wiki/Changelog#${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
@@ -65,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

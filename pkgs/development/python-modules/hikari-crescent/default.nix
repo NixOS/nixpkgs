@@ -5,6 +5,7 @@
   poetry-core,
   hikari,
   sigparse,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dotenv,
   pytest-asyncio,
@@ -12,7 +13,7 @@
   pynacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hikari-crescent";
   version = "1.4.0";
   pyproject = true;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-86NCAlN5/JGrxPVIMs6ARr6H4G3shPcgxASwukptyJo=";
   };
 
@@ -29,6 +30,11 @@ buildPythonPackage rec {
   dependencies = [
     hikari
     sigparse
+  ];
+
+  nativeBuildInputs = [
+    # .dist-info/METADATA specifies version '0'
+    pyprojectVersionPatchHook
   ];
 
   pythonImportsCheck = [ "crescent" ];
@@ -43,6 +49,8 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_handle_resp" ];
 
+  disabledTestPaths = [ "tests/test_bot/test_bot.py" ];
+
   meta = {
     description = "Command handler for Hikari that keeps your project neat and tidy";
     license = lib.licenses.mit;
@@ -50,4 +58,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hikari-crescent";
   };
-}
+})

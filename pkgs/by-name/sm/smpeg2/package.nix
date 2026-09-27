@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "smpeg2";
-  version = "unstable-2022-05-26";
+  version = "2.0.0-unstable-2022-05-26";
 
   src = fetchFromGitHub {
     owner = "icculus";
@@ -48,11 +48,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

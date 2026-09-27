@@ -18,7 +18,7 @@
   result,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "netchannel";
   version = "2.1.3";
 
@@ -26,7 +26,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";
+    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${finalAttrs.version}/mirage-net-xen-${finalAttrs.version}.tbz";
     hash = "sha256-gOpzY4bn9L8wkbeViXy/XQmxKqqJfd99bcHQFitYFOE=";
   };
 
@@ -50,10 +50,10 @@ buildDunePackage rec {
     result
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network device for reading and writing Ethernet frames via then Xen netfront/netback protocol";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/mirage-net-xen";
   };
-}
+})

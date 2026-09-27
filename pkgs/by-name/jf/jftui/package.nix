@@ -8,15 +8,15 @@
   yajl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jftui";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = "jftui";
-    rev = "v${version}";
-    sha256 = "sha256-0gTJ2uXDcK9zCx6yKS3VxFyxSQZ2l4ydKUI2gYbsiao=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-0YhLYaPcFgTl5AiE+8Ah8WDMIaxh5Ov3d5Dk3BLLbbs=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     install -Dm555 build/jftui $out/bin/jftui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Jellyfin Terminal User Interface";
     homepage = "https://github.com/Aanok/jftui";
-    license = licenses.unlicense;
-    maintainers = [ maintainers.nyanloutre ];
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    maintainers = [ lib.maintainers.nyanloutre ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "jftui";
   };
-}
+})

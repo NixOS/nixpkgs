@@ -34,7 +34,6 @@ buildGoModule (finalAttrs: {
   # the binary panics if something required wasn't set during compilation
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.tests = nixosTests.ferretdb;
 
@@ -45,7 +44,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.ferretdb.com/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       noisersup
       julienmalka
     ];

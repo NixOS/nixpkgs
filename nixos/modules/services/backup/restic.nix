@@ -255,7 +255,7 @@ in
             runCheck = lib.mkOption {
               type = lib.types.bool;
               default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
-              defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+              defaultText = lib.literalExpression "builtins.length config.services.backups.${name}.checkOpts > 0";
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
             };
@@ -392,7 +392,7 @@ in
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
         inhibitCmd = lib.concatStringsSep " " [
-          "${pkgs.systemd}/bin/systemd-inhibit"
+          "${config.systemd.package}/bin/systemd-inhibit"
           "--mode='block'"
           "--who='restic'"
           "--what='sleep'"
@@ -478,7 +478,14 @@ in
               ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
             ''}
             ${lib.optionalString backup.initialize ''
-              ${resticCmd} cat config > /dev/null || ${resticCmd} init
+              ${resticCmd} cat config --no-lock > /dev/null || {
+                status=$?
+                if [ "$status" -eq 10 ]; then
+                  ${resticCmd} init
+                else
+                  exit "$status"
+                fi
+              }
             ''}
             ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
               cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
@@ -494,7 +501,7 @@ in
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
             ${lib.optionalString fileBackup ''
-              rm ${filesFromTmpFile}
+              rm -f ${filesFromTmpFile}
             ''}
           '';
         }
@@ -505,6 +512,7 @@ in
       lib.nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
         inherit (backup) timerConfig;
+        unitConfig.X-OnlyManualStart = true;
       }
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 

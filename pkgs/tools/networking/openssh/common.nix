@@ -16,9 +16,10 @@
   # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
   pkgs,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
+  withAudit ? false,
   audit,
+  libcap_ng,
   zlib,
   openssl,
   softhsm,
@@ -46,6 +47,9 @@
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
 
+# libaudit support requires Linux
+assert withAudit -> stdenv.hostPlatform.isLinux;
+
 # FIDO support requires SK support
 assert withFIDO -> withSecurityKey;
 
@@ -66,10 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
-
-    # See discussion in https://github.com/NixOS/nixpkgs/issues/453782 and
-    # https://github.com/openssh/openssh-portable/pull/602
-    ./fix_pkcs11_tests.patch
   ]
   ++ extraPatches;
 
@@ -99,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
   ++ lib.optional withPAM pam
-  ++ lib.optional stdenv.hostPlatform.isStatic audit;
+  ++ lib.optionals withAudit [
+    audit
+    libcap_ng
+  ];
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -107,11 +110,22 @@ stdenv.mkDerivation (finalAttrs: {
     unset LD
   '';
 
-  env = lib.optionalAttrs isNixos {
-    # openssh calls passwd to allow the user to reset an expired password, but nixos
-    # doesn't ship it at /usr/bin/passwd.
-    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
-  };
+  env =
+    lib.optionalAttrs isNixos {
+      # openssh calls passwd to allow the user to reset an expired password, but nixos
+      # doesn't ship it at /usr/bin/passwd.
+      PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+      NIX_LDFLAGS = lib.concatStringsSep " " (
+        lib.optional withKerberos "-lkeyutils"
+        ++ lib.optional withLdns "-lcrypto"
+        ++ lib.optionals withAudit [
+          "-laudit"
+          "-lcap-ng"
+        ]
+      );
+    };
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -136,13 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLdns "--with-ldns"
   ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
   ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
+  ++ lib.optional withAudit "--with-audit=linux"
   ++ extraConfigureFlags;
-
-  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [
-    "-laudit"
-  ]
-  ++ lib.optional withKerberos "-lkeyutils"
-  ++ lib.optional withLdns "-lcrypto";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
@@ -271,7 +280,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = extraMeta.maintainers or [ ];
+    teams = [ lib.teams.security-review ];
     mainProgram = "ssh";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" finalAttrs.version;
   }
   // extraMeta;
 })

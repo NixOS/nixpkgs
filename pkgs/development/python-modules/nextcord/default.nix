@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     tag = "v${version}";
-    hash = "sha256-ex6amnB51Jla5ia2HVaMOZsDOEtgJ8RB1eNTLpXNzSY=";
+    hash = "sha256-4/3RM32kEYt5J4bL7/SsPvKhnT1eGS3o0+9lNMqbSj8=";
   };
 
   patches = [
@@ -73,11 +73,11 @@ buildPythonPackage rec {
     "nextcord.ext.tasks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nextcord/nextcord/blob/${src.tag}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

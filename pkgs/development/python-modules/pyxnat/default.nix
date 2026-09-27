@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   lxml,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyxnat";
   version = "1.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # PyPI dist missing test configuration files:
   src = fetchFromGitHub {
@@ -74,12 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyxnat" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     mainProgram = "sessionmirror.py";
     changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

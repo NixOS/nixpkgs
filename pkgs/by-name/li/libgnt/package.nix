@@ -13,7 +13,7 @@
   buildDocs ? true,
   mesonEmulatorHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnt";
   version = "2.14.4-dev";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional buildDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/pidgin/libgnt-${finalAttrs.version}.tar.xz";
     hash = "sha256-GVkzqacx01dXkbiBulzArSpxXh6cTCPMqqKhfhZMluw=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "python2" false)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ncurses toolkit for creating text-mode graphical user interfaces";
     homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ony ];
   };
-}
+})

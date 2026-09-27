@@ -12,14 +12,12 @@
   mdx,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "kcas";
   version = "0.7.0";
 
-  minimalOCamlVersion = "4.13.0";
-
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/kcas/releases/download/${version}/kcas-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/kcas/releases/download/${finalAttrs.version}/kcas-${finalAttrs.version}.tbz";
     hash = "sha256-mo/otnkB79QdyVgLw1sZFfkR/Z/l15cRVfEYPPd6H5E=";
   };
 
@@ -30,7 +28,7 @@ buildDunePackage rec {
     backoff
   ];
 
-  doCheck = !lib.versionAtLeast ocaml.version "5.4";
+  doCheck = lib.versionAtLeast ocaml.version "5.1" && !lib.versionAtLeast ocaml.version "5.4";
   nativeCheckInputs = [ mdx.bin ];
   checkInputs = [
     alcotest
@@ -44,8 +42,8 @@ buildDunePackage rec {
     longDescription = ''
       A software transactional memory (STM) implementation based on an atomic lock-free multi-word compare-and-set (MCAS) algorithm enhanced with read-only compare operations and ability to block awaiting for changes.
     '';
-    changelog = "https://raw.githubusercontent.com/ocaml-multicore/kcas/refs/tags/${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/ocaml-multicore/kcas/refs/tags/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

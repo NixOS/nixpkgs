@@ -15,7 +15,7 @@
   python3Packages,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "letterpress";
   version = "2.2";
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "letterpress";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cqLodI6UjdLCKLGGcSIbXu1+LOcq2DE00V+lVS7OBMg=";
   };
 
@@ -56,14 +56,14 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
   '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create beautiful ASCII art";
     longDescription = ''
       Letterpress converts your images into a picture made up of ASCII characters.
@@ -71,11 +71,11 @@ python3Packages.buildPythonApplication rec {
       High-res output can still be viewed comfortably by lowering the zoom factor.
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
-    changelog = "https://gitlab.gnome.org/World/Letterpress/-/releases/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dawidd6 ];
-    teams = [ teams.gnome-circle ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/World/Letterpress/-/releases/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
     mainProgram = "letterpress";
   };
-}
+})

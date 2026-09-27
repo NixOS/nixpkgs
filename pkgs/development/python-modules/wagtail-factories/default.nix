@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
-  version = "4.3.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-factories";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-Rbu8D0vmUyF76YzF1QSQC5c0s12GxRrHNuUhMxcZdQY=";
+    hash = "sha256-mVxLnP++j116bfJMJa7GoH1Rqvj7rdj0JsNFm7fJ7h0=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   passthru.tests.wagtail-factories = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Factory boy classes for wagtail";
     homepage = "https://github.com/wagtail/wagtail-factories";
     changelog = "https://github.com/wagtail/wagtail-factories/blob/${src.tag}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

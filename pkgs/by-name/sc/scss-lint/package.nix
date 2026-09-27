@@ -11,14 +11,13 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "scss-lint";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help keep your SCSS files clean and readable";
     homepage = "https://github.com/brigade/scss-lint";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      lovek323
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

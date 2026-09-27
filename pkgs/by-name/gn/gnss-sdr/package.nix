@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchFromGitHub,
   armadillo,
   cmake,
@@ -24,13 +25,13 @@
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.20";
+  version = "0.0.21";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    hash = "sha256-kQv8I4dcWeRuAfYtD5EAAMwvfnOTi+QWDogUZb4M/qQ=";
+    hash = "sha256-3oBF9FajapmXxvE4tQOuzwTkjwmk1DF806nMYdZqQUY=";
   };
 
   patches = [
@@ -114,10 +115,10 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

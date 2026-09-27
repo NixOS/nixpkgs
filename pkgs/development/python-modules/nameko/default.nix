@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # install_requires
   dnspython,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "nameko";
   version = "2.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -58,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nameko" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microservices framework that lets service developers concentrate on application logic and encourages testability";
     mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
     changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siddharthdhakane ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siddharthdhakane ];
   };
 }

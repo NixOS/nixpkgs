@@ -3,18 +3,19 @@
   fetchurl,
   lib,
   stdenv,
+  argp-standalone,
   libgcrypt,
   readline,
   libgpg-error,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.16";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.19";
   pname = "freeipmi";
 
   src = fetchurl {
-    url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
+    url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-+Vwrc3l8SgNBpCp7PEPvtglUxBMNCCrTSP1A2lVLToU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -23,6 +24,9 @@ stdenv.mkDerivation rec {
     libgcrypt
     readline
     libgpg-error
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
   ];
 
   configureFlags = [
@@ -62,7 +66,10 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
+    maintainers = with lib.maintainers; [
+      booxter
+      raskin
+    ];
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
-}
+})

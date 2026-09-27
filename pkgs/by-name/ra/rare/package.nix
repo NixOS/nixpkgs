@@ -6,7 +6,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rare";
   version = "1.10.11";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RareDevs";
     repo = "Rare";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/
-    install -Dm644 $out/${python3Packages.python.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
+    install -Dm644 $out/${python3Packages.python.sitePackages}/rare/resources/images/Rare.png $out/share/icons/rare.png
   '';
 
   preFixup = ''
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "rare";
   };
-}
+})

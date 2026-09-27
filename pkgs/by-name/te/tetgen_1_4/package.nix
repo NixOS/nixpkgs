@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tetgen";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "${meta.homepage}/files/tetgen${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/files/tetgen${finalAttrs.version}.tar.gz";
     sha256 = "0d70vjqdapmy1ghlsxjlvl5z9yp310zw697bapc4zxmp0sxi29wm";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

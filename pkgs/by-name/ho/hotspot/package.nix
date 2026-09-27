@@ -16,15 +16,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hotspot";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    tag = "v${version}";
-    hash = "sha256-O2wp19scyHIwIY2AzKmPmorGXDH249/OhSg+KtzOYhI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JIcPu9luVivlCmZQulTXfxwnxCvE2YSp7FFUkldktxg=";
     fetchSubmodules = true;
   };
 
@@ -34,14 +34,6 @@ stdenv.mkDerivation rec {
     # stable patchelf corrupts the binary
     patchelfUnstable
     qt6.wrapQtAppsHook
-  ];
-
-  patches = [
-    # Fix build issue with Qt 6.9, can be removed in next release
-    (fetchpatch {
-      url = "https://github.com/KDAB/hotspot/pull/694/commits/5ef04c1dd60846b0d1746132e7e63289ee25f259.patch";
-      hash = "sha256-WYMM1/CY05fztSiRNZQ2Q16n5erjY+AE6gSQgSlb3HA=";
-    })
   ];
 
   cmakeFlags = [ (lib.strings.cmakeBool "QT6_BUILD" true) ];
@@ -87,7 +79,7 @@ stdenv.mkDerivation rec {
       $out/libexec/hotspot-perfparser
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for Linux perf";
     mainProgram = "hotspot";
     longDescription = ''
@@ -96,15 +88,15 @@ stdenv.mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       nh2
       tmarkus
     ];
   };
-}
+})

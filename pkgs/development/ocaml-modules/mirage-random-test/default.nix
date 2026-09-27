@@ -6,7 +6,7 @@
   mirage-random,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-random-test";
   version = "0.1.0";
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    url = "https://github.com/mirage/mirage-random-test/releases/download/v${finalAttrs.version}/mirage-random-test-v${finalAttrs.version}.tbz";
     sha256 = "1jmjyb9a4v7l0xxgdwpr9zshzr8xk3hybra6y2dp51anbwk8kv46";
   };
 
@@ -24,10 +24,10 @@ buildDunePackage rec {
     mirage-random
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stub random device implementation for testing";
     homepage = "https://github.com/mirage/mirage-random";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

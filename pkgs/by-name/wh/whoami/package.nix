@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "whoami";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "whoami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3jzLdCmmts/7S1Oxig9Dg3kRGh/H5l5UD7ztev0yvXY=";
+    hash = "sha256-0ijolVbIttA7yhnN8eDx/FercHh9x81Hpk/CqGzmwhs=";
   };
 
-  vendorHash = "sha256-0Qxw+MUYVgzgWB8vi3HBYtVXSq/btfh4ZfV/m1chNrA=";
+  vendorHash = "sha256-2smvg0b226PSvAEOssCM5NXIqluDBmjzjYd54LWs27A=";
 
   ldflags = [ "-s" ];
 

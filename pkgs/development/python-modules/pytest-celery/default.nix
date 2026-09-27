@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  celery,
   debugpy,
   docker,
   fetchFromGitHub,
@@ -10,22 +9,26 @@
   psutil,
   pytest-docker-tools,
   pytest,
-  pythonOlder,
   tenacity,
+
+  # optional dependencies
+  redis,
+  python-memcached,
+  boto3,
+  botocore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "pytest-celery";
     tag = "v${version}";
-    hash = "sha256-E8GO/00IC9kUvQLZmTFaK4FFQ7d+/tw/kVTQbAqRRRM=";
+    hash = "sha256-8qDnyMv0NxMFWGRbJ63Ye/dSRr8A6Azh2J5gkiwYYzI=";
   };
 
   postPatch = ''
@@ -56,14 +59,31 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  optional-dependencies = {
+    all = [
+      redis
+      python-memcached
+      boto3
+      botocore
+      urllib3
+    ];
+    redis = [ redis ];
+    memcached = [ python-memcached ];
+    sqs = [
+      boto3
+      botocore
+      urllib3
+    ];
+  };
+
   # Infinite recursion with celery
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to enable celery.contrib.pytest";
     homepage = "https://github.com/celery/pytest-celery";
     changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

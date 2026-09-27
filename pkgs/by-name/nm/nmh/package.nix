@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nmh.nongnu.org/";
     downloadPage = "https://download.savannah.nongnu.org/releases/nmh/";
     changelog = "https://savannah.nongnu.org/news/?group=nmh";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     longDescription = ''
       This is the nmh mail user agent (reader/sender), a command-line based
       mail reader that is powerful and extensible.  nmh is an excellent choice
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       claws-mail's mail folders.  Most other mail clients have migrated to
       maildir.
     '';
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
   };
 
 })

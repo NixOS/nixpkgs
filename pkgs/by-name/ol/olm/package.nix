@@ -5,16 +5,19 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "olm";
   version = "3.2.16";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
     repo = "olm";
-    rev = version;
-    sha256 = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
+    tag = finalAttrs.version;
+    hash = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -38,13 +41,12 @@ stdenv.mkDerivation rec {
       --replace-fail "T * const other_pos = other._data;" "T const * other_pos = other._data;"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
     homepage = "https://gitlab.matrix.org/matrix-org/olm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       tilpner
-      oxzi
     ];
     knownVulnerabilities = [
       ''
@@ -95,4 +97,4 @@ stdenv.mkDerivation rec {
       ''
     ];
   };
-}
+})

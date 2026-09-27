@@ -1,51 +1,56 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  makeBinaryWrapper,
   pkg-config,
-  libxkbcommon,
   openssl,
   rust-jemalloc-sys-unprefixed,
   sqlite,
-  vulkan-loader,
-  wayland,
+  bash,
+  coreutils,
   iproute2,
   iptables,
-  libglvnd,
-  copyDesktopItems,
-  makeDesktopItem,
   nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
+    bash
+    coreutils
     iproute2
     iptables
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.86";
+  version = "0.2.102";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-68b6czefoqLskdqhc9kDIoS8eDCKu56lqvX8Jz47C3k=";
+    hash = "sha256-E3msw4yG5RxKapHBvhGEVlsJiLgysCgjAtOrJ8fGES0=";
   };
 
-  cargoHash = "sha256-CoYnP83Ci5Jp3Hunm2+xdXBu0mlhADf4jyfLSIXZ0jI=";
+  cargoHash = "sha256-w+1JLxvflb8PQqNi5MnxoEcWctuaC6Ux3oNYJzB6oaE=";
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
 
-    # This setting is dumped from https://github.com/geph-official/gephgui-wry/blob/a85a632448e548f69f9d1eea3d06a4bdc8be3d57/src/daemon.rs#L230
-    cat ${./settings_default.yaml} | base32 -w 0  | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567' '0123456789ABCDEFGHJKMNPQRSTVWXYZ' | sed 's/=//g' > binaries/geph5-client-gui/src/settings_default.yaml.base32
+    substituteInPlace binaries/geph5-client/src/vpn/linux.rs \
+      --replace-fail 'Command::new("sh")' 'Command::new("${bash}/bin/sh")' \
+      --replace-fail '/usr/bin/env ' '${lib.getExe' coreutils "env"} '
+  '';
+
+  postInstall = ''
+    rm -rf "$out/lib"
   '';
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     pkg-config
-    copyDesktopItems
   ];
 
   buildInputs = [
@@ -61,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [
     "aws_lambda"
-    "windivert"
+    # "windivert" # Only on Windows
   ];
 
   checkFlags = [
@@ -69,37 +74,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=traffcount::tests::test_traffic_count_basic"
     # Requires network
     "--skip=dns::tests::resolve_google"
+    "--skip=tests::test_clib"
     # Never finish
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
     "--skip=tests::ping_pong"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot connect to the internet within the macOS sandbox
+    "--skip=tests::test_successful_ping"
+    "--skip=tests::test_failed_ping"
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Geph5";
-      desktopName = "Geph5";
-      icon = "geph5";
-      exec = "geph5-client-gui";
-      categories = [ "Network" ];
-      comment = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
-    })
-  ];
-
-  postInstall = ''
-    install -m 444 -D binaries/geph5-client-gui/icon.png $out/share/icons/hicolor/512x512/apps/geph5.png
-  '';
-
-  postFixup = ''
-    # Add required but not explicitly requested libraries
-    patchelf --add-rpath '${
-      lib.makeLibraryPath [
-        wayland
-        libxkbcommon
-        vulkan-loader
-        libglvnd
-      ]
-    }' "$out/bin/geph5-client-gui"
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    for program in $out/bin/*; do
+      wrapProgram "$program" --prefix PATH : ${binPath}
+    done
   '';
 
   passthru.updateScript = nix-update-script {
@@ -114,7 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/geph-official/geph5";
     changelog = "https://github.com/geph-official/geph5/releases/tag/geph5-client-v${finalAttrs.version}";
     mainProgram = "geph5-client";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin; # VPN mode is not yet available on macOS.
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       penalty1083

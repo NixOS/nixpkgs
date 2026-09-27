@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchzip,
@@ -7,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opentyrian";
   version = "2.1.20221123";
 
   src = fetchFromGitHub {
     owner = "opentyrian";
     repo = "opentyrian";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
   };
 
@@ -42,7 +43,11 @@ stdenv.mkDerivation rec {
     description = ''Open source port of the game "Tyrian"'';
     mainProgram = "opentyrian";
     homepage = "https://github.com/opentyrian/opentyrian";
-    # This does not account of Tyrian data.
-    # license = lib.licenses.gpl2;
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Plus # opentyrian
+        unfree # First-party assets we bundle
+      ];
   };
-}
+})

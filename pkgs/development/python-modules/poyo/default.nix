@@ -4,19 +4,19 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.5.0";
   format = "setuptools";
   pname = "poyo";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1pflivs6j22frz0v3dqxnvc8yb8fb52g11lqr88z0i8cg2m5csg2";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hackebrot/poyo";
     description = "Lightweight YAML Parser for Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

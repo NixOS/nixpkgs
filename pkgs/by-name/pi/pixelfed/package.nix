@@ -7,19 +7,21 @@
   dataDir ? "/var/lib/pixelfed",
   runtimeDir ? "/run/pixelfed",
 }:
-
-php.buildComposerProject2 (finalAttrs: {
+let
+  php' = php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ffi ]));
+in
+php'.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.6";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxJWoFNyIGQ6o9g2Q0/jaBMyeH8UnbTgha2goHAurvY=";
+    hash = "sha256-eWNpoCyKK7vDx4kCKsZhieMyZhTDC9FS6gVqLKPzviQ=";
   };
 
-  vendorHash = "sha256-ciHP6dE42pXupZl4V37RWcHkIZ+xf6cnpwqd3C1dNmQ=";
+  vendorHash = "sha256-A7uHuE+9tfNMxtHhZL5+hsnW3qkJaPeKW119xB32qRM=";
 
   postInstall = ''
     chmod -R u+w $out/share
@@ -40,11 +42,11 @@ php.buildComposerProject2 (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Federated image sharing platform";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
-    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
     platforms = php.meta.platforms;
   };
 })

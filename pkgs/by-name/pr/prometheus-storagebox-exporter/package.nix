@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-storagebox-exporter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fleaz";
     repo = "prometheus-storagebox-exporter";
-    hash = "sha256-sufxNnHAdOaYEzKj9vriDrJF6Tq4Eim3Z45FEuuG97Q=";
-    tag = "v${version}";
+    hash = "sha256-eHS0/nrfl6pnB4GjbHAaQKUOHJYGy+a56N+/WNDht6Q=";
+    tag = "v${finalAttrs.version}";
   };
 
-  vendorHash = "sha256-hWM7JnL0x+vsUrQsJZGM3z2jB3F1wtjKWmX8j+WnjKY=";
+  vendorHash = "sha256-NlTAmurQz7c+Gor0ExQoXUxAzcuCnk0ra3J4bojoFeU=";
 
   meta = {
     description = "Prometheus exporter for Hetzner storage boxes";
@@ -27,4 +27,4 @@ buildGoModule rec {
       fleaz
     ];
   };
-}
+})

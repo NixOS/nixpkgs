@@ -8,8 +8,8 @@
   fetchurl,
   flac,
   gcc14,
-  gssdp,
-  gupnp,
+  # gssdp,
+  # gupnp,
   gupnp-av,
   lame,
   libgmpris,
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     flac
     gcc14.cc.lib
     rygel-hqplayerd
-    gssdp
-    gupnp
+    # gssdp
+    # gupnp
     gupnp-av
     lame
     libgmpris
@@ -110,12 +110,17 @@ stdenv.mkDerivation rec {
     rygel = rygel-hqplayerd;
   };
 
-  meta = with lib; {
+  meta = {
+    # libsoup 2.4 and its dependents (specifically gupnp and gssdp) were
+    # removed due to being insecure and having many known vulnerabilities. this
+    # thus no longer builds. this may be unbroken by updating to hqplayer 6.0,
+    # as it ostensibly removes the need for rygel and gupnp at all.
+    broken = true;
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "xfs_undelete";
-  version = "unstable-2023-04-12";
+  version = "12.0-unstable-2023-04-11";
 
   src = fetchFromGitHub {
     repo = "xfs_undelete";
@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Undelete tool for the XFS filesystem";
     mainProgram = "xfs_undelete";
     homepage = "https://github.com/ianka/xfs_undelete";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.deepfire ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

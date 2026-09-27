@@ -14,7 +14,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   tenacity,
   respx,
   retrying,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "qcs-api-client";
   version = "0.26.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
@@ -80,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcs_api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://qcs-api-client-python.readthedocs.io/";
     changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

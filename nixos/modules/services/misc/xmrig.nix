@@ -65,7 +65,7 @@ in
     };
   };
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ratsclub ];
+  meta = {
+    maintainers = with lib.maintainers; [ ratsclub ];
   };
 }

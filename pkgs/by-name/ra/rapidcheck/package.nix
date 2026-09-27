@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidcheck";
-  version = "0-unstable-2023-12-14";
+  version = "0-unstable-2026-08-06";
 
   src = fetchFromGitHub {
     owner = "emil-e";
     repo = "rapidcheck";
-    rev = "ff6af6fc683159deb51c543b065eba14dfcf329b";
-    hash = "sha256-Ixz5RpY0n8Un/Pv4XoTfbs40+70iyMbkQUjDqoLaWOg=";
+    rev = "6e8dadfdafa3a74eabb52ead87f8787f72eccd0b";
+    hash = "sha256-AOHG06EVsOOdvyOohP5hsFuEe7yfXuvkEgFHQUVUs0w=";
   };
 
   outputs = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ framework for property based testing inspired by QuickCheck";
     inherit (finalAttrs.src.meta) homepage;
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     pkgConfigModules = [
       "rapidcheck"
       # Extras
@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       "rapidcheck_doctest"
       "rapidcheck_gtest"
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

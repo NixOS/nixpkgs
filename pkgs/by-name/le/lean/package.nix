@@ -54,7 +54,13 @@ stdenv.mkDerivation rec {
         --subst-var-by GIT_SHA1 "${src.rev}"
     '';
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    sed -e '1i #include <cstdint>' -i src/util/hash.{cpp,h}
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace $out/bin/leanpkg \
@@ -62,6 +68,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";

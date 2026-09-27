@@ -1,11 +1,11 @@
 {
   lib,
-  python3Packages,
+  python313Packages,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "beeref";
   version = "0.3.3";
   pyproject = true;
@@ -13,13 +13,13 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rbreu";
     repo = "beeref";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GtxiJKj3tlzI1kVXzJg0LNAUcodXSna17ZvAtsAEH4M=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ python313Packages.setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     exif
     lxml
     pyqt6
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/rbreu/beeref/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/rbreu/beeref/blob/v${finalAttrs.version}/CHANGELOG.rst";
     description = "Reference image viewer";
     homepage = "https://beeref.org";
     license = with lib.licenses; [
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

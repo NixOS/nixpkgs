@@ -9,7 +9,7 @@
   uutf,
   cmdliner,
   cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "18.0.0" else "15.0.0",
 }:
 
 let
@@ -18,13 +18,13 @@ let
   hash =
     {
       "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
-      "17.0.0" = "sha256-5XYZU8Ros2aiCy04xzLiwhN+v5kM9Y3twdVPQ8IY1GA=";
+      "18.0.0" = "sha256-PigyC3vjIFWo2pNa3yUJBv3qgcpZXWf6ytGIOoaiHiM=";
     }
     ."${version}";
 in
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit version;
+stdenv.mkDerivation (finallAttrs: {
+  name = "ocaml${ocaml.version}-${finallAttrs.pname}-${finallAttrs.version}";
+  inherit version pname;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
@@ -57,13 +57,13 @@ stdenv.mkDerivation {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml module for normalizing Unicode text";
     homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "unftrip";
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.03";
   };
-}
+})

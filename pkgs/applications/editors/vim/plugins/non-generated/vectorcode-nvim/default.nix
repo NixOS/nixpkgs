@@ -33,7 +33,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Index and navigate your code repository using vectorcode";
-    homepage = "https://github.com/Davidyz/VectorCode/blob/main/docs/neovim.md";
+    homepage = "https://github.com/Davidyz/VectorCode/blob/main/docs/neovim/README.md";
     inherit (vectorcode.meta) changelog license;
     maintainers = with lib.maintainers; [ sarahec ];
   };

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "squid-exporter";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "boynux";
     repo = "squid-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UH/+YbUiAqgAJ8Xm/6cZg5imFSgA6LHU6+SHseq5IPw=";
   };
 
@@ -20,7 +20,8 @@ buildGoModule rec {
   meta = {
     description = "Squid Prometheus exporter";
     homepage = "https://github.com/boynux/squid-exporter";
+    mainProgram = "squid-exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ srhb ];
   };
-}
+})

@@ -9,18 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ruri";
-  version = "3.9.1";
+  version = "3.9.5";
 
   src = fetchFromGitHub {
     owner = "RuriOSS";
     repo = "ruri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-stM4hSLdSqmYUZ/XBD3Y1GylrrGRISlcy8LN07HREpQ=";
+    hash = "sha256-eiljz0atD2lmgl4emoCw9xWsqm/cXP8QEj7AfcyHaSE=";
   };
-
-  patches = [
-    ./cmake-install.patch
-  ];
 
   buildInputs = [
     libcap
@@ -34,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Self-contained Linux container implementation";
     homepage = "https://wiki.crack.moe/ruri";
-    downloadPage = "https://github.com/Moe-hacker/ruri";
-    changelog = "https://github.com/Moe-hacker/ruri/releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/RuriOSS/ruri";
+    changelog = "https://github.com/RuriOSS/ruri/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "ruri";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

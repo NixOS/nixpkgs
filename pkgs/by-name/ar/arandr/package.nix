@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  fetchpatch,
   python3Packages,
   gobject-introspection,
   gsettings-desktop-schemas,
@@ -18,7 +19,7 @@ let
     pygobject3
     ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "arandr";
   version = "0.1.11";
   pyproject = true;
@@ -26,13 +27,21 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "arandr";
     repo = "arandr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
 
-  # patch to set mtime=0 on setup.py
-  patches = [ ./gzip-timestamp-fix.patch ];
-  patchFlags = [ "-p0" ];
+  patches = [
+    # patch to set mtime=0 on setup.py
+    ./gzip-timestamp-fix.patch
+
+    # fixes build with setuptools 81+, while keeping it backwards compatible
+    (fetchpatch {
+      name = "arandr-0.1.11-setuptools-81.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-misc/arandr/files/arandr-0.1.11-setuptools-81.patch";
+      hash = "sha256-b9U8b4rdkN5lWDVpv50szaVS0rAZVSy7q6IXNVLvq3A=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -42,7 +51,6 @@ buildPythonApplication rec {
   buildInputs = [
     gsettings-desktop-schemas
     gtk3
-    xrandr
   ];
 
   build-system = [ setuptools ];
@@ -61,9 +69,13 @@ buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xrandr ])
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -72,7 +84,7 @@ buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
+    changelog = "https://gitlab.com/arandr/arandr/-/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Simple visual front end for XRandR";
     homepage = "https://christian.amsuess.com/tools/arandr/";
     license = lib.licenses.gpl3Plus;
@@ -81,4 +93,4 @@ buildPythonApplication rec {
       gepbird
     ];
   };
-}
+})

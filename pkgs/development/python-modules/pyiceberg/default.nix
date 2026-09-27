@@ -6,7 +6,6 @@
 
   # build-system
   cython,
-  poetry-core,
   setuptools,
 
   # dependencies
@@ -19,7 +18,6 @@
   pyroaring,
   requests,
   rich,
-  sortedcontainers,
   strictyaml,
   tenacity,
   zstandard,
@@ -27,18 +25,17 @@
   # optional-dependencies
   adlfs,
   google-cloud-bigquery,
-  # bodo,
-  # daft,
   datafusion,
   duckdb,
   pyarrow,
   boto3,
+  azure-identity,
   google-auth,
   gcsfs,
+  geoarrow-pyarrow,
   huggingface-hub,
   thrift,
   kerberos,
-  # thrift-sasl,
   pandas,
   polars,
   pyiceberg-core,
@@ -55,46 +52,32 @@
   moto,
   pyspark,
   pytestCheckHook,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   requests-mock,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
-  pname = "iceberg-python";
-  version = "0.10.0";
+buildPythonPackage (finalAttrs: {
+  pname = "pyiceberg";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
-    tag = "pyiceberg-${version}";
-    hash = "sha256-uR8nmKVjYjiArcNaf/Af2kGh14p59VV9g2mKPKmiJnc=";
+    tag = "pyiceberg-${finalAttrs.version}";
+    hash = "sha256-rH+lURcsMqU+Dz4AdofngxLVhJzZIp4LMru1yyvyItI=";
   };
-
-  patches = [
-    # Build script fails to build the cython extension on python 3.11 (no issues with python 3.12):
-    # distutils.errors.DistutilsSetupError: each element of 'ext_modules' option must be an Extension instance or 2-tuple
-    # This error vanishes if Cython and setuptools imports are swapped
-    # https://stackoverflow.com/a/53356077/11196710
-    ./reorder-imports-in-build-script.patch
-  ];
 
   build-system = [
     cython
-    poetry-core
     setuptools
   ];
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
-
-  pythonRelaxDeps = [
-    "cachetools"
-    "rich"
-  ];
 
   dependencies = [
     cachetools
@@ -106,7 +89,6 @@ buildPythonPackage rec {
     pyroaring
     requests
     rich
-    sortedcontainers
     strictyaml
     tenacity
     zstandard
@@ -135,11 +117,17 @@ buildPythonPackage rec {
     dynamodb = [
       boto3
     ];
+    entra-auth = [
+      azure-identity
+    ];
     gcp-auth = [
       google-auth
     ];
     gcsfs = [
       gcsfs
+    ];
+    geoarrow = [
+      geoarrow-pyarrow
     ];
     glue = [
       boto3
@@ -164,7 +152,6 @@ buildPythonPackage rec {
     ];
     pyarrow = [
       pyarrow
-      pyiceberg-core
     ];
     pyiceberg-core = [
       pyiceberg-core
@@ -190,9 +177,6 @@ buildPythonPackage rec {
     sql-sqlite = [
       sqlalchemy
     ];
-    zstandard = [
-      zstandard
-    ];
   };
 
   pythonImportsCheck = [
@@ -209,24 +193,27 @@ buildPythonPackage rec {
     fastavro
     moto
     pyspark
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
     pytestCheckHook
     requests-mock
   ]
-  ++ optional-dependencies.bigquery
-  ++ optional-dependencies.hive
-  ++ optional-dependencies.pandas
-  ++ optional-dependencies.pyarrow
-  ++ optional-dependencies.s3fs
-  ++ optional-dependencies.sql-sqlite
+  ++ finalAttrs.passthru.optional-dependencies.adlfs
+  ++ finalAttrs.passthru.optional-dependencies.bigquery
+  ++ finalAttrs.passthru.optional-dependencies.entra-auth
+  ++ finalAttrs.passthru.optional-dependencies.geoarrow
+  ++ finalAttrs.passthru.optional-dependencies.hive
+  ++ finalAttrs.passthru.optional-dependencies.pandas
+  ++ finalAttrs.passthru.optional-dependencies.pyarrow
+  ++ finalAttrs.passthru.optional-dependencies.pyiceberg-core
+  ++ finalAttrs.passthru.optional-dependencies.s3fs
+  ++ finalAttrs.passthru.optional-dependencies.sql-sqlite
   ++ moto.optional-dependencies.server;
 
-  pytestFlags = [
-    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "-Wignore::ResourceWarning"
-  ];
+  preCheck = ''
+    rm -rf pyiceberg
+  '';
 
   disabledTestPaths = [
     # Several errors:
@@ -234,9 +221,20 @@ buildPythonPackage rec {
     # - requests.exceptions.ConnectionError: HTTPConnectionPool(host='localhost', port=8181): Max retries exceeded with url: /v1/config
     # - thrift.transport.TTransport.TTransportException: Could not connect to any of [('127.0.0.1', 9083)]
     "tests/integration"
+
+    # ModuleNotFoundError: No module named 'nbformat'
+    "tests/notebooks"
+
+    # Segfaults: `pyiceberg-core` bundles `datafusion-ffi` 53.x, whose ABI is
+    # incompatible with the packaged `datafusion` 54.x
+    # https://github.com/apache/datafusion/issues/17374
+    "tests/table/test_datafusion.py"
   ];
 
   disabledTests = [
+    # AssertionError: assert 'grant_type=c...scope=catalog' == 'grant_type=c...scope=catalog'
+    "test_auth_header"
+
     # KeyError: 'authorization'
     "test_token_200"
     "test_token_200_without_optional_fields"
@@ -244,12 +242,10 @@ buildPythonPackage rec {
     "test_token_with_optional_oauth_params"
     "test_token_with_custom_scope"
 
-    # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
-    "test_datafusion_register_pyiceberg_tabl"
-
     # ModuleNotFoundError: No module named 'puresasl'
     "test_create_hive_client_with_kerberos"
     "test_create_hive_client_with_kerberos_using_context_manager"
+    "test_kerberized_client_uses_fresh_transport_on_reuse"
 
     # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
     "test_checking_if_a_file_exists"
@@ -289,6 +285,14 @@ buildPythonPackage rec {
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+
+    # Timing sensitive
+    #   AssertionError: assert 8 == 5
+    "test_hive_wait_for_lock"
+
+    # Memory usage sensitive
+    #   AssertionError: Peak memory ratio (5.7x) exceeds 3.0x
+    "test_add_files_dup_check_memory_growth"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
@@ -304,11 +308,8 @@ buildPythonPackage rec {
     "test_identity_transform_columns_projection"
     "test_in_memory_catalog_context_manager"
     "test_inspect_partition_for_nested_field"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AssertionError:
-    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
-    "test_read_not_struct_type"
+    "test_inspect_partitions_respects_partition_evolution"
+    "test_partition_column_projection_with_schema_evolution"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -316,8 +317,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";
     homepage = "https://github.com/apache/iceberg-python";
-    changelog = "https://github.com/apache/iceberg-python/releases/tag/pyiceberg-${version}";
+    changelog = "https://github.com/apache/iceberg-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

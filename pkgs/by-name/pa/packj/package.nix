@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "packj";
   version = "0.15-beta";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ossillate-inc";
     repo = "packj";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OWcJE2Gtjgoj9bCGZcHDfAFLWRP4wdENeJAnILMdUXY=";
   };
 
@@ -55,9 +55,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to detect malicious/vulnerable open-source dependencies";
     homepage = "https://github.com/ossillate-inc/packj";
-    changelog = "https://github.com/ossillate-inc/packj/releases/tag/v${version}";
+    changelog = "https://github.com/ossillate-inc/packj/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "packj";
   };
-}
+})

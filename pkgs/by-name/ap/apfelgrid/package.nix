@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apfelgrid";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nhartland";
     repo = "APFELgrid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0l0cyxd00kmb5aggzwsxg83ah0qiwav0shbxkxwrz3dvw78n89jk";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ultra-fast theory predictions for collider observables";
     mainProgram = "apfelgrid-config";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://nhartland.github.io/APFELgrid/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

@@ -11,12 +11,12 @@
   keybinder3,
   intltool,
   libcanberra-gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   libpulseaudio,
   libgudev,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kazam";
   version = "1.5.5-unstable-2025-01-02";
   pyproject = true;
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libwnck
     keybinder3
-    libappindicator-gtk3
+    libappindicator
     libgudev
   ];
 
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     pycairo
     dbus-python
-    xlib
+    python-xlib
   ];
 
   patches = [
@@ -75,10 +75,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";
-    changelog = "https://github.com/niknah/kazam/raw/${src.rev}/NEWS";
+    changelog = "https://github.com/niknah/kazam/raw/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "kazam";
   };
-}
+})

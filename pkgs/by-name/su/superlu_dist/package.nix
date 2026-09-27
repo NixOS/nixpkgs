@@ -18,6 +18,7 @@
   isILP64 ? false,
 
   # passthru.tests
+  mpich,
   superlu_dist,
 }:
 
@@ -35,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = "rm $out/SRC/prec-independent/mc64ad_dist.c";
     hash = "sha256-i/Gg+9oMNNRlviwXUSRkWNaLRZLPWZRtA1fGYqh2X0k=";
   };
+
+  # --oversubscribe unrecognized by mpich
+  # see https://github.com/xiaoyeli/superlu_dist/issues/208
+  postPatch = ''
+    substituteInPlace TEST/CMakeLists.txt \
+      --replace-fail "-oversubscribe" ""
+  '';
 
   patches = [
     ./mc64ad_dist-stub.patch
@@ -89,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit isILP64;
     tests = {
       ilp64 = superlu_dist.override { isILP64 = true; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      mpich = superlu_dist.override {
+        mpi = mpich;
+      };
     };
   };
 

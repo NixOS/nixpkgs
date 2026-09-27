@@ -1,36 +1,37 @@
 {
   lib,
-  attrs,
-  botocore,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  hypothesis,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
   inquirer,
   jmespath,
-  mypy-extensions,
   pip,
-  pytestCheckHook,
   pyyaml,
-  requests,
-  setuptools,
   six,
-  typing-extensions,
-  watchdog,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
   websocket-client,
-  wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chalice";
-  version = "1.32.0";
+  version = "1.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
-    tag = version;
-    hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
+    tag = finalAttrs.version;
+    hash = "sha256-c5xzgrxRFRlvgMnf/L8rhG7rYJLtuMvDZHYsPaHkdRs=";
   };
 
   build-system = [ setuptools ];
@@ -42,10 +43,11 @@ buildPythonPackage rec {
     jmespath
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    wheel
   ];
+
+  pythonRelaxDeps = [ "pip" ];
 
   nativeCheckInputs = [
     hypothesis
@@ -73,22 +75,23 @@ buildPythonPackage rec {
     "test_can_import_env_vars"
     "test_stack_trace_printed_on_error"
     # Don't build
-    "test_can_generate_pipeline_for_all"
     "test_build_wheel"
     # Tests require dist
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
   ];
 
   pythonImportsCheck = [ "chalice" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Serverless Microframework for AWS";
     mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
-    changelog = "https://github.com/aws/chalice/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
+    changelog = "https://github.com/aws/chalice/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

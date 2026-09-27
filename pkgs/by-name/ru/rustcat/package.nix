@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustcat";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "robiot";
     repo = "rustcat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/6vNFh7n6WvYerrL8m9sgUKsO2KKj7/f8xc4rzHy9Io=";
   };
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Port listener and reverse shell";
     homepage = "https://github.com/robiot/rustcat";
-    changelog = "https://github.com/robiot/rustcat/releases/tag/v${version}";
+    changelog = "https://github.com/robiot/rustcat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "rcat";
   };
-}
+})

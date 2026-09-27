@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "esphome-dashboard-api";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard-api";
     tag = version;
-    hash = "sha256-b3PnMzlA9N8NH6R5ed6wf5QF45i887iQk2QgH7e755k=";
+    hash = "sha256-3VVdWHGpLSgyQkp3b0wVao5lW/3peWES2cE8P5KBM5Q=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "esphome_dashboard_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to interact with ESPHome Dashboard";
     homepage = "https://github.com/esphome/dashboard-api";
     changelog = "https://github.com/esphome/dashboard-api/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

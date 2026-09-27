@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "connect";
   version = "1.105";
 
   src = fetchurl {
-    url = "https://bitbucket.org/gotoh/connect/get/${version}.tar.bz2";
+    url = "https://bitbucket.org/gotoh/connect/get/${finalAttrs.version}.tar.bz2";
     sha256 = "00yld6yinc8s4xv3b8kbvzn2f4rja5dmp6ysv3n4847qn4k60dh7";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jcumming ];
     mainProgram = "connect";
   };
-}
+})

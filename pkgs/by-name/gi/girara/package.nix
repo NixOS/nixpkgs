@@ -15,11 +15,12 @@
   json-glib,
   libintl,
   zathura,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "girara";
-  version = "0.4.5";
+  version = "2026.07.18";
 
   outputs = [
     "out"
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "girara";
-    tag = version;
-    hash = "sha256-XjRmGgljlkvxwcbPmA9ZFAPAjbClSQDdmQU/GFeLLxI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q4IbB8Wecob9NH6UPqyIifyd3D+IpMCfe725U3htR+s=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +63,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" (
-      (stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.hostPlatform.isDarwin)
-    ))
   ];
 
   checkPhase = ''
@@ -74,8 +72,11 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  passthru.tests = {
-    inherit zathura;
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit zathura;
+    };
   };
 
   meta = {
@@ -89,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

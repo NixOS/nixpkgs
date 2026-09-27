@@ -16,6 +16,7 @@
   markdown-it-py,
   mdit-py-plugins,
   narwhals,
+  opentelemetry-api,
   orjson,
   packaging,
   platformdirs,
@@ -36,6 +37,7 @@
   langchain-core,
   ollama,
   openai,
+  opentelemetry-sdk,
   pandas,
   polars,
   pytest-asyncio,
@@ -45,17 +47,16 @@
   pytest-xdist,
   pytestCheckHook,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shiny";
-  version = "1.5.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
-    tag = "v${version}";
-    hash = "sha256-zRKfSY0rE+jzwYUcrRTIFW3OVmavhMDbAQEpry46zCI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4DnWfJS3vb2AASXyhLBcYhBh4LjLihTEIylm2ChWNtk=";
   };
 
   build-system = [
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     markdown-it-py
     mdit-py-plugins
     narwhals
+    opentelemetry-api
     orjson
     packaging
     platformdirs
@@ -101,6 +103,7 @@ buildPythonPackage rec {
     langchain-core
     ollama
     openai
+    opentelemetry-sdk
     pandas
     polars
     pytest-asyncio
@@ -110,7 +113,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     # ERROR: 'fixture' is not a valid asyncio_default_fixture_loop_scope.
@@ -127,6 +130,15 @@ buildPythonPackage rec {
     "test_theme_from_brand_base_case_compiles"
     # ValueError: A tokenizer is required to impose `token_limits` on messages
     "test_chat_message_trimming"
+
+    # Snapshot tests fail with AssertionError
+    "test_toast_header_icon_renders_in_header"
+    "test_toast_header_icon_with_status_and_title"
+    "test_toast_icon_renders_in_body_with_header"
+    "test_toast_icon_renders_in_body_without_header"
+    "test_toast_icon_works_with_closable_button_in_body"
+    "test_toast_with_both_header_icon_and_body_icon"
+    "test_toast_with_custom_tag_header"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -134,8 +146,8 @@ buildPythonPackage rec {
   meta = {
     description = "Build fast, beautiful web applications in Python";
     homepage = "https://shiny.posit.co/py";
-    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

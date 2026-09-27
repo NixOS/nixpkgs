@@ -1,20 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   pymupdf,
 }:
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "cardimpose";
-  version = "0.2.1-unstable-2024-12-28";
+  version = "0.2.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "frsche";
-    repo = "cardimpose";
-    rev = "eb26a9795e20db3e3dd5b62dbcbbad547cb05a55";
-    hash = "sha256-Fel0YOe2D76h+QAon/wxI6EsZhfLca+0ncNi9i888+E=";
+  __structuredAttrs = true;
+
+  # Get source from Pypi as the GitHub repository doesn't have any version
+  # indicators, so there's no way to tell when a new version is available or
+  # what the version should be.
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-fMI2bvsHGYU7nZ9CdaUtWQkNj2MihMEcBCVy8VbE6F0=";
   };
 
   build-system = [ setuptools ];
@@ -38,4 +41,4 @@ buildPythonPackage {
     badPlatforms = pymupdf.meta.badPlatforms or [ ];
     maintainers = [ lib.maintainers.me-and ];
   };
-}
+})

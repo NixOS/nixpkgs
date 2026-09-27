@@ -21,7 +21,6 @@
   libxml2,
   libglut,
   libsamplerate,
-  pcre,
   libevent,
   libedit,
   yajl,
@@ -29,8 +28,8 @@
   openssl,
   glfw,
   pkg-config,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libmemcached,
 }:
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation {
   version = "2019.05.22-alpha";
 
   src = fetchFromGitHub {
-    owner = "stevedekorte";
+    owner = "IoLanguage";
     repo = "io";
     tag = "2019.05.22-alpha";
     fetchSubmodules = true;
@@ -53,6 +52,10 @@ stdenv.mkDerivation {
       sha256 = "9f06073ac17f26c2ef6298143bdd1babe7783c228f9667622aa6c91bb7ec7fa0";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -77,14 +80,13 @@ stdenv.mkDerivation {
     libxml2
     libglut
     libsamplerate
-    pcre
     libevent
     libedit
     yajl
     glfw
     openssl
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libmemcached
     python3
   ];

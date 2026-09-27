@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cent";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "xm1k3";
     repo = "cent";
-    tag = "v${version}";
-    hash = "sha256-AmOq+n+TcpwDgFjFsFNVl/fAIAJbqYdoR2P1dasb8h8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dblykbFoYc45czbOnxrfR+HIBEyUo9JlzprhwOkCG58=";
   };
 
   vendorHash = "sha256-sn4ZIDP07u9dwVJHy7KrQFZHsGrqpkM8CzcIbNMDiIo=";
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to handle Nuclei community templates";
     homepage = "https://github.com/xm1k3/cent";
-    changelog = "https://github.com/xm1k3/cent/releases/tag/v${version}";
+    changelog = "https://github.com/xm1k3/cent/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "cent";
   };
-}
+})

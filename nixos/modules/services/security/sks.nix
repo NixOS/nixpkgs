@@ -114,7 +114,7 @@ in
     systemd.services =
       let
         hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'";
-        hkpPort = builtins.toString cfg.hkpPort;
+        hkpPort = toString cfg.hkpPort;
       in
       {
         sks-db = {

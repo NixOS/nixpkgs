@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lionheart";
-    repo = "pinboard";
+    repo = "pinboard.py";
     rev = version;
     sha256 = "sha256-+JWr2QmdqASK/X10U0ZOZ95K2ctWceSW167raxZjIW4=";
   };
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   # tests require an API key
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Pinboard.in";
     mainProgram = "pinboard";
-    maintainers = with maintainers; [ djanatyn ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ djanatyn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";
   };
 }

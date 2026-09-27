@@ -5,12 +5,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "empty";
   version = "0.6.21b";
 
   src = fetchzip {
-    url = "mirror://sourceforge/empty/empty/empty-${version}.tgz";
+    url = "mirror://sourceforge/empty/empty/empty-${finalAttrs.version}.tgz";
     sha256 = "1rkixh2byr70pdxrwr4lj1ckh191rjny1m5xbjsa7nqw1fw6c2xs";
     stripRoot = false;
   };
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     rm empty
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://empty.sourceforge.net";
     description = "Simple tool to automate interactive terminal applications";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     longDescription = ''
       The empty utility provides an interface to execute and/or interact with
       processes under pseudo-terminal sessions (PTYs). This tool is definitely
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       - has small and simple source code
       - can easily be ported to almost all UNIX-like systems
     '';
-    maintainers = [ maintainers.djwf ];
+    maintainers = [ lib.maintainers.djwf ];
     mainProgram = "empty";
   };
-}
+})

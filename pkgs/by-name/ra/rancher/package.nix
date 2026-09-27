@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rancher";
-  version = "2.12.3";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-i+l+vs+uD6h0GruvxhkQtb7DYCJ3uysa/rZ8hGmmu7Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DHxPgHm5dzv4o8yZD6SaQ5Q+3UAZ5LJ/scT7dIXe5G8=";
   };
 
   env.CGO_ENABLED = 0;
@@ -20,12 +20,12 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
     "-extldflags"
     "-static"
   ];
 
-  vendorHash = "sha256-mObfou6JXQ+ZWvxWMpdcC1ymngFJZ8k9I+rCYCFvDg4=";
+  vendorHash = "sha256-zy2CefEZbYu1HlfPLZtzYxpLYZ0cJko5W6ErDCukYDc=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher
@@ -33,14 +33,14 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/rancher | grep ${version} > /dev/null
+    $out/bin/rancher | grep ${finalAttrs.version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for interacting with your Rancher Server";
     mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -3,23 +3,22 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   nodejs,
 }:
 
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.5.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "ether";
-    repo = "etherpad-lite";
+    repo = "etherpad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Qrmpz9ehblS2Jdw137CJVKYmhkXt8c9B6kDG8OxZPo=";
+    hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
   };
 
   patches = [
@@ -29,14 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-gajm1yXQPZZ/oB27HwgTEoKLzwMKsHDoo2w+mIOnJrc=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-scJhcZDyqUVdKv/EQvB5+EJN/SvMw220+QOcTUxTFJQ=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_10
     makeWrapper
   ];
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_10 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete
@@ -85,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       It provides full data export capabilities, and runs on your server, under your control.
     '';
     homepage = "https://etherpad.org/";
-    changelog = "https://github.com/ether/etherpad-lite/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ether/etherpad/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       erdnaxe
       f2k1de

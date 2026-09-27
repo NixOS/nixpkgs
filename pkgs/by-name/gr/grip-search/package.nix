@@ -9,14 +9,14 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grip-search";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "sc0ty";
     repo = "grip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bkqarylgzhis6fpj48qbifcd6a26cgnq8784hgnm707rq9kb0rx";
   };
 
@@ -40,17 +40,25 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/general/config.h --replace-fail "CUSTOM-BUILD" "${version}"
+    substituteInPlace src/general/config.h --replace-fail "CUSTOM-BUILD" "${finalAttrs.version}"
 
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required (VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace \
+      src/general/CMakeLists.txt \
+      src/test/CMakeLists.txt \
+      src/gripgen/CMakeLists.txt \
+      src/grip/CMakeLists.txt \
+      --replace-fail ' system' ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/sc0ty/grip";
-    license = licenses.gpl3;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

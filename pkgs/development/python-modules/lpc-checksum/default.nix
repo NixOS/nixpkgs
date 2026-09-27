@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lpc_checksum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python script to calculate LPC firmware checksums";
     mainProgram = "lpc_checksum";
     homepage = "https://pypi.org/project/lpc-checksum/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
   };
 }

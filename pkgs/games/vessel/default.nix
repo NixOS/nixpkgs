@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${version}-bin" in the
+    You can do this by using "nix-prefetch-url file://$PWD/vessel-${version}-bin" in the
     directory where you saved it.
   '';
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,
@@ -96,8 +96,8 @@ stdenv.mkDerivation rec {
       to life, and all the consequences that ensue.
     '';
     homepage = "http://www.strangeloopgames.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 
 }

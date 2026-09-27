@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucap";
-  version = "20240220";
+  version = "20260729";
 
   src = fetchgit {
     url = "https://https.git.savannah.gnu.org/git/gnucap.git";
     tag = finalAttrs.version;
-    hash = "sha256-aZMiNKwI6eQZAxlF/+GoJhKczohgGwZ0/Wgpv3+AhYY=";
+    hash = "sha256-l9FA/7Kl8MgbrbWMQPplo5ohvKcNeriJEgLzZrUTEw8=";
   };
 
   nativeBuildInputs = [

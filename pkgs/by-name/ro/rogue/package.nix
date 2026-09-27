@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses5 ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "http://rogue.rogueforge.net/rogue-5-4/";
     description = "Final version of the original Rogue game developed for the UNIX operating system";

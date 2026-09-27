@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termcolor";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "termcolor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2RXQ8sn2VNhQ2WZfwCCeQuM6x6C+sLA6ulAaFtaDMZw=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DTERMCOLOR_TESTS=ON" ];
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint8_t' has not been declared
     "-include cstdint"
   ];
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ library for printing colored messages";
     homepage = "https://github.com/ikalnytskyi/termcolor";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

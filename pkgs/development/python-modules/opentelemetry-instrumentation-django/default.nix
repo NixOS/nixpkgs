@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   django,
   hatchling,
   opentelemetry-api,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-django";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-django";
 

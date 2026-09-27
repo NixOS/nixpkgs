@@ -3,19 +3,20 @@
   stdenv,
   fetchurl,
   perl,
+  bashNonInteractive,
   libunwind,
   buildPackages,
   gitUpdater,
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strace";
-  version = "6.17";
+  version = "7.2";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Cnx77cfvwHbzJCoDEK8q5jwpKjbdQjbweeiKk+mMucA=";
+    url = "https://strace.io/files/${finalAttrs.version}/strace-${finalAttrs.version}.tar.xz";
+    hash = "sha256-S95iRpJokNzugk9uasQqBnUvR9d+UJfYbjwNbUtwn+U=";
   };
 
   separateDebugInfo = true;
@@ -28,16 +29,18 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  enableParallelBuilding = true;
-
-  # libunwind for -k.
-  # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
-  # The build will silently fall back and -k will not work on RISC-V.
   buildInputs = [
+    bashNonInteractive # for strace-log-merge shebang
+    # libunwind for -k.
+    # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
+    # The build will silently fall back and -k will not work on RISC-V.
     libunwind
   ]
   # -kk
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+
+  enableParallelBuilding = true;
+  strictDeps = true;
 
   configureFlags = [
     "--enable-mpers=check"
@@ -50,19 +53,21 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://strace.io/";
     description = "System call tracer for Linux";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # gpl2Plus is for the test suite
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       ma27
       qyliss
     ];
     mainProgram = "strace";
   };
-}
+})

@@ -9,12 +9,12 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
-  official_extensions_version = "unstable-2024-04-27";
+  official_extensions_rev_date = "2025-12-26";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
-    rev = "71de129744ba37fd4cf363b78445f5345bc6d0b7";
-    hash = "sha256-A+hOjbGNfhwTOAMeo08MUdqfWxxetzLz865oQQDsQlg=";
+    rev = "42c32bfd9af2d816933cf310e24d25888a8e167d";
+    hash = "sha256-El488QK3xWQM01GsuyBizud6VghXsRDqiOblnMfjVxE=";
   };
 
   baseExtensions =
@@ -41,7 +41,7 @@ let
       demo = buildFreshRssExtension {
         FreshRssExtUniqueId = "Demo";
         pname = "demo";
-        version = "unstable-2023-12-22";
+        version = "0.1-unstable-2023-12-22";
         src = fetchFromGitHub {
           owner = "FreshRSS";
           repo = "xExtension-Demo";
@@ -96,7 +96,7 @@ let
       title-wrap = buildFreshRssExtension {
         FreshRssExtUniqueId = "TitleWrap";
         pname = "title-wrap";
-        version = official_extensions_version;
+        version = "0.3.1-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-TitleWrap";
         meta = {
@@ -107,10 +107,24 @@ let
         };
       };
 
+      unsafe-auto-login = buildFreshRssExtension {
+        FreshRssExtUniqueId = "UnsafeAutologin";
+        pname = "unsafe-auto-login";
+        version = "1.0.0-unstable-${official_extensions_rev_date}";
+        src = official_extensions_src;
+        sourceRoot = "${official_extensions_src.name}/xExtension-UnsafeAutologin";
+        meta = {
+          description = "FreshRSS extension to bring back unsafe autologin functionality.";
+          homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-UnsafeAutologin";
+          license = lib.licenses.agpl3Only;
+          maintainers = [ lib.maintainers.stunkymonkey ];
+        };
+      };
+
       youtube = buildFreshRssExtension {
         FreshRssExtUniqueId = "YouTube";
         pname = "youtube";
-        version = official_extensions_version;
+        version = "1.1.0-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-YouTube";
         meta = {

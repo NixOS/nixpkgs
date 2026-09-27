@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-pattern-library";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
     tag = "v${version}";
-    hash = "sha256-urK34rlBU5GuEOlUtmJLGv6wlTP5H/RMAkwQu5S2Jbo=";
+    hash = "sha256-WLGoV9xj7MpUq5gzUz225Tz/TTqMyegyuwLNkHVqQFg=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pattern_library" ];
 
-  meta = with lib; {
+  meta = {
     description = "UI pattern libraries for Django templates";
     homepage = "https://github.com/torchbox/django-pattern-library/";
     changelog = "https://github.com/torchbox/django-pattern-library/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

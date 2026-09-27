@@ -6,14 +6,14 @@
   kissfft,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qm-dsp";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "c4dm";
     repo = "qm-dsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude kissfft}/include/kissfft";
 
-  meta = with lib; {
+  meta = {
     description = "C++ library of functions for DSP and Music Informatics purposes";
     homepage = "https://code.soundsoftware.ac.uk/projects/qm-dsp";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

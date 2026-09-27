@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "teavpn2";
-  version = "unstable-2023-07-25";
+  version = "0.0.1-rc2-unstable-2023-07-25";
 
   src = fetchFromGitHub {
     owner = "TeaInside";
@@ -30,12 +30,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source VPN Software";
     homepage = "https://github.com/TeaInside/teavpn2";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "teavpn2";
-    maintainers = with maintainers; [ ludovicopiero ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
+    platforms = lib.platforms.linux;
   };
 }

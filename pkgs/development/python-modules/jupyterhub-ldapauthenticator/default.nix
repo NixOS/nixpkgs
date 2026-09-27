@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "test_ldap_auth"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple LDAP Authenticator Plugin for JupyterHub";
     homepage = "https://github.com/jupyterhub/ldapauthenticator";
     changelog = "https://github.com/jupyterhub/ldapauthenticator/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

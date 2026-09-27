@@ -26,7 +26,7 @@ in
     };
   }
   // lib.listToAttrs (
-    builtins.map (
+    map (
       client:
       lib.nameValuePair client {
         imports = [
@@ -80,7 +80,7 @@ in
           ''
           # check that all greetings arrived on all clients
         ]
-        ++ builtins.map (other: ''
+        ++ map (other: ''
           ${client}.succeed(
               "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
           )
@@ -97,5 +97,5 @@ in
       # entry is executed by every client before advancing
       # to the next one.
     ''
-    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (builtins.map clientScript clients));
+    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (map clientScript clients));
 }

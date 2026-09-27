@@ -369,6 +369,13 @@ in
         description = "Path to a file containing the SMTP password.";
       };
 
+      incomingMailPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/incomingmailpw";
+        description = "Path to a file containing the IMAP password.";
+      };
+
       metricsTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -698,6 +705,10 @@ in
           PASSWD = "#mailerpass#";
         };
 
+        "email.incoming" = mkIf (cfg.incomingMailPasswordFile != null) {
+          PASSWORD = "#incomingmailpass#";
+        };
+
         metrics = mkIf (cfg.metricsTokenFile != null) {
           TOKEN = "#metricstoken#";
         };
@@ -858,6 +869,10 @@ in
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
 
+            ${lib.optionalString (cfg.incomingMailPasswordFile != null) ''
+              ${replaceSecretBin} '#incomingmailpass#' '${cfg.incomingMailPasswordFile}' '${runConfig}'
+            ''}
+
             ${lib.optionalString (cfg.metricsTokenFile != null) ''
               ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
             ''}
@@ -913,11 +928,12 @@ in
         ]
         ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = !useSendmail;
+        # one mid size deployments, Gitea already gets killed when doing DB migrations
+        TimeoutStartSec = "3m";
+
         # Sandboxing
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = !useSendmail;
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
@@ -937,7 +953,7 @@ in
         ++ lib.optional (useSendmail && config.services.postfix.enable) "AF_NETLINK";
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;

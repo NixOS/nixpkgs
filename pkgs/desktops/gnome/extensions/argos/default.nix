@@ -1,19 +1,18 @@
 {
   fetchFromGitHub,
   lib,
-  stdenv,
-  unstableGitUpdater,
+  stdenvNoCC,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "argos";
-  version = "unstable-2025-09-25";
+  version = "50";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    rev = "c0dc23880e52a2f78b7a5c35b5b3781d5b1366f7";
-    hash = "sha256-A/ugbKxnUJdoMN724ECtRm0QWwCVopmbltt+fUKBp7E=";
+    tag = "GNOME-50";
+    hash = "sha256-KwW4Hzp+0TqFU1ygPURNbbT+ZzQN7eocn2R4IJFmNZQ=";
   };
 
   installPhase = ''
@@ -24,13 +23,12 @@ stdenv.mkDerivation {
   passthru = {
     extensionUuid = "argos@pew.worldwidemann.com";
     extensionPortalSlug = "argos";
-    updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create GNOME Shell extensions in seconds";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ andersk ];
     homepage = "https://github.com/p-e-w/argos";
   };
 }

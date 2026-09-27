@@ -7,12 +7,12 @@
   linphonePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trx";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.pogo.org.uk/~mark/trx/releases/${pname}-${version}.tar.gz";
+    url = "https://www.pogo.org.uk/~mark/trx/releases/trx-${finalAttrs.version}.tar.gz";
     sha256 = "1jjgca92nifjhcr3n0fmpfr6f5gxlqyal2wmgdlgd7hx834r1if7";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple toolset for broadcasting live audio using RTP/UDP and Opus";
     homepage = "http://www.pogo.org.uk/~mark/trx/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.hansjoergschurr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.hansjoergschurr ];
+    platforms = lib.platforms.linux;
   };
-}
+})

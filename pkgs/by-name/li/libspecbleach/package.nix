@@ -2,37 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  meson,
-  ninja,
+  cmake,
   pkg-config,
   fftwFloat,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspecbleach";
-  version = "0.1.6";
+  version = "0.3.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = "libspecbleach";
-    rev = "v${version}";
-    sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l8qVSE8ZBb/IWDcN7wJALtOtjnXk6/FqjTi0xI6TlSk=";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    cmake
     pkg-config
   ];
-  buildInputs = [
-    fftwFloat
+
+  buildInputs = [ fftwFloat ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_FFTW" true)
+    (lib.cmakeBool "ENABLE_EXAMPLES" false)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C library for audio noise reduction";
     homepage = "https://github.com/lucianodato/libspecbleach";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/lucianodato/libspecbleach/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
-}
+})

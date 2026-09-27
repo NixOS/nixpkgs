@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "filecheck";
-  version = "1.0.3";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AntonLydike";
     repo = "filecheck";
     tag = "v${version}";
-    hash = "sha256-oOGQIEPIHL4xQRVKOw+8Z8QSowXlavVnck+IOWA9qd8=";
+    hash = "sha256-Ml8RUk2zgDuU8rZbedjSv3mk6TdIxCBVECA6kMcig5o=";
   };
 
   build-system = [ poetry-core ];
@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "filecheck" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/antonlydike/filecheck/releases/tag/${src.tag}";
     homepage = "https://github.com/antonlydike/filecheck";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python-native clone of LLVMs FileCheck tool";
     mainProgram = "filecheck";
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = with lib.maintainers; [ yorickvp ];
   };
 }

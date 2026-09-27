@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "bandit";
-  version = "1.9.2";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MkEEFc2Tv5yLkZchWdXPHn8GOpFG1wNFZBzTh33jSM4=";
+    hash = "sha256-tYnl3ir+cL1NU/oMHaYZn0CFr2Zv3gDooDTxUqUs1ig=";
   };
 
   build-system = [ pbr ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bandit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security oriented static analyser for python code";
     homepage = "https://bandit.readthedocs.io/";
     changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

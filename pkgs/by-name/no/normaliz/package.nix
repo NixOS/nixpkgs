@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "normaliz";
-  version = "3.11.0";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "normaliz";
     repo = "normaliz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O8zUhuR+e9yNxj9jC2xK7UZ2aUHoEWjwxn3XxTyP8hQ=";
+    hash = "sha256-+puqgmLtn+49rv6aTybbNG7MC/ksKijH2KQOEBKbmMQ=";
   };
 
   buildInputs = [
@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.normaliz.uni-osnabrueck.de/";
     description = "Open source tool for computations in affine monoids, vector configurations, lattice polytopes, and rational cones";
-    maintainers = with maintainers; [ yannickulrich ];
-    platforms = with platforms; unix ++ windows;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ yannickulrich ];
+    platforms = with lib.platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "normaliz";
   };
 })

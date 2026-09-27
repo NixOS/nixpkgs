@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Ubuntu Font Family";
     longDescription = "The Ubuntu Font Family are a set of matching libre/open fonts.
     The fonts were originally developed in 2010–2011,
@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     and expanded again in 2022–2023 when variable fonts were added.";
     homepage = "https://design.ubuntu.com/font";
     changelog = "https://github.com/canonical/Ubuntu-Sans-fonts/blob/${finalAttrs.src.rev}/FONTLOG.txt";
-    license = licenses.ufl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.ufl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

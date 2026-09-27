@@ -2,7 +2,6 @@
   lib,
   acme,
   aiohttp,
-  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
@@ -10,8 +9,9 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  grpcio,
+  icmplib,
   josepy,
-  litellm,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -29,42 +29,41 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "1.6.1";
+  version = "2.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    tag = version;
-    hash = "sha256-LBJPzMosSgfdONu2preIBKmlKhY4P+jFTmR8u2BKCZI=";
+    tag = finalAttrs.version;
+    hash = "sha256-neW9v4o0Au9+AYmfzDoGXHOLMvHzQcloinmaZ7O98HY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "acme"
-    "snitun"
   ];
 
   dependencies = [
     acme
     aiohttp
-    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
     cryptography
+    grpcio
+    icmplib
     josepy
-    litellm
     pycognito
     pyjwt
     sentence-stream
@@ -86,11 +85,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fab
+      Scriptkiddi
+    ];
   };
-}
+})

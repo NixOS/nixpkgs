@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchPypi,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugnplay";
   version = "0.5.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "877e2d2500a45aaf31e5175f9f46182088d3e2d64c1c6b9ff6c778ae0ee594c8";
   };
 
@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plugnplay" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic plug-in system for python applications";
     homepage = "https://github.com/daltonmatos/plugnplay";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

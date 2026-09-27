@@ -4,25 +4,25 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aperture";
-  version = "0.3-beta";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "aperture";
-    tag = "v${version}";
-    hash = "sha256-PsmaNJxWkXiFDA7IGhT+Kx1GUvv23c8L8Jz21/b48oo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XVLpIuBCavCbHcSMPFmxNxtdkr+jYy/AYjffzyKSYOg=";
   };
 
-  vendorHash = "sha256-rrDLdE7c6ykhdqOfRpuxyRO4xqYp3LZvovAppzy1wVw=";
+  vendorHash = "sha256-I7StCuL8UifVXBvchG0VRWA5nZc+nwIpK6+PQfkVGGo=";
 
   subPackages = [ "cmd/aperture" ];
 
   meta = {
     description = "L402 (Lightning HTTP 402) Reverse Proxy";
     homepage = "https://github.com/lightninglabs/aperture";
-    changelog = "https://github.com/lightninglabs/aperture/releases/tag/v${version}";
+    changelog = "https://github.com/lightninglabs/aperture/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sputn1ck
@@ -30,4 +30,4 @@ buildGoModule rec {
     ];
     mainProgram = "aperture";
   };
-}
+})

@@ -2,29 +2,21 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
+  texinfo,
   ncurses,
   libxcrypt,
   pam ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screen";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/screen-${version}.tar.gz";
-    hash = "sha256-La429Ns3n/zRS2kVlrpuwYrDqeIrxHrCOXiatYQJhp0=";
+    url = "mirror://gnu/screen/screen-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yposfiQJGbx6wSEkWTrkUpu0619zSdiFeCm34/CzszI=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://file.savannah.gnu.org/file/0001-test-fix-unit-tests.patch?file_id=57558";
-      stripLen = 1;
-      hash = "sha256-q3jQQrzweLf2T/V5X9iL4ZZK342QEXLG5fZTaMOB4tY=";
-    })
-  ];
 
   configureFlags = [
     "--enable-telnet"
@@ -36,6 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    texinfo
   ];
   buildInputs = [
     ncurses
@@ -43,10 +36,16 @@ stdenv.mkDerivation rec {
     pam
   ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://www.gnu.org/software/screen/";
     description = "Window manager that multiplexes a physical terminal";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       GNU Screen is a full-screen window manager that multiplexes a physical
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
       terminal.
     '';
 
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

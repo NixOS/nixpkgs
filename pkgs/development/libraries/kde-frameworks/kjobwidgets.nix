@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qttools,
   kcoreaddons,
@@ -10,6 +11,7 @@
 mkDerivation {
   pname = "kjobwidgets";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     qttools
   ];

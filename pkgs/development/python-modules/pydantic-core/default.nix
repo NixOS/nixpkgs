@@ -1,84 +1,76 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cargo,
   rustPlatform,
-  rustc,
-  libiconv,
   typing-extensions,
   pytestCheckHook,
   hypothesis,
+  inline-snapshot,
+  pytest-benchmark,
+  pytest-run-parallel,
   pytest-timeout,
   pytest-mock,
   dirty-equals,
   pydantic,
+  typing-inspection,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.33.2";
+    version = "2.46.4";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
-      repo = "pydantic-core";
-      tag = "v${version}";
-      hash = "sha256-2jUkd/Y92Iuq/A31cevqjZK4bCOp+AEC/MAnHSt2HLY=";
+      repo = "pydantic";
+      tag = "core-v${version}";
+      hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
     };
 
+    sourceRoot = "${src.name}/pydantic-core";
+
     cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit pname version src;
-      hash = "sha256-MY6Gxoz5Q7nCptR+zvdABh2agfbpqOtfTtor4pmkb9c=";
+      inherit
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = "sha256-5L317YTV7/Bc/YJLLzc745oJntiYkcZupdeUxiQwcOU=";
     };
 
     nativeBuildInputs = [
-      cargo
       rustPlatform.cargoSetupHook
-      rustc
-    ];
-
-    build-system = [
       rustPlatform.maturinBuildHook
-      typing-extensions
     ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
     dependencies = [ typing-extensions ];
 
     pythonImportsCheck = [ "pydantic_core" ];
 
-    # escape infinite recursion with pydantic via dirty-equals
+    # escape infinite recursion with pydantic via inline-snapshot
     doCheck = false;
-    passthru.tests.pytest = pydantic-core.overrideAttrs { doCheck = true; };
+    passthru.tests.pytest = pydantic-core.overridePythonAttrs { doCheck = true; };
 
     nativeCheckInputs = [
       pytestCheckHook
       hypothesis
+      inline-snapshot
       pytest-timeout
       dirty-equals
+      pytest-benchmark
       pytest-mock
+      pytest-run-parallel
+      typing-inspection
     ];
 
-    disabledTests = [
-      # RecursionError: maximum recursion depth exceeded while calling a Python object
-      "test_recursive"
-    ];
-
-    disabledTestPaths = [
-      # no point in benchmarking in nixpkgs build farm
-      "tests/benchmarks"
-    ];
-
-    meta = with lib; {
-      changelog = "https://github.com/pydantic/pydantic-core/releases/tag/v${version}";
+    meta = {
       description = "Core validation logic for pydantic written in rust";
-      homepage = "https://github.com/pydantic/pydantic-core";
-      license = licenses.mit;
-      maintainers = pydantic.meta.maintainers;
+      homepage = "https://github.com/pydantic/pydantic/tree/main/pydantic-core";
+      license = lib.licenses.mit;
+      inherit (pydantic.meta) maintainers;
     };
   };
 in

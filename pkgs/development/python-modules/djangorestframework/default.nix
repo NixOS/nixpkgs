@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
   django,
-  pytz,
 
   # optional-dependencies
   coreapi,
@@ -21,63 +19,56 @@
   pyyaml,
 
   # tests
+  dj-database-url,
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangorestframework";
-  version = "3.16.0";
+  version = "3.18.1";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
-    rev = version;
-    hash = "sha256-LFq8mUx+jAFFnQTfysYs+DSN941p+8h9mDDOp+LO7VU=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZOzGJOIyN6X7NxplIDUeII87IlsXViNLPeW7f4/vIfY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     django
-    pygments
-  ]
-  ++ (lib.optional (lib.versionOlder django.version "5.0.0") pytz);
+  ];
 
   optional-dependencies = {
     complete = [
+      coreapi
       coreschema
       django-guardian
       inflection
       psycopg2
       pygments
       pyyaml
-    ]
-    ++ lib.optionals (pythonOlder "3.13") [
-      # broken on 3.13
-      coreapi
     ];
   };
 
   nativeCheckInputs = [
+    dj-database-url
     pytest-django
     pytestCheckHook
+    pytz
   ]
-  ++ optional-dependencies.complete;
-
-  disabledTests = [
-    # https://github.com/encode/django-rest-framework/issues/9422
-    "test_urlpatterns"
-  ];
+  ++ finalAttrs.passthru.optional-dependencies.complete;
 
   pythonImportsCheck = [ "rest_framework" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
+  meta = {
+    changelog = "https://github.com/encode/django-rest-framework/releases/tag/${finalAttrs.src.tag}";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
-}
+})

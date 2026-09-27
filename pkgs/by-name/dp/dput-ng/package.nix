@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "1.43";
+  version = "1.46";
 in
 python3.pkgs.buildPythonApplication {
   pname = "dput-ng";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
     owner = "debian";
     repo = "dput-ng";
     tag = "debian/${version}";
-    hash = "sha256-zrH4h4C4y3oTiOXsidFv/rIJNzCdV2lqzNEg0SOkX4w=";
+    hash = "sha256-7A9crJpdQKj8TlSfIQ41PxtR6hcIdGo2sIaQnXGiXvg=";
   };
 
   postPatch = ''
@@ -58,13 +58,13 @@ python3.pkgs.buildPythonApplication {
     # Essentially: all tags from 1.40 onwards start with `debian/`,
     # then the version, and then an optional suffix (usually reserved for backports).
     # We want to ignore the backport versions, and strip the `debian/` prefix.
-    extraArgs = [ "--version-regex=(?:debian\/)?(\d+(?:\.\d+)*)(?:[_\+].*)?" ];
+    extraArgs = [ "--version-regex=(?:debian/)?(\\d+(?:\\.\\d+)*)(?:[_+].*)?" ];
   };
 
   meta = {
     description = "Next-generation Debian package upload tool";
     homepage = "https://dput.readthedocs.io/en/latest/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "dput";

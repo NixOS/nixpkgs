@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ bison ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
     "-Wno-error=implicit-function-declaration"
   ];
@@ -43,12 +43,12 @@ stdenv.mkDerivation {
     "--enable-pthreads" # build Hugs using POSIX threads C library
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "hugs";
     homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
-    maintainers = with maintainers; [ joachifm ];
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

@@ -2,89 +2,82 @@
   lib,
   stdenvNoCC,
   bun,
-  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 let
-  pname = "models-dev";
-  version = "0-unstable-2025-11-28";
-  src = fetchFromGitHub {
-    owner = "sst";
-    repo = "models.dev";
-    rev = "48358b91b776d0bd34cbbc4c70e7ac5ce827b916";
-    hash = "sha256-Pvtc32s/p19Pg8JACSEmxj6Ldc5vl8ZOXiPbJ3ZAUqQ=";
-    postFetch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-      # NOTE: Normalize case-sensitive directory names that cause issues on case-insensitive filesystems
-      cp -r "$out/providers/poe/models/openai"/* "$out/providers/poe/models/openAi/"
-      rm -rf "$out/providers/poe/models/openai"
-    '';
-  };
+  node_modules =
+    finalAttrs:
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+      __structuredAttrs = true;
+      strictDeps = true;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
 
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
 
-    dontConfigure = true;
+      dontConfigure = true;
 
-    buildPhase = ''
-      runHook preBuild
+      buildPhase = ''
+        runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        bun install \
+          --cpu="*" \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
 
-       bun install \
-         --filter=./packages/web \
-         --force \
-         --frozen-lockfile \
-         --ignore-scripts \
-         --no-progress \
-         --production
+        runHook postBuild
+      '';
 
-      runHook postBuild
-    '';
+      installPhase = ''
+        runHook preInstall
 
-    installPhase = ''
-      runHook preInstall
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+        runHook postInstall
+      '';
 
-      runHook postInstall
-    '';
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
 
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
+      outputHash = "sha256-aL2kNCYF6Y4QnEvlpQ9U5Qe+K8a1J2X7BvJqE+BnRcY=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
+  pname = "models-dev";
+  version = "sdk-v0.0.5-unstable-2026-09-22";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "anomalyco";
+    repo = "models.dev";
+    rev = "d0a0af81e26a783730ba502b6fbaf7b9ec52714b";
+    hash = "sha256-crR+erCZFBe2pUIHcoT6MWJfJSd7hXWCj1sJ8a1YDJo=";
+  };
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R ${finalAttrs.passthru.node_modules}/. .
 
     runHook postConfigure
   '';
@@ -94,6 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -107,17 +101,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
+    node_modules = node_modules finalAttrs;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
   };
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/sst/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

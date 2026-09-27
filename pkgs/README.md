@@ -20,7 +20,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
 - [`by-name`](./by-name): Top-level packages organised by name ([docs](./by-name/README.md))
-- All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
+- All other directories loosely categorise top-level package definitions, see [category hierarchy][categories]
 
 ## Quick Start to Adding a Package
 
@@ -75,7 +75,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
 
 This section describes a general framework of understanding and exceptions might apply.
 
-Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project or included in [search.nixos.org's list of indexed 3rd-party flakes](https://github.com/NixOS/nixos-search/blob/main/flakes/manual.toml)
 
 ---
 
@@ -148,7 +148,7 @@ To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, can be found in the [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -183,11 +183,17 @@ To add a package to Nixpkgs:
   Examples:
 
   * nginx: init at 2.0.1
+  * qt6Packages.qtdeclarative: fix build
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
 (using "→" instead of "->" is also accepted)
+
+For package sets with multiple versions, such as `perlPackages` (aliased to
+`perl5Packages`) and `python3Packages` (aliased to `python313Packages` at the
+time of writing), please use the unversioned attribute in your commit message
+unless the change is specific to one version.
 
 Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
 More sophisticated prefixes are also possible:
@@ -196,8 +202,8 @@ More sophisticated prefixes are also possible:
 |--------------------------------------------------------------------------|------------------------------------------------------------|
 | `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
 | `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
-| `python3{9,10}Packages.requests: 1.0.0 -> 2.0.0`                         | `python39Packages.requests`, `python310Packages.requests`  |
-| `python312.pkgs.numpy,python313.pkgs.scipy: fix build`                   | `python312.pkgs.numpy` , `python313.pkgs.scipy`            |
+| `python3Packages.requests: 1.0.0 -> 2.0.0`                               | `python3Packages.requests`                                 |
+| `python3Packagess.{numpy,scipy}: fix build`                              | `python3Packages.numpy` , `python3Packages.scipy`          |
 
 When opening a PR with multiple commits, CI creates a single build job for all detected packages.
 If `passthru.tests` attributes are available, these will be built as well.
@@ -305,10 +311,6 @@ For example, the `libxml2` package builds both a library and some tools; but it�
 
   - `servers/http` (e.g. `apache-httpd`)
 
-- **If it’s an implementation of the X Windowing System:**
-
-  - `servers/x11` (e.g. `xorg` — this includes the client libraries and programs)
-
 - **Else:**
 
   - `servers/misc`
@@ -331,7 +333,7 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 - **If it’s a _terminal emulator_:**
 
-  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
+  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt`)
 
 - **If it’s a _file manager_:**
 
@@ -437,7 +439,7 @@ Follow these guidelines:
   - It _must_ be a valid identifier in Nix.
 
   - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore.
-    Otherwise the attribute name _should not_ be prefixed with an underline.
+    Otherwise the attribute name _should not_ be prefixed with an underscore.
 
     Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
@@ -460,7 +462,7 @@ Follow these guidelines:
 ## Versioning
 [versioning]: #versioning
 
-These are the guidelines the `version` attribute of a package:
+These are the guidelines for the `version` attribute of a package:
 
 - It _must_ start with a digit.
   This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
@@ -487,7 +489,7 @@ See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/N
 
 ## Meta attributes
 
-The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
+The `meta` attribute set should always be placed last in the derivation and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -655,7 +657,7 @@ The latter avoids link rot when the upstream abandons, squashes or rebases their
 { patches = [ ./0001-add-missing-include.patch ]; }
 ```
 
-If you do need to do create this sort of patch file, one way to do so is with git:
+If you do need to create this sort of patch file, one way to do so is with git:
 
 1. Move to the root directory of the source code you're patching.
 
@@ -730,7 +732,7 @@ We use jbidwatcher as an example for a discontinued project here.
 1. Create a pull request against Nixpkgs.
    Mention the package maintainer.
 
-This is how the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
+This is what the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
 
 ## Package tests
 
@@ -743,7 +745,7 @@ To run the main types of tests locally:
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
-The following types of tests exists:
+The following types of tests exist:
 
 * [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs.
   They exercise both NixOS modules and the packaged programs used within them.
@@ -878,7 +880,7 @@ $ nix-build -A phoronix-test-suite.tests
 Here are examples of package tests:
 
 - [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
-- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
+- [Lobster compile test](by-name/lo/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
 - [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
@@ -910,99 +912,217 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
+The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
+It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
-> [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
->
-> ```nix
-> { stdenv, nix-update-script }:
-> stdenv.mkDerivation {
->   # ...
->   passthru.updateScript = nix-update-script { };
-> }
-> ```
->
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
-> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
-> While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+### Valid `passthru.updateScript` values
 
-The `passthru.updateScript` attribute can contain one of the following:
+Below are the types of values that can be used as `passthru.updateScript`.
 
-- an executable file, either on the file system:
+#### Executable File
 
-  ```nix
-  { stdenv }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = ./update.sh;
-  }
-  ```
+Either on the file system:
 
-  or inside the expression itself:
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = ./update.sh;
+  # ...
+}
+```
 
-  ```nix
-  { stdenv, writeScript }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = writeScript "update-zoom-us" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+Or inside the expression itself:
 
-      set -eu -o pipefail
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+  writeScript,
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = writeScript "update-zoom-us" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
-      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
-      update-source-version zoom-us "$version"
-    '';
-  }
-  ```
+    set -eu -o pipefail
 
-- a list, a script file followed by arguments to be passed to it:
+    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+    update-source-version zoom-us "$version"
+  '';
+  # ...
+}
+```
 
-  ```nix
-  { stdenv }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = [
+#### List of Script & Arguments
+
+Example:
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = [
+    ../../update.sh
+    finalAttrs.pname
+    "--requested-release=unstable"
+  ];
+  # ...
+})
+```
+
+#### Attribute Set
+
+A `passthru.updateScript` equal to an attribute set, can have several attributes, all used in the following example, and described below.
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = {
+    command = [
       ../../update.sh
-      pname
-      "--requested-release=unstable"
+      finalAttrs.pname
     ];
+    attrPath = finalAttrs.pname;
+    supportedFeatures = [
+      "commit"
+    ];
+  };
+  # ...
+})
+```
+
+##### `command` (string or list of strings, mandatory)
+
+A [string](#executable-file) or [list of strings](#list-of-script--arguments) as described in the above linked sections
+
+##### `attrPath` (string, optional)
+
+A string containing the canonical attribute path for the package.
+If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+
+##### `supportedFeatures` (list, optional)
+
+A list of the extra features the script supports.
+Below is a description of each of these features.
+
+###### `commit`
+
+This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+Example:
+
+```json
+[
+  {
+    "attrPath": "volume_key",
+    "oldVersion": "0.3.11",
+    "newVersion": "0.3.12",
+    "files": [
+      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+    ]
   }
-  ```
+]
+```
 
-- an attribute set containing:
-  - `command`
+When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
+An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
 
-    A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
+The commit object contains the following values:
 
-  - `attrPath` (optional)
+- `attrPath` – a string containing the attribute path
+- `oldVersion` – a string containing the old version
+- `newVersion` – a string containing the new version
+- `files` – a non-empty list of file paths (as strings) to add to the commit
+- `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
+- `commitMessage` (optional) – a string to use instead of the default commit message
 
-    A string containing the canonical attribute path for the package.
+If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
-    If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+### General Purpose Update Scripts
 
-  - `supportedFeatures` (optional)
+For most software distributed by Nixpkgs, you don't have to write a custom `passthru.updateScript`.
+Nixpkgs provides a few general purpose Nix functions that can be used instead, described below.
 
-    A list of the [extra features the script supports][supported-features].
+#### `nix-update-script`
 
-    ```nix
-    { stdenv }:
-    stdenv.mkDerivation rec {
-      pname = "my-package";
-      # ...
-      passthru.updateScript = {
-        command = [
-          ../../update.sh
-          pname
-        ];
-        attrPath = pname;
-        supportedFeatures = [
-          # ...
-        ];
-      };
-    }
-    ```
+The program [`nix-update`](https://github.com/Mic92/nix-update) is a Python utility that is capable of finding new versions from numerous repositories and updating the Nix files accordingly.
+Below is an example usage of it as a `passthru.updateScript`.
+
+```nix
+{
+  stdenv,
+  # ...
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = nix-update-script { };
+  # ...
+})
+```
+
+Adding a `nix-update` CLI flag like `--version branch` or `--version-regex` can be done with e.g:
+
+```nix
+nix-update-script {
+  extraArgs = [
+    "--version-regex"
+    "release-(.*)"
+  ];
+}
+```
+
+The main `nix-update` argument - the attribute path, can be controlled via the `attrPath` Nix argument:
+
+```nix
+nix-update-script {
+  attrPath = "my-attr";
+}
+```
+
+#### `genericUpdater`
+
+Used to implement other updaters. `gitUpdater`, `directoryListingUpdater` and more are implemented via it.
+
+#### `gitUpdater`
+
+Used to update `src` attributes to new Git tags, for fetchers like `fetchgit`, `fetchFromGitHub`, `fetchFromGitLab` and alike. Accepted arguments:
+
+TODO...
+
+#### `unstableGitUpdater`
+
+Similar to `gitUpdater`, but updates the `rev` and `version` attribute per [Nixpkgs versioning conventions](#versioning) to the latest untagged revision.
+
+<!-- TODO: Describe `httpTwoLevelsUpdater`? -->
+
+#### `directoryListingUpdater`
+
+TODO...
+
+#### `_experimental-update-script-combinators`
+
+TODO...
 
 ### How are update scripts executed?
 
@@ -1023,46 +1143,8 @@ Furthermore each update script will be passed the following environment variable
 > An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
-While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
-If you need to customize commit message, you can have the update script implement the `commit` feature.
-
-### Supported features
-[update-script-supported-features]: #supported-features
-
-- `commit`
-
-  This feature allows update scripts to *ask* `update.nix` to create Git commits.
-
-  When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
-  Example:
-
-  ```json
-  [
-    {
-      "attrPath": "volume_key",
-      "oldVersion": "0.3.11",
-      "newVersion": "0.3.12",
-      "files": [
-        "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
-      ]
-    }
-  ]
-  ```
-  :::
-
-  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
-  An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
-
-  The commit object contains the following values:
-
-  - `attrPath` – a string containing the attribute path
-  - `oldVersion` – a string containing the old version
-  - `newVersion` – a string containing the new version
-  - `files` – a non-empty list of file paths (as strings) to add to the commit
-  - `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
-  - `commitMessage` (optional) – a string to use instead of the default commit message
-
-  If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
+If you need to customize commit message, you can have the update script implement the `commit` feature, as described in [`commit` supported feature](#commit).
 
 ## Reviewing contributions
 
@@ -1137,7 +1219,7 @@ Sample template for a package update review is provided below.
 ### New packages
 
 New packages are a common type of pull requests.
-These pull requests consist in adding a new nix-expression for a package.
+These pull requests consist of adding a new nix-expression for a package.
 
 Review process:
 
@@ -1146,7 +1228,7 @@ Review process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
-- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
+- Ensure that the meta fields [fit the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set.
@@ -1214,45 +1296,25 @@ Security fixes are submitted in the same way as other changes and thus the same 
 
 If a security fix applies to both master and a stable release then, similar to regular changes, they are preferably delivered via master first and cherry-picked to the release branch.
 
-Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
+Critical security fixes may bypass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
-### Vulnerability Roundup
+### Vulnerability tracker
 
-#### Issues
+Vulnerable packages in Nixpkgs are tracked using the [Nixpkgs security tracker](https://tracker.security.nixos.org/).
 
-Vulnerable packages in Nixpkgs are managed using issues.
-Currently opened ones can be found using the following:
+CVEs are automatically matched against Nixpkgs derivations and reviewed by the [security team](https://nixos.org/community/teams/security/).
+When a match is confirmed, the tracker publishes it and automatically opens a corresponding GitHub issue where listed maintainers are notified.
 
-[github.com/NixOS/nixpkgs/issues?q=is:issue+is:open+"Vulnerability+roundup"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+%22Vulnerability+roundup%22)
+Each entry corresponds to a vulnerable version of a package; as a consequence:
 
-Each issue corresponds to a vulnerable version of a package; as a consequence:
+- One entry can contain several CVEs;
+- A single package can be concerned by several entries.
 
-- One issue can contain several CVEs;
-- One CVE can be shared across several issues;
-- A single package can be concerned by several issues.
-
-
-A "Vulnerability roundup" issue usually respects the following format:
-
-```txt
-<link to relevant package search on search.nix.gsc.io>, <link to relevant files in Nixpkgs on GitHub>
-
-<list of related CVEs, their CVSS score, and the impacted NixOS version>
-
-<list of the scanned Nixpkgs versions>
-
-<list of relevant contributors>
-```
-
-Note that there can be an extra comment containing links to previously reported (and still open) issues for the same package.
-
+Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/subscriptions/) for the packages they maintain.
 
 #### Triaging and Fixing
 
-**Note**: An issue can be a "false positive" (i.e. automatically opened, but without the package it refers to being actually vulnerable).
-If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as the necessary to help maintainers double check.
-
-If you are investigating a "true positive":
+If you are investigating an [issue opened by the security tracker](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20state%3Aopen%20author%3Aapp%2Fnixpkgs-security-tracker):
 
 - Find the earliest patched version or a code patch in the CVE details;
 - Is the issue already patched (version up-to-date or patch applied manually) in Nixpkgs's `master` branch?

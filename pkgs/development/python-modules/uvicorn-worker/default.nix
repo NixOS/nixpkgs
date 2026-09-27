@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn-worker";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "uvicorn-worker";
     tag = version;
-    hash = "sha256-a5L4H1Bym5Dx9/pGL/Vz6ZO699t/1Wmc1ExIb0t/ISc=";
+    hash = "sha256-qfk3lkHwuGbRWj4D65EontmEgKtk7ILq6gZCrxcrrJU=";
   };
 
   build-system = [ hatchling ];

@@ -35,7 +35,7 @@ rec {
             -o ./test1.js
 
           echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-          ${pkgs.nodejs}/bin/node ./test1.js
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./test1.js
 
           set +x
           if [ $? -ne 0 ]; then
@@ -77,7 +77,7 @@ rec {
           --embed-file ./test/xmlid/id_err1.xml
 
           echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-          ${pkgs.nodejs}/bin/node ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
 
           set +x
           if [ $? -ne 0 ]; then
@@ -92,7 +92,7 @@ rec {
 
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
-    version = "unstable-2016-06-05";
+    version = "0-unstable-2016-06-05";
 
     buildInputs = [
       libtool
@@ -109,10 +109,11 @@ rec {
       automake
     ];
 
-    src = pkgs.fetchgit {
-      url = "https://gitlab.com/odfplugfest/xmlmirror.git";
+    src = pkgs.fetchFromGitLab {
+      owner = "odfplugfest";
+      repo = "xmlmirror";
       rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
-      sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
+      hash = "sha256-i+QgY+5PYVg5pwhzcDnkfXAznBg3e8sWH2jZtixuWsk=";
     };
 
     configurePhase = ''
@@ -154,7 +155,11 @@ rec {
       cp *.rng $out/share
       cp README.md $doc/share/${pname}
     '';
-    checkPhase = '''';
+    checkPhase = "";
+
+    meta = {
+      homepage = "https://gitlab.com/odfplugfest/xmlmirror";
+    };
   };
 
   zlib =
@@ -184,7 +189,7 @@ rec {
           -L. libz.a -I . -o example.js
 
           echo "Using node to execute the test"
-          ${pkgs.nodejs}/bin/node ./example.js
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./example.js
 
           set +x
           if [ $? -ne 0 ]; then

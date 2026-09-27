@@ -27,7 +27,6 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -37,7 +36,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/bronze1man/yaml2json/releases/tag/v${finalAttrs.version}";
     description = "Convert yaml to json";
     mainProgram = "yaml2json";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

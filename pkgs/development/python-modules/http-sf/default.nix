@@ -6,16 +6,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "http-sf";
-  version = "1.0.7";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mnot";
     repo = "http-sf";
-    tag = "v${version}";
-    hash = "sha256-V/ZwThTNMqnqvgOs7c4JVjvGCTU15ryzTIMX2T4hUQE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sqLYD/JIRvKl6ciVDfSWNAUhhSHhdw7UFnDyHiV5sZg=";
   };
 
   build-system = [ setuptools ];
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "http_sf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse and serialise HTTP structured field values";
     homepage = "https://github.com/mnot/http-sf";
-    changelog = "https://github.com/mnot/http-sf/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mnot/http-sf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

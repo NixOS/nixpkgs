@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   makeWrapper,
   gitUpdater,
   cdrtools,
+  coreutils,
   curl,
   gawk,
   mesa-demos,
@@ -33,6 +33,7 @@
 let
   runtimePaths = [
     cdrtools
+    coreutils
     curl
     gawk
     gnugrep
@@ -58,27 +59,24 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.9";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    tag = finalAttrs.version;
+    hash = "sha256-HFq3oYz6KQcq3P92bTg2O5XFtZZcZBfiCOOJSfnV1ro=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "correctly-handle-version-10.0.0-of-qemu.patch";
-      url = "https://github.com/quickemu-project/quickemu/commit/f25205f4513c4fa72be6940081c62e613d1fddc6.patch";
-      hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
-    })
-  ];
 
   postPatch = ''
     sed -i \
-      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variables}" |' \
-      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ${lib.optionalString stdenv.hostPlatform.isx86_64 ''
+        -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variablesMs}" |' \
+        -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ''} \
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        -e '/AAVMF_CODE.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ''} \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \

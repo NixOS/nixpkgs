@@ -1,7 +1,6 @@
 { lib, ... }:
 {
   name = "cadvisor";
-  meta.maintainers = with lib.maintainers; [ offline ];
 
   nodes = {
     machine = {

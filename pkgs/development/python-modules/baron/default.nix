@@ -2,31 +2,38 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   rply,
   pytestCheckHook,
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "baron";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "af822ad44d4eb425c8516df4239ac4fdba9fdb398ef77e4924cd7c9b4045bc2f";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-r4Iq1E1OtCXIUW30I5rE/bqf2zmO935JJM18m0BFvC8=";
   };
 
-  propagatedBuildInputs = [ rply ];
+  build-system = [ setuptools ];
+
+  dependencies = [ rply ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = isPy3k;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "baron" ];
+
+  meta = {
     homepage = "https://github.com/PyCQA/baron";
     description = "Abstraction on top of baron, a FST for python to make writing refactoring code a realistic task";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

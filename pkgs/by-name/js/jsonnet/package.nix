@@ -8,7 +8,7 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jsonnet";
   version = "0.21.0";
   outputs = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "google";
     repo = "jsonnet";
     sha256 = "sha256-QHp0DOu/pqcgN7di219cHzfFb7fWtdGGE6J1ZXgbOGQ=";
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/jsonnet";
     platforms = lib.platforms.unix;
   };
-}
+})

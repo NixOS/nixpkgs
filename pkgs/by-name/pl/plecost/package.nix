@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iniqua";
+    owner = "Plecost";
     repo = "plecost";
     # Release is untagged
     rev = "4895e345d71bffe956be43530632e303dd379a5f";
@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability fingerprinting and vulnerability finder for Wordpress blog engine";
     mainProgram = "plecost";
-    homepage = "https://github.com/iniqua/plecost";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
+    homepage = "https://github.com/Plecost/plecost";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

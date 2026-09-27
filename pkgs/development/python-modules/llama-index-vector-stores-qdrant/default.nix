@@ -8,15 +8,15 @@
   qdrant-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-qdrant";
-  version = "0.9.0";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
-    inherit version;
-    hash = "sha256-TXBHk/0B4XOtzakCVG5d8aeSgYdoaqSDDWi4j3yMIy0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-S3t/6kLcpFNhbHbo/LcsyqctVSf1N3SlSVdJJ/PDzyY=";
   };
 
   build-system = [ hatchling ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.vector_stores.qdrant" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Vector Store Integration for Qdrant";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-qdrant";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

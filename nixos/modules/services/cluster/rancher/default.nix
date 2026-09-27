@@ -29,7 +29,7 @@ let
       containerdConfigTemplateFile = "/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl";
       staticContentChartDir = "/var/lib/rancher/${name}/server/static/charts";
 
-      manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml { };
+      manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml_1_2 { };
       # Manifests need a valid suffix to be respected
       mkManifestTarget =
         name:
@@ -169,7 +169,7 @@ let
         # source is a store path containing the complete manifest file
         source = mkManifestSource "auto-deploy-chart-${name}" (
           lib.singleton (mkHelmChartCR name value)
-          ++ builtins.map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
+          ++ map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
         );
       };
 
@@ -384,7 +384,7 @@ let
             target = lib.mkDefault (mkManifestTarget name);
             source = lib.mkIf (config.content != null) (
               let
-                name' = "${name}-manifest-" + builtins.baseNameOf name;
+                name' = "${name}-manifest-" + baseNameOf name;
                 mkSource = mkManifestSource name';
               in
               lib.mkDerivedConfig options.content mkSource
@@ -515,6 +515,12 @@ let
         nodeIP = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "IPv4/IPv6 addresses to advertise for node.";
+          default = null;
+        };
+
+        nodeExternalIP = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "IPv4/IPv6 external addresses to advertise for node.";
           default = null;
         };
 
@@ -826,8 +832,8 @@ let
             "${name}: token, tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"
           )
           ++ (lib.optional (
-            cfg.role == "agent" && !(cfg.agentTokenFile != null || cfg.agentToken != "")
-          ) "${name}: agentToken and agentToken should not be set if role is 'agent'");
+            cfg.role == "agent" && (cfg.agentTokenFile != null || cfg.agentToken != "")
+          ) "${name}: agentToken and agentTokenFile should not be set if role is 'agent'");
 
         environment.systemPackages = [ config.services.${name}.package ];
 
@@ -843,13 +849,22 @@ let
                 "L+".argument = "${manifest.source}";
               };
             };
-            # Make a systemd-tmpfiles rule for a container image
-            mkImageRule = image: {
-              name = "${imageDir}/${image.name}";
-              value = {
-                "L+".argument = "${image}";
-              };
-            };
+            # Build a single store directory containing symlinks to all
+            # container images declared in the NixOS configuration. The
+            # directory's store path changes whenever any image changes, so
+            # k3s/rke2 re-imports images on every generation switch. It is
+            # exposed under ${imageDir}/nixos so that ${imageDir} itself
+            # remains a normal directory that users can still populate manually.
+            agentImagesDir = pkgs.linkFarm "${name}-agent-images" (
+              map (image: {
+                # The store-path hash is included in the link name so that two
+                # different images with the same tarball base name do not
+                # collide. The context is discarded because tmpfiles link names
+                # must not carry store-path references.
+                name = builtins.unsafeDiscardStringContext (builtins.baseNameOf image);
+                path = image;
+              }) cfg.images
+            );
             # Merge charts with charts contained in enabled auto deploying charts
             helmCharts =
               (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
@@ -867,7 +882,11 @@ let
             };
           in
           (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
-          // (builtins.listToAttrs (map mkImageRule cfg.images))
+          // (lib.optionalAttrs (cfg.images != [ ]) {
+            "${imageDir}/nixos" = {
+              "L+".argument = "${agentImagesDir}";
+            };
+          })
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
@@ -936,6 +955,7 @@ let
                 ++ (lib.optionals (cfg.nodeLabel != [ ]) (map (l: "--node-label=${l}") cfg.nodeLabel))
                 ++ (lib.optionals (cfg.nodeTaint != [ ]) (map (t: "--node-taint=${t}") cfg.nodeTaint))
                 ++ (lib.optional (cfg.nodeIP != null) "--node-ip=${cfg.nodeIP}")
+                ++ (lib.optional (cfg.nodeExternalIP != null) "--node-external-ip=${cfg.nodeExternalIP}")
                 ++ (lib.optional cfg.selinux "--selinux")
                 ++ (lib.optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
                 ++ (lib.optional (cfg.extraKubeProxyConfig != { }) "--kube-proxy-arg=config=${kubeProxyConfig}")
@@ -962,5 +982,6 @@ in
       (import ./rke2.nix args)
     ];
 
-  meta.maintainers = pkgs.rke2.meta.maintainers ++ lib.teams.k3s.members;
+  meta.teams = [ lib.teams.k3s ];
+  meta.maintainers = pkgs.rke2.meta.maintainers;
 }

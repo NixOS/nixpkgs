@@ -13,11 +13,12 @@
   expat,
   glew,
   freetype,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   libGL,
   libGLU,
-  xorg,
+  libx11,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     glew
     freetype
-    libSM
-    libXext
+    libsm
+    libxext
     libGL
     libGLU
-    xorg.libxcb
-    xorg.libX11
+    libxcb
+    libx11
   ];
   nativeBuildInputs = [
     cmake

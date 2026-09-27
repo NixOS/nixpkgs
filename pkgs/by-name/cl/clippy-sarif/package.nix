@@ -6,12 +6,12 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clippy-sarif";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pqu7jIKksjn52benebICQEhgCW59MX+RRTcHm2ufjWE=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clippy-sarif";
     inherit (clippy.meta) platforms;
   };
-}
+})

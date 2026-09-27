@@ -3,22 +3,22 @@
   stdenv,
   fetchzip,
   jq,
-  openjdk11,
+  openjdk21,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eclair";
-  version = "0.8.0";
-  revision = "0077471";
+  version = "0.14.2";
+  revision = "3dd8d2d";
 
   src = fetchzip {
     url = "https://github.com/ACINQ/eclair/releases/download/v${version}/eclair-node-${version}-${revision}-bin.zip";
-    hash = "sha256-jkXdt1aQRVgItfFPuyh45uXjUFgJtKng/17Po5i7ang=";
+    hash = "sha256-4S2xAEGc1/9cs2n/fE4weIB7+oCqzH500QyTOaZew7A=";
   };
 
   propagatedBuildInputs = [
     jq
-    openjdk11
+    openjdk21
   ];
 
   installPhase = ''
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scala implementation of the Lightning Network";
     homepage = "https://github.com/ACINQ/eclair";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.unix;
   };
 }

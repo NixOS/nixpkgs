@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.6.1";
+  version = "2.0.2";
 in
 buildGoModule {
   pname = "ktunnel";
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "omrikiei";
     repo = "ktunnel";
     rev = "v${version}";
-    sha256 = "sha256-rcUCIUIyBCSuMly7y0GUNQCdJUgsj7Oi6Hpz23uXoJw=";
+    sha256 = "sha256-SJ6WCLJLKVODVsvPQUngV0oz60dpFT1mRDLNaeJ6P7M=";
   };
 
   ldflags = [
@@ -22,7 +22,7 @@ buildGoModule {
     "-w"
   ];
 
-  vendorHash = "sha256-Q8t/NWGeUB1IpxdsxvyvbYh/adtcA4p+7bcCy9YFjsw=";
+  vendorHash = "sha256-9RT5NtsuhFGXHYoP9YFrNfQQlbeu1DB7gDkKgTn5z7g=";
 
   preCheck = "export HOME=$(mktemp -d)";
 
@@ -35,11 +35,11 @@ buildGoModule {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli that exposes your local resources to kubernetes";
     mainProgram = "ktunnel";
     homepage = "https://github.com/omrikiei/ktunnel";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

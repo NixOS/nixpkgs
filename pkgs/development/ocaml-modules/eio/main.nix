@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildDunePackage,
+  dune-configurator,
   eio,
   eio_posix,
   eio_linux,
@@ -19,6 +20,8 @@ buildDunePackage {
   minimalOCamlVersion = "5.0";
 
   dontStrip = true;
+
+  buildInputs = lib.optional (lib.versionAtLeast eio.version "1.4") dune-configurator;
 
   propagatedBuildInputs = [
     eio_posix

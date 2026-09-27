@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.31.1";
 
   src = fetchurl {
-    url = "http://webhome.phy.duke.edu/~rgb/General/dieharder/dieharder-${finalAttrs.version}.tgz";
+    url = "https://webhome.phy.duke.edu/~rgb/General/dieharder/dieharder-${finalAttrs.version}.tgz";
     hash = "sha256-bP8P+DlMVTVJrHQzNZzPyVX7JnlCYDFGIN+l5M1Lcn8=";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Random Number Generator test suite";
     mainProgram = "dieharder";
     homepage = "https://webhome.phy.duke.edu/~rgb/General/dieharder.php";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zhaofengli ];
+    platforms = lib.platforms.unix;
   };
 })

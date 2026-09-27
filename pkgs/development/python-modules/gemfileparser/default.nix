@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "gemfileparser";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gemfileparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse Ruby Gemfile, .gemspec and Cocoapod .podspec file using Python";
     homepage = "https://github.com/gemfileparser/gemfileparser";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];

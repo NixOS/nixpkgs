@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fpp";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "PathPicker";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-4BkdGvG/RyF3JBnd/X5r5nboEHG4aqahcYHDunMv2zU=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "fpp";
   };
-}
+})

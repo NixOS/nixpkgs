@@ -6,7 +6,11 @@
   libpng,
   udunits,
   netcdf,
-  xorg,
+  libxt,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,19 +33,22 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     netcdf
     udunits
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXaw
-    xorg.libXt
+    libice
+    libsm
+    libx11
+    libxaw
+    libxt
   ];
 
-  meta = with lib; {
+  # K&R-style declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
+  meta = {
     description = "Visual browser for netCDF format files";
     homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "ncview";
-    maintainers = with maintainers; [ jmettes ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ jmettes ];
+    platforms = lib.platforms.all;
   };
 })

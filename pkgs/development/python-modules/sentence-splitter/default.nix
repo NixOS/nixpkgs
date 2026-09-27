@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sentence-splitter";
   version = "1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mediacloud";
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sentence_splitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
     homepage = "https://github.com/mediacloud/sentence-splitter";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

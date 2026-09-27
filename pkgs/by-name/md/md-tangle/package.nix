@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "md-tangle";
-  version = "1.4.4";
+  version = "2.1.2";
   pyproject = true;
 
   # By some strange reason, fetchPypi fails miserably
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "joakimmj";
     repo = "md-tangle";
     tag = "v${version}";
-    hash = "sha256-PkOKSsyY8uwS4mhl0lB+KGeUvXfEc7PUDHZapHMYv4c=";
+    hash = "sha256-3lHPYfIXfS/iilY2ZW/EOKiI1hkRWaDoqbxSmntsZNo=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -25,11 +25,11 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonImportsCheck = [ "md_tangle" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joakimmj/md-tangle/";
     description = "Generates (\"tangles\") source code from Markdown documents";
     mainProgram = "md-tangle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

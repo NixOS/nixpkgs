@@ -28,36 +28,34 @@
 }:
 
 let
-  tdlib-1811 = tdlib.overrideAttrs (
-    oa: fa: {
-      version = "1.8.11";
-      src = fetchFromGitHub {
-        owner = "tdlib";
-        repo = "td";
-        rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
-        hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
-      };
+  tdlib-1811 = tdlib.overrideAttrs {
+    version = "1.8.11";
+    src = fetchFromGitHub {
+      owner = "tdlib";
+      repo = "td";
+      rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
+      hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
+    };
 
-      # CMake 4 compat
-      postPatch = ''
-        substituteInPlace CMakeLists.txt \
-          --replace-fail 'cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+    # CMake 4 compat
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
 
-        substituteInPlace td/generate/tl-parser/CMakeLists.txt \
-          --replace-fail 'cmake_minimum_required(VERSION 3.0 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
-      '';
-    }
-  );
+      substituteInPlace td/generate/tl-parser/CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "teleports";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/teleports";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V9yOQbVXtZGxdiieggPwHd17ilRZ0xMEI2yphgjx188=";
+    hash = "sha256-y0oXlhu2cvOGYZCEHfL6DcyStCQcIz7JtIpR4Tygm/4=";
   };
 
   patches = [
@@ -66,19 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-teleports-Call-i18n.bindtextdomain.patch";
       url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/dd537c08453be9bfcdb2ee1eb692514c7e867e41.patch";
       hash = "sha256-zxxFvoj6jluGPCA9GQsxuYYweaSOVrkD01hZwCtq52U=";
-    })
-
-    # Fix CMake 4 compatibility
-    # Remove when version > 1.21
-    (fetchpatch {
-      name = "0002-teleports-CMakeLists.txt-Support-building-with-CMake-4.patch";
-      url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/ffb4e745889a473a208a86a29b7e439129930b01.patch";
-      hash = "sha256-EdcCHH/0Zq8wcF6UPyvy16wntDeSqTV9LWQat91LNRo=";
-    })
-    (fetchpatch {
-      name = "0003-teleports-libs-qtdlib-CMakeLists.txt-Support-building-with-CMake-4.patch";
-      url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/fe7f0cb304ddaefae9f97917d3edc89de5f21b1f.patch";
-      hash = "sha256-yIc/l6iHb5qWI0QZOx8Hhd0lgEYyPozL+AjrmF2L89k=";
     })
 
     # Remove when https://gitlab.com/ubports/development/apps/teleports/-/merge_requests/586 merged & in release

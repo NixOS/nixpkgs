@@ -5,7 +5,7 @@
   zlib,
 }:
 stdenv.mkDerivation {
-  name = "ropebwt2";
+  pname = "ropebwt2";
   version = "0-unstable-2021-02-01";
   src = fetchFromGitHub {
     owner = "lh3";

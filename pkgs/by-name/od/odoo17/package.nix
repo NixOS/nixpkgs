@@ -31,8 +31,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
-
-  format = "setuptools";
+  pyproject = true;
 
   # latest release is at https://github.com/odoo/docker/blob/master/17.0/Dockerfile
   src = fetchzip {
@@ -48,23 +47,31 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    "${lib.makeBinPath [
-      wkhtmltopdf
-      rtlcss
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        wkhtmltopdf
+        rtlcss
+      ]
+    }"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  postPatch = ''
+    # hardcode the location of the unwrapped python scrip, otherwise the websocket
+    # server (called longpoll in codebase) will fail to start.
+    substituteInPlace odoo/service/server.py \
+      --replace-fail 'sys.argv[0]' "'${placeholder "out"}/bin/.odoo-wrapped'"
+  '';
+
+  build-system = with python.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python.pkgs; [
     babel
     chardet
     cryptography
     decorator
     docutils-0_17 # sphinx has a docutils requirement >= 18
-    ebaysdk
-    freezegun
     geoip2
     gevent
     greenlet
@@ -102,8 +109,7 @@ python.pkgs.buildPythonApplication rec {
     xlwt
     zeep
 
-    setuptools
-    mock
+    setuptools # pkg_resources is imported during runtime
   ];
 
   # takes 5+ minutes and there are not files to strip
@@ -112,7 +118,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo17;
+      inherit (nixosTests) odoo17 odoo17-multiprocess;
     };
   };
 

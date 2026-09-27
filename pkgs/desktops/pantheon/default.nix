@@ -20,6 +20,7 @@ lib.makeScope pkgs.newScope (
       switchboard-plug-notifications
       switchboard-plug-onlineaccounts
       switchboard-plug-pantheon-shell
+      switchboard-plug-parental-controls
       switchboard-plug-power
       switchboard-plug-printers
       switchboard-plug-security-privacy
@@ -44,10 +45,10 @@ lib.makeScope pkgs.newScope (
 
     teams = [ lib.teams.pantheon ];
 
-    mutter = pkgs.mutter46;
+    mutter = pkgs.mutter48;
 
-    # Using 43 to match Mutter used in Pantheon
-    gnome-settings-daemon = pkgs.gnome-settings-daemon46;
+    # Using 48 to match Mutter used in Pantheon
+    gnome-settings-daemon = pkgs.gnome-settings-daemon48;
 
     elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -200,6 +201,8 @@ lib.makeScope pkgs.newScope (
     switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
 
     switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
+
+    switchboard-plug-parental-controls = callPackage ./apps/switchboard-plugs/parental-controls { };
 
     switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
 

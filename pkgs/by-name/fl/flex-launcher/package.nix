@@ -4,7 +4,7 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
-  libX11,
+  libx11,
   cmake,
   validatePkgConfig,
   inih,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
-    libX11
+    libx11
     inih
   ];
 

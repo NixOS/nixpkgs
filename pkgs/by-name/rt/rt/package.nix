@@ -11,15 +11,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rt";
-  version = "5.0.8";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     repo = "rt";
-    rev = "rt-${version}";
+    rev = "rt-${finalAttrs.version}";
     owner = "bestpractical";
-    hash = "sha256-4/iC1PjLgLAp7XWTafe8HW3bTkDWWQxtSEIOs8wluzE=";
+    hash = "sha256-wmYBeHb/aGKzbDD7mbSMpz0eEZHRq+Jr5+hDK0Hl9+s=";
   };
 
   patches = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
           BusinessHours
           CGIEmulatePSGI
           CGIPSGI
+          CSSInliner
           CSSMinifierXS
           CSSSquish
           ConvertColor
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
           DateExtract
           DateManip
           DateTimeFormatNatural
+          DateTimeSet
           DevelGlobalDestruction
           EmailAddress
           EmailAddressList
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
           GDGraph
           GnuPGInterface
           GraphViz2
+          HashMerge
+          HashMergeExtra
           HTMLFormatExternal
           HTMLFormatTextWithLinks
           HTMLFormatTextWithLinksAndTables
@@ -80,6 +84,7 @@ stdenv.mkDerivation rec {
           HTMLQuoted
           HTMLRewriteAttributes
           HTMLScrubber
+          Imager
           IPCRun
           IPCRun3
           JSON
@@ -133,7 +138,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    echo rt-${version} > .tag
+    echo rt-${finalAttrs.version} > .tag
   '';
   preConfigure = ''
     appendToVar configureFlags "--with-web-user=$UID"
@@ -176,6 +181,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    homepage = "https://github.com/bestpractical/rt";
     platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
   };
-}
+})

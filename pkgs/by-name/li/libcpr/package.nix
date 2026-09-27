@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.14.1";
+  version = "1.14.2";
 in
 stdenv.mkDerivation {
   pname = "libcpr";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "libcpr";
     repo = "cpr";
     rev = version;
-    hash = "sha256-kwbkdAeTpkEJbzvqpUQx007ZIBtwqOPG8n41TvFxeiM=";
+    hash = "sha256-fglJNQzf+5c5nJysxqTxE4EWSQO0GVauLV8yLypQMPs=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +50,14 @@ stdenv.mkDerivation {
                      "_IMPORT_PREFIX \"$dev\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ wrapper around libcurl";
     homepage = "https://docs.libcpr.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       phodina
       rycee
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

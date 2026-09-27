@@ -15,8 +15,8 @@
 }:
 
 let
-  sabctoolsVersion = "8.2.6";
-  sabctoolsHash = "sha256-olZSIjfP2E1tkCG8WzEZfrBJuDEp3PZyFFE5LJODEZE=";
+  sabctoolsVersion = "9.6.3";
+  sabctoolsHash = "sha256-+qzSDV7JER45yBMmyh5Jor4rJLlcE8KPguPnrBmMkSk=";
 
   pythonEnv = python3.withPackages (
     ps: with ps; [
@@ -24,13 +24,14 @@ let
       babelfish
       cffi
       chardet
-      cheetah3
       cheroot
       cherrypy
       configobj
       cryptography
+      ct3
       feedparser
       guessit
+      hachoir
       jaraco-classes
       jaraco-collections
       jaraco-context
@@ -73,14 +74,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.5.5";
+  version = "5.1.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-XEWMy+Ph47neyQubehegcOxucClB1Z9t1QDLN7FrxaY=";
+    hash = "sha256-Ya7AagLwupKmkeOWPbsQB/lWyl/7egTGbcxXqM5yY54=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -104,14 +105,13 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jojosch
-      adamcstephens
     ];
     mainProgram = "sabnzbd";
   };

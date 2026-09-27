@@ -15,18 +15,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koji";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "cococonscious";
     repo = "koji";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+xtq4btFbOfiyFMDHXo6riSBMhAwTLQFuE91MUHtg5Q=";
+    hash = "sha256-qKC4ayaNPSUh4wSElBWxk/P+Y2dFgCIFiMkI0/QztDY=";
   };
 
-  cargoHash = "sha256-WiFXDXLJc2ictv29UoRFRpIpAqeJlEBEOvThXhLXLJA=";
+  cargoHash = "sha256-vdELHNH1GqR0LPY3SSNgSR3krZZ85Tsx6aTHve0Vhe8=";
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config

@@ -39,11 +39,11 @@ buildPythonPackage rec {
   # https://github.com/django-crispy-forms/crispy-bootstrap3/issues/12
   doCheck = lib.versionOlder django.version "5.1";
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 3 template pack for django-crispy-forms";
     homepage = "https://github.com/django-crispy-forms/crispy-bootstrap3";
     changelog = "https://github.com/django-crispy-forms/crispy-bootstrap3/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

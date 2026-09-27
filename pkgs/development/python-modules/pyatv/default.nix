@@ -27,22 +27,22 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatv";
-  version = "0.16.1";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
-    tag = "v${version}";
-    hash = "sha256-b5u9u5CD/1W422rCxHvoyBqT5CuBAh68/EUBzNDcXoE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UNBpVB2H+xr0ijdlfK/Hrh6k3lhRSqHkthjWp/WZsaQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest-runner" ""
-  '';
+  patches = [
+    # https://github.com/postlund/pyatv/pull/2909
+    ./fix-test-fixtures-for-newer-zeroconf-versions.diff
+  ];
 
   pythonRelaxDeps = [
     "aiohttp"
@@ -86,15 +86,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.12") [
-      # https://github.com/postlund/pyatv/issues/2365
-      "test_simple_dispatch"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
-      "test_stream_retransmission"
-    ];
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+    "test_stream_retransmission"
+  ];
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox
@@ -106,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
-    changelog = "https://github.com/postlund/pyatv/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/postlund/pyatv/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

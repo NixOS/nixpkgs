@@ -4,18 +4,18 @@
   cmake,
   stdenv,
   testers,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uavs3d";
-  version = "1.1-unstable-2023-02-23";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "uavs3";
     repo = "uavs3d";
-    rev = "1fd04917cff50fac72ae23e45f82ca6fd9130bd8";
-    hash = "sha256-ZSuFgTngOd4NbZnOnw4XVocv4nAR9HPkb6rP2SASLrM=";
+    tag = finalAttrs.version;
+    hash = "sha256-SlCGLglBsU3ua406Bnf89c4X80F5B93piF2sAXqtRus=";
   };
 
   cmakeFlags = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = gitUpdater { };
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 

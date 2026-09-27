@@ -20,16 +20,16 @@ let
     hash = "sha256-QSJjXgzjoKIwTvIx6iWCHjleJTAAI7qnbcxZb8sygxY=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Virtual Tabletop for playing roleplaying games with remote players or face to face";
     mainProgram = "maptool";
     homepage = "https://www.rptools.net/toolbox/maptool/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ rhendric ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };
 

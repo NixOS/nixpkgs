@@ -7,12 +7,12 @@
   argp-standalone,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libavc1394";
   version = "0.5.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libavc1394/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libavc1394/libavc1394-${finalAttrs.version}.tar.gz";
     sha256 = "0lsv46jdqvdx5hx92v0z2cz3yh6212pz9gk0k3513sbaa04zzcbw";
   };
 
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libraw1394 ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-largp";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-largp";
+  };
 
   meta = {
     description = "Programming interface for the 1394 Trade Association AV/C (Audio/Video Control) Digital Interface Command Set";
@@ -28,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

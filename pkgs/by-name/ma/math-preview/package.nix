@@ -6,31 +6,32 @@
   nodejs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "math-preview";
-  version = "5.1.1";
+  version = "5.1.2-unstable-2024-08-01";
   inherit nodejs;
 
   src = fetchFromGitLab {
     owner = "matsievskiysv";
     repo = "math-preview";
-    rev = "v${version}";
-    hash = "sha256-P3TZ/D6D2PvwPV6alSrDEQujzgI8DhK4VOuCC0BCIFo=";
+    # FIXME: switch to tag="v${finalAttrs.version}" when upstream eventually cuts a new release.
+    rev = "a2ca3c175468ceaf02bab6cdfd8ef016bda2b98d";
+    hash = "sha256-o7n02aecHWt4Vumj+wdv/yavaVnMuxm8p+Pb+ppDrUE=";
   };
 
-  npmDepsHash = "sha256-GAPhG3haM9UNdj6tCz8I4j7v6rvNbatdu7NjCeENj3s=";
+  npmDepsHash = "sha256-IzJszTaa8NMGRadRdBetfQXJfyjVKKYveTzbPOr07Sw=";
   dontNpmBuild = true;
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Emacs preview math inline";
     mainProgram = "math-preview";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://gitlab.com/matsievskiysv/math-preview";
-    maintainers = with maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [ renesat ];
     inherit (nodejs.meta) platforms;
   };
 }

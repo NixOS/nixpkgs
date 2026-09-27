@@ -23,7 +23,8 @@
   libsepol,
   libthai,
   libdatrie,
-  xorg,
+  libxtst,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -37,14 +38,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "KnobKraft-orm";
 
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "christofmuc";
     repo = "knobkraft-orm";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-dOgPq4r2IvKDPhhV/LWRfGeeFckN5ZUeee/T6QNfCtw=";
+    hash = "sha256-1mPeiey0hbJmg5k9R06wnDIGDDxbOfRixQ0zoFa4zYA=";
   };
 
   nativeBuildInputs = [
@@ -71,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     libthai
     libdatrie
-    xorg.libXdmcp
+    libxdmcp
     lerc
     libxkbcommon
     libepoxy
-    xorg.libXtst
+    libxtst
     sqlite
     git
     libdeflate

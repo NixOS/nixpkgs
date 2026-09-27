@@ -5,15 +5,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.11";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.12";
   pname = "chibi-scheme";
 
   src = fetchFromGitHub {
     owner = "ashinn";
     repo = "chibi-scheme";
-    rev = version;
-    sha256 = "sha256-i+xiaYwM7a+0T824VSuh7UUNI6HV9KpqzQPE1WAZ+As=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-TQT3/fZqgQP5UfCKN1ShvGgxdjfNdUWnpqdHKQMJHzY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       DerGuteMoritz
     ];
   };
-}
+})

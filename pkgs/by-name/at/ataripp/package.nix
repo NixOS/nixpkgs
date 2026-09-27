@@ -5,10 +5,10 @@
   alsa-lib,
   fetchurl,
   gcc-unwrapped,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
+  libice,
+  libsm,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     alsa-lib
     gcc-unwrapped
-    libICE
-    libSM
-    libX11
-    libXext
+    libice
+    libsm
+    libx11
+    libxext
   ];
 
   postFixup = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
     maintainers = [ ];
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
 })

@@ -11,14 +11,14 @@
   singleWordlist ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scowl";
   version = "2020.12.07";
 
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
-    rev = "rel-${version}";
+    rev = "rel-${finalAttrs.version}";
     sha256 = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
   };
 
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "http://wordlist.aspell.net/";
   };
-}
+})

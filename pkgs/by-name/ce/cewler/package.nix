@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cewler";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roys";
     repo = "cewler";
     rev = "v${version}";
-    hash = "sha256-Od9O71122jVwqZ5ntoBQQtyNQjt2RRbZT8DzWFPUN84=";
+    hash = "sha256-9P8vFacbw0pgthYqJY/aPuV39VQuMAA8o7yJ8HkD7RQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Custom Word List generator Redefined";
     mainProgram = "cewler";
     homepage = "https://github.com/roys/cewler";
-    license = licenses.cc-by-nc-40;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.cc-by-nc-40;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

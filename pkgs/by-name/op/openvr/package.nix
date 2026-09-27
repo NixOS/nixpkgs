@@ -11,14 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "2.12.14";
+  version = "2.15.6";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-G+xoFIabSbYEaWATGSzHP3SWkaqQhQQ6kMkYfjBXBUU=";
+    hash = "sha256-xtCqro73fWQ6i0PiVmWYCK30DUSq1WeALoUolUjuWlE=";
   };
+
+  postUnpack = ''
+    # Move in-tree jsoncpp out to complement the patch above
+    # fetchpatch2 is not able to handle these renames
+    mkdir source/thirdparty
+    mv source/src/json source/thirdparty/jsoncpp
+  '';
 
   patches = [
     # https://github.com/ValveSoftware/openvr/pull/594
@@ -35,11 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postUnpack = ''
-    # Move in-tree jsoncpp out to complement the patch above
-    # fetchpatch2 is not able to handle these renames
-    mkdir source/thirdparty
-    mv source/src/json source/thirdparty/jsoncpp
+  postPatch = ''
+    # Fix jsoncpp ABI for downstream packages
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-std=c++11" "-std=c++17"
   '';
 
   nativeBuildInputs = [

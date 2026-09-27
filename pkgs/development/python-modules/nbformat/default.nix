@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   hatchling,
   hatch-nodejs-version,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "nbformat";
   version = "5.10.4";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -56,6 +54,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

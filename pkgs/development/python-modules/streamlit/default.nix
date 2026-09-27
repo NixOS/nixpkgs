@@ -2,12 +2,15 @@
   lib,
   stdenv,
   altair,
+  anyio,
   blinker,
   buildPythonPackage,
   cachetools,
   click,
   fetchPypi,
   gitpython,
+  httptools,
+  itsdangerous,
   numpy,
   packaging,
   pandas,
@@ -15,54 +18,63 @@
   protobuf,
   pyarrow,
   pydeck,
-  pythonOlder,
-  setuptools,
+  python-multipart,
   requests,
   rich,
+  setuptools,
+  starlette,
   tenacity,
   toml,
   tornado,
   typing-extensions,
+  uvicorn,
   watchdog,
+  websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit";
-  version = "1.51.0";
+  version = "1.62.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HnQqnAtpj0Zsb1v1jTM77aWh++jeZgdDl2eRtcFEbvY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-nSVx2m5nmcuvD1lUj1dzkmJgqHppgHzz4vD2j59eTUU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "protobuf"
+  ];
 
   dependencies = [
     altair
+    anyio
     blinker
     cachetools
     click
+    gitpython
+    httptools
+    itsdangerous
     numpy
     packaging
     pandas
     pillow
     protobuf
     pyarrow
+    pydeck
+    python-multipart
     requests
     rich
+    starlette
     tenacity
     toml
-    typing-extensions
-    gitpython
-    pydeck
     tornado
+    typing-extensions
+    uvicorn
+    websockets
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
@@ -71,19 +83,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streamlit" ];
 
-  postInstall = ''
-    rm $out/bin/streamlit.cmd # remove windows helper
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://streamlit.io/";
-    changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
+    changelog = "https://github.com/streamlit/streamlit/releases/tag/${finalAttrs.version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       natsukium
       yrashk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

@@ -9,7 +9,7 @@
 
 rec {
   pname = "glow-lang";
-  version = "unstable-2023-12-04";
+  version = "0.3.2-unstable-2023-12-04";
   git-version = "0.3.2-237-g08d849ad";
   softwareName = "Glow";
   gerbil-package = "mukn/glow";
@@ -58,12 +58,12 @@ rec {
     chmod a+x $out/bin/glow
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Glow: language for safe Decentralized Applications (DApps)";
     homepage = "https://glow-lang.org";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fare ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fare ];
     broken = true; # Broken for all platforms since 2023-10-13
   };
 }

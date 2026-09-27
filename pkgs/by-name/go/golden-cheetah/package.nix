@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.7-SP1";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NsXTe4Ht4TFDu7/nK3/hdCk/K2mPm59I9GHkVOTDc74=";
+    hash = "sha256-NGb8u2xdmDkh0Vx5kf2KHGmsojguS2Of6NVajc6iEBI=";
   };
 
   buildInputs =
@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-building-with-bison-3.7.patch
   ];
 
-  NIX_LDFLAGS = "-lz -lgsl -lblas";
+  env.NIX_LDFLAGS = toString [
+    "-lz"
+    "-lgsl"
+    "-lblas"
+  ];
 
   qtWrapperArgs = [
     "--prefix"
@@ -96,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
         install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
-        install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
+        install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall
       ''
@@ -110,12 +114,19 @@ stdenv.mkDerivation (finalAttrs: {
     else
       abort "unsupported platform";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=v([0-9\\.]+)"
+    ];
+  };
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
+    changelog = "https://github.com/GoldenCheetah/GoldenCheetah/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/GoldenCheetah/GoldenCheetah";
     mainProgram = "GoldenCheetah";
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ adamcstephens ];
     license = lib.licenses.gpl2Plus;
   };

@@ -2,24 +2,37 @@
   lib,
   go,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   versionCheckHook,
+  common-updater-scripts,
+  curlMinimal,
+  elm2nix,
+  nix-update,
+  nixfmt,
+  writeShellApplication,
 }:
 
+let
+  elmUi = callPackage ./elm-ui.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.29.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uP4JCbQEe7/en5sBq/k73kqK6YVmuLvfiUy1fqPitw=";
+    hash = "sha256-LGjBuZ7kbtABunEk2YyCKILsPS/0FlS/6Mf/2qVpseI=";
   };
 
-  vendorHash = "sha256-bN1iV2JrrjwiiIXr5lp389HvEoQGteJQD94cug0/048=";
+  postPatch = ''
+    cp -r ${elmUi}/. ui/app/dist
+  '';
+  vendorHash = "sha256-t5jQtccln3dfcHlnEOnLQHfjzfU9kY9Y7q+r4AigvBE=";
 
   subPackages = [
     "cmd/alertmanager"
@@ -48,20 +61,47 @@ buildGoModule (finalAttrs: {
     installShellCompletion amtool.zsh
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+  passthru = {
+    inherit elmUi;
+    tests = { inherit (nixosTests.prometheus) alertmanager; };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "alertmanager-update";
+      runtimeInputs = [
+        curlMinimal
+        common-updater-scripts
+        elm2nix
+        nix-update
+        nixfmt
+      ];
+      text = ''
+        TAG=$(list-git-tags --url="https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}" | sort -V | tail -n1)
+
+        pushd pkgs/by-name/pr/prometheus-alertmanager
+        wcurl --output="elm.json" "https://raw.githubusercontent.com/prometheus/alertmanager/refs/tags/''${TAG}/ui/app/elm.json"
+        elm2nix convert > elm-srcs.nix
+        elm2nix snapshot > registry.dat
+        rm elm.json
+        nixfmt elm-srcs.nix
+        popd
+
+        nix-update prometheus-alertmanager --version "''${TAG#v}"
+        nix-update prometheus-alertmanager.elmUi
+      '';
+    });
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     changelog = "https://github.com/prometheus/alertmanager/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alertmanager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

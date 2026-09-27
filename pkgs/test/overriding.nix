@@ -5,7 +5,14 @@
 }:
 
 let
-  tests = tests-stdenv // test-extendMkDerivation // tests-fetchhg // tests-go // tests-python;
+  tests =
+    tests-stdenv
+    // test-extendMkDerivation
+    // tests-fetchgit
+    // tests-fetchhg
+    // tests-fetchurl
+    // tests-go
+    // tests-python;
 
   tests-stdenv =
     let
@@ -61,6 +68,16 @@ let
             pname = "hello-no-final-attrs-overridden";
           }).pname;
         expected = "hello-no-final-attrs-overridden";
+      };
+      structuredAttrs-allowedRequisites-nullability = {
+        expr =
+          lib.hasPrefix builtins.storeDir
+            (pkgs.stdenv.mkDerivation {
+              __structuredAttrs = true;
+              inherit (pkgs.hello) pname version src;
+              allowedRequisites = null;
+            }).drvPath;
+        expected = true;
       };
     };
 
@@ -128,6 +145,130 @@ let
       extendMkDerivation-helloLocal-specialArg = {
         expr = hiLocal.greeting;
         expected = "Hi!";
+      };
+    };
+
+  /**
+    Take two positional arguments `fakeHash` and `partialHash`,
+    and return a modified version of fakeHash whose hash body is partially substituted by `partialHash` from the beginning,
+    used to assert a specific fake hash variant is used by an overridden FOD.
+
+    # Inputs
+
+    `fakeHash`
+
+    : The specified zero fake hash
+
+    `partialHash`
+
+    : A trimmed non-zero hash body, to substitute the beginning of the zero hash body.
+  */
+  genNonzeroFakeHash =
+    fakeHash:
+    let
+      isSRIHash = lib.hasInfix "-" fakeHash;
+      defaultHashAlgo = lib.optionalString isSRIHash lib.head (lib.splitString "-" lib.fakeHash);
+      defaultHashPrefix = lib.optionalString isSRIHash (defaultHashAlgo + "-");
+      defaultHashBody = lib.removePrefix defaultHashPrefix fakeHash;
+    in
+    partialHash:
+    defaultHashPrefix
+    + partialHash
+    + (lib.substring (lib.stringLength partialHash) (lib.stringLength defaultHashBody) defaultHashBody);
+
+  tests-fetchgit =
+    let
+      fakeSha256-1 = genNonzeroFakeHash lib.fakeSha256 "1";
+      fakeHash-2 = genNonzeroFakeHash lib.fakeHash "B";
+      src-with-sha256 = pkgs.fetchgit {
+        url = "https://example.com/source.git";
+        sha256 = fakeSha256-1;
+      };
+    in
+    {
+      test-fetchgit-hash-compat = {
+        expr = {
+          inherit (src-with-sha256)
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = fakeSha256-1;
+          outputHashAlgo = "sha256";
+        };
+      };
+      test-fetchgit-overrideAttrs-hash = {
+        expr = {
+          inherit (src-with-sha256.overrideAttrs { hash = fakeHash-2; })
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = fakeHash-2;
+          outputHashAlgo = null;
+        };
+      };
+      test-fetchurl-overrideAttrs-hash-empty = {
+        expr = {
+          inherit (src-with-sha256.overrideAttrs { hash = ""; })
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = lib.fakeHash;
+          outputHashAlgo = null;
+        };
+      };
+    };
+
+  tests-fetchurl =
+    let
+      fakeSha256-1 = genNonzeroFakeHash lib.fakeSha256 "1";
+      fakeHash-2 = genNonzeroFakeHash lib.fakeHash "B";
+      src-with-sha256 = pkgs.fetchurl {
+        url = "https://example.com/source.tar.gz";
+        sha256 = fakeSha256-1;
+      };
+    in
+    {
+      test-fetchurl-hash-compat = {
+        expr = {
+          inherit (src-with-sha256)
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = fakeSha256-1;
+          outputHashAlgo = "sha256";
+        };
+      };
+      test-fetchurl-overrideAttrs-hash = {
+        expr = {
+          inherit (src-with-sha256.overrideAttrs { hash = fakeHash-2; })
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = fakeHash-2;
+          outputHashAlgo = null;
+        };
+      };
+      test-fetchurl-overrideAttrs-hash-empty = {
+        expr = {
+          inherit (src-with-sha256.overrideAttrs { hash = ""; })
+            outputHash
+            outputHashAlgo
+            ;
+        };
+        expected = {
+          outputHash = lib.fakeHash;
+          outputHashAlgo = null;
+        };
       };
     };
 
@@ -292,14 +433,124 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
+      package-stub = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+        }
+      ) { };
+
+      package-stub-gcc = package-stub.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.gccStdenv;
+        };
       });
+      package-stub-clang = package-stub-gcc.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.clangStdenv;
+        };
+      });
+      package-stub-libcxx = package-stub-clang.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.libcxxStdenv;
+        };
+      });
+
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (previousAttrs: {
+          overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+        });
+      applyOverridePythonAttrsFP =
+        p:
+        p.overridePythonAttrs (
+          finalAttrs: previousAttrs: {
+            overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+            overridePythonAttrsFlagP1 = finalAttrs.overridePythonAttrsFlag + 1;
+          }
+        );
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
     in
     {
+      buildPythonPackage-override-gccStdenv = {
+        expr = package-stub-gcc.stdenv;
+        expected = pkgs.gccStdenv;
+      };
+      buildPythonPackage-override-clangStdenv = {
+        expr = package-stub-clang.stdenv;
+        expected = pkgs.clangStdenv;
+      };
+      buildPythonPackage-override-libcxxStdenv = {
+        expr = package-stub-libcxx.stdenv;
+        expected = pkgs.libcxxStdenv;
+      };
+
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
+        expected = 1;
+      };
+      overridePythonAttrs-nested = {
+        expr = (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
+        expected = 2;
+      };
+      overridePythonAttrs-plain = {
+        expr = (package-stub.overridePythonAttrs { overridePythonAttrsFlag = 0; }).overridePythonAttrsFlag;
+        expected = 0;
+      };
+      overridePythonAttrs-finalAttrs = {
+        expr = {
+          inherit (applyOverridePythonAttrsFP package-stub)
+            overridePythonAttrsFlag
+            overridePythonAttrsFlagP1
+            ;
+        };
+        expected = {
+          overridePythonAttrsFlag = 1;
+          overridePythonAttrsFlagP1 = 2;
+        };
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = {
+          inherit (applyOverridePythonAttrs (overrideAttrsFooBar package-stub))
+            FOO
+            BAR
+            ;
+        };
+        expected = {
+          FOO = "a";
+          BAR = "a";
+        };
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = (applyOverridePythonAttrs (overrideAttrsFooBar package-stub)) ? overridePythonAttrsFlag;
         expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr = overrideAttrsFooBar (applyOverridePythonAttrs package-stub);
+        expected = applyOverridePythonAttrs (overrideAttrsFooBar package-stub);
+      };
+      chain-of-overrides = rec {
+        expr = lib.pipe package-stub [
+          (p: p.overrideAttrs { inherit (expected) a; })
+          (p: p.overridePythonAttrs { inherit (expected) b; })
+          (p: p.overrideAttrs { inherit (expected) c; })
+          (p: p.overridePythonAttrs { inherit (expected) d; })
+          (builtins.intersectAttrs expected)
+        ];
+        expected = lib.genAttrs [ "a" "b" "c" "d" ] lib.id;
       };
     };
 

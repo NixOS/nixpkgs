@@ -11,9 +11,9 @@
   alsa-lib,
   libGL,
   libGLU,
-  libX11,
-  libXi,
-  libXcursor,
+  libx11,
+  libxi,
+  libxcursor,
   lua,
   makeDesktopItem,
   copyDesktopItems,
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXi
-    libXcursor
+    libx11
+    libxi
+    libxcursor
     lua
   ];
 

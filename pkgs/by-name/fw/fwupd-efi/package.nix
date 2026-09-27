@@ -8,6 +8,7 @@
   gnu-efi,
   python3,
   python3Packages,
+  fwupd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,10 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgenpeimg=disabled"
   ];
 
-  meta = with lib; {
-    homepage = "https://fwupd.org/";
-    maintainers = [ ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+  meta = {
+    description = "EFI Application used by uefi-capsule plugin in fwupd";
+    inherit (fwupd.meta)
+      homepage
+      maintainers
+      license
+      platforms
+      ;
+    teams = [ lib.teams.boot-security ];
   };
 })

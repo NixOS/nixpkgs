@@ -6,7 +6,6 @@
   pkg-config,
   fftw,
   file,
-  gnome2,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
@@ -15,29 +14,27 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  # libXmu is not used if libunique is.
   libXmuSupport ? false,
-  xorg,
+  libxmu,
   libxsltSupport ? true,
   libxslt,
   fitsSupport ? true,
   cfitsio,
   zlibSupport ? true,
   zlib,
-  libuniqueSupport ? true,
-  libunique,
   libpngSupport ? true,
   libpng,
   openglSupport ? !stdenv.hostPlatform.isDarwin,
+  gtkglext,
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
-  version = "2.69";
+  version = "2.71";
   src = fetchurl {
-    url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-WX62tR7ldaB/NQzAVzvHTQBaNJDZgyrRNqNp5w0w76Y=";
+    url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
+    hash = "sha256-LfchvvzL5NXuK6Vksy5pNB+M4d5jfiBFg4oJotRrXbo=";
   };
 
   nativeBuildInputs = [
@@ -50,18 +47,17 @@ stdenv.mkDerivation rec {
     fftw
   ]
   ++ lib.optionals openglSupport [
-    gnome2.gtkglext
+    gtkglext
     libGL
   ]
   ++ lib.optional openexrSupport openexr
-  ++ lib.optional libXmuSupport xorg.libXmu
+  ++ lib.optional libXmuSupport libxmu
   ++ lib.optional fitsSupport cfitsio
   ++ lib.optional libpngSupport libpng
   ++ lib.optional libxsltSupport libxslt
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libwebpSupport libwebp
   ++ lib.optional zlibSupport zlib
-  ++ lib.optional libuniqueSupport libunique
   ++ lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
@@ -89,4 +85,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

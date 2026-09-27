@@ -25,18 +25,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.34.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigtable";
     tag = "v${version}";
-    hash = "sha256-KPibMigfBJ2sE/QVgTjr7901dzj+/hWbOYz92naUxMw=";
+    hash = "sha256-rvw7mHWifJ6+g89DXtV0pOFwbbGQNlK1J+IRhy/7W5o=";
   };
 
   pyproject = true;
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

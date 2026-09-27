@@ -14,19 +14,25 @@
   lttng-ust_2_12,
   krb5,
   bash,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
   nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.15.7";
+  version = "7.25.2";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-xTD1bdL/UUGqUxDmrguO6Oapv37clDD2b3YWCe7B+Bs=";
+    hash = "sha256-iiTBEAEcTUDHFjaytuGxZfvDOKeccieDSWnHZU7u5to=";
     fetchSubmodules = true;
   };
 
@@ -51,9 +57,9 @@ buildDotnetModule (finalAttrs: {
 
   dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "v2rayN" ];
 
@@ -72,14 +78,14 @@ buildDotnetModule (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = with xorg; [
-    libX11
-    libXrandr
-    libXi
-    libICE
-    libSM
-    libXcursor
-    libXext
+  runtimeDeps = [
+    libx11
+    libxrandr
+    libxi
+    libice
+    libsm
+    libxcursor
+    libxext
   ];
 
   desktopItems = [
@@ -105,8 +111,8 @@ buildDotnetModule (finalAttrs: {
     description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ andrewzah ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

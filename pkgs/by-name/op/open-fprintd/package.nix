@@ -49,13 +49,13 @@ python3Packages.buildPythonPackage rec {
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/lib/open-fprintd" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/lib/open-fprintd" "$out ''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fprintd replacement which allows you to have your own backend as a standalone service";
     homepage = "https://github.com/uunicorn/open-fprintd";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,37 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   aiobtclientrpc,
   async-timeout,
   httpx,
   torf,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientapi";
-  version = "1.1.4";
+  version = "2.0.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientapi";
-    tag = "v${version}";
-    hash = "sha256-ga3EyKhfdEKkjFktUlgLSX54QbTc/a48vmWjmRqa+4w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7LpLkbN1PJCLOGjPm3HN2LWS0JeFzP7se6NGEtZb6uk=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
-  ];
+  pythonRelaxDeps = [ "async-timeout" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiobtclientrpc
@@ -42,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -64,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

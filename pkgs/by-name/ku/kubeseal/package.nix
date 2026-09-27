@@ -2,35 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeseal";
-  version = "0.33.1";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
-    owner = "bitnami-labs";
+    owner = "bitnami";
     repo = "sealed-secrets";
-    rev = "v${version}";
-    sha256 = "sha256-lwBNYvpQWKXqvZsKk943dWDrR8cQk/xoDnTflgP77Pg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmvKD6Rk/xCw0hpGmus9JOG2JBStqzTSl09QGYMcOjQ=";
   };
 
-  vendorHash = "sha256-LZjnveGOHxF8en+EfcjYIq6ZkYv4sG/4sEv4DhTLUkU=";
+  vendorHash = "sha256-JzBl9jOGYstoimv8bdy2t1DSvchFMl73zdxeY1Vagog=";
 
   subPackages = [ "cmd/kubeseal" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Kubernetes controller and tool for one-way encrypted Secrets";
     mainProgram = "kubeseal";
-    homepage = "https://github.com/bitnami-labs/sealed-secrets";
-    changelog = "https://github.com/bitnami-labs/sealed-secrets/blob/v${version}/RELEASE-NOTES.md";
+    homepage = "https://github.com/bitnami/sealed-secrets";
+    changelog = "https://github.com/bitnami/sealed-secrets/blob/v${finalAttrs.version}/RELEASE-NOTES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ groodt ];
   };
-}
+})

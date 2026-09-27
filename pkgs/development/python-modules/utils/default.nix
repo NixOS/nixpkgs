@@ -2,21 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "utils";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "haaksmash";
     repo = "pyutils";
-    rev = version;
-    sha256 = "07pr39cfw5ayzkp6h53y7lfpd0w19pphsdzsf100fsyy3npavgbr";
+    tag = finalAttrs.version;
+    hash = "sha256-eb2trh3eawdAcPo3De9NgYN2HT1+FGju/F4V7lga+R4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -25,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python set of utility functions and objects";
     homepage = "https://github.com/haaksmash/pyutils";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

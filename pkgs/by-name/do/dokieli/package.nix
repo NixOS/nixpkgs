@@ -16,20 +16,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-11-27";
+  version = "0-unstable-2026-08-10";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "25c20daf88a7d7e8d816a7deed4e2fe134bdb97d";
-    hash = "sha256-GiMBCUT9wd/6bZ1hXt9431Ax1Z7BLHOXfWiiPxKZsCs=";
+    rev = "c23e80e4fe54a2ad20f36a9f21a0987f5e3e4505";
+    hash = "sha256-ZwK+MxrTodDvvJuQCIhcDkluor4ri856m/WhcVRwfzo=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-8LBMHdjWaxno4I+ZAwTw9WCVotX7O0eufhGJGg1a0w4=";
+    hash = "sha256-AqmUWgVDksQeBKcC8mpq1xgQ5NcHTjX/YSgm9J+feBs=";
   };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -42,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
 
@@ -69,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
-    homepage = "https://github.com/linkeddata/dokieli";
-    license = with lib.licenses; [
-      cc-by-40
-      mit
+    homepage = "https://github.com/dokieli/dokieli";
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.cc-by-40
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];

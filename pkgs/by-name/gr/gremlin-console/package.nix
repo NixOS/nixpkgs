@@ -8,12 +8,12 @@
 let
   openjdk = openjdk11;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gremlin-console";
-  version = "3.8.0";
+  version = "3.8.2";
   src = fetchzip {
-    url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
-    sha256 = "sha256-vTv2a3+Ezd87ph4BnRaypPuUz0/s8DFcHVsKaURucTY=";
+    url = "https://downloads.apache.org/tinkerpop/${finalAttrs.version}/apache-tinkerpop-gremlin-console-${finalAttrs.version}-bin.zip";
+    sha256 = "sha256-U2sorMLLFcYV9dRX64uHR+eUu92ZmxhYgOK4CBsL5YE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
-    license = licenses.asl20;
-    maintainers = [ maintainers.lewo ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.lewo ];
+    platforms = lib.platforms.all;
     mainProgram = "gremlin-console";
   };
-}
+})

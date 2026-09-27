@@ -63,11 +63,11 @@ buildPythonPackage rec {
   # Needs to set up some git repos
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "First Git web viewer that Just Works";
     mainProgram = "klaus";
     homepage = "https://github.com/jonashaag/klaus";
-    license = licenses.isc;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

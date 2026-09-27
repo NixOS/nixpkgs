@@ -23,15 +23,17 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
-  version = "0.3.1";
+  version = "0.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    rev = "v${version}";
-    hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
   };
 
   patches = [
@@ -48,7 +50,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
 
   buildInputs = [
     blas
@@ -69,18 +73,20 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build config/install-mod.py
+
+    # custom blas and lapack need to be explicitly found for transitive dependencies
+    # otherwise CMAKE builds can not proceed.
+    echo 'set(custom-blas_FOUND TRUE)' >> config/cmake/Findcustom-blas.cmake
+    echo 'set(custom-lapack_FOUND TRUE)' >> config/cmake/Findcustom-lapack.cmake
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/multicharge";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    changelog = "https://github.com/grimme-lab/multicharge/releases/tag/${finalAttrs.src.tag}";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

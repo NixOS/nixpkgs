@@ -7,21 +7,18 @@
   psutil,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sybil,
 }:
 
 buildPythonPackage rec {
   pname = "flufl-lock";
-  version = "8.2.0";
+  version = "9.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flufl_lock";
     inherit version;
-    hash = "sha256-FbMzw1+rGjayI4QAVyWK60zXnw+6+CwUTyPN9s8U1eM=";
+    hash = "sha256-jXPIjKt8mLeSZxApnBFivsfOJT+bnF8KLKgDf58kAjQ=";
   };
 
   build-system = [ hatchling ];
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "flufl" ];
 
-  meta = with lib; {
+  meta = {
     description = "NFS-safe file locking with timeouts for POSIX and Windows";
     homepage = "https://flufllock.readthedocs.io/";
     changelog = "https://gitlab.com/warsaw/flufl.lock/-/blob/${version}/docs/NEWS.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

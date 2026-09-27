@@ -33,9 +33,10 @@ stdenv.mkDerivation {
     cp -r opt/OpenPrinting-Lexmark/doc $out/doc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openprinting.org/driver/Postscript-Lexmark/";
     description = "Lexmark Postscript Drivers";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free; # Custom license that mostly pulls from BSD
   };
 }

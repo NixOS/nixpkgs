@@ -12,7 +12,8 @@
   e2fsprogs,
   makeDesktopItem,
   copyDesktopItems,
-  xorg,
+  libx11,
+  libxcb,
   libGL,
   alsa-lib,
   freetype,
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     cups
     libgpg-error
     e2fsprogs
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     libGL
     alsa-lib
     freetype
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/opt
     cp -ar LightBurn $out/opt/lightburn
-    install -Dm644 $out/opt/lightburn/LightBurn.png $out/share/pixmaps/lightburn.png
+    install -Dm644 $out/opt/lightburn/LightBurn.png $out/share/icons/hicolor/512x512/apps/lightburn.png
 
     runHook postInstall
   '';

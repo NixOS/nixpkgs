@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "5.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/groove/groove/${version}/${pname}-${
+    url = "mirror://sourceforge/groove/groove/${version}/groove-${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }-bin.zip";
     sha256 = "sha256-JwoUlO6F2+8NtCnLC+xm5q0Jm8RIyU1rnuKGmjgJhFU=";
@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GRaphs for Object-Oriented VErification";
     homepage = "https://groove.cs.utwente.nl/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

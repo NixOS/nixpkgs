@@ -12,7 +12,6 @@
   pytest-cov-stub,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
   yarl,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "rokuecp";
   version = "0.19.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Network related tests are having troube in the sandbox
+    # Network related tests are having trouble in the sandbox
     "test_resolve_hostname"
     "test_get_dns_state"
     # Assertion issue
@@ -68,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rokuecp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
     changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

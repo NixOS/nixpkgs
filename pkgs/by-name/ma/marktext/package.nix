@@ -8,7 +8,10 @@
   nodejs,
   electron,
   python3,
-  xorg,
+  node-gyp,
+  libx11,
+  xorgproto,
+  libxkbfile,
   fontconfig,
   node-gyp-build,
   ripgrep,
@@ -49,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: with ps; [ packaging ]))
     pkg-config
     nodejs
+    node-gyp
     node-gyp-build
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -58,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsecret
-    xorg.libX11
-    xorg.libxkbfile
+    libx11
+    libxkbfile
     fontconfig
-    xorg.xorgproto
+    xorgproto
   ];
 
   postPatch = ''
@@ -161,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
-    homepage = "https://www.marktext.cc";
+    homepage = "https://www.marktext.me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       nh2
@@ -169,7 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
       bot-wxt1221
     ];
     badPlatforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     platforms = lib.platforms.unix;

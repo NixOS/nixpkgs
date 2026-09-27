@@ -1,67 +1,40 @@
 {
-  stdenvNoCC,
+  config,
   callPackage,
   lib,
-  fetchurl,
-  releaseManifestFile,
-  releaseInfoFile,
-  bootstrapSdkFile,
-  allowPrerelease ? false,
-  depsFile,
-  fallbackTargetPackages,
-  pkgsBuildHost,
+  channel,
+  dir ? ./. + ("/" + channel),
   buildDotnetSdk,
-}:
+  ...
+}@attrs:
 
 let
-  inherit (lib.importJSON releaseInfoFile)
-    tarballHash
-    artifactsUrl
-    artifactsHash
-    bootstrapSdk
-    ;
+  binary =
+    let
+      path = dir + "/releases.nix";
+    in
+    if lib.pathExists path then buildDotnetSdk path else { };
 
-  pkgs = callPackage ./stage1.nix {
-    inherit
-      releaseManifestFile
-      tarballHash
-      depsFile
-      fallbackTargetPackages
-      ;
-    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
-      passthru = old.passthru or { } // {
-        artifacts = stdenvNoCC.mkDerivation {
-          name = lib.nameFromURL artifactsUrl ".tar.gz";
+  withVMR = lib.pathExists (dir + "/release.json");
 
-          src = fetchurl {
-            url = artifactsUrl;
-            hash = artifactsHash;
-          };
+  sourcePackages = lib.optionalAttrs withVMR (callPackage ./source (attrs // { inherit binary; }));
 
-          sourceRoot = ".";
+  pkgs =
+    lib.optionalAttrs config.allowAliases binary
+    // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) binary
+    // sourcePackages;
 
-          installPhase = ''
-            mkdir -p $out
-            cp -r * $out/
-          '';
-        };
-      };
-    });
-  };
-
+  suffix = lib.replaceStrings [ "." ] [ "_" ] channel;
+  sdkAttr = "sdk_${suffix}" + lib.optionalString (!withVMR) "-bin";
 in
 pkgs
 // {
-  vmr = pkgs.vmr.overrideAttrs (old: {
-    passthru = old.passthru // {
-      updateScript = pkgsBuildHost.callPackage ./update.nix {
-        inherit
-          releaseManifestFile
-          releaseInfoFile
-          bootstrapSdkFile
-          allowPrerelease
-          ;
-      };
+  ${sdkAttr} = pkgs.${sdkAttr}.overrideAttrs (prev: {
+    passthru = prev.passthru or { } // {
+      updateScript = [
+        ./update.sh
+        channel
+      ];
     };
   });
 }

@@ -6,16 +6,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwdata";
-  version = "0.401";
+  version = "0.411";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2NZwylrUfnzA0aE+xlVZ7QCpCzfW9DwGzRVHirt0TRU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y2iBWSOYPCliGsy1rMBBsCT9imzGpgEWJgJHebN/jUA=";
   };
 
+  strictDeps = true;
+
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/vcrhonek/hwdata";

@@ -11,6 +11,7 @@
   evolution-data-server-gtk4,
   glib,
   glib-networking,
+  gnome-online-accounts,
   gst_all_1,
   gtk4,
   gtksourceview5,
@@ -24,19 +25,25 @@
   libsoup_3,
   libspelling,
   sqlite,
-  webkitgtk_6_0,
+  icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.16.1";
+  version = "4.20.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    tag = "v${version}";
-    hash = "sha256-jQW82nnIfuKhTWPlJQD2Mcl+Yl+NqnTbRnMn5+sfuD4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0d5EzbPs2MIdnIjLGBY6JRmXJ/NFjO4DPom0WY989mQ=";
+    fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # Don't check updates
+    sed -i -e '/check_for_updates.begin/d' src/Layouts/Sidebar.vala
+  '';
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -51,6 +58,7 @@ stdenv.mkDerivation rec {
     evolution-data-server-gtk4
     glib
     glib-networking
+    gnome-online-accounts
     # Needed for GtkMediaStream creation with success.ogg, see #311295.
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -66,15 +74,15 @@ stdenv.mkDerivation rec {
     libsoup_3
     libspelling
     sqlite
-    webkitgtk_6_0
+    icu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
-    license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };
-}
+})

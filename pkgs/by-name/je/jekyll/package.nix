@@ -41,7 +41,7 @@ bundlerApp {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Blog-aware, static site generator, written in Ruby";
     longDescription = ''
       Jekyll is a simple, blog-aware, static site generator, written in Ruby.
@@ -53,9 +53,9 @@ bundlerApp {
     '';
     homepage = "https://jekyllrb.com/";
     changelog = "https://jekyllrb.com/news/releases/";
-    license = licenses.mit;
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    platforms = lib.platforms.unix;
     mainProgram = "jekyll";
   };
 }

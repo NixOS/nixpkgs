@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitLab,
   setuptools,
   setuptools-scm,
@@ -10,19 +9,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-debian";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "python-debian-team";
     repo = "python-debian";
-    tag = version;
-    hash = "sha256-lSKtlBqAa8cJZZHMVb90eYIGem4DwVZLldaYSAJBNek=";
+    tag = finalAttrs.version;
+    hash = "sha256-K5i0zDZXeAgoAdblqp+f5QX9FIZYVpJ4wWk29hwVjfM=";
   };
 
   build-system = [
@@ -30,7 +27,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
+  optional-dependencies.encodings = [
     charset-normalizer
   ];
 
@@ -51,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "contact";
-  version = "1.4.3";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdxlocations";
     repo = "contact";
-    tag = version;
-    hash = "sha256-PjWVjvuHAgHR1/G4LfwhG0g45XoLTUf6BumopwgOPe0=";
+    tag = finalAttrs.version;
+    hash = "sha256-J2gOtPW0BY28K1TuNlpXxUw8KzKJ3/SDeJR8g2QIX04=";
   };
 
   dependencies = [ python3Packages.meshtastic ];
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/pdxlocations/contact";
-    changelog = "https://github.com/pdxlocations/contact/releases/tag/${src.tag}";
+    changelog = "https://github.com/pdxlocations/contact/releases/tag/${finalAttrs.src.tag}";
     description = "Console UI for Meshtastic";
     mainProgram = "contact";
     license = lib.licenses.gpl3Only;
@@ -31,4 +31,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

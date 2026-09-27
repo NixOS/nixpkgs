@@ -61,7 +61,7 @@ let
 
     lxterminal.pkg = p: p.lxterminal;
 
-    mate-terminal.pkg = p: p.mate.mate-terminal;
+    mate-terminal.pkg = p: p.mate-terminal;
     mate-terminal.cmd = "SHELL=$command mate-terminal --disable-factory"; # factory mode uses dbus, and we don't have a proper dbus session set up
 
     mlterm.pkg = p: p.mlterm;
@@ -92,8 +92,6 @@ let
     terminology.cmd = "SHELL=$command terminology --no-wizard=true";
     terminology.colourTest = false; # broken by gloss effect
 
-    termite.pkg = p: p.termite;
-
     termonad.pkg = p: p.termonad;
 
     tilda.pkg = p: p.tilda;
@@ -109,7 +107,7 @@ let
     # times out after spending many hours
     #wezterm.pkg = p: p.wezterm;
 
-    xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
+    xfce4-terminal.pkg = p: p.xfce4-terminal;
 
     xterm.pkg = p: p.xterm;
 
@@ -183,8 +181,6 @@ mapAttrs (
 
     testScript =
       { nodes, ... }:
-      let
-      in
       ''
         with subtest("wait for x"):
             start_all()

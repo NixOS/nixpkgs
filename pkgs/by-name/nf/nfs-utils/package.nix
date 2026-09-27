@@ -15,7 +15,7 @@
   libuuid,
   keyutils,
   lvm2,
-  systemd,
+  systemdMinimal,
   coreutils,
   python3,
   buildPackages,
@@ -28,23 +28,28 @@
   udevCheckHook,
   enablePython ? true,
   enableLdap ? true,
+  enableSystemd ? true,
 }:
 
 let
-  statdPath = lib.makeBinPath [
-    systemd
-    util-linux
-    coreutils
-  ];
+  statdPath = lib.makeBinPath (
+    [
+      util-linux
+      coreutils
+    ]
+    ++ lib.optionals enableSystemd [
+      systemdMinimal
+    ]
+  );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-utils";
-  version = "2.8.4";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/nfs-utils/${version}/nfs-utils-${version}.tar.xz";
-    hash = "sha256-EcTMWYpDTX00C60+Byo3O6HcwsSfhV1EsgIiK3js2/U=";
+    url = "mirror://kernel/linux/utils/nfs-utils/${finalAttrs.version}/nfs-utils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fbwF64sygosyKHK3WaYss5ectBGPNE3YYWgT0TkOhOA=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -96,11 +101,16 @@ stdenv.mkDerivation rec {
     "--enable-svcgss"
     "--with-statedir=/var/lib/nfs"
     "--with-krb5=${lib.getLib libkrb5}"
-    "--with-systemd=${placeholder "out"}/etc/systemd/system"
     "--enable-libmount-mount"
     "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
     "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
+    (
+      if enableSystemd then
+        "--with-systemd=${placeholder "out"}/etc/systemd/system"
+      else
+        "--without-systemd"
+    )
   ]
   ++ lib.optional enableLdap "--enable-ldap";
 
@@ -139,6 +149,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "sbindir=$(out)/bin"
+  ]
+  ++ lib.optionals enableSystemd [
     "generator_dir=$(out)/etc/systemd/system-generators"
   ];
 
@@ -153,20 +165,23 @@ stdenv.mkDerivation rec {
     "lib"
     "libexec"
     "bin"
+  ]
+  ++ lib.optionals enableSystemd [
     "etc/systemd/system-generators"
   ];
 
-  postInstall = ''
-    # Not used on NixOS
-    sed -i \
-      -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
-      -e "s,/usr/sbin,$out/bin,g" \
-      $out/etc/systemd/system/*
-  ''
-  + lib.optionalString (!enablePython) ''
-    # Remove all scripts that require python (currently mountstats and nfsiostat)
-    grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
-  '';
+  postInstall =
+    lib.optionalString enableSystemd ''
+      # Not used on NixOS
+      sed -i \
+        -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
+        -e "s,/usr/sbin,$out/bin,g" \
+        $out/etc/systemd/system/*
+    ''
+    + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
+    '';
 
   # One test fails on mips.
   # doCheck = !stdenv.hostPlatform.isMips;
@@ -183,7 +198,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -192,9 +207,10 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
+    changelog = "https://www.kernel.org/pub/linux/utils/nfs-utils/${finalAttrs.version}/${finalAttrs.version}-Changelog";
     homepage = "https://linux-nfs.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

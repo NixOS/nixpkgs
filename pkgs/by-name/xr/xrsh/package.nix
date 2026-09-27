@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeWrapper,
   unstableGitUpdater,
   writeShellApplication,
@@ -12,9 +12,8 @@ stdenv.mkDerivation {
   pname = "xrsh";
   version = "0-unstable-2025-05-23";
 
-  src = fetchFromGitea {
+  src = fetchFromCodeberg {
     fetchSubmodules = true;
-    domain = "codeberg.org";
     owner = "xrsh";
     repo = "xrsh";
     rev = "ab5efe4a337459886394b9c13550a543c4c4ae25";

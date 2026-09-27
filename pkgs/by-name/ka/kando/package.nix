@@ -15,24 +15,28 @@
   makeDesktopItem,
 
   libxkbcommon,
-  libX11,
-  libXtst,
-  libXi,
+  libx11,
+  libxtst,
+  libxi,
   wayland,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "kando";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    tag = "v${version}";
-    hash = "sha256-pgHhMzObj8Fh6pw1wjJXjghjKzKiM64lXS4Xlwh3omY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UBah/yWcGGyrZpSmahYO4mdYuaP3WQ2PnoZ1gfgWSZk=";
   };
 
-  npmDepsHash = "sha256-vytwJdVnkm1AlDoM86xh5Vx5lsaDRcNdwjhP43A6KF8=";
+  patches = [
+    ./add-deep-link-note.patch
+  ];
+
+  npmDepsHash = "sha256-OUtUYSOjxBi8RPswGUTQKpt86ovW3k+qffcCxW2N9xw=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -50,9 +54,9 @@ buildNpmPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
-    libX11
-    libXtst
-    libXi
+    libx11
+    libxtst
+    libxi
     wayland
   ];
 
@@ -62,8 +66,8 @@ buildNpmPackage rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     # use our own node headers since we skip downloading them
     NIX_CFLAGS_COMPILE = "-I${nodejs}/include/node";
-    # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.hostPlatform.isDarwin "false";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
   };
 
   postConfigure = ''
@@ -127,11 +131,12 @@ buildNpmPackage rec {
       genericName = "Pie Menu";
       comment = "The Cross-Platform Pie Menu";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/kando" ];
     })
   ];
 
   meta = {
-    changelog = "https://github.com/kando-menu/kando/releases/tag/v${version}";
+    changelog = "https://github.com/kando-menu/kando/releases/tag/v${finalAttrs.version}";
     description = "Cross-Platform Pie Menu";
     homepage = "https://github.com/kando-menu/kando";
     license = lib.licenses.mit;
@@ -139,4 +144,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = electron.meta.platforms;
   };
-}
+})

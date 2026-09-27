@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gitUpdater,
+  nix-update-script,
+  testers,
   jre,
   makeWrapper,
   mysqlSupport ? true,
@@ -26,11 +27,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase";
-  version = "5.0.1";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
-    hash = "sha256-OuEczc1MCA5CHl/QQ729Yk1W/PybKU1dnYmMuLB05Ek=";
+    hash = "sha256-uwhjjXDd3Wr4zKbgMxSFdvghS1mWgxsfiGTrNSj0z84=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -77,23 +78,26 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/liquibase
     '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/liquibase/liquibase";
-    rev-prefix = "v";
-    # The latest versions are in the 4.xx series.  I am not sure where
-    # 10.10.10 and 5.0.0 came from, though it appears like they are
-    # for the commercial product.
-    ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
-  };
+  # Upstream tags things it never releases -- v5.0.4 exists right now with no
+  # release behind it -- so ask the release endpoint rather than the tags.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+  meta = {
     description = "Version Control for your database";
     mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jsoo1 ];
-    platforms = with platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    # Relicensed at 5.0.0. The FSL permits internal and commercial use but
+    # forbids competing products, so it is unfree by our definition; each
+    # release additionally becomes Apache-2.0 two years after publication.
+    license = lib.licenses.fsl11Asl20;
+    maintainers = with lib.maintainers; [
+      agilesteel
+      jsoo1
+    ];
+    platforms = with lib.platforms; unix;
   };
 })

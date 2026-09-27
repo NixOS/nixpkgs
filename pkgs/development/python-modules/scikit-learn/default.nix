@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   cython,
@@ -16,34 +17,43 @@
   llvmPackages,
   pytestCheckHook,
   pytest-xdist,
-  pillow,
   joblib,
+  narwhals,
+  pillow,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.7.1";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-JLPx6XakZlqnTuD8qsK4/Mxq53yOB6sl2jum0ykrmAI=";
+    hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
+
+  patches = [
+    # Fix HTML display performance when user has many features
+    # https://github.com/scikit-learn/scikit-learn/pull/34362
+    # TODO: remove when updating to the next release.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/aeadb51af96556dd0f884c0037c9dc9993449538.patch";
+      hash = "sha256-J7igLpK8pdcbgMwxFqaAGDEwm87VrLHb+ckg/pEh6IY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2,<2.3.0" numpy \
-      --replace-fail "scipy>=1.8.0,<1.16.0" scipy
+      --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
+      --replace-fail "numpy>=2,<2.5.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.18.0" scipy
   '';
 
   buildInputs = [
@@ -66,14 +76,10 @@ buildPythonPackage rec {
 
   dependencies = [
     joblib
+    narwhals
     numpy
     scipy
     threadpoolctl
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "scipy"
   ];
 
   nativeCheckInputs = [
@@ -118,7 +124,6 @@ buildPythonPackage rec {
   preCheck = ''
     cd $TMPDIR
     export HOME=$TMPDIR
-    export OMP_NUM_THREADS=1
   '';
 
   pythonImportsCheck = [ "sklearn" ];

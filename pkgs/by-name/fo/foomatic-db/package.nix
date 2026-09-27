@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  coreutils,
   cups,
   cups-filters,
   ghostscript,
@@ -14,18 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-db";
-  version = "0-unstable-2024-12-05";
+  version = "0-unstable-2026-09-04";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db";
-    rev = "9a7a08318598fea569cf073489709899c9af6143";
-    hash = "sha256-7vvJPhUa4oDe101Iv897LoChNIcdTa4LviLUndHxWtw=";
+    rev = "76dd1e31354c189b2edd9ae8201285d622c89395";
+    hash = "sha256-rTowiKV4alVAw9qrqSARVL2Fl+soIzhwQYlANiRXI74=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   buildInputs = [
+    coreutils
     cups
     cups-filters
     ghostscript
@@ -74,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Comments indicate the respective
   # package the command is contained in.
-  ppdFileCommands = [
-    "cat"
+  env.ppdFileCommands = lib.join " " [
+    "cat" # coreutils
     "date"
     "printf" # coreutils
     "rastertohp" # cups

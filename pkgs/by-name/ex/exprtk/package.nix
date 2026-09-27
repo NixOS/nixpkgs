@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exprtk";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "ArashPartow";
     repo = "exprtk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-A4UzNYZZGgTJOw9G4Jg1wJZhxguFRohNEcwmwUOAX18=";
   };
 
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ Mathematical Expression Toolkit Library";
     homepage = "https://www.partow.net/programming/exprtk/index.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

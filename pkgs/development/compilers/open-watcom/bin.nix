@@ -95,15 +95,15 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.prettyName = "open-watcom-bin";
 
-  meta = with lib; {
+  meta = {
     description = "Project to maintain and enhance the Watcom C, C++, and Fortran cross compilers and tools";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.openwatcom.org/";
-    license = licenses.watcom;
+    license = lib.licenses.watcom;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.blitz ];
+    maintainers = [ lib.maintainers.blitz ];
   };
 }

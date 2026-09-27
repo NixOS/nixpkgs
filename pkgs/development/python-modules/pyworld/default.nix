@@ -1,31 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   numpy,
   cython,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyworld";
-  version = "0.3.5";
-  format = "setuptools";
+  version = "0.3.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G5PlPN22eg5PqjTWz5GaxsZi/rHIwO2QHXG1las5aqM=";
+  src = fetchFromGitHub {
+    owner = "JeremyCCHsu";
+    repo = "Python-Wrapper-for-World-Vocoder";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FK/SNt6OOYWWv6fVX29J4WBvaQ4jjR45SI95igORrj0=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   pythonImportsCheck = [ "pyworld" ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "PyWorld is a Python wrapper for WORLD vocoder";
     homepage = "https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

@@ -25,7 +25,7 @@ let
         # This is safe since we are using it as the path value, so the context
         # will still ensure that this nix store path exists on the running
         # system.
-        taFile = builtins.baseNameOf (builtins.unsafeDiscardStringContext ta);
+        taFile = baseNameOf (builtins.unsafeDiscardStringContext ta);
       in
       {
         name = "lib/${taDir}/${taFile}";

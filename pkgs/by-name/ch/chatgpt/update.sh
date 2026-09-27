@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl libxml2
 
-XML_URL="https://persistent.oaistatic.com/sidekick/public/sparkle_public_appcast.xml"
+XML_URL="https://persistent.oaistatic.com/codex-app-prod/appcast.xml"
 
 XML_DATA=$(curl -s $XML_URL)
 

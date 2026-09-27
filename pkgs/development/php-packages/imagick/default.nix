@@ -1,27 +1,29 @@
 {
   buildPecl,
-  fetchpatch,
   lib,
   imagemagick,
   pkg-config,
   pcre2,
-  php,
 }:
 
 buildPecl {
   pname = "imagick";
 
-  version = "3.8.0";
-  sha256 = "sha256-vaZ0YchU8g1hBXgrdpxST8NziLddRIHZUWRNIWf/7sY=";
+  version = "3.8.1";
+  hash = "sha256-OjWHwKUkwX0NrZZzoWC5DNd26DaDhHThc7VJ7YZDUu4=";
 
   configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ pcre2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Imagick is a native php extension to create and modify images using the ImageMagick API";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/imagick";
-    teams = [ teams.php ];
+    teams = [ lib.teams.php ];
   };
 }

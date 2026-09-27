@@ -8,31 +8,51 @@
   perlPackages,
   help2man,
   fetchzip,
+  pkgsCross,
+  efitools,
+  buildPackages,
 }:
-stdenv.mkDerivation rec {
+let
+  isCross = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "efitools";
   version = "1.9.2";
 
   buildInputs = [
     gnu-efi
     openssl
-    sbsigntool
   ];
 
   nativeBuildInputs = [
     perl
     perlPackages.FileSlurp
     help2man
+    openssl
+    sbsigntool
+  ]
+  ++ lib.optionals isCross [
+    efitools
   ];
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot/efitools-v${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot/efitools-v${finalAttrs.version}.tar.gz";
     sha256 = "0jabgl2pxvfl780yvghq131ylpf82k7banjz0ksjhlm66ik8gb1i";
   };
 
-  # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
   patches = [
+    # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
     ./aarch64.patch
+
+    # Fix build with gcc15
+    ./remove-redundant-bool.patch
+
+    # https://bugs.debian.org/1122408
+    ./objcopy-output-target.patch
+  ]
+  ++ lib.optionals isCross [
+    # Use builder's efitools to create sig lists for host
+    ./cross.patch
   ];
 
   postPatch = ''
@@ -41,14 +61,30 @@ stdenv.mkDerivation rec {
     sed -i -e 's#$(DESTDIR)/usr#$(out)#g' Make.rules
     sed -i '$asign-efi-sig-list.o flash-var.o: CFLAGS += -D_GNU_SOURCE' Makefile
     substituteInPlace lib/console.c --replace "EFI_WARN_UNKOWN_GLYPH" "EFI_WARN_UNKNOWN_GLYPH"
+    # Fix cross-compilation: use $(AR) and $(NM) variables instead of hardcoded commands
+    substituteInPlace Make.rules --replace-fail 'ar rcv' '$(AR) rcv'
+    substituteInPlace Make.rules --replace-fail 'nm -D' '$(NM) -D'
     patchShebangs .
   '';
 
-  meta = with lib; {
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "NM=${stdenv.cc.targetPrefix}nm"
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ]
+  ++ lib.optionals isCross [
+    "MANPAGES="
+  ];
+
+  passthru.tests = {
+    cross-aarch64 = pkgsCross.aarch64-multiplatform.efitools;
+  };
+
+  meta = {
     description = "Tools for manipulating UEFI secure boot platforms";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.grahamc ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
-}
+})

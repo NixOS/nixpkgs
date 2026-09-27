@@ -1,15 +1,13 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
 }:
 
-assert crossSystem == localSystem;
-
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
 
   shell =
@@ -105,7 +103,7 @@ let
       extraNativeBuildInputs ? [ ],
     }:
 
-    import ../generic {
+    genericStdenv {
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
@@ -145,7 +143,6 @@ let
         shell
         cc
         overrides
-        config
         ;
     };
 
@@ -178,12 +175,16 @@ in
           name = "cc-native";
           nativeTools = true;
           nativeLibc = true;
+          expand-response-params = "";
           inherit lib nativePrefix;
+          runtimeShell = shell;
           bintools = import ../../build-support/bintools-wrapper {
             name = "bintools";
             inherit lib stdenvNoCC nativePrefix;
             nativeTools = true;
             nativeLibc = true;
+            expand-response-params = "";
+            runtimeShell = shell;
           };
           inherit stdenvNoCC;
         };

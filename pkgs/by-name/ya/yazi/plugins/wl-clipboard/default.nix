@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "wl-clipboard.yazi";
-  version = "0-unstable-2025-08-30";
+  version = "0-unstable-2026-04-07";
 
   installPhase = ''
     runHook preInstall
@@ -18,8 +18,8 @@ mkYaziPlugin {
   src = fetchFromGitHub {
     owner = "grappas";
     repo = "wl-clipboard.yazi";
-    rev = "e9a38e47d07549968019702bdafdc4ed07151b7d";
-    hash = "sha256-3PRQl4TvuOe5DwVi1gmtmfTOEVZWRayijIbnPgaR3L8=";
+    rev = "8cc55242dbbc0b60fde27ab0d17bf11d91a14e14";
+    hash = "sha256-pIKxWhaVDUOUKvVL4hGXn5zT4K7AvDi/VM+zBCX+19c=";
   };
 
   meta = {

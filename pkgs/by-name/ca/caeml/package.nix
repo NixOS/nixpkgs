@@ -16,7 +16,7 @@ buildGoModule {
 
   vendorHash = "sha256-SDJsRLIGlLv/6NUctCrn6z1IDEmum1Wn5I8RFuwcOe8=";
 
-  meta = with lib; {
+  meta = {
     description = "cat eml files";
     mainProgram = "caeml";
     longDescription = ''
@@ -26,7 +26,7 @@ buildGoModule {
       kept and these are decoded and of all the parts only text/plain is returned.
     '';
     homepage = "https://github.com/ferdinandyb/caeml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

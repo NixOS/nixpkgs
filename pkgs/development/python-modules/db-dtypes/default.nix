@@ -2,28 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   numpy,
   packaging,
   pandas,
   pyarrow,
-  pytest8_3CheckHook,
-  pythonOlder,
+  pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "db-dtypes";
-  version = "1.4.3";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-db-dtypes-pandas";
-    tag = "v${version}";
-    hash = "sha256-AyO/GwtExMWi4mB3OMtYPFvAVS/ylcBXGiGXgaScyCA=";
+    repo = "google-cloud-python";
+    tag = "db-dtypes-v${finalAttrs.version}";
+    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/db-dtypes";
+
+  patches = [
+    (fetchpatch {
+      name = "support-pandas-3.0.patch";
+      url = "https://github.com/googleapis/google-cloud-python/commit/2086b34d8b3418462c9bc89b96eac779a25a3afd.patch";
+      relative = "packages/db-dtypes";
+      hash = "sha256-0NvbTCnr95IW7rkQVu3iUDsNXU/LzXhJwwSDdliFZ+Y=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -34,22 +43,19 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  nativeCheckInputs = [ pytest8_3CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # ValueError: Unable to avoid copy while creating an array as requested.
-    "test_array_interface_copy"
-    # Failed: DID NOT RAISE <class 'TypeError'>
-    "test_reduce_series_numeric"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "db_dtypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
-    homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
-    changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/db-dtypes";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/db-dtypes/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

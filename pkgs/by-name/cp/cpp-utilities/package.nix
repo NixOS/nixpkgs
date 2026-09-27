@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.31.1";
+  version = "5.36.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "cpp-utilities";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HpzcGHDudVFmkVfkn5YpAATKfZ3FpIKXfqhpjpehK1M=";
+    sha256 = "sha256-tLLmHdYk9sO7wDdkK/hDJv8QDfs0M1IwxNvI/3WNpwg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   # tests fail on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Martchus/cpp-utilities";
     description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

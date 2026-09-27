@@ -38,6 +38,7 @@ let
     optional
     optionals
     optionalString
+    versionAtLeast
     versionOlder
     ;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -52,7 +53,12 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
+  patches =
+    patches
+    ++ optional (
+      interactive && versionAtLeast version "7.2" && versionOlder version "7.3"
+    ) ./fix-test-suite-failures-with-perl-5.42.patch
+    ++ optional crossBuildTools ./cross-tools-flags.patch;
 
   postPatch = ''
     patchShebangs tp/maintain/regenerate_commands_perl_info.pl
@@ -134,6 +140,8 @@ stdenv.mkDerivation {
         --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
     done
   '';
+
+  __structuredAttrs = true;
 
   meta = meta // {
     branch = version;

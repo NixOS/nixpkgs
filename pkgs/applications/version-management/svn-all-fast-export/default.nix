@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
+  qt6,
   subversion,
   apr,
 }:
@@ -24,31 +22,35 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    qt6.qmake
+    qt6.qttools
   ];
   buildInputs = [
     apr.dev
     subversion.dev
-    qtbase
+    qt6.qtbase
+    qt6.qt5compat
   ];
 
   qmakeFlags = [
     "VERSION=${version}"
     "APR_INCLUDE=${apr.dev}/include/apr-1"
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "CONFIG-=app_bundle"
   ];
 
-  NIX_LDFLAGS = "-lsvn_fs-1";
+  env.NIX_LDFLAGS = "-lsvn_fs-1";
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/svn-all-fast-export/svn2git";
     description = "Fast-import based converter for an svn repo to git repos";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.flokli ];
     mainProgram = "svn-all-fast-export";
   };
 }

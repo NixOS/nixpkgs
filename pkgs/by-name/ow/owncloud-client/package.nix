@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   nix-update-script,
   qt6Packages,
   # nativeBuildInputs
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   # buildInputs
   sqlite,
   libsecret,
@@ -19,19 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "5.3.2";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
     tag = "v${version}";
-    hash = "sha256-HEnjtedmdNJTpc/PmEyoEsLGUydFkVF3UAsSdzQ4L1Q=";
+    hash = "sha256-RNa3i+Qf/cPE+TvYFt5FjbQcHgep3z/XBzno/EyJ3EQ==";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
   ];

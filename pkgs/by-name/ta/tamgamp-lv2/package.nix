@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "tamgamp.lv2";
-  version = "unstable-2020-06-14";
+  version = "0-unstable-2020-06-14";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sadko4u/tamgamp.lv2";
     description = "Guitar amplifier simulator";
     longDescription = ''
@@ -56,8 +56,8 @@ stdenv.mkDerivation {
       - VOX AC-30 Brilliant channel
       - VOX AC-30 normal channel
     '';
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3Plus;
   };
 }

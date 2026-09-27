@@ -19,25 +19,33 @@
   # Optional dependencies
   withQemu ? false,
   qemu,
-
-  # Workaround for supporting providing additional package manager
-  # dependencies in the recursive use in the binary path.
-  # This can / should be removed once the `finalAttrs` pattern is
-  # available for Python packages.
-  extraDeps ? [ ],
 }:
 let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
-  systemdForMkosi = systemd.override {
-    withRepart = true;
-    withBootloader = true;
-    withSysusers = true;
-    withFirstboot = true;
-    withEfi = true;
-    withUkify = true;
-    withKernelInstall = true;
-  };
+  systemdForMkosi =
+    (systemd.override {
+      withRepart = true;
+      withBootloader = true;
+      withSysusers = true;
+      withFirstboot = true;
+      withEfi = true;
+      withUkify = true;
+      withKernelInstall = true;
+    }).overrideAttrs
+      (prevAttrs: {
+        # Use the default PATH instead of the nix store path
+        postPatch = (prevAttrs.postPatch or "") + ''
+          substituteInPlace src/basic/path-util.h \
+            --replace-fail "\"$out/bin/\"" \
+            '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
+        '';
+
+        # Use the FHS nologin path, not the nix store path
+        mesonFlags = (prevAttrs.mesonFlags or [ ]) ++ [
+          (lib.mesonOption "nologin-path" "/usr/sbin/nologin")
+        ];
+      });
 
   pythonWithPefile = python3Packages.python.withPackages (ps: [ ps.pefile ]);
 
@@ -51,15 +59,14 @@ let
     systemdForMkosi
     util-linux
   ]
-  ++ extraDeps
   ++ lib.optionals withQemu [
     qemu
   ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mkosi";
-  version = "25.3";
-  format = "pyproject";
+  version = "27";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -69,8 +76,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    rev = "21850673a7f75125d516268ce379dae776dd816a";
-    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uUNPGFXrwTiSC6/EcYIxbAizjcS3Hqe1LABa5BmWGgw=";
   };
 
   patches = [
@@ -94,7 +101,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace mkosi/{run,__init__}.py \
-      --replace-fail '@MKOSI_SANDBOX@' "\"$out/bin/mkosi-sandbox\""
+      --replace-fail '@MKOSI_SANDBOX@' "$out/bin/mkosi-sandbox"
   '';
 
   nativeBuildInputs = [
@@ -120,16 +127,25 @@ python3Packages.buildPythonApplication rec {
     mv mkosi/resources/man/mkosi.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/510068
+  postFixup = ''
+    rm -f "$out/bin/mkosi-sandbox" "$out/bin/.mkosi-sandbox-wrapped"
+    sed "1i#!${python3Packages.python.interpreter} -SI" \
+      "$out/${python3Packages.python.sitePackages}/mkosi/sandbox.py" \
+      > "$out/bin/mkosi-sandbox"
+    chmod +x "$out/bin/mkosi-sandbox"
+  '';
+
+  meta = {
     description = "Build legacy-free OS images";
     homepage = "https://github.com/systemd/mkosi";
-    changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
-    license = licenses.lgpl21Only;
+    changelog = "https://github.com/systemd/mkosi/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl21Only;
     mainProgram = "mkosi";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       malt3
       msanft
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

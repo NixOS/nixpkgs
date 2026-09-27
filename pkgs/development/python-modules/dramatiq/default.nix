@@ -2,35 +2,33 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   gevent,
   pika,
   prometheus-client,
   pylibmc,
   pytestCheckHook,
+  pytest-benchmark,
   pytest-cov-stub,
   redis,
-  setuptools,
+  setuptools_80,
   watchdog,
   watchdog-gevent,
 }:
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.18.0";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     tag = "v${version}";
-    hash = "sha256-noq2tWi7IUdYmRB9N3MN9oWrnNaYBgXFumOpcGw8Jn0=";
+    hash = "sha256-wUE3R/lFafP7P9tjKjFC+jwCc3jkvGeXunC8AhkBLbM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ prometheus-client ];
 
@@ -56,16 +54,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
+    pytest-benchmark
     pika
     redis
     pylibmc
   ];
 
-  postPatch = ''
-    sed -i ./setup.cfg \
-      -e 's:--benchmark-autosave::' \
-      -e 's:--benchmark-compare::' \
-  '';
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # Requires a running redis
@@ -92,6 +87,8 @@ buildPythonPackage rec {
     # AssertionError
     "test_cli_scrubs_stale_pid_files"
     "test_message_contains_requeue_time_after_retry"
+    # Timing-sensitive under load on the aarch64-linux builder.
+    "test_actor_messages_can_be_assigned_time_limits"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Takes too long for darwin ofborg
@@ -100,10 +97,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dramatiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

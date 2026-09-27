@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -41,16 +40,14 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.4.0";
+  version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-QRxaLJAtI7Xe+3Llp3fJP12KblDJ8+MGNsmKT4t2O0k=";
+    hash = "sha256-jz1+wSBt67ExeGszJKsZ0QPaE7Z4Y/qZKZA+cWWy0Ag=";
   };
 
   build-system = [
@@ -58,7 +55,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babelfish
     beautifulsoup4
     chardet

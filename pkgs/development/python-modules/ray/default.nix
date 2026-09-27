@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   python,
   fetchPypi,
@@ -61,6 +60,8 @@
   scipy,
   # serve
   fastapi,
+  jinja2,
+  mmh3,
   starlette,
   uvicorn,
   watchfiles,
@@ -70,17 +71,18 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.52.1";
-in
-buildPythonPackage rec {
-  inherit pname version;
+  version = "2.58.0";
   format = "wheel";
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -94,32 +96,35 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-s/nmG3mfs8yP1wd6PS62dt3+99tkT2tqK2V8XDIUzxk=";
-          cp311 = "sha256-paPCaNRQYMUM0CmXnsxfHqrsBAsZ+ojdT+npJ9Gf8T4=";
-          cp312 = "sha256-hDwBCK1yu3/Gwjoi4p5gmVRqXqrTrWdceKFG2QgPbsY=";
-          cp313 = "sha256-u+SSx4CjmmS9PQdmytENVM8SIi34jSh+wtjy1S3jfHk=";
+          cp311 = "sha256-/D3S3s67NdHzaCwhHsnWyYB7MVLw3vpC7AlCgXAT4YA=";
+          cp312 = "sha256-HiDEqNJWPZWA5498FSl6n4r+kkAbaYvOtBBsNLMMAcY=";
+          cp313 = "sha256-siYhQKGZRYxa1veRfsdY0FfRZp+CQEj3hRGcbOJTk2M=";
+          cp314 = "sha256-eXZbOtrsDs6K5OeujNWZ/1macebdTw53OhGHtHJhyns=";
         };
         aarch64-linux = {
-          cp310 = "sha256-Zb9GH9/k/6ZnxG+UVfh0CyrWwfpHG0YdX1z2t7rxd7U=";
-          cp311 = "sha256-K1fvJyoqCg265tGNcKpUHqtiC0/jtE1QRm06UzwW+dk=";
-          cp312 = "sha256-COuPX9VSkrpr7jY6MkkRNqXlSvVOAH+B4GA5hvvqQaQ=";
-          cp313 = "sha256-44Jq605Dmd4MaIW9i+fOL2KfoAEPABPxGD4HJrPSXkA=";
+          cp311 = "sha256-wgvEy6IdJsVjRJXWWZJ3rEfbf8M707JsDsd4H4zMOzw=";
+          cp312 = "sha256-YvLxek1QFQlp3PCkzL2vva+ofWviJe4SCKe1a9Nzo3w=";
+          cp313 = "sha256-uRG6i1F/LQnF1fMIZYU+JYnQOUF6VJEoPfIYktyGSYw=";
+          cp314 = "sha256-IGllfupWv92rpYzyNTKlgtzGa8vfTLpNqK0f4qcsAoo=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-mTGUqL5wVA4PgZhiAxu/GaZEAfvmwxtCBl/TE7pGbTQ=";
-          cp311 = "sha256-9Z47LRoUZqwHePLG+snMtfMBB9d+Pd3R1gFnJI0mhHQ=";
-          cp312 = "sha256-aDFZL+3woSIBb12rS2fYX6PU2zsh9YjRiDS1wDE5bRw=";
-          cp313 = "sha256-tbwpVIq7Cgp66eb/OwzMooJO2vARpDNuFaMnk9V0+/0=";
+          cp311 = "sha256-pVszZTqtwhwpi7ApzD7Zh4sysrCH/ikTxebg4tsfaZ4=";
+          cp312 = "sha256-MIhjpkaNyWnR1SqZIzVp16KpwnRfWJt0/yd+l2lIYHc=";
+          cp313 = "sha256-imZMsfvg9/15TsZiTdx3JJT4+q/O+oOlhWn5qcaZRWI=";
+          cp314 = "sha256-2SRh/w4nhjWzwJrvx/5W4RSRSp2+er/T2caSrG3xlTs=";
         };
       };
     in
     fetchPypi {
-      inherit pname version format;
+      inherit (finalAttrs) pname version;
+      format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+      hash =
+        hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
+          or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -215,10 +220,16 @@ buildPythonPackage rec {
     serve = lib.unique (
       [
         fastapi
+        # Undeclared upstream: `ray.serve._private.haproxy`, imported by the serve controller since
+        # 2.57.0, needs it
+        jinja2
+        mmh3
         requests
         starlette
         uvicorn
         watchfiles
+        # `ray-haproxy` (upstream, linux-only) is not packaged: it only ships an HAProxy binary, and
+        # ray falls back to `haproxy` from PATH
       ]
       ++ self.default
     );
@@ -260,11 +271,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
-    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
@@ -273,4 +289,4 @@ buildPythonPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

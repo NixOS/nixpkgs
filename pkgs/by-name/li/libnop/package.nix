@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtest ];
 
   # Add optimization flags to address _FORTIFY_SOURCE warning
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-O1"
     "-std=c++17"
   ];

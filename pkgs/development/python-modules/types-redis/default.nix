@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redis-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for redis";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

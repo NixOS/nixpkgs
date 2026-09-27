@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2025-05-08";
+  version = "0-unstable-2025-11-12";
 
   src = fetchFromGitHub {
     owner = "openjdk";
     repo = "jextract";
-    rev = "ab6b30fd189e33a52d366846202f2e9b9b280142";
-    hash = "sha256-cFXQo/DpjOuuW+HCP2G9HiOqdgVmmyPd3IXCB9X+w6M=";
+    rev = "91fc954c46fac907cae6cd1417d835208c9df150";
+    hash = "sha256-RAK7A0BCFaYe/q1nCdvXk091bhSj9DKxg2uQfABk4eo=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
     platforms = jdk25.meta.platforms;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       jlesquembre
       sharzy
     ];

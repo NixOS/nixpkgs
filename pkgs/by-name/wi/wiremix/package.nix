@@ -6,16 +6,16 @@
   pipewire,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wiremix";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-wBE7gYR2fVbSc9NA8IGI2SGJwMACoPi1NTTdGq4UVF8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aV/HTDw5lKzcA8Q+IziHEFlIu8OpL9eUvjNuvqoz3SQ=";
   };
 
-  cargoHash = "sha256-0O8Oe4EppvvFIF9e0MzNSAGp0ZmnW3wr8DHw7G00UWY=";
+  cargoHash = "sha256-QT96vzK0PirBn4nf40SEghcbAt+aRplETUREONZtY3I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tsowell ];
     platforms = lib.platforms.linux;
   };
-}
+})

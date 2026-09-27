@@ -6,25 +6,30 @@
   libjpeg,
   SDL2,
   libvorbis,
-  xorg,
+  libx11,
 }:
 stdenv.mkDerivation {
   pname = "darkplaces";
-  version = "unstable-2022-05-10";
+  version = "20140513-unstable-2026-01-22";
 
   src = fetchFromGitHub {
     owner = "DarkPlacesEngine";
     repo = "darkplaces";
-    rev = "f16954a9d40168253ac5d9890dabcf7dbd266cd9";
-    hash = "sha256-5KsUcgHbuzFUE6LcclqI8VPSFbXZzBnxzOBB9Kf8krI=";
+    rev = "d93f9c4292039354a2b8d40d11bc386891e55fe5";
+    hash = "sha256-/xbQhQZveRCSnotZz3Wbw+9VwNC+kqoEJ7GuNZTpkLA=";
   };
 
   buildInputs = [
     zlib
     libjpeg
     SDL2
-    xorg.libX11
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile.inc \
+      --replace-fail '$(SDLCONFIG_STATICLIBS)' '$(SDLCONFIG_LIBS)'
+  '';
 
   buildFlags = [ "release" ];
 
@@ -38,14 +43,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup = ''
-    patchelf \
-      --add-needed ${libvorbis}/lib/libvorbisfile.so \
-      --add-needed ${libvorbis}/lib/libvorbis.so \
-      $out/bin/darkplaces
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf \
+        --add-needed ${libvorbis}/lib/libvorbisfile.so \
+        --add-needed ${libvorbis}/lib/libvorbis.so \
+        $out/bin/darkplaces
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      ${stdenv.cc.targetPrefix}install_name_tool \
+        -add_rpath ${lib.getLib libvorbis}/lib \
+        $out/bin/darkplaces
+    '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.icculus.org/twilight/darkplaces/";
     description = "Quake 1 engine implementation by LadyHavoc";
     longDescription = ''
@@ -54,8 +65,8 @@ stdenv.mkDerivation {
       rendering features, and expanding upon the engine's native game code
       language QuakeC, as well as supporting additional map and model formats.
     '';
-    maintainers = with maintainers; [ necrophcodr ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ necrophcodr ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

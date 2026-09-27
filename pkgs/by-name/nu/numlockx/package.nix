@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoconf,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation {
@@ -19,13 +19,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     autoconf
   ];
 
   meta = {
     description = "Allows to start X with NumLock turned on";
+    homepage = "https://github.com/rg3/numlockx";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "numlockx";

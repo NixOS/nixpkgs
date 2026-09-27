@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '1.0.5'" "version = '${version}'"
+  '';
+
   build-system = [
     setuptools
   ];
@@ -50,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Milter" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://bmsi.com/python/milter.html";
     description = "Python bindings for libmilter api";
-    maintainers = with maintainers; [ yorickvp ];
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ yorickvp ];
+    license = lib.licenses.gpl2;
   };
 }

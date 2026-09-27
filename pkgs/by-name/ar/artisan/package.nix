@@ -6,11 +6,11 @@
 }:
 let
   pname = "artisan";
-  version = "3.4.0";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
-    hash = "sha256-aAxFfghEf+MRDZBd0FD5OphOOVhz3Nt2wUOmhrwXGh4=";
+    hash = "sha256-4vhdx97Y8ntj4HU2T/pHq/ZgioeY0yi+ydVcDFrHRrQ=";
   };
 
   appimageContents = appimageTools.extract {
@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=v([\\d.]+)" ];
+    extraArgs = [ "--version-regex=v([\\d.]+)$" ];
   };
 
   meta = {

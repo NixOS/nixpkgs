@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
   versionCheckHook,
   nix-update-script,
 }:
@@ -18,14 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hrwkPSxY1DTEXt9vxDECDEJaoTDzBUS7rVI609uZwdU=";
   };
 
-  preBuild = ''
-    echo "const char *gitversion = \"${finalAttrs.version}\";" > git_version.h # From Makefile
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$PWD"
+  postPatch = ''
+    substituteInPlace makefile \
+      --replace-fail " -static " " " \
+      --replace-fail "\$(shell git rev-parse HEAD)" ${finalAttrs.version}
   '';
-
-  nativeBuildInputs = [
-    cmake
-  ];
 
   installPhase = ''
     runHook preInstall

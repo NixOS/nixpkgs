@@ -5,17 +5,22 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jiratui";
-  version = "1.3.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "whyisdifficult";
     repo = "jiratui";
-    tag = "v${version}";
-    hash = "sha256-b5bSMPnqHqpeFDl501gSun7G38OlhV/IMNMYXQT+j/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c+ycttouo6LZr1jaJ9lrS2aAODfsTRNhxyL4o4nqc/c=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.2,<0.10.0" "uv_build>=0.9.2"
+  '';
 
   build-system = with python3Packages; [
     uv-build
@@ -27,19 +32,28 @@ python3Packages.buildPythonApplication rec {
       click
       gitpython
       httpx
-      pyaml
+      marklas
+      puremagic
       pydantic-settings
       python-dateutil
       python-json-logger
-      python-magic
+      pyyaml
       textual
+      textual-autocomplete
       textual-image
+      urllib3
       xdg-base-dirs
     ]
     ++ textual.optional-dependencies.syntax;
 
   pythonRelaxDeps = [
     "click"
+    "marklas"
+    # upstream wants puremagic >= 2.2.0 but only uses puremagic.magic_string,
+    # which is compatible with 1.x; drop once puremagic >= 2.2.0 lands
+    "puremagic"
+    "pydantic-settings"
+    "python-json-logger"
   ];
 
   pythonImportsCheck = [
@@ -53,9 +67,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "A Textual User Interface for interacting with Atlassian Jira from your shell";
     homepage = "https://github.com/whyisdifficult/jiratui";
-    changelog = "https://github.com/whyisdifficult/jiratui/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/whyisdifficult/jiratui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "jiratui";
   };
-}
+})

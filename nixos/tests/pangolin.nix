@@ -16,6 +16,7 @@ in
   meta.maintainers = with lib.maintainers; [
     jackr
     sigmasquadron
+    water-sucks
   ];
 
   # The full test is not yet implemented, but once upstream supports a way to

@@ -30,10 +30,10 @@ buildDunePackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SGrondin/${pname}";
     description = "OCaml implementation of the T-Digest algorithm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

@@ -6,16 +6,16 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astropy-iers-data";
-  version = "0.2025.8.4.0.42.59";
+  version = "0.2026.6.22.1.23.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-iers-data";
-    tag = "v${version}";
-    hash = "sha256-Izqm626PZzjnMNUzPW2x15ER7fn5f9+m2X434vXV/yo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q3uW3G3WTHpaRC54tO7ytmSg65SMaOQKO5KbqaSxeq4=";
   };
 
   build-system = [
@@ -28,10 +28,11 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/astropy/astropy-iers-data/releases/tag/${finalAttrs.src.tag}";
     description = "IERS data maintained by @astrofrog and astropy.utils.iers maintainers";
     homepage = "https://github.com/astropy/astropy-iers-data";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

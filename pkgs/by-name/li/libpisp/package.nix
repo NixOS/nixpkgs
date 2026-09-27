@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpisp";
-  version = "1.2.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "libpisp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YshU7G5Rov67CVwFbf5ENp2j5ptAvkVrlMu85KmnEpk=";
+    hash = "sha256-hzJA8hoOXf2Lswwz9t0StJ9JJP8ICWJlstzSsli4Yqs=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/libpisp";
     description = "Helper library to generate run-time configuration for the Raspberry Pi ISP (PiSP), consisting of the Frontend and Backend hardware components";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
   };
 })

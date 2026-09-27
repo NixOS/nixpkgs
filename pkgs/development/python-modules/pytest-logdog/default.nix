@@ -4,17 +4,14 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-logdog";
   version = "0.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ods";
@@ -23,20 +20,21 @@ buildPythonPackage rec {
     hash = "sha256-Tmoq+KAGzn0MMj29rukDfAc4LSIwC8DoMTuBAppV32I=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
-
-  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_logdog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to test logging";
     homepage = "https://github.com/ods/pytest-logdog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

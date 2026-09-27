@@ -75,9 +75,12 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-sstp-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    knownVulnerabilities = [
+      "CVE-2026-91838"
+    ];
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -9,15 +9,15 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.45";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.46";
   pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
-    rev = "v${version}";
-    sha256 = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-gY6fmm6B6H7tg3xENnqaoy1QEMIf+a3k/C+JcnkyZwo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "profile-cleaner";
   };
-}
+})

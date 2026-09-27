@@ -1,38 +1,39 @@
 {
-  python3,
+  python3Packages,
   lib,
   fetchFromGitLab,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "hid-tools";
-  version = "0.7";
+  version = "0.12";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libevdev";
     repo = "hid-tools";
-    rev = version;
-    hash = "sha256-h880jJcZDc9pIPf+nr30wu2i9y3saAKFZpooJ4MF67E=";
+    tag = finalAttrs.version;
+    hash = "sha256-00Vsnjio8LEcuCfvNVEbFpJ2JabmMZqwXli1My5SVWs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatchling
     pypandoc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     libevdev
     parse
     pyyaml
     click
+    pyroute2
     pyudev
     typing-extensions
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
@@ -45,10 +46,10 @@ python3.pkgs.buildPythonPackage rec {
       --replace-fail "pypandoc_binary" "pypandoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python scripts to manipulate HID data";
     homepage = "https://gitlab.freedesktop.org/libevdev/hid-tools";
-    license = licenses.mit;
-    teams = [ teams.freedesktop ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.freedesktop ];
   };
-}
+})

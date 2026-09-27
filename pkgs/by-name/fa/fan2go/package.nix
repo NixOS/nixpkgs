@@ -8,15 +8,15 @@
   enableNVML ? config.cudaSupport,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fan2go";
-  version = "0.11.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
-    tag = version;
-    hash = "sha256-CHBJhG10RD5rQW1SFk7ffV9M4t6LtJR6xQrw47KQzC0=";
+    tag = finalAttrs.version;
+    hash = "sha256-LEPyyVlVPbGnAfRF0E7wr4fQqRNSKKSsDSKGBCISt5A=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-BSZwvD9psXtSmoUPBxMVuvbcpqDSpFEKVskJo05e4fo=";
+  vendorHash = "sha256-LydoBk7qt3Xsf13isJ/yTf6a+FExV9TSSUfD5Tu8Hqk=";
 
   nativeBuildInputs = lib.optionals enableNVML [
     autoAddDriverRunpath
@@ -65,12 +65,12 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple daemon providing dynamic fan speed control based on temperature sensors";
     mainProgram = "fan2go";
     homepage = "https://github.com/markusressel/fan2go";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mtoohey ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ mtoohey ];
+    platforms = lib.platforms.linux;
   };
-}
+})

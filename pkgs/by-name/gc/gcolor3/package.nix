@@ -12,7 +12,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcolor3";
   version = "2.4.0";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gcolor3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "rHIAjk2m3Lkz11obgNZaapa1Zr2GDH7XzgzuAJmq+MU=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gcolor3-color-selection.c --replace "libportal/portal-gtk3.h" "libportal-gtk3/portal-gtk3.h"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple color chooser written in GTK3";
     mainProgram = "gcolor3";
     homepage = "https://gitlab.gnome.org/World/gcolor3";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

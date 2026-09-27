@@ -10,6 +10,8 @@
   sqlite,
   gobject-introspection,
   vala,
+  jansson,
+  docbook_xsl_ns,
   gtk-doc,
   boost,
   meson,
@@ -23,14 +25,14 @@
   enableCommandNotFound ? false,
   enableBashCompletion ? false,
   bash-completion ? null,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "packagekit";
-  version = "1.3.2";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -41,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "v${version}";
-    hash = "sha256-oQuJpn9G/V8CrrEs2agbKVS9xZnS1MgHa8B8P1nFmiw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-okmbeM/Iv4DKKl21gDCRvMtYG/xcQ1N/rayH9YH0gN0=";
   };
 
   buildInputs = [
@@ -52,10 +54,11 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
+    jansson
     sqlite
     boost
   ]
-  ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableSystemd systemdLibs
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+    (lib.mesonBool "systemd" enableSystemd)
     # often fails to build with nix updates
     # and remounts /nix/store as rw
     # https://github.com/NixOS/nixpkgs/issues/177946
@@ -93,17 +96,22 @@ stdenv.mkDerivation rec {
     # HACK: we want packagekit to look in /etc for configs but install
     # those files in $out/etc ; we just override the runtime paths here
     # same for /var & $out/var
-    substituteInPlace etc/meson.build \
-      --replace "install_dir: join_paths(get_option('sysconfdir'), 'PackageKit')" "install_dir: join_paths('$out', 'etc', 'PackageKit')"
+    substituteInPlace data/config/meson.build \
+      --replace-fail "install_dir: join_paths(get_option('sysconfdir'), 'PackageKit')" "install_dir: join_paths('$out', 'etc', 'PackageKit')"
     substituteInPlace data/meson.build \
-      --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
+      --replace-fail "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
+    substituteInPlace client/meson.build \
+      --replace-fail http://docbook.sourceforge.net/release/xsl-ns/current ${docbook_xsl_ns}/share/xml/docbook-xsl-ns
+
+    # Fix /usr/bin/env python3 not being available.
+    patchShebangs tests/runner/setup-test-root.py
   '';
 
   passthru.tests = {
     nixos-test = nixosTests.packagekit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software
@@ -116,8 +124,8 @@ stdenv.mkDerivation rec {
       mode package managers.
     '';
     homepage = "https://github.com/PackageKit/PackageKit";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

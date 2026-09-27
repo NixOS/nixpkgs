@@ -13,30 +13,31 @@
   graphicsmagick,
   ffmpeg,
   zlib,
-  libSM,
-  libICE,
   stb,
   openssl,
-  xxHash,
+  xxhash,
   pugixml,
+  onnxruntime,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lms";
-  version = "3.72.1";
+  version = "3.80.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
-    rev = "v${version}";
-    hash = "sha256-c6eCfQz/Tc8pg1vVjgidkPj7I85sJ5AcyX7Gf/MTXZI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TXtSsQ6qsZd5WpW9d9o/ELcvkGEMj9Sih376AoyyaFA=";
   };
 
   strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
     gtest
     boost
@@ -44,15 +45,13 @@ stdenv.mkDerivation rec {
     taglib
     libconfig
     libarchive
-    graphicsmagick
     ffmpeg
     zlib
-    libSM
-    libICE
     stb
     openssl
-    xxHash
+    xxhash
     pugixml
+    onnxruntime
   ];
 
   postPatch = ''
@@ -62,19 +61,18 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${lib.getExe ffmpeg}"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/docroot" "$out/share/lms/docroot"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/approot" "$out/share/lms/approot"
+    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms" "$out/share/lms"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"
     install -Dm444 $out/share/lms/default.service -T $out/lib/systemd/system/lmsd.service
   '';
 
   meta = {
     homepage = "https://github.com/epoupon/lms";
-    changelog = "https://github.com/epoupon/lms/releases/tag/${src.rev}";
+    changelog = "https://github.com/epoupon/lms/releases/tag/${finalAttrs.src.rev}";
     description = "Lightweight Music Server - Access your self-hosted music using a web interface";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "lms";
     maintainers = with lib.maintainers; [ mksafavi ];
   };
-}
+})

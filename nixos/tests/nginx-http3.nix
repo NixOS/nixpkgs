@@ -1,4 +1,4 @@
-{ pkgs, runTest, ... }:
+{ pkgs, runTest }:
 let
   hosts = ''
     192.168.2.101 acme.test
@@ -6,7 +6,7 @@ let
 
 in
 builtins.listToAttrs (
-  builtins.map
+  map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
       value = runTest {

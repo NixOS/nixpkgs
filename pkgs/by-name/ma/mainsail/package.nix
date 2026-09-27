@@ -2,23 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
 buildNpmPackage rec {
   pname = "mainsail";
-  version = "2.15.0";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
-    hash = "sha256-JmN5VPj4h83gLx/UsT69mXFxyvCHir0tl7zN2Q7eMOc=";
+    hash = "sha256-Djw5wwVflhU9G99GLUNO0a6wDZTB4y/yBqRruUJZQis=";
   };
 
-  npmDepsHash = "sha256-8rUhDo1l0oLENWwy56UzwlSGIBJtTPsH6w5OX8tnp6U=";
+  npmDepsHash = "sha256-fQnAVwBME4oJ15sOmZAr4qwxSpA5qqr8zJxEsVVGwSg=";
+
+  nodejs = nodejs_22;
 
   # Prevent Cypress binary download.
-  CYPRESS_INSTALL_BINARY = 0;
+  env.CYPRESS_INSTALL_BINARY = 0;
 
   preConfigure = ''
     # Make the build.zip target do nothing, since we will just copy these files later.
@@ -41,7 +44,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      shhht
       lovesegfault
       wulfsta
     ];

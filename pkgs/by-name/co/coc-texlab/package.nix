@@ -36,18 +36,18 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-texlab";
-  version = "0-unstable-2025-07-22";
+  version = "0-unstable-2026-07-27";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-texlab";
-    rev = "a4ad3f259d94086f4971b22b97833e8a72226782";
-    hash = "sha256-6W+L/LdF6g0Xwhv+9VtjjfzRjlbN7OaqHbSXtO3cfZ0=";
+    rev = "80282b28a6e5c2667099529df40ab1beed3e0cd6";
+    hash = "sha256-QUWg83Z27+Qi1sWkI9pkXPq3LgDAZ4EBl9cWAIXHYrc=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-g2IwfO1IMktTtflR2m7c99wOYLJYmD2I7hBbCNy+XFA=";
+    hash = "sha256-T8AkY+NfKgJ6kQGJtWBIzrqud8gYhESlvOiCSTdOScI=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "TexLab extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-texlab";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

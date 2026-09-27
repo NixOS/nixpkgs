@@ -38,13 +38,13 @@ in
       settings = mkOption {
         type = configFormat.type;
         default = {
-          general.output_backend = "pa";
+          general.output_backend = "pulseaudio";
           diagnostics.log_verbosity = 1;
         };
         example = {
           general = {
             name = "NixOS Shairport";
-            output_backend = "pw";
+            output_backend = "pipewire";
           };
           metadata = {
             enabled = "yes";
@@ -112,13 +112,23 @@ in
   ###### implementation
 
   config = mkIf config.services.shairport-sync.enable {
+    assertions = [
+      {
+        assertion = config.services.shairport-sync.settings.general.output_backend or null != "pw";
+        message = "shairport-sync 5.0 renamed the pipewire backend from 'pw' to 'pipewire'";
+      }
+      {
+        assertion = config.services.shairport-sync.settings.general.output_backend or null != "pa";
+        message = "shairport-sync 5.0 renamed the pulseaudio backend from 'pa' to 'pulseaudio'";
+      }
+    ];
 
     services.avahi.enable = true;
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
     services.shairport-sync.settings = {
-      general.output_backend = lib.mkDefault "pa";
+      general.output_backend = lib.mkDefault "pulseaudio";
       diagnostics.log_verbosity = lib.mkDefault 1;
     };
 

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  setuptools,
 
   # tests
   ipykernel,
@@ -11,17 +11,19 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wasabi";
   version = "1.1.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-S7MAjwA4CdsMPii02vIJBuqHGiu0P5kUGX1UD08uCHg=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     ipykernel
@@ -34,11 +36,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight console printing and formatting toolkit";
-    homepage = "https://github.com/ines/wasabi";
-    changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
-    license = licenses.mit;
+    homepage = "https://github.com/explosion/wasabi";
+    changelog = "https://github.com/explosion/wasabi/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

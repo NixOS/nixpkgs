@@ -5,6 +5,7 @@
   sslLibrary ? "openssl",
   stdenv,
   lib,
+  fetchpatch2,
   fetchurl,
   nixosTests,
   zlib,
@@ -12,7 +13,6 @@
   aws-lc,
   libressl,
   openssl,
-  wolfssl,
   lua5_4,
   pcre2,
 }:
@@ -21,7 +21,6 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "aws-lc"
   "libressl"
   "openssl"
-  "wolfssl"
 ];
 let
   sslPkgs = {
@@ -30,21 +29,26 @@ let
       libressl
       openssl
       ;
-    wolfssl = wolfssl.override {
-      variant = "haproxy";
-      extraConfigureFlags = [ "--enable-quic" ];
-    };
   };
   sslPkg = sslPkgs.${sslLibrary};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.9";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-5mDRQbKQGfTRmHhbCDTMPpyW787rgHwv/y/JNb0zVMI=";
+    hash = "sha256-sMUFPE1GhA7N7jklc2/po95kclWbQ8aRg9cOWT2RM98=";
   };
+
+  patches = [
+    # Remove once the packaged release fixes CVE-2026-90678.
+    (fetchpatch2 {
+      name = "CVE-2026-90678.patch";
+      url = "https://github.com/haproxy/haproxy/commit/86a4ebc761a278838e8cb06f3a292282ba704c65.patch?full_index=1";
+      hash = "sha256-GTI9c1Y3d7DN2m11eODM3FkY2Aitrndi3CTI2Tr95OU=";
+    })
+  ];
 
   buildInputs = [
     sslPkg
@@ -82,11 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (sslLibrary == "aws-lc") [
     "USE_OPENSSL_AWSLC=true"
   ]
-  ++ lib.optionals (sslLibrary == "openssl") [
+  ++ lib.optionals (sslLibrary == "openssl" && lib.versionOlder openssl.version "3.5.2") [
     "USE_QUIC_OPENSSL_COMPAT=yes"
-  ]
-  ++ lib.optionals (sslLibrary == "wolfssl") [
-    "USE_OPENSSL_WOLFSSL=yes"
   ]
   ++ lib.optionals usePcre [
     "USE_PCRE2=yes"

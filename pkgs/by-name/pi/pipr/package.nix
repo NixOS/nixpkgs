@@ -3,33 +3,43 @@
   fetchFromGitHub,
   rustPlatform,
   bubblewrap,
+  oniguruma,
+  pkg-config,
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pipr";
   version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "ElKowar";
     repo = "pipr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
   };
 
   cargoHash = "sha256-SRIv/dZcyKm2E7c5/LtMCDnh+SDqPhJ01GZtkj0RgA0=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [ oniguruma ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
+
   postFixup = ''
     wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Commandline-tool to interactively write shell pipelines";
     mainProgram = "pipr";
     homepage = "https://github.com/ElKowar/pipr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elkowar ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ elkowar ];
+    platforms = lib.platforms.all;
   };
-}
+})

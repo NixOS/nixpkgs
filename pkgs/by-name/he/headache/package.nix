@@ -30,11 +30,11 @@ buildDunePackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frama-c/headache";
     description = "Lightweight tool for managing headers in source code files";
     mainProgram = "headache";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

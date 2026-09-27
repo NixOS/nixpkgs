@@ -4,31 +4,31 @@
   lib,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nar-serve";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
-    rev = "v${version}";
-    hash = "sha256-8QuMS00EutmqzAIPxyJEPxM8EHiWlSKs6E2Htoh3Kes=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-72gY3V9XLi+qZWDH3ARR2DLEYC3cszYkAVBBBRTNcrM=";
   };
 
-  vendorHash = "sha256-td9NYHGYJYPlIj2tnf5I/GnJQOOgODc6TakHFwxyvLQ=";
+  vendorHash = "sha256-sms5yAbbc6PN02DFFRTktjaryDF/h+3b14BC+ZwMBOA=";
 
   doCheck = false;
 
   passthru.tests = { inherit (nixosTests) nar-serve; };
 
-  meta = with lib; {
+  meta = {
     description = "Serve NAR file contents via HTTP";
     mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rizary
       zimbatm
     ];
   };
-}
+})

@@ -8,35 +8,44 @@
   setuptools,
 
   # dependencies
+  defusedxml,
+  doclang,
   jsonref,
   jsonschema,
   latex2mathml,
   pandas,
   pillow,
   pydantic,
+  pydantic-settings,
   pyyaml,
   semchunk,
   tabulate,
   transformers,
+  tree-sitter,
   typer,
   typing-extensions,
 
   # tests
+  gitpython,
   jsondiff,
+  opencv-python-headless,
   pytestCheckHook,
   requests,
+  saxonche,
+  universal-pathlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-core";
-  version = "2.50.1";
+  version = "2.90.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-core";
-    tag = "v${version}";
-    hash = "sha256-pLIWskl5nXdOC5UwvfJ3Yhl8qV6jg42P89gLj7ASpTA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-giPdZKVwR+Gvo4hpn/hUhACMuZwCEqhZwqph+wOrqgk=";
   };
 
   build-system = [
@@ -44,45 +53,62 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "defusedxml"
+    "pillow"
+    "pydantic-settings"
+    "typer"
+  ];
   dependencies = [
+    defusedxml
+    doclang
     jsonref
     jsonschema
     latex2mathml
     pandas
     pillow
     pydantic
+    pydantic-settings
     pyyaml
     semchunk
     tabulate
     transformers
+    tree-sitter
     typer
     typing-extensions
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
-
-  pythonImportsCheck = [
-    "docling_core"
-  ];
+  pythonImportsCheck = [ "docling_core" ];
 
   nativeCheckInputs = [
+    gitpython
     jsondiff
+    # `ImageRef.from_pil` encodes PNGs with OpenCV when available, and the test
+    # reference files are generated with it: https://github.com/docling-project/docling-core/pull/562
+    opencv-python-headless
     pytestCheckHook
     requests
+    saxonche
+    universal-pathlib
   ];
 
   disabledTestPaths = [
     # attempts to download models
+    "test/test_chunk_expander.py"
+    "test/test_code_chunker.py"
+    "test/test_code_chunking_strategy.py"
     "test/test_hybrid_chunker.py"
+    "test/test_line_chunker.py"
+
+    # Requires unpackaged dclq
+    "packages/dclq/tests/test_cli.py"
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-core/blob/${src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
-    homepage = "https://github.com/DS4SD/docling-core";
+    homepage = "https://github.com/docling-project/docling-core";
+    changelog = "https://github.com/docling-project/docling-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

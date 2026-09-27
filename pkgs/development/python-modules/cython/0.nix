@@ -32,9 +32,9 @@ let
     "overflow_check_longlong"
   ];
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "0.29.37.1";
+  version = "0.29.37";
   pyproject = true;
 
   # error: too few arguments to function '_PyLong_AsByteArray'
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XsEy2NrG7hq+VXRCRbD4BRaBieU6mVoE0GT52L3mMhs=";
+    tag = finalAttrs.version;
+    hash = "sha256-8LQsfN0LjWvBcRyFNR66jilijGGswgbjrZ9xnOQTjjk=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   patches = [
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
@@ -98,9 +98,9 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/cython/cython/blob/${finalAttrs.version}/CHANGES.rst";
     description = "Optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;
   };
-}
+})

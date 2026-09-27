@@ -4,19 +4,19 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "9.1.5";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "10.2.1";
   pname = "oxipng";
 
   # do not use fetchCrate (only repository includes tests)
   src = fetchFromGitHub {
-    owner = "shssoichiro";
+    owner = "oxipng";
     repo = "oxipng";
-    tag = "v${version}";
-    hash = "sha256-UjiGQSLiUMuYm62wF7Xwhp2MRzCaQ9pbBBkvHnuspVw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NWDd56sZ/7W8cq9P3o8ifjLhyR+ZHEYrh1fUbyGYhBQ=";
   };
 
-  cargoHash = "sha256-sdhyxJDUlb6+SJ/kvfqsplHOeCEbA3ls66eur3eeVVA=";
+  cargoHash = "sha256-9DD1EHNtxLN3vwJQFIdibw1SnEgKHlCZAqq7GkDSQh4=";
 
   # don't require qemu for aarch64-linux tests
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    homepage = "https://github.com/shssoichiro/oxipng";
+    homepage = "https://github.com/oxipng/oxipng";
     description = "Multithreaded lossless PNG compression optimizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir ];
     mainProgram = "oxipng";
   };
-}
+})

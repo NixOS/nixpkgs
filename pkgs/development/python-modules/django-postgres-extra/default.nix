@@ -27,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-/2qoXZ2f3un2cgJFAGMnQWBraJ7urkb0kHtcKKJsh6w=";
   };
 
+  postPatch = ''
+    echo '__version__ = "${version}"' > psqlextra/_version.py
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -83,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psqlextra" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bringing all of PostgreSQL's awesomeness to Django";
     homepage = "https://github.com/SectorLabs/django-postgres-extra";
     changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ b4dm4n ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ b4dm4n ];
   };
 }

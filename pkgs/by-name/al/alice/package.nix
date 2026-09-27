@@ -2,42 +2,33 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
-stdenv.mkDerivation (attrs: {
-  pname = "Alice";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "alice";
   version = "2.003";
 
   outputs = [
     "out"
-    "woff2"
+    "webfont"
   ];
 
   src = fetchzip {
-    url =
-      with attrs;
-      "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
+    url = "https://github.com/cyrealtype/Alice/releases/download/v${finalAttrs.version}/Alice-v${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
-    install -m444 -Dt $out/share/fonts/opentype fonts/otf/*.otf
-    install -m444 -Dt $woff2/share/fonts/woff2 fonts/webfonts/*.woff2
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Open-source font by Ksenia Erulevich";
     homepage = "https://github.com/cyrealtype/Alice";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 })

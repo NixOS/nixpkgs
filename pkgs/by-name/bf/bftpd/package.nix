@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/bftpd/bftpd/bftpd-${version}/bftpd-${version}.tar.gz";
     sha256 = "sha256-f7XZCSrGwmQqyf5C4xtJ46Q4SDHxbr15rDzcAK1PvB4=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcrypt ];
 
-  CFLAGS = "-std=gnu89";
+  env.CFLAGS = "-std=gnu89";
 
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal ftp server";
     mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.all;
   };
 }

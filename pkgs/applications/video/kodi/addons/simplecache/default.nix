@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-community-addons/script.module.simplecache";
     description = "Simple object cache for Kodi addons";
-    license = licenses.asl20;
-    teams = [ teams.kodi ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

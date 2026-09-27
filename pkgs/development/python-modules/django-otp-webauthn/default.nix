@@ -1,44 +1,67 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  hatch-vcs,
   hatchling,
   django,
   django-otp,
-  djangorestframework,
   webauthn,
+  pytestCheckHook,
+  beautifulsoup4,
+  dj-database-url,
+  django-csp,
+  django-debug-toolbar,
+  jsonschema,
+  pytest-django,
+  pytest-factoryboy,
+  pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-otp-webauthn";
-  version = "0.6.0";
+  version = "0.10.3";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "django_otp_webauthn";
-    hash = "sha256-Exyao6i63S7czGAcZMULrNcnxjRNw21ufNFaxj9kkFs=";
+  src = fetchFromGitHub {
+    owner = "Stormbase";
+    repo = "django-otp-webauthn";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BmbCC0Tf4Ghp/bjRc2q5efRx3MWR8tARiT4iMq51jP0=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     django
     django-otp
-    djangorestframework
     webauthn
   ];
 
-  # Tests are on the roadmap, but not yet implemented
-
   pythonImportsCheck = [ "django_otp_webauthn" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    dj-database-url
+    django-csp
+    django-debug-toolbar
+    jsonschema
+    pytest-django
+    pytest-factoryboy
+    pytest-mock
+  ];
+
+  meta = {
     description = "Passkey support for Django";
     homepage = "https://github.com/Stormbase/django-otp-webauthn";
-    changelog = "https://github.com/Stormbase/django-otp-webauthn/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://github.com/Stormbase/django-otp-webauthn/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
-}
+})

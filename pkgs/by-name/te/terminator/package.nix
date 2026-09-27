@@ -14,16 +14,16 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "terminator";
-  version = "2.1.5";
+  version = "2.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    tag = "v${version}";
-    hash = "sha256-RM/7jUWGDV0EdMyMeLsCrvevH+5hZSJVAKmtalxNKG8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U96YPoRxSiF6k2k3J2QFzwodbosQVs3lb/lpf0CToyg=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal emulator with support for tiling and tabs";
     longDescription = ''
       The goal of this project is to produce a useful tool for arranging
@@ -83,10 +83,10 @@ python3.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
-    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${src.tag}";
+    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gnome-terminator/terminator";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.linux;
   };
-}
+})

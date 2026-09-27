@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  extra-cmake-modules,
+  cmake,
   exiv2,
   ffmpeg,
   libvlc,
@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    cmake
+    kdePackages.extra-cmake-modules
     kdePackages.wrapQtAppsHook
   ];
 
@@ -47,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient image organization and indexing";
     homepage = "https://www.kphotoalbum.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (kdePackages.kconfig.meta) platforms;
   };
 })

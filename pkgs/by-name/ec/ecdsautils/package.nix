@@ -7,19 +7,17 @@
   pkg-config,
   doxygen,
   libuecc,
+  versionCheckHook,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecdsautils";
   version = "0.4.2";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "freifunk-gluon";
     repo = "ecdsautils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
@@ -37,14 +35,21 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ libuecc ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  meta = {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
     homepage = "https://github.com/freifunk-gluon/ecdsautils/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ];
-    maintainers = [ ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aiyion ];
+    mainProgram = "ecdsautil";
+    platforms = lib.platforms.unix;
   };
-}
+})

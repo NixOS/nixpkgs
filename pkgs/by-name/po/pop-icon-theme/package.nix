@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pop-icon-theme";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "icon-theme";
     rev = "v${version}";
-    sha256 = "sha256-V8xBZj6T4Ly/GHV0CVLZ1a4UZbmCkhYRe05qUfJk7Wg=";
+    sha256 = "sha256-4Ae06/ywjZUk6zHAk7CpYcK3Y2xSX+Rae/QZOE1ZT3I=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +33,14 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  meta = with lib; {
+  meta = {
     description = "Icon theme for Pop!_OS with a semi-flat design and raised 3D motifs";
     homepage = "https://github.com/pop-os/icon-theme";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3
     ];
-    platforms = platforms.linux; # hash mismatch on darwin due to file names differing only in case
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux; # hash mismatch on darwin due to file names differing only in case
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

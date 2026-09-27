@@ -77,10 +77,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Bash scripts that integrate bat with various command line tools";
     homepage = "https://github.com/eth-p/bat-extras";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bbigras
-      perchun
+      PerchunPak
     ];
     platforms = lib.platforms.all;
   };

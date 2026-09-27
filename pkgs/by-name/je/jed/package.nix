@@ -4,9 +4,9 @@
   fetchzip,
   pkg-config,
   gpm,
-  libXext,
-  libXft,
-  libXt,
+  libxext,
+  libxft,
+  libxt,
   ncurses5,
   slang,
 }:
@@ -16,16 +16,16 @@ stdenv.mkDerivation rec {
   version = "0.99-19";
 
   src = fetchzip {
-    url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://www.jedsoft.org/releases/jed/jed-${version}.tar.bz2";
     sha256 = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gpm
-    libXext
-    libXft
-    libXt
+    libxext
+    libxft
+    libxt
     ncurses5
     slang
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     install -D src/objs/rgrep $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programmable text editor written around S-Lang";
     longDescription = ''
       JED is a freely available text editor for Unix, VMS, MSDOS, OS/2, BeOS,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         more
     '';
     homepage = "https://www.jedsoft.org/jed/index.html";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = slang.meta.platforms;
   };
 }

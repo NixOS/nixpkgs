@@ -1,33 +1,40 @@
 {
+  lib,
+
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
+
+  # buildInputs
+  jrl-cmakemodules,
+
+  # propagatedBuildInputs
   boost,
   casadi,
-  casadiSupport ? true,
-  cmake,
-  collisionSupport ? true,
-  console-bridge,
-  ctestCheckHook,
-  doxygen,
-  eigen,
-  example-robot-data,
-  fetchFromGitHub,
-  fetchpatch,
   coal,
-  jrl-cmakemodules,
-  lib,
-  pkg-config,
-  stdenv,
+  console-bridge,
+  eigen,
   urdfdom,
+
+  # nativeCheckInputs
+  ctestCheckHook,
+
+  # checkInputs = [
+  example-robot-data,
+
+  casadiSupport ? true,
+  collisionSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.8.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2oMP653fJ7Msk+IB8whRk2L8xkAmRdDeMLPJyyD99OQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wWuW58okWARbF/nonybw3DbGY4hrHDiEsdjiF6RoaVc=";
   };
 
   outputs = [
@@ -35,29 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  patches = [
-    # ref. https://github.com/stack-of-tasks/pinocchio/pull/2771
-    (fetchpatch {
-      name = "fix-viser-path.patch";
-      url = "https://github.com/stack-of-tasks/pinocchio/commit/36a04bddb6980a7bcd28ebcc55d4e442f7920d87.patch";
-      hash = "sha256-9oENiMmRqJLU4ZiyGojm7suqdwTDGfk56aS2kcZiGaI=";
-    })
-  ];
-
   postPatch = ''
-    # allow package:// uri use in examples
-    export ROS_PACKAGE_PATH=${example-robot-data}/share
-
     # silence matplotlib warning
     export MPLCONFIGDIR=$(mktemp -d)
   '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [
@@ -65,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     coal
     console-bridge
     eigen
-    jrl-cmakemodules
     urdfdom
   ]
   ++ lib.optionals collisionSupport [ coal ]
@@ -90,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       "test-cpp-algorithm-utils-force"
     ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
@@ -99,9 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
     homepage = "https://github.com/stack-of-tasks/pinocchio";
+    changelog = "https://github.com/stack-of-tasks/pinocchio/blob/devel/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       nim65s

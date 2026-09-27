@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-intl";
     tag = version;
-    hash = "sha256-5Ro+UG9pwwp656fYyCsna6P4s9Gb86Tu3Qm2WUI7tsE=";
+    hash = "sha256-Q8k/XOT2s7u7IuQ85XrcARLPwMUC9Z6yeRshrIGbJdA=";
   };
 
   build-system = [
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_intl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx utility that make it easy to translate and to apply translation";
     homepage = "https://github.com/sphinx-doc/sphinx-intl";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

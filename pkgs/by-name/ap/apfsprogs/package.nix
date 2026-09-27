@@ -73,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Experimental APFS tools for linux";
     homepage = "https://github.com/linux-apfs/apfsprogs";
     changelog = "https://github.com/linux-apfs/apfsprogs/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 })

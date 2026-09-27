@@ -30,9 +30,13 @@ let
 
   baseAttrs = {
     src = fetchurl {
-      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
-        lib.replaceStrings [ "." ] [ "_" ] version
-      }-src.tgz";
+      url =
+        if lib.versionAtLeast version "78.1" then
+          "https://github.com/unicode-org/icu/releases/download/release-${version}/icu4c-${version}-sources.tgz"
+        else
+          "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
+            lib.replaceStrings [ "." ] [ "_" ] version
+          }-src.tgz";
       inherit hash;
     };
 
@@ -77,16 +81,20 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    meta = {
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
-      maintainers = with maintainers; [ raskin ];
+      maintainers = with lib.maintainers; [ raskin ];
+      license = lib.licenses.unicode-30;
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"
         "icu-uc"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -139,6 +147,7 @@ let
 
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+          substituteInPlace "$out/lib/pkgconfig/icu-uc.pc" --replace-fail "$out/lib" "$dev/lib"
         ''
       );
 

@@ -8,16 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termirs";
-  version = "0.2.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "caelansar";
     repo = "termirs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yQ9WmvnIJJHhhXNTHZeHGz2uYVAxuFPf2U1WzybjJqU=";
+    hash = "sha256-K8SDC/pH+PcY67qo/2F8zLKafzdKbxSC5IcVVRYMkHE=";
   };
 
-  cargoHash = "sha256-J/TgFi0iyhaj9/aF3Gd46PNq/QE+hQfF2YawbJf/5AA=";
+  cargoHash = "sha256-z0TgeDALtpDoR3YEHi+udRgTLwDhWQcGVejNBjuzY4c=";
+
+  postPatch = ''
+    substituteInPlace ../termirs-0.3.3-vendor/source-git-0/wezterm-term-0.1.0/src/terminalstate/mod.rs \
+      --replace-fail 'include_bytes!("../../../termwiz/data/wezterm")' 'include_bytes!("../../../termwiz-0.24.0/data/wezterm")'
+  '';
 
   passthru.updateScript = nix-update-script { };
 

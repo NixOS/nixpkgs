@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   pyserial,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "modbus-tk";
   version = "1.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "modbus_tk";

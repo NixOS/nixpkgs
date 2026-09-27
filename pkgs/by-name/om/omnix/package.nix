@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "omnix";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "juspay";
     repo = "omnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wxBZLeYoYIQlZLsWpJty95fUmEbgHPCwbn392b9n3NY=";
+    hash = "sha256-D9rAVsSFooVWpSX//gTcRcmgiAjwZYNRMDIctMmwnho=";
   };
 
-  cargoHash = "sha256-qZv/4P9f87Glif2VsdrY23JGw6bSSQYdekF6erY5owk=";
+  cargoHash = "sha256-3zWbhuZzqkxgM0Js3luR6+Yr5/UGn1EoL6OqxPt94JM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -114,7 +114,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/om";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

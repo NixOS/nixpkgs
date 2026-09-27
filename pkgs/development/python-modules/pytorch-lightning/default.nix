@@ -22,21 +22,20 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.0";
+  version = "2.6.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
-    tag = version;
-    hash = "sha256-zmFA9/tz0C06LmQ37wHeoR1kBHKdoz/D1cKWMoeWHzs=";
+    tag = finalAttrs.version;
+    hash = "sha256-VKEd9Psj4DdOSdIXqwbmLl23FJWrQJEr9b34+t//c9w=";
   };
 
-  preConfigure = ''
-    export PACKAGE_NAME=pytorch
-  '';
+  env.PACKAGE_NAME = "pytorch";
 
   build-system = [ setuptools ];
 
@@ -67,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
-    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.tag}";
+    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

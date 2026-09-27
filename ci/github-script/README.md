@@ -15,3 +15,9 @@ Run `./run commits OWNER REPO PR`, where OWNER is your username or "NixOS", REPO
 ## Labeler
 
 Run `./run labels OWNER REPO`, where OWNER is your username or "NixOS" and REPO the name of your fork or "nixpkgs".
+
+## Reminders
+
+Run `./run reminders OWNER REPO PR` to post the reminders that apply to the paths a pull request touches.
+
+To add a reminder, write the review body to `reminders/KEY.md` and list KEY with its path regexes in `reminders.js`.

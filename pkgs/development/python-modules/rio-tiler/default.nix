@@ -3,66 +3,96 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
+  async-geotiff,
   attrs,
   boto3,
   cachetools,
   color-operations,
+  h5netcdf,
   hatchling,
-  httpx,
+  httpx2,
   morecantile,
   numexpr,
   numpy,
+  obstore,
   pydantic,
   pystac,
+  pytest-asyncio,
   rasterio,
   rioxarray,
+  typing-extensions,
+  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "7.8.1";
+  version = "9.4.6";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    tag = version;
-    hash = "sha256-w7uw5PY3uiJmxsgSB1YDbtG7IY1pd4WU3JExZRc40gs=";
+    tag = finalAttrs.version;
+    hash = "sha256-h21DLKl2bwjaJihhoD34JzjRJ7II8NWw6npln6LoW8E=";
   };
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cachetools
     color-operations
-    httpx
+    httpx2
     morecantile
     numexpr
     numpy
     pydantic
     pystac
     rasterio
+    typing-extensions
   ];
 
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    xarray = [ rioxarray ];
+    zarr = [
+      obstore
+      zarr
+    ];
+    geotiff = [
+      async-geotiff
+      obstore
+    ];
+  };
+
   nativeCheckInputs = [
-    boto3
+    h5netcdf
     pytestCheckHook
-    rioxarray
-  ];
+    pytest-asyncio
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "rio_tiler" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Requires network access
+    "test_dataset_reader"
+
+    "test_async_reader_tile"
+    "test_async_mosaic_tiler"
+    "test_inherit_rasterio_env_empty"
+    "test_inherit_rasterio_env_not_empty"
+    "test_warp_masked_pixels_propagate"
+
+    # test is failing on aarch64
+    "test_geoxarray_reader"
+  ];
+
+  meta = {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
-    # Tests broken with gdal 3.10
-    # https://github.com/cogeotiff/rio-tiler/issues/769
-    broken = true;
   };
-}
+})

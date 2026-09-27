@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "matterircd";
-  version = "0.28.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
-    rev = "v${version}";
-    sha256 = "sha256-qA07i31fGLLIfWoCBW1f5nvf4AWEIkSXZh22F6rRnpM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-maIc7HgzW4mhz59WFmm26tJddC70kvF2GdsYZ0HW9AU=";
   };
 
   vendorHash = null;
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal IRC server bridge to Mattermost";
     mainProgram = "matterircd";
     homepage = "https://github.com/42wim/matterircd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ numinit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ numinit ];
   };
-}
+})

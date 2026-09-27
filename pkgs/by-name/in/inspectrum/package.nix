@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   gnuradioMinimal,
   thrift,
   fetchFromGitHub,
@@ -42,12 +43,16 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     gnuradioMinimal.unwrapped.python.pkgs.thrift
   ];
 
-  meta = with lib; {
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${stdenv.cc.targetPrefix}install_name_tool -change libliquid.dylib ${lib.getLib liquid-dsp}/lib/libliquid.dylib $out/bin/.inspectrum-wrapped
+  '';
+
+  meta = {
     description = "Tool for analysing captured signals from sdr receivers";
     mainProgram = "inspectrum";
     homepage = "https://github.com/miek/inspectrum";
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl3Plus;
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gren";
-  version = "0.6.3";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "gren-lang";
     repo = "compiler";
     tag = finalAttrs.version;
-    hash = "sha256-P8Y6JOgxGAVWT9DfbNLHVJnsPBcrUkHEumkU56riI10=";
+    hash = "sha256-GLqDBTNu7jTy+WTbPrK7d/AIjHKWTidsf19AP4WwEQo=";
   };
 
   buildInputs = [ nodejs ];
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/gren";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     backend = haskellPackages.callPackage ./generated-backend-package.nix { };

@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitiles,
   makeWrapper,
-  nix-update-script,
   python3,
   git,
   gnupg,
@@ -11,15 +10,14 @@
   openssh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-repo";
-  version = "2.59";
+  version = "2.67";
 
-  src = fetchFromGitHub {
-    owner = "android";
-    repo = "tools_repo";
-    rev = "v${version}";
-    hash = "sha256-5ffk5B4ZA/Wy2bQNahFaXPFRSZdKz5t6TaGbN00mfxo=";
+  src = fetchFromGitiles {
+    url = "https://android.googlesource.com/tools/repo";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xr5u6JZ3XER2F/A61i+S1NOR66sYIU/kFxWv3/FgQZs=";
   };
 
   # Fix 'NameError: name 'ssl' is not defined'
@@ -57,10 +55,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -69,9 +67,12 @@ stdenv.mkDerivation rec {
       to make it easier to work with Git.
     '';
     homepage = "https://android.googlesource.com/tools/repo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      otavio
+      ungeskriptet
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "repo";
   };
-}
+})

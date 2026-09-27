@@ -243,7 +243,7 @@ let
 
   basicEnv =
     if copyGemFiles then
-      runCommand name' basicEnvArgs ''
+      runCommand name' (basicEnvArgs // { __structuredAttrs = true; }) ''
         mkdir -p $out
         for i in $paths; do
           ${buildPackages.rsync}/bin/rsync -a $i/lib $out/

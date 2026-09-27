@@ -4,29 +4,29 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codespelunker";
-  version = "1.4.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "cs";
-    rev = "v${version}";
-    hash = "sha256-FZf3aRozpXWTRDrNDRxb1dGBXiLVEYOUd8a/hqzThps=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yjzqy0YgpKUR1ZlRXpBW9GBoLmXZ1AjTfPfkxD9Ht/s=";
   };
 
   vendorHash = null;
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Command code search tool";
     homepage = "https://github.com/boyter/cs";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       unlicense
     ];
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cs";
   };
-}
+})

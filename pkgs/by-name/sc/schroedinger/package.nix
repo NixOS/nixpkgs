@@ -9,12 +9,12 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schroedinger";
   version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/${pname}-${version}.tar.gz";
+    url = "https://download.videolan.org/contrib/schroedinger-${finalAttrs.version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -41,15 +41,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Dirac video codec in ANSI C";
     homepage = "https://sourceforge.net/projects/schrodinger/";
     maintainers = [ ];
     license = [
-      licenses.mpl11
-      licenses.lgpl2
-      licenses.mit
+      lib.licenses.mpl11
+      lib.licenses.lgpl2
+      lib.licenses.mit
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

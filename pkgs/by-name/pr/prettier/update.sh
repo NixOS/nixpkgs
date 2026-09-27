@@ -45,4 +45,7 @@ update-source-version "${package}" "${latest_version}"
 echo "Update yarn offline cache hash…"
 nix-build --attr "${package}.src"
 yarn-berry-fetcher missing-hashes result/yarn.lock >"${package_dir}/missing-hashes.json"
+yarn_hash="$(yarn-berry-fetcher prefetch result/yarn.lock "${package_dir}/missing-hashes.json")"
 rm -f "${package_dir}/package.json"
+
+sed --in-place --expression='s/yarnHash = ".*"/yarnHash = "'${yarn_hash}'"/' "${package_dir}/package.nix"

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-toolbox";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cool-RR";
     repo = "python_toolbox";
     tag = version;
-    hash = "sha256-pbo4vhypM97OXh6CxK42EbZdrXljvj5rmP9C9RDPo5g=";
+    hash = "sha256-DzrA1c3rAo/8DnYo0DE7Kft0uCBqEwdAaUDjg4K2Mn4=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
     "test_repr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for testing PySnooper";
     homepage = "https://github.com/cool-RR/python_toolbox";
     changelog = "https://github.com/cool-RR/python_toolbox/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
   };
 }

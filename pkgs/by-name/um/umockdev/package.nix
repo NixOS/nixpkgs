@@ -84,12 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  # glibc valgrind can't measure musl binaries (and vice versa)
+  doCheck = stdenv.hostPlatform.libc == stdenv.buildPlatform.libc;
 
   postPatch = ''
     # Substitute the path to this derivation in the patch we apply.
     substituteInPlace src/umockdev-wrapper \
       --subst-var-by 'LIBDIR' "''${!outputLib}/lib"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace src/libumockdev-preload.c \
+      --replace-fail libc.so.6 libc.so
   '';
 
   preCheck = ''
@@ -114,12 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/martinpitt/umockdev";
     changelog = "https://github.com/martinpitt/umockdev/releases/tag/${finalAttrs.version}";
     description = "Mock hardware devices for creating unit tests";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
+    platforms = with lib.platforms; linux;
   };
 })

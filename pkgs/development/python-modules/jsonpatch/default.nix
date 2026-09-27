@@ -4,24 +4,26 @@
   fetchFromGitHub,
   jsonpointer,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpatch";
   version = "1.33";
-  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stefankoegl";
     repo = "python-json-patch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
   };
 
-  propagatedBuildInputs = [ jsonpointer ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jsonpointer ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -29,10 +31,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

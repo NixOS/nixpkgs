@@ -23,15 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Islamic Tools and Libraries (ITL)";
     longDescription = ''
       The Islamic Tools and Libraries (ITL) project provides
       a fully featured library for performing common Islamic calculations.
     '';
     homepage = "https://www.arabeyes.org/ITL";
-    license = licenses.lgpl21Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ amyipdev ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ amyipdev ];
   };
 })

@@ -2,33 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   python,
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yacs";
   version = "0.1.8";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rbgirshick";
     repo = "yacs";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyyaml ];
 
   pythonImportsCheck = [ "yacs" ];
   checkPhase = ''
     ${python.interpreter} yacs/tests.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

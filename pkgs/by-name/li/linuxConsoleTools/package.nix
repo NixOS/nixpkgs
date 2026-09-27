@@ -7,12 +7,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxconsoletools";
   version = "1.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/linuxconsole/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/linuxconsole/linuxconsoletools-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-TaKXRceCt9sY9fN8Sed78WMSHdN2Hi/HY2+gy/NcJFY=";
   };
 
@@ -30,14 +30,13 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "Set of tools for joysticks and serial peripherals";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       pSub
-      ebzzry
     ];
 
     longDescription = ''
@@ -52,4 +51,4 @@ stdenv.mkDerivation rec {
       inputattach(1) - connects legacy serial devices to the input layer
     '';
   };
-}
+})

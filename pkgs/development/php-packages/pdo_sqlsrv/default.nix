@@ -3,24 +3,24 @@
   buildPecl,
   lib,
   libiconv,
-  unixODBC,
+  unixodbc,
   php,
 }:
-
 buildPecl {
   pname = "pdo_sqlsrv";
 
-  version = "5.10.1";
-  sha256 = "sha256-x4VBlqI2vINQijRvjG7x35mbwh7rvYOL2wUTIV4GKK0=";
+  version = "5.13.0";
+  sha256 = "sha256-76hZvMSNl/JSaNvevx2yXyVhDX+jaz7pEHPByZQR4kw=";
 
   internalDeps = [ php.extensions.pdo ];
 
-  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [ unixodbc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Drivers for PHP for SQL Server";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Microsoft/msphpsql";
-    teams = [ teams.php ];
+    teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

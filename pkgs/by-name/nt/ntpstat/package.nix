@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Print the ntpd or chronyd synchronisation status";
     homepage = "https://github.com/mlichvar/ntpstat";
     license = lib.licenses.mit;
-    mainProgram = "nptstat";
+    mainProgram = "ntpstat";
     maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
   };

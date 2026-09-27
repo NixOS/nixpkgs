@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "helm-s3";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = "helm-s3";
     rev = "v${version}";
-    hash = "sha256-c3UbtNReSfhSAl0ioaP1DUsKNSZ4nng9X8oOPkx0eC4=";
+    hash = "sha256-ivaREH6IiNNfgah45jITzl50miDJ34BlzWwMEdKAbjg=";
   };
 
-  vendorHash = "sha256-VdrlSZpMak3F8CH5aDPDWk3SyX/zbBRmaMyFaeF7fKM=";
+  vendorHash = "sha256-F01BWnCAZ9IJgbHgnmlB2f/MTqu0mWcidCPDdTqzhUg=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
@@ -41,10 +41,10 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-s3 plugin.yaml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that allows to set up a chart repository using AWS S3";
     homepage = "https://github.com/hypnoglow/helm-s3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
 }

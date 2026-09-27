@@ -1,0 +1,94 @@
+diff --git a/numba_cuda/numba/cuda/cuda_paths.py b/numba_cuda/numba/cuda/cuda_paths.py
+index 1c7f8e8..4880614 100644
+--- a/numba_cuda/numba/cuda/cuda_paths.py
++++ b/numba_cuda/numba/cuda/cuda_paths.py
+@@ -101,10 +101,7 @@ def _get_libdevice_path_decision():
+ 
+ 
+ def _get_libdevice_path():
+-    by, out = _get_libdevice_path_decision()
+-    if not out:
+-        return _env_path_tuple(by, None)
+-    return _env_path_tuple(by, out)
++    return _env_path_tuple("Nixpkgs", "@libnvvm@/libdevice/libdevice.10.bc")
+ 
+ 
+ def _cuda_static_libdir():
+@@ -177,13 +174,11 @@ def _get_static_cudalib_dir_path_decision():
+ 
+ 
+ def _get_cudalib_dir():
+-    by, libdir = _get_cudalib_dir_path_decision()
+-    return _env_path_tuple(by, libdir)
++    return _env_path_tuple("Nixpkgs", "@libcudart@/lib")
+ 
+ 
+ def _get_static_cudalib_dir():
+-    by, libdir = _get_static_cudalib_dir_path_decision()
+-    return _env_path_tuple(by, libdir)
++    return _env_path_tuple("Nixpkgs", "@libcudartStatic@/lib")
+ 
+ 
+ def get_system_ctk(*subdirs):
+@@ -425,23 +420,7 @@ def get_current_cuda_target_name():
+ 
+ def _get_include_dir():
+     """Find the root include directory."""
+-    located_header_dir = pathfinder.locate_nvidia_header_directory("cudart")
+-    if located_header_dir is not None:
+-        if not os.path.exists(
+-            os.path.join(
+-                located_header_dir.abs_path, "cuda_device_runtime_api.h"
+-            )
+-        ):
+-            return _env_path_tuple("Unknown", None)
+-        return _env_path_tuple(
+-            located_header_dir.found_via, located_header_dir.abs_path
+-        )
+-    else:
+-        if config.CUDA_INCLUDE_PATH:
+-            return _env_path_tuple(
+-                "CUDA_INCLUDE_PATH Config entry", config.CUDA_INCLUDE_PATH
+-            )
+-    return _env_path_tuple("Unknown", None)
++    return _env_path_tuple("Nixpkgs", "@cudartInclude@")
+ 
+ 
+ def _find_cuda_home_from_lib_path(lib_path):
+@@ -522,12 +501,8 @@ def _get_nvrtc():
+ 
+ 
+ def _get_nvrtc_path():
+-    # the pathfinder API will either find the library or raise
+-    nvrtc = _get_nvrtc()
+-    return _env_path_tuple(nvrtc.found_via, nvrtc.abs_path)
++    return _env_path_tuple("Nixpkgs", "@libnvrtc@/lib/libnvrtc.so")
+ 
+ 
+ def _get_nvvm_path():
+-    # the pathfinder API will either find the library or raise
+-    nvvm = _get_nvvm()
+-    return _env_path_tuple(nvvm.found_via, nvvm.abs_path)
++    return _env_path_tuple("Nixpkgs", "@libnvvm@/lib/libnvvm.so")
+diff --git a/numba_cuda/numba/cuda/cudadrv/nvrtc.py b/numba_cuda/numba/cuda/cudadrv/nvrtc.py
+index 8eb881b..73e05ae 100644
+--- a/numba_cuda/numba/cuda/cudadrv/nvrtc.py
++++ b/numba_cuda/numba/cuda/cudadrv/nvrtc.py
+@@ -115,13 +115,10 @@ def compile(src, name, cc, ltoir=False, lineinfo=False, debug=False):
+     elif nvrtc_ver_major == 13:
+         numba_include = f"{os.path.join(numba_cuda_path, 'include', '13')}"
+ 
+-    cccl_found_header_dir = pathfinder.locate_nvidia_header_directory("cccl")
+-    if cccl_found_header_dir is not None:
+-        # TODO: Not every kernel needs cccl, so it shouldn't
+-        # be added to the include path for every kernel.
+-        # Needs to be flagged during compilation if NRT is included.
+-        cccl_include_dir = cccl_found_header_dir.abs_path
+-        cuda_includes.append(cccl_include_dir)
++    # TODO: Not every kernel needs cccl, so it shouldn't
++    # be added to the include path for every kernel.
++    # Needs to be flagged during compilation if NRT is included.
++    cuda_includes.append("@cccl@")
+ 
+     if config.CUDA_NVRTC_EXTRA_SEARCH_PATHS:
+         extra_includes = config.CUDA_NVRTC_EXTRA_SEARCH_PATHS.split(":")

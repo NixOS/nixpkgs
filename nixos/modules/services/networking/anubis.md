@@ -78,15 +78,57 @@ It is possible to configure default settings for all instances of Anubis, via {o
 ```nix
 {
   services.anubis.defaultOptions = {
-    botPolicy = {
-      dnsbl = false;
-    };
     settings.DIFFICULTY = 3;
   };
 }
 ```
 
-Note that at the moment, a custom bot policy is not merged with the baked-in one. That means to only override a setting
-like `dnsbl`, copying the entire bot policy is required. Check
-[the upstream repository](https://github.com/TecharoHQ/anubis/blob/1509b06cb921aff842e71fbb6636646be6ed5b46/cmd/anubis/botPolicies.json)
-for the policy.
+By default, this module uses Anubis's built-in policy (`botPolicies.yaml`), which includes sensible defaults for bot
+rules, thresholds, status codes, and storage backend. A custom policy file is only generated when you explicitly
+customize the policy via {option}`services.anubis.instances.<name>.policy`.
+
+To add custom bot rules while keeping the defaults:
+
+```nix
+{
+  services.anubis.instances.default = {
+    settings.TARGET = "http://localhost:8000";
+    policy.extraBots = [
+      {
+        name = "my-allowed-bot";
+        user_agent_regex = "MyBot/.*";
+        action = "ALLOW";
+      }
+    ];
+  };
+}
+```
+
+To opt out of the default bot rules entirely and define your own:
+
+```nix
+{
+  services.anubis.instances.default = {
+    settings.TARGET = "http://localhost:8000";
+    policy = {
+      useDefaultBotRules = false;
+      extraBots = [
+        {
+          name = "my-rule";
+          path_regex = ".*";
+          action = "CHALLENGE";
+        }
+      ];
+    };
+  };
+}
+```
+
+::: {.note}
+When you customize the policy, a custom policy file is generated. This file imports the default bot rules via
+`(data)/meta/default-config.yaml` when {option}`services.anubis.instances.<name>.policy.useDefaultBotRules` is enabled,
+but uses Anubis's simpler legacy threshold instead of the 5-tier thresholds from `botPolicies.yaml`. If you need custom
+thresholds, specify them in {option}`services.anubis.instances.<name>.policy.settings`.
+:::
+
+See [the upstream documentation](https://anubis.techaro.lol/docs/admin/policies) for all available policy options.

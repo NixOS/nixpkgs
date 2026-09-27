@@ -16,14 +16,14 @@
   udsSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conserver";
   version = "8.2.7";
 
   src = fetchFromGitHub {
     owner = "bstansell";
     repo = "conserver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LiCknqitBoa8E8rNMVgp1004CwkW8G4O5XGKe4NfZI8=";
   };
 
@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
       --replace-fail "@INSTALL_PROGRAM@ -s" "@INSTALL_PROGRAM@"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.conserver.com/";
     description = "Application that allows multiple users to watch a serial console at the same time";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
-}
+})

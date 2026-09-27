@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python,
 
   # build-system
@@ -41,15 +41,14 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.12.0";
+  version = "65.19.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-LM9XU8oMzg2WlYnwPmmZY+8gzZWT1br2ciZ7gCTbH7I=";
+    hash = "sha256-hTZe4OWMvTxqhgU95BXPqHCbxRnfRJ/f3gxAJWDYgHY=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -69,6 +68,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless = [
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib

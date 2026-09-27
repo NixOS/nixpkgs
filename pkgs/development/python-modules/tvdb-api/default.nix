@@ -25,10 +25,10 @@ buildPythonPackage {
   # requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple to use TVDB (thetvdb.com) API in Python";
     homepage = "https://github.com/dbr/tvdb_api";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

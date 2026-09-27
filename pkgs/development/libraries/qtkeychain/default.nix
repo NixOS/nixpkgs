@@ -11,19 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = version;
-    sha256 = "sha256-/gdozAJbjaaCcttQED2PixaFNRDZOXbBIoV9QLexNUg=";
+    sha256 = "sha256-6Aw+hy3WCTr3iEiZns7aH82nkVSG/KMqEA2LE0XZ7Zo=";
   };
 
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"
+    "-DBUILD_WITH_QT5=${if lib.versions.major qtbase.version == "5" then "ON" else "OFF"}"
     "-DQT_TRANSLATIONS_DIR=share/qt/translations"
   ];
 

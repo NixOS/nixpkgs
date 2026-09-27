@@ -7,7 +7,6 @@
   hypothesis,
   lib,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
 
   pyproject = true;
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bear";
@@ -63,10 +60,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Twitter API";
     homepage = "https://github.com/bear/python-twitter";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -8,12 +8,12 @@
   igv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "igv";
-  version = "2.19.7";
+  version = "2.19.8";
   src = fetchzip {
-    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
-    sha256 = "sha256-IkzaQAM+s1boEKo/3ShtbUhihrhxLQCTz8/0lzAyYJA=";
+    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor finalAttrs.version}/IGV_${finalAttrs.version}.zip";
+    sha256 = "sha256-WVf/y0+Hk3OIz+hlCTJ81Ui/s6vthFLJWLuBJAOGzaQ=";
   };
 
   installPhase = ''
@@ -38,14 +38,14 @@ stdenv.mkDerivation rec {
     package = igv;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.broadinstitute.org/igv/";
     description = "Visualization tool for interactive exploration of genomic datasets";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.mimame
-      maintainers.rollf
+      lib.maintainers.mimame
+      lib.maintainers.rollf
     ];
   };
-}
+})

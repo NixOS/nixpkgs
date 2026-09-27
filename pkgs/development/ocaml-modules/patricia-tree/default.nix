@@ -1,24 +1,32 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchFromGitHub,
   findlib,
   mdx,
-  qcheck-core,
+  qcheck,
   ppx_inline_test,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "patricia-tree";
-  version = "0.11.0";
+  version = "0.14.0";
+
+  __structuredAttrs = true;
 
   minimalOCamlVersion = "4.14";
+
+  # Fix build with gcc15
+  env = lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "5.0") {
+    NIX_CFLAGS_COMPILE = "-std=gnu11";
+  };
 
   src = fetchFromGitHub {
     owner = "codex-semantics-library";
     repo = "patricia-tree";
-    tag = "v${version}";
-    hash = "sha256-lpmU0KhsyIHxPBiw38ssA7XFEMsRvOT03MByoJG88Xs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rWhVBmeBItRDpQSAeIuDIv9zrP6p1oIs471Bx9KUx1w=";
   };
 
   nativeCheckInputs = [
@@ -28,7 +36,7 @@ buildDunePackage rec {
   checkInputs = [
     mdx
     ppx_inline_test
-    qcheck-core
+    qcheck
   ];
 
   doCheck = true;
@@ -37,8 +45,8 @@ buildDunePackage rec {
     description = "Patricia Tree data structure in OCaml";
     homepage = "https://codex.top/api/patricia-tree/";
     downloadPage = "https://github.com/codex-semantics-library/patricia-tree";
-    changelog = "https://github.com/codex-semantics-library/patricia-tree/releases/tag/v${version}";
+    changelog = "https://github.com/codex-semantics-library/patricia-tree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
-}
+})

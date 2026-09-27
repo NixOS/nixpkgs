@@ -55,7 +55,7 @@ buildGoModule {
 
   tags = [ "embedui" ];
 
-  doCheck = false; # tries to modify filesytem
+  doCheck = false; # tries to modify filesystem
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -77,11 +77,11 @@ buildGoModule {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Experimental fast photo viewer";
     homepage = "https://github.com/SmilyOrg/photofield";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "photofield";
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

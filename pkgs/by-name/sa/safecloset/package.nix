@@ -3,24 +3,26 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  xorg,
+  libxcb,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "safecloset";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
-    rev = "v${version}";
-    hash = "sha256-pTfslMZmP8YzLzTru3b64qQ9qefkPzo9V8/S6eSQBgM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2Mvn2gWYcIotnAOBZnTSFawF9qORCh3Pfce6SVGjO24=";
   };
 
-  cargoHash = "sha256-b0MD30IJRp06qkYsQsiEI7c4ArY3GCSIh8I16/4eom0=";
+  cargoHash = "sha256-l7/bgYpiCBBk1uKL2AQb+3UNXJLHA9AQJVMPs64Ka+Y=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
+    libxcb
   ];
 
   checkFlags = [
@@ -28,12 +30,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=timer::timer_tests::test_timer_reset"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cross-platform secure TUI secret locker";
     homepage = "https://github.com/Canop/safecloset";
-    changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = [ ];
+    changelog = "https://github.com/Canop/safecloset/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "safecloset";
   };
-}
+})

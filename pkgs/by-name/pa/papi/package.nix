@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "papi";
 
   src = fetchurl {
-    url = "http://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
+    url = "https://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-qb/4nM85kV1yngiuCgxqcc4Ou+mEEemi6zyDyNsK85w=";
   };
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icl.utk.edu/papi/";
     description = "Library providing access to various hardware performance counters";
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       costrouc
       zhaofengli
     ];

@@ -9,7 +9,7 @@
   SDL2_net,
   libogg,
   libvorbis,
-  ffmpeg,
+  ffmpeg_7,
   zlib,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     SDL2_net
     libogg
     libvorbis
-    ffmpeg
+    ffmpeg_7
     clunk
     zlib
   ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/KranX/Vangers";
     mainProgram = "vangers";
     platforms = lib.platforms.all;
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
   };
 }

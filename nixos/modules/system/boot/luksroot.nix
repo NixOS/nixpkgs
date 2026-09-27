@@ -199,6 +199,7 @@ let
           while true; do
               echo -n "Passphrase for ${dev.device}: "
               passphrase=
+              ${lib.optionalString (dev.timeout != null) "time_passed=0"}
               while true; do
                   if [ -e /crypt-ramfs/passphrase ]; then
                       echo "reused"
@@ -214,7 +215,7 @@ let
 
                       # and try reading it from /dev/console with a timeout
                       IFS= read -t 1 -r passphrase
-                      if [ -n "$passphrase" ]; then
+                      if [ $? = 0 ]; then
                          ${
                            if luks.reusePassphrases then
                              ''
@@ -229,10 +230,17 @@ let
                          echo
                          break
                       fi
+                      ${lib.optionalString (dev.timeout != null) ''
+                        time_passed=$((time_passed + 1))
+                        if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                          echo "Timeout reached"
+                          poweroff -f
+                        fi
+                      ''}
                   fi
               done
               echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$passphrase" | ${csopen} --key-file=-
+              echo "$passphrase" | ${csopen}
               if [ $? == 0 ]; then
                   echo " - success"
                   ${
@@ -328,6 +336,7 @@ let
                 ${optionalString dev.yubikey.twoFactor ''
                   echo -n "Enter two-factor passphrase: "
                   k_user=
+                  ${lib.optionalString (dev.timeout != null) "time_passed=0"}
                   while true; do
                       if [ -e /crypt-ramfs/passphrase ]; then
                           echo "reused"
@@ -351,6 +360,13 @@ let
                              echo
                              break
                           fi
+                          ${lib.optionalString (dev.timeout != null) ''
+                            time_passed=$((time_passed + 1))
+                            if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                              echo "Timeout reached"
+                              poweroff -f
+                            fi
+                          ''}
                       fi
                   done
                 ''}
@@ -451,6 +467,7 @@ let
             for try in $(seq 3); do
                 echo -n "PIN for GPG Card associated with device ${dev.device}: "
                 pin=
+                ${lib.optionalString (dev.timeout != null) "time_passed=0"}
                 while true; do
                     if [ -e /crypt-ramfs/passphrase ]; then
                         echo "reused"
@@ -474,6 +491,13 @@ let
                            echo
                            break
                         fi
+                        ${lib.optionalString (dev.timeout != null) ''
+                          time_passed=$((time_passed + 1))
+                          if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                            echo "Timeout reached"
+                            poweroff -f
+                          fi
+                        ''}
                     fi
                 done
                 echo -n "Verifying passphrase for ${dev.device}..."
@@ -523,8 +547,22 @@ let
                 ''
               else
                 ''
-                  read -rsp "FIDO2 salt for ${dev.device}: " passphrase
-                  echo
+                  ${lib.optionalString (dev.timeout != null) "time_passed=0"}
+                  echo -n "FIDO2 salt for ${dev.device}: "
+                  while true; do
+                    IFS= read -t 1 -rs passphrase
+                    if [ -n "$passphrase" ]; then
+                      echo
+                      break
+                    fi
+                    ${lib.optionalString (dev.timeout != null) ''
+                      time_passed=$((time_passed + 1))
+                      if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                        echo "Timeout reached"
+                        poweroff -f
+                      fi
+                    ''}
+                  done
                 ''
             }
             ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
@@ -562,27 +600,62 @@ let
       ${dev.postOpenCommands}
     '';
 
-  askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
-    #!/bin/sh
+  askPass =
+    let
+      configHasTimeouts = lib.any (dev: dev.timeout != null) (lib.attrValues luks.devices);
+    in
+    pkgs.writeScriptBin "cryptsetup-askpass" ''
+      #!/bin/sh
 
-    ${commonFunctions}
+      ${commonFunctions}
 
-    while true; do
-        wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
-        device=$(cat /crypt-ramfs/device)
+      get_timeout_for_device() {
+          ${lib.pipe luks.devices [
+            (lib.filterAttrs (name: dev: dev.timeout != luks.timeout))
+            (lib.mapAttrsToList (
+              name: dev: ''
+                if [ "$1" = "${lib.escapeShellArg dev.device}" ]; then
+                    echo "${toString dev.timeout}"
+                    return
+                fi
+              ''
+            ))
+            (lib.concatStringsSep "\n")
+          ]}
+          echo "${builtins.toString luks.timeout}"
+      }
 
-        echo -n "Passphrase for $device: "
-        IFS= read -rs passphrase
-        ret=$?
-        echo
-        if [ $ret -ne 0 ]; then
-          die "End of file reached. Exiting shell."
-        fi
+      while true; do
+          wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
+          device=$(cat /crypt-ramfs/device)
+          ${lib.optionalString configHasTimeouts "time_passed=0"}
+          timeout=$(get_timeout_for_device $device)
 
-        rm /crypt-ramfs/device
-        echo -n "$passphrase" > /crypt-ramfs/passphrase
-    done
-  '';
+          echo -n "Passphrase for $device: "
+          while true; do
+              IFS= read -t 1 -r passphrase
+              ret=$?
+              if [ $ret -eq 1 ]; then
+                  echo
+                  die "End of file reached. Exiting shell."
+              fi
+              if [ -n "$passphrase" ]; then
+                  echo
+                  break
+              fi
+              ${lib.optionalString configHasTimeouts ''
+                time_passed=$((time_passed + 1))
+                if [ $timeout -gt 0 && $time_passed -ge $timeout ]; then
+                    echo "Timeout reached"
+                    poweroff -f
+                fi
+              ''}
+          done
+
+          rm /crypt-ramfs/device
+          echo -n "$passphrase" > /crypt-ramfs/passphrase
+      done
+    '';
 
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
@@ -602,13 +675,24 @@ let
             ++ optional (v.header != null) "header=${v.header}"
             ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
             ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
-            ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+            ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${toString v.keyFileTimeout}s"
             ++ optional (v.tryEmptyPassphrase) "try-empty-password=true";
         in
         "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}"
       ) luks.devices
     )
   );
+
+  systemdStage1HardwareKeyAssertionMessage = opt: ''
+    ${opt} is deprecated, and it is unsupported with systemd stage 1. Support will be removed in 26.11 along with scripted stage 1. Hardware keys in systemd stage 1 are supported with systemd-cryptsetup(8). To migrate, enroll a key in a LUKS slot with systemd-cryptenroll(1). Usually, systemd will automatically detect the configuration at runtime, but if necessary, configure the corresponding crypttab(5) options with boot.initrd.luks.devices.<name>.crypttabExtraOpts.
+
+    Note: After migrating to a new LUKS slot, the old LUKS slot used for the scripted stage 1 implementation should be removed, otherwise it could interfere with falling back to a passphrase prompt in the event the hardware key fails.
+
+    See:
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptsetup.html
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptenroll.html
+    - https://www.freedesktop.org/software/systemd/man/crypttab.html
+  '';
 
 in
 {
@@ -635,7 +719,6 @@ in
       type = types.listOf types.str;
       default = [
         "aes"
-        "aes_generic"
         "blowfish"
         "twofish"
         "serpent"
@@ -647,6 +730,8 @@ in
         "sha512"
         "af_alg"
         "algif_skcipher"
+        "cryptd"
+        "input_leds" # for capslock LED on most keyboards in case decryption requires password
       ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -997,11 +1082,20 @@ in
                   type = with types; listOf singleLineStr;
                   default = [ ];
                   example = [ "_netdev" ];
-                  visible = false;
                   description = ''
                     Only used with systemd stage 1.
 
                     Extra options to append to the last column of the generated crypttab file.
+                  '';
+                };
+
+                timeout = mkOption {
+                  type = types.nullOr types.ints.positive;
+                  default = luks.timeout;
+                  defaultText = "{option}`boot.initrd.luks.timeout`";
+                  description = ''
+                    The amount of time in seconds to wait on the passphrase prompt.
+                    If the timeout is reached, the system will power off.
                   '';
                 };
               };
@@ -1049,6 +1143,15 @@ in
       '';
     };
 
+    boot.initrd.luks.timeout = mkOption {
+      type = types.nullOr types.ints.positive;
+      default = null;
+      description = ''
+        The amount of time in seconds to wait on the passphrase prompt.
+        If the timeout is reached, the system will power off.
+      '';
+    };
+
   };
 
   config = mkIf (luks.devices != { } || luks.forceLuksSupportInInitrd) {
@@ -1089,7 +1192,9 @@ in
       }
       {
         assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
-        message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
+        message = ''
+          boot.initrd.luks.devices.<name>.preLVM has no effect with systemd stage 1. It can be safely removed from your configuration, and systemd will discover LVM devices automatically at runtime, whether they come before or after LUKS. The preLVM option will be removed in 26.11 along with scripted stage 1.
+        '';
       }
       {
         assertion =
@@ -1103,24 +1208,17 @@ in
           -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
         message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
-        message = "systemd stage 1 does not support GPG smartcards yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.gpgSupport";
       }
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-        message = ''
-          systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.fido2Support`.
-          Use systemd-cryptenroll(1) to configure FIDO2 support, and set
-          `boot.initrd.luks.devices.''${DEVICE}.crypttabExtraOpts` as appropriate per crypttab(5)
-          (e.g. `fido2-device=auto`).
-        '';
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.fido2Support";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
-        message = "systemd stage 1 does not support Yubikeys yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.yubikeySupport";
       }
     ];
 
@@ -1135,8 +1233,6 @@ in
     boot.initrd.availableKernelModules = [
       "dm_mod"
       "dm_crypt"
-      "cryptd"
-      "input_leds"
     ]
     ++ luks.cryptoModules
     # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
@@ -1247,42 +1343,58 @@ in
     boot.initrd.systemd.services =
       let
         devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices;
+        devicesWithTimeout = filterAttrs (_: dev: dev.timeout != null) luks.devices;
       in
-      mkIf (clevis.enable && systemd.enable) (
-        mapAttrs' (
-          name: _:
-          nameValuePair "cryptsetup-clevis-${name}" {
-            wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
-            before = [
-              "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
-              "initrd-switch-root.target"
-              "shutdown.target"
-            ];
-            wants = optional clevis.useTang "network-online.target";
-            after = [
-              "systemd-modules-load.service"
-              "tpm2.target"
-            ]
-            ++ optional clevis.useTang "network-online.target";
-            script = ''
-              mkdir -p /clevis-${name}
-              mount -t ramfs none /clevis-${name}
-              umask 277
-              clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
-            '';
-            conflicts = [
-              "initrd-switch-root.target"
-              "shutdown.target"
-            ];
-            unitConfig.DefaultDependencies = "no";
-            serviceConfig = {
-              Type = "oneshot";
-              RemainAfterExit = true;
-              ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
-            };
-          }
-        ) devicesWithClevis
-      );
+      mkMerge [
+        (mkIf (clevis.enable && systemd.enable) (
+          mapAttrs' (
+            name: _:
+            nameValuePair "cryptsetup-clevis-${name}" {
+              wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
+              before = [
+                "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
+                "initrd-switch-root.target"
+                "shutdown.target"
+              ];
+              wants = optional clevis.useTang "network-online.target";
+              after = [
+                "systemd-modules-load.service"
+                "tpm2.target"
+              ]
+              ++ optional clevis.useTang "network-online.target";
+              script = ''
+                mkdir -p /clevis-${name}
+                mount -t ramfs none /clevis-${name}
+                umask 277
+                clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+              '';
+              conflicts = [
+                "initrd-switch-root.target"
+                "shutdown.target"
+              ];
+              unitConfig.DefaultDependencies = "no";
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
+              };
+            }
+          ) devicesWithClevis
+        ))
+
+        (mkIf systemd.enable (
+          mapAttrs' (
+            name: dev:
+            nameValuePair "systemd-cryptsetup@${utils.escapeSystemdPath name}" {
+              overrideStrategy = "asDropin";
+              unitConfig = {
+                JobTimeoutSec = dev.timeout;
+                JobTimeoutAction = "poweroff";
+              };
+            }
+          ) devicesWithTimeout
+        ))
+      ];
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };

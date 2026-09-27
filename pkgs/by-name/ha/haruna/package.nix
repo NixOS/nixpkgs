@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haruna";
-  version = "1.6.0";
+  version = "1.8.1";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${finalAttrs.finalPackage.version}";
-    hash = "sha256-pAFO6zclJNmHD91ady0vlnBg6ebSWMzJq7TZN/uBGnM=";
+    hash = "sha256-JIpaP9Tfw1+RhTqHmNoP7tsSHfELxw7bJBk8oLq6iYQ=";
     domain = "invent.kde.org";
   };
 

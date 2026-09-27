@@ -2,70 +2,105 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # dependencies
   gym,
   gymnasium,
-  torch,
+  packaging,
   tensorboard,
+  torch,
   tqdm,
   wandb,
-  packaging,
+
+  # tests
+  flax,
+  hypothesis,
+  jax,
+  mujoco,
+  optax,
+  pettingzoo,
+  pygame,
+  pymunk,
+  pytest-xdist,
   pytestCheckHook,
+  warp-lang,
+  warp-nn,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skrl";
-  version = "1.4.3";
+  version = "2.1.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = "skrl";
-    tag = version;
-    hash = "sha256-5lkoYAmMIWqK3+E3WxXMWS9zal2DhZkfl30EkrHKpdI=";
+    tag = finalAttrs.version;
+    hash = "sha256-pntQ/7kefi7LLLG1DTKY9Zjlzb0UXiduQCzlX5PkZds=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gym
     gymnasium
-    torch
+    packaging
     tensorboard
+    torch
     tqdm
     wandb
-    packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  doCheck = torch.cudaSupport;
+  pythonImportsCheck = [ "skrl" ];
 
-  pythonImportsCheck = [
-    "skrl"
-    "skrl.agents"
-    "skrl.agents.torch"
-    "skrl.envs"
-    "skrl.envs.torch"
-    "skrl.models"
-    "skrl.models.torch"
-    "skrl.resources"
-    "skrl.resources.noises"
-    "skrl.resources.noises.torch"
-    "skrl.resources.schedulers"
-    "skrl.resources.schedulers.torch"
-    "skrl.trainers"
-    "skrl.trainers.torch"
-    "skrl.utils"
-    "skrl.utils.model_instantiators"
+  nativeCheckInputs = [
+    flax
+    hypothesis
+    jax
+    mujoco
+    optax
+    pettingzoo
+    pygame
+    pymunk
+    pytest-xdist
+    pytestCheckHook
+    warp-lang
+    warp-nn
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Flaky when using pytest-xdist
+    "test_agent"
+
+    # TypeError: The array passed to from_dlpack must have __dlpack__ and __dlpack_device__ methods
+    "test_env"
+    "test_multi_agent_env"
+
+    # OverflowError
+    "test_key"
+
+    # Require GPU access
+    "test_device[cuda]"
+    "test_parse_device[cuda]"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: Can't instantiate abstract class Memory without an implementation for abstract method 'sample'
+    "tests/memories/torch/test_base.py"
+  ];
+
+  meta = {
     description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
-    changelog = "https://github.com/Toni-SM/skrl/releases/tag/${version}";
     homepage = "https://skrl.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    downloadPage = "https://github.com/Toni-SM/skrl";
+    changelog = "https://github.com/Toni-SM/skrl/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

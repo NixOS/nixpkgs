@@ -1,43 +1,43 @@
 {
   lib,
-  stdenv,
+  pkgsStatic,
   fetchFromGitHub,
-  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.18.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
-    rev = "v${version}";
-    hash = "sha256-hAm9dHxsIR5cJlZHvSUcj3FXBIF9g7klJ2gSg9vVQcE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xAuKhgnH5j5NioXDivwpaZFKkkTzGWJglbmVw5koaqE=";
   };
 
-  cargoHash = "sha256-iULpW3DiEUmKz5OKUeWfYNAfhrEECd2XijtYqfcbjB0=";
+  cargoHash = "sha256-hNZhL+kZgm2pX28mKdCgpGyBexI33idlEfPB8OmgGOY=";
 
-  RUSTFLAGS = "--cfg tokio_unstable";
-
-  checkFlags = [
-    # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
-    "--skip=copy::copy_tests::check_default_mode"
-    "--skip=test_weird_permissions"
-    "--skip=test_edge_case_special_permissions"
-    # these tests require network access to determine local IP address
-    "--skip=test_remote"
+  # Enable upstream's Nix sandbox test filter without replacing nixpkgs'
+  # target-specific Rust flags. Keep this config identical in both phases so
+  # Cargo can reuse the release artifacts built before the checks.
+  cargoBuildFlags = [
+    "--config"
+    ''target.'cfg(all())'.rustflags=["--cfg","tokio_unstable","--cfg","rcp_nix_sandbox"]''
   ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  # fixtures that mutate process-global admission, congestion, hook and file-descriptor
+  # state are only supported under nextest's process isolation or single-threaded libtest
+  dontUseCargoParallelTests = true;
 
   meta = {
-    changelog = "https://github.com/wykurz/rcp/releases/tag/v${version}";
+    changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";
     description = "Tools to efficiently copy, remove and link large filesets";
     homepage = "https://github.com/wykurz/rcp";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "rcp";
     maintainers = with lib.maintainers; [ wykurz ];
-    # Building procfs on an for a unsupported platform. Currently only linux and android are supported
-    # (Your current target_os is macos)
-    broken = stdenv.hostPlatform.isDarwin;
+    # procfs only supports Linux and Android
+    broken = pkgsStatic.stdenv.hostPlatform.isDarwin;
   };
-}
+})

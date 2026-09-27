@@ -11,14 +11,14 @@
   watch,
 }:
 
-rustPlatform.buildRustPackage (attrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tattoy";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "tattoy-org";
     repo = "tattoy";
-    tag = "tattoy-v${attrs.version}";
+    tag = "tattoy-v${finalAttrs.version}";
     hash = "sha256-44rXygZVbwwC/jOB69iHydsjYr/WeVU4Eky3BPqJzyc=";
   };
 
@@ -40,15 +40,21 @@ rustPlatform.buildRustPackage (attrs: {
     watch
   ];
 
-  checkFlags = [
-    # e2e tests currently fail
-    # see https://github.com/tattoy-org/tattoy/pull/104/files for discussion
-    # re-enable after PR merged
-    "--skip e2e"
-    "--skip gpu"
-  ];
-
   useNextest = true;
+
+  checkFlags =
+    lib.concatMap
+      (t: [
+        "--skip"
+        "${t}"
+      ])
+      [
+        # e2e tests currently fail
+        # see https://github.com/tattoy-org/tattoy/pull/104/files for discussion
+        # re-enable after PR merged
+        "e2e"
+        "gpu"
+      ];
 
   meta = {
     description = "Text-based compositor for modern terminals";

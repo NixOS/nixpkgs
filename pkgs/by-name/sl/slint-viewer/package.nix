@@ -1,30 +1,59 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchCrate,
-  qt6,
+
+  fontconfig,
   libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  pkg-config,
+  qt6,
+  wayland,
+
+  autoPatchelfHook,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.13.1";
+  version = "1.18.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-I3iwnxft0z6kXdlHIaZUqufqJP3XrF2h+l5Y4EgLPr0=";
+    hash = "sha256-MlYBkJl8MupzpTfyjmlLlfpYqFWHg3lll7x87leB5iY=";
   };
 
-  cargoHash = "sha256-lxxiNa1xqZDtSx19h1MxGOhK/N14fv5k+miaaNpskFc=";
+  cargoHash = "sha256-qEXy0uaQFY5fu5Gtpsk+7oW6jtFTK4N/y4aK8ruplI8=";
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+    fontconfig
     libGL
   ];
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  buildFeatures = [ "gettext" ];
+
+  nativeBuildInputs = [
+    pkg-config
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+
+  # stolen from the surfer package
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libx11
+    libxcursor
+    libxi
+    libxkbcommon
+    wayland
+  ];
 
   # There are no tests
   doCheck = false;

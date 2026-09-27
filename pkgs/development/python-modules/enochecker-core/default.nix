@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "enochecker-core";
   version = "0.10.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -23,11 +20,11 @@ buildPythonPackage rec {
   # no tests upstream
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Base library for enochecker libs";
     homepage = "https://github.com/enowars/enochecker_core";
     changelog = "https://github.com/enowars/enochecker_core/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fwc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fwc ];
   };
 }

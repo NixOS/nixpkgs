@@ -10,12 +10,12 @@
   json-glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitlbee-facebook";
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "bitlbee";
     repo = "bitlbee-facebook";
     sha256 = "1qiiiq17ybylbhwgbwsvmshb517589r8yy5rsh1rfaylmlcxyy7z";
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Facebook protocol plugin for bitlbee";
     homepage = "https://github.com/bitlbee/bitlbee-facebook";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ toonn ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ toonn ];
+    platforms = lib.platforms.linux;
   };
-}
+})

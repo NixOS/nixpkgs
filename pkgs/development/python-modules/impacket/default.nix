@@ -15,15 +15,14 @@
   pytestCheckHook,
   six,
 }:
-
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0JpSvvxU24IDM2BWfetwxIoIGBPQiiIhstGiWc1+Tjo=";
+    hash = "sha256-7ZHIAra+/2VGr9ImKUK8GhiLRnH7kex1HUah1m0ows8=";
   };
 
   pythonRelaxDeps = [ "pyopenssl" ];
@@ -46,7 +45,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "impacket" ];
+  pythonImportsCheck = [
+    "impacket"
+    "impacket.msada_guids"
+  ];
 
   disabledTestPaths = [
     # Skip all RPC related tests
@@ -54,14 +56,14 @@ buildPythonPackage rec {
     "tests/SMB_RPC/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network protocols Constructors and Dissectors";
     homepage = "https://github.com/SecureAuthCorp/impacket";
     changelog =
       "https://github.com/fortra/impacket/releases/tag/impacket_"
-      + replaceStrings [ "." ] [ "_" ] version;
+      + lib.replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
-    license = licenses.free;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

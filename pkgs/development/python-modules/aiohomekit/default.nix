@@ -8,30 +8,25 @@
   bleak-retry-connector,
   chacha20poly1305,
   chacha20poly1305-reuseable,
-  commentjson,
   cryptography,
   fetchFromGitHub,
   orjson,
   poetry-core,
-  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohomekit";
-  version = "3.2.20";
+  version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
-    tag = version;
-    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
+    tag = finalAttrs.version;
+    hash = "sha256-ozVIT9JGi4rcW3LRcp1QR1kj0gl5APLv9y4Imqe99yE=";
   };
 
   build-system = [ poetry-core ];
@@ -44,14 +39,13 @@ buildPythonPackage rec {
     bleak-retry-connector
     chacha20poly1305
     chacha20poly1305-reuseable
-    commentjson
     cryptography
     orjson
     zeroconf
   ];
 
   nativeCheckInputs = [
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-aiohttp
     pytestCheckHook
   ];
 
@@ -62,16 +56,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohomekit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that implements the HomeKit protocol";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aiohomekitctl";
   };
-}
+})

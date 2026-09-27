@@ -2,31 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   python-dateutil,
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dateutils";
   version = "0.6.12";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "dateutils";
+    inherit (finalAttrs) version;
     hash = "sha256-A92QvLIVQb1OtLATY35PG1+USIHEbMbktnpgWeNw4/E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     pytz
   ];
 
   pythonImportsCheck = [ "dateutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with datetime objects";
     homepage = "https://github.com/jmcantrell/python-dateutils";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

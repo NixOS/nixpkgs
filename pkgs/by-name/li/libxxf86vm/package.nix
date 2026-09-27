@@ -3,15 +3,15 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
   writeScript,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxxf86vm";
-  version = "1.1.6";
+  version = "1.1.7";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXxf86vm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lq9BTHPOHVRJrQS+f58n+oMw+ES23ahD7yLj4b77PuM=";
+    hash = "sha256-rlDA9mngr1pnzEzQ9U8h1kpk0mYK+IPoDpXT/lG5Rdg=";
   };
 
   strictDeps = true;
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 

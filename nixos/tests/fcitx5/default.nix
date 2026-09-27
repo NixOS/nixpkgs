@@ -30,14 +30,14 @@
         enable = true;
         type = "fcitx5";
         fcitx5.addons = [
-          pkgs.fcitx5-chinese-addons
+          pkgs.qt6Packages.fcitx5-chinese-addons
           pkgs.fcitx5-hangul
           pkgs.fcitx5-m17n
           pkgs.fcitx5-mozc
         ];
         fcitx5.settings = {
           globalOptions = {
-            "Hotkey"."EnumerateSkipFirst" = "False";
+            "Hotkey"."EnumerateSkipFirst" = false;
             "Hotkey/TriggerKeys"."0" = "Control+space";
             "Hotkey/EnumerateForwardKeys"."0" = "Alt+Shift_L";
             "Hotkey/EnumerateBackwardKeys"."0" = "Alt+Shift_R";
@@ -81,7 +81,7 @@
       user = nodes.machine.users.users.alice;
       xauth = "${user.home}/.Xauthority";
     in
-    ''
+    /* python */ ''
       start_all()
 
       machine.wait_for_x()

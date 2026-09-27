@@ -51,10 +51,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mir_eval" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common metrics for common audio/music processing tasks";
     homepage = "https://github.com/craffel/mir_eval";
-    license = licenses.mit;
-    maintainers = with maintainers; [ carlthome ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ carlthome ];
   };
 }

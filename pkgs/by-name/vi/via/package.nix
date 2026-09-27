@@ -12,7 +12,7 @@ let
     name = "via-${version}-linux.AppImage";
     sha256 = "sha256-+uTvmrqHK7L5VA/lUHCZZeRYPUrcVA+vjG7venxuHhs=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -33,12 +33,12 @@ appimageTools.wrapType2 {
     echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another keyboard configurator";
     homepage = "https://caniusevia.com/";
     # Upstream claims to be GPL-3 but doesn't release source code
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "via";
   };

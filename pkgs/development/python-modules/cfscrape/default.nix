@@ -3,12 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "cfscrape";
   version = "2.1.1";
-  format = "setuptools";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "Anorov";
     repo = "cloudflare-scrape";
@@ -16,15 +18,17 @@ buildPythonPackage {
     hash = "sha256-uO8lBZonjk+mlFYoNSaz+GIN/W9yf8VL9OQ7MKfsMgI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Anorov/cloudflare-scrape";
     description = "Python module to bypass Cloudflare's anti-bot page";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

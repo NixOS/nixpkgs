@@ -6,12 +6,22 @@
 
 appimageTools.wrapType2 rec {
   pname = "xlights";
-  version = "2025.12";
+  version = "2026.16";
 
   src = fetchurl {
     url = "https://github.com/smeighan/xLights/releases/download/${version}/xLights-${version}-x86_64.AppImage";
-    hash = "sha256-INB4x2iCzjpURL7VhugCcYo+X6p6aKIY5Dx5dy1ZjJ8=";
+    hash = "sha256-JadeIsb2LoAYCW+K09dzpYpxb0deVyUrYLoXThiTFuQ=";
   };
+
+  appimageContents = appimageTools.extract { inherit pname version src; };
+
+  extraInstallCommands = ''
+    install -m 444 -D ${appimageContents}/xlights.desktop $out/share/applications/xlights.desktop
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/xlights.png \
+      $out/share/icons/hicolor/256x256/apps/xlights.png
+    substituteInPlace $out/share/applications/xlights.desktop \
+      --replace-fail 'Exec=xLights' 'Exec=xlights'
+  '';
 
   meta = {
     description = "Sequencer for lights with USB and E1.31 drivers";

@@ -23,6 +23,8 @@ in
     services.spotifyd = {
       enable = lib.mkEnableOption "spotifyd, a Spotify playing daemon";
 
+      package = lib.mkPackageOption pkgs "spotifyd" { };
+
       config = lib.mkOption {
         default = "";
         type = lib.types.lines;
@@ -43,6 +45,7 @@ in
           <https://docs.spotifyd.rs/configuration/index.html#config-file>.
         '';
       };
+
     };
   };
 
@@ -64,7 +67,7 @@ in
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";
       serviceConfig = {
-        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
+        ExecStart = "${cfg.package}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
         Restart = "always";
         RestartSec = 12;
         DynamicUser = true;

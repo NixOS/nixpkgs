@@ -5,7 +5,7 @@
   writeShellScriptBin,
   xdg-utils,
 
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   cmake,
   ninja,
@@ -23,6 +23,8 @@
   os-prober,
   xkeyboard_config,
 
+  extraWrapperArgs ? [ ],
+
   # passthru.tests
   calamares-nixos,
 }:
@@ -36,14 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calamares";
-  version = "3.4.0";
+  version = "3.4.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Calamares";
     repo = "calamares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qk+GnonuEWK3hXjmwxf9awgxr6dGunShJgwmkT78qKM=";
+    hash = "sha256-/foh3NKXTaNmP+x18t+GeAz7qv4e/TyspSEln8mMH4I=";
   };
 
   patches = [
@@ -54,10 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't create users - they're already created by the installer
     # FIXME: upstream this?
     ./dont-create-users.patch
-
-    # Allow QML to write to GlobalStorage
-    # FIXME: upstream this
-    ./let-qml-write-to-global-storage.patch
   ];
 
   nativeBuildInputs = [
@@ -85,10 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # this is called via pkexec, which does not resolve symlinks, so the policy
-    # needs to point at the symlinked path
     substituteInPlace io.calamares.calamares.policy \
-      --replace-fail /usr/bin/calamares /run/current-system/sw/bin/calamares
+      --replace-fail /usr/bin/calamares $out/bin/calamares
 
     substituteInPlace src/modules/locale/SetTimezoneJob.cpp src/libcalamares/locale/TimeZone.cpp \
       --replace-fail /usr/share/zoneinfo ${tzdata}/share/zoneinfo
@@ -111,25 +106,25 @@ stdenv.mkDerivation (finalAttrs: {
         xdg-open-nixos
       ]
     }"
-  ];
+  ]
+  ++ extraWrapperArgs;
 
   passthru.tests = {
     inherit calamares-nixos;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       bsd2
       cc0
     ];
-    maintainers = with maintainers; [
-      manveru
+    maintainers = with lib.maintainers; [
       vlinkz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "calamares";
   };
 })

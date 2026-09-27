@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sendgrid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for SendGrid";
     homepage = "https://github.com/sendgrid/sendgrid-python";
     changelog = "https://github.com/sendgrid/sendgrid-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

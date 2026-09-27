@@ -4,7 +4,6 @@
   libmysqlclient,
   packaging,
   lib,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "mariadb";
   version = "1.1.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";

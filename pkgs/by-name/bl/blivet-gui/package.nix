@@ -22,7 +22,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "blivet-gui";
   version = "2.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "storaged-project";

@@ -12,10 +12,10 @@
   fontconfig,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libxkbcommon,
   vulkan-loader,
   wayland,
@@ -33,16 +33,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ludusavi";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tN0z9kSiSnbto8SyZE3y3pGBJObBksoRxAIKC5OBAxc=";
+    hash = "sha256-S2yN0WLG2tUxkqR9xe466VE+QgDQcSNgyNjvjTjTY7Q=";
   };
 
-  cargoHash = "sha256-1zoG0UymnEMHMnVaboSDqYMZsObuuzxtwsjCfjeZaa0=";
+  cargoHash = "sha256-nRqyzRl10xRMLR5hxSaaMxBArgScoV2/iCvMkN9zH/4=";
 
   dontWrapGApps = true;
 
@@ -57,10 +57,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
-    libXcursor
-    libXrandr
-    libXi
+    libx11
+    libxcursor
+    libxrandr
+    libxi
     cairo
     pango
     atkmm
@@ -93,10 +93,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         bzip2
         fontconfig
         freetype
-        libX11
-        libXcursor
-        libXrandr
-        libXi
+        libx11
+        libxcursor
+        libxrandr
+        libxi
         libxkbcommon
         vulkan-loader
         wayland

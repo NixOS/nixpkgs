@@ -10,16 +10,16 @@
   distutils,
 }:
 
-buildPythonPackage rec {
-  version = "4.12.0";
+buildPythonPackage (finalAttrs: {
+  version = "5.3.0";
   pname = "pynest2d";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "pynest2d";
-    rev = version;
-    hash = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
+    tag = finalAttrs.version;
+    hash = "sha256-J7QFzWvqOaUx4Gfi5VLLWi0hJIyfYc0Htu2CM7ze6xA=";
   };
 
   propagatedBuildInputs = [
@@ -33,18 +33,16 @@ buildPythonPackage rec {
     sip4
   ];
 
-  strictDeps = true;
-
-  CLIPPER_PATH = "${clipper.out}";
+  env.CLIPPER_PATH = clipper.out;
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

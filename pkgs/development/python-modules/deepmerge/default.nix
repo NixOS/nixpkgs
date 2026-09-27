@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "2.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XD2GCB++vQTdXeA2JqBge4CamPtsy6V3C2JGb+lA/yA=";
+    hash = "sha256-NbOaTLks8yjW7KYcu/ZfaKN8LOswhfD4U8uy5SpZ/CM=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepmerge" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/toumorokoshi/deepmerge/releases/tag/v${version}";
     description = "Toolset to deeply merge python dictionaries";
     downloadPage = "https://github.com/toumorokoshi/deepmerge";
     homepage = "http://deepmerge.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

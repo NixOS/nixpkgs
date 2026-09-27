@@ -13,7 +13,7 @@
   vivisect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "viv-utils";
   version = "0.8.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YyD6CFA8lhc1XU7pckKv3th422ssYZkRJ/JfQD5e65c=";
   };
 
@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "viv_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
-    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -9,18 +9,18 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-duplicates";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "cargo-duplicates";
-    rev = "v${version}";
-    hash = "sha256-JzS1+BHSCEcZM5MokbQsck/AGJ7EeSwbzjNz0uLQsgE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bHVqAZetPrbWKhiMRaiCenOCK0ZPiF1F2D3Wa6+mrzw=";
   };
 
-  cargoHash = "sha256-58H6wFToCgW+J7QYXb6W6BiCFUVIG8MmxgZtWnPNkrI=";
+  cargoHash = "sha256-v7SEXhWyL+BCLWucYXG4dAoMqL57bPTKAUtQKCNu6FQ=";
 
   nativeBuildInputs = [
     curl
@@ -34,13 +34,13 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";
     mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

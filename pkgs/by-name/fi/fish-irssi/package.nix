@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation {
   pname = "fish-irssi";
-  version = "unstable-2023-08-05";
+  version = "1.6-unstable-2023-08-05";
 
   src = fetchFromGitHub {
     owner = "falsovsky";
@@ -33,10 +33,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DIRSSI_INCLUDE_PATH:PATH=${irssi}/include" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

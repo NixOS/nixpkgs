@@ -1,36 +1,45 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   testers,
   nix-update-script,
+  go-md2man,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.1.3";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pBVbzrTy/IWIo6WlhM1qgowfxSU31awyHcRDHNArBMo=";
+    hash = "sha256-XsFuvWur9KaZaIT4IkgiXRtom/Hcn6xnJt8lbvpYu94=";
   };
 
-  cargoHash = "sha256-DoQIJCs36ZmTxdsDCzquKAeOSIUBbo2V+DTx68FZiu4=";
+  cargoHash = "sha256-QZxEVHd1RoN7Qxouj5cScvbK6Y0FLMH3zXKr07/Cyes=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildAndTestSubdir = "angrr";
+
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
+  postBuild = ''
+    mkdir --parents build/{man-pages,shell-completions}
+    cargo xtask man-pages --out build/man-pages
+    cargo xtask shell-completions --out build/shell-completions
+  '';
   postInstall = ''
     install -m400 -D ./direnv/angrr.sh $out/share/direnv/lib/angrr.sh
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installManPage build/man-pages/*
     installShellCompletion --cmd angrr \
-      --bash <($out/bin/angrr completion bash) \
-      --fish <($out/bin/angrr completion fish) \
-      --zsh  <($out/bin/angrr completion zsh)
+      --bash build/shell-completions/angrr.bash \
+      --fish build/shell-completions/angrr.fish \
+      --zsh  build/shell-completions/_angrr
   '';
 
   passthru = {
@@ -44,9 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Tool for auto Nix GC roots retention";
+    description = "Auto Nix GC Root Retention";
     homepage = "https://github.com/linyinfeng/angrr";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yinfeng ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "angrr";

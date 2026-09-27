@@ -11,14 +11,14 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libieee1284";
   version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "twaugh";
     repo = "libieee1284";
-    rev = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "0wfv1prmhhpyll9l4g1ij3im7hk9mm96ydw3l9fvhjp3993cdn2x";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel port communication library";
     mainProgram = "libieee1284_test";
     homepage = "http://cyberelk.net/tim/software/libieee1284/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

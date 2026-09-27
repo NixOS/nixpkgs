@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   spglib,
   numpy,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "sumo";
   version = "2.3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SMTG-UCL";

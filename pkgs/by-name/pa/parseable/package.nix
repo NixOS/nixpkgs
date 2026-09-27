@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rdkafka,
   pkg-config,
   fetchFromGitHub,
@@ -9,23 +10,23 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parseable";
-  version = "2.4.0";
+  version = "2.5.10";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = "parseable";
-    tag = "v${version}";
-    hash = "sha256-0PyXrwFh2YroxeAPL2GCZiOUfzFLThN0ZnL0a7BDnfw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Asb6064TqvL9kNkWBMj4Z+1j1yIM+iBWsN+R5EuMOVA=";
   };
 
-  LOCAL_ASSETS_PATH = fetchzip {
-    url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${version}/build.zip";
-    hash = "sha256-7uJvWAGDexzWhnm1ofPHzoRD8Q70fQ+eyUPpQHcWv4o=";
+  env.LOCAL_ASSETS_PATH = fetchzip {
+    url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${finalAttrs.version}/build.zip";
+    hash = "sha256-gWzfucetsJJSSjI9nGm7I8xLo0t1VKb4AertiEGuLWA=";
   };
 
-  cargoHash = "sha256-VAdivS7zxoFrjeTnRGbUqtEgCj73iF29ZiCUfzdP1Yo=";
+  cargoHash = "sha256-1K+EY8YkAjLiWfqUkgkqQOveXjHzraEV51zz3gwGMNs=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,17 +35,21 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "rdkafka/dynamic-linking" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  # Disables tests that rely on hostnames.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=generate_correct_path_with_current_time_and"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Disk less, cloud native database for logs, observability, security, and compliance";
     homepage = "https://www.parseable.com";
-    changelog = "https://github.com/parseablehq/parseable/releases/tag/v${version}";
+    changelog = "https://github.com/parseablehq/parseable/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ilyakooo0 ];
     mainProgram = "parseable";
   };
-}
+})

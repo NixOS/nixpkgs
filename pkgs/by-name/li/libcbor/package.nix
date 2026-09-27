@@ -7,20 +7,20 @@
 
   # for passthru.tests
   libfido2,
-  mysql80,
+  mysql84,
   openssh,
   systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ePgVR7VHXWKqOShuAEQG3BJ08W2aZS/vfcPUCqTw7X4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zjajNtj4jKbt3pLjfLrgtYljyMDYJtnzAC5JPdt+Wys=";
   };
 
   outputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {
-    inherit libfido2 mysql80;
+    inherit libfido2 mysql84;
     openssh = (openssh.override { withFIDO = true; });
     systemd = (
       systemd.override {
@@ -60,10 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/PJK/libcbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

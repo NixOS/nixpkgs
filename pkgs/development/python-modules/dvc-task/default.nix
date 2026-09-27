@@ -9,26 +9,27 @@
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   setuptools-scm,
   shortuuid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-task";
   version = "0.40.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-task";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bRQJLncxCigYPEtlvKjUtKqhcBkB7erEtoJQ30yGamE=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     celery
@@ -53,11 +54,11 @@ buildPythonPackage rec {
     "celery_setup_worker"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Celery task queue used in DVC";
     homepage = "https://github.com/iterative/dvc-task";
-    changelog = "https://github.com/iterative/dvc-task/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/dvc-task/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

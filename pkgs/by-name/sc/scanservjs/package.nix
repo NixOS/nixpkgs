@@ -1,87 +1,84 @@
 {
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
   fetchNpmDeps,
-  nodejs_20,
-  replaceVars,
+  buildNpmPackage,
+  nodejs,
+  npmHooks,
+  nixosTests,
 }:
 
-let
-  # Build fails on node 22, presumably because of esm.
-  # https://github.com/NixOS/nixpkgs/issues/371649
-  nodejs = nodejs_20;
-  version = "2.27.1";
+buildNpmPackage (finalAttrs: {
+  pname = "scanservjs";
+  version = "3.3.0";
+
   src = fetchFromGitHub {
     owner = "sbs20";
     repo = "scanservjs";
-    # rev = "v${version}";
-    # 2.27.1 doesn't have a tag
-    rev = "b15adc6f97fb152fd9819371bb1a9b8118baf55b";
-    hash = "sha256-ne9fEF/eurWPXzmJQzBn5jiy+JgxMWiCXsOdmu2fj6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UyNSEjwqL+DHTJWgJ6lrNXfPuNJv2H3rUtpRqdNeEkg=";
   };
 
-  depsHashes = {
-    server = "sha256-M8t+TrE+ntZaI9X7hEel94bz34DPtW32n0KKMSoCfIs=";
-    client = "sha256-C31WBYE8ba0t4mfKFAuYWrCZtSdN7tQIYmCflDRKuBM=";
+  appServerNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-server-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-server";
+    hash = "sha256-zp8gguoc+OdSABCOKUzLMuKIrnuYVX39kCD8b7ZTIgQ=";
   };
 
-  serverDepsForClient = fetchNpmDeps {
-    inherit src nodejs;
-    sourceRoot = "${src.name}/packages/server";
-    name = "scanservjs";
-    hash = depsHashes.server or lib.fakeHash;
+  appUiNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-ui-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-ui";
+    hash = "sha256-/30JnlN66N3pWQHHxeGG6k0nW3miFfiYlb3Snx2BP6E=";
   };
 
-  # static client files
-  client = buildNpmPackage {
-    pname = "scanservjs-client";
-    inherit version src nodejs;
+  npmDepsHash = "sha256-BNYRDVGC7wFdv7VKARZee2ea1QcLSX3iwoCGGcsVtag=";
 
-    sourceRoot = "${src.name}/packages/client";
-    npmDepsHash = depsHashes.client or lib.fakeHash;
+  patches = [
+    ./nix-compatibility.patch
+  ];
 
-    preBuild = ''
-      cd ../server
-      chmod +w package-lock.json . /build/source/
-      npmDeps=${serverDepsForClient} npmConfigHook
-      cd ../client
-    '';
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+  ];
 
-    env.NODE_OPTIONS = "--openssl-legacy-provider";
-
-    dontNpmInstall = true;
-    installPhase = ''
-      mv /build/source/dist/client $out
-    '';
-  };
-
-in
-buildNpmPackage {
-  pname = "scanservjs";
-  inherit version src nodejs;
-
-  sourceRoot = "${src.name}/packages/server";
-  npmDepsHash = depsHashes.server or lib.fakeHash;
-
-  # can't use "patches" since they change the server deps' hash for building the client
-  # (I don't want to maintain one more hash)
-  preBuild = ''
-    chmod +w /build/source
-    patch -p3 <${
-      replaceVars ./decouple-from-source-tree.patch {
-        inherit client;
-      }
-    }
-    substituteInPlace src/api.js --replace 'NIX_OUT_PLACEHOLDER' "$out"
+  preConfigure = ''
+    npmRoot=app-server npmDeps=${finalAttrs.appServerNpmDeps} npmConfigHook
+    npmRoot=app-ui npmDeps=${finalAttrs.appUiNpmDeps} npmConfigHook
   '';
 
-  postInstall = ''
+  postBuild = ''
+    # Install runtime dependencies
+    npm_config_cache=${finalAttrs.appServerNpmDeps} npm install \
+      --prefix ./dist \
+      --offline \
+      --production \
+      --ignore-scripts
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf $out/lib
+
+    mkdir -p $out/lib
+    cp -r dist/* $out/lib
+
+    substituteInPlace "$out/lib/server/express-configurer.js" \
+      --replace-fail "@client@" "$out/lib/client"
+
     mkdir -p $out/bin
     makeWrapper ${lib.getExe nodejs} $out/bin/scanservjs \
       --set NODE_ENV production \
-      --add-flags "'$out/lib/node_modules/scanservjs-api/src/server.js'"
+      --add-flags "$out/lib/server/server.js"
+
+    runHook postInstall
   '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";
@@ -92,4 +89,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ chayleaf ];
     platforms = lib.platforms.linux;
   };
-}
+})

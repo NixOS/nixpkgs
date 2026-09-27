@@ -2,17 +2,15 @@
   buildDunePackage,
   eio,
   linol,
-  yojson,
 }:
 
 buildDunePackage {
   pname = "linol-eio";
-  inherit (linol) version src;
+  inherit (linol) version src patches;
 
   propagatedBuildInputs = [
     eio
     linol
-    yojson
   ];
 
   meta = linol.meta // {

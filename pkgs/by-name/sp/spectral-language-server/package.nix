@@ -5,7 +5,7 @@
   fetchYarnDeps,
   yarnConfigHook,
   fetchFromGitHub,
-  typescript,
+  typescript_7,
   jq,
   fetchpatch,
 }:
@@ -29,7 +29,7 @@ let
     };
 
     nativeBuildInputs = [
-      typescript
+      typescript_7
       jq
       yarnConfigHook
     ];
@@ -37,6 +37,8 @@ let
     postPatch = ''
       cp server/tsconfig.json server/tsconfig.json.bak
       jq '.compilerOptions += {"module": "NodeNext", "moduleResolution": "NodeNext"}' server/tsconfig.json.bak > server/tsconfig.json
+      cp tsconfig.base.json tsconfig.base.json.bak
+      jq 'del(.compilerOptions.baseUrl)' tsconfig.base.json.bak > tsconfig.base.json
     '';
 
     buildPhase = ''
@@ -55,10 +57,10 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/stoplightio/vscode-spectral";
       description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   });
 in
@@ -99,11 +101,11 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/luizcorreia/spectral-language-server";
     description = "Awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
-    maintainers = with maintainers; [ momeemt ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
     mainProgram = "spectral-language-server";
   };
 }

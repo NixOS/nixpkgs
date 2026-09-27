@@ -11,7 +11,7 @@
   cmake,
   gmp,
   onetbb,
-  LAStools,
+  lastools,
   eigen,
   mpfr,
   numpy,
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 
+  env.CGAL_PYTHON_MODULE_VERSION = version;
+
   dontUseCmakeConfigure = true;
 
   build-system = [
@@ -60,7 +62,7 @@ buildPythonPackage rec {
     eigen
   ]
   ++ lib.optionals withLAS [
-    LAStools
+    lastools
   ];
 
   dependencies = [
@@ -74,6 +76,12 @@ buildPythonPackage rec {
     for file in $out/${python.sitePackages}/CGAL/_*.so; do
       patchelf "$file" --add-rpath $out/${python.sitePackages}/CGAL/_lib
     done
+  '';
+
+  preCheck = ''
+    # CGAL_Alpha_wrap_3.alpha_wrap_3(...) fails with a segmentation fault
+    # https://github.com/CGAL/cgal-swig-bindings/issues/306
+    rm examples/python/test_aw3.py
   '';
 
   checkPhase = ''

@@ -1,13 +1,13 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "ollama-vulkan";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes.vulkan =
     { ... }:
     {
       services.ollama.enable = true;
-      services.ollama.acceleration = "vulkan";
+      services.ollama.package = pkgs.ollama-vulkan;
     };
 
   testScript = ''

@@ -2,7 +2,7 @@
 { config, pkgs, ... }:
 let
   inherit (pkgs) lib;
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
   vlanIfs = lib.range 1 (lib.length config.virtualisation.vlans);
 in
 {

@@ -15,8 +15,8 @@
   gnused,
   graphicsmagick,
   jq,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libjpeg,
   libpng,
   libtiff,
@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.6.2";
+  version = "3.7.6";
 
   outputs = [
     "out"
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "gmic";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-KiX7yHwuy2AWLqqmiHz9YhbvRBEusE9TuXKtaA9YsME=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-hewDoraw6DCmj1EryZrODFDqzbKI2RhgRuXAop+pg7c=";
   };
 
   # TODO: build this from source
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://gmic.eu/gmic_stdlib_community${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.h";
-    hash = "sha256-JO8ijrOgrOq7lB8NaxnlsQhDXSMgAGQlOG3lT9NfuMw=";
+    hash = "sha256-ek8w9uCp4ey5zT8Y1+yM9gXtzigNINOQ0XW6kT6Zj5Q=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     cimg
     fftw
     graphicsmagick
-    libX11
-    libXext
+    libx11
+    libxext
     libjpeg
     libpng
     libtiff

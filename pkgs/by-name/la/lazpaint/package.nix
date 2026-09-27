@@ -6,7 +6,7 @@
   fpc,
   autoPatchelfHook,
   libsForQt5,
-  xorg,
+  libx11,
   python3,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   runtimeDependencies = [
-    xorg.libX11
+    libx11
   ];
 
   preConfigure = ''

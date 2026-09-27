@@ -3,19 +3,23 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nodejs_22,
 }:
+
 buildNpmPackage rec {
   pname = "ares-cli";
-  version = "3.2.1";
+  version = "3.2.6";
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-L8suZDtXVchVyvp7KCv0UaceJqqGBdfopd5tZzwj3MY=";
+    hash = "sha256-ziOZb+kzsAge6OxB/Vsaj04duZfeuezZFet2HdXPA58=";
   };
 
+  nodejs = nodejs_22;
+
   dontNpmBuild = true;
-  npmDepsHash = "sha256-ATIxe/sulfOpz5KiWauDAPZrlfUOFyiTa+5ECFbVd+0=";
+  npmDepsHash = "sha256-k8PRP1liSbJze2SHkmvUBqcGuAusnudwgj6ANMu32A8=";
 
   passthru.updateScript = nix-update-script { };
 

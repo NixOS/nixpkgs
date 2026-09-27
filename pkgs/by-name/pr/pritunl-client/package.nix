@@ -24,7 +24,7 @@ let
   version = "1.3.4275.94";
   src = fetchFromGitHub {
     owner = "pritunl";
-    repo = "pritunl-client-electron";
+    repo = "pritunl-client";
     rev = version;
     sha256 = "sha256-a1arRI4qQy5niKV8JAyusAjheMa/LtEXPZGhngsH+TU=";
   };
@@ -161,11 +161,11 @@ stdenv.mkDerivation {
   '';
 
   passthru.updateScript = nix-update-script { };
-  meta = with lib; {
+  meta = {
     description = "Pritunl OpenVPN client";
     homepage = "https://client.pritunl.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       minizilla
       andrevmatos
     ];

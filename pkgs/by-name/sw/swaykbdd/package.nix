@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaykbdd";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swaykbdd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-FtXmn5Lf0PhL99xGl/SHWNaE6vAMOF2Ok4xVJT2Bf/s=";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ json_c ];
 
-  meta = with lib; {
+  meta = {
     description = "Per-window keyboard layout for Sway";
     homepage = "https://github.com/artemsen/swaykbdd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivankovnatsky ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ivankovnatsky ];
+    platforms = lib.platforms.linux;
     mainProgram = "swaykbdd";
   };
-}
+})

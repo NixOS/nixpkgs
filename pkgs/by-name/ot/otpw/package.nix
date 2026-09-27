@@ -2,6 +2,7 @@
   lib,
   stdenv,
   coreutils,
+  fetchDebianPatch,
   fetchurl,
   libxcrypt,
   pam,
@@ -20,7 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mKyjimHHcTZ3uW8kQmynBTSAwP0HfZGx6ZvJ+SzLgyo=";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchDebianPatch {
+      pname = "otpw";
+      version = "1.5";
+      debianRevision = "6";
+      patch = "gcc15.patch";
+      hash = "sha256-lR/FZannn9YVCTj+DWZvIyu99lmkaUxG48TGzckyolU=";
+    })
+  ];
+
+  postPatch = ''
     sed -i 's/^CFLAGS.*/CFLAGS=-O2 -fPIC/' Makefile
     substituteInPlace otpw-gen.c \
       --replace "head -c 20 /dev/urandom 2>&1" "${coreutils}/bin/head -c 20 /dev/urandom 2>&1" \

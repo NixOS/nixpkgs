@@ -5,19 +5,25 @@
   meson,
   ninja,
   pkg-config,
+  canfigger,
   ncurses,
   gettext,
+  glib,
+  linuxHeaders,
 }:
 
-stdenv.mkDerivation rec {
+let
+  version = "0.10.0";
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit version;
   pname = "rmw";
-  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
     tag = "v${version}";
-    hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
+    hash = "sha256-NT6P0/pPYyAlno+w0DZoZUepm8cbwlc3+Ety15CKV+g=";
     fetchSubmodules = true;
   };
 
@@ -25,24 +31,24 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux linuxHeaders;
 
   buildInputs = [
+    canfigger
     ncurses
+    glib
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
-  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
-  mesonFlags = [
-    "-Dcanfigger:b_sanitize=none"
-  ];
-
-  meta = with lib; {
-    description = "Trashcan/ recycle bin utility for the command line";
+  meta = {
+    description = "trashcan/recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
-    changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/theimpossibleastronaut/rmw/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      _0k4r1m
+    ];
     mainProgram = "rmw";
   };
-}
+})

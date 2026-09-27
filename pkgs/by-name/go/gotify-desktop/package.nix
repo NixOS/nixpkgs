@@ -7,31 +7,31 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gotify-desktop";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "gotify-desktop";
-    rev = version;
-    sha256 = "sha256-BD8BqG+YheAGvHWrI1/PqCs6T3O3OwXodZq3gvgh1LU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-bKLqe02/KnSjeho7SYAiN2k3YY4XMpjLCZfWJngTIOQ=";
   };
 
-  cargoHash = "sha256-CHo3TYNpXdU3g7vKEwmubPKy+COSZ9Ay77nW8IlK9H4=";
+  cargoHash = "sha256-IgenG3xPxo4JRzQ/F3pxrYM4KiPU0TfFYc32TDT8rag=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Small Gotify daemon to send messages as desktop notifications";
     homepage = "https://github.com/desbma/gotify-desktop";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       genofire
     ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gotify-desktop";
   };
-}
+})

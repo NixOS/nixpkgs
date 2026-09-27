@@ -9,14 +9,14 @@
   popt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librsync";
   version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fiOby8tOhv0KJ+ZwAWfh/ynqHlYC9kNqKfxNl3IhzR8=";
   };
 
@@ -28,14 +28,21 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ]
+  # Avoid cycle dependence between out and lib outputs on Darwin, by using bin
+  # instead of lib
+  ++ (if stdenv.hostPlatform.isDarwin then [ "bin" ] else [ "lib" ]);
 
   meta = {
     description = "Implementation of the rsync remote-delta algorithm";
     homepage = "https://librsync.sourceforge.net/";
-    changelog = "https://github.com/librsync/librsync/releases/tag/v${version}";
+    changelog = "https://github.com/librsync/librsync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "rdiff";
     platforms = lib.platforms.unix;
   };
-}
+})

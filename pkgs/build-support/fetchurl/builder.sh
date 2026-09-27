@@ -1,4 +1,19 @@
-source $mirrorsFile
+source "$NIX_ATTRS_SH_FILE"
+
+# This file will bring variables of the form "_mirror_<mirrorname>" into scope.
+# DO NOT USE the "_mirror" prefix for variables in this script to avoid
+# accidentally clobbering them.
+source "$mirrorsListFile"
+
+# Normalize `curlOpts` as a string.
+# If defined as a list (deprecated), it would be a bash array.
+if [[ "$(declare -p curlOpts 2&>/dev/null || true)" =~ ^"declare -a" ]]; then
+    unset _temp
+    _temp="${curlOpts[*]}"
+    unset curlOpts
+    curlOpts=$_temp
+    unset _temp
+fi
 
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
@@ -22,16 +37,19 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
-eval "curl+=($curlOptsList)"
+# NOTE:
+# `netrcPhase` should not attempt to access builder.sh implementation details (e.g., the `${curl[@]}` array),
+# The implementation detail could change in any Nixpkgs revision, including backports.
+if [[ -n "${netrcPhase-}" ]]; then
+    runPhase netrcPhase
+    curl+=(--netrc-file "$PWD/netrc")
+fi
 
-curl+=(
-    $curlOpts
-    $NIX_CURL_FLAGS
-)
+curl+=("${curlOptsList[@]}")
+concatTo curl curlOpts NIX_CURL_FLAGS
 
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
-
 
 tryDownload() {
     local url="$1"
@@ -43,9 +61,9 @@ tryDownload() {
     success=
 
     # if we get error code 18, resume partial download
-    while [ $curlexit -eq 18 ]; do
+    while [ "$curlexit" -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if "${curl[@]}" -C - --fail "$url" --output "$target"; then
+       if "${curl[@]}" -C - --fail "$url" --output "$target" 2> >(tr '\r' '\n'); then
           success=1
           break
        else
@@ -60,8 +78,8 @@ finish() {
 
     set +o noglob
 
-    if [[ $executable == "1" ]]; then
-      chmod +x $downloadedFile
+    if [[ "$executable" == "1" ]]; then
+      chmod +x "$downloadedFile"
     fi
 
     if [ -z "$skipPostFetch" ]; then
@@ -73,12 +91,15 @@ finish() {
 
 
 tryHashedMirrors() {
+    # The hashed mirrors are stored in the mirrorsListFile,
+    # so we have to use the "_mirror_" prefix, the same as for any other mirror
     if test -n "$NIX_HASHED_MIRRORS"; then
-        hashedMirrors="$NIX_HASHED_MIRRORS"
+        IFS=' ' read -r -a _mirror_hashedMirrors <<< "$NIX_HASHED_MIRRORS"
     fi
 
-    for mirror in $hashedMirrors; do
-        url="$mirror/$outputHashAlgo/$outputHash"
+    local mirror
+    for mirror in "${_mirror_hashedMirrors[@]}"; do
+        local url="$mirror/$outputHashAlgo/$outputHash"
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
@@ -107,36 +128,63 @@ tryHashedMirrors() {
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
-urls2=
-for url in $urls; do
-    if test "${url:0:9}" != "mirror://"; then
-        urls2="$urls2 $url"
-    else
-        url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
-        #varName="mirror_$site"
-        varName="$site" # !!! danger of name clash, fix this
-        if test -z "${!varName}"; then
-            echo "warning: unknown mirror:// site \`$site'"
-        else
-            mirrors=${!varName}
+resolvedUrls=()
 
-            # Allow command-line override by setting NIX_MIRRORS_$site.
-            varName="NIX_MIRRORS_$site"
-            if test -n "${!varName}"; then mirrors="${!varName}"; fi
-
-            for url3 in $mirrors; do
-                urls2="$urls2 $url3$fileName";
-            done
+_resolveUrls() {
+    local url
+    for url in "${urls[@]}"; do
+        # Direct URL: just add it and we're done
+        if test "${url:0:9}" != "mirror://"; then
+            resolvedUrls+=("${url}")
+            continue
         fi
-    fi
-done
-urls="$urls2"
+
+        # Try to get appropriate mirrors via the sourced mirrorsListFile or
+        # environment variable NIX_MIRROR_site
+        # Start by looking for mirror:// and splitting everything after that
+        # into a site and a path - the site part should lead us to an array
+        # with the URLs, or the appropriate env variable
+        if ! [[ "$url" =~ ^mirror://([^/ ]+)[/]([^ ]+)$ ]]; then
+          echo "error: fetchurl: $name: invalid mirror:// URL format: $url" >&2
+          exit 1
+        fi
+        local site="${BASH_REMATCH[1]}"
+        local filePath="${BASH_REMATCH[2]}"
+
+        # The name of the array containing mirrors for site
+        local varName="_mirror_${site}"
+        # Needed to iterate over the array using an indirect reference
+        local arrName="${varName}[@]"
+        # The environment variable that can potentially override the mirrors
+        local envVarName="NIX_MIRRORS_${site}"
+
+        local mirrorUrls
+        if test -v "${arrName}"; then
+            if test -n "${!envVarName}"; then
+                echo "resolving url via NIX_MIRRORS_${site}"
+                IFS=' ' read -r -a mirrorUrls <<< "${!envVarName}"
+            else
+                mirrorUrls=("${!arrName}")
+            fi
+        else
+            echo "warning: unknown mirror:// site \`${site}'"
+            continue
+        fi
+
+        local mirrorUrl
+        for mirrorUrl in "${mirrorUrls[@]}"; do
+            resolvedUrls+=("${mirrorUrl}${filePath}");
+        done
+    done
+}
+
+_resolveUrls
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
-    echo "$urls" > $out
+    echo "${resolvedUrls[*]}" > "$out"
     exit 0
 fi
 
@@ -148,7 +196,7 @@ fi
 set -o noglob
 
 success=
-for url in $urls; do
+for url in "${resolvedUrls[@]}"; do
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)
@@ -156,6 +204,8 @@ for url in $urls; do
                ;;
            https://gitlab.com/*/-/archive/*)
                echo "warning: archives from GitLab revisions should use fetchFromGitLab"
+               ;;
+           *)
                ;;
        esac
     fi

@@ -26,6 +26,14 @@ in
       description = "Port on which to serve the Mealie service.";
     };
 
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to open the port in the firewall.
+      '';
+    };
+
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
       default = { };
@@ -96,12 +104,14 @@ in
         DynamicUser = true;
         User = "mealie";
         ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
+        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     services.mealie.settings = lib.mkIf cfg.database.createLocally {
       DB_ENGINE = "postgres";

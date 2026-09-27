@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchpatch,
+  cmake,
   extra-cmake-modules,
   docbook_xml_dtd_45,
   docbook_xsl_ns,
@@ -16,6 +17,7 @@
 mkDerivation {
   pname = "kdoctools";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     # The build system insists on having native Perl.
     perl

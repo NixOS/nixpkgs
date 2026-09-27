@@ -1,37 +1,44 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
-  nodejs,
+  nodejs_22,
   npmHooks,
   python3,
+  templ,
+  nix-update-script,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.21.3";
+  version = "0.23.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
-    tag = version;
-    hash = "sha256-d4FLyD2uOngUANc7fai8j0wZSY1ISS18JEBDxCqXdQw=";
+    tag = finalAttrs.version;
+    hash = "sha256-veoQz28B4HAxwtY2pDVO9EymUCYJs73BhD8r4x4MtBk=";
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs_22
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
+    templ
   ];
 
   npmRoot = "web";
 
-  NODE_PATH = "$npmDeps";
+  env.NODE_PATH = "$npmDeps";
+
+  postPatch = ''
+    templ generate
+  '';
 
   preBuild = ''
-    make generate
+    make TEMPL=templ generate
   '';
 
   subPackages = [ "." ];
@@ -48,7 +55,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "codeberg.org/readeck/readeck/configs.version=${version}"
+    "codeberg.org/readeck/readeck/configs.version=${finalAttrs.version}"
     "-X"
     "codeberg.org/readeck/readeck/configs.buildTimeStr=1970-01-01T08:00:00Z"
   ];
@@ -61,21 +68,26 @@ buildGoModule rec {
   };
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/web";
-    hash = "sha256-XT+4IR1xVXiDY4wx2smt0pcNUx6UFoXYq+zxvbGsQ8A=";
+    src = "${finalAttrs.src}/web";
+    hash = "sha256-PURkorsNLDMe64g6tzKCcbuX490QXBgatZCnjBTk3+U=";
   };
 
-  vendorHash = "sha256-IWRlruj+zYixCRgbaf7QYBeCGwzf0qRY8OFa4s/PzME=";
+  vendorHash = "sha256-s72IaPhsTz3XawNiVYO1LMs88CO/qPOxyUAG0FA/2J0=";
+
+  passthru = {
+    tests = { inherit (nixosTests) readeck; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
-    changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";
+    changelog = "https://codeberg.org/readeck/readeck/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       julienmalka
       linsui
     ];
   };
-}
+})

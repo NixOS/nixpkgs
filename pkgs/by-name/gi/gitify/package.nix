@@ -2,47 +2,72 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
-  nodejs,
-  electron,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs_24,
+  electron_44,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
   makeWrapper,
+  cacert,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_11;
+  nodejs = nodejs_24;
+  electron = electron_44;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.14.1";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nZoWqfocEg33C22CfVIkayUWkkZ29A8FcAEXx+tJGUU=";
+    hash = "sha256-f/4EXNMtlh/8oHtKPtot3+fwlb7yx2tRtWcBSneImfI=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
     copyDesktopItems
     imagemagick
     makeWrapper
+    cacert
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-LnYwUXwGm/2yx7QrMcPu32oPtRJKnuqysecwwH25QIg=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-E11bKKjN9axHkK8I1NVeetgPhl/1lqb79cPMBi5iDAc=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace config/electron-builder.js \
+    substituteInPlace electron-builder.js \
       --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
       --replace-fail "'scripts/afterSign.js'" "null"
+
+    # With a nixpkgs electron wrapper, app.isPackaged always returns false,
+    # so isDevMode() is always true. This causes the config.ts getter for
+    # indexHtml to return VITE_DEV_SERVER_URL (which is empty) instead of the
+    # packaged file:// URL, resulting in a blank white window.
+    # Patch isDevMode() to false so the file:// path is always used.
+    substituteInPlace src/main/config.ts \
+      --replace-fail "isDevMode()" "false"
+
+    # Disable auto-updater; updates are handled via nixpkgs.
+    substituteInPlace src/main/updater.ts \
+      --replace-fail "if (!this.menubar.app.isPackaged)" "if (true)"
   '';
 
   buildPhase = ''
@@ -54,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
-        --config config/electron-builder.js \
+        --config electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \

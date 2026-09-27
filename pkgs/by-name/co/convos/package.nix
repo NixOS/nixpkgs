@@ -5,7 +5,6 @@
   perl,
   perlPackages,
   makeWrapper,
-  shortenPerlShebang,
   openssl,
   nixosTests,
 }:
@@ -21,10 +20,7 @@ perlPackages.buildPerlPackage rec {
     sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with perlPackages; [
     CryptPassphrase
@@ -73,7 +69,7 @@ perlPackages.buildPerlPackage rec {
     # the sandbox, we replace the this out from a substitution expression
     #
     substituteInPlace t/web-register-open-to-public.t \
-      --replace '!127.0.0.1!' '!localhost!'
+      --replace-fail '!127.0.0.1!' '!localhost!'
 
     # Another online test fails, so remove this.
     rm t/irc-reconnect.t
@@ -89,6 +85,10 @@ perlPackages.buildPerlPackage rec {
 
     # Another web test fails, so we also remove this.
     rm t/web-login.t
+
+    # Remove tests failing due to Mojolicious CSRF behavior updates in 9.48
+    #
+    rm t/web-recover-password.t t/web-register-invite-only.t t/web-users.t
 
     # Module::Install is a runtime dependency not covered by the tests, so we add
     # a test for it.
@@ -107,9 +107,6 @@ perlPackages.buildPerlPackage rec {
     ln -s $AUTO_SHARE_PATH/public/assets $out/assets
     cp -vR templates $out/templates
     cp Makefile.PL $out/Makefile.PL
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/convos
   ''
   + ''
     wrapProgram $out/bin/convos --set MOJO_HOME $out

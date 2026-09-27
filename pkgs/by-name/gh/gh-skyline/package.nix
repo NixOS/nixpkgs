@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-skyline";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-skyline";
-    tag = "v${version}";
-    hash = "sha256-yc9NaWx1jV2YUpPz2u9irikkLw1cnManq+AXREvCfII=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-benxBu8jppD/HBnglKEZWowdvzDb5sp5+SFJD5fVzKQ=";
   };
 
-  vendorHash = "sha256-fPXpgiCA9k8tYQ2leCb+XR34OGJZ6YWCFAxG9mTeXoI=";
+  vendorHash = "sha256-br7YEloTCOa0fIL1xAAvvdCdownU5abCLbISLw0jUDw=";
 
   ldflags = [
     "-s"
@@ -29,7 +29,7 @@ buildGoModule rec {
     description = "Generate a 3D model of your GitHub contribution history";
     homepage = "https://github.com/github/gh-skyline";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     mainProgram = "gh-skyline";
   };
-}
+})

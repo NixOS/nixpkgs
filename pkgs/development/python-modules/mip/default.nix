@@ -9,7 +9,6 @@
   networkx,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -25,9 +24,7 @@
 buildPythonPackage rec {
   pname = "mip";
   version = "1.15.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -84,13 +81,13 @@ buildPythonPackage rec {
     inherit gurobipy numpy;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-mip.com/";
     description = "Collection of Python tools for the modeling and solution of Mixed-Integer Linear programs (MIPs)";
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
-    license = licenses.epl20;
+    license = lib.licenses.epl20;
     broken = stdenv.hostPlatform.isAarch64;
-    maintainers = with maintainers; [ nessdoor ];
+    maintainers = with lib.maintainers; [ nessdoor ];
   };
 }

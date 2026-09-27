@@ -7,14 +7,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minia";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "GATB";
     repo = "minia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0bmfrywixaaql898l0ixsfkhxjf2hb08ssnqzlzacfizxdp46siq";
     fetchSubmodules = true;
   };
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Short read genome assembler";
     mainProgram = "minia";
     homepage = "https://github.com/GATB/minia";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ jbedo ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

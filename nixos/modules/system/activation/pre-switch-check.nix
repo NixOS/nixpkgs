@@ -8,9 +8,18 @@ let
   preSwitchCheckScript = lib.concatLines (
     lib.mapAttrsToList (name: text: ''
       # pre-switch check ${name}
-      if ! (
+      #
+      # Run with errexit in a subshell that is not part of an `if`/`||`
+      # condition, so that `set -e` is actually honoured inside the
+      # check body.
+      set +e
+      (
+        set -e
         ${text}
-      ) >&2 ; then
+      ) >&2
+      _rc=$?
+      set -e
+      if [ "$_rc" -ne 0 ]; then
         echo "Pre-switch check '${name}' failed" >&2
         exit 1
       fi

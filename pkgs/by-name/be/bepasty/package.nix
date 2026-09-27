@@ -10,6 +10,14 @@ let
   bepastyPython = python3.override {
     self = bepastyPython;
     packageOverrides = self: super: {
+      xstatic-bootstrap = super.xstatic-bootstrap.overridePythonAttrs (oldAttrs: rec {
+        version = "4.5.3.1";
+        src = oldAttrs.src.override {
+          pname = "XStatic-Bootstrap";
+          inherit version;
+          hash = "sha256-z2fSBUN7MlCKiLaafnxbviylqK5xCXORpqb1EOv9KCA=";
+        };
+      });
       xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs (oldAttrs: rec {
         version = "4.7.0.0";
         src = oldAttrs.src.override {
@@ -28,7 +36,7 @@ in
 bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = with bepastyPython.pkgs; [
     flask
@@ -73,11 +81,11 @@ bepastyPython.pkgs.buildPythonPackage rec {
     "src/bepasty/tests/test_website.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bepasty/bepasty-server";
     description = "Binary pastebin server";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       aither64
       makefu
     ];

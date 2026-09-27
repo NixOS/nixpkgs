@@ -1,49 +1,63 @@
 {
   lib,
-  stdenv,
-  fetchurl,
+  maven,
+  fetchFromGitHub,
   jre,
   makeWrapper,
-  testers,
-  swagger-codegen3,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.0.62";
-  pname = "swagger-codegen";
+maven.buildMavenPackage rec {
+  pname = "swagger-codegen3";
+  version = "3.0.81";
 
-  jarfilename = "${pname}-cli-${version}.jar";
+  src = fetchFromGitHub {
+    owner = "swagger-api";
+    repo = "swagger-codegen";
+    tag = "v${version}";
+    hash = "sha256-5p8wVdPRsepwuXgl8weotxXrdGJcbe0Qv1VceCFrNdM=";
+  };
+
+  mvnHash = "sha256-d8OVpSRQWbajXnM1eCKOOmUVHPpBR2AVeZMdJXbBbLg=";
+
+  mvnParameters = toString [
+    "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
+  ];
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  src = fetchurl {
-    url = "mirror://maven/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-23opx14BRfG7SjcSKXu59wmrrJsJiGebiMRvidV2gE8=";
-  };
-
-  dontUnpack = true;
-
   installPhase = ''
-    install -D $src $out/share/java/${jarfilename}
+    runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname}3 \
-      --add-flags "-jar $out/share/java/${jarfilename}"
+    mkdir -p $out/bin $out/share/java
+    install -Dm644 modules/swagger-codegen-cli/target/swagger-codegen-cli.jar $out/share/java
+
+    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen3 \
+      --add-flags "-jar $out/share/java/swagger-codegen-cli.jar"
+
+    runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = swagger-codegen3;
-    command = "swagger-codegen3 version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen/tree/3.0.0";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = [ maintainers._1000101 ];
+    changelog = "https://github.com/swagger-api/swagger-codegen/releases/tag/v${version}";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      _1000101
+      anthonyroussel
+    ];
     mainProgram = "swagger-codegen3";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -3,7 +3,9 @@
   stdenvNoCC,
   libsass,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   nixosTests,
   vips,
@@ -28,7 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
   ];
 
   buildInputs = [
@@ -36,10 +39,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     vips
   ];
 
-  extraBuildInputs = [ libsass ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
     hash = pinData.uiPNPMDepsHash;
   };
 
@@ -71,22 +74,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
   '';
 
-  distPhase = "true";
-
   passthru = {
     updateScript = ./update.py;
     tests.lemmy-ui = nixosTests.lemmy;
   };
 
   meta = {
-    description = "Building a federated alternative to reddit in rust";
+    description = "Web frontend for a federated link aggregator";
     homepage = "https://join-lemmy.org/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo
+      lucasew
     ];
+    teams = [ lib.teams.ngi ];
     inherit (nodejs.meta) platforms;
   };
 })

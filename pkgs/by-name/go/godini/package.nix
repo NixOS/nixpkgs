@@ -7,14 +7,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "godini";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "bilbilak";
     repo = "godini";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-83OAddIoJzAUXPZKGnAx8XPKrdSmtc1EIJUDmRHTU/U=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/bilbilak/godini/config.Version=${version}"
+    "-X github.com/bilbilak/godini/config.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ _4r7if3x ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

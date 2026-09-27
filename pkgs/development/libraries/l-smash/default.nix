@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     "--cross-prefix=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -9,7 +9,7 @@
   bzip2,
   fftw,
   fftwFloat,
-  libX11,
+  libx11,
   libfishsound,
   libid3tag,
   libjack2,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     fftw
     fftwFloat
-    libX11
+    libx11
     libfishsound
     libid3tag
     libjack2

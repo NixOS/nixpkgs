@@ -1,45 +1,60 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_12,
+  pnpmConfigHook,
   python3,
-  electron_37,
+  electron_44,
   makeDesktopItem,
-  makeShellWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
 }:
 
-buildNpmPackage rec {
+let
+  electron = electron_44;
+  pnpm = pnpm_12;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.2";
+  version = "5.13.1";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
-    tag = "v${version}";
-    hash = "sha256-+OS3Fw4Z1ZOzXou1sK39AUFLI78nUl4UBVYA3SNH7I0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bYN63EQo+c0SIz3BBIwkAS1QqS7+sg7JdpoOekVYq5Q=";
   };
 
-  npmDepsHash = "sha256-5qjBZfl9kse97y5Mru4RF4RLTbojoXeUp84I/bOHEcw=";
-  makeCacheWritable = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-7F1mRrNgU9Ki7yfkz46LXgw10bY5roJP12oo4wSg91s=";
   };
 
   nativeBuildInputs = [
-    makeShellWrapper
+    nodejs
+    pnpm
+    pnpmConfigHook
+    makeBinaryWrapper
     copyDesktopItems
-    (python3.withPackages (ps: with ps; [ distutils ]))
+    python3
   ];
 
-  dontNpmBuild = true;
   buildPhase = ''
     runHook preBuild
 
-    npm run pack -- \
-      -c.electronDist=${electron_37}/libexec/electron \
-      -c.electronVersion=${electron_37.version}
+    pnpm exec electron-vite build
+    npm_package_config_node_gyp_nodedir=${electron.headers} \
+      pnpm exec electron-builder --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -52,9 +67,8 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_37}' "$out/bin/zulip" \
+    makeBinaryWrapper '${lib.getExe electron}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
@@ -77,12 +91,15 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    donationPage = "https://zulip.com/help/support-zulip-project";
+    downloadPage = "https://github.com/zulip/zulip-desktop";
+    changelog = "https://github.com/zulip/zulip-desktop/blob/v${finalAttrs.version}/changelog.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };
-}
+})

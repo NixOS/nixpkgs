@@ -7,7 +7,6 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "niaclass";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niaclass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for solving classification tasks using Nature-inspired algorithms";
     homepage = "https://github.com/firefly-cpp/NiaClass";
     changelog = "https://github.com/firefly-cpp/NiaClass/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

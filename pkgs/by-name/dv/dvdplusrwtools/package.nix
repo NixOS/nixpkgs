@@ -7,12 +7,17 @@
   m4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvd+rw-tools";
   version = "7.1";
 
   src = fetchurl {
-    url = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools/${pname}-${version}.tar.gz";
+    # Original source; no longer available
+    # url = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools/dvd+rw-tools-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://anduin.linuxfromscratch.org/BLFS/dvd+rw-tools/dvd+rw-tools-${finalAttrs.version}.tar.gz"
+      "https://github.com/openeuler-mirror/dvdplusrw-tools/raw/refs/heads/master/dvd+rw-tools-${finalAttrs.version}.tar.gz"
+    ];
     sha256 = "1jkjvvnjcyxpql97xjjx0kwvy70kxpiznr2zpjy2hhci5s10zmpq";
   };
 
@@ -90,13 +95,13 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
-    homepage = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools";
+  meta = {
+    homepage = "https://en.wikipedia.org/wiki/Dvd%2Brw-tools";
     description = "Tools for mastering Blu-ray and DVD+-RW/+-R media";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       gpl2Only
       publicDomain
     ];
   };
-}
+})

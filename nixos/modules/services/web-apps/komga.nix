@@ -111,7 +111,7 @@ in
           inherit (cfg) user group;
         };
         "${cfg.stateDir}/application.yml"."L+" = {
-          argument = builtins.toString (settingsFormat.generate "application.yml" cfg.settings);
+          argument = toString (settingsFormat.generate "application.yml" cfg.settings);
         };
       };
 

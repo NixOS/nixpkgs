@@ -14,16 +14,13 @@
 # After a package upgrade, empty the `var/cache` folder or unexpected
 # error will occur.
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "wallabag";
   version = "2.6.14";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   # Release tarball includes vendored files
   src = fetchurl {
-    url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
+    url = "https://github.com/wallabag/wallabag/releases/download/${finalAttrs.version}/wallabag-${finalAttrs.version}.tar.gz";
     hash = "sha256-AEk0WuxZfazo4r4shcK453RCF/4V/VMDvKs4EXGe/w0=";
   };
 
@@ -51,8 +48,8 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.mit;
     homepage = "https://wallabag.org";
-    changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
+    changelog = "https://github.com/wallabag/wallabag/releases/tag/${finalAttrs.version}";
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,20 +6,20 @@
   zenoh-c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-cpp";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.10.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-cpp";
-    tag = version;
-    hash = "sha256-rznvif87UZbYzZB4yHG4R850qm6Z3beJ1NSG4wrf58M=";
+    tag = finalAttrs.version;
+    hash = "sha256-EX3TSm0gAaRS2mj8o90zKsFvSqv2bgjrCnW4b1cC4JM=";
   };
 
   cmakeFlags = [
-    "-DZENOHCXX_ZENOHC=ON"
-    "-DZENOHCXX_ZENOHPICO=OFF"
+    (lib.cmakeBool "ZENOHCXX_ZENOHC" true)
+    (lib.cmakeBool "ZENOHCXX_ZENOHPICO" false)
   ];
 
   nativeBuildInputs = [
@@ -30,10 +30,8 @@ stdenv.mkDerivation rec {
     zenoh-c
   ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/zenohcxx.pc \
-      --replace-fail "\''${prefix}/" ""
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ API for zenoh";
@@ -44,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

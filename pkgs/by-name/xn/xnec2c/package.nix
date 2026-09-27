@@ -16,13 +16,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xnec2c";
-  version = "4.4.17";
+  version = "4.4.18";
 
   src = fetchFromGitHub {
     owner = "KJ7LNW";
     repo = "xnec2c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZxKpClB5IBfcpIOJsGVSiZU8WGu/8Yzeru96uCKkCGQ=";
+    hash = "sha256-bmbSuk/bgjLVs6IOIYpOTdeDCYKTZbsCgMv57cLKsEw=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical antenna simulation";
     mainProgram = "xnec2c";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     # Darwin support likely to be fixed upstream in the next release

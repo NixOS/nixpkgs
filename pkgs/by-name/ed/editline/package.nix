@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optional enableTermcap ncurses;
 
+  makeFlags = lib.optionals stdenv.hostPlatform.isPE [
+    "LDFLAGS=-no-undefined"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -46,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://troglobit.com/projects/editline/";
     description = "Readline() replacement for UNIX without termcap (ncurses)";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ oxalica ];
-    platforms = platforms.all;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ oxalica ];
+    platforms = lib.platforms.all;
   };
 })

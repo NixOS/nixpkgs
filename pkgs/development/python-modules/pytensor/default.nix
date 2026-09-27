@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -15,35 +16,36 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  tensorflow-probability,
   writableTmpDirAsHomeHook,
 
+  # passthru
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.35.1";
+  version = "3.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-5+yMZysK69g+3uYrP12WK3ngpAYn8XrHoVjLqjvbobg=";
+    hash = "sha256-tUHBpMyArqM61X3LqNbQQioD1Fe38bQj9jqkHDojVwU=";
   };
 
   build-system = [
@@ -58,10 +60,15 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
+    setuptools
   ];
 
+  # `tensorflow-probability` is deliberately omitted: it only unlocks a handful of jax tests but
+  # drags in `tensorflow-bin`/`tf2onnx`, which fail to evaluate on Python 3.14 and on Darwin.
+  # Most of them are guarded upstream by `TFP_INSTALLED`, the rest are listed in `disabledTests`.
   nativeCheckInputs = [
     jax
     jaxlib
@@ -69,7 +76,6 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
     writableTmpDirAsHomeHook
   ];
 
@@ -82,11 +88,34 @@ buildPythonPackage rec {
     rm -rf pytensor
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
+
+    # `det` of a singular matrix: jax returns -1.3e-116 where numpy returns 0.0
+    "test_jax_basic"
+
+    # NotImplementedError: No JAX implementation for Op {betaincinv,gammainccinv,gammaincinv}.
+    # These need `tensorflow-probability` but, unlike the other tfp tests, are not guarded
+    # upstream by `TFP_INSTALLED`.
+    "test_betaincinv"
+    "test_gammainccinv"
+    "test_gammaincinv"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
+    # references, so the count is one lower.
+    "test_sparse_creation_refcount"
+    "test_sparse_passthrough_refcount"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
     # tests.unittest_tools.WrongValue: WrongValue
     "test_op_sd"
     "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
@@ -159,7 +188,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -173,11 +201,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
-}
+})

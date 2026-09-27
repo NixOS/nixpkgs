@@ -38,10 +38,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.36.2";
-    rev = "dc2d3098ae5641555f15c71d5bb5ce0060a8015c";
-    hash = "sha256-ll7gn3y2dUW3kMtbUTjfi7ZTviE87S30ptiRlCPec9Q=";
+    version = "1.36.10";
+    rev = "053a8989382dd91542ecf0cef8f379b9cb761cdd";
+    hash = "sha256-6bGXZfU2JutiriefwBudt46BrJRnwEqQCjYVRjUgyaY=";
   };
+
+  # When GO_VERSION changes upstream, update the four sha256 hex strings in the
+  # _GO_SDKS dict in 0005-nixpkgs-pin-go-sdk-downloads.patch using output from
+  # this command (set the version literal in `select` to match GO_VERSION):
+  #   curl -s 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | select(.version == "go1.24.6") | .files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin") and (.arch == "amd64" or .arch == "arm64")) | "\(.os)_\(.arch): \(.sha256)"'
 
   # these need to be updated for any changes to fetchAttrs
   depsHash' =
@@ -49,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-AqXGk6IZ85TFNO7v8KFJOe8Caf1x4xQh/VuhaUq9rB4=";
-        aarch64-linux = "sha256-l70j1UcVNHGrzzvcqdeLDJUuaLkoLNM2yWCHKY4EShs=";
+        x86_64-linux = "sha256-EUPWZ8N8wXtnOle8WMLfdxQEdCnTv1JJSbgG39UOoMc=";
+        aarch64-linux = "sha256-WltewtSjwvmYfZQwYAslCCoBdLY1MyO9jnMC/bCzVeg=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -80,6 +85,9 @@ buildBazelPackage rec {
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # pin Go SDK downloads so the deps hash doesn't drift on every Go release
+      ./0005-nixpkgs-pin-go-sdk-downloads.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -144,14 +152,14 @@ buildBazelPackage rec {
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      # Envoy uses --noenable_bzlmod so BCR modules are not needed.
+      # Populate the repository cache with entries the build needs from the empty
+      # workspace.  Use `bazel sync` (which fetches WORKSPACE repos) rather than
+      # `bazel fetch` (which requires bzlmod for its --all mode).
       mkdir $NIX_BUILD_TOP/empty
       pushd $NIX_BUILD_TOP/empty
-      touch MODULE.bazel
-      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
-      # This really bloats the size of the FOD.
-      # TODO: lukegb - figure out how to make this suck less.
-      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
-      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      touch MODULE.bazel WORKSPACE
+      bazel sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
       popd
 
       # Strip out the path to the build location (by deleting the comment line).
@@ -172,6 +180,44 @@ buildBazelPackage rec {
 
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Drop prebuilt JDK toolchains and non-Linux java tool bundles; we force @local_jdk anyway.
+      shopt -s nullglob
+      rm -rf $bazelOut/external/remotejdk*
+      for dir in $bazelOut/external/remote_java_tools*; do
+        base=$(basename "$dir")
+        if [[ "$base" != remote_java_tools_linux ]]; then
+          rm -rf "$dir"
+        fi
+      done
+      rm -rf $bazelOut/external/android_tools $bazelOut/external/android_gmaven_r8
+      find $bazelOut/external/repository_cache -maxdepth 1 -type f \
+        \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) -delete
+
+      # Prune repository_cache entries for unused remote JDK/tool bundles.
+      keep_patterns=()
+      case ${stdenv.hostPlatform.system} in
+        x86_64-linux)
+          keep_patterns+=("remotejdk8_linux" "remotejdk11_linux" "remotejdk17_linux" "remotejdk21_linux" "remote_java_tools_linux")
+          ;;
+        aarch64-linux)
+          keep_patterns+=("remotejdk8_linux_aarch64" "remotejdk11_linux_aarch64" "remotejdk17_linux_aarch64" "remotejdk21_linux_aarch64" "remote_java_tools_linux")
+          ;;
+      esac
+
+      find $bazelOut/external/repository_cache -type f \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) | while read f; do
+        keep=false
+        for pat in $keep_patterns; do
+          if [[ $(basename "$f") == *"$pat"* ]]; then
+            keep=true
+            break
+          fi
+        done
+        if ! $keep; then
+          rm -f "$f"
+        fi
+      done
+      shopt -u nullglob
 
       # CMake 4.1 drops compatibility with <3.5; bump libevent's floor to avoid configure failure.
       sed -i 's/cmake_minimum_required(VERSION 3\\.1.2 FATAL_ERROR)/cmake_minimum_required(VERSION 3.5 FATAL_ERROR)/' \

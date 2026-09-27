@@ -22,10 +22,10 @@ stdenv.mkDerivation {
     install -D $src $out/share/go.py
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (weechat.meta) platforms;
     description = "WeeChat script to quickly jump to different buffers";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ govanify ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ govanify ];
   };
 }

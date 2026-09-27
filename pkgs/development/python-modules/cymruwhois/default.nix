@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python-memcached,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cymruwhois";
   version = "1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "JustinAzoff";

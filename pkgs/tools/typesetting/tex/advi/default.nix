@@ -73,10 +73,10 @@ ocamlPackages.buildDunePackage rec {
   # TODO: redirect /share/advi/tex/latex to tex output compatible with texlive.combine
   # (requires patching check() in advi-latex-files)
 
-  meta = with lib; {
+  meta = {
     homepage = "http://advi.inria.fr/";
     description = "Unix-platform DVI previewer and a programmable presenter for slides written in LaTeX";
-    license = licenses.lgpl21Only;
-    maintainers = [ maintainers.xworld21 ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ lib.maintainers.xworld21 ];
   };
 }

@@ -1,7 +1,9 @@
 {
   config,
   lib,
+  options,
   pkgs,
+  utils,
   ...
 }@host:
 
@@ -55,8 +57,13 @@ let
       # Initialise the container side of the veth pair.
       if [[ -n "''${HOST_ADDRESS-}" ]]   || [[ -n "''${HOST_ADDRESS6-}" ]]  ||
          [[ -n "''${LOCAL_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
-         [[ -n "''${HOST_BRIDGE-}" ]]; then
+         [[ -n "''${HOST_BRIDGE-}" ]]    || [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
         ip link set host0 name eth0
+
+        if [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
+          ip link set dev eth0 address "$LOCAL_MAC_ADDRESS"
+        fi
+
         ip link set dev eth0 up
 
         if [[ -n "''${LOCAL_ADDRESS-}" ]]; then
@@ -92,6 +99,7 @@ let
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
     declare root
 
+    mkdir -p "$root/usr/bin"
     mkdir -p "$root/etc" "$root/var/lib"
     chmod 0755 "$root/etc" "$root/var/lib"
     mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
@@ -138,7 +146,8 @@ let
     fi
 
     if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
-       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+       [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
       extraFlags+=("--network-veth")
     fi
 
@@ -193,8 +202,12 @@ let
       --notify-ready=yes \
       --kill-signal=SIGRTMIN+3 \
       --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
+      ${optionalString config.nix.enable "--bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT"} \
+      ${
+        optionalString (
+          config.nix.enable && config.nix.daemon.enable
+        ) "--bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT"
+      } \
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
       ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
@@ -205,6 +218,7 @@ let
       --setenv LOCAL_ADDRESS="''${LOCAL_ADDRESS-}" \
       --setenv HOST_ADDRESS6="''${HOST_ADDRESS6-}" \
       --setenv LOCAL_ADDRESS6="''${LOCAL_ADDRESS6-}" \
+      --setenv LOCAL_MAC_ADDRESS="''${LOCAL_MAC_ADDRESS-}" \
       --setenv HOST_PORT="''${HOST_PORT-}" \
       --setenv PATH="$PATH" \
       ${optionalString cfg.ephemeral "--ephemeral"} \
@@ -216,7 +230,7 @@ let
       ${
         optionalString (
           cfg.tmpfs != null && cfg.tmpfs != [ ]
-        ) ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
+        ) "--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}"
       } \
       ''${EXTRA_NSPAWN_FLAGS-} \
       ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
@@ -487,6 +501,18 @@ let
       '';
     };
 
+    localMacAddress = mkOption {
+      type = types.nullOr (lib.types.strMatching "([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}");
+      default = null;
+      example = "de:b7:73:01:10:90";
+      description = ''
+        The MAC address assigned to the interface in the container. This address
+        is assigned early during container boot, and can thus be reliably used
+        for setups like IPv6 SLAAC with router advertisements. If this option is
+        not specified, the veth devices gets assigned a random,
+        locally-administered unicast MAC address.
+      '';
+    };
   };
 
   dummyConfig = {
@@ -499,8 +525,22 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
+    localMacAddress = null;
     tmpfs = null;
   };
+
+  # Parses an IP address with an optional prefix
+  ipFromString =
+    str: defaultPrefix:
+    let
+      segments = lib.splitString "/" str;
+      prefix = lib.elemAt segments 1;
+      hasPrefix = builtins.length segments == 2;
+    in
+    {
+      address = lib.head segments;
+      prefixLength = if hasPrefix then builtins.fromJSON prefix else defaultPrefix;
+    };
 
 in
 
@@ -563,7 +603,6 @@ in
                           extraConfig =
                             { options, ... }:
                             {
-                              _file = "module at ${__curPos.file}:${toString __curPos.line}";
                               config = {
                                 nixpkgs =
                                   if options.nixpkgs ? hostPlatform then
@@ -573,6 +612,16 @@ in
                                 boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
+                                networking.interfaces = lib.mkIf config.privateNetwork (
+                                  lib.mkMerge [
+                                    (lib.mkIf (config.localAddress != null) {
+                                      eth0.ipv4.addresses = [ (ipFromString config.localAddress 32) ];
+                                    })
+                                    (lib.mkIf (config.localAddress6 != null) {
+                                      eth0.ipv6.addresses = [ (ipFromString config.localAddress6 128) ];
+                                    })
+                                  ]
+                                );
                                 assertions = [
                                   {
                                     assertion =
@@ -947,12 +996,51 @@ in
 
       assertions =
         let
+          # Host Nix config info
+          inherit
+            (rec {
+              disabledOpts = filter (x: !x.value) [
+                options.nix.enable
+                options.nix.daemon.enable
+              ];
+              hostNixSocketEnabled = disabledOpts == [ ];
+              hostNixSocketIsDisabled =
+                if lib.length disabledOpts == 1 then
+                  "host option ${lib.head disabledOpts} is disabled"
+                else
+                  "host options ${lib.concatStringsSep " and " disabledOpts} are disabled";
+            })
+            hostNixSocketEnabled
+            hostNixSocketIsDisabled
+            ;
+
+          # Tested in: nixos/tests/containers-eval.nix
           mapper =
-            name: cfg:
+            name:
+            { cfg, opt }:
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
-              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces."
+            ++
+              optional (cfg.flake != null && !config.nix.enable)
+                "${options.containers}.${strings.escapeNixIdentifier name}.flake is defined, so the container is built with nix on the host, but ${options.nix.enable} is disabled"
+            ++
+              optional
+                (
+                  !hostNixSocketEnabled
+                  && opt.config.isDefined
+                  && cfg.config.nix.enable
+                  && cfg.config.nix.daemon.enable
+                )
+                "${options.containers}.${strings.escapeNixIdentifier name} has nix.daemon.enable = true, but the host does not provide a nix daemon socket, as ${hostNixSocketIsDisabled}. Disable nix.daemon.enable in the container, or enable the daemon on the host.";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        (lib.concatMap
+          # This could be done in mapper but causes a reformat
+          (map (msg: {
+            assertion = false;
+            message = msg;
+          }))
+          (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers))
+        );
     }
 
     (mkIf (config.boot.enableContainers) (
@@ -1044,7 +1132,7 @@ in
                   serviceConfig = serviceDirectives containerConfig;
                   unitConfig.RequiresMountsFor =
                     lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
-                    ++ builtins.map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
+                    ++ map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
                       builtins.attrValues cfg.bindMounts
                     );
                   environment.root =
@@ -1052,8 +1140,14 @@ in
                 }
                 // (optionalAttrs containerConfig.autoStart {
                   wantedBy = [ "machines.target" ];
-                  wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
-                  after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                  wants = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
+                  after = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
                   restartTriggers = [
                     containerConfig.path
                     config.environment.etc."${configurationDirectoryName}/${name}.conf".source
@@ -1107,6 +1201,9 @@ in
                   ''}
                   ${optionalString (cfg.localAddress6 != null) ''
                     LOCAL_ADDRESS6=${cfg.localAddress6}
+                  ''}
+                  ${optionalString (cfg.localMacAddress != null) ''
+                    LOCAL_MAC_ADDRESS=${cfg.localMacAddress}
                   ''}
                 ''}
                 ${optionalString (cfg.networkNamespace != null) ''

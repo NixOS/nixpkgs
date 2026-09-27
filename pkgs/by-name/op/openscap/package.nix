@@ -29,24 +29,23 @@
   makeWrapper,
   rpm,
   system-sendmail,
-  gnome2,
   curl,
   procps,
   systemd,
   perl,
   doxygen,
   pkg-config,
-  perl538Packages,
+  perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscap";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "openscap";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-AOldgYS8qMOLB/Nm2/O0obdDOrefSrubTETb50f3Gv8=";
   };
 
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    with perl538Packages;
+    with perlPackages;
     [
       XMLXPath
       LinuxACL
@@ -95,7 +94,6 @@ stdenv.mkDerivation rec {
       libsepol
       curl
       glib
-      gnome2.ORBit2
       opendbx
     ];
 
@@ -159,10 +157,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NIST Certified SCAP 1.2 toolkit";
     homepage = "https://github.com/OpenSCAP/openscap";
-    changelog = "https://github.com/OpenSCAP/openscap/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/OpenSCAP/openscap/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "oscap";
     platforms = lib.platforms.linux;
   };
-}
+})

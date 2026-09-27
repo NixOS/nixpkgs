@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zk";
-  version = "0.15.1";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
-    rev = "v${version}";
-    sha256 = "sha256-h4q3GG4DPPEJk2G5JDbUhnHpqEdMAkGYSMs9TS5Goco=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-owHbrQwoQS+SbfZ6EQO/ii10zX73MmUpohuIIltlnw8=";
   };
 
-  vendorHash = "sha256-2PlaIw7NaW4pAVIituSVWhssSBKjowLOLuBV/wz829I=";
+  vendorHash = "sha256-Y5KI3o4HYWyqQl/RnOetyIKOI+CbYWSgrbkGkpAKsX4=";
 
   doCheck = false;
 
@@ -25,19 +25,19 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Build=${version}"
-    "-X=main.Version=${version}"
+    "-X=main.Build=${finalAttrs.version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
 
   tags = [ "fts5" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ pinpox ];
-    license = licenses.gpl3;
+  meta = {
+    maintainers = with lib.maintainers; [ pinpox ];
+    license = lib.licenses.gpl3;
     description = "Zettelkasten plain text note-taking assistant";
-    homepage = "https://github.com/mickael-menu/zk";
+    homepage = "https://github.com/zk-org/zk";
     mainProgram = "zk";
   };
-}
+})

@@ -3,17 +3,18 @@
   stdenv,
   dpkg,
   fetchurl,
-  procps,
-  net-tools,
+  libgcc,
+  libnetfilter_conntrack,
   autoPatchelfHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "speedify";
-  version = "15.8.2-12611";
+  # Find latest version within https://apt.connectify.me/dists/speedify/main/binary-amd64/Packages.gz
+  version = "16.7.0-12928";
 
   src = fetchurl {
     url = "https://apt.connectify.me/pool/main/s/speedify/speedify_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-61GQZkXBe3EQpOUODpL60SCHJO0FGqvpL9xFn+q+kPs=";
+    hash = "sha256-A77LYBGLAgoRFV64/ZmpTL76NQx6xHq0a7leDYi9Izg=";
   };
 
   nativeBuildInputs = [
@@ -22,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    procps
-    net-tools
+    libgcc
+    libnetfilter_conntrack
   ];
 
   installPhase = ''

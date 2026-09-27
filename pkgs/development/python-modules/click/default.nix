@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   importlib-metadata,
   pytestCheckHook,
 
@@ -17,28 +16,23 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.2.1";
+  version = "8.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-3FfLKwpfkiGfY2+H2fQoZwLBqfPlV46xw2Bc4YEsyps=";
+    hash = "sha256-LcnAI4hyiuaJ4qnFnbAR5Cft/yvW5tAIjY6qc6K/Nrw=";
   };
-
-  patches = [
-    # https://github.com/pallets/click/pull/2940
-    (fetchpatch {
-      name = "fix-SystemExit-when-using-stdin.patch";
-      url = "https://github.com/pallets/click/commit/93c6966eb3a575c2b600434d1cc9f4b3aee505ac.patch";
-      hash = "sha256-DkVF0JnKbcsdAhgVjWJEDZZ8vr2sf6wba8P3SyRUy6o=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTests = [
     # for some reason the tests fail to execute cat, even though they run with less just fine,

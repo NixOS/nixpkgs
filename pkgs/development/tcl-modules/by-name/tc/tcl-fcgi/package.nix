@@ -3,6 +3,7 @@
   fetchFromGitHub,
   mkTclDerivation,
   tclx,
+  tcl,
 }:
 
 mkTclDerivation {
@@ -31,5 +32,6 @@ mkTclDerivation {
     license = lib.licenses.bsd2;
     platforms = tclx.meta.platforms;
     maintainers = with lib.maintainers; [ nat-418 ];
+    broken = tcl.isTcl9;
   };
 }

@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-test-runner";
-  version = "unstable-2019-10-02";
+  version = "19.04.0-unstable-2019-10-02";
 
   src = fetchbzr {
     url = "lp:dbus-test-runner";
     rev = "109";
-    sha256 = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
+    hash = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
   };
 
   patches = [
@@ -76,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Small little utility to run a couple of executables under a new DBus session for testing";
     mainProgram = "dbus-test-runner";
     homepage = "https://launchpad.net/dbus-test-runner";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    teams = [ teams.lomiri ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lomiri ];
     pkgConfigModules = [
       "dbustest-1"
     ];

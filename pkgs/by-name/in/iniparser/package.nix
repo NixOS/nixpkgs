@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-z10S9ODLprd7CbL5Ecgh7H4eOwTetYwFXiWBUm6fIr4=";
   };
 
-  patches = lib.optional finalAttrs.doCheck (
+  patches = lib.optional finalAttrs.finalPackage.doCheck (
     # 1. Do not fetch the Unity GitHub repository
     # 2. Lookup the Unity pkgconfig file
     # 3. Get the generate_test_runner.rb file from the Unity share directory
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
   doCheck = true;
   nativeCheckInputs = [
@@ -54,15 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
       (unity-test.override {
         supportDouble = true;
       }).overrideAttrs
-      {
-        doCheck = false;
-      }
+        {
+          doCheck = false;
+        }
     )
   ];
 
   postFixup = ''
     ln -sv $out/include/iniparser/*.h $out/include/
   '';
+
+  strictDeps = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

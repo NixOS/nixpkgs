@@ -14,15 +14,15 @@
   scdoc,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waylogout";
-  version = "unstable-2023-06-09";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "loserMcloser";
     repo = "waylogout";
-    rev = "f90e1b8b0f67a2694fafca7beb32828493f3f78e";
-    hash = "sha256-YQtX4t6q2NybuKU3lVcn5XhC0nXcPfEbcXbuFmDZOrw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dsuuTjmZm3IpqXU68LsAz86HNbMFvKhWPYOMG/5Z4jE=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     gdk-pixbuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical logout/suspend/reboot/shutdown dialog for wayland";
     homepage = "https://github.com/loserMcloser/waylogout";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "waylogout";
   };
-}
+})

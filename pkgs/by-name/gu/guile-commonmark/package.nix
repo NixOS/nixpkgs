@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "guile-commonmark";
-  version = "unstable-2020-04-30";
+  version = "0.1.2-unstable-2020-04-30";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OrangeShark";
@@ -21,6 +24,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
     texinfo # for makeinfo
   ];
@@ -35,10 +39,10 @@ stdenv.mkDerivation {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OrangeShark/guile-commonmark";
     description = "Implementation of CommonMark for Guile";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };

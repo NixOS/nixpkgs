@@ -16,12 +16,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tevent";
   version = "0.17.1";
 
   src = fetchurl {
-    url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
+    url = "mirror://samba/tevent/tevent-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-G+LepzfN4l/gZiH4SUXmPrcSWeDEPp+PXaSC2rGnvpI=";
   };
 
@@ -61,20 +61,23 @@ stdenv.mkDerivation rec {
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
-
-  meta = with lib; {
+  meta = {
     description = "Event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

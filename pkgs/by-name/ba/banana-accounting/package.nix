@@ -9,7 +9,7 @@
   gmp,
   gtk3,
   libGL,
-  libX11,
+  libx11,
   libgcrypt,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     (lib.getLib stdenv.cc.cc)
     libGL
-    libX11
+    libx11
     libgcrypt
   ];
 

@@ -5,19 +5,23 @@
   wrapGAppsHook3,
   gtk3,
   librsvg,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   argyllcms,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
-  version = "3.9.17";
-  format = "setuptools";
+  version = "3.9.19";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "DisplayCAL";
-    inherit version;
-    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
+    pname = "displaycal";
+    inherit (finalAttrs) version;
+    hash = "sha256-GHx+2VwuxwdMQh6fxY6V/EQJE4CPxer39Aj/QlMWbrw=";
   };
 
   nativeBuildInputs = [
@@ -25,15 +29,30 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools_80 ];
+
+  postPatch = ''
+    # 2 conflicting copies of bin/displaycal end up from the installation
+    # process (one from pyproject.toml’s gui-scripts, one from setup.py). Keep
+    # only the setup.py version. Replace key with an invalide name to be
+    # skipped.
+    substituteInPlace pyproject.toml \
+      --replace-fail "[project.gui-scripts]" "[_project.gui-scripts]" \
+  '';
+
+  dependencies = with python3.pkgs; [
     build
     certifi
+    defusedxml
     wxpython
     dbus-python
     distro
     numpy
     pillow
+    psutil
     pychromecast
+    pyglet
+    pyyaml
     send2trash
     zeroconf
   ];
@@ -41,14 +60,12 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-  ]
-  ++ (with xorg; [
-    libX11
-    libXxf86vm
-    libXext
-    libXinerama
-    libXrandr
-  ]);
+    libx11
+    libxxf86vm
+    libxext
+    libxinerama
+    libxrandr
+  ];
 
   # Workaround for eoyilmaz/displaycal-py3#261
   setupPyGlobalFlags = [ "appdata" ];
@@ -67,11 +84,11 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display calibration and characterization powered by Argyll CMS (Migrated to Python 3)";
     homepage = "https://github.com/eoyilmaz/displaycal-py3";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

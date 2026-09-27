@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/upa/mscp";
     mainProgram = "mscp";
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.deshaw ];
     platforms = lib.platforms.unix;
   };
 })

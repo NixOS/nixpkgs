@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pth";
   version = "2.0.7";
 
   src = fetchurl {
-    url = "mirror://gnu/pth/pth-${version}.tar.gz";
+    url = "mirror://gnu/pth/pth-${finalAttrs.version}.tar.gz";
     sha256 = "0ckjqw5kz5m30srqi87idj7xhpw6bpki43mj07bazjm2qmh3cdbj";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   #     pth_uctx.c:31:10: fatal error: pth_p.h: No such file
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Portable Threads library";
     mainProgram = "pth-config";
     homepage = "https://www.gnu.org/software/pth";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

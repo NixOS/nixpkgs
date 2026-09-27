@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "gbforth";
-  version = "unstable-2025-10-08";
+  version = "0-unstable-2025-10-08";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ams-hackers";
@@ -49,7 +52,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gbforth.org/";
     description = "Forth-based Game Boy development kit";
     mainProgram = "gbforth";
@@ -58,8 +61,8 @@ stdenv.mkDerivation {
       It features a Forth-based assembler, a cross-compiler with support for
       lazy code generation and a library of useful words.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

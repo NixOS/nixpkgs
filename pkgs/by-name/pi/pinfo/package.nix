@@ -10,14 +10,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pinfo";
   version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "baszoetekouw";
     repo = "pinfo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "173d2p22irwiabvr4z6qvr6zpr6ysfkhmadjlyhyiwd7z62larvy";
   };
 
@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     "--with-readline=${readline.dev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Viewer for info files";
     homepage = "https://github.com/baszoetekouw/pinfo";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pinfo";
   };
-}
+})

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.8";
+  version = "3.50.11";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-DcW88Zx8uoxOL+2mV7uBIsnmQEuy02tbAO1ljf0ZigQ=";
+    hash = "sha256-cPZJgXhWQ5pdKB3hHG7x3vYon3J8HzHDVicP6CODUQ4=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
+    mainProgram = "gnome-online-accounts-gtk";
     description = "Online accounts configuration utility";
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 })

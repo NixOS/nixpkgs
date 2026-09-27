@@ -11,7 +11,6 @@
   pygments,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   sphinx,
   typeguard,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.24.5";
+  version = "4.24.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal";
     tag = version;
-    hash = "sha256-oSvLi+9JYnwilJa63MuGb2iir2Mjr3UewzpPLCtOVzs=";
+    hash = "sha256-nLZ06Xfa9Q+Saf8qPXG1Xo6y6oO6kifhfK/gryZ6q90=";
   };
 
   build-system = [ flit-core ];
@@ -75,7 +72,7 @@ buildPythonPackage rec {
     # assert basically correct but fails in string match due to '' removed
     "test_unknown_command"
   ]
-  ++ lib.optional (pythonAtLeast "3.13") [
+  ++ lib.optionals (pythonAtLeast "3.13") [
     # assert basically correct but string match fails in due to
     # ('pathlib._local', 'Path.write_text') != ('pathlib', 'Path.write_text')
     "test_infer"
@@ -91,7 +88,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for design by contract (DbC) and checking values, exceptions, and side-effects";
     longDescription = ''
       In a nutshell, deal empowers you to write bug-free code.
@@ -100,7 +97,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/life4/deal";
     changelog = "https://github.com/life4/deal/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

@@ -1,8 +1,10 @@
 {
+  lib,
   mkDerivation,
   m4,
   compatIfNeeded,
   zlib,
+  libelf,
 }:
 
 mkDerivation {
@@ -15,6 +17,11 @@ mkDerivation {
     "sys/sys/elf_common.h"
   ];
   extraNativeBuildInputs = [ m4 ];
-  buildInputs = compatIfNeeded ++ [ zlib ];
+  buildInputs = compatIfNeeded ++ [
+    zlib
+    libelf
+  ];
   MK_TESTS = "no";
+
+  meta.platforms = lib.platforms.unix;
 }

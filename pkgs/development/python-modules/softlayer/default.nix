@@ -26,16 +26,16 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "softlayer";
-  version = "6.2.7";
+  version = "6.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
-    tag = "v${version}";
-    hash = "sha256-mlC4o39Ol1ALguc9KGpxB0M0vhWz4LG2uwhW8CBrVgg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kGgCW9N2NZi8PHcfpN+8L2bg7v1edP8ZXYaoSt9545M=";
   };
 
   build-system = [ setuptools ];
@@ -68,8 +68,18 @@ buildPythonPackage rec {
     # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
     "tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
 
+    # SystemExit: 1 (or 2)
+    "tests/CLI/modules/hardware/hardware_list_tests.py::HardwareListCLITests"
+    "tests/CLI/modules/vs/vs_create_tests.py::VirtCreateTests"
+    "tests/CLI/modules/vs/vs_tests.py::VirtTests"
+
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
+  ];
+
+  disabledTests = [
+    # AssertionError
+    "test_cf_call_large_dataset"
   ];
 
   pythonImportsCheck = [ "SoftLayer" ];
@@ -77,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

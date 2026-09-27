@@ -9,15 +9,12 @@
   pysocks,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hydrogram";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hydrogram";
@@ -54,11 +51,11 @@ buildPythonPackage rec {
     "hydrogram.types"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Telegram MTProto API framework for fluid user and bot interactions";
     homepage = "https://github.com/hydrogram/hydrogram";
     changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${src.tag}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ tholo ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ tholo ];
   };
 }

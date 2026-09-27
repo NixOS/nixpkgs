@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.21";
+  version = "3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     tag = version;
-    hash = "sha256-CVwPMMQFGqvyxm5tK7JMEX8/dgiF25wwRNaLNfLLWto=";
+    hash = "sha256-CtzVHnQALqA5D0wJQ74lAw9HunVFZEkKvij6RQaQrBE=";
   };
 
   build-system = [
@@ -62,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "acquire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
     changelog = "https://github.com/fox-it/acquire/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,37 +1,22 @@
 {
   stdenv,
   lib,
-  python3,
   fetchFromGitHub,
   nixosTests,
-  fetchPypi,
   fetchYarnDeps,
+  python3,
+  python3Packages,
   nodejs,
   yarnBuildHook,
   yarnConfigHook,
 }:
 let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      django = super.django_5_2;
-      django-csp = super.django-csp.overridePythonAttrs rec {
-        version = "4.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
-        };
-      };
-    };
-  };
-
-  version = "3.9.0";
+  version = "5.7.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-qlnDv2NYs6XCZDos/8CflyO/0GmYKd45/efDDNGGsic=";
+    hash = "sha256-/kCrh5CUFcurXpK8trdlW2kI1JDoKeD7n40vjvG/v4E=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -44,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-+kjU8eGk5CFh6/Z4G5G4XiaZ5OOBO5WB4d7lU7evXs0=";
+      hash = "sha256-Y+E1HhQRdmdQf9kfkL09W/R29oN8wCLNsMBDnNGx6T0=";
     };
 
     nativeBuildInputs = [
@@ -55,73 +40,121 @@ let
 
     dontInstall = true;
   };
+
+  python3Packages' = python3Packages.overrideScope (
+    self: super: {
+      django-treebeard = super.django-treebeard.overridePythonAttrs (
+        finalAttrs: { src, ... }: {
+          version = "4.8.0";
+          src = src.override {
+            hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+          };
+        }
+      );
+    }
+  );
+in
+let
+  # Prevent using the wrong one.
+  python3Packages = python3Packages';
 in
 
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lasuite-docs";
   pyproject = true;
   inherit version src;
 
-  sourceRoot = "source/src/backend";
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  # They use a old version of mistralai which exported a class
+  # at the top level
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+  ''
+  # Otherwise fails with:
+  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace impress/settings.py \
+      --replace-fail \
+        "gethostname()" \
+        "gethostname() + '.local'"
+  '';
+  __darwinAllowLocalNetworking = true;
 
-  dependencies = with python.pkgs; [
-    beautifulsoup4
-    boto3
-    celery
-    django
-    django-configurations
-    django-cors-headers
-    django-countries
-    django-csp
-    django-extensions
-    django-filter
-    django-lasuite
-    django-parler
-    django-redis
-    django-storages
-    django-timezone-field
-    django-treebeard
-    djangorestframework
-    drf-spectacular
-    drf-spectacular-sidecar
-    dockerflow
-    easy-thumbnails
-    factory-boy
-    gunicorn
-    jsonschema
-    lxml
-    markdown
-    mozilla-django-oidc
-    nested-multipart-parser
-    openai
-    psycopg
-    pycrdt
-    pyjwt
-    pyopenssl
-    python-magic
-    redis
-    requests
-    sentry-sdk
-    whitenoise
-  ];
+  build-system = with python3Packages; [ uv-build ];
+
+  dependencies =
+    with python3Packages;
+    [
+      beautifulsoup4
+      boto3
+      celery
+      emoji
+      dj-database-url
+      django
+      django-configurations
+      django-cors-headers
+      django-countries
+      django-csp
+      django-extensions
+      django-filter
+      django-lasuite
+      django-parler
+      django-redis
+      django-silk
+      django-storages
+      django-timezone-field
+      django-treebeard
+      django-waffle
+      djangorestframework
+      drf-spectacular
+      drf-spectacular-sidecar
+      dockerflow
+      easy-thumbnails
+      factory-boy
+      gunicorn
+      jsonschema
+      langfuse
+      lxml
+      markdown
+      mistralai
+      mozilla-django-oidc
+      nested-multipart-parser
+      openai
+      posthog
+      psycopg
+      pycrdt
+      pydantic-ai-slim
+      pyjwt
+      pyopenssl
+      python-magic
+      redis
+      requests
+      sentry-sdk
+      servestatic
+      uvicorn
+      whitenoise
+    ]
+    ++ celery.optional-dependencies.redis
+    ++ django-lasuite.optional-dependencies.all
+    ++ django-storages.optional-dependencies.s3;
 
   pythonRelaxDeps = true;
 
   postBuild = ''
     export DATA_DIR=$(pwd)/data
-    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
+    ${python3.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
   '';
 
   postInstall =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python3Packages.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       mkdir -p $out/{bin,share}
@@ -132,13 +165,15 @@ python.pkgs.buildPythonApplication rec {
 
       makeWrapper $out/bin/.manage.py $out/bin/docs \
         --prefix PYTHONPATH : "${pythonPath}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
-      makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
+      makeWrapper ${lib.getExe python3Packages.celery} $out/bin/celery \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
+      makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
 
-      mkdir -p $out/${python.sitePackages}/core/templates
-      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
+      mkdir -p $out/${python3.sitePackages}/core/templates
+      ln -sv ${mail-templates}/ $out/${python3.sitePackages}/core/templates/mail
+
+      cp -r impress/configuration $out/${python3.sitePackages}/impress/configuration
     '';
 
   passthru.tests = {
@@ -148,10 +183,13 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
     homepage = "https://github.com/suitenumerique/docs";
-    changelog = "https://github.com/suitenumerique/docs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     mainProgram = "docs";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
-}
+})

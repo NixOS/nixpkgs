@@ -102,7 +102,7 @@ let
       installPhase ? null,
       extraExtensions ? [ ],
       ...
-    }:
+    }@args:
     let
       agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
     in
@@ -136,12 +136,14 @@ let
             runHook postInstall
           '';
 
-      # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
-      # we need to set LC_ALL to an UTF-8-supporting locale. However, on
-      # darwin, it seems that there is no standard such locale; luckily,
-      # the referenced issue doesn't seem to surface on darwin. Hence let's
-      # set this only on non-darwin.
-      LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
+      env = args.env or { } // {
+        # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
+        # we need to set LC_ALL to an UTF-8-supporting locale. However, on
+        # darwin, it seems that there is no standard such locale; luckily,
+        # the referenced issue doesn't seem to surface on darwin. Hence let's
+        # set this only on non-darwin.
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
+      };
 
       meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 

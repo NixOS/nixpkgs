@@ -31,7 +31,7 @@ python.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "RicterZ";
-    repo = "nhentai";
+    repo = "doujinshi-dl";
     rev = version;
     hash = "sha256-KwcaCeeGeR6qSfraSYyf4VEims9YWB6j3HmpT8XSePo=";
   };
@@ -57,11 +57,12 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "tabulate"
     "urllib3"
   ];
 
   meta = {
-    homepage = "https://github.com/RicterZ/nhentai";
+    homepage = "https://github.com/RicterZ/doujinshi-dl";
     description = "CLI tool for downloading doujinshi from adult site(s)";
     license = lib.licenses.mit;
     maintainers = [ ];

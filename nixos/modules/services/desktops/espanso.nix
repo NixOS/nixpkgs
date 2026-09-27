@@ -21,6 +21,12 @@ in
       package = lib.mkPackageOption pkgs "espanso" {
         example = "pkgs.espanso-wayland";
       };
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "with pkgs; [ bash curl python3 ];";
+        description = "Extra packages to be added to Espanso service path.";
+      };
     };
   };
 
@@ -29,9 +35,7 @@ in
       capabilities = "cap_dac_override+p";
       owner = "root";
       group = "root";
-      source = lib.getExe (
-        pkgs.espanso-wayland.override { securityWrapperPath = config.security.wrapperDir; }
-      );
+      source = lib.getExe (cfg.package.override { securityWrapperPath = config.security.wrapperDir; });
     };
     systemd.user.services.espanso = {
       description = "Espanso daemon";
@@ -45,6 +49,7 @@ in
         Restart = "on-failure";
       };
       wantedBy = [ "graphical-session.target" ];
+      path = cfg.extraPackages;
     };
 
     environment.systemPackages = [ cfg.package ];

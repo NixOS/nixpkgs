@@ -4,31 +4,37 @@
   fetchFromGitLab,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
-  makeDesktopItem,
+  libdecor,
   libgbm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxkbcommon,
+  libxrandr,
+  libxxf86vm,
+  makeDesktopItem,
+  makeWrapper,
   pkg-config,
-  stdenv,
+  wayland,
+  wl-clipboard,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipqr";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
-    rev = "v${version}";
-    hash = "sha256-iuA6RqclMm1CWaiM1kpOpgfYvKaYGOIwFQkLr/nCL5M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DC6zc1Qe/z7ihuvdawb8bj5MefYGgt7HAV5dWTjeHZc=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-MrXMbavff6CEKVbL+Mx8hICYB9sZQcvAhnu2X4sVvVw=";
+
+  tags = [ "wayland" ];
 
   ldflags = [
     "-s"
@@ -37,23 +43,30 @@ buildGoModule rec {
 
   buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
     libgbm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxkbcommon
+    libxrandr
+    libxxf86vm
+    wayland
   ];
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeWrapper
     pkg-config
   ];
 
   postInstall = ''
     install -Dm644 icon.svg $out/share/icons/hicolor/scalable/apps/clipqr.svg
+
+    wrapProgram $out/bin/clipqr \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdecor ]} \
+      --prefix PATH : ${lib.makeBinPath [ wl-clipboard ]}
   '';
 
   desktopItems = [
@@ -68,12 +81,12 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scan QR codes on screen and from camera, the result is in your clipboard";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MatthieuBarthel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
     mainProgram = "clipqr";
   };
-}
+})

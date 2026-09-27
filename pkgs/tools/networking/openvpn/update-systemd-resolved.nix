@@ -9,7 +9,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "update-systemd-resolved";
   # when updating this, check if additional binaries need injecting into PATH
   version = "1.3.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jonathanio";
     repo = "update-systemd-resolved";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lYJTR3oBmpENcqNHa9PFXsw7ly6agwjBWf4UXf1d8Kc=";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     ./update-systemd-resolved.patch
   ];
 
-  PREFIX = "${placeholder "out"}/libexec/openvpn";
+  env.PREFIX = "${placeholder "out"}/libexec/openvpn";
 
   postInstall = ''
-    substituteInPlace ${PREFIX}/update-systemd-resolved \
+    substituteInPlace ${finalAttrs.env.PREFIX}/update-systemd-resolved \
       --subst-var-by PATH ${
         lib.makeBinPath [
           coreutils
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helper script for OpenVPN to directly update the DNS settings of a link through systemd-resolved via DBus";
     homepage = "https://github.com/jonathanio/update-systemd-resolved";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ eadwu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ eadwu ];
+    platforms = lib.platforms.linux;
   };
-}
+})

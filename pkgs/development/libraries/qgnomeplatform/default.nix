@@ -9,13 +9,20 @@
   adwaita-qt6,
   glib,
   gtk3,
-  qtbase,
-  qtwayland,
+  qt5,
+  qt6,
   replaceVars,
   gsettings-desktop-schemas,
   useQt6 ? false,
 }:
 
+let
+  qt = if useQt6 then qt6 else qt5;
+  inherit (qt)
+    qtbase
+    qtwayland
+    ;
+in
 stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
   version = "0.8.4";
@@ -77,11 +84,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

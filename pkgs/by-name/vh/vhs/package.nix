@@ -7,41 +7,41 @@
   ffmpeg,
   ttyd,
   chromium,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vhs";
-  version = "0.10.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "vhs";
-    rev = "v${version}";
-    hash = "sha256-ZnE5G8kfj7qScsT+bZg90ze4scpUxeC6xF8dAhdUUCo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9O9f/3B42BhhJ5LWNyHrQtaOKwVnAZR309Dvbpx3d4g=";
   };
 
-  vendorHash = "sha256-jmabOEFHduHzOBAymnxQrvYzXzxKnS1RqZZ0re3w63Y=";
+  vendorHash = "sha256-ZGlXyM4oRZSCY/Ulc55NcFylHnQKqA/TXjpcWGdmhwo=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/vhs --prefix PATH : ${
       lib.makeBinPath (
-        lib.optionals stdenv.hostPlatform.isLinux [ chromium ]
-        ++ [
+        [
           ffmpeg
           ttyd
         ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ chromium ]
       )
     }
   ''
@@ -58,8 +58,8 @@ buildGoModule rec {
     description = "Tool for generating terminal GIFs with code";
     mainProgram = "vhs";
     homepage = "https://github.com/charmbracelet/vhs";
-    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maaslalani ];
+    maintainers = [ ];
   };
-}
+})

@@ -5,18 +5,18 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gcsfuse";
-  version = "3.5.1";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
-    rev = "v${version}";
-    hash = "sha256-hC8/vgngJ4lLF02uV1MurZyRG7dpcEg9gcZr+HWzaNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k12Gi1fBsxd1P3iL7/5CwUfOpap4ienUY4dvubjL2MI=";
   };
 
-  vendorHash = "sha256-BirzhmYwFSs2poA5tNOlK2bDO71mCkgSck7fE9la2wA=";
+  vendorHash = "sha256-ATV2KYKWbxCYUzF+GFmaNYcGlVhyB+xDpgMEvT1sPEI=";
 
   subPackages = [
     "."
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.gcsfuseVersion=${version}"
+    "-X main.gcsfuseVersion=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -47,10 +47,10 @@ buildGoModule rec {
   meta = {
     description = "User-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
-    changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
+    changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     # internal/cache/file/downloader/job.go:386:77: undefined: syscall.O_DIRECT
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

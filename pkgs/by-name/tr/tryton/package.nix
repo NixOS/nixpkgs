@@ -10,7 +10,7 @@
   gtkspell3,
   adwaita-icon-theme,
   glib,
-  goocanvas2,
+  goocanvas_2,
   gdk-pixbuf,
   pango,
   fontconfig,
@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tryton";
-  version = "7.6.3";
+  version = "7.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yZHHtTVVjiGUT0PA8q5MBBvh04JqMlWOscnA09QD0Yk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-X8jJ/NXbvoKJdKep78inefILaFLjJyAmRMVfdOEb0tk=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     adwaita-icon-theme
-    goocanvas2
+    goocanvas_2
     fontconfig
     freetype
     gtk3
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''
@@ -81,10 +81,10 @@ python3Packages.buildPythonApplication rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       johbo
       udono
     ];
   };
-}
+})

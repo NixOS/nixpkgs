@@ -15,18 +15,15 @@
   gdk-pixbuf,
   taglib,
   libimobiledevice,
-  monoSupport ? false,
-  mono,
   udevCheckHook,
-  gtk-sharp-2_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpod";
   version = "0.8.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
+    url = "mirror://sourceforge/gtkpod/libgpod-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
   };
 
@@ -57,10 +54,7 @@ stdenv.mkDerivation rec {
     "--without-hal"
     "--enable-udev"
     "--with-udev-dir=${placeholder "out"}/lib/udev"
-  ]
-  ++ lib.optionals monoSupport [ "--with-mono" ];
-
-  dontStrip = monoSupport;
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -72,16 +66,14 @@ stdenv.mkDerivation rec {
   ++ (with perlPackages; [
     perl
     XMLParser
-  ])
-  ++ lib.optional monoSupport mono;
+  ]);
 
   buildInputs = [
     libxml2
     sg3_utils
     sqlite
     taglib
-  ]
-  ++ lib.optional monoSupport gtk-sharp-2_0;
+  ];
 
   propagatedBuildInputs = [
     gdk-pixbuf
@@ -98,12 +90,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";
     mainProgram = "ipod-read-sysinfo-extended";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

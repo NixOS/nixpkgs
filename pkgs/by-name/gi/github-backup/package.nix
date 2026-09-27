@@ -8,16 +8,16 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "github-backup";
-  version = "0.52.0";
+  version = "0.65.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "josegonzalez";
     repo = "python-github-backup";
-    tag = version;
-    hash = "sha256-rWHCmrLaPuIgvudygmjOgA+vuW5IBa47jVsPj5Cps0Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-p3EdOVrwegx8dOJFmBUUpSAbk3ONZbrTgmQut/bxgJ0=";
   };
 
   build-system = with python3Packages; [
@@ -42,12 +42,12 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
-    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "github-backup";
   };
-}
+})

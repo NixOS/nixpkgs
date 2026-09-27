@@ -2,11 +2,14 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule {
   pname = "gx-go";
-  version = "unstable-2020-03-03";
+  version = "1.9.0-unstable-2020-03-03";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "whyrusleeping";
@@ -22,11 +25,17 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  preVersionCheck = ''
+    export version="1.9.0"
+  '';
+
+  meta = {
     description = "Tool for importing go packages into gx";
     mainProgram = "gx-go";
     homepage = "https://github.com/whyrusleeping/gx-go";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

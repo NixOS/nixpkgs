@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   vala,
   meson,
   ninja,
@@ -19,7 +20,7 @@
   gpgme,
   python3,
   openldap,
-  gcr,
+  gcr_3,
   libsecret,
   avahi,
   p11-kit,
@@ -28,14 +29,24 @@
   libhandy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seahorse";
   version = "47.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/seahorse/${lib.versions.major version}/seahorse-${version}.tar.xz";
+    url = "mirror://gnome/sources/seahorse/${lib.versions.major finalAttrs.version}/seahorse-${finalAttrs.version}.tar.xz";
     hash = "sha256-nBkX5KYff+u3h4Sc42znF/znBsNGiAuZHQVtVNrbysw=";
   };
+
+  patches = [
+    # Fix build with gpgme 2.0+
+    # https://gitlab.gnome.org/GNOME/seahorse/-/merge_requests/248
+    (fetchpatch {
+      name = "seahorse-allow-build-with-gpgme-2_0.patch";
+      url = "https://gitlab.gnome.org/GNOME/seahorse/-/commit/aa68522cc696fa491ccfdff735b77bcf113168d0.patch";
+      hash = "sha256-xd5K8xUGuMk+41JROsq7QpZ5gD2jPAbv1kQdLI3z9lc=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -48,14 +59,14 @@ stdenv.mkDerivation rec {
     openssh
     gnupg
     desktop-file-utils
-    gcr
+    gcr_3
   ];
 
   buildInputs = [
     gtk3
     glib
     glib-networking
-    gcr
+    gcr_3
     gsettings-desktop-schemas
     gpgme
     libsecret
@@ -87,7 +98,7 @@ stdenv.mkDerivation rec {
     # Add “org.gnome.crypto.pgp” GSettings schema to path
     # to make it available for “gpgme-backend” test.
     # It is used by Seahorse’s internal “common” library.
-    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
+    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr_3}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
   '';
@@ -95,7 +106,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Pick up icons from Gcr
-      --prefix XDG_DATA_DIRS : "${gcr}/share"
+      --prefix XDG_DATA_DIRS : "${gcr_3}/share"
     )
   '';
 
@@ -105,12 +116,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
     mainProgram = "seahorse";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

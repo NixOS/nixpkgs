@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "memory_tempfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create temporary files and temporary dirs in memory-based filesystems on Linux";
     homepage = "https://github.com/mbello/memory-tempfile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

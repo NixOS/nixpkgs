@@ -14,22 +14,22 @@
   libdrm,
   gpu-screen-recorder,
   libglvnd,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.7.8";
+  version = "5.8.1";
 
   src = fetchgit {
-    url = "https://repo.dec05eba.com/${pname}";
-    tag = version;
-    hash = "sha256-Vzi7IfiMsBFJZaZwC1CWZkVFCfDAfU0lmO7orRLjqgU=";
+    url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
+    tag = finalAttrs.version;
+    hash = "sha256-LOaHYk7c8USZz5p17YdzcgGJ+FZkEt1qn15VggnQyJQ=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +46,13 @@ stdenv.mkDerivation rec {
     libayatana-appindicator
     libpulseaudio
     libdrm
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     wayland
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   preFixup =
     let
@@ -79,7 +82,8 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
-}
+})

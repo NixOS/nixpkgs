@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eigen";
   version = "2.0.17";
 
   src = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-C1Bu2H4zxd/2QVzz9AOdoCSRwOYjF41Vr/0S8Fm2kzQ=";
   };
 
@@ -22,14 +22,13 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/445447
   patches = [ ./cmake-4-build.patch ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
-      sander
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

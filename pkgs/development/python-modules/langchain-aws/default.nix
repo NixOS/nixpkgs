@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   boto3,
@@ -13,6 +13,14 @@
   pydantic,
 
   # tests
+  langchain,
+
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
+
+  # tests
+  langchain-openai,
   langchain-tests,
   pytest-asyncio,
   pytest-cov-stub,
@@ -22,16 +30,17 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.0.0";
+  version = "1.7.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "langchain-aws==${version}";
-    hash = "sha256-Y4r9a7EiyOACcU41+1Lo89jguu1QmijWsNeoNqKF3cY=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-WIa2LWG21WEV4O58K172FGMOpJLfdHj/8+UWabGBKdw=";
   };
 
   postPatch = ''
@@ -39,9 +48,9 @@ buildPythonPackage rec {
       --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -51,21 +60,38 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
+  optional-dependencies = {
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
+      langchain-anthropic
+    ];
+  };
+
   nativeCheckInputs = [
+    anthropic
+    langchain
+    langchain-openai
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    # Requires aws-bedrock-token-generator (not packaged)
+    "test_bedrock_api_key_provider"
+    "test_installed_provider_mints_token_when_called"
+    # botocore added new content block keys
+    "test__bedrock_content_block_keys_match_botocore"
+  ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 
@@ -74,11 +100,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-aws==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
@@ -87,4 +114,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

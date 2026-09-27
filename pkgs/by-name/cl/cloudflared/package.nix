@@ -7,34 +7,29 @@
   gitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflared";
-  version = "2025.11.1";
+  version = "2026.9.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    tag = version;
-    hash = "sha256-OspDwmh8rzGaHlLfQiUxQzDNxBdzkBJbPrmL1YN7BtM=";
+    tag = finalAttrs.version;
+    hash = "sha256-hWU8hdIUqiwU3RfL4alL1pck0SGcbwxunv9Yw9+9xfY=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-mTNP7u+kCYR9rcYGJ20q7Tl/Oi6ZF/UdEfiI1C7mfpw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs"
   ];
 
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
     export HOME="$(mktemp -d)"
-
-    # Workaround for: protocol_test.go:11:
-    #   lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:51876->[::1]:53: read: connection refused
-    substituteInPlace "edgediscovery/protocol_test.go" \
-      --replace-warn "TestProtocolPercentage" "SkipProtocolPercentage"
 
     # Workaround for: origin_icmp_proxy_test.go:46:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied
@@ -68,12 +63,17 @@ buildGoModule rec {
     #   Should be false
     substituteInPlace "datagramsession/manager_test.go" \
       --replace-warn "TestManagerCtxDoneCloseSessions" "SkipManagerCtxDoneCloseSessions"
+
+    # Workaround for: curves_test.go:121:
+    #   Should be true
+    substituteInPlace "crypto/curves_test.go" \
+      --replace-warn "TestSupportedCurvesNegotiation" "SkipSupportedCurvesNegotiation"
   '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    tests = callPackage ./tests.nix { inherit version; };
+    tests = callPackage ./tests.nix { inherit (finalAttrs) version; };
     updateScript = gitUpdater { };
   };
 
@@ -95,7 +95,7 @@ buildGoModule rec {
     '';
     homepage = "https://www.cloudflare.com/products/tunnel";
     downloadPage = "https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/";
-    changelog = "https://raw.githubusercontent.com/cloudflare/cloudflared/refs/tags/${version}/RELEASE_NOTES";
+    changelog = "https://raw.githubusercontent.com/cloudflare/cloudflared/refs/tags/${finalAttrs.version}/RELEASE_NOTES";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [
@@ -105,7 +105,8 @@ buildGoModule rec {
       piperswe
       qjoly
       wrbbz
+      ryand56
     ];
     mainProgram = "cloudflared";
   };
-}
+})

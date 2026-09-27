@@ -1,5 +1,5 @@
 import ./generic.nix rec {
-  version = "5.4.4";
+  version = "5.4.6";
   tag = "v${version}";
-  sourceSha256 = "sha256-vHcMlWr/Dy5CnX165ihpCKNTVvw1eWncxzPho+73wB0=";
+  sourceSha256 = "sha256-2riqX1H+h6710roYqa4iP/dJCY/P55OCs/Aw9K+7D7w=";
 }

@@ -12,12 +12,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencloud-desktop";
-  version = "3.0.2";
+  version = "4.0.0";
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ILOapZfySDJWZJDVFwNs46SEw/yPpe/+2dctyRl8iJ8=";
+    hash = "sha256-f8R/q6oyMpPBW3viWoWZeRVrcHYX46JiNIdvONdaqQQ=";
   };
 
   buildInputs = [

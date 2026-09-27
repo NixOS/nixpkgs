@@ -4,12 +4,13 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  testers,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdiscid";
-  version = "0.6.5";
+  version = "0.7.0";
 
   nativeBuildInputs = [
     cmake
@@ -20,17 +21,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "metabrainz";
     repo = "libdiscid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lGq2iGt7c4h8HntEPeQcd7X+IykRLm0kvjrLswRWSSs=";
+    hash = "sha256-ynQuEzHblXnqvV6bKtjJNFuwUkd/ACVCy+jFfUAD+jo=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework IOKit";
+  postPatch = ''
+    substituteInPlace libdiscid.pc.in \
+      --replace-fail 'libdir=@libdir@' 'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail 'includedir=@includedir@' 'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "CoreFoundation"
+      "-framework"
+      "IOKit"
+    ];
+  };
 
-  meta = with lib; {
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "C library for creating MusicBrainz DiscIDs from audio CDs";
     homepage = "https://musicbrainz.org/doc/libdiscid";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
+    pkgConfigModules = [ "libdiscid" ];
   };
 })

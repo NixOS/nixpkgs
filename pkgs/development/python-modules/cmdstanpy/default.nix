@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   cmdstan,
   setuptools,
@@ -14,7 +15,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmdstanpy";
   version = "1.3.0";
   pyproject = true;
@@ -22,13 +23,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XVviGdJ41mcjCscL3jvcpHi6zMREHsuShGHpnMQX6V8=";
   };
 
   patches = [
     (replaceVars ./use-nix-cmdstan-path.patch {
       cmdstan = "${cmdstan}/opt/cmdstan";
+    })
+    # Fix tests for cmdstan 2.39.0
+    (fetchpatch {
+      url = "https://github.com/stan-dev/cmdstanpy/commit/5ef72db67660b8fb0ea0ba25bef9667e88aafc5f.patch";
+      hash = "sha256-BZcJiRAluItsfzvGJ2yJVDHuUp92AI19x7d06wRGzY4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/stan-dev/cmdstanpy/commit/f08c69835d2d4a69c7e526d939757b8f609da8f6.patch";
+      hash = "sha256-3o8d5h0eRkghav2vuG6eERf6u6GJSKEaqmnGhfBXbjk=";
     })
   ];
 
@@ -58,7 +68,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -84,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/stan-dev/cmdstanpy";
     description = "Lightweight interface to Stan for Python users";
-    changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
+    changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

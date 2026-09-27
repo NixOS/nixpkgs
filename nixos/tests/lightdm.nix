@@ -20,7 +20,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
     in
     ''
       start_all()

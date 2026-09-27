@@ -6,7 +6,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "promise";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "syrusakbary";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "promise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ultra-performant Promise implementation in Python";
     homepage = "https://github.com/syrusakbary/promise";
     changelog = "https://github.com/syrusakbary/promise/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

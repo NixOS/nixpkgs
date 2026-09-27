@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   appstream-glib,
   autoAddDriverRunpath,
   cargo,
@@ -18,23 +18,25 @@
   dmidecode,
   util-linux,
   systemd,
+  libsoup_3,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.9.0";
+  version = "51.0";
 
-  src = fetchFromGitHub {
-    owner = "nokyan";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME/Incubator";
     repo = "resources";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ayptMBniaqVQwLThxTbMn5498kURjwRkC9lVPs7pryo=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZdLBWawoD07SxC+/QTeyOXx7uAyazP6XjLeTF6lsWRw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-b6zWjSTkqdLaWRtMIHTLT0rEHlIxEKejYuoJkr4C3nY=";
+    hash = "sha256-m4LwmA5mwd2bUK5X26HJvIr6hxf75O+9WGEfYVthSh0=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    libsoup_3
   ];
 
   # Check all Command::new
@@ -61,10 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     dmidecode
     util-linux # lscpu
     systemd # udevadm
-  ];
-
-  mesonFlags = [
-    (lib.mesonOption "profile" "default")
   ];
 
   preFixup = ''
@@ -76,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/nokyan/resources/releases/tag/v${finalAttrs.version}";
     description = "Monitor your system resources and processes";
-    homepage = "https://github.com/nokyan/resources";
-    license = lib.licenses.gpl3Only;
+    homepage = "https://gitlab.gnome.org/GNOME/Incubator/resources";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "resources";
     maintainers = with lib.maintainers; [
       lukas-heiligenbrunner
       ewuuwe
+      graysontinker
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;

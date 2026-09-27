@@ -5,29 +5,32 @@
   kernel,
   kernelModuleMakeFlags,
   bc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2025-05-29";
+  version = "${kernel.version}-unstable-2026-08-18";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "morrownr";
-    repo = "88x2bu-20210702";
-    rev = "fe48647496798cac77976e310ee95da000b436c9";
-    hash = "sha256-h20vwCgLOiNh0LN3MGwPl3F/PSWGc2XS4t1sdeFAOko=";
+    owner = "RinCat";
+    repo = "RTL88x2BU-Linux-Driver";
+    rev = "ad889cc324baf2f13724e3d7b6e880804d3adae7";
+    hash = "sha256-COMFTSlaDeWdRLMmpJOK7hyCXeUC9QX2D5YIortl/ko=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace /sbin/depmod \# \
-      --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      --replace /sbin/depmod \#
   '';
 
   preInstall = ''
@@ -36,12 +39,18 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "Realtek rtl88x2bu driver";
-    homepage = "https://github.com/morrownr/88x2bu-20210702";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ otavio ];
-    broken = kernel.kernelAtLeast "6.17";
+    homepage = "https://github.com/RinCat/RTL88x2BU-Linux-Driver";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      otavio
+      claymorwan
+    ];
+
+    broken = kernel.kernelOlder "5.11";
   };
 }

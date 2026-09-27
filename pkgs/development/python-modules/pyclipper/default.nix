@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.3.0.post6";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "pyclipper";
     tag = version;
-    hash = "sha256-s2D0ipDatAaF7A1RYOKyI31nkfc/WL3vHWsAMbo+WcY=";
+    hash = "sha256-mh+F3iFCItmLbV6bF7Mi5IaWwjcKrE9Nk6lxglyFUg4=";
   };
 
   build-system = [
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyclipper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython wrapper for clipper library";
     homepage = "https://github.com/fonttools/pyclipper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

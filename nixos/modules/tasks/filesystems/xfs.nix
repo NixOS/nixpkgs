@@ -18,6 +18,11 @@ in
 
     system.fsPackages = [ pkgs.xfsprogs.bin ];
 
+    systemd = {
+      packages = [ pkgs.xfsprogs.out ];
+      services.xfs_scrub_all.path = [ pkgs.util-linux.bin ]; # lsblk
+    };
+
     boot.initrd.availableKernelModules = mkIf inInitrd [
       "xfs"
       "crc32c"

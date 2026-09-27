@@ -3,34 +3,34 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyskyqhub";
   version = "0.1.9";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_hub";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Tests require physical hardware
   doCheck = false;
 
   pythonImportsCheck = [ "pyskyqhub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for accessing SkyQ Hub";
     homepage = "https://github.com/RogerSelwyn/skyq_hub";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

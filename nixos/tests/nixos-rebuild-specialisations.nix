@@ -1,9 +1,4 @@
-{
-  hostPkgs,
-  lib,
-  withNg,
-  ...
-}:
+{ hostPkgs, ... }:
 {
   name = "nixos-rebuild-specialisations";
 
@@ -25,6 +20,7 @@
           hashed-mirrors = null;
           connect-timeout = 1;
         };
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
 
         system.includeBuildDependencies = true;
 
@@ -33,7 +29,6 @@
           pkgs.grub2
         ];
 
-        system.rebuild.enableNg = withNg;
         system.switch.enable = true;
 
         virtualisation = {
@@ -65,8 +60,6 @@
               environment.systemPackages = [
                 (pkgs.writeShellScriptBin "parent" "")
               ];
-
-              system.rebuild.enableNg = ${lib.boolToString withNg};
 
               specialisation.foo = {
                 inheritParentConfig = true;

@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
@@ -16,7 +14,6 @@
   patchelf,
   pkg-config,
   python3Packages,
-  shellcheck,
 
   # runtime
   flatbuffers,
@@ -36,16 +33,12 @@
 let
   inherit (lib)
     cmakeBool
+    cmakeFeature
+    getLib
     ;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
-
-  tbbbind_version = "2_5";
-  tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
-    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
-  };
 
   python = python3Packages.python.withPackages (
     ps: with ps; [
@@ -60,34 +53,30 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvino";
-  version = "2025.2.1";
+  version = "2026.4.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Bu0m7nGqyHwHsa7FKr4nvUh/poJxMTgwuAU81QBmI4g=";
+    hash = "sha256-WIFbm2/lptoJGBVqpYM/qD9MHOTpayMT95fXOLmlfP4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "cmake4-compat.patch";
-      url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
-      hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
-    })
-  ];
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "python"
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
+    # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
+    addDriverRunpath
+
     cmake
     git
     libarchive
@@ -95,19 +84,15 @@ stdenv.mkDerivation rec {
     pkg-config
     python
     scons'
-    shellcheck
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
 
-  postPatch = ''
-    mkdir -p temp/tbbbind_${tbbbind_version}
-    pushd temp/tbbbind_${tbbbind_version}
-    bsdtar -xf ${tbbbind}
-    echo "${tbbbind.url}" > ie_dependency.info
-    popd
-  '';
+  patches = [
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
+  ];
 
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
@@ -117,9 +102,22 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
-    "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
-    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DOpenCV_DIR=${getLib opencv}/lib/cmake/opencv4/"
+    "-DProtobuf_LIBRARIES=${getLib protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
+
+    # OV_CPACK_* variables are normally set by packaging macros that only run
+    # when CPACK_GENERATOR matches a known type to upstream.
+    # Without one, all vars remain undefined and install() destinations are empty,
+    # putting files in $out/ root or producing absolute paths. Set them directly
+    # here so the build produces a standard layout.
+    (cmakeFeature "OV_CPACK_LIBRARYDIR" "lib")
+    (cmakeFeature "OV_CPACK_RUNTIMEDIR" "lib")
+    (cmakeFeature "OV_CPACK_ARCHIVEDIR" "lib")
+    (cmakeFeature "OV_CPACK_INCLUDEDIR" "include")
+    (cmakeFeature "OV_CPACK_OPENVINO_CMAKEDIR" "lib/cmake/OpenVINO")
+    (cmakeFeature "OV_CPACK_PYTHONDIR" "python")
+    (cmakeFeature "OV_CPACK_PLUGINSDIR" "lib")
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (cmakeBool "NCC_SYLE" false)
@@ -148,10 +146,6 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libngraph_backend.so"
-  ];
-
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
   env.NIX_CFLAGS_COMPILE = "-Wno-odr";
 
@@ -174,20 +168,18 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $python
-    mv $out/python/* $python/
-    rmdir $out/python
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
   '';
 
   postFixup = ''
-    # Link to OpenCL
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addDriverRunpath "$lib"
-    done
+    substituteInPlace $dev/lib/pkgconfig/openvino.pc \
+      --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${finalAttrs.src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
@@ -197,8 +189,8 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
-}
+})

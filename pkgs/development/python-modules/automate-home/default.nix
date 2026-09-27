@@ -8,7 +8,6 @@
   hiredis,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   pyyaml,
   setuptools,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # Typing issue
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "home" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to automate (home) devices";
     homepage = "https://github.com/majamassarini/automate-home";
     changelog = "https://github.com/majamassarini/automate-home/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

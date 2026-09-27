@@ -3,6 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
+  getVersionFile,
   cmake,
   zlib,
   ncurses,
@@ -24,39 +25,43 @@
   monorepoSrc ? null,
   enableManpages ? false,
   devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
-  fetchpatch2,
-  replaceVars,
+  versionCheckHook,
 }:
 
 let
-  vscodeExt = {
+  vscodeExt = rec {
     name = "lldb-dap";
     version = "0.2.0";
+    uniqueId = "llvm-org.${name}-${version}";
   };
+  canRunLldb = !enableManpages && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation (
   finalAttrs:
   {
-    passthru.monorepoSrc = monorepoSrc;
     pname = "lldb";
     inherit version;
 
     src =
       if monorepoSrc != null then
-        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/lldb "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
-            mkdir -p "$out/llvm"
-            cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
-          ''
-        )
+        runCommand "lldb-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/lldb "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+              mkdir -p "$out/llvm"
+              cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+            ''
+          )
       else
         src;
 
@@ -70,7 +75,14 @@ stdenv.mkDerivation (
 
     sourceRoot = "${finalAttrs.src.name}/lldb";
 
-    patches = [ ./gnu-install-dirs.patch ];
+    patches = [
+      (getVersionFile "lldb/gnu-install-dirs.patch")
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "18") [
+      # Fix build with gcc15
+      # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
+      ./lldb-add-include-cstdint.patch
+    ];
 
     nativeBuildInputs = [
       cmake
@@ -93,6 +105,8 @@ stdenv.mkDerivation (
       libedit
       libxml2
       libllvm
+      python3
+      lua5_3
       # Starting with LLVM 16, the resource dir patch is no longer enough to get
       # libclang into the rpath of the lldb executables. By putting it into
       # buildInputs cc-wrapper will set up rpath correctly for us.
@@ -101,6 +115,8 @@ stdenv.mkDerivation (
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.bootstrap_cmds
     ];
+
+    strictDeps = true;
 
     hardeningDisable = [ "format" ];
 
@@ -130,38 +146,62 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
-      (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
+      (lib.cmakeFeature "LLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
     ]
     ++ devExtraCmakeFlags;
 
     doCheck = false;
-    doInstallCheck = false;
+    doInstallCheck = canRunLldb;
 
-    # TODO: cleanup with mass-rebuild
+    nativeInstallCheckInputs = lib.optionals canRunLldb [ versionCheckHook ];
+
+    preVersionCheck = ''
+      version=${release_version}
+    '';
+
     installCheckPhase = ''
-      if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
-          echo "ERROR: python files not installed where expected!";
-          return 1;
-      fi
-      if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
-          echo "ERROR: lua files not installed where expected!";
-          return 1;
-      fi
+      runHook preInstallCheck
+
+      pythonOutput=$($out/bin/lldb --batch -o 'script print(1000+100+10+1)' 2>&1)
+      echo "$pythonOutput"
+      grep -Fx 1111 <<< "$pythonOutput"
+
+      luaOutput=$($out/bin/lldb --batch --script-language lua \
+        -o 'script io.stdout:write(1000+100+10+1, "\n")' 2>&1)
+      echo "$luaOutput"
+      grep -Fx 1111 <<< "$luaOutput"
+
+      runHook postInstallCheck
     '';
 
-    postInstall = ''
-      wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
+    postInstall =
+      let
+        # Needed after https://github.com/llvm/llvm-project/commit/5f0f0fcd62227fb864203acc1a57e3ebf7a254a3
+        packageJsonPath =
+          if lib.versionAtLeast release_version "22" then
+            "../tools/${vscodeExt.name}/extension/package.json"
+          else
+            "../tools/${vscodeExt.name}/package.json";
+      in
+      ''
+        wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
 
-      # Editor support
-      # vscode:
-      install -D ../tools/${vscodeExt.name}/package.json $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
-      mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-      ln -s $out/bin/*${vscodeExt.name} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-    '';
+        # Editor support
+        # vscode:
+        vscodeExtDir="$out/share/vscode/extensions/${vscodeExt.uniqueId}"
+        install -D ${packageJsonPath} "$vscodeExtDir/package.json"
+        mkdir -p "$vscodeExtDir/bin"
+        ln -s $out/bin/*${vscodeExt.name} "$vscodeExtDir/bin"
+      '';
 
-    passthru.vscodeExtName = vscodeExt.name;
-    passthru.vscodeExtPublisher = "llvm";
-    passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
+    passthru = {
+      inherit monorepoSrc;
+      vscodeExtName = vscodeExt.name;
+      vscodeExtPublisher = "llvm";
+      vscodeExtUniqueId = vscodeExt.uniqueId;
+    };
+
+    __structuredAttrs = true;
 
     meta = llvm_meta // {
       homepage = "https://lldb.llvm.org/";
@@ -180,23 +220,23 @@ stdenv.mkDerivation (
 
     ninjaFlags = [ "docs-lldb-man" ];
 
-    propagatedBuildInputs = [ ];
-
     # manually install lldb man page
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/man/man1
       install docs/man/lldb.1 -t $out/share/man/man1/
+
+      runHook postInstall
     '';
 
-    postPatch = null;
     postInstall = null;
 
     outputs = [ "out" ];
 
-    doCheck = false;
-
     meta = llvm_meta // {
       description = "man pages for LLDB ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

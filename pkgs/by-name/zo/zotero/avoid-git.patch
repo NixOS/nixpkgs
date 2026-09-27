@@ -1,0 +1,42 @@
+diff --git a/js-build/document-worker.js b/js-build/document-worker.js
+index 52f81d2d83..8899b1644b 100644
+--- a/js-build/document-worker.js
++++ b/js-build/document-worker.js
+@@ -16,8 +16,7 @@ async function getDocumentWorker(signatures) {
+ 	const modulePath = path.join(__dirname, '..', 'document-worker');
+ 	const targetDir = path.join(__dirname, '..', 'build', 'resource', 'document-worker');
+ 
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 
+ 	if (!('document-worker' in signatures)
+ 			|| signatures['document-worker'].hash !== hash
+diff --git a/js-build/note-editor.js b/js-build/note-editor.js
+index 1435730342..6eebb10c50 100644
+--- a/js-build/note-editor.js
++++ b/js-build/note-editor.js
+@@ -12,8 +12,7 @@ async function getZoteroNoteEditor(signatures) {
+ 
+ 	const modulePath = path.join(__dirname, '..', 'note-editor');
+ 
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 
+ 	if (!('note-editor' in signatures) || signatures['note-editor'].hash !== hash) {
+ 		const targetDir = path.join(__dirname, '..', 'build', 'resource', 'note-editor');
+diff --git a/js-build/reader.js b/js-build/reader.js
+index 12b5df6a92..4e76039695 100644
+--- a/js-build/reader.js
++++ b/js-build/reader.js
+@@ -12,8 +12,7 @@ async function getReader(signatures) {
+ 
+ 	const modulePath = path.join(__dirname, '..', 'reader');
+ 	
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 	
+ 	if (!('reader' in signatures) || signatures['reader'].hash !== hash) {
+ 		const targetDir = path.join(__dirname, '..', 'build', 'resource', 'reader');

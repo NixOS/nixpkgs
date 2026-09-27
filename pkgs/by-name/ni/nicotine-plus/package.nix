@@ -56,16 +56,17 @@ python3Packages.buildPythonApplication {
   ];
 
   doCheck = false;
-  meta = with lib; {
+  meta = {
     description = "Graphical client for the SoulSeek peer-to-peer system";
+    mainProgram = "nicotine";
     longDescription = ''
       Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
       to the official Soulseek client, providing additional functionality while
       keeping current with the Soulseek protocol.
     '';
     homepage = "https://www.nicotine-plus.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       klntsky
       amadaluzia
     ];

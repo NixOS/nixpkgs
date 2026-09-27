@@ -1,12 +1,11 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   numpy,
@@ -14,13 +13,14 @@
   pydantic,
   tqdm,
   toolz,
+  typing-extensions,
 
   # optional dependencies (torch)
   torch,
   lightning,
   scipy,
 
-  # test
+  # tests
   pytestCheckHook,
   distutils,
   matplotlib,
@@ -30,38 +30,39 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gluonts";
-  version = "0.16.2";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "gluonts";
-    tag = "v${version}";
-    hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9X+cTwaoCsAgrjaZtWjDYDjYZO6MNPuBt0oGQUH8/nc=";
   };
 
-  patches = [
-    # Fixes _pickle.UnpicklingError: Weights only load failed.
-    # https://github.com/awslabs/gluonts/pull/3269
-    (fetchpatch {
-      name = "fix-torch-load_from_checkpoint";
-      url = "https://github.com/awslabs/gluonts/pull/3269/commits/6420e75cfbeabcd94e2ff09dfed3b2eeb4881710.patch";
-      hash = "sha256-UeLjgKra+Y3uPoTBle+YCxD0a1ahu6d5anrMHn4HH2I=";
-    })
-  ];
-
   build-system = [
-    setuptools
+    hatchling
   ];
 
+  patches = [
+    # Fix pandas>=3 compatibility
+    ./pandas3-compat.patch
+  ];
+
+  pythonRelaxDeps = [
+    "pandas"
+    "toolz"
+  ];
   dependencies = [
     numpy
     pandas
     pydantic
     tqdm
     toolz
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -71,11 +72,6 @@ buildPythonPackage rec {
       scipy
     ];
   };
-
-  pythonRelaxDeps = [
-    "numpy"
-    "toolz"
-  ];
 
   pythonImportsCheck = [
     "gluonts"
@@ -100,11 +96,15 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     which
   ]
-  ++ optional-dependencies.torch;
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   disabledTestPaths = [
     # requires `cpflows`, not in Nixpkgs
     "test/torch/model"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5
+    "test/torch/test_torch_item_id_info.py"
   ];
 
   disabledTests = [
@@ -119,8 +119,8 @@ buildPythonPackage rec {
   meta = {
     description = "Probabilistic time series modeling in Python";
     homepage = "https://ts.gluon.ai";
-    changelog = "https://github.com/awslabs/gluonts/releases/tag/${src.tag}";
+    changelog = "https://github.com/awslabs/gluonts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

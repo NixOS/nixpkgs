@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sockjs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sockjs server";
     homepage = "https://github.com/aio-libs/sockjs";
     changelog = "https://github.com/aio-libs/sockjs/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

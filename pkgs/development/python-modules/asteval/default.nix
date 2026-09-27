@@ -7,16 +7,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asteval";
-  version = "1.0.7";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
-    tag = version;
-    hash = "sha256-c+gVT947IpJC2gn1SWVth0ScOBh34m89dpgR5AikOHk=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z30H1bSud/VbYnHqRYzyJnDufFM4uBhPcMtVmZ1Sl94=";
   };
 
   build-system = [ setuptools-scm ];
@@ -33,11 +33,11 @@ buildPythonPackage rec {
     "test_set_default_nodehandler"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/lmfit/asteval";
-    changelog = "https://github.com/lmfit/asteval/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

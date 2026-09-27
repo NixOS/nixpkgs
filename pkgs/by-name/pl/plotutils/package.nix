@@ -11,12 +11,12 @@
 # gentoo passes X, this package contains fonts
 # I'm only interested in making pstoedit convert to svg
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plotutils";
   version = "2.6";
 
   src = fetchurl {
-    url = "mirror://gnu/plotutils/plotutils-${version}.tar.gz";
+    url = "mirror://gnu/plotutils/plotutils-${finalAttrs.version}.tar.gz";
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/plotutils/";
 
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

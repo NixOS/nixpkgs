@@ -12,7 +12,7 @@
   dcraw,
   gimp,
   libjxl,
-  squashfsTools,
+  squashfs-tools,
 
   # Exclude "raw" for now because dcraw is vulnerable.
   enabledThumbnailers ? [
@@ -30,16 +30,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xapp-thumbnailers";
-  version = "1.2.9";
+  version = "1.2.10";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp-thumbnailers";
-    tag = version;
-    hash = "sha256-XlmWenp3BmGnmLGt9jauys9P92icsezjieHuyGVMisw=";
+    tag = finalAttrs.version;
+    hash = "sha256-6ipO1l+K9um8ShIFEHsza5G/yYQxlkBAnYtdgqFC0bI=";
   };
 
   patches = [ ./meson.patch ];
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
   preFixup =
     let
       runtimeBinPackages =
-        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfsTools
+        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfs-tools
         ++ lib.optional (builtins.elem "gimp" enabledThumbnailers) gimp
         ++ lib.optional (builtins.elem "jxl" enabledThumbnailers) libjxl
         ++ lib.optional (builtins.elem "raw" enabledThumbnailers) dcraw;
@@ -109,14 +109,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "XappThumbnailers" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Thumbnailers for GTK desktop environments";
     homepage = "https://github.com/linuxmint/xapp-thumbnailers";
-    changelog = "https://github.com/linuxmint/xapp-thumbnailers/blob/${src.tag}/debian/changelog";
+    changelog = "https://github.com/linuxmint/xapp-thumbnailers/blob/${finalAttrs.src.tag}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ thunze ];
     inherit (xapp.meta) platforms;
   };
-}
+})

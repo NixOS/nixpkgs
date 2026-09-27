@@ -1,12 +1,19 @@
 {
   lib,
   stdenvNoCC,
-  nodejs,
-  pnpm_9,
+  nodejs-slim,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
   fetchFromGitHub,
   nix-update-script,
+  runCommand,
+  emmet-language-server,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
   version = "2.8.0";
@@ -18,25 +25,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-EY/xfrf6sGnZPbkbf9msauOoZ0h0EjLSwQC0aiS/Kco=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-sMOC5MQmJKwXZoUZnOmBy2I83SNMdrPc6WQKmeVGiCc=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-FbwciSGn/W8xQhTU2rHdYIX01wUAqcgY67za8n5AMcM=";
   };
 
   nativeBuildInputs = [
-    nodejs
-    pnpm_9.configHook
+    nodejs-slim
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
-    pnpm build
-
-    runHook postBuild
-  '';
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
@@ -61,7 +62,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.smoke = runCommand "emmet-language-server-smoke-test" { } ''
+      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+      CONTENT_LENGTH=''${#INIT_REQUEST}
+
+      RESPONSE=$(
+        {
+          printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+          sleep 1
+        } | timeout 3  ${lib.getExe emmet-language-server} --stdio 2>&1 | head -c 1000
+      ) || true
+
+      echo "$RESPONSE" | grep -q '"capabilities"'
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Language server for emmet.io";

@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-6eEuMztSUVboKjyFLyIBa5FYIg0vR0VN6crop303FAE=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_mocker.py \
+      --replace-fail assertEquals assertEqual
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -37,11 +42,11 @@ buildPythonPackage rec {
     testtools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mock out responses from the requests package";
     homepage = "https://requests-mock.readthedocs.io";
     changelog = "https://github.com/jamielennox/requests-mock/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

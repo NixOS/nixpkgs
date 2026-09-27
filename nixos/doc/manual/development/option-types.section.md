@@ -137,6 +137,22 @@ Users must still be careful about how they reference these paths.
     multiple option definitions are correctly merged together. The main use
     case is as the type of the `_module.freeformType` option.
 
+`types.optionDeclaration`
+
+:   The type of a module system option declaration, as created by `lib.mkOption`.
+    This allows an option to hold another option declaration as its value, which
+    can then be spliced into a module's `options` attrset. Note that this only
+    accepts option declarations, not evaluated options (i.e. options that have
+    been processed by `evalModules` and have a `value` field).
+
+    ::: {.warning}
+    Use of this type is a form of metaprogramming that makes modules harder
+    to reason about, since options and their types become dynamic values
+    rather than statically declared structure. Prefer conventional module
+    patterns where possible, and only reach for `types.optionDeclaration` when the
+    added complexity is justified.
+    :::
+
 `types.attrs`
 
 :   A free-form attribute set.
@@ -478,6 +494,47 @@ Composed types are types that take a type as parameter. `listOf
 
       Displays the option as `foo.<id>` in the manual.
 
+`types.attrListOf` *`t`*
+
+:   An ordered list of single-attribute attribute sets, where each value is of *`t`* type.
+    The output is always `[ { name1 = value1; } { name2 = value2; } ... ]`.
+
+    Definitions can be provided in two formats, which may be mixed via `lib.mkMerge`, `imports`, etc:
+
+    - **List format**: `[ { a = 1; } { b = 2; } ]` — each element must be a single-attribute attribute set.
+      Elements may be wrapped in `lib.mkOrder` (or `lib.mkBefore`/`lib.mkAfter`) to control ordering;
+      unwrapped elements use the default order priority.
+
+    - **Attribute set format**: `{ a = lib.mkOrder 100 1; b = 2; }` — each name-value pair becomes a single-attribute attribute set in the output.
+      Values may be wrapped in `lib.mkOrder` (or `lib.mkBefore`/`lib.mkAfter`) to control ordering.
+      Values without `lib.mkOrder` use the default priority.
+
+    Multiple definitions of the same option are concatenated and then sorted by priority.
+    Entries at the same priority level preserve their definition order.
+
+`types.attrListWith` { *`elemType`*, *`asAttrs`* ? false, *`mergeAttrValues`* ? _name: values: values }
+
+:   An ordered list of single-attribute attribute sets, where each value is of *`elemType`* type.
+
+    **Parameters**
+
+    `elemType` (Required)
+    : Specifies the type of each value in the attribute list.
+
+    `asAttrs`
+    : When `true`, the option value is an attribute set instead of a list.
+      Duplicate keys are merged using `mergeAttrValues`.
+      The ordered list is always available via `valueMeta.attrListValue`.
+
+    `mergeAttrValues`
+    : A function `name: values: mergedValue` that controls how duplicate keys
+      are combined when `asAttrs = true`. This is passed as the callback to
+      `lib.zipAttrsWith`. The `values` list is in order of priority.
+      By default, all values are collected into a list.
+
+    **Behavior**
+
+    - `attrListWith { elemType = t; }` is equivalent to `attrListOf t`
 
 `types.uniq` *`t`*
 
@@ -496,6 +553,20 @@ Composed types are types that take a type as parameter. `listOf
     function *`f`* which takes an argument of type *`from`* and return a
     value of type *`to`*. Can be used to preserve backwards compatibility
     of an option if its type was changed.
+
+`types.json`
+
+:   A type representing JSON-compatible values. This includes `null`, booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any JSON-compatible
+    values.
+
+`types.toml`
+
+:   A type representing TOML-compatible values. This includes booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any TOML-compatible
+    values.
 
 ## Submodule {#section-option-types-submodule}
 

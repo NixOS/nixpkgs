@@ -22,17 +22,21 @@
   sqlite,
   desktop-file-utils,
   libxml2,
+  libsecret,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.96.4-beta";
+  version = "0.99.7-beta-1";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPkqTnC5Gg2hnzQ2Lul5aXF5QhYpHQ1MiilvNiKHFdc=";
+    hash = "sha256-Te6/LAP4J1kW1aOvSVVrbLJSBfBwt3ia0dM7cBzOOD8=";
     fetchSubmodules = true;
   };
 
@@ -45,10 +49,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AISBkWJ0ZZy2HdZCwW6S5DcD09nVJOmglsoevCaD/3g=";
+    hash = "sha256-TRERgKHkQa+/32JS2xUiuXxg9bEsur1Z7hITbhQOFEM=";
   };
 
   mesonBuildType = "release";
+
+  # Euphonica caches album art as WebP, and gdk-pixbuf's default loaders.cache
+  # doesn't include a WebP loader, causing covers to fail to load repeatedly.
+  # https://github.com/NixOS/nixpkgs/issues/557510
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
 
   nativeBuildInputs = [
     cargo
@@ -74,13 +92,18 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     sqlite
     libxml2
+    libsecret
   ];
 
   meta = {
     description = "MPD client with delusions of grandeur, made with Rust, GTK and Libadwaita";
     homepage = "https://github.com/htkhiem/euphonica";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ paperdigits ];
+    maintainers = with lib.maintainers; [
+      paperdigits
+      aaravrav
+      doronbehar
+    ];
     mainProgram = "euphonica";
     platforms = with lib.platforms; linux;
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   doxygen,
   gettext,
@@ -18,9 +19,9 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exiv2";
-  version = "0.28.7";
+  version = "0.28.9";
 
   outputs = [
     "out"
@@ -33,9 +34,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exiv2";
     repo = "exiv2";
-    tag = "v${version}";
-    hash = "sha256-a7nPjDjTcwsQeypARvy2rRsv9jpasSSxSyCTLWNDDtA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ESRiiBBckGIhnhSOMmcF/m1PYi2sLGv1xxE0b22nl5M=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-i686-lens-rounding.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/7d25da6045556c8b9a81632cffd1bd2e2a9d0977.patch";
+      hash = "sha256-wA14qgkGIM7hvYRfv4+jPcMIbbr2oE9UvdaanVm4Sy0=";
+    })
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [
     cmake
@@ -107,12 +118,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://exiv2.org";
     description = "Library and command-line utility to manage image metadata";
     mainProgram = "exiv2";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

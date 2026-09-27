@@ -5,21 +5,18 @@
   mdformat,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-toc";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-toc";
     tag = version;
-    hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
+    hash = "sha256-Rj1lp5Ub+UriOuE896tywN4myovna2RLYO3LRa96FCM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -30,14 +27,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_toc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin to generate a table of contents";
     homepage = "https://github.com/hukkin/mdformat-toc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];
-    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }

@@ -51,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Refactoring and linting tool for Scala";
     mainProgram = "scalafix";
     homepage = "https://scalacenter.github.io/scalafix/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.tomahna ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.tomahna ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 })

@@ -5,6 +5,7 @@
   gnupg,
   setuptools,
   pytestCheckHook,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage rec {
@@ -33,10 +34,12 @@ buildPythonPackage rec {
     "test_tx_with_gpg"
   ];
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin was in 2021
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

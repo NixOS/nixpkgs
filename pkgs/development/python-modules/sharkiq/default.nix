@@ -9,16 +9,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sharkiq";
-  version = "1.4.2";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
-    tag = "v${version}";
-    hash = "sha256-VhWqYYGZRsEPW4g9kQznr50ujGhLcTs+TS3atxsqCng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-24/cJJ4RaM6twVorJ0pQ/LDHZBTP/rxCiwNozNLS82M=";
   };
 
   postPatch = ''
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sharkiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Shark IQ robots";
     homepage = "https://github.com/JeffResc/sharkiq";
-    changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

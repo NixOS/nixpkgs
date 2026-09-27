@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  fltk13,
+  fltk_1_3,
   portaudio,
   lame,
   libvorbis,
@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "butt";
-  version = "1.45.0";
+  version = "1.46.0";
 
   src = fetchurl {
     url = "https://danielnoethen.de/butt/release/${finalAttrs.version}/butt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iEmFEJRsTvHeKGYvnhzYXSC/q0DSw0Z/YgK4buDtg2Q=";
+    hash = "sha256-3RIC2H5HMn/e5Bl4XCPxxpv+FET9RgV7MxtcOuscXzs=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     portaudio
     lame
     libvorbis

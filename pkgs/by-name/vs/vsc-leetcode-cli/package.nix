@@ -21,11 +21,11 @@ buildNpmPackage {
 
   dontCheckForBrokenSymlinks = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for leetcode.com";
     homepage = "https://github.com/leetcode-tools/leetcode-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "leetcode";
   };
 }

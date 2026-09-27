@@ -26,13 +26,13 @@
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfutils";
-  version = "0.194";
+  version = "0.195";
 
   src = fetchurl {
-    url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-CeL/Az05uqiziKLX+8U5C/3pmuO3xnx9qvdDP7zw8B4=";
+    url = "https://sourceware.org/elfutils/ftp/${finalAttrs.version}/elfutils-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-N2Kf338fPcKBjhOPyiuAlBd9bC0PcB07tlClYSGNwCY=";
   };
 
   patches = [
@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
       name = "musl-strndupa.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
+    })
+    (fetchpatch {
+      name = "fix-i386_tlsdesc_relocation.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=bfd519cc58e190544a6785d3f0a27fcfaf7d8da3";
+      hash = "sha256-N7DL2FG1AWLc+hcnxGMbUl5TuieoAc9OD6gc0sbsiGI=";
     })
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
@@ -85,8 +90,8 @@ stdenv.mkDerivation rec {
     flex
     gettext
     bzip2
-  ]
-  ++ lib.optional enableDebuginfod pkg-config;
+    pkg-config
+  ];
   buildInputs = [
     zlib
     zstd
@@ -107,6 +112,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  strictDeps = true;
 
   hardeningDisable = [ "strictflexarrays3" ];
 
@@ -139,19 +146,22 @@ stdenv.mkDerivation rec {
     rev-prefix = "elfutils-";
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with lib.maintainers; [ r-burns ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" finalAttrs.version;
   };
-}
+})

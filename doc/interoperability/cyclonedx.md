@@ -39,7 +39,7 @@ The `nix:narinfo` properties should be accompanied by a `nix:store_path` propert
 | `nix:narinfo:system`      | The hardware and software platform on which this component is produced. |
 | `nix:narinfo:sig`         | Signatures claiming that this component is what it claims to be. |
 | `nix:narinfo:ca`          | Content address of this store object's file system object, used to compute its store path. |
-| `nix:narinfo:references`  | A whitespace separated array of store paths that this component references. |
+| `nix:narinfo:references`  | A whitespace-separated array of store paths that this component references. |
 
 ### `nix:fod` {#sec-interop.cylonedx-fod}
 

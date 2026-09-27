@@ -13,7 +13,7 @@
   libxml2,
   wingpanel,
   libgee,
-  xorg,
+  xkeyboard-config,
   libgnomekbd,
   ibus,
 }:
@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
     ibus
     libgee
     wingpanel
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-keyboard";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

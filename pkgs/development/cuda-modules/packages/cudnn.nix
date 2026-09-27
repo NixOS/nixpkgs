@@ -4,6 +4,7 @@
   buildRedist,
   lib,
   libcublas,
+  cuda_nvrtc,
   patchelf,
   zlib,
 }:
@@ -27,7 +28,7 @@ buildRedist (
     ];
 
     buildInputs = [
-      # NOTE: Verions of CUDNN after 9.0 no longer depend on libcublas:
+      # NOTE: Versions of CUDNN after 9.0 no longer depend on libcublas:
       # https://docs.nvidia.com/deeplearning/cudnn/latest/release-notes.html?highlight=cublas#cudnn-9-0-0
       # However, NVIDIA only provides libcublasLT via the libcublas package.
       (lib.getLib libcublas)
@@ -42,8 +43,17 @@ buildRedist (
       ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
+    # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description
+    # https://docs.nvidia.com/deeplearning/cudnn/backend/latest/api/cudnn-graph-library.html
+    # libcudnn_adv and libcudnn_engines_precompiled dlopen libcublasLt -- the soname lives in
+    # .rodata and is never DT_NEEDED, so the buildInputs entry above never reaches a runpath.
+    appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") [
+      cuda_nvrtc # libnvrtc.so.%s
+      libcublas # libcublasLt.so.%s
+    ];
+
     # NOTE:
-    #   With cuDNN forward compatiblity, all non-natively supported compute capabilities JIT compile PTX kernels.
+    #   With cuDNN forward compatibility, all non-natively supported compute capabilities JIT compile PTX kernels.
     #
     #   While this is sub-optimal and we should warn the user and encourage them to use a newer version of cuDNN, we
     #   have no clean mechanism by which we can warn the user, or allow silencing such a warning if the use of an

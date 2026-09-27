@@ -7,8 +7,8 @@
   copyDesktopItems,
   libglvnd,
   libjack2,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   makeDesktopItem,
   makeWrapper,
   SDL2,
@@ -21,7 +21,6 @@ let
     "i686-linux" = "linux_x86";
     "aarch64-linux" = "linux_arm64";
     "armv7l-linux" = "arm_armhf_raspberry_pi";
-    "x86_64-darwin" = "macos";
     "aarch64-darwin" = "macos";
   };
   bindir =
@@ -35,15 +34,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
-  version = "2.1.3";
+  version = "2.1.4d";
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20251019141206/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20260501043715/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-egOaIZEyI5x2VV660qbO+pan22BFRaa4d+8sOpJhpBM=";
+    hash = "sha256-HQwA9FyK1xdcTsWWfX7ZJ0KcnuwRz25ztjlrNIDhFQY=";
   };
 
   nativeBuildInputs =
@@ -59,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libglvnd
-    libX11
-    libXi
+    libx11
+    libxi
     SDL2
   ];
 
@@ -68,21 +67,35 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "sunvox";
-      exec = "sunvox";
-      desktopName = "SunVox";
-      genericName = "Modular Synthesizer";
-      comment = "Modular synthesizer with pattern-based sequencer";
-      icon = "sunvox";
-      categories = [
-        "AudioVideo"
-        "Audio"
-        "Midi"
-      ];
-    })
-  ];
+  desktopItems =
+    let
+      sunvoxDesktop =
+        variant:
+        makeDesktopItem {
+          name = "sunvox" + lib.optionalString (variant != null) "-${lib.strings.toLower variant}";
+          exec = "sunvox" + lib.optionalString (variant != null) "_${lib.strings.toLower variant}";
+          desktopName = "SunVox" + lib.optionalString (variant != null) " (${variant})";
+          genericName = "Modular Synthesizer";
+          comment = "Modular synthesizer with pattern-based sequencer";
+          icon = "sunvox";
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Midi"
+          ];
+        };
+    in
+    lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        (sunvoxDesktop null)
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [
+        (sunvoxDesktop "OpenGL")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isi686) [
+        (sunvoxDesktop "LoFi")
+      ]
+    );
 
   dontConfigure = true;
   dontBuild = true;
@@ -127,12 +140,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
-    license = licenses.unfreeRedistributable;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://www.warmplace.ru/soft/sunvox/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       puffnfresh
       OPNA2608
     ];

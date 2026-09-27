@@ -1,0 +1,17 @@
+Source archives have no Git index to enumerate. Write an empty depfile in
+that case; CMake still tracks the generator and build configuration itself.
+Keep Git dependency tracking unchanged for checkouts, including worktrees.
+
+--- a/Meta/Generators/generate-build-information.py
++++ b/Meta/Generators/generate-build-information.py
+@@ -146,6 +146,10 @@
+ 
+ 
+ def write_depfile(source, output, target):
++    if not (source / ".git").exists():
++        output.write_text(f"{escape_depfile_path(target)}:\n")
++        return
++
+     tracked_files = subprocess.check_output(["git", "-C", str(source), "ls-files", "-z"]).split(b"\0")
+ 
+     dependencies = (

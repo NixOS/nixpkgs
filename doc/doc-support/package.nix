@@ -54,7 +54,8 @@ stdenvNoCC.mkDerivation (
     };
   in
   {
-    name = "nixpkgs-manual";
+    version = lib.trivial.release;
+    pname = "nixpkgs-manual";
 
     nativeBuildInputs = [ nixos-render-docs ];
 
@@ -72,6 +73,7 @@ stdenvNoCC.mkDerivation (
             ../anchor.min.js
             ../manpage-urls.json
             ../redirects.json
+            ../nav.json
           ]
         );
     };
@@ -89,7 +91,7 @@ stdenvNoCC.mkDerivation (
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
-      cat ./functions/library.md.in ${lib-docs}/index.md > ./functions/library.md
+      cp ${lib-docs}/lib-functions.json ./lib-functions.json
 
       substitute ./manual.md.in ./manual.md \
         --replace-fail '@MANUAL_VERSION@' '${lib.version}'
@@ -115,8 +117,10 @@ stdenvNoCC.mkDerivation (
         --script ./highlightjs/loader.js \
         --script ./anchor.min.js \
         --script ./anchor-use.js \
-        --toc-depth 1 \
-        --section-toc-depth 1 \
+        --sidebar-depth 3 \
+        --experimental-config ./nav.json \
+        --header ${./header.html}\
+        --no-navheader \
         manual.md \
         out/index.html
 
@@ -143,7 +147,7 @@ stdenvNoCC.mkDerivation (
     '';
 
     passthru = {
-      lib-docs = callPackage ./lib-function-docs.nix { inherit nixpkgs; };
+      lib-docs = callPackage ./lib-function-docs.nix { };
 
       epub = callPackage ./epub.nix { };
 
@@ -157,7 +161,7 @@ stdenvNoCC.mkDerivation (
             buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/index.html";
           };
-          nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
+          nixos-render-docs-redirects' = writeShellScriptBin "redirects" ''${lib.getExe nixos-render-docs-redirects} --file '${toString ../redirects.json}' "$@"'';
         in
         mkShellNoCC {
           packages = [
@@ -168,8 +172,11 @@ stdenvNoCC.mkDerivation (
         };
 
       tests = {
+        # Don't run this in CI because it's not reproducible
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };
+
+    meta.license = lib.licenses.mit;
   }
 )

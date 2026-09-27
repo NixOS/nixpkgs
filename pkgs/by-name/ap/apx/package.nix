@@ -6,9 +6,13 @@
   distrobox,
   podman,
   writableTmpDirAsHomeHook,
+  curl,
+  jq,
+  common-updater-scripts,
+  writeShellScript,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "apx";
   version = "2.4.5";
   versionConfig = "1.0.0";
@@ -16,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0Rfj7hrH26R9GHOPPVdCaeb1bfAw9KnPpJYXyiei90U=";
   };
 
@@ -24,7 +28,7 @@ buildGoModule rec {
   configsSrc = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "vanilla-apx-configs";
-    tag = "v${versionConfig}";
+    tag = "v${finalAttrs.versionConfig}";
     hash = "sha256-cCXmHkRjcWcpMtgPVtQF5Q76jr1Qt2RHSLtWLQdq+aE=";
   };
 
@@ -43,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.Version=v${version}'"
+    "-X 'main.Version=v${finalAttrs.version}'"
   ];
 
   postPatch = ''
@@ -60,8 +64,8 @@ buildGoModule rec {
 
     # Install official Vanilla configs (same as install script)
     install -d $out/share/apx
-    cp -r ${configsSrc}/stacks $out/share/apx/
-    cp -r ${configsSrc}/package-managers $out/share/apx/
+    cp -r ${finalAttrs.configsSrc}/stacks $out/share/apx/
+    cp -r ${finalAttrs.configsSrc}/package-managers $out/share/apx/
 
     # Man pages, documentation, license
     installManPage man/man1/*
@@ -74,6 +78,26 @@ buildGoModule rec {
       --bash <($out/bin/apx completion bash) \
       --fish <($out/bin/apx completion fish) \
       --zsh <($out/bin/apx completion zsh)
+  '';
+
+  passthru.updateScript = writeShellScript "update-apx" ''
+    set -euo pipefail
+        PATH=${
+          lib.makeBinPath [
+            curl
+            jq
+            common-updater-scripts
+          ]
+        }:$PATH
+
+    echo "Fetching latest version for vanilla-apx-configs..."
+    LATEST_CONFIG=$(curl -s https://api.github.com/repos/Vanilla-OS/vanilla-apx-configs/releases/latest | jq -r .tag_name | sed 's/^v//')
+
+    echo "Updating versionConfig to $LATEST_CONFIG..."
+    update-source-version apx "$LATEST_CONFIG" --version-key=versionConfig --source-key=configsSrc
+
+    echo "Updating main apx package..."
+    nix-update apx
   '';
 
   meta = {
@@ -89,12 +113,9 @@ buildGoModule rec {
         environment.systemPackages = with pkgs; [ apx ];
     '';
     homepage = "https://github.com/Vanilla-OS/apx";
-    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
+    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      dit7ya
-      chewblacka
-    ];
+    maintainers = with lib.maintainers; [ masrlinu ];
     mainProgram = "apx";
   };
-}
+})

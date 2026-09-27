@@ -5,15 +5,15 @@
   git,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-archive-all";
   version = "1.23.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kentzo";
     repo = "git-archive-all";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fIPjggOx+CEorj1bazz8s81ZdppkTL0OlA5tRqCYZyc=";
   };
 
@@ -32,6 +32,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace test_git_archive_all.py \
       --replace "import pycodestyle" ""
   '';
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeCheckInputs = [
     git
@@ -60,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-archive-all";
   };
-}
+})

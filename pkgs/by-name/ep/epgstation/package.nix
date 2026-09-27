@@ -8,6 +8,7 @@
   bash,
   nodejs,
   python3,
+  stdenv, # for meta.broken
 }:
 
 buildNpmPackage rec {
@@ -126,11 +127,13 @@ buildNpmPackage rec {
       popd
     '';
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "DVR software compatible with Mirakurun";
     homepage = "https://github.com/l3tnun/EPGStation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ midchildan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ midchildan ];
     mainProgram = "epgstation";
   };
 }

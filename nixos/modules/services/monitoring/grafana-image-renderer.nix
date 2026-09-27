@@ -25,7 +25,7 @@ let
 
     generate = lib.flip lib.pipe [
       # Remove legacy option prefixes that only exist for backwards-compat
-      (lib.flip builtins.removeAttrs [
+      (lib.flip removeAttrs [
         "service"
         "rendering"
         "assertions"

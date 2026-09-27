@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./version_without_git.patch
+    ./gcc15_compat_vnd_marian_missing_include.patch
   ];
 
   postPatch = ''
@@ -94,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "translateLocally";
     homepage = "https://translatelocally.com/";
     description = "Fast and secure translation on your local machine, powered by marian and Bergamot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ euxane ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -4,13 +4,13 @@
   fetchsvn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xavs";
   version = "55";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xavs/code/trunk";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0drw16wm95dqszpl7j33y4gckz0w0107lnz6wkzb66f0dlbv48cf";
   };
 
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AVS encoder and decoder";
     mainProgram = "xavs";
     homepage = "https://xavs.sourceforge.net/";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

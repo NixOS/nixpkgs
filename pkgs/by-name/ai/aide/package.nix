@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aide";
-  version = "0.19.2";
+  version = "0.19.4";
 
   src = fetchurl {
     # We specifically want the tar.gz, so fetchFromGitHub is not suitable here
     url = "https://github.com/aide/aide/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-I3YrBfRhEe3rPIoFAWyHMcAb24wfkb5IwVbDGrhedMQ=";
+    hash = "sha256-R6t8aW8HRZEUeaQfkNetmdJlNuGG1mxKrQk7xy0g/18=";
   };
 
   nativeBuildInputs = [ pkg-config ];

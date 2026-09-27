@@ -10,14 +10,14 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boolector";
   version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "boolector";
     repo = "boolector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CKhaPaWUB6Fz0LfnCl81LVmTebCWzTvZLKeC0KH3by4=";
   };
 
@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
     cp $out/include/boolector/btortypes.h $out/include/btortypes.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast SMT solver for bit-vectors and arrays";
     homepage = "https://boolector.github.io";
-    license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

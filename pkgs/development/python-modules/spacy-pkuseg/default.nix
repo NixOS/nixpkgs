@@ -19,10 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-tIB4d1r/80kUN1NE1W9wo37ARBiMyuzj9wgG/TIqR+s=";
   };
 
-  # Does not seem to have actual tests, but unittest discover
-  # recognizes some non-tests as tests and fails.
-  doCheck = false;
-
   build-system = [
     cython
     numpy
@@ -34,12 +30,16 @@ buildPythonPackage rec {
     srsly
   ];
 
+  # Does not seem to have actual tests, but unittest discover
+  # recognizes some non-tests as tests and fails.
+  doCheck = false;
+
   pythonImportsCheck = [ "spacy_pkuseg" ];
 
-  meta = with lib; {
-    description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
+  meta = {
+    description = "Chinese word segmentation toolkit for spaCy (fork of pkuseg-python)";
     homepage = "https://github.com/explosion/spacy-pkuseg";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

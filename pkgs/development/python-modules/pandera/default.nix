@@ -9,7 +9,6 @@
   setuptools-scm,
 
   # dependencies
-  numpy,
   packaging,
   pandas,
   pydantic,
@@ -20,45 +19,51 @@
   # optional-dependencies
   black,
   dask,
-  duckdb,
   fastapi,
+  frictionless,
   geopandas,
   hypothesis,
   ibis-framework,
+  narwhals,
+  numpy,
   pandas-stubs,
   polars,
+  pyarrow,
+  pyarrow-hotfix,
   pyyaml,
+  rich,
   scipy,
   shapely,
+  typer,
+  xarray,
 
   # tests
+  duckdb,
   joblib,
-  pyarrow-hotfix,
-  pyarrow,
   pytest-asyncio,
   pytestCheckHook,
-  pythonAtLeast,
-  rich,
+  python-multipart,
+  requests,
+  uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandera";
-  version = "0.27.0";
+  version = "0.33.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
-    tag = "v${version}";
-    hash = "sha256-r9lHK2fK1q2pHhpdW+Q83Kk+OZhAOwx8k3GgxHHlj/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5sM/iEbv1+ojqwL/E9cVQxJW3u1dlzMQ6iAiKAjV+DI=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
     packaging
@@ -72,12 +77,17 @@ buildPythonPackage rec {
     let
       dask-dataframe = [ dask ] ++ dask.optional-dependencies.dataframe;
       extras = {
+        cli = [
+          typer
+          rich
+          pyyaml
+        ];
         strategies = [ hypothesis ];
         hypotheses = [ scipy ];
         io = [
           pyyaml
           black
-          #frictionless # not in nixpkgs
+          frictionless
         ];
         # pyspark expression does not define optional-dependencies.connect:
         #pyspark = [ pyspark ] ++ pyspark.optional-dependencies.connect;
@@ -102,58 +112,65 @@ buildPythonPackage rec {
         ];
         ibis = [
           ibis-framework
-          duckdb
+          pyarrow-hotfix
         ];
+        narwhals = [ narwhals ];
         pandas = [
           numpy
           pandas
         ];
         polars = [ polars ];
+        pyarrow = [
+          pyarrow
+          narwhals
+        ];
+        xarray = [
+          numpy
+          xarray
+        ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
+    duckdb
     joblib
-    pyarrow
-    pyarrow-hotfix
     pytest-asyncio
     pytestCheckHook
-    rich
+    python-multipart
+    requests
+    uvicorn
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestPaths = [
-    "tests/fastapi/test_app.py" # tries to access network
     "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
-    "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
-    "tests/pyspark" # requires spark
-
-    # KeyError: 'dask'
-    "tests/dask/test_dask.py::test_series_schema"
-    "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
-
-    # TypeError: memtable() got an unexpected keyword argument 'name'
-    # https://github.com/unionai-oss/pandera/issues/2154
-    "tests/ibis/test_ibis_container.py"
+    "tests/pyspark" # requires pyspark[connect], which the nixpkgs pyspark does not provide
+    # asserts on exact mypy diagnostics against upstream's pinned mypy 1.19
+    "tests/mypy/"
+    # narwhals backend is broken upstream: 33 failures across 7 files
+    "tests/narwhals/"
+    # passes, but adds ~4 min to the check phase
+    "tests/strategies/test_strategies.py"
+    # BackendNotFoundError: passes alone, but the *_narwhals_register tests
+    # swap the backend registry process-wide and this runs after them
+    "tests/strategies/test_no_filter_chain.py"
   ];
 
   disabledTests = [
-    # TypeError: __class__ assignment: 'GeoDataFrame' object...
-    "test_schema_model"
-    "test_schema_from_dataframe"
-    "test_schema_no_geometry"
+    # ibis returns None where pandas returns NaN in the failure cases
+    "test_ibis_custom_check"
+    # ibis schemas still resolve to the ibis backend, not the narwhals one
+    "test_ibis_backend_is_narwhals"
+    # requires pyspark
+    "test_pyspark_pandas_does_not_route_to_pyspark_sql"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # OOM error on ofborg:
     "test_engine_geometry_coerce_crs"
     # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
     "test_schema_dtype_crs_with_coerce"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
-    "test_legacy_default_pandas_extension_dtype"
   ];
 
   pythonImportsCheck = [
@@ -164,11 +181,13 @@ buildPythonPackage rec {
     "pandera.engines"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

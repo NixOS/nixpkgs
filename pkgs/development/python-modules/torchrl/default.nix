@@ -10,10 +10,12 @@
   numpy,
   pybind11,
   setuptools,
+  setuptools-scm,
   torch,
 
   # dependencies
   cloudpickle,
+  hoptorch,
   packaging,
   pyvers,
   tensordict,
@@ -45,6 +47,7 @@
   vllm,
   # marl
   pettingzoo,
+  vmas,
   # offline-data
   h5py,
   huggingface-hub,
@@ -66,21 +69,23 @@
   # tests
   imageio,
   pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   pyyaml,
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.10.1";
+  version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    tag = "v${version}";
-    hash = "sha256-Vd/w11P4NVrx2xki+VYlXQaM8F+vpdokke8ZAHg6h0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ATfvAobn9MjY+PHY7xY+iPztyKBZ5YpGXL1ZCzgvQXc=";
   };
 
   postPatch = ''
@@ -94,16 +99,18 @@ buildPythonPackage rec {
     numpy
     pybind11
     setuptools
+    setuptools-scm
     torch
   ];
   dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    hoptorch
     numpy
     packaging
-    tensordict
     pyvers
+    tensordict
     torch
   ];
 
@@ -139,7 +146,7 @@ buildPythonPackage rec {
     marl = [
       # dm-meltingpot (unpackaged)
       pettingzoo
-      # vmas (unpackaged)
+      vmas
     ];
     offline-data = [
       h5py
@@ -154,6 +161,9 @@ buildPythonPackage rec {
     ];
     open-spiel = [
       # open-spiel (unpackaged)
+    ];
+    procgen = [
+      # procgen (unpackaged)
     ];
     rendering = [ moviepy ];
     replay-buffer = [ torch ];
@@ -181,22 +191,45 @@ buildPythonPackage rec {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
+  pytestFlags = [
+    # Tests memory consumption grows significantly with the number of parallel processes
+    # -> Limit the number of parallel jobs to prevent OOMing
+    "--maxprocesses=16"
+
+    # Some tests are flaky when ran with pytest-xdist. Give them 2 more chances to succeed.
+    "--reruns=3"
+    "--reruns-delay=1"
+  ];
+
   nativeCheckInputs = [
-    h5py
     gymnasium
+    h5py
+    hydra-core
     imageio
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     pyyaml
     scipy
     torchvision
   ]
-  ++ optional-dependencies.atari
-  ++ optional-dependencies.gym-continuous
-  ++ optional-dependencies.llm
-  ++ optional-dependencies.rendering;
+  ++ finalAttrs.passthru.optional-dependencies.atari
+  ++ finalAttrs.passthru.optional-dependencies.gym-continuous
+  ++ finalAttrs.passthru.optional-dependencies.llm
+  ++ finalAttrs.passthru.optional-dependencies.rendering;
 
   disabledTests = [
+    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most
+    # likely means that a valid OpenGL context has not been created before mjr_makeContext was
+    # called
+    "test_from_pixels_spec_and_rollout"
+    "test_render_every"
+    "test_vecenvs_env"
+
+    # Hang forever
+    "test_pixels_only_drops_observation_key"
+    "test_render_method"
+
     # Require network
     "test_create_or_load_dataset"
     "test_from_text_env_tokenizer"
@@ -236,9 +269,6 @@ buildPythonPackage rec {
     "test_auto_register"
     "test_info_dict_reader"
 
-    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
-    "test_vecenvs_env"
-
     # ValueError: Can't write images with one color channel.
     "test_log_video"
 
@@ -257,9 +287,12 @@ buildPythonPackage rec {
     "test_trans_serial_env_check"
     "test_transform_env"
 
-    # undeterministic
+    # nondeterministic
     "test_distributed_collector_updatepolicy"
     "test_timeit"
+
+    # AssertionError: assert tensor(7.6068e-06) > 1e-05
+    "test_ddpg_prioritized_weights"
 
     # On a 24 threads system
     # assert torch.get_num_threads() == max(1, init_threads - 3)
@@ -284,13 +317,37 @@ buildPythonPackage rec {
     # which is not the same as the test file we want to collect:
     #   /build/source/test/smoke_test.py
     "test/llm"
+
+    # Hang indefinitely on some CPUs
+    "test/services/test_services.py"
+    "test/envs/test_special.py::TestAsyncEnvPool::test_recv_timeout_bounds_whole_call"
+
+    # AssertionError: Test timed out (most tests in this class)
+    "test/test_configs.py::TestHydraParsing"
+
+    # AssertionError: Traceback (most recent call last)
+    "test/objectives/test_dreamer_v3.py::test_dreamer_v3_checkpoint_resume_processes"
+
+    # AssertionError: Tensor-likes are not equal!
+    "test/modules/test_dreamer_components.py::TestDreamerV3Components::test_discrete_actor[cpu-autocast]"
+
+    # OSError: We couldn't connect to 'https://huggingface.co' to load the files,...
+    "test/transforms/test_key_transforms.py::TestTokenizer::test_single_string_attention_mask_padding"
+    "test/transforms/test_key_transforms.py::TestTokenizer::test_single_string_without_attention_mask"
+
+    # ray.exceptions.GetTimeoutError: Get timed out: some object(s) not ready
+    # (in other words, a sandbox issue)
+    "test/services/test_python_executor_service.py::TestPythonExecutorService::test_service_execution"
+
+    # Very slow, timing out under load
+    "test/test_distributed.py::TestSyncCollector"
   ];
 
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rewrk";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "lnx-search";
     repo = "rewrk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Bqr5kmIIx+12hW4jpINcv0GBJBbMAkd4di/hZSXlT18=";
   };
 
@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "More modern http framework benchmarker supporting HTTP/1 and HTTP/2 benchmarks";
     homepage = "https://github.com/lnx-search/rewrk";
-    changelog = "https://github.com/lnx-search/rewrk/releases/tag/${version}";
+    changelog = "https://github.com/lnx-search/rewrk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rewrk";
   };
-}
+})

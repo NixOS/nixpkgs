@@ -9,7 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rtl8189es-${kernel.version}-${version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "rtl8189es";
   version = "2025-09-26";
 
   src = fetchFromGitHub {
@@ -53,11 +54,11 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek rtl8189es";
     homepage = "https://github.com/jwrdegoede/rtl8189ES_linux";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ danielfullmer ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ danielfullmer ];
   };
 }

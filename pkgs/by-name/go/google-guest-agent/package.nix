@@ -10,14 +10,14 @@
   procps,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "guest-agent";
   version = "20230821.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-agent";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
   };
 
@@ -59,9 +59,9 @@ buildGoModule rec {
   meta = {
     description = "Guest Agent for Google Compute Engine";
     homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
-    changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${version}";
+    changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

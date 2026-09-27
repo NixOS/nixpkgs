@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "clickhouse-cli";
   version = "0.3.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickhouse_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Third-party client for the Clickhouse DBMS server";
     mainProgram = "clickhouse-cli";
     homepage = "https://github.com/hatarist/clickhouse-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivan-babrou ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ivan-babrou ];
   };
 }

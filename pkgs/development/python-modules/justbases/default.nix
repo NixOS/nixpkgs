@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conversion of ints and rationals to any base";
     homepage = "https://github.com/mulkieran/justbases";
     changelog = "https://github.com/mulkieran/justbases/blob/v${version}/CHANGES.txt";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

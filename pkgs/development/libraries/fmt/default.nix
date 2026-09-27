@@ -53,18 +53,24 @@ let
           ;
       };
 
-      meta = with lib; {
+      meta = {
+        # last successful hydra build on darwin was in 2025
+        broken = lib.versionOlder version "11" && stdenv.hostPlatform.isDarwin;
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
           used as a fast and safe alternative to printf and IOStreams.
         '';
         homepage = "https://fmt.dev/";
-        changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
+        changelog =
+          let
+            ext = if lib.versionOlder version "10" then "rst" else "md";
+          in
+          "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.${ext}";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ ];
-        license = licenses.mit;
-        platforms = platforms.all;
+        license = lib.licenses.mit;
+        platforms = lib.platforms.all;
       };
     };
 in
@@ -99,7 +105,16 @@ in
   };
 
   fmt_12 = generic {
-    version = "12.0.0";
-    hash = "sha256-AZDmIeU1HbadC+K0TIAGogvVnxt0oE9U6ocpawIgl6g=";
+    version = "12.2.0";
+    hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
+
+    patches = [
+      # fix build on 32-bit targets
+      # FIXME: remove in next update
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/588b3a0f8f6a8bcf2a959cae882d5b2703e86737.patch";
+        hash = "sha256-DiE3nwYrtNDJ6cqYreU499Y0auH6dsAW21TRPe16Tx8=";
+      })
+    ];
   };
 }

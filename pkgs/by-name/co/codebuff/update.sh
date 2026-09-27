@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nodePackages.npm nix-update
+#!nix-shell -i bash -p nodejs nix-update
 
 set -euo pipefail
 
@@ -10,6 +10,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 npm i --package-lock-only codebuff@"$version"
 rm -f package.json
 
-# Update version and hases
+# Update version and hashes
 cd -
 nix-update codebuff --version "$version"

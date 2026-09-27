@@ -5,16 +5,16 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "smpmgr";
-  version = "0.15.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpmgr";
-    tag = version;
-    hash = "sha256-ZIIHxQLBwd5OAxFqg0iOrdC7Xu3oZPHSJjdpo2CidAg=";
+    tag = finalAttrs.version;
+    hash = "sha256-Kcd6D995bS9GbytkTPam0KKuqNjuajMjDMfKx7TWm20=";
   };
 
   build-system = with python3Packages; [
@@ -27,26 +27,28 @@ python3Packages.buildPythonApplication rec {
     "smpclient"
   ];
 
-  dependencies = with python3Packages; [
-    readchar
-    smpclient
-    typer
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      readchar
+      smpclient
+      typer
+    ]
+    ++ smpclient.optional-dependencies.all;
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "smpmgr" ];
 
   meta = {
     description = "Simple Management Protocol (SMP) Manager for remotely managing MCU firmware";
     homepage = "https://github.com/intercreate/smpmgr";
-    changelog = "https://github.com/intercreate/smpmgr/releases/tag/${src.tag}";
+    changelog = "https://github.com/intercreate/smpmgr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "smpmgr";
   };
-}
+})

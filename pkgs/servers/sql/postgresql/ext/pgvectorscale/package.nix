@@ -9,18 +9,18 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "pgvectorscale";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "pgvectorscale";
     tag = finalAttrs.version;
-    hash = "sha256-whGTJI73wifYkleC+aAbDV4nhwls3uFs1xKcB0zLDRo=";
+    hash = "sha256-4i5PhGfvfMPMhkmxfxvaWdIvmGHR1ZkMQzBSTNvqEgw=";
   };
 
   doCheck = false;
 
-  cargoHash = "sha256-uaRKUtsUdZPcrQLAixCiEphXQqdsRhi8nSfh9b3w0ao=";
+  cargoHash = "sha256-2QmOxRKVkC/WBz6BRnxD57hH2E5ANHtNKrp/ytBaILI=";
   cargoPatches = [
     ./add-Cargo.lock.patch
   ];
@@ -65,10 +65,17 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # Upstream removed support for PostgreSQL 13 on 0.9.0: https://github.com/timescale/pgvectorscale/releases/tag/0.9.0
-    broken = lib.versionOlder postgresql.version "14";
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/timescale/pgvectorscale/issues/281
+    # Check after next package update.
+    broken =
+      lib.warnIf (finalAttrs.version != "0.9.1") "Is postgresql19Packages.pgvectorscale still broken?"
+        (lib.versionAtLeast postgresql.version "19");
     homepage = "https://github.com/timescale/pgvectorscale";
-    teams = [ lib.teams.flyingcircus ];
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;

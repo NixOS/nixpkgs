@@ -7,13 +7,13 @@
   asLibrary ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "astyle";
-  version = "3.6.13";
+  version = "3.6.18";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-BIt0sUxuAff66OY7dn2jMwOrOdkCKv4zBVzkueVvFi0=";
+    url = "mirror://sourceforge/astyle/astyle-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-1PxDPP6syVLeKVlhvIrp6rci4IWAuqbB6Oezmnovu0g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # upstream repo includes a build/ directory
   cmakeBuildDir = "_build";
 
-  cmakeFlags = lib.optional asLibrary [
+  cmakeFlags = lib.optionals asLibrary [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
@@ -30,15 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = !asLibrary;
 
-  meta = with lib; {
+  meta = {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
     mainProgram = "astyle";
     homepage = "https://astyle.sourceforge.net/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ carlossless ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ carlossless ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -17,13 +17,13 @@
   freetype,
   libpng,
   libtheora,
-  libX11,
+  libx11,
   # glx
   libGLU,
   libGL,
-  libXpm,
-  libXext,
-  libXxf86vm,
+  libxpm,
+  libxext,
+  libxxf86vm,
   alsa-lib,
   # sdl
   SDL2,
@@ -38,7 +38,6 @@
 let
   pname = "xonotic";
   version = "0.8.6";
-  name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
       ""
@@ -91,6 +90,8 @@ let
       hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
+    patches = [ ./fix-build-with-c23.patch ];
+
     nativeBuildInputs = [ unzip ];
     buildInputs = [
       libjpeg
@@ -98,14 +99,14 @@ let
       libvorbis
       curl
       gmp
-      libX11
+      libx11
     ]
     ++ lib.optionals withGLX [
       libGLU
       libGL
-      libXpm
-      libXext
-      libXxf86vm
+      libxpm
+      libxext
+      libxxf86vm
       alsa-lib
     ]
     ++ lib.optionals withSDL [ SDL2 ];
@@ -203,6 +204,15 @@ let
             --add-needed ${libtheora}/lib/libtheora.so \
             $out/bin/xonotic-sdl
       '';
+
+    meta.mainProgram = "xonotic-${
+      if withSDL then
+        "sdl"
+      else if withGLX then
+        "glx"
+      else
+        "dedicated"
+    }";
   };
 
 in
@@ -231,6 +241,7 @@ rec {
         desktopItems = [ desktopItem ];
         meta = meta // {
           hydraPlatforms = [ ];
+          mainProgram = if withSDL || withGLX then "xonotic" else "xonotic-dedicated";
         };
       }
       (

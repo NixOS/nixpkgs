@@ -7,14 +7,14 @@
   m4ri,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20250128";
   pname = "m4rie";
 
   src = fetchFromGitHub {
     owner = "malb";
     repo = "m4rie";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tw6ZX8hKfr9wQLF2nuO1dSkkTYZX6pzNWMlWfzLqQNE=";
   };
 
@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://malb.bitbucket.io/m4rie/";
     description = "Library for matrix multiplication, reduction and inversion over GF(2^k) for 2 <= k <= 10";
     longDescription = ''
       M4RIE is a library for fast arithmetic with dense matrices over small finite fields of even characteristic.
       It uses the M4RI library, implementing the same operations over the finite field F2.
     '';
-    license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
-}
+})

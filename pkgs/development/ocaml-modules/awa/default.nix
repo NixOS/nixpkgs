@@ -7,8 +7,7 @@
   mirage-crypto-rng,
   mirage-crypto-pk,
   x509,
-  cstruct,
-  cstruct-unix,
+  ohex,
   eqaf,
   mtime,
   logs,
@@ -19,13 +18,13 @@
   mirage-mtime,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "awa";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchurl {
-    url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    hash = "sha256-64gloekVN0YsBwUodrJc6QaNU3PGKMIZMPJWvBfzaj0=";
+    url = "https://github.com/mirage/awa-ssh/releases/download/v${finalAttrs.version}/awa-${finalAttrs.version}.tbz";
+    hash = "sha256-xis3+I4cY9gQVSZmMCavIl9qGe7njoRQKfFZ6yh1kQE=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +33,7 @@ buildDunePackage rec {
     mirage-crypto-rng
     mirage-crypto-pk
     x509
-    cstruct
+    ohex
     mtime
     logs
     base64
@@ -44,17 +43,16 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    cstruct-unix
     cmdliner
     fmt
     mirage-mtime
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH implementation in OCaml";
     homepage = "https://github.com/mirage/awa-ssh";
-    changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    changelog = "https://github.com/mirage/awa-ssh/raw/v${finalAttrs.version}/CHANGES.md";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

@@ -2,6 +2,7 @@
   name-prefix ? "temurin",
   brand-name ? "Eclipse Temurin",
   sourcePerArch,
+  jmodsSourcePreArch ? null,
   knownVulnerabilities ? [ ],
 }:
 
@@ -17,7 +18,11 @@
   fontconfig,
   freetype,
   libffi,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   zlib,
   # runtime dependencies
   cups,
@@ -52,22 +57,29 @@ let
       else
         "${name-prefix}-${sourcePerArch.packageType}-bin";
 
-    version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
+    version = sourcePerArch.${cpuName}.version or "unsupported";
 
-    src = fetchurl {
-      inherit (sourcePerArch.${cpuName}) url sha256;
-    };
+    srcs = [
+      (fetchurl {
+        inherit (sourcePerArch.${cpuName}) url sha256;
+      })
+    ]
+    ++ lib.optional (jmodsSourcePreArch != null) (fetchurl {
+      inherit (jmodsSourcePreArch.${cpuName}) url sha256;
+    });
+
+    sourceRoot = ".";
 
     buildInputs = [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxext
+      libxi
+      libxrender
+      libxtst
       zlib
     ]
     ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
@@ -81,9 +93,12 @@ let
     dontStrip = 1;
 
     installPhase = ''
-      cd ..
+      # compatible semeru jdk
+      TARGET_SOURCE=$(find . -maxdepth 1 -type d ! -name "." ! -name "*jmods" -print -quit)
 
-      mv $sourceRoot $out
+      mv "$TARGET_SOURCE" $out
+
+      ${lib.optionalString (jmodsSourcePreArch != null) "mv */ $out/jmods"}
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
@@ -129,19 +144,19 @@ let
       home = result;
     };
 
-    meta = with lib; {
-      license = with licenses; [
+    meta = {
+      license = with lib.licenses; [
         gpl2
         classpathException20
       ];
-      sourceProvenance = with sourceTypes; [
+      sourceProvenance = with lib.sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
-      teams = [ teams.java ];
+      maintainers = with lib.maintainers; [ taku0 ];
+      teams = [ lib.teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

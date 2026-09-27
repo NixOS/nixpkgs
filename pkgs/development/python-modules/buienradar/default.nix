@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-DTdxzBe9fBOH5fHME++oq62xMtBKnjY7BCevwjl8VZ8=";
   };
 
+  patches = [
+    # https://github.com/mjj4791/python-buienradar/pull/26
+    ./setuptools-82-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -67,12 +72,12 @@ buildPythonPackage rec {
     "buienradar.constants"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mjj4791/python-buienradar/blob/${src.tag}/CHANGLOG.rst";
     description = "Library and CLI tools for interacting with buienradar";
     mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

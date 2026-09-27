@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mesos-dns";
-  version = "0.9.4";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "m3scluster";
     repo = "mesos-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-InUuEJjfZTRToCGiC3QYDK7UY8vje0T8RQ2YElIkb2w=";
+    hash = "sha256-922FWRqKGBFB8zQf9nAtlym3b7Fjcg+uaIqEKeRZSro=";
   };
 
   vendorHash = "sha256-l1y3CaGG1ykJnGit81D+E+jB4RUYneQzRMTvOPCH+jk=";

@@ -15,7 +15,7 @@
   withUi ? true,
   buildFeatures ?
     # enable all features except self_update by default
-    # https://github.com/dathere/qsv/blob/10.0.0/Cargo.toml#L370
+    # https://github.com/dathere/qsv/blob/19.1.0/Cargo.toml#L370
     [
       "apply"
       "feature_capable"
@@ -31,21 +31,20 @@
   mainProgram ? "qsv",
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "10.0.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version buildFeatures;
+  version = "23.0.1";
+
+  inherit buildFeatures;
 
   src = fetchFromGitHub {
     owner = "dathere";
     repo = "qsv";
-    rev = version;
-    hash = "sha256-Jo2pC+zs3wQAaeQzg6MLySVtI0bB7hLczT62Xpb4L14=";
+    rev = finalAttrs.version;
+    hash = "sha256-lWyJOKVKg94TWBoRWu7nnhUM3so2Vg0iICkCnNxqiaI=";
   };
 
-  cargoHash = "sha256-05jJslguUFLZtugozv/jn7CDie47WnvrFnjC3SUYxxo=";
+  cargoHash = "sha256-x/APHiuSWEvzChVGLogjDvxrhYDL7q6Ujb5TrETV+qc=";
 
   buildInputs = [
     file
@@ -70,7 +69,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
-    changelog = "https://github.com/dathere/qsv/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       # or
@@ -82,4 +81,4 @@ rustPlatform.buildRustPackage {
       misuzu
     ];
   };
-}
+})

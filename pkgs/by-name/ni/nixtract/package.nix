@@ -11,18 +11,18 @@
   nixtract,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixtract";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nixtract";
-    rev = "v${version}";
-    hash = "sha256-36ciPNSlB1LU+UXP8MLakrBRRqbyiVFN8Jp/JbCe1OY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VrM8x85tF3NJOX8bgoDVmtfAa8qkLgdgbri46sPQ2jE=";
   };
 
-  cargoHash = "sha256-vG661ZXL87FiMy8yLOI7cagvunhzJhAsBR+VF6RfBxU=";
+  cargoHash = "sha256-ZZWdjMrRaWotIkHf3OB/f1UxtNtNeMvgGs97glXZjy8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nixtract";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

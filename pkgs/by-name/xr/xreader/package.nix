@@ -19,8 +19,6 @@
   poppler,
   libspectre,
   libgxps,
-  webkitgtk_4_1,
-  nodePackages,
   ninja,
   djvulibre,
   backends ? [
@@ -31,19 +29,18 @@
     "pixbuf"
     "comics"
     "xps"
-    "epub"
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.0";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
-    rev = version;
-    hash = "sha256-cp/pZ42AS98AD78BVMeY3SHQHkYA2h4o0kddr/H+kUA=";
+    rev = finalAttrs.version;
+    hash = "sha256-mSaEVXwX6rErIEi9KxmMrGYunZFK8AbxNCTl8EJQGTM=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +54,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dmathjax-directory=${nodePackages.mathjax}"
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -73,10 +69,14 @@ stdenv.mkDerivation rec {
     poppler
     libspectre
     libgxps
-    webkitgtk_4_1
-    nodePackages.mathjax
     djvulibre
   ];
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/xreader.thumbnailer \
+      --replace-fail "TryExec=xreader-thumbnailer" "TryExec=$out/bin/xreader-thumbnailer" \
+      --replace-fail "Exec=xreader-thumbnailer" "Exec=$out/bin/xreader-thumbnailer"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
     homepage = "https://github.com/linuxmint/xreader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

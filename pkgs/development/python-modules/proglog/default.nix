@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   dependencies = [ tqdm ];
 
-  meta = with lib; {
+  meta = {
     description = "Logs and progress bars manager for Python";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Proglog";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

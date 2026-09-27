@@ -67,18 +67,23 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)" \
       --replace-warn 'pkg_get_variable(EMILUA_PLUGINSDIR emilua pluginsdir)' 'set(EMILUA_PLUGINSDIR "${"$"}{CMAKE_INSTALL_PREFIX}/${emilua.sitePackages}")'
+    substituteInPlace td/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace td/td/generate/tl-parser/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Telegram Database Library bindings for Emilua";
     homepage = "https://emilua.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manipuladordedados ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ manipuladordedados ];
+    platforms = lib.platforms.linux;
   };
 }

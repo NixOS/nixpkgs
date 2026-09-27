@@ -5,17 +5,17 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "istioctl";
-  version = "1.28.0";
+  version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
-    rev = version;
-    hash = "sha256-NLARp5Gw04UosyLw3TkEmtvSLKa+tYp4s60UKvcJOgw=";
+    rev = finalAttrs.version;
+    hash = "sha256-9HIDkNpLwwGN80NIweQ6DowKR0x26E0LkMuzl3qsGNs=";
   };
-  vendorHash = "sha256-ge9aR3ZYOJaYp0D1UWzzg40nXlwM/Sl1Ep+u1CmdSV8=";
+  vendorHash = "sha256-19ziol7/8UOw78kW5epqzrR6GO0k+CwQGkq1l7XKMaw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,9 +23,9 @@ buildGoModule rec {
   ldflags =
     let
       attrs = [
-        "istio.io/istio/pkg/version.buildVersion=${version}"
+        "istio.io/istio/pkg/version.buildVersion=${finalAttrs.version}"
         "istio.io/istio/pkg/version.buildStatus=Nix"
-        "istio.io/istio/pkg/version.buildTag=${version}"
+        "istio.io/istio/pkg/version.buildTag=${finalAttrs.version}"
         "istio.io/istio/pkg/version.buildHub=docker.io/istio"
       ];
     in
@@ -39,7 +39,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/istioctl version --remote=false | grep ${version} > /dev/null
+    $out/bin/istioctl version --remote=false | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = ''
@@ -49,14 +49,14 @@ buildGoModule rec {
     installShellCompletion --zsh _istioctl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Istio configuration command line utility for service operators to debug and diagnose their Istio mesh";
     mainProgram = "istioctl";
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       veehaitch
       ryan4yin
     ];
   };
-}
+})

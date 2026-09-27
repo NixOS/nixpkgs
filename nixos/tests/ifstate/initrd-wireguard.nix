@@ -10,25 +10,26 @@ let
     {
       enable = true;
       settings = {
-        interfaces = {
-          eth1 = {
-            addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
-            link = {
-              state = "up";
-              kind = "physical";
-            };
+        namespaces.outside.interfaces.eth1 = {
+          addresses = [ "2001:0db8:a::${toString id}/64" ];
+          link = {
+            state = "up";
+            kind = "physical";
           };
+        };
+        interfaces = {
           wg0 = {
-            addresses = [ "2001:0db8:b::${builtins.toString id}/64" ];
+            addresses = [ "2001:0db8:b::${toString id}/64" ];
             link = {
               state = "up";
               kind = "wireguard";
+              bind_netns = "outside";
             };
             wireguard = {
               private_key = "!include ${pkgs.writeText "wg_priv.key" wgPriv}";
               listen_port = 51820;
               peers."${wgPeerPubKey}" = {
-                endpoint = "[2001:0db8:a::${builtins.toString wgPeerId}]:51820";
+                endpoint = "[2001:0db8:a::${toString wgPeerId}]:51820";
                 allowedips = [ "::/0" ];
               };
             };
@@ -61,6 +62,9 @@ in
         };
 
         boot.initrd = {
+          # otherwise the interfaces do not get created
+          kernelModules = [ "virtio_net" ];
+
           network = {
             enable = true;
             ifstate =
@@ -72,12 +76,10 @@ in
                 wgPeerId = 2;
               }
               // {
-                package = pkgs.ifstate.override {
-                  withConfigValidation = false;
-                };
                 allowIfstateToDrasticlyIncreaseInitrdSize = true;
               };
           };
+
           systemd = {
             enable = true;
             network.enable = false;

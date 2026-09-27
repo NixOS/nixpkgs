@@ -6,22 +6,22 @@
 
 buildNpmPackage rec {
   pname = "resumed";
-  version = "4.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "rbardini";
     repo = "resumed";
     rev = "v${version}";
-    hash = "sha256-kDv6kOVY8IfztmLeby2NgB5q0DtP1ajMselvr1EDQJ8=";
+    hash = "sha256-zV+3HZ89bQoSHdZcYkdeqYJI0UnEZFAG3U/ZC9iHcvE=";
   };
 
-  npmDepsHash = "sha256-7Wdf8NaizgIExeX+Kc8wn5f20al0bnxRpFoPy6p40jw=";
+  npmDepsHash = "sha256-zm4FU/xCFJmsZt4uib+pSiCP023p4mGGiODq4QW0zV0=";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";
     homepage = "https://github.com/rbardini/resumed";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "resumed";
   };
 }

@@ -1,8 +1,8 @@
 {
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -20,19 +20,24 @@
   gnugrep,
   gnused,
   makeWrapper,
+
+  # test dependencies
+  which,
+  util-linux,
+  tcpdump,
 }:
 let
   withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "25.09.0";
+  version = "26.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
+    hash = "sha256-Hw1sOADqQYn0JX3rJcT6bCAarzRV1OaTPyuRCDv5sF4=";
     fetchSubmodules = true;
   };
 
@@ -44,27 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     "tools"
   ];
 
-  patches = [
-    # Fix test failure with musl libc.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
-      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
-    })
-    # Fix sandbox test failure.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
-      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
-    })
-    # Fix build failure due to make install race condition.
-    # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
-    ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
-  ];
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     python3
     makeWrapper
+    # NOTE: remove if OVN switches to `command -v`:
+    # https://patchwork.ozlabs.org/project/ovn/patch/20260205004956.84602-3-ihar.hrachyshka@gmail.com/
+    which # used in test suite to detect presence of commands
   ];
 
   buildInputs = [
@@ -101,8 +93,18 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
-    openssl # used to generate certificates used for test services
+    # used to generate certificates used for test services
+    openssl
     procps
+
+    # some tests may need tcpdump to run
+    tcpdump
+
+    # scapy-server imports scapy module
+    (python3.withPackages (ps: with ps; [ scapy ]))
+
+    # scapy tests use flock to start scapy-server
+    util-linux
   ];
 
   postInstall = ''
@@ -145,9 +147,27 @@ stdenv.mkDerivation (finalAttrs: {
     # hack to stop tests from trying to read /etc/resolv.conf
     export OVS_RESOLV_CONF="$PWD/resolv.conf"
     touch $OVS_RESOLV_CONF
+
+    patchShebangs --build tests/scapy-server.py
   '';
 
-  passthru.updateScript = nix-update-script { };
+  checkPhase = ''
+    runHook preCheck
+
+    if ! make check; then
+      echo "Some tests failed. Collecting logs for analysis..."
+      find tests/testsuite.dir -type f -exec echo "==== Contents of {} ====" \; -exec cat {} \;
+      exit 1
+    fi
+
+    runHook postCheck
+  '';
+
+  passthru = {
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open Virtual Network";

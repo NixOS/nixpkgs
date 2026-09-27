@@ -6,39 +6,45 @@
   graphviz,
   pydot,
   networkx,
+  pkg-resources-backport,
+  setuptools,
   which,
 }:
 
 buildPythonPackage rec {
   pname = "pycflow2dot";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1zm8x2pd0q6zza0fw7hg9g1qvybfnjq6ql9b8mh2fc45l7l25655";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cflow
     graphviz
     pydot
+    pkg-resources-backport
     networkx
     which
   ];
 
   pythonImportsCheck = [ "pycflow2dot" ];
+
   checkPhase = ''
     cd tests
     export PATH=$out/bin:$PATH
     make all
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Layout C call graphs from cflow using GraphViz dot";
-    mainProgram = "cflow2dot";
     homepage = "https://github.com/johnyf/pycflow2dot";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    mainProgram = "cflow2dot";
   };
 }

@@ -1,0 +1,9 @@
+diff --git a/tests/check_utils.c b/tests/check_utils.c
+index 7229e4b..a422af4 100644
+--- a/tests/check_utils.c
++++ b/tests/check_utils.c
+@@ -1,3 +1,4 @@
++#include "../config.h"
+ #include <stdlib.h>
+ 
+ #include "../src/tailor.h"

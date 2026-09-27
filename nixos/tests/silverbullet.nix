@@ -33,7 +33,7 @@
   testScript =
     { nodes, ... }:
     ''
-      PORT = ${builtins.toString nodes.simple.services.silverbullet.listenPort}
+      PORT = ${toString nodes.simple.services.silverbullet.listenPort}
       ADDRESS = "${nodes.simple.services.silverbullet.listenAddress}"
       SPACEDIR = "${nodes.simple.services.silverbullet.spaceDir}"
       simple.wait_for_unit("silverbullet.service")
@@ -41,13 +41,13 @@
       simple.succeed(f"curl --max-time 5 -s -v -o /dev/null --fail http://{ADDRESS}:{PORT}/")
       simple.succeed(f"test -d '{SPACEDIR}'")
 
-      PORT = ${builtins.toString nodes.configured.services.silverbullet.listenPort}
+      PORT = ${toString nodes.configured.services.silverbullet.listenPort}
       ADDRESS = "${nodes.configured.services.silverbullet.listenAddress}"
       SPACEDIR = "${nodes.configured.services.silverbullet.spaceDir}"
       configured.wait_for_unit("silverbullet.service")
       configured.wait_for_open_port(PORT)
-      assert int(configured.succeed(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/test.md -H'Authorization: Bearer test'")) == 200
-      assert int(configured.fail(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/test.md -H'Authorization: Bearer wrong'")) == 401
+      assert int(configured.succeed(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/.fs/test.md -H'Authorization: Bearer test'")) == 200
+      assert int(configured.fail(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/.fs/test.md -H'Authorization: Bearer wrong'")) == 401
       configured.succeed(f"test -d '{SPACEDIR}'")
     '';
 }

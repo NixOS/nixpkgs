@@ -7,12 +7,13 @@
   blas,
   cmake,
   flex,
-  fop,
   glpk,
   gmp,
   lapack,
   libxml2,
   libxslt,
+  docbook_xml_dtd_43,
+  docbook_xsl,
   llvmPackages,
   pkg-config,
   plfit,
@@ -25,13 +26,13 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
     tag = finalAttrs.version;
-    hash = "sha256-SwcihzISSmeVhpMrysOhWrUzVVuB4ZBVEjC0vHJwrdw=";
+    hash = "sha256-mXaW9UOTPN5iM7ZNoV2NjH+2Maez5A/YfABeQRe0vgY=";
   };
 
   postPatch = ''
@@ -48,9 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     flex
-    fop
     libxml2
     libxslt
+    docbook_xml_dtd_43
+    docbook_xsl
     pkg-config
     python3
     sourceHighlight
@@ -85,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  buildFlags = [
+    "all"
+    "html"
+  ];
+
   doCheck = true;
 
   postInstall = ''
@@ -104,13 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     python = python3.pkgs.igraph;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       MostAwesomeDude
       dotlambda
     ];

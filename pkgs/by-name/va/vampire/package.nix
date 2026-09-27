@@ -2,53 +2,69 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   z3,
-  zlib,
+  # We use an older version of z3 because upstream pins this older version as a submodule
+  # And doesn't recommend using different versions unless you know specfically what you are doing
+  z3' ? z3.overrideAttrs rec {
+    version = "4.14.0";
+    src = fetchFromGitHub {
+      owner = "Z3Prover";
+      repo = "z3";
+      rev = "z3-${version}";
+      hash = "sha256-Bv7+0J7ilJNFM5feYJqDpYsOjj7h7t1Bx/4OIar43EI=";
+    };
+  },
+  enableZ3 ? z3' != null,
+  nix-update-script,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "4.9";
+  version = "5.1.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
-    tag = "v${version}casc2024";
-    hash = "sha256-NHAlPIy33u+TRmTuFoLRlPCvi3g62ilTfJ0wleboMNU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zPE2GmaHupBhyPEZFcoRADzClPKYydlJ74dNkyQpJa8=";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [
-    z3
-    zlib
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ z3' ];
+
+  # Needed so we can case on it's value
+  cmakeBuildType = "Release";
+  buildFlags = lib.optionals (finalAttrs.doCheck) [
+    "all"
+    "vtest"
   ];
 
-  makeFlags = [
-    "vampire_z3_rel"
-    "CC:=$(CC)"
-    "CXX:=$(CXX)"
+  cmakeFlags = [
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_Z3" (!enableZ3))
+  ]
+  ++ lib.optionals enableZ3 [
+    (lib.cmakeFeature "Z3_DIR" "${z3'.dev}/lib/cmake")
   ];
 
-  postPatch = ''
-    patch -p1 -i ${./minisat-fenv.patch} -d Minisat || true
-  '';
-
-  enableParallelBuilding = true;
-
-  fixupPhase = ''
-    runHook preFixup
-
+  prePatch = ''
     rm -rf z3
-
-    runHook postFixup
   '';
 
-  installPhase = ''
-    runHook preInstall
+  # The tests only are able to be built in Debug builds, otherwise the `vtest`
+  # binary doesn't exist as a target
+  doCheck = finalAttrs.cmakeBuildType == "Debug";
 
-    install -m0755 -D vampire_z3_rel* $out/bin/vampire
-
-    runHook postInstall
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+    z3 = z3';
+    tests.debug-build-with-tests = finalAttrs.finalPackage.overrideAttrs {
+      cmakeBuildType = "Debug";
+    };
+  };
 
   meta = {
     homepage = "https://vprover.github.io/";
@@ -56,6 +72,6 @@ stdenv.mkDerivation rec {
     mainProgram = "vampire";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
   };
-}
+})

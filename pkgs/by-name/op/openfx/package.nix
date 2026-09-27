@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "openfx";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openfx";
-    rev = "OFX_Release_1_4_TAG";
-    sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
+    rev = "OFX_Release_1.5.1";
+    hash = "sha256-qiY5klmGDiU9cqjfNdFsCcNqSBwV0dVZB2ZIsElRBD4=";
   };
 
   outputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     cp -r include/* $dev/include/OpenFX/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image processing plug-in standard";
     homepage = "https://openeffects.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.guibou ];
   };
 }

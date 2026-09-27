@@ -16,7 +16,7 @@
   zenity,
   luajit_2_1,
   libGL,
-  libX11,
+  libx11,
 
   builderArgs,
 }:
@@ -58,7 +58,7 @@ buildDubPackage (
       freetype
       SDL2
       libGL
-      libX11
+      libx11
     ];
 
     dontUseCmakeConfigure = true;

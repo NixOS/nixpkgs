@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  pythonOlder,
-
   unittestCheckHook,
 
   setuptools,
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "khanaa";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cakimpei";
@@ -39,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "khanaa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to make spelling Thai more convenient";
     homepage = "https://github.com/cakimpei/khanaa";
     changelog = "https://github.com/cakimpei/khanaa/blob/main/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

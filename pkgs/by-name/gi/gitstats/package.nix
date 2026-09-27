@@ -11,7 +11,7 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitstats";
   version = "2016-01-08";
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ];
 
   buildFlags = [ "man" ];
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     installManPage doc/gitstats.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "gitstats";
   };
-}
+})

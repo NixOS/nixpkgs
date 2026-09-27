@@ -4,11 +4,12 @@
   appdirs,
   buildPythonPackage,
   fetchPypi,
+  glibcLocales,
+  isPyPy,
   mock,
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -19,12 +20,15 @@ buildPythonPackage rec {
   version = "2.4.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-rpfH1RIT9LcLapWCklMCiQkN46fhWEHhCPvhRPBp0xM=";
   };
+
+  patches = [
+    ./drop-pkg-resources.patch
+    ./python-3.14-pathname2url.patch
+  ];
 
   postPatch = ''
     # https://github.com/PyFilesystem/pyfilesystem2/pull/591
@@ -46,9 +50,12 @@ buildPythonPackage rec {
     mock
     psutil
     pytestCheckHook
+  ]
+  ++ lib.optionals isPyPy [
+    glibcLocales
   ];
 
-  LC_ALL = "en_US.utf-8";
+  env.LC_ALL = "en_US.utf-8";
 
   preCheck = ''
     HOME=$(mktemp -d)
@@ -59,6 +66,10 @@ buildPythonPackage rec {
     "tests/test_move.py"
     "tests/test_mirror.py"
     "tests/test_copy.py"
+    # pyftpdlib removed tests from installation in 2.1.0, resulting in
+    #     ModuleNotFoundError: No module named 'pyftpdlib.test'
+    "tests/test_ftpfs.py"
+    "tests/test_encoding.py" # fails under zfs normalization=formD
   ];
 
   disabledTests = [
@@ -77,12 +88,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem abstraction";
     homepage = "https://github.com/PyFilesystem/pyfilesystem2";
     changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

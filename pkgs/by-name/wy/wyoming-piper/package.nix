@@ -5,16 +5,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-piper";
-  version = "2.0.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "wyoming-piper";
-    rev = "a9bedf7947b6813807caa9eba22c745cad68e5c1";
-    hash = "sha256-Ld+UZguvtVig+g4hepLnC0PEYU/yST4cpI5bLfeTVkw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gz/Pxf4GUZLCBsRW6ML/6l+rdcb17V4rZ7ltvjcN694=";
   };
 
   build-system = with python3Packages; [
@@ -27,37 +27,46 @@ python3Packages.buildPythonApplication rec {
     "wyoming"
   ];
 
-  dependencies = with python3Packages; [
-    regex
-    piper-tts
-    sentence-stream
-    wyoming
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      regex
+      piper-tts
+      sentence-stream
+      wyoming
+    ]
+    ++ wyoming.optional-dependencies.zeroconf;
+
+  optional-dependencies = with python3Packages; {
+    http = wyoming.optional-dependencies.http;
+    ja = piper-tts.optional-dependencies.ja;
+    # We do not follow the dependency dance upstream does as that would require overrideAttrs.
+    # omnivoice = [ omnivoice ]; # not packaged, yet
+    web = [ flask ];
+    zeroconf = wyoming.optional-dependencies.zeroconf;
+    zh = piper-tts.optional-dependencies.zh;
+  };
 
   pythonImportsCheck = [
     "wyoming_piper"
   ];
 
-  doCheck = false; # only test requires network
-
   nativeCheckInputs = with python3Packages; [
-    numpy
     pytest-asyncio
     pytestCheckHook
-    python-speech-features
   ];
 
-  disabledTests = [
-    # network access
-    "test_piper"
+  disabledTestPaths = [
+    # requires network access
+    "tests/test_piper.py"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/OHF-Voice/wyoming-piper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
-    homepage = "https://github.com/rhasspy/wyoming-piper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    homepage = "https://github.com/OHF-Voice/wyoming-piper";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

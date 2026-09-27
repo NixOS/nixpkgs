@@ -50,15 +50,20 @@ let
 in
 stdenv.mkDerivation {
   pname = "dia";
-  version = "unstable-2025-10-26";
+  version = "0.97.2-unstable-2026-07-24";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "dia";
-    rev = "efdf829e8afdbbeb371820932769e35415ebe886";
-    hash = "sha256-VFFU5iJnVJdZ2tkNszZ2ooBD+GiCL6MqanzpEWIJerk=";
+    rev = "ad68cc378b7a187706bc2648c48b44d16fb80819";
+    hash = "sha256-ejjSc9GGXD5GsbeRps1T20xifJuzWA1yq/G7jk797Cw=";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/dia/-/merge_requests/146
+    ./fix-build-with-poppler-26-06.patch
+  ];
 
   postPatch = ''
     # Fix build with poppler 25.10.0
@@ -98,12 +103,18 @@ stdenv.mkDerivation {
     gtk-mac-integration-gtk3
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/org.gnome.Dia.thumbnailer \
+      --replace-fail "TryExec=dia" "TryExec=$out/bin/dia" \
+      --replace-fail "Exec=dia" "Exec=$out/bin/dia"
+  '';
+
+  meta = {
     description = "Gnome Diagram drawing software";
     mainProgram = "dia";
     homepage = "https://wiki.gnome.org/Apps/Dia";
-    maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -2,38 +2,43 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_24,
+  npm-lockfile-fix,
   testers,
   snyk,
-  nodejs_20,
 }:
 
-let
-  version = "1.1299.1";
-in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "snyk";
-  inherit version;
+  version = "1.1307.1";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-DANNao3xNcoYWgyi5Dn5UTdeUNPMtkSC5f9VMIShqpQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VhbtP1aHIkYaPbptkJMT/cMAhqFeAwTwSZioIAUbO8k=";
+
+    # TODO: Remove once https://github.com/snyk/cli/pull/6924 is released.
+    postFetch = ''
+      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+    '';
   };
 
-  npmDepsHash = "sha256-WKVFg4rtm9UCWRbj1QCrDdQFpk0QZm3KKRUfOQfEJtg=";
+  npmDepsFetcherVersion = 2;
+
+  npmDepsHash = "sha256-mTP5Tyi41BhSaDjCallH6r+PAFd/UCqNLxUkk2DzcLE=";
+
+  nodejs = nodejs_24;
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
+      --replace-fail '"version": "1.0.0-monorepo"' '"version": "${finalAttrs.version}"'
   '';
 
   postInstall = ''
     # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
     find -L $out -type l -print -delete
   '';
-
-  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 
@@ -44,9 +49,9 @@ buildNpmPackage {
   meta = {
     description = "Scans and monitors projects for security vulnerabilities";
     homepage = "https://snyk.io";
-    changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
+    changelog = "https://github.com/snyk/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "snyk";
   };
-}
+})

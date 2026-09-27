@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "valuta";
   version = "1.4.2";
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ideveCore";
     repo = "Valuta";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1vcjmSXEKy6XTEPV5jiz+ZxzFFUhVnmLK6MDjqoWTHs=";
   };
 
@@ -61,13 +61,13 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ arthsmn ];
-    teams = [ teams.gnome-circle ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "currencyconverter";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

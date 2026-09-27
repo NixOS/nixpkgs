@@ -14,20 +14,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.14.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-ee9P2XrUToW0WJJk8QnIkY6/9t+RCY98Ai05cz9ViIY=";
+    hash = "sha256-9os/QtFNL8zobOmg5V09Op8/P43YS6qpQh1qcHqXbgE=";
   };
 
-  cargoHash = "sha256-nO8T+nSfR/EGW8IhjevmCH10P0ky+D0vyULSCVL5OYE=";
+  cargoHash = "sha256-0zrxOPWKP0Yz0og9UZtiiyNJtB4mwIKz1fi++wwm7oE=";
 
   cargoBuildFlags = [
-    "-p nickel-lang-cli"
-    "-p nickel-lang-lsp"
+    "--package"
+    "nickel-lang-cli"
+    "--package"
+    "nickel-lang-lsp"
   ];
 
   nativeBuildInputs = [
@@ -39,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_28
+    nixVersions.nix_2_31
     boost
   ];
 
@@ -68,6 +70,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--exclude=py-nickel"
   ];
 
+  checkFlags = lib.optionals enableNixImport [
+    # libnixmain from Nix >= 2.31 tries to create /nix/var/nix/profiles on
+    # initialisation, which is rejected by the build sandbox.
+    "--skip=stdin_format::evaluates_nix_from_stdin"
+  ];
+
   postInstall = ''
     mkdir -p $nls/bin
     mv $out/bin/nls $nls/bin/nls
@@ -76,7 +84,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -92,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/nickel-lang/nickel/blob/${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felschr

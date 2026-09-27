@@ -8,17 +8,18 @@
   ncurses,
   docbook_xsl,
   git,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "sdl-jstest";
-  version = "0.2.2-unstable-2025-03-27";
+  version = "0.2.2-unstable-2026-07-03";
 
   src = fetchFromGitHub {
     owner = "Grumbel";
     repo = "sdl-jstest";
-    rev = "917d27b3b45a335137bd2c8597f8bcf2bac8a569";
-    hash = "sha256-lUHI72fcIEllbcieUrp9A/iKSjUHqmKOUXbzdXCV5jE=";
+    rev = "b8eae565aefa8f1723eb0a64be94de309525d204";
+    hash = "sha256-kS1FcoRUInVkksI2SKQ5oCnEYSZzpf3X+db1KmRzJwI=";
     fetchSubmodules = true;
   };
 
@@ -36,12 +37,18 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_SDL_JSTEST" false) ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     homepage = "https://github.com/Grumbel/sdl-jstest";
     description = "Simple SDL joystick test application for the console";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      yuannan
+    ];
     mainProgram = "sdl2-jstest";
   };
 }

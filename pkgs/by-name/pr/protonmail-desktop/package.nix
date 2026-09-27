@@ -10,9 +10,9 @@
 }:
 let
   mainProgram = "proton-mail";
-  version = "1.9.1";
-  linuxHash = "sha256-P2i/uX++F1JUgwSUyndYazjLSCK1mP+XSGICPUoo1VE=";
-  darwinHash = "sha256-U+I0ttToDiLLjEaKlvdb7HhE4dMrLryc251GXBVsQEM=";
+  version = "1.14.0";
+  linuxHash = "sha256-yB5eKXhW9bmGxHsjOKZlNI2JfN8CXFz1Pz2+77DPYog=";
+  darwinHash = "sha256-NDgCvgM0CM6RNklo2VuMRZb/oT5yaiW7QqyJVAr6hHo=";
 in
 stdenv.mkDerivation {
   pname = "protonmail-desktop";
@@ -25,10 +25,6 @@ stdenv.mkDerivation {
         hash = linuxHash;
       };
       "aarch64-darwin" = fetchurl {
-        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
-        hash = darwinHash;
-      };
-      "x86_64-darwin" = fetchurl {
         url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
         hash = darwinHash;
       };
@@ -91,7 +87,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rsniezek
-      sebtm
       matteopacini
     ];
     platforms = [

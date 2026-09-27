@@ -16,13 +16,13 @@
   withManufDb ? false,
   wireshark,
   libpcap,
-# 2D/3D graphics and graphs TODO: VPython
-# TODO: nmap, numpy
+  # 2D/3D graphics and graphs TODO: VPython
+  # TODO: nmap, numpy
 }:
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -31,14 +31,15 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     tag = "v${version}";
-    hash = "sha256-m2L30aEpPp9cfW652yd+0wFkNlMij6FF1RzWZbwJ79A=";
+    hash = "sha256-Pp7pPfaWyzJGf+soENfOPynN8logc5FM848hyVCcdKk=";
   };
 
-  patches = [ ./find-library.patch ];
+  patches = lib.optional (!stdenv.hostPlatform.isStatic) ./find-library.patch;
 
   postPatch = ''
     printf "${version}" > scapy/VERSION
-
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     libpcap_file="${lib.getLib libpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}"
     if ! [ -e "$libpcap_file" ]; then
         echo "error: $libpcap_file not found" >&2
@@ -77,7 +78,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "scapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based network packet manipulation program and library";
     mainProgram = "scapy";
     longDescription = ''
@@ -103,9 +104,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://scapy.net/";
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
     ];
   };

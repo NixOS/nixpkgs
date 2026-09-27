@@ -3,11 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  gdk-pixbuf,
-  gnome-themes-extra,
-  gtk-engine-murrine,
   jdupes,
-  librsvg,
   sassc,
   which,
   themeVariants ? [ ], # default: blue
@@ -47,18 +43,8 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
       which
     ];
 
-    buildInputs = [
-      gdk-pixbuf # pixbuf engine for Gtk2
-      gnome-themes-extra # adwaita engine for Gtk2
-      librsvg # pixbuf loader for svg
-    ];
-
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine # murrine engine for Gtk2
-    ];
-
     postPatch = ''
-      patchShebangs install.sh clean-old-theme.sh
+      patchShebangs install.sh
     '';
 
     installPhase = ''
@@ -84,11 +70,11 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat Design theme for GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/Qogir-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

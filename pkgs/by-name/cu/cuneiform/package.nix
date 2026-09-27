@@ -1,14 +1,14 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchurl,
   cmake,
   imagemagick,
   testers,
 }:
 
-# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15.
-stdenv.mkDerivation (finalAttrs: {
+# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15. Switched to gcc14Stdenv as of 2026-09-13 to fix hydra build error
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
   version = "1.1.0";
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     command = "cuneiform";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-language OCR system";
     homepage = "https://launchpad.net/cuneiform-linux";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
     mainProgram = "cuneiform";
   };
 })

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "setup-envtest";
   version = "0.22.3";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     fetchFromGitHub {
       owner = "kubernetes-sigs";
       repo = "controller-runtime";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-Al1MILraagj5b2AatweT3uGv/xpFYgLN/vEXCE/w630=";
     }
     + "/tools/setup-envtest";
@@ -26,11 +26,11 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool that manages binaries for envtest, allowing the download of new binaries, listing installed and available ones, and cleaning up versions";
-    homepage = "https://github.com/kubernetes-sigs/controller-runtime/tree/v${version}/tools/setup-envtest";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arikgrahl ];
+    homepage = "https://github.com/kubernetes-sigs/controller-runtime/tree/v${finalAttrs.version}/tools/setup-envtest";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "setup-envtest";
   };
-}
+})

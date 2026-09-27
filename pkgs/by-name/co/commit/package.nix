@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commit";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ACgt1xZTiHYiCTUvfQ+KP5TYm8tMimGizK1dn9UXzao=";
+    hash = "sha256-PyxByqvTK/B5Kr+uRZTZxsHcfhLqAjZrJ0/hW7m8zVQ=";
     fetchSubmodules = true;
   };
 

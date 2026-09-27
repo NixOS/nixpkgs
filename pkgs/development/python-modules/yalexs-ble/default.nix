@@ -1,7 +1,6 @@
 {
   lib,
   async-interrupt,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
@@ -14,23 +13,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yalexs-ble";
-  version = "3.2.1";
+  version = "4.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Yale-Libs";
     repo = "yalexs-ble";
-    tag = "v${version}";
-    hash = "sha256-50gI1vcA3GPm5yqLxKa6tV0bv5xUMfNFvdabJ2KY99I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-osvdWeYP/hp21C4Xtv0eBV+fMAg4mQ2JeFUa3NtT1IQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     async-interrupt
-    async-timeout
     bleak
     bleak-retry-connector
     cryptography
@@ -45,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yalexs_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Yale BLE devices";
-    homepage = "https://github.com/bdraco/yalexs-ble";
-    changelog = "https://github.com/bdraco/yalexs-ble/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/Yale-Libs/yalexs-ble";
+    changelog = "https://github.com/Yale-Libs/yalexs-ble/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

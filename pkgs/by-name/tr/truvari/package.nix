@@ -80,14 +80,13 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Structural variant comparison tool for VCFs";
     homepage = "https://github.com/ACEnglish/truvari";
     changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
-      scalavision
     ];
     longDescription = ''
       Truvari is a benchmarking tool for comparison sets of SVs.

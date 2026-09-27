@@ -11,6 +11,7 @@
   systemd,
   gitUpdater,
   lib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "data/session/meson.build" \
       --replace-fail ": systemd_user_unit_dir" ": '$out/lib/systemd/user'"
+
+    substituteInPlace "data/system/org.libvirt.conf.in" \
+      --replace-fail 'group="libvirt"' 'group="libvirtd"'
   '';
 
   nativeBuildInputs = [
@@ -60,8 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # needs running D-Bus and libvirt
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+    tests = {
+      inherit (nixosTests) libvirtd;
+    };
   };
 
   meta = {

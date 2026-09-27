@@ -7,7 +7,7 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "farith";
   version = "0.1";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     domain = "git.frama-c.com";
     owner = "pub";
     repo = "farith";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9TGKeL3DXKEf2RLpkjOTC8aDQeLKSM9QUIiSkFCQW+8=";
   };
 
@@ -35,4 +35,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

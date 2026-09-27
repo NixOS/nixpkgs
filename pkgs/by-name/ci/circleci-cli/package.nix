@@ -1,52 +1,65 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
+  buildPackages,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "circleci-cli";
-  version = "0.1.33721";
+  version = "1.0.48571";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
-    rev = "v${version}";
-    sha256 = "sha256-0ZJZ9xVnk/nUf4NnvFmXcM6FHKoh296hfIbMwnQ9CwA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-doBByvNJG3BIF/+zepBeOm+ZcB+g/nx6W7A8zovJToc=";
   };
 
-  vendorHash = "sha256-QMSciB81khHhjd/4Km1YYyTiEFDF75AcNGsmZTLLO5Q=";
+  vendorHash = "sha256-YYyHAGWMiCzjjW1wY9f8IKs0ZICOnA7RWVpruhR9dI8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  subPackages = [ "cmd/circleci" ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}"
-    "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    mv $out/bin/circleci-cli $out/bin/circleci
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd circleci \
+        --bash <(${emulator} $out/bin/circleci completion bash) \
+        --zsh <(${emulator} $out/bin/circleci completion zsh) \
+        --fish <(${emulator} $out/bin/circleci completion fish)
 
-    installShellCompletion --cmd circleci \
-      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
-      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
-  '';
+      ${emulator} $out/bin/circleci man --output $TMPDIR/circleci.1
+      installManPage $TMPDIR/circleci.1
+    ''
+  );
 
-  meta = with lib; {
+  meta = {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
-      run jobs as if they were running on the hosted CirleCI application.
+      run jobs as if they were running on the hosted CircleCI application.
     '';
-    maintainers = with maintainers; [ synthetica ];
+    maintainers = with lib.maintainers; [ stig ];
     mainProgram = "circleci";
-    license = licenses.mit;
-    homepage = "https://circleci.com/";
+    license = lib.licenses.mit;
+    homepage = "https://cli.circleci.com";
   };
-}
+})

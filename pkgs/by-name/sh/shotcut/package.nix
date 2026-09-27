@@ -5,6 +5,7 @@
   replaceVars,
   SDL2,
   frei0r,
+  opencv4,
   ladspaPlugins,
   gettext,
   jack1,
@@ -14,29 +15,31 @@
   qt6Packages,
   cmake,
   gitUpdater,
-  ffmpeg,
+  ffmpeg_8,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "25.08.16";
+  version = "26.7.30";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpMfiqUwG11H+7sLkp3sLzDWjco1OxYqGyfMAFojSPU=";
+    hash = "sha256-ZfJ4ADJBCriC67YpRiKbJKW799iJnXcS1dp7AQoz2Ew=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     SDL2
-    frei0r
+    (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
     ladspaPlugins
     gettext
     qt6Packages.mlt
@@ -45,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtmultimedia
     qt6.qtcharts
+    qt6.qtwebsockets
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 
@@ -54,18 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-mlt-ffmpeg-path.patch {
-      inherit ffmpeg;
+      ffmpeg = ffmpeg_8;
       mlt = qt6Packages.mlt;
     })
   ];
 
+  dontWrapGApps = true;
+
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set FREI0R_PATH ${
+      (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
+    }/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
     }"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
@@ -91,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       woffs
       peti
+      nick-linux
     ];
     platforms = lib.platforms.unix;
     mainProgram = "shotcut";

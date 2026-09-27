@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "3.0.2";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5jCO2LW7nzbzo+de0fpxBcVASDmINB6yFerkQZlo2o8=";
+    hash = "sha256-6YgCEeDwjNNMMh1tE/DUbScR7ZYf+FNMhFs+q7b0MuM=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-hedkslhyAsictu9Cbw7CgreoWa1StLpTt8oTPNLr5fc=";
+  vendorHash = "sha256-1ouPW3HBjyTB2qRg7DNNLs5eO8UF1UKJLYPPNfJX4NU=";
 
   subPackages = [
     "cmd/cosign"
@@ -61,6 +61,8 @@ buildGoModule (finalAttrs: {
         "TestGetRekorPubKeys"
         "TestVerifyEmbeddedSCT"
         "TestValidateAndUnpackCertWithSCT"
+        "TestVerifySkWithoutIdentities"
+        "TestVerifyAttestationSkWithoutIdentities"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -78,13 +80,13 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${finalAttrs.version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     mainProgram = "cosign";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lesuisse
       jk
       developer-guy

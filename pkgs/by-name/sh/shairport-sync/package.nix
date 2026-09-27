@@ -23,10 +23,11 @@
   libao,
   libsoundio,
   mosquitto,
+  nix-update-script,
   pipewire,
   soxr,
-  alac,
   sndio,
+  enableAvahi ? true,
   enableAirplay2 ? false,
   enableStdout ? true,
   enableAlsa ? true,
@@ -42,24 +43,24 @@
   enableMqttClient ? true,
   enableDbus ? stdenv.hostPlatform.isLinux,
   enableSoxr ? true,
-  enableAlac ? true,
   enableConvolution ? true,
   enableLibdaemon ? false,
+  enableTinySVCmDNS ? true,
 }:
 
 let
   inherit (lib) optional optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "4.3.7";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
-    tag = version;
-    hash = "sha256-bfOgUeUCxQeCmKKBlvIXptM5lJxgZiH4lOhLJSNih8g=";
+    tag = finalAttrs.version;
+    hash = "sha256-mSPuvUzfvm/kZS0LDJhve7SAB35jSH7hhOcOxPXuLww=";
   };
 
   nativeBuildInputs = [
@@ -72,16 +73,17 @@ stdenv.mkDerivation rec {
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
   ]
-  ++ optional enableAirplay2 [
+  ++ optionals enableAirplay2 [
+    libplist.bin
     unixtools.xxd
   ];
 
   buildInputs = [
     openssl
-    avahi
     popt
     libconfig
   ]
+  ++ optional enableAvahi avahi
   ++ optional enableLibdaemon libdaemon
   ++ optional enableAlsa alsa-lib
   ++ optional enableSndio sndio
@@ -92,7 +94,6 @@ stdenv.mkDerivation rec {
   ++ optional enableJack libjack2
   ++ optional enableSoundio libsoundio
   ++ optional enableSoxr soxr
-  ++ optional enableAlac alac
   ++ optional enableConvolution libsndfile
   ++ optionals enableAirplay2 [
     libplist
@@ -114,11 +115,10 @@ stdenv.mkDerivation rec {
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
-    "--with-stdout"
-    "--with-avahi"
   ]
-  ++ optional enablePulse "--with-pa"
-  ++ optional enablePipewire "--with-pw"
+  ++ optional enableAvahi "--with-avahi"
+  ++ optional enablePulse "--with-pulseaudio"
+  ++ optional enablePipewire "--with-pipewire"
   ++ optional enableAlsa "--with-alsa"
   ++ optional enableSndio "--with-sndio"
   ++ optional enableAo "--with-ao"
@@ -127,16 +127,21 @@ stdenv.mkDerivation rec {
   ++ optional enableStdout "--with-stdout"
   ++ optional enablePipe "--with-pipe"
   ++ optional enableSoxr "--with-soxr"
-  ++ optional enableAlac "--with-apple-alac"
   ++ optional enableConvolution "--with-convolution"
   ++ optional enableDbus "--with-dbus-interface"
   ++ optional enableMetadata "--with-metadata"
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableMqttClient "--with-mqtt-client"
+  ++ optional enableTinySVCmDNS "--with-tinysvcmdns"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script {
+    # ignore -dev tagged releases
+    extraArgs = [ "--version-regex=^([0-9\\.]+)$" ];
+  };
 
   meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
@@ -144,9 +149,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [
-      lnl7
       jordanisaacs
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

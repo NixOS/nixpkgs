@@ -2,6 +2,7 @@
   lib,
   php,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -17,14 +18,16 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerLock = ./composer.lock;
   composerStrictValidation = false;
-  vendorHash = "sha256-4wB8MRnqnruo9VXupMmAqiRSZx8F2i+8zcOphTeDp1g=";
+  vendorHash = "sha256-EHl+Mr6y5A51EpLPAWUGtiPkLOky6KvsSY4JWHeyO28=";
 
-  meta = with lib; {
+  passthru.tests.module = nixosTests.flarum;
+
+  meta = {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
     description = "Delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fsagbuya
       jasonodoom
     ];

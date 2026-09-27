@@ -40,11 +40,11 @@ buildNpmPackage rec {
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to turn web pages into readable PDF, EPUB, HTML, or Markdown docs";
     homepage = "https://github.com/danburzo/percollate";
-    license = licenses.mit;
-    maintainers = [ maintainers.austinbutler ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.austinbutler ];
     mainProgram = "percollate";
   };
 }

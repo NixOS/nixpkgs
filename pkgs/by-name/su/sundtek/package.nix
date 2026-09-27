@@ -10,7 +10,7 @@ let
     "$out/bin"
   ];
   platform =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isx86_64 then
       "64bit"
     else if isi686 then
@@ -18,7 +18,7 @@ let
     else
       throw "${system} not considered in build derivation. Might still be supported.";
   sha256 =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isx86_64 then
       "1jfsng5n3phw5rqpkid9m5j7m7zgj5bifh7swvba7f97y6imdaax"
     else
@@ -51,12 +51,12 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Sundtek MediaTV driver";
-    maintainers = [ maintainers.simonvandel ];
+    maintainers = [ lib.maintainers.simonvandel ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.unix;
-    license = licenses.unfree;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
     homepage = "https://support.sundtek.com/index.php/topic,1573.0.html";
   };
 }

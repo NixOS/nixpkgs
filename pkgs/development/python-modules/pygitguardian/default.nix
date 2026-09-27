@@ -9,26 +9,22 @@
   requests,
   responses,
   setuptools,
+  typeguard,
   typing-extensions,
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygitguardian";
-  version = "1.27.0";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
-    tag = "v${version}";
-    hash = "sha256-Jn8wy5UmuzqEputujGJQtAe8AoGCLYpSwZWHpDGlSWg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vjD4RZSV1CN7QaYJYrs/K+2Ax+Mac27bTJ4SQJQHEgU=";
   };
-
-  pythonRelaxDeps = [
-    "marshmallow-dataclass"
-    "setuptools"
-  ];
 
   build-system = [ pdm-backend ];
 
@@ -37,6 +33,7 @@ buildPythonPackage rec {
     marshmallow-dataclass
     requests
     setuptools
+    typeguard
     typing-extensions
   ];
 
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   env.GITGUARDIAN_API_KEY = "Test key for tests";
 
-  meta = with lib; {
+  meta = {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

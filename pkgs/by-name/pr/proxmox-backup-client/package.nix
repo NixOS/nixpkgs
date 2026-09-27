@@ -14,34 +14,34 @@
 
 let
   pname = "proxmox-backup-client";
-  version = "4.0.14";
+  version = "4.2.0";
 
   proxmox-backup_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-backup.git";
-    rev = "8b1b5f8e4d8216a0c45146b426dbfaff01ac0068";
+    rev = "035c449897fafc228c8bbf3a5b5ba38564478ac7";
     name = "proxmox-backup";
-    hash = "sha256-aLiGJcCsHI4QFfMwgmQsXWabRyQ829itNsIDcaVW4FA=";
+    hash = "sha256-tfZXmMWQrP0MiBC1uuSenGaghqHi4ljky6T2KtLcjhk=";
   };
 
   proxmox_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox.git";
-    rev = "56c4deb6309c41ff5afa5765b112be967c653857";
+    rev = "22c4d5ecbfce6eb2fd566181e0b7d23ac2df4f0c";
     name = "proxmox";
-    hash = "sha256-mkGvfWWis1W8xBLb8Da/uIauPEMKPosPdZ+UcgMrvkk=";
+    hash = "sha256-rYaLx6Lorry+NkEmc6/xARMY6ZgdnIaCLJqRA0Mnf8o=";
   };
 
   proxmox-fuse_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-fuse.git";
-    rev = "87dbf9bfef9169286263bccffaae3206635ca108"; # 1.0.0
+    rev = "258788a3d66f7a77040a480170fff9890d4939aa"; # 3.0.0
     name = "proxmox-fuse";
-    hash = "sha256-/8Xy6LTql3gHfHuxT0lK5mhLGc58YAb1W+eyusmEP8Y=";
+    hash = "sha256-deEPxhg2uyswBYjgYrXcAEBByJ/4ptX7I9y0R3AAFA0=";
   };
 
   proxmox-pxar_src = fetchgit {
     url = "git://git.proxmox.com/git/pxar.git";
-    rev = "993c66fcb8819770f279cb9fb4d13f58f367606c"; # 1.0.0
+    rev = "091a8a382d0d6fc71025351fb35c51b1f3b0074d"; # 1.0.1
     name = "pxar";
-    hash = "sha256-V5DkTIyPuopSILQoJt04E5G9ZEylQF1x5oXgWQJuDq8=";
+    hash = "sha256-9SFlrz6nuVby6iQ2ELVaioZu2pcs90tSuyzLCWJlcrA=";
   };
 
   proxmox-pathpatterns_src = fetchgit {
@@ -80,9 +80,6 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
-
-    (cd ../pxar && chmod -R u+w . && patch -p1 <${./0003-decoder-fix-autoref-error-in-pointer-to-reference-co.patch})
-    (cd ../proxmox && chmod -R u+w . && patch -p1 <${./0004-pbs-api-types-crypto-fix-autoref-error-in-ptr-to-ref.patch})
 
     # avoid some unnecessary dependencies, stemming from greedy linkage by rustc
     # see also upstream Makefile for similar workaround
@@ -124,12 +121,13 @@ rustPlatform.buildRustPackage {
     "--bin=pxar"
   ];
 
-  RUSTFLAGS = [ "-L.dep-stubs" ];
+  env = {
+    RUSTFLAGS = toString [ "-L.dep-stubs" ];
+    # pbs-buildcfg requires this set, would be the git commit id
+    REPOID = "";
+  };
 
   doCheck = false;
-
-  # pbs-buildcfg requires this set, would be the git commit id
-  REPOID = "";
 
   nativeBuildInputs = [
     pkgconf
@@ -150,16 +148,16 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for Proxmox Backup Server";
     homepage = "https://pbs.proxmox.com/docs/backup-client.html";
     changelog = "https://git.proxmox.com/?p=proxmox-backup.git;a=blob;f=debian/changelog;hb=${proxmox-backup_src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       cofob
       christoph-heiss
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "proxmox-backup-client";
   };
 }

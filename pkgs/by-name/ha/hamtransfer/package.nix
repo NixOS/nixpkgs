@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage {
     mv $out/bin/uploader $out/bin/hamtransfer-uploader
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for transferring files over amateur radio using modern techniques";
     homepage = "https://github.com/ThomasHabets/hamtransfer";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
       pkharvey

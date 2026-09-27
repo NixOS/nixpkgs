@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "progress-tracker";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "smolBlackCat";
     repo = "progress-tracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ejXN10OyzvHi7n0ph7pnAxgonqexv1d3Yxi3s7ej2i4=";
+    hash = "sha256-jFHB/YqdRlLihRWfxgap1OCZkbYqh5knfBzuEiWJjRY=";
     fetchSubmodules = true;
   };
 

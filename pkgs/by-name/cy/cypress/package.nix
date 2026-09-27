@@ -1,6 +1,7 @@
 {
   alsa-lib,
   autoPatchelfHook,
+  darwin,
   fetchzip,
   gtk2,
   gtk3,
@@ -12,26 +13,21 @@
   stdenv,
   udev,
   unzip,
-  xorg,
 }:
 
 let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-oCTpVD7W1NHWD0nJBrgtmWZZozbcJeAfr7mn/JjqdcM=";
+      hash = "sha256-RkuHmZWKQOQKERQ/b86oIYF8QAd90tanzkREtKoj7eM=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-MIUVhWkfKN5056jhHN31h4dBcTHJI0iX+I2RbkNI80I=";
+      hash = "sha256-me1xSE0Laa+3cfQ5Vx17pZZ8z3BtUU9SnOYWcuA26R4=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-8qvMsC+tRKK12jC2r1A54kS/PZ6q+sErvLvTkse6Kn4=";
-    };
-    x86_64-darwin = {
-      platform = "darwin-x64";
-      hash = "sha256-cCLJloLcuCDgTEiMMJKY6rYiPPhZfFfqXFP5NAMhw4Q=";
+      hash = "sha256-3ZPSwjLFUG8QaIsj7XgvwrA4TTXm3StGdSTd3qg0TJ4=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -41,7 +37,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "14.5.4";
+  version = "15.19.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -55,6 +51,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     unzip
     makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -115,18 +114,21 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     mainProgram = "Cypress";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = lib.attrNames availableBinaries;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tweber
       mmahut
       Crafter
       jonhermansen
+    ];
+    knownVulnerabilities = [
+      "Uses Electron 37.6.0, EOL on October 4, 2025, Several CVEs known."
     ];
   };
 }

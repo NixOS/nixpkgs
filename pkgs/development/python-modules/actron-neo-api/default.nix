@@ -1,34 +1,36 @@
 {
   aiohttp,
+  aiomqtt,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   lib,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "actron-neo-api";
-  version = "0.1.84";
+  version = "0.5.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kclif9";
     repo = "actronneoapi";
     tag = "v${version}";
-    hash = "sha256-ihIg264ZX0tCfRwVLkiq62ke2G125ObcrVabPCDrc4c=";
+    hash = "sha256-2iMZVWXC1LK4zh7CtWbtFnipj47lwOGMKWyslpIIaUE=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     aiohttp
+    aiomqtt
     pydantic
   ];
 
@@ -37,15 +39,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # test hangs
-    "test_poll_for_token_pending"
-    # AttributeError: property 'authorization_header' of 'ActronAirOAuth2DeviceCodeAuth' object has no setter
-    "test_lazy_token_refres"
-    # ActronAirAuthError: Refresh token is required to refresh the access token
-    "test_get_user_info"
   ];
 
   meta = {

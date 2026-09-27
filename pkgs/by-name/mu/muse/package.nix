@@ -3,13 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   alsa-lib,
   dssi,
   fluidsynth,
-  ladspaH,
-  lash,
+  ladspa-header,
   libinstpatch,
   libjack2,
   liblo,
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     libsForQt5.qttools
     libsForQt5.wrapQtAppsHook
@@ -50,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     dssi
     fluidsynth
-    ladspaH
-    lash
+    ladspa-header
     libinstpatch
     libjack2
     liblo

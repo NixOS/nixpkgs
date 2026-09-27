@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "civo";
-  version = "1.4.6";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "civo";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-QZZuRHcKNncQTRgizWAH723OskVMH92eQ72wHpEINEc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SyKDnzJQm3AX47aWWa+TZ8TzMbTsO1p9AIF0xfS7yTQ=";
   };
 
-  vendorHash = "sha256-ZoJdu8sA0r5kiADF+VB4BnOduWLbBAVGbMQs45HKDIU=";
+  vendorHash = "sha256-4QnvXhdNpA00CsPcOvEKLVHmaw5UxkM0b4xjbGavkWk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,8 +28,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/civo/cli/common.VersionCli=${version}"
-    "-X github.com/civo/cli/common.CommitCli=${src.rev}"
+    "-X github.com/civo/cli/common.VersionCli=${finalAttrs.version}"
+    "-X github.com/civo/cli/common.CommitCli=${finalAttrs.src.rev}"
     "-X github.com/civo/cli/common.DateCli=unknown"
   ];
 
@@ -55,4 +55,4 @@ buildGoModule rec {
       rytswd
     ];
   };
-}
+})

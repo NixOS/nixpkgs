@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   obs-studio,
-  ffmpeg_7,
+  ffmpeg,
   libjpeg,
   libimobiledevice,
   libusbmuxd,
@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-obs-plugin";
     tag = finalAttrs.version;
-    sha256 = "sha256-hxG/v15Q4D+6LU4BNV6ErSa1WvPk4kMPl07pIqiMcc4=";
+    hash = "sha256-T7CQrjQK5OV1bgqa2il9snsK7nScuVhV06NuX2SoIeI=";
   };
 
   preBuild = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusbmuxd
     libplist
     obs-studio
-    ffmpeg_7
+    ffmpeg
   ];
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
     "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
     "LIBOBS_INCLUDES=${obs-studio}/include/obs"
-    "FFMPEG_INCLUDES=${lib.getLib ffmpeg_7}"
+    "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
     "LIBUSBMUXD=libusbmuxd-2.0"
     "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];

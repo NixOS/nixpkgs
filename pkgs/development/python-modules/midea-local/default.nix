@@ -6,24 +6,25 @@
   aiofiles,
   aiohttp,
   colorlog,
-  commonregex,
   defusedxml,
-  deprecated,
   ifaddr,
   pycryptodome,
   platformdirs,
+  typing-extensions,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "6.5.0";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
-    tag = "v${version}";
-    hash = "sha256-l5wV6W0CR3Jlir1DEpuh7/I8hGnH5+yrq0JjKcFh4sk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Yx3i/zZvVqZrlsbLxkWWFAITFnwOAaaiBoFfjaYbKw=";
   };
 
   build-system = [ setuptools ];
@@ -32,19 +33,25 @@ buildPythonPackage rec {
     aiofiles
     aiohttp
     colorlog
-    commonregex
     defusedxml
-    deprecated
     ifaddr
     pycryptodome
     platformdirs
+    typing-extensions
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "midealocal" ];
+
+  meta = {
     description = "Control your Midea M-Smart appliances via local area network";
     homepage = "https://github.com/midea-lan/midea-local";
-    changelog = "https://github.com/midea-lan/midea-local/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ k900 ];
-    license = licenses.mit;
+    changelog = "https://github.com/midea-lan/midea-local/releases/tag/${finalAttrs.src.tag}";
+    maintainers = with lib.maintainers; [ k900 ];
+    license = lib.licenses.mit;
   };
-}
+})

@@ -9,17 +9,18 @@
   libopcodes,
   libunwind,
   libblocksruntime,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "honggfuzz";
-  version = "2.6";
+  version = "2.6-unstable-2026-06-19";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "honggfuzz";
-    rev = version;
-    sha256 = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
+    rev = "cf8b66a4d09f4d4d786d96e3c46d9141fb4e98e2";
+    hash = "sha256-cu7VLQvdmgYIbWhAiZjG5wkO/b5+FoBmXp/SlYmykF0=";
   };
 
   postPatch = ''
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
     cp libhfnetdriver/libhfnetdriver.a $out/lib
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9]*";
+  };
+
   meta = {
     description = "Security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
     longDescription = ''
@@ -80,4 +85,4 @@ stdenv.mkDerivation rec {
       chivay
     ];
   };
-}
+})

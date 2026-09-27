@@ -12,7 +12,7 @@
   withRustAnalyzer ? true,
   rust-analyzer,
   withTypescript ? true,
-  typescript,
+  typescript_5,
   abseil-cpp,
   boost,
   llvmPackages,
@@ -43,10 +43,10 @@ stdenv.mkDerivation {
     [
       abseil-cpp
       boost
-      libllvm.all
-      libclang.all
       legacy-cgi
     ]
+    ++ libllvm.all
+    ++ libclang.all
     ++ [
       jedi
       jedi-language-server
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
-    ln -sf ${typescript} $TARGET
+    ln -sf ${typescript_5} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
       --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Code-completion and comprehension server";
     longDescription = ''
       Note if YouCompleteMe Vim plugin complains with;
@@ -133,12 +133,11 @@ stdenv.mkDerivation {
     '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      lnl7
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       mel
       S0AndS0
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

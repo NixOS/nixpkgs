@@ -8,22 +8,24 @@
   numpy-typing-compat,
   beartype,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "optype";
-  version = "0.14.0-unstable-2025-11-10";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    rev = "5f16def3546222caf81a3411a27b007a00819172";
-    hash = "sha256-52cY+u0wjhJFQDLsjND/h6cfln4rCTtcy+HqaoH/re0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mtcGblOEyLfOmBwQCC+jX9wvpXiRJE/DNPfPMpcKEOI=";
   };
 
-  disabled = pythonOlder "3.11";
+  postPatch = ''
+    substituteInPlace tests/numpy/test_any_array.py \
+      --replace-fail "np.timedelta64(0)" "np.timedelta64(0, \"s\")"
+  '';
 
   build-system = [
     uv-build
@@ -57,4 +59,4 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})

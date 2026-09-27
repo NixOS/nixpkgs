@@ -5,13 +5,13 @@
   ocamlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hevea";
-  version = "2.37";
+  version = "2.38";
 
   src = fetchurl {
-    url = "https://hevea.inria.fr/distri/hevea-${version}.tar.gz";
-    sha256 = "sha256-tuk/B/WBedZbTrfoxKXV9otKJfEEwCmmL8kVTpPhr1k=";
+    url = "https://hevea.inria.fr/distri/hevea-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-ciA4BlAHIm8Po95GKRJylNLim/u8QQQsg6Vw+gxFWkc=";
   };
 
   strictDeps = true;
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Quite complete and fast LATEX to HTML translator";
     homepage = "https://hevea.inria.fr/";
-    changelog = "https://github.com/maranget/hevea/raw/v${version}/CHANGES";
+    changelog = "https://github.com/maranget/hevea/raw/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.qpl;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
   };
-}
+})

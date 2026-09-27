@@ -4,27 +4,35 @@
   lib,
   python,
   setuptools,
+  pyprojectVersionPatchHook,
 }:
 
-let
-  version = "2025.9.18";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "regex";
-  inherit version;
+  version = "2026.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrabarnett";
     repo = "mrab-regex";
-    tag = version;
-    hash = "sha256-s/jaRbQffd1DmGribk8gwTraKEhWfvFZboWXUduhM8A=";
+    tag = finalAttrs.version;
+    hash = "sha256-x9XjtIUjm1eV0GS0216ZimHx6DNxtxZV5pQ6dbkEfTc=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
+  preCheck = ''
+    rm regex/__init__.py
+  '';
+
   checkPhase = ''
-    ${python.interpreter} -m unittest
+    runHook preCheck
+
+    ${python.interpreter} -m unittest ./regex/tests/test_regex.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "regex" ];
@@ -38,4 +46,4 @@ buildPythonPackage {
     ];
     maintainers = [ lib.maintainers.dwoffinden ];
   };
-}
+})

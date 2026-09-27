@@ -6,7 +6,6 @@
   fetchPypi,
   fetchpatch,
   fetchpatch2,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,
@@ -25,35 +24,16 @@ let
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.3.0";
+  version = "3.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
+    inherit version;
+    pname = "tpm2_pytss";
+    hash = "sha256-wZPPGQi0gvk8SqRkEykg/jo31LnYAuJnl0/y3+N9RDM=";
   };
 
   patches = [
-    # libtpms (underneath swtpm) bumped the TPM revision
-    # https://github.com/tpm2-software/tpm2-pytss/pull/593
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
-      hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
-    })
-    # support cryptography >= 45.0.0
-    # https://github.com/tpm2-software/tpm2-pytss/pull/643
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
-      hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
-    })
-    # Properly restore environment variables upon exit from
-    # FAPIConfig context. Accepted into upstream, not yet released.
-    (fetchpatch2 {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
-      hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
-    })
   ]
   ++ lib.optionals isCross [
     # pytss will regenerate files from headers of tpm2-tss.
@@ -63,6 +43,7 @@ buildPythonPackage rec {
     # when cross-compiling is turned on.
     # This patch changes the call to pycparser.preprocess_file to provide the name
     # of the cross-compiling cpp
+    # NOTE: This patch could be dropped after next release. 3.0.0-rc0 already have proper `$CC -E` invocation
     (replaceVars ./cross.patch {
       crossPrefix = stdenv.hostPlatform.config;
     })
@@ -102,12 +83,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tpm2_pytss" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
     changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       baloo
       scottstephens
     ];

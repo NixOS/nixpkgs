@@ -12,16 +12,15 @@
   zix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sord";
-  version = "0.16.20";
+  version = "0.16.22";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "drobilla";
     repo = "sord";
-    tag = "v${version}";
-    hash = "sha256-+f3dxhcxVoub+KeI5c5/J87SVvAawrm5cZgo2qogdRM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XrtYKc/7oD/4XrWduokILeWgNIY0QrRDj36s50LOK80=";
   };
 
   outputs = [
@@ -46,14 +45,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://drobilla.net/software/sord";
     description = "Lightweight C library for storing RDF data in memory";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd0
       isc
     ];
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

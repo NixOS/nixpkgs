@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pythonOlder,
   pywebpush,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-webpush";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "safwanrahman";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webpush" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for integrating and sending Web Push Notification in Django Application";
     homepage = "https://github.com/safwanrahman/django-webpush/";
     changelog = "https://github.com/safwanrahman/django-webpush/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

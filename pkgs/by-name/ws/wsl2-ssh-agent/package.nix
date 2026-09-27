@@ -4,15 +4,15 @@
   lib,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wsl2-ssh-agent";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "mame";
     repo = "wsl2-ssh-agent";
-    tag = "v${version}";
-    hash = "sha256-oFlp6EIh32tuqBuLlSjURpl85bzw1HymJplXoGJAM8k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7hibPeYoBxhdf+nQy/xUtR4piMP3vddGSNfQwleOgyk=";
   };
 
   vendorHash = "sha256-YnqpP+JkbdkCtmuhqHnKqRfKogl+tGdCG11uIbyHtlI=";
@@ -32,4 +32,4 @@ buildGoModule rec {
     mainProgram = "wsl2-ssh-agent";
     maintainers = with lib.maintainers; [ eymeric ];
   };
-}
+})

@@ -4,31 +4,31 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "uni";
-  version = "2.8.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "uni";
-    tag = "v${version}";
-    hash = "sha256-LSmQtndWBc7wCYBnyaeDb4Le4PQPcSO8lTp+CSC2jbc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j7uqxXDFCBbLLOVGKlUEsDdryGkZ6n08E4jZgWtCwJs=";
   };
 
-  vendorHash = "sha256-4w5L5Zg0LJX2v4mqLLjAvEdh3Ad69MLa97SR6RY3fT4=";
+  vendorHash = "sha256-Jox5uuQactffBJDDxhlCWKzPh0fKL7bLh22ARJBgSII=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   meta = {
     homepage = "https://github.com/arp242/uni";
     description = "Query the Unicode database from the commandline, with good support for emojis";
-    changelog = "https://github.com/arp242/uni/releases/tag/v${version}";
+    changelog = "https://github.com/arp242/uni/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chvp ];
     mainProgram = "uni";
   };
-}
+})

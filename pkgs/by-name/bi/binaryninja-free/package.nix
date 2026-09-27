@@ -1,31 +1,45 @@
 {
   autoPatchelfHook,
   copyDesktopItems,
+  curl,
   dbus,
   fetchurl,
   fontconfig,
   freetype,
   lib,
+  libdrm,
   libGLU,
   libxkbcommon,
   makeDesktopItem,
   stdenv,
   unzip,
   wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
-  libxml2,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
 }:
+let
+  version = "6.0.10601";
+
+  sources = {
+    x86_64-linux = {
+      url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${version}/binaryninja_free_linux.zip";
+      hash = "sha256-PoucWGGr5umwTIa1+cStLchs7ep5ty17Cu4f3PfOkdY=";
+    };
+    aarch64-linux = {
+      url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${version}/binaryninja_free_linux-arm.zip";
+      hash = "sha256-G3gSWFa+Rh9zJMoA9QyH8XiIXsEK0YVXgHDtmR6X11o=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "5.1.8104";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-s7lRvQhegW/bgZc6XnAowTl1ZZPIN0/BJe+u3p9qHsE=";
-  };
+  src = fetchurl (
+    sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+  );
 
   icon = fetchurl {
     url = "https://raw.githubusercontent.com/Vector35/binaryninja-api/448f40be71dffa86a6581c3696627ccc1bdf74f2/docs/img/logo.png";
@@ -54,24 +68,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    curl
     dbus
     fontconfig
     freetype
+    libdrm
     libGLU
     libxkbcommon
     stdenv.cc.cc.lib
     wayland
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
   ];
-
-  preFixup = ''
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    mkdir -p "$out/lib"
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -98,7 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
       free = false;
     };
     mainProgram = "binaryninja";
-    maintainers = with lib.maintainers; [ scoder12 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      scoder12
+      timschumi
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

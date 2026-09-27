@@ -5,19 +5,22 @@
   beziers,
   glyphslib,
   numpy,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glyphtools";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PXwXHWMJbsi6ZtN+daaXAnlw3gV5DFAhyRxdBa7UP+M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beziers
     glyphslib
     numpy
@@ -29,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glyphtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for extracting information from font glyphs";
     homepage = "https://github.com/simoncozens/glyphtools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

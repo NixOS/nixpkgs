@@ -5,23 +5,23 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "writefreely";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "writefreely";
     repo = "writefreely";
-    rev = "v${version}";
-    sha256 = "sha256-VM5TkQAohxGmtbQs9ZWxCqF4kJ/9wtihz+p1twd+W9E=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-CzIlXy1StXuK8fY3+uZd2pu5hB/MWdJrN+WEdEZEzfk=";
   };
 
-  vendorHash = "sha256-5X+EYV1RFbzB26gi7IYcNpWtNlkTaK2SnDxYJL1AlaA=";
+  vendorHash = "sha256-RrwcY2DNO90cG8YtTQ0nAkUMNnehd1JByHCw/QtGRNs=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/writefreely/writefreely.softwareVer=${version}"
+    "-X github.com/writefreely/writefreely.softwareVer=${finalAttrs.version}"
   ];
 
   tags = [ "sqlite" ];
@@ -32,11 +32,11 @@ buildGoModule rec {
     inherit (nixosTests) writefreely;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build a digital writing community";
     homepage = "https://github.com/writefreely/writefreely";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ soopyc ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ soopyc ];
     mainProgram = "writefreely";
   };
-}
+})

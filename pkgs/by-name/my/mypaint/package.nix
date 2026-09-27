@@ -27,15 +27,15 @@ let
     buildPythonApplication
     ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "mypaint";
   version = "2.0.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
@@ -161,6 +161,12 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/mypaint-ora.thumbnailer \
+      --replace-fail "TryExec=mypaint-ora-thumbnailer" "TryExec=$out/bin/mypaint-ora-thumbnailer" \
+      --replace-fail "Exec=mypaint-ora-thumbnailer" "Exec=$out/bin/mypaint-ora-thumbnailer"
+  '';
+
   meta = {
     description = "Graphics application for digital painters";
     homepage = "http://mypaint.org/";
@@ -168,4 +174,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jtojnar ];
   };
-}
+})

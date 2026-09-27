@@ -19,21 +19,26 @@
   dbus,
   desktop-file-utils,
   versionCheckHook,
+  libxml2,
+  appstream,
+  blueprint-compiler,
+  glycin-loaders,
+  libglycin,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
-  version = "0.21.0";
+  version = "26.9.2";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    tag = "v${version}";
-    hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qlkXQxae8rhDgIJk60NzD6yk6b71S8jTGuChcnW9VuM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Phwn2qBPVaGEyzaBHIg9vq8LEFI0DsSUWkHrpimjy30=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +50,10 @@ stdenv.mkDerivation rec {
     rustc
     cargo
     desktop-file-utils
+    libxml2 # xmllint
+    appstream # appstreamcli
+    blueprint-compiler
+    libglycin.patchVendorHook
   ];
 
   buildInputs = [
@@ -54,6 +63,8 @@ stdenv.mkDerivation rec {
     openssl
     libepoxy
     dbus
+    libglycin
+    glycin-loaders
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -64,8 +75,11 @@ stdenv.mkDerivation rec {
     gst-libav
   ]);
 
+  mesonFlags = [
+    "-Drust-target=release"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -81,4 +95,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
   };
-}
+})

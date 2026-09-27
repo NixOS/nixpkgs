@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library to read freedesktop.org menu files";
-    homepage = "https://blog.lxde.org/tag/menu-cache/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.ttuegel ];
+    homepage = "https://github.com/lxde/menu-cache";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

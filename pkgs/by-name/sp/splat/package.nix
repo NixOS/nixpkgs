@@ -8,12 +8,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splat";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "https://www.qsl.net/kd2bd/${pname}-${version}.tar.bz2";
+    url = "https://www.qsl.net/kd2bd/splat-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ObCzFOLpJ73wDR7aS5hl79EouoUDBfmHrsBJxP1Yopw=";
   };
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "RF Signal Propagation, Loss, And Terrain analysis tool for the electromagnetic spectrum between 20 MHz and 20 GHz";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://www.qsl.net/kd2bd/splat.html";
-    platforms = platforms.x86_64;
+    platforms = lib.platforms.x86_64;
   };
 
-}
+})

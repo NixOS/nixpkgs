@@ -14,6 +14,9 @@
   xmlto,
   meson,
   ninja,
+  gnome,
+  librsvg,
+  makeWrapper,
 
   acl,
   appstream,
@@ -33,18 +36,23 @@
   gnupg,
   gnutar,
   json-glib,
+  libarchive,
   libcap,
   libyaml,
   ostree,
   patch,
   rpm,
-  unzip,
   attr,
 }:
 
+let
+  gdkPixbufLoadersCache = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [ librsvg ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
-  version = "1.4.4";
+  version = "1.4.10";
 
   outputs = [
     "out"
@@ -56,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   # fetchFromGitHub fetches an archive which does not contain the full source (https://github.com/flatpak/flatpak-builder/issues/558)
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${finalAttrs.version}/flatpak-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3CcVk5S6qiy1I/Uvh0Ry/1DRYZgyMyZMoqIuhQdB7Ho=";
+    hash = "sha256-sXIQeMBpfIyh19uWUjK1CdGqh/aLTa43jrUAvd3bnME=";
   };
 
   patches = [
@@ -69,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
-      unzip = "${unzip}/bin/unzip";
+      bsdunzip = "${libarchive}/bin/bsdunzip";
       rpm2cpio = "${rpm}/bin/rpm2cpio";
       cpio = "${cpio}/bin/cpio";
       git = "${gitMinimal}/bin/git";
@@ -95,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     xmlto
+    makeWrapper
   ];
 
   buildInputs = [
@@ -132,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       for file in ${installed_testdir}/{test-builder.sh,test-builder-python.sh,test-builder-deprecated.sh}; do
         patchShebangs $file
       done
+      wrapProgram $out/bin/flatpak-builder --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufLoadersCache}
     '';
 
   passthru = {
@@ -149,12 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build flatpaks from source";
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ arthsmn ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 })

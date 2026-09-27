@@ -11,14 +11,14 @@
 # Instead of writing directly into $HOME, we change the default db location
 # from $HOME/.dupd_sqlite to $HOME/.cache/dupd.sqlite3
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dupd";
   version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "jvirkki";
     repo = "dupd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ZiQroJ5fjBCIjU+M8KRA0N3Mrg9h0NVtfYUIS4cYyhw=";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility to find duplicate files";
     homepage = "http://www.virkki.com/dupd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "dupd";
   };
-}
+})

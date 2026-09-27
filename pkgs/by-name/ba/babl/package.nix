@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.116";
+  version = "0.1.126";
 
   outputs = [
     "out"
@@ -23,12 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UPrgaYZ8et4SWYiP8ePbhf7IbXCCUuU4W1pPOaeOxIM=";
+    hash = "sha256-PwkPSyph/s98jcYKWAS7x3zv2Nd4ry3tBZ8ONnpSkw4=";
   };
 
   patches = [
     # Allow overriding path to dev output that will be hardcoded e.g. in pkg-config file.
     ./dev-prefix.patch
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -44,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
   ]
@@ -58,15 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
     changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
-      replaceStrings [ "." ] [ "_" ] finalAttrs.version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/NEWS";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

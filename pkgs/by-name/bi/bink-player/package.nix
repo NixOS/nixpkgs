@@ -5,7 +5,7 @@
   autoPatchelfHook,
   p7zip,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     stdenv.cc.cc.lib
     libGL
-    libX11
+    libx11
   ];
 
   installPhase = ''

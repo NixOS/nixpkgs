@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "didyoumean";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "hisbaan";
     repo = "didyoumean";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PSEoh1OMElFJ8m4er1vBMkQak3JvLjd+oWNWA46cows=";
   };
 
@@ -43,14 +43,14 @@ rustPlatform.buildRustPackage rec {
   # Clipboard doesn't exist in test environment
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       evanjs
       wegank
     ];
     mainProgram = "dym";
   };
-}
+})

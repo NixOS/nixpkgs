@@ -16,6 +16,7 @@
   psycopg2,
   scipy,
   tkinter,
+  typing-extensions,
 
   # tests
   addBinToPathHook,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.26.0";
+  version = "3.29.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ase";
     repo = "ase";
     tag = version;
-    hash = "sha256-1738NQPgOqSr2PZu1T2b9bL0V+ZzGk2jcWBhLF21VQs=";
+    hash = "sha256-hMeGeQFoC+eWfHkJize21IdxLKAR7Oc0Txwg2BQIvWg=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     pillow
     psycopg2
     scipy
+    typing-extensions
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tkinter
@@ -57,6 +59,10 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

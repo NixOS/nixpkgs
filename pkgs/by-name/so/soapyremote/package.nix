@@ -42,12 +42,12 @@ stdenv.mkDerivation {
     lib.optionals stdenv.hostPlatform.isDarwin [ "-include sys/select.h" ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pothosware/SoapyRemote";
     description = "SoapySDR plugin for remote access to SDRs";
-    license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
     mainProgram = "SoapySDRServer";
   };
 }

@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "avea";
-  version = "1.6.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "k0rventen";
     repo = "avea";
-    tag = "v${version}";
-    hash = "sha256-IfD74nsuHYBrwXebpRE9tzPIwp+i3jdZjh49gz8NRz4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8jDKsEqYDUuB9L2M3da+6xvp6pP7TRHcZwy8w/fOesk=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "avea" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with Elgato's Avea bulb";
     homepage = "https://github.com/k0rventen/avea";
-    changelog = "https://github.com/k0rventen/avea/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/k0rventen/avea/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

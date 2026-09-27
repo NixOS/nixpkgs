@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Icinga/icinga-php-thirdparty";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
 }

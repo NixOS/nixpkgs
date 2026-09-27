@@ -4,8 +4,10 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  xorg,
-  gtk2,
+  libxcb-util,
+  util-macros,
+  libxcb,
+  gtk3,
   spice,
   spice-protocol,
 }:
@@ -28,21 +30,21 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.utilmacros
-    gtk2
+    libxcb
+    libxcb-util
+    util-macros
+    gtk3
     spice
     spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
-  meta = with lib; {
+  meta = {
     description = "Enable a running X11 desktop to be available via a Spice server";
     homepage = "https://gitlab.freedesktop.org/spice/x11spice";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

@@ -20,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "playsound" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TaylorSMarks/playsound";
     description = "Pure Python, cross platform, single function module with no dependencies for playing sounds";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

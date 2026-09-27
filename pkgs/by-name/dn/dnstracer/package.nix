@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.10";
   pname = "dnstracer";
 
   src = fetchurl {
-    url = "https://www.mavetju.org/download/${pname}-${version}.tar.bz2";
+    url = "https://www.mavetju.org/download/dnstracer-${finalAttrs.version}.tar.bz2";
     sha256 = "089bmrjnmsga2n0r4xgw4bwbf41xdqsnmabjxhw8lngg2pns1kb4";
   };
 
@@ -33,14 +33,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libresolv ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lresolv";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lresolv";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
     homepage = "http://www.mavetju.org/unix/general.php";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "dnstracer";
   };
-}
+})

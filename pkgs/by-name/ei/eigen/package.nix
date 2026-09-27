@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "EIGEN_LEAVE_TEST_IN_ALL_TARGET" true) # Build tests in parallel
   ];
@@ -47,12 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
   # too many flaky tests
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
-      sander
       raskin
     ];
     platforms = lib.platforms.unix;

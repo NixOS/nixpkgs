@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "js-$pkgver.jar" "$out/share/java/js.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of JavaScript written in Java";
 
     longDescription = ''
@@ -40,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://rhino.github.io/";
 
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl11 # or
       gpl2Plus
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

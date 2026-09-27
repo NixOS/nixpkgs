@@ -159,7 +159,7 @@ in
       before = [ "time-sync.target" ];
 
       serviceConfig = {
-        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
+        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${toString ntpFlags}";
         Type = "forking";
 
         # Hardening options

@@ -32,15 +32,15 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GIF effects CLI";
     homepage = "https://github.com/sgreben/yeetgif";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
       cc-by-nc-sa-40
     ];
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = with lib.maintainers; [ ajs124 ];
     mainProgram = "gif";
   };
 }

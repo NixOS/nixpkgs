@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   makeWrapper,
   pkg-config,
   libxslt,
@@ -30,15 +29,13 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
 }:
 
 assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.90.10";
+  version = "1.91.4";
 
   outputs = [
     "out"
@@ -52,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-08lAt91RJ/sFIGlq1gfn4wUiwNxWyTO+pX41HKzQTG8=";
+    hash = "sha256-B/gfrXPLYwOGyheTLP/sEH5RakLUm4OiRAV+U2wL9V0=";
   };
 
   patches =
@@ -108,9 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.packaging
     ]))
-  ]
-  ++ lib.optionals withSystemd [
-    systemd
   ]
   ++ lib.optionals useIMobileDevice [
     libimobiledevice
@@ -235,13 +229,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "D-Bus service for power management";
     mainProgram = "upower";
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 })

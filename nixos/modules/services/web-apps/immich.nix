@@ -50,9 +50,6 @@ let
     mkOption
     mkEnableOption
     ;
-
-  postgresqlPackage =
-    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
   imports = [
@@ -67,6 +64,30 @@ in
         directly in `settings`. To do so, set `_secret` of the desired
         attribute to a file path, for example:
           `services.immich.settings.oauth.clientSecret._secret = "/path/to/secret/file";`
+      ''
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "database"
+        "enableVectorChord"
+      ]
+      ''
+        `database.enableVectorChord` has been deprecated as the pgvecto.rs alternative
+        is no longer available. From now on, vectorchord is always enabled.
+      ''
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "database"
+        "enableVectors"
+      ]
+      ''
+        `database.enableVectors` has been deprecated as pgvecto.rs is no longer available.
+        From now on, vectorchord is used instead.
       ''
     )
   ];
@@ -113,7 +134,15 @@ in
     host = mkOption {
       type = types.str;
       default = "localhost";
-      description = "The host that immich will listen on.";
+      example = ""; # all interfaces
+      # hint: the use of "" for IMMICH_HOST is not documented
+      # see https://docs.immich.app/install/environment-variables/#ports
+      # or https://github.com/immich-app/immich/blob/767caf9bfec2ec74ebdef6f58643ee9505da8550/docs/docs/install/environment-variables.md?plain=1#L70
+      # impl: https://github.com/immich-app/immich/blob/60f4dedb2991c8356d2977f1dc9cfa2cf666788c/server/src/app.common.ts#L90
+      description = ''
+        The host that immich will listen on.
+        Set to an empty string (`""`) to listen on all interfaces.
+      '';
     };
     port = mkOption {
       type = types.port;
@@ -203,18 +232,7 @@ in
         // {
           default = true;
         };
-      enableVectorChord =
-        mkEnableOption "the new VectorChord extension for full-text search in Postgres"
-        // {
-          default = true;
-        };
-      enableVectors =
-        mkEnableOption "pgvecto.rs in the database. You may disable this, if you have migrated to VectorChord and deleted the `vectors` schema."
-        // {
-          default = lib.versionOlder config.system.stateVersion "25.11";
-          defaultText = lib.literalExpression "lib.versionOlder config.system.stateVersion \"25.11\"";
-        };
-      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+      createDB = mkEnableOption "the automatic creation of the database for immich" // {
         default = true;
       };
       name = mkOption {
@@ -237,6 +255,29 @@ in
         type = types.str;
         default = "immich";
         description = "The database user for immich.";
+      };
+      package = mkOption {
+        type = types.package;
+        default =
+          if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
+        defaultText = lib.literalExpression ''
+          if config.services.postgresql.enable then
+            config.services.postgresql.package
+          else
+            pkgs.postgresql
+        '';
+        example = lib.literalExpression "pkgs.postgresql_18";
+        description = ''
+          The postgresql package providing the client programs that immich uses,
+          most notably the `pg_dumpall` of its database backup job.
+
+          These programs refuse to talk to a server that is newer than
+          themselves, so this must not be older than the server reachable at
+          {option}`services.immich.database.host`. It is derived from
+          {option}`services.postgresql.package` whenever the postgresql module
+          is enabled on this host; set it explicitly when the database lives on
+          another machine.
+        '';
       };
     };
     redis = {
@@ -263,17 +304,6 @@ in
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
       }
-      {
-        # When removing this assertion, please adjust the nixosTests accordingly.
-        assertion =
-          (cfg.database.enable && cfg.database.enableVectors)
-          -> lib.versionOlder config.services.postgresql.package.version "17";
-        message = "Immich doesn't support PostgreSQL 17+ when using pgvecto.rs. Consider disabling it using services.immich.database.enableVectors if it is not needed anymore.";
-      }
-      {
-        assertion = cfg.database.enable -> (cfg.database.enableVectorChord || cfg.database.enableVectors);
-        message = "At least one of services.immich.database.enableVectorChord and services.immich.database.enableVectors has to be enabled.";
-      }
     ];
 
     services.postgresql = mkIf cfg.database.enable {
@@ -286,55 +316,37 @@ in
           ensureClauses.login = true;
         }
       ];
-      extensions =
-        ps:
-        lib.optionals cfg.database.enableVectors [ ps.pgvecto-rs ]
-        ++ lib.optionals cfg.database.enableVectorChord [
-          ps.pgvector
-          ps.vectorchord
-        ];
+      extensions = ps: [
+        ps.pgvector
+        ps.vectorchord
+      ];
       settings = {
-        shared_preload_libraries =
-          lib.optionals cfg.database.enableVectors [
-            "vectors.so"
-          ]
-          ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
+        shared_preload_libraries = [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
-      let
-        extensions = [
-          "unaccent"
-          "uuid-ossp"
-          "cube"
-          "earthdistance"
-          "pg_trgm"
-        ]
-        ++ lib.optionals cfg.database.enableVectors [
-          "vectors"
-        ]
-        ++ lib.optionals cfg.database.enableVectorChord [
-          "vector"
-          "vchord"
-        ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
-          # save previous version of vectorchord to trigger reindex on update
-          lib.optionalString cfg.database.enableVectorChord ''
+    systemd.services.postgresql-setup = mkIf cfg.database.enable {
+      serviceConfig.ExecStartPost =
+        let
+          extensions = [
+            "unaccent"
+            "uuid-ossp"
+            "cube"
+            "earthdistance"
+            "pg_trgm"
+            "vector"
+            "vchord"
+          ];
+          sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+            -- save previous version of vectorchord to trigger reindex on update
             SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
-          ''
-          + ''
+
             ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
             ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
             ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ''
-          + lib.optionalString cfg.database.enableVectors ''
-            ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
-            GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
-          ''
-          # trigger reindex if vectorchord updates
-          # https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
-          + lib.optionalString cfg.database.enableVectorChord ''
+
+            -- trigger reindex if vectorchord updates
+            -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
             SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
 
             SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
@@ -342,14 +354,14 @@ in
               REINDEX INDEX face_index;
               REINDEX INDEX clip_index;
             \endif
+          '';
+        in
+        [
           ''
-        );
-      in
-      [
-        ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
-        ''
-      ];
+            ${lib.getExe' cfg.database.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ''
+        ];
+    };
 
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
@@ -417,7 +429,7 @@ in
       path = [
         # gzip and pg_dumpall are used by the backup service
         pkgs.gzip
-        postgresqlPackage
+        cfg.database.package
       ];
 
       preStart = mkIf (cfg.settings != null) secretsReplacement.script;
@@ -480,6 +492,5 @@ in
   };
   meta = {
     maintainers = with lib.maintainers; [ jvanbruegge ];
-    doc = ./immich.md;
   };
 }

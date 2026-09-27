@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "taxii2-client";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "oasis-open";

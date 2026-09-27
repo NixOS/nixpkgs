@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  isPy27,
 }:
 
 buildPythonPackage {
   pname = "pyxl3";
   version = "1.4";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "gvanrossum";
@@ -21,10 +19,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
     homepage = "https://github.com/gvanrossum/pyxl3";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

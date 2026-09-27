@@ -4,27 +4,28 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lf";
-  version = "38";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
-    tag = "r${version}";
-    hash = "sha256-a3Ql0E3ZVbveGXGO+n2G2WBVjBk5HuJx9NiaZ7ZAVMc=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-WxXbvj17c1yq4Xkj2BE9nENNBMW677aeFq4TYyCt9yE=";
   };
 
-  vendorHash = "sha256-kZFmCkYd6ijJC/vedUoWZW1TUW1oGD9qA0GCQzfiTUE=";
+  vendorHash = "sha256-VSQf04uyQ49oENlxmGIIrukq5kmHgr8lwmQnJt/50Fo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.gVersion=r${version}"
+    "-X main.gVersion=r${finalAttrs.version}"
   ];
 
   # Force the use of the pure-go implementation of the os/user library.
@@ -37,6 +38,10 @@ buildGoModule rec {
     installShellCompletion etc/lf.{bash,zsh,fish}
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
     description = "Terminal file manager written in Go and heavily inspired by ranger";
     longDescription = ''
@@ -46,9 +51,9 @@ buildGoModule rec {
       are handled by external tools.
     '';
     homepage = "https://godoc.org/github.com/gokcehan/lf";
-    changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
+    changelog = "https://github.com/gokcehan/lf/releases/tag/r${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "lf";
   };
-}
+})

@@ -35,6 +35,7 @@ lib.makeOverridable (
       i586 = "i386";
       i686 = "i386";
       x86_64 = "amd64";
+      riscv64 = "riscv64";
     };
 
     archMap = {
@@ -44,6 +45,7 @@ lib.makeOverridable (
       i586 = "i386";
       i686 = "i386";
       x86_64 = "amd64";
+      riscv64 = "riscv64";
     };
 
   in
@@ -88,10 +90,10 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta = with lib; {
-        maintainers = with maintainers; [ ericson2314 ];
-        platforms = platforms.openbsd;
-        license = licenses.bsd2;
+      meta = {
+        maintainers = with lib.maintainers; [ ericson2314 ];
+        platforms = lib.platforms.openbsd;
+        license = lib.licenses.bsd2;
       };
     }
     // lib.optionalAttrs stdenv'.hasCC {

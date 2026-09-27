@@ -3,19 +3,19 @@
   fetchzip,
   jam,
   unzip,
-  libX11,
-  libXxf86vm,
-  libXrandr,
-  libXinerama,
-  libXrender,
-  libXext,
+  libx11,
+  libxxf86vm,
+  libxrandr,
+  libxinerama,
+  libxrender,
+  libxext,
   libtiff,
   libjpeg,
   libpng,
-  libXScrnSaver,
+  libxscrnsaver,
   writeText,
-  libXdmcp,
-  libXau,
+  libxdmcp,
+  libxau,
   lib,
   openssl,
   buildPackages,
@@ -136,15 +136,15 @@ stdenv.mkDerivation rec {
     libtiff
     libjpeg
     libpng
-    libX11
-    libXxf86vm
-    libXrandr
-    libXinerama
-    libXext
-    libXrender
-    libXScrnSaver
-    libXdmcp
-    libXau
+    libx11
+    libxxf86vm
+    libxrandr
+    libxinerama
+    libxext
+    libxrender
+    libxscrnsaver
+    libxdmcp
+    libxau
     openssl
   ];
 
@@ -171,22 +171,22 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-argyllcms" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of 'Current Version 3.0.1 (19th October 2023)'
       new_version="$(curl -s https://www.argyllcms.com/ |
-          pcregrep -o1 '>Current Version ([0-9.]+) ')"
+          pcre2grep -o1 '>Current Version ([0-9.]+) ')"
       update-source-version ${pname} "$new_version"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

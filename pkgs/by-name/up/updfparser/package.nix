@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "updfparser";
+  pname = "updfparser";
   version = "0-unstable-2024-03-24";
   rev = "6060d123441a06df699eb275ae5ffdd50409b8f3";
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very simple PDF parser";
     homepage = "https://forge.soutade.fr/soutade/updfparser";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ autumnal ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ autumnal ];
+    platforms = lib.platforms.all;
   };
 })

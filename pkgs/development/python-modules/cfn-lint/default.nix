@@ -6,48 +6,41 @@
   fetchFromGitHub,
   jschema-to-python,
   jsonpatch,
-  jsonschema,
   junit-xml,
   mock,
   networkx,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   regex,
   sarif-om,
   setuptools,
   sympy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.38.3";
+  version = "1.43.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-n3NHmbo3qRhP7oqUOokw8oGnNXo4rhRhuAgL66hvfog=";
+    hash = "sha256-tolQ7O6J/pfmtw29t8SGBDEDGiTOsJdc/mI3ulUseKo=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aws-sam-translator
-    jschema-to-python
     jsonpatch
-    jsonschema
-    junit-xml
-    networkx
     networkx
     pyyaml
     regex
-    sarif-om
     sympy
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -57,12 +50,7 @@ buildPythonPackage rec {
       jschema-to-python
       sarif-om
     ];
-    full = [
-      jschema-to-python
-      junit-xml
-      pydot
-      sarif-om
-    ];
+    full = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "full" ]);
   };
 
   nativeCheckInputs = [
@@ -70,32 +58,34 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ optional-dependencies.full;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
-
-  disabledTestPaths = [
-    # tests fail starting on 2025-10-01
-    # related: https://github.com/aws-cloudformation/cfn-lint/issues/4125
-    "test/integration/test_quickstart_templates.py"
-    "test/integration/test_quickstart_templates_non_strict.py"
-  ];
 
   disabledTests = [
     # Requires git directory
     "test_update_docs"
   ];
 
+  disabledTestPaths = [
+    # unexpected exit code afer nodejs_24 24.16.0 update
+    "test/integration/test_quickstart_templates.py::TestQuickStartTemplates::test_templates"
+    "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_module_integration"
+    "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_templates"
+    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_module_integration"
+    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_templates"
+  ];
+
   pythonImportsCheck = [ "cfnlint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

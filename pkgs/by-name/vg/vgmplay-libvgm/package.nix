@@ -12,14 +12,22 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.51.1-unstable-2025-04-05";
+  version = "0.52.0-unstable-2026-09-08";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "7aa3f749468e15ea6dcb94edce51315c19ee448e";
-    hash = "sha256-g+nG+OdZjeHaLADQts0PcKbs3dXoBvL9qLgds+ozyRw=";
+    rev = "14e1b4edf53a66ee5d9fdb0c584d6d564cd27ac4";
+    hash = "sha256-Qy4G3uCC3p/VmolTzl7b5p9HLw2QXvl51jAJMIElBXQ=";
   };
+
+  # We don't want text files in bindir
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'install(FILES "''${SRC}" RENAME "''${DST}" DESTINATION "''${CMAKE_INSTALL_BINDIR}")' \
+        'install(FILES "''${SRC}" RENAME "''${DST}" DESTINATION "''${CMAKE_INSTALL_DATADIR}/vgmplay")'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -32,20 +40,16 @@ stdenv.mkDerivation {
     inih
   ];
 
-  postInstall = ''
-    install -Dm644 ../VGMPlay.ini $out/share/vgmplay/VGMPlay.ini
-  '';
-
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/ValleyBell/vgmplay-libvgm.git";
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "vgmplay";
     homepage = "https://github.com/ValleyBell/vgmplay-libvgm";
     description = "New VGMPlay, based on libvgm";
-    license = licenses.unfree; # no licensing text anywhere yet
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree; # no licensing text anywhere yet
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

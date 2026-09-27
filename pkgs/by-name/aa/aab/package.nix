@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "aab";
   version = "1.0.0-dev.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "glutanimate";
     repo = "anki-addon-builder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-92Xqxgb9MLhSIa5EN3Rdk4aJlRfzEWqKmXFe604Q354=";
   };
 
@@ -45,4 +45,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

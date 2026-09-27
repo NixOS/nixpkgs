@@ -2,12 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   boost186,
   libsodium,
-  miniupnpc,
   openssl,
   python3,
   randomx,
@@ -40,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.3";
+  version = "0.18.5.1";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-tu8PHTiz3ScJ0uQh1ztkFmEthjb+BERtPMxCyQhuZPw=";
+    hash = "sha256-RxuhR+GH4Y5kSzNxsqJklRWMbq1K82K3A2V+6JqYR98=";
   };
 
   patches = [
@@ -70,7 +68,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost186 # uses boost/asio/io_service.hpp
     libsodium
-    miniupnpc
     openssl
     randomx
     rapidjson
@@ -95,10 +92,8 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
-  ++ lib.optional trezorSupport [
+  ++ lib.optionals trezorSupport [
     "-DUSE_DEVICE_TREZOR=ON"
-    # fix build on recent gcc versions
-    "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];
 
   outputs = [

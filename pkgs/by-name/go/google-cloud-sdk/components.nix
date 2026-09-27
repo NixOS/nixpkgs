@@ -166,7 +166,7 @@ let
         fi
 
         # Write the snapshot file to the `.install` folder
-        cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
+        printf "%s" "$snapshot" > $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
       nativeBuildInputs = [
         python3
@@ -181,7 +181,7 @@ let
       passthru = {
         dependencies = filterForSystem dependencies;
       };
-      passAsFile = [ "snapshot" ];
+      __structuredAttrs = true;
       meta = {
         inherit description platforms;
       };

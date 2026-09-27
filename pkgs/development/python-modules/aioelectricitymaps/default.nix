@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aioelectricitymaps";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
@@ -54,11 +51,11 @@ buildPythonPackage rec {
   # https://github.com/jpbede/aioelectricitymaps/pull/415
   pytestFlags = [ "--snapshot-update" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Electricity maps";
     homepage = "https://github.com/jpbede/aioelectricitymaps";
     changelog = "https://github.com/jpbede/aioelectricitymaps/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

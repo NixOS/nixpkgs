@@ -22,10 +22,10 @@ in
 
 stdenv.mkDerivation {
   pname = "kjv";
-  version = "unstable-2021-03-11";
+  version = "0-unstable-2021-03-11";
 
   src = fetchFromGitHub {
-    owner = "bontibon";
+    owner = "layeh";
     repo = "kjv";
     rev = "108595dcbb9bb12d40e0309f029b6fb3ccd81309";
     hash = "sha256-Z6myd9Xn23pYizG+IZVDrP988pYU06QIcpqXtWTcPiw=";
@@ -40,11 +40,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bible, King James Version";
-    homepage = "https://github.com/bontibon/kjv";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/layeh/kjv";
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       jtobin
       cafkafk
     ];

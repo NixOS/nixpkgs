@@ -6,17 +6,17 @@
 
 buildNpmPackage rec {
   pname = "versatile-thermostat-ui-card";
-  version = "1.1.4";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "jmcollin78";
     repo = "versatile-thermostat-ui-card";
     rev = "${version}";
-    hash = "sha256-4v1Tl3GQagQd1H+CFBG+OuRl2zfz5vvyWRy7oBSpxfM=";
+    hash = "sha256-N3v5VD0XdvKlMyMvyJ4gXB2yRt3qfJpngbzLdTGy5Ec=";
   };
 
   npmFlags = [ "--legacy-peer-deps" ];
-  npmDepsHash = "sha256-TlJGO0kw3+8ukT1DERp/xDwmeSu0ofP5mqrmXmGcF2M=";
+  npmDepsHash = "sha256-PRgt6s+5dGHzn0pnZJDVXBKMXM+4wwYtRTdl0QwA9Dw=";
 
   installPhase = ''
     runHook preInstall
@@ -27,11 +27,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jmcollin78/versatile-thermostat-ui-card/releases/tag/${version}";
     description = "Home Assistant card for the Versatile Thermostat integration";
     homepage = "https://github.com/jmcollin78/versatile-thermostat-ui-card";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pwoelfel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pwoelfel ];
   };
 }

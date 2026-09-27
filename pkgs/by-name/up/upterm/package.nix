@@ -1,49 +1,75 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
   installShellFiles,
   nixosTests,
+  testers,
+  upterm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "upterm";
-  version = "0.15.3";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
-    rev = "v${version}";
-    hash = "sha256-9h4Poz0hUg5/7CrF0ZzT4KrVaFlhvcorIgZbleMpV6w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Dnfbmvt4IsW+DDfqTZXf4bz6L9byhQfzBLHQbFy+ZpQ=";
   };
 
-  vendorHash = "sha256-i92RshW5dsRE88X8bXyrj13va66cc0Yu/btpR0pvoSM=";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/owenthereal/upterm/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  vendorHash = "sha256-GI8EnQAuzQmpYgGCr2FgfbTyIDkLdMgyvBDOfllqthk=";
 
   subPackages = [
     "cmd/upterm"
     "cmd/uptermd"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+    installShellFiles
+  ];
 
   postInstall = ''
     # force go to build for build arch rather than host arch during cross-compiling
     CGO_ENABLED=0 GOOS= GOARCH= go run cmd/gendoc/main.go
     installManPage etc/man/man*/*
-    installShellCompletion --bash --name upterm.bash etc/completion/upterm.bash_completion.sh
-    installShellCompletion --zsh --name _upterm etc/completion/upterm.zsh_completion
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for cmd in upterm uptermd; do
+      installShellCompletion --cmd $cmd \
+        --bash <($out/bin/$cmd completion bash) \
+        --fish <($out/bin/$cmd completion fish) \
+        --zsh <($out/bin/$cmd completion zsh)
+    done
   '';
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) uptermd; };
+  passthru.tests = {
+    inherit (nixosTests) uptermd;
+    version = testers.testVersion {
+      package = upterm;
+      command = "HOME=$PWD upterm version"; # upterm tries to write to $HOME
+      version = "Upterm version ${finalAttrs.version}";
+    };
+  };
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hax404 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
-}
+})

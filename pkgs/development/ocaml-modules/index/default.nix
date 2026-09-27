@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   buildDunePackage,
   repr,
   ppx_repr,
@@ -18,14 +19,23 @@
   lru,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "index";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
+    url = "https://github.com/mirage/index/releases/download/${finalAttrs.version}/index-${finalAttrs.version}.tbz";
     hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
+
+  patches = [
+    # Compatibility with cmdliner 2.0
+    (fetchpatch {
+      url = "https://github.com/mirage/index/commit/aa7aa4734213f74a246f66719a1085b522f431d4.patch";
+      hash = "sha256-Vc4r/I3TeIy/D4FcYzj4vRrH87vI2JRagqAXhD9BUxc=";
+      includes = [ "*.ml" ];
+    })
+  ];
 
   # Compatibility with logs 0.8.0
   postPatch = ''
@@ -57,10 +67,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Platform-agnostic multi-level index";
     homepage = "https://github.com/mirage/index";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

@@ -57,11 +57,11 @@ buildPythonPackage rec {
     withFullCheck = jpylyzer.override { doFullCheck = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";
     mainProgram = "jpylyzer";
     homepage = "https://jpylyzer.openpreservation.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

@@ -6,19 +6,18 @@
   pkg-config,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsrpc";
-  version = "0.25.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "rsRPC";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zQtCd8d2n41ak+hQbEsjGlsHgbW3n5B5DQZ85icIogs=";
+    hash = "sha256-L07x93mgTbo+v0Wg91XjCNbRYAltHns8WyrsIrr7pZE=";
   };
 
-  cargoHash = "sha256-mF2pgg1NmOHM0DE7XUuik0IPp4w4EUs3VRYvBh3ZFK8=";
+  cargoHash = "sha256-YTkOneMUTVLv3SWgeRdYpxGB9PIr+C9NHR1SCHOvDUY=";
 
   nativeBuildInputs = [
     pkg-config

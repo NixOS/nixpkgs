@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -31,15 +30,18 @@
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.5";
+  version = "3.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-TfBGcHg9y9G2Rxs/OpZ8CcQrhK05gijZjVxOYSTkJJ8=";
+    hash = "sha256-bDSqLxYQYCnN5SngoZmYwJTL6qoWpZ9HVUQMiAVQxlE=";
   };
 
   outputs = [
@@ -60,19 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
       --replace-fail '/usr/bin/test' 'test'
 
-    substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
-    # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
-    # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
-    # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
+    substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
+  # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
+  # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
+  # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
+  + ''
     substituteInPlace tests/qml/CMakeLists.txt \
       --replace-fail 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
       --replace-fail 'powerpc-linux-gnu' 'ppc' \
       --replace-fail 's390x-linux-gnu' 's390x'
-
-    # Tests run in parallel to other builds, don't suck up cores
+  ''
+  # Tests run in parallel to other builds, don't suck up cores
+  + ''
     substituteInPlace tests/headers/compile_headers.py \
       --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
   '';
@@ -115,9 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-    # Something seems borked with bad's h264 decoder, add libav as a workaround
-    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
-    gst-libav
     # maybe add ugly to cover all kinds of formats?
   ]);
 
@@ -134,17 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # QSignalSpy tests in QML suite always fail, pass when running interactively
-        "-E"
-        "^qml"
-      ]
-    ))
+    # This is to work around an issue on old Ubuntu versions, which don't need it.
+    # Entering that branch errors out unless we add lsb_release. Just don't enter it.
+    (lib.cmakeBool "skip-dbus-tests" false)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -171,6 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    }
+    // lib.optionalAttrs (!withQt6) {
       # gallery app delegates to thumbnailer, tests various formats
       inherit (nixosTests.lomiri-gallery-app)
         format-mp4
@@ -182,8 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };
   };
@@ -200,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-thumbnailer-qt"
+      "liblomiri-thumbnailer-qt${lib.optionalString withQt6 "6"}"
     ];
   };
 })

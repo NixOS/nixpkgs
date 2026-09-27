@@ -2,26 +2,26 @@
   lib,
   stdenv,
   fetchurl,
-  libSM,
-  libX11,
-  libXt,
+  libsm,
+  libx11,
+  libxt,
   libffi,
   ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.91.4";
+  version = "2.92.1";
 
   src = fetchurl {
-    url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3JUTNOFmZpSlAx40BHAT6YQgYLxdVPPXLwyfzDoYdlc=";
+    url = "https://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VeQcDGGxQ3Xpfz6pYbwLcnUfRZjkDgsCCsVtqXm2Rqk=";
   };
 
   buildInputs = [
-    libSM
-    libX11
-    libXt
+    libsm
+    libx11
+    libxt
     libffi
     ncurses
   ];

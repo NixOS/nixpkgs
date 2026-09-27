@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   beautifulsoup4,
-  pythonOlder,
   pandas,
   python,
   numpy,
@@ -19,9 +18,9 @@
 buildPythonPackage {
   pname = "trectools";
   version = "0.0.50";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "joaopalotti";
@@ -30,11 +29,6 @@ buildPythonPackage {
     rev = "8a896def007e3d657eb29f820ee3de98e2f32691";
     hash = "sha256-p8BvLO+rD/l+ATE4+u3I6k25R1RVKlk2dn+RLQZTLDs=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
-  '';
 
   build-system = [ setuptools ];
 
@@ -49,12 +43,19 @@ buildPythonPackage {
     sarge
   ];
 
-  unittestFlagsArray = [
-    "unittests/"
-  ];
+  pythonRemoveDeps = [ "bs4" ];
 
   nativeCheckInputs = [
     unittestCheckHook
+  ];
+
+  preCheck = ''
+    # tests pass numpy arrays to float(), which numpy 2 rejects
+    rm unittests/testtreceval.py
+  '';
+
+  unittestFlags = [
+    "unittests/"
   ];
 
   pythonImportsCheck = [ "trectools" ];

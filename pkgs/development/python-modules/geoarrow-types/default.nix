@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyarrow,
   setuptools-scm,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "geoarrow-types";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
@@ -25,8 +22,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -37,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.types" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyArrow types for geoarrow";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
   };

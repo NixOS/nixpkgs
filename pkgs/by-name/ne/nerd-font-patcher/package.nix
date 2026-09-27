@@ -4,19 +4,19 @@
   fetchzip,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nerd-font-patcher";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchzip {
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FontPatcher.zip";
-    sha256 = "sha256-koZj0Tn1HtvvSbQGTc3RbXQdUU4qJwgClOVq1RXW6aM=";
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${finalAttrs.version}/FontPatcher.zip";
+    hash = "sha256-gZ41oZPnsVLcchA58eJ1Vl28ccqePpOZd/ZCEKYywX4=";
     stripRoot = false;
   };
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./use-nix-paths.patch
@@ -25,17 +25,19 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share $out/lib
     install -Dm755 font-patcher $out/bin/nerd-font-patcher
     cp -ra src/glyphs $out/share/
-    cp -ra bin/scripts/name_parser $out/lib/
+    cp -ra bin/scripts/{braille,name_parser} $out/lib/
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Font patcher to generate Nerd font";
     mainProgram = "nerd-font-patcher";
     homepage = "https://nerdfonts.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ck3d ];
   };
-}
+})

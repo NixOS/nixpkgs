@@ -7,76 +7,75 @@
   dbip-country-lite,
   formats,
   nix-update-script,
+  nixosTests,
   nezha-theme-admin,
   nezha-theme-user,
   withThemes ? [ ],
 }:
 
 let
-  pname = "nezha";
-  version = "1.14.9";
-
   frontendName = lib.removePrefix "nezha-theme-";
 
   frontend-templates =
     let
-      mkTemplate = theme: {
-        path = "${frontendName theme.pname}-dist";
-        name = frontendName theme.pname;
-        repository = theme.meta.homepage;
-        author = theme.src.owner;
-        version = theme.version;
-        isofficial = false;
-        isadmin = false;
-      };
+      mkTemplate =
+        theme: extra:
+        {
+          path = "${frontendName theme.pname}-dist";
+          name = frontendName theme.pname;
+          repository = theme.meta.homepage or "";
+          author = theme.src.owner or "";
+          version = theme.version;
+          is_official = false;
+          is_admin = false;
+        }
+        // extra;
+
+      officialThemes = [
+        (mkTemplate nezha-theme-admin {
+          name = "OfficialAdmin";
+          is_admin = true;
+          is_official = true;
+        })
+        (mkTemplate nezha-theme-user {
+          name = "Official";
+          is_official = true;
+        })
+      ];
+
+      communityThemes = map (t: mkTemplate t { }) withThemes;
     in
-    (formats.yaml { }).generate "frontend-templates.yaml" (
-      [
-        (
-          mkTemplate nezha-theme-admin
-          // {
-            name = "OfficialAdmin";
-            isadmin = true;
-            isofficial = true;
-          }
-        )
-        (
-          mkTemplate nezha-theme-user
-          // {
-            name = "Official";
-            isofficial = true;
-          }
-        )
-      ]
-      ++ map mkTemplate withThemes
-    );
+    (formats.yaml { }).generate "frontend-templates.yaml" (officialThemes ++ communityThemes);
 in
-buildGoModule {
-  inherit pname version;
+buildGoModule (finalAttrs: {
+  pname = "nezha";
+  version = "2.3.12";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
-    tag = "v${version}";
-    hash = "sha256-q4LxqoelZ0Haz8rArINOPvopQQKGnkqIMZ2INo/2C3c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XgTbDpfGYbpiFseJjwraDg3svyT0EpgvoY2dvLbtZtQ=";
   };
 
   proxyVendor = true;
 
-  prePatch = ''
-    rm -rf cmd/dashboard/*-dist
-
-    cp ${frontend-templates} service/singleton/frontend-templates.yaml
-  ''
-  + lib.concatStringsSep "\n" (
-    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
-      [
+  prePatch =
+    let
+      allThemes = [
         nezha-theme-admin
         nezha-theme-user
       ]
-      ++ withThemes
-    )
-  );
+      ++ withThemes;
+
+      installThemeCmd = theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist";
+    in
+    ''
+      rm -rf cmd/dashboard/*-dist
+
+      cp ${frontend-templates} service/singleton/frontend-templates.yaml
+      ${lib.concatMapStringsSep "\n" installThemeCmd allThemes}
+    '';
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.
@@ -92,17 +91,18 @@ buildGoModule {
   nativeBuildInputs = [ go-swag ];
 
   # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
-  preBuild = ''
-    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+  postConfigure = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-Q+ur9hIG0xVJHdi79K5e4sV8xuR45qp195ptEDbHAvc=";
+  vendorHash = "sha256-NpGdVymENUkxW1N3BQGdVPGbp/snMOf22khQ6xEsNuk=";
 
   ldflags = [
     "-s"
-    "-X github.com/nezhahq/nezha/service/singleton.Version=${version}"
+    "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # TestOptionalAuth_PATWithoutScopeIsDenied
   checkFlags = "-skip=^TestSplitDomainSOA$";
 
   postInstall = ''
@@ -115,14 +115,17 @@ buildGoModule {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) nezha;
+    };
   };
 
   meta = {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
     homepage = "https://github.com/nezhahq/nezha";
-    changelog = "https://github.com/nezhahq/nezha/releases/tag/v${version}";
+    changelog = "https://github.com/nezhahq/nezha/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";
   };
-}
+})

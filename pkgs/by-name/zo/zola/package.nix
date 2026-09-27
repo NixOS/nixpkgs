@@ -3,25 +3,25 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cacert,
   pkg-config,
   oniguruma,
   installShellFiles,
-  zola,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zola";
-  version = "0.21.0";
+  version = "0.23.6";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
-    rev = "v${version}";
-    hash = "sha256-+/0MhKKDSbOEa5btAZyaS3bQPeGJuski/07I4Q9v9cg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MJfxJ1Lh6V4fOw8HDjIZvMwHYu9DaGmxHLs3p+qt97w=";
   };
 
-  cargoHash = "sha256-K2wdq61FVVG9wJF+UcRZyZ2YSEw3iavboAGkzCcTGkU=";
+  cargoHash = "sha256-Pj3qMAtsEFcd47F2ecYO/Dr0Ht+hSrhEH6IhjUvhMKM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +32,11 @@ rustPlatform.buildRustPackage rec {
     oniguruma
   ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  checkInputs = [
+    cacert
+  ];
+
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zola \
@@ -41,13 +45,13 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/zola completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion { package = zola; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Fast static site generator with everything built-in";
     mainProgram = "zola";
     homepage = "https://www.getzola.org/";
-    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/getzola/zola/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dandellion
@@ -55,4 +59,4 @@ rustPlatform.buildRustPackage rec {
       _0x4A6F
     ];
   };
-}
+})

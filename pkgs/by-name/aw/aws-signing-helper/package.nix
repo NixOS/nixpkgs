@@ -4,17 +4,17 @@
   lib,
   bash,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-signing-helper";
-  version = "1.7.2";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "rolesanywhere-credential-helper";
-    rev = "v${version}";
-    hash = "sha256-6yq/+LwYBfq0bHcZMqeU2mToo4QmkeoXeixn4ZFFfmM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XLQEGHM7cKm3n9pQdyzGWXN9Wre2DZyXZWuwa4CcU7E=";
   };
-  vendorHash = "sha256-acr1A+Yj+azdTaGHlNVW1ADMEFTpAVhUAP1yWkUpJ38=";
+  vendorHash = "sha256-HLqId+mb+UbiX9M4xpCoDv257qKHUOuc6037WameY7Y=";
 
   checkPhase = ''
     runHook preCheck
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "AWS Signing Helper for IAM Roles Anywhere";
     homepage = "https://github.com/aws/rolesanywhere-credential-helper";
-    changelog = "https://github.com/aws/rolesanywhere-credential-helper/releases/tag/v${version}";
+    changelog = "https://github.com/aws/rolesanywhere-credential-helper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "aws_signing_helper";
     maintainers = with lib.maintainers; [ pandanz ];
   };
-}
+})

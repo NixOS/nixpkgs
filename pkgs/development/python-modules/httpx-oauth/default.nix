@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-oauth";
-  version = "0.16.1";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-oauth";
     tag = "v${version}";
-    hash = "sha256-/2IBAEZrK0Do7t9g+MWsKuIlcg0ANCfOoagVwTbBso8=";
+    hash = "sha256-I6ffcbmnNjJUGuDctFQo5m1HE6N60wErSJUDcXL9TRw=";
   };
 
   build-system = [
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpx_oauth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async OAuth client using HTTPX";
     homepage = "https://github.com/frankie567/httpx-oauth";
     changelog = "https://github.com/frankie567/httpx-oauth/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

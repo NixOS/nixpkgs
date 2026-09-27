@@ -20,18 +20,19 @@ let
             yq
             check-jsonschema
           ];
+          strictDeps = true;
           value = builtins.toJSON value;
-          passAsFile = [ "value" ];
+          __structuredAttrs = true;
         }
         ''
-          yq --yaml-output . $valuePath > $out
+          printf "%s" "$value" | yq --yaml-output . > $out
           check-jsonschema --schemafile "${cfg.package.passthru.jsonschema}" "$out"
           sed -i $'s|\'!include |!include \'|' $out
         '';
 
     inherit (pkgs.formats.yaml { }) type;
   };
-  initrdInterfaceTypes = builtins.map (interface: interface.link.kind) (
+  initrdInterfaceTypes = map (interface: interface.link.kind) (
     builtins.attrValues initrdCfg.settings.interfaces
   );
   # IfState interface kind to kernel modules mapping
@@ -69,7 +70,6 @@ let
   # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
   commonServiceConfig = {
     after = [
-      "systemd-udev-settle.service"
       "network-pre.target"
       "systemd-sysusers.service"
       "systemd-sysctl.service"
@@ -106,7 +106,7 @@ in
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
-        description = "Content of IfState's configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+        description = "Content of IfState's configuration file. See <https://ifstate.net/2.2/schema/> for details.";
       };
     };
 
@@ -131,19 +131,27 @@ in
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
-        description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+        description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.2/schema/> for details.";
       };
 
       cleanupSettings = lib.mkOption {
         inherit (settingsFormat) type;
         # required by json schema
         default.interfaces = { };
-        description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goas is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
+        description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goal is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
       };
     };
   };
 
   config = lib.mkMerge [
+    (lib.mkIf (cfg.enable || initrdCfg.enable) {
+      # sane defaults to not let IfState work against the kernel
+      boot.extraModprobeConfig = ''
+        options bonding max_bonds=0
+        options dummy numdummies=0
+        options ifb numifbs=0
+      '';
+    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -158,13 +166,6 @@ in
 
       networking.useDHCP = lib.mkDefault false;
 
-      # sane defaults to not let IfState work against the kernel
-      boot.extraModprobeConfig = ''
-        options bonding max_bonds=0
-        options dummy numdummies=0
-        options ifb numifbs=0
-      '';
-
       environment = {
         # ifstatecli command should be available to use user, there are other useful subcommands like check or show
         systemPackages = [ cfg.package ];
@@ -172,7 +173,7 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = commonServiceConfig // {
+      systemd.services.ifstate = lib.recursiveUpdate commonServiceConfig {
         description = "IfState";
 
         wantedBy = [
@@ -187,6 +188,13 @@ in
           ExecStart = "${lib.getExe cfg.package} --config ${
             config.environment.etc."ifstate/ifstate.yaml".source
           } apply";
+
+          # We wait for the udev events queue to empty in the *hope* that the
+          # devices needed here become available. This is terribly broken and
+          # essentially no better than a random sleep(). Same below for initrd.
+          # FIXME: use .device units dependecies instead.
+          ExecStartPre = "-${lib.getExe' config.systemd.package "udevadm"} settle --timeout=180";
+
           # because oneshot services do not have a timeout by default
           TimeoutStartSec = "2min";
         };
@@ -227,7 +235,7 @@ in
               type:
               if builtins.hasAttr type interfaceKernelModules then interfaceKernelModules."${type}" else [ ];
           in
-          lib.flatten (builtins.map enableModule initrdInterfaceTypes);
+          lib.flatten (map enableModule initrdInterfaceTypes);
 
         systemd = {
           storePaths = [
@@ -262,7 +270,7 @@ in
             "remote-fs.target"
           ];
 
-          services.ifstate-initrd = commonServiceConfig // {
+          services.ifstate-initrd = lib.recursiveUpdate commonServiceConfig {
             description = "IfState initrd";
 
             wantedBy = [
@@ -288,6 +296,8 @@ in
               } apply";
               # because oneshot services do not have a timeout by default
               TimeoutStartSec = "2min";
+              # See comment on non-initrd service above
+              ExecStartPre = "-${lib.getExe' config.boot.initrd.systemd.package "udevadm"} settle --timeout=180";
             };
           };
         };

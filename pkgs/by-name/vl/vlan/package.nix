@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vlan";
   version = "1.9";
 
   src = fetchurl {
-    url = "https://www.candelatech.com/~greear/${pname}/${pname}.${version}.tar.gz";
+    url = "https://www.candelatech.com/~greear/vlan/vlan.${finalAttrs.version}.tar.gz";
     sha256 = "1jjc5f26hj7bk8nkjxsa8znfxcf8pgry2ipnwmj2fr6ky0dhm3rv";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     cp vconfig.8 $out/share/man/man8/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User mode programs to enable VLANs on Ethernet devices";
     homepage = "https://www.candelatech.com/~greear/vlan.html";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "vconfig";
   };
-}
+})

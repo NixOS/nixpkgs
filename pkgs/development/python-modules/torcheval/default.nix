@@ -13,6 +13,9 @@ let
   pname = "torcheval";
   version = "0.0.7";
 in
+
+# nixpkgs-update: no auto update
+# upstream is missing the tag, so r-ryantm is attempting downgrades, e.g. #460611
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
@@ -41,7 +44,7 @@ buildPythonPackage {
     changelog = "https://github.com/meta-pytorch/torcheval/releases/tag/${version}";
 
     platforms = lib.platforms.unix;
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bengsparks ];
   };
 }

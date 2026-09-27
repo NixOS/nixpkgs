@@ -9,21 +9,25 @@
 
   # buildInputs
   fmt,
+  libbfd,
+  libunwind,
   rsync,
 
   versionCheckHook,
   nix-update-script,
+  runCommand,
+  lua-language-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.15.0";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-frsq5OA3giLOJ/KPcAqVhme+0CtJuZrS3F4zHN1PnFM=";
+    hash = "sha256-3Sm958Fr5wn54B+aJMaK+cR/F10dPIcGvBrhjHTy2us=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+    libbfd
+    libunwind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rsync
@@ -122,20 +128,35 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.smoke = runCommand "lua-language-server-smoke-test" { } ''
+      export XDG_CACHE_HOME=$(mktemp -d)
+
+      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+      CONTENT_LENGTH=''${#INIT_REQUEST}
+
+      RESPONSE=$(
+        {
+          printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+          sleep 1
+        } | timeout 3  ${lib.getExe lua-language-server} --stdio 2>&1 | head -c 1000
+      ) || true
+
+      echo "$RESPONSE" | grep -q '"capabilities"'
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      gepbird
-      sei40kr
-    ];
+    maintainers = with lib.maintainers; [ gepbird ];
     mainProgram = "lua-language-server";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

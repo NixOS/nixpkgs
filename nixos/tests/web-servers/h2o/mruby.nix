@@ -59,7 +59,7 @@ in
     { nodes, ... }:
     let
       inherit (nodes) server;
-      portStr = builtins.toString server.services.h2o.settings.listen;
+      portStr = toString server.services.h2o.settings.listen;
       origin = "http://server:${portStr}";
     in
     # python

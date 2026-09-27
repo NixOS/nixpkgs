@@ -2,25 +2,38 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webrtcvad";
   version = "2.0.10";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f1bed2fb25b63fb7b1a55d64090c993c9c9167b28485ae0bcdd81cf6ede96aea";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-8b7S+yW2P7expV1kCQyZPJyRZ7KEha4Lzdgc9u3pauo=";
   };
+
+  patches = [
+    # remove pkg_resources usage
+    # backport of https://github.com/wiseman/py-webrtcvad/pull/96
+    ./no-pkg-resources.patch
+  ];
+
+  build-system = [ setuptools ];
 
   # required WAV files for testing are not included in the tarball
   doCheck = false;
 
+  pythonImportsCheck = [ "webrtcvad" ];
+
   meta = {
     description = "Interface to the Google WebRTC Voice Activity Detector (VAD)";
     homepage = "https://github.com/wiseman/py-webrtcvad";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

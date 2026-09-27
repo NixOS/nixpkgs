@@ -5,20 +5,20 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "google-cloud-sql-proxy";
-  version = "2.19.0";
+  version = "2.25.3";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
-    rev = "v${version}";
-    hash = "sha256-LF9ALCBgO2cIVLRTH0KxdmsIhfnnCO4akmoGS3kIWm0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e9Koj9J3sOxTuuHb0EDS/Ca4SW+EibEQLgitoW8eCU8=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-RtWTVb1JWNgVM3NZf28CMKIgPjGIgZztYYULqTM7nQg=";
+  vendorHash = "sha256-ec+6GZ+ET2fs6hE1wndzOHdLtmDcuRq7++S1Z+6MsL4=";
 
   checkFlags = [
     "-short"
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";
     longDescription = ''
       The Cloud SQL Auth Proxy is a utility for ensuring secure connections to your Cloud SQL instances.
@@ -37,11 +37,11 @@ buildGoModule rec {
       page for details on how the Cloud SQL Proxy works.
     '';
     homepage = "https://github.com/GoogleCloudPlatform/cloud-sql-proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nicknovitski
       totoroot
     ];
     mainProgram = "cloud-sql-proxy";
   };
-}
+})

@@ -7,14 +7,14 @@
   vulkan-headers,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkdisplayinfo";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "ChristophHaag";
     repo = "vkdisplayinfo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-n6U7T5aOYTpgWE2WGPBPHtQKzitf9PxAoXJNWyz4rYw=";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     vulkan-headers
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print displays and modes enumerated with the Vulkan function vkGetPhysicalDeviceDisplayPropertiesKHR";
     homepage = "https://github.com/ChristophHaag/vkdisplayinfo";
-    platforms = platforms.linux;
-    license = licenses.boost;
-    maintainers = [ maintainers.LunNova ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = [ lib.maintainers.LunNova ];
     mainProgram = "vkdisplayinfo";
   };
-}
+})

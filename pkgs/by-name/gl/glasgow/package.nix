@@ -1,16 +1,20 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
-  sdcc,
-  yosys,
   icestorm,
   nextpnr,
+  sdcc_4_5,
+  yosys,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  # The firmware must match glasgow's checked-in blob byte for byte, so libfx2 needs the same sdcc.
+  fx2 = python3Packages.fx2.override { sdcc = sdcc_4_5; };
+in
+python3Packages.buildPythonApplication rec {
   pname = "glasgow";
-  version = "0-unstable-2025-07-28";
+  version = "0-unstable-2025-07-25";
   # Similar to `pdm show`, but without the commit counter
   pdmVersion =
     let
@@ -18,42 +22,47 @@ python3.pkgs.buildPythonApplication rec {
       rev = lib.substring 0 7 src.rev;
     in
     "${tag}.1.dev0+g${rev}";
-  # the latest commit ID touching the `firmware` directory, can differ from rev!
-  firmwareGitRev = "4fe35360";
+  # Usually the latest commit ID touching the `firmware` directory. Differs from src/rev!
+  # Run `git log -1 --abbrev=8 --pretty=%h HEAD .` inside the firmware/fx2 dir.
+  firmwareGitRev = "12b5cfb3";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "18442e9684cdda4bb2cbd2be9c31b3c6dffc625a";
-    hash = "sha256-b0kpgCHMk5Ylj4hY29sHRzY/zI1JXReHioHxHSO4h5E=";
+    rev = "c424688ff0d7faee49198bbdb2a34b1026534350";
+    hash = "sha256-0pVQg3FSBQ8A4eLnAxFdicOiCvAYmKwHnSoLGx1MLxM=";
   };
 
   nativeBuildInputs = [
-    sdcc
+    sdcc_4_5
   ];
 
   build-system = [
-    python3.pkgs.pdm-backend
+    python3Packages.pdm-backend
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = [
+    fx2
+  ]
+  ++ (with python3Packages; [
     aiohttp
     amaranth
     cobs
-    fx2
+    enum-tools
     importlib-resources
     libusb1
     packaging
     platformdirs
     pyvcd
     typing-extensions
-  ];
+    tqdm
+  ]);
 
   nativeCheckInputs = [
     # pytestCheckHook discovers way less tests
-    python3.pkgs.unittestCheckHook
+    python3Packages.unittestCheckHook
     icestorm
     nextpnr
     yosys
@@ -66,14 +75,18 @@ python3.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   preBuild = ''
-    make -C firmware GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${python3.pkgs.fx2}/share/libfx2
+    make -C firmware/fx2 GIT_TREE_DIRTY=0 GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${fx2}/share/libfx2
 
     # Normalize the .ihex file, see ./software/deploy-firmware.sh.
-    ${python3.withPackages (p: [ p.fx2 ])}/bin/python firmware/normalize.py \
-      firmware/glasgow.ihex firmware/glasgow.ihex
+    ${python3Packages.python.withPackages (_: [ fx2 ])}/bin/python firmware/fx2/normalize.py \
+      firmware/fx2/build/firmware.ihex firmware/fx2/glasgow.ihex
 
     # Ensure the compiled firmware is exactly the same as the one shipped in the repo.
-    cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex
+    if ! cmp -s firmware/fx2/glasgow.ihex software/glasgow/hardware/firmware-fx2.ihex; then
+      echo >&2 "Firmware doesn't reproduce!"
+      diff -u software/glasgow/hardware/firmware-fx2.ihex firmware/fx2/glasgow.ihex
+      exit 1
+    fi
 
     cd software
     export PDM_BUILD_SCM_VERSION="${pdmVersion}"
@@ -99,7 +112,7 @@ python3.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "--set"
     "YOSYS"
-    "${yosys}/bin/yosys"
+    (lib.getExe yosys)
     "--set"
     "ICEPACK"
     "${icestorm}/bin/icepack"
@@ -108,11 +121,11 @@ python3.pkgs.buildPythonApplication rec {
     "${nextpnr}/bin/nextpnr-ice40"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [
       flokli
       thoughtpolice
     ];

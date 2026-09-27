@@ -5,24 +5,26 @@
   fetchFromGitHub,
   just,
   libcosmicAppHook,
+  autoAddDriverRunpath,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-minimon";
-  version = "0.9.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "minimon-applet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tUAp6GN5oJYhALjTpEELMOEBpfao5D9B0hl2ecNtwMg=";
+    hash = "sha256-0ZLyjcn+h/IUXEMbTvbyKI7Qt5YRNBxUXV/7OHRsHLU=";
   };
 
-  cargoHash = "sha256-qgqlEufv9vLLIOcDLiX76xRcXal1Q0S5726ua+8R8Ek=";
+  cargoHash = "sha256-MF5XK9U1Dj5IdC8Pd6W+8GPWvEhusO+MacMutEnaymk=";
 
   nativeBuildInputs = [
     just
     libcosmicAppHook
+    autoAddDriverRunpath # for GPU monitoring
   ];
 
   dontUseJustBuild = true;
@@ -34,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-applet-minimon"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-applet-minimon"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -44,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "COSMIC applet for displaying CPU/Memory/Network/Disk/GPU usage in the Panel or Dock";
     homepage = "https://github.com/cosmic-utils/minimon-applet";
     license = lib.licenses.gpl3Only;
-    mainProgram = "cosmic-applet-minimon";
+    mainProgram = "cosmic-ext-applet-minimon";
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     platforms = lib.platforms.linux;
   };

@@ -23,16 +23,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "knowit";
-  version = "0.5.11";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "knowit";
-    tag = version;
-    hash = "sha256-JqzCLdXEWZyvqXpeTJRW0zhY+wVcHLuBYrJbuSqfgkg=";
+    tag = finalAttrs.version;
+    hash = "sha256-krrAeroM1eQZXi2onV4FdrKIQdPLkZS+/ypyY0Kc+Pw=";
   };
 
   matroska_test_zip = fetchzip {
@@ -43,12 +43,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     mkdir -p tests/data/videos
-    cp ${matroska_test_zip}/*.mkv tests/data/videos/
+    cp ${finalAttrs.matroska_test_zip}/*.mkv tests/data/videos/
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     babelfish
@@ -64,10 +62,6 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "knowit"
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
     ffmpeg
@@ -76,12 +70,14 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonImportsCheck = [ "knowit" ];
+
   meta = {
-    changelog = "https://github.com/ratoaq2/knowit/releases/tag/${src.tag}";
     description = "Extract metadata from media files";
     homepage = "https://github.com/ratoaq2/knowit";
+    changelog = "https://github.com/ratoaq2/knowit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "knowit";
   };
-}
+})

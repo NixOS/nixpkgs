@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -10,23 +11,26 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     tag = version;
-    hash = "sha256-ALwhl9WUDkv0POufF/G/rZrn+ITbMdh6y86lShy6ZTg=";
+    hash = "sha256-ni+YY8MGPik8/qxAKlY1loAbRBFcdOch1qT4xvN1Kyc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' ""
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     zigpy
@@ -37,12 +41,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_connect" # Attempts to test ioctl
+  ];
+
+  meta = {
     changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
     description = "Library which communicates with XBee radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-xbee";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

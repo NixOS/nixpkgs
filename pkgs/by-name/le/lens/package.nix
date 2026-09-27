@@ -8,20 +8,16 @@
 let
 
   pname = "lens-desktop";
-  version = "2024.11.261604";
+  version = "2026.9.20601";
 
   sources = {
     x86_64-linux = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
-      hash = "sha256-AbuEU5gOckVU+eDIFnomc7ryLq68ihuk3c0XosoJp74=";
-    };
-    x86_64-darwin = {
-      url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.dmg";
-      hash = "sha256-MQQRGTCe+LEHXJi6zjnpENbtlWNP+XVH9rWXRMk+26w=";
+      hash = "sha512-21OGo4uXHjcvGNNiiy6hWm+tEJc4yFaYvVfXK89oH5oSrEpIacNlZ8I95tI0yjJQsuZEHBN9wBD+Zm6WgO4hFg==";
     };
     aarch64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
-      hash = "sha256-aakJCLnQBAnUdrrniTcahS+q3/kP09mlaPTV8FW5afI=";
+      hash = "sha512-kCL3jZHB644fRlwbmqNkusvC9k9EAi6EWsH8bEc9isGC4vwShkYw5Fu7U53nT6nh6wxba5aDMk9ZJWA3tB8Tgw==";
     };
   };
 
@@ -29,17 +25,20 @@ let
     inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.lens;
-    maintainers = with maintainers; [
+    license = lib.licenses.lens;
+    maintainers = with lib.maintainers; [
       dbirks
+      qweered
       RossComputerGuy
       starkca90
     ];
     platforms = builtins.attrNames sources;
   };
+
+  updateScript = ./update.sh;
 
 in
 if stdenv.hostPlatform.isDarwin then
@@ -49,6 +48,7 @@ if stdenv.hostPlatform.isDarwin then
       version
       src
       meta
+      updateScript
       ;
   }
 else
@@ -58,5 +58,6 @@ else
       version
       src
       meta
+      updateScript
       ;
   }

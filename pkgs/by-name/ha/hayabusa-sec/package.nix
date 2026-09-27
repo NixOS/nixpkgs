@@ -2,27 +2,30 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
   pkg-config,
   openssl,
   rust-jemalloc-sys,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hayabusa-sec";
-  version = "3.3.0-unstable-2025-07-17";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Yamato-Security";
     repo = "hayabusa";
-    rev = "feaa165b4c0af34919ad26f634cb684e23172359";
-    hash = "sha256-h08InhNVW33IjPA228gv6Enlg6EKmj0yHb/UvJ/f7uw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k4t0DY0EkSU8jTzUwkBynopLcI/ZxaShrLVg7x1pN+U=";
     # Include the hayabusa-rules
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-wcH1Ron5Zx2ypWyaW0z7L9rCanAcosvpPQnP60qbvWQ=";
+  cargoHash = "sha256-fADma0ssh5t6A1gKd5yyy6DTqjYUvqQNaHT+McKRShU=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
   ];
 
@@ -39,14 +42,24 @@ rustPlatform.buildRustPackage {
   # > error: unexpected argument '--skip' found
   doCheck = false;
 
+  postInstall = ''
+    mkdir -p $out/share/hayabusa-sec
+    cp -r rules $out/share/hayabusa-sec/
+    mv $out/bin/hayabusa $out/share/hayabusa-sec/
+    makeWrapper $out/share/hayabusa-sec/hayabusa $out/bin/hayabusa
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Sigma-based threat hunting and fast forensics timeline generator for Windows event logs";
     homepage = "https://github.com/Yamato-Security/hayabusa";
+    changelog = "https://github.com/Yamato-Security/hayabusa/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      d3vil0p3r
       jk
+      d3vil0p3r
     ];
     mainProgram = "hayabusa";
   };
-}
+})

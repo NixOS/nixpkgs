@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build time
   pdm-backend,
@@ -17,7 +16,7 @@
 
 let
   pname = "findpython";
-  version = "0.7.1";
+  version = "0.8.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,7 +24,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nynmo9q9t18rOclJdywO0m6rFTCABmafNHjNqw2GfHg=";
+    hash = "sha256-U7MiZIdN+lmQvQnXF4GThtjbMUnYn+IPiP4QeN4oa64=";
   };
 
   build-system = [ pdm-backend ];
@@ -39,12 +38,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "findpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to find python versions on your system";
     mainProgram = "findpython";
     homepage = "https://github.com/frostming/findpython";
     changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -1,27 +1,20 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "0x";
-  version = "0-unstable-2022-07-11";
+  version = "0.1.0";
 
-  src = fetchFromGitHub {
-    owner = "mcy";
-    repo = "0x";
-    rev = "8070704b8efdd1f16bc7e01e393230f16cd8b0a6";
-    hash = "sha256-NzD/j8rBfk/cpoBnkFHFqpXz58mswLZr8TUS16vlrZQ=";
+  src = fetchCrate {
+    inherit (finalAttrs) version;
+    pname = "ohx";
+    hash = "sha256-im9F0MQYddCcBthSldeQ6T0BIswhBSGc/LKUlJg/754=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-TCpJz/ZIOFiEvjQzrSnUASPOHbqD8GYy3IpozFGat/g=";
 
   meta = {
     homepage = "https://github.com/mcy/0x";
@@ -30,4 +23,4 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

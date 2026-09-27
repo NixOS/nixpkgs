@@ -3,7 +3,7 @@
     { pkgs, ... }:
     let
       trivialJob = pkgs.writeTextDir "trivial.nix" ''
-        { trivial = builtins.derivation {
+        { trivial = derivation {
             name = "trivial";
             system = "${pkgs.stdenv.hostPlatform.system}";
             builder = "/bin/sh";
@@ -44,5 +44,6 @@
       };
       services.postfix.enable = true;
       nix.settings.substituters = [ ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 }

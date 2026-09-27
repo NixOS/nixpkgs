@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cerberus";
   version = "1.3.8";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "cerberus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-C7YZjqQtdkakqHXBU3cFUl/gCFvCl3saP14eqt2fdAM=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
     "cerberus/benchmarks/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Schema and data validation tool for Python dictionaries";
     homepage = "http://python-cerberus.org/";
-    changelog = "https://github.com/pyeve/cerberus/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyeve/cerberus/blob/${finalAttrs.version}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

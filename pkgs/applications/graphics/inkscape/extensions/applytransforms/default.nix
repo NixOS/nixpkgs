@@ -2,23 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation {
   pname = "inkscape-applytransforms";
-  version = "0.pre+unstable=2021-05-11";
+  version = "0-unstable-2024-12-19";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Klowner";
     repo = "inkscape-applytransforms";
-    rev = "5b3ed4af0fb66e399e686fc2b649b56db84f6042";
-    sha256 = "XWwkuw+Um/cflRWjIeIgQUxJLrk2DLDmx7K+pMWvIlI=";
+    rev = "979f98dfe199d25ceecff68a86684b941e703e18";
+    hash = "sha256-vRhNsHx5QkJPQgeToh4GRKD7EpMwLnN8QhrAP0WWTjU=";
   };
 
   nativeCheckInputs = [
-    python3.pkgs.inkex
-    python3.pkgs.pytestCheckHook
+    python3Packages.inkex
+    python3Packages.pytestCheckHook
   ];
 
   dontBuild = true;
@@ -33,11 +36,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Inkscape extension which removes all matrix transforms by applying them recursively to shapes";
     homepage = "https://github.com/Klowner/inkscape-applytransforms";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.all;
   };
 }

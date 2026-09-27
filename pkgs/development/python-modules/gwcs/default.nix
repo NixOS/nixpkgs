@@ -7,24 +7,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pytest-astropy,
+  pytest-doctestplus,
   pytestCheckHook,
   scipy,
   setuptools-scm,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gwcs";
-  version = "0.26.1";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spacetelescope";
     repo = "gwcs";
-    tag = version;
-    hash = "sha256-S7+jDWCyQPQJAVgb/+BHC03+1aYyw2TK6SmkEz+k6u4=";
+    tag = finalAttrs.version;
+    hash = "sha256-0iUnapBn8yDCx1tqHD10Ljid15yBuqlICyFuva2LNPk=";
   };
+
+  postPatch = ''
+    sed -i "/--doctest-rst/d" pyproject.toml
+  '';
 
   build-system = [
     setuptools
@@ -41,17 +45,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-astropy
+    pytest-doctestplus
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "gwcs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to manage the Generalized World Coordinate System";
     homepage = "https://github.com/spacetelescope/gwcs";
-    changelog = "https://github.com/spacetelescope/gwcs/blob/${src.tag}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/spacetelescope/gwcs/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

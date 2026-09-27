@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     patchShebangs ./
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   cmakeFlags = [
     (lib.cmakeFeature "ELMER_INSTALL_LIB_DIR" "${placeholder "out"}/lib")
@@ -73,15 +73,15 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "QWT_INCLUDE_DIR" "${qt6Packages.qwt}/lib/qwt.framework/Headers")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://elmerfem.org";
     description = "Finite element software for multiphysical problems";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       wulfsta
       broke
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
 }

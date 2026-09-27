@@ -1,0 +1,44 @@
+GCC 15 uses C23 by default which is stricter about function prototypes.
+
+diff -r -U3 mcabber-1.1.2.orig/mcabber/screen.c mcabber-1.1.2/mcabber/screen.c
+--- mcabber-1.1.2.orig/mcabber/screen.c	2026-01-02 22:48:11.169262178 +0100
++++ mcabber-1.1.2/mcabber/screen.c	2026-01-02 22:51:01.428023634 +0100
+@@ -90,7 +90,7 @@
+                            const gchar *message, gpointer user_data);
+ 
+ #ifdef XEP0085
+-static gboolean scr_chatstates_timeout();
++static gboolean scr_chatstates_timeout(gpointer user_data);
+ #endif
+ 
+ #if defined(WITH_ENCHANT) || defined(WITH_ASPELL)
+@@ -2485,7 +2485,7 @@
+ }
+ 
+ #ifdef XEP0085
+-static gboolean scr_chatstates_timeout(void)
++static gboolean scr_chatstates_timeout(gpointer user_data)
+ {
+   time_t now;
+   time(&now);
+diff -r -U3 mcabber-1.1.2.orig/mcabber/xmpp.c mcabber-1.1.2/mcabber/xmpp.c
+--- mcabber-1.1.2.orig/mcabber/xmpp.c	2026-01-02 22:48:11.166975512 +0100
++++ mcabber-1.1.2/mcabber/xmpp.c	2026-01-02 22:52:30.355029495 +0100
+@@ -50,7 +50,7 @@
+ static guint AutoConnection;
+ 
+ inline void update_last_use(void);
+-inline gboolean xmpp_reconnect();
++inline gboolean xmpp_reconnect(gpointer user_data);
+ 
+ enum imstatus mystatus = offline;
+ static enum imstatus mywantedstatus = available;
+@@ -781,7 +781,7 @@
+     scr_LogPrint(LPRINT_LOGNORM, "Authentication failed");
+ }
+ 
+-gboolean xmpp_reconnect()
++gboolean xmpp_reconnect(gpointer user_data)
+ {
+   if (!lconnection)
+     xmpp_connect();

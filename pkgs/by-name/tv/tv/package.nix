@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tv";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "uzimaru0000";
     repo = "tv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qODv45smZ6jHCJBaa6EEvFLG+7g+FWrRf6BiHRFLzqM=";
   };
 
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
     description = "Format json into table view";
     mainProgram = "tv";
     homepage = "https://github.com/uzimaru0000/tv";
-    changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/uzimaru0000/tv/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

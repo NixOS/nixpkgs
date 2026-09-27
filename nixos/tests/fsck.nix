@@ -1,7 +1,7 @@
-{ systemdStage1, ... }:
+{ lib, systemdStage1, ... }:
 
 {
-  name = "fsck";
+  name = "fsck" + lib.optionalString systemdStage1 "-systemd-stage-1";
 
   nodes.machine = {
     virtualisation.emptyDiskImages = [ 1 ];
@@ -27,10 +27,7 @@
 
       with subtest("root fs is fsckd"):
           machine.succeed("journalctl -b | grep '${
-            if systemdStage1 then
-              "fsck.*${builtins.baseNameOf rootDevice}.*clean"
-            else
-              "fsck.ext4.*${rootDevice}"
+            if systemdStage1 then "fsck.*${baseNameOf rootDevice}.*clean" else "fsck.ext4.*${rootDevice}"
           }'")
 
       with subtest("mnt fs is fsckd"):

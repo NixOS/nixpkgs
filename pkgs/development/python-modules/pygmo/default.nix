@@ -5,9 +5,6 @@
   fetchFromGitHub,
   cmake,
   boost,
-  eigen,
-  ipopt,
-  nlopt,
   pagmo2,
   python,
   cloudpickle,
@@ -43,19 +40,16 @@ toPythonModule (
 
     buildInputs = [
       boost
-      eigen
-      ipopt
-      nlopt
       pagmo2
       pybind11
     ];
 
     doCheck = true;
 
-    meta = with lib; {
+    meta = {
       description = "Parallel optimisation for Python";
       homepage = "https://github.com/esa/pygmo2";
-      license = licenses.gpl3Plus;
+      license = lib.licenses.gpl3Plus;
       maintainers = [ ];
     };
   }

@@ -7,7 +7,7 @@
   sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "magnetico";
   version = "0.13.0";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
     domain = "maxwell.eurofusion.eu/git";
     owner = "rnhmjoj";
     repo = "magnetico";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TqzsgUSPIBQT+k+ZrJPkF7uIt8o018ZN5p8nHom8cXM=";
   };
 
@@ -36,11 +36,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) magnetico; };
 
-  meta = with lib; {
+  meta = {
     description = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
     homepage = "https://maxwell.eurofusion.eu/git/rnhmjoj/magnetico";
-    license = licenses.agpl3Only;
-    badPlatforms = platforms.darwin;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.agpl3Only;
+    badPlatforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

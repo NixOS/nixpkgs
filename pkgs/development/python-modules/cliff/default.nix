@@ -3,14 +3,11 @@
   buildPythonPackage,
   fetchPypi,
   autopage,
-  cmd2,
-  importlib-metadata,
+  cmd2_4,
   openstackdocstheme,
   pbr,
   prettytable,
-  pyparsing,
   pyyaml,
-  setuptools,
   stevedore,
   sphinxHook,
   callPackage,
@@ -18,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.10.0";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jB9baCdBoDsMRgfILor0HU6cKFkCRkZWL4bN6ylZqG0=";
+    hash = "sha256-hTFK1JvWL5ClEJTU4xsctNO5L7g8s5Ne66AjbDKDnnU=";
   };
 
   build-system = [
     openstackdocstheme
-    setuptools
+    pbr
     sphinxHook
   ];
 
@@ -36,11 +33,8 @@ buildPythonPackage rec {
 
   dependencies = [
     autopage
-    cmd2
-    importlib-metadata
-    pbr
+    cmd2_4
     prettytable
-    pyparsing
     pyyaml
     stevedore
   ];
@@ -54,10 +48,10 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

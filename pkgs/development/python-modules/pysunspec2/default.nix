@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
@@ -9,18 +8,16 @@
   openpyxl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAtrs: {
   pname = "pysunspec2";
-  version = "1.3.3";
+  version = "1.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sunspec";
     repo = "pysunspec2";
-    tag = "v${version}";
-    hash = "sha256-mVx8Rt5GLyQ2ss0iJPi32Fhl9pD7hsXxW94p+8ri+w4=";
+    tag = "v${finalAtrs.version}";
+    hash = "sha256-9VZy0QwMh9JK0DpECRMhF279lo125Dq1AUaa6gtHuV0=";
     fetchSubmodules = true;
   };
 
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sunspec2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with SunSpec devices";
     homepage = "https://github.com/sunspec/pysunspec2";
-    changelog = "https://github.com/sunspec/pysunspec2/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    changelog = "https://github.com/sunspec/pysunspec2/releases/tag/${finalAtrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.cheriimoya ];
   };
-}
+})

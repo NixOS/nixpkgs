@@ -7,14 +7,14 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libksi";
   version = "3.21.3087";
 
   src = fetchFromGitHub {
     owner = "Guardtime";
     repo = "libksi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zEWxJpv0MeGUq/xkM26tDoauFyw53enGyWVhlX0jlYI=";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     "--with-cafile=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GuardTime/libksi";
     description = "Keyless Signature Infrastructure API library";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
-}
+})

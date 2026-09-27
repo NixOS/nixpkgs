@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-oWJxpiC83C/ghs/Ik8+DrPWtP/j5jWEZ3+9Nqg4ARKU=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
+
   build-system = [
     incremental
     setuptools
@@ -41,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ovoenergy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
     changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

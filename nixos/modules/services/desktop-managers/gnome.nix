@@ -30,7 +30,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
@@ -75,12 +75,14 @@ let
   notExcluded =
     pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
+  removeExcluded =
+    pkgList: utils.removePackagesByName pkgList config.environment.gnome.excludePackages;
 in
 
 {
   meta = {
     doc = ./gnome.md;
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   imports = [
@@ -320,15 +322,21 @@ in
 
     (lib.mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
+      i18n.inputMethod.enable = mkDefault true;
+      i18n.inputMethod.type = mkDefault "ibus";
       programs.dconf.enable = true;
-      security.polkit.enable = true;
+      security.polkit = {
+        enable = true;
+        # Required by gnome-initial-setup, gnome-system-monitor, gvfs for admin://
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
       services.dleyna.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
-      services.gnome.gnome-keyring.enable = true;
+      services.gnome.gnome-keyring.enable = mkDefault true;
       services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.localsearch.enable = mkDefault true;
@@ -386,7 +394,20 @@ in
       systemd.packages = [
         pkgs.gnome-session
         pkgs.gnome-shell
+      ]
+      ++ removeExcluded [
+        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
+
+      # Restarting this unit terminates the active GNOME session.
+      systemd.user.services.gnome-session-monitor = {
+        restartIfChanged = false;
+        overrideStrategy = "asDropin";
+        # No need to add the NixOS default Environment="Path=coreutils:...",
+        # to the gnome-session-monitor service.
+        enableDefaultPath = false;
+      };
 
       services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
@@ -414,9 +435,9 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = utils.removePackagesByName [
+      fonts.packages = removeExcluded [
         pkgs.adwaita-fonts
-      ] config.environment.gnome.excludePackages;
+      ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
@@ -427,6 +448,7 @@ in
           optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
+            pkgs.glycin-thumbnailer # Image thumbnailers
             pkgs.gnome-backgrounds
             pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
@@ -435,18 +457,18 @@ in
             pkgs.gnome-user-docs
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
+            pkgs.gst-thumbnailers # Audio and video thumbnailers
             pkgs.gtk3.out # for gtk-launch program
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
           ];
         in
-        mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+        mandatoryPackages ++ removeExcluded optionalPackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.baobab
         pkgs.decibels
         pkgs.epiphany
@@ -462,6 +484,7 @@ in
         pkgs.gnome-maps
         pkgs.gnome-music
         pkgs.gnome-system-monitor
+        pkgs.gnome-tecla
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
@@ -471,13 +494,12 @@ in
         pkgs.simple-scan
         pkgs.snapshot
         pkgs.yelp
-      ] config.environment.gnome.excludePackages;
+      ];
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
-      programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
@@ -505,7 +527,7 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.aisleriot
         pkgs.atomix
         pkgs.five-or-more
@@ -526,12 +548,12 @@ in
         pkgs.quadrapassel
         pkgs.swell-foop
         pkgs.tali
-      ] config.environment.gnome.excludePackages;
+      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.dconf-editor
         pkgs.devhelp
         pkgs.d-spy
@@ -542,7 +564,7 @@ in
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
         pkgs.sysprof
-      ] config.environment.gnome.excludePackages;
+      ];
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

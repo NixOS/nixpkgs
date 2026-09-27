@@ -14,38 +14,43 @@
   gitUpdater,
 }:
 
-let
-  # fix segfault in iwctl with readline-8.3
-  # https://lists.gnu.org/archive/html/bug-readline/2025-07/msg00007.htmlP
-  readline-patch = fetchpatch {
-    url = "https://lists.gnu.org/archive/html/bug-readline/2025-07/txtmA7rksnmmi.txt";
-    hash = "sha256-QSS1GUJ2i/bF2ksvUtw27oqFHuTHALi+7QwxMFt9ZaM=";
-    stripLen = 2;
-  };
-
-  myreadline = (
-    readline.overrideAttrs (
-      _final: prev: {
-        patches = (prev.patches or [ ]) ++ [ readline-patch ];
-      }
-    )
-  );
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     tag = finalAttrs.version;
-    hash = "sha256-qzqBNGy67/VvRZh7n0W2ZPYwoyX/lP6k1sF57lL6v7c=";
+    hash = "sha256-78Zw/i2dXecvC+DDSunPlUzqJj0FFYf7Sm6iN5VXBbA=";
   };
 
   patches = [
     # Remove dbus config referencing the netdev group, which we don't have.
     # Users are advised to use the wheel group instead.
     ./no_netdev_group.diff
+
+    # Fixes for exploitable memory-safety bugs reported in
+    # https://abhinavagarwal07.github.io/posts/iwd-rrm-stack-overflow/
+    (fetchpatch {
+      name = "rrm-fix-stack-buffer-overflow-in-rrm_report_beacon_results.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0001-rrm-fix-stack-buffer-overflow-in-rrm_report_beacon_r.patch";
+      hash = "sha256-t7f4vrS8Ns0BUt8UxS+62T+xWDZaA/t5A0cnXWm00ZU=";
+    })
+    (fetchpatch {
+      name = "ie-fix-off-by-one-in-he-capabilities-channel-width-set.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0002-ie-fix-off-by-one-in-HE-Capabilities-Channel-Width-S.patch";
+      hash = "sha256-142lowS9YtOGwfRqryxxGnzcNZrz72tIOhVZhlo3fMY=";
+    })
+    (fetchpatch {
+      name = "ft-fix-mde_equal-self-comparison-and-type-mismatch.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0003-ft-fix-mde_equal-self-comparison-and-type-mismatch.patch";
+      hash = "sha256-Qdm8eAw3tbH/wDWvmWIkKxMQ2m16o+VvEPYaKXBgAAw=";
+    })
+    (fetchpatch {
+      name = "ie-fix-uint8_t-underflow-in-fte-sub-element-parser.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0004-ie-fix-uint8_t-underflow-in-FTE-sub-element-parser.patch";
+      hash = "sha256-6At7PUXoORM++9ndIzxTTRu7V09+D31DrdMNLt1EtOc=";
+    })
   ];
 
   outputs = [
@@ -66,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ell
     python3Packages.python
-    myreadline
+    readline
   ];
 
   nativeCheckInputs = [ openssl ];
@@ -132,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      dtzWill
       fpletz
     ];
   };

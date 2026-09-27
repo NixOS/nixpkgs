@@ -6,14 +6,14 @@
   pango,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3bar-river";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "i3bar-river";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0ux0woVp9HVCJf/oND2AKHj30eNC/w1WDnlPafLTgxM=";
   };
 
@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ];
 
-  meta = with lib; {
+  meta = {
     description = "Port of i3bar for river";
     homepage = "https://github.com/MaxVerevkin/i3bar-river";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nicegamer7 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nicegamer7 ];
     mainProgram = "i3bar-river";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

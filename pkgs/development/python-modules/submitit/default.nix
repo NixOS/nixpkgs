@@ -1,39 +1,44 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  cloudpickle,
+
+  # build-system
   flit-core,
+
+  # dependencies
+  cloudpickle,
   typing-extensions,
+
+  # tests
   pytestCheckHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "submitit";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
-    tag = version;
-    hash = "sha256-uBlKbg1oKeUPcWzM9WxisGtpBu69eZyTetaANYpTG5E=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q/2mC7viLYl8fx7dtQueZqT191EbERZPfN0WkTS/U1w=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
     cloudpickle
-    setuptools
     typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    # event_loop was removed in pytest-asyncio 1.x
-    pytest-asyncio_0
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [
@@ -42,20 +47,19 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests are broken
-    "test_snapshot"
-    "test_snapshot_excludes"
-    "test_job_use_snapshot_cwd"
-    "test_job_use_snapshot_modules"
-    "test_nested_pickling"
     "test_setup"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in the sandbox:
+    #   AssertionError: Should have resumed from a checkpoint
     "test_requeuing"
   ];
 
   meta = {
-    changelog = "https://github.com/facebookincubator/submitit/releases/tag/${version}";
+    changelog = "https://github.com/facebookincubator/submitit/releases/tag/${finalAttrs.src.tag}";
     description = "Python 3.8+ toolbox for submitting jobs to Slurm";
     homepage = "https://github.com/facebookincubator/submitit";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.nickcao ];
   };
-}
+})

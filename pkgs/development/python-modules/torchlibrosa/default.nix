@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   librosa,
   numpy,
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchlibrosa";
   version = "0.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Yqi+7fnJtBQaBiNN8/ECKfe6huZ2eMzuAkiexO8EQCg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     librosa
     numpy
     torch
@@ -32,10 +37,10 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "torchlibrosa" ];
 
-  meta = with lib; {
-    description = "PyTorch implemention of part of librosa functions";
+  meta = {
+    description = "PyTorch implementation of part of librosa functions";
     homepage = "https://github.com/qiuqiangkong/torchlibrosa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azuwis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
   };
-}
+})

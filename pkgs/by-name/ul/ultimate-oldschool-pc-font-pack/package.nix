@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,20 +15,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-54U8tZzvivTSOgmGesj9QbIgkSTm9w4quMhsuEc0Xy4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
-    cp */*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Ultimate Oldschool PC Font Pack (TTF Fonts)";
     homepage = "https://int10h.org/oldschool-pc-fonts/";
     changelog = "https://int10h.org/oldschool-pc-fonts/readme/#history";
-    license = licenses.cc-by-sa-40;
-    maintainers = [ maintainers.endgame ];
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = [ lib.maintainers.endgame ];
   };
 }

@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cjose";
   version = "0.6.2.2";
 
   src = fetchFromGitHub {
-    owner = "zmartzone";
+    owner = "OpenIDC";
     repo = "cjose";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
   };
 
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://github.com/zmartzone/cjose";
-    changelog = "https://github.com/zmartzone/cjose/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/OpenIDC/cjose";
+    changelog = "https://github.com/OpenIDC/cjose/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "C library for Javascript Object Signing and Encryption. This is a maintained fork of the original project";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ midchildan ];
     platforms = lib.platforms.all;
   };
-}
+})

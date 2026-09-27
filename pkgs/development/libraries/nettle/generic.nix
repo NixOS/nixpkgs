@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  strictDeps = true;
+
   configureFlags =
     # runtime selection of HW-accelerated code; it's default since 3.7
     [ "--enable-fat" ]
@@ -40,7 +42,9 @@ stdenv.mkDerivation {
 
   patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin") ./cygwin.patch;
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Cryptographic library";
 
     longDescription = ''
@@ -66,11 +70,12 @@ stdenv.mkDerivation {
       I/O.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.lysator.liu.se/~nisse/nettle/";
 
-    platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.vcunat ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nettle_project" version;
   };
 }

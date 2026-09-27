@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   packaging,
-  tomli,
   pytestCheckHook,
   build,
   hatchling,
@@ -35,8 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -50,6 +47,10 @@ buildPythonPackage rec {
     mercurial
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # wants to write to the Nix store
     "test_editable_mode"
@@ -60,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versioningit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytries";
     repo = "marisa-trie";
     tag = version;
-    hash = "sha256-7T0V5levh9xjWmjJdFix0p8L3lZhfurikSWMI7Hotbs=";
+    hash = "sha256-U3gntlvJ0IaWoK+2V0OQ/XoDLfQsSbrrsSj95VR1m+4=";
   };
 
   patches = [
@@ -27,6 +27,12 @@ buildPythonPackage rec {
       marisa = lib.getDev marisa-cpp;
     })
   ];
+
+  postPatch = ''
+    # https://github.com/pytries/marisa-trie/issues/132
+    substituteInPlace tests/test_binary_trie.py tests/test_trie.py \
+      --replace-fail MARISA_FORMAT_ERROR std::runtime_error
+  '';
 
   build-system = [
     cython
@@ -49,7 +55,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marisa_trie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static memory-efficient Trie-like structures for Python based on marisa-trie C++ library";
     longDescription = ''
       There are official SWIG-based Python bindings included in C++ library distribution.
@@ -57,6 +63,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/kmike/marisa-trie";
     changelog = "https://github.com/pytries/marisa-trie/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -22,18 +22,18 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-frog";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [ ./update-compatible-with-non-flatpak-env.patch ];
   postPatch = ''
@@ -88,12 +88,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://getfrog.app/";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.axodentally ];
+    platforms = lib.platforms.linux;
   };
-}
+})

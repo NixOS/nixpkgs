@@ -14,6 +14,7 @@ let
     "yazi"
     "theme"
     "keymap"
+    "vfs"
   ];
 in
 {
@@ -26,23 +27,17 @@ in
       type =
         with lib.types;
         submodule {
-          options = (
-            lib.listToAttrs (
-              map (
-                name:
-                lib.nameValuePair name (
-                  lib.mkOption {
-                    inherit (settingsFormat) type;
-                    default = { };
-                    description = ''
-                      Configuration included in `${name}.toml`.
+          options = lib.genAttrs files (
+            name:
+            lib.mkOption {
+              inherit (settingsFormat) type;
+              default = { };
+              description = ''
+                Configuration included in `${name}.toml`.
 
-                      See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
-                    '';
-                  }
-                )
-              ) files
-            )
+                See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
+              '';
+            }
           );
         };
       default = { };

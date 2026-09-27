@@ -9,19 +9,19 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-sip-connector";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sip-connector";
-    rev = version;
-    hash = "sha256-NmjaN28NnAIpMwUHCUS+7LJBwvCp48kyhmHRf6cU5WE=";
+    rev = finalAttrs.version;
+    hash = "sha256-JOTUa1buj9qR8dnMZMLaxjSIrsLnr9g1yylkTgPcL4k=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

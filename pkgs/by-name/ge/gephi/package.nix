@@ -37,15 +37,15 @@ maven.buildMavenPackage rec {
     printf "\n\njdkhome=${jdk11}\n" >> $out/etc/gephi.conf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Platform for visualizing and manipulating large graphs";
     mainProgram = "gephi";
     homepage = "https://gephi.org";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3;
-    maintainers = [ maintainers.taeer ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.taeer ];
   };
 }

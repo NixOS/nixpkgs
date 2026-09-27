@@ -5,15 +5,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovh-ttyrec";
-  version = "1.1.7.1";
+  version = "1.2.0.0";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "ovh-ttyrec";
-    rev = "v${version}";
-    hash = "sha256-VTF9WLwAIWWn+W0sLQaoFBFro+pSXKwcTO6q6MW6JD8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UC0+LW4iheVasCEznXw+OTyxMt3hO59gFhB2YiXCFZI=";
   };
 
   nativeBuildInputs = [ zstd ];
@@ -24,14 +24,11 @@ stdenv.mkDerivation rec {
     cp docs/*.1 $out/man
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ovh/ovh-ttyrec/";
     description = "Terminal interaction recorder and player";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      chaduffy
-      zimbatm
-    ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

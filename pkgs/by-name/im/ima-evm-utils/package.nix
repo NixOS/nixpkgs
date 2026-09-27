@@ -12,14 +12,14 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ima-evm-utils";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "linux-integrity";
     repo = "ima-evm-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vIu12Flc2DiEqUSKAfoUi7Zg6D25pURvlYKEQKHER4I=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    homepage = "http://bmc.github.com/munkres/";
+  meta = {
+    homepage = "https://software.clapper.org/munkres/";
     description = "Munkres algorithm for the Assignment Problem";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

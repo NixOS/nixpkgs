@@ -2,25 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   click,
   psutil,
   pytestCheckHook,
   lsof,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "daemonocle";
   version = "1.2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jnrbsn";
     repo = "daemonocle";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K+IqpEQ4yhfSguPPm2Ult3kGNO/9H56B+kD5ntaCZdk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     psutil
   ];
@@ -43,7 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "daemonocle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating super fancy Unix daemons";
     longDescription = ''
       daemonocle is a library for creating your own Unix-style daemons
@@ -52,8 +57,8 @@ buildPythonPackage rec {
       often see in other daemons.
     '';
     homepage = "https://github.com/jnrbsn/daemonocle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

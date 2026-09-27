@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-cdbVAkYSnE98/sIPXlfjUdK4SS1jHMKqlnkUrPkfbOY=";
   };
 
+  patches = [
+    # pkg_resources is gone in setuptools 82
+    ./no-pkg-resources.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -29,17 +34,16 @@ buildPythonPackage rec {
     pycryptodome
     requests
     six
-    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "httpsig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sign HTTP requests with secure signatures";
-    license = licenses.mit;
-    maintainers = with maintainers; [ srhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ srhb ];
     homepage = "https://github.com/ahknight/httpsig";
   };
 }

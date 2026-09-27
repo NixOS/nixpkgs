@@ -4,24 +4,25 @@
   factorio-utils,
   fetchurl,
   libGL,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libxkbcommon,
   makeDesktopItem,
   makeWrapper,
-  releaseType,
+  releaseType ? "alpha",
   stdenv,
   wayland,
 
   mods-dat ? null,
-  versionsJson ? ./versions.json,
+  versions ? null,
+  versionsJson ? null,
   username ? "",
   token ? "", # get/reset token at https://factorio.com/profile
   experimental ? false, # true means to always use the latest branch
@@ -36,7 +37,7 @@ assert
 
 let
 
-  inherit (lib) importJSON;
+  inherit (lib) defaultTo importJSON;
 
   mods = args.mods or [ ];
 
@@ -94,7 +95,8 @@ let
 
   # NB `experimental` directs us to take the latest build, regardless of its branch;
   # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
-  versions = importJSON versionsJson;
+  versionsJson = defaultTo ./versions.json args.versionsJson or null;
+  versions = defaultTo (importJSON versionsJson) args.versions or null;
   binDists = makeBinDists versions;
 
   actual =
@@ -139,7 +141,12 @@ let
                 "token@token"
               ];
             })
-            (_: {
+            (prevAttrs: {
+              impureEnvVars = prevAttrs.impureEnvVars or [ ] ++ [
+                "NIX_FACTORIO_USERNAME"
+                "NIX_FACTORIO_TOKEN"
+              ];
+
               # This preHook hides the credentials from /proc
               preHook =
                 if username != "" && token != "" then
@@ -149,8 +156,12 @@ let
                   ''
                 else
                   ''
-                    # Deliberately failing since username/token was not provided, so we can't fetch.
-                    exit 1
+                    if [[ -z "''${NIX_FACTORIO_USERNAME}" || -z "''${NIX_FACTORIO_TOKEN}" ]]; then
+                      # Deliberately failing since username/token was not provided, so we can't fetch.
+                      exit 1
+                    fi
+                    echo -n "$NIX_FACTORIO_USERNAME" >username
+                    echo -n "$NIX_FACTORIO_TOKEN"    >token
                   '';
               failureHook = ''
                 cat <<EOF
@@ -203,7 +214,10 @@ let
         $out/bin/factorio
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      updateScript = ./update.py;
+      inherit versionsJson versions;
+    };
 
     meta = {
       description = "Game in which you build and maintain factories";
@@ -224,11 +238,13 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [
         Baughn
-        elitak
         priegger
         lukegb
       ];
-      platforms = [ "x86_64-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       mainProgram = "factorio";
     };
   };
@@ -243,14 +259,14 @@ let
       libPath = lib.makeLibraryPath [
         alsa-lib
         libGL
-        libICE
-        libSM
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXinerama
-        libXrandr
+        libice
+        libsm
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxinerama
+        libxrandr
         libpulseaudio
         libxkbcommon
         wayland

@@ -8,7 +8,6 @@
 let
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.generators) toINIWithGlobalSection;
-  inherit (lib.lists) optional;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) escape;
@@ -16,7 +15,6 @@ let
     attrsOf
     bool
     int
-    lines
     oneOf
     str
     submodule

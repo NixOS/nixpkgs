@@ -10,15 +10,15 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fswatch";
-  version = "1.18.3";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
-    rev = version;
-    sha256 = "sha256-C/NHDhhRTQppu8xRWe9fy1+KIutyoRbkkabUtGlJ1fE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-vzTegBbAgwscFuHbMKlXOmw6PuDRGeJiUciFxF55pKE=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform file change monitor with multiple backends";
     mainProgram = "fswatch";
     homepage = "https://github.com/emcrisostomo/fswatch";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.7.1";
+  version = "4.7.2";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UiC6s86i7UavW86EKm74oPVlEacvoKmwW7KETjpnNaI=";
+    hash = "sha256-60Lpg5WRfWMzlOoOUA+C6KLlYIZ+3BjXidOVqv4M2GA=";
   };
 
   patches = [
@@ -80,14 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
   ];
 
-  buildInputs = [
-    libdeflate
+  # Things listed in the
+  # pkg-config file need to be propagated or else
+  # they will not be picked up properly
+  propagatedBuildInputs = [
     libjpeg
-    # libwebp depends on us; this will cause infinite recursion otherwise
-    (libwebp.override { tiffSupport = false; })
-    xz
     zlib
     zstd
+    libdeflate
+    xz
+    # libwebp depends on us; this will cause infinite recursion otherwise
+    (libwebp.override { tiffSupport = false; })
   ]
   ++ lib.optionals withLerc [
     lerc
@@ -123,13 +126,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
-    license = licenses.libtiff;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.libtiff;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
-    teams = [ teams.geospatial ];
+    teams = [ lib.teams.geospatial ];
   };
 })

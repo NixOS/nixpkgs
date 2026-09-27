@@ -4,35 +4,32 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   importlib-metadata,
   parameterized,
-  poetry-core,
-  pytest-mock,
   pytest-cov-stub,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
-  requests,
   requests-mock,
+  requests,
   responses,
   rich,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "censys";
-  version = "2.2.18";
+  version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    tag = "v${version}";
-    hash = "sha256-fHqDXqhjqfj8VBb7Od7wuUXAEHQBXwm5LAUPLM0oN2Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GBFsAVecUN49vousqnB6enqRsAg1aBrjaA/Q7XXnOUE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     argcomplete
@@ -59,12 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "censys" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
-    changelog = "https://github.com/censys/censys-python/releases/tag/v${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/censys/censys-python/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "censys";
   };
-}
+})

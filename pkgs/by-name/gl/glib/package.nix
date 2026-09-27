@@ -9,7 +9,6 @@
   pkg-config,
   perl,
   python3,
-  python3Packages,
   libiconv,
   zlib,
   libffi,
@@ -23,10 +22,11 @@
   docutils,
   gi-docgen,
   # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-  util-linuxMinimal ? null,
+  util-linuxMinimal,
   buildPackages,
 
   # this is just for tests (not in the closure of any regular package)
+  glib,
   dbus,
   tzdata,
   desktop-file-utils,
@@ -42,9 +42,14 @@
     && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
 }:
 
-assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
-
 let
+  glib-untested = glib.overrideAttrs { doCheck = false; };
+  # break dependency cycles
+  # these things are only used for tests, they don't get into the closure
+  dbus' = dbus.override { enableSystemd = false; };
+  shared-mime-info' = shared-mime-info.override { glib = glib-untested; };
+  desktop-file-utils' = desktop-file-utils.override { glib = glib-untested; };
+
   gobject-introspection' = buildPackages.gobject-introspection.override {
     propagateFullGlib = false;
     # Avoid introducing cairo, which enables gobjectSupport by default.
@@ -70,11 +75,13 @@ let
     &&
       # dtrace support requires sys/sdt.h header
       lib.meta.availableOn stdenv.hostPlatform libsystemtap;
+
+  withSysprofCapture = !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isFreeBSD;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.86.1";
+  version = "2.88.3";
 
   outputs = [
     "bin"
@@ -87,14 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EZ0XCMoCJVbW0pie6QrRuCvZwNFmfgZpRKbQAg4tXlc=";
+    hash = "sha256-qyTSTmmN+h5Ai3vNtQj0qvyQYYWouM5y/febu9ybODs=";
   };
 
   patches =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      ./darwin-compilation.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    lib.optionals stdenv.hostPlatform.isMusl [
       ./quark_init_on_demand.patch
       ./gobject_init_on_demand.patch
     ]
@@ -156,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.setupHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals withSysprofCapture [
     libsysprof-capture
   ]
   ++ [
@@ -188,8 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     python3
-    python3Packages.packaging # mostly used to make meson happy
-    python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
   ]
@@ -213,8 +215,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     tzdata
-    desktop-file-utils
-    shared-mime-info
+    desktop-file-utils'
+    shared-mime-info'
   ];
 
   mesonFlags = [
@@ -228,13 +230,12 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
     # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
-  ]
-  ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    "-Dlibelf=disabled"
+    (lib.mesonEnable "libelf" (lib.meta.availableOn stdenv.hostPlatform elfutils))
+    # sysprof-capture does not build on Windows
+    (lib.mesonEnable "sysprof" withSysprofCapture)
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Dxattr=false"
-    "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
   ];
 
   env = {
@@ -244,6 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
       # we're using plain
       "-DG_DISABLE_CAST_CHECKS"
     ];
+    DETERMINISTIC_BUILD = 1;
   };
 
   postPatch = ''
@@ -272,8 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
   '';
 
-  DETERMINISTIC_BUILD = 1;
-
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
     moveToOutput "share/glib-2.0/gdb" "$out"
@@ -289,11 +289,6 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    buildPythonPath ${python3Packages.packaging}
-    patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
   # Move man pages to the same output as their binaries (needs to be
@@ -315,8 +310,8 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
-    export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
-    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
+    export XDG_DATA_DIRS="${desktop-file-utils'}/share:${shared-mime-info'}/share"
+    export G_TEST_DBUS_DAEMON="${dbus'}/bin/dbus-daemon"
 
     # pkg_config_tests expects a PKG_CONFIG_PATH that points to meson-private, wrapped pkg-config
     # tries to be clever and picks up the wrong glib at the end.
@@ -362,21 +357,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
-      lovek323
-      raskin
-    ];
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

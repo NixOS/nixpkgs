@@ -80,6 +80,9 @@ in
       unitConfig = lib.optionalAttrs cfg.startWithGraphical {
         After = "graphical-session.target";
       };
+
+      # Long-lived session that ought to only be restarted manually
+      restartIfChanged = false;
     }
     // lib.optionalAttrs cfg.enable {
       wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
@@ -90,7 +93,7 @@ in
       editorScript
     ];
 
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
   };
 
   meta.doc = ./emacs.md;

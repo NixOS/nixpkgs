@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -23,20 +24,22 @@
   pillow,
   pytest-asyncio,
   pytest-snapshot,
+  pytest-vcr,
   pytestCheckHook,
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chatlas";
-  version = "0.13.2";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "chatlas";
-    tag = "v${version}";
-    hash = "sha256-uCgpNvDJZKwxX4HYF8tyvJ1AiQLmybuxrZkYK/u5xlg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wf+YYC7coJ9euOXIP9Oq7k2z8zhLZdfjVM+yxmM9MAY=";
   };
 
   build-system = [
@@ -63,6 +66,7 @@ buildPythonPackage rec {
     pillow
     pytest-asyncio
     pytest-snapshot
+    pytest-vcr
     pytestCheckHook
     tenacity
   ];
@@ -78,6 +82,9 @@ buildPythonPackage rec {
     "tests/test_provider_openai.py"
     "tests/test_provider_snowflake.py"
     "tests/test_register_tool_models.py"
+
+    # Requires a DeeSeek API key and internet access
+    "tests/test_provider_deepseek.py"
   ];
 
   disabledTests = [
@@ -155,14 +162,22 @@ buildPythonPackage rec {
     "test_tool_yielding_with_error"
     "test_translate_model_params_openai"
     "test_unknown_tool_error_format_updated"
+
+    # Require an AWS key and internet access
+    "test_provider_instances"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in the sandbox
+    # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+    "test_can_create_image_from_plot"
   ];
 
   meta = {
     description = "Friendly guide to building LLM chat apps in Python with less effort and more clarity";
     homepage = "https://posit-dev.github.io/chatlas";
     downloadPage = "https://github.com/posit-dev/chatlas";
-    changelog = "https://github.com/posit-dev/chatlas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/chatlas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

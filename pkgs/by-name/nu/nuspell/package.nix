@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   ctestCheckHook,
+  doxygen,
   buildPackages,
   pkg-config,
   icu,
@@ -15,17 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nuspell";
-  version = "5.1.6";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
+    hash = "sha256-foMq1Gx30/EmYIHMPXTeraV3XcwBBVGnjMRjGE9+Xbw=";
   };
 
   nativeBuildInputs = [
     cmake
+    doxygen
     pkg-config
   ]
   ++ lib.optional enableManpages buildPackages.pandoc;

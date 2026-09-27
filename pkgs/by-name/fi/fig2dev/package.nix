@@ -13,12 +13,12 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fig2dev";
   version = "3.2.9a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
+    url = "mirror://sourceforge/mcj/fig2dev-${finalAttrs.version}.tar.xz";
     hash = "sha256-YeGFOTF2hS8DuQGzsFsZ+8Wtglj/FC89pucLG4NRMyY=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
-  GSEXE = "${ghostscript}/bin/gs";
+  env.GSEXE = "${ghostscript}/bin/gs";
 
   configureFlags = [ "--enable-transfig" ];
 
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
         --set PATH ${lib.makeBinPath [ gnused ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Xfig files to other formats";
     homepage = "https://mcj.sourceforge.net/";
-    license = licenses.xfig;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.xfig;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lesuisse ];
   };
-}
+})

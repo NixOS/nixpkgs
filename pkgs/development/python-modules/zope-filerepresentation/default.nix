@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "zope-filerepresentation";
-  version = "6.1";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.filerepresentation";
     tag = version;
-    hash = "sha256-6J4munk2yyZ6e9rpU2Op+Gbf0OXGI6GpHjmpUZVRjsY=";
+    hash = "sha256-VWi00b7m+aKwkg/Gfzo5fJWMqdMqgowBpkqsYcEO2gY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" setuptools
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];

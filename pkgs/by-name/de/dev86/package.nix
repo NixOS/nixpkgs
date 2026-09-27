@@ -1,19 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dev86";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2026-05-15";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jbruchon";
     repo = "dev86";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-xeOtESc0X7RZWCIpNZSHE8au9+opXwnHsAcayYLSX7w=";
+    rev = "8cf785fc11516b31404ea6593d9fc5a411f59dad";
+    hash = "sha256-nY5awJzEO+xbJRAbeRJgKjJf30SNz2Bg346KMNDtmls=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

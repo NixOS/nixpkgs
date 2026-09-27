@@ -3,16 +3,17 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  pkg-config,
   elfutils,
   libxml2,
-  pkg-config,
-  strace,
+  xxhash,
+  xz,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libabigail";
-  version = "2.5";
+  version = "2.10";
 
   outputs = [
     "bin"
@@ -21,19 +22,20 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-fPxOmwCuONh/sMY76rsyucv5zkEOUs7rWtWzxb6xEfM=";
+    url = "https://mirrors.kernel.org/sourceware/libabigail/libabigail-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DMEOZHE5gzDgAbn+N/HoxRCKmrYysIypY01sZLw4C3g=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    strace
   ];
 
   buildInputs = [
     elfutils
     libxml2
+    xxhash
+    xz
   ];
 
   nativeCheckInputs = [
@@ -55,14 +57,14 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
     ];
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,24 +6,28 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana-image-renderer";
-  version = "5.0.10";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oWJlb1mV1sNgN7EQ8L4msfnKps5oV60JgwZYpAJQaq4=";
+    hash = "sha256-ODH5u7Q+CIJKZQEKz2QswgHm+ZVzmiRmw9GVR47iooI=";
   };
 
-  vendorHash = "sha256-wA1XeLO2bYwq7HZOQ5UNcdqqJdEWRUxFoAQucXAj48k=";
+  vendorHash = "sha256-QiseTdsFOBg3aDYpdmLHfXL9eFll6iJo4wSKwXvdGnM=";
+
+  postPatch = ''
+    substituteInPlace go.mod --replace-fail 'go 1.26.4' 'go 1.26.3'
+  '';
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/grafana/grafana-image-renderer";
     description = "Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     mainProgram = "grafana-image-renderer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 })

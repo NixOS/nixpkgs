@@ -5,14 +5,14 @@
   libmrss,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsstail";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "rsstail";
-    rev = "v${final.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wbdf9zhwMN7QhJ5WoJo1Csu0EcKUTON8Q2Ic5scbn7I=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (final: {
   # just runs cppcheck linter
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Monitor RSS feeds for new entries";
     mainProgram = "rsstail";
     longDescription = ''
@@ -36,8 +36,8 @@ stdenv.mkDerivation (final: {
       detects a new entry it'll emit only that new entry.
     '';
     homepage = "https://www.vanheusden.com/rsstail/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.Necior ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.Necior ];
+    platforms = lib.platforms.unix;
   };
 })

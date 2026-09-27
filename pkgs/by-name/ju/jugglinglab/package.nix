@@ -13,7 +13,6 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-aarch64";
-      "x86_64-darwin" = "darwin-x86-64";
       "aarch64-darwin" = "darwin-aarch64";
     }
     .${stdenv.system} or null;
@@ -80,15 +79,15 @@ maven.buildMavenPackage rec {
         --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
   '';
 
-  meta = with lib; {
-    description = "Program to visualize different juggling pattens";
+  meta = {
+    description = "Program to visualize different juggling patterns";
     homepage = "https://jugglinglab.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "jugglinglab";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       wnklmnn
       tomasajt
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

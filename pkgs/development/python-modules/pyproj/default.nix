@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
 
   certifi,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.7.2";
+  version = "3.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     tag = version;
-    hash = "sha256-WV344gxcmq08sIUVevn6uD50FSy4JvLt4aret5ZakYQ=";
+    hash = "sha256-+2wUMbswg2yltNMLPc9U8MbEFx2xKVWxGjP/TBfCjto=";
   };
 
   # force pyproj to use ${proj}
@@ -75,6 +72,10 @@ buildPythonPackage rec {
     "test_sync__source_id__list"
     "test_sync_download"
     "test_transformer_group__download_grids"
+    # https://github.com/pyproj4/pyproj/issues/1588
+    "test_coordinate_operation__from_string"
+    "test_transformer_from_pipeline__input_types"
+    "test_transformer_from_pipeline__wkt_json"
   ];
 
   pythonImportsCheck = [
@@ -93,16 +94,15 @@ buildPythonPackage rec {
     "pyproj.exceptions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to PROJ library";
     mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      lsix
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
-    teams = [ teams.geospatial ];
+    teams = [ lib.teams.geospatial ];
   };
 }

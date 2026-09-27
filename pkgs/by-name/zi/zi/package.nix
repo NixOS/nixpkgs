@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "zi";
-  version = "unstable-2022-04-09";
+  version = "1.0.0-unstable-2022-04-09";
   src = fetchFromGitHub {
     owner = "z-shell";
     repo = "zi";
@@ -26,10 +26,10 @@ stdenvNoCC.mkDerivation {
     installShellCompletion --zsh lib/_zi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/z-shell/zi";
     description = "Swiss Army Knife for Zsh - Unix Shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
   };
 }

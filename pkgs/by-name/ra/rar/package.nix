@@ -8,21 +8,17 @@
 }:
 
 let
-  version = "7.12";
+  version = "7.23";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
   # Use `./update.sh` to generate the entries below
   srcs = {
     x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-Yw2andExNnJzZnvuB5rRA/Rp8bfNvJtCpPKDzCmTurI=";
+      hash = "sha256-dZtLaqDZ93ExiCFilRGT86DlS/YOHY3EJVqjCKzKtYg=";
     };
     aarch64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
-      hash = "sha256-lQeOD1n/0F6+ZlpVfp1NHAcxVqJ3fZFn9sQg7kSKg8U=";
-    };
-    x86_64-darwin = {
-      url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-Wzp5Izpc4usNldBEb3OZCeNyByTTJegoxbDD8HNnCPo=";
+      hash = "sha256-aLOTwAB1jUd/3kPJVf91QvEvdvP16HzdqSMVL8eRvU0=";
     };
   };
 in
@@ -65,13 +61,13 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "rar";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.attrNames srcs;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

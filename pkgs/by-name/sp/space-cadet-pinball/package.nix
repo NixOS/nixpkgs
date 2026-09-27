@@ -76,10 +76,7 @@ stdenv.mkDerivation rec {
       unfree
       mit
     ];
-    maintainers = with lib.maintainers; [
-      hqurve
-      nadiaholmquist
-    ];
+    maintainers = with lib.maintainers; [ nadiaholmquist ];
     platforms = lib.platforms.all;
     mainProgram = "SpaceCadetPinball";
   };

@@ -9,27 +9,24 @@
   pytest-asyncio,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioskybell";
   version = "23.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aioskybell";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5F0B5z0pJLKJPzKIowE07vEgmNXnDVEeGFbPGnJ6H9I=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version="master",' 'version="${version}",'
+      --replace 'version="master",' 'version="${finalAttrs.version}",'
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -56,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioskybell" ];
 
-  meta = with lib; {
+  meta = {
     description = "API client for Skybell doorbells";
     homepage = "https://github.com/tkdrob/aioskybell";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -341,6 +341,7 @@ in
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
       DB_PORT = db.port;
+      DB_SOCKET = lib.mkIf db.createLocally "/run/mysqld/mysqld.sock";
       DB_DATABASE = db.name;
       DB_USERNAME = db.user;
       DB_PASSWORD._secret = db.passwordFile;
@@ -403,7 +404,7 @@ in
           locations = {
             "/" = {
               index = "index.php";
-              extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+              extraConfig = "try_files $uri $uri/ /index.php?$query_string;";
             };
             "~ \\.php$" = {
               extraConfig = ''

@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   jq,
   moreutils,
@@ -25,7 +24,7 @@ buildNpmPackage rec {
     hash = "sha256-11wlKK0z3/KRKMKNrDvZLvK7vV0UzrMTaG0ei9n6VEk=";
   };
 
-  npmDepsHash = "sha256-1+RjSr5FSaQFqkL/yzlAQhm56NVG2kjzZC/DsEi3HJE=";
+  npmDepsHash = "sha256-6Os6aWkgbA6m4JCp3b6UeZ4NC8N+7pwCWkPBc4xXAHY=";
 
   patches = [
     # Fix info in the "about" page, enable asar, add option to build for the detected system
@@ -33,8 +32,11 @@ buildNpmPackage rec {
       inherit version;
     })
 
-    # would not build with nodejs_22 and above without this
+    # would not build with nodejs_24 and above without this
     ./update-nan.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
   ];
 
   postPatch = ''

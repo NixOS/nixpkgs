@@ -2,38 +2,46 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
+  stdenv,
   nix-update-script,
+  enableSystemd ? stdenv.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${finalAttrs.version}";
-    hash = "sha256-KLHccRCJ19CrGKePhUgW4GhQzn+ULE861cW2ykGoaZk=";
+    hash = "sha256-VL58v/mBwFwDmF4Xg43bzitcBCsPsEwEaLKqV5X9rpg=";
   };
 
-  cargoHash = "sha256-m1kOV0b/HCSAGfbEh4GdtrlphoELe7ebG+kgKKNYihY=";
+  cargoHash = "sha256-pxzPcieUXE3VOyGNDaeDHUQPayRDZXpW57VWMejlZ4k=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildFeatures = lib.optionals enableSystemd [
+    "systemd"
+  ];
 
-  postInstall = ''
-    installShellCompletion --cmd pizauth \
-      --bash share/bash/completion.bash \
-      --fish share/fish/pizauth.fish
-
-    installManPage pizauth.1 pizauth.conf.5
-
+  preConfigure = ''
     substituteInPlace lib/systemd/user/pizauth.service \
-      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
-    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
+      --replace-fail /usr/bin/ ''${!outputBin}/bin/
+    # Upstream's Makefile uses target/release/pizauth as a Makefile target that
+    # the `install` target depends upon. Nixpkgs' cargoBuildHook defaults to
+    # using the explicit `--target @rustcTargetSpec@` flag, so that the
+    # executable always ends up in
+    # `target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release`. To make the
+    # Makefile not run cargo build again, we use this substitution.
+    substituteInPlace Makefile \
+      --replace-fail target/release target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    make PREFIX=$out install ${lib.optionalString enableSystemd "install-systemd"}
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";
@@ -43,7 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      doronbehar
+    ];
     mainProgram = "pizauth";
   };
 })

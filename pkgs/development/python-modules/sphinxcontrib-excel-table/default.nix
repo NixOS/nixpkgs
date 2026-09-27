@@ -2,21 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sphinx,
   openpyxl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-excel-table";
   version = "1.0.8";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256:1q79byn3k3ribvwqafbpixwabjhymk46ns8ym0hxcn8vhf5nljzd";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     sphinx
     openpyxl
   ];
@@ -28,10 +33,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx excel-table extension";
     homepage = "https://github.com/hackerain/sphinxcontrib-excel-table";
-    maintainers = with maintainers; [ raboof ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ raboof ];
+    license = lib.licenses.asl20;
   };
-}
+})

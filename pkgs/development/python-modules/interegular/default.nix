@@ -2,23 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "interegular";
   version = "0.3.3";
-  format = "setuptools";
+  pyproject = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2baXshs0iEcROZug8DdpFLgYmc5nADJIbQ0Eg0SnZgA=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "interegular" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Library to check a subset of python regexes for intersections";
     homepage = "https://github.com/MegaIng/interegular";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lach ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lach ];
   };
-}
+})

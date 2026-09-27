@@ -21,7 +21,6 @@
   json-glib,
   borgbackup,
   duplicity,
-  fuse,
   rclone,
   restic,
   nix-update-script,
@@ -29,14 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "49.2";
+  version = "50.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     tag = finalAttrs.version;
-    hash = "sha256-yH4XX1MwPxTmKh6p27pYQBQDyeGIT+Ed9E0Y508EF7s=";
+    hash = "sha256-c4Myy1nV6CupGG53Iqm0Z82yVx/Llgot4IZCrnubacE=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Check https://gitlab.gnome.org/World/deja-dup/-/blob/main/meson.options
     (lib.mesonOption "borg_command" (lib.getExe borgbackup))
     (lib.mesonOption "duplicity_command" (lib.getExe duplicity))
-    (lib.mesonOption "fusermount_command" (lib.getExe' fuse "fusermount"))
     (lib.mesonOption "rclone_command" (lib.getExe rclone))
     (lib.mesonOption "restic_command" (lib.getExe restic))
     (lib.mesonEnable "packagekit" false) # packagekit-glib not packaged
@@ -78,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
   '';
+
+  patches = [ ./find-fusermount-setuid.patch ];
 
   passthru = {
     updateScript = nix-update-script { };

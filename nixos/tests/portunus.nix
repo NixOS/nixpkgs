@@ -13,6 +13,7 @@
 
   testScript = ''
     machine.wait_for_unit("portunus.service")
-    machine.succeed("curl --fail -vvv http://localhost:8080/")
+    machine.wait_for_open_port(8080)
+    machine.wait_until_succeeds("curl --fail -vvv http://localhost:8080/")
   '';
 }

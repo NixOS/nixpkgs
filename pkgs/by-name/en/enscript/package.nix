@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enscript";
   version = "1.6.6";
 
   src = fetchurl {
-    url = "mirror://gnu/enscript/enscript-${version}.tar.gz";
+    url = "mirror://gnu/enscript/enscript-${finalAttrs.version}.tar.gz";
     sha256 = "1fy0ymvzrrvs889zanxcaxjfcxarm2d3k43c9frmbl1ld7dblmkd";
   };
 
@@ -19,6 +20,12 @@ stdenv.mkDerivation rec {
     # requires that compat/getopt.h is also removed
     # https://savannah.gnu.org/bugs/?64307
     ./0001-use-system-getopt.patch
+    # Fix build with gcc15
+    #   regex.c:3565:13: error: too many arguments to function 're_match_2_internal'; expected 0, have 8
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/debian/enscript/-/raw/7a51479540a210dee5eee4ece5b54e3ce15dec52/debian/patches/1096582-gcc-15";
+      hash = "sha256-0H8FNCKgQ1YCwcBaMChQSuFaYlmzSsoqtfsNSr567+Y=";
+    })
   ];
 
   postPatch = ''
@@ -32,6 +39,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext ];
 
   doCheck = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Converter from ASCII to PostScript, HTML, or RTF";
@@ -51,8 +61,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/enscript/";
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
     platforms = lib.platforms.all;
     mainProgram = "enscript";
   };
-}
+})

@@ -1,17 +1,17 @@
 {
   lib,
+  pkgs,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
   pillow,
-  zbar,
   pytestCheckHook,
   setuptools,
 }:
 
 let
-  zbar' = zbar.override {
+  zbar' = pkgs.zbar.override {
     enableVideo = false;
     withXorg = false;
   };
@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read one-dimensional barcodes and QR codes from Python using the zbar library";
     homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

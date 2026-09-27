@@ -6,15 +6,12 @@
   poetry-core,
   nixops,
   python-digitalocean,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "nixops-digitalocean";
   version = "0.1.0-unstable-2022-08-14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -45,10 +42,10 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "NixOps Digitalocean plugin";
     homepage = "https://github.com/nix-community/nixops-digitalocean";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

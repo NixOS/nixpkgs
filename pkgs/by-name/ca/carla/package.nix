@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
-    wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/carla/resources" "$out ''${pythonPath[*]}"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
       patchPythonScript "$f"

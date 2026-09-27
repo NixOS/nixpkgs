@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "aritim-dark";
-  version = "unstable-2021-12-29";
+  version = "0.7-unstable-2021-12-29";
 
   src = fetchFromGitHub {
     owner = "Mrcuve0";
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Dark theme deeply inspired by the Ayu Dark color palette";
     homepage = "https://github.com/Mrcuve0/Aritim-Dark";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.pasqui23 ];
   };

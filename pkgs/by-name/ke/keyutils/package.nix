@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
   fetchurl,
 }:
 
@@ -9,13 +10,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keyutils";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
   };
 
   patches = [
@@ -34,7 +35,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
+
+  makeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "NO_SOLIB=1" ];
 
   outputs = [
     "out"
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch
     substituteInPlace Makefile \
-      --replace \
+      --replace-fail \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(shell date -u +%F)\""' \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(date -ud "@$SOURCE_DATE_EPOCH" +%F)\""'
   '';
@@ -68,10 +75,12 @@ stdenv.mkDerivation rec {
     "USRLIBDIR=$(lib)/lib"
   ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
     description = "Tools used to control the Linux kernel key management system";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

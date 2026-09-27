@@ -2,24 +2,33 @@
   lib,
   fetchFromGitHub,
   gitMinimal,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      pytest-randomly = super.pytest-randomly.overridePythonAttrs {
+        doCheck = false;
+      };
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "quark-engine";
   version = "25.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "quark-engine";
+    owner = "ev-flow";
     repo = "quark-engine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with pythonPackages; [
     androguard
     click
     colorama
@@ -45,11 +54,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "quark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
-    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ev-flow/quark-engine/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

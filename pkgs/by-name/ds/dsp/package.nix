@@ -11,7 +11,7 @@
   alsa-lib,
   libao,
   libmad,
-  ladspaH,
+  ladspa-header,
   libtool,
   libpulseaudio,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libao
     libmad
-    ladspaH
+    ladspa-header
     libtool
     libpulseaudio
   ];

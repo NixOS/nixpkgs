@@ -3,29 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  xorg,
+  xvfb,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xvfbwrapper";
-  version = "0.2.15";
+  version = "0.2.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgoldberg";
     repo = "xvfbwrapper";
     tag = version;
-    sha256 = "sha256-9PDLR8oz6VcRfqWOrLCw08wCqJeNCI5leiE6+QZi7xY=";
+    sha256 = "sha256-iqWDXDzoGAs6Ze1XHrM3HzeqTHbiYU2/CpeZQNzwl0s=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ xorg.xvfb ];
+  dependencies = [ xvfb ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    xorg.xvfb
+    xvfb
   ];
 
   meta = {

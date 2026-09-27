@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2025.2";
+  version = "2026.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NguePbtJognCGtYYCcf7RTZD4EiziSTHZYE1RnRugcM=";
+    hash = "sha256-DmC0eynyFXQ3byGP4hq8AJiUojIeoWxnVPPK1ut83Wo=";
   };
 
   postPatch = ''
@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytz" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://launchpad.net/pytz/+announcements";
     description = "World timezone definitions, modern and historical";
     homepage = "https://pythonhosted.org/pytz";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
       jherland
     ];

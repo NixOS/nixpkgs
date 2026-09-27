@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter335,
+  flutter347,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,21 +14,21 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.70";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-XWa5jEIQWmApbXNu8AgKt6Af9S1ZrsyaFET07FVn7Rc=";
+    hash = "sha256-5ZjyG3NRati8IWGI2QpV0Ywu9sAI4vrFGRJorH5MbQk=";
   };
 
   metaCommon = {
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
     description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yvnth ];
     platforms = lib.platforms.linux;
   };
 
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-3q+fI0MHg+wSSkbEzqXxdoGkF0B/LhLMbB6VcX3xuwE=";
+    cargoHash = "sha256-q/jlamNxHrBe4z+MIpNr4T4HJgPsJMh0x18bXr4HKtU=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter335.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -86,7 +86,7 @@ flutter335.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
-          cargoHash = "sha256-oJOM/Tb4QrezdtU8YTyr57JZp5FkDewgwXrBqwp6cp8=";
+          cargoHash = "sha256-mS8XJNw6qn6AVdUtZmSe2xfuraHz8m8t7tQhnSlof2M=";
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
@@ -147,7 +147,14 @@ flutter335.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/app_icons/icon-red.png $out/share/pixmaps/mangayomi.png
+    install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
+  '';
+
+  # clang errors on the ignored fread result (-Werror=unused-result);
+  # magic is zero-initialized so a short read is harmless
+  postPatch = ''
+    substituteInPlace lib/ffi/image_decoder.cpp \
+      --replace-fail 'fread(magic, 1, 2, f);' '(void)fread(magic, 1, 2, f);'
   '';
 
   extraWrapProgramArgs = ''

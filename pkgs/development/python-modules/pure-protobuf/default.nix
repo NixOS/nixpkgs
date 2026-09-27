@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   poetry-dynamic-versioning,
@@ -16,9 +15,8 @@ buildPythonPackage rec {
   pname = "pure-protobuf";
   version = "3.1.5";
 
-  format = "pyproject";
+  pyproject = true;
   # < 3.10 requires get-annotations which isn't packaged yet
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "eigenein";
@@ -46,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pure_protobuf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
     changelog = "https://github.com/eigenein/protobuf/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chuangzhu ];
   };
 }

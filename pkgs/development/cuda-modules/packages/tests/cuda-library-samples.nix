@@ -4,7 +4,7 @@
   autoPatchelfHook,
   backendStdenv,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudatoolkit,
@@ -44,7 +44,6 @@ let
       '';
       license = lib.licenses.bsd3;
       platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
       teams = [ lib.teams.cuda ];
     };
   });
@@ -100,7 +99,7 @@ in
         (lib.getDev libcusparse)
         cuda_nvcc
         (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
-        cuda_cccl # <nv/target>
+        cccl # <nv/target>
       ];
 
       postPatch = prevAttrs.postPatch or "" + ''

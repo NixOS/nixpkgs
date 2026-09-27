@@ -1,33 +1,40 @@
 {
   lib,
+  pnpm_10,
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   npmHooks,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";
-  version = "0.1.4";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "mixedbread-ai";
     repo = "mgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FwgUK5vPXba8cmGrsSItbhXYDNPxkr7x5u1jPxs3SAA=";
+    hash = "sha256-uLAK4Mf0ghJmm6dHxooVuvMrZ16K9XZtedF5Cr/2DiM=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-oq7jczTfm6CgLAUYftBlAYK6MFELDRfXCFtjsLWV8mU=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-T1mbRDBLU4SjZSgqyKgusZe5UV9hI+/bAmBYoAWcWtQ=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     npmHooks.npmInstallHook
   ];
 

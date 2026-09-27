@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-all-features";
   version = "1.12.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pD0lyI2zSOeEDk1Lch4Qf5mo8Z8Peiy2XF5iQ62vsaI=";
   };
 
@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EKDeBib52Os1X3sgM9CtrNkl20l1Wn/cMBIBM1/KY5A=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to build and test all feature flag combinations";
     homepage = "https://github.com/frewsxcv/cargo-all-features";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

@@ -4,24 +4,24 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flamelens";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "YS-L";
     repo = "flamelens";
-    tag = "v${version}";
-    hash = "sha256-cvsBeV9pdgr8V+82Fw/XZS1Ljq/7ff4JYMHnNxqNvOM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b7lRMyeX/aL1ziSaLBUxChrwXeKNhcCShjGY6ANYqhY=";
   };
 
-  cargoHash = "sha256-FIIt8RwPaPrVG3D9FoMjR4L81NzUrKZsAeW2AJkBG1o=";
+  cargoHash = "sha256-QcEN83Cd92i0Ll+8uWSLREKk5i0STwhAKTCx48BiI6A=";
 
   meta = {
     description = "Interactive flamegraph viewer in the terminal";
     homepage = "https://github.com/YS-L/flamelens";
-    changelog = "https://github.com/YS-L/flamelens/releases/tag/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/YS-L/flamelens/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.averdow ];
   };
-}
+})

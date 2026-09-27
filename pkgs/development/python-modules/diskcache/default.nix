@@ -3,26 +3,28 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytest-cov-stub,
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diskcache";
   version = "5.6.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-cov-stub
@@ -45,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diskcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

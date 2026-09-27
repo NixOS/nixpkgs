@@ -18,20 +18,24 @@
 
 stdenv.mkDerivation {
   pname = "NetworkManager-iodine${lib.optionalString withGnome "-gnome"}";
-  version = "1.2.0-unstable-2025-10-11";
+  version = "1.2.0-unstable-2026-03-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "network-manager-iodine";
-    rev = "ad266003aa74ddba1d22259b213a7f9c996e1cd4";
-    sha256 = "OoJRkU4POW9RajwW05xYPlkodXqytq89GTbJuoLxebY=";
+    rev = "ce18eb60893887e104a7623fb919264c12769d03";
+    sha256 = "wQVajbnw8q544APKQJfoUb7JaSH8MU3qQN3Gp6mYReE=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit iodine;
     })
+
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/issues/4
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/merge_requests/6
+    ./CVE-2026-91837.patch
   ];
 
   nativeBuildInputs = [
@@ -70,9 +74,10 @@ stdenv.mkDerivation {
     networkManagerPlugin = "VPN/nm-iodine-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's iodine plugin";
+    homepage = "https://gitlab.gnome.org/GNOME/network-manager-iodine";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

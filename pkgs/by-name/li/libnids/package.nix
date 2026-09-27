@@ -36,14 +36,14 @@ stdenv.mkDerivation {
     this is necessary for dsniff to compile; otherwise g_thread_init is a missing
     symbol when linking (?!?)
   */
-  env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
+  env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= -std=gnu17 ";
 
-  meta = with lib; {
+  meta = {
     description = "E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";
     homepage = "https://libnids.sourceforge.net/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.symphorien ];
     # probably also bsd and solaris
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

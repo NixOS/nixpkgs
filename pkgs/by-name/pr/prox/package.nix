@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prox";
   # While upstream did release a v1.0.0, v1.1.0 is actually newer: https://github.com/fgrosse/prox/releases/tag/v1.1.0
   version = "1.1.0";
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fgrosse";
     repo = "prox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KSHTlcAmnuU8F17N0LBS0s5b/k6Of0OEHVd3v50bH3g=";
   };
 
@@ -20,14 +20,14 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace cmd/prox/version.go \
-      --replace '0.0.0-unknown' '${version}'
+      --replace '0.0.0-unknown' '${finalAttrs.version}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fgrosse/prox";
     description = "Process runner for Procfile-based applications";
     mainProgram = "prox";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

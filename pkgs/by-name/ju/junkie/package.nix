@@ -6,18 +6,18 @@
   autoreconfHook,
   pkg-config,
   libpcap,
-  guile_2_2,
+  guile,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "junkie";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "rixed";
     repo = "junkie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
 
@@ -30,14 +30,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "guile-2.2" "guile-3.0"
+  ''
   # IP_DONTFRAG is defined on macOS from Big Sur
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '10i#undef IP_DONTFRAG' include/junkie/proto/ip.h
   '';
 
   buildInputs = [
     libpcap
-    guile_2_2
+    guile
     openssl
   ];
   nativeBuildInputs = [
@@ -45,8 +49,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   configureFlags = [
-    "GUILELIBDIR=\${out}/${guile_2_2.siteDir}"
-    "GUILECACHEDIR=\${out}/${guile_2_2.siteCcacheDir}"
+    "GUILELIBDIR=\${out}/${guile.siteDir}"
+    "GUILECACHEDIR=\${out}/${guile.siteCcacheDir}"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
   ];
 
   meta = {
@@ -65,4 +74,4 @@ stdenv.mkDerivation rec {
       - a tool listing TLS certificates...
     '';
   };
-}
+})

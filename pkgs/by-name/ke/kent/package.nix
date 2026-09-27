@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kent";
-  version = "488";
+  version = "498";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = "kent";
     tag = "v${finalAttrs.version}_base";
-    hash = "sha256-7iapTrQBq0VvbSe+lEdf9lISRJ/uPGdnfjJiSA0NLN8=";
+    hash = "sha256-8QemUemf4IKjj3UdVZRpuvngXJgSxv9LVX9ZYqJ1ShI=";
   };
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
@@ -100,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://genome.ucsc.edu";
     changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${finalAttrs.version}_base";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ scalavision ];
     platforms = lib.platforms.linux;
   };
 })

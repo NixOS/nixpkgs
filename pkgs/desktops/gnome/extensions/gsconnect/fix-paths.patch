@@ -13,14 +13,14 @@ index 3fb887c3..e8cbe1bd 100644
  Icon=org.gnome.Shell.Extensions.GSConnect
 diff --git a/src/__nix-prepend-search-paths.js b/src/__nix-prepend-search-paths.js
 new file mode 100644
-index 00000000..d009dfd9
+index 00000000..e664ad9b
 --- /dev/null
 +++ b/src/__nix-prepend-search-paths.js
 @@ -0,0 +1,2 @@
 +import GIRepository from 'gi://GIRepository';
 +'@typelibPath@'.split(':').forEach(path => GIRepository.Repository.dup_default().prepend_search_path(path));
 diff --git a/src/extension.js b/src/extension.js
-index 53ecd5fc..78782357 100644
+index b82a9754..7303ee7a 100644
 --- a/src/extension.js
 +++ b/src/extension.js
 @@ -2,6 +2,8 @@
@@ -32,11 +32,22 @@ index 53ecd5fc..78782357 100644
  import Gio from 'gi://Gio';
  import GObject from 'gi://GObject';
  
-diff --git i/src/gsconnect-preferences w/src/gsconnect-preferences
-index b16ddc7d..263dfb04 100755
+diff --git a/src/gsconnect-preferences b/src/gsconnect-preferences
+index 652f6b2e..7122bed6 100755
 --- a/src/gsconnect-preferences
 +++ b/src/gsconnect-preferences
-@@ -6,6 +6,8 @@
+@@ -15,5 +15,5 @@ if [ ! -f "./gsconnect-preferences.js" ]; then
+     fi
+     cd "$extension_dir" || exit 1
+ fi
+-exec /usr/bin/env gjs -m gsconnect-preferences.js
++exec @gjs@ -m gsconnect-preferences.js
+
+diff --git a/src/gsconnect-preferences.js b/src/gsconnect-preferences.js
+index e2b1efe9..c2060e61 100644
+--- a/src/gsconnect-preferences.js
++++ b/src/gsconnect-preferences.js
+@@ -4,6 +4,8 @@
  
  // -*- mode: js; -*-
  
@@ -46,7 +57,7 @@ index b16ddc7d..263dfb04 100755
  import 'gi://GdkPixbuf?version=2.0';
  import Gio from 'gi://Gio?version=2.0';
 diff --git a/src/prefs.js b/src/prefs.js
-index dd20fd20..5f82c53a 100644
+index e4d38f8c..e177810b 100644
 --- a/src/prefs.js
 +++ b/src/prefs.js
 @@ -2,6 +2,8 @@
@@ -58,3 +69,24 @@ index dd20fd20..5f82c53a 100644
  import Gio from 'gi://Gio';
  import GLib from 'gi://GLib';
  import Adw from 'gi://Adw';
+@@ -28,6 +30,6 @@ export default class GSConnectExtensionPreferences extends ExtensionPreferences
+ 
+         const _launcher = Gio.SubprocessLauncher.new({flags: Gio.SubprocessFlags.NONE});
+         _launcher.set_cwd(this.path);
+-        _launcher.spawnv(['gjs', '-m', 'gsconnect-preferences.js']);
++        _launcher.spawnv(['@gjs@', '-m', 'gsconnect-preferences.js']);
+     }
+ }
+diff --git a/src/service/daemon.js b/src/service/daemon.js
+index dda8b434..889c7d48 100755
+--- a/src/service/daemon.js
++++ b/src/service/daemon.js
+@@ -214,7 +214,7 @@ const Service = GObject.registerClass({
+             {flags: Gio.SubprocessFlags.NONE}
+         );
+         _launcher.set_cwd(Config.PACKAGE_DATADIR);
+-        _launcher.spawnv(['gjs', '-m', 'gsconnect-preferences.js']);
++        _launcher.spawnv(['@gjs@', '-m', 'gsconnect-preferences.js']);
+     }
+ 
+     /**

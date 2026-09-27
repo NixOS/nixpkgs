@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # Requires a running SuperCollider instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Live coding music with SuperCollider";
     mainProgram = "FoxDot";
     homepage = "https://foxdot.org/";
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

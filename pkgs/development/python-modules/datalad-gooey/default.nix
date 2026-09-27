@@ -3,6 +3,7 @@
   lib,
   git,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   git-annex,
   pyside6,
@@ -17,7 +18,7 @@
 buildPythonPackage {
   pname = "datalad-gooey";
   # many bug fixes on `master` but no new release
-  version = "unstable-2024-02-20";
+  version = "0.2.0-unstable-2024-02-20";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -53,6 +54,10 @@ buildPythonPackage {
     pytest-qt
     git
     git-annex
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_lsfiles"
   ];
 
   pythonImportsCheck = [ "datalad_gooey" ];

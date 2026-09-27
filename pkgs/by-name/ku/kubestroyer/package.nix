@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubestroyer";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Rolix44";
     repo = "Kubestroyer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A4kx0Xx3p9rP8OKRLPe9AfX+rqGggtvPb7Hsg+lLkSI=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Kubernetes exploitation tool";
     homepage = "https://github.com/Rolix44/Kubestroyer";
-    changelog = "https://github.com/Rolix44/Kubestroyer/releases/tag/v${version}";
+    changelog = "https://github.com/Rolix44/Kubestroyer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kubestroyer";
   };
-}
+})

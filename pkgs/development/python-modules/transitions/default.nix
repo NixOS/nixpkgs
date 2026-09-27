@@ -42,7 +42,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # crashes in pygraphviz/graphviz
+    "tests/test_pygraphviz.py::PygraphvizTest::test_binary_stream"
+    "tests/test_pygraphviz.py::TestPygraphvizNested::test_binary_stream"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # sleep is not accurate on Darwin
     "tests/test_async.py"
   ];
@@ -68,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "transitions" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytransitions/transitions";
     description = "Lightweight, object-oriented finite state machine implementation in Python";
     changelog = "https://github.com/pytransitions/transitions/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

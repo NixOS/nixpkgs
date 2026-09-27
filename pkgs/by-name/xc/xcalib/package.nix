@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
-  libX11,
-  libXxf86vm,
-  libXrandr,
+  libx11,
+  libxxf86vm,
+  libxrandr,
   samurai,
   fetchpatch,
 }:
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xcalib";
   version = "0.11";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "OpenICC";
     repo = "xcalib";
     tag = finalAttrs.version;
@@ -37,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXxf86vm
-    libXrandr
+    libx11
+    libxxf86vm
+    libxrandr
     samurai
   ];
 

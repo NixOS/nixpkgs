@@ -16,7 +16,7 @@
   stdenv,
 }:
 let
-  version = "2.56.1582";
+  version = "2.71.1683";
   urlVersion = builtins.replaceStrings [ "." ] [ "0" ] version;
 in
 stdenv.mkDerivation {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-    hash = "sha256-LKuno7SpOpxx3JpM36tYlOHjJWWRLRjPiA096Bv/QvQ=";
+    hash = "sha256-z/8rORTsDUhgh2hfep62jMVeAvX/c5HW4vBkVnvhcQc=";
   };
 
   dontConfigure = true;
@@ -50,19 +50,14 @@ stdenv.mkDerivation {
       # NB: While this might seem like odd behavior, it's what Roon expects. The
       # tarball distribution provides scripts that do a bunch of nonsense on top
       # of what wrapBin is doing here, so consider it the lesser of two evils.
-      # I didn't bother checking whether the symlinks are really necessary, but
-      # I wouldn't put it past Roon to have custom code based on the binary
-      # name, so we're playing it safe.
       wrapBin = binPath: ''
         (
           binDir="$(dirname "${binPath}")"
           binName="$(basename "${binPath}")"
-          dotnetDir="$out/RoonDotnet"
+          actualBin="$binDir/$binName.exe"
 
-          ln -sf "$dotnetDir/dotnet" "$dotnetDir/$binName"
           rm "${binPath}"
-          makeWrapper "$dotnetDir/$binName" "${binPath}" \
-            --add-flags "$binDir/$binName.dll" \
+          makeWrapper "$actualBin" "${binPath}" \
             --argv0 "$binName" \
             --prefix LD_LIBRARY_PATH : "${
               lib.makeLibraryPath [
@@ -72,7 +67,7 @@ stdenv.mkDerivation {
                 openssl
               ]
             }" \
-            --prefix PATH : "$dotnetDir" \
+            --prefix PATH : "$binDir" \
             --prefix PATH : "${
               lib.makeBinPath [
                 alsa-utils
@@ -80,8 +75,7 @@ stdenv.mkDerivation {
                 ffmpeg
               ]
             }" \
-            --chdir "$binDir" \
-            --set DOTNET_ROOT "$dotnetDir"
+            --chdir "$binDir"
         )
       '';
     in
@@ -105,13 +99,13 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = ./update.py;
-  meta = with lib; {
+  meta = {
     description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       lovesegfault
       steell
       ramblurr

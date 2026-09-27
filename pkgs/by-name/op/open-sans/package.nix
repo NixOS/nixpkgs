@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitLab,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -12,28 +13,21 @@ stdenvNoCC.mkDerivation {
     domain = "salsa.debian.org";
     owner = "fonts-team";
     repo = "fonts-open-sans";
-    rev = "debian/1.11-1";
+    tag = "debian/1.11-1";
     hash = "sha256-gkq5RPa83dND91q1hiA9Qokq1iA8gLQ8XvCNWe+e8Bw=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Open Sans fonts";
     longDescription = ''
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
     homepage = "https://www.opensans.com";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.pantheon ];
   };
 }

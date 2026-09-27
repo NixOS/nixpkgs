@@ -6,15 +6,15 @@
   fetchFromGitHub,
   kdePackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kdiskmark";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
-    rev = version;
-    hash = "sha256-b42PNUrG10RyGct6dPtdT89oO222tEovkSPoRcROfaQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-cdKkOe5BbzF8K+buwctsSMlw4ko0DrNHZ2HwJA9Det4=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     (lib.makeBinPath [ fio ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HDD and SSD benchmark tool with a friendly graphical user interface";
     longDescription = ''
       If kdiskmark is not run as root it can rely on polkit to get the necessary
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
       on NixOS, nix-env will not work.
     '';
     homepage = "https://github.com/JonMagon/KDiskMark";
-    maintainers = [ maintainers.symphorien ];
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.symphorien ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "kdiskmark";
   };
-}
+})

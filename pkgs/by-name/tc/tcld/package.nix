@@ -10,12 +10,12 @@
 
 buildGoModule (finalAttrs: {
   pname = "tcld";
-  version = "0.41.0";
+  version = "0.55.0";
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tcld";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Jnm6l9Jj1mi9esDS6teKTEMhq7V1QD/dTl3qFhKsW4o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VbhjfcGSXMJr/oaSDA7s8EuJhmyCdFfyix4T0bTfNE0=";
     # Populate values from the git repository; by doing this in 'postFetch' we
     # can delete '.git' afterwards and the 'src' should stay reproducible.
     leaveDotGit = true;
@@ -69,7 +69,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.github.com/temporalio/tcld";
     changelog = "https://github.com/temporalio/tcld/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+    ];
     mainProgram = "tcld";
   };
 })

@@ -28,19 +28,23 @@ stdenv.mkDerivation {
     substituteInPlace ../config.guess --replace-fail /usr/bin/uname uname
   '';
 
+  strictDeps = true;
+
   configureFlags = [ "--enable-install-libiberty" ] ++ lib.optional (!staticBuild) "--enable-shared";
 
   postInstall = lib.optionalString (!staticBuild) ''
     cp pic/libiberty.a $out/lib*/libiberty.a
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://gcc.gnu.org/";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ericson2314
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

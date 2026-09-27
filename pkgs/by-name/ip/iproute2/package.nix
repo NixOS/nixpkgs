@@ -16,32 +16,25 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2";
-  version = "6.17.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-l4HllBCrfeqOn3m7EP8UiOY9EPy7cFA7lEJronqOLew=";
+    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/Z+huVgJQXFXyoPdcpV+MmG9vOiWNTy5NvgK8LM6S1w=";
   };
-
-  patches = [
-    (fetchurl {
-      name = "musl-redefinition.patch";
-      url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
-      hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC := gcc" "CC ?= $CC"
+      --replace-fail "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [
     "out"
     "dev"
     "scripts"
+    "man"
   ];
 
   configureFlags = [
@@ -52,7 +45,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -94,6 +86,8 @@ stdenv.mkDerivation rec {
     libbpf
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
@@ -104,14 +98,13 @@ stdenv.mkDerivation rec {
   # needed for nixos-anywhere
   passthru.tests.static = pkgsStatic.iproute2;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
-}
+})

@@ -4,11 +4,11 @@
   fetchFromGitHub,
   setuptools,
 
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.2";
   pname = "ewmhlib";
   pyproject = true;
@@ -16,14 +16,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "EWMHlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NELOgUV8KuN+CqmoSbLYImguHlp8dyhGmJtoxJjOBkA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    xlib
+    python-xlib
     typing-extensions
   ];
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     description = "Extended Window Manager Hints implementation in Python 3";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

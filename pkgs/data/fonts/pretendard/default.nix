@@ -30,12 +30,12 @@ let
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://github.com/orioncactus/pretendard";
         description = "Alternative font to system-ui for all platforms";
-        license = licenses.ofl;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ sudosubin ];
+        license = lib.licenses.ofl;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ sudosubin ];
       };
     };
 

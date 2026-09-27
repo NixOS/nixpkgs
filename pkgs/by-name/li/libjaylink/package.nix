@@ -11,14 +11,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
-  version = "0.4.0";
+  version = "0.5.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
     tag = finalAttrs.version;
-    hash = "sha256-PghPVgovNo/HhNg7c6EGXrqi6jMrb8p/uLqGDIZ7t+s=";
+    hash = "sha256-bwFmJuezMURM7JEInG/q5TP7g+QloyQ4V1rsUZVcmvE=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
     description = "Shared library written in C to access SEGGER J-Link and compatible devices";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ felixsinger ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ felixsinger ];
+    platforms = lib.platforms.unix;
   };
 })

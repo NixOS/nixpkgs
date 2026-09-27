@@ -43,7 +43,7 @@ buildNpmPackage (finalAttrs: {
     description = "Beautifier for javascript";
     homepage = "https://beautifier.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "js-beautify";
   };
 })

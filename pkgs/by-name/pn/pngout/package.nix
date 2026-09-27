@@ -22,9 +22,6 @@ let
       folder = "i686";
       ld-linux = "ld-linux.so.2";
     };
-    x86_64-darwin = {
-      folder = ".";
-    };
     x86_64-linux = {
       folder = "amd64";
       ld-linux = "ld-linux-x86-64.so.2";
@@ -73,7 +70,6 @@ stdenv.mkDerivation {
     license = lib.licenses.unfreeRedistributable;
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;
-    maintainers = [ lib.maintainers.sander ];
     mainProgram = "pngout";
   };
 }

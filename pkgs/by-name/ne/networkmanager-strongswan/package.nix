@@ -13,13 +13,13 @@
   libnma-gtk4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-strongswan";
-  version = "1.6.2";
+  version = "1.6.5";
 
   src = fetchurl {
-    url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-jL8kf63MsCbTTvYn1M7YbpUOMXPl2h/ZY7Rpz2rAr34=";
+    url = "https://download.strongswan.org/NetworkManager/NetworkManager-strongswan-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-OpHK38x8dGFkcLKw+A203BfxAzYrOG7XY0edhQBQG2c=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "--with-gtk4"
   ];
 
-  PKG_CONFIG_LIBNM_VPNSERVICEDIR = "${placeholder "out"}/lib/NetworkManager/VPN";
+  env.PKG_CONFIG_LIBNM_VPNSERVICEDIR = "${placeholder "out"}/lib/NetworkManager/VPN";
 
   passthru = {
     networkManagerPlugin = "VPN/nm-strongswan-service.name";
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

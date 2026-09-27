@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "deepsecrets";
   version = "1.0.6";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "avito-tech";
     repo = "deepsecrets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VfIsPgStHcIYGbfrOs1mvgoq0ZoVSZwILFVBeMt/5Jc=";
   };
 
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
-    # assumes package is built in /app (docker?), and not /build/${src.name} (nix sandbox)
+    # assumes package is built in /app (docker?), and not /build/${finalAttrs.src.name} (nix sandbox)
     "test_1_cli"
     "test_config"
     "test_basic_info"
@@ -49,10 +49,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Secrets scanner that understands code";
     homepage = "https://github.com/avito-tech/deepsecrets";
-    changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
+    changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "deepsecrets";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 let
   font-awesome =
@@ -10,7 +11,7 @@ let
       hash,
       rev ? version,
     }:
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "font-awesome";
       inherit version;
 
@@ -20,29 +21,26 @@ let
         inherit rev hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [ installFonts ];
+      dontInstallWebfonts = true;
 
-        install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
+      sourceRoot = "${finalAttrs.src.name}/${if version == "4.7.0" then "fonts" else "otfs"}";
 
-        runHook postInstall
-      '';
-
-      meta = with lib; {
+      meta = {
         description = "Font Awesome - OTF font";
         longDescription = ''
           Font Awesome gives you scalable vector icons that can instantly be customized.
           This package includes only the OTF font. For full CSS etc. see the project website.
         '';
         homepage = "https://fontawesome.com/";
-        license = licenses.ofl;
-        platforms = platforms.all;
-        maintainers = with maintainers; [
+        license = lib.licenses.ofl;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [
           abaldeau
           johnazoidberg
         ];
       };
-    };
+    });
 in
 {
   # Keeping version 4 and 5 because version 6 is incompatible for some icons. That
@@ -65,7 +63,7 @@ in
     hash = "sha256-MaJG96kYj8ukJVyqOTDpkHH/eWr/ZlbVKk9AvJM7ub4=";
   };
   v7 = font-awesome {
-    version = "7.0.1";
-    hash = "sha256-ucKE4euZf7teosY+6X0W1wDOdnlW1SRcZhQdBvvOY1s=";
+    version = "7.2.0";
+    hash = "sha256-BTm78NCZXksCuzoXm2B39/UIB/Sb/wwL1vvaGRVUaio=";
   };
 }

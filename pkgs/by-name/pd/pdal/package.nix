@@ -24,20 +24,19 @@
   proj,
   sqlite,
   tiledb,
-  xercesc,
   zlib,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.9.2";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     tag = finalAttrs.version;
-    hash = "sha256-W3HTgdLHzETfmp/DZ5s9pWXQeBaic4/O55ckGzDDtxs=";
+    hash = "sha256-VxELHAiiFMKjsvgBK4Cm6YJSrs/4QhhF1haZv4/FlZg=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     sqlite
     tiledb
-    xercesc
     zlib
     zstd
   ]
@@ -101,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
     # by upstream CI.
-    # See: https://github.com/PDAL/PDAL/blob/2.9.2/.github/workflows/linux.yml#L81
+    # See: https://github.com/PDAL/PDAL/blob/2.9.3/.github/workflows/linux.yml#L81
     "pdal_io_tiledb_writer_test"
     "pdal_io_tiledb_reader_test"
     "pdal_io_tiledb_time_writer_test"
@@ -113,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_stac_reader_test"
 
     # Require data to be downloaded from Internet
-    "pdal_io_copc_reader_test"
+    "pdal_io_copc_remote_reader_test"
   ];
 
   nativeCheckInputs = [
@@ -137,12 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pdal" ];
   };
 })

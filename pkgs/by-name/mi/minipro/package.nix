@@ -4,23 +4,31 @@
   fetchFromGitLab,
   pkg-config,
   libusb1,
+  util-linux,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minipro";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
-    rev = version;
-    hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
+    rev = finalAttrs.version;
+    hash = "sha256-2Vi4NAKh+6N/at09egjS04ankEXnSHzsAIFSIau7jNc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [
+    pkg-config
+    util-linux
+  ];
+  buildInputs = [
+    libusb1
+    zlib
+  ];
   makeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "PREFIX=$(out)"
     "UDEV_DIR=$(out)/lib/udev"
     "COMPLETIONS_DIR=$(out)/share/bash-completion/completions"
@@ -31,12 +39,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/DavidGriffith/minipro";
     description = "Open source program for controlling the MiniPRO TL866xx series of chip programmers";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bmwalters ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bmwalters ];
     mainProgram = "minipro";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

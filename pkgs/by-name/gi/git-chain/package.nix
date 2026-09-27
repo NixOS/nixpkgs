@@ -6,6 +6,7 @@
   openssl,
   git,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
@@ -29,11 +30,13 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool for rebasing a chain of local git branches";
     homepage = "https://github.com/dashed/git-chain";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "git-chain";
-    maintainers = with maintainers; [ bcyran ];
+    maintainers = with lib.maintainers; [ bcyran ];
   };
 }

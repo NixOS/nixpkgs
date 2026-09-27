@@ -19,7 +19,7 @@
   freetype,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moxnotify";
   version = "0.1.0";
 
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
 
     # Install D-Bus service file
     mkdir -p $out/share/dbus-1/services
-    substitute ${src}/pl.mox.notify.service.in $out/share/dbus-1/services/pl.mox.notify.service \
+    substitute ${finalAttrs.src}/pl.mox.notify.service.in $out/share/dbus-1/services/pl.mox.notify.service \
       --replace-fail "@bindir@" "$out/bin"
   '';
 
@@ -101,4 +101,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux; # Wayland-specific, Linux only
     mainProgram = "moxnotify";
   };
-}
+})

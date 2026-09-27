@@ -30,11 +30,14 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "YouTube traffic proxy for video playback and images";
     homepage = "https://github.com/TeamPiped/http3-ytproxy";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ _999eagle ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      _999eagle
+      Fijxu
+    ];
     mainProgram = "http3-ytproxy";
   };
 }

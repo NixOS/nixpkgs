@@ -1,5 +1,7 @@
 {
   lib,
+  openssl,
+  pkg-config,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -7,24 +9,37 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_ls";
-  version = "0.17.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "EmmyLuaLs";
     repo = "emmylua-analyzer-rust";
     tag = finalAttrs.version;
-    hash = "sha256-CAYSaRjpQwnPZojeX/VyV9/xz8SY8Lt+e1wc79qvGZg=";
+    hash = "sha256-wxVbjKHcid5rG4Y2xpq9AKu/T6tg8JGFfciChqvmUDo=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  # Needed to get openssl-sys to use pkg-config.
+  env.OPENSSL_NO_VENDOR = 1;
 
   buildAndTestSubdir = "crates/emmylua_ls";
 
-  cargoHash = "sha256-nGSN7LqvAwYg2Z+2tTAc+vIwrYmb+W0OLw9EeG7e/V8=";
+  cargoHash = "sha256-MAMHJDzU7WRfsl4IQ6eKt1mc1e90s2RQG8fwE8Ay3qc=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/emmylua_ls";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

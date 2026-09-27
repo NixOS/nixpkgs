@@ -30,6 +30,7 @@ let
           inherit version src;
           hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
         };
+        pythonRelaxDeps = [ "chroma-hnswlib" ];
         postPatch = null;
         build-system = with self; [
           setuptools
@@ -91,19 +92,21 @@ let
           "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.19";
+  version = "0.7.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-H2Umh4/vRDqaGXVoK/fZaj9guA4IaVSgOEDAVEPsD9A=";
+    hash = "sha256-RU9WnKuPaxDnPW5MQyrxPEw7ufMcVNxSRyJ5QvrzoVs=";
   };
 
   build-system = with python.pkgs; [
@@ -204,6 +207,9 @@ python.pkgs.buildPythonApplication rec {
     "test_get_reranker"
     "test_query_tool_success"
     "test_supported_rerankers_initialization"
+    # tree-sitter-language-pack 1.x.x raises LanguageNotFoundError for unknown
+    # languages here, while this test still expects LookupError.
+    "test_treesitter_chunker_parser_from_config_no_parser_found_error"
   ];
 
   passthru = {

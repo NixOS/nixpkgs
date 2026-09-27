@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftpman";
-  version = "2.1.0";
+  version = "2.1.2";
 
   passthru.updateScript = nix-update-script { };
 
@@ -15,17 +15,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "spantaleev";
     repo = "sftpman-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IhMBnp951mKfG054svFTezf3fpOEMJusRj45qVThmA=";
+    hash = "sha256-kFh47UmKumEq6bL+bKaYjNHkW3EWPLeFgpqvPglDpEU=";
   };
 
-  cargoHash = "sha256-TltizTFKrMvHNQcSoow9fuNLy6appYq9Y4LicEQrfRE=";
+  cargoHash = "sha256-0BSkHVe/sO/ucShv/oKK1ibO1bZ16nbZR/2kNA0Q9aQ=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/spantaleev/sftpman-rs";
     description = "Application that handles sshfs/sftp file systems mounting";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       contrun
       fugi
     ];

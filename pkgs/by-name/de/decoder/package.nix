@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "decoder";
-  version = "unstable-2021-11-20";
+  version = "0.4-unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "PeterPawn";
     repo = "decoder";
     rev = "da0f826629d4e7b873f9d1a39f24c50ff0a68cd2";
-    sha256 = "sha256-1sT1/iwtc2ievmLuNuooy9b14pTs1ZC5noDwzFelk7w=";
+    hash = "sha256-1sT1/iwtc2ievmLuNuooy9b14pTs1ZC5noDwzFelk7w=";
   };
 
   patches = [
@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PeterPawn/decoder";
     description = ''"secrets" decoding for FRITZ!OS devices'';
     mainProgram = "decoder";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

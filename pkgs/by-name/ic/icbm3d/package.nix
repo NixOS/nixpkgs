@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mtQcFU70dpV3GiaHXVQVvO3LE5NSseIXXzhtIGsAOP0=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix darwin and cross-compiled builds
 

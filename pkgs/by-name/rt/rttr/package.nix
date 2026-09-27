@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rttr";
   version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "rttrorg";
     repo = "rttr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1yxad8sj40wi75hny8w6imrsx8wjasjmsipnlq559n4b6kl84ijp";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "C++ Reflection Library";
     homepage = "https://www.rttr.org";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

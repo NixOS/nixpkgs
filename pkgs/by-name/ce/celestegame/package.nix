@@ -82,15 +82,12 @@ buildFHSEnv {
   version = celeste.version + (lib.optionalString withEverest "+everest.${everest.version}");
 
   multiPkgs =
-    pkgs:
-    with pkgs;
-    [
+    pkgs: with pkgs; [
       glib
       glibc_multi
       kdePackages.wayland
       libxkbcommon
       libgcc
-      mesa
       libdrm
       expat
       alsa-lib
@@ -134,23 +131,21 @@ buildFHSEnv {
       libpulseaudio
       pipewire
       vulkan-loader
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXext
+      libx11
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxext
       libxcb
-      libXcursor
-      libXinerama
-      libXi
-      libXrandr
-      libXScrnSaver
-      libXxf86vm
-      libXau
-      libXdmcp
-    ]);
+      libxcursor
+      libxinerama
+      libxi
+      libxrandr
+      libxscrnsaver
+      libxxf86vm
+      libxau
+      libxdmcp
+    ];
 
   targetPkgs = pkgs: [ celeste ];
 

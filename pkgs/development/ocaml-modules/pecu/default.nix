@@ -9,14 +9,14 @@
   astring,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pecu";
   version = "0.7";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/pecu/releases/download/v${version}/pecu-${version}.tbz";
+    url = "https://github.com/mirage/pecu/releases/download/v${finalAttrs.version}/pecu-${finalAttrs.version}.tbz";
     hash = "sha256-rXR3tbFkKNM8MkQAZ2hJU9lO+qQ/qvYghXkYus6f13g=";
   };
 
@@ -29,10 +29,10 @@ buildDunePackage rec {
     astring
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encoder/Decoder of Quoted-Printable (RFC2045 & RFC2047)";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/pecu";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

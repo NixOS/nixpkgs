@@ -3,23 +3,27 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
   libuuid,
   libselinux,
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nilfs-utils";
-  version = "2.2.12";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = "nilfs-utils";
-    rev = "v${version}";
-    sha256 = "sha256-9IUuam5g24+eywEeNZET8TAvKJVevJBwHTHSwN9Tz58=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Sqg1pERzxc6H7eMJGv3XTgiC3/KXu/hqqZzl1vxM6E8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     libuuid
@@ -27,20 +31,16 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Fix up hardcoded paths.
-    substituteInPlace lib/cleaner_exec.c --replace /sbin/ $out/bin/
-    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${lib.getBin e2fsprogs}/bin/
+    substituteInPlace sbin/Makefile.am \
+      --replace-fail '$(badblocksdir)' '${lib.getBin e2fsprogs}/bin'
   '';
 
-  # According to upstream, libmount should be detected automatically but the
-  # build system fails to do this. This is likely a bug with their build system
-  # hence it is explicitly enabled here.
-  configureFlags = [ "--with-libmount" ];
-
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "root_sbindir=${placeholder "out"}/sbin"
+  configureFlags = [
+    "--with-libmount"
+    "--enable-usrmerge=bin"
   ];
+
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
   # still doesn't use it
@@ -51,14 +51,21 @@ stdenv.mkDerivation rec {
     find . -name .libs -exec rm -rf -- {} +
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
+  meta = {
     description = "NILFS utilities";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    homepage = "https://github.com/nilfs-dev/nilfs-utils";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21
     ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
-}
+})

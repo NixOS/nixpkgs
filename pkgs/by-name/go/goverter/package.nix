@@ -4,18 +4,18 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goverter";
-  version = "1.9.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "jmattheis";
     repo = "goverter";
-    tag = "v${version}";
-    hash = "sha256-OJMZovYTPOW+jeml3J6+V7qiyNVZPxl1eHYJ1fEhdHk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/5Wdu0mfzOSI7vsDwuVPIEX1hLecUHNW16Lm/14XB9c=";
   };
 
-  vendorHash = "sha256-wStuQhxrzd+LyHQi+k6ez6JT1xzZcPjJa09WqX70bys=";
+  vendorHash = "sha256-4laZspdBxhXlmSV5dBNfMPkZ7h/iWcaTIKG4q12Lfb8=";
 
   subPackages = [ "cmd/goverter" ];
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ krostar ];
     mainProgram = "goverter";
   };
-}
+})

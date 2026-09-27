@@ -26,7 +26,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = version;
+    tag = version;
     hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 
@@ -68,7 +68,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = version;
+    tag = version;
     hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 

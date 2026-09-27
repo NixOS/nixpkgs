@@ -1,29 +1,48 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
+  pandoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hexyl";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "hexyl";
-    tag = "v${version}";
-    hash = "sha256-TmFvv+jzOSM8kKCxBbUoDsUjKRPTplhWheVfIjS5nsY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1FlFvVgv4SslHtwXvHIE5aUXlDsUK4YFBtIKgsv/eB0=";
   };
 
-  cargoHash = "sha256-QjQoGtLF5BAxWFiLZZYCpwrYCdiVfvG/lAukCNZGsec=";
+  cargoHash = "sha256-/+0oRyA9gfucfBTdkN9Q5eUZOWNDIAOj634yAc7Hzn0=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  __structuredAttrs = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    installShellFiles
+    pandoc
+  ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
+
+  # https://github.com/sharkdp/hexyl/blob/6ecc29b9c8c84d08a7e860f7f69c22b113b480ea/README.md?plain=1#L161-L163
+  postInstall = ''
+    installManPage --name hexyl.1 <(pandoc -s -f markdown -t man -o - doc/hexyl.1.md)
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd hexyl \
+      --bash <($out/bin/hexyl --completion bash) \
+      --fish <($out/bin/hexyl --completion fish) \
+      --zsh <($out/bin/hexyl --completion zsh)
+  '';
 
   meta = {
     description = "Command-line hex viewer";
@@ -34,15 +53,17 @@ rustPlatform.buildRustPackage rec {
       characters and non-ASCII).
     '';
     homepage = "https://github.com/sharkdp/hexyl";
-    changelog = "https://github.com/sharkdp/hexyl/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    changelog = "https://github.com/sharkdp/hexyl/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       dywedir
       SuperSandro2000
     ];
     mainProgram = "hexyl";
   };
-}
+})

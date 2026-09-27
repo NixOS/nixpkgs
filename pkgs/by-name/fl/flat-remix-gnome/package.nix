@@ -11,14 +11,14 @@ let
   # https://github.com/daniruiz/flat-remix-gnome/blob/20250926/Makefile#L38
   fake-dconf = writeScriptBin "dconf" "echo -n";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flat-remix-gnome";
   version = "20250926";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix-gnome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6K/BQqVOeDeJuUi0+NgCFeerX5sSy+nKapYxIQfbKFQ=";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     rm $out/share/gnome-shell/gnome-shell-theme.gresource.old
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gnome";
-    license = licenses.cc-by-sa-40;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.vanilla ];
+    license = lib.licenses.cc-by-sa-40;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.vanilla ];
   };
-}
+})

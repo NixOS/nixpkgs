@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   pkg-config,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "master_me";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "trummerschlunk";
     repo = "master_me";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-eesMXxRcCgzhSQ+WUqM00EuKYhFxysjH+RWKHKGYzUM=";
   };
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trummerschlunk/master_me";
     description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "master_me";
   };
-}
+})

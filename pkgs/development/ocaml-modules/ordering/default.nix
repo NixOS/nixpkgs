@@ -1,14 +1,12 @@
-{ buildDunePackage, dune_3 }:
+{ buildDunePackage, dune }:
 
 buildDunePackage {
   pname = "ordering";
-  inherit (dune_3) version src;
-  duneVersion = "3";
-  minimalOCamlVersion = "4.08";
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Element ordering";
   };
 }

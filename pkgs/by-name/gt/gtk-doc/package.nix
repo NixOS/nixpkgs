@@ -14,25 +14,21 @@
   dblatex,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gtk-doc";
-  version = "1.35.1";
+  version = "1.36.1";
 
   outputDevdoc = "out";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-doc";
-    rev = version;
-    hash = "sha256-EqU7lnBnOn3gR3hT95yjdTUb3cqX2XJK5UAKsFw2Q10=";
+    tag = finalAttrs.version;
+    hash = "sha256-8hB43BCAtT1B7/ak2i0FAlYD3Kb4rNCWfsJ+wqGu3FA=";
   };
-
-  patches = [
-    passthru.respect_xml_catalog_files_var_patch
-  ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -83,19 +79,20 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
-    respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
     updateScript = gnome.updateScript {
       packageName = "gtk-doc";
       versionPolicy = "none";
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gtk-doc/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    teams = [ lib.teams.gnome ];
   };
-}
+})

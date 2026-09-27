@@ -2,58 +2,55 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   dtc,
   openssl,
+  zstd,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "49.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bPPs/4XMcvOH4BGfQrjQdvgjGWae4UEZjzPKjalDN3w=";
+    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "vsock-seccomp-Rust-1.90.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/ec57aade1563075e37b8e9ccc0b85fe2c04a54b8.patch";
-      hash = "sha256-M+I+ZbiNDV1a8Y46+/mPTyDlQgQS7G6ytvPgli0NhJ0=";
-    })
-    (fetchpatch {
-      name = "vfio-user-seccomp-Rust-1.90.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/95b8c6afdd6eec9810243f92ec1956dccfe305da.patch";
-      hash = "sha256-kCP/Fu0Dg+GdnwyFQLqZWKlbqO9w4KRJcbV4sReSDYM=";
-    })
-  ];
+  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
 
-  cargoHash = "sha256-5EK9V9yiF/UjmlYSKBIJgQOA1YU33ezicLikWYnKFAo=";
+  patches = [
+    ./musl-1.2.6.patch
+  ];
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
-  checkInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 dtc;
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoTestFlags = [
     "--workspace"
-    "--bins"
-    "--lib" # Integration tests require root.
     "--exclude"
     "hypervisor" # /dev/kvm
     "--exclude"
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+    "--"
+    # io_uring syscalls are blocked by the Lix sandbox
+    "--skip=formats"
+    "--skip=io_impl::async_io::uring_data_io"
   ];
 
   nativeInstallCheckInputs = [
@@ -71,8 +68,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "cloud-hypervisor";
     maintainers = with lib.maintainers; [
-      offline
       qyliss
+      phip1611
     ];
     platforms = [
       "aarch64-linux"

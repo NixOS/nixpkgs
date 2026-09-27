@@ -1,199 +1,248 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   bun,
+  darwin,
   fetchFromGitHub,
-  fzf,
-  makeBinaryWrapper,
+  makeWrapper,
   models-dev,
+  nodejs,
   nix-update-script,
   ripgrep,
-  testers,
+  sysctl,
+  installShellFiles,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 let
-  pname = "opencode";
-  version = "1.0.119";
-  src = fetchFromGitHub {
-    owner = "sst";
-    repo = "opencode";
-    tag = "v${version}";
-    hash = "sha256-U2oIEXhAWOaOZHGBlVUPgysW0AtEh/P8LxbGlm8Lquk=";
-  };
+  node_modules =
+    finalAttrs:
+    stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+      __structuredAttrs = true;
+      strictDeps = true;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
 
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
 
-    dontConfigure = true;
+      dontConfigure = true;
 
-    buildPhase = ''
-      runHook preBuild
+      buildPhase = ''
+        runHook preBuild
 
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        bun install \
+          --cpu="*" \
+          --frozen-lockfile \
+          --filter ./ \
+          --filter ./packages/app \
+          --filter ./packages/desktop \
+          --filter ./packages/opencode \
+          --filter ./packages/shared \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
 
-      bun install \
-        --cpu="*" \
-        --filter=./packages/opencode \
-        --force \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*" \
-        --production
+        bun --bun ./nix/scripts/canonicalize-node-modules.ts
+        bun --bun ./nix/scripts/normalize-bun-binaries.ts
 
-      bun run ./nix/scripts/canonicalize-node-modules.ts
-      bun run ./nix/scripts/normalize-bun-binaries.ts
+        runHook postBuild
+      '';
 
-      runHook postBuild
-    '';
+      installPhase = ''
+        runHook preInstall
 
-    installPhase = ''
-      runHook preInstall
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+        # opencode targets only Linux and Darwin (see meta.platforms), so the
+        # Windows executables that "bun install --os=*" fetches are never
+        # executed. Dropping them keeps the output reproducible on hosts whose
+        # security endpoint agents scan the store, and removes the vulnerable
+        # bundled 7za.exe that will be quarantined.
+        find $out -type f -name '*.exe' -delete
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
 
-    outputHash = "sha256-rGmHVBhsyOmPD4kG8k0hhER5pZn2KVwBXk0O8MER8jc=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
+      outputHash = "sha256-qWZuOpolZAr7EZlAgfVx8nw8axoOMauoXwcqiJUGu24=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "opencode";
+  version = "1.18.31";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "anomalyco";
+    repo = "opencode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q0DYH5GHQGZ6ICyMR5rWq86DvfWpQERGZeLYTJb7cj0=";
+  };
+
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail \
+        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    # Skip smoke test
+    + ''
+      substituteInPlace packages/opencode/script/build.ts \
+        --replace-fail \
+        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
+        'if (false)'
+    ''
+    # Bun 1.4.x regressed compiled executable code splitting.
+    + ''
+      substituteInPlace packages/opencode/script/build.ts \
+        --replace-fail 'splitting: true,' 'splitting: false,'
+    '';
 
   nativeBuildInputs = [
     bun
-    makeBinaryWrapper
-    models-dev
-  ];
-
-  patches = [
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    ./relax-bun-version-check.patch
+    nodejs
+    installShellFiles
+    makeWrapper
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R ${finalAttrs.passthru.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_DISABLE_MODELS_FETCH = true;
   env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "stable";
-
-  preBuild = ''
-    chmod -R u+w ./packages/opencode/node_modules
-    pushd ./packages/opencode/node_modules/@parcel/
-      for pkg in ../../../../node_modules/.bun/@parcel+watcher-*; do
-        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
-        ln -sf "$pkg/node_modules/@parcel/$linkName" "$linkName"
-      done
-    popd
-
-    pushd ./packages/opencode/node_modules/@opentui/
-      for pkg in ../../../../node_modules/.bun/@opentui+core-*; do
-        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
-        ln -sf "$pkg/node_modules/@opentui/$linkName" "$linkName"
-      done
-    popd
-  '';
+  env.OPENCODE_CHANNEL = "prod";
 
   buildPhase = ''
     runHook preBuild
 
-
     cd ./packages/opencode
-    cp ${./bundle.ts} ./bundle.ts
-    bun run ./bundle.ts
+    bun --bun ./script/build.ts --single --skip-install
+    bun --bun ./script/schema.ts config.json tui.json
+    substituteInPlace config.json \
+      --replace-fail "https://models.dev/model-schema.json" \
+                     "file://$out/share/model-schema.json"
 
     runHook postBuild
   '';
 
-  dontStrip = true;
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/opencode
-    # Copy the bundled dist directory
-    cp -r dist $out/lib/opencode/
+    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    wrapProgram $out/bin/opencode \
+     --prefix PATH : ${
+       lib.makeBinPath (
+         [
+           ripgrep
+         ]
+         ++ lib.optionals stdenv.hostPlatform.isDarwin [
+           sysctl
+         ]
+       )
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true \
+    --run '
+      # NOTE: Once this workaround is removed we should switch back to using
+      # makeBinaryWrapper here.
 
-    # Fix WASM paths in worker.ts - use absolute paths to the installed location
-    # Main wasm is tree-sitter-<hash>.wasm, language wasms are tree-sitter-<lang>-<hash>.wasm
-    main_wasm=$(find "$out/lib/opencode/dist" -maxdepth 1 -name 'tree-sitter-[a-z0-9]*.wasm' -print -quit)
+      # nixpkgs previously built OpenCode with OPENCODE_CHANNEL=stable. "stable"
+      # is no longer an upstream channel, so it caused OpenCode to store its database
+      # as opencode-stable.db. After switching to the upstream production channel,
+      # OpenCode would normally use opencode.db instead, making existing sessions
+      # appear to be lost. Keep using the legacy database until the user migrates
+      # it, unless they explicitly configured OPENCODE_DB or disabled this workaround.
 
-    substituteInPlace $out/lib/opencode/dist/worker.ts \
-      --replace-fail 'module2.exports = "../../../tree-sitter-' 'module2.exports = "'"$out"'/lib/opencode/dist/tree-sitter-' \
-      --replace-fail 'new URL("tree-sitter.wasm", import.meta.url).href' "\"$main_wasm\""
+      data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
+      legacy="$data_home/opencode/opencode-stable.db"
+      canonical="$data_home/opencode/opencode.db"
 
-    # Copy only the native modules we need (marked as external in bundle.ts)
-    mkdir -p $out/lib/opencode/node_modules/.bun
-    mkdir -p $out/lib/opencode/node_modules/@opentui
+      if [ -z "''${OPENCODE_DB:-}" ] \
+        && [ -z "''${NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND:-}" ] \
+        && [ -e "$legacy" ] \
+        && [ ! -e "$canonical" ]; then
+        export OPENCODE_DB="opencode-stable.db"
 
-    # Copy @opentui/core platform-specific packages
-    for pkg in ../../node_modules/.bun/@opentui+core-*; do
-      if [ -d "$pkg" ]; then
-        cp -r "$pkg" $out/lib/opencode/node_modules/.bun/$(basename "$pkg")
+        # Only show migration guidance when stderr is attached to a terminal.
+        # Non-interactive uses such as `opencode web`, services, or scripts
+        # should continue starting normally with the legacy database selected.
+        if [ -t 2 ]; then
+          echo "Detected legacy nixpkgs OpenCode database at $legacy." >&2
+          echo "Continuing to use it for compatibility." >&2
+          echo "See https://github.com/NixOS/nixpkgs/pull/558549 for migration instructions." >&2
+          echo "Set NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND=1 to disable this workaround." >&2
+        fi
       fi
-    done
+    '
 
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe bun} $out/bin/opencode \
-      --add-flags "run" \
-      --add-flags "$out/lib/opencode/dist/index.js" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          fzf
-          ripgrep
-        ]
-      } \
-      --argv0 opencode
+    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 tui.json $out/share/tui.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
 
-  postInstall = ''
-    # Add symlinks for platform-specific native modules
-    for pkg in $out/lib/opencode/node_modules/.bun/@opentui+core-*; do
-      if [ -d "$pkg" ]; then
-        pkgName=$(basename "$pkg" | sed 's/@opentui+\(core-[^@]*\)@.*/\1/')
-        ln -sf ../.bun/$(basename "$pkg")/node_modules/@opentui/$pkgName \
-               $out/lib/opencode/node_modules/@opentui/$pkgName
-      fi
-    done
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      codesign --force --sign - $out/bin/.opencode-wrapped
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd opencode \
+        --bash <($out/bin/opencode completion) \
+        --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+    '';
+
+  dontStrip = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "OPENCODE_DISABLE_MODELS_FETCH"
+  ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "HOME=$(mktemp -d) opencode --version";
-      inherit (finalAttrs) version;
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
+      tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
+    node_modules = node_modules finalAttrs;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -204,18 +253,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AI coding agent built for the terminal";
-    longDescription = ''
-      OpenCode is a terminal-based agent that can build anything.
-      It combines a TypeScript/JavaScript core with a Go-based TUI
-      to provide an interactive AI coding experience.
-    '';
-    homepage = "https://github.com/sst/opencode";
+    homepage = "https://github.com/anomalyco/opencode";
+    changelog = "https://github.com/anomalyco/opencode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      delafthi
+      DuskyElf
+      graham33
+    ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
   };

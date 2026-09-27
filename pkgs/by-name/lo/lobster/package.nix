@@ -2,50 +2,64 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   callPackage,
+  pkg-config,
 
   # Linux deps
   libGL,
-  xorg,
+  libxcursor,
+  libxext,
+  libxi,
+  libx11,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
 
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2025.3";
+  version = "2026.7";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YGtjoRBGOqkcHaiZNPVFOoeLitJTG/M0I08EPZVCfj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R9S69gwtAd3U9MKUqHuxx6+G0ufQWr9o38/t4z/9ARo=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "cmake-fix.patch";
-      url = "https://github.com/aardappel/lobster/commit/a5f46ed65cad43ea70c8a6af5ea2fd5a018c8941.patch?full_index=1";
-      hash = "sha256-91pmoTPLD2Fo2SuCKngdRxXFUty5lOyA4oX8zaJ0ON0=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
-
-  nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # TODO devendor sdl3 and remove these
     libGL
-    xorg.libX11
-    xorg.libXext
+    libxcursor
+    libx11
+    libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
   ];
 
   preConfigure = ''
     cd dev
   '';
 
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # The test suite expects the executable to be in any of a number of locations
+  # that do not include the bin directory.
+  preCheck = ''
+    ln -s ../../bin/lobster lobster
+  '';
+
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
     mainProgram = "lobster";
@@ -54,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       very static typing and memory management with a very lightweight,
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

@@ -9,24 +9,38 @@
   ninja,
   cmake,
   libuuid,
+  alsa-lib,
   wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
+  glslang,
+  spirv-tools,
+  symlinkJoin,
   llvmPackages_20,
   autoPatchelfHook,
   unstableGitUpdater,
   fetchFromGitHub,
 }:
+
+let
+  vulkan-sdk = symlinkJoin {
+    name = "vulkan-sdk";
+    paths = [
+      glslang
+      spirv-tools
+    ];
+  };
+in
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-11-29";
+  version = "0-unstable-2026-09-14";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "ce5100cbf384d441f7ccfd0269938616a345722f";
-    hash = "sha256-v2RFsOFbsM14lGo//7Qf25neRfM9mSbC8cJZP1xCsms=";
+    rev = "6f9840568bb7dc9f5a9adb94801a99b18a7b2a60";
+    hash = "sha256-VDRWBsFt672IVtBUktXVtOWav5G2+SYpkQhtKUhLgR0=";
   };
 
   dontConfigure = true;
@@ -38,16 +52,15 @@ llvmPackages_20.stdenv.mkDerivation {
     cmake
     wrapGAppsHook3
     copyDesktopItems
+    glslang
+    spirv-tools
+    llvmPackages_20.lld
     autoPatchelfHook
+    alsa-lib
     libuuid
   ];
 
-  postPatch = ''
-    substituteInPlace premake5.lua \
-      --replace-fail "cdialect(\"C17\")" ""
-  ''; # Prevent build failure
-
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=unused-result"
   ];
 
@@ -59,6 +72,7 @@ llvmPackages_20.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+    export VULKAN_SDK="${vulkan-sdk}"
     python3 xenia-build.py setup
     python3 xenia-build.py build --config=release
     runHook postBuild

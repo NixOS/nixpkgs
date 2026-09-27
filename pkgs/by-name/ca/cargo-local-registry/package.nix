@@ -7,20 +7,22 @@
   libgit2,
   openssl,
   zlib,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-local-registry";
-  version = "0.2.8";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
-    rev = "v${version}";
-    hash = "sha256-XZ/OHcu3viS6LPQMyBDhxlpnC2oSgWQp7XtnKZCfMEw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b0twS9Vhz1FcsHXNtePYi+PIY7yqgrH4kgqdf2jqF7w=";
   };
 
-  cargoHash = "sha256-d3gWy2OR6mWluaT9Vl7UWzjHsTmTXzyts50PWVibI0o=";
+  cargoHash = "sha256-Cp54HkQ+8fG85wfFof5cexyAxo9spv78TstEEyKK7RE=";
 
   nativeBuildInputs = [
     curl
@@ -37,15 +39,21 @@ rustPlatform.buildRustPackage rec {
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cargo subcommand to manage local registries";
     mainProgram = "cargo-local-registry";
     homepage = "https://github.com/dhovart/cargo-local-registry";
-    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

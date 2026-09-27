@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   runCommand,
   unzip,
   bchunk,
@@ -55,9 +56,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wargus";
     repo = "wargus";
-    rev = "v${version}";
-    sha256 = "sha256-yJeMFxCD0ikwVPQApf+IBuMQ6eOjn1fVKNmqh6r760c=";
+    tag = "v${version}";
+    sha256 = "sha256-rU2uMhk7Hx9hrLR/iH2tHkJ2z4cVmJB3ISlvY6dfQKU=";
   };
+  patches = [
+    (fetchpatch {
+      # "change to cmake_minimum_required(VERSION 3.5) to fix CI"
+      url = "https://github.com/Wargus/wargus/commit/e89e121edadaf3ab365263c68b5baec305a5c65f.patch";
+      sha256 = "sha256-9FgflNyqZUrBY1prOahicnjslMxxUrK2bLspfGeZ6Os=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -84,11 +92,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/games/stratagus/wargus/{contrib/black_title.png,graphics/ui/black_title.png}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Importer and scripts for Warcraft II: Tides of Darkness, the expansion Beyond the Dark Portal, and Aleonas Tales";
     homepage = "https://wargus.github.io/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.astro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.astro ];
+    platforms = lib.platforms.linux;
   };
 }

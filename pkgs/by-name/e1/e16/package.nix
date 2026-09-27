@@ -5,14 +5,14 @@
   pkg-config,
   freetype,
   imlib2,
-  libSM,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libsm,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libsndfile,
   pango,
@@ -21,13 +21,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "e16";
-  version = "1.0.31";
+  version = "1.0.32";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    hash = "sha256-ZQTsIy/BiO/xUiCu+bc2n406F0unAinxyYLjVRfUSiQ=";
+    url = "mirror://sourceforge/enlightenment/e16-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BrbvWToTBRcNnLcHFOoVsFSoSon01QfCpdTXTaJj3g0=";
   };
 
   nativeBuildInputs = [
@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     imlib2
-    libSM
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXrandr
+    libsm
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxrandr
     libpulseaudio
     libsndfile
     pango
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.enlightenment.org/e16";
     description = "Enlightenment DR16 window manager";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

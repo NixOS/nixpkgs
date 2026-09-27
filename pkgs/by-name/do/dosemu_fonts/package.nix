@@ -7,12 +7,12 @@
   mkfontscale,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosemu-fonts";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dosemu/dosemu-${version}.tgz";
+    url = "mirror://sourceforge/dosemu/dosemu-${finalAttrs.version}.tgz";
     sha256 = "0l1zwmw42mpakjrzmbygshcg2qzq9mv8lx42738rz3j9hrqzg4pw";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     description = "Various fonts from the DOSEmu project";
     license = lib.licenses.gpl2Only;
   };
-}
+})

@@ -10,18 +10,19 @@
   updatecli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "updatecli";
-  version = "0.110.3";
+  version = "0.120.1";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
-    rev = "v${version}";
-    hash = "sha256-PeCvJx582Ndz11CmOwGT0fmqplhOqCT98xhtH0Me818=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Cp6721G8xxVe0s9hVMYOx8u++6m2mXLKTn2Djrq7Kv0=";
   };
 
-  vendorHash = "sha256-2LiPLFjFxyoypEe1dCzMIQvIN6CfnDr0/EZuGkmA2kM=";
+  proxyVendor = true;
+  vendorHash = "sha256-D6zcSo6MXabfgpUetyUCCFCYokbwGwmG6dLNAEOdHYU=";
 
   # tests require network access
   doCheck = false;
@@ -33,7 +34,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/updatecli/updatecli/pkg/core/version.BuildTime=unknown"
     ''-X "github.com/updatecli/updatecli/pkg/core/version.GoVersion=go version go${lib.getVersion go}"''
-    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${version}"
+    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -56,18 +57,18 @@ buildGoModule rec {
     installManPage updatecli.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
-    changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    changelog = "https://github.com/updatecli/updatecli/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       croissong
       lpostula
     ];
   };
-}
+})

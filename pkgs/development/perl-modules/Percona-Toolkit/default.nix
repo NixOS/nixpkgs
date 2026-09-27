@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPerlPackage,
-  shortenPerlShebang,
   DBDmysql,
   DBI,
   IOSocketSSL,
@@ -13,13 +12,13 @@
 }:
 
 let
-  version = "3.7.0";
+  version = "3.7.1-4";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-toolkit";
     rev = "v${version}";
-    sha256 = "sha256-fJGeL9XZHTFmpns5CE7It35HRnF3JiC6muOpOS1zboI=";
+    sha256 = "sha256-5mdRkdRSXhqdhJ0+pgQD18DS30WyvY2h6oImO4Fhljs=";
 
     # needed for build script
     leaveDotGit = true;
@@ -30,7 +29,7 @@ let
       pname = "Percona-Toolkit go-bindings";
       inherit src version;
 
-      vendorHash = "sha256-HAaoVYK6av085zSG0ZRpbmUgEA2UEt7CGWF/834e+z4=";
+      vendorHash = "sha256-LdUWZdoKVsYcL6DO0U18pHMmF4D+5PwMdlJf416H4hA=";
     }).goModules;
 in
 buildPerlPackage {
@@ -42,7 +41,6 @@ buildPerlPackage {
 
   nativeBuildInputs = [
     git
-    shortenPerlShebang
   ];
 
   buildInputs = [
@@ -64,15 +62,11 @@ buildPerlPackage {
     export HOME=$TMPDIR
   '';
 
-  postInstall = ''
-    shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
-  '';
-
   meta = {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks";
     homepage = "https://www.percona.com/software/database-tools/percona-toolkit";
     changelog = "https://docs.percona.com/percona-toolkit/release_notes.html";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

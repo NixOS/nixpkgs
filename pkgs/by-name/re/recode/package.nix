@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   python3Packages,
+  perl,
   flex,
   texinfo,
   libiconv,
@@ -11,16 +12,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recode";
-  version = "3.7.14";
+  version = "3.7.16";
 
   # Use official tarball, avoid need to bootstrap/generate build system
   src = fetchurl {
     url = "https://github.com/rrthomas/recode/releases/download/v${finalAttrs.version}/recode-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eGqv1USFGisTsKN36sFQD4IM5iYVzMLmMLUB53Q7nzM=";
+    hash = "sha256-w9QH9U90uudjYDEgluLtRmIvAchuULCe9Fstk8j8/y0=";
   };
 
   nativeBuildInputs = [
     python3Packages.python
+    perl
     flex
     texinfo
     libiconv

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-cd";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-eOo1DqTvYazr+wWraG9PZe0tTCgaAvhWtELG5rlaGSs=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "test/test_spell_check.py"
   ];
 
-  pythonImportCheck = [ "colcon_cd" ];
+  pythonImportsCheck = [ "colcon_cd" ];
 
   meta = {
     description = "A shell function for colcon-core to change the current working directory.";

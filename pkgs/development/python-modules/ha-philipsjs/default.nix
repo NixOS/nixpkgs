@@ -7,17 +7,14 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   respx,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "3.3.4";
+  version = "3.3.4"; # FIXME Can we check metadata again?
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
@@ -42,11 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "haphilipsjs" ];
 
-  meta = with lib; {
+  # the tag 3.3.4 actually corresponds to version 3.2.4
+  dontCheckPythonMetadata = true;
+
+  meta = {
     description = "Library to interact with Philips TVs with jointSPACE API";
     homepage = "https://github.com/danielperna84/ha-philipsjs";
     changelog = "https://github.com/danielperna84/ha-philipsjs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

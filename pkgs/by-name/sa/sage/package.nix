@@ -10,7 +10,7 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
-  inherit (pkgs) symlinkJoin callPackage nodePackages;
+  inherit (pkgs) symlinkJoin callPackage mathjax;
 
   python3 = pkgs.python3 // {
     pkgs = pkgs.python3.pkgs.overrideScope (
@@ -66,7 +66,7 @@ let
     inherit singular maxima;
     inherit three;
     cysignals = python3.pkgs.cysignals;
-    mathjax = nodePackages.mathjax;
+    mathjax = mathjax;
   };
 
   # The shell file that gets sourced on every sage start. Will also source
@@ -130,6 +130,10 @@ let
       rpy2
       sphinx
       pillow
+      # sage.misc.cython compiles code at runtime using setuptools and
+      # distutils (the latter provided by setuptools' shim on python >= 3.12).
+      # Not declared upstream: https://github.com/sagemath/sage/issues/33065
+      setuptools
     ]
     ++ extraPythonPackages python3.pkgs;
 

@@ -109,9 +109,9 @@ in
         description = "Synergy client";
         wantedBy = lib.optional cfgC.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${
+        serviceConfig.ExecStart = "${pkgs.synergy}/bin/synergyc -f ${
           lib.optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"
-        } ${cfgC.serverAddress}'';
+        } ${cfgC.serverAddress}";
         serviceConfig.Restart = "on-failure";
       };
     })
@@ -124,13 +124,13 @@ in
         description = "Synergy server";
         wantedBy = lib.optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${
+        serviceConfig.ExecStart = "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${
           lib.optionalString (cfgS.address != "") " -a ${cfgS.address}"
         }${
           lib.optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
         }${lib.optionalString cfgS.tls.enable " --enable-crypto"}${
           lib.optionalString (cfgS.tls.cert != null) " --tls-cert ${cfgS.tls.cert}"
-        }'';
+        }";
         serviceConfig.Restart = "on-failure";
       };
     })

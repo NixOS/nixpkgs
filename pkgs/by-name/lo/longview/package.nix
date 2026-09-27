@@ -8,14 +8,14 @@
   glibc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.5";
   pname = "longview";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = "longview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1i9lli8iw8sb1bd633i82fzhx5gz85ma9d1hra41pkv2p3h823pa";
   };
 
@@ -69,16 +69,16 @@ stdenv.mkDerivation rec {
      --suffix PERL5LIB : $out --suffix INC : $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.linode.com/longview";
     description = "Collects all of your system-level metrics and sends them to Linode";
     mainProgram = "longview";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rvl ];
-    inherit version;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rvl ];
+    inherit (finalAttrs) version;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
   };
-}
+})

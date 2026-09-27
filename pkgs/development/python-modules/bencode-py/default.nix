@@ -2,30 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pbr,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
-  pname = "beconde-py";
+buildPythonPackage (finalAttrs: {
+  pname = "bencode-py";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "bencode.py";
     hash = "sha256-KiTM2hclpRplCJPQtjJgE4NZ6qKZu256CZYTUKKm4Fw=";
   };
 
-  pythonImportsCheck = [ "bencodepy" ];
+  build-system = [
+    setuptools
+    pbr
+  ];
 
-  nativeBuildInputs = [ pbr ];
+  pythonImportsCheck = [ "bencodepy" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple bencode parser (for Python 2, Python 3 and PyPy)";
     homepage = "https://github.com/fuzeman/bencode.py";
-    license = licenses.bitTorrent11;
-    maintainers = with maintainers; [ vamega ];
+    license = lib.licenses.bitTorrent11;
+    maintainers = with lib.maintainers; [ vamega ];
   };
-}
+})

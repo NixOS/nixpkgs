@@ -10,24 +10,24 @@
   nemo,
   dbus-glib,
   libcryptui,
-  gcr,
+  gcr_3,
   libnotify,
   gnupg,
   gpgme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-seahorse";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    tag = version;
-    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
-  sourceRoot = "${src.name}/nemo-seahorse";
+  sourceRoot = "${finalAttrs.src.name}/nemo-seahorse";
 
   nativeBuildInputs = [
     glib
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gpgme
     dbus-glib
     libcryptui
-    gcr
+    gcr_3
     libnotify
     gnupg
   ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
         services.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
           nemo
-          gcr
+          gcr_3
           libcryptui
           nemo-seahorse
         ];
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

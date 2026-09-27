@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchFromGitHub {
-    owner = "off-world";
+    owner = "tobiohlala";
     repo = "lightdm-tiny-greeter";
     rev = version;
     sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
@@ -57,12 +57,11 @@ stdenv.mkDerivation rec {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny multi user lightdm greeter";
     mainProgram = "lightdm-tiny-greeter";
-    homepage = "https://github.com/off-world/lightdm-tiny-greeter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/tobiohlala/lightdm-tiny-greeter";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

@@ -7,19 +7,43 @@
   cmake,
   openssl,
   lksctp-tools,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
-  version = "3.7.3-unstable-2025-01-22";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "SIPp";
     repo = "sipp";
-    rev = "464cf74c7321069b51c10f0c37f19ba16c2e7138";
-    hash = "sha256-mloeBKgDXmsa/WAUhlDsgNdhK8dpisGf3ti5UQQchJ8=";
-    leaveDotGit = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1JKKD3rEddCzXrbNpbzvhFXlTlkTXlP7vmRXvlGzkgI=";
   };
+
+  # TODO: Remove this patches once SIPP releases a version newer than 3.7.7.
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-90780.patch";
+      url = "https://github.com/SIPp/sipp/commit/8ddfb43359703e665041a955543e07f504f80232.patch";
+      hash = "sha256-MYzy6C5yOwEJ7lo+GDdfTRlJ1t4ABtnm7ha+gAwoARo=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-90779.patch";
+      url = "https://github.com/SIPp/sipp/commit/09916a92de768ab08056a78e4731f9edc3853e1c.patch";
+      hash = "sha256-MJe6SMT3yNzbep9/eC4ELCqxMKwe/v9ZkB4q/R0dpUg=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-90778.patch";
+      url = "https://github.com/SIPp/sipp/commit/d913c75c4ac55fe6d2b79c6dc23d8aa36dbc5283.patch";
+      hash = "sha256-SEufhy4qB8PTWVwr5TE783P0yWjZk2/jcBGlqtJIbXc=";
+    })
+  ];
+
+  postPatch = ''
+    echo '#define SIPP_VERSION VERSION' > include/version.h
+    echo '#define VERSION "v${finalAttrs.version}"' >> include/version.h
+  '';
 
   cmakeFlags = [
     "-DUSE_PCAP=1"

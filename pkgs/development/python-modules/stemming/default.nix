@@ -1,18 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  setuptools,
 }:
-let
+buildPythonPackage {
   pname = "stemming";
   version = "1.0.1";
-in
-buildPythonPackage {
-  inherit version pname;
-  format = "setuptools";
+  pyproject = true;
 
-  # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "nmstoker";
     repo = "stemming";
@@ -20,14 +16,16 @@ buildPythonPackage {
     hash = "sha256-wnmBCbxnCZ9mN1J7sLcN7OynMcvqgAnhEgpAwW2/xz4=";
   };
 
-  disabled = pythonOlder "3.7";
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "stemming" ];
 
-  meta = with lib; {
+  doCheck = false; # source doesn't contain tests
+
+  meta = {
     description = "Python implementations of various stemming algorithms";
     homepage = "https://github.com/nmstoker/stemming";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

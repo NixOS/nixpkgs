@@ -8,14 +8,13 @@
   application ? "browser",
   applicationName ? "Firefox",
   branding ? null,
-  requireSigning ? true,
-  allowAddonSideload ? false,
   src,
   unpackPhase ? null,
   extraPatches ? [ ],
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
+  extraPreConfigure ? "",
   extraBuildInputs ? [ ],
   extraMakeFlags ? [ ],
   extraPassthru ? { },
@@ -23,12 +22,8 @@
 }:
 
 let
-  # Rename the variables to prevent infinite recursion
-  requireSigningDefault = requireSigning;
-  allowAddonSideloadDefault = allowAddonSideload;
-
   # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
-  # This is declared here because it's used in the default value of elfhackSupport
+  # This is declared here because it's used in the default value of enableElfhack
   isElfhackPlatform =
     stdenv:
     stdenv.hostPlatform.isElf
@@ -45,20 +40,26 @@ in
   pkgs,
   stdenv,
   patchelf,
+  fetchpatch,
 
   # build time
   autoconf,
+  buildPackages,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
+  overrideCC,
   perl,
   pkg-config,
   pkgsCross, # wasm32 rlbox
   python3,
+  python313,
   runCommand,
+  rustc,
   rust-cbindgen,
+  rustPlatform,
   unzip,
   which,
   wrapGAppsHook3,
@@ -73,8 +74,6 @@ in
   glib,
   gnum4,
   gtk3,
-  icu73,
-  icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
   libGL,
   libGLU,
   libevent,
@@ -90,7 +89,17 @@ in
   nss_latest,
   onnxruntime,
   pango,
-  xorg,
+  libxt,
+  libxtst,
+  libxrender,
+  libxi,
+  libxft,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libx11,
+  xorgproto,
+  pixman,
   zip,
   zlib,
   pkgsBuildBuild,
@@ -102,72 +111,73 @@ in
   cups,
   rsync, # used when preparing .app directory
 
-  # optionals
-
-  ## addon signing/sideloading
-  requireSigning ? requireSigningDefault,
-  allowAddonSideload ? allowAddonSideloadDefault,
-
-  ## debugging
-
-  debugBuild ? false,
-
-  # On 32bit platforms, we disable adding "-g" for easier linking.
-  enableDebugSymbols ? !stdenv.hostPlatform.is32bit,
-
-  ## optional libraries
-
-  alsaSupport ? stdenv.hostPlatform.isLinux,
+  # optional dependencies
+  withALSA ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  ffmpegSupport ? true,
-  gssSupport ? true,
+  withFFmpeg ? true,
+  withGSSAPI ? true,
   libkrb5,
-  jackSupport ? stdenv.hostPlatform.isLinux,
+  withJACK ? stdenv.hostPlatform.isLinux,
   libjack2,
-  jemallocSupport ? !stdenv.hostPlatform.isMusl,
+  withJemalloc ? !stdenv.hostPlatform.isMusl,
   jemalloc,
-  ltoSupport ? (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
-  ),
-  overrideCC,
-  buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
-  xvfb-run,
-  elfhackSupport ?
-    isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
-  pipewireSupport ? waylandSupport && webrtcSupport,
-  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
+  withPipewire ? withWayland && enableWebRTC,
+  withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  sndioSupport ? stdenv.hostPlatform.isLinux,
+  withSndio ? stdenv.hostPlatform.isLinux,
   sndio,
-  waylandSupport ? !stdenv.hostPlatform.isDarwin,
+  withWayland ? !stdenv.hostPlatform.isDarwin,
   libxkbcommon,
   libdrm,
 
-  ## privacy-related options
+  # Build configuration
 
-  privacySupport ? false,
+  ## Addon signing/sideloading
+  enableAddonSigning ? true,
+  enableAddonSideload ? false,
 
-  # WARNING: NEVER set any of the options below to `true` by default.
-  # Set to `!privacySupport` or `false`.
+  ## Optimizations
+  enableElfhack ?
+    isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
+  enableLTO ? (
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform.is64bit
+    && !stdenv.hostPlatform.isRiscV
+  ),
+  enablePGO ? (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    # PGO merges profile data with a 32-bit llvm-profdata, which runs out of
+    # address space on the huge libxul profile, so disable it on 32-bit.
+    && stdenv.hostPlatform.is64bit
+  ),
+  xvfb-run,
 
-  crashreporterSupport ?
-    !privacySupport
+  ## Debugging
+  enableDebug ? false,
+
+  ## On 32bit platforms, we disable adding "-g" for easier linking.
+  enableDebugSymbols ? !stdenv.hostPlatform.is32bit,
+
+  ## Privacy knobs
+  enableDataReporting ? true,
+  enableLocation ? true,
+  enableWebRTC ? true,
+  enableNeckoWiFi ? enableLocation,
+
+  ## Crash reporting
+  ## https://crash-stats.mozilla.org/search/?distribution_id=%3Dnixos
+  enableCrashReporter ?
+    enableDataReporting
     && !stdenv.hostPlatform.isLoongArch64
     && !stdenv.hostPlatform.isRiscV
     && !stdenv.hostPlatform.isMusl,
   curl,
-  geolocationSupport ? !privacySupport,
-  webrtcSupport ? !privacySupport,
 
-  # digital rights managemewnt
-
-  # This flag controls whether Firefox will show the nagbar, that allows
-  # users at runtime the choice to enable Widevine CDM support when a site
-  # requests it.
-  # Controlling the nagbar and widevine CDM at runtime is possible by setting
-  # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
-  drmSupport ? true,
+  ## DRM / Encrypted Media Extensions
+  # Build time toggle to control whether the DRM nagbar will appear
+  # (browser.eme.ui.enabled), when sites require it to playback media.
+  enableEMENagbar ? true,
 
   # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
   # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -192,33 +202,17 @@ in
 
 assert stdenv.cc.libc or null != null;
 assert
-  pipewireSupport
-  -> !waylandSupport || !webrtcSupport
-  -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
-assert elfhackSupport -> isElfhackPlatform stdenv;
+  withPipewire
+  -> !withWayland || !enableWebRTC
+  -> throw "${pname}: Pipewire support depends on Wayland and WebRTC support.";
+assert enableElfhack -> isElfhackPlatform stdenv;
 
 let
   inherit (lib) enableFeature;
 
-  rustPackages =
-    pkgs:
-    (pkgs.rust.override (
-      # aarch64-darwin firefox crashes on loading favicons due to a llvm 21 bug:
-      # https://github.com/NixOS/nixpkgs/issues/453372
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
-      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-        llvmPackages = pkgs.llvmPackages_20;
-      }
-    )).packages.stable;
-
-  toRustC = pkgs: (rustPackages pkgs).rustc;
-
-  rustc = toRustC pkgs;
-  inherit (rustPackages pkgs) rustPlatform;
-
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = (toRustC pkgsBuildBuild).llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -233,7 +227,7 @@ let
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (
     llvmPackages.stdenv.cc.override {
-      bintools = if ltoSupport then (toRustC buildPackages).llvmPackages.bintools else stdenv.cc.bintools;
+      bintools = if enableLTO then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
     }
   );
 
@@ -241,9 +235,9 @@ let
   # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" { } ''
-    mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
-      ln -s $lib $out/lib/wasm32-wasi
+    mkdir -p $out/lib/wasm32-wasip1
+    for lib in ${pkgsCross.wasm32-wasip1.llvmPackages.libcxx}/lib/*; do
+      ln -s $lib $out/lib/wasm32-wasip1
     done
   '';
 
@@ -268,7 +262,7 @@ let
     );
 
   defaultPrefs =
-    if geolocationSupport then
+    if enableLocation then
       {
         "geo.provider.network.url" = {
           value = "https://api.beacondb.net/v1/geolocate";
@@ -279,7 +273,7 @@ let
       {
         "geo.provider.use_geoclue" = {
           value = false;
-          reason = "Geolocation support has been disabled through the `geolocationSupport` package attribute.";
+          reason = "Geolocation support has been disabled through the `enableLocation` package attribute.";
         };
       };
 
@@ -296,7 +290,7 @@ let
     if stdenv.hostPlatform.isDarwin then
       "cairo-cocoa"
     else
-      "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
+      "cairo-gtk3${lib.optionalString withWayland "-wayland"}";
 
 in
 
@@ -304,15 +298,25 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase meta;
+  inherit src unpackPhase;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  meta =
+    meta
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # MacOS builds may take a long time and sometimes hit the default timeout
+      timeout = lib.max (24 * 60 * 60) (meta.timeout or 0);
+    };
 
   outputs = [
     "out"
   ]
-  ++ lib.optionals crashreporterSupport [ "symbols" ];
+  ++ lib.optionals enableCrashReporter [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
-  preConfigurePhases = lib.optionals pgoSupport [
+  preConfigurePhases = lib.optionals enablePGO [
     "configurePhase"
     "buildPhase"
     "profilingPhase"
@@ -328,15 +332,24 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "144") [
+      # Versions before 144 vendor bindgen 0.69. On Darwin, libc++ 21 changed
+      # basic_string::__self_view from a typedef to an attributed using alias;
+      # bindgen then emits it without its template parameter, producing invalid
+      # Rust. Vendored bindgen was updated in:
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
+      ./140-bindgen-string-view.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
+      # https://github.com/mozilla/cbindgen/issues/1165
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
+      ./153-cbindgen-0.29.4-compat.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
     patchShebangs mach build
-  ''
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
-  + lib.optionalString (lib.versionAtLeast version "134") ''
-    sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
   ''
   + extraPostPatch;
 
@@ -348,19 +361,15 @@ buildStdenv.mkDerivation {
     "-l"
   ];
 
-  # if not explicitly set, wrong cc from buildStdenv would be used
-  HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
-  HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
-
   nativeBuildInputs = [
     autoconf
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
-    python3
+    (if lib.versionAtLeast version "143.0" then python3 else python313)
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc
@@ -373,11 +382,11 @@ buildStdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
   ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
-  ++ lib.optionals crashreporterSupport [
+  ++ lib.optionals enableCrashReporter [
     dump_syms
     patchelf
   ]
-  ++ lib.optionals pgoSupport [ xvfb-run ]
+  ++ lib.optionals enablePGO [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
@@ -407,10 +416,10 @@ buildStdenv.mkDerivation {
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
     # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    export WASM_CC=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}c++
   ''
-  + lib.optionalString pgoSupport ''
+  + lib.optionalString enablePGO ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
       echo "Configuring with profiling data"
       for i in "''${!configureFlagsArray[@]}"; do
@@ -444,7 +453,7 @@ buildStdenv.mkDerivation {
   + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
     export MOZILLA_OFFICIAL=1
   ''
-  + lib.optionalString (!requireSigning) ''
+  + lib.optionalString (!enableAddonSigning) ''
     export MOZ_REQUIRE_SIGNING=
   ''
   + lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -452,20 +461,7 @@ buildStdenv.mkDerivation {
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   ''
-  +
-    # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
-    lib.optionalString
-      (
-        stdenv.hostPlatform.isDarwin
-        && lib.versionAtLeast version "143"
-        && lib.versionOlder version "145"
-        && lib.versionOlder apple-sdk_15.version "15.4"
-      )
-      ''
-        mkdir -p xnu/sys
-        cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
-        export CXXFLAGS="-isystem $(pwd)/xnu"
-      '';
+  + extraPreConfigure;
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
@@ -483,19 +479,20 @@ buildStdenv.mkDerivation {
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
-  # LTO is done using clang and lld on Linux.
-  ++ lib.optionals ltoSupport [
+  # LTO is done using clang and lld.
+  ++ lib.optionals enableLTO [
     "--enable-lto=cross,full" # Cross-Language LTO
     "--enable-linker=lld"
   ]
-  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
-  ++ lib.optional (!drmSupport) "--disable-eme"
-  ++ lib.optional allowAddonSideload "--allow-addon-sideload"
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature enableElfhack "elf-hack")
+  ++ lib.optional (!enableEMENagbar) "--disable-eme"
+  ++ lib.optional enableAddonSideload "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
     "--enable-system-pixman"
     "--with-system-ffi"
-    "--with-system-icu"
+    # Mozilla vendors 10+ patches and ICU upstream is very slow to adopt them
+    # "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-libvpx"
@@ -506,27 +503,28 @@ buildStdenv.mkDerivation {
     "--with-system-zlib"
 
     # These options are not available on MacOS, even --disable-*
-    (enableFeature alsaSupport "alsa")
-    (enableFeature jackSupport "jack")
-    (enableFeature pulseaudioSupport "pulseaudio")
-    (enableFeature sndioSupport "sndio")
+    (enableFeature withALSA "alsa")
+    (enableFeature withJACK "jack")
+    (enableFeature withPulseaudio "pulseaudio")
+    (enableFeature withSndio "sndio")
   ]
   ++ lib.optionals (!buildStdenv.hostPlatform.isDarwin && lib.versionAtLeast version "141") [
     "--with-onnx-runtime=${lib.getLib onnxruntime}/lib"
   ]
   ++ [
-    (enableFeature crashreporterSupport "crashreporter")
-    (enableFeature ffmpegSupport "ffmpeg")
-    (enableFeature geolocationSupport "necko-wifi")
-    (enableFeature gssSupport "negotiateauth")
-    (enableFeature jemallocSupport "jemalloc")
-    (enableFeature webrtcSupport "webrtc")
+    (enableFeature withFFmpeg "ffmpeg")
+    (enableFeature withGSSAPI "negotiateauth")
+    (enableFeature withJemalloc "jemalloc")
 
-    (enableFeature debugBuild "debug")
-    (if debugBuild then "--enable-profiling" else "--enable-optimize")
+    (enableFeature enableCrashReporter "crashreporter")
+    (enableFeature enableNeckoWiFi "necko-wifi")
+    (enableFeature enableWebRTC "webrtc")
+
+    (enableFeature enableDebug "debug")
+    (if enableDebug then "--enable-profiling" else "--enable-optimize")
     # --enable-release adds -ffunction-sections & LTO that require a big amount
     # of RAM, and the 32-bit memory space cannot handle that linking
-    (enableFeature (!debugBuild && !stdenv.hostPlatform.is32bit) "release")
+    (enableFeature (!enableDebug && !stdenv.hostPlatform.is32bit) "release")
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [
@@ -575,37 +573,36 @@ buildStdenv.mkDerivation {
       libwebp
       nspr
       pango
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXft
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.pixman
-      xorg.xorgproto
+      libx11
+      libxcursor
+      libxdamage
+      libxext
+      libxft
+      libxi
+      libxrender
+      libxt
+      libxtst
+      pixman
+      xorgproto
       zlib
       (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
     ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional jackSupport libjack2
-    ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
-    ++ lib.optional sndioSupport sndio
-    ++ lib.optionals waylandSupport [
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withJACK libjack2
+    ++ lib.optional withPulseaudio libpulseaudio # only headers are needed
+    ++ lib.optional withSndio sndio
+    ++ lib.optionals withWayland [
       libxkbcommon
       libdrm
     ]
   ))
-  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
-  ++ lib.optional gssSupport libkrb5
-  ++ lib.optional jemallocSupport jemalloc
+  ++ lib.optional withGSSAPI libkrb5
+  ++ lib.optional withJemalloc jemalloc
   ++ extraBuildInputs;
 
-  profilingPhase = lib.optionalString pgoSupport ''
+  profilingPhase = lib.optionalString enablePGO ''
     # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=tar
+    export MOZ_PKG_FORMAT=TAR
 
     # Package up Firefox for profiling
     ./mach package
@@ -638,7 +635,12 @@ buildStdenv.mkDerivation {
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
-  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  env = {
+    # if not explicitly set, wrong cc from buildStdenv would be used
+    HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
+    HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
     # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
     # On musl we have to explicitly set the rpath to include these libraries.
@@ -651,7 +653,7 @@ buildStdenv.mkDerivation {
   # Generate build symbols once after the final build
   # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
   preInstall =
-    lib.optionalString crashreporterSupport ''
+    lib.optionalString enableCrashReporter ''
       ./mach buildsymbols
       mkdir -p $symbols/
       cp objdir/dist/*.crashreporter-symbols.zip $symbols/
@@ -675,9 +677,6 @@ buildStdenv.mkDerivation {
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
-      # Needed to find Mozilla runtime
-      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
-
       resourceDir=$out/lib/${binaryName}
     ''
     + ''
@@ -688,7 +687,7 @@ buildStdenv.mkDerivation {
       cd ..
     '';
 
-  postFixup = lib.optionalString (crashreporterSupport && buildStdenv.hostPlatform.isLinux) ''
+  postFixup = lib.optionalString (enableCrashReporter && buildStdenv.hostPlatform.isLinux) ''
     patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
@@ -706,21 +705,25 @@ buildStdenv.mkDerivation {
     '';
 
   passthru = {
-    inherit applicationName;
-    inherit application extraPatches;
-    inherit updateScript;
-    inherit alsaSupport;
-    inherit binaryName;
-    inherit requireSigning allowAddonSideload;
-    inherit jackSupport;
-    inherit pipewireSupport;
-    inherit sndioSupport;
-    inherit nspr;
-    inherit ffmpegSupport;
-    inherit gssSupport;
-    inherit tests;
-    inherit gtk3;
-    inherit wasiSysRoot;
+    inherit
+      application
+      applicationName
+      binaryName
+      enableAddonSideload
+      enableAddonSigning
+      extraPatches
+      gtk3
+      nspr
+      tests
+      updateScript
+      wasiSysRoot
+      withALSA
+      withFFmpeg
+      withGSSAPI
+      withJACK
+      withPipewire
+      withSndio
+      ;
     version = packageVersion;
   }
   // extraPassthru;

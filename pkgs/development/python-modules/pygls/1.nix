@@ -7,22 +7,19 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typeguard,
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygls";
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
@@ -62,10 +59,11 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = {
+    broken = lib.versionAtLeast lsprotocol.version "2024";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
-    changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
-}
+})

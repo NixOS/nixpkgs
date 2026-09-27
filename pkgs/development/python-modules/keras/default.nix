@@ -14,14 +14,15 @@
   ml-dtypes,
   namex,
   numpy,
-  tf2onnx,
   onnxruntime,
   optree,
+  orbax-checkpoint,
   packaging,
   pythonAtLeast,
   rich,
   scikit-learn,
   tensorflow,
+  tf2onnx,
 
   # tests
   dm-tree,
@@ -34,27 +35,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.12.0";
+  version = "3.15.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    tag = "v${version}";
-    hash = "sha256-xuCxeQD8NAn7zlqCG+GyFjL6NlnIkGie+4GxzLGsyUg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
-
-  # Use a raw string to prevent LaTeX codes from being interpreted as escape sequences.
-  # SyntaxError: invalid escape sequence '\h
-  # Fix submitted upstream: https://github.com/keras-team/keras/pull/21790
-  postPatch = ''
-    substituteInPlace keras/src/quantizers/gptq_test.py \
-      --replace-fail \
-        'CALIBRATION_TEXT = """' \
-        'CALIBRATION_TEXT = r"""'
-  '';
 
   build-system = [
     setuptools
@@ -66,13 +58,14 @@ buildPythonPackage rec {
     ml-dtypes
     namex
     numpy
-    tf2onnx
     onnxruntime
     optree
+    orbax-checkpoint
     packaging
     rich
     scikit-learn
     tensorflow
+    tf2onnx
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
@@ -94,9 +87,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Require unpackaged `grain`
+    "test_basics_grain"
     "test_fit_with_data_adapter_grain_dataloader"
-    "test_fit_with_data_adapter_grain_datast"
-    "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
     "test_image_dataset_from_directory_binary_grain"
     "test_image_dataset_from_directory_color_modes_grain"
     "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
@@ -108,7 +102,13 @@ buildPythonPackage rec {
     "test_image_dataset_from_directory_pad_to_aspect_ratio_grain"
     "test_image_dataset_from_directory_shuffle_grain"
     "test_image_dataset_from_directory_validation_split_grain"
+    "test_no_targets_grain"
+    "test_not_batched_grain"
     "test_sample_count_grain"
+    "test_sampling_rate_grain"
+    "test_sequence_stride_grain"
+    "test_shuffle_grain"
+    "test_start_and_end_index_grain"
     "test_text_dataset_from_directory_binary_grain"
     "test_text_dataset_from_directory_follow_links_grain"
     "test_text_dataset_from_directory_manual_labels_grain"
@@ -116,6 +116,7 @@ buildPythonPackage rec {
     "test_text_dataset_from_directory_not_batched_grain"
     "test_text_dataset_from_directory_standalone_grain"
     "test_text_dataset_from_directory_validation_split_grain"
+    "test_timeseries_regression_grain"
 
     # Tries to install the package in the sandbox
     "test_keras_imports"
@@ -123,83 +124,16 @@ buildPythonPackage rec {
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
 
-    # E       AssertionError:
-    # E       - float32
-    # E       + float64
-    "test_angle_bool"
-    "test_angle_int16"
-    "test_angle_int32"
-    "test_angle_int8"
-    "test_angle_uint16"
-    "test_angle_uint32"
-    "test_angle_uint8"
-    "test_bartlett_bfloat16"
-    "test_bartlett_bool"
-    "test_bartlett_float16"
-    "test_bartlett_float32"
-    "test_bartlett_float64"
-    "test_bartlett_int16"
-    "test_bartlett_int32"
-    "test_bartlett_int64"
-    "test_bartlett_int8"
-    "test_bartlett_none"
-    "test_bartlett_uint16"
-    "test_bartlett_uint32"
-    "test_bartlett_uint8"
-    "test_blackman_bfloat16"
-    "test_blackman_bool"
-    "test_blackman_float16"
-    "test_blackman_float32"
-    "test_blackman_float64"
-    "test_blackman_int16"
-    "test_blackman_int32"
-    "test_blackman_int64"
-    "test_blackman_int8"
-    "test_blackman_none"
-    "test_blackman_uint16"
-    "test_blackman_uint32"
-    "test_blackman_uint8"
-    "test_eye_none"
-    "test_hamming_bfloat16"
-    "test_hamming_bool"
-    "test_hamming_float16"
-    "test_hamming_float32"
-    "test_hamming_float64"
-    "test_hamming_int16"
-    "test_hamming_int32"
-    "test_hamming_int64"
-    "test_hamming_int8"
-    "test_hamming_none"
-    "test_hamming_uint16"
-    "test_hamming_uint32"
-    "test_hamming_uint8"
-    "test_hanning_bfloat16"
-    "test_hanning_bool"
-    "test_hanning_float16"
-    "test_hanning_float32"
-    "test_hanning_float64"
-    "test_hanning_int16"
-    "test_hanning_int32"
-    "test_hanning_int64"
-    "test_hanning_int8"
-    "test_hanning_none"
-    "test_hanning_uint16"
-    "test_hanning_uint32"
-    "test_hanning_uint8"
-    "test_identity_none"
-    "test_kaiser_bfloat16"
-    "test_kaiser_bool"
-    "test_kaiser_float16"
-    "test_kaiser_float32"
-    "test_kaiser_float64"
-    "test_kaiser_int16"
-    "test_kaiser_int32"
-    "test_kaiser_int64"
-    "test_kaiser_int8"
-    "test_kaiser_none"
-    "test_kaiser_uint16"
-    "test_kaiser_uint32"
-    "test_kaiser_uint8"
+    # jax >= 0.11.2 serializes StableHLO portable artifacts targeting v1.18.0, which use
+    # `vhlo.custom_call_v2`. tensorflow's `XlaCallModule` (StableHLO v1.13.7) cannot
+    # deserialize them, breaking `JaxLayer`/`FlaxLayer` native serialization.
+    "test_jax_layer_native_serialization"
+    "test_jax_layer_stateless"
+    "test_jax_layer_training_independent"
+    "test_jax_layer_training_state"
+    "test_jax_layer_training_state_dtype_policy"
+    "test_with_polymorphic_shape_more_than_26_dimension_names"
+    "test_with_structures_as_inputs_and_outputs"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Hangs forever
@@ -207,10 +141,17 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
     # Require unpackaged `grain`
     "keras/src/layers/preprocessing/data_layer_test.py"
+    "keras/src/layers/preprocessing/discretization_test.py"
     "keras/src/layers/preprocessing/image_preprocessing/resizing_test.py"
     "keras/src/layers/preprocessing/rescaling_test.py"
+    "keras/src/layers/preprocessing/string_lookup_test.py"
+    "keras/src/layers/preprocessing/text_vectorization_test.py"
     "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
 
     # These tests succeed when run individually, but crash within the full test suite:
@@ -243,8 +184,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
+    changelog = "https://github.com/keras-team/keras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

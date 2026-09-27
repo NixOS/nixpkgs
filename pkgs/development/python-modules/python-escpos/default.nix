@@ -28,7 +28,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-escpos";
   version = "3.1";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-escpos";
     repo = "python-escpos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f7qA1+8PwnXS526jjULEoyn0ejnvsneuWDt863p4J2g=";
     fetchSubmodules = true;
   };
@@ -85,16 +85,16 @@ buildPythonPackage rec {
     mock
     hypothesis
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   pythonImportsCheck = [ "escpos" ];
 
   meta = {
-    changelog = "https://github.com/python-escpos/python-escpos/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/python-escpos/python-escpos/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Python library to manipulate ESC/POS printers";
     homepage = "https://python-escpos.readthedocs.io/";
     license = lib.licenses.mit;
     mainProgram = "python-escpos";
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

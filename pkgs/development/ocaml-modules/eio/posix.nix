@@ -20,8 +20,6 @@ buildDunePackage {
 
   minimalOCamlVersion = "5.0";
 
-  dontStrip = true;
-
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
@@ -36,4 +34,6 @@ buildDunePackage {
     logs
     iomux
   ];
+
+  dontStrip = true;
 }

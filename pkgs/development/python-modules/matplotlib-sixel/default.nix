@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sixel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sixel graphics backend for matplotlib";
     homepage = "https://github.com/jonathf/matplotlib-sixel";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

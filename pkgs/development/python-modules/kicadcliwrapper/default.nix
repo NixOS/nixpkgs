@@ -9,7 +9,7 @@
   kicad,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kicadcliwrapper";
   version = "1.1.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "kicadcliwrapper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s1j0k6SvZiIHu8PKGTR+GaYUZIlFq5TKYuxoCsvsvUY=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Strongly typed, auto-generated bindings for KiCAD's CLI";
     homepage = "https://github.com/atopile/kicadcliwrapper";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

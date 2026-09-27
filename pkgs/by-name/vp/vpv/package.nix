@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   cmake,
   pkg-config,
   libGL,
   libpng,
   libtiff,
   libjpeg,
-  libX11,
+  libx11,
   SDL2,
   gdal,
   octave,
@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpv";
-  version = "0.9.0";
+  version = "0.9.1";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "kidanger";
     repo = "vpv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eyfRMoocKEt0VezDRm5Tq7CjpEyfrcEb6WcUSO5M1Og=";
+    sha256 = "sha256-S7+o2tPo5jvSHqm4S3wIzF2eRNZmMEZJcYV2tNLNPko=";
   };
 
   cargoRoot = "src/fuzzy-finder";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     libjpeg
-    libX11
+    libx11
     SDL2
     gdal
     octave

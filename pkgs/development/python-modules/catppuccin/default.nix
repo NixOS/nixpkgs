@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "catppuccin";
   version = "2.5.0";
 
@@ -18,9 +18,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wumJ8kpr+C2pdw8jYf+IqYTdSB6Iy37yZqPKycYmOSs=";
   };
+
+  patches = [
+    # https://github.com/catppuccin/python/pull/130
+    ./matplotlib-3.11.patch
+  ];
 
   build-system = [ hatchling ];
 
@@ -30,7 +35,10 @@ buildPythonPackage rec {
     rich = [ rich ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "catppuccin" ];
 
@@ -43,4 +51,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})

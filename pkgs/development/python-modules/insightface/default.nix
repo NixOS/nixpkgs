@@ -1,40 +1,48 @@
 {
   lib,
-  albumentations,
   buildPythonPackage,
-  cython,
-  easydict,
   fetchPypi,
-  insightface,
-  matplotlib,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # dependencies
   mxnet,
   numpy,
   onnx,
   onnxruntime,
-  opencv4,
-  pillow,
-  prettytable,
-  pythonOlder,
+  opencv-python,
   requests,
-  setuptools,
-  scipy,
   scikit-image,
-  scikit-learn,
-  testers,
+  scipy,
   tqdm,
+
+  # optional-dependencies
+  # gui:
+  pillow,
+  pyside6,
+  reportlab,
+  scikit-learn,
+  # face3d
+  albumentationsx,
+  matplotlib,
+
+  insightface,
+  testers,
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "insightface";
-  version = "0.7.3";
+  version = "1.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.8";
-
+  # No tags on GitHub
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-J68kiRu7pHDLNXOzZqD8yomJ/IUDyfjygejLpv1xYHU=";
   };
 
   build-system = [
@@ -43,28 +51,40 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    albumentations
-    easydict
-    matplotlib
     mxnet # used in insightface/commands/rec_add_mask_param.py
     numpy
     onnx
     onnxruntime
-    opencv4
-    pillow
-    prettytable
+    opencv-python
     requests
-    scikit-learn
     scikit-image
     scipy
     tqdm
   ];
 
-  # aarch64-linux tries to get cpu information from /sys, which isn't available
-  # inside the nix build sandbox.
-  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+  optional-dependencies = {
+    gui = [
+      pillow
+      pyside6
+      reportlab
+      scikit-learn
+    ];
+    face3d = [
+      albumentationsx
+      matplotlib
+    ];
+  };
 
-  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform.system != "aarch64-linux") {
+  pythonImportsCheck = [
+    "insightface"
+    "insightface.app"
+    "insightface.data"
+  ];
+
+  # No tests in the Pypi archive
+  doCheck = false;
+
+  passthru.tests = {
     version = testers.testVersion {
       package = insightface;
       command = "insightface-cli --help";
@@ -74,14 +94,6 @@ buildPythonPackage rec {
     };
   };
 
-  pythonImportsCheck = [
-    "insightface"
-    "insightface.app"
-    "insightface.data"
-  ];
-
-  doCheck = false; # Upstream has no tests
-
   meta = {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
     mainProgram = "insightface-cli";
@@ -89,4 +101,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
   };
-}
+})

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "check-wmi-plus";
   version = "1.65";
 
-  # Upstream has been moved from Github to tarballs on the author's website.
+  # Upstream has been moved from GitHub to tarballs on the author's website.
   # See https://edcint.co.nz/checkwmiplus/releases/
   src = fetchFromGitHub {
     owner = "speartail";
@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
     gzip $out/share/man/man1/check_wmi_plus.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sensu/nagios plugin using WMI to query Windows hosts";
     homepage = "https://edcint.co.nz/checkwmiplus/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "check_wmi_plus";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

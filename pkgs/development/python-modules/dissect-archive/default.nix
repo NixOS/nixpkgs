@@ -42,11 +42,11 @@ buildPythonPackage rec {
     "test_wim"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing parsers for various archive and backup formats";
     homepage = "https://github.com/fox-it/dissect.archive";
     changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -19,14 +19,14 @@ let
     hash = "sha256-HEZAyUyjWs0N4bRLbW3tHDHCiTBtdCbgY23JsiYsZCA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvas-smb";
   version = "22.5.10";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-smb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H0nG+0DPBQmXVQDVLTEhxhoFeU9ryU5N6qz64+PxV+g=";
   };
 
@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     cp ${heimdalConfigHeader} include/heim_threads.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SMB module for Greenbone Community Edition";
     homepage = "https://github.com/greenbone/openvas-smb";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mi-ael ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mi-ael ];
     mainProgram = "wmic";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

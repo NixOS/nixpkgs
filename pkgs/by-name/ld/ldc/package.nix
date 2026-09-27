@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   callPackage,
   makeWrapper,
   removeReferencesTo,
@@ -11,7 +10,7 @@
   targetPackages,
   cmake,
   ninja,
-  llvm_18,
+  llvm_21,
   curl,
   tzdata,
   lit,
@@ -32,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.41.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
+    hash = "sha256-adA14tx/bruGvHVoODz13f8h/U2ol1lK0ytxnypsLv8=";
     fetchSubmodules = true;
   };
 
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     ldcBootstrap
     lit
     lit.python
-    llvm_18.dev
+    llvm_21.dev
     makeWrapper
     ninja
     unzip
@@ -156,12 +155,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = [ ldcBootstrap ];
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based D compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     changelog = "https://github.com/ldc-developers/ldc/releases/tag/v${finalAttrs.version}";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       boost
       mit
@@ -169,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     mainProgram = "ldc2";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lionello
       jtbx
     ];
@@ -177,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

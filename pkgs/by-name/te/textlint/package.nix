@@ -4,7 +4,9 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs-slim,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   versionCheckHook,
   runCommand,
   textlint,
@@ -17,6 +19,7 @@
   textlint-rule-max-comma,
   textlint-rule-no-start-duplicated-conjunction,
   textlint-rule-period-in-list-item,
+  textlint-rule-preset-ai-words-ja,
   textlint-rule-preset-ja-spacing,
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-prh,
@@ -25,16 +28,15 @@
   textlint-rule-unexpanded-acronym,
   textlint-rule-write-good,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint";
-  version = "15.2.1";
+  version = "15.7.1";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xjtmYz+O+Sn697OrBkPddv1Ma5UsOkO5v4SGlhsaYWA=";
+    hash = "sha256-Dt0AprnI/ixezMwU6JG6WhfJTU1xTRu2M4xwbY4uOko=";
   };
 
   patches = [
@@ -49,21 +51,23 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-overrides.patch
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    fetcherVersion = 1;
-    hash = "sha256-TyKtH4HjCDTydVd/poG05Yh5nRSfcrSPzFLEE3Oq2uo=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-dWcLm8cTo8LC6IqMEe1zDxVJ7ioytKigEwYna6hiO8A=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs-slim
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''
@@ -154,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
         textlint-rule-max-comma
         textlint-rule-no-start-duplicated-conjunction
         textlint-rule-period-in-list-item
+        textlint-rule-preset-ai-words-ja
         textlint-rule-preset-ja-spacing
         textlint-rule-preset-ja-technical-writing
         textlint-rule-prh

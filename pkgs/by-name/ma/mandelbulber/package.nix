@@ -20,13 +20,13 @@ assert withOpenCL -> ocl-icd != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mandelbulber";
-  version = "2.33";
+  version = "2.34";
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
     rev = finalAttrs.version;
-    sha256 = "sha256-3PPgH9E+k2DFm8ib1bmvTsllQ9kYi3oLDwPHcs1Otac=";
+    sha256 = "sha256-FrJ5X7dZgciEsInfzW45+CenAdtTRmLInRo6OLvhdB8=";
   };
 
   nativeBuildInputs = [
@@ -66,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "3D fractal rendering engine";
     mainProgram = "mandelbulber2";
     longDescription = "Mandelbulber creatively generates three-dimensional fractals. Explore trigonometric, hyper-complex, Mandelbox, IFS, and many other 3D fractals.";
     homepage = "https://mandelbulber.com";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kovirobi ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kovirobi ];
   };
 })

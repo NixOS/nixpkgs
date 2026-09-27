@@ -2,30 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
   cmake,
-  doxygen,
   gbenchmark,
   graphviz,
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ftxui";
-  version = "6.1.9";
+  version = "7.0.3";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
     repo = "ftxui";
-    tag = "v${version}";
-    hash = "sha256-plJxTLhOhUyuay5uYv4KLK9UTmM2vsoda+iDXVa4b+k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hKdmzraAgKwvOGQXpglD9lm0465j92AAn2MhS9ZM4jA=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    graphviz
   ];
 
   checkInputs = [
@@ -33,20 +31,18 @@ stdenv.mkDerivation rec {
     gbenchmark
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "FTXUI_BUILD_EXAMPLES" false)
-    (lib.cmakeBool "FTXUI_BUILD_DOCS" true)
-    (lib.cmakeBool "FTXUI_BUILD_TESTS" doCheck)
-  ];
-
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  cmakeFlags = [
+    (lib.cmakeBool "FTXUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   meta = {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";
-    changelog = "https://github.com/ArthurSonzogni/FTXUI/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ArthurSonzogni/FTXUI/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Functional Terminal User Interface library for C++";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
     platforms = lib.platforms.all;
   };
-}
+})

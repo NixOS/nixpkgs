@@ -14,14 +14,14 @@
   t4kcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.3";
   pname = "tuxtype";
 
   src = fetchFromGitHub {
     owner = "tux4kids";
     repo = "tuxtype";
-    rev = "upstream/${version}";
+    rev = "upstream/${finalAttrs.version}";
     sha256 = "1i33rhi9gpzfml4hd73s18h6p2s8zcr26va2vwf2pqqd9fhdwpsg";
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-sdlpango" ];
 
-  meta = with lib; {
+  meta = {
     description = "Educational Typing Tutor Game Starring Tux, the Linux Penguin";
     mainProgram = "tuxtype";
     homepage = "https://github.com/tux4kids/tuxtype";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

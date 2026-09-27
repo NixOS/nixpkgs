@@ -14,7 +14,8 @@
   pango,
   inih,
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
-  xorg,
+  libx11,
+  libxcb,
   libxkbcommon,
   libGL,
   wayland,
@@ -44,14 +45,15 @@
   libnsbmp,
   libwebp,
   qoi,
+  bashNonInteractive,
 }:
 
 let
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
-      xorg.libxcb
-      xorg.libX11
+      libxcb
+      libx11
     ];
     wayland = [
       wayland
@@ -125,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pango
     inih
+    bashNonInteractive
   ]
   ++ windowSystems."${withWindowSystem}"
   ++ map (b: backends."${b}") withBackends;

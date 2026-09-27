@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "qmidinet";
 
   src = fetchurl {
     url = "mirror://sourceforge/qmidinet/qmidinet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9V1KXK6LAYxM+kei14pof93hZQUDs7/ywRaSz6pwyyk=";
+    hash = "sha256-gBAaK32rabujVsCIOJcNZluaKpFz1KjICcRbKgvmXaQ=";
   };
 
   hardeningDisable = [ "format" ];

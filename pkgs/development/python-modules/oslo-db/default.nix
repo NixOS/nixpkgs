@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "17.4.0";
+  version = "18.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_db";
     inherit version;
-    hash = "sha256-FLYvWMQWMwy7GIpTKbFNlQF2Ye+K6h1yoP+STuz5EKk=";
+    hash = "sha256-Ujm6BZuUw4HGG1q+YHrc0V6u6N8RXerduKNtyzZuRPo=";
   };
 
   build-system = [
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     oslo-utils
     sqlalchemy
     stevedore
-  ];
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     aiosqlite
@@ -58,16 +59,16 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "oslo_db.tests.sqlalchemy.test_utils.TestModelQuery.test_project_filter_allow_none")
+    stestr run
     runHook postCheck
   '';
 
   pythonImportsCheck = [ "oslo_db" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Database library";
     homepage = "https://github.com/openstack/oslo.db";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

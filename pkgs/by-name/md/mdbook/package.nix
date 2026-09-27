@@ -8,7 +8,7 @@
   installShellFiles,
 }:
 let
-  version = "0.4.52";
+  version = "0.5.4";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -18,18 +18,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-a3GSMz1+8Ve5cp4x1NjBlsCU/wMC4Jl3/H9qx7+1XlI=";
+    hash = "sha256-1bUMFxPpb9H/pRdCOX0u8Tn8RPmJElDs7o9t5JtRFuU=";
   };
 
-  cargoHash = "sha256-wvTixSVHXglJM+nBMulZNZKF8pZfNd2G8Z+1PlAWmpk=";
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-rust-1.91-tests.patch";
-      url = "https://github.com/rust-lang/mdBook/commit/841c68d05e763b031524a2b4d679f033cd15e64c.patch?full_index=1";
-      hash = "sha256-KDQhmFX2TWamtdyssFL69MP3vg9LABb+bF8/7vaFsew=";
-    })
-  ];
+  cargoHash = "sha256-OmlcPZuQ1RbyFrF5tuztucgtCA544UHJxEaXh/mfSHQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       Frostman
       matthiasbeyer

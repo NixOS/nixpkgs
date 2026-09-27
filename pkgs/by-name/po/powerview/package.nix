@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "powerview";
   version = "2025.1.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aniqfakhrul";
     repo = "powerview.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kA7vb3YwUlolEnSJRFi+YZoq4yZsdMG+Snk7zsyOCmQ=";
   };
 
@@ -51,9 +51,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Alternative PowerView.ps1 script in Python";
     homepage = "https://github.com/aniqfakhrul/powerview.py";
-    changelog = "https://github.com/aniqfakhrul/powerview.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/aniqfakhrul/powerview.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "powerview";
   };
-}
+})

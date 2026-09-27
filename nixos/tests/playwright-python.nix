@@ -29,7 +29,7 @@
               "firefox": {},
               "webkit": {}
             }
-            needle = re.compile("Nix.*Reference Manual")
+            needle = re.compile("Nix.* Manual")
             if len(sys.argv) != 3 or sys.argv[1] not in browsers.keys():
                 print(f"usage: {sys.argv[0]} [{'|'.join(browsers.keys())}] <url>")
                 sys.exit(1)

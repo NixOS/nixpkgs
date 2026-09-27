@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "fabio";
-  version = "2024.9.0";
+  version = "2025.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+HPfUfRoUxwRqufgzYihTyIfTvCUMfvFpspnse1HU1s=";
+    hash = "sha256-wZdjvPoCp4pQfz2RS1ZKiZfIimqntPh/nbTOf6OX0lY=";
   };
 
   pythonImportsCheck = [ "fabio" ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/silx-kit/fabio/blob/main/doc/source/Changelog.rst";
     description = "I/O library for images produced by 2D X-ray detector";
     homepage = "https://github.com/silx-kit/fabio";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmiddend ];
   };
 

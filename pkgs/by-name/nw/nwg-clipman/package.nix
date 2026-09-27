@@ -11,16 +11,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "nwg-clipman";
-  version = "0.2.7";
+  version = "0.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-clipman";
-    tag = "v${version}";
-    hash = "sha256-EBxt1OSwddlMIwEqc89rzak3jhPwOhZ61Rz5l2LU2kY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GVA842yCSSO2vDD51AObEQNhDVuRIdH1c6BF1tv2Q8E=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -50,10 +50,8 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     install -Dm644 nwg-clipman.desktop -t $out/share/applications/
-    install -Dm644 nwg-clipman.svg -t $out/share/pixmaps/
+    install -Dm644 nwg-clipman.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
-
-  strictDeps = true;
 
   pythonImportsCheck = [ "nwg_clipman" ];
 
@@ -62,10 +60,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "GTK3-based GUI for cliphist";
     homepage = "https://github.com/nwg-piotr/nwg-clipman";
-    changelog = "https://github.com/nwg-piotr/nwg-clipman/releases/tag/v${version}";
+    changelog = "https://github.com/nwg-piotr/nwg-clipman/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ averyanalex ];
     platforms = lib.platforms.linux;
     mainProgram = "nwg-clipman";
   };
-}
+})

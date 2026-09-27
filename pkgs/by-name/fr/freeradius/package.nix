@@ -32,19 +32,20 @@
   sqlite,
   withYubikey ? false,
   libyubikey,
+  nixosTests,
 }:
 
 assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.7";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
     tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-FG0/quBB5Q/bdYQqkFaZc/BhcIC/n2uVstlIGe4EPvE=";
+    hash = "sha256-+pFV6dDnL7T5G309cLACa+/0vGppCEdk3ghOQhgSjTs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -101,12 +102,19 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests.networking.networkmanager)
+      eap
+      eapFiles
+      ;
+  };
+
+  meta = {
     homepage = "https://freeradius.org/";
     description = "Modular, high performance free RADIUS suite";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }
 ## TODO: include windbind optionally (via samba?)

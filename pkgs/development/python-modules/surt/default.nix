@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
-  pythonOlder,
   six,
   tldextract,
 }:
@@ -11,9 +11,9 @@
 buildPythonPackage {
   pname = "surt";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "internetarchive";
@@ -24,7 +24,9 @@ buildPythonPackage {
     hash = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
     tldextract
   ];
@@ -33,16 +35,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "surt" ];
 
-  disabledTests = [
-    # Tests want to download Public Suffix List
-    "test_getPublicPrefix"
-    "test_getPublicSuffix"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
     homepage = "https://github.com/internetarchive/surt";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

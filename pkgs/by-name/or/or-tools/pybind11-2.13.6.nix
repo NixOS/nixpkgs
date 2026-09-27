@@ -5,8 +5,8 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   setuptools,
@@ -16,7 +16,6 @@
   catch2,
   numpy,
   pytestCheckHook,
-  libxcrypt,
   makeSetupHook,
 }:
 let
@@ -28,9 +27,10 @@ let
       pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
+    meta.license = lib.licenses.mit;
   } ./pybind11-setup-hook.sh;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybind11";
   version = "2.13.6";
   pyproject = true;
@@ -38,12 +38,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 
-  # https://github.com/google/or-tools/commit/7f29b27840436e19b6530d5c7f23eeadd819bd3e
-  patches = [ ./pybind11.patch ];
+  patches = [
+    # From pybind/pybind11#5305, merged upstream.
+    # TODO: remove when updating to a newer pybind11 release.
+    ./pybind11.patch
+    # Python 3.14 support, from pybind/pybind11#5646.
+    (fetchpatch {
+      name = "pybind11-python314-fopen.patch";
+      url = "https://github.com/pybind/pybind11/commit/3bd75bddf966ca32fec6e7d7ffc25630431e8815.patch";
+      includes = [ "include/pybind11/eval.h" ];
+      hash = "sha256-98gdGDUQFM/0el6j+fqyBppOfrjub4Cyxlu7wc7S8SQ=";
+    })
+    (fetchpatch {
+      name = "pybind11-python314-unhashable-message.patch";
+      url = "https://github.com/pybind/pybind11/commit/236b32f5c53665c1b1ea3d70f4a776287dadf863.patch";
+      hash = "sha256-zCapiTpNuPyYepOYmHCRjEFOn8z0UmlT2PmgX59XzM8=";
+    })
+  ];
 
   build-system = [
     cmake
@@ -51,7 +66,6 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
@@ -114,7 +128,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
@@ -128,4 +142,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

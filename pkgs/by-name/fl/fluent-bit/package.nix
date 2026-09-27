@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "4.1.1";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mu6WPp4jUAnLpZzFwy8HoKosCiYPxejsKEEnBRKodr4=";
+    hash = "sha256-VXLHuyOxKWiMaYSRObu/I8kFbmUx8pGa4oKMGaEItbg=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -85,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLB_RELEASE" true)
     (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Auto would raise the baseline to rv64gcv_zba
+    (lib.cmakeFeature "FLB_SIMD" "Off")
+  ]
   ++ lib.optionals stdenv.cc.isClang [
     # `FLB_SECURITY` causes bad linker options for Clang to be set.
     (lib.cmakeBool "FLB_SECURITY" false)
@@ -102,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We fix this by setting the systemd package's `systemdsystemunitdir` pkg-config variable.
   #
   # https://man.openbsd.org/pkg-config.1#PKG_CONFIG_$PACKAGE_$VARIABLE
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   outputs = [
     "out"
@@ -113,8 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) fluent-bit;
@@ -124,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fast and lightweight logs and metrics processor for Linux, BSD, OSX and Windows";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;

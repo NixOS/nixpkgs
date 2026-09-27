@@ -8,8 +8,8 @@
   pdm-backend,
 
   # dependencies
+  annotated-doc,
   click,
-  typing-extensions,
 
   # optional-dependencies
   rich,
@@ -17,24 +17,21 @@
 
   # tests
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   writableTmpDirAsHomeHook,
   procps,
-
-  # typer or typer-slim
-  package ? "typer",
 }:
 
 buildPythonPackage rec {
-  pname = package;
-  version = "0.19.2";
+  pname = "typer";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-mMsOEI4FpLkLkpjxjnUdmKdWD65Zx3Z1+L+XsS79k44=";
+    hash = "sha256-HIvXseuR7zUXFuTWzntDfHhAp8BcFjxo35gn0i4+03w=";
   };
 
   postPatch = ''
@@ -44,30 +41,20 @@ buildPythonPackage rec {
     done
   '';
 
-  env.TIANGOLO_BUILD_PACKAGE = package;
+  env.TIANGOLO_BUILD_PACKAGE = "typer";
 
   build-system = [ pdm-backend ];
 
   dependencies = [
+    annotated-doc
     click
-    typing-extensions
-  ]
-  # typer includes the standard optional by default
-  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
-  ++ lib.optionals (package == "typer") optional-dependencies.standard;
-
-  optional-dependencies = {
-    standard = [
-      rich
-      shellingham
-    ];
-  };
-
-  doCheck = package == "typer"; # tests expect standard dependencies
+    rich
+    shellingham
+  ];
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

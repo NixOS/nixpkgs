@@ -4,31 +4,40 @@
   fetchFromGitHub,
   libbsd,
   libgcrypt,
-  xxHash,
+  xxhash,
   pkg-config,
   glib,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   sqlite,
   util-linux,
-  testers,
-  duperemove,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duperemove";
   version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postPatch = ''
-    substituteInPlace util.c --replace \
-      "lscpu" "${lib.getBin util-linux}/bin/lscpu"
+    substituteInPlace util.c --replace-fail \
+      "lscpu" "${lib.getExe' util-linux "lscpu"}"
   '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -38,28 +47,32 @@ stdenv.mkDerivation rec {
     linuxHeaders
     sqlite
     util-linux
-    xxHash
+    xxhash
   ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=v${version}"
+    "VERSION=v${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = duperemove;
-    command = "duperemove --version";
-    version = "v${version}";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/markfasheh/duperemove/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "duperemove";
   };
-}
+})

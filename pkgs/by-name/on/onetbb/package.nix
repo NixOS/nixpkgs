@@ -1,15 +1,20 @@
-{
+args@{
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  hwloc,
+  hwloc, # Purposefully shadowed below
   ninja,
   pkg-config,
   ctestCheckHook,
 }:
-
+let
+  # The behavior of OneTBB does not change if it is built with hwloc with support for CUDA.
+  # However, the derivation *does* change, causing rebuilds of packages like Nix.
+  # To avoid these pointless rebuilds, we make sure to always use a version of hwloc with CUDA
+  # support disabled.
+  hwloc = args.hwloc.override { enableCuda = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "onetbb";
   version = "2022.3.0";
@@ -20,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "oneapi-src";
+    owner = "uxlfoundation";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
     hash = "sha256-HIHF6KHlEI4rgQ9Epe0+DmNe1y95K9iYa4V/wFnJfEU=";
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   dontUseNinjaCheck = true;
 
@@ -71,13 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+    # Treating compiler errors as warnings creates churn each compiler update,
+    # and provides little utility to us downstream.
+    (lib.cmakeBool "TBB_STRICT" false)
+    (lib.cmakeBool "TBB_TEST" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "${placeholder "out"}/lib")
   ];
 
   env = {
-    # Fix build with modern gcc
-    # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=stringop-overflow";
-
     # Fix undefined reference errors with version script under LLVM.
     NIX_LDFLAGS = lib.optionalString (
       stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
@@ -99,7 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
       template-based runtime library can help you harness the latent
       performance of multi-core processors.
     '';
-    platforms = lib.platforms.all;
+    platforms = lib.subtractLists lib.platforms.cygwin lib.platforms.all;
+    # oneTBB does not support static builds
+    # "You are building oneTBB as a static library. This is highly discouraged and such configuration is not supported. Consider building a dynamic library to avoid unforeseen issues."
+    # https://github.com/uxlfoundation/oneTBB/blob/db7891a246cafbb90719c3dee497d96889ca692b/CMakeLists.txt#L160
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice

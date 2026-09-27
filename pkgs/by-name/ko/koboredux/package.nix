@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  requireFile,
+  fetchItchIo,
   cmake,
   pkg-config,
   SDL2,
@@ -31,18 +31,12 @@ let
     sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
   };
 
-  assets_src = requireFile {
+  assets_src = fetchItchIo {
     name = "koboredux-${version}-Linux.tar.bz2";
+    gameUrl = "https://olofson.itch.io/kobo-redux";
     sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
-    message = ''
-      Please purchase the game on https://olofson.itch.io/kobo-redux
-      and download the Linux build.
-
-      Once you have downloaded the file, please use the following command
-      and re-run the installation:
-
-      nix-prefetch-url file://\$PWD/koboredux-${version}-Linux.tar.bz2
-
+    upload = "709961";
+    extraMessage = ''
       Alternatively, install the "koboredux-free" package, which replaces the
       proprietary assets with a placeholder theme.
     '';
@@ -65,7 +59,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = optionalString useProprietaryAssets ''
+  postPatch = ''
+    # CMake 4 support
+    # https://github.com/olofson/koboredux/pull/562
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 2.8...4.1)'
+  ''
+  + optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux data/gfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux_fullscreen data/gfx/

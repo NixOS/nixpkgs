@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-Z3+GijoI+351zV7IpLSBQu6LE2OhhXho4ygNMVbg2xs=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='0.7.3'" "version='${version}'"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];

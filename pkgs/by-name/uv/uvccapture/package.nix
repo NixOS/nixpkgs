@@ -13,12 +13,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uvccapture";
   version = "0.5";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1b3akkcmr3brbf93akr8xi20w8zqf2g0qfq928500wy04qi6jqpi";
   };
 
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     cp -v debian/uvccapture.1 "$out/share/man/man1/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Capture image from USB webcam at a specified interval";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "uvccapture";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPyPy,
   blas,
   lapack,
@@ -18,16 +19,18 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxopt";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "1.3.3";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NGH6QsGyJAuk2h2YXKc1A5FBV/xMd0FzJ+1tfYWs2+Y=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-gFnO9B8fEVyHvJt1/sn4bblefwr88DpS1hm6Qz5EO8s=";
   };
 
   buildInputs = [
@@ -35,7 +38,10 @@ buildPythonPackage rec {
     lapack
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
@@ -45,7 +51,6 @@ buildPythonPackage rec {
     CVXOPT_BUILD_DSDP = "0";
     CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
     CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
   }
   // lib.optionalAttrs withGsl {
     CVXOPT_BUILD_GSL = "1";
@@ -70,7 +75,9 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "cvxopt" ];
+
+  meta = {
     homepage = "https://cvxopt.org/";
     description = "Python Software for Convex Optimization";
     longDescription = ''
@@ -83,7 +90,7 @@ buildPythonPackage rec {
       standard library and on the strengths of Python as a high-level
       programming language.
     '';
-    maintainers = with maintainers; [ edwtjo ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

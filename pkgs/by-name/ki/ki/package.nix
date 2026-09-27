@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication {
 
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "langfield";
     repo = "ki";
@@ -24,6 +22,7 @@ python3Packages.buildPythonApplication {
     ./fix-beartype-error.patch
     ./replace-deprecated-distutils-with-setuptools.patch
     ./update-to-newer-anki-versions.patch
+    ./fix-gitpython-remote-url-type.patch
   ];
 
   build-system = with python3Packages; [

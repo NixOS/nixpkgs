@@ -3,26 +3,33 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   testers,
   nix-update-script,
   kind,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kind";
-  version = "0.30.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-TssyKO5v3xqSDjS3DYIlO7iOx/zzS3E9O88V9R7S5Ac=";
+    hash = "sha256-ii0VhS1Nib+r2ZFIIkRvkcGY1fLxev6WnhbqvaZW7j8=";
   };
 
   patches = [
     # fix kernel module path used by kind
     ./kernel-module-path.patch
+
+    # fix apiserver connection loss after envoy lb container restart
+    (fetchpatch {
+      url = "https://github.com/kubernetes-sigs/kind/commit/9a24e6c1ae3d59f8de052ee5c3842820450a369a.patch";
+      hash = "sha256-BP2Ub8b1GA7V0CGvhcoGuHRm7u+IMRTmN3mDc2rePnY=";
+    })
   ];
 
   vendorHash = "sha256-tRpylYpEGF6XqtBl7ESYlXKEEAt+Jws4x4VlUVW8SNI=";
@@ -52,14 +59,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
-    maintainers = with maintainers; [
-      offline
+    maintainers = with lib.maintainers; [
       rawkode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "kind";
   };
-}
+})

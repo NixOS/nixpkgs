@@ -8,10 +8,9 @@
   coreapi,
   pytest-mypy-plugins,
   pytestCheckHook,
-  pythonOlder,
   requests,
   types-pyyaml,
-  setuptools,
+  uv-build,
   types-markdown,
   types-requests,
   typing-extensions,
@@ -19,24 +18,22 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.16.2";
+  version = "3.16.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-A6IyRJwuc0eqRtkCHtWN5C5yCMdgxfygqmpHV+/MJhE=";
+    hash = "sha256-I7+XMUB87+bIyQMQZUm5hUTsJ+2wA3F6qyjJQeWeQdo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "<79.0.0" ""
+      --replace-fail "uv_build>=0.8.19,<0.10.0" "uv_build"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     django-stubs
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
     changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

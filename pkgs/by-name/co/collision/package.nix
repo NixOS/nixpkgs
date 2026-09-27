@@ -21,13 +21,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.11.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
-    rev = "v${version}";
-    hash = "sha256-OCFy7DFSRsqiw+b6zlJy9Us44zQXf150zVDu3GmclOk=";
+    tag = "v${version}";
+    hash = "sha256-GcCqItSHUhhS0yrOM8bMzkVsVHyC97c+yccw5ZP61IU=";
   };
 
   postPatch = ''
@@ -100,17 +100,14 @@ crystal.buildCrystalPackage rec {
         supportedFeatures = [ "silent" ];
       }
     ];
-    shardLock = runCommand "shard.lock" { inherit src; } ''
-      cp $src/shard.lock $out
-    '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Check hashes for your files";
     homepage = "https://github.com/GeopJr/Collision";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "collision";
-    maintainers = with maintainers; [ sund3RRR ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

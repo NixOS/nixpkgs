@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Sound Control server and client in pure python";
     homepage = "https://github.com/attwad/python-osc";
     changelog = "https://github.com/attwad/python-osc/blob/v${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ anirrudh ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ anirrudh ];
   };
 }

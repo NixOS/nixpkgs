@@ -8,12 +8,12 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "duckscript_cli";
   version = "0.11.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-afxzZkmmYnprUBquH681VHMDs3Co9C71chNoKbu6lEY=";
   };
 
@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ft6EUajAj+Zw3cEhdajwwHAaMaUf+/vtTuUYni8E+o0=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple, extendable and embeddable scripting language";
     homepage = "https://github.com/sagiegurari/duckscript";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "duck";
   };
-}
+})

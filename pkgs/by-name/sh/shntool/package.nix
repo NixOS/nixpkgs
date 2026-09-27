@@ -5,7 +5,7 @@
   flac,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.0.10+git20130108.4ca41f4-1";
   pname = "shntool";
 
@@ -13,15 +13,25 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "shntool";
-    rev = "debian/${version}";
+    rev = "debian/${finalAttrs.version}";
     sha256 = "sha256-Qn4LwVx34EhypiZDIxuveNhePigkuiICn1nBukoQf5Y=";
   };
 
-  buildInputs = [ flac ];
+  patches = [
+    # Fix conflicts between reserved keywords `bool` (starting from C23) and custom `typedef`s.
+    ./bool-type.patch
+    # Fix implicit weak-typed pointer casting.
+    ./function-pointer-type.patch
+  ];
 
   prePatch = ''
-    patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
+    additional_patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
+    patches="$patches $additional_patches"
   '';
+
+  buildInputs = [
+    flac
+  ];
 
   meta = {
     description = "Multi-purpose WAVE data processing and reporting utility";
@@ -30,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jcumming ];
   };
-}
+})

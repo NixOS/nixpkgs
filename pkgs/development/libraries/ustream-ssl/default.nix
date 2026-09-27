@@ -6,7 +6,6 @@
   pkg-config,
   libubox-nossl,
   ssl_implementation,
-  additional_buildInputs ? [ ],
 }:
 
 stdenv.mkDerivation {
@@ -35,20 +34,20 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs = [ ssl_implementation ] ++ additional_buildInputs;
+  buildInputs = [ ssl_implementation ];
 
   passthru = {
     inherit ssl_implementation;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ustream SSL wrapper";
     homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       fpletz
       mkg20001
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

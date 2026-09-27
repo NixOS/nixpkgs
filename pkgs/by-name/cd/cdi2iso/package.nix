@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdi2iso";
   version = "0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdi2iso.berlios/${pname}-${version}-src.tar.gz";
+    url = "mirror://sourceforge/cdi2iso.berlios/cdi2iso-${finalAttrs.version}-src.tar.gz";
     sha256 = "0fj2fxhpr26z649m0ph71378c41ljflpyk89g87x8r1mc4rbq3kh";
   };
 
@@ -22,12 +22,11 @@ stdenv.mkDerivation rec {
     cp cdi2iso $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very simple utility for converting DiscJuggler images to the standard ISO-9660 format";
     homepage = "https://sourceforge.net/projects/cdi2iso.berlios";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     mainProgram = "cdi2iso";
   };
-}
+})

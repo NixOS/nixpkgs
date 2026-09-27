@@ -10,6 +10,8 @@
   eigenpy,
   pylatexenc,
   numpy,
+
+  buildStandalone ? true,
 }:
 toPythonModule (
   coal.overrideAttrs (super: {
@@ -17,7 +19,7 @@ toPythonModule (
 
     cmakeFlags = super.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" true)
-      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" true)
+      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" buildStandalone)
     ];
 
     # those are used by CMake at configure/build time
@@ -26,11 +28,12 @@ toPythonModule (
       pylatexenc
     ];
 
-    propagatedBuildInputs = super.propagatedBuildInputs ++ [
+    propagatedBuildInputs = [
       boost
-      coal
       eigenpy
-    ];
+    ]
+    ++ super.propagatedBuildInputs
+    ++ lib.optional buildStandalone coal;
 
     nativeCheckInputs = [
       pythonImportsCheckHook

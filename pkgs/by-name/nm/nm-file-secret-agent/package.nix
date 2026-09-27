@@ -1,25 +1,24 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   dbus,
   networkmanager,
   pkg-config,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
-  name = "nm-file-secret-agent";
-  version = "1.1.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nm-file-secret-agent";
+  version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lilly";
     repo = "nm-file-secret-agent";
-    rev = "v${version}";
-    hash = "sha256-FZef9qMJeQkoLvCHcsGMqr0riC98WVXntQtbt76Iev4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-exU+9fN2Wt2+0lQoZS4TFPhCcoDPWEIZldRO9LKux3U=";
   };
 
-  cargoHash = "sha256-HYyL0r9YrDL22uQdypJQ7Xep9Uqt4b16bhl0D9kRByU=";
+  cargoHash = "sha256-jxeEubl1uXmnapvP2OV4jCQWoavAVPbSPL1C3fFtJlE=";
   buildInputs = [ dbus ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lilioid ];
     platforms = lib.lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
   };
-}
+})

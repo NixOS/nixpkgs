@@ -9,7 +9,17 @@
   x264,
   libva,
   gst_all_1,
-  xorg,
+  libxv,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libxcomposite,
   libdrm,
   pkg-config,
   pango,
@@ -18,21 +28,27 @@
   git,
   autoconf,
   libtool,
-  typescript,
+  yq-go,
+  typescript_7,
   wayland,
   libxkbcommon,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "weylus";
-  version = "unstable-2025-10-08";
+  version = "0.11.4-unstable-2026-2-16";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = "weylus";
-    rev = "56e29ecbde3a4aba994a9df047b5398feb447c1b";
-    hash = "sha256-dHdgWrygSXqKf9fpYRVDj+Ql97Or/kjBfN/mECy2ipc=";
+    rev = "38a01a8f8e429500c7e9f67fc1c88ca37a4d1e93";
+    hash = "sha256-kcFXwrxg9PQxR4/71s10TMtaFvksuQaNReSoGBbrdM0=";
   };
+
+  postPatch = ''
+    yq -i '.compilerOptions += {"strict": false, "rootDir": "ts"}' tsconfig.json
+  '';
 
   buildInputs = [
     ffmpeg
@@ -42,17 +58,17 @@ rustPlatform.buildRustPackage {
     dbus
     libva
     gst_all_1.gst-plugins-base
-    xorg.libXext
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXi
-    xorg.libXv
+    libxext
+    libxft
+    libxinerama
+    libxcursor
+    libxrender
+    libxfixes
+    libxtst
+    libxrandr
+    libxcomposite
+    libxi
+    libxv
     pango
     libdrm
     wayland
@@ -62,7 +78,8 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cmake
     git
-    typescript
+    yq-go
+    typescript_7
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -71,7 +88,7 @@ rustPlatform.buildRustPackage {
     libtool
   ];
 
-  cargoHash = "sha256-Mx8/zMG36qztbFYgqC7SB75bf8T0NkYQA+2Hs9/pnjk=";
+  cargoHash = "sha256-2K+zLgZ3ApTCpj/OYy0f80pkvXPaB6TJe4fcrqsxPPw=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
@@ -97,11 +114,15 @@ rustPlatform.buildRustPackage {
     ];
   };
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
+
+  meta = {
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.zainkergaye ];
   };
 }

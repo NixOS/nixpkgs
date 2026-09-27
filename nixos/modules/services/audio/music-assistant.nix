@@ -16,6 +16,7 @@ let
     ;
 
   inherit (types)
+    bool
     listOf
     enum
     str
@@ -26,9 +27,6 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
-
-  # YouTube Music needs deno with JIT to solve yt-dlp challenges
-  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -54,6 +52,15 @@ in
       '';
     };
 
+    openFirewall = lib.mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Whether to open required ports for the configured providers.
+        Currently airplay and sendspin need port to be opened to function.
+      '';
+    };
+
     providers = mkOption {
       type = listOf (enum cfg.package.providerNames);
       default = [ ];
@@ -68,6 +75,48 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts =
+        lib.optional cfg.enable 8097 # Music Assistant stream port
+        ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
+        ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
+        ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
+        ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
+          # https://lyrion.org/reference/slimproto-protocol/
+          3483 # Slimproto control
+          # https://lyrion.org/reference/cli/using-the-cli/
+          9000 # Slimproto JSON-RPC
+          9090 # Slimproto CLI
+        ];
+      allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
+        # https://lyrion.org/reference/slimproto-protocol/
+        3483 # Slimproto discovery
+      ];
+      # The information published by Apple 1 seem to not apply to libraop.
+      # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
+      # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
+      # 2: https://en.wikipedia.org/wiki/Ephemeral_port#Range
+      allowedUDPPortRanges = lib.mkIf (lib.elem "airplay" cfg.providers) [
+        {
+          from = 32768;
+          to = 65535;
+        }
+      ];
+    };
+
+    services = {
+      avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
+        enable = true;
+        openFirewall = lib.mkIf cfg.openFirewall true;
+        publish = {
+          enable = true;
+          userServices = true;
+        };
+      };
+
+      music-assistant.providers = cfg.package.providersBuiltins;
+    };
+
     systemd.services.music-assistant = {
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
@@ -87,15 +136,25 @@ in
         [
           lsof
         ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [
+          airplay-cli
+        ]
+        ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          shairport-sync
+        ]
         ++ lib.optionals (lib.elem "spotify" cfg.providers) [
           librespot-ma
+        ]
+        ++ lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+          go-librespot
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
         ]
-        ++ lib.optionals useYTMusic [
+        # YouTube Music needs deno with JIT to solve yt-dlp challenges
+        ++ lib.optionals (lib.elem "ytmusic" cfg.providers) [
           deno
-          ffmpeg
+          ffmpeg-headless
         ];
 
       serviceConfig = {
@@ -107,12 +166,27 @@ in
         );
         DynamicUser = true;
         StateDirectory = "music-assistant";
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = [ "" ];
+        # AirPlay 2 requires CAP_NET_BIND_SERVICE to bind to UDP ports 319 and 320 for synchronized group playback.
+        # Opening the ports in the firewall is not necessary.
+        # See this older version of the docs:
+        # https://github.com/music-assistant/music-assistant.io/blob/33175c11961beac4c6a27beff6d4cce269f29efe/src/content/docs/player-support/airplay.md#airplay-2-group-synchronization
+        AmbientCapabilities = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = !useYTMusic;
-        ProcSubset = "pid";
+        # breaks pyopenssl's cffi calls, used in remote access feature
+        # not compatible with llvmlite which is required by numba -> librosa
+        MemoryDenyWriteExecute = false;
+        # required for torch to properly detect the supported engines
+        # allows Music-Assistant to warn, if x86_64-v2 cpu features are missing
+        BindReadOnlyPaths = [ "/proc/cpuinfo" ];
+        ProcSubset = "all";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -125,15 +199,20 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
-          "~@privileged @resources"
+          "~@privileged"
+          "mbind"
         ]
-        ++ lib.optionals useYTMusic [
+        # YouTube Music needs deno with JIT to solve yt-dlp challenges
+        ++ lib.optionals (lib.elem "ytmusic" cfg.providers) [
           "@pkey"
         ];
         RestrictSUIDSGID = true;

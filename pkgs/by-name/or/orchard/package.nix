@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "orchard";
-  version = "0.45.0";
+  version = "0.56.1";
 
   src = fetchFromGitHub {
-    owner = "cirruslabs";
+    owner = "openai";
     repo = "orchard";
     rev = version;
-    hash = "sha256-4kWpMN92DWwWE53e9oZ4++MH1LI9327YFNqCBm9ZXGQ=";
+    hash = "sha256-axzEWud7hY321RkbaFtVKhSn7WFHeYOFHDdKRh25zaY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-qjOWsvG3qldBkYso0M71ZeciiUQK7I9wA56zBt+kIRk=";
+  vendorHash = "sha256-yFqYNfBHvUiBQ6OZlNq4aUBg48g8VnuIBYEAKKrb6Y4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,11 +50,11 @@ buildGoModule rec {
       --fish <($out/bin/orchard completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "orchard";
     description = "Orchestrator for running Tart Virtual Machines on a cluster of Apple Silicon devices";
-    homepage = "https://github.com/cirruslabs/orchard";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [ techknowlogick ];
+    homepage = "https://github.com/openai/orchard";
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

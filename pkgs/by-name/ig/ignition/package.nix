@@ -10,7 +10,7 @@
   meson,
   ninja,
   pkg-config,
-  typescript,
+  typescript_7,
   wrapGAppsHook4,
 
   gjs,
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ignition";
-  version = "2.1.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "flattool";
     repo = "ignition";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-BqlzxrsbukfkwRIUTN5eaJPRC/dWSWUieDKIqnePZl4=";
+    hash = "sha256-egbpFpwYXhezeQbKSj75InFV3blj1GVzRgcku3ZF6Ag=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    typescript
+    typescript_7
     wrapGAppsHook4
   ];
 
@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
   ];
+
+  # Needed since Jasmine is not in nixpkgs
+  mesonFlags = [ "-Dtests=false" ];
 
   meta = {
     description = "Manage startup apps and scripts";

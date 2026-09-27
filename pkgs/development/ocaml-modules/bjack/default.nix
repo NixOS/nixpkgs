@@ -7,14 +7,14 @@
   libjack2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bjack";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-bjack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jIxxqBVWphWYyLh+24rTxk4WWfPPdGCvNdevFJEKw70=";
   };
 
@@ -24,10 +24,10 @@ buildDunePackage rec {
     libjack2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-bjack";
     description = "Blocking API for the jack audio connection kit";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

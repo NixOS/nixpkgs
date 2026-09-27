@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "editorconfig-checker";
-  version = "3.6.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HQYZXwxysGpbNDAzgAruzBtSlPxfwrLuzirkZSV2Xhs=";
+    hash = "sha256-clahBJTjfUIMn4D6OxZDXtQ+nnjuExQsuxI/lp0AYrs=";
   };
 
-  vendorHash = "sha256-zlARI7bKf+4bdgCha9AlDZyTRbrOHtmvHeExJWhB85I=";
+  vendorHash = "sha256-DufIXNRFuQ+qymKeAaPNB4j8CS6M1FU3p8V9sPOWmCI=";
 
   # Tests run on source and don't expect vendor dir.
   doCheck = false;
@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://editorconfig-checker.github.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      uri-canva
       zowoq
     ];
   };

@@ -20,7 +20,7 @@ in
           ~/.config/sx/sxrc file containing session startup commands, see
           {manpage}`sx(1)`. This is not automatically generated from the desktopManager
           and windowManager settings. sx doesn't have a way to directly set
-          X server flags, but it can be done by overriding its xorgserver
+          X server flags, but it can be done by overriding its xorg-server
           dependency.
         '';
       };

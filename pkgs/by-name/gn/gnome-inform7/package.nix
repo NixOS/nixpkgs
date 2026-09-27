@@ -24,7 +24,7 @@
   gtksourceview3,
   gspell,
   libxml2,
-  goocanvas2,
+  goocanvas_2,
   libplist,
   glib,
   gst_all_1,
@@ -36,7 +36,7 @@ let
   ratify = (
     stdenv.mkDerivation {
       pname = "ratify";
-      version = "unstable-2021-02-21";
+      version = "0-unstable-2021-02-21";
       src = fetchFromGitHub {
         owner = "ptomato";
         repo = "ratify";
@@ -63,7 +63,7 @@ let
   chimara = (
     stdenv.mkDerivation {
       pname = "chimara";
-      version = "unstable-2021-04-06";
+      version = "0.9.1-unstable-2021-04-06";
       src = fetchFromGitHub {
         owner = "chimara";
         repo = "Chimara";
@@ -101,10 +101,10 @@ let
 in
 stdenv.mkDerivation {
   pname = "gnome-inform7";
-  version = "unstable-2021-04-06";
+  version = "6M62-unstable-2021-04-06";
   src = fetchFromGitHub {
     owner = "ptomato";
-    repo = "gnome-inform7";
+    repo = "inform7-ide";
     # build from revision in the GTK3 branch as mainline requires webkit-1.0
     rev = "c37e045c159692aae2e4e79b917e5f96cfefa66a";
     sha256 = "Q4xoITs3AYXhvpWaABRAvJaUWTtUl8lYQ1k9zX7FrNw=";
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
     gspell
     # webkitgtk_4_0
     libxml2
-    goocanvas2
+    goocanvas_2
     libplist
     ratify
     chimara
@@ -136,17 +136,17 @@ stdenv.mkDerivation {
     patchShebangs build-aux/* src/generate-resource-xml.{py,sh}
   '';
 
-  meta = with lib; {
+  meta = {
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Inform 7 for the Gnome platform";
     longDescription = ''
       This version of Inform 7 for the Gnome platform was created by Philip Chimento, based on a design by Graham Nelson and Andrew Hunter.
     '';
-    homepage = "https://github.com/ptomato/gnome-inform7";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.fitzgibbon ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/ptomato/inform7-ide";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.fitzgibbon ];
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-inform7";
   };
 }

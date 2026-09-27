@@ -7,13 +7,13 @@
   libgpg-error,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libksba";
-  version = "1.6.7";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "mirror://gnupg/libksba/libksba-${version}.tar.bz2";
-    hash = "sha256-z3JRC467TrZpPu92V0nYNnegPHkpGjEQQKW/15uqt2M=";
+    url = "mirror://gnupg/libksba/libksba-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-KWuduQlXSfKqEEIC16t/0JrRBxDgB4CnCcl1SxodkpI=";
   };
 
   outputs = [
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
     mainProgram = "ksba-config";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
   };
-}
+})

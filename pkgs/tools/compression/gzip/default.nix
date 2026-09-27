@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchurl,
-  makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
+  # Tests
+  gzip,
+  less,
+  perl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -12,14 +15,20 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzip";
   version = "1.14";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
+
+  patches = [
+    ./0001-Don-t-add-timestamps-when-GZIP_NO_TIMESTAMPS-is-set.patch
+    ./CVE-2026-41991.patch
+    ./CVE-2026-41992.patch
+  ];
 
   outputs = [
     "out"
@@ -29,11 +38,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    updateAutotoolsGnuConfigScriptsHook
-    makeShellWrapper
-  ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ runtimeShellPackage ];
+
+  strictDeps = true;
 
   makeFlags = [
     "SHELL=/bin/sh"
@@ -44,6 +52,16 @@ stdenv.mkDerivation rec {
     "ZLESS_PROG=zless"
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) {
+    NIX_CFLAGS_LINK = "-no-pie";
+  };
+
+  nativeCheckInputs = [
+    less
+    perl
+  ];
+  doCheck = false;
+
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
   # internal cross-references, just add $out/bin to PATH at the top of
@@ -52,18 +70,20 @@ stdenv.mkDerivation rec {
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
   ''
-  # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
-  # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
-  # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
-  + ''
-    wrapProgram $out/bin/gzip \
-      --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
+  # avoid wrapping the actual executable on cygwin because changing the
+  # extension will break dll linking
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mv $out/bin/{,.}gzip.exe
+    ln -s .gzip.exe $out/bin/gzip
   '';
+
+  passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
-
     longDescription = ''
       gzip (GNU zip) is a popular data compression program written by
       Jean-loup Gailly for the GNU project.  Mark Adler wrote the
@@ -75,11 +95,9 @@ stdenv.mkDerivation rec {
       and we needed a replacement.  The superior compression ratio of gzip
       is just a bonus.
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
-
     mainProgram = "gzip";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
   };
-}
+})

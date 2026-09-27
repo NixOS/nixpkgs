@@ -145,9 +145,11 @@ let
     pkgs.writeShellScriptBin "mastodon-tootctl" ''
       set -a
       export RAILS_ROOT="${cfg.package}"
+      export HOME="/var/lib/mastodon"
       source "${envFile}"
       source /var/lib/mastodon/.secrets_env
       ${sourceExtraEnv}
+      cd /var/lib/mastodon
 
       sudo=exec
       if [[ "$USER" != ${cfg.user} ]]; then
@@ -160,7 +162,7 @@ let
     name: processCfg:
     lib.nameValuePair "mastodon-sidekiq-${name}" (
       let
-        jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
+        jobClassArgs = toString (map (c: "-q ${c}") processCfg.jobClasses);
         jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
         threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
       in

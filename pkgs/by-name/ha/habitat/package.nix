@@ -11,18 +11,18 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "habitat";
-  version = "1.6.1245";
+  version = "2.1.23";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
-    rev = version;
-    hash = "sha256-n2ylJSCXPnnPHadfZaRS/3vxtnvkXhiTzCyObK7hmEk=";
+    rev = finalAttrs.version;
+    hash = "sha256-mV7v9Vy9txlHA46xIlccRu0+lS2VYY2N3R3dxfvE7NY=";
   };
 
-  cargoHash = "sha256-JMIAHupv3da71j5ID5ZR0mD7ZLLj4ktIs0aQrdWi3jU=";
+  cargoHash = "sha256-SF3Cuwew/0TpipwJsnI1Kbup7hTDb7rVowqQL2ML990=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     "-p"
     "hab"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -48,16 +48,16 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application automation framework";
     homepage = "https://www.habitat.sh";
-    changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/habitat-sh/habitat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rushmorem
       qjoly
     ];
     mainProgram = "hab";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

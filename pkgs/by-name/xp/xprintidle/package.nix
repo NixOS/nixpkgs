@@ -5,7 +5,9 @@
   meson,
   ninja,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,17 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXScrnSaver
-    xorg.libX11
-    xorg.libXext
+    libxscrnsaver
+    libx11
+    libxext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/g0hl1n/xprintidle";
     description = "Utility that queries the X server for the user's idle time and prints it to stdout";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
     mainProgram = "xprintidle";
   };
 })

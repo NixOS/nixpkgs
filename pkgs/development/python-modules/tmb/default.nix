@@ -2,37 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tmb";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alemuro";
     repo = "tmb";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-XuRhRmeTXAplb14UwISyzaqEIrFeg8/aCdMxUccMUos=";
   };
 
-  VERSION = version;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  env.VERSION = finalAttrs.version;
+
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "tmb" ];
 
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library that interacts with TMB API";
     homepage = "https://github.com/alemuro/tmb";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

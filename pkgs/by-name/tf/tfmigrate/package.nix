@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tfmigrate";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfmigrate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tuLbcxJj8TsG3I/o3cHO2DtQm9ql3wlhYBtYiMbRW7o=";
+    hash = "sha256-NXsAwJTIVlgSC+RdumXsfHIjXfNm37PjLrEWaf+85aM=";
   };
 
   vendorHash = "sha256-TqZi5NZ+4eSzq98/ZM4Gab7Sud7bz1DNHrp5nGaGHDE=";

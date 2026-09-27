@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpustat";
   version = "0.03.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "cpustat";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-wvCaMmWKEzanwgDBL2+8qAIIIKfGNi0O2J+SUXOx508=";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CPU usage monitoring tool";
     homepage = "https://github.com/ColinIanKing/cpustat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "cpustat";
   };
-}
+})

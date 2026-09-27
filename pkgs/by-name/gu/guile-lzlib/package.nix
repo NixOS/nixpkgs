@@ -10,12 +10,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lzlib";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://notabug.org/guile-lzlib/guile-lzlib/archive/${version}.tar.gz";
+    url = "https://notabug.org/guile-lzlib/guile-lzlib/archive/${finalAttrs.version}.tar.gz";
     hash = "sha256-p/mcjSoUPgXqItstyLnObCfK6UIWK0XuMBXtkCevD/I=";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
   # tests fail on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Guile library providing bindings to lzlib";
     homepage = "https://notabug.org/guile-lzlib/guile-lzlib";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

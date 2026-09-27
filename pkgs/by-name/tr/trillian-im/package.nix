@@ -6,18 +6,18 @@
   dpkg,
   atkmm,
   cairo,
-  cairomm,
+  cairomm_1_0,
   gtk3,
   gtkmm3,
   libnotify,
   libsecret,
-  pangomm,
-  xorg,
+  pangomm_1_4,
+  libxscrnsaver,
   libpulseaudio,
   librsvg,
   libzip,
   openssl,
-  libappindicator-gtk3,
+  libappindicator,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,18 +37,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     atkmm
     cairo
-    cairomm
+    cairomm_1_0
     gtk3
     gtkmm3
     libnotify
     libsecret
-    pangomm
-    xorg.libXScrnSaver
+    pangomm_1_4
+    libxscrnsaver
     libpulseaudio
     librsvg
     libzip
     openssl
-    libappindicator-gtk3
+    libappindicator
   ];
 
   dontUnpack = true;
@@ -67,11 +67,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern instant messaging for home and work that prioritizes chat interoperability and security";
     homepage = "https://www.trillian.im/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ majiir ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ majiir ];
     platforms = [ "x86_64-linux" ];
   };
 }

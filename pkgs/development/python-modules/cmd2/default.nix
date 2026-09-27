@@ -2,29 +2,27 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   glibcLocales,
   gnureadline,
   pyperclip,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   rich-argparse,
   setuptools-scm,
-  wcwidth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmd2";
-  version = "2.7.0";
+  version = "3.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gdgTW0YhDh0DpagQuvhZBppiIUeIzu7DWI9E7thvvus=";
+  src = fetchFromGitHub {
+    owner = "python-cmd2";
+    repo = "cmd2";
+    tag = finalAttrs.version;
+    hash = "sha256-dntUbxlMVlss6TN8IhEaWcANqiqWgqxT35bGY7cWjcE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -32,7 +30,6 @@ buildPythonPackage rec {
   dependencies = [
     pyperclip
     rich-argparse
-    wcwidth
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
@@ -48,16 +45,15 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't require vim for tests, it causes lots of rebuilds
     "test_find_editor_not_specified"
-    "test_transcript"
   ];
 
   pythonImportsCheck = [ "cmd2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
-    changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ teto ];
+    changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
   };
-}
+})

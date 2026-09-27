@@ -10,7 +10,8 @@
   doxygen,
   graphviz,
   libexsid,
-  libgcrypt,
+  libresidfp,
+  libusb1,
   perl,
   pkg-config,
   xa,
@@ -18,23 +19,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.15.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-/GXRqLt2wPCUiOKlaEq52APOOYWgbaejzJcppZgMgfA=";
+    hash = "sha256-c2LzjFwPdk/Di9Eh6E5sBwup+DD5IPXRJYjlnSBBNJU=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals docSupport [ "doc" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     patchShebangs .
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,22 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libexsid
-    libgcrypt
+    libresidfp
+    libusb1
   ];
 
-  enableParallelBuilding = true;
-
   configureFlags = [
-    (lib.strings.enableFeature true "hardsid")
-    (lib.strings.withFeature true "gcrypt")
     (lib.strings.withFeature true "exsid")
+    (lib.strings.withFeature true "usbsid")
     (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
   ];
 
-  # Make Doxygen happy with the setup, reduce log noise
-  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
-    fontDirectories = [ ];
-  });
+  enableParallelBuilding = true;
 
   preBuild = ''
     # Reduce noise from fontconfig during doc building
@@ -80,10 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
 
+  # Make Doxygen happy with the setup, reduce log noise
+  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
+    fontDirectories = [ ];
+  });
+
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater {
       rev-prefix = "v";
+      ignoredVersions = "[a-zA-Z]";
     };
   };
 
@@ -97,9 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
     changelog = "https://github.com/libsidplayfp/libsidplayfp/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ramkromberg
       OPNA2608
     ];
     platforms = lib.platforms.all;

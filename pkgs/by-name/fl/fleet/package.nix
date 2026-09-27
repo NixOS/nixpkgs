@@ -1,21 +1,60 @@
 {
   lib,
   fetchFromGitHub,
+  stdenvNoCC,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs_24,
+  fetchYarnDeps,
   buildGoModule,
+  go-bindata,
   versionCheckHook,
 }:
-
-buildGoModule (finalAttrs: {
+let
   pname = "fleet";
-  version = "4.76.1";
-
+  version = "4.90.1";
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
-    tag = "fleet-v${finalAttrs.version}";
-    hash = "sha256-DWrErGFKhhAP+qePYz5VJ26dySMOicGkHEN16J9qOx4=";
+    tag = "fleet-v${version}";
+    hash = "sha256-yD1snjDI5AAnHmnbpAUhtRx7ayPyqn9Tqv84p5W3SV4=";
   };
-  vendorHash = "sha256-VLxhlzuQqt/jtUwllCutj2CO2tXWFgLRpU2mGtZM6RE=";
+
+  frontend = stdenvNoCC.mkDerivation {
+    pname = "${pname}-frontend";
+    inherit version src;
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs_24
+    ];
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-OVXnPUQOr8KQYNthE8RzPV9IoQH8pxXHqjgTy7ymW/k=";
+    };
+
+    NODE_ENV = "production";
+    yarnBuildScript = "webpack";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/assets
+      cp -r assets/* $out/assets/
+
+      mkdir -p $out/frontend/templates
+      cp frontend/templates/react.tmpl $out/frontend/templates/react.tmpl
+
+      runHook postInstall
+    '';
+  };
+in
+buildGoModule (finalAttrs: {
+  inherit pname version src;
+
+  vendorHash = "sha256-1IGhOxzrQAyZu9a4HUvdN0MV5x8WnWMcFQejwy5WF1c=";
 
   subPackages = [
     "cmd/fleet"
@@ -26,11 +65,30 @@ buildGoModule (finalAttrs: {
     "-X github.com/fleetdm/fleet/v4/server/version.version=${finalAttrs.version}"
   ];
 
+  nativeBuildInputs = [ go-bindata ];
+
+  preBuild = ''
+    cp -r ${frontend}/assets/* assets
+    cp -r ${frontend}/frontend/templates/react.tmpl frontend/templates/react.tmpl
+
+    go-bindata -pkg=bindata -tags full \
+      -o=server/bindata/generated.go \
+      frontend/templates/ assets/... server/mail/templates
+  '';
+
+  tags = [ "full" ];
+
   doInstallCheck = true;
   versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    inherit frontend;
+  };
 
   meta = {
     homepage = "https://github.com/fleetdm/fleet";
@@ -40,6 +98,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       asauzeau
       lesuisse
+      bddvlpr
     ];
     mainProgram = "fleet";
   };

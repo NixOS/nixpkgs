@@ -11,7 +11,8 @@ let
   generic =
     ver: assets:
     stdenv.mkDerivation {
-      name = "d${toString ver}x-rebirth-full-${assets.version}";
+      pname = "d${toString ver}x-rebirth-full";
+      inherit (assets) version;
 
       nativeBuildInputs = [ makeWrapper ];
 
@@ -22,15 +23,15 @@ let
           --add-flags "-hogdir ${assets}/share/games/descent${toString ver}"
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Descent ${toString ver} using the DXX-Rebirth project engine and game assets from GOG";
         homepage = "https://www.dxx-rebirth.com/";
-        license = with licenses; [
+        license = with lib.licenses; [
           free
           unfree
         ];
-        maintainers = with maintainers; [ peterhoeg ];
-        platforms = with platforms; linux;
+        maintainers = with lib.maintainers; [ peterhoeg ];
+        platforms = with lib.platforms; linux;
         hydraPlatforms = [ ];
       };
     };

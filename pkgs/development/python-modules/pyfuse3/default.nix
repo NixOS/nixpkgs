@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   pkg-config,
   setuptools,
+  setuptools-scm,
   fuse3,
   trio,
   python,
@@ -16,27 +16,27 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
-    tag = version;
-    hash = "sha256-J4xHiaV8GCtUQ9GJS8YRXpMsuzuwbtnzspvuIonHT24=";
+    tag = "v${version}";
+    hash = "sha256-HhEtWYWdxJZOMS3dqB2VdQS7aSdpkRhq7EZCJ55n2OE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "if DEVELOPER_MODE" "if False" \
-      --replace-fail "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
-  '';
+  patches = [
+    # Fix cross compilation by using PKG_CONFIG env variable instead
+    # of hardcoded binary name
+    # https://github.com/libfuse/pyfuse3/pull/148
+    ./fix_cross_parse_pkg_config.patch
+  ];
 
   build-system = [
     cython
     setuptools
+    setuptools-scm
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,10 +44,6 @@ buildPythonPackage rec {
   buildInputs = [ fuse3 ];
 
   dependencies = [ trio ];
-
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -61,17 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pyfuse3"
-    "pyfuse3_asyncio"
+    "pyfuse3.asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       dotlambda
     ];
-    changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${src.tag}/Changes.rst";
+    platforms = lib.platforms.linux;
   };
 }

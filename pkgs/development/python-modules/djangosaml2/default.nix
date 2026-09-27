@@ -5,7 +5,6 @@
   defusedxml,
   django,
   pysaml2,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "djangosaml2";
   version = "1.11.1-1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";

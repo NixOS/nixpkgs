@@ -10,14 +10,14 @@
   openonload,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpdirect";
   version = "9.0.2.45";
 
   src = fetchFromGitHub {
     owner = "Xilinx-CNS";
     repo = "tcpdirect";
-    rev = "tcpdirect-${version}";
+    rev = "tcpdirect-${finalAttrs.version}";
     hash = "sha256-7VQwep078hXdXE4pqGUe2CLqnPdDuWupcyuC+NCM5Ms=";
   };
 
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Ultra low latency kernel bypass TCP and UDP implementation for AMD Solarflare network adapters";
     homepage = "https://www.openonload.org";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ YorikSar ];
+    maintainers = with lib.maintainers; [ YorikSar ];
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253
     platforms = [ "x86_64-linux" ];
   };
-}
+})

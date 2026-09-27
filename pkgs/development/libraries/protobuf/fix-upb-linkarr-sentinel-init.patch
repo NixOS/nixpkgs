@@ -1,0 +1,35 @@
+diff --git a/upb/port/def.inc b/upb/port/def.inc
+index f66885ddf55cf..1305fd164b293 100644
+--- a/upb/port/def.inc
++++ b/upb/port/def.inc
+@@ -534,7 +534,7 @@ Error, UINTPTR_MAX is undefined
+ #define UPB_LINKARR_DECLARE(name, type) \
+   extern type __start_linkarr_##name;   \
+   extern type __stop_linkarr_##name;    \
+-  UPB_LINKARR_APPEND(name)              \
+-  UPB_LINKARR_SENTINEL type UPB_linkarr_internal_empty_##name[1]
++  UPB_LINKARR_APPEND(name)                                          \
++  UPB_LINKARR_SENTINEL type UPB_linkarr_internal_empty_##name[1] = {0}
+ #define UPB_LINKARR_START(name) (&__start_linkarr_##name)
+ #define UPB_LINKARR_STOP(name) (&__stop_linkarr_##name)
+ 
+@@ -554,7 +554,7 @@ Error, UINTPTR_MAX is undefined
+   extern type __stop_linkarr_##name __asm(  \
+       "section$end$__DATA$"                 \
+       "__la_" #name);                       \
+-  UPB_LINKARR_APPEND(name)                  \
+-  UPB_LINKARR_SENTINEL type UPB_linkarr_internal_empty_##name[1]
++  UPB_LINKARR_APPEND(name)                                              \
++  UPB_LINKARR_SENTINEL type UPB_linkarr_internal_empty_##name[1] = {0}
+ #define UPB_LINKARR_START(name) (&__start_linkarr_##name)
+ #define UPB_LINKARR_STOP(name) (&__stop_linkarr_##name)
+ 
+@@ -570,7 +570,7 @@ Error, UINTPTR_MAX is undefined
+ 
+ #define UPB_LINKARR_ATTR
+ 
+-#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))
++#define UPB_LINKARR_SENTINEL __attribute__((weak, used))
+ 
+ #if defined(__ELF__) || defined(__wasm__)
+ 

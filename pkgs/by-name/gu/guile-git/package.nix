@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   guile,
   libgit2,
   scheme-bytestructures,
@@ -20,6 +21,21 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-ihKpEnng6Uemrguecbd25vElEhIu2Efb86aM8679TAc=";
   };
+
+  patches = [
+    # remove > 0.10.0
+    (fetchpatch {
+      name = "catch-git-error-guile";
+      url = "https://gitlab.com/guile-git/guile-git/-/commit/9c76c6b31e217c470c8576172b123be9c373dc9b.diff";
+      hash = "sha256-H0s7Ebl+HNL8Zak58kJmFETWZJcNq+Z5gTGRqU9gj58=";
+    })
+    # remove > 0.10.0
+    (fetchpatch {
+      name = "test-typo";
+      url = "https://gitlab.com/guile-git/guile-git/-/commit/4451c0808fbdf8cd13d486a18b03881f998f6e88.diff";
+      hash = "sha256-K2f67WXUBLI/09eF8Xg3JMX7gkISFTZK3yHu0VDVQ4E=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -48,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";
     license = lib.licenses.gpl3Plus;

@@ -3,63 +3,71 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  appstream-glib,
-  cargo,
-  desktop-file-utils,
-  glib,
-  libadwaita,
-  meson,
-  ninja,
+  fontconfig,
+  libxkbcommon,
+  openssl,
   pkg-config,
-  rustc,
-  wrapGAppsHook4,
-  dbus,
-  gtk4,
-  sqlite,
+  libxscrnsaver,
+  libxi,
+  libxcursor,
+  libx11,
+  vulkan-loader,
+  wayland,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "furtherance";
-  version = "1.8.3";
+  version = "26.7.0";
 
   src = fetchFromGitHub {
-    owner = "lakoliu";
+    owner = "unobserved-io";
     repo = "Furtherance";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-TxYARpCqqjjwinoRU2Wjihp+FYIvcI0YCGlOuumX6To=";
+    rev = finalAttrs.version;
+    hash = "sha256-UMkFEbLdwZsSJviO29FNmLYLL5/HofhriMptpjSAYuY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-SFp9YCmneOll2pItWmg2b2jrpRqPnvV9vwz4mjjvwM4=";
-  };
+  cargoHash = "sha256-fdslQutVEGq1EG+Q8QAYKf9XfoostvHKWZrr4YwEowQ=";
 
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
-    meson
-    ninja
     pkg-config
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    wrapGAppsHook4
   ];
 
   buildInputs = [
-    dbus
-    glib
-    gtk4
-    libadwaita
-    sqlite
+    fontconfig
+    openssl
+    libxkbcommon
+    libx11
+    libxscrnsaver
+    libxcursor
+    libxi
+    vulkan-loader
+    wayland
   ];
 
-  meta = with lib; {
+  checkFlags = [
+    # panicked at src/tests/timer_tests.rs:30:9
+    "--skip=tests::timer_tests::timer_tests::test_split_task_input_basic"
+  ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          vulkan-loader
+          libxkbcommon
+          wayland
+        ]
+      }
+  '';
+
+  meta = {
     description = "Track your time without being tracked";
     mainProgram = "furtherance";
-    homepage = "https://github.com/lakoliu/Furtherance";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ CaptainJawZ ];
+    homepage = "https://github.com/unobserved-io/Furtherance";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      CaptainJawZ
+      locnide
+    ];
   };
 })

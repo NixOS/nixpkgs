@@ -17,6 +17,8 @@
   threadSupport ? true,
   useBoehmgc ? false,
   boehmgc,
+  sbcl,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -24,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "24.5.10";
+  version = "26.5.5";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
+    hash = "sha256-oBpbzajFtz5Z3aNJT9E+X+xdtqodrXgsPMO7V/FjNDU=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +39,11 @@ stdenv.mkDerivation rec {
     automake
     texinfo
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
+
   propagatedBuildInputs = [
     libffi
     gmp
@@ -48,14 +54,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
-  ];
-
-  patches = [
-    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
-      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
-    })
   ];
 
   configureFlags = [
@@ -88,13 +86,16 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  # ECL is used as a bootstrap compiler for SBCL.
+  passthru.tests.sbcl = sbcl;
+
+  meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ecl";
     teams = [ lib.teams.lisp ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

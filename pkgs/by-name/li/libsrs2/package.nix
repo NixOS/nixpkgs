@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsrs2";
   version = "1.0.18";
 
   src = fetchurl {
-    url = "https://www.libsrs2.org/srs/libsrs2-${version}.tar.gz";
+    url = "https://www.libsrs2.org/srs/libsrs2-${finalAttrs.version}.tar.gz";
     sha256 = "9d1191b705d7587a5886736899001d04168392bbb6ed6345a057ade50943a492";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.libsrs2.org/";
     platforms = lib.platforms.linux;
   };
-}
+})

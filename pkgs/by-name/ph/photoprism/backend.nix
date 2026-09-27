@@ -2,15 +2,19 @@
   lib,
   buildGoModule,
   coreutils,
-  python3,
+  python313,
   src,
   version,
   pkg-config,
   vips,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
+  # tensorflow does not yet support python314: https://github.com/tensorflow/tensorflow/issues/102890
+  python3 = python313;
+
   # we need to copy these, to add the symlinks, so the linker actually finds these libraries
   libtensorflow = symlinkJoin {
     name = "libtensorflow";
@@ -45,7 +49,7 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-yLzIjoN1csyNpounvbQ6r1nudPypwjabAbdhyjna2+s=";
+  vendorHash = "sha256-coFrVxlriIlHe06BrzuyuB297pCLEMZnGiAgActEIcM=";
 
   subPackages = [ "cmd/photoprism" ];
 
@@ -54,10 +58,14 @@ buildGoModule {
 
   CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      ipetkov
+    ];
   };
 }

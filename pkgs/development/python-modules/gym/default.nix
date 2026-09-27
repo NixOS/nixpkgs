@@ -11,8 +11,6 @@
   cloudpickle,
   numpy,
   gym-notices,
-  importlib-metadata,
-  pythonOlder,
 
   # tests
   moviepy,
@@ -62,8 +60,7 @@ buildPythonPackage rec {
     cloudpickle
     numpy
     gym-notices
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   pythonImportsCheck = [ "gym" ];
 

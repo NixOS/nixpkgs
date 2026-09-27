@@ -1,41 +1,65 @@
 {
   lib,
+  buildNpmPackage,
+  codex,
   fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
+  makeBinaryWrapper,
+  nix-update-script,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+
+buildNpmPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "0.5.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
-    owner = "zed-industries";
+    owner = "agentclientprotocol";
     repo = "codex-acp";
-    tag = "v${version}";
-    hash = "sha256-fUY76RRvZ4Cri7diV1gL00KISlFeFuxqVQHbfXl2kQU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GIMJm+kifPEMb7XLPSssUu87eEE+aaBr2jZUk8aPD2s=";
   };
 
-  cargoHash = "sha256-3SSwfJgpe4+7wFqX6iST4zya9x1Op4bsmKQQwbs9l5s=";
+  npmDepsHash = "sha256-BeRj6LpIpGV4ONEHE//nYXTfkB1nfVQpPeJF3LRlyRM=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    openssl
-  ];
+  postInstall = ''
+    # Use the source-built Nixpkgs package instead of npm's bundled Codex binaries.
+    rm -r $out/lib/node_modules/@agentclientprotocol/codex-acp/node_modules/@openai/codex*
+    rm $out/lib/node_modules/@agentclientprotocol/codex-acp/node_modules/.bin/codex
+    wrapProgram $out/bin/codex-acp \
+      --set-default CODEX_PATH ${lib.getExe codex}
+  '';
 
-  doCheck = false;
+  doCheck = true;
 
-  meta = with lib; {
-    description = "An ACP-compatible coding agent powered by Codex";
-    homepage = "https://github.com/zed-industries/codex-acp";
-    changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tlvince ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+  checkPhase = ''
+    runHook preCheck
+    npm test
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    rm -r node_modules/.vite
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "ACP adapter for Codex CLI";
+    homepage = "https://github.com/agentclientprotocol/codex-acp";
+    changelog = "https://github.com/agentclientprotocol/codex-acp/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tpansino ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "codex-acp";
   };
-}
+})

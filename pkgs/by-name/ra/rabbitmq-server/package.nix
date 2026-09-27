@@ -1,6 +1,6 @@
 {
   lib,
-  beamPackages,
+  beam27Packages,
   stdenv,
   fetchurl,
   python3,
@@ -39,16 +39,18 @@ let
       systemd # for systemd unit activation check
     ]
   );
+
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rabbitmq-server";
-  version = "4.2.1";
+  version = "4.3.1";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-loZsktSiUexsQQsMxDL4WVdtVsoXp3mEllNzkwglPgM=";
+    hash = "sha256-LqNnrbMO5dZDnU2e4yMhP/duePh6ETN1AUcqn7+53t4=";
   };
 
   nativeBuildInputs = [

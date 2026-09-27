@@ -289,6 +289,9 @@ let
           # Build same version as Haskell package
           hindent = (externalSrc super.hindent pkgs.haskellPackages.hindent).overrideAttrs (attrs: {
             packageRequires = [ self.haskell-mode ];
+            propagatedUserEnvPkgs = attrs.propagatedUserEnvPkgs or [ ] ++ [
+              pkgs.haskellPackages.hindent
+            ];
           });
 
           hotfuzz = super.hotfuzz.overrideAttrs (old: {
@@ -353,7 +356,7 @@ let
                 pkgs.pkg-config
               ];
 
-              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant_2 ];
 
               postBuild = ''
                 NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
@@ -396,12 +399,6 @@ let
             };
           });
 
-          evil-magit = buildWithGit super.evil-magit;
-
-          eopengrok = buildWithGit super.eopengrok;
-
-          forge = buildWithGit super.forge;
-
           gnuplot = super.gnuplot.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace gnuplot.el \
@@ -416,74 +413,14 @@ let
             '';
           });
 
-          magit = buildWithGit super.magit;
-
-          magit-find-file = buildWithGit super.magit-find-file;
-
-          magit-gh-pulls = buildWithGit super.magit-gh-pulls;
-
-          magit-imerge = buildWithGit super.magit-imerge;
-
-          magit-lfs = buildWithGit super.magit-lfs;
-
-          magit-org-todos = buildWithGit super.magit-org-todos;
-
-          magit-tbdiff = buildWithGit super.magit-tbdiff;
-
-          magit-topgit = ignoreCompilationError (buildWithGit super.magit-topgit); # elisp error
-
-          magit-vcsh = buildWithGit super.magit-vcsh;
-
-          magit-gerrit = buildWithGit super.magit-gerrit;
-
-          magit-annex = buildWithGit super.magit-annex;
-
-          magit-todos = buildWithGit super.magit-todos;
-
-          magit-filenotify = buildWithGit super.magit-filenotify;
-
-          magit-gitflow = buildWithGit super.magit-gitflow;
-
-          magithub = ignoreCompilationError (buildWithGit super.magithub); # elisp error
-
-          magit-svn = buildWithGit super.magit-svn;
-
-          kubernetes = buildWithGit super.kubernetes;
-
-          kubernetes-evil = buildWithGit super.kubernetes-evil;
+          magit-topgit = ignoreCompilationError super.magit-topgit; # elisp error
 
           egg = buildWithGit super.egg;
 
-          kapacitor = buildWithGit super.kapacitor;
-
-          gerrit = buildWithGit super.gerrit;
-
-          gerrit-download = buildWithGit super.gerrit-download;
-
-          github-pullrequest = buildWithGit super.github-pullrequest;
-
-          jist = buildWithGit super.jist;
-
           mandoku = addPackageRequires super.mandoku [ self.git ]; # upstream is archived
 
-          magit-p4 = buildWithGit super.magit-p4;
-
-          magit-rbr = buildWithGit super.magit-rbr;
-
-          magit-diff-flycheck = buildWithGit super.magit-diff-flycheck;
-
-          magit-reviewboard = buildWithGit super.magit-reviewboard;
-
-          magit-patch-changelog = buildWithGit super.magit-patch-changelog;
-
-          magit-circleci = buildWithGit super.magit-circleci;
-
           # https://github.com/dandavison/magit-delta/issues/30
-          magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
-
-          orgit = buildWithGit super.orgit;
-
-          orgit-forge = buildWithGit super.orgit-forge;
+          magit-delta = addPackageRequires super.magit-delta [ self.dash ];
 
           ormolu = super.ormolu.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
@@ -491,8 +428,6 @@ let
                 --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
             '';
           });
-
-          ox-rss = buildWithGit super.ox-rss;
 
           python-isort = super.python-isort.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
@@ -520,7 +455,7 @@ let
             '';
           });
 
-          rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
+          rtags = ignoreCompilationError (fix-rtags super.rtags); # elisp error
 
           rtags-xref = dontConfigure super.rtags;
 
@@ -549,8 +484,12 @@ let
           # Telega has a server portion for it's network protocol
           # elisp error
           telega = (ignoreCompilationError super.telega).overrideAttrs (old: {
-            buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+            buildInputs = old.buildInputs ++ [
+              pkgs.tdlib
+              pkgs.zlib
+            ];
             nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
+            propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.qrencode ];
 
             postPatch = ''
               substituteInPlace telega-customize.el \
@@ -770,7 +709,7 @@ let
           mozc = super.mozc.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace src/unix/emacs/mozc.el \
-                --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+                --replace '"mozc_emacs_helper"' '"${pkgs.mozc}/bin/mozc_emacs_helper"'
             '';
           });
 
@@ -854,18 +793,6 @@ let
           auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
 
           auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
-
-          auto-virtualenv = super.auto-virtualenv.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
-                  url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
-                  hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
-                })
-              ];
-            }
-          );
 
           aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
@@ -1004,8 +931,6 @@ let
           # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
           company-distel = ignoreCompilationError super.company-distel;
 
-          company-forge = buildWithGit super.company-forge;
-
           # qmltypes-table.el causing native-compiler-error-empty-byte
           company-qml = ignoreCompilationError super.company-qml;
 
@@ -1017,6 +942,9 @@ let
           # missing optional dependencies
           conda = addPackageRequires super.conda [ self.projectile ];
 
+          # https://github.com/NixOS/nixpkgs/issues/483425
+          consult = addPackageRequires super.consult [ self.flymake ];
+
           # needs network during compilation, also native-ice
           consult-gh = ignoreCompilationError (
             super.consult-gh.overrideAttrs (old: {
@@ -1026,9 +954,6 @@ let
 
           # needs network during compilation
           consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
-
-          # needs network during compilation
-          consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
 
           # needs network during compilation
           consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
@@ -1065,6 +990,13 @@ let
 
           # missing optional dependencies: text-translator, not on any ELPA
           dic-lookup-w3m = ignoreCompilationError super.dic-lookup-w3m;
+
+          difftastic = super.difftastic.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace difftastic.el \
+                --replace-fail 'difftastic-executable "difft"' 'difftastic-executable "${lib.getExe pkgs.difftastic}"'
+            '';
+          });
 
           # https://github.com/nlamirault/dionysos/issues/17
           dionysos = addPackageRequires super.dionysos [ self.f ];
@@ -1135,8 +1067,6 @@ let
             ];
           });
 
-          embark-vc = buildWithGit super.embark-vc;
-
           # https://github.com/nubank/emidje/issues/23
           emidje = addPackageRequires super.emidje [ self.pkg-info ];
 
@@ -1144,10 +1074,6 @@ let
 
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
-
-          # missing optional dependencies
-          # https://github.com/isamert/empv.el/pull/96
-          empv = addPackageRequires super.empv [ self.hydra ];
 
           enotify = ignoreCompilationError super.enotify; # elisp error
 
@@ -1184,6 +1110,9 @@ let
           # https://github.com/PythonNut/evil-easymotion/issues/74
           evil-easymotion = addPackageRequires super.evil-easymotion [ self.evil ];
 
+          # tightly coupled to ghostel (from manual-packages), use the same source
+          evil-ghostel = externalSrc super.evil-ghostel self.ghostel;
+
           evil-mu4e = addPackageRequires super.evil-mu4e [ self.mu4e ];
 
           # https://github.com/VanLaser/evil-nl-break-undo/issues/2
@@ -1204,11 +1133,16 @@ let
           # https://github.com/syl20bnr/flymake-elixir/issues/4
           flymake-elixir = addPackageRequires super.flymake-elixir [ self.flymake-easy ];
 
+          flymake-hadolint = super.flymake-hadolint.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace flymake-hadolint.el \
+                --replace-fail 'flymake-hadolint-program "hadolint"' 'flymake-hadolint-program "${lib.getExe pkgs.hadolint}"'
+            '';
+          });
+
           flyparens = ignoreCompilationError super.flyparens; # elisp error
 
           fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
-
-          forge-llm = buildWithGit super.forge-llm;
 
           frontside-javascript = super.frontside-javascript.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1235,8 +1169,6 @@ let
             self.flycheck
           ];
 
-          gh-notify = buildWithGit super.gh-notify;
-
           # https://gitlab.com/emacs-stuff/git-commit-insert-issue/-/issues/24
           git-commit-insert-issue = addPackageRequires super.git-commit-insert-issue [ self.glab ];
 
@@ -1249,7 +1181,7 @@ let
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
-          gnosis = mkHome super.gnosis;
+          gnosis = ignoreCompilationError (mkHome super.gnosis); # doing db stuff when compiling
 
           go = ignoreCompilationError super.go; # elisp error
 
@@ -1411,9 +1343,46 @@ let
 
           leaf-defaults = ignoreCompilationError super.leaf-defaults; # elisp error
 
-          # https://github.com/abo-abo/lispy/pull/683
-          # missing optional dependencies
-          lispy = addPackageRequires (mkHome super.lispy) [ self.indium ];
+          liberime = super.liberime.overrideAttrs (
+            let
+              libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+            in
+            prevAttrs: {
+              buildInputs = prevAttrs.buildInputs ++ [
+                pkgs.librime
+              ];
+              nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [
+                pkgs.which
+              ];
+              postBuild =
+                prevAttrs.postBuild or ""
+                + "\n"
+                + ''
+                  make CC=$CC SUFFIX=${libExt}
+                '';
+              postInstall =
+                prevAttrs.postInstall or ""
+                + "\n"
+                + ''
+                  rm -rv $out/share/emacs/site-lisp/elpa/liberime-*/{src,emacs-module,Makefile}
+                  install src/liberime-core${libExt} $out/share/emacs/site-lisp/elpa/liberime-*
+                '';
+            }
+          );
+
+          lispy = addPackageRequires (mkHome super.lispy) [
+            # MELPA no longer reads lispy-pkg.el, the only place lispy
+            # declares its dependencies
+            # https://github.com/melpa/melpa/commit/ce48c8475144800fc1150607353df958afadf2ed
+            self.ace-window
+            self.hydra
+            self.iedit
+            self.swiper
+            self.zoutline
+            # https://github.com/abo-abo/lispy/pull/683
+            # missing optional dependencies
+            self.indium
+          ];
 
           lsp-origami = ignoreCompilationError super.lsp-origami; # elisp error
 
@@ -1442,6 +1411,8 @@ let
 
           mu4e-alert = addPackageRequires super.mu4e-alert [ self.mu4e ];
 
+          mu4e-autotask = addPackageRequires super.mu4e-autotask [ self.mu4e ];
+
           mu4e-column-faces = addPackageRequires super.mu4e-column-faces [ self.mu4e ];
 
           mu4e-conversation = addPackageRequires super.mu4e-conversation [ self.mu4e ];
@@ -1455,6 +1426,8 @@ let
           mu4e-query-fragments = addPackageRequires super.mu4e-query-fragments [ self.mu4e ];
 
           mu4e-views = addPackageRequires super.mu4e-views [ self.mu4e ];
+
+          mu4e-walk = addPackageRequires super.mu4e-walk [ self.mu4e ];
 
           # https://github.com/magnars/multifiles.el/issues/9
           multifiles = addPackageRequires super.multifiles [ self.dash ];
@@ -1510,6 +1483,8 @@ let
 
           org-change = ignoreCompilationError super.org-change; # elisp error
 
+          org-cite-overlay = ignoreCompilationError super.org-cite-overlay; # native-ice
+
           org-edit-latex = mkHome super.org-edit-latex;
 
           # https://github.com/GuiltyDolphin/org-evil/issues/24
@@ -1550,6 +1525,9 @@ let
           org-noter-pdftools = mkHome super.org-noter-pdftools;
 
           org-pdftools = mkHome super.org-pdftools;
+
+          # elisp error when loading elnode
+          org-present-remote = ignoreCompilationError super.org-present-remote;
 
           org-projectile = super.org-projectile.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1613,6 +1591,8 @@ let
               '';
           });
 
+          peek-mode = ignoreCompilationError super.peek-mode; # elisp error when loading elnode
+
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 
           pinot = ignoreCompilationError super.pinot; # elisp error
@@ -1667,18 +1647,6 @@ let
 
           scad-preview = ignoreCompilationError super.scad-preview; # elisp error
 
-          sdml-mode = super.sdml-mode.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "make-pretty-hydra-optional.patch";
-                  url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
-                  hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
-                })
-              ];
-            }
-          );
-
           # https://github.com/wanderlust/semi/pull/29
           # missing optional dependencies
           semi = addPackageRequires super.semi [ self.bbdb-vcard ];
@@ -1686,6 +1654,9 @@ let
           shadchen = ignoreCompilationError super.shadchen; # elisp error
 
           shampoo = ignoreCompilationError super.shampoo; # elisp error
+
+          # missing optional dependencies
+          shexc-ts-mode = addPackageRequires super.shexc-ts-mode [ self.yaml ];
 
           # missing optional dependencies and one of them (mew) is not on any ELPA
           shimbun = ignoreCompilationError (

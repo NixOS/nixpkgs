@@ -2,26 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   serialio,
   sockio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "connio";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "connio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPM7Ya69t0jpZhKM2MTk6BwjvoW3a8SV3k000LB9Ypo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     serialio
     sockio
   ];
@@ -31,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for concurrency agnostic communication";
     homepage = "https://github.com/tiagocoutinho/connio";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

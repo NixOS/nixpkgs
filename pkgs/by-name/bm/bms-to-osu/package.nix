@@ -6,12 +6,9 @@
   ffmpeg,
 }:
 
-let
+buildDotnetModule {
   pname = "bms-to-osu";
   version = "2.5-unstable-2025-01-14"; # 2.5 crashes at runtime due to missing kernel32.dll
-in
-buildDotnetModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "QingQiz";

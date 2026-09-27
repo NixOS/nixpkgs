@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "validate-email";
   version = "1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "validate_email" ];
 
-  meta = with lib; {
+  meta = {
     description = "Verify if an email address is valid and really exists";
     homepage = "https://github.com/syrusakbary/validate_email";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

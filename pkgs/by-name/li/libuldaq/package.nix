@@ -6,15 +6,15 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libuldaq";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mccdaq";
     repo = "uldaq";
-    rev = "v${version}";
-    sha256 = "sha256-DA1mxu94z5xDpGK9OBwD02HXlOATv/slqZ4lz5GM7QM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-+UNICbbhPk9yJIeC2w8d3q5OPrWrDFZ2cvZsbn6dNgQ=";
   };
 
   patches = [
@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library to talk to uldaq devices";
     longDescription = ''
       Library used to communicate with USB data acquisition (DAQ)
       devices from Measurement Computing
     '';
     homepage = "https://github.com/mccdaq/uldaq";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.simonkampe ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.simonkampe ];
   };
-}
+})

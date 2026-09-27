@@ -5,14 +5,14 @@
   pandoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "didder";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "makew0rld";
     repo = "didder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wYAudEyOLxbNfk4M720absGkuWXcaBPyBAcmBNBaaWU=";
   };
 
@@ -29,9 +29,9 @@ buildGoModule rec {
     gzip -c didder.1 > $out/share/man/man1/didder.1.gz
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Extensive, fast, and accurate command-line image dithering tool";
     license = lib.licenses.gpl3;
     mainProgram = "didder";
   };
-}
+})

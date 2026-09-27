@@ -9,15 +9,12 @@
   idna,
   requests,
   urllib3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gradient-statsd";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "gradient_statsd";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
   # Pypi does not contain tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around the DogStatsd client";
     homepage = "https://paperspace.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

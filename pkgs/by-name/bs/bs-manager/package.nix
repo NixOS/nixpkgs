@@ -8,6 +8,7 @@
   fetchNpmDeps,
   fetchFromGitHub,
   makeDesktopItem,
+  nodejs_22,
 
   autoPatchelfHook,
   copyDesktopItems,
@@ -19,13 +20,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Zagrios";
     repo = "bs-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YitQjhnadQrpdBOV2CUedRNm/RW7/rpXtS9PJTa9kUU=";
+    hash = "sha256-h2ksGQhnf69zPaas1rZZ/l7U66qYYz8vztTJpZBvZPI=";
   };
 
   postPatch = ''
@@ -38,13 +39,13 @@ buildNpmPackage (finalAttrs: {
     ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
   '';
 
-  npmDepsHash = "sha256-3NMqYD7S4wYjwYuGJOmq2/C82qtG1mImsR4crjFLe30=";
+  npmDepsHash = "sha256-iyhbqxnIoxq4MH0Qd+h4FRi8/dqg62SvMDe8/XAfKhI=";
 
   extraNpmDeps = fetchNpmDeps {
     name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/release/app";
-    hash = "sha256-UWsxty1kfxMr5fybtykrN2G+yiQ9dw/bbMwfcVLJgp4=";
+    hash = "sha256-jw7vhYF3//GWIpjlvK+iJakzy2c84Xyx0e6XsBJjAlg=";
   };
 
   makeCacheWritable = true;
@@ -61,6 +62,10 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [
     stdenv.cc.cc
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1" # musl-based node modules won't be used on glibc systems
   ];
 
   preBuild = ''
@@ -108,7 +113,7 @@ buildNpmPackage (finalAttrs: {
     (makeDesktopItem {
       desktopName = "BSManager";
       name = "BSManager";
-      exec = "bs-manager";
+      exec = "bs-manager %U";
       terminal = false;
       type = "Application";
       icon = "bs-manager";
@@ -127,7 +132,12 @@ buildNpmPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "extraNpmDeps"
+      ];
+    };
     depotdownloader = callPackage ./depotdownloader { };
   };
 

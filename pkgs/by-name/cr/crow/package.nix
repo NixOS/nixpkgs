@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow";
-  version = "1.2.1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "CrowCpp";
     repo = "Crow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iQ2owNry4LOmMxyO5L7O7XZB5vwUf+ZuZL76hZ6FThk=";
+    hash = "sha256-MN2x1hgJ9TziZFPSZn6RuAEfl4mZv3ijU9LqQJkw6UM=";
   };
 
   patches = [
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CROW_BUILD_EXAMPLES" false)
+    # Requires more non-trivial patches to get around CPM
+    (lib.cmakeBool "CROW_GENERATE_SBOM" false)
   ];
 
   doCheck = true;

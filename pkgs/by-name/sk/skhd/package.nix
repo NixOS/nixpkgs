@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.9";
 
   src = fetchFromGitHub {
-    owner = "koekeishiya";
+    owner = "asmvik";
     repo = "skhd";
     rev = "v${finalAttrs.version}";
     hash = "sha256-fnkWws/g4BdHKDRhqoCpdPFUavOHdk8R7h7H1dAdAYI=";
@@ -27,20 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple hotkey daemon for macOS";
-    homepage = "https://github.com/koekeishiya/skhd";
+    homepage = "https://github.com/asmvik/skhd";
     license = lib.licenses.mit;
     mainProgram = "skhd";
     maintainers = with lib.maintainers; [
       cmacrae
-      lnl7
-      periklis
       khaneliman
     ];
     platforms = lib.platforms.darwin;

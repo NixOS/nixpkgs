@@ -1,11 +1,11 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
-  llvmPackages_20,
-  go,
+  llvmPackages_22,
+  go_1_27,
   xar,
   binaryen,
   avrdude,
@@ -16,10 +16,12 @@
 }:
 
 let
-  # nixpkgs typically updates default llvm version faster than tinygo releases
-  # which ends up breaking this build. Use fixed version for each release.
+  # nixpkgs typically updates default llvm and go versions faster than tinygo releases
+  # which ends up breaking this build. Use fixed versions for each release.
+  buildGoModule = buildGo127Module;
+  go = go_1_27;
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages_20)
+  inherit (llvmPackages_22)
     llvm
     clang
     compiler-rt
@@ -34,15 +36,15 @@ let
   '';
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tinygo";
-  version = "0.39.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
-    tag = "v${version}";
-    hash = "sha256-uooBZl4u9EHfs1DTI/dQ9Uz1uVOmRcIClEMB7D1q8Lk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9XIqkrq8lInPpQ7G2D5gxRs8Q+pf5ry6JMgvf6dXxds=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -53,10 +55,10 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Vae7IFACioxH4E61GX/X7G19/ITbajp96VNUhliV8ls=";
+  vendorHash = "sha256-GkFyLorvYJ6pr1eNqV7AodilnJxitncnaaZDEav6jCo=";
 
   patches = [
-    ./0001-GNUmakefile.patch
+    ./Makefiles.patch
   ];
 
   nativeCheckInputs = [ binaryen ];
@@ -91,7 +93,7 @@ buildGoModule rec {
     mkdir -p lib/compiler-rt-builtins
     cp -a ${compiler-rt.src}/compiler-rt/lib/builtins/* lib/compiler-rt-builtins/
 
-    substituteInPlace GNUmakefile \
+    substituteInPlace make/release.mk \
       --replace "build/release/tinygo/bin" "$out/bin" \
       --replace "build/release/" "$out/share/"
   '';
@@ -134,17 +136,17 @@ buildGoModule rec {
     make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       muscaln
     ];
   };
-}
+})

@@ -8,18 +8,18 @@
   roxctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "roxctl";
-  version = "4.9.1";
+  version = "4.11.4";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
-    rev = version;
-    sha256 = "sha256-zlmXIqFXp2vnsTsY12zWwMjhPwt7ZM746EjQWVwgKe0=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-wsBwiCzcjaUfZN7MfUSwL/17BpOSOBcQZHrxW09rXZE=";
   };
 
-  vendorHash = "sha256-IyeJS5RHcBkw2bvZklIojrQZBPRhJ+JAnggGm113Lns=";
+  vendorHash = "sha256-hIktQdJDuyqxwq3iop63dUNTqUDqnNnvZVJ3uAQg5BA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
+    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -43,11 +43,11 @@ buildGoModule rec {
     command = "roxctl version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line client of the StackRox Kubernetes Security Platform";
     mainProgram = "roxctl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://www.stackrox.io";
-    maintainers = with maintainers; [ stehessel ];
+    maintainers = with lib.maintainers; [ stehessel ];
   };
-}
+})

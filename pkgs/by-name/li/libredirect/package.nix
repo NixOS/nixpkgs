@@ -124,12 +124,12 @@ else
     installCheckPhase = ''
       (
         source "$hook/nix-support/setup-hook"
-        NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d)" ./test
+        NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d):/run/sock=$PWD/test.sock" ./test
       )
     '';
 
-    meta = with lib; {
-      platforms = platforms.unix;
+    meta = {
+      platforms = lib.platforms.unix;
       description = "LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
       longDescription = ''
         libredirect is an LD_PRELOAD library to intercept and rewrite the paths in

@@ -1,9 +1,9 @@
 {
   mkKdeDerivation,
-  xorg,
+  libxxf86vm,
 }:
 mkKdeDerivation {
   pname = "kgamma";
 
-  extraBuildInputs = [ xorg.libXxf86vm ];
+  extraBuildInputs = [ libxxf86vm ];
 }

@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plog";
   version = "1.1.11";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SergiusTheBest";
     repo = "plog";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/H7qNL6aPjmFYk0X1sx4CCSZWrAMQgPo8I9X/P50ln0=";
   };
 
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
     "-DPLOG_BUILD_SAMPLES=NO"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable, simple and extensible C++ logging library";
     homepage = "https://github.com/SergiusTheBest/plog";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       raphaelr
       erdnaxe
     ];
   };
-}
+})

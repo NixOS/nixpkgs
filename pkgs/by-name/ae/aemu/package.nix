@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     # "-DENABLE_VKCEREAL_TESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://android.googlesource.com/platform/hardware/google/aemu";
     description = "Android emulation utilities library";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
     # The BSD license comes from host-common/VpxFrameParser.cpp, which
     # incorporates some code from libvpx, which uses the 3-clause BSD license.
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
       bsd3
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

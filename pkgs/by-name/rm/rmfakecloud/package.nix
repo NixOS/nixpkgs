@@ -3,35 +3,41 @@
   fetchFromGitHub,
   buildGoModule,
   enableWebui ? true,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nixosTests,
 }:
-
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.26";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
-    rev = "v${version}";
-    hash = "sha256-QV8RFg6gATyjIESwO3r5M3Yd9qWFsA6X6bYLmNpLek0=";
+    tag = "v${version}";
+    hash = "sha256-0eESaBe9FGqDrAumS8ANEEaB4FgbZsgWX1487J3Li4I=";
   };
 
-  vendorHash = "sha256-ColOCdKa/sKoLnF/3idBIEyFB2JWYM+1y5TdC/LZT4A=";
+  vendorHash = "sha256-A+y63w+sEleXFh4ZHgFo1IhsQ2KhqqKW4vRPi393atI=";
 
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
   env.pnpmRoot = "ui";
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
-    fetcherVersion = 1;
-    hash = "sha256-uywmHN9HWKi0CaqTg9uEio2XCu6ap9v2xtbodW/6b4Q=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-UQT6uYusDw7Hd+1URrSQkyorajih6oF0LSMpPZy9K1w=";
   };
-  preBuild = lib.optionals enableWebui ''
+  preBuild = lib.optionalString enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
     rm -r ui/node_modules/sass-embedded ui/node_modules/.pnpm/sass-embedded*
 
@@ -42,11 +48,12 @@ buildGoModule rec {
   '';
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
   ];
 
   # ... or don't embed it in the server
-  postPatch = lib.optionals (!enableWebui) ''
+  postPatch = lib.optionalString (!enableWebui) ''
     sed -i '/go:/d' ui/assets.go
   '';
 
@@ -58,12 +65,11 @@ buildGoModule rec {
 
   passthru.tests.rmfakecloud = nixosTests.rmfakecloud;
 
-  meta = with lib; {
+  meta = {
     description = "Host your own cloud for the Remarkable";
     homepage = "https://ddvk.github.io/rmfakecloud/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
-      euxane
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       martinetd
     ];
     mainProgram = "rmfakecloud";

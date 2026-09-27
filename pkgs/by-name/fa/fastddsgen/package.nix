@@ -3,7 +3,6 @@
   stdenv,
   makeWrapper,
   fetchFromGitHub,
-  fetchpatch2,
   gradle,
   openjdk,
   testers,
@@ -11,36 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastddsgen";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
-    tag = "v${finalAttrs.version}";
+    # Version 4.3.0 has an extra .0 in the git tag.
+    # TODO Remove .0 for later releases if needed.
+    tag = "v${finalAttrs.version}.0";
     fetchSubmodules = true;
-    hash = "sha256-weGS340MvPitWMgWx1cWTgYgGcQfJSTUus8EcBob7hY=";
+    hash = "sha256-yh92JYJFJVp2/rDpz9eAUlNDhtRoRHgCIRYfrADfA/c=";
   };
-
-  patches = [
-    # Note: PR is not yet merged
-    # Select commit from https://github.com/eProsima/IDL-Parser/pull/179
-    (fetchpatch2 {
-      url = "https://github.com/eProsima/IDL-Parser/commit/801ed2f671322c0134b8db180529c9a400d5ed2b.patch";
-      stripLen = 1;
-      extraPrefix = "thirdparty/idl-parser/";
-      includes = [ "thirdparty/idl-parser/build.gradle" ];
-      hash = "sha256-OzywQ02yaMnya+536DeHWeKwZefI4meYqmZcp3onwR8=";
-    })
-
-    # Note: PR is not yet merged
-    # Select commit from https://github.com/eProsima/Fast-DDS-Gen/pull/493
-    (fetchpatch2 {
-      url = "https://github.com/eProsima/Fast-DDS-Gen/commit/b1b66d587f38d4fd6227aa1969c3a10c2095ae7d.patch";
-      hash = "sha256-qVp9Xk8og8Ga2BMiqt2BFM0lAtDnmmwzteceievfcXE=";
-    })
-
-    ./493-addendum.patch
-  ];
 
   nativeBuildInputs = [
     gradle
@@ -87,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast-DDS IDL code generator tool";
     mainProgram = "fastddsgen";
     homepage = "https://github.com/eProsima/Fast-DDS-Gen";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       eProsima Fast DDS-Gen is a Java application that generates
       eProsima Fast DDS C++ or Python source code using the data types
@@ -100,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       order to define the data type of a topic, which will later be
       used to publish or subscribe.
     '';
-    maintainers = with maintainers; [ wentasah ];
+    maintainers = with lib.maintainers; [ wentasah ];
     platforms = openjdk.meta.platforms;
   };
 })

@@ -33,11 +33,11 @@ buildPythonPackage rec {
     "glm"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";
     description = "OpenGL Mathematics (GLM) library for Python written in C++";
     changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${src.tag}";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ sund3RRR ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ sund3RRR ];
   };
 }

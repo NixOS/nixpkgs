@@ -7,22 +7,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "croncpp";
-  version = "2023.03.30";
+  version = "2026.08.12";
 
   src = fetchFromGitHub {
     owner = "mariusbancila";
     repo = "croncpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SBjNzy54OGEMemBp+c1gaH90Dc7ySL915z4E64cBWTI=";
+    hash = "sha256-qdl9494mpmozt6Rmd20MUeGeILWmNGHaxDgW2JnlUvs=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "C++11/14/17 header-only cross-platform library for handling CRON expressions";
     homepage = "https://github.com/mariusbancila/croncpp";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ typedrat ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ typedrat ];
   };
 })

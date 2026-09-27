@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   capnproto,
   sqlite,
   boost,
@@ -17,17 +18,17 @@ let
     sha256 = "1hm5kci2g6n5ikrvp1kpkkdzimjgylv1xicg2vnkbvd9rb56qa99";
   };
   js.ansi_up = fetchurl {
-    url = "https://raw.githubusercontent.com/drudru/ansi_up/v4.0.4/ansi_up.js";
-    sha256 = "1dx8wn38ds8d01kkih26fx1yrisg3kpz61qynjr4zil03ap0hrlr";
+    url = "https://raw.githubusercontent.com/drudru/ansi_up/v5.2.1/ansi_up.js";
+    hash = "sha256-n+tjM7z62ovMht6Zud3jfyQvgrO6cL9zdyEBakKuuRs=";
   };
   js.Chart = fetchurl {
     url = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js";
     hash = "sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "laminar";
-  version = "1.3";
+  version = "1.4";
   outputs = [
     "out"
     "doc"
@@ -35,14 +36,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ohwgiles";
     repo = "laminar";
-    rev = version;
-    hash = "sha256-eo5WzvmjBEe0LAfZdQ/U0XepEE2kdWKKiyE4HOi3RXk=";
+    rev = finalAttrs.version;
+    hash = "sha256-epaiwaQkVohUEDUZNzUxWcOoJ+CxEUlJ8lX2C7e9vWo=";
   };
   patches = [ ./patches/no-network.patch ];
 
   # We need both binary from "capnproto" and library files.
   nativeBuildInputs = [
     cmake
+    pkg-config
     pandoc
     capnproto
   ];
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     zlib
     rapidjson
   ];
-  cmakeFlags = [ "-DLAMINAR_VERSION=${version}" ];
+  cmakeFlags = [ "-DLAMINAR_VERSION=${finalAttrs.version}" ];
 
   preBuild = ''
     mkdir -p js css
@@ -72,14 +74,14 @@ stdenv.mkDerivation rec {
     rm -rf $out/etc # remove upstream config file
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and modular continuous integration service";
     homepage = "https://laminar.ohwg.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       kaction
       maralorn
     ];
   };
-}
+})

@@ -5,26 +5,24 @@
   python3Packages,
   qt6Packages,
   libvncserver,
+  stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blink-qt";
-  version = "6.0.4";
+  version = "6.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "blink-qt";
-    tag = version;
-    hash = "sha256-QESg9yo5oddYqSKuFLSMI2Oju3FCq97+j0uJDK85Yy8=";
+    tag = finalAttrs.version;
+    hash = "sha256-0hsuAYYp7KvfxErAcN4EX8G3goirGRmpijJfAMvbZJQ=";
   };
 
   patches = [
-    # Remove when version > 6.0.4
-    (fetchpatch2 {
-      url = "https://github.com/AGProjects/blink-qt/commit/45343c90ae0680a3d03589fa8a12ac1eb85a6925.patch";
-      hash = "sha256-XwV5L3r0IqWkhlaJypS2cHkDCcoumOgEEqDpdcaTviE=";
-    })
+    # Remove once https://github.com/AGProjects/blink-qt/pull/7 is merged and tagged
+    ./fix-none-account.patch
   ];
 
   nativeBuildInputs = [ qt6Packages.wrapQtAppsHook ];
@@ -40,26 +38,31 @@ python3Packages.buildPythonApplication rec {
     qt6Packages.qtsvg
   ];
 
-  dependencies = with python3Packages; [
-    dateutils
-    dnspython
-    google-api-python-client
-    lxml
-    lxml-html-clean
-    msrplib
-    oauth2client
-    otr
-    pgpy
-    pyqt6
-    pyqt6-webengine
-    python3-application
-    python3-eventlib
-    python3-gnutls
-    sipsimple
-    sqlobject
-    standard-imghdr
-    xcaplib
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      dateutils
+      dnspython
+      google-auth-oauthlib
+      google-api-python-client
+      lxml
+      lxml-html-clean
+      msrplib
+      python3-otr
+      pgpy
+      pyqt6
+      pyqt6-webengine
+      python3-application
+      python3-eventlib
+      python3-gnutls
+      python3-sipsimple
+      sqlobject
+      standard-imghdr
+      xcaplib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      numpy
+    ];
 
   dontWrapQtApps = true;
 
@@ -76,10 +79,10 @@ python3Packages.buildPythonApplication rec {
     description = "Blink SIP Client";
     homepage = "https://icanblink.com";
     downloadPage = "https://github.com/agprojects/blink-qt";
-    changelog = "https://github.com/AGProjects/blink-qt/releases/tag/${version}";
+    changelog = "https://github.com/AGProjects/blink-qt/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "blink";
   };
-}
+})

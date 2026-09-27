@@ -13,6 +13,7 @@
 
   # buildInputs
   rdkafka,
+  rust-jemalloc-sys-unprefixed,
 
   # tests
   cacert,
@@ -25,16 +26,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.5.5";
+  version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xx/gge8A3jathSoHXOJ9DoIJG07uw/UTHh7uuHkOPl0=";
+    hash = "sha256-LVzgyaY7v44tzzcRcAdWFEa7DZfzYnZvI8k4tiDHB3Q=";
   };
 
-  cargoHash = "sha256-yWxy+mLrg0VtWhrpRum1DufQCeB2HkbDRiscWOJOth8=";
+  cargoHash = "sha256-b1xwzpqef9WHhcXIgzb/eIhNrsXuNskQAIRti8wdgMQ=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -76,6 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Have to be set to dynamically link librdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+
+    # krb5-src contains K&R-style C code incompatible with GCC 14's default C23 standard;
+    # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
+    NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=int-conversion";
   };
 
   nativeBuildInputs = [
@@ -88,6 +93,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     rdkafka
+    # tikv-jemalloc-sys's vendored jemalloc configure breaks under gcc 15.
+    rust-jemalloc-sys-unprefixed
   ];
 
   nativeCheckInputs = [
@@ -100,13 +107,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Error: deadline has elapsed
-    "--skip replicated_loglet"
-
+    "--skip"
+    "replicated_loglet"
     # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
-
+    "--skip"
+    "fast_forward_over_trim_gap"
     # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
+    "--skip"
+    "restatectl_smoke_test"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -114,7 +122,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -23,14 +23,14 @@
   zmusic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzdoom";
   version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
-    rev = "g${version}";
+    rev = "g${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-kYw+r08v/Q/hphJuvjn38Dj5mZRijE6pWKoEZBlN5P4=";
   };
@@ -67,26 +67,30 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
-      --replace-fail "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "ret_var(Tag)" "ret_var(\"${finalAttrs.src.rev}\")" \
       --replace-fail "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
-      --replace-fail "ret_var(Hash)" "ret_var(\"${src.rev}\")" \
-      --replace-fail "<unknown version>" "${src.rev}"
+      --replace-fail "ret_var(Hash)" "ret_var(\"${finalAttrs.src.rev}\")" \
+      --replace-fail "<unknown version>" "${finalAttrs.src.rev}"
   '';
 
   # Apple dropped GL support
   # Shader's loading will throw an error while linking
   cmakeFlags = [
-    "-DDYN_GTK=OFF"
-    "-DDYN_OPENAL=OFF"
+    (lib.cmakeBool "DYN_GTK" false)
+    (lib.cmakeBool "DYN_OPENAL" false)
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "HAVE_GLES2" false)
+    (lib.cmakeFeature "OPENAL_INCLUDE_DIR" "${openal}/include/AL")
+    (lib.cmakeFeature "OPENAL_LIBRARY" "${openal}/lib/libopenal.dylib")
+  ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "gzdoom";
       exec = "gzdoom";
       desktopName = "GZDoom";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "gzdoom";
       categories = [ "Game" ];
     })
@@ -120,10 +124,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
-      azahi
       lassulus
       Gliczy
       r4v3n6101
     ];
   };
-}
+})

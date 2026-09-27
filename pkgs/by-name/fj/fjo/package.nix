@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   openssl,
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fjo";
   version = "0.3.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "VoiDD";
     repo = "fjo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KjH78yqfZoN24TBYyFZuxf7z9poRov0uFYQ8+eq9p/o=";
   };
 
@@ -31,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "berg";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

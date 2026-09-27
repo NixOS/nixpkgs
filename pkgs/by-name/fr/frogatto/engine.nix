@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation {
   pname = "anura-engine";
-  version = "unstable-2023-02-27";
+  version = "0-unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "anura-engine";
@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     cp -a anura $out/bin/frogatto
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anura-engine/anura";
     description = "Game engine used by Frogatto";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

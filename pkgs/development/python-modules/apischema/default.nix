@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   graphql-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest8_3CheckHook,
   pythonOlder,
@@ -13,8 +14,6 @@ buildPythonPackage rec {
   pname = "apischema";
   version = "0.18.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wyfo";
@@ -31,9 +30,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   optional-dependencies = {
     graphql = [ graphql-core ];
   };
+
+  # Hasn't been updated in two years
+  doCheck = pythonOlder "3.14";
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -43,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apischema" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON (de)serialization, GraphQL and JSON schema generation using typing";
     homepage = "https://github.com/wyfo/apischema";
     changelog = "https://github.com/wyfo/apischema/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
