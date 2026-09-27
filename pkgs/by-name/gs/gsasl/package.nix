@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsasl";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/gsasl-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-/uNsZqwS0y078pp7Na2PREt5lv42m52l02/WrmScaOs=";
+    sha256 = "sha256-0yvhXv06BMsZsjL3Ib3KAsxq16tBXffXn7LdLA2j4L4=";
   };
 
   buildInputs = [
