@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "light-entity-card";
-  version = "6.4.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "ljmerza";
     repo = "light-entity-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-19P+X59S32kOo+qZ1sh9iFiVT7+jhuYsRrGp/6E0HD4=";
+    hash = "sha256-7nRONIGy7kOYJBx813f7luwMI1rDu9FR75OP5HBsDxY=";
   };
 
-  npmDepsHash = "sha256-Sl2TgA73Wq1n//lqokLC7iHcE1Oqt+ZP6MT+Deidhn0=";
+  npmDepsHash = "sha256-askNG1clZXaJbRBJH7HG/JGhxejmBq38py+A6sSmM3w=";
 
   installPhase = ''
     runHook preInstall
