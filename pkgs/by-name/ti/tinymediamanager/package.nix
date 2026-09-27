@@ -153,6 +153,8 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Media management tool";
     homepage = "https://www.tinymediamanager.org/";
