@@ -92,6 +92,7 @@ buildGo127Module (finalAttrs: {
   meta = {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
+    downloadPage = "https://github.com/cli/cli";
     changelog = "https://github.com/cli/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "gh";
