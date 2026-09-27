@@ -460,6 +460,7 @@
     name = "aaravrav";
     github = "aaravrav";
     githubId = 37036762;
+    matrix = "@hepara:matrix.org";
   };
   aarnphm = {
     email = "contact@aarnphm.xyz";
@@ -11513,6 +11514,13 @@
     githubId = 58676303;
     name = "hhydraa";
   };
+  hideyosh1 = {
+    email = "penelope.zhong@proton.me";
+    keys = [ { fingerprint = "01E9 0D3E 815F 84CA 1003  E7D7 2F75 2D18 C2C1 7AF8"; } ];
+    name = "Penelope Zhong";
+    github = "hideyosh1";
+    githubId = 64223175;
+  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
@@ -20093,6 +20101,12 @@
     github = "mtul0729";
     githubId = 52401682;
     name = "myul";
+  };
+  Myxogastria0808 = {
+    email = "r.rstudio.c@gmail.com";
+    github = "Myxogastria0808";
+    githubId = 78744619;
+    name = "Yuki Osada";
   };
   myypo = {
     email = "nikirsmcgl@gmail.com";

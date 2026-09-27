@@ -1112,6 +1112,9 @@ stdenv.mkDerivation (
         emily
       ];
       mainProgram = "ffmpeg";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ffmpeg" finalAttrs.version // {
+        product = "ffmpeg";
+      };
     };
   }
   // lib.optionalAttrs withCudaLLVM {

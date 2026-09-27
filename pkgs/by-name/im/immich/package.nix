@@ -169,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
   # fix for node-gyp, see https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919
   env.npm_config_nodedir = nodejs;
+  # Prevent Python (via node-gyp) from writing bytecode to ensure build determinism
+  env.PYTHONDONTWRITEBYTECODE = "1";
 
   buildPhase = ''
     runHook preBuild

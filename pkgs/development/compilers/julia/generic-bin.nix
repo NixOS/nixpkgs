@@ -66,6 +66,9 @@ stdenv.mkDerivation {
 
   inherit version patches;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src =
     {
       x86_64-linux = fetchurl {
