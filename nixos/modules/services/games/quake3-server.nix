@@ -28,31 +28,11 @@ let
     ${cfg.extraConfig}
   '';
 
-  defaultBaseq3 = pkgs.requireFile rec {
-    name = "baseq3";
-    hashMode = "recursive";
-    sha256 = "5dd8ee09eabd45e80450f31d7a8b69b846f59738726929298d8a813ce5725ed3";
-    message = ''
-      Unfortunately, we cannot download ${name} automatically.
-      Please purchase a legitimate copy of Quake 3 and change into the installation directory.
-
-      You can either add all relevant files to the nix-store like this:
-      mkdir /tmp/baseq3
-      cp baseq3/pak*.pk3 /tmp/baseq3
-      nix-store --add-fixed sha256 --recursive /tmp/baseq3
-
-      Alternatively you can set services.quake3-server.baseq3 to a path and
-      copy the baseq3 directory into the .q3a subdirectory of that path.
-    '';
-  };
-
   home = pkgs.runCommand "quake3-home" { } ''
     mkdir -p $out/.q3a/baseq3
-
-    for file in ${cfg.baseq3}/*; do
-      ln -s $file $out/.q3a/baseq3/$(basename $file)
+    for file in $(find -L ${cfg.baseq3} -maxdepth 2 -name '*.pk3'); do
+      ln -s "$file" "$out/.q3a/baseq3/$(basename "$file")"
     done
-
     ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
   '';
 in
@@ -136,13 +116,23 @@ in
 
       baseq3 = mkOption {
         type = types.either types.package types.path;
-        default = defaultBaseq3;
-        defaultText = literalMD "Manually downloaded Quake 3 installation directory.";
+        default = pkgs.symlinkJoin {
+          name = "quake3-demo-content";
+          paths = [
+            pkgs.quake3demodata
+            pkgs.quake3pointrelease
+          ];
+        };
+        defaultText = "Freely redistributable Quake 3 demo data (`pak0`) plus the 1.32 point release files (`pak1`-`pak8`), merged together.";
         example = "/var/lib/q3ds";
         description = ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved
           in the top-level directory. If this is on another filesystem (e.g /var/lib/baseq3) the .pk3 files are searched in
           $baseq3/.q3a/baseq3/
+
+          Defaults to the freely redistributable demo data (pak0) merged
+          with the 1.32 point release files (pak1-pak8), so the game runs
+          out of the box without owning a retail copy.
         '';
       };
     };
