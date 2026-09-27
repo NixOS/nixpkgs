@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-privatedns";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_privatedns";
     inherit version;
-    hash = "sha256-NCMYcvAblPYZXY7lQo4XRpJS7QTqCCjVIyXr578KEgs=";
+    hash = "sha256-4GTSIhFTgkk8dr4QluTYMA6zGp70XBmKoZGZM8uQoSQ=";
   };
 
   build-system = [ setuptools ];
