@@ -28992,6 +28992,13 @@
     github = "thelissimus";
     githubId = 70096720;
   };
+  thelolcoder2007 = {
+    name = "thelolcoder2007";
+    github = "thelolcoder2007";
+    githubId = 52106896;
+    matrix = "@erents:dapperepoging.nl";
+    keys = [ { fingerprint = "E374 815F C754 462B 1C34  3562 FDC3 99DE 8F7E 200B"; } ];
+  };
   themadbit = {
     name = "Mark Tanui";
     email = "marktanui75@gmail.com";

@@ -15012,8 +15012,6 @@ self: super: with self; {
 
   pyfreshr = callPackage ../development/python-modules/pyfreshr { };
 
-  pyfribidi = callPackage ../development/python-modules/pyfribidi { };
-
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
   pyfronius = callPackage ../development/python-modules/pyfronius { };

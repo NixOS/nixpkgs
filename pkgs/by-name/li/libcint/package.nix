@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       It provides C/Fortran API to evaluate one-electron / two-electron
       integrals for Cartesian / real-spheric / spinor Gaussian type functions.
     '';
-    homepage = "http://wiki.sunqm.net/libcint";
+    homepage = "https://github.com/sunqm/libcint";
     downloadPage = "https://github.com/sunqm/libcint";
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = lib.licenses.bsd2;
