@@ -45,6 +45,12 @@
   libxcomposite,
   libx11,
   libxshmfence,
+
+  # update script
+  writeShellApplication,
+  common-updater-scripts,
+  curl,
+  jq,
 }:
 
 let
@@ -98,16 +104,15 @@ let
       "out"
     ];
   };
-
-  version = "0.115.0";
 in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  inherit version;
+  version = "0.115.0";
 
   src =
     let
-      flavor = if sdk then "sdk-" else "";
+      flavor = if sdk then "sdk" else "normal";
 
       arch =
         if stdenv.hostPlatform.is64bit then
@@ -116,20 +121,8 @@ stdenv.mkDerivation {
           "arm64"
         else
           throw "nwjs: unsupported architecture.";
-
-      # TODO: Write an update script to update all 4 hashes.
-      # nixpkgs-update: no auto update
-      hashes = {
-        "sdk-arm64" = "sha256-yhAQNZ4eMAZIouD+twxfWPgL91b8pRR7YzVODwu0npg=";
-        "sdk-x64" = "sha256-H1yRI+xR/7+TDQ6xaswrvqhJcObO9ZVm6qXIDT5FTQc=";
-        "arm64" = "sha256-RF2QCVIRKd00heZKyzirCr7ePLjlGza19u8CN4fcxT0=";
-        "x64" = "sha256-XlGTxRWd7jwmCXrgSG8q/0tciW21p8f1wr8a4n8rmNk=";
-      };
     in
-    fetchurl {
-      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${arch}.tar.gz";
-      hash = hashes."${flavor + arch}";
-    };
+    finalAttrs.passthru.srcs."${flavor}-${arch}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -169,6 +162,55 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    srcs =
+      let
+        mkUrl =
+          flavor: arch:
+          "https://dl.nwjs.io/v${finalAttrs.version}/nwjs-${
+            lib.optionalString (flavor == "sdk") "sdk-"
+          }v${finalAttrs.version}-linux-${arch}.tar.gz";
+      in
+      {
+        normal-arm64 = fetchurl {
+          url = mkUrl "normal" "arm64";
+          hash = "sha256-urnIwmnNcb6mqkBHepniVT4jxha4ImI9P+SRvKUQFl8=";
+        };
+        normal-x64 = fetchurl {
+          url = mkUrl "normal" "x64";
+          hash = "sha256-9p3ZA/ICjlsydQTXTobRRi2u3N0U/GtEP9q1RHjSZ8o=";
+        };
+        sdk-arm64 = fetchurl {
+          url = mkUrl "sdk" "arm64";
+          hash = "sha256-p9qUIVLqVeRD9hRETmnQK1nprzOYANxJLrXoDLjpF9Q=";
+        };
+        sdk-x64 = fetchurl {
+          url = mkUrl "sdk" "x64";
+          hash = "sha256-rPIaD0aPi7zAXu9qrApbPyT3DkroDlYE71X1Bt4PmcA=";
+        };
+      };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-nwjs";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        jq
+      ];
+      text = ''
+        LATEST_VERSION="$(curl -sL https://nwjs.io/versions.json | jq -r '.stable' | sed 's/^v//')"
+        ARCHIVE_NAMES="${toString (lib.attrNames finalAttrs.passthru.srcs)}"
+
+        for name in $ARCHIVE_NAMES; do
+          update-source-version nwjs "$LATEST_VERSION" \
+            --source-key="passthru.srcs.$name" \
+            --ignore-same-version \
+            --print-changes
+        done
+      '';
+    });
+  };
+
   meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
@@ -176,7 +218,7 @@ stdenv.mkDerivation {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    changelog = "https://github.com/nwjs/nw.js/blob/nw-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nwjs/nw.js/blob/nw-v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       mikaelfangel
@@ -185,4 +227,4 @@ stdenv.mkDerivation {
     mainProgram = "nw";
     license = lib.licenses.mit;
   };
-}
+})
