@@ -1,22 +1,34 @@
 {
-  "asterisk_18": {
-    "sha256": "a17f511bfa092c8fa9eccd3a5ecf5f728ccdcf2b1a04d2c06e7177d96c3c9ee1",
-    "version": "18.26.4"
-  },
   "asterisk_20": {
-    "sha256": "247e47727856b113ad520f3142225b3b7e526e1ba471fb7d546bc0fa4a734592",
-    "version": "20.18.2"
+    "pjproject": {
+      "sha256": "04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7",
+      "version": "2.17"
+    },
+    "sha256": "32ef7db8e449629128eb5f7e42d3d704f03daacb91d76ee694a9acf7f1fd53e2",
+    "version": "20.20.1"
   },
   "asterisk_21": {
-    "sha256": "f7d2535e949dfc531c8480ba2c72c4a007701d787986c01730e391d601320153",
-    "version": "21.12.1"
+    "pjproject": {
+      "sha256": "58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c",
+      "version": "2.15.1"
+    },
+    "sha256": "1601086eb812ee78e810adc34d3196cb253e2d3156ccfd9911f736f2bce83dd8",
+    "version": "21.12.3"
   },
   "asterisk_22": {
-    "sha256": "8dd373ce0771a9ed40bb54a72a889ccdd14c0cee458ed68da9ce913a668e4b22",
-    "version": "22.8.2"
+    "pjproject": {
+      "sha256": "04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7",
+      "version": "2.17"
+    },
+    "sha256": "0953564c44fa49827f3c9d70ca6e80db83828c9848440852c6be44c961855353",
+    "version": "22.10.1"
   },
   "asterisk_23": {
-    "sha256": "dfba245e993d500a4a04a7e859e5e60d9623e769b403919254a140ec1d52aa71",
-    "version": "23.2.2"
+    "pjproject": {
+      "sha256": "04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7",
+      "version": "2.17"
+    },
+    "sha256": "9d90269af187c8437087ba96f569e656a6a4a9a0a2347489c9e81ff1c37d2c51",
+    "version": "23.4.1"
   }
 }
