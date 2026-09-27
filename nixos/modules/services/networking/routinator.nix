@@ -140,7 +140,8 @@ in
     systemd.services.routinator = {
       description = "Routinator 3000 is free, open-source RPKI Relying Party software made by NLnet Labs.";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       path = with pkgs; [ rsync ];
       serviceConfig = {
         Type = "exec";
