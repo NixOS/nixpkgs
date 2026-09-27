@@ -382,6 +382,7 @@
   ./programs/wayland/wayvnc.nix
   ./programs/weylus.nix
   ./programs/whois.nix
+  ./programs/widevine-cdm.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
