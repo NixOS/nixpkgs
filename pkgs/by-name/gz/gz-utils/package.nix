@@ -5,19 +5,25 @@
 
   # nativeBuildInputs
   cmake,
-  gz-cmake, # currently, gz-utils is dependent on gz-cmake
   doxygen,
   graphviz,
 
-  # buildInputs
+  # propagatedNativeBuildInputs
+  gz-cmake, # downstream consumers need gz-cmake's CMake modules
+
+  # propagatedBuildInputs
   cli11,
   spdlog,
 
   # nativeCheckInputs
+  ctestCheckHook,
   python3,
 
   # checkInputs
   gtest,
+
+  nix-update-script,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
@@ -45,12 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    gz-cmake
     doxygen
     graphviz
   ];
 
-  buildInputs = [
+  propagatedNativeBuildInputs = [
+    gz-cmake
+  ];
+
+  propagatedBuildInputs = [
     cli11
     spdlog
   ];
@@ -67,11 +76,25 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doxygen/html $doc
   '';
 
-  nativeCheckInputs = [ python3 ];
+  nativeCheckInputs = [
+    ctestCheckHook
+    python3
+  ];
 
   checkInputs = [ gtest ];
 
   doCheck = true;
+
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=gz-utils${lib.versions.major finalAttrs.version}_([\\d\\.]+)"
+      ];
+    };
+  };
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";
@@ -79,6 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/gazebosim/gz-utils/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = with lib.maintainers; [ guelakais ];
+    pkgConfigModules = [ "gz-utils" ];
+    maintainers = with lib.maintainers; [
+      guelakais
+      taylorhoward92
+    ];
   };
 })

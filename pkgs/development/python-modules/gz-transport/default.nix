@@ -1,26 +1,30 @@
 {
+  lib,
   stdenv,
   toPythonModule,
   python,
   pkgs,
+  gz-msgs,
 }:
 
 let
-  gz-math = pkgs.gz-math.override { python3Packages = python.pkgs; };
+  gz-transport = pkgs.gz-transport.override { python3Packages = python.pkgs; };
 in
 toPythonModule (
   stdenv.mkDerivation {
-    pname = "gz-math";
-    inherit (gz-math) version;
+    pname = "gz-transport";
+    inherit (gz-transport) version;
 
     dontUnpack = true;
     dontConfigure = true;
     dontBuild = true;
 
+    propagatedBuildInputs = [ gz-msgs ];
+
     installPhase = ''
       runHook preInstall
       mkdir -p "$out/${python.sitePackages}"
-      cp -r ${gz-math}/lib/python/. "$out/${python.sitePackages}/"
+      cp -r ${gz-transport}/lib/python/. "$out/${python.sitePackages}/"
       runHook postInstall
     '';
 
@@ -29,12 +33,12 @@ toPythonModule (
     installCheckPhase = ''
       runHook preInstallCheck
       PYTHONPATH="$out/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}" \
-        ${python.pythonOnBuildForHost.interpreter} -c "import gz.math"
+        ${python.pythonOnBuildForHost.interpreter} -c "import gz.transport"
       runHook postInstallCheck
     '';
 
-    meta = gz-math.meta // {
-      description = "Python bindings for gz-math";
+    meta = gz-transport.meta // {
+      description = "Python bindings for gz-transport";
     };
   }
 )
