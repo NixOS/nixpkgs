@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5536c75..7e916f4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -254,16 +254,20 @@ else()
+ endif()
+ 
+ # ———————————————————————————————————————————————
+-# Add tokenizers-cpp subproject
++# Add tokenizers-cpp pre-built package
+ # ———————————————————————————————————————————————
+-# Ensure C++17 is available for tokenizers-cpp
+-if(CMAKE_CXX_STANDARD LESS 17)
+-    set(CMAKE_CXX_STANDARD 17)
++if(NOT DEFINED TOKENIZERS_CPP_LIB_PATH)
++    message(FATAL_ERROR "TOKENIZERS_CPP_LIB_PATH must be set to the path of the pre-built libtokenizers_cpp.a")
++endif()
++if(NOT DEFINED TOKENIZERS_CPP_INCLUDE_PATH)
++    message(FATAL_ERROR "TOKENIZERS_CPP_INCLUDE_PATH must be set to the tokenizers-cpp include directory")
+ endif()
+ 
+-add_subdirectory(${CMAKE_SOURCE_DIR}/../third_party/tokenizers-cpp
+-                 ${CMAKE_BINARY_DIR}/tokenizers-cpp
+-                 EXCLUDE_FROM_ALL)
++add_library(tokenizers_cpp STATIC IMPORTED)
++set_target_properties(tokenizers_cpp PROPERTIES
++    IMPORTED_LOCATION ${TOKENIZERS_CPP_LIB_PATH}
++    INTERFACE_INCLUDE_DIRECTORIES ${TOKENIZERS_CPP_INCLUDE_PATH}
++)
+ 
+ # ———————————————————————————————————————————————
+ # Gather your sources
