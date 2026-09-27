@@ -1,0 +1,7 @@
+--- a/pnpm-workspace.yaml	2026-05-11 18:41:00.505375748 -0400
++++ b/pnpm-workspace.yaml	2026-05-11 18:41:00.549859840 -0400
+@@ -1,2 +1,4 @@
+ onlyBuiltDependencies:
+   - sharp
++packages:
++  - "."
