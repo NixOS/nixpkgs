@@ -5,6 +5,7 @@
   meson,
   ninja,
   nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Enhanced config file parser, which merges config files placed in several locations into one";
@@ -43,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ grimmauld ];
     mainProgram = "econftool";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libeconf" ];
   };
 })
