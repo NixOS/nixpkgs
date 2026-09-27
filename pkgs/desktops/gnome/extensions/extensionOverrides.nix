@@ -115,7 +115,6 @@ lib.trivial.pipe super [
     patches = [
       (replaceVars ./extensionOverridesPatches/ding_at_rastersoft.com.patch {
         inherit gjs;
-        util_linux = util-linux;
         xdg_utils = xdg-utils;
         gtk3_gsettings_path = glib.getSchemaPath gtk3;
         nautilus_gsettings_path = glib.getSchemaPath nautilus;
