@@ -123,8 +123,8 @@ stdenv.mkDerivation rec {
           # we have to copy it, because the plugins have refrences to .. inside
         in
         ''
-          mkdir -p $out/share/moodle/${dir}/${p.name}
-          cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
+          mkdir -p $out/share/moodle/public/${dir}/${p.name}
+          cp -r ${p}/* $out/share/moodle/public/${dir}/${p.name}/
         ''
       ) plugins
     )}
