@@ -2558,6 +2558,7 @@ mapAliases {
   theme-jade1 = throw "'theme-jade1' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   theme-obsidian2 = throw "'theme-obsidian2' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   theme-vertex = throw "'theme-vertex' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
+  themes = throw "'themes' has ben removed because it was unused"; # Added 2026-09-27
   thinkingRock = throw "'thinkingRock' has been removed due to being unmaintained decades old software"; # Added 2026-02-12
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30

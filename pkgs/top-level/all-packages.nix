@@ -8202,8 +8202,6 @@ with pkgs;
     source-han-serif-vf-ttf
     ;
 
-  themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
-
   tex-gyre = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
 
   tex-gyre-math = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
