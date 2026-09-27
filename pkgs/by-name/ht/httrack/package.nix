@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httrack";
-  version = "3.50.3";
+  version = "3.50.4";
 
   src = fetchurl {
     url = "https://github.com/xroche/httrack/releases/download/${finalAttrs.version}/httrack-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZE1OwOSK1ZbazX+AF7aNij8d/BQChLQStTCG59FmTp0=";
+    hash = "sha256-+X27ltEQaBtDSZEsi8XEARpsInp9QpTqHU8Ak7rqUbY=";
   };
 
   buildInputs = [
