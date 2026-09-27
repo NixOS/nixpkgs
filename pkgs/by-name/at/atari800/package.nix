@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atari800";
-  version = "5.2.0";
+  version = "7_0_0";
 
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
     rev = "ATARI800_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-D66YRRTqdoV9TqDFonJ9XNpfP52AicuYgdiW27RCIuQ=";
+    hash = "sha256-Z5VJmGDg8vmRjoIcjalYtpWwGy0nXH3w/Nv2c8fCj30=";
   };
 
   nativeBuildInputs = [
