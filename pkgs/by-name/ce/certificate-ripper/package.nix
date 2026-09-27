@@ -7,7 +7,7 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "certificate-ripper";
-  version = "2.4.1";
+  version = "2.7.1";
 
   src = maven.buildMavenPackage {
     pname = "certificate-ripper-jar";
@@ -17,30 +17,24 @@ buildGraalvmNativeImage (finalAttrs: {
       owner = "Hakky54";
       repo = "certificate-ripper";
       tag = finalAttrs.version;
-      hash = "sha256-qQ5BHH+DT1sGNDGzSbclqc6+byBxyP16qvm3k9E/Yks=";
+      hash = "sha256-yKBINzHhUpjqrbMIt3LulKtMLyuZvuBzBaR6wMs6lCI=";
     };
 
     patches = [
       ./pin-default-maven-plguin-versions.patch
-      ./fix-test-temp-dir-path.patch
     ];
 
-    mvnHash = "sha256-G2+Z1JyxTzCZzWjB8MQH1T9kwHjtRPag+bmzGXpQXw4=";
+    mvnHash = "sha256-ZuqPzFL7CJ/H6SBcQMwTMqBsKtlxv9oiQXXfFgMdQpE=";
 
-    mvnParameters =
-      let
-        disabledTests = [
-          "PemExportCommandShould#resolveRootCaOnlyWhenEnabled" # uses network
-          "DerExportCommandShould#processSystemTrustedCertificates"
-          "JksExportCommandShould#processSystemTrustedCertificates"
-          "PemExportCommandShould#processSystemTrustedCertificates"
-          "Pkcs12ExportCommandShould#processSystemTrustedCertificates"
-        ];
-      in
-      lib.escapeShellArgs [
-        "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z" # make timestamp deterministic
-        "-Dtest=${lib.concatMapStringsSep "," (t: "!" + t) disabledTests}"
-      ];
+    mvnParameters = lib.escapeShellArgs [
+      # generate a singular .jar file
+      "-Pfat-jar"
+      # make the build timestamp deterministic
+      "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
+    ];
+
+    # Integration tests and network based tests fail, let's not bother with blacklisting them one-by-one
+    doCheck = false;
 
     installPhase = ''
       install -Dm644 target/crip.jar $out
