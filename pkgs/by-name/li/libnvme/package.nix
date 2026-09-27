@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
   version = "1.16.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
