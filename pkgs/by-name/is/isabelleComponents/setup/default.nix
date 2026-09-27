@@ -4,13 +4,13 @@
   scala,
   jdk,
   flatlaf,
-  bash_process,
+  isabelle,
   writeTextFile,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "isabelle-setup";
-  inherit (bash_process) src version;
+  inherit (isabelle) src version;
 
   __structuredAttrs = true;
   strictDeps = true;

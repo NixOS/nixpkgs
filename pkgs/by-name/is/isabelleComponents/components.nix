@@ -1,10 +1,79 @@
-{ lib, newScope }:
+{
+  lib,
+  newScope,
+  stdenv,
+}:
 
 lib.makeScope newScope (self: {
   # Helpers
   addSettings = self.callPackage ./add-settings.nix { };
+  buildIsabelle = self.callPackage ./generic.nix { };
 
   # Isabelle versions
+  isabelleWithJars =
+    self.buildIsabelle
+      {
+        makeHeap = false;
+        doCheck = false;
+      }
+      (cp: [
+        cp.bash_process
+        cp.flatlaf
+        cp.fonts
+        cp.jdk
+        cp.javamail
+        cp.jedit
+        cp.jfreechart
+        cp.jortho
+        cp.jsvg
+        cp.jsoup
+        cp.kodkodi
+        cp.polyml
+        cp.postgresql_jdbc
+        cp.scala
+        cp.setup
+        cp.solr
+        cp.sqlite
+        cp.xz-java
+        cp.zstd-jni
+      ]);
+
+  isabelleWithProvers = self.buildIsabelle { } (
+    cp:
+    self.isabelleWithJars.componentsFn cp
+    ++ [
+      cp.csdp
+      cp.cvc5
+      cp.e
+      cp.minisat
+      cp.nunchaku
+      cp.smbc
+      cp.spass
+      cp.vampire
+      cp.verit
+      cp.zipperposition
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform cp.z3) [
+      cp.z3
+    ]
+  );
+
+  isabelle = self.isabelleWithProvers.withComponents (cp: [
+    cp.bib2xhtml
+    cp.elm
+    cp.find_facts_web
+    cp.lipics
+    cp.llncs
+    cp.opam
+    cp.pdfjs
+    cp.prismjs
+    cp.rsync
+    cp.stack
+  ]);
+
+  isabelleWithLinter = self.isabelle.withComponents (cp: [ cp.isabelle-linter ]);
+  isabelleWithVSCodium = self.isabelle.withComponents (cp: [ cp.vscodium ]);
+  isabelleUnfree = self.isabelle.withComponents (cp: [ cp.foiltex ]);
   isabelle-bin = self.callPackage ./binary { };
 
   # Components
