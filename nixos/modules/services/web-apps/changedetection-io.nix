@@ -150,7 +150,7 @@ in
             ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
             ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
             ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
-            ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
+            ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1";
             EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
             ExecStart = ''
               ${cfg.package}/bin/changedetection.py \
@@ -202,7 +202,7 @@ in
 
         (mkIf cfg.playwrightSupport {
           changedetection-io-playwright = {
-            image = "browserless/chrome";
+            image = "ghcr.io/browserless/chromium";
             environment = {
               SCREEN_WIDTH = "1920";
               SCREEN_HEIGHT = "1024";
