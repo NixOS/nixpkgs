@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lis";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchzip {
     url = "https://www.ssisc.org/lis/dl/lis-${finalAttrs.version}.zip";
-    hash = "sha256-RyNFHdezJyE8rJohxW3FmcqD+4N+7+ejD1z/DplQHe8=";
+    hash = "sha256-NBdM6wPfRf0Rx7of8c5ef23Ga403rmQCJ+jWHzNl0OA=";
   };
 
   enableParallelBuilding = true;
