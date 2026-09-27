@@ -24,9 +24,9 @@ let
 
   coqPath = lib.makeSearchPath "/lib/coq/${rocq-version}/user-contrib" allPackages;
 
-  ocamlPath = lib.makeSearchPath "/lib/ocaml/${coq.ocamlPackages.ocaml.version}/site-lib" (
-    [ coq.ocamlPackages.findlib ] ++ allPackages
-  );
+  ocamlPath =
+    lib.makeSearchPathOutput "dev" "/lib/ocaml/${coq.ocamlPackages.ocaml.version}/site-lib"
+      ([ coq.ocamlPackages.findlib ] ++ allPackages);
 
   pathEnvVar = if isRocq then "ROCQPATH" else "COQPATH";
 in
