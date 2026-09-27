@@ -1,0 +1,331 @@
+diff -ru a/lib/quantization/src/turboquant/simd/query2bit/x64.rs b/lib/quantization/src/turboquant/simd/query2bit/x64.rs
+--- a/lib/quantization/src/turboquant/simd/query2bit/x64.rs
++++ b/lib/quantization/src/turboquant/simd/query2bit/x64.rs
+@@ -203,82 +203,7 @@
+     /// CPU must support `avx512f`, `avx512bw`, `avx512vnni`, `ssse3`, `sse4.1`.
+     #[target_feature(enable = "avx512f,avx512bw,avx512vnni,sse4.1,ssse3")]
+     pub unsafe fn dotprod_raw_avx512_vnni(&self, vector: &[u8]) -> i64 {
+-        use core::arch::x86_64::*;
+-
+-        assert_eq!(
+-            vector.len(),
+-            self.expected_vector_bytes(),
+-            "Query2bitSimd::dotprod_raw_avx512_vnni: vector length mismatch ({} vs expected {})",
+-            vector.len(),
+-            self.expected_vector_bytes(),
+-        );
+-
+-        unsafe {
+-            let mut acc_low = _mm512_setzero_si512();
+-            let mut acc_high = _mm512_setzero_si512();
+-
+-            let n_chunks = self.query_data.len();
+-            let n_quads = n_chunks / 4;
+-
+-            for q in 0..n_quads {
+-                let base = 4 * q;
+-
+-                // Unpack 4 × 16 centroids from 16 packed data bytes.
+-                let c_0 = unpack_16_codes_sse(vector.as_ptr().add(4 * base));
+-                let c_1 = unpack_16_codes_sse(vector.as_ptr().add(4 * (base + 1)));
+-                let c_2 = unpack_16_codes_sse(vector.as_ptr().add(4 * (base + 2)));
+-                let c_3 = unpack_16_codes_sse(vector.as_ptr().add(4 * (base + 3)));
+-                let c_ab = _mm256_set_m128i(c_1, c_0);
+-                let c_cd = _mm256_set_m128i(c_3, c_2);
+-                let c = _mm512_inserti64x4(_mm512_castsi256_si512(c_ab), c_cd, 1);
+-
+-                // Load 4 × 16 query-low i8 and 4 × 16 query-high i8 into ZMMs.
+-                let q_lo_0 = _mm_loadu_si128(self.query_data[base][0].as_ptr().cast::<__m128i>());
+-                let q_lo_1 =
+-                    _mm_loadu_si128(self.query_data[base + 1][0].as_ptr().cast::<__m128i>());
+-                let q_lo_2 =
+-                    _mm_loadu_si128(self.query_data[base + 2][0].as_ptr().cast::<__m128i>());
+-                let q_lo_3 =
+-                    _mm_loadu_si128(self.query_data[base + 3][0].as_ptr().cast::<__m128i>());
+-                let q_lo_ab = _mm256_set_m128i(q_lo_1, q_lo_0);
+-                let q_lo_cd = _mm256_set_m128i(q_lo_3, q_lo_2);
+-                let q_low = _mm512_inserti64x4(_mm512_castsi256_si512(q_lo_ab), q_lo_cd, 1);
+-
+-                let q_hi_0 = _mm_loadu_si128(self.query_data[base][1].as_ptr().cast::<__m128i>());
+-                let q_hi_1 =
+-                    _mm_loadu_si128(self.query_data[base + 1][1].as_ptr().cast::<__m128i>());
+-                let q_hi_2 =
+-                    _mm_loadu_si128(self.query_data[base + 2][1].as_ptr().cast::<__m128i>());
+-                let q_hi_3 =
+-                    _mm_loadu_si128(self.query_data[base + 3][1].as_ptr().cast::<__m128i>());
+-                let q_hi_ab = _mm256_set_m128i(q_hi_1, q_hi_0);
+-                let q_hi_cd = _mm256_set_m128i(q_hi_3, q_hi_2);
+-                let q_high = _mm512_inserti64x4(_mm512_castsi256_si512(q_hi_ab), q_hi_cd, 1);
+-
+-                acc_low = _mm512_dpbusd_epi32(acc_low, c, q_low);
+-                acc_high = _mm512_dpbusd_epi32(acc_high, c, q_high);
+-            }
+-
+-            let mut total_low = i64::from(_mm512_reduce_add_epi32(acc_low));
+-            let mut total_high = i64::from(_mm512_reduce_add_epi32(acc_high));
+-
+-            // Tail (0..3 chunks) via plain SSE `maddubs + madd_epi16` —
+-            // avoids pulling in avx512vl for the narrow VPDPBUSD variants.
+-            let tail_start = n_quads * 4;
+-            let ones = _mm_set1_epi16(1);
+-            for p in tail_start..n_chunks {
+-                let [q_lo_chunk, q_hi_chunk] = &self.query_data[p];
+-                let c = unpack_16_codes_sse(vector.as_ptr().add(4 * p));
+-                let q_low = _mm_loadu_si128(q_lo_chunk.as_ptr().cast::<__m128i>());
+-                let q_high = _mm_loadu_si128(q_hi_chunk.as_ptr().cast::<__m128i>());
+-                let prod_low = _mm_maddubs_epi16(c, q_low);
+-                let prod_high = _mm_maddubs_epi16(c, q_high);
+-                total_low += i64::from(hsum_i32_sse(_mm_madd_epi16(prod_low, ones)));
+-                total_high += i64::from(hsum_i32_sse(_mm_madd_epi16(prod_high, ones)));
+-            }
+-
+-            total_low + QUERY_HIGH_COEF * total_high + self.dotprod_raw_tail(vector)
+-        }
++        unsafe { self.dotprod_raw_avx2(vector) }
+     }
+ }
+ 
+@@ -584,74 +509,7 @@
+ /// CPU must support `avx512f`, `avx512bw`, `avx512vnni`, `ssse3`, `sse4.1`.
+ #[target_feature(enable = "avx512f,avx512bw,avx512vnni,sse4.1,ssse3")]
+ pub unsafe fn score_2bit_internal_avx512_vnni(a: &[u8], b: &[u8]) -> f32 {
+-    use core::arch::x86_64::*;
+-
+-    assert_eq!(a.len(), b.len());
+-
+-    unsafe {
+-        // Full-width 512-bit VNNI.  Process 4 chunks (64 codes) per iter.
+-        let shift512 = _mm512_set1_epi8(-128_i8);
+-        let mut acc = _mm512_setzero_si512();
+-
+-        let n_chunks = a.len() / 4;
+-        let n_quads = n_chunks / 4;
+-
+-        for q in 0..n_quads {
+-            let base = 4 * q;
+-            let c_a_0 = unpack_16_codes_sse(a.as_ptr().add(4 * base));
+-            let c_a_1 = unpack_16_codes_sse(a.as_ptr().add(4 * (base + 1)));
+-            let c_a_2 = unpack_16_codes_sse(a.as_ptr().add(4 * (base + 2)));
+-            let c_a_3 = unpack_16_codes_sse(a.as_ptr().add(4 * (base + 3)));
+-            let c_b_0 = unpack_16_codes_sse(b.as_ptr().add(4 * base));
+-            let c_b_1 = unpack_16_codes_sse(b.as_ptr().add(4 * (base + 1)));
+-            let c_b_2 = unpack_16_codes_sse(b.as_ptr().add(4 * (base + 2)));
+-            let c_b_3 = unpack_16_codes_sse(b.as_ptr().add(4 * (base + 3)));
+-
+-            let c_a_ab = _mm256_set_m128i(c_a_1, c_a_0);
+-            let c_a_cd = _mm256_set_m128i(c_a_3, c_a_2);
+-            let c_a = _mm512_inserti64x4(_mm512_castsi256_si512(c_a_ab), c_a_cd, 1);
+-            let c_b_ab = _mm256_set_m128i(c_b_1, c_b_0);
+-            let c_b_cd = _mm256_set_m128i(c_b_3, c_b_2);
+-            let c_b = _mm512_inserti64x4(_mm512_castsi256_si512(c_b_ab), c_b_cd, 1);
+-
+-            // Unwind the `+128` shift to recover signed i8.
+-            let c_a = _mm512_xor_si512(c_a, shift512);
+-            let c_b = _mm512_xor_si512(c_b, shift512);
+-
+-            // Widen i8 → i16 in both halves of each ZMM.
+-            let c_a_lo = _mm512_cvtepi8_epi16(_mm512_castsi512_si256(c_a));
+-            let c_a_hi = _mm512_cvtepi8_epi16(_mm512_extracti64x4_epi64(c_a, 1));
+-            let c_b_lo = _mm512_cvtepi8_epi16(_mm512_castsi512_si256(c_b));
+-            let c_b_hi = _mm512_cvtepi8_epi16(_mm512_extracti64x4_epi64(c_b, 1));
+-
+-            acc = _mm512_dpwssd_epi32(acc, c_a_lo, c_b_lo);
+-            acc = _mm512_dpwssd_epi32(acc, c_a_hi, c_b_hi);
+-        }
+-
+-        let mut acc_total = i64::from(_mm512_reduce_add_epi32(acc));
+-
+-        // Tail (0..3 chunks) via SSE `madd_epi16` — no avx512vl needed.
+-        let tail_start = n_quads * 4;
+-        let shift_128 = _mm_set1_epi8(-128_i8);
+-        for p in tail_start..n_chunks {
+-            let c_a = _mm_xor_si128(unpack_16_codes_sse(a.as_ptr().add(4 * p)), shift_128);
+-            let c_b = _mm_xor_si128(unpack_16_codes_sse(b.as_ptr().add(4 * p)), shift_128);
+-            let c_a_lo = _mm_cvtepi8_epi16(c_a);
+-            let c_a_hi = _mm_cvtepi8_epi16(_mm_srli_si128(c_a, 8));
+-            let c_b_lo = _mm_cvtepi8_epi16(c_b);
+-            let c_b_hi = _mm_cvtepi8_epi16(_mm_srli_si128(c_b, 8));
+-            let prod = _mm_add_epi32(
+-                _mm_madd_epi16(c_a_lo, c_b_lo),
+-                _mm_madd_epi16(c_a_hi, c_b_hi),
+-            );
+-            acc_total += i64::from(hsum_i32_sse(prod));
+-        }
+-
+-        // Scalar tail for any bytes past the last SIMD chunk (a.len() % 4).
+-        let simd_bytes = n_chunks * 4;
+-        acc_total += super::score_2bit_internal_integer(&a[simd_bytes..], &b[simd_bytes..]);
+-        acc_total as f32 / (CODEBOOK_SCALE * CODEBOOK_SCALE)
+-    }
++    unsafe { score_2bit_internal_avx2(a, b) }
+ }
+ 
+ #[cfg(test)]
+diff -ru a/lib/quantization/src/turboquant/simd/query4bit/x64.rs b/lib/quantization/src/turboquant/simd/query4bit/x64.rs
+--- a/lib/quantization/src/turboquant/simd/query4bit/x64.rs
++++ b/lib/quantization/src/turboquant/simd/query4bit/x64.rs
+@@ -146,95 +146,7 @@
+     /// CPU must support `avx512f`, `avx512bw`, and `avx512vnni`.
+     #[target_feature(enable = "avx512f,avx512bw,avx512vnni,sse4.1,ssse3")]
+     pub unsafe fn dotprod_raw_avx512_vnni(&self, vector: &[u8]) -> i64 {
+-        use core::arch::x86_64::*;
+-
+-        assert_eq!(
+-            vector.len(),
+-            self.expected_vector_bytes(),
+-            "Query4bitSimd::dotprod_raw_avx512_vnni: vector length mismatch ({} vs expected {})",
+-            vector.len(),
+-            self.expected_vector_bytes(),
+-        );
+-
+-        unsafe {
+-            let codebook_128 = _mm_loadu_si128(CODEBOOK_U8.as_ptr().cast::<__m128i>());
+-            let codebook_512 = _mm512_broadcast_i32x4(codebook_128);
+-            let nibble_mask_128 = _mm_set1_epi8(0x0F);
+-            let ones_128 = _mm_set1_epi16(1);
+-            let mut acc = _mm512_setzero_si512();
+-
+-            let chunks = self.query_data.as_slice();
+-            let n_pairs = chunks.len() / 2;
+-
+-            for i in 0..n_pairs {
+-                let pair_ptr = chunks.as_ptr().add(2 * i).cast::<__m512i>();
+-                let low_high_pair = _mm512_loadu_si512(pair_ptr);
+-
+-                let v_packed_16 = _mm_loadu_si128(vector.as_ptr().add(16 * i).cast::<__m128i>());
+-                let v_lo = _mm_and_si128(v_packed_16, nibble_mask_128);
+-                let v_hi = _mm_and_si128(_mm_srli_epi16(v_packed_16, 4), nibble_mask_128);
+-                let v_chunk_a = _mm_unpacklo_epi8(v_lo, v_hi);
+-                let v_chunk_b = _mm_unpackhi_epi8(v_lo, v_hi);
+-
+-                let v_dup_a = _mm256_broadcastsi128_si256(v_chunk_a);
+-                let v_dup_b = _mm256_broadcastsi128_si256(v_chunk_b);
+-                let v_512 = _mm512_inserti64x4(_mm512_castsi256_si512(v_dup_a), v_dup_b, 1);
+-
+-                let c_512 = _mm512_shuffle_epi8(codebook_512, v_512);
+-                acc = _mm512_dpbusd_epi32(acc, c_512, low_high_pair);
+-            }
+-
+-            let acc_256_lo = _mm512_castsi512_si256(acc);
+-            let acc_256_hi = _mm512_extracti64x4_epi64(acc, 1);
+-            let lane_a_low = _mm256_castsi256_si128(acc_256_lo);
+-            let lane_a_high = _mm256_extracti128_si256(acc_256_lo, 1);
+-            let lane_b_low = _mm256_castsi256_si128(acc_256_hi);
+-            let lane_b_high = _mm256_extracti128_si256(acc_256_hi, 1);
+-            let mut sum_low_xmm = _mm_add_epi32(lane_a_low, lane_b_low);
+-            let mut sum_high_xmm = _mm_add_epi32(lane_a_high, lane_b_high);
+-
+-            // Odd leftover chunk via SSE-style `maddubs + madd_epi16` — 1 chunk
+-            // is too narrow to benefit from VNNI here.  Only reached when
+-            // `query_data.len()` is odd (dim not a multiple of 32).
+-            if chunks.len() % 2 == 1 {
+-                let tail_chunk = 2 * n_pairs;
+-                let [low, high] = chunks[tail_chunk];
+-
+-                let v_packed =
+-                    _mm_loadl_epi64(vector.as_ptr().add(tail_chunk * 8).cast::<__m128i>());
+-                let v_lo = _mm_and_si128(v_packed, nibble_mask_128);
+-                let v_hi = _mm_and_si128(_mm_srli_epi16(v_packed, 4), nibble_mask_128);
+-                let v = _mm_unpacklo_epi8(v_lo, v_hi);
+-                let c_u = _mm_shuffle_epi8(codebook_128, v);
+-
+-                let q_low = _mm_loadu_si128(low.as_ptr().cast::<__m128i>());
+-                let q_high = _mm_loadu_si128(high.as_ptr().cast::<__m128i>());
+-                let prod_low = _mm_maddubs_epi16(c_u, q_low);
+-                let prod_high = _mm_maddubs_epi16(c_u, q_high);
+-                sum_low_xmm = _mm_add_epi32(sum_low_xmm, _mm_madd_epi16(prod_low, ones_128));
+-                sum_high_xmm = _mm_add_epi32(sum_high_xmm, _mm_madd_epi16(prod_high, ones_128));
+-            }
+-
+-            // Tail dims (< 14 remaining after the optional leftover chunk):
+-            // one SSE chunk on a zero-padded scratch, same as the SSE variant.
+-            if let Some(buf) = self.tail_chunk_scratch(vector) {
+-                let v_packed = _mm_loadl_epi64(buf.as_ptr().cast::<__m128i>());
+-                let v_lo = _mm_and_si128(v_packed, nibble_mask_128);
+-                let v_hi = _mm_and_si128(_mm_srli_epi16(v_packed, 4), nibble_mask_128);
+-                let v = _mm_unpacklo_epi8(v_lo, v_hi);
+-                let c_u = _mm_shuffle_epi8(codebook_128, v);
+-
+-                let q_low = _mm_loadu_si128(self.tail_low.as_ptr().cast::<__m128i>());
+-                let q_high = _mm_loadu_si128(self.tail_high.as_ptr().cast::<__m128i>());
+-                let prod_low = _mm_maddubs_epi16(c_u, q_low);
+-                let prod_high = _mm_maddubs_epi16(c_u, q_high);
+-                sum_low_xmm = _mm_add_epi32(sum_low_xmm, _mm_madd_epi16(prod_low, ones_128));
+-                sum_high_xmm = _mm_add_epi32(sum_high_xmm, _mm_madd_epi16(prod_high, ones_128));
+-            }
+-
+-            i64::from(hsum_i32_sse(sum_low_xmm))
+-                + QUERY_HIGH_COEF * i64::from(hsum_i32_sse(sum_high_xmm))
+-        }
++        unsafe { self.dotprod_raw_avx2(vector) }
+     }
+ }
+ 
+@@ -391,66 +303,7 @@
+ /// CPU must support `avx512f`, `avx512bw`, and `avx512vnni`.
+ #[target_feature(enable = "avx512f,avx512bw,avx512vnni")]
+ pub unsafe fn score_4bit_internal_avx512_vnni(a: &[u8], b: &[u8]) -> f32 {
+-    use core::arch::x86_64::*;
+-
+-    assert_eq!(
+-        a.len(),
+-        b.len(),
+-        "score_4bit_internal_avx512_vnni: vector length mismatch ({} vs {})",
+-        a.len(),
+-        b.len(),
+-    );
+-
+-    unsafe {
+-        let codebook_i8_128 = _mm_xor_si128(
+-            _mm_loadu_si128(CODEBOOK_U8.as_ptr().cast::<__m128i>()),
+-            _mm_set1_epi8(-128i8),
+-        );
+-        let codebook_i8_256 = _mm256_broadcastsi128_si256(codebook_i8_128);
+-        let nibble_mask = _mm_set1_epi8(0x0F);
+-        let mut acc = _mm512_setzero_si512();
+-
+-        // 32 elements (= 16 bytes from each source) per iter.  Shuffle stays
+-        // on 256-bit (32 codebook values fit exactly), then we widen to 512.
+-        let n_iters = a.len() / 16;
+-        for i in 0..n_iters {
+-            let va = _mm_loadu_si128(a.as_ptr().add(16 * i).cast::<__m128i>());
+-            let va_lo = _mm_and_si128(va, nibble_mask);
+-            let va_hi = _mm_and_si128(_mm_srli_epi16(va, 4), nibble_mask);
+-            let a_idx_0 = _mm_unpacklo_epi8(va_lo, va_hi);
+-            let a_idx_1 = _mm_unpackhi_epi8(va_lo, va_hi);
+-            let a_idx_256 = _mm256_inserti128_si256(_mm256_castsi128_si256(a_idx_0), a_idx_1, 1);
+-            let c_a_i8_256 = _mm256_shuffle_epi8(codebook_i8_256, a_idx_256);
+-
+-            let vb = _mm_loadu_si128(b.as_ptr().add(16 * i).cast::<__m128i>());
+-            let vb_lo = _mm_and_si128(vb, nibble_mask);
+-            let vb_hi = _mm_and_si128(_mm_srli_epi16(vb, 4), nibble_mask);
+-            let b_idx_0 = _mm_unpacklo_epi8(vb_lo, vb_hi);
+-            let b_idx_1 = _mm_unpackhi_epi8(vb_lo, vb_hi);
+-            let b_idx_256 = _mm256_inserti128_si256(_mm256_castsi128_si256(b_idx_0), b_idx_1, 1);
+-            let c_b_i8_256 = _mm256_shuffle_epi8(codebook_i8_256, b_idx_256);
+-
+-            // Widen 32 i8 → 32 i16, one ZMM each.
+-            let c_a_i16 = _mm512_cvtepi8_epi16(c_a_i8_256);
+-            let c_b_i16 = _mm512_cvtepi8_epi16(c_b_i8_256);
+-
+-            // VPDPWSSD: acc[lane] += a[2·lane]·b[2·lane] + a[2·lane+1]·b[2·lane+1]
+-            // with every operand interpreted as signed i16.
+-            acc = _mm512_dpwssd_epi32(acc, c_a_i16, c_b_i16);
+-        }
+-
+-        let acc_256_lo = _mm512_castsi512_si256(acc);
+-        let acc_256_hi = _mm512_extracti64x4_epi64(acc, 1);
+-        let acc_256 = _mm256_add_epi32(acc_256_lo, acc_256_hi);
+-        let acc_128 = _mm_add_epi32(
+-            _mm256_castsi256_si128(acc_256),
+-            _mm256_extracti128_si256(acc_256, 1),
+-        );
+-        let simd_bytes = n_iters * 16;
+-        let sum = i64::from(hsum_i32_sse(acc_128))
+-            + super::score_4bit_internal_integer(&a[simd_bytes..], &b[simd_bytes..]);
+-        sum as f32 / (CODEBOOK_SCALE * CODEBOOK_SCALE)
+-    }
++    unsafe { score_4bit_internal_avx2(a, b) }
+ }
+ 
+ // ------------------------------------------------------------------
