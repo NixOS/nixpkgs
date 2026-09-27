@@ -37,6 +37,7 @@ lib.makeScope newScope (self: {
   polyml = self.callPackage ./polyml { };
   postgresql_jdbc = self.callPackage ./postgresql_jdbc { };
   prismjs = self.callPackage ./prismjs { };
+  rsync = self.callPackage ./rsync { };
   scala = self.callPackage ./scala { };
   setup = self.callPackage ./setup { };
   sha1 = self.callPackage ./sha1 { };
