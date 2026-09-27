@@ -42,6 +42,11 @@
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = binaryName;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "firefox";
+      sw_edition = "devedition";
+    };
+
   };
   tests = {
     inherit (nixosTests) firefox-devedition;
