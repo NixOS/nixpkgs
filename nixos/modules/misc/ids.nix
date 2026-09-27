@@ -733,6 +733,7 @@ in
 
       onepassword = 31001; # 1Password requires that its GID be larger than 1000
       onepassword-cli = 31002; # 1Password requires that its GID be larger than 1000
+      onepassword-mcp = 31003; # 1Password requires that its GID be larger than 1000
 
       users = 100;
       nixbld = 30000;

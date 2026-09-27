@@ -124,9 +124,28 @@ stdenv.mkDerivation {
       # Icons
       cp -a resources/icons $out/share
 
+      mcpServer="$out/share/1password/1password-mcp"
+      legacyMcpServer="$out/share/1password/onepassword-mcp"
+
+      # Stable releases use 1password-mcp, while older beta releases still use
+      # onepassword-mcp. Normalize both variants to expose the canonical name,
+      # retain the legacy path, and patch the actual binary rather than a symlink.
+      if [[ -e "$mcpServer" ]]; then
+        mcpServerSource="$mcpServer"
+        [[ -e "$legacyMcpServer" ]] || ln -s 1password-mcp "$legacyMcpServer"
+      elif [[ -e "$legacyMcpServer" ]]; then
+        mcpServerSource="$legacyMcpServer"
+        ln -s onepassword-mcp "$mcpServer"
+      else
+        echo "1Password MCP server binary not found" >&2
+        exit 1
+      fi
+
       interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
       patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-interpreter "$interp" "$mcpServerSource"
       patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-rpath ${rpath}:$out/share/1password "$mcpServerSource"
       for file in $(find $out -type f -name \*.so\* ); do
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
