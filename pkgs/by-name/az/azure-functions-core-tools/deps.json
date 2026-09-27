@@ -234,12 +234,6 @@
     "url": "https://pkgs.dev.azure.com/azfunc/ae7e3bf3-d41a-4480-9ac0-b6cf9df9ac24/_packaging/52180d9d-2fe0-4459-980a-091ff2c69ffa/nuget/v3/flat2/microsoft.aspnetcore.antiforgery/2.2.0/microsoft.aspnetcore.antiforgery.2.2.0.nupkg"
   },
   {
-    "pname": "Microsoft.AspNetCore.App.Runtime.osx-arm64",
-    "version": "10.0.12",
-    "hash": "sha256-hQfg1wK8ZFHXz8QwP3lk/D+X8iNP5TCEiETEFcECFQ0=",
-    "url": "https://pkgs.dev.azure.com/azfunc/ae7e3bf3-d41a-4480-9ac0-b6cf9df9ac24/_packaging/52180d9d-2fe0-4459-980a-091ff2c69ffa/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.osx-arm64/10.0.12/microsoft.aspnetcore.app.runtime.osx-arm64.10.0.12.nupkg"
-  },
-  {
     "pname": "Microsoft.AspNetCore.Authentication.Abstractions",
     "version": "2.3.0",
     "hash": "sha256-UwMVhuE3TBEO7G0QJrghhYrgkYw2p9WR87yHQ1ty2RI=",
@@ -1594,18 +1588,6 @@
     "version": "18.7.1",
     "hash": "sha256-sTEk+neir/Qbrn93/T1C3qUl25J0kvD/Mf6ojoBgzQc=",
     "url": "https://pkgs.dev.azure.com/azfunc/ae7e3bf3-d41a-4480-9ac0-b6cf9df9ac24/_packaging/52180d9d-2fe0-4459-980a-091ff2c69ffa/nuget/v3/flat2/microsoft.net.stringtools/18.7.1/microsoft.net.stringtools.18.7.1.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.osx-arm64",
-    "version": "10.0.12",
-    "hash": "sha256-rb1ubsGRFJj0MaqXotG7qdFZ/2DfDXdEy48ERXRKHjQ=",
-    "url": "https://pkgs.dev.azure.com/azfunc/ae7e3bf3-d41a-4480-9ac0-b6cf9df9ac24/_packaging/52180d9d-2fe0-4459-980a-091ff2c69ffa/nuget/v3/flat2/microsoft.netcore.app.host.osx-arm64/10.0.12/microsoft.netcore.app.host.osx-arm64.10.0.12.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.osx-arm64",
-    "version": "10.0.12",
-    "hash": "sha256-Lw5y/feerZHQ4a1JYOo6m966G3ywhGfj6tCkJ9H9Lgg=",
-    "url": "https://pkgs.dev.azure.com/azfunc/ae7e3bf3-d41a-4480-9ac0-b6cf9df9ac24/_packaging/52180d9d-2fe0-4459-980a-091ff2c69ffa/nuget/v3/flat2/microsoft.netcore.app.runtime.osx-arm64/10.0.12/microsoft.netcore.app.runtime.osx-arm64.10.0.12.nupkg"
   },
   {
     "pname": "Microsoft.NETCore.Platforms",

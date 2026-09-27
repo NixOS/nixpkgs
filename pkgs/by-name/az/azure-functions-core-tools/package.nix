@@ -39,6 +39,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_10_0 // {
     inherit
       (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_10_0
         dotnetCorePackages.sdk_9_0
         dotnetCorePackages.sdk_8_0
       ])
