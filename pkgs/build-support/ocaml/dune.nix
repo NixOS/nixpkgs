@@ -35,6 +35,12 @@ lib.extendMkDerivation {
           "3" = dune_3;
         }
         ."${dune-version}";
+
+      # OCaml libraries, and the dependencies they propagate, are only needed
+      # to build other packages. Unless the package chooses its outputs or
+      # installs itself, install them into "dev", so that they stay out of the
+      # runtime closure of "out".
+      splitDev = !(args ? outputs || args ? installPhase);
     in
 
     if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion then
@@ -44,6 +50,14 @@ lib.extendMkDerivation {
         name = "ocaml${ocaml.version}-${pname}-${finalAttrs.version}";
 
         strictDeps = true;
+
+        outputs = args.outputs or ([ "out" ] ++ lib.optional splitDev "dev");
+
+        # The findlib setup hook always points OCAMLFIND_DESTDIR at $out.
+        postHook = ''
+          export OCAMLFIND_DESTDIR="''${!outputDev}/lib/ocaml/${ocaml.version}/site-lib/"
+        ''
+        + args.postHook or "";
 
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
@@ -72,6 +86,8 @@ lib.extendMkDerivation {
              ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
                --bindir "''${!outputBin}/bin" --datadir "$out/share"
              ''}
+            # Libraries without executables or docs don't install anything into $out.
+            mkdir -p "$out"
             runHook postInstall
           '';
 
@@ -85,5 +101,9 @@ lib.extendMkDerivation {
         meta = (args.meta or { }) // {
           platforms = args.meta.platforms or ocaml.meta.platforms;
         };
+      }
+      // lib.optionalAttrs splitDev {
+        # Dune packages that ship a configure script don't expect autoconf flags.
+        setOutputFlags = args.setOutputFlags or false;
       };
 }
