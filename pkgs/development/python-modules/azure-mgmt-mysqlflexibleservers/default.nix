@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  wheel,
   azure-common,
   azure-mgmt-core,
   isodate,
@@ -11,21 +10,18 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-mysqlflexibleservers";
-  version = "1.1.0b3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_mysqlflexibleservers";
-    inherit version;
-    hash = "sha256-15uNv6MKuHxuXxeQYWbpmWQVhmkmzCYjeGkSIamGWAM=";
+    inherit (finalAttrs) version;
+    hash = "sha256-0HemVoiKXFl39HmiRKZKxKHTUQAumaft2vakmoIZLlY=";
   };
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-common
@@ -35,9 +31,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "azure.mgmt.mysqlflexibleservers"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.mysqlflexibleservers" ];
 
   meta = {
     description = "Microsoft Azure Mysqlflexibleservers Management Client Library for Python";
@@ -45,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
