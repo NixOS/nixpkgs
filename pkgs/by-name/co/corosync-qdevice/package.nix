@@ -10,6 +10,7 @@
   nspr,
   systemd,
   versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,5 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "corosync-qdevice";
     platforms = lib.platforms.linux;
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) corosync-qnetd;
   };
 })
