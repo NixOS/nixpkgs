@@ -67,12 +67,11 @@ lib.extendMkDerivation {
           args.installPhase or ''
             runHook preInstall
             dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${lib.concatStringsSep " " dunePackages} \
-             ${
-               if lib.versionAtLeast Dune.version "2.9" then
-                 "--docdir $out/share/doc --mandir $out/share/man"
-               else
-                 ""
-             }
+             ${lib.optionalString (lib.versionAtLeast Dune.version "2.9") ''
+               --docdir "''${!outputDoc}/share/doc" --mandir "''${!outputMan}/share/man" --etcdir "$out/etc" \
+             ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
+               --bindir "''${!outputBin}/bin" --datadir "$out/share"
+             ''}
             runHook postInstall
           '';
 
