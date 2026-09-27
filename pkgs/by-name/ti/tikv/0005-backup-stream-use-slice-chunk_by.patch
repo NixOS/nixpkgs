@@ -1,0 +1,25 @@
+From 561c180f7f1772547e239a41df2ebd805b98752e Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 5/6] backup-stream: use slice::chunk_by
+
+---
+ components/backup-stream/src/metadata/store/slash_etc.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/backup-stream/src/metadata/store/slash_etc.rs b/components/backup-stream/src/metadata/store/slash_etc.rs
+index a564d069d..cb27676c0 100644
+--- a/components/backup-stream/src/metadata/store/slash_etc.rs
++++ b/components/backup-stream/src/metadata/store/slash_etc.rs
+@@ -113,7 +113,7 @@ impl SlashEtc {
+             .collect::<Vec<_>>();
+         let kvs = mvccs
+             .as_slice()
+-            .group_by(|k1, k2| k1.0.0 == k2.0.0)
++            .chunk_by(|k1, k2| k1.0.0 == k2.0.0)
+             .filter_map(|k| {
+                 let (k, v) = k.last()?;
+                 match v {
+-- 
+2.53.0
+
