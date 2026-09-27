@@ -14,6 +14,7 @@
   rustc,
   cargo,
   cargo-auditable ? prev.cargo-auditable,
+  gitMinimal ? prev.buildPackages.gitMinimal,
   stdenv ? prev.stdenv,
   ...
 }:
@@ -27,7 +28,7 @@
     in
     {
       fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
-        inherit cargo;
+        inherit cargo gitMinimal;
       };
 
       buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
