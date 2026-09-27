@@ -11082,7 +11082,9 @@ self: super: with self; {
     }
   );
 
-  mlx = callPackage ../development/python-modules/mlx { };
+  mlx = callPackage ../development/python-modules/mlx {
+    inherit (pkgs.darwin) metal-cpp metal-toolchain;
+  };
 
   mlx-bin = callPackage ../development/python-modules/mlx/bin.nix { };
 
@@ -22354,6 +22356,10 @@ self: super: with self; {
   };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vllm-metal = callPackage ../development/python-modules/vllm-metal {
+    inherit (pkgs.darwin) metal-toolchain;
+  };
 
   vmas = callPackage ../development/python-modules/vmas { };
 
