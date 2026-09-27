@@ -105,6 +105,9 @@ in
       environment = {
         HOME = "/var/lib/private/newt";
       };
+      # restart on rebuild if the env file has changed
+      restartTriggers = [ cfg.environmentFile ];
+
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} ${
           lib.cli.toCommandLineShellGNU { } (lib.recursiveUpdate cfg.settings { inherit blueprint-file; })
