@@ -16,6 +16,11 @@
   systemd,
   # ImportError: cannot import name 'mlog' from 'mesonbuild'
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+
+  # for passthru.tests
+  networkmanager,
+  nvme-cli,
+  libblockdev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    inherit networkmanager nvme-cli libblockdev;
   };
 
   meta = {
