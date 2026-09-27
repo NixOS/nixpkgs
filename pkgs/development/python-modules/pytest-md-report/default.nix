@@ -9,6 +9,7 @@
   tcolorpy,
   typepy,
   pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_md_report" ];
+
+  pythonRelaxDeps = [
+    "typepy"
+  ];
 
   meta = {
     description = "Pytest plugin to make a test results report with Markdown table format";
