@@ -25,7 +25,67 @@ function pytestCheckPhase() {
     runHook preCheck
 
     # Compose arguments
-    local -a flagsArray=(-m pytest)
+    local -a flagsArray=()
+
+    local _pytestFlags_asArray=()
+    concatTo _pytestFlags_asArray pytestFlags
+
+    local -a overrideIniFlags=()
+    local _flag
+    for _flag in $_pytest_config_addopts; do
+        if [[ "$_flag" =~ ^(-o|--override-ini[=\ ])(.*)$ ]]; then
+            overrideIniFlags+=("$_flag")
+        fi
+    done
+
+    # For backward compatibility to existing `--import-mode` flag in `pytestFlags`
+    if [[ -z "${pytestImportMode-}" ]]; then
+        local _flag
+        for _flag in "${_pytestFlags_asArray[@]}"; do
+            if [[ "$_flag" =~ ^--import-mode[=\ ](.+)$ ]]; then
+                pytestImportMode="${BASH_REMATCH[1]}"
+            fi
+        done
+        if [[ -n "${pytestImportMode-}" ]]; then
+            echo "pytestCheckHook: --import-mode flag has been added with pytestFlags" >&2
+            dontAddPytestImportMode=1
+        fi
+    fi
+
+    # In case pytest configuration addopts set --import-mode, observe its value.
+    if [[ -z "${pytestImportMode-}" ]]; then
+        local _flag _pytest_config_addopts
+        _pytest_config_addopts="$(
+            echo "pytestCheckHook: getting pytestconfig.addopts value by running pytest" >&2
+            pytest \
+              -p no:cacheprovider "${overrideIniFlags[@]}" \
+              @pytestCheckHookResources@/test_pytest_get_value.py::test_pytestconfig_getoption_addopts \
+              3>&1 1>/dev/null
+            echo "pytestCheckHook: finished getting pytestconfig.addopts value by running pytest" >&2
+        )"
+        if [[ -n "$_pytest_config_addopts" ]]; then
+            for _flag in $_pytest_config_addopts; do
+                if [[ "$_flag" =~ ^--import-mode[=\ ](.*)$ ]]; then
+                    pytestImportMode="${BASH_REMATCH[1]}"
+                fi
+            done
+        fi
+        if [[ -n "${pytestImportMode-}" ]]; then
+            echo "--import-mode flag has been added with pytest configuration addopts" >&2
+            dontAddPytestImportMode=1
+        fi
+    fi
+
+    # Default pytestImportMode to "importlib", contrary to pytest's default behaviour "prepend".
+    # pytestImportMode = "importlib" makes pytest import the test modules without modifying `sys.path`,
+    # allowing installed modules (instead of the unbuilt modules in CWD) to be used by the test modules.
+    : "${pytestImportMode:=importlib}"
+
+    echo "pytestCheckHook: pytestImprotMode is $pytestImportMode" >&2
+
+    if [[ -z "${dontAddPytestImportMode-}" ]]; then
+        flagsArray+=(--import-mode="$pytestImportMode")
+    fi
 
     local -a _pathsArray
     local path
@@ -39,19 +99,7 @@ function pytestCheckPhase() {
             # The `|| kill "$$"` trick propagates the errors from the process substitutiton subshell,
             # which is suggested by a StackOverflow answer: https://unix.stackexchange.com/a/217643
             readarray -t -O"${#flagsArray[@]}" flagsArray < <(
-                @pythonCheckInterpreter@ - "$path" <<EOF || kill "$$"
-import glob
-import sys
-path_glob=sys.argv[1]
-if not len(path_glob):
-    sys.exit('Got an empty enabled tests path glob. Aborting')
-path_expanded = glob.glob(path_glob)
-if not len(path_expanded):
-    sys.exit('Enabled tests path glob "{}" does not match any paths. Aborting'.format(path_glob))
-for path in path_expanded:
-    print(path)
-EOF
-            )
+                @pythonCheckInterpreter@ @pytestCheckHookResources@/expand-glob.py "$path" "1" "Enabled test path glob" || kill "$$")
         fi
     done
 
@@ -62,15 +110,7 @@ EOF
             flagsArray+=("--deselect=$path")
         else
             # Check if every path glob matches at least one path
-            @pythonCheckInterpreter@ - "$path" <<EOF
-import glob
-import sys
-path_glob=sys.argv[1]
-if not len(path_glob):
-    sys.exit('Got an empty disabled tests path glob. Aborting')
-if next(glob.iglob(path_glob), None) is None:
-    sys.exit('Disabled tests path glob "{}" does not match any paths. Aborting'.format(path_glob))
-EOF
+            @pythonCheckInterpreter@ @pytestCheckHookResources@/expand-glob.py "$path" "" "Disabled test path glob"
             flagsArray+=("--ignore-glob=$path")
         fi
     done
@@ -88,7 +128,7 @@ EOF
 
     concatTo flagsArray pytestFlags
     echoCmd 'pytest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ "${flagsArray[@]}"
+    pytest "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
