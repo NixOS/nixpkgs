@@ -163,9 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -Dm755 -t "$out/bin" ds4 ds4-server ds4-bench ds4-eval ds4-agent
 
-    # Wrap upstream's GGUF downloader as `ds4-download-model`, patching its
-    # project-root detection to use $DS4_HOME (default: cwd) instead of the
-    # read-only store path that `dirname $0` resolves to.
+    # Do not default to CWD which is in the nix store
     install -Dm755 download_model.sh "$out/bin/ds4-download-model"
     substituteInPlace "$out/bin/ds4-download-model" \
       --replace-fail 'ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)' 'ROOT=''${DS4_HOME:-$PWD}' \
