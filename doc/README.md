@@ -51,14 +51,16 @@ $ cd /path/to/nixpkgs/doc
 $ nix-shell
 ```
 
-To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+To load the documentation development environment automatically when entering that directory:
 
-Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+1. Install [`nix-direnv`](https://search.nixos.org/packages?channel=unstable&query=nix-direnv#show=nix-direnv)
+1. Set up direnv in the documentation directory:
 
-```
-/**/.envrc
-/**/.direnv
-```
+   ```ShellSession
+   $ cd doc
+   $ echo "use nix" > .envrc
+   $ direnv allow
+   ```
 
 #### Live preview
 
