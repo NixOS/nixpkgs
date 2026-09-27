@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "davs2" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "davs2_project" finalAttrs.version;
   };
 })
