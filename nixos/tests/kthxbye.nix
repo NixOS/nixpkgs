@@ -13,50 +13,52 @@
       services.prometheus = {
         enable = true;
 
-        globalConfig = {
-          scrape_interval = "5s";
-          scrape_timeout = "5s";
-          evaluation_interval = "5s";
-        };
-
-        scrapeConfigs = [
-          {
-            job_name = "prometheus";
+        settings = {
+          global = {
             scrape_interval = "5s";
-            static_configs = [
-              {
-                targets = [ "localhost:9090" ];
-              }
-            ];
-          }
-        ];
+            scrape_timeout = "5s";
+            evaluation_interval = "5s";
+          };
 
-        rules = [
-          ''
-            groups:
-              - name: test
-                rules:
-                  - alert: node_up
-                    expr: up != 0
-                    for: 5s
-                    labels:
-                      severity: bottom of the barrel
-                    annotations:
-                      summary: node is fine
-          ''
-        ];
+          scrape_configs = [
+            {
+              job_name = "prometheus";
+              scrape_interval = "5s";
+              static_configs = [
+                {
+                  targets = [ "localhost:9090" ];
+                }
+              ];
+            }
+          ];
 
-        alertmanagers = [
-          {
-            static_configs = [
-              {
-                targets = [
-                  "localhost:9093"
-                ];
-              }
-            ];
-          }
-        ];
+          rule_files = [
+            (pkgs.writeText "prometheus-rules.yml" ''
+              groups:
+                - name: test
+                  rules:
+                    - alert: node_up
+                      expr: up != 0
+                      for: 5s
+                      labels:
+                        severity: bottom of the barrel
+                      annotations:
+                        summary: node is fine
+            '')
+          ];
+
+          alerting.alertmanagers = [
+            {
+              static_configs = [
+                {
+                  targets = [
+                    "localhost:9093"
+                  ];
+                }
+              ];
+            }
+          ];
+        };
 
         alertmanager = {
           enable = true;
