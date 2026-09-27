@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { dismissReviews, postReview } from './reviews.js'
-import { classify } from './supportedBranches.js'
-import supportedSystems from './supportedSystems.js'
+import { dismissReviews, postReview } from './reviews.ts'
+import { classify } from './supportedBranches.ts'
+import supportedSystems from './supportedSystems.ts'
 
 const reviewKey = 'prepare'
 
@@ -66,7 +66,7 @@ export default async ({ github, context, core, dry }) => {
       // commits between that base and head is the real base. We can query for this via GitHub's
       // REST API. There can be multiple candidates for the real base with the same number of
       // commits. In this case we pick the "best" candidate by a fixed ordering of branches,
-      // as defined in ci/github-script/supportedBranches.js.
+      // as defined in ci/github-script/supportedBranches.ts.
       //
       // These requests take a while, when comparing against the wrong release - they need
       // to look at way more than 10k commits in that case. Thus, we try to minimize the
