@@ -27,6 +27,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.11";
 
+  # The toplevel loads the utop library at runtime,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
+
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
     hash = "sha256-FOGTkf+LGMFbARc3TU0PxXIAUJV72AKYZQVkuJT6hdo=";

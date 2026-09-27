@@ -31,7 +31,7 @@ pkgs.mkShell {
 
 ## Packaging guide {#sec-language-ocaml-packaging}
 
-OCaml libraries should be installed in `$(out)/lib/ocaml/${ocaml.version}/site-lib/`. Such directories are automatically added to the `$OCAMLPATH` environment variable when building another package that depends on them or when opening a `nix-shell`.
+OCaml libraries should be installed in `$(out)/lib/ocaml/${ocaml.version}/site-lib/` (or in the same directory of the `dev` output, see `buildDunePackage` below). Such directories are automatically added to the `$OCAMLPATH` environment variable when building another package that depends on them or when opening a `nix-shell`.
 
 Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes a convenience build support function called `buildDunePackage` that will build an OCaml package using dune, OCaml and findlib and any additional dependencies provided as `buildInputs` or `propagatedBuildInputs`.
 
@@ -138,6 +138,28 @@ buildDunePackage (finalAttrs: {
   };
 })
 ```
+
+Unless the package sets `outputs` or overrides `installPhase`, `buildDunePackage`
+builds separate outputs, and points `$OCAMLFIND_DESTDIR` to `dev`:
+
+- `out` contains what the package produces for use at runtime, such as
+  executables.
+- `dev` contains the OCaml libraries and the propagated dependencies needed to
+  build other packages against them. It is selected automatically when the
+  package is used as a build input.
+- `man` contains the man pages. Like `out`, it is installed by default.
+- `doc` contains the documentation, such as the README and license files.
+
+This keeps build-time only OCaml dependencies out of the runtime closure of
+executables. Code that refers to the library directory of such a package must
+use its `dev` output, for example `${lib.getDev menhirLib}/lib/ocaml` or
+`lib.makeSearchPathOutput "dev" "lib/ocaml/${ocaml.version}/site-lib"`.
+Likewise, installing the library into a profile or environment requires its
+`dev` output, e.g. `ocamlPackages.menhirLib.dev`.
+
+Packages whose executables need their own OCaml library at runtime, such as
+toplevels or programs that load plugins, can't be split this way: the two
+outputs would refer to each other. They must set `outputs = [ "out" ];`.
 
 The build will automatically fail if two distinct versions of the same library
 are added to `buildInputs` (which usually happens transitively because of

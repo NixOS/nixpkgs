@@ -81,8 +81,8 @@ let
       }
       {
         name = "OCAMLPATH";
-        value = lib.concatStringsSep ":" (
-          map (x: "${x}/lib/ocaml/${coq.ocaml.version}/site-lib/") ([ coq.ocamlPackages.findlib ] ++ packages)
+        value = lib.makeSearchPathOutput "dev" "lib/ocaml/${coq.ocaml.version}/site-lib" (
+          [ coq.ocamlPackages.findlib ] ++ packages
         );
       }
     ];

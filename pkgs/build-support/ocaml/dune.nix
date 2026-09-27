@@ -35,6 +35,13 @@ lib.extendMkDerivation {
           "3" = dune_3;
         }
         ."${dune-version}";
+
+      # OCaml libraries, and the dependencies they propagate, are only needed
+      # to build other packages. Unless the package chooses its outputs or
+      # installs itself, install them into "dev", so that they stay out of the
+      # runtime closure of "out". Man pages and documentation go to "man" and
+      # "doc".
+      splitOutputs = !(args ? outputs || args ? installPhase);
     in
 
     if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion then
@@ -44,6 +51,22 @@ lib.extendMkDerivation {
         name = "ocaml${ocaml.version}-${pname}-${finalAttrs.version}";
 
         strictDeps = true;
+
+        outputs =
+          args.outputs or (
+            [ "out" ]
+            ++ lib.optionals splitOutputs [
+              "dev"
+              "man"
+              "doc"
+            ]
+          );
+
+        # The findlib setup hook always points OCAMLFIND_DESTDIR at $out.
+        postHook = ''
+          export OCAMLFIND_DESTDIR="''${!outputDev}/lib/ocaml/${ocaml.version}/site-lib/"
+        ''
+        + args.postHook or "";
 
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
@@ -67,12 +90,15 @@ lib.extendMkDerivation {
           args.installPhase or ''
             runHook preInstall
             dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${lib.concatStringsSep " " dunePackages} \
-             ${
-               if lib.versionAtLeast Dune.version "2.9" then
-                 "--docdir $out/share/doc --mandir $out/share/man"
-               else
-                 ""
-             }
+             ${lib.optionalString (lib.versionAtLeast Dune.version "2.9") ''
+               --docdir "''${!outputDoc}/share/doc" --mandir "''${!outputMan}/share/man" --etcdir "$out/etc" \
+             ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
+               --bindir "''${!outputBin}/bin" --datadir "$out/share"
+             ''}
+            # Not every package installs something into each output.
+            for output in $(getAllOutputNames); do
+              mkdir -p "''${!output}"
+            done
             runHook postInstall
           '';
 
@@ -83,8 +109,18 @@ lib.extendMkDerivation {
             runHook postCheck
           '';
 
-        meta = (args.meta or { }) // {
-          platforms = args.meta.platforms or ocaml.meta.platforms;
-        };
+        meta =
+          (args.meta or { })
+          // {
+            platforms = args.meta.platforms or ocaml.meta.platforms;
+          }
+          # meta is often copied from another package, which may have other outputs.
+          // lib.optionalAttrs (args.meta or { } ? outputsToInstall) {
+            outputsToInstall = lib.intersectLists finalAttrs.outputs args.meta.outputsToInstall;
+          };
+      }
+      // lib.optionalAttrs splitOutputs {
+        # Dune packages that ship a configure script don't expect autoconf flags.
+        setOutputFlags = args.setOutputFlags or false;
       };
 }
