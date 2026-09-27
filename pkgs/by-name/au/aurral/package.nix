@@ -5,6 +5,7 @@
   gitMinimal,
   nix-update-script,
   nodejs_26,
+  python3,
   sqlite,
   ffmpeg,
   yt-dlp,
@@ -16,9 +17,12 @@
   nixosTests,
 }:
 
+let
+  matcherPython = python3.withPackages (ps: [ ps.beets ]);
+in
 buildNpmPackage (finalAttrs: {
   pname = "aurral";
-  version = "2.9.1";
+  version = "2.10.0";
 
   __structuredAttrs = true;
 
@@ -26,27 +30,32 @@ buildNpmPackage (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HiOcDvp+ZZozWPEoou0UJFsZAoql89q2WVZaj7fgVrs=";
+    hash = "sha256-PNTcFtP9ajEBi3X7oofdsm5K0bN9T4MlMYA0+srFqgs=";
   };
 
   # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
-  # Remove engine constraint not matching upstream dockerfile.
   patches = [
     ./package.json.patch
   ];
 
-  # https://github.com/lklynet/aurral/pull/873
   postPatch = ''
-    # Keep automatic ports above Fetch's highest blocked port (10080).
-    substituteInPlace .tests/helpers/backendTestHarness.js \
-      --replace-fail '4100 + Math.floor(Math.random() * 1000)' \
-      '11000 + Math.floor(Math.random() * 1000)'
+    substituteInPlace backend/services/trackMatching/beetsClient.js \
+      --replace-fail 'const PINNED_BEETS_VERSION = "2.14.0";' \
+      'const PINNED_BEETS_VERSION = "${python3.pkgs.beets.version}";'
+    substituteInPlace .tests/track-matching/beets-client.test.js \
+      --replace-fail 'assert.equal(status.error.required, "2.14.0");' \
+      'assert.equal(status.error.required, "${python3.pkgs.beets.version}");'
+    substituteInPlace .tests/honker/background-worker-recovery.test.js \
+      --replace-fail '  assert.equal(registry?.inFlightActive, undefined);' \
+      '  assert.equal(registry?.inFlightActive, undefined); queue.cancel(jobId);'
   '';
 
-  npmDepsHash = "sha256-NVz5eqDDtMBKiTDl3aX0pHBYGTcYal8lmCf8mbKu31I=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-8GmWzjja+SYIkJa+VqkA0nmY10B/bjq7i2RR8qZBofo=";
 
   nodejs = nodejs_26;
 
+  env.AURRAL_MATCHER_PYTHON = "${matcherPython}/bin/python";
   env.VITE_APP_VERSION = finalAttrs.version;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite ];
   env.FONTCONFIG_FILE = makeFontsConf {
@@ -103,6 +112,7 @@ buildNpmPackage (finalAttrs: {
       ]
     }\''${PATH:+:}\$PATH
     export FONTCONFIG_FILE=${finalAttrs.env.FONTCONFIG_FILE}
+    export AURRAL_MATCHER_PYTHON=${matcherPython}/bin/python
     export APP_VERSION=${finalAttrs.version}
     export NODE_ENV=production
     case "\$1" in
