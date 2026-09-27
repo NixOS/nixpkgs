@@ -6131,6 +6131,12 @@
     githubId = 16950437;
     name = "cwyc";
   };
+  cxinu = {
+    email = "cxinu.main@protonmail.com";
+    github = "cxinu";
+    githubId = 72374438;
+    name = "cxinu";
+  };
   cybardev = {
     name = "Sheikh";
     github = "cybardev";
