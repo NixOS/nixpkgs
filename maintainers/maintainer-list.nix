@@ -24576,6 +24576,12 @@
     githubId = 255667;
     name = "Linus Karl";
   };
+  reu = {
+    email = "rnavarro@rnavarro.com.br";
+    github = "reu";
+    githubId = 191614;
+    name = "Rodrigo Navarro";
+  };
   revol-xut = {
     email = "revol-xut@protonmail.com";
     name = "Tassilo Tanneberger";
