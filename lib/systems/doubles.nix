@@ -103,6 +103,7 @@ let
     "s390x-none"
     "vc4-none"
     "x86_64-none"
+    "xtensa-none"
 
     # OpenBSD
     "i686-openbsd"
