@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kquickimageeditor";
-  version = "0.6.1";
+  version = "0.6.2.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "kquickimageeditor";
     rev = "v${version}";
-    sha256 = "sha256-MluY8nkMtg1uLAStDZFDxyJoeDrcp3smZ4U5IG5sXMk=";
+    sha256 = "sha256-HzbuFOFYjjZwTZ0LLcP5BXIpBMr/4fL4nG0ByqXPJrg=";
   };
 
   nativeBuildInputs = [
