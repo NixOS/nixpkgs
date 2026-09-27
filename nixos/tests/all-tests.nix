@@ -1251,6 +1251,7 @@ in
   netbird = runTest ./netbird.nix;
   netbird-relay = runTest ./netbird-relay.nix;
   netbox = runTest ./web-apps/netbox/default.nix;
+  netbox-branching = runTest ./netbox-branching.nix;
   netdata = runTest ./netdata.nix;
   netfoil = runTest ./netfoil.nix;
   netplan = runTest ./netplan.nix;
