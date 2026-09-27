@@ -15926,6 +15926,12 @@
     githubId = 27364685;
     name = "Lorenzo Pasqui";
   };
+  l12raptor = {
+    email = "l12raptor@proton.me";
+    github = "L12Raptor";
+    githubId = 84540018;
+    name = "Lowis";
+  };
   l1n = {
     github = "l1n";
     githubId = 1367322;
