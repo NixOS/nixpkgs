@@ -19,6 +19,10 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-rHT8ZLBe3uO1NxrbVBdrh0fn9gvBVq4XE8Gfhcshq/E=";
 
+  patches = [
+    ./0001-Don-t-apply-plugdev-group-in-udev-rules.patch
+  ];
+
   buildInputs = [
     udev
   ];
