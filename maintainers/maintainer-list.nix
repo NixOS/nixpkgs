@@ -5619,6 +5619,11 @@
     githubId = 118829;
     name = "codec";
   };
+  CodeCorrupt = {
+    github = "CodeCorrupt";
+    githubId = 8364947;
+    name = "Tyler Hoyt";
+  };
   CodedNil = {
     github = "CodedNil";
     githubId = 5075747;
