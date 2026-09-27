@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "solana-agave";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "anza-xyz";
     repo = "agave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZbC4RENDG9QmThv8yFKa4Zlh1eaFHgh/GLIHA0ecn7w=";
+    hash = "sha256-d3L5ow6hKT0MbPEXE0tPUrVxEN/jxj+jRSAbp8T1Lu8=";
   };
 
-  cargoHash = "sha256-lW5ufveAj1nqg2p5OLiPNwtnmEcxbXSda1LRLcWbeVQ=";
+  cargoHash = "sha256-HbT4tmwgh47iR5NRMc5P7t1uGtXitgJNoAK9a/ykcYY=";
 
   nativeBuildInputs = [
     installShellFiles
