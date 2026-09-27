@@ -18098,6 +18098,8 @@ self: super: with self; {
 
   resend = callPackage ../development/python-modules/resend { };
 
+  resize-image = callPackage ../development/python-modules/resize-image { };
+
   resize-right = callPackage ../development/python-modules/resize-right { };
 
   resolvelib = callPackage ../development/python-modules/resolvelib { };
