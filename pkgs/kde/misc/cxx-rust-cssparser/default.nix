@@ -11,14 +11,14 @@
 
 mkKdeDerivation rec {
   pname = "cxx-rust-cssparser";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "cxx-rust-cssparser";
     tag = "v${version}";
-    hash = "sha256-zYY9GmQb/Qbbu8AhOGHfrrQ563cIrnx9KMGkdledURw=";
+    hash = "sha256-0GO299lTzKh6YwNytuDHu+JlBT+d9E4R1VDWrXueVlM=";
   };
 
   extraNativeBuildInputs = [
@@ -41,7 +41,7 @@ mkKdeDerivation rec {
       src
       cargoRoot
       ;
-    hash = "sha256-CdOvP7VxS2JMD3MlRtc6QNUCGiVMGxiKayLG6vn6n+8=";
+    hash = "sha256-Ukb/LbMMHfeazHiTpwKKAZV2nx5tXZZxJYbLGe9RaVM=";
   };
 
   dontWrapQtApps = true;

@@ -12,6 +12,7 @@
   pkg-config,
   pciutils,
   pulseaudio,
+  qtgraphs,
   qttools,
   replaceVars,
   systemsettings,
@@ -60,7 +61,11 @@ mkKdeDerivation {
   '';
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ libusb1 ];
+  extraBuildInputs = [
+    qtgraphs
+
+    libusb1
+  ];
 
   qtWrapperArgs = [ "--inherit-argv0" ];
 

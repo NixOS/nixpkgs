@@ -39,9 +39,6 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
-
-    # stop accidentally duplicating fontconfig configs
-    ./fontconfig.patch
   ];
 
   outputs = [
@@ -65,6 +62,7 @@ mkKdeDerivation {
     pkg-config
     spirv-tools
   ];
+
   extraBuildInputs = [
     qtlocation
     qtpositioning
@@ -102,8 +100,5 @@ mkKdeDerivation {
     moveToOutput share/wayland-sessions $sessions
   '';
 
-  passthru.providedSessions = [
-    "plasma"
-    "plasmax11"
-  ];
+  passthru.providedSessions = [ "plasma" ];
 }
