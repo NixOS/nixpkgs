@@ -27334,6 +27334,13 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  sobte = {
+    matrix = "@sobte:matrix.org";
+    email = "nixos@sobte.me";
+    github = "Sobte";
+    githubId = 22280111;
+    name = "Sobte";
+  };
   sochotnicky = {
     email = "stanislav+github@ochotnicky.com";
     github = "sochotnicky";
