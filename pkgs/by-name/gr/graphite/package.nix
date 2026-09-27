@@ -29,12 +29,12 @@
 }:
 
 let
-  version = "0-unstable-2026-09-15";
-  rev = "fdf6cfe296e308c45aa5696a88a947feec2fe67a";
+  version = "0-unstable-2026-09-26";
+  rev = "2ef9c11cd323e1a9363b0b0661aee28814beada9";
 
-  srcHash = "sha256-k0C6ocP0lHwG402pmDHO0BLQ6DsK0Y4NqXLMJHHnBao=";
-  shaderHash = "sha256-LReut68Cwoz/YmXaLiVnccg+RerMrKqEWhiWGyx5k+Q=";
-  cargoHash = "sha256-/XEsrJed6rdsOpWFq6+trK9ylcH7v8g2XCExEI335jY=";
+  srcHash = "sha256-7RJNRp3YuX+gDf/SeEpntXiuWSFc1JUZhLDuh36i/B4=";
+  shaderHash = "sha256-iBepn2rTmudtL1JEyyh9h4OeC0KuKWvpCH6Q4bb5Mns=";
+  cargoHash = "sha256-HSRJ1MQoB7GoNgc6V7vaLxewmHBjUtUF/6rHc+DugU8=";
   npmHash = "sha256-Cay+aZcZGAU2vKAs7nub/YVcQ/sxsruWhjZ9KkqXHuc=";
 
   brandingRev = "6687dc6d3d8552948458d00d35e2bee3a40ab66b";
