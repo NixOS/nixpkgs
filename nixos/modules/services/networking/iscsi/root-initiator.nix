@@ -43,6 +43,23 @@ in
       type = nullOr str;
     };
 
+    discoverType = mkOption {
+      description = ''
+        Target discovery type.
+        Change this if you want to discover your targes via an iSNS server
+        or use the targets provided via firmware settings.
+        See {manpage}`iscsiadm(8)`.
+      '';
+      default = "sendtargets";
+      example = "sendtargets";
+      type = enum [
+        "st"
+        "sendtargets"
+        "isns"
+        "fw"
+      ];
+    };
+
     target = mkOption {
       description = ''
         Name of the iSCSI target to boot from.
@@ -168,7 +185,7 @@ in
 
           iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
           iscsiadm --mode discoverydb \
-            --type sendtargets \
+            --type ${cfg.discoverType} \
             --discover \
             --portal ${escapeShellArg cfg.discoverPortal} \
             --debug ${toString cfg.logLevel}
