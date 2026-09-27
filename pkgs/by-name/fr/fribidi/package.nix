@@ -9,6 +9,10 @@
   fixDarwinDylibNames,
   python3,
   testers,
+
+  # for passthru.tests
+  pango,
+  libass,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
+    inherit pango libass;
   };
 
   meta = {
