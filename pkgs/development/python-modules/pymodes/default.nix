@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pymodes";
-  version = "2.21.1";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "junzis";
     repo = "pyModeS";
     tag = "v${version}";
-    hash = "sha256-Tla5hJ7J/3R4r4fTQMUIpY+QGvLRuNMZfWU0RsAiuk0=";
+    hash = "sha256-oFaNWLYuF2RubAk1PT0oqmkaq/aUxITil7Q/tydMbOw=";
   };
 
   build-system = [
