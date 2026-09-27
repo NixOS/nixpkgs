@@ -1,0 +1,12 @@
+#define _GNU_SOURCE
+#include <dlfcn.h>
+#include <string.h>
+
+void *dlopen(const char *filename, int flags) {
+    static void *(*real_dlopen)(const char *, int) = NULL;
+    if (!real_dlopen)
+        real_dlopen = dlsym(RTLD_NEXT, "dlopen");
+    if (filename && (@DEEPBIND_CHECKS@))
+        flags |= RTLD_DEEPBIND;
+    return real_dlopen(filename, flags);
+}
