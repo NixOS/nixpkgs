@@ -61,7 +61,10 @@ in
       description = "Readarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "READARR" cfg.settings;
+      environment = servarr.mkServarrSettingsEnvVars "READARR" cfg.settings // {
+        # Disable debug socket: https://github.com/dotnet/docs/blob/6b96e8456f7eb67f7a4df6b25ad2d298fdc0989f/docs/core/diagnostics/diagnostic-port.md#security-considerations
+        DOTNET_EnableDiagnostics = "0";
+      };
 
       serviceConfig = {
         Type = "simple";
