@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bozohttpd";
-  version = "20240126";
+  version = "20260503";
 
   # bozohttpd is developed in-tree in pkgsrc, canonical hashes can be found at:
   # http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/www/bozohttpd/distinfo
   src = fetchurl {
     url = "http://eterna23.net/bozohttpd/bozohttpd-${finalAttrs.version}.tar.bz2";
-    hash = "sha512-fr1PnyYAS3wkpmj/npRC3A87UL9LIXw4thlM4GfrtlJbuX5EkWGVJnHJW/EmYp7z+N91dcdRJgdO79l6WJsKpg==";
+    hash = "sha512-pK92Z9QmTWdR0gp56SjZesEwibz3rLShbdiPfAyqKrLCS3PpQQpeLXv/wqvR7N8/GybmzM6Bp8STj6ZO1IjqEw==";
   };
 
   buildInputs = [
