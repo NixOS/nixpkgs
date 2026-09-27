@@ -563,13 +563,8 @@ To install the package, `yarnInstallHook` uses both `npm` and `yarn` to clean up
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
 #### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
-Yarn Berry (v3 / v4) versions have similar formats. They start with blocks like these:
 
-```yaml
-__metadata:
-  version: 6
-  cacheKey: 8[cX]
-```
+Yarn Berry (v3 / v4) versions have similar formats. The `yarn.lock` file starts with blocks like these:
 
 ```yaml
 __metadata:
@@ -594,7 +589,6 @@ Explicitly pin the major version. For example, capture the `yarn-berry_Xn` argum
 
 let
   yarn-berry = yarn-berry_4;
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
@@ -617,6 +611,7 @@ stdenv.mkDerivation (finalAttrs: {
 ```
 
 ##### `yarn-berry_X.fetchYarnBerryDeps` {#javascript-fetchYarnBerryDeps}
+
 `fetchYarnBerryDeps` runs `yarn-berry-fetcher fetch` in a fixed-output-derivation. It is a custom fetcher designed to reproducibly download all files in the `yarn.lock` file, validating their hashes in the process. For git dependencies, it creates a checkout at `${offlineCache}/checkouts/<40-character-commit-hash>` (relying on the git commit hash to describe the contents of the checkout).
 
 To produce the `hash` argument for the `fetchYarnBerryDeps` call, run `yarn-berry-fetcher prefetch`:
@@ -628,14 +623,17 @@ $ yarn-berry-fetcher prefetch </path/to/yarn.lock> [/path/to/missing-hashes.json
 This prints the hash to stdout. Use it in update scripts to recalculate the hash for a new `yarn.lock`.
 
 ##### `yarn-berry_X.yarnBerryConfigHook` {#javascript-yarnBerryConfigHook}
+
 `yarnBerryConfigHook` uses the store path `offlineCache` points to, to run a `yarn install` during the build, producing a usable `node_modules` directory from the downloaded dependencies.
 
 Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
 
 ##### Patching the project's `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
+
 In case patching the project's `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`).
 
 ##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
+
 Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
 
 To compensate for this, run the `yarn-berry-fetcher missing-hashes` subcommand to produce all missing hashes. These are stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
@@ -649,7 +647,6 @@ To compensate for this, run the `yarn-berry-fetcher missing-hashes` subcommand t
 
 let
   yarn-berry = yarn-berry_4;
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
