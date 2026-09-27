@@ -1,0 +1,9 @@
+{
+  "version": "0.1.12",
+  "srcHash": "sha256-B6/MJ8+K3bd41/2fz4smaEFmJoPVeoryvFOTGEGR4c4=",
+  "cargoHash": "sha256-tnQSANMa1Q1d/7PWfKmJ9VIT4o1AWcq1l+UdotoOVtI=",
+  "x86_64-linux": "sha256-JYtaGY3SBnuB80p6aj0UTRs6jXvRc9By62cXZR974bg=",
+  "x86_64-darwin": "",
+  "aarch64-darwin": "",
+  "aarch64-linux": ""
+}
