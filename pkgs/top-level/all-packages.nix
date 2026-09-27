@@ -7293,7 +7293,6 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
-      nginxModules.rtmp
       nginxModules.moreheaders
     ];
   };
