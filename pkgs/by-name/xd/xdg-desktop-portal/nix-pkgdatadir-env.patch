@@ -1,6 +1,6 @@
---- a/src/xdp-portal-impl.c
-+++ b/src/xdp-portal-impl.c
-@@ -277,6 +277,8 @@ load_installed_portals (gboolean opt_verbose)
+--- a/src/xdp-portal-config.c
++++ b/src/xdp-portal-config.c
+@@ -277,6 +277,8 @@ load_installed_portals (XdpPortalConfig *portal_config,
  
    /* We need to override this in the tests */
    portal_dir = g_getenv ("XDG_DESKTOP_PORTAL_DIR");

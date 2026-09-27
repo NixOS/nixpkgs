@@ -22,6 +22,7 @@ makeInstalledTest {
     environment.systemPackages = with pkgs; [
       umockdev
       wireless-regdb
+      bubblewrap
     ];
     services.geoclue2 = {
       enable = true;
