@@ -34,12 +34,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "p4";
-  version = "2024.1/2596294";
+  version = "2025.2/2907753";
 
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
-    url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
-    hash = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
+    url = "https://web.archive.org/web/20260324235228/https://ftp.perforce.com/perforce/r25.2/bin.tools/p4source.tgz";
+    hash = "sha256-xcFaV2Enkc6DOuDhgdYjToWosXUyHjuBnTj2bgyYGAM=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ jam ];
 
   outputs = [
-    "out"
     "bin"
+    "out"
     "dev"
   ];
 
@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-sMALLOC_OVERRIDE=no"
     "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
     "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
+    # jam doesn't provide a default OSPLAT except on x86_64-linux
+    "-sOSPLAT=${lib.toUpper stdenv.hostPlatform.linuxArch}"
   ]
   ++ lib.optionals stdenv.cc.isClang [
     "-sOSCOMP=clang"
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-sOSVER=1013"
+    "-sOSVER=1100"
     "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
   ];
 
