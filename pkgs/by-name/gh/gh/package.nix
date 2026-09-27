@@ -6,6 +6,10 @@
   stdenv,
   versionCheckHook,
   makeWrapper,
+
+  writableTmpDirAsHomeHook,
+  git,
+  openssh,
 }:
 
 buildGo127Module (finalAttrs: {
@@ -69,8 +73,18 @@ buildGo127Module (finalAttrs: {
     runHook postInstall
   '';
 
-  # most tests require network access
-  doCheck = false;
+  nativeCheckInputs = [
+    openssh
+    git
+    writableTmpDirAsHomeHook
+  ];
+  doCheck = true;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+  checkPhase = ''
+    runHook preCheck
+    go test ./...
+    runHook postCheck
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
