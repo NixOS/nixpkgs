@@ -31,7 +31,7 @@
       +
         # Clang flags compatibility
         ''
-          find $BSDSRCDIR -name 'Makefile*' -exec sed -E -i -e 's/-fno-ret-protector/-fno-stack-protector/g' -e 's/-nopie/-no-pie/g' {} +
+          find $BSDSRCDIR -name 'Makefile*' -exec sed -E -i -e 's/-fno-ret-protector/-fno-stack-protector/g' -e 's/-fret-clean//g' -e 's/-nopie/-no-pie/g' {} +
           sed -E -i -e 's_^\tinstall.*$_\tinstall bsd ''${out}/bsd_' -e s/update-link// $BSDSRCDIR/sys/arch/*/conf/Makefile.*
         ''
       +
