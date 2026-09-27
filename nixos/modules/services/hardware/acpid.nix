@@ -148,6 +148,37 @@ in
           ]
           ++ lib.optional cfg.logEvents "--logevents"
         );
+
+        # hardening
+        CapabilityBoundingSet = [
+          ""
+        ];
+        RestrictNamespaces = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        MemoryDenyWriteExecute = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        LockPersonality = true;
+        ProtectSystem = "strict";
+        PrivateUsers = true;
+        RestrictRealtime = true;
+        PrivateTmp = true;
+        ProtectHome = true;
+        ProtectProc = "invisible";
+        ProtectKernelLogs = true;
+        IPAddressAllow = [ ];
+
+        PrivateDevices = false; # acpi needs device access
+        PrivateNetwork = false; # required for netlink to work properly
+        NoNewPrivileges = false; # custom hooks might want to execute things at higher/different access
+        ProcSubset = "all"; # requires access to /proc/acpi
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
       };
       unitConfig = {
         ConditionVirtualization = "!systemd-nspawn";
