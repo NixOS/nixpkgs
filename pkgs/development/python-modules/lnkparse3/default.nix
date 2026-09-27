@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "lnkparse3";
   version = "1.6.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Matmaus";
@@ -33,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Matmaus/LnkParse3/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "lnkparse";
   };
 }
