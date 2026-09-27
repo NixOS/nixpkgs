@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.12.0";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   # git source doesn't ship a cargo.lock
   src = fetchCrate {
@@ -29,8 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # assuming a cargo debug-build layout (target/debug/cargo-bundle)
   patches = [ ./tests-env.patch ];
 
-  # native-tls links openssl on Linux, found via pkg-config; on darwin it
-  # uses the Security/system-libs framework instead
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
@@ -52,10 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Wrap rust executables in OS-specific app bundles";
     longDescription = ''
-      cargo-bundle is a tool used to generate installers or app bundles for
-      executables built with cargo. It can create .app and .dmg bundles for
-      macOS, .deb packages and AppImage bundles for Linux, and .msi
-      installers for Windows (iOS and Windows support is experimental).
+      cargo-bundle is a tool used to generate installers
+      or app bundles for executables built with cargo.
+      It can create .app and .dmg bundles for macOS, .deb packages and AppImage bundles for Linux,
+      and .msi installers for Windows (iOS and Windows support is experimental).
     '';
     homepage = "https://github.com/burtonageo/cargo-bundle";
     changelog = "https://github.com/burtonageo/cargo-bundle/tags";
@@ -63,7 +62,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ lib.maintainers.progrm_jarvis ];
+    maintainers = [
+      lib.maintainers.progrm_jarvis
+      lib.maintainers.philocalyst
+    ];
     mainProgram = "cargo-bundle";
     platforms = lib.platforms.unix;
   };
