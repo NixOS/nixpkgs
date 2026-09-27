@@ -105,7 +105,7 @@ let
   };
 
   # This is the variable that sets the GRUB release.
-  version = "2.14";
+  version = "2.16";
 in
 
 assert zfsSupport -> zfs != null;
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.freedesktop.org/gnu-grub/grub.git";
     tag = "grub-${version}";
-    hash = "sha256-Gkpde5CeJOQ+0p5WGwXZ2P881jxrWkuFw3Fh4lul/so=";
+    hash = "sha256-SB0clzmoqlwolHdgbPwJQv51WNWtdFafsL0T4hDjQf0=";
   };
 
   patches =
@@ -139,35 +139,6 @@ stdenv.mkDerivation rec {
       ./fix-bash-completion.patch
       ./add-hidden-menu-entries.patch
       ./bootstrap-po-downloads.patch
-
-      /*
-        Fix parallel `msgmerge` race on de.po.
-        See https://gitlab.freedesktop.org/gnu-grub/grub/-/work_items/18
-        See https://github.com/NixOS/nixpkgs/pull/248747#issuecomment-1676301670
-      */
-      (fetchpatch {
-        name = "02_fix_msmerge.patch";
-        url = grubPatch "c2a215245e2e7d61da4f41945222bd761679ae11";
-        hash = "sha256-vBCDej/5DVX1NQMR05kNunxbmfyKywyYQtu4tg3Q2Cs=";
-      })
-
-      /*
-        The commit that we're reverting below breaks the `kernel.img` payload that's generated at runtime.
-
-        If we don't do this, we can't install GRUB.
-      */
-      (fetchpatch {
-        name = "01_fix_kernel-img_load_offset.patch";
-        url = grubPatch "1dc2986c7e8480d955f87d276d31400116a21fac";
-        hash = "sha256-T1V7Rklc7RNsKTwk2gLoWHxoXUlCM0/mxcnymqUcyRg=";
-      })
-
-      # Required to build grub2_efi with GCC 16, or fails with "error: 'regparm' attribute ignored [-Werror=attributes]"
-      (fetchpatch {
-        name = "gcc16_make_regparm_attribute_more_conditional.patch";
-        url = grubPatch "9922ed133c2c754ec9f37198da2b3e3e8a4fd5ff";
-        hash = "sha256-V2vffDxL/qQ14YN5scc3CFPBFBWvkh57dc5/hWd/6F4=";
-      })
     ];
 
   postPatch = ''
@@ -231,9 +202,6 @@ stdenv.mkDerivation rec {
   separateDebugInfo = !xenSupport;
 
   preConfigure = ''
-    # Trust me, it's NEVER missing.
-    substituteInPlace configure.ac --replace-fail 'm4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])' ' '
-
     for i in "tests/util/"*.in
     do
       sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
