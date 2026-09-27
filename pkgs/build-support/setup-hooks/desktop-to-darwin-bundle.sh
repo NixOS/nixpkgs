@@ -91,7 +91,7 @@ convertIconTheme() {
         local dim=$((iconSize * scale))
 
         echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
-        magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
+        magick "$in" -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$out"
         convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
     }
 
@@ -107,7 +107,7 @@ convertIconTheme() {
 
             echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
-            magick convert -density "$density" -units PixelsPerInch "$out" "$out"
+            magick "$out" -density "$density" -units PixelsPerInch "$out"
             convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
         else
             return 1
@@ -136,11 +136,13 @@ convertIconTheme() {
         local -r resultdir=$(mktemp -d)
 
         local -ar candidateIcons=(
-            "${sharePath}/icons/${theme}/"*"/${iconname}.png"
-            "${sharePath}/icons/${theme}/"*"/${iconname}.xpm"
+            "${sharePath}/icons/${theme}/"*"/apps/${iconname}.png"
+            "${sharePath}/icons/${theme}/"*"/apps/${iconname}.xpm"
+            "${sharePath}/icons/${iconname}.png"
+            "${sharePath}/icons/${iconname}.xpm"
         )
 
-        local -a scalableIcon=("${sharePath}/icons/${theme}/scalable/${iconname}.svg"*)
+        local -a scalableIcon=("${sharePath}/icons/${theme}/scalable/apps/${iconname}.svg"*)
         if [[ ${#scalableIcon[@]} = 0 ]]; then
             scalableIcon=('-')
         fi
@@ -167,7 +169,7 @@ convertIconTheme() {
                 case $type in
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
-                        magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
+                        magick "$icon" -density "$density" -units PixelsPerInch "$result"
                         convertIfUnsupportedIcon "$result" "$iconSize" "$scale"
                         foundIcon=OTHER
                         ;;
@@ -206,7 +208,7 @@ convertIconTheme() {
         echo "$resultdir"
     }
 
-    iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
+    iconsdir=$(getIcons "$sharePath" "$iconName" "$theme")
     if [[ -n "$(ls -A1 "$iconsdir")" ]]; then
         icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
