@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-domainregistration";
-  version = "1.0.0b1";
+  version = "1.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_domainregistration";
     inherit (finalAttrs) version;
-    hash = "sha256-9ayRrmCqmTY8yMLtrj/IIUb5xONb9SQoz8wvN29Wvy0=";
+    hash = "sha256-MEdWbc6xpTE+F0lEF1uVZ2y5p0BiwXdcctIbnl/OEk4=";
   };
 
   build-system = [
