@@ -290,14 +290,13 @@ pnpm is available as the top-level package `pnpm`. Additionally, there are varia
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook) prepares the build environment to install the pre-fetched dependencies store. The example below uses the fetcher and setup hook for a package that has `package.json` and `pnpm-lock.yaml`:
 
-There is also the [`pnpmBuildHook`](#pnpm-build-hook) for building packages with `pnpm`, as seen in [](#ex-pnpm-build-hook).
-
 ```nix
 {
   fetchPnpmDeps,
   nodejs,
   pnpm_11,
   pnpmConfigHook,
+  pnpmBuildHook,
   stdenv,
 }:
 let
@@ -319,7 +318,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs # in case scripts are run outside of a pnpm call
     pnpmConfigHook
-    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
+    pnpmBuildHook
+    pnpm # At least required by pnpmConfigHook and pnpmBuildHook, if not other (custom) phases
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -330,6 +330,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
+
+The example also uses [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook), which runs `pnpm run build` in the build phase.
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the `fetchPnpmDeps` function as well (i.e., `inherit (finalAttrs) patches`).
 
@@ -350,6 +352,33 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 ```
 
 If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
+
+#### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
+
+The `pnpmBuildHook` in overrides the default build phase with `pnpm run <build-script>`.
+
+```nix
+{
+  nativeBuildInputs = [
+    pnpmBuildHook
+  ];
+
+  pnpmBuildScript = "build-ui";
+  pnpmBuildFlags = [
+    "--mode"
+    "production"
+  ];
+}
+```
+
+Available options:
+
+- `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
+- `pnpmBuildFlags`: array of flags to pass to the build script.
+- `pnpmFlags`: currently the same as `pnpmBuildFlags`, but might be used by other hooks in the future.
+- `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
+
+Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
