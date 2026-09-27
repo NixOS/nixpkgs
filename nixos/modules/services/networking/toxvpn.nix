@@ -59,6 +59,11 @@ with lib;
         KillMode = "process";
         Restart = "on-success";
         Type = "notify";
+        User = "toxvpn";
+        Group = "toxvpn";
+        # Creates a tun device, which needs CAP_NET_ADMIN.
+        AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
       };
 
       restartIfChanged = false; # Likely to be used for remote admin
