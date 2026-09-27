@@ -1,80 +1,87 @@
 {
   lib,
   archinfo,
+  arpy,
   buildPythonPackage,
   cart,
-  cffi,
   fetchFromGitHub,
+  minidump,
   pefile,
   pyelftools,
   pytestCheckHook,
   pyvex,
+  pyxbe,
+  pyxdia,
+  pythonOlder,
   setuptools,
   sortedcontainers,
-  nix-update-script,
+  uefi-firmware,
 }:
 
 let
-  # The binaries are following the argr projects release cycle
-  version = "9.2.154";
-
-  # Binary files from https://github.com/angr/binaries (only used for testing and only here)
+  # Released alongside angr 9.3.3; the binaries repository was not bumped to 9.3.
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    tag = "v${version}";
-    hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
+    tag = "v9.2.227";
+    hash = "sha256-ehab3ApgaqNrSlVD1bjhB4zLhz039Mk57recam03HY0=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cle";
-  inherit version;
+  # Keep angr-management, angr, archinfo, claripy, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "9.3.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "cle";
-    tag = "v${version}";
-    hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8KLndMNdEbg2qFXgfvG4BalQnNN2pEkbTcuef+mh9Dk=";
   };
+
+  pythonRelaxDeps = [ "arpy" ];
+
+  # pyxdia bundles Microsoft's unfree DIA runtime, so keep PDB support opt-in.
+  pythonRemoveDeps = [ "pyxdia" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     archinfo
+    arpy
     cart
-    cffi
+    minidump
     pefile
     pyelftools
     pyvex
+    pyxbe
     sortedcontainers
+    uefi-firmware
   ];
+
+  optional-dependencies.pdb = [ pyxdia ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''
-    export HOME=$TMPDIR
-    cp -r ${binaries} $HOME/binaries
+    export HOME="$TMPDIR"
+    ln -s ${binaries} ../binaries
   '';
 
   disabledTests = [
-    # PPC tests seems to fails
-    "test_ppc_rel24_relocation"
-    "test_ppc_addr16_ha_relocation"
-    "test_ppc_addr16_lo_relocation"
-    "test_plt_full_relro"
-    # Test fails
-    "test_tls_pe_incorrect_tls_data_start"
-    "test_x86"
-    "test_x86_64"
-    # The required parts is not present on Nix
-    "test_remote_file_map"
+    # Require the optional unfree pyxdia dependency.
+    "test_debug_symbol_paths_flat_layout"
+    "test_debug_symbol_paths_multiple_paths"
+    "test_debug_symbol_paths_nonexistent_path"
+    "test_debug_symbol_paths_symbol_store_layout"
+    "test_pdb"
   ];
 
   pythonImportsCheck = [ "cle" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python loader for many binary formats";
@@ -82,4 +89,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

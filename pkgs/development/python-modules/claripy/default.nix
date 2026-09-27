@@ -2,25 +2,27 @@
   lib,
   buildPythonPackage,
   cachetools,
-  decorator,
   fetchFromGitHub,
-  pysmt,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
-  typing-extensions,
   z3-solver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "claripy";
-  version = "9.2.193";
+  # Keep angr-management, angr, archinfo, claripy, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "9.3.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "claripy";
-    tag = "v${version}";
-    hash = "sha256-nZ7ORbhi0R79pcHpkx/lRVdfUsoutCqU+zHX8AICTUE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XhLqM9PkysJ+gS21ZDLLumaK2TgC/4k8e0BulPWWoVA=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -32,9 +34,6 @@ buildPythonPackage rec {
 
   dependencies = [
     cachetools
-    decorator
-    pysmt
-    typing-extensions
     z3-solver
   ]
   ++ z3-solver.requiredPythonModules;
@@ -49,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

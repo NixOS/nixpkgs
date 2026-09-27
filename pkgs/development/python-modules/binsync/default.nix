@@ -1,70 +1,74 @@
 {
   lib,
   buildPythonPackage,
+  declib,
   fetchFromGitHub,
   filelock,
+  flask,
   gitpython,
-  libbs,
+  ply,
   prompt-toolkit,
-  pycparser,
-  pyside6,
   pytest-qt,
   pytestCheckHook,
+  requests,
   setuptools,
   sortedcontainers,
   toml,
   tqdm,
+  writableTmpDirAsHomeHook,
   wordfreq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "binsync";
-  version = "5.11.0";
+  version = "5.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "binsync";
-    tag = "v${version}";
-    hash = "sha256-dRc/sF2eVCW1fX66PsF4xU1RbkSnn/sT/PFsRbvDpzY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4bxzNLgd42n4h1N4rwkMnL5WZ7zVSbEbgdfvlTlueNo=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    declib
     filelock
     gitpython
-    libbs
+    ply
     prompt-toolkit
-    pycparser
     sortedcontainers
     toml
     tqdm
     wordfreq
-  ];
-
-  optional-dependencies = {
-    ghidra = [ pyside6 ];
-  };
+  ]
+  ++ declib.optional-dependencies.ghidra;
 
   nativeCheckInputs = [
+    flask
     pytestCheckHook
     pytest-qt
-    pyside6
+    requests
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
-    # Test tries to import angr-management
+    # Test imports angr-management, which depends on binsync.
     "tests/test_angr_gui.py"
+    # Flaky teardown does not wait for QThreads before destroying them.
+    "tests/test_auxiliary_server.py"
   ];
+
+  env.QT_QPA_PLATFORM = "offscreen";
 
   pythonImportsCheck = [ "binsync" ];
 
   meta = {
     description = "Reversing plugin for cross-decompiler collaboration, built on git";
     homepage = "https://github.com/binsync/binsync";
-    changelog = "https://github.com/binsync/binsync/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})
