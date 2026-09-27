@@ -230,6 +230,14 @@ in
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Open firewall port 19999 for netdata web interface.
+        '';
+      };
+
       deadlineBeforeStopSec = lib.mkOption {
         type = lib.types.int;
         default = 120;
@@ -269,6 +277,8 @@ in
     ) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
+
+    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall 19999;
 
     systemd.tmpfiles.settings = lib.mkIf cfg.package.withNdsudo {
       "95-netdata-ndsudo" = {
