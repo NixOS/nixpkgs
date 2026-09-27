@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   pnpm_10,
   nodejs,
   makeBinaryWrapper,
@@ -40,17 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     makeBinaryWrapper
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm run --filter=svelte-check... build
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
