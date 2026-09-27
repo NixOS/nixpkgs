@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "hpccm";
-  version = "26.1.0";
+  version = "26.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
     tag = "v${version}";
-    hash = "sha256-ITmq031/I4nKU4te9hio/H03Kz1IAfqTejDWUfsGL+g=";
+    hash = "sha256-VH5hA9VEOfuUgvQG0aAdyvLslRkg3KV6wlzWnCQhGKE=";
   };
 
   build-system = [ setuptools ];
