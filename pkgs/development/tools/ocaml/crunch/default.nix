@@ -2,7 +2,6 @@
   lib,
   buildDunePackage,
   fetchurl,
-  ocaml,
   cmdliner,
   ptime,
 }:
@@ -19,16 +18,6 @@ buildDunePackage (finalAttrs: {
   buildInputs = [ cmdliner ];
 
   propagatedBuildInputs = [ ptime ];
-
-  outputs = [
-    "lib"
-    "bin"
-    "out"
-  ];
-
-  installPhase = ''
-    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/
-  '';
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-crunch";
