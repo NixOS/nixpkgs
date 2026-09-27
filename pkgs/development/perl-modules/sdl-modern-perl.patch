@@ -1,0 +1,64 @@
+From d734d03862d7dcc776bd2fa3ba662cdd5879b32e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 12 Jul 2023 17:55:27 +0200
+Subject: [PATCH] Adapt to perl 5.37.1
+
+Perl 5.37.1 removed a deprecated sv_nv() macro and SDL fails to build
+with Perl 5.38.0:
+
+lib/SDLx/Controller/Interface.xs:60:26: error: implicit declaration of function 'sv_nv'
+   60 |         out->dv_x      = sv_nv(temp);
+      |                          ^~~~~
+
+Users are advised to use SvNVx() macro instead. SvNVx() seems to have been
+available all the time (it predates a commit from 1993-10-07).
+
+This patch does that.
+
+https://github.com/PerlGameDev/SDL/issues/303
+---
+ src/SDLx/Controller/Interface.xs | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/SDLx/Controller/Interface.xs b/src/SDLx/Controller/Interface.xs
+index 3dc202b7..d326c885 100644
+--- a/src/SDLx/Controller/Interface.xs
++++ b/src/SDLx/Controller/Interface.xs
+@@ -57,15 +57,15 @@ void evaluate(SDLx_Interface *obj, SDLx_Derivative *out, SDLx_State *initial, fl
+ 
+ 	SV *temp;
+ 	temp           = av_pop(accel);
+-	out->dv_x      = sv_nv(temp);
++	out->dv_x      = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	temp           = av_pop(accel);
+-	out->dv_y      = sv_nv(temp);
++	out->dv_y      = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	temp           = av_pop(accel);
+-	out->dang_v    = sv_nv(temp);
++	out->dang_v    = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	SvREFCNT_dec((SV *)accel);
+@@ -90,15 +90,15 @@ void evaluate_dt(SDLx_Interface *obj, SDLx_Derivative *out, SDLx_State *initial,
+ 
+ 	SV *temp;
+ 	temp           = av_pop(accel);
+-	out->dv_x      = sv_nv(temp);
++	out->dv_x      = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	temp           = av_pop(accel);
+-	out->dv_y      = sv_nv(temp);
++	out->dv_y      = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	temp           = av_pop(accel);
+-	out->dang_v    = sv_nv(temp);
++	out->dang_v    = SvNVx(temp);
+ 	SvREFCNT_dec(temp);
+ 
+ 	SvREFCNT_dec((SV *)accel);

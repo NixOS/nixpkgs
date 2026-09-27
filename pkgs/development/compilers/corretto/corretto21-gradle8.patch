@@ -1,0 +1,340 @@
+diff --git a/build.gradle b/build.gradle
+index 61d5c8f8b48..2102e8921bd 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -257,7 +257,7 @@ project(':prebuild') {
+     def generateToolMain = "build.tools.generatecacerts.GenerateCacerts"
+ 
+     task copyToolSrc(type: Copy) {
+-        description 'Copy utility tool source to the project root'
++        description = 'Copy utility tool source to the project root'
+         from fileTree("$rootDir/make/jdk/src/classes") {
+             include 'build/tools/generatecacerts/*'
+         }
+@@ -267,7 +267,7 @@ project(':prebuild') {
+     task buildTool(type: JavaCompile) {
+         dependsOn copyToolSrc
+         source = fileTree(dir: preBuildSrc, include: '**/*.java')
+-        destinationDir = file(classPath)
++        destinationDirectory = file(classPath)
+         classpath = files(classPath)
+     }
+ 
+@@ -280,7 +280,7 @@ project(':prebuild') {
+ 
+         // See commit for [JDK-8275252](https://github.com/corretto/corretto-jdk/commit/bd2b41dd7062c50f3aaebec2137d5fdd9546c120)
+         jvmArgs = ['-Dkeystore.pkcs12.certProtectionAlgorithm=NONE', '-Dkeystore.pkcs12.macAlgorithm=NONE']
+-        main = generateToolMain
++        mainClass = generateToolMain
+         args = [jdkCaDir, project.caCerts]
+     }
+ 
+@@ -311,9 +311,9 @@ project(':openjdksrc') {
+      * Compresses a snapshot of the source code used to perform the build.
+      */
+     task sourceDistributionTarball(type: Tar) {
+-        description 'Assemble source files required for building and distributing Corretto.'
+-        compression Compression.GZIP
+-        archiveName sourceTar
++        description = 'Assemble source files required for building and distributing Corretto.'
++        compression = Compression.GZIP
++        archiveFileName = sourceTar
+         def sourceTarRootFiles = ['LICENSE',
+                     'ADDITIONAL_LICENSE_INFO',
+                     'README',
+diff --git a/installers/linux/al2/spec/build.gradle b/installers/linux/al2/spec/build.gradle
+index 1df0004cbac..1b5dd56d7fd 100644
+--- a/installers/linux/al2/spec/build.gradle
++++ b/installers/linux/al2/spec/build.gradle
+@@ -63,8 +63,8 @@ task inflateRpmSpec {
+ 
+ task copySourceTar(type: Tar) {
+     dependsOn project.configurations.compile, inflateRpmSpec
+-    compression Compression.GZIP
+-    archiveName project.configurations.compile.singleFile.name
++    compression = Compression.GZIP
++    archiveFileName = project.configurations.compile.singleFile.name
+     from("$buildDir") {
+         include "java-${project.version.major}-amazon-corretto.spec"
+         into 'rpm'
+diff --git a/installers/linux/alpine/tar/build.gradle b/installers/linux/alpine/tar/build.gradle
+index 5b88041eebb..5b0c05f81d0 100644
+--- a/installers/linux/alpine/tar/build.gradle
++++ b/installers/linux/alpine/tar/build.gradle
+@@ -131,9 +131,9 @@ task bundleThirdPartyBinaries {
+ 
+ task packageTestImage(type: Tar) {
+     dependsOn createTestImage
+-    description 'Package test results'
+-    archiveName "amazon-corretto-testimage-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
+-    compression Compression.GZIP
++    description = 'Package test results'
++    archiveFileName = "amazon-corretto-testimage-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
++    compression = Compression.GZIP
+     from(testResultingImage) {
+         include '**'
+     }
+@@ -142,9 +142,9 @@ task packageTestImage(type: Tar) {
+ 
+ task packageDebugSymbols(type: Tar) {
+     dependsOn packageTestImage
+-    description 'Package debug symbols'
+-    archiveName "amazon-corretto-debugsymbols-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
+-    compression Compression.GZIP
++    description = 'Package debug symbols'
++    archiveFileName = "amazon-corretto-debugsymbols-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
++    compression = Compression.GZIP
+     from(jdkResultingImage) {
+         include 'bin/*.diz'
+         include 'lib/*.diz'
+@@ -154,12 +154,12 @@ task packageDebugSymbols(type: Tar) {
+ }
+ 
+ task packageBuildResults(type: Tar) {
+-    description 'Compresses the JDK image and puts the results in build/distributions.'
++    description = 'Compresses the JDK image and puts the results in build/distributions.'
+     dependsOn packageDebugSymbols
+     dependsOn executeBuild
+     dependsOn bundleThirdPartyBinaries
+-    archiveName "amazon-corretto-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
+-    compression Compression.GZIP
++    archiveFileName = "amazon-corretto-${project.version.full}-alpine-linux-${arch_alias}.tar.gz"
++    compression = Compression.GZIP
+     from(buildRoot) {
+         include project.rootFiles
+     }
+@@ -178,7 +178,7 @@ task packageBuildResults(type: Tar) {
+     // See https://github.com/corretto/corretto-11/issues/129
+     from(jdkResultingImage) {
+         include 'legal/**'
+-        fileMode 0444
++        fileMode = 0444
+     }
+     into "amazon-corretto-${project.version.full}-alpine-linux-${arch_alias}"
+ }
+diff --git a/installers/linux/universal/deb/build.gradle b/installers/linux/universal/deb/build.gradle
+index 4daf46e8b14..3376e3c58d1 100644
+--- a/installers/linux/universal/deb/build.gradle
++++ b/installers/linux/universal/deb/build.gradle
+@@ -20,7 +20,7 @@
+  */
+ 
+ plugins {
+-    id 'nebula.ospackage' version 'latest.release'
++    id 'com.netflix.nebula.ospackage' version 'latest.release'
+ }
+ 
+ dependencies {
+@@ -57,22 +57,22 @@ def jinfoName = ".${jdkInstallationDirName}.jinfo"
+ ospackage {
+     // Valid version must start with a digit and only contain [A-Za-z0-9.+:~-]
+     // See http://manpages.ubuntu.com/manpages/artful/en/man5/deb-version.5.html
+-    version project.version.upstream
+-    release project.version.revision
+-
+-    url "${packageInfo.url}"
+-    vendor "${packageInfo.vendor}"
+-    packager "${packageInfo.packager}"
+-    license "${packageInfo.license}"
+-    buildHost "${packageInfo.buildHost}"
+-    maintainer "${packageInfo.maintainer}"
+-    packageGroup 'java'
+-    priority 'optional'
+-    user 'root'
+-    permissionGroup 'root'
+-    epoch 1
+-    arch arch_deb
+-    multiArch SAME
++    version = project.version.upstream
++    release = project.version.revision
++
++    url = "${packageInfo.url}"
++    vendor = "${packageInfo.vendor}"
++    packager = "${packageInfo.packager}"
++    license = "${packageInfo.license}"
++    buildHost = "${packageInfo.buildHost}"
++    maintainer = "${packageInfo.maintainer}"
++    packageGroup = 'java'
++    priority = 'optional'
++    user = 'root'
++    permissionGroup = 'root'
++    epoch = 1
++    arch = arch_deb
++    multiArch = SAME
+ }
+ 
+ /**
+@@ -127,13 +127,13 @@ task inflateJinfoTemplate(type: Copy) {
+  * distributions folder.
+  */
+ task generateJdkDeb(type: Deb) {
+-    description 'Create the DEB package for Corretto JDK'
++    description = 'Create the DEB package for Corretto JDK'
+     dependsOn inflateDebScriptTemplate
+     dependsOn inflateJinfoTemplate
+ 
+-    packageName jdkPackageName
+-    packageDescription "Amazon Corretto\'s packaging of the OpenJDK ${project.version.major} code."
+-    summary "Amazon Corretto ${project.version.major} development environment"
++    packageName = jdkPackageName
++    packageDescription = "Amazon Corretto\'s packaging of the OpenJDK ${project.version.major} code."
++    summary = "Amazon Corretto ${project.version.major} development environment"
+ 
+     postInstall file("$buildRoot/scripts/postin_jdk.sh")
+     preUninstall file("$buildRoot/scripts/preun_jdk.sh")
+@@ -191,13 +191,13 @@ task generateJdkDeb(type: Deb) {
+     // See https://github.com/corretto/corretto-11/issues/129
+     from("${jdkBinaryDir}/legal") {
+         into "${jdkHome}/legal"
+-        fileMode 0444
++        fileMode = 0444
+     }
+ 
+     if (!project.excludeReadmeJavaSE) {
+         from("${jdkBinaryDir}/README.JAVASE") {
+             into jdkHome
+-            fileMode 0444
++            fileMode = 0444
+         }
+     }
+ 
+diff --git a/installers/linux/universal/rpm/build.gradle b/installers/linux/universal/rpm/build.gradle
+index 50f55bb52c0..fbbe8f44bca 100644
+--- a/installers/linux/universal/rpm/build.gradle
++++ b/installers/linux/universal/rpm/build.gradle
+@@ -20,7 +20,7 @@
+  */
+ 
+ plugins {
+-    id 'nebula.ospackage' version 'latest.release'
++    id 'com.netflix.nebula.ospackage' version 'latest.release'
+ }
+ 
+ dependencies {
+@@ -51,20 +51,20 @@ def jdkBinaryDir = "${buildRoot}/${project.correttoJdkArchiveName}"
+ def jdkPackageName = "java-${project.version.major}-amazon-corretto-devel"
+ 
+ ospackage {
+-    version project.version.upstream
+-    release project.version.revision
+-
+-    url "${packageInfo.url}"
+-    vendor "${packageInfo.vendor}"
+-    packager "${packageInfo.packager}"
+-    license "${packageInfo.license}"
+-    buildHost "${packageInfo.buildHost}"
+-    user 'root'
+-    permissionGroup 'root'
+-    epoch 1
+-    arch arch_redline
+-    os LINUX
+-    type BINARY
++    version = project.version.upstream
++    release = project.version.revision
++
++    url = "${packageInfo.url}"
++    vendor = "${packageInfo.vendor}"
++    packager = "${packageInfo.packager}"
++    license = "${packageInfo.license}"
++    buildHost = "${packageInfo.buildHost}"
++    user = 'root'
++    permissionGroup = 'root'
++    epoch = 1
++    arch = arch_redline
++    os = LINUX
++    type = BINARY
+ }
+ 
+ /**
+@@ -100,14 +100,14 @@ task inflateRpmScriptTemplate(type: Copy) {
+  * distributions folder.
+  */
+ task generateJdkRpm(type: Rpm) {
+-    description 'Create the RPM package for Corretto JDK'
++    description = 'Create the RPM package for Corretto JDK'
+     dependsOn inflateRpmScriptTemplate
+-    packageName jdkPackageName
+-    packageDescription packageInfo.description
+-    summary "Amazon Corretto ${project.version.major} development environment"
+-    packageGroup 'Development/Tools'
++    packageName = jdkPackageName
++    packageDescription = packageInfo.description
++    summary = "Amazon Corretto ${project.version.major} development environment"
++    packageGroup = 'Development/Tools'
+     // Remove after https://github.com/nebula-plugins/gradle-ospackage-plugin/issues/401 is merged and released
+-    sourcePackage "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
++    sourcePackage = "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
+ 
+     prefix(jdkHome)
+     postInstall file("$buildRoot/scripts/postin_java.sh")
+@@ -146,13 +146,13 @@ task generateJdkRpm(type: Rpm) {
+     // See https://github.com/corretto/corretto-11/issues/129
+     from("${jdkBinaryDir}/legal") {
+         into "${jdkHome}/legal"
+-        fileMode 0444
++        fileMode = 0444
+     }
+ 
+     if (!project.excludeReadmeJavaSE) {
+         from("${jdkBinaryDir}/README.JAVASE") {
+             into jdkHome
+-            fileMode 0444
++            fileMode = 0444
+         }
+     }   
+ }
+diff --git a/installers/linux/universal/tar/build.gradle b/installers/linux/universal/tar/build.gradle
+index be5be844e38..0480a6a34c9 100644
+--- a/installers/linux/universal/tar/build.gradle
++++ b/installers/linux/universal/tar/build.gradle
+@@ -121,9 +121,9 @@ task bundleThirdPartyBinaries {
+ 
+ task packageTestImage(type: Tar) {
+     dependsOn createTestImage
+-    description 'Package test results'
+-    archiveName "${project.correttoTestImageArchiveName}.tar.gz"
+-    compression Compression.GZIP
++    description = 'Package test results'
++    archiveFileName = "${project.correttoTestImageArchiveName}.tar.gz"
++    compression = Compression.GZIP
+     from(testResultingImage) {
+         include '**'
+     }
+@@ -131,10 +131,10 @@ task packageTestImage(type: Tar) {
+ }
+ 
+ task packageDebugSymbols(type: Tar) {
+-    description 'Package debug results'
++    description = 'Package debug results'
+     dependsOn packageTestImage
+-    archiveName "${project.correttoDebugSymbolsArchiveName}.tar.gz"
+-    compression Compression.GZIP
++    archiveFileName = "${project.correttoDebugSymbolsArchiveName}.tar.gz"
++    compression = Compression.GZIP
+     from(jdkResultingImage) {
+         include 'bin/*.diz'
+         include 'lib/*.diz'
+@@ -144,11 +144,11 @@ task packageDebugSymbols(type: Tar) {
+ }
+ 
+ task packageBuildResults(type: Tar) {
+-    description 'Compresses the JDK image and puts the results in build/distributions.'
++    description = 'Compresses the JDK image and puts the results in build/distributions.'
+     dependsOn packageDebugSymbols
+     dependsOn bundleThirdPartyBinaries
+-    archiveName "${project.correttoJdkArchiveName}.tar.gz"
+-    compression Compression.GZIP
++    archiveFileName = "${project.correttoJdkArchiveName}.tar.gz"
++    compression = Compression.GZIP
+     from(buildRoot) {
+         include project.rootFiles
+         into project.correttoJdkArchiveName
+@@ -169,7 +169,7 @@ task packageBuildResults(type: Tar) {
+     // See https://github.com/corretto/corretto-11/issues/129
+     from("${jdkResultingImage}/legal") {
+         include '**'
+-        fileMode 0444
++        fileMode = 0444
+         into "${project.correttoJdkArchiveName}/legal"
+     }
+ }

@@ -1,0 +1,92 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/misc_cmds/blob/main/misc_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('misc_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+libedit = dependency('libedit')
+libutil = cc.find_library('util')
+ncurses = dependency('ncurses')
+
+
+# Binaries
+executable(
+    'calendar',
+    c_args : [ '-D__FBSDID=__RCSID' ],
+    dependencies : [ libutil ],
+    install : true,
+    sources : [
+        'calendar/calendar.c',
+        'calendar/dates.c',
+        'calendar/day.c',
+        'calendar/events.c',
+        'calendar/io.c',
+        'calendar/locale.c',
+        'calendar/ostern.c',
+        'calendar/parsedata.c',
+        'calendar/paskha.c',
+        'calendar/pom.c',
+        'calendar/sunpos.c',
+    ],
+)
+install_data(
+    'calendar/calendars/calendar.apple',
+    'calendar/calendars/calendar.freebsd',
+    install_dir : get_option('datadir') / 'calendar',
+)
+install_man('calendar/calendar.1')
+
+executable(
+    'leave',
+    c_args : [
+        '-D__FBSDID=__RCSID',
+        '-Du_int=uint32_t',
+        '-include', 'stdint.h',
+    ],
+    install : true,
+    sources : [ 'leave/leave.c' ],
+)
+install_man('leave/leave.1')
+
+executable(
+    'ncal',
+    dependencies : [ ncurses ],
+    include_directories : 'ncal',
+    install : true,
+    sources : [
+        'ncal/calendar.c',
+        'ncal/easter.c',
+        'ncal/ncal.c',
+    ],
+)
+install_man('ncal/ncal.1')
+
+install_symlink(
+    'cal',
+    install_dir : get_option('bindir'),
+    pointing_to : 'ncal',
+)
+install_symlink(
+    'cal.1',
+    install_dir : get_option('mandir') / 'man1',
+    pointing_to : 'ncal.1',
+)
+
+executable(
+    'tsort',
+    install : true,
+    sources : [ 'tsort/tsort.c' ],
+)
+install_man('tsort/tsort.1')
+
+executable(
+    'units',
+    dependencies : [ libedit ],
+    install : true,
+    sources : [ 'units/units.c' ],
+)
+install_man('units/units.1')

@@ -1,0 +1,114 @@
+diff --git a/src/particles/particles.pro b/src/particles/particles.pro
+index aaaa83419a..58aee00036 100644
+--- a/src/particles/particles.pro
++++ b/src/particles/particles.pro
+@@ -20,6 +20,6 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQuick/Particles.2
+ QML_IMPORT_NAME = QtQuick.Particles
+ IMPORT_VERSION = 2.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+ 
+ load(qt_module)
+diff --git a/src/qml/qml.pro b/src/qml/qml.pro
+index e39a8319b6..90c0331278 100644
+--- a/src/qml/qml.pro
++++ b/src/qml/qml.pro
+@@ -72,6 +72,6 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQml
+ QML_IMPORT_NAME = QtQml
+ IMPORT_VERSION = 2.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+ 
+ load(qt_module)
+diff --git a/src/qmlmodels/qmlmodels.pro b/src/qmlmodels/qmlmodels.pro
+index 4ac093556d..112e2c2be0 100644
+--- a/src/qmlmodels/qmlmodels.pro
++++ b/src/qmlmodels/qmlmodels.pro
+@@ -68,6 +68,6 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQml/Models.2
+ QML_IMPORT_NAME = QtQml.Models
+ IMPORT_VERSION = 2.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+ 
+ load(qt_module)
+diff --git a/src/qmltest/qmltest.pro b/src/qmltest/qmltest.pro
+index c2e8068fc6..79dba368f7 100644
+--- a/src/qmltest/qmltest.pro
++++ b/src/qmltest/qmltest.pro
+@@ -34,7 +34,7 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/Qt/test/qtestroot
+ QML_IMPORT_NAME = Qt.test.qtestroot
+ QML_IMPORT_VERSION = 1.0
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+ 
+ # Install qmldir
+ qmldir.files = $$PWD/qmldir
+diff --git a/src/qmlworkerscript/qmlworkerscript.pro b/src/qmlworkerscript/qmlworkerscript.pro
+index 84466062e1..79885455cc 100644
+--- a/src/qmlworkerscript/qmlworkerscript.pro
++++ b/src/qmlworkerscript/qmlworkerscript.pro
+@@ -23,6 +23,6 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQml/WorkerScript.2
+ QML_IMPORT_NAME = QtQml.WorkerScript
+ IMPORT_VERSION = 2.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+ 
+ load(qt_module)
+diff --git a/src/quick/quick.pro b/src/quick/quick.pro
+index f2d49cf939..c401b04c4e 100644
+--- a/src/quick/quick.pro
++++ b/src/quick/quick.pro
+@@ -52,4 +52,4 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQuick.2
+ QML_IMPORT_NAME = QtQuick
+ IMPORT_VERSION = 2.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+diff --git a/src/quickshapes/quickshapes.pro b/src/quickshapes/quickshapes.pro
+index 4dbd3e5e46..0c6b186fc8 100644
+--- a/src/quickshapes/quickshapes.pro
++++ b/src/quickshapes/quickshapes.pro
+@@ -36,4 +36,4 @@ QMLTYPES_FILENAME = plugins.qmltypes
+ QMLTYPES_INSTALL_DIR = $$[QT_INSTALL_QML]/QtQuick/Shapes
+ QML_IMPORT_NAME = QtQuick.Shapes
+ IMPORT_VERSION = 1.$$QT_MINOR_VERSION
+-CONFIG += qmltypes install_qmltypes install_metatypes
++CONFIG += qmltypes install_qmltypes
+diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
+index 005db4248..685c5b1b2 100644
+--- a/src/qml/qml/qqmlimport.cpp
++++ b/src/qml/qml/qqmlimport.cpp
+@@ -1760,6 +1760,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+     QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
+     addImportPath(installImportsPath);
+ 
++    // Add import paths derived from PATH
++    const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(':');
++    const QString qmldir = QStringLiteral("../" NIXPKGS_QML2_IMPORT_PREFIX);
++    for (const QString &path: paths) {
++        if (!path.isEmpty()) {
++            addImportPath(QDir::cleanPath(path + QDir::separator() + qmldir));
++        }
++    }
++
+     // env import paths
+     if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
+         const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
+diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
+index 537eaf62ea..e21de58f64 100644
+--- a/tools/qmlcachegen/qmlcache.prf
++++ b/tools/qmlcachegen/qmlcache.prf
+@@ -26,7 +26,7 @@ defineReplace(qmlCacheOutputFileName) {
+ }
+ 
+ qmlcacheinst.base = $$QMLCACHE_DESTDIR
+-qmlcacheinst.path = $$[QT_INSTALL_QML]/$$TARGETPATH
++qmlcacheinst.path = $$NIX_OUTPUT_QML/$$TARGETPATH
+ qmlcacheinst.CONFIG = no_check_exist
+ 
+ qmlcachegen.input = CACHEGEN_FILES

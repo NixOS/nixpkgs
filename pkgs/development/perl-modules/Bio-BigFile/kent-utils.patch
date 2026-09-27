@@ -1,0 +1,27 @@
+--- ./src/utils/bigWigCat/makefile	2023-03-27 14:03:01.585896516 +0000
++++ ./src/utils/bigWigCat/makefile	2023-03-27 14:03:27.716180479 +0000
+@@ -1,3 +1,4 @@
+ kentSrc = ../..
+ A = bigWigCat
+ include $(kentSrc)/inc/userApp.mk
++L += -lz
+
+--- ./src/utils/pslLiftSubrangeBlat/makefile	1970-01-01 00:00:01.000000000 +0000
++++ ./src/utils/pslLiftSubrangeBlat/makefile	2023-03-27 14:36:59.044600213 +0000
+@@ -3,7 +3,7 @@
+ preMyLibs += ../../lib/$(MACHTYPE)/jkhgap.a
+ include $(kentSrc)/inc/userApp.mk
+ HG_INC += -I../../hg/inc
+-L += $(MYSQLLIBS) -lm
++L += $(MYSQLLIBS) -lm -lz
+ 
+ test::
+ 	cd tests && ${MAKE} test
+
+--- ./src/utils/bigWigCorrelate/makefile	2023-03-27 14:36:23.117545553 +0000
++++ ./src/utils/bigWigCorrelate/makefile	2023-03-27 14:36:33.854328176 +0000
+@@ -1,3 +1,4 @@
+ kentSrc = ../..
+ A = bigWigCorrelate
+ include $(kentSrc)/inc/userApp.mk
++L += -lz

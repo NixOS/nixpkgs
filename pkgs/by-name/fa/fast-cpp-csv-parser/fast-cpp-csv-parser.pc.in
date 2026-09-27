@@ -1,0 +1,8 @@
+prefix=@out@
+includedir=${prefix}/include
+
+Name: fast-cpp-csv-parser
+Description: Fast header-only library for reading CSV files
+URL: https://github.com/ben-strasser/fast-cpp-csv-parser
+Version: @version@
+Cflags: -isystem${includedir}

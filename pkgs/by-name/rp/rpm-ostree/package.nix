@@ -1,0 +1,135 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ostree,
+  rpm,
+  which,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  cargo,
+  rustc,
+  gobject-introspection,
+  gtk-doc,
+  libxml2,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  gperf,
+  cmake,
+  libcap,
+  glib,
+  systemd,
+  json-glib,
+  libarchive,
+  libsolv,
+  librepo,
+  polkit,
+  bubblewrap,
+  pcre2,
+  check,
+  python3,
+  json_c,
+  zchunk,
+  libmodulemd,
+  util-linux,
+  sqlite,
+  cppunit,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rpm-ostree";
+  version = "2026.1";
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "devdoc"
+  ];
+
+  src = fetchurl {
+    url = "https://github.com/coreos/rpm-ostree/releases/download/v${finalAttrs.version}/rpm-ostree-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/dgF4jN4Sq7pRFmSMWXmG21y0PlkPPOMf8QhP8CB+yA=";
+  };
+
+  nativeBuildInputs = [
+    python3
+    pkg-config
+    which
+    autoconf
+    automake
+    libtool
+    cmake
+    gperf
+    cargo
+    rustc
+    gobject-introspection
+    gtk-doc
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+  ];
+
+  buildInputs = [
+    libcap
+    ostree
+    rpm
+    glib
+    systemd
+    polkit
+    bubblewrap
+    json-glib
+    libarchive
+    libsolv
+    librepo
+    pcre2
+    check
+
+    # libdnf # vendored unstable branch
+    # required by vendored libdnf
+    json_c
+    zchunk
+    libmodulemd
+    util-linux # for smartcols.pc
+    sqlite
+    cppunit
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  prePatch = ''
+    # According to #cmake on freenode, libdnf should bundle the FindLibSolv.cmake module
+    cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake libdnf/cmake/modules/
+
+    # Let's not hardcode the rpm-gpg path...
+    substituteInPlace libdnf/libdnf/dnf-keyring.cpp \
+      --replace '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
+
+    # Do not try to install in global /usr/lib
+    substituteInPlace Makefile-rpm-ostree.am \
+      --replace '/usr/lib/kernel/install.d' '$(libdir)/kernel/install.d'
+  '';
+
+  preConfigure = ''
+    env NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  meta = {
+    description = "Hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
+    homepage = "https://coreos.github.io/rpm-ostree/";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    mainProgram = "rpm-ostree";
+  };
+})

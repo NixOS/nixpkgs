@@ -1,0 +1,29 @@
+diff --git a/src/panes/about/pane.py b/src/panes/about/pane.py
+index 5e3a456..df2dfe0 100644
+--- a/src/panes/about/pane.py
++++ b/src/panes/about/pane.py
+@@ -31,6 +31,7 @@ from PySide6.QtCore import Qt, QByteArray, QUrl, QSize, \
+ from PySide6.QtGui import QIcon
+ from PySide6.QtWidgets import QMessageBox
+ import urllib.request
++import ssl
+ import hashlib
+ 
+ import certifi # PyInstaller pickup (should be auto-used by urllib)
+@@ -159,14 +160,14 @@ class AboutPane(UIController):
+         log.info('checking for updates')
+         self.window.checkupdates_pushButton.setEnabled(False)
+         with urllib.request.urlopen(type(self).update_url,
+-                                    cafile=certifi.where()) as response:
++                                    context=ssl.create_default_context(cafile=certifi.where())) as response:
+             self.remote_version_body = response.read(100)
+ 
+     def check_for_compat(self, progress_callback=lambda x: ()):
+         log.info('checking for compat')
+         self.window.checkcompat_pushButton.setEnabled(False)
+         with urllib.request.urlopen(type(self).compat_url,
+-                                    cafile=certifi.where()) as response:
++                                    context=ssl.create_default_context(cafile=certifi.where())) as response:
+             self.remote_compat_body = response.read(10000)
+ 
+     def finished_check_for_updates(self, show_mb=True, \

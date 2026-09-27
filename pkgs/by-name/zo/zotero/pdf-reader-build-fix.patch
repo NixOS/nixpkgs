@@ -1,0 +1,12 @@
+diff --git a/pdfjs/build b/pdfjs/build
+index abd34be..509932f 100755
+--- a/pdfjs/build
++++ b/pdfjs/build
+@@ -14,7 +14,6 @@ BUILD_BASE=./build
+ 
+ # Move into the PDF.js directory, install dependencies, and build
+ pushd pdfjs/pdf.js
+-npm ci
+ if [[ $PDFJS_CONFIG != "web" ]]; then
+ 	npx gulp generic
+ fi

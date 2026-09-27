@@ -1,0 +1,20 @@
+diff --git a/test/test.py b/test/test.py
+index 0acb642bdf1e..2b43e4d5dc28 100755
+--- a/test/test.py
++++ b/test/test.py
+@@ -795,10 +795,11 @@ def C_funkynames_test(t):
+             test_generic(cfvcmd + ' --encoding=raw -v -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_all_test, files=cnum, ok=cnum))
+             test_generic(cfvcmd + ' --encoding=raw -v -u -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_all_test, files=cnum, ok=cnum, unv=0))
+             # cfv -T, undecodable filenames on disk and in CF (same names), without raw, cferrors
+-            test_generic(cfvcmd + ' -v -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable))
+-            test_generic(cfvcmd + ' -v -u -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1, unv=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable,unv=numundecodable))
+-            test_generic(cfvcmd + ' -v -m -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable))
+-            test_generic(cfvcmd + ' -v -m -u -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1, unv=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable,unv=numundecodable))
++            if sys.platform != 'darwin':
++                test_generic(cfvcmd + ' -v -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable))
++                test_generic(cfvcmd + ' -v -u -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1, unv=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable,unv=numundecodable))
++                test_generic(cfvcmd + ' -v -m -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable))
++                test_generic(cfvcmd + ' -v -m -u -T -p %s -f %s' % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1, unv=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable,unv=numundecodable))
+ 
+             # TODO: needs "deep" -s
+             if not deep:

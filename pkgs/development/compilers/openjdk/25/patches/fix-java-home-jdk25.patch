@@ -1,0 +1,13 @@
+--- a/src/hotspot/os/linux/os_linux.cpp	2025-04-08 14:43:06.765198522 +0200
++++ b/src/hotspot/os/linux/os_linux.cpp	2025-04-08 14:43:27.890301990 +0200
+@@ -2758,9 +2758,7 @@
+   assert(ret, "cannot locate libjvm");
+   char *rp = nullptr;
+   if (ret && dli_fname[0] != '\0') {
+-    rp = os::realpath(dli_fname, buf, buflen);
+-  }
+-  if (rp == nullptr) {
++    snprintf(buf, buflen, "%s", dli_fname);
+     return;
+   }
+ 

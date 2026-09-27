@@ -1,0 +1,27 @@
+Sphinx changed something between sphinx=4.5.0 and sphinx=5.3 that broke
+"sphinxcontrib.log_cabinet" plugin.
+
+When Sphinx tries to importlib.import_module("sphinxcontrib.log_cabinet"), it
+has couple other sphinxcontrib.* libraries in sys.path, and they seem to cause
+conflict. So here I purge sys.path from sphixcontrib-related things, import
+log_cabinet and put everything back, so when Sphinx will do "import_module",
+"sphinxcontrib.log_cabinet" will be already imported and cached.
+
+All this is quite hacky, but we are talking about merely building documentation
+here. If resulting html looks good, what happened in Nix sandbox stays in Nix
+sandbox.
+
+--- a/docs/conf.py	1970-01-01 00:00:00.000000000 -0000
++++ b/docs/conf.py	1970-01-01 00:00:00.000000000 -0000
+@@ -1,5 +1,12 @@
+ from pallets_sphinx_themes import get_version
+ from pallets_sphinx_themes import ProjectLink
++import importlib
++import sys
++
++saved_path = sys.path
++sys.path = [x for x in sys.path if "sphinxcontrib" not in x or "cabinet" in x]
++import sphinxcontrib.log_cabinet
++sys.path = saved_path
+ 
+ # Project --------------------------------------------------------------

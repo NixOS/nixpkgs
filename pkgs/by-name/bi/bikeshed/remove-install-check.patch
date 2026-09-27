@@ -1,0 +1,28 @@
+diff --git i/bikeshed/__init__.py w/bikeshed/__init__.py
+index 4450f6c..a697657 100644
+--- i/bikeshed/__init__.py
++++ w/bikeshed/__init__.py
+@@ -32,23 +32,6 @@ def verify_python_version() -> None:
+ 
+ verify_python_version()
+ 
+-
+-def verify_requirements() -> None:
+-    try:
+-        subprocess.check_output([sys.executable, "-m", "pip", "check", "bikeshed"])  # noqa: S603
+-    except subprocess.CalledProcessError as e:
+-        print("ERROR: Broken or incomplete manual installation.")
+-        print(str(e.output, encoding="utf-8"))
+-        requirements_file_path = os.path.join(
+-            os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+-            "requirements.txt",
+-        )
+-        print(f'Run "pip3 install -r {requirements_file_path}" to complete installation')
+-        print("Meanwhile, attempting to run Bikeshed anyway...")
+-
+-
+-verify_requirements()
+-
+ from . import (
+     config,
+     update,
