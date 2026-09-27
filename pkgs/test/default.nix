@@ -114,6 +114,8 @@ in
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = recurseIntoAttrs (callPackage ./stdenv { });
 
+  gcc = recurseIntoAttrs (callPackage ./gcc { });
+
   hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix { });
   hardeningFlags-gcc = recurseIntoAttrs (
     callPackage ./cc-wrapper/hardening.nix {
