@@ -40,7 +40,12 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Safe Rust implementation of libmagic";
     homepage = "https://github.com/qjerome/magic-rs";
-    license = lib.licenses.gpl3Only;
+    license =
+      with lib.licenses;
+      OR [
+        gpl3Only
+        bsd2
+      ];
     maintainers = with lib.maintainers; [ fab ];
   };
 })
