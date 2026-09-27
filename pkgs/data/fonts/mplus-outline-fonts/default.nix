@@ -14,6 +14,9 @@ in
     pname = "${pname}-osdn";
     version = "063a";
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     src = fetchurl {
       url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-063a.tar.xz";
       hash = "sha256-ROuXO0tq/1dN5FTbEF3cI+Z0nCKUc0vZyx4Nc05M3Xk=";
@@ -33,6 +36,9 @@ in
   githubRelease = stdenvNoCC.mkDerivation {
     pname = "${pname}-github";
     version = "0-unstable-2022-03-19";
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "coz-m";
