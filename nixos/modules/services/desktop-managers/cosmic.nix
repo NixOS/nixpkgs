@@ -30,6 +30,7 @@ let
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
+      cosmic-osk
       cosmic-panel
       cosmic-session
       cosmic-settings
@@ -90,6 +91,7 @@ in
           cosmic-reader
           cosmic-screenshot
           cosmic-term
+          cosmic-viewer
           cosmic-wallpapers
           cosmic-sound-theme
           glib
@@ -134,6 +136,11 @@ in
       open-sans
     ];
 
+    qt = {
+      enable = lib.mkDefault true;
+      platformTheme = lib.mkDefault "qt5ct";
+    };
+
     # Required options for the COSMIC DE
     environment.sessionVariables.X11_BASE_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.xml";
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
@@ -164,6 +171,7 @@ in
     hardware.system76.power-daemon.enable = lib.mkDefault (
       !config.services.power-profiles-daemon.enable && !config.services.tuned.enable
     );
+    services.switcherooControl.enable = lib.mkDefault true;
 
     warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
       ''
