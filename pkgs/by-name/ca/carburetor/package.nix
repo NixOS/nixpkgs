@@ -13,7 +13,7 @@
   tractor,
 }:
 let
-  # This package should be updated together with pkgs/by-name/tr/tractor/package.nix
+  # This package and pkgs/by-name/tr/tractor/package.nix should be updated to their latest available versions together.
   version = "5.1.1";
 in
 python3Packages.buildPythonApplication {
