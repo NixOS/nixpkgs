@@ -14146,6 +14146,11 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  Jotham-LEC = {
+    name = "Jotham Lim Ee Chen";
+    github = "Jotham-LEC";
+    githubId = 250284264;
+  };
   jovandeginste = {
     email = "jo.vandeginste@gmail.com";
     github = "jovandeginste";
