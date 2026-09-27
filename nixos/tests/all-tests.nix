@@ -341,6 +341,7 @@ in
     _module.args.compression = "xz";
   };
   bind = runTest ./bind.nix;
+  bird-lg = runTest ./bird-lg.nix;
   bird2 = import ./bird.nix {
     inherit (pkgs) lib;
     inherit runTest;
