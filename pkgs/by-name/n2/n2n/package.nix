@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n2n";
-  version = "3.0";
+  version = "3.1.1";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "n2n";
     rev = finalAttrs.version;
-    hash = "sha256-OXmcc6r+fTHs/tDNF3akSsynB/bVRKB6Fl5oYxmu+E0=";
+    hash = "sha256-/Yb6L6Pt2vR7fzVS1QS9Z46yaR26fqE7LPrAEHl5sbw=";
   };
 
   nativeBuildInputs = [
