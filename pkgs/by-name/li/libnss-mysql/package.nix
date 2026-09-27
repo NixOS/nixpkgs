@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnss-mysql";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "saknopper";
     repo = "libnss-mysql";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/oeUe94NfOzKrHhiIEW0cMXP5pAqPHulRO82JwPrv5I=";
+    sha256 = "sha256-DjkiyTQ4t5PdBrVqcymZJKFdpA1+QlB5g7ykuJl4wlA=";
   };
 
   nativeBuildInputs = [
