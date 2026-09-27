@@ -1,0 +1,132 @@
+--- a/resources/3rdparty/CMakeLists.txt
++++ b/resources/3rdparty/CMakeLists.txt
+@@ -17,8 +17,7 @@ message(STATUS "Storm - Building external resources with ${STORM_RESOURCES_BUILD
+ message (STATUS "Storm - Including l3pp logging.")
+ ExternalProject_Add(
+         l3pp_ext
+-        GIT_REPOSITORY https://github.com/hbruintjes/l3pp.git
+-        GIT_TAG e4f8d7fe6c328849aff34d2dfd6fd592c14070d5
++        URL file://@l3ppSrc@
+         SOURCE_DIR ${STORM_3RDPARTY_BINARY_DIR}/l3pp
+         UPDATE_COMMAND ""
+         CONFIGURE_COMMAND ""
+@@ -68,38 +67,7 @@ endif()
+ ##
+ #############################################################
+ 
+-# Checkout Eigen
+-# We're checking out Eigen using the (currently not officially released) version 3.4.1
+-# See here https://gitlab.com/libeigen/eigen/-/commit/bae907b8f6078b1df290729eef946360315bd312
+-# The current official release is 3.4.0 which results in issues, see https://github.com/moves-rwth/storm/issues/162
+-message (STATUS "Storm - Including Eigen commit bae907b8f6078b1df290729eef946360315bd312 (unofficial 3.4.1 release).")
+-ExternalProject_Add(
+-        eigen_src
+-        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-        GIT_TAG bae907b8f6078b1df290729eef946360315bd312
+-        SOURCE_DIR ${STORM_3RDPARTY_BINARY_DIR}/StormEigen
+-        # First check whether patch was already applied (--reverse --check), otherwise apply patch
+-        PATCH_COMMAND git apply ${STORM_3RDPARTY_SOURCE_DIR}/patches/eigen341alpha.patch --reverse --check -q || git apply ${STORM_3RDPARTY_SOURCE_DIR}/patches/eigen341alpha.patch
+-        UPDATE_COMMAND ""
+-        CONFIGURE_COMMAND ""
+-        BUILD_COMMAND ""
+-        INSTALL_COMMAND ""
+-        LOG_DOWNLOAD ON
+-        LOG_INSTALL ON
+-)
+-add_library(eigen3storm INTERFACE) # Not imported, we are in control of the sources.
+-add_dependencies(eigen3storm eigen_src)
+-# note that we include without StormEigen
+-target_include_directories(eigen3storm INTERFACE
+-        $<BUILD_INTERFACE:${STORM_3RDPARTY_BINARY_DIR}>
+-        $<INSTALL_INTERFACE:${STORM_RESOURCE_INCLUDE_INSTALL_DIR}>
+-)
+-install(TARGETS eigen3storm EXPORT storm_Targets)
+-install(DIRECTORY ${STORM_3RDPARTY_BINARY_DIR}/StormEigen/
+-        DESTINATION ${STORM_RESOURCE_INCLUDE_INSTALL_DIR}/StormEigen
+-        PATTERN ".git" EXCLUDE)
+-add_dependencies(storm_resources eigen3storm)
+-list(APPEND STORM_DEP_TARGETS eigen3storm)
++include_directories(${EIGEN3_INCLUDE_DIR})
+ 
+ #############################################################
+ ##
+@@ -345,58 +313,34 @@ include(${STORM_3RDPARTY_SOURCE_DIR}/include_cudd.cmake)
+ ##
+ #############################################################
+ # Set compile flags for dependencies
+-if(STORM_USE_CLN_EA OR STORM_USE_CLN_RF)
+-    set(SHIPPED_CARL_USE_CLN_NUMBERS ON)
+-    set(SHIPPED_CARL_USE_GINAC ON)
+-else()
+-    set(SHIPPED_CARL_USE_CLN_NUMBERS OFF)
+-    set(SHIPPED_CARL_USE_GINAC OFF)
+-endif()
+-
+ set(STORM_HAVE_CARL OFF)
+ set(CARL_MINVERSION "14.30")
+ set(CARL_C14VERSION "14")
+ 
+ include(FetchContent)
+-FETCHCONTENT_DECLARE(
+-        carl
+-        GIT_REPOSITORY ${STORM_CARL_GIT_REPO}
+-        GIT_TAG ${STORM_CARL_GIT_TAG}
+-)
+-SET(EXCLUDE_TESTS_FROM_ALL ON)  #carl without tests
+-SET(THREAD_SAFE ON) #carl thread safe code
+-SET(USE_CLN_NUMBERS ${SHIPPED_CARL_USE_CLN_NUMBERS})
+-SET(USE_GINAC ${SHIPPED_CARL_USE_GINAC})
+-SET(PORTABLE ${STORM_PORTABLE})
+-SET(CARL_LIB_INSTALL_DIR "lib/storm/resources")
+-SET(CARL_INCLUDE_INSTALL_DIR "include/storm/resources") # maybe use resources folder /carl instead for consistency?
+-SET(CARL_EXPORT_TO_CMAKE OFF)
+-SET(CARL_CMAKE_INSTALL_DIR "lib/cmake/storm")
+-# We do not want to build or own version of ginac and cln, it adds levels of complexity that we currently do not want to handle.
+-SET(ALLOW_SHIPPED_CLN OFF)
+-SET(ALLOW_SHIPPED_GINAC OFF)
+-FETCHCONTENT_MAKEAVAILABLE(carl)
+-include(${carl_BINARY_DIR}/carlConfig.cmake)
+-# Read variables from this config.
++find_package(carl ${CARL_MINVERSION} REQUIRED CONFIG)
++
+ set(STORM_HAVE_CLN ${CARL_HAVE_CLN})
+ set(STORM_HAVE_GINAC ${CARL_HAVE_GINAC})
+-message(STATUS "Storm - Using carl version ${carl_VERSION} from ${carl_SOURCE_DIR} (CLN: ${STORM_HAVE_CLN}, GiNaC: ${STORM_HAVE_GINAC})")
+-#
++message(STATUS "Storm - Using system carl version ${carl_VERSION} from ${CARL_DIR} (CLN: ${STORM_HAVE_CLN}, GiNaC: ${STORM_HAVE_GINAC})")
++
+ # TODO this old flag is no longer really relevant as CARL must always be present.
+ set(STORM_HAVE_CARL ON)
+ # This flag is currently required to pick the right carl adapter.
+ # TODO It can be removed as the old versions that did not support forward declarations are no longer supported either way.
+ set(STORM_CARL_SUPPORTS_FWD_DECL ON)
++
++
+ add_dependencies(storm_resources lib_carl)
+ list(APPEND STORM_FETCHED_TARGETS lib_carl)
+ 
+ # Some checks to see whether we correctly configured carl.
+-if(SHIPPED_CARL_USE_CLN_NUMBERS AND NOT STORM_HAVE_CLN)
++if(CARL_USE_CLN_NUMBERS AND NOT STORM_HAVE_CLN)
+     message(FATAL_ERROR "Cannot use CLN numbers. Consider installing {cln, ginac} or run cmake with STORM_USE_CLN_EA=OFF and STORM_USE_CLN_RF=OFF. Please also consult the documentation regarding dependencies for more information about prerequisites. ")
+ endif()
+-if(SHIPPED_CARL_USE_GINAC AND NOT STORM_HAVE_GINAC)
++if(CARL_USE_GINAC AND NOT STORM_HAVE_GINAC)
+     message(FATAL_ERROR "Cannot use CLN numbers without ginac. Consider installing ginac  or run cmake with STORM_USE_CLN_EA=OFF and STORM_USE_CLN_RF=OFF. Please also consult the documentation regarding dependencies for more information about prerequisites.")
+ endif()
+ 
+ #############################################################
+ ##
+diff --git a/resources/cmake/stormConfig.cmake.install.in b/resources/cmake/stormConfig.cmake.install.in
+index 1090d01c0..bb7691b3e 100644
+--- a/resources/cmake/stormConfig.cmake.install.in
++++ b/resources/cmake/stormConfig.cmake.install.in
+@@ -17,7 +17,7 @@ endif()
+ set(STORM_RESOURCE_INCLUDE_INSTALL_DIR "${_IMPORT_PREFIX}/@STORM_RESOURCE_INCLUDE_INSTALL_DIR@")
+ set(STORM_RESOURCE_LIBRARY_INSTALL_DIR "${_IMPORT_PREFIX}/@STORM_RESOURCE_LIBRARY_INSTALL_DIR@")
+ 
+-include("${CMAKE_CURRENT_LIST_DIR}/carlConfig.cmake")
++find_package(carl ${CARL_MINVERSION} REQUIRED CONFIG)
+ if(NOT TARGET lib_carl)
+     message(FATAL_ERROR "Including ${CMAKE_CURRENT_LIST_DIR}/carlConfig.cmake did not define target lib_carl.")
+ endif()
