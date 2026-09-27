@@ -333,8 +333,10 @@ in
           message = "Paperclip ${name}: embedded PostgreSQL requires database.embeddedPasswordFile.";
         }
         {
-          assertion = !(lib.hasAttrByPath [ "llm" "apiKey" ] c.settings);
-          message = "Paperclip ${name}: settings.llm.apiKey would expose a credential in the Nix store.";
+          assertion =
+            !(lib.hasAttrByPath [ "llm" "apiKey" ] c.settings)
+            && !(lib.hasAttrByPath [ "database" "connectionString" ] c.settings);
+          message = "Paperclip ${name}: LLM keys and database URLs must use runtime credentials, never store-backed settings.";
         }
         {
           assertion = lib.all validPath (
