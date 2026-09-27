@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysqltuner";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "major";
     repo = "MySQLTuner-perl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-F874Pf3FpaGjuv0GIe7u5/ntH/6S4hwg2GbCnPB/SzU=";
+    hash = "sha256-e49JKGwpZv8lr08HtqLKPm0IESTQdna3DmSnPg1rrnE=";
   };
 
   postPatch = ''
