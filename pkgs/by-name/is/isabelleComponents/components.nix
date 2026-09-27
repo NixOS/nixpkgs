@@ -42,6 +42,7 @@ lib.makeScope newScope (self: {
   setup = self.callPackage ./setup { };
   sha1 = self.callPackage ./sha1 { };
   smbc = self.callPackage ./smbc { };
+  solr = self.callPackage ./solr { };
   spass = self.callPackage ./spass { };
   vampire = self.callPackage ./vampire { };
   verit = self.callPackage ./verit { };
