@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "noto-fonts-monochrome-emoji";
-  version = "3.000";
+  version = "";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "a73b9ab0a5df191bcfed817159a903911ea7958a";
-    hash = "sha256-qVFU4uZius8oFPJCIL9ek2YdS3jru5mmTHp2L9RIXfg=";
+    rev = "b979dba422e445492b0eb9951ac52ee0b4d648c3";
+    hash = "sha256-cZeMMVUUXGjShTrD5PkPEDMkqnXSuyfIlp6hP8nkXUU=";
     sparseCheckout = [ "ofl/notoemoji" ];
   };
 
