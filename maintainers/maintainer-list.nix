@@ -5469,6 +5469,12 @@
     name = "Borja Clemente";
     keys = [ { fingerprint = "C4E1 58BD FD33 3C77 B6C7  178E 2539 757E F64C 60DD"; } ];
   };
+  cleboost = {
+    email = "clement.balarot@gmail.com";
+    github = "Cleboost";
+    githubId = 61158869;
+    name = "Clément Balarot";
+  };
   cleeyv = {
     email = "cleeyv@riseup.net";
     github = "cleeyv";
