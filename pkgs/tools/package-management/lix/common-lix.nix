@@ -209,6 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.tappy
         p.ruff
       ]
+      ++ lib.optionals (lib.versionAtLeast version "2.96") [ p.mistletoe ]
       ++ lib.optionals usesCapnp [ p.pycapnp ]
     ))
     pkg-config
