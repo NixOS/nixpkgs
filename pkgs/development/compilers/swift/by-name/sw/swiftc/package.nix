@@ -96,6 +96,8 @@ let
 
   swiftComponents' = lib.filter isNotSwiftSyntax swiftComponents;
 
+  withStaticLibsForLLDB = bootstrapStage == 2 && lib.versions.majorMinor swift_release != "6.2";
+
   swiftPlatform = stdenv.hostPlatform.swift.platform;
 
   srcs = {
@@ -131,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "man"
   ]
-  ++ lib.optionals (bootstrapStage == 2) [
+  ++ lib.optionals withStaticLibsForLLDB [
     # Static libs from the compiler build (needed to build LLDB).
     "static"
   ];
@@ -378,7 +380,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s swift-frontend "''${!outputBin}/bin/swift"
       ln -s swift-frontend "''${!outputBin}/bin/swiftc"
     ''
-    + lib.optionalString (bootstrapStage == 2) (
+    + lib.optionalString withStaticLibsForLLDB (
       ''
         mkdir -p "$static/lib"
 
@@ -449,7 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The Swift fork of LLDB needs several internal headers and build artifacts. These are copied in `postFixup` instead
     # of in `postInstall` to prevent the multiple outputs hook from moving them to $dev. We don’t want them in
     # $dev to keep the closure size down when using `swiftc` outside of buidling LLDB.
-    lib.optionalString (bootstrapStage == 2) ''
+    lib.optionalString withStaticLibsForLLDB ''
       staticLibExt=${stdenv.hostPlatform.extensions.staticLibrary}
       sharedLibExt=${stdenv.hostPlatform.extensions.sharedLibrary}
 
