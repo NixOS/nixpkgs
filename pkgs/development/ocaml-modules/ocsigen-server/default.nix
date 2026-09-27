@@ -30,7 +30,7 @@
 }:
 
 let
-  mkpath = p: "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
+  mkpath = p: "${lib.getDev p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 in
 
 let
