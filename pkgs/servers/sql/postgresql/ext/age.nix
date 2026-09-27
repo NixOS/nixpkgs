@@ -12,8 +12,8 @@
 let
   sources = {
     "18" = {
-      version = "1.7.0-rc0";
-      hash = "sha256-Hqjg62YLTLEa6wRA5S4MAIED7Hobtiih4E55cSzVTqE";
+      version = "1.8.0-rc0";
+      hash = "sha256-QtcH0lUWvey/URZm/cqh1TempMU2Vnerzu6SQg+yofA=";
     };
     "17" = {
       version = "1.7.0-rc0";
@@ -92,7 +92,7 @@ postgresqlBuildExtension (finalAttrs: {
     broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames sources);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/age/raw/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
+    changelog = "https://github.com/apache/age/raw/refs/tags/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
     maintainers = with lib.maintainers; [ anish ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
