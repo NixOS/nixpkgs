@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apl387";
-  version = "0-unstable-2025-12-13";
+  version = "2026-08-17";
 
   src = fetchFromGitHub {
     owner = "dyalog";
     repo = "APL387";
-    rev = "60ff47a728ee043f878dc2ed801d53e29fcebe9d";
-    hash = "sha256-VyO+7PUYcmmhbFVAW37yvWQLUpt0K/ihA/JGmbt+4Uk=";
+    tag = finalAttrs.version;
+    hash = "sha256-KeXZOX5ZSZjhrgN54w2yHpiOhTnk9NU3F8jh/AR1l44=";
   };
 
   nativeBuildInputs = [
