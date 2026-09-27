@@ -7,7 +7,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mio";
-  version = "unstable-2023-03-03";
+  version = "0-unstable-2023-03-03";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vimpunk";
