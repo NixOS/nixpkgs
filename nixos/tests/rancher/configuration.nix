@@ -1,5 +1,5 @@
-# Tests that containerd configuration, kubelet configuration, and graceful node shutdown are
-# configured correctly
+# Tests that containerd configuration (both template versions), kubelet configuration, and graceful
+# node shutdown are configured correctly
 {
   pkgs,
   lib,
@@ -54,6 +54,15 @@ in
           inherit podsPerCore memoryThrottlingFactor containerLogMaxSize;
         };
       };
+
+      specialisation.containerd-v3.configuration = {
+        services.${rancherDistro}.containerdConfigTemplateV3 = ''
+          # Base ${rancherDistro} config
+          {{ template "base" . }}
+
+          # MAGIC COMMENT V3
+        '';
+      };
     };
 
   testScript = # python
@@ -85,6 +94,17 @@ in
         t.assertEqual(kubelet_config["podsPerCore"], ${toString podsPerCore})
         t.assertEqual(kubelet_config["memoryThrottlingFactor"], ${toString memoryThrottlingFactor})
         t.assertEqual(kubelet_config["containerLogMaxSize"],"${containerLogMaxSize}")
+
+      with subtest("Containerd version 3 config template takes precedence"):
+        machine.succeed("/run/booted-system/specialisation/containerd-v3/bin/switch-to-configuration test")
+        machine.succeed("systemctl restart ${serviceName}")
+        machine.wait_for_unit("${serviceName}")
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config-v3.toml.tmpl")
+        t.assertIn("MAGIC COMMENT V3", out, "the containerd version 3 config template does not contain the magic comment")
+        # the rendered config is the version 3 format and contains the magic comment
+        machine.wait_until_succeeds("grep -q 'MAGIC COMMENT V3' /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
+        t.assertIn("version = 3", out, "the containerd config is not in the version 3 format")
     '';
 
   meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
