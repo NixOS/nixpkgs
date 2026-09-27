@@ -16,6 +16,9 @@
   #        make it a _small package instead, then remove pkgsReadOnly = false;.
   node.pkgsReadOnly = false;
 
+  # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  defaults.nix.enable = true;
+
   nodes = {
     deployer =
       {
@@ -152,6 +155,7 @@
             { lib, pkgs, modulesPath, ... }: {
               imports = [
                 (modulesPath + "/virtualisation/qemu-vm.nix")
+                (modulesPath + "/virtualisation/guest-networking-options.nix")
                 (modulesPath + "/testing/test-instrumentation.nix")
                 (modulesPath + "/../tests/common/user-account.nix")
                 (lib.modules.importJSON ./target-configuration.json)
@@ -213,12 +217,14 @@
       with subtest("Deploy to bob@target via reverse ssh with password-based sudo"):
         deployer.wait_for_unit("multi-user.target")
         # Uses TTY/send_chars instead of deployer.succeed to set NIX_SSHOPTS and for ask-sudo-password
-        deployer.send_chars("NIX_SSHOPTS=\"-p 2222\" nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host bob@localhost --ask-sudo-password\n")
+        deployer.send_chars("""NIX_SSHOPTS="-p 2222" nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host bob@localhost --ask-sudo-password; printf '%s\\n' "$?" > /tmp/bob-rebuild-status\n""")
         deployer.wait_until_tty_matches("1", "password for bob")
         deployer.send_chars("${nodes.target.users.users.bob.password}\n")
 
         # the connection breaks, but the 'switch' should now continue in the background:
-        deployer.wait_until_tty_matches("1", "error: while running command with remote sudo")
+        deployer.wait_for_file("/tmp/bob-rebuild-status")
+        status = deployer.succeed("cat /tmp/bob-rebuild-status").strip()
+        assert status != "0", "Expected the interrupted SSH deployment to report failure"
 
         def deployed(last_try: bool) -> bool:
             target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname", timeout=20).rstrip()
