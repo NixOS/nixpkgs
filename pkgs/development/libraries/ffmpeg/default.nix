@@ -31,8 +31,8 @@ let
   };
 
   v8 = {
-    version = "8.1.2";
-    hash = "sha256-wJ3c8VVo/tK84K7bKYs/UWcln4mSO+tf/w5NLNjKhiI=";
+    version = "8.1.3";
+    hash = "sha256-i2R/HKonZwmkqWWy2U5eY5zSMx1rPkXNHPljN3qUiKQ=";
   };
 
   v9 = {
