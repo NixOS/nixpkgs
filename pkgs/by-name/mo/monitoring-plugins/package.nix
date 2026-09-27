@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monitoring-plugins";
-  version = "2.4.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "monitoring-plugins";
     repo = "monitoring-plugins";
     rev = "v${version}";
-    hash = "sha256-T37t0shhC+8k7CN/hIOxsskuuCi0LwQui8xyRTC+pjQ=";
+    hash = "sha256-9c3E6WRCamSbp++ZPKUujV2nsqXnaHK1dIdzBIrKXn8=";
   };
 
   # TODO: Awful hack. Grrr...
