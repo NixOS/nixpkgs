@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "econftool";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libeconf" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "opensuse" finalAttrs.version;
   };
 })
