@@ -45,6 +45,22 @@ lib.extendMkDerivation {
 
         strictDeps = true;
 
+        # OCaml libraries, and the dependencies they propagate, are only needed
+        # to build other packages. Unless the package chooses its outputs,
+        # those are installed into "dev", rather than "out", to minimize the
+        # "out" runtime closure.
+        outputs = args.outputs or [
+          "out"
+          "dev"
+        ];
+
+        # The findlib setup hook always points OCAMLFIND_DESTDIR at $out, so
+        # override it after all setup hooks have run.
+        postHook = ''
+          export OCAMLFIND_DESTDIR="''${!outputDev}/lib/ocaml/${ocaml.version}/site-lib/"
+        ''
+        + args.postHook or "";
+
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
         configurePlatforms = [ ];
@@ -72,6 +88,8 @@ lib.extendMkDerivation {
              ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
                --bindir "''${!outputBin}/bin" --datadir "$out/share"
              ''}
+            # Libraries without executables or docs don't install anything into $out.
+            mkdir -p "$out"
             runHook postInstall
           '';
 
@@ -81,6 +99,11 @@ lib.extendMkDerivation {
             dune runtest -p ${lib.concatStringsSep "," dunePackages} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
             runHook postCheck
           '';
+
+        # With several outputs, multiple-outputs.sh passes autoconf-style
+        # --bindir/--libdir/--mandir/... flags to ./configure. The configure
+        # scripts shipped by dune packages are hand-written and reject them.
+        setOutputFlags = args.setOutputFlags or false;
 
         meta = (args.meta or { }) // {
           platforms = args.meta.platforms or ocaml.meta.platforms;
