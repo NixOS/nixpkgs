@@ -13,7 +13,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jenkinsapi";
   version = "0.3.23";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "jenkinsapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NtILbbXu4dtYda28WaFiGkICf0bOmVMKOOnnrHptxsg=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python API for accessing resources on a Jenkins continuous-integration server";
-    homepage = "https://github.com/salimfadhley/jenkinsapi";
-    changelog = "https://github.com/pycontribs/jenkinsapi/releases/tag/${src.tag}";
+    homepage = "https://github.com/pycontribs/jenkinsapi";
+    changelog = "https://github.com/pycontribs/jenkinsapi/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       de11n
       despsyched
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})
