@@ -7,27 +7,28 @@
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.4.3";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "lightningstream";
-  inherit version;
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "PowerDNS";
     repo = "lightningstream";
-    tag = "v${version}";
-    hash = "sha256-gnLmqm35HHpQlglKjw57NBMs8jMAHDieWlnE3OAQR4I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9RJOPNiso7RjjlzeRCjR6hl/er7g72oLvOqTAA+B4oc=";
   };
+
+  postPatch = ''
+    substituteInPlace cmd/lightningstream/commands/version.go \
+      --replace-fail 'bi.Main.Version' '"${finalAttrs.version}"'
+  '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-wkLoaR46l+jCm3TJDflcuI2hDvluoH2o5lLIqtrVRqo=";
+  vendorHash = "sha256-19WrmUuUxkhvH8gLtGAghMUX9cjUpY4Go4KPGKwJjB0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -62,7 +63,8 @@ buildGoModule {
     description = "LMDB sync via S3 buckets";
     mainProgram = "lightningstream";
     license = lib.licenses.mit;
+    changelog = "https://github.com/PowerDNS/lightningstream/releases/tag/v${finalAttrs.version}";
     homepage = "https://doc.powerdns.com/lightningstream/latest/index.html";
     maintainers = with lib.maintainers; [ samw ];
   };
-}
+})
