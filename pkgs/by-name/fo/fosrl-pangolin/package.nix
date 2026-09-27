@@ -132,7 +132,9 @@ buildNpmPackage (finalAttrs: {
                dir:
                "test -f ${dir}/.nix_skip_setup || { rm -${lib.optionalString (dir == ".next") "r"}f ${dir} && ${
                  if (dir == ".next") then "cp -rd" else "ln -s"
-               } ${placeholder "out"}/share/pangolin/${dir} .; }"
+               } ${placeholder "out"}/share/pangolin/${dir} .${
+                 lib.optionalString (dir == ".next") " && chmod -R u+w ${dir}"
+               }; }"
              )
              [
                ".next"
