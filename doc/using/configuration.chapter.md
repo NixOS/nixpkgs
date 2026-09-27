@@ -105,26 +105,47 @@ There are several ways to tweak how Nix handles a package which has been marked 
     $ export NIXPKGS_ALLOW_UNFREE=1
     ```
 
--   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
-
-    This option is a function which accepts a package as a parameter, and returns a boolean. The following example configuration accepts a package and always returns false:
-
-    ```nix
-    { allowUnfreePredicate = (pkg: false); }
-    ```
-
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and Visual Studio Code:
+-   To allow specific unfree packages, add their names to your Nixpkgs configuration file:
 
     ```nix
     {
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "roon-server"
-          "vscode"
-        ];
+      allowUnfreePackages = [
+        "fence"
+        "roon-server"
+        "vscode"
+      ];
     }
     ```
+
+    `allowUnfreePackages` permits the listed unfree packages.
+
+    In NixOS modules, lists set through `nixpkgs.config.allowUnfreePackages` merge additively across modules. This allows you to declare your unfree exceptions in the same modules that triggered them.
+
+    To allow unfree packages programmatically:
+
+    ```nix
+    { lib, ... }:
+    {
+      allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
+    }
+    ```
+
+    This permits packages such as `roon-bridge` and `roon-server`.
+
+    To combine the list and predicate, set both options:
+
+    ```nix
+    { lib, ... }:
+    {
+      allowUnfreePackages = [
+        "fence"
+        "vscode"
+      ];
+      allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
+    }
+    ```
+
+    This permits unfree packages that match either option.
 
 -   It is also possible to allow and block licenses that are specifically acceptable or not acceptable, using `allowlistedLicenses` and `blocklistedLicenses`, respectively.
 
