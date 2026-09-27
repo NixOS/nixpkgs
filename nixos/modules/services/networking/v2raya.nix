@@ -12,20 +12,22 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "v2raya" "cliPackage" ] ''
+      v2rayA now exclusively uses its bundled v2raya_core binary.
+    '')
+  ];
+
   options = {
     services.v2raya = {
       enable = options.mkEnableOption "the v2rayA service";
 
       package = options.mkPackageOption pkgs "v2raya" { };
-      cliPackage = options.mkPackageOption pkgs "v2ray" {
-        example = "pkgs.xray";
-        extraDescription = "This is the package used for overriding the value of the `v2ray` attribute in the package set by `services.v2raya.package`.";
-      };
     };
   };
 
   config = mkIf config.services.v2raya.enable {
-    environment.systemPackages = [ (cfg.package.override { v2ray = cfg.cliPackage; }) ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.v2raya =
       let
@@ -50,7 +52,7 @@ in
 
         serviceConfig = {
           User = "root";
-          ExecStart = "${getExe (cfg.package.override { v2ray = cfg.cliPackage; })} --log-disable-timestamp";
+          ExecStart = "${getExe cfg.package} --log-disable-timestamp";
           Environment = [ "V2RAYA_LOG_FILE=/var/log/v2raya/v2raya.log" ];
           LimitNPROC = 500;
           LimitNOFILE = 1000000;
