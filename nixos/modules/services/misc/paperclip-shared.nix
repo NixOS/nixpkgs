@@ -333,6 +333,10 @@ in
           message = "Paperclip ${name}: embedded PostgreSQL requires database.embeddedPasswordFile.";
         }
         {
+          assertion = !(lib.hasAttrByPath [ "llm" "apiKey" ] c.settings);
+          message = "Paperclip ${name}: settings.llm.apiKey would expose a credential in the Nix store.";
+        }
+        {
           assertion = lib.all validPath (
             builtins.attrValues c.credentialFiles
             ++ lib.filter (p: p != null) [
