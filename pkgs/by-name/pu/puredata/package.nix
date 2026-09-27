@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -16,22 +15,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "puredata";
-  version = "0.55-2";
+  version = "0.56-5";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-EIKX+NHdGQ346LtKSsNIeSrM9wT5ogUtk8uoybi7Wls=";
+    hash = "sha256-GOynTqtEnb2ND8kY8frVeMhjKscwYJ1/I9RLsmEpH0E=";
   };
 
   patches = [
     # expose error function used by dependents
     ./expose-error.patch
-
-    # Fix build with GCC 15
-    (fetchpatch {
-      url = "https://github.com/pure-data/pure-data/commit/95e4105bc1044cbbcbbbcc369480a77c298d7475.patch";
-      hash = "sha256-zFB9m8Nw80X9+a64Uft4tNRA4BHsVr8zxLqAof0jJEI=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -80,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ carlthome ];
     mainProgram = "pd";
-    changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
+    changelog = "https://msp.ucsd.edu/Pd_documentation/5.current.status.htm#${finalAttrs.version}";
   };
 })
