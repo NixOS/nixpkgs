@@ -196,8 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  # Keep the package current automatically: upstream has no releases, so the
-  # r-ryantm update bot bumps the pin to the latest `main` commit on every run.
+  #  upstream does not releases
   passthru.updateScript = unstableGitUpdater {
     branch = "main";
     hardcodeZeroVersion = true;
