@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation {
   pname = "astrolog";
-  version = "7.70";
+  version = "7.80";
 
   src = fetchzip {
-    url = "https://www.astrolog.org/ftp/ast77src.zip";
-    hash = "sha256-rG7njEtnHwUDqWstj0bQxm2c9CbsOmWOCYs0FtiVoJE=";
+    url = "https://www.astrolog.org/ftp/ast78src.zip";
+    hash = "sha256-sqv6CKCrxiZqfWtJNVnQWHxda7TrocFB2vb5LDc4cAA=";
     stripRoot = false;
   };
 
