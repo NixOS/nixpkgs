@@ -6,6 +6,12 @@ Package JavaScript applications with the tools below.
 
 ## Tools overview {#javascript-tools-overview}
 
+- **npm**: [`buildNpmPackage`](#javascript-buildNpmPackage), [`prefetch-npm-deps` (CLI)](#javascript-buildNpmPackage-prefetch-npm-deps), [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps), [`importNpmLock`](#javascript-buildNpmPackage-importNpmLock)
+- [**corepack**](#javascript-corepack)
+- **pnpm**: [`fetchPnpmDeps`](#javascript-pnpm), [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook), [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook)
+- [**Yarn v1**](#javascript-yarn-v1): [`fetchYarnDeps`](#javascript-fetchyarndeps), [`yarnConfigHook`](#javascript-yarnconfighook), [`yarnBuildHook`](#javascript-yarnbuildhook), [`yarnInstallHook`](#javascript-yarninstallhook)
+- [**Yarn Berry (v3/v4)**](#javascript-yarn-v3-v4): [`fetchYarnBerryDeps`](#javascript-fetchYarnBerryDeps), [`yarnBerryConfigHook`](#javascript-yarnBerryConfigHook)
+
 ## General principles {#javascript-general-principles}
 
 The principles below are ordered by importance.
