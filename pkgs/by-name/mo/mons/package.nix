@@ -13,13 +13,13 @@
 
 resholve.mkDerivation {
   pname = "mons";
-  version = "unstable-2020-03-20";
+  version = "0.8.2-unstable-2020-03-20";
 
   src = fetchFromGitHub {
     owner = "Ventto";
     repo = "mons";
     rev = "375bbba3aa700c8b3b33645a7fb70605c8b0ff0c";
-    sha256 = "19r5y721yrxhd9jp99s29jjvm0p87vl6xfjlcj38bljq903f21cl";
+    hash = "sha256-lAXhBkhY0oWGZFS6bug+6IK6pUxCp3RlarBnH8TxJac=";
     fetchSubmodules = true;
   };
 
