@@ -107,5 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = lib.teams.apparmor.members;
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "canonical" finalAttrs.version // {
+      product = "apparmor";
+    };
   };
 })
