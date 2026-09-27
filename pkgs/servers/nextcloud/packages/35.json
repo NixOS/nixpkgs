@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-Z8d3puqXRAnp0ijCP8YPK+jmddN2UxtrGxJfLwNlc40=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v6.5.4/calendar-v6.5.4.tar.gz",
-    "version": "6.5.4",
+    "hash": "sha256-/WYw3uxWg2h4TFae8Bx9ntisyhq2gzzxKiv/WYSj+ns=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v6.6.1/calendar-v6.6.1.tar.gz",
+    "version": "6.6.1",
     "description": "A Calendar app for Nextcloud. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Like Contacts, Talk, Tasks, Deck and Circles\n* 🌐 **WebCal Support!** Want to see your favorite team's matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 **Search!** Find your events at ease\n* ☑️ **Tasks!** See tasks or Deck cards with a due date directly in the calendar\n* 🔈 **Talk rooms!** Create an associated Talk room when booking a meeting with just one click\n* 📆 **Appointment booking** Send people a link so they can book an appointment with you [using this app](https://apps.nextcloud.com/apps/appointments)\n* 📎 **Attachments!** Add, upload and view event attachments\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -107,6 +107,16 @@
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
     "licenses": [
       "AGPL-3.0-or-later"
+    ]
+  },
+  "eurooffice": {
+    "hash": "sha256-lr+pvkSCBzHRR9FQSSwgs/bcRHKVACnQpZBytNnGT3Q=",
+    "url": "https://github.com/nextcloud-releases/eurooffice/releases/download/v11.0.5/eurooffice-v11.0.5.tar.gz",
+    "version": "11.0.5",
+    "description": "The Nextcloud Office app for Nextcloud brings powerful document editing and collaboration tools directly to your Nextcloud environment. With this integration, you can seamlessly create, edit, and co-author text documents, spreadsheets, presentations, and PDFs, as well as build and fill out PDF forms.\n\nCollaborate with your team in real time, make use of Track Changes, version history, comments, integrated chat, and more. Work together on files with federated cloud sharing. Flexible access permissions allow you to control who can view, edit, or comment, ensuring secure role-based collaboration tailored to your needs. Documents can also be protected with watermarks, password settings, and encryption for added security.\n\nThe app offers support for over 50 file formats, including DOCX, XLSX, PPTX, PDF, RTF, TXT, CSV, ODT, ODS, ODP, EPUB, FB2, HTML, HWP, HWPX, Pages, Numbers, Keynote, etc. Seamless desktop and mobile app integration means you'll have access to your Nextcloud files wherever you go.\n\nFurthermore, you can seamlessly connect any AI assistant, including local ones, directly to the editors to work faster and more efficient. This allows you to leverage various AI models for tasks like chatbot interactions, translations, OCR, and more.\n\nWhether you’re working with internal teams or external collaborators, the Nextcloud Office app for Nextcloud enhances productivity, simplifies workflows, and ensures your files remain secure.",
+    "homepage": "https://nextcloud.com/office/",
+    "licenses": [
+      "AGPL-3.0-only"
     ]
   },
   "files_automatedtagging": {
@@ -310,9 +320,9 @@
     ]
   },
   "pantry": {
-    "hash": "sha256-jJKOGlbj6fzDpLMFH6JT3ePwddcC4tQMFlDfipb3iRk=",
-    "url": "https://github.com/chenasraf/nextcloud-pantry/releases/download/v0.32.0/pantry-v0.32.0.tar.gz",
-    "version": "0.32.0",
+    "hash": "sha256-2UsicLMSkzwBE8h3vWBh/rFA9VzQh9wYiBExBqu2Vqw=",
+    "url": "https://github.com/chenasraf/nextcloud-pantry/releases/download/v0.33.0/pantry-v0.33.0.tar.gz",
+    "version": "0.33.0",
     "description": "Pantry helps households stay organized in Nextcloud.\n\n- **Houses** group members and their shared data. A person can belong to multiple houses and switch between them freely.\n- **Checklists** support recurring items (e.g. milk every week) that automatically reappear when due. Share lists with the whole household so everyone knows what to pick up.\n- **Shopping mode** turns your lists into a store-by-store trip — pick the lists and the route, check items off as you walk, see which housemates are out shopping, and finish with a priced review that lands in your shopping history.\n- **Barcode scanning** prefills an item from a product's EAN or UPC. Scan with the camera or type the code in, and Pantry looks up the name, category and photo for you to review.\n- **Custom fields** attach your own information to checklist items — an expiry date, an aisle number, a size, a yes/no flag. Define a field once for the house or a single list; date fields can send a reminder before they come due.\n- **Photo boards** let you keep shared reference photos organized in folders — the right brand of dog food, a favorite recipe card, a product label, and so on.\n- **Notes wall** gives the household a lightweight shared space for reminders, pinned messages, and quick notes with customizable colors.\n- **Notifications** keep everyone in the loop when photos are uploaded or notes are added or edited.\n\nAll data is scoped to a house; members only see the houses they belong to.\n\nPantry also has companion apps for mobile, watch and desktop that let you manage your lists, photos and notes on the go and keep everything in sync with your Nextcloud instance.\n\n**Companion apps:** Android ([Google Play](https://play.google.com/store/apps/details?id=dev.casraf.pantry), [F-Droid](https://f-droid.org/en/packages/dev.casraf.pantry/)) | iOS/macOS ([App Store](https://apps.apple.com/us/app/pantry-for-nextcloud/id6762161619)) | Wear OS ([Google Play](https://play.google.com/store/apps/details?id=dev.casraf.pantry)) | [Windows](https://pantry.casraf.dev/docs/getting-started/apps#desktop) | [Linux](https://pantry.casraf.dev/docs/getting-started/apps#desktop)\n\n**Website:** [pantry.casraf.dev](https://pantry.casraf.dev) | **Documentation:** [pantry.casraf.dev/docs](https://pantry.casraf.dev/docs)",
     "homepage": "https://pantry.casraf.dev",
     "licenses": [
@@ -335,6 +345,16 @@
     "version": "9.3.0",
     "description": "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "previewgenerator": {
+    "hash": "sha256-6QpXxs0CpcbMNhY/N8lCl6L/0kQ8y/AWSIHo/XsyT9k=",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.15.0/previewgenerator-v5.15.0.tar.gz",
+    "version": "5.15.0",
+    "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
+    "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
       "agpl"
     ]

@@ -11,6 +11,7 @@
 , "deck": "agpl3Plus"
 , "drawio": "agpl3Plus"
 , "end_to_end_encryption": "agpl3Plus"
+, "eurooffice": "agpl3Only"
 , "files_automatedtagging" : "agpl3Plus"
 , "files_linkeditor": "agpl3Plus"
 , "files_markdown": "agpl3Plus"
