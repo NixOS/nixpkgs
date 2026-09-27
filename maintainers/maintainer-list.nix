@@ -24972,6 +24972,12 @@
     githubId = 1080963;
     name = "Roberto";
   };
+  robertplant = {
+    name = "Robert Plant";
+    email = "rob@robertplant.io";
+    github = "RobertPlant";
+    githubId = 3082998;
+  };
   robertrichter = {
     email = "robert.richter@rrcomtech.com";
     github = "judgeNotFound";
