@@ -83,7 +83,7 @@ lib.extendMkDerivation {
         renamed="$TMPDIR/${tmpFilename}"
         mv "$downloadedFile" "$renamed"
         unpackFile "$renamed"
-        chmod -R +w "$unpackDir"
+        chmod -R +rwX "$unpackDir"
       ''
       + (
         if finalAttrs.stripRoot then
