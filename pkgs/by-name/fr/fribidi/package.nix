@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "fribidi" ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })
