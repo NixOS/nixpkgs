@@ -10,7 +10,10 @@ stdenv.mkDerivation {
   pname = "jack_autoconnect";
 
   # It does not have any versions (yet?)
-  version = "unstable-2021-02-01";
+  version = "0-unstable-2021-02-01";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kripton";
@@ -31,8 +34,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p -- "$out/bin"
     cp -- jack_autoconnect "$out/bin"
+    runHook postInstall
   '';
 
   meta = {
