@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nodejs,
   fetchNpmDeps,
@@ -8,30 +8,30 @@
   go-task,
 }:
 
-buildGoModule rec {
+buildGo127Module rec {
   pname = "immich-kiosk";
-  version = "0.42.0";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-NgNVTVU7WlOBiaLXviTUYAq3PSLQuCKICP3rO/2U61Y=";
+    hash = "sha256-IJPJ5c6mlsvx3gDkzk3okTxWJENDv5Rsok3vO+rrwvI=";
   };
 
   postPatch = ''
     # Delete vendor directory to regenerate it consistently across platforms
     rm -rf vendor
     # immich-kiosk bumps go at a faster cadence than nixpkgs
-    sed -i -E 's/^go 1\.26\.[0-9]+$/go 1.26/' go.mod
+    sed -i -E 's/^go 1\.27\.[0-9]+$/go 1.27/' go.mod
   '';
-  vendorHash = "sha256-E+IS0/GxTpasiyKBj6oN9Jb3R4fzXZJ4v8bVkxlHWIk=";
+  vendorHash = "sha256-pAixcJ577ioezOn1qiSFCUYcMiOgNy+S2ZKT9wNy2Yg=";
   proxyVendor = true;
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-Tebhu7qdn7DHTwEBeN2htZJuhYfPE15NyUskIxrfqls=";
+    hash = "sha256-mhqhc+imdMb/w1U3cZS55P3WEWKxPvfTe4CHPZSVoOs=";
   };
   # Frontend is in a subdirectory
   npmRoot = "frontend";

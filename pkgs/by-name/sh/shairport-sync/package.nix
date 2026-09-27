@@ -26,7 +26,6 @@
   nix-update-script,
   pipewire,
   soxr,
-  alac,
   sndio,
   enableAvahi ? true,
   enableAirplay2 ? false,
@@ -44,7 +43,6 @@
   enableMqttClient ? true,
   enableDbus ? stdenv.hostPlatform.isLinux,
   enableSoxr ? true,
-  enableAlac ? !enableAirplay2, # airplay2 build uses ffmpeg for alac
   enableConvolution ? true,
   enableLibdaemon ? false,
   enableTinySVCmDNS ? true,
@@ -96,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableJack libjack2
   ++ optional enableSoundio libsoundio
   ++ optional enableSoxr soxr
-  ++ optional enableAlac alac
   ++ optional enableConvolution libsndfile
   ++ optionals enableAirplay2 [
     libplist
@@ -130,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableStdout "--with-stdout"
   ++ optional enablePipe "--with-pipe"
   ++ optional enableSoxr "--with-soxr"
-  ++ optional enableAlac "--with-apple-alac"
   ++ optional enableConvolution "--with-convolution"
   ++ optional enableDbus "--with-dbus-interface"
   ++ optional enableMetadata "--with-metadata"

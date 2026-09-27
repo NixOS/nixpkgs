@@ -820,6 +820,10 @@ in
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
+    # `systemd-bless-boot good` fails once the current boot has been blessed.
+    systemd.services.systemd-bless-boot = lib.mkIf cfg.package.withBootloader {
+      restartIfChanged = false;
+    };
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {

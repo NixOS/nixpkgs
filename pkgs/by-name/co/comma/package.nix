@@ -64,6 +64,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/comma --print-completions bash) \
         --fish <(${emulator} $out/bin/comma --print-completions fish) \
         --zsh <(${emulator} $out/bin/comma --print-completions zsh)
+
+      installShellCompletion --cmd , \
+        --bash <(${emulator} $out/bin/, --print-completions bash) \
+        --fish <(${emulator} $out/bin/, --print-completions fish) \
+        --zsh <(${emulator} $out/bin/, --print-completions zsh)
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

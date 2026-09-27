@@ -88,28 +88,28 @@ let
     };
   };
   betaVersion = {
-    version = "2026.1.4.6"; # "Android Studio Quail 4 | 2026.1.4 RC 2"
+    version = "2026.2.1.6"; # "Android Studio Rabbit 1 | 2026.2.1 RC 1"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-e4lzCfGJq7PBx9qimChUi/NZWu3gWAOiONgUWrTXtgk=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.4.6/android-studio-quail4-rc2-linux.tar.gz";
+        sha256Hash = "sha256-YXLN4O+SqnRhJpQd6lN74Re1vzdXh3JYFKqIdkRAx8w=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.6/android-studio-rabbit1-rc1-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-KqD0LNcmMytDXmaTNIEsvrJRZzBCJ3V0mITlhBnFbf4=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.1.4.6/android-studio-quail4-rc2-mac_arm.dmg";
+        sha256Hash = "sha256-kdcw7G7t0opNj9Xcn86A9ty0pZ3RBV5Ll8omC0Nhxkg=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.6/android-studio-rabbit1-rc1-mac_arm.dmg";
       };
     };
   };
   latestVersion = {
-    version = "2026.2.1.5"; # "Android Studio Rabbit 1 | 2026.2.1 Canary 5"
+    version = "2026.2.2.1"; # "Android Studio Rabbit 2 | 2026.2.2 Canary 1"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-Idrpclm4yiy86SP+hhItMSbquCM8R49NB9n/Q2LXkZc=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.5/android-studio-rabbit1-canary5-linux.tar.gz";
+        sha256Hash = "sha256-m6E5gAI6hO2M5zf7nDQaQtnHmdimdXZsBYSKOVH4nbQ=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.2.1/android-studio-rabbit2-canary1-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-l3S5eFmELeIL30Tn7QoevBfhWLqauZxHtM9FeahpyXk=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.5/android-studio-rabbit1-canary5-mac_arm.dmg";
+        sha256Hash = "sha256-HfIEtxeeDM5wOBn1lBV0aPP7iYe4Ih+RUC6F2culXao=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.2.1/android-studio-rabbit2-canary1-mac_arm.dmg";
       };
     };
   };

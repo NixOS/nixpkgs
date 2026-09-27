@@ -28,9 +28,9 @@ runCommand "${pname}-filtered-src"
           enableOpenSSL = false;
           enableLZ4 = false;
         }).overrideAttrs
-        {
-          doCheck = false;
-        }
+          {
+            doCheck = false;
+          }
       )
     ];
   }

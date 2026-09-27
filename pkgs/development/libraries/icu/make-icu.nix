@@ -88,6 +88,7 @@ let
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
       maintainers = with lib.maintainers; [ raskin ];
+      license = lib.licenses.unicode-30;
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"

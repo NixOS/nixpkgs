@@ -169,6 +169,27 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit custom_swig;
     updateScript = nix-update-script { };
+
+    vulkanLayers = [
+      "renderdoc_capture.json"
+    ];
+
+    tests = {
+      vulkanLayersExist = stdenv.mkDerivation {
+        name = "renderdoc-vulkan-layers-exist";
+        dontUnpack = true;
+        buildCommand = ''
+          touch $out # Dummy file to satisfy the build system
+          for f in ${lib.concatStringsSep " " finalAttrs.passthru.vulkanLayers}; do
+            if [ ! -e "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d/$f" ]; then
+              echo "error: passthru.vulkanLayers lists '$f' but it wasn't found in" \
+                   "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d" >&2
+              exit 1
+            fi
+          done
+        '';
+      };
+    };
   };
 
   meta = {

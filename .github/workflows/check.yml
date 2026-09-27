@@ -80,7 +80,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
-            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.js')
+            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.ts')
             await commits({
               github,
               context,
@@ -190,13 +190,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          persist-credentials: false
-          sparse-checkout: .github/actions
-
       - name: Checkout merge and target commits
-        uses: ./.github/actions/checkout
+        uses: $/.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
@@ -219,13 +214,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          persist-credentials: false
-          sparse-checkout: .github/actions
-
       - name: Checkout merge and target commits
-        uses: ./.github/actions/checkout
+        uses: $/.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}

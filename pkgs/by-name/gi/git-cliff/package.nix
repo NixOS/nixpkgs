@@ -43,7 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
     changelog = "https://github.com/orhun/git-cliff/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       siraben
       matthiasbeyer

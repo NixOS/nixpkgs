@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
   meta = {
-    homepage = "http://www.liblogging.org/";
+    homepage = "https://github.com/rsyslog/liblogging";
     description = "Lightweight signal-safe logging library";
     mainProgram = "stdlogctl";
     license = lib.licenses.bsd2;

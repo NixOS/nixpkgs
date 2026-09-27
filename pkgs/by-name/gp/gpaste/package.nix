@@ -15,6 +15,7 @@
   pkg-config,
   vala,
   desktop-file-utils,
+  directoryListingUpdater,
   wrapGAppsHook3,
 }:
 
@@ -77,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by originalName "prefs" \
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
+
+  passthru.updateScript = directoryListingUpdater { pname = "GPaste"; };
 
   meta = {
     homepage = "https://github.com/Keruspe/GPaste";

@@ -6,6 +6,7 @@
   cmake,
   cpuinfo,
   eigen,
+  farmhash,
   fetchFromGitHub,
   fp16,
   lib,
@@ -13,15 +14,6 @@
 }:
 
 let
-  # https://github.com/coqui-ai/tensorflow/blob/f8242ebc005f6195b67d58349724e608d4fe45da/tensorflow/lite/tools/cmake/modules/farmhash.cmake#L22
-  farmhash = fetchFromGitHub {
-    name = "farmhash-source";
-    owner = "google";
-    repo = "farmhash";
-    rev = "0d859a811870d10f53a594927d0d0b97573ad06d";
-    hash = "sha256-J0AhHVOvPFT2SqvQ+evFiBoVfdHthZSBXzAhUepARfA=";
-  };
-
   # https://github.com/coqui-ai/tensorflow/blob/f8242ebc005f6195b67d58349724e608d4fe45da/tensorflow/lite/tools/cmake/modules/fft2d.cmake#L22
   fft2d = fetchFromGitHub {
     name = "fft2d-source";
@@ -118,7 +110,7 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CLOG" "${cpuinfo.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CPUINFO" "${cpuinfo.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "/build/eigen")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FARMHASH" "${farmhash}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FARMHASH" "${farmhash.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FFT2D" "${fft2d}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GEMMLOWP" "${gemmlowp}")

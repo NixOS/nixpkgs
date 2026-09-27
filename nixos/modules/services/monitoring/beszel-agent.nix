@@ -136,6 +136,7 @@ in
       path =
         cfg.extraPath
         ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
+        ++ lib.optionals config.boot.zfs.enabled [ config.boot.zfs.package ]
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
           (lib.getBin config.hardware.nvidia.package)
         ]
@@ -182,9 +183,9 @@ in
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable;
+        PrivateDevices = !cfg.smartmon.enable && !config.boot.zfs.enabled;
         PrivateTmp = true;
-        PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
+        PrivateUsers = !cfg.smartmon.enable && !config.boot.zfs.enabled && !cfg.environment.SKIP_SYSTEMD;
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = "read-only";

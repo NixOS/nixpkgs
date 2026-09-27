@@ -6,6 +6,7 @@
   jre_headless,
   nixosTests,
   callPackage,
+  bash,
   confFile ? null,
   plugins ? [ ],
   extraFeatures ? [ ],
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     jre_headless
   ];
 
+  buildInputs = [
+    bash
+  ];
+
   patches = [
     # Make home.dir and config.dir configurable through the
     # KC_HOME_DIR and KC_CONF_DIR environment variables.
@@ -59,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   ''
   + ''
-    patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bin/kc.sh build ${featuresSubcommand}
+    bash bin/kc.sh build ${featuresSubcommand}
 
     runHook postBuild
   '';

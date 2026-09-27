@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "victron-vrm";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KSoft-Si";
     repo = "vrm-client";
     tag = "v${version}";
-    hash = "sha256-In4yL5e6DZkP/8JeM1FhoMuhsqQ6uZE3fFLyfnLzgZQ=";
+    hash = "sha256-bkQeIlTXy0970+tw7BRK8tllaCulOlsbEmMWa8jR2S8=";
   };
 
   build-system = [ hatchling ];

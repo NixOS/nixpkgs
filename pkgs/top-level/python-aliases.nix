@@ -177,6 +177,7 @@ mapAliases {
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
+  databricks-cli = throw "'databricks-cli' has been removed from the Python package set. Use 'pkgs.databricks-cli' instead."; # Added 2026-09-04
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
@@ -195,6 +196,7 @@ mapAliases {
   discogs_client = throw "'discogs_client' has been renamed to/replaced by 'discogs-client'"; # Converted to throw 2025-10-29
   distutils_extra = throw "'distutils_extra' has been renamed to/replaced by 'distutils-extra'"; # Converted to throw 2025-10-29
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
+  django-admin-datta = throw "django-admin-datta has been removed because it is unmaintained"; # added 2026-09-19
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
@@ -532,6 +534,7 @@ mapAliases {
   pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
   pyflunearyou = throw "'pyflunearyou' has been renamed to/replaced by 'pyoutbreaksnearme'"; # Converted to throw 2025-10-29
+  pyfribidi = throw "'pyfribidi' has been removed because it is unmaintained upstream"; # added 2026-09-27
   pygame_sdl2 = throw "'pygame_sdl2' has been renamed to/replaced by 'pygame-sdl2'"; # Converted to throw 2025-10-29
   PyGithub = throw "'PyGithub' has been renamed to/replaced by 'pygithub'"; # Converted to throw 2025-10-29
   pygls_2 = pygls; # added 2026-01-05
@@ -702,6 +705,7 @@ mapAliases {
   slackclient = throw "'slackclient' has been renamed to/replaced by 'slack-sdk'"; # Converted to throw 2025-10-29
   sleekxmpp = throw "'sleekxmpp' has been removed because it was deprecated in favor of 'slixmpp'"; # added 2026-01-19
   slicedimage = throw "'slicedimage' has been removed because it was unused"; # Added 2026-08-14
+  slugid = throw "'slugid' has been removed as it was deprecated upstream."; # Added 2026-09-04
   smart_open = throw "'smart_open' has been renamed to/replaced by 'smart-open'"; # Converted to throw 2025-10-29
   smpp_pdu = throw "'smpp_pdu' has been renamed to/replaced by 'smpp-pdu'"; # Converted to throw 2025-10-29
   sorl_thumbnail = throw "'sorl_thumbnail' has been renamed to/replaced by 'sorl-thumbnail'"; # Converted to throw 2025-10-29
