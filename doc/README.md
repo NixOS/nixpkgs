@@ -133,7 +133,7 @@ A few markups for other kinds of literals are also available:
 - `` {env}`XDG_DATA_DIRS` ``
 - `` {file}`/etc/passwd` ``
 - `` {option}`networking.useDHCP` ``
-- `` {var}`/etc/passwd` ``
+- `` {var}`pkgs` ``
 
 These literal kinds are used mostly in NixOS option documentation.
 
