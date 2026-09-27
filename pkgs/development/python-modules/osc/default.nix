@@ -6,6 +6,7 @@
   fetchFromGitHub,
   lib,
   rpm,
+  setuptools,
   urllib3,
   keyring,
   ruamel-yaml,
@@ -13,22 +14,24 @@
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.27.2";
-  format = "setuptools";
+  version = "1.27.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
-    rev = version;
-    hash = "sha256-PwOJpjlIqOtLw79DK0KWb8ktAQ9vQVnSdf657jPVfLQ=";
+    tag = version;
+    hash = "sha256-We8SuDa2phvvu9IcsBWu/YBHPvlPy0Yka716KKcFwJ8=";
   };
 
-  buildInputs = [ bashInteractive ]; # needed for bash-completion helper
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ bashInteractive ]; # needed for bash-completion helper
   nativeCheckInputs = [
     rpm
     diffstat
   ];
-  propagatedBuildInputs = [
+  dependencies = [
     urllib3
     cryptography
     keyring
@@ -47,7 +50,7 @@ buildPythonPackage rec {
     EOF
   '';
 
-  preCheck = "HOME=$TOP/tmp";
+  preCheck = "HOME=$TMPDIR";
 
   meta = {
     homepage = "https://github.com/openSUSE/osc";
@@ -57,6 +60,6 @@ buildPythonPackage rec {
       peti
       saschagrunert
     ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }
