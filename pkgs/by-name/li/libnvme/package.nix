@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  testers,
   bash,
   json_c,
   keyutils,
@@ -66,11 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
   # mocked ioctl conflicts with the musl one: https://github.com/NixOS/nixpkgs/pull/263768#issuecomment-1782877974
   doCheck = !stdenv.hostPlatform.isMusl;
 
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
     maintainers = with lib.maintainers; [ vifino ];
     license = with lib.licenses; [ lgpl21Plus ];
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "libnvme"
+      "libnvme-mi"
+    ];
   };
 })
