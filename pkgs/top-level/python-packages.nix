@@ -10527,6 +10527,8 @@ self: super: with self; {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
+  markdown-to-confluence = callPackage ../development/python-modules/markdown-to-confluence { };
+
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
   markdownify = callPackage ../development/python-modules/markdownify { };

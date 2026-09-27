@@ -2302,6 +2302,8 @@ with pkgs;
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
+  markdown-to-confluence = with python3Packages; toPythonApplication markdown-to-confluence;
+
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
   mdcat = callPackage ../tools/text/mdcat {
