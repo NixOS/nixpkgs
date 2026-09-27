@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "pypager";
-  version = "3.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
