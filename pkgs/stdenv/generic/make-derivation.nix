@@ -20,7 +20,6 @@ let
     elem
     extendDerivation
     filter
-    filterAttrs
     foldl'
     getDev
     head
@@ -135,14 +134,6 @@ let
 
   isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
 
-  cachedOutputChecks = {
-    out = { };
-  };
-  debugCachedOutputChecks = {
-    out = { };
-    debug = { };
-  };
-
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath =
@@ -173,14 +164,18 @@ let
     # having to wait while nix builds a derivation that might not be used.
     # See also https://github.com/NixOS/nix/issues/4629
     {
-      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
+      ${if attrs ? disallowedReferences then "disallowedReferences" else null} =
         map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
+      ${if attrs ? disallowedRequisites then "disallowedRequisites" else null} =
         map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+      ${
+        if attrs ? allowedReferences && attrs.allowedReferences != null then "allowedReferences" else null
+      } =
+        map unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+      ${
+        if attrs ? allowedRequisites && attrs.allowedRequisites != null then "allowedRequisites" else null
+      } =
+        map unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 in
 config:
@@ -858,41 +853,46 @@ let
             map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
           ${if !__structuredAttrs && attrs ? disallowedRequisites then "disallowedRequisites" else null} =
             map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-          ${if !__structuredAttrs && attrs ? allowedReferences then "allowedReferences" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-          ${if !__structuredAttrs && attrs ? allowedRequisites then "allowedRequisites" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+          ${
+            if !__structuredAttrs && attrs ? allowedReferences && attrs.allowedReferences != null then
+              "allowedReferences"
+            else
+              null
+          } =
+            map unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+          ${
+            if !__structuredAttrs && attrs ? allowedRequisites && attrs.allowedRequisites != null then
+              "allowedRequisites"
+            else
+              null
+          } =
+            map unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
           ${if __structuredAttrs then "outputChecks" else null} =
             let
               attrsOutputChecks = makeOutputChecks attrs;
-              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
             in
-            # to avoid the listToAttrs in most common situations, we replicate
-            # what it would produce for most derivations. this can be improved
-            # in the future at the cost of a mass rebuild - empty attrsets for
-            # each output is a noop
-            if
-              !attrs ? outputs
-              && !attrs ? outputChecks
-              && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
-            then
-              if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
+            if !attrs ? outputChecks && attrsOutputChecks == { } then
+              { }
             else
               listToAttrs (
                 map (name: {
                   inherit name;
                   value =
                     let
-                      raw = zipAttrsWith (_: concatLists) [
-                        attrsOutputChecksFiltered
-                        (makeOutputChecks (attrs.outputChecks.${name} or { }))
-                      ];
+                      raw =
+                        if attrs ? outputChecks.${name} then
+                          zipAttrsWith (_: concatLists) [
+                            attrsOutputChecks
+                            (makeOutputChecks attrs.outputChecks.${name})
+                          ]
+                        else
+                          attrsOutputChecks;
                     in
                     # separateDebugInfo = true will put all sorts of files in
                     # the debug output which could carry references, but
                     # that's "normal". Notably it symlinks to the source.
                     # So disable reference checking for the debug output
-                    if separateDebugInfo' && name == "debug" then
+                    if raw != { } && separateDebugInfo' && name == "debug" then
                       removeAttrs raw referenceCheckingAttrsToRemove
                     else
                       raw;
