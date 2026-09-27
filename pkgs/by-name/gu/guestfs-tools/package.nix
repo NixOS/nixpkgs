@@ -13,6 +13,7 @@
   gnupg,
   hivex,
   jansson,
+  json_c,
   libguestfs-with-appliance,
   libosinfo,
   libvirt,
@@ -31,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guestfs-tools";
-  version = "1.52.3";
+  version = "1.54.0";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor finalAttrs.version}-stable/guestfs-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0xLCwj6TXU5b+tUewhKE9X0E+FN0MpX6+V+WHFxmiEc=";
+    hash = "sha256-m27742X3r+RGSe2YO7RWSYW1I/iLQau4wrDeFZiGj6I=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     hivex
     jansson
+    json_c
     libguestfs-with-appliance
     libosinfo
     libvirt
@@ -74,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pcre2
     xz
+  ];
+
+  patches = [
+    # Fix build against libguestfs >= 1.58 where app2_spare1 was
+    # renamed to app2_class. https://github.com/libguestfs/guestfs-tools/issues/28
+    ./fix-app2-spare1.patch
   ];
 
   postPatch = ''
@@ -98,6 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Extra arguments appended to every wrapProgram call. Overridable by
+  # downstream packages (e.g. guestfs-tools-nix) to inject additional
+  # PATH entries or environment variables without double-wrapping.
+  extraWrapArgs = [ ];
+
   postInstall = ''
     wrapProgram $out/bin/virt-builder \
       --argv0 virt-builder \
@@ -105,10 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           curl
           gnupg
+          qemu
         ]
       }:$out/bin \
-      --suffix VIRT_BUILDER_DIRS : /etc:$out/etc
+      --suffix VIRT_BUILDER_DIRS : /etc:$out/etc \
+      ${lib.escapeShellArgs finalAttrs.extraWrapArgs}
     wrapProgram $out/bin/virt-win-reg \
+      --prefix PATH : ${qemu}/bin \
       --prefix PERL5LIB : ${
         with perlPackages;
         makeFullPerlPath [
@@ -116,7 +132,17 @@ stdenv.mkDerivation (finalAttrs: {
           libintl-perl
           libguestfs-with-appliance
         ]
-      }
+      } \
+      ${lib.escapeShellArgs finalAttrs.extraWrapArgs}
+
+    # Wrap remaining binaries so libguestfs can find qemu-img at runtime
+    for f in $out/bin/virt-*; do
+      case "$(basename "$f")" in
+        virt-builder|virt-win-reg) continue ;;
+      esac
+      wrapProgram "$f" --prefix PATH : ${qemu}/bin \
+        ${lib.escapeShellArgs finalAttrs.extraWrapArgs}
+    done
   '';
 
   passthru.updateScript = gitUpdater {

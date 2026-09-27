@@ -1,0 +1,26 @@
+--- a/lib/launch-direct.c
++++ b/lib/launch-direct.c
+@@ -735,4 +735,21 @@
+   }
+
+   /* Create the virtio serial bus. */
++
++  /* Share host paths into the appliance via 9p if requested.
++   * Used by the Nix-built appliance to access /nix/store at runtime
++   * instead of baking the full store closure into the root image.
++   */
++  {
++    const char *virtfs_path = getenv ("LIBGUESTFS_NIX_9P");
++    if (virtfs_path && virtfs_path[0]) {
++      start_list ("-virtfs") {
++        append_list ("local");
++        append_list_format ("path=%s", virtfs_path);
++        append_list ("security_model=none");
++        append_list ("mount_tag=nix-store");
++        append_list ("readonly=on");
++      } end_list ();
++    }
++  }
+   arg ("-device", VIRTIO_DEVICE_NAME ("virtio-serial"));
+
+   /* Create the serial console. */
