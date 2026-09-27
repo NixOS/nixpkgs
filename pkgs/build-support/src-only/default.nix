@@ -55,7 +55,10 @@ let
       ) "srcOnly: derivation has dontUnpack set, overriding" false;
 
       dontInstall = false;
-      installPhase = "cp -pr --reflink=auto -- . $out";
+      installPhase = ''
+        chmod -R go-w .
+        cp -pR --reflink=auto -- . $out
+      '';
 
       # the original derivation might've set something like outputDev = "lib", but "lib" isn't an output anymore
       # some things get confused and error if one of these is set to an output that doesn't exist
