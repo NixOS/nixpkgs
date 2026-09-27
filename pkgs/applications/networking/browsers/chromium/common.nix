@@ -306,6 +306,7 @@ let
   };
 
   isElectron = packageName == "electron";
+  widevineSupport = extraAttrs.widevineSupport or (packageName == "chromium");
   rustcVersion = buildPackages.rustc.version;
   llvmVersion = buildPackages.rustc.llvmPackages.llvm.version;
 
@@ -541,9 +542,8 @@ let
       # Stopped applying with M153 due to formatting.
       ./patches/no-build-timestamps.patch
     ]
-    ++ lib.optionals (packageName == "chromium") [
-      # This patch is limited to chromium and ungoogled-chromium because electron-source sets
-      # enable_widevine to false.
+    ++ lib.optionals widevineSupport [
+      # Not applied to electron-source, which sets enable_widevine to false.
       #
       # The patch disables the automatic Widevine download (component) that happens at runtime
       # completely (~/.config/chromium/WidevineCdm/). This would happen if chromium encounters DRM
@@ -1072,7 +1072,7 @@ let
         use_gio = true;
         use_cups = cupsSupport;
       }
-      // lib.optionalAttrs (packageName == "chromium") {
+      // lib.optionalAttrs widevineSupport {
         # Enabling the Widevine here doesn't affect whether we can redistribute the chromium package.
         # Widevine in this drv is a bit more complex than just that. See Widevine patch somewhere above.
         enable_widevine = true;
@@ -1265,6 +1265,7 @@ stdenv.mkDerivation (
     "name"
     "gnFlags"
     "buildTargets"
+    "widevineSupport"
   ]
   // {
     passthru = base.passthru // (extraAttrs.passthru or { });
