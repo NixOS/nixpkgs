@@ -13,7 +13,7 @@ When writing new docs use **Progressive Disclosure:**
 - Use **examples** first to show how to get something done.
 - Keep **explanation** lean.
 
-Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
+Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
 Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
 
@@ -216,7 +216,7 @@ When needed, each convention explains why it exists, so you can make a decision 
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
-**For prose style, see the [documentation styleguide](./styleguide.md).**
+**For prose style, see the [documentation style guide](./styleguide.md).**
 
 ### Document structure
 
@@ -286,7 +286,7 @@ When changing existing content, update formatting if possible, but avoid excessi
 
 ### Examples first
 
-Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
+Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
 
 Use this structure for each documented item:
 
