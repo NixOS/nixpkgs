@@ -156,6 +156,13 @@ Some advantages of virtual machines over containers are:
   (Switching to a specialisation requires the creation of SUID/SGID wrappers, which is disallowed in `systemd-nspawn` within the Nix sandbox.)
 - Virtual machines allow the execution of `setuid` binaries.
 
+On Darwin, tests that define containers but no virtual machine nodes run the
+containers inside a Linux QEMU virtual machine. In this case, the containers
+share the kernel of that virtual machine, and [`nodeDefaults`](#test-opt-nodeDefaults)
+configures the virtual machine. Tests that define both containers and virtual
+machine nodes are not supported on Darwin. See the
+[system requirements](#sec-running-nixos-tests-requirements) for details.
+
 Refer to the sections on [QEMU virtual machines](#ssec-nixos-test-qemu-vms)
 and [systemd-nspawn containers](#ssec-nixos-test-nspawn-containers) below
 for more details on configuring each type of machine.
