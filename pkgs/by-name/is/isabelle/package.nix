@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.prismjs
     isabelleComponents.postgresql_jdbc
     isabelleComponents.rsync
+    isabelleComponents.smbc
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -159,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/postgresql-42.7.8' '${isabelleComponents.postgresql_jdbc.settings}' \
       --replace-fail 'contrib/rsync-3.2.7-1' '${isabelleComponents.rsync.settings}' \
       --replace-fail 'contrib/scala-${isabelleComponents.scala.version}' '${isabelleComponents.scala.settings}' \
+      --replace-fail 'contrib/smbc-0.4.1' '${isabelleComponents.smbc.settings}' \
       --replace-fail 'contrib/spass-3.8ds-2' '${isabelleComponents.spass.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}' \
       --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}' \
@@ -178,7 +180,8 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/isabelle_fonts-20241227 contrib/jsoup-1.21.2 contrib/jortho-1.0-2 \
            contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1 contrib/llncs-2.25 contrib/opam-2.0.7 \
            contrib/minisat-2.2.1-1 contrib/mlton-20241230-1 contrib/pdfjs-5.4.394 \
-           contrib/prismjs-1.30.0 contrib/postgresql-42.7.8 contrib/rsync-3.2.7-1
+           contrib/prismjs-1.30.0 contrib/postgresql-42.7.8 contrib/rsync-3.2.7-1 \
+           contrib/smbc-0.4.1
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
