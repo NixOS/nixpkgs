@@ -11,24 +11,28 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "opendal";
-  version = "0.46.0";
+  version = "0.47.10";
+  # The OpenDAL core and Python bindings use independent versions.
+  coreVersion = "0.59.3";
+  hash = "sha256-pve2LwMtgfdRjC363eDp7Zz5YR09M3zHYBRgbDuDkKk=";
+  cargoLockFile = ./Cargo.lock;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "opendal";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OQGpz6o4R0Yp+1vAgFtik/l7wvHwJNcB1BhZLk+BFPg=";
+    tag = "v${finalAttrs.coreVersion}";
+    hash = finalAttrs.hash;
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+    ln -s ${finalAttrs.cargoLockFile} Cargo.lock
   '';
 
   cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+    lockFile = finalAttrs.cargoLockFile;
   };
 
   env = {
