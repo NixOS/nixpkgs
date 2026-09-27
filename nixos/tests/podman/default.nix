@@ -74,6 +74,14 @@ import ../make-test-python.nix (
             isNormalUser = true;
           };
         };
+      docker_compat =
+        { pkgs, ... }:
+        {
+          virtualisation.podman = {
+            enable = true;
+            dockerCompat = true;
+          };
+        };
     };
 
     testScript = ''
@@ -90,6 +98,7 @@ import ../make-test-python.nix (
       rootless.wait_for_unit("sockets.target")
       dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
+      docker_compat.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
@@ -242,6 +251,15 @@ import ../make-test-python.nix (
           rootless.wait_until_succeeds(su_cmd("podman ps | grep quadlet"), timeout=20)
           rootless.systemctl("stop quadlet", "alice")
 
+      with subtest("Docker compat works"):
+          docker_compat.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
+          docker_compat.succeed(
+            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
+          )
+          docker_compat.succeed("docker ps | grep sleeping")
+          docker_compat.succeed("podman ps | grep sleeping")
+          docker_compat.succeed("docker stop sleeping")
+          docker_compat.succeed("docker rm sleeping")
       # TODO: add docker-compose test
 
     '';
