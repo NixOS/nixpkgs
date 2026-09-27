@@ -72,6 +72,20 @@ $ nixos-version --configuration-revision
 aa314ebd1592f6cdd53cb5bba8bcae97d9323de8
 .Ed
 .
+.It Fl -kernel-version
+Show the kernel version, e.g.
+.Bd -literal -offset indent
+$ nixos-version --kernel-version
+7.2.5
+.Ed
+.
+.It Fl -specialisations
+Show specialisations, separate by spaces, if available, e.g.
+.Bd -literal -offset indent
+$ nixos-version --specialisations
+foo bar
+.Ed
+.
 .It Fl -json
 Print a JSON representation of the versions of NixOS and the top-level
 configuration flake.
