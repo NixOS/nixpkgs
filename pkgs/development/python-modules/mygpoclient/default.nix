@@ -20,6 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-g4iPw6i8Gy3kvIjHCyGLJNHNb+osaCmc46hIryrodi8=";
   };
 
+  # Use fork instead of forkserver to avoid server not being started yet
+  # before test
+  postPatch = ''
+    substituteInPlace mygpoclient/http_test.py \
+      --replace-fail "multiprocessing.Process(" 'multiprocessing.get_context("fork").Process('
+  '';
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "mygpoclient" ];
