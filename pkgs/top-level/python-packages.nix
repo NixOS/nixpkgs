@@ -3497,6 +3497,8 @@ self: super: with self; {
 
   columnize = callPackage ../development/python-modules/columnize { };
 
+  com2ann = callPackage ../development/python-modules/com2ann { };
+
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
@@ -6176,6 +6178,8 @@ self: super: with self; {
   flake8-bugbear = callPackage ../development/python-modules/flake8-bugbear { };
 
   flake8-class-newline = callPackage ../development/python-modules/flake8-class-newline { };
+
+  flake8-comprehensions = callPackage ../development/python-modules/flake8-comprehensions { };
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
@@ -16543,6 +16547,8 @@ self: super: with self; {
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
+
+  pytest-flake8-path = callPackage ../development/python-modules/pytest-flake8-path { };
 
   pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
 
