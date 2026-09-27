@@ -5,6 +5,7 @@
   fetchFromGitLab,
   runCommand,
   writeText,
+  versionCheckHook,
   # docs deps
   libxslt,
   docbook_xml_dtd_412,
@@ -305,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -332,6 +333,10 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = lib.concatStringsSep "\n" (
     map (resholve.phraseSolution "xdg-utils-resholved") solutions
   );
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/xdg-terminal";
 
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
@@ -365,6 +370,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
+    downloadPage = "https://gitlab.freedesktop.org/xdg/xdg-utils";
+    changelog = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/releases/${finalAttrs.src.tag}";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
