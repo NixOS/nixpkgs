@@ -26,14 +26,14 @@ let
 in
 buildPythonPackage rec {
   pname = "dataprep-ml";
-  version = "25.2.3.0";
+  version = "0.0.26";
   pyproject = true;
 
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {
     pname = "dataprep_ml";
     inherit version;
-    hash = "sha256-pULqrPTxGtBLRsKCpSsP3a/QA0O5eXOP6BSI5TbCQWY=";
+    hash = "sha256-wdfAWJb32ws6mwDYSvMkU8PI36m/kDt+7pz9ZBpJQd4=";
   };
 
   pythonRelaxDeps = [
