@@ -12,13 +12,13 @@
 }:
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "bazarr";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "morpheus65535";
     repo = "bazarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m9429gSt9xrA3N9w6eIBtHmQWOZDiRKIsu52fusQutU=";
+    hash = "sha256-5bhNbLfuL1wzraO3UypRRstC1+ULTaFVNJC++Qov6AE=";
   };
 
   dependencies = with python313Packages; [
@@ -76,7 +76,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
 
       nodejs = nodejs_24;
 
-      npmDepsHash = "sha256-82hLGQBuymU7DhDn+aYQIay1cVR+d4E3nU+ZNhJ8xJ0=";
+      npmDepsHash = "sha256-uvUXk5+/WOfFRuBnC/SQOkau+0uIkJ4OTofMXckmwzw=";
 
       nativeBuildInputs = [ dart-sass ];
 
