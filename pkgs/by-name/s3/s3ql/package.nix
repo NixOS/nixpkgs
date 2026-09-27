@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3,
-  replaceVars,
   sqlite,
   which,
   nix-update-script,
@@ -14,53 +13,62 @@ let
     buildPythonApplication
     setuptools
     cython
+    anyio
     apsw
     cryptography
     defusedxml
     google-auth
     google-auth-oauthlib
+    h11
+    httpcore
+    more-itertools
+    pydantic
     pyfuse3
     requests
     trio
+    typer
     pytest-trio
     pytestCheckHook
-    python
     ;
 in
 
 buildPythonApplication (finalAttrs: {
   pname = "s3ql";
-  version = "5.3.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "s3ql";
     repo = "s3ql";
     tag = "s3ql-${finalAttrs.version}";
-    hash = "sha256-SVB+VB508hGXvdHZo5lt09yssjjwHS1tsDU8M4j+swc=";
+    hash = "sha256-YPp/QN5oYyTzYLfb7KJGsvEF7wTt94XwuYCjCOF3cos=";
   };
 
-  patches = [
-    (replaceVars ./0001-setup.py-remove-self-reference.patch { inherit (finalAttrs) version; })
+  build-system = [
+    cython
+    setuptools
   ];
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     which
-    cython
   ];
 
   dependencies = [
+    anyio
     apsw
     cryptography
     defusedxml
     google-auth
     google-auth-oauthlib
+    h11
+    httpcore
+    more-itertools
+    pydantic
     pyfuse3
     requests
     sqlite
     trio
+    typer
   ];
 
   nativeCheckInputs = [
@@ -69,8 +77,8 @@ buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} ./setup.py build_cython build_ext --inplace
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
   '';
 
   pythonImportsCheck = [ "s3ql" ];
