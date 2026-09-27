@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # macOS iconv implementation is slightly broken since Sonoma
     # https://github.com/Homebrew/homebrew-core/pull/199639
     # https://savannah.gnu.org/bugs/index.php?66541
