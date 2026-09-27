@@ -57,6 +57,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # backoff retries: https://github.com/python-wheel-build/fromager/pull/1348
   env.FROMAGER_HTTP_RETRIES = 0;
 
+  # Tests share repository directories and race during setup:
+  # https://github.com/python-wheel-build/fromager/pull/1349
+  dontUsePytestXdist = true;
+
   pythonImportsCheck = [
     "fromager"
   ];
