@@ -262,4 +262,12 @@ stdenv.mkDerivation (
       homepage = "https://github.com/llvm/llvm-project";
     };
   }
+  // lib.optionalAttrs (enableManpages && lib.versionAtLeast release_version "23") {
+    # From LLVM 23 on, every Sphinx configuration imports the shared `llvm_sphinx`
+    # module from utils/docs. CMake only adds it to PYTHONPATH relative to
+    # LLVM_MAIN_SRC_DIR, which does not lead to the monorepo in these builds.
+    preBuild = lib.optionalString (monorepoSrc != null) ''
+      export PYTHONPATH="${monorepoSrc}/utils/docs''${PYTHONPATH:+:$PYTHONPATH}"
+    '';
+  }
 )
