@@ -85,6 +85,7 @@ in
           cosmic-edit
           cosmic-icons
           cosmic-monitor
+          cosmic-osk
           cosmic-player
           cosmic-randr
           cosmic-reader
