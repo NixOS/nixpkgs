@@ -10,7 +10,6 @@
   testers,
   validatePkgConfig,
   nix-update-script,
-  withExamples ? true,
   withTools ? true,
 }:
 
