@@ -34,6 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
+  patches = [
+    # upstream duplicates some sources in .cargo/config.toml
+    # that's also defined in Cargo.toml, cargo fails with duplicate definitions
+    ./remove-pnpm-managed-cargo-sources.patch
+  ];
+
   cargoBuildFlags = [
     "--bin=pnpm"
   ];
