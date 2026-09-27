@@ -52,6 +52,8 @@ lib.makeScope newScope (self: {
       cp.vampire
       cp.verit
       cp.zipperposition
+      # Needs to be below vampire and spass to allow it to detect them
+      cp.naproche
     ]
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform cp.z3) [
       cp.z3
@@ -103,6 +105,7 @@ lib.makeScope newScope (self: {
   llncs = self.callPackage ./llncs { };
   minisat = self.callPackage ./minisat { };
   mlton = self.callPackage ./mlton { };
+  naproche = self.callPackage ./naproche { };
   nunchaku = self.callPackage ./nunchaku { };
   opam = self.callPackage ./opam { };
   pdfjs = self.callPackage ./pdfjs { };
