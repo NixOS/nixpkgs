@@ -9,49 +9,83 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "oterm";
-  version = "0.14.7";
+  version = "0.25.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = finalAttrs.version;
-    hash = "sha256-f8UUWQtn+lG0mzO7i6LWDoNwGBLFbIbGdqAptNgoek4=";
+    hash = "sha256-3s/nNXLkK0i93Pw/bbg/tsUqA0F7TbxHIBOopDPuQ60=";
   };
 
   pythonRelaxDeps = [
     "aiosql"
     "aiosqlite"
-    "httpx"
     "ollama"
     "packaging"
     "pillow"
     "pydantic"
+    "pydantic-ai-harness"
+    "pydantic-ai-slim"
+    "python-dotenv"
     "textual"
+    "textual-image"
+    "textual-speedups"
+    "textualeffects"
     "typer"
-    "fastmcp"
   ];
 
   build-system = with python3Packages; [ hatchling ];
 
-  dependencies = with python3Packages; [
-    aiohttp
-    aiosql
-    aiosqlite
-    fastmcp
-    httpx
-    mcp
-    ollama
-    packaging
-    pillow
-    pyperclip
-    python-dotenv
-    rich-pixels
-    textual
-    textual-image
-    textualeffects
-    typer
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      aiosql
+      aiosqlite
+      ollama
+      packaging
+      pillow
+      pydantic
+      pydantic-ai-harness
+      # pydantic-ai-slim and its extras, as required by oterm's pyproject.toml
+      pydantic-ai-slim
+      anthropic
+      boto3
+      cohere
+      ddgs
+      # fastmcp-slim[client], imported by oterm.tools.mcp (client + keyring/filetree/memory backends)
+      authlib
+      exceptiongroup
+      fastmcp-slim
+      mcp
+      py-key-value-aio
+      starlette
+      aiofile
+      anyio
+      cachetools
+      keyring
+      google-genai
+      groq
+      huggingface-hub
+      logfire
+      markdownify
+      mistralai
+      openai
+      opentelemetry-instrumentation-httpx
+      python-dotenv
+      python-multipart
+      tiktoken
+      textual
+      textual-image
+      textual-speedups
+      textualeffects
+      typer
+    ]
+    # extra: pydantic-ai-slim[huggingface] (marker-limited to these architectures)
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [ hf-xet ];
 
   pythonImportsCheck = [ "oterm" ];
 
