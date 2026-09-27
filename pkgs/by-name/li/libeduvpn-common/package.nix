@@ -6,11 +6,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "libeduvpn-common";
-  version = "4.0.0";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://codeberg.org/eduVPN/eduvpn-common/releases/download/${finalAttrs.version}/eduvpn-common-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pMxcHiX6Ct6QpU13JnoEyqt7bd58dmOxoncIp6PDvgo=";
+    hash = "sha256-mD0LWhYVCzNMFPXQeOgV5go+rRJh4W0o48AFaJKlCcU=";
   };
 
   vendorHash = null;
