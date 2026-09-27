@@ -1,0 +1,18 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6c97d18..987e44d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -431,13 +431,6 @@ target_compile_definitions(brokkr PRIVATE
+ if(WIN32)
+     set(BROKKR_DEPLOY_TOOL_OPTIONS DEPLOY_TOOL_OPTIONS --no-compiler-runtime)
+ endif()
+-qt_generate_deploy_app_script(
+-    TARGET brokkr
+-    OUTPUT_SCRIPT deploy_script
+-    NO_UNSUPPORTED_PLATFORM_ERROR
+-    ${BROKKR_DEPLOY_TOOL_OPTIONS}
+-)
+-install(SCRIPT ${deploy_script})
+ install(TARGETS brokkr
+     RUNTIME DESTINATION bin
+     BUNDLE  DESTINATION .
