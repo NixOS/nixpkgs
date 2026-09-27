@@ -48,7 +48,7 @@ in
 
   options = {
     boot.kernel.enable =
-      mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel"
+      mkEnableOption "the Linux kernel. This is useful for systemd-like containers which already have a kernel installed"
       // {
         default = true;
       };
