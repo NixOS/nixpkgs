@@ -19,6 +19,8 @@ appimageTools.wrapAppImage {
 
   src = appimageContents;
 
+  runScript = "env LC_NUMERIC=C appimage-exec.sh -w ${appimageContents} --";
+
   extraInstallCommands = ''
     mkdir -p $out/share/applications
     cp ${appimageContents}/wechat.desktop $out/share/applications/
