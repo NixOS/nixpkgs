@@ -135,8 +135,12 @@ bash.runCommand "${pname}-${version}"
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
       --enable-checking=release \
+      --enable-static \
+      --disable-serial-configure \
+      --disable-analyzer \
       --disable-bootstrap \
       --disable-dependency-tracking \
+      --disable-decimal-float \
       --disable-libmpx \
       --disable-libsanitizer \
       --disable-libssp \
@@ -159,4 +163,14 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    if [ -d "$out/lib64" ]; then
+      shopt -s dotglob
+      for lib in $out/lib64/*; do
+        mv --no-clobber "$lib" "$out/lib/"
+      done
+      shopt -u dotglob
+      rm -rf "$out/lib64"
+      ln -s lib "$out/lib64"
+    fi
   ''
