@@ -17743,6 +17743,8 @@ self: super: with self; {
 
   quart-trio = callPackage ../development/python-modules/quart-trio { };
 
+  quaternions-for-python = callPackage ../development/python-modules/quaternions-for-python { };
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
