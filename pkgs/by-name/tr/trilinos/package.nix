@@ -60,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "trilinos";
-  version = "16.1.0";
+  version = "17.2.1";
 
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
     tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-9Yn79kt7JHS30lc+qImSbLOU3Cdb87S3xmlm3v9G1uo=";
+    hash = "sha256-q/zR1gOC1zUckbWx1MoU3j8Ej1/t4dKCfg//lx2TdaE=";
   };
 
   nativeBuildInputs = [
