@@ -21321,6 +21321,11 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  notzorua = {
+    github = "notzorua";
+    githubId = 248946345;
+    name = "rem";
+  };
   nouritsu = {
     name = "Aneesh Bhave";
     email = "aneesh1701@gmail.com";
