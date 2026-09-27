@@ -18,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jIEsfX3Oz/koX0srLPGII99WaeFjKtXvB4kzMu7LbWs=";
   };
 
+  # unsupported flags that we can just remove
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace-fail "'-ffat-lto-objects'," "" \
+      --replace-fail "version_flag = ['-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), mapfile)]" "version_flag = []"
+  '';
+
   __structuredAttrs = true;
   strictDeps = true;
 
