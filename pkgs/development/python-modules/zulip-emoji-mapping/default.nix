@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +17,17 @@ buildPythonPackage rec {
     hash = "sha256-logm5uAnLAcFqI7mUxKEO9ZmHqRkd6CFiCW4B5tqZzg=";
   };
 
+  postPatch = ''
+    cat >> pyproject.toml <<EOF
+
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
+  '';
+
   build-system = [
-    setuptools
+    poetry-core
   ];
 
   pythonImportsCheck = [
