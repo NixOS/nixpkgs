@@ -108,7 +108,6 @@ with lib.maintainers;
     members = [
       lopsided98
       mic92
-      zowoq
     ];
     scope = "Maintain Buildbot CI framework";
     shortName = "Buildbot";

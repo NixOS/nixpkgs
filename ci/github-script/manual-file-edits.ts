@@ -1,6 +1,6 @@
-import { getCommitDetailsForPR } from './get-pr-commit-details.js'
-import { dismissReviews, postReview } from './reviews.js'
-import { classify } from './supportedBranches.js'
+import { getCommitDetailsForPR } from './get-pr-commit-details.ts'
+import { dismissReviews, postReview } from './reviews.ts'
+import { classify } from './supportedBranches.ts'
 
 export default async function checkManualFileEdits({
   github,

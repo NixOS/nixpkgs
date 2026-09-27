@@ -3,26 +3,23 @@ import { promisify } from 'node:util'
 
 const execFile = promisify(nodeExecFile)
 
-/**
- * @typedef {{
- *  subject: string,
- *  sha: string,
- *  author: { name: string, email: string },
- *  committer: { name: string, email: string}
- *  changedPaths: string[],
- *  changedPathSegments: Set<string>,
- * }} Commit
- */
+export type Commit = {
+  subject: string
+  sha: string
+  author: { name: string; email: string }
+  committer: { name: string; email: string }
+  changedPaths: string[]
+  changedPathSegments: Set<string>
+}
 
-/**
- * @param {{
- *  args: string[]
- *  core: typeof import('@actions/core'),
- *  quiet?: boolean,
- *  repoPath?: string,
- * }} RunGitProps
- */
-async function runGit({ args, repoPath, core, quiet }) {
+interface RunGitProps {
+  args: string[]
+  core: typeof import('@actions/core')
+  quiet?: boolean
+  repoPath?: string
+}
+
+async function runGit({ args, repoPath, core, quiet }: RunGitProps) {
   if (repoPath) {
     args = ['-C', repoPath, ...args]
   }
@@ -34,21 +31,29 @@ async function runGit({ args, repoPath, core, quiet }) {
   return await execFile('git', args)
 }
 
+interface GetCommitMessagesForPRProps {
+  core: typeof import('@actions/core')
+  pr: Awaited<
+    ReturnType<
+      InstanceType<
+        typeof import('@actions/github/lib/utils').GitHub
+      >['rest']['pulls']['get']
+    >
+  >['data']
+  repoPath?: string
+}
+
 /**
  * Gets the SHA, subject and changed files for each commit in the given PR.
  *
  * Don't use GitHub API at all: the "list commits on PR" endpoint has a limit
  * of 250 commits and doesn't return the changed files.
- *
- * @param {{
- *  core: typeof import('@actions/core'),
- *  pr: Awaited<ReturnType<InstanceType<typeof import('@actions/github/lib/utils').GitHub>["rest"]["pulls"]["get"]>>["data"]
- *  repoPath?: string,
- * }} GetCommitMessagesForPRProps
- *
- * @returns {Promise<Commit[]>}
  */
-export async function getCommitDetailsForPR({ core, pr, repoPath }) {
+export async function getCommitDetailsForPR({
+  core,
+  pr,
+  repoPath,
+}: GetCommitMessagesForPRProps): Promise<Commit[]> {
   await runGit({
     args: ['fetch', `--depth=1`, 'origin', pr.base.sha],
     repoPath,
