@@ -7,8 +7,9 @@
   curl,
   gettext,
   libclang,
-  pkg-config,
   openssl,
+  perl,
+  pkg-config,
   rustPlatform,
   rustc,
   fetchYarnDeps,
@@ -23,7 +24,7 @@
 }:
 
 let
-  version = "0.2.20250521-115337+25ed6ac4";
+  version = "0.2.20260522-084851+1e764c94";
 
   # Sapling sets a Cargo config containing lines like so:
   # [target.aarch64-apple-darwin]
@@ -45,15 +46,27 @@ let
     owner = "facebook";
     repo = "sapling";
     tag = version;
-    hash = "sha256-NvfSx6BMbwOFY+y6Yb/tyUNYeuL8WCoc+HSVys8Ko0Y=";
+    hash = "sha256-Uqv3SCbiPTH8L+anlb2cUOm7gGmmD+SHALHvHpy5pfA=";
   };
 
   addonsSrc = "${src}/addons";
 
-  # Fetches the Yarn modules in Nix to to be used as an offline cache
+  # Clean the upstream yarn.lock completely before fetchYarnDeps parses it
+  fixedYarnLock = stdenv.mkDerivation {
+    name = "sapling-fixed-yarn-lock";
+    src = addonsSrc;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out
+      substitute yarn.lock $out/yarn.lock \
+        --replace-fail "https://registry.facebook.net" "https://registry.npmjs.org"
+    '';
+  };
+
+  # Fetches the Yarn modules in Nix to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-9l4lSzFTF5rSByO388tosJCxOb65Nnua6HaDD7F62No=";
+    yarnLock = "${fixedYarnLock}/yarn.lock";
+    sha256 = "sha256-eS5NF3JAaKnlJkCKR9NpIDbMxaWpFXYEs45J5MTCRUI=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -72,6 +85,11 @@ let
       runHook preBuild
 
       export HOME=$(mktemp -d)
+
+      # Overwrite the build directory's lockfile with our fixed version
+      # so that yarn install matches the offline cache exactly.
+      cp ${fixedYarnLock}/yarn.lock yarn.lock
+
       fixup-yarn-lock yarn.lock
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
@@ -107,20 +125,21 @@ python312Packages.buildPythonApplication {
   sourceRoot = "${src.name}/eden/scm";
 
   # Upstream does not commit Cargo.lock
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-026OKsszbF2aPWpA8JBc6KwZHxEqwnKIluzDjO/opgc=";
-      "fb303_core-0.0.0" = "sha256-IJKAWgBLrLnWItw6UTNdwjuTDO6dUfqyKsVv2aW6Kyo=";
-      "fbthrift-0.0.1+unstable" = "sha256-FuUo1cZG7Ed+TAXY53MpylBPGzFruIsWaxKPR26TxVk=";
-      "serde_bser-0.4.0" = "sha256-OY+IZh4nz5ICrDKYr8pPfORW4i8KBULhGC5YyXb5Ulg=";
-      "watchman_client-0.9.0" = "sha256-OY+IZh4nz5ICrDKYr8pPfORW4i8KBULhGC5YyXb5Ulg=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    pname = "sapling";
+    inherit src version;
+    cargoRoot = "eden/scm";
+    postPatch = ''
+      cp ${./Cargo.lock} eden/scm/Cargo.lock
+    '';
+    hash = "sha256-Uqv3SCbiPTH8L+anlb2cUOm7gGmmD+SHALHvHpy5pfA=";
   };
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
+
+    # Remove [patch.crates-io] to prevent Cargo from fetching git repos in the sandbox
+    sed -i '/^\[patch\.crates-io\]$/,/^$/d' Cargo.toml
 
     substituteInPlace sapling/thirdparty/pysocks/setup.py \
       --replace-fail 'os.path.dirname(__file__)' "\"$out/lib/${python312Packages.python.libPrefix}/site-packages/sapling/thirdparty/pysocks\""
@@ -144,6 +163,7 @@ python312Packages.buildPythonApplication {
 
   nativeBuildInputs = [
     curl
+    perl
     pkg-config
     myCargoSetupHook
     cargo
@@ -162,6 +182,7 @@ python312Packages.buildPythonApplication {
   env = {
     HGNAME = "sl";
     LIBCLANG_PATH = "${lib.getLib libclang}/lib";
+    OPENSSL_NO_VENDOR = "1";
     SAPLING_OSS_BUILD = "true";
     SAPLING_VERSION = version;
     SAPLING_VERSION_HASH =
