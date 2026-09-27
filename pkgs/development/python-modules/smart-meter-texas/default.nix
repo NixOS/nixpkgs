@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  asn1,
+  asn1_2,
   python-dateutil,
   setuptools,
   tenacity,
@@ -30,7 +30,9 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    asn1
+    # _find_ca_issuers_uri() recurses with enter()/leave() and loops on eof(),
+    # which is only container-relative in asn1 2.x
+    asn1_2
     python-dateutil
     tenacity
   ];
