@@ -10,4 +10,5 @@ def _program(name, args):
     return subprocess.call([os.path.join(BIN_DIR, name)] + args, close_fds=False)
 
 def ninja():
+    """Run the ninja build system with command-line arguments."""
     raise SystemExit(_program('ninja', sys.argv[1:]))
