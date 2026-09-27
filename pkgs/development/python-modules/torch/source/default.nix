@@ -413,6 +413,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       --replace-fail \
         "#include <omp.h>" \
         '#include "${lib.getInclude llvmPackages.openmp}/include/omp.h"'
+  ''
+  + ''
+    patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
   '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
