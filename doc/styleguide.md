@@ -22,7 +22,7 @@ Write for someone who knows a great deal — up to but not including this projec
 
 If specific knowledge is required, mention it at the start of the page.
 
-### Show, Don't Tell
+### Show, don't tell
 
 The fastest path to understanding is a working example.
 People learn by doing, not by reading about doing.
@@ -34,7 +34,7 @@ People learn by doing, not by reading about doing.
 - Cover edge cases or variations
 - Link to further information instead of including it
 
-### Grammar and Style
+### Grammar and style
 
 **Sentence structure:**
 
@@ -54,7 +54,7 @@ Users care about *detecting hardware*, not *the tool that does it*.
 
 > This command detects your hardware and saves the configuration.
 
-### Content Organization
+### Content organization
 
 Lead with value. State what the reader will accomplish before explaining how.
 
@@ -83,7 +83,7 @@ Use **progressive disclosure**. Introduce concepts only when needed.
 3. Explain concepts if needed
 4. Provide advanced options separately or link to the reference
 
-### No Meta-commentary
+### No meta-commentary
 
 Don't describe what the documentation does. Just do it.
 
@@ -97,7 +97,7 @@ Don't describe what the documentation does. Just do it.
 > Configure networking by setting:
 > Set up a web server:
 
-### Code Examples
+### Code examples
 
 **Keep examples focused:**
 
@@ -130,7 +130,7 @@ Paste code examples directly and without further alteration.
 }
 ```
 
-### Lead with Practical Examples
+### Lead with practical examples
 
 Don't front-load theory. Readers want to accomplish something first, then understand why it works.
 
@@ -166,7 +166,7 @@ Users learn the NixOS module system by seeing patterns first.
 - Link deeper concepts instead of inlining them
 - Link to `nix.dev` for optional learning
 
-### General Rules
+### General rules
 
 - Abbreviate keys like `ssh-ed25519 AAAAC3NzaC…`
 - Abbreviate IP addresses like `192.168.XXX.XXX`
@@ -200,7 +200,7 @@ Use sentence case. A reader scanning only headings should understand the page.
 > Configure networking
 > Add a user to the system
 
-### Imperative Mood, Voice, and Person
+### Imperative mood, voice, and person
 
 Use imperative mood for instructions. Address the reader as "you", not "the user". Use active voice; in other words, make the subject do the action.
 
@@ -230,7 +230,7 @@ Use present tense for descriptions. Future tense makes documentation feel tentat
 > This creates a new folder.
 > Running this command installs the package.
 
-### Be Confident
+### Be confident
 
 State facts. Don't hedge with "should," "might," "typically," or "usually" unless the behavior genuinely varies.
 
@@ -244,7 +244,7 @@ State facts. Don't hedge with "should," "might," "typically," or "usually" unles
 > This creates the configuration file.
 > The service starts automatically.
 
-### Avoid Nominalizations
+### Avoid nominalizations
 
 A nominalization is a verb turned into a noun, often by adding *-tion*, *-meant*, or *-ance* (e.g. "explanation", "selection"). The fix: find the hidden verb and use it directly.
 
@@ -258,7 +258,7 @@ A nominalization is a verb turned into a noun, often by adding *-tion*, *-meant*
 > Select from the list.
 > Explain the error.
 
-### Plain Words
+### Plain words
 
 Technical precision for technical terms; plain language for everything else.
 
@@ -270,7 +270,7 @@ Technical precision for technical terms; plain language for everything else.
 - "set up" not "establish"
 - "find out" not "ascertain"
 
-### Filler Words and Weak Phrases
+### Filler words and weak phrases
 
 Cut words and phrases that add length without meaning.
 
@@ -296,7 +296,7 @@ Delete on sight:
 
 Every word must earn its place.
 
-### Writing Procedures
+### Writing procedures
 
 One instruction per sentence. Don't pack multiple actions into one sentence.
 
@@ -320,7 +320,7 @@ Don't bury the negative. Key limitations should be prominent, not a footnote aft
 
 > This service does not support multiple instances.
 
-### Consistent Terminology
+### Consistent terminology
 
 Pick a term and stick to it. Don't swap synonyms to avoid repetition. In technical documentation, repetition is clarity.
 
@@ -359,7 +359,7 @@ Only link when the destination is directly relevant, not for generic background 
 
 > See `[database schema](url)` for the full table structure.
 
-### UI Language
+### UI language
 
 Match UI element names exactly: wording, casing, and spacing (even if a label seems oddly worded).
 
