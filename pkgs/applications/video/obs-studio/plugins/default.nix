@@ -66,6 +66,8 @@
 
   obs-plugin-countdown = qt6Packages.callPackage ./obs-plugin-countdown.nix { };
 
+  obs-pwvideo = callPackage ./obs-pwvideo.nix { };
+
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
 
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };

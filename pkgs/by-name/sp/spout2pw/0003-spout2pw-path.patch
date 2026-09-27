@@ -1,0 +1,13 @@
+diff --git a/misc/spout2pw.sh b/misc/spout2pw.sh
+index 0737cc7..26b5c71 100755
+--- a/misc/spout2pw.sh
++++ b/misc/spout2pw.sh
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ set -E
+ 
+-spout2pw="$(dirname "$(realpath "$0")")"
++spout2pw="@SPOUT2PW_PATH@/share/spout2pw"
+ 
+ setup_logging() {
+     zenity=
