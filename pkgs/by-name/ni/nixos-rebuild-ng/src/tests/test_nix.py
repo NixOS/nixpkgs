@@ -5,7 +5,7 @@ import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
-from unittest.mock import ANY, Mock, call, patch
+from unittest.mock import Mock, call, patch
 
 import pytest
 from pytest import MonkeyPatch
@@ -480,48 +480,6 @@ def test_get_nixpkgs_rev(tmpdir: Path) -> None:
 
 
 def test_get_generations(tmp_path: Path) -> None:
-    nixos_path = tmp_path / "nixos-system"
-    nixos_path.mkdir()
-
-    (tmp_path / "system").symlink_to(tmp_path / "system-2-link")
-    # In the "wrong" order on purpose to make sure we are sorting the results
-    (tmp_path / "system-1-link").symlink_to(nixos_path)
-    (tmp_path / "system-3-link").symlink_to(nixos_path)
-    (tmp_path / "system-2-link").symlink_to(nixos_path)
-
-    # An alternate profile; this shouldn't appear.
-    (tmp_path / "custom").symlink_to(tmp_path / "custom-1-link")
-    (tmp_path / "custom-1-link").symlink_to(nixos_path)
-
-    assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
-        m.Generation(id=1, current=False, timestamp=ANY),
-        m.Generation(id=2, current=True, timestamp=ANY),
-        m.Generation(id=3, current=False, timestamp=ANY),
-    ]
-
-
-def test_get_generations_with_profile(tmp_path: Path) -> None:
-    nixos_path = tmp_path / "nixos-system"
-    nixos_path.mkdir()
-
-    (tmp_path / "custom").symlink_to(tmp_path / "custom-2-link")
-    # In the "wrong" order on purpose to make sure we are sorting the results
-    (tmp_path / "custom-1-link").symlink_to(nixos_path)
-    (tmp_path / "custom-3-link").symlink_to(nixos_path)
-    (tmp_path / "custom-2-link").symlink_to(nixos_path)
-
-    # An alternate profile; none of these should appear.
-    (tmp_path / "system").symlink_to(tmp_path / "system-1-link")
-    (tmp_path / "system-1-link").symlink_to(nixos_path)
-
-    assert n.get_generations(m.Profile("custom", tmp_path / "custom")) == [
-        m.Generation(id=1, current=False, timestamp=ANY),
-        m.Generation(id=2, current=True, timestamp=ANY),
-        m.Generation(id=3, current=False, timestamp=ANY),
-    ]
-
-
-def test_get_generations_from_nix_env(tmp_path: Path) -> None:
     path = tmp_path / "test"
     path.touch()
     return_value = CompletedProcess(
@@ -537,7 +495,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
     with patch(
         get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
     ) as mock_run:
-        assert n.get_generations_from_nix_env(m.Profile("system", path)) == [
+        assert n.get_generations(m.Profile("system", path)) == [
             m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
             m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
             m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
@@ -553,9 +511,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
     with patch(
         get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
     ) as mock_run:
-        assert n.get_generations_from_nix_env(
-            m.Profile("system", path), remote, SUDO
-        ) == [
+        assert n.get_generations(m.Profile("system", path), remote, SUDO) == [
             m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
             m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
             m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
@@ -587,7 +543,10 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
 def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
     # Probably better to test this function in a real system, this test is
     # mostly to make sure it doesn't break horribly
-    assert n.list_generations(m.Profile("system", tmp_path)) == [
+    assert n.list_generations(
+        profile=m.Profile("system", tmp_path),
+        elevate=e.NO_ELEVATOR,
+    ) == [
         {
             "configurationRevision": "Unknown",
             "current": True,

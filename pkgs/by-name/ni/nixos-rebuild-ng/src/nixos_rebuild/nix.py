@@ -423,39 +423,7 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         return None
 
 
-def get_generations(profile: Profile) -> list[Generation]:
-    """Get all NixOS generations from profile.
-
-    Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
-    and if this is the current active profile or not.
-    """
-    if not profile.path.exists():
-        raise NixOSRebuildError(f"no profile '{profile.name}' found")
-
-    def parse_path(path: Path, profile: Profile) -> Generation:
-        entry_id = path.name.split("-")[1]
-        current = path.name == profile.path.readlink().name
-        timestamp = datetime.fromtimestamp(
-            timestamp=path.stat().st_ctime,
-            tz=local_tz,
-        ).strftime("%Y-%m-%d %H:%M:%S")
-
-        return Generation(
-            id=int(entry_id),
-            timestamp=timestamp,
-            current=current,
-        )
-
-    return sorted(
-        [
-            parse_path(p, profile)
-            for p in profile.path.parent.glob(f"{profile.name}-*-link")
-        ],
-        key=lambda d: d.id,
-    )
-
-
-def get_generations_from_nix_env(
+def get_generations(
     profile: Profile,
     target_host: Remote | None = None,
     elevate: Elevator = NO_ELEVATOR,
@@ -465,10 +433,10 @@ def get_generations_from_nix_env(
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
     and if this is the current active profile or not.
     """
-    if not profile.path.exists():
-        raise NixOSRebuildError(f"no profile '{profile.name}' found")
-
-    # Using `nix-env --list-generations` needs root to lock the profile
+    # `nix-env --list-generations` historically needed root to run.
+    # This was fixed in https://github.com/NixOS/nix/pull/16523, but just in
+    # case the user has some old `nix` version for some reason, we still
+    # run `nix-env` as root if the user is using elevate
     r = run_wrapper(
         ["nix-env", "-p", profile.path, "--list-generations"],
         stdout=PIPE,
@@ -495,7 +463,7 @@ def get_generations_from_nix_env(
     )
 
 
-def list_generations(profile: Profile) -> list[GenerationJson]:
+def list_generations(profile: Profile, elevate: Elevator) -> list[GenerationJson]:
     """Get all NixOS generations from profile, including extra information.
 
     Includes OS information like the commit, kernel version, configuration
@@ -543,13 +511,18 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             current=generation.current,
         )
 
-    # This can be surprisingly slow, especially with lots of generations,
-    # but it is basically IO work so we can run in parallel
-    with ThreadPoolExecutor() as executor:
-        return sorted(
-            executor.map(get_generation_info, get_generations(profile)),
-            key=lambda x: x["generation"],
-            reverse=True,
+    if generations := get_generations(profile=profile, elevate=elevate):
+        # This can be surprisingly slow, especially with lots of generations,
+        # but it is basically IO work so we can run in parallel
+        with ThreadPoolExecutor() as executor:
+            return sorted(
+                executor.map(get_generation_info, generations),
+                key=lambda x: x["generation"],
+                reverse=True,
+            )
+    else:
+        raise NixOSRebuildError(
+            f"could not find generations for profile '{profile.name}'"
         )
 
 
@@ -642,9 +615,7 @@ def rollback_temporary_profile(
     elevate: Elevator,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations_from_nix_env(
-        profile, target_host=target_host, elevate=elevate
-    )
+    generations = get_generations(profile, target_host=target_host, elevate=elevate)
     previous_gen_id = None
     for generation in generations:
         if not generation.current:
