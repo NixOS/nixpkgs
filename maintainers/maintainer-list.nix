@@ -9692,6 +9692,12 @@
     name = "Fausto Núñez Alberro";
     keys = [ { fingerprint = "668E 01D1 B129 3F42 0A0F  933A C880 6451 94A2 D562"; } ];
   };
+  font44 = {
+    email = "hi@ketanvijayvargiya.com";
+    github = "font44";
+    githubId = 7019732;
+    name = "Ketan Vijayvargiya";
+  };
   fooker = {
     email = "fooker@lab.sh";
     github = "fooker";
