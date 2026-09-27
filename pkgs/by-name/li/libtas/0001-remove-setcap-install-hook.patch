@@ -1,0 +1,22 @@
+From 89d1132e29925ee046ed84cfd46180b6a2bb0f3b Mon Sep 17 00:00:00 2001
+From: Michaili K <git@michaili.dev>
+Date: Mon, 16 Mar 2026 13:59:56 +0100
+Subject: [PATCH] remove setcap install hook
+
+---
+ src/program/Makefile.am | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/program/Makefile.am b/src/program/Makefile.am
+index e5d387bd..cd6e7d23 100644
+--- a/src/program/Makefile.am
++++ b/src/program/Makefile.am
+@@ -212,5 +212,3 @@ SUFFIXES = .h _moc.cpp
+ 
+ CLEANFILES = $(libTAS_MOCSOURCES)
+ 
+-install-exec-hook:
+-	if command -v setcap >/dev/null 2>&1; then setcap cap_checkpoint_restore+eip $(DESTDIR)$(bindir)/$(bin_PROGRAMS); fi
+-- 
+2.52.0
+
