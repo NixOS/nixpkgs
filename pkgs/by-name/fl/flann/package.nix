@@ -11,6 +11,10 @@
   unzip,
   llvmPackages,
   enablePython ? false,
+
+  # for passthru.tests
+  clangStdenv,
+  flann,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional enablePython python3 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   passthru.tests = {
+    flann-clang = flann.override {
+      stdenv = clangStdenv;
+    };
+    flann-python = flann.override {
+      enablePython = true;
+    };
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
