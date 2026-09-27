@@ -12,15 +12,10 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
+    let
+      name = finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+    in
     {
-      name ? "${args.pname}-${args.version}",
-      src ? null,
-      srcs ? null,
-      sourceRoot ? null,
-      prePatch ? "",
-      patches ? [ ],
-      postPatch ? "",
-      patchFlags ? [ ],
       nativeBuildInputs ? [ ],
       buildInputs ? [ ],
       # The output hash of the dependencies for this project.
@@ -55,22 +50,6 @@ lib.extendMkDerivation {
       # Value for npm `--workspace` flag and directory in which the files to be installed are found.
       npmWorkspace ? null,
       nodejs ? topLevelArgs.nodejs,
-      npmDeps ? fetchNpmDeps {
-        inherit
-          forceGitDeps
-          forceEmptyCache
-          src
-          srcs
-          sourceRoot
-          prePatch
-          patches
-          postPatch
-          patchFlags
-          ;
-        name = "${name}-npm-deps";
-        hash = npmDepsHash;
-        fetcherVersion = npmDepsFetcherVersion;
-      },
       # Custom npmConfigHook
       npmConfigHook ? null,
       # Custom npmBuildHook
@@ -87,7 +66,29 @@ lib.extendMkDerivation {
       };
     in
     {
-      inherit npmDeps npmBuildScript;
+      inherit npmBuildScript;
+
+      npmDeps =
+        args.npmDeps or (fetchNpmDeps {
+          name = "${name}-npm-deps";
+
+          src = finalAttrs.src or null;
+          srcs = finalAttrs.srcs or null;
+          sourceRoot = finalAttrs.sourceRoot or null;
+          prePatch = finalAttrs.prePatch or "";
+          patches = finalAttrs.patches or [ ];
+          postPatch = finalAttrs.postPatch or "";
+          patchFlags = finalAttrs.patchFlags or [ ];
+
+          inherit
+            forceGitDeps
+            forceEmptyCache
+            ;
+
+          fetcherVersion = npmDepsFetcherVersion;
+
+          hash = npmDepsHash;
+        });
 
       env = (args.env or { }) // {
         NIX_NPM_FETCHER_VERSION = npmDepsFetcherVersion;
