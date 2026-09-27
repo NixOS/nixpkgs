@@ -872,6 +872,7 @@ in
     systemdStage1 = true;
   };
   hickory-dns = runTest ./hickory-dns.nix;
+  hindsight-api = runTest ./hindsight-api.nix;
   hister = runTest ./hister.nix;
   hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
