@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.9.13";
+  version = "2026.9.15";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kl576zWsww9cOOX41e14uDkr5Zcig7Pp/iXmNqBR+lI=";
+    hash = "sha256-atiEHEDKlAfqGdJa46v0z2aTt03CKLHFaEuJ5QKyD0Y=";
   };
 
-  cargoHash = "sha256-QgoMmPXsKCdNnepfYusJza+7z0zQNmaNVzKTw36qesk=";
+  cargoHash = "sha256-i96rOfxrL95T6RHWbFlKhRfzicctp3bbQK7LewT7wIg=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,13 +48,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./src/cli/generate/git_pre_commit.rs \
       ./src/cli/generate/snapshots/*.snap
 
-    substituteInPlace ./src/test.rs \
+    substituteInPlace ./src/testing.rs \
       --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
 
-    substituteInPlace ./src/git.rs \
+    substituteInPlace ./crates/mise-util/src/git.rs \
       --replace-fail '"git"' '"${lib.getExe git}"'
 
-    substituteInPlace ./src/env_diff.rs \
+    substituteInPlace ./crates/mise-util/src/env_diff.rs \
       --replace-fail '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
@@ -62,14 +62,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
 
     # tests spawn helpers with PATH=/usr/bin:/bin, which is near-empty here
-    substituteInPlace ./src/cmd.rs \
+    substituteInPlace ./crates/mise-util/src/cmd.rs \
       --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")'
 
-    substituteInPlace ./src/inline_command.rs \
+    substituteInPlace ./crates/mise-util/src/inline_command.rs \
       --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")' \
       --replace-fail 'Command::new("/bin/sh")' 'Command::new("${lib.getExe' bash "sh"}")'
 
-    substituteInPlace ./src/agecrypt/fixtures/age-plugin-se.py \
+    substituteInPlace ./crates/mise-util/src/agecrypt/fixtures/age-plugin-se.py \
       --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe python3}'
   '';
 
@@ -118,9 +118,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip"
     "system::defaults::tests::test_host_scopes_are_independent"
     "--skip"
+    "system::defaults::tests::test_host_uuid_names_core_foundation_byhost_files"
+    "--skip"
     "system::defaults::tests::test_nested_value_round_trip"
     "--skip"
     "system::defaults::tests::test_patch_native_round_trip_and_preflight"
+    "--skip"
+    "system::defaults::tests::test_sandboxed_round_trip_writes_container"
     # sandbox-exec is unavailable in the sandbox
     "--skip"
     "sandbox::macos::tests::"
@@ -141,10 +145,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system_install::tests::archive_boundary"
   ];
 
+  # mise-util's own tests keep their caches under the real $HOME
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   # every test process resets the same fixed $HOME/cwd
   dontUseCargoParallelTests = true;
 
   cargoTestFlags = [
+    # much of the suite moved into the mise-util workspace crate
+    "--package"
+    "mise"
+    "--package"
+    "mise-util"
     "--all-features"
     "--no-fail-fast"
   ];
