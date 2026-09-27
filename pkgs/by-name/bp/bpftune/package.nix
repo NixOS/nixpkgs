@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bpftune";
-  version = "0.4-2";
+  version = "ol10/bpftune-0.3-2";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
     tag = finalAttrs.version;
-    hash = "sha256-clfR2nZKB9ztfUEw+znr9/Rdefv4K+mTeRCSBLIBmVY=";
+    hash = "sha256-SI3AV4By/bO0CYGg6oPVL87bxCj8EA+HDOeGPNtHsos=";
   };
 
   postPatch = ''
