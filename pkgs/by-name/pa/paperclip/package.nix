@@ -96,11 +96,6 @@ let
       postgresql
       vips
     ];
-    postPatch = ''
-      substituteInPlace server/src/services/railway-ssh.ts \
-        --replace-fail '"/usr/bin/ssh-keygen"' '"${openssh}/bin/ssh-keygen"' \
-        --replace-fail '"/usr/bin/ssh"' '"${openssh}/bin/ssh"'
-    '';
     pnpmInstallFlags = [ "--shamefully-hoist" ];
     pnpmWorkspaces = [
       "paperclipai..."
