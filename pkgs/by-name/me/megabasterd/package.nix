@@ -7,13 +7,13 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "megabasterd";
-  version = "8.60";
+  version = "8.61";
 
   src = fetchFromGitHub {
     owner = "tonikelope";
     repo = "megabasterd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSN7kNNqgWuEStXmGcz/IlKnkuE7VDZOIjAY0fVUGVQ=";
+    hash = "sha256-H3nW+phtT30nhKIBxlS3CAqVxFIWcBvStbNlnobWEiQ=";
   };
 
   mvnHash = "sha256-JZ8INISDHPVhxylKwQc2DybPqxfwcGpkWxDhq8Fpqt8=";
