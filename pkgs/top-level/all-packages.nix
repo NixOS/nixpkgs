@@ -3924,7 +3924,7 @@ with pkgs;
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
   ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
-  ocaml-crunch = ocamlPackages.crunch.bin;
+  ocaml-crunch = ocamlPackages.crunch;
 
   inherit (ocaml-ng.ocamlPackages_4_14)
     ocamlformat_0_19_0
