@@ -200,6 +200,11 @@ _logHook() {
 # were added, stopping if any fails (returns a non-zero exit
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
+#
+# Documented in:
+# - source: `doc/stdenv/stdenv.chapter.md`
+# - stable docs: https://nixos.org/manual/nixpkgs/stable/#fun-runHook
+# - unstable docs: https://nixos.org/manual/nixpkgs/unstable/#fun-runHook
 runHook() {
     local hookName="$1"
     shift
@@ -219,6 +224,11 @@ runHook() {
 
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
+#
+# Documented in:
+# - source: `doc/stdenv/stdenv.chapter.md`
+# - stable docs: https://nixos.org/manual/nixpkgs/stable/#fun-runOneHook
+# - unstable docs: https://nixos.org/manual/nixpkgs/unstable/#fun-runOneHook
 runOneHook() {
     local hookName="$1"
     shift
@@ -283,6 +293,11 @@ _eval() {
 # to split the command in three parts because the middle format string
 # will be, and must be, repeated for each argument. The first argument
 # goes before the ':' and is just for convenience.
+#
+# Documented in:
+# - source: `doc/stdenv/stdenv.chapter.md`
+# - stable docs: https://nixos.org/manual/nixpkgs/stable/#fun-echoCmd
+# - unstable docs: https://nixos.org/manual/nixpkgs/unstable/#fun-echoCmd
 echoCmd() {
     printf "%s:" "$1"
     shift

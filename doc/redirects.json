@@ -161,6 +161,12 @@
   "getting-started": [
     "index.html#getting-started"
   ],
+  "fun-echoCmd": [
+    "index.html#fun-echoCmd"
+  ],
+  "fun-runOneHook": [
+    "index.html#fun-runOneHook"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
