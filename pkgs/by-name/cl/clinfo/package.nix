@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clinfo";
-  version = "3.0.25.02.14";
+  version = "3.1.26.09.26";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
     rev = finalAttrs.version;
-    sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
+    sha256 = "sha256-5lM/6ULfw0xwXOZU2Kvc2h1oY7JBCvbAFuVn8mRvRX8=";
   };
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
