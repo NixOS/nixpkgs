@@ -86,6 +86,10 @@ let
       libName ? browser.libName or applicationName, # Important for tor package or the like
       nixExtensions ? null,
       hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
+      # Using a profile last written to by a newer version of firefox is
+      # possible in many cases but can lead to partial data loss without
+      # warning. This flag allows opting into that behaviour.
+      allowDowngrade ? false,
     }:
 
     let
@@ -331,7 +335,8 @@ let
         "--set"
         "MOZ_LEGACY_PROFILES"
         "1"
-
+      ]
+      ++ lib.optionals allowDowngrade [
         "--set"
         "MOZ_ALLOW_DOWNGRADE"
         "1"
