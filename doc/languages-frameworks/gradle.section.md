@@ -140,6 +140,45 @@ The update script does the following:
   package, can be absolute). In nixpkgs, it's discouraged to have the
   lockfiles be named anything other than `deps.json`. Consider creating
   subdirectories if your package requires multiple `deps.json` files.
+- `overrideDeps` - a function that transforms the decompressed
+  dependency map before fetching. Defaults to `lib.id` (no-op). The
+  function receives an attrset of
+  `{ url = { hash = "sha256-..."; }; ... }` and must return a modified
+  version. This is useful for dependencies with URLs whose content
+  changes frequently (e.g., snapshot indices), where the hash in
+  `deps.json` becomes stale.
+
+## Overriding Dependencies {#gradle-overriding-deps}
+
+Some Gradle dependencies have URLs that change content frequently
+(e.g., snapshot indices). When this happens, the hash in `deps.json`
+becomes stale and the build breaks. Rather than constantly updating the
+lockfile, you can use `overrideDeps` to modify the resolved dependency
+map at build time.
+
+Remove a volatile URL:
+
+```nix
+mitmCache = gradle.fetchDeps {
+  inherit (finalAttrs) pname;
+  data = ./deps.json;
+  overrideDeps = deps: removeAttrs deps [
+    "https://repo.example.com/snapshots/com/example/play-sdk/index/snapshot.gz"
+  ];
+};
+```
+
+Replace a hash:
+
+```nix
+mitmCache = gradle.fetchDeps {
+  inherit (finalAttrs) pname;
+  data = ./deps.json;
+  overrideDeps = deps: deps // {
+    "https://example.com/artifact.jar" = { hash = "sha256-newHash..."; };
+  };
+};
+```
 
 ## Environment {#gradle-environment}
 
