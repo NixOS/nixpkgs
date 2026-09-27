@@ -171,6 +171,7 @@
   "flang/use-xflang-in-diagnostics.patch" = [
     {
       after = "20";
+      before = "22";
       path = ../21;
     }
   ];
