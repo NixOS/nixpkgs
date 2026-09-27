@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Nice editor";
-    homepage = "https://ne.di.unimi.it/";
+    homepage = "https://github.com/vigna/ne";
     changelog = "https://github.com/vigna/ne/releases/tag/${finalAttrs.version}";
     downloadPage = "https://github.com/vigna/ne";
     longDescription = ''
