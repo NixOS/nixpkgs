@@ -1,0 +1,5 @@
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -1493 +1493 @@
+-    resolution: {tarball: https://github.com/aiscript-dev/aiscript-languageserver/releases/download/0.1.6/aiscript-dev-aiscript-languageserver-0.1.6.tgz}
++    resolution: {integrity: sha512-DBcHPHTeAVthlVi4lR4uFBYQU8AakaTYGMMVecGA8s8jFJPxscjkOgQ8/oOnJTcxbQx71V59ECQcoKahXMKcDw==, tarball: https://github.com/aiscript-dev/aiscript-languageserver/releases/download/0.1.6/aiscript-dev-aiscript-languageserver-0.1.6.tgz}

@@ -8,7 +8,7 @@
   makeWrapper,
   nixosTests,
   nodejs_22,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   stdenv,
 }:
@@ -74,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     git
     makeWrapper
     nodejs_22
-    pnpm_10
+    pnpm_10_latest
     pnpmConfigHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     hash = pnpmDepsHash;
     fetcherVersion = 3;
   };

@@ -1,6 +1,6 @@
 {
   lib,
-  pnpm_10,
+  pnpm_10_latest,
   stdenv,
   rustPlatform,
   cargo-tauri,
@@ -19,7 +19,7 @@
   fetchFromGitHub,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";
