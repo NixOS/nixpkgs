@@ -112,11 +112,9 @@ in
       nghttpx = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        script = ''
-          ${pkgs.nghttp2}/bin/nghttpx --conf=${configurationFile}
-        '';
 
         serviceConfig = {
+          ExecStart = "${pkgs.nghttp2}/bin/nghttpx --conf=${configurationFile}";
           Restart = "on-failure";
           RestartSec = 60;
         };
