@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://qtcustomplot.com/";
+    homepage = "https://www.qcustomplot.com/";
     description = "Qt C++ widget for plotting and data visualization";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;

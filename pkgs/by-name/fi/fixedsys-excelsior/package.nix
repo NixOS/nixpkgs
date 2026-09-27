@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.fixedsysexcelsior.com/";
+    homepage = "https://github.com/chrissimpkins/codeface";
     description = "Pan-unicode version of Fixedsys, a classic DOS font";
     platforms = lib.platforms.all;
     license = lib.licenses.publicDomain;
