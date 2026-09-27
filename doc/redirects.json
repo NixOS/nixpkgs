@@ -2984,6 +2984,9 @@
   "meson-honored-variables": [
     "index.html#meson-honored-variables"
   ],
+  "meson-disabled-tests": [
+    "index.html#meson-disabled-tests"
+  ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
