@@ -126,5 +126,16 @@ in
       '';
     };
 
+    warnings =
+      let
+        inherit (config.boot.kernelPackages) kernel;
+        isKernel6_16OrLater = lib.versionAtLeast kernel.version "6.16";
+        isKernel6_18OrLater = lib.versionAtLeast kernel.version "6.18";
+      in
+      lib.optional (isKernel6_16OrLater && !isKernel6_18OrLater) ''
+        A regression bug can occur when combining ipu6 with kernel version 6.16 or 6.17.
+        This will most likely prevent your system from properly suspending or shutting down.
+        For more information see: https://github.com/intel/ipu6-drivers/issues/381
+      '';
   };
 }
