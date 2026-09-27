@@ -1,47 +1,65 @@
 { lib, ... }:
+let
+  inherit (lib) removePrefix;
+in
 
 {
   name = "qui";
-  meta.maintainers = with lib.maintainers; [ undefined-landmark ];
+  meta.maintainers = with lib.maintainers; [
+    connor-grady
+    undefined-landmark
+  ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    let
-      # We create this secret in the Nix store (making it readable by everyone).
-      # DO NOT DO THIS OUTSIDE OF TESTS!!
-      testSecretFile = pkgs.writeText "session_secret" "not-secret";
-    in
-    {
-      services.qui = {
-        enable = true;
-        secretFile = testSecretFile;
-      };
+  nodes.machine = {
+    services.qui.enable = true;
 
+    specialisation = {
       # Use port other than default to test if settings options work.
-      specialisation.settingsPort.configuration = {
-        services.qui = {
-          enable = true;
-          secretFile = testSecretFile;
-          settings.port = 7777;
+      settingsPort.configuration.services.qui.settings.port = 7777;
+
+      # Use a session secret file to test if it propagates to the service.
+      settingsSessionSecretFile.configuration =
+        { config, ... }:
+        let
+          cfg = config.services.qui;
+        in
+        {
+          # This secret lands in the Nix store (making it readable by everyone).
+          # DO NOT DO THIS OUTSIDE OF TESTS!!
+          environment.etc.${removePrefix "/etc/" cfg.settings.sessionSecretFile}.text = "not-secret";
+          services.qui.settings.sessionSecretFile = "/etc/qui/session-secret";
         };
-      };
     };
+  };
 
   testScript =
     { nodes, ... }:
     let
-      settingsPort = "${nodes.machine.system.build.toplevel}/specialisation/settingsPort";
+      inherit (nodes.machine.system.build) toplevel;
     in
     # python
     ''
-      def test_webui(port):
-        machine.wait_for_unit("qui.service")
+      def switch_to_specialisation(s):
+        machine.succeed(f'${toplevel}/specialisation/{s}/bin/switch-to-configuration test')
+
+      def check(port=7476, session_secret=None):
+        machine.wait_for_unit('qui.service')
+
         machine.wait_for_open_port(port)
-        machine.wait_until_succeeds(f"curl --fail http://localhost:{port}")
+        machine.wait_until_succeeds(f'curl --fail http://localhost:{port}')
 
-      test_webui(7476)
+        credential = '/run/credentials/qui.service/sessionSecretFile'
+        if session_secret:
+          machine.succeed(f'[ "$(cat {credential})" = "{session_secret}" ]')
+        else:
+          machine.fail(f'test -e {credential}')
 
-      machine.succeed("${settingsPort}/bin/switch-to-configuration test")
-      test_webui(7777)
+      check()
+
+      switch_to_specialisation('settingsPort')
+      check(port=7777)
+
+      switch_to_specialisation('settingsSessionSecretFile')
+      check(session_secret='not-secret')
     '';
 }
