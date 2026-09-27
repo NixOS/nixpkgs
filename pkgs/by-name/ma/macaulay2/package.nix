@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    blas
     boehmgc
     boost
     cddlib
@@ -114,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     singular
     xz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    blas
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -189,12 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = lib.optionals downloadDocs [
     "MakeDocumentation=false"
   ];
-
-  env.LDFLAGS = lib.concatStringsSep " " (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-lblas"
-    ]
-  );
 
   postInstall = ''
     substituteInPlace "$out/bin/M2" \
