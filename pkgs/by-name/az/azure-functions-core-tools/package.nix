@@ -5,7 +5,6 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  go,
   _experimental-update-script-combinators,
   nix-update-script,
   writeShellApplication,
@@ -48,8 +47,6 @@ buildDotnetModule {
       ;
   };
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
-
-  nativeBuildInputs = [ go ];
 
   linkNuGetPackagesAndSources = true;
   useDotnetFromEnv = true;
