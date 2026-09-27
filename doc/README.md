@@ -163,7 +163,7 @@ The following are supported:
 - `example`
 
 Example admonitions require a title to work.
-If you don't provide one, the manual won't be built.
+If you don't provide one, the manual won't build.
 
 ```markdown
 ::: {.example #ex-showing-an-example}
