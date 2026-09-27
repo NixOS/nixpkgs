@@ -13,7 +13,7 @@ let
   common-config =
     { config, ... }:
     {
-      imports = [ ./module.nix ];
+      imports = [ ../../../../nixos/modules/services/misc/local-ai.nix ];
       services.local-ai = {
         enable = true;
         package = self;
@@ -46,10 +46,11 @@ in
         machine.succeed("curl -f http://localhost:${port}/readyz")
         machine.succeed("curl -f http://localhost:${port}/v1/models --output models.json")
 
-        machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-        # check if following issue is still valid
+        machine.succeed("curl -s http://localhost:${port}/metrics > metrics.txt")
+        machine.succeed("${prom2json}/bin/prom2json metrics.txt > metrics.json")
+        # check if following issue is fixed
         # https://github.com/mudler/LocalAI/issues/2207
-        machine.succeed("${jq}/bin/jq --exit-status '.[] | select(.name == \"api_call\").metrics | debug | any(.labels.path == \"/metricsls\" and .count == \"1\")' metrics.json")
+        machine.succeed("${jq}/bin/jq --exit-status '.[] | select(.name == \"api_call\").metrics | debug | any(.labels.path == \"/v1/models\")' metrics.json")
         machine.copy_from_machine("metrics.json")
       '';
   };
@@ -104,7 +105,8 @@ in
               machine.copy_from_machine("embeddings.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .model == \"${model}\"' embeddings.json")
 
-              machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
+              machine.succeed("curl -s http://localhost:${port}/metrics > metrics.txt")
+              machine.succeed("${prom2json}/bin/prom2json metrics.txt > metrics.json")
               machine.copy_from_machine("metrics.json")
             '';
         };
@@ -219,7 +221,8 @@ in
               machine.copy_from_machine("completions.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .object ==\"text_completion\"' completions.json")
 
-              machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
+              machine.succeed("curl -s http://localhost:${port}/metrics > metrics.txt")
+              machine.succeed("${prom2json}/bin/prom2json metrics.txt > metrics.json")
               machine.copy_from_machine("metrics.json")
             '';
         };
@@ -295,7 +298,8 @@ in
               machine.copy_from_machine("transcription.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${requests.request.input}\"' transcription.json")
 
-              machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
+              machine.succeed("curl -s http://localhost:${port}/metrics > metrics.txt")
+              machine.succeed("${prom2json}/bin/prom2json metrics.txt > metrics.json")
               machine.copy_from_machine("metrics.json")
             '';
         };
