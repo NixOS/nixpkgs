@@ -9,27 +9,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgdboop";
-  version = "1.3.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "SteamGridDB";
     repo = "SGDBoop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/pXZMq80fb7Z+619ACnu/ZYWpouh59PIiruWY7l2cnQ=";
+    hash = "sha256-l4l5CWupL/V/qlnFZIgqUBagc5qg0DDv/zz2yc0mtng=";
   };
 
-  makeFlags = [
-    # The flatpak install just copies things to /app - otherwise wants to do things with XDG
-    "FLATPAK_ID=fake"
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "/app/" "$out/"
-  '';
+    install -Dm755 SGDBoop \
+      $out/bin/SGDBoop
 
-  postInstall = ''
-    rm -r "$out/share/metainfo"
+    install -Dm644 res/linux/com.steamgriddb.SGDBoop.desktop \
+      $out/share/applications/com.steamgriddb.SGDBoop.desktop
+
+    install -Dm444 res/com.steamgriddb.SGDBoop.svg \
+      $out/share/icons/hicolor/scalable/apps/com.steamgriddb.SGDBoop.svg
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
