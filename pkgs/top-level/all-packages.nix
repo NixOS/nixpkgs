@@ -9850,29 +9850,20 @@ with pkgs;
 
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 
-  inherit (callPackage ../games/xonotic { })
-    xonotic-data
-    xonotic
-    ;
-
   xash-dedicated = callPackage ../by-name/xa/xash3d-fwgs/package.nix { buildServer = true; };
 
-  xonotic-glx =
-    (callPackage ../games/xonotic {
-      withSDL = false;
-      withGLX = true;
-    }).xonotic;
+  xonotic-glx = callPackage ../by-name/xo/xonotic/package.nix {
+    withSDL = false;
+    withGLX = true;
+  };
 
-  xonotic-dedicated =
-    (callPackage ../games/xonotic {
-      withSDL = false;
-      withDedicated = true;
-    }).xonotic;
+  xonotic-dedicated = callPackage ../by-name/xo/xonotic/package.nix {
+    withSDL = false;
+    withDedicated = true;
+  };
 
   xonotic-sdl = xonotic;
-  xonotic-sdl-unwrapped = xonotic-sdl.xonotic-unwrapped;
-  xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
-  xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
+  xonotic-data = xonotic.data;
 
   inherit
     (callPackage ../games/quake2/yquake2 {
