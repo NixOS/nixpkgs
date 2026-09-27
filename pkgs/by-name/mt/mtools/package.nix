@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.gpl3Plus
       lib.licenses.fdl13Plus
     ];
+    maintainers = [ lib.maintainers.quantenzitrone ];
   };
 })
