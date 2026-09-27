@@ -1,0 +1,109 @@
+diff --git a/src/devices/grotty/tty.cpp b/src/devices/grotty/tty.cpp
+index be7140e4b..929a4f80d 100644
+--- a/src/devices/grotty/tty.cpp
++++ b/src/devices/grotty/tty.cpp
+@@ -194,11 +194,13 @@ class tty_printer : public printer {
+   int nlines;
+   int cached_v;
+   int cached_vpos;
++  int minline;
+   long curr_fore_idx;
+   long curr_back_idx;
+   bool is_underlining;
+   bool is_boldfacing;
+   bool is_continuously_underlining;
++  bool flushing;
+   PTABLE(schar) tty_colors;
+   void make_underline(int);
+   void make_bold(output_character, int);
+@@ -396,21 +398,39 @@ void tty_printer::add_char(output_character c, int w,
+       fatal("vertical position not a multiple of vertical motion"
+ 	    " quantum");
+     vpos = v / font::vert;
+-    if (vpos > nlines) {
++    if (vpos - minline > nlines) {
+       tty_glyph **old_lines = lines;
+       // If we exceed the previous page length, double the size so that
+       // we don't thrash the allocator.  See Savannah #68145.
+-      int new_nlines = nlines * 2;
+-      lines = new tty_glyph *[new_nlines];
+-      memset(lines, 0, new_nlines * sizeof(tty_glyph *));
+-      memcpy(lines, old_lines, nlines * sizeof(tty_glyph *));
+-      delete[] old_lines;
+-      nlines = new_nlines;
++      // ...however, do not allow buffered output to grow unbounded.
++      // for extremely long unpaginated documents, this buffers the
++      // entire output into memory, leading to poor time-to-first-byte.
++      if (nlines > 10000) { // arbitrary
++        // flush the oldest lines
++        int old_nlines = nlines;
++        nlines = 1000; // arbitrary
++        flushing = true;
++        end_page(0);
++        flushing = false;
++        memmove(&lines[0], &lines[nlines],
++                sizeof(tty_glyph *) * (old_nlines - nlines));
++        memset(&lines[old_nlines - nlines], 0,
++               sizeof(tty_glyph *) * nlines);
++        minline += nlines;
++        nlines = old_nlines;
++      } else {
++        int new_nlines = nlines * 2;
++        lines = new tty_glyph *[new_nlines];
++        memset(lines, 0, new_nlines * sizeof(tty_glyph *));
++        memcpy(lines, old_lines, nlines * sizeof(tty_glyph *));
++        delete[] old_lines;
++        nlines = new_nlines;
++      }
+     }
+     // Note that the first output line corresponds to groff
+     // position font::vert.
+-    if (vpos <= 0) {
+-      error("output above first line discarded");
++    if (vpos <= minline) {
++      error("output above first unflushed line discarded");
+       return;
+     }
+     cached_v = v;
+@@ -430,7 +450,7 @@ void tty_printer::add_char(output_character c, int w,
+   // at each hpos, and otherwise in order of occurrence.
+ 
+   tty_glyph **pp;
+-  for (pp = lines + (vpos - 1); *pp; pp = &(*pp)->next)
++  for (pp = lines + (vpos - 1 - minline); *pp; pp = &(*pp)->next)
+     if ((*pp)->hpos < hpos
+ 	|| ((*pp)->hpos == hpos && (*pp)->order() >= g->order()))
+       break;
+@@ -779,6 +799,8 @@ void tty_printer::begin_page(int)
+ {
+   nlines = default_lines_per_page;
+   lines = new tty_glyph *[nlines];
++  minline = 0;
++  flushing = false;
+   memset(lines, 0, nlines * sizeof(tty_glyph *));
+ }
+ 
+@@ -802,8 +824,11 @@ void tty_printer::end_page(int page_length)
+     error("vertical position at end of page not multiple of vertical"
+ 	  " motion quantum");
+   int lines_per_page = page_length / font::vert;
++  lines_per_page -= minline;
++  if (lines_per_page < 0)
++    lines_per_page = 0;
+   int last_line;
+-  for (last_line = nlines; last_line > 0; last_line--)
++  for (last_line = nlines; !flushing && last_line > 0; last_line--)
+     if (lines[last_line - 1])
+       break;
+ #if 0
+@@ -969,7 +994,9 @@ void tty_printer::end_page(int page_length)
+     for (; last_line < lines_per_page; last_line++)
+       putchar('\n');
+   }
+-  delete[] lines;
++  if (!flushing) {
++    delete[] lines;
++  }
+ }
+ 
+ font *tty_printer::make_font(const char *nm)
