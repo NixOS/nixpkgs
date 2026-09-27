@@ -135,6 +135,8 @@ A few markups for other kinds of literals are also available:
 - `` {option}`networking.useDHCP` ``
 - `` {var}`pkgs` ``
 
+The values will be formatted as inline `<code>` elements.
+
 These literal kinds are used mostly in NixOS option documentation.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
