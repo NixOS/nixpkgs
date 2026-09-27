@@ -1,0 +1,13 @@
+diff --git a/src/plat/init_posix.cc b/src/plat/init_posix.cc
+index 82ea821c..c9fe5c26 100644
+--- a/src/plat/init_posix.cc
++++ b/src/plat/init_posix.cc
+@@ -122,6 +122,8 @@ void Posix_AttachWebHelperHook()
+ 
+ #ifdef MILLENNIUM_DEBUG
+     hhx_path = __HOOK_HELPER_OUTPUT_ABSPATH__;
++#elif DISTRO_NIX
++    hhx_path = MILLENNIUM_RUNTIME_PATH;
+ #else
+     auto base_path = Posix_GetModuleBasePath();
+     if (!base_path) {
