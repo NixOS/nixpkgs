@@ -29,5 +29,6 @@ buildGoModule {
     mainProgram = "upower-notify";
     homepage = "https://github.com/omeid/upower-notify";
     maintainers = with lib.maintainers; [ kamilchm ];
+    license = lib.licenses.unfree;
   };
 }
