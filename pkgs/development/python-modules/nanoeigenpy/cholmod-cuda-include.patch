@@ -1,0 +1,26 @@
+Load CHOLMOD before unpatched Eigen 3.4's extern "C" wrapper so that the CUDA
+C++ declarations retain C++ linkage. CHOLMOD supplies its own C linkage
+guards. Eigen removed the redundant wrapper upstream:
+https://gitlab.com/libeigen/eigen/-/merge_requests/1561
+
+nanoeigenpy also uses this include order in its unmerged CMake refactor:
+https://github.com/Simple-Robotics/nanoeigenpy/pull/40
+https://github.com/Simple-Robotics/nanoeigenpy/commit/f61c95eb50937672c648822b517ba1bb99476ab8
+That commit changes fwd.hpp and relies on feature definitions from the
+refactor. This workaround applies the same include order at the CHOLMOD
+binding header, retaining compatibility with nanoeigenpy 0.5.0.
+
+diff --git a/include/nanoeigenpy/decompositions/sparse/cholmod/cholmod-base.hpp b/include/nanoeigenpy/decompositions/sparse/cholmod/cholmod-base.hpp
+--- a/include/nanoeigenpy/decompositions/sparse/cholmod/cholmod-base.hpp
++++ b/include/nanoeigenpy/decompositions/sparse/cholmod/cholmod-base.hpp
+@@ -4,6 +4,10 @@
+ 
+ #include "nanoeigenpy/fwd.hpp"
+ #include "nanoeigenpy/decompositions/sparse/sparse-solver-base.hpp"
++// Eigen 3.4 includes cholmod.h inside extern "C". Load its CUDA C++ headers
++// before entering that block.
++#include <cholmod.h>
++
+ #include <Eigen/CholmodSupport>
+ 
+ namespace nanoeigenpy {
