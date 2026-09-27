@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "STATIC="
+    "PCPATH=${libusb-compat-0_1.dev}/lib/pkgconfig/libusb.pc" # darwin specific
   ];
 
   installPhase = ''
