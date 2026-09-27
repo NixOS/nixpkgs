@@ -49,6 +49,14 @@ buildPythonPackage {
 
   format = "wheel";
 
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "cxxdev"
+  ];
+  cudaPropagateToOutput = "cxxdev";
+
   # determine supported interpreters by the ones we have x86_64-linux wheels for
   disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
@@ -125,6 +133,15 @@ buildPythonPackage {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
+
+    # Any consumer that doesn't set MKL_ROOT (e.g. torchcodec) would fail RPATH_CHANGE at install time,
+    # as those paths collapse to /lib, /lib/intel64
+    (
+      cd $out/${python.sitePackages}/torch/share/cmake/Caffe2
+      patch -p2 < ${../source/disable-cmake-mkl-rpath.patch}
+    )
+
+    mkdir -p "$cxxdev"
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/296179
@@ -153,6 +170,14 @@ buildPythonPackage {
 
   passthru.tests = callPackage ../tests {
     inherit (config) rocmSupport cudaSupport;
+  };
+
+  # Expose mostly the same attrs as the source build to stay compatible
+  passthru = {
+    inherit cudaPackages;
+    cudaSupport = stdenv.hostPlatform.isLinux;
+    rocmSupport = false;
+    cudaCapabilities = lib.optionals stdenv.hostPlatform.isLinux cudaPackages.flags.cudaCapabilities;
   };
 
   meta = {
