@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashgbx";
-  version = "4.4";
+  version = "5.1";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
     tag = finalAttrs.version;
-    hash = "sha256-C5RljQB6km5yYvFRj/s5AZfMIuMmaqsHnn9BhYWAP4o=";
+    hash = "sha256-34oMTYHVTdDdJ+Bt4XlO2PIjDQa5/rkDpA/N1RQDuaI=";
   };
 
   desktopItems = [
