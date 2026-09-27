@@ -27,10 +27,6 @@ let
             '';
           in
           extraPreBuild + (old.preBuild or "");
-
-        # postFixup wraps nordvpnd so that it can find binaries that it calls.
-        # here, instead, use systemd to update the path to those binaries.
-        postFixup = "";
       });
     in
     pkgs.symlinkJoin {
