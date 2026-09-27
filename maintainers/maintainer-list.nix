@@ -32342,6 +32342,12 @@
     keys = [ { fingerprint = "D9AA B78D 42E1 4B5C 08C0  C2BE 9012 0221 65D9 7825"; } ];
     matrix = "@yvnth:matrix.org";
   };
+  yunor743 = {
+    email = "hugo@perinazzo.com";
+    github = "Yunor743";
+    githubId = 30175713;
+    name = "Hugo Perinazzo";
+  };
   yzx9 = {
     email = "yuan.zx@outlook.com";
     github = "yzx9";
