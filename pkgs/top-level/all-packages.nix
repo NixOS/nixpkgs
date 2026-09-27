@@ -5986,7 +5986,7 @@ with pkgs;
       lib.getBin libiconvReal;
 
   # On non-GNU systems we need GNU Gettext for libintl.
-  libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
+  libintl = if stdenv.hostPlatform.libc != "glibc" then gettext-runtime else null;
 
   libidn2 = callPackage ../development/libraries/libidn2 { };
 
