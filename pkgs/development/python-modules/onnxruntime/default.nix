@@ -77,8 +77,8 @@ buildPythonPackage {
     ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
-  );
+  )
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ];
 
   dependencies = [
     coloredlogs
