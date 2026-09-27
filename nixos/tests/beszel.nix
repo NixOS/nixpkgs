@@ -88,6 +88,12 @@
           };
         };
 
+        specialisation."zfs".configuration = {
+          networking.hostId = "8425e349";
+          boot.supportedFilesystems = [ "zfs" ];
+          services.beszel.agent.enable = true;
+        };
+
         specialisation."gpu-skipped".configuration = {
           services.beszel.agent = {
             enable = true;
@@ -185,6 +191,12 @@
         smartmon = agentHost.succeed("cat ${gpuUnit "gpu-smartmon"}")
         assert "DeviceAllow=/dev/nvme0 r" in smartmon, smartmon
         assert "DeviceAllow=char-drm rw" in smartmon, smartmon
+
+        # zfs only gets /dev/zfs, but needs the host user namespace
+        zfs = agentHost.succeed("cat ${gpuUnit "zfs"}")
+        assert "PrivateDevices=true" in zfs, zfs
+        assert "DeviceAllow=/dev/zfs rw" in zfs, zfs
+        assert "PrivateUsers=false" in zfs, zfs
 
         # SKIP_GPU wins over an explicitly configured collector
         skipped = agentHost.succeed("cat ${gpuUnit "gpu-skipped"}")

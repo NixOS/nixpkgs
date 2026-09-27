@@ -67,7 +67,7 @@ let
       map (device: "${device} r") cfg.smartmon.deviceAllow
     )
     ++ lib.optionals (!cfg.smartmon.enable || cfg.smartmon.deviceAllow != [ ]) (
-      collectorAttrs "deviceAllow"
+      collectorAttrs "deviceAllow" ++ lib.optionals config.boot.zfs.enabled [ "/dev/zfs rw" ]
     );
 
   serviceCapabilities =
@@ -282,8 +282,9 @@ in
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable && !config.boot.zfs.enabled && !gpuNeedsDevices;
+        PrivateDevices = !cfg.smartmon.enable && !gpuNeedsDevices;
         PrivateTmp = true;
+        # zfs commands fail inside a user namespace since zfs 2.2, see syncoid.nix
         PrivateUsers =
           !cfg.smartmon.enable
           && !config.boot.zfs.enabled
