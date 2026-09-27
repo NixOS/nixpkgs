@@ -103,7 +103,7 @@ in
         };
       };
 
-      openFirewall = lib.mkEnableOption "opening TCP ports 80 and 443, and UDP port 51820 in the firewall for the Pangolin service(s)";
+      openFirewall = lib.mkEnableOption "opening TCP ports 80 and 443, and UDP ports 21820 and 51820 in the firewall for the Pangolin service(s)";
 
       baseDomain = lib.mkOption {
         type = with lib.types; nullOr str;
@@ -208,7 +208,10 @@ in
         80
         443
       ];
-      allowedUDPPorts = [ 51820 ];
+      allowedUDPPorts = [
+        21820
+        51820
+      ];
     };
 
     users = {
