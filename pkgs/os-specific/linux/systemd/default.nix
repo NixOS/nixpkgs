@@ -97,7 +97,7 @@
   withCoredump ? true,
   withCryptsetup ? true,
   withRepart ? true,
-  withDocumentation ? true,
+  withDocumentation ? null,
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
@@ -191,6 +191,11 @@ assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
+# `warn` shoved into an `assert true` to prevent the entire file from being reformatted.
+assert lib.warnIf (withDocumentation != null) ''
+  systemd: withDocumentation has been deprecated as documentation is now unconditionally installed in the `doc` output
+'' true;
+
 let
   wantCurl = withRemote || withImportd || withImds;
 
@@ -272,7 +277,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ]
-  ++ (lib.optional (!buildLibsOnly) "man");
+  ++ (lib.optionals (!buildLibsOnly) [
+    "man"
+    "doc"
+  ]);
   separateDebugInfo = true;
   __structuredAttrs = true;
 
@@ -634,9 +642,6 @@ stdenv.mkDerivation (finalAttrs: {
       # For compatibility with dependents that use sbin instead of bin.
       ln -s bin "$out/sbin"
     ''
-    + lib.optionalString (!withDocumentation) ''
-      rm -rf $out/share/doc
-    ''
     + lib.optionalString (withKmod && !buildLibsOnly) ''
       mv $out/lib/modules-load.d $out/example
     ''
@@ -646,15 +651,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  # check udev rules exposed by systemd
-  # can't use `udevCheckHook` here as that would introduce infinite recursion
   installCheckPhase = ''
     runHook preInstallCheck
 
-    ${lib.optionalString (
-      !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
-
+    if [ -e $out/share/doc ] ; then
+      echo "error: share/doc found in 'out' output (should be in 'doc')"
+      false
+    fi
+  ''
+  # check udev rules exposed by systemd
+  # can't use `udevCheckHook` here as that would introduce infinite recursion
+  + lib.optionalString (!buildLibsOnly) ''
+    $out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d
+  ''
+  + ''
     runHook postInstallCheck
   '';
 
