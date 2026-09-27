@@ -68,6 +68,8 @@ stdenvNoCC.mkDerivation rec {
     "BODY_DIMENSIONS=76x72"
     # twemoji contains some codepoints noto doesn't like
     "BYPASS_SEQUENCE_CHECK=True"
+    # stop noto flags from being added
+    "FLAGS="
   ];
 
   enableParallelBuilding = true;
