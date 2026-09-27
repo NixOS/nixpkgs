@@ -32,6 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/eefed841b05c3cd4c65a78b50ce0934d879e6acf/package/network/services/hostapd/patches/300-noscan.patch";
       sha256 = "08p5frxhpq1rp2nczkscapwwl8g9nc4fazhjpxic5bcbssc3sb00";
     })
+
+    # Security advisory 2026-1 patches for hostapd 2.11.
+    # Patches 2,3 and 5 are exclusive to wpa_supplicant and are omitted here
+    # Details: https://w1.fi/security/2026-1/
+    ./0001-AP-MLD-Fix-link-ID-validation-in-Basic-MLE-parsing.patch
+    ./0004-AP-MLD-Verify-AP-MLD-link-ID-validity-before-updatin.patch
   ];
 
   outputs = [
