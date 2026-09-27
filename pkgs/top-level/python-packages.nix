@@ -3475,6 +3475,8 @@ self: super: with self; {
 
   colorful = callPackage ../development/python-modules/colorful { };
 
+  colorize-pinyin = callPackage ../development/python-modules/colorize-pinyin { };
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorlover = callPackage ../development/python-modules/colorlover { };
