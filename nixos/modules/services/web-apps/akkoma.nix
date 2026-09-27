@@ -1167,17 +1167,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      optionals
-        (
+    assertions = [
+      {
+        assertion =
           cfg.config.":pleroma".":media_proxy".enabled
-          && cfg.config.":pleroma".":media_proxy".base_url == null
-        )
-        [
-          ''
-            `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set when the media proxy is enabled.
-          ''
-        ];
+          -> cfg.config.":pleroma".":media_proxy".base_url != null;
+        message = ''
+          `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set to a URL with a different host component (domain name) than the web endpoint when the media proxy is enabled.
+        '';
+      }
+    ];
     warnings =
       optionals (with config.security; cfg.installWrapper && (!sudo.enable) && (!sudo-rs.enable))
         [
