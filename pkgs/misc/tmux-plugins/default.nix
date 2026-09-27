@@ -10,70 +10,61 @@
 let
   rtpPath = "share/tmux-plugins";
 
-  addRtp =
-    path: rtpFilePath: attrs: derivation:
-    derivation
-    // {
-      rtp = "${derivation}/${path}/${rtpFilePath}";
-    }
-    // {
-      overrideAttrs = f: mkTmuxPlugin (attrs // (if lib.isFunction f then f attrs else f));
-    };
+  mkTmuxPlugin = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pluginName,
+        rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux",
+        namePrefix ? "tmuxplugin-",
+        src,
+        unpackPhase ? "",
+        configurePhase ? ":",
+        buildPhase ? ":",
+        addonInfo ? null,
+        preInstall ? "",
+        postInstall ? "",
+        path ? lib.getName pluginName,
+        ...
+      }:
+      {
+        pname = namePrefix + pluginName;
 
-  mkTmuxPlugin =
-    a@{
-      pluginName,
-      rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux",
-      namePrefix ? "tmuxplugin-",
-      src,
-      unpackPhase ? "",
-      configurePhase ? ":",
-      buildPhase ? ":",
-      addonInfo ? null,
-      preInstall ? "",
-      postInstall ? "",
-      path ? lib.getName pluginName,
-      ...
-    }:
-    if lib.hasAttr "dependencies" a then
-      throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
-    else
-      addRtp "${rtpPath}/${path}" rtpFilePath a (
-        stdenv.mkDerivation (
-          a
-          // {
-            pname = namePrefix + pluginName;
+        strictDeps = true;
+        __structuredAttrs = true;
 
-            strictDeps = true;
-            __structuredAttrs = true;
+        inherit
+          pluginName
+          unpackPhase
+          configurePhase
+          buildPhase
+          addonInfo
+          preInstall
+          postInstall
+          ;
 
-            passthru.updateScript = nix-update-script { };
+        installPhase = ''
+          runHook preInstall
 
-            inherit
-              pluginName
-              unpackPhase
-              configurePhase
-              buildPhase
-              addonInfo
-              preInstall
-              postInstall
-              ;
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
+          if [ -n "$addonInfo" ]; then
+            echo "$addonInfo" > $target/addon-info.json
+          fi
 
-            installPhase = ''
-              runHook preInstall
+          runHook postInstall
+        '';
 
-              target=$out/${rtpPath}/${path}
-              mkdir -p $out/${rtpPath}
-              cp -r . $target
-              if [ -n "$addonInfo" ]; then
-                echo "$addonInfo" > $target/addon-info.json
-              fi
+        passthru = {
+          updateScript = nix-update-script { };
+          # .rtp is used by things like programs.tmux.plugins
+          rtp = "${finalAttrs.finalPackage}/${rtpPath}/${path}/${rtpFilePath}";
+        };
+      };
 
-              runHook postInstall
-            '';
-          }
-        )
-      );
+  };
 
 in
 {
@@ -236,25 +227,25 @@ in
     };
   };
 
-  dracula = mkTmuxPlugin rec {
+  dracula = mkTmuxPlugin (finalAttrs: {
     pluginName = "dracula";
     version = "3.3.1";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-UFK0PJFgGIBdpjuSn3stAJ7z73FgEj0yK6F+ETRQ5f4=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
       downloadPage = "https://github.com/dracula/tmux";
       description = "Feature packed Dracula theme for tmux";
-      changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/dracula/tmux/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ethancedwards8 ];
     };
-  };
+  });
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
