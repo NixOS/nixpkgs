@@ -98,6 +98,12 @@ in
 
   cjson = prev.lua-cjson;
 
+  cosmo = prev.cosmo.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      homepage = "https://github.com/mascarenhas/cosmo";
+    };
+  });
+
   cqueues = prev.cqueues.overrideAttrs (old: {
     # Parse out a version number without the Lua version inserted
     version =
@@ -348,6 +354,7 @@ in
     '';
     meta = (old.meta or { }) // {
       broken = luaOlder "5.1" || luaAtLeast "5.3";
+      homepage = "https://github.com/justincormack/ljsyscall";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;

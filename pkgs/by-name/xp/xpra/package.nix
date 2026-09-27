@@ -294,8 +294,7 @@ effectiveBuildPythonApplication rec {
   };
 
   meta = {
-    homepage = "https://xpra.org/";
-    downloadPage = "https://xpra.org/src/";
+    homepage = "https://github.com/Xpra-org/xpra";
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = lib.platforms.linux;
