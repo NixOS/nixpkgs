@@ -168,10 +168,14 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "always";
+          RestartSec = "1s";
           PrivateNetwork = true;
           PrivateTmp = true;
           LimitNPROC = 1;
         };
+
+        # the relay exits whenever its last consumer goes, so restarts are routine
+        startLimitIntervalSec = 0;
 
         environment = {
           GST_PLUGIN_PATH = makeSearchPathOutput "lib" "lib/gstreamer-1.0" (gst ++ instance.extraPackages);
