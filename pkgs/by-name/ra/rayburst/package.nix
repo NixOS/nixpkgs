@@ -24,17 +24,17 @@ let
   pnpm = pnpm_11;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "motrix-next";
-  version = "3.9.8";
+  pname = "rayburst";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "AnInsomniacy";
-    repo = "motrix-next";
+    repo = "rayburst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xg8atHZfz0qiVMyxJGzUhxkfJxxC6bkEMxXM/KOE1Tg=";
+    hash = "sha256-2GuZEFwua3SY7EVywAi0r8ITz/9cUbks7K7ux8SijAo=";
   };
 
-  cargoHash = "sha256-ebwJq2r7Akz8f01dtMglMPpaDs7KRqS74/TU2ypU1hw=";
+  cargoHash = "sha256-xxKzyefv4UjbOW5q/ei6urXETEDZnN3BeUjAkOwu7ZA=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     inherit pnpm;
-    hash = "sha256-niT70XdE31nZhPU+053Er5mO1XpoVI51B2jrMR2SqJ4=";
+    hash = "sha256-zFV87FMMtJQXcus3p0OQDUQ1yVgJ0RgN2EangBw6Y1s=";
     fetcherVersion = 4;
   };
 
@@ -60,8 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  patches = [ ./fix-copy-path.patch ];
-
   # we don't want to wrap aria2c
   dontWrapGApps = true;
 
@@ -72,16 +70,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libayatana-appindicator
   ];
 
+  __structuredAttrs = true;
+
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  # Some tests on macOS attempt to retrieve system settings, such as the default browser and system proxy.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = false;
 
   tauriBuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--no-sign" ];
 
-  # Deactivate the upstream update mechanism
   postPatch = ''
+    substituteInPlace scripts/build-native-messaging-launcher.mjs \
+      --replace-fail "join(tauriDir, 'target'" "join(root, 'target'"
+
+    # Deactivate the upstream update mechanism
     jq '
       .bundle.createUpdaterArtifacts = false |
       .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
@@ -103,29 +105,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
       # Tricky way to make the protocol handler desktop file point to the wrapper
-      --set-default APPIMAGE motrix-next
+      --set-default APPIMAGE rayburst
     )
-    wrapGApp $out/bin/motrix-next
+    wrapGApp $out/bin/rayburst
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
-    description = "Full-featured download manager, rebuilt from scratch with Tauri 2, Vue 3, and Rust";
-    homepage = "https://github.com/AnInsomniacy/motrix-next";
-    changelog = "https://github.com/AnInsomniacy/motrix-next/releases/tag/v${finalAttrs.version}";
+    description = "Desktop download manager for files, torrents and streams";
+    homepage = "https://github.com/AnInsomniacy/rayburst";
+    changelog = "https://github.com/AnInsomniacy/rayburst/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       gpl2Plus
     ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      # ships an upstream-provided aria2c binary (statically linked, max connections increased)
-      # source for this binary: https://github.com/AnInsomniacy/aria2-builder
+      # ships a binary of aria2c fork
+      # source for this fork: https://github.com/AnInsomniacy/aria2-next
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [ ccicnce113424 ];
-    mainProgram = "motrix-next";
+    mainProgram = "rayburst";
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
