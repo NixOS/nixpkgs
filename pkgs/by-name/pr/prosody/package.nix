@@ -37,27 +37,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prosody";
-  version = "13.0.6"; # also update communityModules
+  version = "13.0.7"; # also update communityModules
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7GlvnPViw69KBLB9P7NqHO3MTmmjkv3c/FJLxn2TBQ8=";
+    hash = "sha256-9nHfPHU1xyaa/IlXnqJvwT0QBrQO9d9My3GlYBl/FRs=";
   };
-
-  # The following community modules are necessary for the nixos module
-  # prosody module to comply with XEP-0423 and provide a working
-  # default setup.
-  nixosModuleDeps = [
-    "cloud_notify"
-  ];
 
   # A note to all those merging automated updates: Please also update this
   # attribute as some modules might not be compatible with a newer prosody
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "15a7749c7acb";
-    hash = "sha256-RvhPV6YMdwxxIeHhpqXPfBh6087PAPAQV8D+stpXmBs=";
+    rev = "e80e68d68faa";
+    hash = "sha256-WYMWIlWsOywQ02gg5ywrz7G1DqnLLWLQynXHcfl2us0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -93,16 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
-    ${lib.concatMapStringsSep "\n"
-      (module: ''
-        cp -r ${finalAttrs.communityModules}/mod_${module} $out/lib/prosody/modules/
-      '')
-      (
-        lib.lists.unique (
-          finalAttrs.nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules
-        )
-      )
-    }
+    ${lib.concatMapStringsSep "\n" (module: ''
+      cp -r ${finalAttrs.communityModules}/mod_${module} $out/lib/prosody/modules/
+    '') (lib.lists.unique (withCommunityModules ++ withOnlyInstalledCommunityModules))}
     make -C tools/migration install
   '';
 
