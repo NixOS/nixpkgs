@@ -15,9 +15,9 @@ let
     case "$1 $2" in
       "config var")
         case "$3" in
-          man) echo "$out/share/man";;
+          man) echo "''${man:-$out}/share/man";;
           etc) echo "$out/etc";;
-          doc) echo "$out/share/doc";;
+          doc) echo "''${doc:-$out}/share/doc";;
           share) echo "$out/share";;
           prefix) echo "$out";;
           *) echo "fake-opam does not understand arguments: $@" ; exit 1 ;;
@@ -45,7 +45,7 @@ ocamlPackages.buildDunePackage rec {
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace "\$(DUNE) install \$(DUNEROOT) --display=short" \
-      "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir $out/share/doc --mandir $out/share/man"
+      "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir ''${!outputDoc}/share/doc --mandir ''${!outputMan}/share/man"
     substituteInPlace ./src/discover.sh \
       --replace 'gs_path=$(which gs)' 'gs_path=${ghostscriptX}/bin/gs'
   '';
