@@ -1255,7 +1255,7 @@ in
 
   vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
-    version = "unstable-2020-10-05";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux-focus-events";
