@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fribidi";
   version = "1.0.17";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -45,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  mesonFlags = lib.mapAttrsToList lib.mesonBool {
+    tests = finalAttrs.finalPackage.doCheck;
+    docs = true;
+    bin = true;
+    deprecated = true;
+  };
 
   doCheck = true;
   nativeCheckInputs = [ python3 ];
