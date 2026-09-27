@@ -1,6 +1,6 @@
 Thanks for contributing to the documentation
 
-Make sure you follow the [documentation styleguide](https://github.com/NixOS/nixpkgs/blob/master/doc/styleguide.md), most notably:
+Make sure you follow the [documentation style guide](https://github.com/NixOS/nixpkgs/blob/master/doc/styleguide.md), most notably:
 
 - Show, don't tell: lead with a minimal working example; explanation follows the code.
 - No meta-commentary: don't write "This section explains how to…", just do it.
