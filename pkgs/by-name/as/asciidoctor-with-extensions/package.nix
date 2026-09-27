@@ -3,17 +3,13 @@
   bundlerApp,
   bundlerUpdateScript,
   makeWrapper,
+  runCommandLocal,
+  asciidoctor-with-extensions,
   withJava ? true,
   jre, # Used by asciidoctor-diagram for ditaa and PlantUML
 }:
 
 let
-  path = lib.makeBinPath (lib.optional withJava jre);
-in
-bundlerApp rec {
-  pname = "asciidoctor";
-  gemdir = ./.;
-
   exes = [
     "asciidoctor"
     "asciidoctor-epub3"
@@ -22,18 +18,27 @@ bundlerApp rec {
     "asciidoctor-reducer"
     "asciidoctor-revealjs"
   ];
+in
+bundlerApp {
+  pname = "asciidoctor";
+  gemdir = ./.;
+  inherit exes;
 
   nativeBuildInputs = [ makeWrapper ];
-
-  postBuild = lib.optionalString (path != "") (
+  postBuild = lib.optionalString withJava (
     lib.concatMapStrings (exe: ''
-      wrapProgram $out/bin/${exe} \
-        --prefix PATH : ${path}
+      wrapProgram $out/bin/${exe} --set JAVA_HOME ${jre.home}
     '') exes
   );
 
   passthru = {
     updateScript = bundlerUpdateScript "asciidoctor-with-extensions";
+    tests.generate-diagram =
+      runCommandLocal "asciidoctor-diagram" { nativeBuildInputs = [ asciidoctor-with-extensions ]; }
+        ''
+          asciidoctor -r asciidoctor-diagram --destination-dir "$out" ${./test.adoc}
+          [ -f "$out/ditaa.png" ]
+        '';
   };
 
   meta = {
