@@ -3,19 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   python-dateutil,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ghp-import";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nFNcTGEZPC34hxIiVn1/1+UBTYNfl9x7dDkGniQT00M=";
   };
 
-  propagatedBuildInputs = [ python-dateutil ];
+  build-system = [ setuptools ];
+
+  dependencies = [ python-dateutil ];
 
   # Does not include any unit tests
   doCheck = false;
@@ -29,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
   };
-}
+})
