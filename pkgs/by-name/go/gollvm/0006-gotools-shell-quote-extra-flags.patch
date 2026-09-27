@@ -1,0 +1,36 @@
+From b70ae8f7e1cf7b8e31ab948cf9014b7d4a45c0d1 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 21:08:00 -0500
+Subject: [PATCH 6/10] gotools: shell-quote extra compiler flags
+
+The gotools build emits a small `run-gccgo` helper script and appends
+`GOLLVM_EXTRA_GOCFLAGS` to that script. In CMake, those extra flags are
+stored as a list, so writing the list directly into the shell script
+produces semicolon-separated entries.
+
+That breaks on Nix, where the extra driver flags are critical for
+finding the GCC toolchain, startup objects and libc when `go test`
+links temporary binaries. Emit the flags one by one instead so the
+generated script is valid shell.
+---
+ gotools/CMakeLists.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/gotools/CMakeLists.txt b/gotools/CMakeLists.txt
+--- a/gotools/CMakeLists.txt
++++ b/gotools/CMakeLists.txt
+@@ -118,7 +118,10 @@ file(REMOVE ${rungoctmp})
+ file(WRITE ${rungoctmp} "#!/bin/sh\n")
+ file(APPEND ${rungoctmp} "exec ${gocompiler} \"$@\"")
+ file(APPEND ${rungoctmp} " -I ${libgo_binroot}")
+ file(APPEND ${rungoctmp} " -L ${libgo_binroot}")
+-file(APPEND ${rungoctmp} " ${gotools_extra_gocflags}\n")
++foreach(gocflag IN LISTS gotools_extra_gocflags)
++  file(APPEND ${rungoctmp} " \"${gocflag}\"")
++endforeach()
++file(APPEND ${rungoctmp} "\n")
+ 
+ # Copy with correct perms.
+ file(COPY ${rungoctmp}
+-- 
+2.50.1
