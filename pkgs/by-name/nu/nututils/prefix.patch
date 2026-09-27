@@ -1,0 +1,10 @@
+diff --git a/config.mak b/config.mak
+index 7d88c34..65aa7b1 100644
+--- a/config.mak
++++ b/config.mak
+@@ -1,5 +1,3 @@
+-PREFIX = /usr/local
+-prefix = $(DESTDIR)$(PREFIX)
+ 
+ #CFLAGS += -DDEBUG
+ 
