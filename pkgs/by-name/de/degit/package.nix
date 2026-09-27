@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "degit";
-  version = "3.9.0";
+  version = "3.10.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Rich-Harris";
     repo = "degit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IbFBAWD7Ci10BkZx5PcPOmg4Ur7Mm4YaRnqKvWILDlY=";
+    hash = "sha256-Oilw6PWxWTBTcTFeMAfLUsixMmZtJ6S3cjR/if0uCtc=";
   };
 
   nativeBuildInputs = [
