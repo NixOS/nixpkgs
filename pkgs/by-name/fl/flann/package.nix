@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   cmake,
   fetchFromGitHub,
   fetchpatch,
@@ -59,9 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enablePython python3 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     homepage = "https://github.com/flann-lib/flann";
     license = lib.licenses.bsd3;
+    pkgConfigModules = [ "flann" ];
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
     maintainers = with lib.maintainers; [ tmarkus ];
     platforms = with lib.platforms; linux ++ darwin;
