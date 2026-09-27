@@ -37,20 +37,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.21";
+  version = "1.2.26";
 
   src = fetchFromGitHub {
     owner = "strawberrymusicplayer";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-FI+lyVx9x82o2HZ9YysIlPsSAl94YUD8nrHP0HsmO2E=";
+    hash = "sha256-yBpKKKsFWN5MZvNm9q1Qp4p7vGyZFJ5Zhzgj0lqpeZA=";
   };
-
-  patches = [
-    # Link tests against missing gstreamer app
-    # https://github.com/strawberrymusicplayer/strawberry/pull/2252
-    ./strawberry-tests-link-gst-app.patch
-  ];
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
   postPatch = ''
