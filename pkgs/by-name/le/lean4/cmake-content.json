@@ -1,0 +1,14 @@
+{
+  "cadical": {
+    "owner": "arminbiere",
+    "repo": "cadical",
+    "tag": "rel-2.1.2",
+    "hash": "sha256-fhvQd/f8eaw7OA2/XoOTVOnQxSSxUvugu6VWo2nmpQ0="
+  },
+  "mimalloc": {
+    "owner": "microsoft",
+    "repo": "mimalloc",
+    "tag": "v2.2.3",
+    "hash": "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74="
+  }
+}
