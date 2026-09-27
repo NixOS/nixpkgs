@@ -57,6 +57,17 @@ in
     hostKeys = mkOption {
       type = types.listOf (types.either types.str types.path);
       default = [ ];
+      # Copy paths to the nix store to mimic what closureInfo would be doing when nixos-rebuild build-vm-with-bootloader is used.
+      # Otherwise the store entries no longer match when building the initrd there, as closreInfo copies paths with no derivations available *again* to the nix store.
+      apply = map (
+        path:
+        if isPath path then
+          (pkgs.runCommand (baseNameOf path) { } ''
+            cp ${path} $out
+          '')
+        else
+          path
+      );
       example = [
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
