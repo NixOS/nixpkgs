@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   setuptools,
   setuptools-scm,
   # Optional plugin dependencies, matching upstream's pyproject.toml extras.
@@ -44,7 +45,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "buildstream_plugins_community" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+
+    tests.pytest = nixosTests.buildstream-plugins-community;
+  };
 
   meta = {
     changelog = "https://gitlab.com/BuildStream/buildstream-plugins-community/-/blob/${finalAttrs.src.tag}/NEWS";
