@@ -1,0 +1,121 @@
+diff '--color=auto' -ruN a/build/moz.configure/rust.configure b/build/moz.configure/rust.configure
+--- a/build/moz.configure/rust.configure	2025-08-11 19:07:15.000000000 +0200
++++ b/build/moz.configure/rust.configure	2025-11-17 14:26:13.259267375 +0100
+@@ -280,6 +280,7 @@
+     return data
+ 
+ 
++@imports(_from="textwrap", _import="dedent")
+ def detect_rustc_target(
+     host_or_target, compiler_info, arm_target, rust_supported_targets
+ ):
+@@ -414,7 +415,19 @@
+     rustc_target = find_candidate(candidates)
+ 
+     if rustc_target is None:
+-        die("Don't know how to translate {} for rustc".format(host_or_target.alias))
++        log.warning(
++            dedent(
++                """
++        Don't know how to translate {} for rustc.
++
++        If the triplet is not understood by LLVM, try passing --rust-host-triplet and --rust-target-triplet.
++
++        If you passed those, and the later triplet check doesn't fail, then ignore this warning.
++                """.format(host_or_target.alias)
++            )
++        )
++        # Functionality of this triplet is asserted later, and user-specified triplet may override this
++        rustc_target = host_or_target.alias
+ 
+     return rustc_target
+ 
+@@ -481,7 +494,7 @@
+     arm_target,
+     when=rust_compiler,
+ )
+-@checking("for rust host triplet")
++@checking("for rust host triplet (default)")
+ @imports(_from="textwrap", _import="dedent")
+ def rust_host_triple(
+     rustc, host, compiler_info, rustc_host, rust_supported_targets, arm_target
+@@ -489,48 +502,52 @@
+     rustc_target = detect_rustc_target(
+         host, compiler_info, arm_target, rust_supported_targets
+     )
+-    if rustc_target != rustc_host:
+-        if host.alias == rustc_target:
+-            configure_host = host.alias
+-        else:
+-            configure_host = "{}/{}".format(host.alias, rustc_target)
+-        die(
+-            dedent(
+-                """\
+-        The rust compiler host ({rustc}) is not suitable for the configure host ({configure}).
+-
+-        You can solve this by:
+-        * Set your configure host to match the rust compiler host by editing your
+-        mozconfig and adding "ac_add_options --host={rustc}".
+-        * Or, install the rust toolchain for {configure}, if supported, by running
+-        "rustup default stable-{rustc_target}"
+-        """.format(
+-                    rustc=rustc_host,
+-                    configure=configure_host,
+-                    rustc_target=rustc_target,
+-                )
+-            )
+-        )
+-    assert_rust_compile(host, rustc_target, rustc)
+     return rustc_target
+ 
+ 
+ @depends(
+     rustc, target, c_compiler, rust_supported_targets, arm_target, when=rust_compiler
+ )
+-@checking("for rust target triplet")
++@checking("for rust target triplet (default)")
+ def rust_target_triple(
+     rustc, target, compiler_info, rust_supported_targets, arm_target
+ ):
+     rustc_target = detect_rustc_target(
+         target, compiler_info, arm_target, rust_supported_targets
+     )
+-    assert_rust_compile(target, rustc_target, rustc)
+     return rustc_target
+ 
+ 
+-set_config("RUST_TARGET", rust_target_triple)
+-set_config("RUST_HOST_TARGET", rust_host_triple)
++option(
++    "--rust-target-triplet",
++    nargs=1,
++    default=rust_target_triple,
++    help="Rust target triplet"
++)
++
++option(
++    "--rust-host-triplet",
++    nargs=1,
++    default=rust_host_triple,
++    help="Rust host triplet"
++)
++
++
++@depends(target, rustc, "--rust-target-triplet")
++@checking("for rust target triplet")
++def checked_rust_target_triplet(target, rustc, triplet):
++    assert_rust_compile(target, triplet[0], rustc)
++    return triplet[0]
++
++@depends(target, rustc, "--rust-host-triplet")
++@checking("for rust host triplet")
++def checked_rust_host_triplet(target, rustc, triplet):
++    assert_rust_compile(target, triplet[0], rustc)
++    return triplet[0]
++
++
++set_config("RUST_TARGET", checked_rust_target_triplet)
++set_config("RUST_HOST_TARGET", checked_rust_host_triplet)
+ 
+ 
+ # This is used for putting source info into symbol files.
