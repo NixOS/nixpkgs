@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build dependencies
-  poetry-core,
+  hatchling,
 
   # dependencies
   appdirs,
@@ -19,19 +19,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cleanit";
-  version = "0.4.9";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "cleanit";
-    tag = version;
-    hash = "sha256-5fzBcOr6PGp847S7qLsXgYKxPcGW4mM5B5QNBSvH7BM=";
+    tag = finalAttrs.version;
+    hash = "sha256-3jhiEUgugCYTykr0nwyyM+S9puqIZYuaPZ9H9BF3vFg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     appdirs
@@ -43,8 +43,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonRelaxDeps = [ "chardet" ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cleanit" ];
@@ -52,9 +50,9 @@ buildPythonPackage rec {
   meta = {
     description = "Command line tool that helps you to keep your subtitles clean";
     homepage = "https://github.com/ratoaq2/cleanit";
-    changelog = "https://github.com/ratoaq2/cleanit/releases/tag/${src.tag}";
+    changelog = "https://github.com/ratoaq2/cleanit/blob/${finalAttrs.src.rev}/HISTORY.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "cleanit";
   };
-}
+})
