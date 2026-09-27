@@ -140,8 +140,8 @@ in
     });
 
     services.geoclue2.appConfig.clightc = {
-      isAllowed = true;
-      isSystem = true;
+      allowed = true;
+      system = true;
     };
 
     systemd.services.clightd = {

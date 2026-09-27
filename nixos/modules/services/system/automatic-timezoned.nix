@@ -46,8 +46,8 @@ in
     services.geoclue2 = {
       enable = true;
       appConfig.automatic-timezoned = {
-        isAllowed = true;
-        isSystem = true;
+        allowed = true;
+        system = true;
         users = [ (toString config.ids.uids.automatic-timezoned) ];
       };
     };

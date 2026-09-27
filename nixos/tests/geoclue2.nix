@@ -15,10 +15,12 @@
 
     services.geoclue2 = {
       enable = true;
-      enableDemoAgent = true;
-      enableStatic = true;
-      staticAltitude = 123.45;
-      staticAccuracy = 1000;
+      demoAgent.enable = true;
+      settings.static-source.enable = true;
+      staticLocation = {
+        altitude = 123.45;
+        accuracy = 1000;
+      };
     };
   };
 
