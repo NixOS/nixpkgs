@@ -15784,6 +15784,8 @@ self: super: with self; {
 
   pyoxipng = callPackage ../development/python-modules/pyoxipng { };
 
+  pypac = callPackage ../development/python-modules/pypac { };
+
   pypager = callPackage ../development/python-modules/pypager { };
 
   pypalazzetti = callPackage ../development/python-modules/pypalazzetti { };
