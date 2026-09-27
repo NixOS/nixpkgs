@@ -932,6 +932,7 @@
   ./services/misc/jellyfin.nix
   ./services/misc/kiwix-serve.nix
   ./services/misc/klipper.nix
+  ./services/misc/korrosync.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
   ./services/misc/lifecycled.nix
