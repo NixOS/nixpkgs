@@ -306,6 +306,9 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about our install method
     ./patches/nixos-was-never-supported.patch
 
+    # Fix portainer hang due to missing fixture autouse
+    ./patches/portainer-fixture-autouse.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
