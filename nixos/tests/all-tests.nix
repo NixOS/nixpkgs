@@ -1958,6 +1958,7 @@ in
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
+  typedb = runTest ./typedb.nix;
   typesense = runTest ./typesense.nix;
   tzpfms = runTest ./tzpfms.nix;
   tzupdate = runTest ./tzupdate.nix;
