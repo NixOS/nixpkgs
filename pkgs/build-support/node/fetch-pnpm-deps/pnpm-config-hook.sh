@@ -122,3 +122,22 @@ pnpmConfigHook() {
 if [ -z "${dontPnpmConfigure-}" ]; then
   postConfigureHooks+=(pnpmConfigHook)
 fi
+
+# This does not replace deletions of .modules.yaml made before a package's
+# own `pnpm prune`: pnpm reads that file to decide how to prune.
+pnpmStripInstallState() {
+    local output
+    for output in $(getAllOutputNames); do
+        [ -e "${!output}" ] || continue
+        # Delete impure files. Contains references to build dir and a timestamp.
+        find "${!output}" \
+            \( -name .modules.yaml -o -name .pnpm-workspace-state-v1.json \) \
+            -delete
+    done
+}
+
+if [ -z "${dontPnpmConfigure-}" ] && [ -z "${dontPnpmStripInstallState-}" ]; then
+  postFixupHooks+=(pnpmStripInstallState)
+  # pnpm might be called during installCheckPhase. Cleanup here afterwards as well
+  postInstallCheckHooks+=(pnpmStripInstallState)
+fi
