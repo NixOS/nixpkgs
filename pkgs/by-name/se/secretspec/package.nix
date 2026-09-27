@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  fetchFromGitHub,
   cacert,
   gitMinimal,
   jq,
@@ -12,33 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-U7cSQbkOsmTfJynb1YizyZI2STpX7fz9N8JmJDHNr9w=";
+    hash = "sha256-VCvo+O3IHVUeZG6cxBmWy8/CEDZOwVr8IVcWxroUd00=";
   };
 
-  cargoHash = "sha256-rPtPWBq7MK/e9J4IHRpXlFtSwFom14QIgWXBEwJc/bI=";
+  cargoHash = "sha256-cA7HmOxCrfPiBKI8xxxpRBvGLUgyl4Ts1uhoCt0bBuk=";
 
-  # The tests read fixtures from the repository that are not part of the
-  # published crate.
   postPatch = ''
-    cp -r --no-preserve=mode ${
-      fetchFromGitHub {
-        owner = "cachix";
-        repo = "secretspec";
-        tag = "v${finalAttrs.version}";
-        sparseCheckout = [
-          "conformance/ipc/cases"
-          "docs/public/schema"
-          "tests/fixtures"
-        ];
-        hash = "sha256-nSX5ctVUuTIqgunQ8RRCJi26bS19ohj5HNedXc8rfE0=";
-      }
-    }/{conformance,docs,tests} ..
-    chmod +x ../tests/fixtures/bw-shim.sh
-    patchShebangs ../tests/fixtures/bw-shim.sh
+    patchShebangs tests/fixtures/bw-shim.sh
   '';
 
   nativeCheckInputs = [
@@ -52,15 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export NO_COLOR=1
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
-
-  checkFlags = [
-    # These walk every ancestor of the temporary directory and require root or
-    # user ownership; the sandbox root is owned by the overflow uid.
-    "--skip=provider::external::tests::a_sticky_world_writable_ancestor_is_accepted"
-    "--skip=provider::external::tests::a_symlinked_component_is_validated_through_to_its_target"
-    "--skip=provider::external::tests::a_writable_ancestor_above_a_tight_parent_is_rejected"
-    "--skip=provider::external::tests::platform_policy_accepts_owner_only_files_and_rejects_writable_registration"
-  ];
 
   # A test binds to localhost, which requires an explicit Darwin sandbox exception.
   __darwinAllowLocalNetworking = true;
