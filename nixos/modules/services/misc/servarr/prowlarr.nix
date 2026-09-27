@@ -36,46 +36,56 @@ in
       settings = servarr.mkServarrSettingsOptions "prowlarr" 9696;
 
       environmentFiles = servarr.mkServarrEnvironmentFiles "prowlarr";
+
+      database.createLocally = servarr.mkServarrPostgresqlOption "Prowlarr";
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd = {
-      services.prowlarr = {
-        description = "Prowlarr";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
-          HOME = "/var/empty";
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      systemd = {
+        services.prowlarr = {
+          description = "Prowlarr";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
+            HOME = "/var/empty";
+          };
+
+          serviceConfig = {
+            Type = "simple";
+            DynamicUser = true;
+            StateDirectory = "prowlarr";
+            EnvironmentFile = cfg.environmentFiles;
+            ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
+            Restart = "on-failure";
+          };
+          unitConfig.RequiresMountsFor = [ cfg.dataDir ];
         };
 
-        serviceConfig = {
-          Type = "simple";
-          DynamicUser = true;
-          StateDirectory = "prowlarr";
-          EnvironmentFile = cfg.environmentFiles;
-          ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
-          Restart = "on-failure";
+        tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {
+          user = "root";
+          group = "root";
+          mode = "0700";
         };
-        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+
+        mounts = lib.optional isCustomDataDir {
+          what = cfg.dataDir;
+          where = "/var/lib/private/prowlarr";
+          options = "bind";
+          wantedBy = [ "local-fs.target" ];
+        };
       };
 
-      tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {
-        user = "root";
-        group = "root";
-        mode = "0700";
+      networking.firewall = lib.mkIf cfg.openFirewall {
+        allowedTCPPorts = [ cfg.settings.server.port ];
       };
-
-      mounts = lib.optional isCustomDataDir {
-        what = cfg.dataDir;
-        where = "/var/lib/private/prowlarr";
-        options = "bind";
-        wantedBy = [ "local-fs.target" ];
-      };
-    };
-
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.server.port ];
-    };
-  };
+    })
+    (servarr.mkServarrPostgresqlConfig {
+      inherit cfg;
+      name = "prowlarr";
+      postgresqlPort = config.services.postgresql.settings.port;
+      user = "prowlarr";
+    })
+  ];
 }
