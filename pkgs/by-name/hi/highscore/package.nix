@@ -6,10 +6,7 @@
   librsvg,
   glycin-loaders,
   highscore-unwrapped,
-  highscore-blastem,
   highscore-bsnes,
-  highscore-desmume,
-  highscore-gearsystem,
   highscore-mednafen,
   highscore-mgba,
   highscore-mupen64plus,
@@ -17,13 +14,11 @@
   highscore-prosystem,
   highscore-sameboy,
   highscore-stella,
+  highscore-melonds,
 
   # Allow users to override
   cores ? builtins.filter (p: p.meta.available) [
-    highscore-blastem
     highscore-bsnes
-    highscore-desmume
-    highscore-gearsystem
     highscore-mednafen
     highscore-mgba
     highscore-mupen64plus
@@ -31,6 +26,7 @@
     highscore-prosystem
     highscore-sameboy
     highscore-stella
+    highscore-melonds
   ],
 }:
 
