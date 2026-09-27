@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   gitUpdater,
-  runtimeShell,
+  nixosTests,
 
   # buildInputs
   buildbox,
@@ -15,8 +15,6 @@
   installShellFiles,
 
   # tests
-  addBinToPathHook,
-  gitMinimal,
   versionCheckHook,
 
   # Optional features
@@ -73,46 +71,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patch
   ];
 
-  # The dummy buildbox-casd scripts spawned by tests/internals/cascache.py use
-  # an `/usr/bin/env sh` shebang, which doesn't exist in the Nix build sandbox.
-  postPatch = ''
-    substituteInPlace tests/internals/cascache.py \
-      --replace-fail '#!/usr/bin/env sh' '#!${runtimeShell}'
-  '';
-
   # /dev/fuse is not available inside the Nix build sandbox, so buildbox-casd's
-  # default FUSE-based staging strategy cannot work here. Force the hardlink/copy
-  # stager instead (this is a real, supported buildbox-casd staging mode, not a
-  # workaround: https://gitlab.com/BuildGrid/buildbox/buildbox/-/blob/main/casd/buildboxcasd_server.cpp).
-  preCheck = ''
-    export BUILDBOX_STAGER=copy-or-link
-  '';
-
+  # default FUSE-based staging strategy cannot work here, and the shebang used
+  # by tests/internals/cascache.py's dummy buildbox-casd scripts
+  # (`/usr/bin/env sh`) doesn't exist there either. The pytest suite is run as
+  # a NixOS VM test instead, where both of those are available; see
+  # `passthru.tests.pytest`.
   pythonImportsCheck = [ "buildstream" ];
 
   nativeCheckInputs = [
-    addBinToPathHook
-    buildbox
-    gitMinimal
-    python3Packages.pexpect
-    python3Packages.pyftpdlib
-    python3Packages.pytest-datafiles
-    python3Packages.pytest-env
-    python3Packages.pytest-timeout
-    python3Packages.pytest-xdist
-    python3Packages.pytestCheckHook
     versionCheckHook
-
-    # Test fixture plugin package used by test_source_mirror_plugin[pip]; upstream
-    # normally installs this via tox before running the pip-origin plugin loading test.
-    (python3Packages.buildPythonPackage {
-      pname = "sample-plugins";
-      version = "1.2.3";
-      pyproject = true;
-      build-system = [ python3Packages.setuptools ];
-      src = "${finalAttrs.src}/tests/plugins/sample-plugins";
-      dontCheck = true;
-    })
   ];
 
   postInstall = ''
@@ -123,8 +91,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "dev";
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+    };
+
+    tests.pytest = nixosTests.buildstream;
   };
 
   meta = {
