@@ -478,7 +478,14 @@ in
               ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
             ''}
             ${lib.optionalString backup.initialize ''
-              ${resticCmd} cat config > /dev/null || ${resticCmd} init
+              ${resticCmd} cat config --no-lock > /dev/null || {
+                status=$?
+                if [ "$status" -eq 10 ]; then
+                  ${resticCmd} init
+                else
+                  exit "$status"
+                fi
+              }
             ''}
             ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
               cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}

@@ -644,8 +644,8 @@ in
       s3_role_arn = null;
       s3_role_session_name = null;
 
-      max_user_api_reqs_per_minute = 20;
-      max_user_api_reqs_per_day = 2880;
+      max_user_api_reqs_per_minute = 50;
+      max_user_api_reqs_per_day = 4000;
       max_admin_api_reqs_per_minute = 60;
       max_reqs_per_ip_per_minute = 200;
       max_reqs_per_ip_per_10_seconds = 50;

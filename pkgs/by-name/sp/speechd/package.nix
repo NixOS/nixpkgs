@@ -33,6 +33,7 @@
   withPico ? true,
   picotts,
   libsOnly ? false,
+  nixosTests,
 }:
 
 let
@@ -151,6 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.speechd;
 
   meta = {
     description =

@@ -298,6 +298,14 @@ in
           lpadmin =
             args:
             let
+              toLpadminArgs =
+                # Not using toCommandLineShellGNU since it omits empty strings for short options.
+                lib.cli.toCommandLineShell (optionName: {
+                  option = "-${optionName}";
+                  sep = null;
+                  explicitBool = false;
+                });
+
               # -d, -p and -x are subcommands that must be specified at the start.
               argsDpx = lib.intersectAttrs {
                 d = true;
@@ -310,9 +318,7 @@ in
                 "x"
               ];
             in
-            "lpadmin ${lib.cli.toCommandLineShellGNU { } argsDpx} ${
-              lib.cli.toCommandLineShellGNU { } argsWoDpx
-            }";
+            "lpadmin ${toLpadminArgs argsDpx} ${toLpadminArgs argsWoDpx}";
 
         in
         ''

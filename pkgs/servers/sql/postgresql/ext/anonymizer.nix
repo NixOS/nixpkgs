@@ -12,13 +12,13 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitLab {
     owner = "dalibo";
     repo = "postgresql_anonymizer";
     tag = finalAttrs.version;
-    hash = "sha256-no457Cb6SC6ji1iUbRARP9xESgWERjy8OTtGk8hzmrU=";
+    hash = "sha256-RqDB0gLlQxJBfrMvAXIK62+3+DTWlTFpCaiQTLXt4BM=";
   };
 
   inherit postgresql;

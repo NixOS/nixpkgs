@@ -25,7 +25,6 @@ let
     packagesFor
     packageAliases
     vanillaPackages
-    rpiPackages
     ;
 in
 {
@@ -194,55 +193,10 @@ in
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
 
-        # Remove warning added on 2026-04-01
-        linux_rpi1 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 1;
-              }
-            );
-        linux_rpi2 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 2;
-              }
-            );
-        linux_rpi3 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 3;
-              }
-            );
-        linux_rpi4 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 4;
-              }
-            );
+        linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
       }
     )
   );
@@ -676,16 +630,8 @@ in
     linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
   };
 
-  rpiPackages = {
-    linux_rpi1 = packagesFor kernels.linux_rpi1;
-    linux_rpi2 = packagesFor kernels.linux_rpi2;
-    linux_rpi3 = packagesFor kernels.linux_rpi3;
-    linux_rpi4 = packagesFor kernels.linux_rpi4;
-  };
-
   packages = recurseIntoAttrs (
     vanillaPackages
-    // rpiPackages
     // {
 
       # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -717,6 +663,11 @@ in
       linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
       linux_hardened = throw "linux_hardened has been removed due to lack of maintenance";
       linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
+
+      linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
 
       linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
       linux_rt_5_10 = throw "linux_rt_5_10 has been removed due to lack of maintenance";

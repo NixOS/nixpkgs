@@ -1,3 +1,4 @@
+import sys
 from typing import Iterable
 
 import subprocess
@@ -44,6 +45,10 @@ def replace_blocks(
     """
     with open(file, "r") as f:
         lines = f.readlines()
+
+    if config.dry_run:
+        print(f"[D] --dry-run: {file} not modified", file=sys.stderr)
+        return
 
     for name, block in blocks:
         old_lines = lines

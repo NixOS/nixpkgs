@@ -162,6 +162,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       minijackson
       transcaffeine
+      felbinger
     ];
   };
 })

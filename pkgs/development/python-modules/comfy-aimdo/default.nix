@@ -6,6 +6,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  stdenv,
   comfyui,
 }:
 
@@ -21,14 +22,16 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-aimdo";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-aimdo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHK1+kwPbfhCS5WBo2qCvCWH+t6B6MKvevpcsD9JflE=";
+    hash = "sha256-f5r2UgkWU49Y/sc9MBwlrmzaY3w4wcHJ0HgcFoVe3QY=";
   };
 
   postPatch = ''
@@ -58,7 +61,9 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
-  preBuild = ''
+  # The native library is Linux/Windows only; on other platforms the Python
+  # module is still importable and ComfyUI falls back to its legacy offloader.
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     ./scripts/build-linux-aimdo.sh
   '';
 
@@ -71,7 +76,7 @@ buildPythonPackage (finalAttrs: {
     description = "AI model dynamic offloader for ComfyUI";
     homepage = "https://github.com/Comfy-Org/comfy-aimdo";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     inherit (comfyui.meta) maintainers;
   };
 })

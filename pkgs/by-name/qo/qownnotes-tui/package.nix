@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qownnotes-tui";
-  version = "0.8.0";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "qownnotes";
     repo = "qownnotes-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-62EXnkooEAzczrIBNj8G6i/SLBbjotMUtZ86rNbNe7o=";
+    hash = "sha256-Vh93ZKTXkYVdgAQB9e8b29LZvRPTM3FM60Nxkh/7/FI=";
   };
 
-  cargoHash = "sha256-c4mZD7w2KSvWeYvAt+ISbCpPOuG1VwTS8xcOht3rdLM=";
+  cargoHash = "sha256-ziHScxY1VQcL8UxbAR07BfZLx1SMRLgse4ukfL3waJ0=";
 
   strictDeps = true;
 

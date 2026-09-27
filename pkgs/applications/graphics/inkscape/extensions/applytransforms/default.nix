@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "inkscape-applytransforms";
-  version = "0-unstable-2021-05-11";
+  version = "0-unstable-2024-12-19";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Klowner";
     repo = "inkscape-applytransforms";
-    rev = "5b3ed4af0fb66e399e686fc2b649b56db84f6042";
-    hash = "sha256-XWwkuw+Um/cflRWjIeIgQUxJLrk2DLDmx7K+pMWvIlI=";
+    rev = "979f98dfe199d25ceecff68a86684b941e703e18";
+    hash = "sha256-vRhNsHx5QkJPQgeToh4GRKD7EpMwLnN8QhrAP0WWTjU=";
   };
 
   nativeCheckInputs = [

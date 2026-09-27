@@ -15,11 +15,11 @@
 
 buildDunePackage rec {
   pname = "unstrctrd";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchzip {
     url = "https://github.com/dinosaure/unstrctrd/releases/download/v${version}/unstrctrd-${version}.tbz";
-    hash = "sha256-CGcDqEr+VDTbDYkjxeYB6IFWiTkOTLJJl/Y2bHtv19g=";
+    hash = "sha256-WmjFDxgFTkOmHwcy+9aXBz688DvBBqSeevl2K3/Sv9Y=";
   };
 
   propagatedBuildInputs = [

@@ -22,9 +22,9 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "nccl4py";
-  # `nccl4py` is versioned independently of `nccl` and should be the same as the contents of
-  # `${cudaPackages.nccl.src}/bindings/nccl4py/nccl/core/_version.py`
-  version = "0.5.0";
+  # `nccl4py` is versioned independently of `nccl` and should be the same as the `nccl4py-v*` tag
+  # the sources are fetched from.
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,11 +32,19 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "NVIDIA";
     repo = "nccl";
     tag = "nccl4py-v${finalAttrs.version}";
-    hash = "sha256-f9hOqRJSC/tuRUAN6qKRaItHR62dG7mu1rtw9nJQhic=";
+    hash = "sha256-CzKSEhz/etQsEQ0m1IDJQC4Sp7vQjbk+Z/tJpcRqNZI=";
   };
   sourceRoot = "${finalAttrs.src.name}/bindings/nccl4py";
 
   postPatch = ''
+    # Upstream infers the version from the git metadata of the `nccl` repository, which is not
+    # available when building from the source tarball.
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'dynamic = ["version"]' \
+        'version = "${finalAttrs.version}"' \
+      --replace-fail '"setuptools-scm>=10.2,<11",' ""
+
     substituteInPlace nccl/bindings/_internal/nccl_linux.pyx \
       --replace-fail \
         'from cuda.pathfinder import load_nvidia_dynamic_lib' \

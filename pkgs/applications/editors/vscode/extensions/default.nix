@@ -2690,8 +2690,8 @@ let
         mktplcRef = {
           name = "vscode-todo-highlight";
           publisher = "jgclark";
-          version = "2.0.8";
-          hash = "sha256-/CctaLcG+dA2Cf69/ACeDKdRLsu/VUGbAxUbyhI0VyA=";
+          version = "2.2.5";
+          hash = "sha256-YJb0wojBdEPt/FWp+pNkAtPubVlyKdW0h2sh28/Ymmk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/wayou.vscode-todo-highlight/changelog";

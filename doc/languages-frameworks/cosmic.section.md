@@ -5,7 +5,7 @@
 COSMIC (Computer Operating System Main Interface Components) is a desktop environment developed by
 System76, primarily for the Pop!_OS Linux distribution. Applications in the COSMIC ecosystem are
 written in Rust and use libcosmic, which builds on the Iced GUI framework. This section explains
-how to properly package and integrate COSMIC applications within Nix.
+how to package and integrate COSMIC applications within Nix.
 
 ### libcosmicAppHook {#ssec-cosmic-libcosmic-app-hook}
 
@@ -17,7 +17,7 @@ and wrapping applications based on libcosmic. It handles many common requirement
 - Managing Vergen environment variables for build-time information
 - Setting up Rust linker flags for specific libraries
 
-To use the hook, simply add it to your package's `nativeBuildInputs`:
+Add the hook to your package's `nativeBuildInputs`:
 
 ```nix
 {
@@ -61,8 +61,9 @@ rustPlatform.buildRustPackage {
 }
 ```
 
-Note that `cosmic-settings` is a separate application and not a part of the libcosmic settings
-system itself. It's included by default in `libcosmicAppHook` only to provide these fallback theme
+> [!Note]
+> `cosmic-settings` is a separate application and not a part of the libcosmic settings
+> system itself. It's included by default in `libcosmicAppHook` only to provide these fallback theme
 settings.
 
 ### Icons {#ssec-cosmic-icons}

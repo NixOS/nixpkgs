@@ -191,8 +191,8 @@
   },
   {
     "pname": "NLog",
-    "version": "6.2.0",
-    "hash": "sha256-0xxH2xUXDGaWfeH+Dk1VeZfj65NSKtxTzw8Xau4NeUU="
+    "version": "6.2.1",
+    "hash": "sha256-xKUn24ZEhMugwRTl8nbaPzjCBtElQXyZr7pBknwUkWc="
   },
   {
     "pname": "QRCoder",

@@ -29,6 +29,7 @@
   libgtop,
   libgudev,
   libhandy,
+  libjxl,
   libkrb5,
   libnma,
   libpulseaudio,
@@ -148,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
+          libjxl
           librsvg
           webp-pixbuf-loader
         ];

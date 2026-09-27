@@ -1,8 +1,8 @@
 [
   {
     "pname": "BouncyCastle.Cryptography",
-    "version": "2.6.2",
-    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
+    "version": "2.7.0",
+    "hash": "sha256-8JH/zKtNA5k+Zgus4ndlmnne4JcvVNfx9L1G1oCWYkE="
   },
   {
     "pname": "Microsoft.Win32.SystemEvents",

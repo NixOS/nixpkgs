@@ -1,3 +1,4 @@
+import os.path
 import sys
 
 import json
@@ -8,7 +9,7 @@ from subprocess import CalledProcessError
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
-from jetbrains_nix_updater.ides import Ide
+from jetbrains_nix_updater.ides import Ide, by_name_path
 from jetbrains_nix_updater.update_src_maven import (
     get_maven_deps_for_ide,
     ensure_is_list,
@@ -148,10 +149,6 @@ def generate_jps_hash(config: UpdaterConfig, root_path: Path) -> str:
     )
 
 
-def maven_out_path(jb_root: Path, name: str) -> Path:
-    return jb_root / "source" / f"{name}_maven_artefacts.json"
-
-
 def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     variant = ide.name.removesuffix("-oss")
     try:
@@ -194,7 +191,7 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
                         androidHash = "{android_hash}";
                         jpsHash = "{jps_hash}";
                         restarterHash = "{restarter_hash}";
-                        mvnDeps = ../source/{variant}_maven_artefacts.json;
+                        mvnDeps = ./maven_artefacts.json;
                         repositories = [
                             {repositories_nix}
                         ];
@@ -213,7 +210,12 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
         maven_hashes = get_maven_deps_for_ide(config, ide)
-        with open(maven_out_path(config.jetbrains_root, variant), "w") as f:
-            json.dump(maven_hashes, f, indent=4)
-            f.write("\n")
+        maven_out_path = by_name_path(ide.name, config.nixpkgs_root) / "maven_artefacts.json"
+        if config.dry_run:
+            assert maven_out_path.parent.exists()
+            print(f"[D] --dry-run: {maven_out_path} not modified", file=sys.stderr)
+        else:
+            with open(maven_out_path, "w") as f:
+                json.dump(maven_hashes, f, indent=4)
+                f.write("\n")
     return True
