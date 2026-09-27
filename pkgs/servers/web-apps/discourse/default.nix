@@ -54,13 +54,13 @@
 }:
 
 let
-  version = "2026.8.0";
+  version = "2026.9.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-UUDPZVBQXG6kfW8+TFFDHsNMdH8WLxsgva4jSdZWsC8=";
+    hash = "sha256-xOZyoDA+/UPV/art5z8lNSM7RfNejeYcZAL+JzrPk7A=";
   };
 
   pnpm = pnpm_10;
@@ -180,8 +180,8 @@ let
   rubyEnv =
     let
       # these hashes are auto-updated by update.py
-      dart-x64-hash = "sha256-2rnqNeEr8PFMuFa4IhutxxXui1dCw3XQVqCV5ZwsUR8=";
-      dart-arm64-hash = "sha256-8sgc9IaeWSRnURFtMuSOqnKACkDc5WynmLIboYWwoSM=";
+      dart-x64-hash = "sha256-pNK3ekjTYP/FCInhtb5uxDBDP/yA79fnE76avxoHt9k=";
+      dart-arm64-hash = "sha256-B6OWLvW7dM6DIeO5A6WbpQ0IHJca54HZCRLyAn2XKK0=";
     in
     bundlerEnv rec {
       name = "discourse-ruby-env-${version}";
@@ -274,7 +274,7 @@ let
               unpackPhase
               nativeBuildInputs
               ;
-            hash = "sha256-OIkSavAjja1atbeyPAKFXsXoYI3nUk9c5G3RFBj53Uk=";
+            hash = "sha256-2OITwITCGoAIahIXpemWP38iFGSlrycUV319pmdD1dY=";
           };
 
           dontBuild = false;
@@ -350,7 +350,7 @@ let
       pname = "discourse-assets";
       inherit version src pnpm;
       fetcherVersion = 3;
-      hash = "sha256-fm6hboG2Bjq0HUnbwdLiC1FpoWRZvq+1bN5SupQ2P2k=";
+      hash = "sha256-oahr5SJzHfIfcB7NFxeeEYDf3Q4m/iC/JMpNjlEWgSE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -471,6 +471,8 @@ let
     dontCheckForBrokenSymlinks = true;
   };
 
+  voiceAssets = rubyEnv.gems.discourse_voice_assets;
+
   discourse = stdenv.mkDerivation {
     pname = "discourse";
     inherit version src;
@@ -520,6 +522,9 @@ let
 
       # in the imagemagick sandbox, symlinks permissions are checked (as you would hope) but this causes other problems..
       ./optimize-image-fix.patch
+
+      # Skip voice plugin asset symlink removal/recreation at runtime.
+      ./voice-plugin-assets.patch
     ];
 
     postPatch = ''
@@ -564,6 +569,14 @@ let
       ${lib.concatMapStringsSep "\n" (
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
+
+      # The voice plugin creates its asset symlink below its source tree. That
+      # works during the asset build, but the package source tree is read-only
+      # at runtime..
+      mkdir -p $out/share/discourse/plugins/voice/public/javascripts
+      ln -sf \
+        ${voiceAssets}/lib/ruby/gems/${rubyEnv.ruby.version.libDir}/gems/discourse_voice_assets-${voiceAssets.version}/vendor \
+        $out/share/discourse/plugins/voice/public/javascripts/${voiceAssets.version}
 
       runHook postInstall
     '';
