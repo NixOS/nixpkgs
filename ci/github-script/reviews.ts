@@ -13,30 +13,28 @@ const reviewUsers = [
   'manual-edit',
 ]
 
-/**
- * @typedef {InstanceType<typeof import('@actions/github/lib/utils').GitHub>} GitHub
- * @typedef {typeof import('@actions/github').context} Context
- *
- * @typedef {Awaited<ReturnType<GitHub['rest']['pulls']['listReviews']>>['data'][number]} Review
- * @typedef {Review & { user: NonNullable<Review['user']> }} ReviewWithNonNullUser
- */
+type GitHub = InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+type Context = typeof import('@actions/github').context
+type Review = Awaited<
+  ReturnType<GitHub['rest']['pulls']['listReviews']>
+>['data'][number]
+type ReviewWithNonNullUser = Review & { user: NonNullable<Review['user']> }
 
-/**
- * @param {{
- *  github: GitHub,
- *  context: Context,
- *  core: typeof import('@actions/core'),
- *  dry: boolean,
- *  reviewKey?: string,
- * }} DismissReviewsProps
- */
+interface DismissReviewsProps {
+  github: GitHub
+  context: Context
+  core: typeof import('@actions/core')
+  dry: boolean
+  reviewKey?: string
+}
+
 export async function dismissReviews({
   github,
   context,
   core,
   dry,
   reviewKey,
-}) {
+}: DismissReviewsProps) {
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.warning('dismissReviews called outside of pull_request context')
@@ -47,23 +45,29 @@ export async function dismissReviews({
     return
   }
 
-  const allReviews = await github.paginate(github.rest.pulls.listReviews, {
-    ...context.repo,
-    pull_number,
-  })
+  const allReviews: Review[] = await github.paginate(
+    github.rest.pulls.listReviews,
+    {
+      ...context.repo,
+      pull_number,
+    },
+  )
 
-  const reviews = /** @type {ReviewWithNonNullUser[]} */ (
-    allReviews.filter(
+  const reviews = allReviews
+    .filter((review): review is ReviewWithNonNullUser => !!review.user)
+    .filter(
       (review) =>
-        review.user &&
         review.state !== 'DISMISSED' &&
         review.user.login.endsWith('[bot]') &&
         reviewUsers.some((substr) => review.user?.login.includes(substr)),
     )
-  )
 
   const reviewsByUser = reviews.reduce(
     (prev, curr) => {
+      if (!curr.user) {
+        return prev
+      }
+
       if (!(curr.user.login in prev)) {
         prev[curr.user.login] = []
       }
@@ -72,7 +76,7 @@ export async function dismissReviews({
 
       return prev
     },
-    /** @type {Record<string, ReviewWithNonNullUser[]> } */ ({}),
+    {} as Record<string, ReviewWithNonNullUser[]>,
   )
 
   const commentRegex = new RegExp(
@@ -86,8 +90,8 @@ export async function dismissReviews({
   )
 
   let reviewsToMinimize = reviews
-  const /** @type {ReviewWithNonNullUser[]} */ reviewsToDismiss = []
-  const /** @type {ReviewWithNonNullUser[]} */ reviewsToResolve = []
+  const reviewsToDismiss: ReviewWithNonNullUser[] = []
+  const reviewsToResolve: ReviewWithNonNullUser[] = []
 
   if (reviewKey && reviews.every((review) => commentRegex.test(review.body))) {
     reviewsToMinimize = reviews.filter((review) =>
@@ -165,17 +169,16 @@ export async function dismissReviews({
   ])
 }
 
-/**
- * @param {{
- *  github: GitHub,
- *  context: Context,
- *  core: typeof import('@actions/core'),
- *  dry: boolean,
- *  body: string,
- *  event: keyof typeof eventToState,
- *  reviewKey: string,
- * }} PostReviewProps
- */
+interface PostReviewProps {
+  github: GitHub
+  context: Context
+  core: typeof import('@actions/core')
+  dry: boolean
+  body: string
+  event: keyof typeof eventToState
+  reviewKey: string
+}
+
 export async function postReview({
   github,
   context,
@@ -184,7 +187,7 @@ export async function postReview({
   body,
   event = 'REQUEST_CHANGES',
   reviewKey,
-}) {
+}: PostReviewProps) {
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.warning('postReview called outside of pull_request context')
@@ -210,8 +213,7 @@ export async function postReview({
       reviewUsers.some((substr) => review.user?.login.includes(substr)),
   )
 
-  /** @type {null | Review} */
-  let pendingReview
+  let pendingReview: null | Review
   const matchingReviews = reviews.filter((review) =>
     reviewKeyRegex.test(review.body),
   )
