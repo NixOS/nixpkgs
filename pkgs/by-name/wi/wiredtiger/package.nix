@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiredtiger";
-  version = "11.3.1";
+  version = "wt-18174-splice-profiled-baseline";
 
   src = fetchFromGitHub {
     repo = "wiredtiger";
     owner = "wiredtiger";
     tag = finalAttrs.version;
-    hash = "sha256-K5cZZTvZaWR6gVXF+mHNh7nHxMqi9XaEpB2qsd/pay8=";
+    hash = "sha256-FA9Gaxsvuyb2dKrQYmogQae7jGFhloMnvv4BF0krEZg=";
   };
 
   nativeBuildInputs = [
