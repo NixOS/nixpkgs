@@ -80,7 +80,7 @@ postgresqlBuildExtension (finalAttrs: {
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ anish ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
   };
