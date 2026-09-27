@@ -24,8 +24,8 @@ let
       hash = "sha256-iukdi2c3CukGvjuTojybFFAZBlAw8GEfzFPr2qJuwTA=";
     };
     "15" = {
-      version = "1.5.0-rc0";
-      hash = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
+      version = "1.6.0-rc0";
+      hash = "sha256-W4EALCgCuyzCOUiTu5aU2fz2P8rJFv+7/8m+d+dIV60=";
     };
     "14" = {
       version = "1.6.0-rc0";
