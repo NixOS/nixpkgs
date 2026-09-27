@@ -159,6 +159,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "check_add_cflags -Wparentheses-equality" "" \
       --replace "check_add_cflags -Wunreachable-code-loop-increment" "" \
       --replace "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
+
+    substituteInPlace libs.mk \
+      --replace-fail 'includedir=$''${prefix}' 'includedir=${placeholder "dev"}'
   '';
 
   outputs = [
