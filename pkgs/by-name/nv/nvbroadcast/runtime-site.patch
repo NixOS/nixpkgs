@@ -1,0 +1,80 @@
+diff --git a/src/nvbroadcast/core/dependency_installer.py b/src/nvbroadcast/core/dependency_installer.py
+--- a/src/nvbroadcast/core/dependency_installer.py
++++ b/src/nvbroadcast/core/dependency_installer.py
+@@ -39,3 +39,36 @@ from nvbroadcast.core.platform import (
++RUNTIME_SITE = Path(
++    os.environ.get(
++        "NVBROADCAST_RUNTIME_SITE",
++        Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share"))
++        / "nvbroadcast"
++        / "runtime"
++        / "@version@"
++        / f"python{sys.version_info.major}.{sys.version_info.minor}",
++    )
++)
++
++
++def _activate_runtime_site() -> Path:
++    if not RUNTIME_SITE.is_dir():
++        return RUNTIME_SITE
++    runtime_site = str(RUNTIME_SITE)
++    if runtime_site not in sys.path:
++        sys.path.insert(0, runtime_site)
++    pythonpath = os.environ.get("PYTHONPATH", "")
++    paths = [path for path in pythonpath.split(os.pathsep) if path]
++    if runtime_site not in paths:
++        os.environ["PYTHONPATH"] = os.pathsep.join([runtime_site, *paths])
++    return RUNTIME_SITE
++
++
++def _ensure_runtime_site() -> Path:
++    RUNTIME_SITE.mkdir(mode=0o700, parents=True, exist_ok=True)
++    return _activate_runtime_site()
++
++
++_activate_runtime_site()
++
++
+ CUDA_RUNTIME_PACKAGES = [
+     "cupy-cuda12x>=14.1.1,<15",
+     "onnxruntime-gpu==1.24.4",
+@@ -435,2 +468,4 @@ class DependencyInstaller(GObject.Object):
+         label_prefix = f"{prefix}: " if prefix else ""
++        runtime_site = _ensure_runtime_site()
++        venv_pip = Path("@pip@")
+         install_steps = spec.get("install_steps") or [spec["install_args"]]
+@@ -446,7 +481,15 @@ class DependencyInstaller(GObject.Object):
+             step_prefix = ""
+             if len(install_steps) > 1:
+                 step_prefix = f"Step {step_index}/{len(install_steps)}: "
+-            cmd = [sys.executable, "-m", "pip", *install_args, "--progress-bar", "off"]
++            cmd = [
++                str(venv_pip),
++                *install_args,
++                "--target",
++                str(runtime_site),
++                "--no-input",
++                "--progress-bar",
++                "off",
++            ]
+             try:
+                 proc = subprocess.Popen(
+                     cmd,
+diff --git a/tests/test_dependency_installer.py b/tests/test_dependency_installer.py
+--- a/tests/test_dependency_installer.py
++++ b/tests/test_dependency_installer.py
+@@ -205,8 +205,12 @@ class DependencyInstallerTests(unittest.TestCase):
+         self.assertTrue(success)
+         first_cmd = popen.call_args_list[0].args[0]
+         second_cmd = popen.call_args_list[1].args[0]
+-        self.assertEqual(first_cmd[:3], [dependency_installer.sys.executable, "-m", "pip"])
+-        self.assertEqual(second_cmd[:3], [dependency_installer.sys.executable, "-m", "pip"])
++        self.assertEqual(first_cmd[0], "@pip@")
++        self.assertEqual(second_cmd[0], "@pip@")
++        self.assertIn("--target", first_cmd)
++        self.assertIn(str(dependency_installer.RUNTIME_SITE), first_cmd)
++        self.assertIn("--target", second_cmd)
++        self.assertIn(str(dependency_installer.RUNTIME_SITE), second_cmd)
+         self.assertIn("--no-deps", first_cmd)
+         self.assertIn("faster-whisper", first_cmd)
+         self.assertNotIn("ctranslate2", first_cmd)
