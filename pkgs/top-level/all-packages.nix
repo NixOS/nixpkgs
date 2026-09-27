@@ -9007,6 +9007,15 @@ with pkgs;
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
+  inherit
+    ({
+      quicklook-video_2 = callPackage ../by-name/qu/quicklook-video/2.nix { };
+      quicklook-video_3 = callPackage ../by-name/qu/quicklook-video/3.nix { };
+    })
+    quicklook-video_2
+    quicklook-video_3
+    ;
+
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
