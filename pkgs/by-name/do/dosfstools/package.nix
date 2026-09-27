@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dosfstools";
     repo = "dosfstools";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 
   patches = [
