@@ -1244,6 +1244,11 @@
     name = "Emi";
     matrix = "@emi:the-apothecary.club";
   };
+  alden = {
+    github = "alden";
+    githubId = 84120;
+    name = "Alden";
+  };
   aldenparker = {
     github = "aldenparker";
     githubId = 32986873;
