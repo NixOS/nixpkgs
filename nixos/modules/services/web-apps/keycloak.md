@@ -28,9 +28,13 @@ Keycloak can be used with either PostgreSQL, MariaDB or
 MySQL. Which one is used can be
 configured in [](#opt-services.keycloak.database.type). The selected
 database will automatically be enabled and a database and role
-created unless [](#opt-services.keycloak.database.host) is changed
-from its default of `localhost` or
-[](#opt-services.keycloak.database.createLocally) is set to `false`.
+created when [](#opt-services.keycloak.database.createLocally) is
+`true` (the default).
+
+For PostgreSQL, locally created databases use Unix socket
+authentication (peer auth), so no password is required. For
+MySQL/MariaDB, local database creation additionally requires
+[](#opt-services.keycloak.database.host) to be `localhost`.
 
 External database access can also be configured by setting
 [](#opt-services.keycloak.database.host),
@@ -43,11 +47,8 @@ and allow the configured database user full access to it.
 
 [](#opt-services.keycloak.database.passwordFile)
 must be set to the path to a file containing the password used
-to log in to the database. If [](#opt-services.keycloak.database.host)
-and [](#opt-services.keycloak.database.createLocally)
-are kept at their defaults, the database role
-`keycloak` with that password is provisioned
-on the local database instance.
+to log in to the database, unless using Unix socket
+authentication (PostgreSQL only).
 
 ::: {.warning}
 The path should be provided as a string, not a Nix path, since Nix
@@ -57,19 +58,21 @@ paths are copied into the world readable Nix store.
 ## Unix socket authentication {#module-services-keycloak-unix-socket}
 
 For PostgreSQL, Keycloak can connect via Unix socket using peer
-authentication, avoiding the need for a database password.
+authentication, avoiding the need for a database password. The
+required `junixsocket` plugins are added automatically.
 
-To use Unix sockets, set [](#opt-services.keycloak.database.host)
-to the PostgreSQL socket directory (e.g., `/run/postgresql`) and
-add the required junixsocket plugins:
+When [](#opt-services.keycloak.database.createLocally) is enabled
+(the default) with PostgreSQL, Unix socket authentication is used
+automatically.
+
+To use Unix sockets with an externally managed database, set
+[](#opt-services.keycloak.database.host) to the PostgreSQL socket
+directory:
 ```nix
 {
   services.keycloak = {
+    database.createLocally = false;
     database.host = "/run/postgresql";
-    plugins = with pkgs.keycloak.plugins; [
-      junixsocket-common
-      junixsocket-native-common
-    ];
   };
 }
 ```
@@ -159,7 +162,6 @@ A basic configuration with some custom settings could look like this:
     initialAdminPassword = "e6Wcm0RrtegMEHl"; # change on first login
     sslCertificate = "/run/keys/ssl_cert";
     sslCertificateKey = "/run/keys/ssl_key";
-    database.passwordFile = "/run/keys/db_password";
   };
 }
 ```
