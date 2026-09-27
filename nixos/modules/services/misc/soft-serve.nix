@@ -64,7 +64,7 @@ in
         # Hooks must be executable, but DynamicUser mounts /var/lib/private as noexec
         ExecPaths = "${stateDir}/repos";
 
-        StateDirectory = "soft-serve";
+        StateDirectory = "soft-serve soft-serve/repos";
         WorkingDirectory = stateDir;
         ProcSubset = "pid";
         ProtectProc = "invisible";
