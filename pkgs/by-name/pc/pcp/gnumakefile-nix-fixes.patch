@@ -1,0 +1,57 @@
+From: Nix Packaging
+Subject: Fix GNUmakefile for Nix build environment
+
+This patch makes three changes to GNUmakefile for Nix compatibility:
+
+1. Remove -o $(PCP_USER) -g $(PCP_GROUP) ownership flags from install commands.
+   The Nix sandbox cannot change file ownership (requires root). The NixOS
+   module handles proper ownership at activation time.
+
+2. Change the tmpfiles.d installation path from /usr/lib/tmpfiles.d to
+   $(PCP_SHARE_DIR)/tmpfiles.d. On NixOS, /usr/lib doesn't exist and we
+   need to install to the package output directory.
+
+3. Comment out 'SUBDIRS += qa' to skip testsuite installation. The QA suite
+   has thousands of scripts that significantly slow builds due to shebang
+   patching, and tests require a running pmcd daemon anyway.
+
+These changes improve portability and would benefit other non-FHS systems.
+
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -38,7 +38,8 @@ LDIRDIRT = pcp-[0-9]*.[0-9]*.[0-9]*  pcp-*-[0-9]*.[0-9]*.[0-9]*
+
+ SUBDIRS = vendor src
+ ifneq ($(TARGET_OS),mingw)
+-SUBDIRS += qa
++# SUBDIRS += qa  # Disabled for Nix - testsuite not needed in package
++# To run tests, build from source and use: cd qa && ./check
+ endif
+ SUBDIRS += man html images build debian
+
+@@ -80,9 +81,9 @@ endif
+ 	$(INSTALL) -m 755 -d $(PCP_PMNSADM_DIR)
+ 	$(INSTALL) -m 755 -d $(PCP_PMDASADM_DIR)
+ 	$(INSTALL) -m 755 -d $(PCP_SERVICES_DIR)
+-	$(INSTALL) -m 775 -o $(PCP_USER) -g $(PCP_GROUP) -d $(PCP_TMP_DIR)
++	$(INSTALL) -m 775 -d $(PCP_TMP_DIR)
+ ifeq "$(ENABLE_SYSTEMD)" "true"
+-	# this works if PCP_RUN_DIR (and friends) are within a tmpfs that
++	# This works if PCP_RUN_DIR (and friends) are within a tmpfs that
+ 	# is mounted empty on re-boot and managed by systemd-tmpfiles(8)
+-	$(INSTALL) -m 644 tmpfiles.init.setup /usr/lib/tmpfiles.d/pcp-reboot-init.conf
++	$(INSTALL) -m 644 tmpfiles.init.setup $(PCP_SHARE_DIR)/tmpfiles.d/pcp-reboot-init.conf
+ endif
+@@ -102,8 +103,8 @@ endif
+ 	$(INSTALL) -m 755 -d $(PCP_VAR_DIR)/config
+ 	$(INSTALL) -m 755 -d $(PCP_VAR_DIR)/config/pmchart
+ 	$(INSTALL) -m 755 -d $(PCP_VAR_DIR)/config/pmieconf
+ 	$(INSTALL) -m 755 -d $(PCP_VAR_DIR)/config/pmlogconf
+-	$(INSTALL) -m 775 -o $(PCP_USER) -g $(PCP_GROUP) -d $(PCP_VAR_DIR)/config/pmda
+-	$(INSTALL) -m 775 -o $(PCP_USER) -g $(PCP_GROUP) -d $(PCP_LOG_DIR)
++	$(INSTALL) -m 775 -d $(PCP_VAR_DIR)/config/pmda
++	$(INSTALL) -m 775 -d $(PCP_LOG_DIR)
+ 	$(INSTALL) -m 755 -d $(PCP_PMDAS_DIR)
+ 	$(INSTALL) -m 755 -d $(PCP_DOC_DIR)
+ 	$(INSTALL) -m 755 -d $(PCP_DEMOS_DIR)
+
