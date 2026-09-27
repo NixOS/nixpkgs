@@ -3729,6 +3729,8 @@ self: super: with self; {
 
   courlan = callPackage ../development/python-modules/courlan { };
 
+  covdefaults = callPackage ../development/python-modules/covdefaults { };
+
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
@@ -18782,6 +18784,8 @@ self: super: with self; {
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
 
   selenium-wire-roadtx = callPackage ../development/python-modules/selenium-wire-roadtx { };
+
+  selfies = callPackage ../development/python-modules/selfies { };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 

@@ -7293,12 +7293,12 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
-      nginxModules.rtmp
       nginxModules.moreheaders
     ];
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    openssl = openssl_4_0;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
@@ -9931,15 +9931,6 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome38Extensions
-    gnome40Extensions
-    gnome41Extensions
-    gnome42Extensions
-    gnome43Extensions
-    gnome44Extensions
-    gnome45Extensions
-    gnome46Extensions
-    gnome47Extensions
     gnome48Extensions
     gnome49Extensions
     gnome50Extensions

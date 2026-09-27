@@ -32,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "wit-dylib"
   ];
 
+  useNextest = true;
+
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
