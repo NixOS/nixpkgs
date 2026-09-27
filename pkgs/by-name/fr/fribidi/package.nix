@@ -77,5 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "fribidi" ];
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
 })
