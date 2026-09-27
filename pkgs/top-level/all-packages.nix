@@ -3017,6 +3017,10 @@ with pkgs;
     nvidiaSupport = true;
   };
 
+  zellij-no-web = zellij.override {
+    zellij-unwrapped = zellij-unwrapped.override { withWebServer = false; };
+  };
+
   zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
 
   zstd = callPackage ../tools/compression/zstd {
