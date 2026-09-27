@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn-cli";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iURCubeY/a4VcMK0sNnfAvuz0O7QBi/cYtlni1UqKfE=";
+    hash = "sha256-593Ei30u+NWo87xylWi0Cs7nxsf/NY9yzvbqSHZFDd0=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +37,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     click
     dbus-fast
     packaging
-    proton-core
     proton-keyring-linux
     proton-vpn-api-core
-    proton-vpn-local-agent
+    proton-vpn-daemon
     tabulate
   ];
 

@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "5.2.5";
+  version = "5.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-OGbms0FP0UjHjqvzlFpJIZo3bPFirVcwtVgvAvA9QZA=";
+    hash = "sha256-X2oUeeFSyKw0R2pJTthESofTW4voZ8V669mliYZMsl4=";
   };
 
   postPatch = ''
@@ -112,6 +112,15 @@ buildPythonPackage rec {
     "test_ensure_generate_is_returning_expected_content"
     "test_ensure_same_configuration_file_in_case_of_duplicate"
     "test_ensure_configuration_file_is_deleted"
+  ];
+
+  disabledTestPaths = [
+    # Require the Rust extension `proton.vpn.platform`, which upstream's
+    # Python build does not produce.
+    "tests/python/binary_status"
+    "tests/python/local_agent"
+    "tests/python/test_logging.py"
+    "tests/python/test_modules_exist.py"
   ];
 
   meta = {
