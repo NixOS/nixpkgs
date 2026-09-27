@@ -18482,6 +18482,12 @@
     githubId = 56412856;
     name = "Dillon H. McMahon";
   };
+  mcdonc = {
+    email = "chrism@plope.com";
+    github = "mcdonc";
+    githubId = 125174;
+    name = "Chris McDonough";
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
