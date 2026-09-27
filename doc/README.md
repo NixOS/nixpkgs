@@ -21,7 +21,12 @@ This includes getting started guides and onboarding guides for *using* Nixpkgs a
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
-We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with `:doc` in `nix repl`.
+We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
+
+```
+nix-repl> :l <nixpkgs>
+nix-repl> :doc lib.mapAttrsToList
+```
 
 See [Document structure](#document-structure) for a structural template.
 
