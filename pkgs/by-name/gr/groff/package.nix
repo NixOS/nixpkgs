@@ -42,6 +42,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
   version = "1.24.1";
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://gnu/groff/groff-${finalAttrs.version}.tar.gz";
