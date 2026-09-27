@@ -27,10 +27,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "mcp"
   ];
 
-  dependencies = with python3Packages; [
-    markitdown
-    mcp
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      markitdown
+      mcp
+    ]
+    ++ markitdown.optional-dependencies.all;
 
   pythonImportsCheck = [
     "markitdown_mcp"
