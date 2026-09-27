@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/orhun/pkgtop";
     changelog = "https://github.com/orhun/pkgtop/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ravi-arnan ];
     mainProgram = "pkgtop";
   };
 })
