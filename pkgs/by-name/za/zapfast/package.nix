@@ -10,7 +10,6 @@
   icnsify,
   nix-update-script,
   rcodesign,
-  re-plistbuddy,
   alsa-lib,
   libGL,
   libx11,
@@ -36,7 +35,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zapfast";
-  version = "0.16.3";
+  version = "0.17.0";
 
   __structuredAttrs = true;
 
@@ -44,17 +43,10 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "zapfast";
     tag = "v${version}";
-    hash = "sha256-5tD4jw/pbofC4sZchyAHffoYHnjaHScwXY9tlQYe6QE=";
+    hash = "sha256-8ZdS8Y4YTjcOmAdDTSn2RSyf0NReYbsPIraNPV5doO4=";
   };
 
-  cargoHash = "sha256-CsODwMDeT0TQX9/+OmV1GJW0O/DNrdtpQiBfWsSNlyY=";
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/updates/macos.rs \
-      --replace-fail \
-      'Command::new("/usr/libexec/PlistBuddy")' \
-      'Command::new("${lib.getExe' re-plistbuddy "PlistBuddy"}")'
-  '';
+  cargoHash = "sha256-jXrgk4OUu0kkh8DelaHNx6nKlY8Ln9IJXGVG+vocFH8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -65,7 +57,6 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rcodesign
     icnsify
-    re-plistbuddy
   ];
 
   buildInputs =
@@ -78,8 +69,11 @@ rustPlatform.buildRustPackage rec {
 
   env.ZAPFAST_TEST_RTL_FONT = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=updates::macos::tests::helper_runs_from_a_whole_copy_of_the_bundle"
+  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--lib"
+    "--bin"
+    "zapfast"
+    # skips "--test" "macos_menu", AppKit menus test fails in build sandbox
   ];
 
   postFixup =
