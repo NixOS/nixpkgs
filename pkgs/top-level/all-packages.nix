@@ -9632,6 +9632,13 @@ with pkgs;
 
   ### GAMES
 
+  inherit (callPackage ../games/beatoraja { })
+    beatoraja
+    beatoraja-bin
+    lr2oraja
+    lr2oraja-endlessdream
+    ;
+
   inherit (callPackages ../games/fteqw { })
     fteqw
     fteqw-dedicated
