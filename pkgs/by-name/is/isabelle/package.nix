@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     isabelleComponents.rsync
     isabelleComponents.smbc
     isabelleComponents.solr
+    isabelleComponents.sqlite
   ]
   ++ lib.optionals z3Available [
     isabelleComponents.z3
@@ -164,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'contrib/smbc-0.4.1' '${isabelleComponents.smbc.settings}' \
       --replace-fail 'contrib/solr-${isabelleComponents.solr.version}' '${isabelleComponents.solr.settings}' \
       --replace-fail 'contrib/spass-3.8ds-2' '${isabelleComponents.spass.settings}' \
+      --replace-fail 'contrib/sqlite-${isabelleComponents.sqlite.version}' '${isabelleComponents.sqlite.settings}' \
       --replace-fail 'contrib/vampire-4.8' '${isabelleComponents.vampire.settings}' \
       --replace-fail 'contrib/verit-2021.06.2-rmx-3' '${isabelleComponents.verit.settings}' \
       --replace-fail 'contrib/vscode_extension-20251205' "# in vscodium settings" \
@@ -183,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
            contrib/jsvg-2.0.0 contrib/lipics-3.1.3-1 contrib/llncs-2.25 contrib/opam-2.0.7 \
            contrib/minisat-2.2.1-1 contrib/mlton-20241230-1 contrib/pdfjs-5.4.394 \
            contrib/prismjs-1.30.0 contrib/postgresql-42.7.8 contrib/rsync-3.2.7-1 \
-           contrib/smbc-0.4.1 contrib/solr-9.9.0
+           contrib/smbc-0.4.1 contrib/solr-9.9.0 contrib/sqlite-3.51.0.0
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
