@@ -1,4 +1,7 @@
 {
+  "module-services-comfyui": [
+    "index.html#module-services-comfyui"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
