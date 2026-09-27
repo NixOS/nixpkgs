@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
+  abseil-cpp,
   c-ares,
   cmake,
   crc32c,
@@ -13,33 +14,34 @@
   ninja,
   nlohmann_json,
   openssl,
+  opentelemetry-cpp,
   pkg-config,
   protobuf,
   pkgsBuildHost,
-  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v2.44.0/cmake/GoogleCloudCppFeatures.cmake#L24
+  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v3.6.0/cmake/GoogleCloudCppFeatures.cmake#L24
   apis ? [ "*" ],
   staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
-  googleapisRev = "8cd3749f4b98f2eeeef511c16431979aeb3a6502";
+  googleapisRev = "ef19b7b7a73f19f33ab86c5b3603e9590025acd7";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-w7jq21qLEiMhuI20C6iUeSskAfZCkZgDCPu5Flr8D48=";
+    hash = "sha256-U7vNS3KurR1m/+AVSK9hjHgGSNioZz3uxupWWzKtl/o=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "google-cloud-cpp";
-  version = "2.44.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vE3oGGT33cITdAd4e5Xnlx9tX5Sz+wIFQXzj5hdcGDI=";
+    hash = "sha256-9hlXZ2pSdbunLsHPA4mHYCbWKzEcMeeHkb0h1MYjiFI=";
   };
 
   patches = [
@@ -48,23 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # After 30acc3c, the configPhase fails with:
-  # Target "spanner_database_admin_client_samples" links to:
-  #   google-cloud-cpp::universe_domain
-  # but the target was not found.
-  #
-  # So, we explicitly add `universe_domain` to the list of default features
-  #
-  # Also, we add the missing `<algorithm>` header to fix
-  # "error: 'transform' is not a member of 'std'"
-  postPatch = ''
-    substituteInPlace cmake/GoogleCloudCppFeatures.cmake \
-      --replace-fail \
-        "bigtable;bigquery;iam;logging;pubsub;spanner;storage" \
-        "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain" \
-
-    sed -e '1i #include <algorithm>' -i google/cloud/testing_util/command_line_parsing.cc
-  '';
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -74,14 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     c-ares
+    gbenchmark
+  ];
+
+  propagatedBuildInputs = [
+    abseil-cpp
     crc32c
     (curl.override { inherit openssl; })
     grpc
+    gtest
     nlohmann_json
     openssl
+    opentelemetry-cpp
     protobuf
-    gbenchmark
-    gtest
   ];
 
   doInstallCheck = true;
@@ -145,6 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     # unconditionally build tests to catch linker errors as early as possible
     # this adds a good chunk of time to the build
     (lib.cmakeBool "BUILD_TESTING" true)
+
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "20")
+
     (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_EXAMPLES" false)
 
     # Explicitly set this variable to true as otherwise `universe_domain` will be filtered out
