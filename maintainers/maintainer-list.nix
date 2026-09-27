@@ -12151,6 +12151,12 @@
     githubId = 71074737;
     name = "Simon Wick";
   };
+  ilovelinux = {
+    email = "nix+nixpkgs@ilovelinux.dev";
+    github = "ilovelinux";
+    githubId = 9268789;
+    name = "Antonio Spadaro";
+  };
   ilya-epifanov = {
     email = "mail@ilya.network";
     github = "ilya-epifanov";
