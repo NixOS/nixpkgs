@@ -217,7 +217,7 @@ lib.extendMkDerivation {
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
       env = args.env or { } // {
-        inherit (go) GOOS GOARCH;
+        inherit (stdenv.hostPlatform.go) GOOS GOARCH;
 
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";

@@ -7,7 +7,6 @@
   iana-etc,
   mailcap,
   buildPackages,
-  pkgsBuildTarget,
   targetPackages,
   # for testing
   buildGo126Module,
@@ -17,11 +16,7 @@
 let
   goBootstrap = buildPackages.callPackage ./bootstrap124.nix { };
 
-  # We need a target compiler which is still runnable at build time,
-  # to handle the cross-building case where build != host == target
-  targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-
-  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+  isCross = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
@@ -37,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsBuildTarget = lib.optional isCross targetCC;
 
   depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
@@ -66,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
+    # These control the architectures we're building for in make.bash
+    inherit (stdenv.hostPlatform.go) GOOS GOARCH GOARM;
     # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
     # Go will nevertheless build a for host system that we will copy over in
     # the install phase.
@@ -92,10 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
   }
   // lib.optionalAttrs isCross {
-    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-    # to be different from CC/CXX
-    CC_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}cc";
-    CXX_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}c++";
+    # {CC,CXX}_FOR_TARGET is the compiler for the OS/arch we're building for
+    CC_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+    CXX_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   };
 
   buildPhase = ''
@@ -108,8 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     export PATH=$(pwd)/bin:$PATH
 
     ${lib.optionalString isCross ''
-      # Independent from host/target, CC should produce code for the building system.
-      # We only set it when cross-compiling.
+      # "Command line to run to compile C code for GOHOSTARCH."
       export CC=${buildPackages.stdenv.cc}/bin/cc
       # Prefer external linker for cross when CGO is supported, since
       # we haven't taught go's internal linker to pick the correct ELF
@@ -132,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/regexp/syntax/make_perl_groups.pl
   ''
   + (
+    # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same system string
     if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
       ''
         mv bin/*_*/* bin
