@@ -5,29 +5,27 @@
   stdenv,
   buildPackages,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.13.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vault-tasks";
-  inherit version;
+  version = "2.0.3";
   src = fetchFromGitHub {
     owner = "louis-thevenet";
     repo = "vault-tasks";
-    rev = "v${version}";
-    hash = "sha256-XWeY2l82n51O4/LKPOJZOXf7PCRPOUshFg832iDvmuA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EioDozhVgI6queKe0giINiaahvc91ANDgT0m8/oL9Kk=";
   };
 
-  cargoHash = "sha256-znc2oKpovsXyrUhKvBVMorv7yWM39xNgaNDiq/5I6Dg=";
+  cargoHash = "sha256-TlkuQiNjl+U7dmSHPWlsuThRnMfdLy2/4koK6wcFlT0=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   postInstall = ''
-    install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications
+    install -Dm444 desktop/vault-tasks-tui.desktop -t $out/share/applications
   ''
   + (
     let
@@ -41,13 +39,16 @@ rustPlatform.buildRustPackage {
       # vault-tasks tries to load a config file from ~/.config/ before generating completions
       export HOME="$(mktemp -d)"
 
-      installShellCompletion --cmd vault-tasks \
-        --bash <(${vault-tasks}/bin/vault-tasks generate-completions bash) \
-        --fish <(${vault-tasks}/bin/vault-tasks generate-completions fish) \
-        --zsh <(${vault-tasks}/bin/vault-tasks generate-completions zsh)
+      installShellCompletion --cmd vault-tasks-tui \
+        --bash <(${vault-tasks}/bin/vault-tasks-tui generate-completions bash) \
+        --fish <(${vault-tasks}/bin/vault-tasks-tui generate-completions fish) \
+        --zsh <(${vault-tasks}/bin/vault-tasks-tui generate-completions zsh)
     ''
   );
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -58,7 +59,7 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/louis-thevenet/vault-tasks";
     license = lib.licenses.mit;
-    mainProgram = "vault-tasks";
+    mainProgram = "vault-tasks-tui";
     maintainers = with lib.maintainers; [ louis-thevenet ];
   };
-}
+})
