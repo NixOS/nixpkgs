@@ -4,25 +4,21 @@
   ...
 }:
 let
-  # s3 creds
+  # s3 creds (Garage requires the access key id to be GK + 24 hex chars and the
+  # secret key to be 64 hex chars)
   bucket = "ncps";
   region = "us-west-1";
-  accessKey = builtins.toFile "minio-access-key" "easy-key";
-  secretKey = builtins.toFile "minio-secret-key" "easy-secret";
+  garageAccessKey = "GKaaaaaaaaaaaaaaaaaaaaaaaa";
+  garageSecretKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  garageRpcSecret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
+  accessKey = builtins.toFile "garage-access-key" garageAccessKey;
+  secretKey = builtins.toFile "garage-secret-key" garageSecretKey;
 
   # pg creds
   postgresPassword = "easypwd";
 
   # redis creds
   redisPassword = "easypwd";
-
-  initMinio = pkgs.writeShellScriptBin "init-minio.sh" ''
-    set -euo pipefail
-
-    mc alias set local "http://127.0.0.1:9000" minioadmin minioadmin
-    mc mb local/${bucket}
-    mc admin user svcacct add --access-key "$(cat ${accessKey})" --secret-key "$(cat ${secretKey})" local minioadmin
-  '';
 
   ncpsAttrs = hostname: {
     services.ncps = {
@@ -49,7 +45,10 @@ let
         storage.s3 = {
           inherit bucket region;
 
-          endpoint = "http://minio:9000";
+          endpoint = "http://garage:3900";
+
+          # Garage only supports path-style addressing.
+          forcePathStyle = true;
 
           accessKeyIdPath = accessKey;
           secretAccessKeyPath = secretKey;
@@ -108,19 +107,30 @@ in
       system.extraDependencies = [ pkgs.emptyFile ];
     };
 
-    minio = {
-      services.minio = {
-        inherit region;
+    garage =
+      { config, ... }:
+      {
+        services.garage = {
+          enable = true;
+          package = pkgs.garage_2;
+          settings = {
+            replication_factor = 1;
+            consistency_mode = "consistent";
+            rpc_bind_addr = "[::]:3901";
+            rpc_public_addr = "[::1]:3901";
+            rpc_secret = garageRpcSecret;
+            s3_api = {
+              s3_region = region;
+              api_bind_addr = "[::]:3900";
+            };
+          };
+        };
 
-        enable = true;
+        networking.firewall.allowedTCPPorts = [ 3900 ];
+        environment.systemPackages = [ config.services.garage.package ];
+        # Garage requires at least 1GiB of free disk space to run.
+        virtualisation.diskSize = 2048;
       };
-
-      networking.firewall.allowedTCPPorts = [ 9000 ];
-      environment.systemPackages = [
-        pkgs.minio-client
-        initMinio
-      ];
-    };
 
     ncps0 = lib.mkMerge [
       (ncpsAttrs "ncps0")
@@ -165,13 +175,20 @@ in
     { nodes, ... }:
     ''
       harmonia.start()
-      minio.start()
+      garage.start()
       postgres.start()
       redis.start()
 
-      minio.wait_for_unit("minio.service")
+      garage.wait_for_unit("garage.service")
+      garage.wait_for_open_port(3900)
 
-      minio.wait_until_succeeds("init-minio.sh")
+      # Bootstrap a single-node Garage cluster with a fixed access key and bucket.
+      garage_node_id = garage.succeed("garage status | tail -n1 | awk '{ print $1 }'").strip()
+      garage.succeed(f"garage layout assign -c 1G -z garage {garage_node_id}")
+      garage.succeed("garage layout apply --version 1")
+      garage.succeed("garage key import ${garageAccessKey} ${garageSecretKey} --yes")
+      garage.succeed("garage bucket create ${bucket}")
+      garage.succeed("garage bucket allow --read --write ${bucket} --key ${garageAccessKey}")
 
       postgres.wait_for_unit("postgresql.service")
       redis.wait_for_unit("redis-ncps.service")
