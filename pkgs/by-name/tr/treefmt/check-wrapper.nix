@@ -1,6 +1,7 @@
 {
   lib,
   gitMinimal,
+  gitSetupHook,
   runCommand,
   stdenvNoCC,
   wrapper,
@@ -18,6 +19,7 @@ runCommand "${lib.getName wrapper}-check"
     strictDeps = true;
     nativeBuildInputs = [
       gitMinimal
+      gitSetupHook
       wrapper
     ];
     inherit project;
@@ -35,8 +37,6 @@ runCommand "${lib.getName wrapper}-check"
 
     # Setup a git repo
     git init --initial-branch main
-    git config user.name nixbld
-    git config user.email nixbld@example.com
     git add .
     git commit -m init --quiet
 
