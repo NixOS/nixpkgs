@@ -4,6 +4,9 @@ lib.makeScope newScope (self: {
   # Helpers
   addSettings = self.callPackage ./add-settings.nix { };
 
+  # Isabelle versions
+  isabelle-bin = self.callPackage ./binary { };
+
   # Components
   bash_process = self.callPackage ./bash_process { };
   bib2xhtml = self.callPackage ./bib2xhtml { };

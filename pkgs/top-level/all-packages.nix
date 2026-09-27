@@ -10206,6 +10206,8 @@ with pkgs;
     enableUnfree = true;
   };
 
+  isabelle = isabelleComponents.isabelle-bin;
+
   lean3 = lean;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
