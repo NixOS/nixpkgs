@@ -1,4 +1,5 @@
 {
+  lib,
   buildDunePackage,
   replaceVars,
   ocaml,
@@ -20,7 +21,7 @@ buildDunePackage {
 
   patches = [
     (replaceVars ./menhir-suggest-menhirLib.patch {
-      libdir = "${menhirLib}/lib/ocaml/${ocaml.version}/site-lib/menhirLib";
+      libdir = "${lib.getDev menhirLib}/lib/ocaml/${ocaml.version}/site-lib/menhirLib";
     })
   ];
 
