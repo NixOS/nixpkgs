@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "pyxl3";
-  version = "1.4";
+  version = "1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
