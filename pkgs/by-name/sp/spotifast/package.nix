@@ -11,7 +11,6 @@
   nix-update-script,
   dbus,
   rcodesign,
-  re-plistbuddy,
   alsa-lib,
   libpulseaudio,
   libGL,
@@ -38,7 +37,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "spotifast";
-  version = "0.10.1";
+  version = "0.11.0";
 
   __structuredAttrs = true;
 
@@ -46,10 +45,10 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "spotifast";
     tag = "v${version}";
-    hash = "sha256-rLyzvv7eJSHbzJdwx0iuwk5MHXWHHneGTOkpUQwIGAg=";
+    hash = "sha256-jp8iDO0b/EoFvZWB7n3hRtRma2Vx1f9UeZpLlgXtwcY=";
   };
 
-  cargoHash = "sha256-pwid4r8fy3t4g6CsAepkvT9KbExUxml6jj8c71Pv/wc=";
+  cargoHash = "sha256-Ed4Bim++LqzZ/DY+SjF5WS0DWs3Wg0Vb3WWgxL0URn8=";
 
   # projectm-sys only searches lib, while CMake may otherwise install to lib64.
   postPatch = ''
@@ -57,12 +56,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail \
       '.define("BUILD_SHARED_LIBS", build_shared_libs)' \
       '.define("CMAKE_INSTALL_LIBDIR", "lib").define("BUILD_SHARED_LIBS", build_shared_libs)'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/updates/macos.rs \
-      --replace-fail \
-      'Command::new("/usr/libexec/PlistBuddy")' \
-      'Command::new("${lib.getExe' re-plistbuddy "PlistBuddy"}")'
   '';
 
   # The proxy test needs a valid CA bundle.
@@ -79,7 +72,6 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rcodesign
     icnsify
-    re-plistbuddy
   ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
