@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "viskores";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "viskores";
     repo = "viskores";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fD0L+offvoeYa2yuJ828VRa4GA9/PiyXmxrFAei7u2w=";
+    hash = "sha256-jssanmFezwf8INFlBWSZSyfCYXRpqndbStW804D9t+8=";
   };
 
   nativeBuildInputs = [
