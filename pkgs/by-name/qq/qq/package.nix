@@ -3,7 +3,9 @@
   libuuid,
   cups,
   dpkg,
-  fetchurl,
+  cacert,
+  curl,
+  jq,
   glib,
   libssh2,
   gtk3,
@@ -19,6 +21,7 @@
   nss,
   libxdamage,
   systemd,
+  runCommandLocal,
   stdenv,
   undmg,
   at-spi2-core,
@@ -31,12 +34,40 @@
 }:
 
 let
-  sources = import ./sources.nix { inherit fetchurl; };
+  fetchqq =
+    {
+      url,
+      hash,
+    }:
+    runCommandLocal (baseNameOf url)
+      {
+        outputHash = hash;
+        outputHashMode = "flat";
+        nativeBuildInputs = [
+          curl
+          jq
+          cacert
+        ];
+      }
+      ''
+        # https://github.com/flathub/com.qq.QQ/issues/274#issuecomment-5512982615
+        signedUrl=$(
+          curl -fsS --retry 3 -X POST "https://im.qq.com/http2rpc/gotrpc/noauth/trpc.qqntv2.urlsign.UrlSign/GetSign" \
+            -H "Content-Type: application/json" \
+            -H 'x-oidb: {"uint32_command":"0x9b8e","uint32_service_type":1}' \
+            -d "{\"url\":\"${url}\"}" | jq -er '.data.url'
+        )
+        curl -fL --retry 3 -o "$out" "$signedUrl"
+      '';
+  sources = import ./sources.nix { };
   source =
     sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   pname = "qq";
-  inherit (source) version src;
+  version = source.version;
+  src = fetchqq {
+    inherit (source) url hash;
+  };
   passthru = {
     # nixpkgs-update: no auto update
     updateScript = ./update.sh;
