@@ -1,0 +1,46 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e56846e..c207b42 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,13 +20,13 @@ endif()
+ 
+ set(LUAJIT_SOURCE_DIR ${CMAKE_SOURCE_DIR}/deps/luajit)
+ set(LUAJIT_BUILD_DIR ${CMAKE_BINARY_DIR}/luajit-build)
+-set(LUAJIT_INCLUDE_DIR ${LUAJIT_SOURCE_DIR}/src)
++set(LUAJIT_INCLUDE_DIR @luajit_include@)
+ 
+ # Determine the static lib name
+ if(IS_MACOS)
+-    set(LUAJIT_STATIC_LIB ${LUAJIT_SOURCE_DIR}/src/libluajit.a)
++    set(LUAJIT_STATIC_LIB @luajit_lib@)
+ else()
+-    set(LUAJIT_STATIC_LIB ${LUAJIT_SOURCE_DIR}/src/libluajit.a)
++    set(LUAJIT_STATIC_LIB @luajit_lib@)
+ endif()
+ 
+ # Build LuaJIT using its Makefile
+@@ -80,14 +80,13 @@ add_custom_command(
+     VERBATIM
+ )
+ 
+-add_custom_target(luajit_build DEPENDS ${LUAJIT_STATIC_LIB})
+ 
+ # Create imported target for LuaJIT
+ add_library(luajit STATIC IMPORTED)
+ set_target_properties(luajit PROPERTIES
+     IMPORTED_LOCATION ${LUAJIT_STATIC_LIB}
+ )
+-add_dependencies(luajit luajit_build)
++add_dependencies(luajit)
+ 
+ # ---------------------------------------------------------------------------
+ # Embed FFI Lua files as C string literals
+@@ -151,7 +150,7 @@ target_include_directories(valkeyluajit PRIVATE
+ )
+ 
+ # Ensure embedded FFI header is generated before compiling
+-add_dependencies(valkeyluajit ffi_lua_embed luajit_build)
++add_dependencies(valkeyluajit ffi_lua_embed)
+ 
+ # Link LuaJIT static library
+ # Platform-specific linking to ensure luaopen_ffi and all FFI symbols are exported
