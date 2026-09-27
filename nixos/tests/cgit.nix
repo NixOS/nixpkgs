@@ -4,6 +4,20 @@ let
     User-agent: *
     Disallow: /
   '';
+
+  cgitJS = pkgs.writeText "cgit.js" ''
+    /* overridden cgit javascript */
+  '';
+
+  cgitRobots = pkgs.cgit.overrideAttrs (
+    { postInstall, ... }:
+    {
+      postInstall = ''
+        ${postInstall}
+        cp ${robotsTxt} "$out/cgit/robots.txt"
+      '';
+    }
+  );
 in
 {
   name = "cgit";
@@ -13,19 +27,11 @@ in
 
   nodes = {
     server =
-      { ... }:
+      { config, ... }:
       {
         services.cgit."localhost" = {
           enable = true;
-          package = pkgs.cgit.overrideAttrs (
-            { postInstall, ... }:
-            {
-              postInstall = ''
-                ${postInstall}
-                cp ${robotsTxt} "$out/cgit/robots.txt"
-              '';
-            }
-          );
+          package = cgitRobots;
           nginx.location = "/(c)git/";
           repos = {
             some-repo = {
@@ -41,8 +47,26 @@ in
           };
           gitHttpBackend.checkExportOkFiles = false;
         };
+        services.cgit."localhost2" = {
+          enable = true;
+          package = pkgs.cgit.overrideAttrs (
+            { postInstall, ... }:
+            {
+              postInstall = ''
+                ${postInstall}
+                cp ${cgitJS} "$out/cgit/cgit.js"
+                truncate -s 0  "$out/cgit/robots.txt"
+              '';
+            }
+          );
+          nginx.virtualHost = "localhost";
+          nginx.location = "/2/";
+          scanPath = pkgs.emptyDirectory;
+          gitHttpBackend.checkExportOkFiles = false;
+        };
         services.cgit."check.localhost" = {
           enable = true;
+          package = cgitRobots;
           scanPath = "/tmp/git";
           settings = {
             strict-export = "git-daemon-export-ok";
@@ -54,9 +78,17 @@ in
           scanPath = "/tmp/git";
           settings = {
             strict-export = "git-daemon-export-ok";
+            logo = "nix-snowflake.png";
           };
           gitHttpBackend.enable = false;
         };
+
+        assertions = [
+          {
+            assertion = !config.services.nginx.virtualHosts."localhost".locations ? "= /cgit.png";
+            message = "The cgit logo at localhost was not overridden properly.";
+          }
+        ];
 
         environment.systemPackages = [ pkgs.git ];
       };
@@ -71,15 +103,20 @@ in
       server.wait_for_unit("network.target")
       server.wait_for_open_port(80)
 
+      # test assets
+      server.succeed("curl -fsS http://localhost/%28c%29git/ | grep -F '/(c)git/cgit.css'")
       server.succeed("curl -fsS http://localhost/%28c%29git/cgit.css")
-
-      server.succeed("curl -fsS http://localhost/%28c%29git/robots.txt | diff -u - ${robotsTxt}")
+      server.fail("curl -fsS http://localhost/cgit.css")
+      server.fail("curl -fsS http://localhost/cgit.js | diff -u - ${cgitJS}")
+      server.fail("curl -fsS http://localhost/%28c%29git/robots.txt")
+      server.fail("curl -fsS http://localhost/2/robots.txt")
+      server.succeed("curl -fsS http://localhost/2/cgit.js | diff -u - ${cgitJS}")
+      server.succeed("curl -fsS http://check.localhost/robots.txt | diff -u - ${robotsTxt}")
+      server.succeed("curl -sS http://no-git-http-backend.localhost/ | grep -F nix-snowflake.png")
 
       server.succeed(
           "curl -fsS http://localhost/%28c%29git/ | grep -F 'some-repo description'"
       )
-
-      server.fail("curl -fsS http://localhost/robots.txt")
 
       server.succeed("sudo -u cgit ${pkgs.writeShellScript "setup-cgit-test-repo" ''
         set -e
