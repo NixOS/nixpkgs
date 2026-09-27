@@ -105,6 +105,8 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# Don't pass entire command line via env var. Fixes: https://github.com/NixOS/nixpkgs/issues/41340
+++ [ ./gcc-collect-no-env-var.patch ]
 
 ## 2. Patches relevant on specific platforms ####################################
 
