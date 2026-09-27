@@ -1,0 +1,12 @@
+--- a/lib/Basic/Targets/OSTargets.h
++++ b/lib/Basic/Targets/OSTargets.h
+@@ -545,6 +545,9 @@ protected:
+     } else {
+         Builder.defineMacro("__gnu_linux__");
+     }
++    if (Triple.getEnvironmentName() == "mlibc") {
++      Builder.defineMacro("__mlibc__");
++    }
+     if (Opts.POSIXThreads)
+       Builder.defineMacro("_REENTRANT");
+     if (Opts.CPlusPlus)
