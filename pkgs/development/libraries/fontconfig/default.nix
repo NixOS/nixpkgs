@@ -41,12 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    expat
-  ];
-
   propagatedBuildInputs = [
     freetype
+    expat
   ];
 
   postPatch = ''
