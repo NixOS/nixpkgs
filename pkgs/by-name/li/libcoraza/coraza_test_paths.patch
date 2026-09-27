@@ -1,0 +1,22 @@
+diff --git a/internal/operators/inspect_file_test.go b/internal/operators/inspect_file_test.go
+index 82e8ab11..1051889f 100644
+--- a/internal/operators/inspect_file_test.go
++++ b/internal/operators/inspect_file_test.go
+@@ -15,7 +15,7 @@ import (
+ )
+ 
+ func TestInspectFileExitCode(t *testing.T) {
+-	existCommand := "/bin/echo"
++	existCommand := "/build/source/gotest/echo"
+ 	if runtime.GOOS == "windows" {
+ 		existCommand = "C:\\Windows\\system32\\tasklist.exe"
+ 	}
+@@ -49,7 +49,7 @@ func TestInspectFileExitCode(t *testing.T) {
+ }
+ 
+ func TestInspectFileOutput(t *testing.T) {
+-	existCommand := "/bin/echo"
++	existCommand := "/build/source/gotest/echo"
+ 	if runtime.GOOS == "windows" {
+ 		// TODO: Add support for this platform.
+ 		t.Skip("Skipping test on Windows")

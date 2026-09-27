@@ -1271,6 +1271,7 @@ in
   nginx = runTest ./nginx.nix;
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-compression = runTest ./nginx-compression.nix;
+  nginx-coraza = runTest ./nginx-coraza.nix;
   nginx-dynamic-modules = runTest ./nginx-dynamic-modules.nix;
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
