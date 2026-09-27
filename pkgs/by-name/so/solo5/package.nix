@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "0.10.1";
+  version = "0.13.0";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    hash = "sha256-UfYkyE1k5S57kRLaYk7hRE4lOCuzjzcTv4SNtlqk9DU=";
+    hash = "sha256-T6QJuiSa0FWR/3yU+OL7jS4TqAhRL7PF8kNP1mpQjxE=";
   };
 
   configurePhase = ''
