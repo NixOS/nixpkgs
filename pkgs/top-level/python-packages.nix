@@ -10931,6 +10931,10 @@ self: super: with self; {
 
   mistralai = callPackage ../development/python-modules/mistralai { };
 
+  mistralai-vibe-local-harness =
+    callPackage ../development/python-modules/mistralai-vibe-local-harness
+      { };
+
   mistune = callPackage ../development/python-modules/mistune { };
 
   mistune_2 = callPackage ../development/python-modules/mistune/2.nix { };
