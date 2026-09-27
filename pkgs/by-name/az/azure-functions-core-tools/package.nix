@@ -47,6 +47,8 @@ buildDotnetModule {
       targetPackages
       ;
   };
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
+
   nativeBuildInputs = [ go ];
 
   linkNuGetPackagesAndSources = true;
