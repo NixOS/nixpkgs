@@ -132,6 +132,7 @@
   ./hardware/video/webcam/ipu6.nix
   ./hardware/video/webcam/ipu7.nix
   ./hardware/wooting.nix
+  ./hardware/xencelabs.nix
   ./hardware/xone.nix
   ./hardware/xpad-noone.nix
   ./hardware/xpadneo.nix
