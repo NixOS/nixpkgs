@@ -56,7 +56,7 @@ Exceptions to this rule are:
   ```nix
   {
     patchedPackageJSON = final.runCommand "package.json" { } ''
-      ${jq}/bin/jq '.version = "0.4.0" |
+      ${lib.getExe jq} '.version = "0.4.0" |
         .devDependencies."@jsdoc/cli" = "^0.2.5"
         ${sonar-src}/package.json > $out
     '';

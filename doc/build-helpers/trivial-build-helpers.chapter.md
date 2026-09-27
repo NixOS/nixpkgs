@@ -15,7 +15,7 @@ Typically both the *attributes* and *script* arguments support this, simultaneou
 # Using `finalAttrs` in a build helper
 
 ```nix
-runCommand "hi" (finalAttrs: { passthru.exe = "${finalAttrs.finalPackage}/bin/hi"; }) ''
+runCommand "hi" (finalAttrs: { passthru.exe = lib.getExe' finalAttrs.finalPackage "hi"; }) ''
   mkdir -p $out/bin
   substitute ${./hi.foo} $out/bin/hi --replace-fail "@foo@" ${lib.getExe foo}
 ''
@@ -416,7 +416,7 @@ writeTextFile {
   executable = true;
   destination = "/some/subpath/my-cool-script";
   checkPhase = ''
-    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
+    ${lib.getExe pkgs.shellcheck} $out/some/subpath/my-cool-script
   '';
   meta = {
     license = pkgs.lib.licenses.cc0;
@@ -838,7 +838,7 @@ Runtime environment variables can be set with the `runtimeEnv` argument.
 ::: {.example #ex-writeShellApplication}
 # Usage of `writeShellApplication`
 
-The following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`
+The following shell application can refer to `curl` directly, rather than needing to write `${lib.getExe curl}`
 
 ```nix
 writeShellApplication {
@@ -896,7 +896,7 @@ The result is equivalent to the output of `nix-store -q --requisites`.
 For example,
 
 ```nix
-writeClosure [ (writeScriptBin "hi" "${hello}/bin/hello") ]
+writeClosure [ (writeScriptBin "hi" (lib.getExe hello)) ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
@@ -922,7 +922,7 @@ This produces the equivalent of `nix-store -q --references`.
 For example,
 
 ```nix
-writeDirectReferencesToFile (writeScriptBin "hi" "${hello}/bin/hello")
+writeDirectReferencesToFile (writeScriptBin "hi" (lib.getExe hello))
 ```
 
 produces an output path `/nix/store/<hash>-runtime-references` containing
