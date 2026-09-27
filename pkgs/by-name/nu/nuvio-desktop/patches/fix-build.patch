@@ -1,0 +1,15 @@
+diff --git a/composeApp/build.gradle.kts b/composeApp/build.gradle.kts
+index 54177f3b..4acd36f1 100644
+--- a/composeApp/build.gradle.kts
++++ b/composeApp/build.gradle.kts
+@@ -889,7 +889,8 @@ val generateWindowsPlayerRuntimeIndex = tasks.register<GenerateNativeRuntimeInde
+ }
+ 
+ abstract class GenerateNativeRuntimeIndexTask : DefaultTask() {
+-    @get:InputDirectory
++    @get:InputFiles
++    @get:PathSensitive(PathSensitivity.RELATIVE)
+     abstract val runtimeDir: DirectoryProperty
+ 
+     @get:OutputFile
+
