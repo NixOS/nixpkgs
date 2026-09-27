@@ -7,19 +7,26 @@ This directory houses the source files for the Nixpkgs manual.
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-When writing new docs use **Progressive Disclosure**
+When writing new docs use **Progressive Disclosure:**
 
-Start simple, pick up beginners.
-Use **examples** first to show how to get something done. Keep **Explanation** lean.
+- Start simple, pick up beginners.
+- Use **examples** first to show how to get something done.
+- Keep **explanation** lean.
 
-Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
+Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
-Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
+Documentation about Nixpkgs belongs here.
+This includes getting started guides and onboarding guides for *using* Nixpkgs and the language frameworks it ships.
 
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
-We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with `:doc` in `nix repl`.
+We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
+
+```
+nix-repl> :l <nixpkgs>
+nix-repl> :doc lib.mapAttrsToList
+```
 
 See [Document structure](#document-structure) for a structural template.
 
@@ -42,9 +49,7 @@ If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.
 
 ### Development environment
 
-To reduce repetition, consider using tools from the provided development environment:
-
-Load it from the Nixpkgs documentation directory with
+To reduce repetition, consider using tools from the documentation development environment:
 
 ```ShellSession
 $ cd /path/to/nixpkgs/doc
@@ -217,7 +222,7 @@ When needed, each convention explains why it exists, so you can make a decision 
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
-**For prose style, see the [documentation styleguide](./styleguide.md).**
+**For prose style, see the [documentation style guide](./styleguide.md).**
 
 ### Document structure
 
@@ -287,7 +292,7 @@ When changing existing content, update formatting if possible, but avoid excessi
 
 ### Examples first
 
-Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
+Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
 
 Use this structure for each documented item:
 

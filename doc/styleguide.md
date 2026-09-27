@@ -1,4 +1,4 @@
-# Styleguide
+# Style guide
 
 Use this page as a reference and style guide for our internal and external documentation.
 
