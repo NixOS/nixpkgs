@@ -203,6 +203,12 @@
     github = "1nv0k32";
     githubId = 30079271;
   };
+  _1sixth = {
+    email = "1sixth@azc.moe";
+    github = "1sixth";
+    githubId = 67363572;
+    name = "1sixth";
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
