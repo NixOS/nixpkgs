@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/fribidi/fribidi";
+    changelog = "https://github.com/fribidi/fribidi/releases/tag/v${finalAttrs.version}";
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     mainProgram = "fribidi";
     license = lib.licenses.lgpl21;
