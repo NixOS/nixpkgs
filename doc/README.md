@@ -179,11 +179,11 @@ Text for the example.
 For defining a group of terms:
 
 ```markdown
-pear
-:   green or yellow bulbous fruit
+Pear
+:   Green or yellow bulbous fruit
 
-watermelon
-:   green fruit with red flesh
+Watermelon
+:   Green fruit with red flesh
 ```
 
 ## Commit conventions
