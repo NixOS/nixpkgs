@@ -5,6 +5,7 @@
   fetchFromGitLab,
   runCommand,
   writeText,
+  versionCheckHook,
   # docs deps
   libxslt,
   docbook_xml_dtd_412,
@@ -332,6 +333,10 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = lib.concatStringsSep "\n" (
     map (resholve.phraseSolution "xdg-utils-resholved") solutions
   );
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/xdg-terminal";
 
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
