@@ -42,6 +42,31 @@ Here, `passwordFile` is the path to a file containing just the password in
 plaintext. Make sure to set permissions to make this file unreadable to any
 user besides root.
 
+To avoid using plaintext passwords you can enable hashed passwords:
+(If your `stateVersion ≥ 26.11` this is enabled by default)
+```nix
+{
+  services.anki-sync-server = {
+    hashedPasswords = true;
+    users = [
+      {
+        username = "user";
+        password = "$pbkdf2-sha256$i=600000,l=32$9anYFhbNoLGCS6wz8yiNHg$4GS6mcHmjWq1cNRah7zl1EgT8TS7fk9vutL5cr9WHZc";
+      }
+    ];
+  };
+}
+```
+
+::: {.note}
+This will interpret all password options for this module as hashed passwords.
+As of writing only pbkdf2-sha256 is supported in anki for hashed passwords.
+:::
+
+::: {.tip}
+A valid pbkdf2-sha256 hash can be generated using the `pbkdf2-password-hash` package.
+:::
+
 By default, synced data are stored in */var/lib/anki-sync-server/*ankiuser**.
 You can change the directory by using `services.anki-sync-server.baseDirectory`
 
