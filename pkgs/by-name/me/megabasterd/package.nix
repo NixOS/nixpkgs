@@ -5,17 +5,14 @@
   makeWrapper,
   maven,
 }:
-let
-  version = "8.60";
-in
-maven.buildMavenPackage {
+maven.buildMavenPackage (finalAttrs: {
   pname = "megabasterd";
-  inherit version;
+  version = "8.60";
 
   src = fetchFromGitHub {
     owner = "tonikelope";
     repo = "megabasterd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bSN7kNNqgWuEStXmGcz/IlKnkuE7VDZOIjAY0fVUGVQ=";
   };
 
@@ -26,7 +23,7 @@ maven.buildMavenPackage {
   installPhase = ''
     runHook preInstall
 
-    jar_filename=MegaBasterd-${version}-jar-with-dependencies.jar
+    jar_filename=MegaBasterd-${finalAttrs.version}-jar-with-dependencies.jar
 
     mkdir -p $out/bin $out/share/megabasterd
     install -Dm644 target/$jar_filename $out/share/megabasterd
@@ -45,4 +42,4 @@ maven.buildMavenPackage {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "megabasterd";
   };
-}
+})
