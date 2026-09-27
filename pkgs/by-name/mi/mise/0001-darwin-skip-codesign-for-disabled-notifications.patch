@@ -1,0 +1,141 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Esteve Fernandez <esteve@apache.org>
+Date: Thu, 3 Sep 2026 12:22:43 +0000
+Subject: [PATCH 1/1] build: skip codesign when notification signing is disabled
+
+When notification signing is disabled, avoid invoking the macOS codesign
+binary or embedding its generated resources while preserving signing for
+real identities.
+
+Signed-off-by: Esteve Fernandez <esteve@apache.org>
+---
+ build.rs                            | 35 ++++++++++++++++++++----------------
+ src/system/history/notify/macos.rs | 36 +++++++++++++++++++++++++++++-------
+ 2 files changed, 48 insertions(+), 23 deletions(-)
+
+diff --git a/build.rs b/build.rs
+--- a/build.rs
++++ b/build.rs
+@@ -47,0 +48,1 @@ fn build_notification_helper() -> Result<()> {
++    println!("cargo:rustc-check-cfg=cfg(mise_notification_release_signed)");
+@@ -89,22 +89,24 @@ fn build_notification_helper() -> Result<()> {
+     let identity = env::var("MISE_NOTIFICATION_SIGN_IDENTITY").unwrap_or_else(|_| "-".into());
++    let release_signed = identity != "-";
+     println!(
+         "cargo:rustc-env=MISE_NOTIFICATION_RELEASE_SIGNED={}",
+-        if identity == "-" { "0" } else { "1" }
++        if release_signed { "1" } else { "0" }
+     );
+-    let mut codesign = Command::new("/usr/bin/codesign");
+-    codesign
+-        .args(["--force", "--sign"])
+-        .arg(&identity)
+-        .args(["--identifier", "dev.jdx.mise.notifications"]);
+-    if identity != "-" {
+-        codesign.args(["--options", "runtime", "--timestamp"]);
+-    }
+-    let signed = codesign.arg(&app).output()?;
+-    if !signed.status.success() {
+-        return Err(eyre!(
+-            "failed to sign the macOS notification helper: {}",
+-            String::from_utf8_lossy(&signed.stderr).trim()
+-        ));
+-    }
++    if release_signed {
++        println!("cargo:rustc-cfg=mise_notification_release_signed");
++        let mut codesign = Command::new("/usr/bin/codesign");
++        codesign
++            .args(["--force", "--sign"])
++            .arg(&identity)
++            .args(["--identifier", "dev.jdx.mise.notifications"])
++            .args(["--options", "runtime", "--timestamp"]);
++        let signed = codesign.arg(&app).output()?;
++        if !signed.status.success() {
++            return Err(eyre!(
++                "failed to sign the macOS notification helper: {}",
++                String::from_utf8_lossy(&signed.stderr).trim()
++            ));
++        }
++    }
+     Ok(())
+ }
+diff --git a/src/system/history/notify/macos.rs b/src/system/history/notify/macos.rs
+--- a/src/system/history/notify/macos.rs
++++ b/src/system/history/notify/macos.rs
+@@ -22,1 +22,2 @@
++#[cfg(mise_notification_release_signed)]
+ const CODE_RESOURCES: &[u8] = include_bytes!(concat!(
+@@ -31,10 +31,20 @@
++#[cfg(mise_notification_release_signed)]
++fn bundle_fingerprint() -> String {
++    crate::hash::hash_to_str(&(HELPER, INFO, ICON, CODE_RESOURCES))
++}
++
++#[cfg(not(mise_notification_release_signed))]
++fn bundle_fingerprint() -> String {
++    crate::hash::hash_to_str(&(HELPER, INFO, ICON))
++}
++
+ fn app_path(root: &Path) -> PathBuf {
+     // A versioned directory permits safe replacement without modifying a
+     // running helper. The bundle identifier remains stable across versions.
+-    let fingerprint = crate::hash::hash_to_str(&(HELPER, INFO, ICON, CODE_RESOURCES));
++    let fingerprint = bundle_fingerprint();
+     root.join(fingerprint).join("mise.app")
+ }
+ 
+ fn executable(app: &Path) -> PathBuf {
+     app.join("Contents/MacOS/mise-notify")
+ }
+@@ -42,8 +42,16 @@
+-fn complete(app: &Path) -> bool {
+-    executable(app).is_file()
+-        && app.join("Contents/Info.plist").is_file()
+-        && app.join("Contents/Resources/mise.icns").is_file()
+-        && app.join("Contents/_CodeSignature/CodeResources").is_file()
+-}
++#[cfg(mise_notification_release_signed)]
++fn complete(app: &Path) -> bool {
++    executable(app).is_file()
++        && app.join("Contents/Info.plist").is_file()
++        && app.join("Contents/Resources/mise.icns").is_file()
++        && app.join("Contents/_CodeSignature/CodeResources").is_file()
++}
++
++#[cfg(not(mise_notification_release_signed))]
++fn complete(app: &Path) -> bool {
++    executable(app).is_file()
++        && app.join("Contents/Info.plist").is_file()
++        && app.join("Contents/Resources/mise.icns").is_file()
++}
+ 
+ pub(super) fn notification(title: &str, body: &str) -> Result<Command> {
+@@ -78,14 +78,16 @@
+     let contents = staged.join("Contents");
+     std::fs::create_dir_all(contents.join("MacOS"))?;
+     std::fs::create_dir_all(contents.join("Resources"))?;
++    #[cfg(mise_notification_release_signed)]
+     std::fs::create_dir_all(contents.join("_CodeSignature"))?;
+     std::fs::write(executable(&staged), HELPER)?;
+     std::fs::set_permissions(executable(&staged), std::fs::Permissions::from_mode(0o755))?;
+     std::fs::write(contents.join("Info.plist"), INFO)?;
+     std::fs::write(contents.join("Resources/mise.icns"), ICON)?;
++    #[cfg(mise_notification_release_signed)]
+     std::fs::write(
+         contents.join("_CodeSignature/CodeResources"),
+         CODE_RESOURCES,
+     )?;
+     std::fs::create_dir_all(app.parent().unwrap())?;
+     if app.symlink_metadata().is_ok() {
+@@ -123,10 +123,11 @@
+         );
++        #[cfg(mise_notification_release_signed)]
+         assert!(
+             Command::new("/usr/bin/codesign")
+                 .args(["--verify", "--strict"])
+                 .arg(&app)
+                 .status()
+                 .unwrap()
+                 .success()
+         );
+         assert_eq!(ensure_app(temp.path()).unwrap(), app);
