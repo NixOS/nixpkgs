@@ -6,7 +6,7 @@
   pkg-config,
   ninja,
   obs-studio,
-  qtbase,
+  qt6,
   libxt,
   libxtst,
   libxi,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
     sdl3
     libx11
     libxau
