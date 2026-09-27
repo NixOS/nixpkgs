@@ -40,18 +40,21 @@ let
 
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
-  cuda-common-redist = with cudaPackages; [
-    (lib.getDev cccl) # <thrust/*>
-    (lib.getDev libcublas) # cublas_v2.h
-    (lib.getLib libcublas)
-    (lib.getInclude libcublas) # cublasLt.h
-    libcurand
-    libcusolver # cusolverDn.h
-    (lib.getDev libcusparse) # cusparse.h
-    (lib.getLib libcusparse) # cusparse.h
-    (lib.getInclude libcusparse) # cusparse.h
-    (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
-  ];
+  cuda-common-redist =
+    with cudaPackages;
+    [
+      (lib.getDev cccl) # <thrust/*>
+      (lib.getDev libcublas) # cublas_v2.h
+      (lib.getLib libcublas)
+      (lib.getInclude libcublas) # cublasLt.h
+      libcurand
+      libcusolver # cusolverDn.h
+      (lib.getDev libcusparse) # cusparse.h
+      (lib.getLib libcusparse) # cusparse.h
+      (lib.getInclude libcusparse) # cusparse.h
+      (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
+    ]
+    ++ lib.optionals (cudaPackages ? cuda_crt) [ cuda_crt ];
 
   cuda-native-redist = symlinkJoin {
     name = "cuda-native-redist-${cudaMajorMinorVersion}";
