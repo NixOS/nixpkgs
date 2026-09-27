@@ -422,6 +422,7 @@ in
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
   charliecloud = runTest ./charliecloud.nix;
+  checkmate-capture = runTest ./checkmate-capture.nix;
   chhoto-url = runTest ./chhoto-url.nix;
   chipass = runTest ./chipass.nix;
   chromadb = runTest ./chromadb.nix;
