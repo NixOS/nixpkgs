@@ -3,31 +3,33 @@
   stdenv,
   fetchFromCodeberg,
   autoreconfHook,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "log4shib";
-  version = "1.0.9";
+  version = "2.0.1";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromCodeberg {
     owner = "Shibboleth";
     repo = "cpp-log4shib";
     tag = finalAttrs.version;
-    hash = "sha256-PcIkn8LuB4zdYiV0LDM+pzDxeWdS1PiXQox2bGhhORs=";
+    hash = "sha256-EoVg+u8t8h8HZrXHg+854+Az0tN9shPPyl6oTSjKqYg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env.CXXFLAGS = "-std=c++11";
-
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";
-    mainProgram = "log4shib-config";
     maintainers = with lib.maintainers; [ drawbu ];
     license = lib.licenses.lgpl21;
-    homepage = "http://log4cpp.sf.net";
+    homepage = "https://codeberg.org/Shibboleth/cpp-log4shib";
   };
 })
