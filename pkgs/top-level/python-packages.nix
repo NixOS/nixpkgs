@@ -3224,6 +3224,8 @@ self: super: with self; {
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean { };
 
+  click-extra = callPackage ../development/python-modules/click-extra { };
+
   click-help-colors = callPackage ../development/python-modules/click-help-colors { };
 
   click-log = callPackage ../development/python-modules/click-log { };
@@ -5790,6 +5792,8 @@ self: super: with self; {
   exrex = callPackage ../development/python-modules/exrex { };
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
+
+  extra-platforms = callPackage ../development/python-modules/extra-platforms { };
 
   extra-streamlit-components =
     callPackage ../development/python-modules/extra-streamlit-components
