@@ -347,6 +347,7 @@
   ./programs/throne.nix
   ./programs/thunar.nix
   ./programs/thunderbird.nix
+  ./programs/timr-tui.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
   ./programs/trippy.nix
