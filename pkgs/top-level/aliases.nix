@@ -1805,6 +1805,7 @@ mapAliases {
   netbox_4_3 = throw "netbox 4.3 series has been removed as it was EOL"; # Added 2026-08-24
   netbox_4_4 = throw "netbox 4.4 series has been removed as it was EOL"; # Added 2026-08-24
   netbox_4_5 = throw "netbox 4.5 series has been removed as it was EOL"; # Added 2026-08-24
+  netbox_4_6 = throw "netbox 4.6 series has been removed as it was EOL"; # Added 2026-08-24
   netbsdCross = throw "'netbsdCross' has been renamed to/replaced by 'netbsd'"; # Converted to throw 2025-10-27
   netsurf.browser = throw "'netsurf.browser' has been renamed to/replaced by 'netsurf-browser'"; # Converted to throw 2025-10-27
   netsurf.buildsystem = throw "'netsurf.buildsystem' has been renamed to/replaced by 'netsurf-buildsystem'"; # Converted to throw 2025-10-27

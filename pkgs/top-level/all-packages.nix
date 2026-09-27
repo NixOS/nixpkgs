@@ -2495,7 +2495,7 @@ with pkgs;
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
-  netbox_4_6 = netbox;
+  netbox_4_7 = netbox;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
