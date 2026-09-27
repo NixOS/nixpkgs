@@ -3264,8 +3264,6 @@ self: super: with self; {
 
   cligj = callPackage ../development/python-modules/cligj { };
 
-  clikit = callPackage ../development/python-modules/clikit { };
-
   clingo = toPythonModule (
     pkgs.clingo.override {
       inherit python;
@@ -15347,8 +15345,6 @@ self: super: with self; {
   pyleri = callPackage ../development/python-modules/pyleri { };
 
   pylette = callPackage ../development/python-modules/pylette { };
-
-  pylev = callPackage ../development/python-modules/pylev { };
 
   pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
 
