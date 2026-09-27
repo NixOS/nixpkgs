@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waveform";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "phandasm";
     repo = "waveform";
     rev = "v${version}";
-    hash = "sha256-Bg1n1yV4JzNFEXFNayNa1exsSZhmRJ0RLHDjLWmqGZE=";
+    hash = "sha256-kSOny91aqR5smge3DjuzbR5zaHNwaaJNWg8DJkYv6K0=";
   };
 
   postPatch = ''
