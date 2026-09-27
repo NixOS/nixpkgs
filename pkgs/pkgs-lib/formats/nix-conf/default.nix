@@ -13,11 +13,13 @@ let
     isDerivation
     isFloat
     isInt
+    isList
     isString
     mapAttrsToList
     optionalString
     strings
     types
+    unique
     versionAtLeast
     ;
   inherit (lib.generators)
@@ -63,6 +65,7 @@ in
       generate =
         let
           # note that list type has been omitted here as the separator varies, see `nix.settings.*`
+          # lists that do reach here are space-separated; duplicates are dropped, keeping first-occurrence order
           mkValueString =
             v:
             if v == null then
@@ -73,6 +76,8 @@ in
               boolToString v
             else if isFloat v then
               strings.floatToString v
+            else if isList v then
+              toString (unique v)
             else if isDerivation v then
               toString v
             else if builtins.isPath v then
