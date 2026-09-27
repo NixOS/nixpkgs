@@ -215,6 +215,8 @@ freecad-utils.makeCustomizable (
       ];
       platforms = lib.platforms.linux;
       mainProgram = "freecad";
+      # repology claims `freecadweb` as vendor, but newer CVEs (e.g. CVE-2026-73235) are listed with freecad/freecad
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "freecad" finalAttrs.version;
     };
   })
 )
