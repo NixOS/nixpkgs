@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
+  # necessary to compile helper which runs during build to generate tables
+  # see gen.tab/meson.build for details
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   mesonFlags = lib.mapAttrsToList lib.mesonBool {
