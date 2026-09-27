@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to access MS-DOS disks";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.quantenzitrone ];
   };
 })
