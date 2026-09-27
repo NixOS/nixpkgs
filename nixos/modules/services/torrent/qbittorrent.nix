@@ -177,6 +177,12 @@ in
         Path to a file containing the plaintext WebUI password.
         The password is hashed using PBKDF2-HMAC-SHA512 and injected
         into the config at service startup.
+
+        Enabling this option replaces the configuration file at every service
+        startup, even when {option}`services.qbittorrent.serverConfig` is empty.
+        Configure persistent settings with
+        {option}`services.qbittorrent.serverConfig`, as changes made through the
+        WebUI will be lost when the service restarts.
       '';
     };
 
