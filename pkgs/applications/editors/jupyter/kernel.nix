@@ -2,16 +2,16 @@
   lib,
   stdenv,
   python3,
+  jupyterLib,
 }:
 
 let
-
   default = {
     python3 =
       let
         env = (python3.withPackages (ps: with ps; [ ipykernel ]));
       in
-      {
+      jupyterLib.mkKernelDefinition {
         displayName = "Python 3";
         argv = [
           env.interpreter
