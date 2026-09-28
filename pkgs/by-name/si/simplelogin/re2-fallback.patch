@@ -1,0 +1,60 @@
+diff --git a/app/dashboard/views/referral.py b/app/dashboard/views/referral.py
+index a123456..b123456 100644
+--- a/app/dashboard/views/referral.py
++++ b/app/dashboard/views/referral.py
+@@ -1,4 +1,7 @@
+-import re2 as re
++try:
++    import re2 as re
++except ImportError:
++    import re
+ from flask import render_template, request, flash, redirect, url_for
+ from flask_login import login_required, current_user
+ 
+diff --git a/app/email_utils.py b/app/email_utils.py
+index a123456..b123456 100644
+--- a/app/email_utils.py
++++ b/app/email_utils.py
+@@ -10,7 +10,10 @@ import json
+ import os
+ import quopri
+ import random
+-import re2 as re
++try:
++    import re2 as re
++except ImportError:
++    import re
+ import sentry_sdk
+ import spf
+ import time
+diff --git a/app/regex_utils.py b/app/regex_utils.py
+index a123456..b123456 100644
+--- a/app/regex_utils.py
++++ b/app/regex_utils.py
+@@ -1,6 +1,9 @@
+ import re
+ 
+-import re2
++try:
++    import re2
++except ImportError:
++    import re as re2
+ 
+ from app.log import LOG
+ 
+diff --git a/app/spamassassin_utils.py b/app/spamassassin_utils.py
+index a123456..b123456 100644
+--- a/app/spamassassin_utils.py
++++ b/app/spamassassin_utils.py
+@@ -8,7 +8,10 @@ import logging
+ import socket
+ from io import BytesIO
+ 
+-import re2 as re
++try:
++    import re2 as re
++except ImportError:
++    import re
+ import select
+ 
+ from app.log import LOG
