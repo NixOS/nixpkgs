@@ -87,7 +87,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "";
+    description = "Pure image rendering from drawing instructions for e-paper displays";
     homepage = "https://github.com/OpenDisplay/odl-renderer";
     changelog = "https://github.com/OpenDisplay/odl-renderer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
