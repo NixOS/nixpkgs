@@ -39,6 +39,7 @@
   lasem,
   pkg-config,
   ncurses,
+  readline,
   xapian,
   gpgme,
   util-linux,
@@ -1116,6 +1117,10 @@ in
       substituteInPlace lib/rbreadline.rb \
         --replace 'infocmp' '${ncurses}/bin/infocmp'
     '';
+  };
+
+  readline-ext = attrs: {
+    buildInputs = [ readline ];
   };
 
   taglib-ruby = attrs: {
