@@ -14,6 +14,14 @@
       };
     };
 
+    portOnlyConf = {
+      services.adguardhome = {
+        enable = true;
+
+        port = 12345;
+      };
+    };
+
     schemaVersionBefore23 = {
       services.adguardhome = {
         enable = true;
@@ -130,6 +138,10 @@
     with subtest("Default config test"):
       emptyConf.wait_for_unit("adguardhome.service")
       emptyConf.wait_for_open_port(3000)
+
+    with subtest("Only setting the port"):
+      portOnlyConf.wait_for_unit("adguardhome.service")
+      portOnlyConf.wait_for_open_port(12345)
 
     with subtest("Default schema_version 23 config test"):
       schemaVersionBefore23.wait_for_unit("adguardhome.service")
