@@ -4228,6 +4228,8 @@ self: super: with self; {
 
   decli = callPackage ../development/python-modules/decli { };
 
+  declib = callPackage ../development/python-modules/declib { };
+
   declinate = callPackage ../development/python-modules/declinate { };
 
   decopatch = callPackage ../development/python-modules/decopatch { };
