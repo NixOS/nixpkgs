@@ -100,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "flatpak";
-    rev = "187a5439b5712c5806b46988f0c2e35bccbaa1f8"; # flatpak-1.16.x
-    sha256 = "sha256-2eARgsiC/lDbV7LaQ9CaNTeuBbzbRav8dVsl+xrJG2g=";
+    rev = "80b7aa9eb91ca25b73a531484ad9a51def9ca32c"; # flatpak-1.16.x
+    sha256 = "sha256-PBE3mrzaeYt4fgkhFWthlyVZnBeYgDcww4nN5Cn9K4Q=";
   };
 
   patches = [
