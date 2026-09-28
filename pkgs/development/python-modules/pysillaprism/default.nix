@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysillaprism";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ebaschiera";
     repo = "pysillaprism";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KpjKn62KOivu95thLeHiU8U+9xK1oVdE+yWN7NGFEA0=";
+    hash = "sha256-EkaHeudneVUlbH1dxF1uIXEnh4tfIppp9DzFz9L2GuM=";
   };
 
   build-system = [ hatchling ];
