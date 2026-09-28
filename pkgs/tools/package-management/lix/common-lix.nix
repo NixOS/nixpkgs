@@ -287,6 +287,10 @@ stdenv.mkDerivation (finalAttrs: {
         "${finalAttrs.cargoDeps}/source-registry-0"
       else
         "lix: no `MESON_PACKAGE_CACHE_DIR`, set `cargoDeps`";
+
+    # Defense-in-depth: never inherit an executable stack from a dependency.
+    # It does happen: https://github.com/NixOS/nixpkgs/issues/567777.
+    NIX_LDFLAGS = "-z,noexecstack";
   };
 
   propagatedBuildInputs = [
