@@ -7,19 +7,18 @@
   wayland,
   withNativeLibs ? false,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-clipboard-rs";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eUD3XmEiBVMf+bImG6Ah48/96AxFhqTiLjK1gPJFdpw=";
+    hash = "sha256-7eJ4V0Wr71bdH5+Smc2KAaK06i2/YpJtlis+vqwUY5w=";
   };
 
-  cargoHash = "sha256-yTQ4EZ8ae3v0H4C94lV6AVNVSi+XDroKxjjHU4MagGU=";
+  cargoHash = "sha256-NYVtztI5lYlRDNg2eNQyoEn7q43Yybdn2oq+srnVbeY=";
 
   cargoBuildFlags = [
     "--package=wl-clipboard-rs"
