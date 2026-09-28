@@ -12,6 +12,8 @@
   replaceVars,
   writeShellScriptBin,
   zlib,
+  callPackage,
+  makeSetupHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -175,6 +177,14 @@ python3.pkgs.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
   env.hostPlatform = stdenv.targetPlatform.system;
+
+  passthru = {
+    fetchSubprojects = callPackage ./fetch-subprojects.nix { };
+    subprojectsHook = makeSetupHook {
+      name = "meson-subprojects-hook";
+    } ./subprojects-hook.sh;
+    tests = callPackage ./tests.nix { };
+  };
 
   meta = {
     homepage = "https://mesonbuild.com";
