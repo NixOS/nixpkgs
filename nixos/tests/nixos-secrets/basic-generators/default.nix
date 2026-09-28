@@ -5,8 +5,10 @@
     { pkgs, ... }:
     {
       nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
-      environment.systemPackages = [ pkgs.nixos-secrets ];
       environment.etc."nixos".source = ./config;
+
+      environment.systemPackages = [ pkgs.nixos-secrets ];
+      nix.enable = true;
 
       system.extraDependencies = [
         (import ../collect-secrets-scripts.nix {
