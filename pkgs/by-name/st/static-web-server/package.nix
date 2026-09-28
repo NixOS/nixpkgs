@@ -49,10 +49,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "A cross-platform, high-performance and asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       misilelab
       progrm_jarvis

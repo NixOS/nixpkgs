@@ -39,10 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libusb/hidapi";
     maintainers = with lib.maintainers; [ prusnak ];
     # You can choose between GPLv3, BSD or HIDAPI license (even more liberal)
-    license = with lib.licenses; [
-      bsd3 # or
-      gpl3Only
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        bsd3
+        gpl3Only
+      ];
     pkgConfigModules =
       lib.optionals stdenv.hostPlatform.isDarwin [
         "hidapi"

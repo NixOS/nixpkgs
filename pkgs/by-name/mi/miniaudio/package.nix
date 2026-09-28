@@ -70,10 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
     changelog = "https://github.com/mackron/miniaudio/blob/${finalAttrs.version}/CHANGES.md";
-    license = with lib.licenses; [
-      unlicense # or
-      mit0
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        unlicense
+        mit0
+      ];
     maintainers = [ lib.maintainers.jansol ];
     pkgConfigModules = [ "miniaudio" ];
     platforms = lib.platforms.linux;

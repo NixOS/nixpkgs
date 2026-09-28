@@ -159,10 +159,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mic92
     ];

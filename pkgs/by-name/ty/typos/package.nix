@@ -37,10 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "typos";
     homepage = "https://github.com/crate-ci/typos";
     changelog = "https://github.com/crate-ci/typos/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mgttlinger
       chrjabs

@@ -60,10 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with lib.licenses; [
-      lgpl21 # or
-      bsd2
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        lgpl21
+        bsd2
+      ];
     maintainers = with lib.maintainers; [
       thoughtpolice
       vcunat
