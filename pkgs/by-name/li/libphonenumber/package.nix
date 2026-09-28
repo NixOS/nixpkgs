@@ -38,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-include-dir.patch
   ];
 
+  # Upstream compiles a test program which is hardcoded to link against the static versions of the compiled libraries.
+  # Without this change, we can't disable building static libraries on non-static platforms.
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    substituteInPlace cpp/CMakeLists.txt \
+      --replace-fail 'target_link_libraries (geocoding_test_program geocoding phonenumber)' 'target_link_libraries (geocoding_test_program geocoding-shared phonenumber-shared)'
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -87,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       USE_STDMUTEX = true;
       USE_STD_MAP = true;
 
-      BUILD_SHARED_LIBS = true;
-      BUILD_STATIC_LIB = true;
+      BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
+      BUILD_STATIC_LIB = stdenv.hostPlatform.isStatic;
     }
     ++ [
       (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=deprecated-declarations")
