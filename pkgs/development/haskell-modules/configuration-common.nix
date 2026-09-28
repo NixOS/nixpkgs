@@ -1642,6 +1642,14 @@ with haskellLib;
   # https://github.com/raehik/rerefined/issues/2
   rerefined = doJailbreak super.rerefined;
 
+  # 2026-09-28: allow QuickCheck 2.16
+  # https://github.com/raehik/strongweak/pull/5
+  strongweak = appendPatch (fetchpatch {
+    name = "bump-bounds.patch";
+    url = "https://github.com/raehik/strongweak/commit/1757ec7e349cfa5769967ece4d855e405e15e474.patch";
+    sha256 = "sha256-IndGHlsbQ9673s0uawLR+FL/83QVLqSny4k9Sd0xT/U";
+  }) super.strongweak;
+
   # 2026-09-13: allow QuickCheck 2.16
   # https://github.com/muesli4/table-layout/issues/62
   table-layout = doJailbreak super.table-layout;
