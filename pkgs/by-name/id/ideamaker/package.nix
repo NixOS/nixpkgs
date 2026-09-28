@@ -12,8 +12,9 @@
   lib,
   libGLU,
   libpsl,
-  qt5,
+  libsForQt5,
   libredirect,
+  libvlc,
   libx11,
   lz4,
   makeDesktopItem,
@@ -26,7 +27,7 @@
 }:
 let
   pname = "ideamaker";
-  version = "5.2.2.8570";
+  version = "5.5.0.8810";
   semver = lib.strings.concatStringsSep "." (lib.lists.init (builtins.splitVersion version));
   description = "Raise3D's 3D slicer software";
 in
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
   inherit pname version;
   src = fetchurl {
     url = "https://downcdn.raise3d.com/ideamaker/release/${semver}/ideaMaker_${version}-ubuntu_amd64.deb";
-    hash = "sha256-kXcgVuuPTMWoOCrEztiedJrZrTbFx1xHyzzh4y2b0UA=";
+    hash = "sha256-EXvRxU5AWbFSn4acw9n9Q003r/GB9q/iL5qD0wo+LDM=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +56,9 @@ stdenv.mkDerivation {
     gtk3
     nghttp2
     libpsl
-    qt5.qtbase
-    qt5.qtwayland
+    libsForQt5.qtbase
+    libsForQt5.qt5.qtwayland
+    libvlc
   ];
 
   installPhase = ''
