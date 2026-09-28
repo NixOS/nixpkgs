@@ -51,6 +51,7 @@
   sqlite,
   libffi,
   bash,
+  ocl-icd,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
@@ -287,6 +288,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -rf "$out"/logs
     rm -rf "$out"/.toolkit_linking_tool
+
+    # The bundled OpenCL loader reads /etc/OpenCL/vendors; point it to ocl-icd,
+    # which reads /run/opengl-driver/etc/OpenCL/vendors where NixOS puts the
+    # drivers. Keep the file names: libomptarget dlopens libOpenCL.so.
+    for f in "$out"/compiler/*/lib/libOpenCL.so*; do
+      [[ ! -e $f ]] || ln -sf "${lib.getLib ocl-icd}/lib/''${f##*/}" "$f"
+    done
 
     ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt,include} "$out"
 
