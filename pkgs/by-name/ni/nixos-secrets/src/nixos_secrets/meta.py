@@ -1,7 +1,7 @@
 import tempfile
 import json
 from dataclasses import dataclass
-from typing import Any, Mapping, Self, Optional
+from typing import Self
 from pathlib import Path
 
 from .error import SecretsError
@@ -21,9 +21,9 @@ VersionID = str
 @dataclass(frozen=True)
 class SecretsMetadata:
     id: VersionID
-    dependencies: Mapping[str, VersionID]
+    dependencies: dict[str, VersionID]
 
-    def from_json(json: Any) -> Self:
+    def from_json(json: any) -> Self:
         return SecretsMetadata(id=json["id"], dependencies=json["dependencies"])
 
     def to_json(self: Self):
@@ -39,7 +39,7 @@ def get_meta(
     config: SecretsConfig,
     files: SecretsFileList,
     secret: SecretsSecret,
-) -> Optional[SecretsMetadata]:
+) -> SecretsMetadata | None:
     if not files.has(secret.backend, secret.name, meta_file_name):
         return None
 

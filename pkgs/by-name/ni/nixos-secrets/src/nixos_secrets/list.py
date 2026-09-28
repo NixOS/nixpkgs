@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Set, Self
+from typing import Self
 from .exec import list_secrets
 from .config import SecretsConfig
 from .args import SecretsArgs
@@ -15,7 +15,7 @@ class SecretsFileListEntry:
 
 @dataclass(frozen=True)
 class SecretsFileList:
-    entries: Set[SecretsFileListEntry]
+    entries: set[SecretsFileListEntry]
 
     def has(
         self: Self,
@@ -30,7 +30,7 @@ class SecretsFileList:
 
 
 def build_file_list(args: SecretsArgs, config: SecretsConfig) -> SecretsFileList:
-    entries: Set[SecretsFileListEntry] = set()
+    entries: set[SecretsFileListEntry] = set()
     for backend in config.storeBackends.values():
         for secret, file in list_secrets(args, config, backend):
             entries.add(SecretsFileListEntry(backend.name, secret, file))

@@ -1,25 +1,25 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any, Self, Mapping, List
+from typing import Self
 from .error import SecretsError
 
 
 @dataclass(frozen=True)
 class SecretsArgs:
-    file: Optional[Path]
-    flake: Optional[str]
-    json: Optional[str]
-    attr: Optional[str]
+    file: Path | None
+    flake: str | None
+    json: str | None
+    attr: str | None
     disable_sandbox: bool
     dry_run: bool
-    local: Optional[str]  # "deploy" only
-    generators: List[str]  # "generate" only
-    set: Mapping[str, Path]  # "generate" only
-    timeout: Optional[float]  # "generate" only
+    local: str | None  # "deploy" only
+    generators: list[str]  # "generate" only
+    set: dict[str, Path]  # "generate" only
+    timeout: float | None  # "generate" only
     command: str  # gotta figure out how to type this properly
     verbose: str
 
-    def from_dict(d: Mapping[str, Any]) -> Self:
+    def from_dict(d: dict[str, any]) -> Self:
         # This one is only in the dict when the "generate" command is used.
         # I wish we had proper sum types...
         if "generators" not in d:

@@ -2,7 +2,6 @@ import os
 import subprocess
 import graphlib
 import functools
-from typing import List, Set, Mapping
 from pathlib import Path
 from .config import (
     SecretsConfig,
@@ -38,7 +37,7 @@ def build_binary(path: Path) -> Path:
         raise SecretsError(f"Error building '{path}':\n{e.stderr}")
 
 
-def backend_env_vars(args: SecretsArgs) -> Mapping[str, str]:
+def backend_env_vars(args: SecretsArgs) -> dict[str, str]:
     out = dict()
     if args.json:
         out["NIXOS_SECRETS_CONFIG"] = args.json
@@ -136,7 +135,7 @@ def delete_secret(
 
 def list_secrets(
     args: SecretsArgs, config: SecretsConfig, backend: SecretsStoreBackend
-) -> Set[tuple[str, str]]:
+) -> set[tuple[str, str]]:
     binary = build_binary(backend.list)
     try:
         pairs = set()
@@ -173,7 +172,7 @@ def deploy_secrets(
     args: SecretsArgs,
     config: SecretsConfig,
     backend: SecretsStoreBackend,
-    files: List[tuple[str, str]],
+    files: list[tuple[str, str]],
 ):
     inputLines = []
     for generator, filename in files:
@@ -234,7 +233,7 @@ def run_prompt(
         reset_terminal_state()
 
 
-def execution_order(config: SecretsConfig) -> List[str]:
+def execution_order(config: SecretsConfig) -> list[str]:
     ts = graphlib.TopologicalSorter()
 
     for name, gen in config.generators.items():

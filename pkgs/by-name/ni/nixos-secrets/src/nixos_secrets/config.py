@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import Mapping, List, Any, Set, Self, Optional
+from typing import Self
 from .error import SecretsError
 import re
 
@@ -14,7 +14,7 @@ class SecretsPromptBackend:
     name: str
     ask: str
 
-    def from_json(name: str, json: Any) -> Self:
+    def from_json(name: str, json: any) -> Self:
         return SecretsPromptBackend(name=name, ask=json["ask"])
 
 
@@ -22,11 +22,11 @@ class SecretsPromptBackend:
 class SecretsPrompt:
     name: str
     label: str
-    description: Optional[str]
+    description: str | None
     backend: str
     type: str  # There's probably a way to type this properly..
 
-    def from_json(name: str, json: Any) -> Self:
+    def from_json(name: str, json: any) -> Self:
         return SecretsPrompt(
             name=name,
             label=json["label"],
@@ -41,13 +41,13 @@ class SecretsStoreBackend:
     name: str
     get: str
     set: str
-    delete: Optional[str]
+    delete: str | None
     list: str
-    fixup: Optional[str]
-    deployRemote: Optional[str]
-    deployLocal: Optional[str]
+    fixup: str | None
+    deployRemote: str | None
+    deployLocal: str | None
 
-    def from_json(name: str, json: Any) -> Self:
+    def from_json(name: str, json: any) -> Self:
         return SecretsStoreBackend(
             name=name,
             get=json["get"],
@@ -65,7 +65,7 @@ class SecretsFile:
     name: str
     deploy: bool = False
 
-    def from_json(name: str, json: Any) -> Self:
+    def from_json(name: str, json: any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -81,12 +81,12 @@ class SecretsFile:
 class SecretsSecret:
     name: str
     backend: str
-    generate: Optional[str]
-    dependencies: List[str]
-    prompts: Mapping[str, SecretsPrompt]
-    files: Mapping[str, SecretsFile]
+    generate: str | None
+    dependencies: list[str]
+    prompts: dict[str, SecretsPrompt]
+    files: dict[str, SecretsFile]
 
-    def from_json(name: str, json: Any) -> Self:
+    def from_json(name: str, json: any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"Secret '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -125,11 +125,11 @@ class SecretsSecret:
 
 @dataclass(frozen=True)
 class SecretsConfig:
-    generators: Mapping[str, SecretsSecret]
-    storeBackends: Mapping[str, SecretsStoreBackend]
-    promptBackends: Mapping[str, SecretsPromptBackend]
+    generators: dict[str, SecretsSecret]
+    storeBackends: dict[str, SecretsStoreBackend]
+    promptBackends: dict[str, SecretsPromptBackend]
 
-    def from_json(json: Any) -> Self:
+    def from_json(json: any) -> Self:
         result = SecretsConfig(generators={}, storeBackends={}, promptBackends={})
 
         for k, v in json["backends"]["prompt"].items():
@@ -141,9 +141,9 @@ class SecretsConfig:
         for k, v in json["store"].items():
             result.generators[k] = SecretsSecret.from_json(k, v)
 
-        referencedGenerators: Set[str] = set()
-        referencedStoreBackends: Set[str] = set()
-        referencedPromptBackends: Set[str] = set()
+        referencedGenerators: set[str] = set()
+        referencedStoreBackends: set[str] = set()
+        referencedPromptBackends: set[str] = set()
 
         for name, gen in result.generators.items():
             referencedGenerators.update(gen.dependencies)
@@ -181,7 +181,7 @@ class SecretsConfig:
         self: Self,
         backend: SecretsStoreBackend,
         deployed_only: bool = False,
-    ) -> List[tuple[str, str]]:
+    ) -> list[tuple[str, str]]:
         files = []
         for generator in self.generators.values():
             if generator.backend != backend.name:

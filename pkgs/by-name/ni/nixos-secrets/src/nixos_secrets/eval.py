@@ -2,7 +2,6 @@ import json
 import subprocess
 import functools
 from pathlib import Path
-from typing import Any, Optional
 from .error import SecretsError
 from .args import SecretsArgs
 from .config import SecretsConfig
@@ -31,7 +30,7 @@ def evaluate_config(args: SecretsArgs) -> SecretsConfig:
     return SecretsConfig.from_json(json.loads(json_str))
 
 
-def evaluate_config_raw(args: SecretsArgs) -> Any:
+def evaluate_config_raw(args: SecretsArgs) -> any:
     if args.json is not None:
         try:
             with open(args.json) as f:
@@ -82,7 +81,7 @@ def evaluate_config_raw(args: SecretsArgs) -> Any:
 
 
 @functools.cache
-def nixpkgs_path() -> Optional[str]:
+def nixpkgs_path() -> str | None:
     try:
         result = subprocess.run(
             ["nix-instantiate", "--find-file", "nixpkgs"],

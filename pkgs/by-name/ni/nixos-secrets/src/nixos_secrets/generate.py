@@ -3,7 +3,6 @@ import tempfile
 import subprocess
 from uuid import uuid4
 from pathlib import Path
-from typing import Mapping
 
 from .args import SecretsArgs
 from .config import SecretsConfig, SecretsSecret
@@ -245,7 +244,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 )
 
             new_id = str(uuid4())
-            dep_ids: Mapping[str, VersionID] = {}
+            dep_ids: dict[str, VersionID] = {}
             for dep_name in generator.dependencies:
                 dep_ids[dep_name] = up_to_date_meta[dep_name].id
             meta = SecretsMetadata(new_id, dep_ids)
