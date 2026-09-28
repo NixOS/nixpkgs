@@ -14,16 +14,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "buildkite-agent";
-  version = "3.137.2";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lAhWU5Zm8ohrAFudJVJvz24wgM/V6KsknVBg6zU04uY=";
+    hash = "sha256-qY8BQ0LEWURdPyaEexDvP88pa30mC5Q0xNGNn6XWkO8=";
   };
 
-  vendorHash = "sha256-sjLVMMC9INg4R9Yd0hVLkqMUkdQf40O9zRYfJGpcGWw=";
+  vendorHash = "sha256-Izey6qpNZSERI/Xg5ANDBB6DOPQ3cGEUS8K0Ok7LdOY=";
 
   postPatch = ''
     substituteInPlace clicommand/agent_start.go --replace /bin/bash ${bash}/bin/bash
