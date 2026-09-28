@@ -74,6 +74,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Core logic used by the other Proton components";
     homepage = "https://github.com/ProtonVPN/python-proton-core";
+    changelog = "https://github.com/ProtonVPN/python-proton-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
