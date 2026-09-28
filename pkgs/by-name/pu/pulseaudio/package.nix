@@ -56,6 +56,13 @@
   bluetoothSupport ? stdenv.hostPlatform.isLinux,
   advancedBluetoothCodecs ? false,
 
+  glibSupport ? !stdenv.hostPlatform.isDarwin,
+  gsettingsSupport ?
+    glibSupport
+    && !libOnly
+    && stdenv.hostPlatform.isLinux
+    && stdenv.buildPlatform == stdenv.hostPlatform,
+
   remoteControlSupport ? false,
 
   zeroconfSupport ? false,
@@ -116,7 +123,7 @@ stdenv.mkDerivation rec {
     m4
     udevCheckHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
+  ++ lib.optionals (!libOnly && glibSupport) [ glib ]
   # gstreamer plugin discovery requires wrapping
   ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
@@ -131,8 +138,10 @@ stdenv.mkDerivation rec {
     check
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    glib
     dbus
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
     libintl
@@ -192,10 +201,9 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "database" "simple")
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
+    (lib.mesonEnable "glib" glibSupport)
     # gsettings does not support cross-compilation
-    (lib.mesonEnable "gsettings" (
-      stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
-    ))
+    (lib.mesonEnable "gsettings" gsettingsSupport)
     (lib.mesonEnable "gstreamer" false)
     (lib.mesonEnable "gtk" false)
     (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
@@ -225,7 +233,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.mesonEnable "consolekit" false)
     (lib.mesonEnable "dbus" false)
-    (lib.mesonEnable "glib" false)
     (lib.mesonEnable "oss-output" false)
   ];
 
@@ -252,7 +259,7 @@ stdenv.mkDerivation rec {
     '';
 
   preFixup =
-    lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
+    lib.optionalString gsettingsSupport ''
       wrapProgram $out/libexec/pulse/gsettings-helper \
        --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
        --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
