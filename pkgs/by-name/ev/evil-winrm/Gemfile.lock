@@ -3,12 +3,12 @@ GEM
   specs:
     base64 (0.3.0)
     benchmark (0.5.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.1.3)
     builder (3.3.0)
     csv (3.3.6)
     erubi (1.13.1)
-    ffi (1.17.2)
-    fileutils (1.7.3)
+    ffi (1.17.4)
+    fileutils (1.8.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
     gyoku (1.4.0)
@@ -17,40 +17,39 @@ GEM
     httpclient (2.9.0)
       mutex_m
     io-console (0.9.4)
-    little-plugger (1.1.4)
     logger (1.7.0)
-    logging (2.4.0)
-      little-plugger (~> 1.1)
-      multi_json (~> 1.14)
-    multi_json (1.17.0)
     mutex_m (0.3.0)
-    nori (2.7.1)
+    nori (2.9.1)
       bigdecimal
+      stringio
     readline (0.0.4)
       reline
+    readline-ext (0.2.0)
     reline (0.7.0)
       io-console (~> 0.5)
     rexml (3.4.4)
-    rubyntlm (0.6.5)
+    rubyntlm (0.6.8)
       base64
-    rubyzip (2.4.1)
-    stringio (3.1.7)
+    rubyzip (3.7.0)
+    stringio (3.2.0)
     syslog (0.4.0)
       logger
-    winrm (2.3.9)
+    winrm (2.4.1)
+      base64 (~> 0.2)
       builder (>= 2.1.2)
       erubi (~> 1.8)
       gssapi (~> 1.2)
       gyoku (~> 1.0)
       httpclient (~> 2.2, >= 2.2.0.2)
-      logging (>= 1.6.1, < 3.0)
+      logger (~> 1.6)
       nori (~> 2.0, >= 2.7.1)
       rexml (~> 3.0)
       rubyntlm (~> 0.6.0, >= 0.6.3)
-    winrm-fs (1.3.5)
-      erubi (~> 1.8)
-      logging (>= 1.6.1, < 3.0)
-      rubyzip (~> 2.0)
+    winrm-fs (1.3.7)
+      benchmark
+      csv (~> 3.3)
+      logger
+      rubyzip (~> 3.4)
       winrm (~> 2.0)
 
 PLATFORMS
@@ -62,10 +61,11 @@ DEPENDENCIES
   fileutils
   logger
   readline
+  readline-ext
   stringio
   syslog
   winrm
   winrm-fs
 
 BUNDLED WITH
-   2.6.9
+   2.7.2
