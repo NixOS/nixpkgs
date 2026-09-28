@@ -28,15 +28,15 @@ case "$1" in
     echo "@kernelVersion@"
     ;;
   --specialisations)
-    if [[ -z "@specialisations@" ]]; then
+    specialisations=@specialisations@
+    if [[ -z "$specialisations" ]]; then
       echo "$0: no specialisations found" >&2
       exit 1
-    else
-      echo "@specialisations@"
     fi
+    printf '%s\n' "$specialisations"
     ;;
   --json)
-    cat <<EOF
+    cat <<'EOF'
 @json@
 EOF
     ;;

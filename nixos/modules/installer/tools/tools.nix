@@ -58,13 +58,19 @@ let
       inherit (config.system.nixos) version codeName revision;
       inherit (config.system) configurationRevision;
       kernelVersion =
-        if config.boot.kernel.enable then config.boot.kernelPackages.kernel.version else null;
-      specialisations = lib.attrNames config.specialisation;
+        if config.boot.kernel.enable then
+          # modDirVersion returns 6.18.54-xanmod1 instead of 6.18.54
+          config.boot.kernelPackages.kernel.modDirVersion or config.boot.kernelPackages.kernel.version
+        else
+          null;
+      specialisations = lib.escapeShellArg (
+        lib.concatStringsSep " " (lib.attrNames config.specialisation)
+      );
 
       json = builtins.toJSON (
         {
           nixosVersion = config.system.nixos.version;
-          inherit kernelVersion specialisations;
+          specialisations = lib.attrNames config.specialisation;
         }
         // lib.optionalAttrs (kernelVersion != null) {
           inherit kernelVersion;
