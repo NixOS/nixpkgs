@@ -10,6 +10,7 @@
   pkg-config,
   stdenv,
   versionCheckHook,
+  enableDocs ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
@@ -27,14 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
+  ] ++ lib.optionals enableDocs [
     doxygen
     graphviz
-    pkg-config
   ];
 
   buildInputs = [ libogg ];
 
-  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_DOCS" enableDocs)
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
