@@ -69,19 +69,19 @@ let
 in
 {
   php82 = mkPhp {
-    version = "8.2.33";
-    hash = "sha256-U2Lyp6DnFoznIv6gBIsaHSjg98wmXEF99nDGVnBpUBg=";
+    version = "8.2.34";
+    hash = "sha256-BGfWOoGQFoEdNf0U9zR2SBOrFJdQN5eQY0KUxyPNdWI=";
   };
   php83 = mkPhp {
-    version = "8.3.33";
-    hash = "sha256-+cn00M12ksbj2jY81MpyqCakmuGPXtQwtvyue8KIHhg=";
+    version = "8.3.35";
+    hash = "sha256-4nnZ7JDZvKuQDRRoFuWxHT6JJLgOK6NsfX2ufXHcvy0=";
   };
   php84 = mkPhp {
-    version = "8.4.25";
-    hash = "sha256-lSzMF4Uma5WPSh3PxYDgjqu7efRCItHv8ZK82Y2R9uM=";
+    version = "8.4.26";
+    hash = "sha256-QglpTXsPY8RaN3PgfNwrv8cSSSZaXZUbH/U+EUftxco=";
   };
   php85 = mkPhp {
-    version = "8.5.10";
-    hash = "sha256-15vU86kkjly1gzdmug1RzTXdAbhyfyPzC826b6vFHT4=";
+    version = "8.5.11";
+    hash = "sha256-3JQHFqjHPlMcAHjuy5VdWV0yHsLMnUcUnPAInqbhj2Q=";
   };
 }

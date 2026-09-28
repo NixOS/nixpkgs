@@ -13,6 +13,7 @@
   gmp,
   gnutls,
   gnugrep,
+  gnused,
   gpauth,
   gtk3,
   iproute2,
@@ -29,6 +30,7 @@
   perl,
   pkg-config,
   systemd,
+  unixtools,
   zlib,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
@@ -130,7 +132,9 @@ rustPlatform.buildRustPackage {
             coreutils
             gawk
             gnugrep
+            gnused
             net-tools
+            unixtools.ps
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iproute2
@@ -143,6 +147,17 @@ rustPlatform.buildRustPackage {
     cp -r packaging/files/usr/lib $out/lib
     substituteInPlace $out/lib/NetworkManager/dispatcher.d/pre-down.d/gpclient.down \
       --replace-fail /usr/bin/gpclient $out/bin/gpclient
+
+    # The dispatcher skips dotfiles, so the .gpclient-nm-hook-wrapped
+    # payload next to the wrapper is not run as a second script.
+    wrapProgram "$out/lib/NetworkManager/dispatcher.d/gpclient-nm-hook" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          unixtools.ps
+        ]
+      }"
 
     install -Dm644 packaging/files/usr/share/applications/gpgui.desktop \
       $out/share/applications/gpgui.desktop
