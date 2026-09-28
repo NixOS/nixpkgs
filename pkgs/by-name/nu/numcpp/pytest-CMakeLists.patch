@@ -1,0 +1,18 @@
+add --embed to $PYTHON_LD_FLAGS and strip a preceding whitespace to conform to CMP0004
+
+--- a/test/pytest/src/CMakeLists.txt
++++ b/test/pytest/src/CMakeLists.txt
+@@ -56,11 +56,12 @@ find_package(Python 3.11 REQUIRED
+ if(UNIX)
+     execute_process(
+         COMMAND 
+-            python3-config --ldflags 
++            python3-config --embed --ldflags
+         OUTPUT_VARIABLE 
+             PYTHON_LD_FLAGS 
+         OUTPUT_STRIP_TRAILING_WHITESPACE
+     )
++    string(STRIP ${PYTHON_LD_FLAGS} PYTHON_LD_FLAGS)
+ endif()
+ 
+ target_link_libraries(${TARGET_NAME} PRIVATE 

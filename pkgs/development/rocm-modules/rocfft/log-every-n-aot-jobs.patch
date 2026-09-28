@@ -1,0 +1,35 @@
+diff --git a/library/src/rocfft_aot_helper.cpp b/library/src/rocfft_aot_helper.cpp
+index f0a889f4..452eb37f 100644
+--- a/library/src/rocfft_aot_helper.cpp
++++ b/library/src/rocfft_aot_helper.cpp
+@@ -771,26 +771,22 @@ int main(int argc, char** argv)
+     for(size_t i = 0; i < NUM_THREADS; ++i)
+     {
+         threads.emplace_back([&queue, &gpu_archs]() {
++            int compile_count = 0;
+             while(true)
+             {
+                 auto item = queue.pop();
+                 if(item.kernel_name.empty())
+                     break;
+ 
++                if(++compile_count % 16 == 0)
++                    std::cerr << "rocfft_aot_helper processing " << item.kernel_name << std::endl << std::flush;
+                 for(const auto& gpu_arch : gpu_archs)
+                 {
+-                    if(item.sol_arch_name.empty())
++                    if(item.sol_arch_name.empty() || gpu_arch.find(item.sol_arch_name) != std::string::npos)
+                     {
+                         RTCCache::cached_compile(
+                             item.kernel_name, gpu_arch, item.generate_src, generator_sum());
+                     }
+-                    else if(gpu_arch.find(item.sol_arch_name) != std::string::npos)
+-                    {
+-                        // std::cout << "arch: " << gpu_arch
+-                        //           << ", solution-kernel: " << item.kernel_name << std::endl;
+-                        RTCCache::cached_compile(
+-                            item.kernel_name, gpu_arch, item.generate_src, generator_sum());
+-                    }
+                 }
+             }
+         });

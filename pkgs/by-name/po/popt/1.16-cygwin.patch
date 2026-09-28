@@ -1,0 +1,11 @@
+--- origsrc/poptconfig.c	2009-05-20 08:18:07.000000000 -0500
++++ src/poptconfig.c	2012-03-29 18:13:46.869286100 -0500
+@@ -42,7 +42,7 @@ extern int glob_pattern_p (const char *_
+ /*@=declundef =exportheader =incondefs =protoparammatch =redecl =type @*/
+ #endif	/* __LCLINT__ */
+ 
+-#if !defined(__GLIBC__)
++#if !defined(__GLIBC__) && !defined(__CYGWIN__)
+ /* Return nonzero if PATTERN contains any metacharacters.
+    Metacharacters can be quoted with backslashes if QUOTE is nonzero.  */
+ static int

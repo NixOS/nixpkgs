@@ -1,0 +1,13 @@
+[build-system]
+requires = ["flit_core"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "cmake"
+version = "@version@"
+description = "CMake is an open-source, cross-platform family oftools designed to build, test and package software"
+
+[project.scripts]
+cmake = "cmake:cmake"
+cpack = "cmake:cpack"
+ctest = "cmake:ctest"

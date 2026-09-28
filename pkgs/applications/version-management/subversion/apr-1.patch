@@ -1,0 +1,11 @@
+--- a/subversion/bindings/swig/perl/native/Makefile.PL.in
++++ b/subversion/bindings/swig/perl/native/Makefile.PL.in
+@@ -72,7 +72,7 @@
+ # According to the log of r7937, the flags guarded by the conditional break
+ # the build on FreeBSD if not conditionalized.
+ my $apr_ldflags = '@SVN_APR_LIBS@'
+-   if $^O eq 'darwin' or $^O eq 'cygwin';
++   if $^O eq 'darwin' or $^O eq 'cygwin' or $^O eq 'linux';
+ 
+ chomp $apr_shlib_path_var;
+ 

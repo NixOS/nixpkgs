@@ -1,0 +1,478 @@
+{
+  lib,
+  pkgs,
+  ...
+}:
+{
+  options.services.github-runners = lib.mkOption {
+    description = ''
+      Multiple GitHub Runners.
+    '';
+    example = {
+      runner1 = {
+        enable = true;
+        url = "https://github.com/owner/repo";
+        name = "runner1";
+        tokenFile = "/secrets/token1";
+      };
+
+      runner2 = {
+        enable = true;
+        url = "https://github.com/owner/repo";
+        name = "runner2";
+        tokenFile = "/secrets/token2";
+      };
+    };
+    default = { };
+    type = lib.types.attrsOf (
+      lib.types.submodule (
+        { name, config, ... }:
+        {
+          options = {
+            enable = lib.mkOption {
+              default = false;
+              example = true;
+              description = ''
+                Whether to enable GitHub Actions runner.
+
+                Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
+                [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
+              '';
+              type = lib.types.bool;
+            };
+
+            url = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = ''
+                Repository to add the runner to.
+
+                Changing this option triggers a new runner registration.
+
+                IMPORTANT: If your token is org-wide (not per repository), you need to
+                provide a github org link, not a single repository, so do it like this
+                `https://github.com/nixos`, not like this
+                `https://github.com/nixos/nixpkgs`.
+                Otherwise, you are going to get a `404 NotFound`
+                from `POST https://api.github.com/actions/runner-registration`
+                in the configure script.
+
+                Mandatory unless `orgs` is used, in which case the URL is taken
+                from each `orgs.<name>.url` instead and this option is ignored.
+              '';
+              example = "https://github.com/nixos/nixpkgs";
+            };
+
+            tokenFile = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              description = ''
+                The full path to a file which contains either
+
+                * a fine-grained personal access token (PAT),
+                * a classic PAT
+                * or a runner registration token
+
+                Exactly one of `tokenFile` and `githubApp` must be set. Use
+                `githubApp` to authenticate via a GitHub App installation instead
+                of a token file.
+
+                Changing this option or the `tokenFile`’s content triggers a new runner registration.
+
+                We suggest using the fine-grained PATs. A runner registration token is valid
+                only for 1 hour after creation, so the next time the runner configuration changes
+                this will give you hard-to-debug HTTP 404 errors in the configure step.
+
+                The file should contain exactly one line with the token without any newline.
+                (Use `echo -n '…token…' > …token file…` to make sure no newlines sneak in.)
+
+                If the file contains a PAT, the service creates a new registration token
+                on startup as needed.
+                If a registration token is given, it can be used to re-register a runner of the same
+                name but is time-limited as noted above.
+
+                For fine-grained PATs:
+
+                Give it "Read and Write access to organization/repository self hosted runners",
+                depending on whether it is organization wide or per-repository. You might have to
+                experiment a little, fine-grained PATs are a `beta` Github feature and still subject
+                to change; nonetheless they are the best option at the moment.
+
+                For classic PATs:
+
+                Make sure the PAT has a scope of `admin:org` for organization-wide registrations
+                or a scope of `repo` for a single repository.
+
+                For runner registration tokens:
+
+                Nothing special needs to be done, but updating will break after one hour,
+                so these are not recommended.
+              '';
+              example = "/run/secrets/github-runner/nixos.token";
+            };
+
+            tokenType = lib.mkOption {
+              type = lib.types.enum [
+                "auto"
+                "access"
+                "registration"
+              ];
+              description = ''
+                Type of token to use for runner registration.
+
+                An access token is a personal access token or any other kind of GitHub token that
+                starts with `ghp_`, `gho_`, etc prefix. It is passed as `--pat` to the runner
+                config script.
+
+                A registration token is an unprefixed string generated by the
+                "Add new self-hosted runner" page. It is passed as `--token` to runner config
+                script.
+
+                The default `auto` attempts to detect the token type automatically based on its
+                format.
+              '';
+              example = "registration";
+              default = "auto";
+            };
+
+            githubApp = lib.mkOption {
+              default = null;
+              description = ''
+                Authenticate the runner using a GitHub App installation instead
+                of a `tokenFile`. Exactly one of `tokenFile` and `githubApp` must
+                be set.
+
+                On every start the service derives a short-lived installation
+                access token from the App's private key, uses it to fetch a fresh
+                runner registration token and registers the runner with it. This
+                avoids storing a long-lived personal access token on the host and
+                pairs well with `ephemeral` runners.
+
+                The App needs read and write access to the
+                "self-hosted runners" administration of the organisation (or
+                repository) given in `url`, and must be installed on the `login`
+                below.
+              '';
+              example = lib.literalExpression ''
+                {
+                  id = 123456;
+                  login = "my-org";
+                  privateKeyFile = "/run/secrets/github-app.pem";
+                }
+              '';
+              type = lib.types.nullOr (
+                lib.types.submodule {
+                  options = {
+                    id = lib.mkOption {
+                      type = lib.types.int;
+                      description = "The GitHub App's ID (the numeric `App ID`, not the client ID).";
+                      example = 123456;
+                    };
+
+                    login = lib.mkOption {
+                      type = lib.types.nullOr lib.types.str;
+                      default = null;
+                      description = ''
+                        The organisation (or user) login the GitHub App is
+                        installed on. Used to look up the App installation and,
+                        for organisation-wide runners, as the registration scope.
+
+                        Mandatory unless `orgs` is used, in which case the login
+                        is taken from each `orgs.<name>.login` instead and this
+                        option is ignored.
+
+                        Changing this option triggers a new runner registration.
+                      '';
+                      example = "my-org";
+                    };
+
+                    privateKeyFile = lib.mkOption {
+                      type = lib.types.path;
+                      description = ''
+                        The full path to a file containing the GitHub App's
+                        PEM-encoded private key. The file should be deployed as a
+                        secret and is never copied into the Nix store.
+                      '';
+                      example = "/run/secrets/github-app.pem";
+                    };
+                  };
+                }
+              );
+            };
+
+            name = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = ''
+                Name of the runner to configure. If null, defaults to the hostname.
+
+                Changing this option triggers a new runner registration.
+              '';
+              example = "nixos";
+              default = name;
+            };
+
+            count = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 1;
+              example = 4;
+              description = ''
+                Number of identical runner instances to create.
+
+                Without `orgs`, this fans the single entry (using the
+                entry-level `url`) out into `count` runner services:
+                `github-runner-<name>` for `count == 1` (unchanged) and
+                `github-runner-<name>-<n>` for `count > 1`. Each instance
+                registers under a distinct runner name.
+
+                With `orgs`, this is the default replica count for every org
+                that does not set its own; see `orgs.<name>.count`.
+
+                Pairs well with `ephemeral`.
+              '';
+            };
+
+            orgs = lib.mkOption {
+              default = { };
+              description = ''
+                Organisations (or repositories) to serve from this entry.
+
+                When set, the entry fans out into one systemd service per runner
+                named `github-runner-<name>-<org>-<n>`, where `<org>` is the
+                attribute name and `<n>` ranges over the per-org `count`. The
+                entry-level `githubApp`/`tokenFile` is shared across every org;
+                only the App `login` changes per org (defaulting to the
+                attribute name), so a single GitHub App installed on multiple
+                orgs serves all of them.
+
+                Leaving this empty (the default) keeps the single-runner
+                behaviour: the entry-level `url`, `name` and auth, fanned out by
+                the entry-level `count`.
+              '';
+              example = lib.literalExpression ''
+                {
+                  org-a.count = 12;
+                  org-b = {
+                    count = 2;
+                    extraLabels = [ "org-b" ];
+                  };
+                }
+              '';
+              type = lib.types.attrsOf (
+                lib.types.submodule (
+                  { name, ... }:
+                  {
+                    options = {
+                      url = lib.mkOption {
+                        type = lib.types.str;
+                        default = "https://github.com/${name}";
+                        defaultText = lib.literalExpression ''"https://github.com/''${name}"'';
+                        description = ''
+                          URL of the organisation (or repository) to connect to.
+                          Defaults to the GitHub URL derived from the attribute name.
+                        '';
+                      };
+
+                      login = lib.mkOption {
+                        type = lib.types.str;
+                        default = name;
+                        defaultText = lib.literalExpression "\${name}";
+                        description = ''
+                          GitHub login (org or user) the shared `githubApp` is
+                          installed on. Defaults to the attribute name. Ignored
+                          when authenticating via `tokenFile`.
+                        '';
+                      };
+
+                      count = lib.mkOption {
+                        type = lib.types.ints.positive;
+                        default = config.count;
+                        defaultText = lib.literalMD "the entry-level `count`";
+                        example = 4;
+                        description = ''
+                          Number of identical runner instances to create for this
+                          org. Defaults to the entry-level `count`. Each gets its
+                          own systemd service named `github-runner-<name>-<org>-<n>`
+                          and registers under a distinct runner name. Pairs well
+                          with `ephemeral`.
+                        '';
+                      };
+
+                      extraLabels = lib.mkOption {
+                        type = lib.types.listOf lib.types.str;
+                        default = [ ];
+                        example = lib.literalExpression ''[ "org-a" ]'';
+                        description = ''
+                          Extra labels added, on top of the entry-level `extraLabels`,
+                          only to this org's runners.
+                        '';
+                      };
+                    };
+                  }
+                )
+              );
+            };
+
+            runnerGroup = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = ''
+                Name of the runner group to add this runner to (defaults to the default runner group).
+
+                Changing this option triggers a new runner registration.
+              '';
+              default = null;
+            };
+
+            extraLabels = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              description = ''
+                Extra labels in addition to the default (unless disabled through the `noDefaultLabels` option).
+
+                Changing this option triggers a new runner registration.
+              '';
+              example = lib.literalExpression ''[ "nixos" ]'';
+              default = [ ];
+            };
+
+            noDefaultLabels = lib.mkOption {
+              type = lib.types.bool;
+              description = ''
+                Disables adding the default labels. Also see the `extraLabels` option.
+
+                Changing this option triggers a new runner registration.
+              '';
+              default = false;
+            };
+
+            replace = lib.mkOption {
+              type = lib.types.bool;
+              description = ''
+                Replace any existing runner with the same name.
+
+                Without this flag, registering a new runner with the same name fails.
+              '';
+              default = false;
+            };
+
+            extraPackages = lib.mkOption {
+              type = lib.types.listOf lib.types.package;
+              description = ''
+                Extra packages to add to `PATH` of the service to make them available to workflows.
+              '';
+              default = [ ];
+            };
+
+            extraEnvironment = lib.mkOption {
+              type = lib.types.attrs;
+              description = ''
+                Extra environment variables to set for the runner, as an attrset.
+              '';
+              example = {
+                GIT_CONFIG = "/path/to/git/config";
+              };
+              default = { };
+            };
+
+            serviceOverrides = lib.mkOption {
+              type = lib.types.attrs;
+              description = ''
+                Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
+                See {manpage}`systemd.exec(5)` for more options.
+              '';
+              example = {
+                ProtectHome = false;
+                RestrictAddressFamilies = [ "AF_PACKET" ];
+              };
+              default = { };
+            };
+
+            package = lib.mkPackageOption pkgs "github-runner" { } // {
+              apply = pkg: pkg.override { inherit (config) nodeRuntimes; };
+            };
+
+            ephemeral = lib.mkOption {
+              type = lib.types.bool;
+              description = ''
+                If enabled, causes the following behavior:
+
+                - Passes the `--ephemeral` flag to the runner configuration script
+                - De-registers and stops the runner with GitHub after it has processed one job
+                - On stop, systemd wipes the runtime directory (this always happens, even without using the ephemeral option)
+                - Restarts the service after its successful exit
+                - On start, wipes the state directory and configures a new runner
+
+                You should only enable this option if `tokenFile` points to a file which contains a
+                personal access token (PAT). If you're using the option with a registration token, restarting the
+                service will fail as soon as the registration token expired.
+
+                Changing this option triggers a new runner registration.
+              '';
+              default = false;
+            };
+
+            user = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = ''
+                User under which to run the service.
+
+                If this option and the `group` option is set to `null`,
+                the service runs as a dynamically allocated user.
+
+                Also see the `group` option for an overview on the effects of the `user` and `group` settings.
+              '';
+              default = null;
+              defaultText = lib.literalExpression "username";
+            };
+
+            group = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = ''
+                Group under which to run the service.
+
+                The effect of this option depends on the value of the `user` option:
+
+                - `group == null` and `user == null`:
+                  The service runs with a dynamically allocated user and group.
+                - `group == null` and `user != null`:
+                  The service runs as the given user and its default group.
+                - `group != null` and `user == null`:
+                  This configuration is invalid. In this case, the service would use the given group
+                  but run as root implicitly. If this is really what you want, set `user = "root"` explicitly.
+              '';
+              default = null;
+              defaultText = lib.literalExpression "groupname";
+            };
+
+            workDir = lib.mkOption {
+              type = with lib.types; nullOr str;
+              description = ''
+                Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
+                and used as a default for [repository checkouts](https://github.com/actions/checkout).
+                The service cleans this directory on every service start.
+
+                A value of `null` will default to the systemd `RuntimeDirectory`.
+
+                Changing this option triggers a new runner registration.
+              '';
+              default = null;
+            };
+
+            nodeRuntimes = lib.mkOption {
+              type =
+                with lib.types;
+                nonEmptyListOf (enum [
+                  "node20"
+                  "node24"
+                ]);
+              default = [
+                "node24"
+              ];
+              description = ''
+                List of Node.js runtimes the runner should support.
+              '';
+            };
+          };
+        }
+      )
+    );
+  };
+}

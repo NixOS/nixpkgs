@@ -1,0 +1,14 @@
+diff --git a/gusb/meson.build b/gusb/meson.build
+index 8236a2b..282aa48 100644
+--- a/gusb/meson.build
++++ b/gusb/meson.build
+@@ -147,7 +147,7 @@ libgusb_gir = libgusb_girtarget[0]
+ libgusb_typelib = libgusb_girtarget[1]
+ 
+ pymod = import('python')
+-py_installation = pymod.find_installation()
++py_installation = pymod.find_installation('@python@')
+ 
+ # Verify the map file is correct -- note we can't actually use the generated
+ # file for two reasons:
+

@@ -1,0 +1,7 @@
+{
+
+  disabledModules = [
+    ./foo.nix
+  ];
+
+}

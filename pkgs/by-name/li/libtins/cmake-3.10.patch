@@ -1,0 +1,47 @@
+From c49fc6ddb1a305a1ff7390b26de83eb35a5b8b12 Mon Sep 17 00:00:00 2001
+From: Dave Walker <dave@daviey.com>
+Date: Thu, 9 Oct 2025 11:28:45 +0100
+Subject: [PATCH] Update CMake minimum required version to 3.10
+
+CMake 4 removed compatibility with CMake versions < 3.5, and versions
+between 3.5-3.10 are deprecated.
+
+This change updates the minimum required version to 3.10 to ensure
+compatibility with modern CMake versions including CMake 4.x.
+
+This issue is affecting NixOS users (see
+https://github.com/NixOS/nixpkgs/issues/450198) and will likely impact
+other distributions as they upgrade to CMake 4.x.
+
+Upstream PR: https://github.com/mfontanini/libtins/pull/553
+---
+ CMakeLists.txt                       | 2 +-
+ cmake/Modules/CheckCXXFeatures.cmake | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3eb435f..a011a19 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+ PROJECT(libtins)
+ 
+ OPTION(LIBTINS_BUILD_EXAMPLES "Build examples" ON)
+diff --git a/cmake/Modules/CheckCXXFeatures.cmake b/cmake/Modules/CheckCXXFeatures.cmake
+index b7b7f14..d924ddc 100644
+--- a/cmake/Modules/CheckCXXFeatures.cmake
++++ b/cmake/Modules/CheckCXXFeatures.cmake
+@@ -50,7 +50,7 @@ if (NOT CMAKE_CXX_COMPILER_LOADED)
+     message(FATAL_ERROR "CheckCXX11Features modules only works if language CXX is enabled")
+ endif ()
+ 
+-cmake_minimum_required(VERSION 2.8.3)
++cmake_minimum_required(VERSION 3.10)
+ 
+ #
+ ### Check for needed compiler flags
+-- 
+2.51.0
+

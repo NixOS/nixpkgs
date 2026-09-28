@@ -1,0 +1,26 @@
+diff --git a/doc/Makefile.in b/doc/Makefile.in
+index be8ebe5..13ae676 100644
+--- a/doc/Makefile.in
++++ b/doc/Makefile.in
+@@ -684,7 +684,7 @@ fimgs.man.html: fimgs.man
+ 	if test ! -s $@ ; then $(MAN2TXT) ./$< > $<.txt && $(srcdir)/vim2html.pl tags $<.txt && mv $<.txt.html $@ ; fi
+ 
+ doctags$(EXEEXT): doctags.c
+-	        $(CC) -o $@ $<
++	        @cc_for_build@ -o $@ $<
+ 
+ #clean:
+ #	        $(RM) -f  doctags.o doctags$(EXEEXT) FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 76f5e1e..027159c 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -1132,7 +1132,7 @@ help-acm.cpp: fim.h
+ 	$(ECHO) '//#endif' >> $@
+ 
+ b2ba$(EXEEXT): b2ba.c
+-	$(CC) -o $@ $<
++	@cc_for_build@ -o $@ $<
+ 
+ @FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT_TRUE@@HAVE_RUNNABLE_TESTS_TRUE@default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba$(EXEEXT)
+ @FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT_TRUE@@HAVE_RUNNABLE_TESTS_TRUE@	./b2ba$(EXEEXT) < $< > $@
