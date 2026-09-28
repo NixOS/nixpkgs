@@ -251,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString libOnly ''
       find $out/share -maxdepth 1 -mindepth 1 ! -name "vala" -prune -exec rm -r {} \;
       find $out/share/vala -maxdepth 1 -mindepth 1 ! -name "vapi" -prune -exec rm -r {} \;
-      rm -r $out/{.bin-unwrapped,etc,lib/pulse-*}
+      rm -r $out/{.bin-unwrapped,etc,lib/pulse-*,lib/pulseaudio}
     ''
     + ''
       moveToOutput lib/cmake "$dev"
