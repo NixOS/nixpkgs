@@ -6,7 +6,7 @@ let
   testPassword = "it's a secret";
 in
 {
-  name = "syncthing";
+  name = "syncthing-folders";
   meta.maintainers = with pkgs.lib.maintainers; [ zarelit ];
 
   nodes = {
