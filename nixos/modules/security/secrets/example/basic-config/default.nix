@@ -39,8 +39,7 @@
       files.greeting.deploy = false;
       generate =
         pkgs:
-        pkgs.writeScript "gen-user" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-user" ''
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           echo "Hewwo $(cat "$prompts/name")!" > "$out/greeting"
         '';
@@ -52,8 +51,7 @@
       files.cow-greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-derived" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-derived" ''
           export PATH="${
             lib.makeBinPath [
               pkgs.coreutils
@@ -69,8 +67,7 @@
       files.cow-greeting-copy = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-derived-plain" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-derived-plain" ''
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           cat $in/derived/cow-greeting > $out/cow-greeting-copy
         '';

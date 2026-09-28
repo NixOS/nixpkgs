@@ -5,8 +5,7 @@
     files.cow-greeting = { };
     generate =
       pkgs:
-      pkgs.writeScript "gen-derived" ''
-        #!/bin/sh
+      pkgs.writeShellScript "gen-derived" ''
         export PATH="${
           lib.makeBinPath [
             pkgs.coreutils

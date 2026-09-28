@@ -189,8 +189,7 @@ in
     # implementation).
     deploy.remote = lib.mkIf (cfg.ssh.target != null) (
       pkgs:
-      pkgs.writeScript "deploy-remote" ''
-        #!/bin/sh
+      pkgs.writeShellScript "deploy-remote" ''
         set -euo pipefail
         ${ageScript pkgs "deploy"} | ssh "${cfg.ssh.target}" -i "${cfg.ssh.identity}" '
           # set -euo pipefail # <- Can't do this; the shell might not be bash :(

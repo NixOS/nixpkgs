@@ -8,8 +8,7 @@
       files.greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-greeting" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-greeting" ''
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           echo "Hewwo $(cat "$prompts/name")!" > $out/greeting
         '';
@@ -20,8 +19,7 @@
       files.cow-greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-derived" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-derived" ''
           export PATH="${
             lib.makeBinPath [
               pkgs.coreutils

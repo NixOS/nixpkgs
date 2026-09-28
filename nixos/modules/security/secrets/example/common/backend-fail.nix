@@ -3,17 +3,12 @@
 let
   fail =
     pkgs:
-    pkgs.writeScript "fail" ''
-      #!/bin/sh
+    pkgs.writeShellScript "fail" ''
       echo "Automatically failing" 1>&2
       exit 1
     '';
 
-  noop =
-    pkgs:
-    pkgs.writeScript "noop" ''
-      #!/bin/sh
-    '';
+  noop = pkgs: pkgs.writeShellScript "noop" "";
 in
 {
   config.secrets.backends.store.fail = {

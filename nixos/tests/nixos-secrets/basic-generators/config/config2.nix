@@ -8,8 +8,7 @@
       files.greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-example" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-example" ''
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           echo "Hewwo $(cat "$prompts/name")!!!" > $out/greeting
         '';
@@ -20,8 +19,7 @@
       files.reverse-greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-reverse" ''
-          #!/bin/sh
+        pkgs.writeShellScript "gen-reverse" ''
           export PATH="${
             lib.makeBinPath [
               pkgs.coreutils

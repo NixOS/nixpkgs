@@ -3,8 +3,7 @@
     files.greeting = { };
     generate =
       pkgs:
-      pkgs.writeScript "gen-greeting" ''
-        #!/bin/sh
+      pkgs.writeShellScript "gen-greeting" ''
         echo "Hewwo world :3c" > $out/greeting
       '';
   };
