@@ -19,20 +19,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "3.8.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "wealthfolio";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5CqLHnwBzqA+yf/sQM2ie3xuO+5aM5EDA0bhZ6r1VIM=";
+    hash = "sha256-ozdNgUytQMWzPf7N+8x2boNC/GgxMmzGzAnioGW20VA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-I9s1hFNb7oHYH5OhKmtMbMsmQZXE6ovpupusN6M1YKc=";
+    hash = "sha256-j9rqB5RYpoyQP58erDE5r1Kx7Aq9vOQbiOTBzGVoe9k=";
   };
 
   cargoRoot = ".";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-PFMmpQhQubMzomvLWMJZrriH9emwEzO/rTFCovzFt6w=";
+    hash = "sha256-skElXNXFcTwPv+rLKY90He8XLZfVrOJ8jYC4kL2vj9c=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  env.OPENSSL_NO_VENDOR = "1";
 
   postPatch = ''
     jq \
