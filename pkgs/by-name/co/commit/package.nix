@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Git commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "re.sonny.Commit";
     platforms = lib.platforms.linux;
