@@ -1,0 +1,8 @@
+libdir=@out@/lib
+includedir=@dev@/include
+
+Name: @pname@
+Description: @description@
+Version: @version@
+Cflags: -I${includedir}/juice
+Libs: -L${libdir} -ljuice
