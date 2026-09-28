@@ -38,6 +38,7 @@
   ninja,
   m4,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
   fetchpatch2,
   nixosTests,
 
@@ -241,9 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall =
     lib.optionalString libOnly ''
