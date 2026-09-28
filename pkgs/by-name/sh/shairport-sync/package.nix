@@ -69,12 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    # For glib we want the `dev` output for the same library we are
-    # also linking against, since pkgsHostTarget.glib.dev exposes
-    # some extra tools that are built for build->host execution.
-    # To achieve this, we coerce the output to a string to prevent
-    # mkDerivation's splicing logic from kicking in.
-    "${glib.dev}"
   ]
   ++ optionals enableAirplay2 [
     libplist.bin
@@ -105,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     ffmpeg
   ]
-  ++ optional stdenv.hostPlatform.isLinux glib;
+  ++ optional (enableDbus || enableMpris) glib;
 
   postPatch = lib.optionalString enableSessionBus ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
@@ -113,6 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  preConfigure = lib.optionalString (enableDbus || enableMpris) ''
+    export PATH=${glib.dev}/bin:$PATH
+  '';
 
   configureFlags = [
     "--without-configfiles"
