@@ -1,0 +1,47 @@
+diff --git a/src/ansiblecmdb/parser.py b/src/ansiblecmdb/parser.py
+index 3b3a885..5194b20 100644
+--- a/src/ansiblecmdb/parser.py
++++ b/src/ansiblecmdb/parser.py
+@@ -115,7 +115,7 @@ class HostsParser(object):
+         Returns:
+             ('children', 'prod')
+         """
+-        m = re.match("\[(.*)\]", line)
++        m = re.match(r"\[(.*)\]", line)
+         group_def = m.groups()[0]
+         if ':' in group_def:
+             group_name, group_type = group_def.split(':')
+diff --git a/src/ansiblecmdb/render.py b/src/ansiblecmdb/render.py
+index 6909457..f198b96 100644
+--- a/src/ansiblecmdb/render.py
++++ b/src/ansiblecmdb/render.py
+@@ -1,5 +1,5 @@
+ import os
+-import imp
++from importlib.util import spec_from_file_location, module_from_spec
+ from mako.template import Template
+ from mako.lookup import TemplateLookup
+ 
+@@ -59,5 +59,7 @@ class Render:
+         return template.render(hosts=hosts, **vars)
+ 
+     def _render_py(self, hosts, vars={}):
+-        module = imp.load_source('r', self.tpl_file)
++        spec = spec_from_file_location('r', self.tpl_file)
++        module = module_from_spec(spec)
++        spec.loader.exec_module(module)
+         return module.render(hosts, vars=vars, tpl_dirs=self.tpl_dirs)
+diff --git a/test/test.py b/test/test.py
+index 667c7a1..9867351 100644
+--- a/test/test.py
++++ b/test/test.py
+@@ -1,6 +1,5 @@
+ import sys
+ import unittest
+-import imp
+ import os
+ 
+ sys.path.insert(0, os.path.realpath('../lib'))
+-- 
+2.44.1
+
