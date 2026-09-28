@@ -125,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     perlPackages.XMLParser
     m4
-    udevCheckHook
   ]
   ++ lib.optionals (!libOnly && glibSupport) [ glib ]
   # gstreamer plugin discovery requires wrapping
@@ -245,7 +244,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ] ++ lib.optionals (udevSupport && !libOnly) [
+    udevCheckHook
+  ];
 
   postInstall =
     lib.optionalString libOnly ''
