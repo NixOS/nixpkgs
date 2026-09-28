@@ -140,6 +140,9 @@ buildPythonPackage (finalAttrs: {
     # Output mismatch
     "test_additional_pattern_intersections"
     "test_undeclared_required"
+    # Generated SSL certificate not found by the test,
+    # despite the patch
+    "test_https_trusted_ca_verifies_and_generates_model"
   ];
 
   disabledTestPaths = [
