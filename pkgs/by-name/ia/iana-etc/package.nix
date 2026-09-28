@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     license = lib.licenses.mit;
   };
 })
