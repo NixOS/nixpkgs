@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= )
+declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= [affiliation]= )
 HELP_MESSAGE="usage: '$0' [selector] value
 examples:
   get-maintainer.sh nicoo
@@ -61,6 +61,9 @@ query() {
   case "$selector" in
     githubId)
       select="select(.${selector} == $value)"
+      ;;
+    affiliation)
+      select="select(.${selector} | has(\"$value\"))"
       ;;
     *)
       select="select(.${selector} == \"$value\")"
