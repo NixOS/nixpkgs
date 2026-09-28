@@ -1,18 +1,18 @@
 {
   "repo": "VirtusLab/scala-cli",
-  "version": "1.16.0",
+  "version": "1.17.1",
   "assets": {
     "aarch64-darwin": {
       "asset": "scala-cli-aarch64-apple-darwin.gz",
-      "hash": "sha256-f8IuaCBvTFeUVQSeaE+CbFpqmnrpVTkbmtH9X0GNBNg="
+      "hash": "sha256-sE+kTl67QkPpxqohsNCd2FsRGCxRl8SjcJ4lJ1Odhkc="
     },
     "aarch64-linux": {
       "asset": "scala-cli-aarch64-pc-linux.gz",
-      "hash": "sha256-LRVyV0OdccfqEePv9Y1VORMxyZJTP+OTf+wQRAQYOWE="
+      "hash": "sha256-oS7VP0cj8+kxKiOD5HZktL6szyvjZs/0Ct9rBUQmFW8="
     },
     "x86_64-linux": {
       "asset": "scala-cli-x86_64-pc-linux.gz",
-      "hash": "sha256-NjZMtzBdSpzoH2XEdrPfz9PgC2K9GdqehrQ5HslTeSQ="
+      "hash": "sha256-QYa/rGVSCX+/05Ob3y7N7By1W6r8v2JZvvXATgiFjrM="
     }
   }
 }

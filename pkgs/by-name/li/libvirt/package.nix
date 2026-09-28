@@ -15,7 +15,6 @@
   gnutls,
   iproute2,
   iptables,
-  libgcrypt,
   libpcap,
   libtasn1,
   libxml2,
@@ -120,14 +119,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "12.6.0";
+  version = "12.7.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-SEscELXhiEoFnDDcxV7Jb2LjyheNJbgPp7AnXix2GVU=";
+    hash = "sha256-5R+EYWo+ZC6F02x+MpXTYJUbo64BDg/Wtlpklo6OtWI=";
   };
 
   patches = [
@@ -226,7 +225,6 @@ stdenv.mkDerivation rec {
     dbus
     glib
     gnutls
-    libgcrypt
     libpcap
     libtasn1
     libxml2

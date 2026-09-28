@@ -2,22 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylatexenc";
   version = "2.11";
-  format = "setuptools";
+
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phfaist";
     repo = "pylatexenc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Zv3Sjx0YpSCnoHHf3CSiGaFMS7FNgUUwvIxNX/k9tOg=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "pylatexenc" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
@@ -28,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

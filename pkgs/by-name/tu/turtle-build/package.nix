@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turtle-build";
-  version = "0.4.9";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "turtle-build";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sbYDp4r/M6GvCYEshccJ331mVNeN85wwf9TKHiYFv7I=";
+    hash = "sha256-WWPrTVCVLMVH28WitTFh3OE7ig0GwSBSh9RhGfOYCG4=";
   };
 
-  cargoHash = "sha256-JZU0Xam4NPiOHdXDtJsTBjOQnaDWReSZMD33sQxeUzQ=";
+  cargoHash = "sha256-537IZEfCIRyJhAD3nv6l2iuuloosJmgmwHTFueTsTEk=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

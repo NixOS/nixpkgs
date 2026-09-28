@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Text Editor Written In C Using ncurses";
     homepage = "https://github.com/Cano-Projects/Cano";
     license = lib.licenses.asl20;
-    mainProgram = "Cano";
+    mainProgram = "cano";
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.linux;
   };

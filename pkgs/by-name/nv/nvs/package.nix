@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nvs";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "y3owk1n";
     repo = "nvs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mz5ScSWC0vAavWS2ZKn58b+k4IxlMLxhaxI1B9v76jg=";
+    hash = "sha256-8koivXbheErauqlquLeEo+7/Iz4HkblblzBY/nojCUg=";
   };
 
-  vendorHash = "sha256-KQVszK0LLMvi+5aWUVmTTGdUsqJrTWRLe2meb2qV2G0=";
+  vendorHash = "sha256-PGwT0PKzBKNbeUilU8GEPEBgaYvR6k5JZ8StXMzjv7M=";
 
   ldflags = [
     "-s"

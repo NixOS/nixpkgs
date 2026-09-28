@@ -76,7 +76,7 @@ let
       CFBundlePackageType = "APPL";
       CFBundleShortVersionString = version;
       CFBundleSupportedPlatforms = [ "MacOSX" ];
-      CFBundleVersion = "18";
+      CFBundleVersion = "21";
       LSApplicationCategoryType = "public.app-category.developer-tools";
       LSMinimumSystemVersion = "13.5";
       LSUIElement = true;
@@ -85,7 +85,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "swipeaerospace";
-  version = "0.3.1";
+  version = "0.3.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MediosZ";
     repo = "SwipeAeroSpace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-468QGWjbRtA9Fml6jjeJZBTCUEp227cQPckqwyLK0dM=";
+    hash = "sha256-lEWbZ/FvxtlY4VnFRk//tDeVrW9+udyJ+hbUsG61jhI=";
   };
 
   # Keep SettingsView unchanged, but open it through a regular WindowGroup.

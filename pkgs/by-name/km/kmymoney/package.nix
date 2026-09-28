@@ -15,6 +15,8 @@
   libical,
   libofx,
   sqlcipher,
+  # TODO: Remove wrapGAppsHook* once PR #507455 or an alternative lands.
+  wrapGAppsHook3,
 
   # Needed for running tests:
   xvfb-run,
@@ -41,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     pkg-config
     python3.pkgs.wrapPython
+    wrapGAppsHook3
   ]
   ++ (with kdePackages; [
     extra-cmake-modules
@@ -91,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     # by patchPythonScript doesn't fail:
     sed -i -e '1i import sys; sys.argv = [""]' \
       "kmymoney/plugins/woob/interface/kmymoneywoob.py"
+  '';
+
+  dontWrapGApps = true; # TODO: Remove this when removing wrapGAppsHook*.
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # libpython is required by the python interpreter embedded in kmymoney, so we

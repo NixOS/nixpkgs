@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.31.1";
+  version = "7.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HjiOZd+fkCTlxMEiuHWxaFeHwf7vHAYESMLkJ9Cye1U=";
+    hash = "sha256-dSkIO5XgnT+NsNeiq4wCTsGXrgN/uSnxYMrxcBdFMio=";
   };
 
   pythonRelaxDeps = [
@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/Python-roborock/python-roborock";
     changelog = "https://github.com/Python-roborock/python-roborock/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "roborock";
   };

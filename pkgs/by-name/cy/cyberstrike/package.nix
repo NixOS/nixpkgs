@@ -174,5 +174,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cyberstrike";
+    # Maintainers have never tested on other platforms, and the package breaks on aarch64-linux and aarch64-darwin in practice
+    platforms = [ "x86_64-linux" ];
   };
 })

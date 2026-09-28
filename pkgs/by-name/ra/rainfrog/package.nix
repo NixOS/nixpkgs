@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rainfrog";
-  version = "0.4.4";
+  version = "0.4.5";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "achristmascarl";
     repo = "rainfrog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PQB/wuLh2iRTlKIwAJ8KfcMJUtHHDkIQXcd2GkorKeI=";
+    hash = "sha256-kA3rIGmSid3qbIasqoSnFv4w0P+RrAWoH8PszY9xSGs=";
   };
 
-  cargoHash = "sha256-0HQszMKfmt93wi+HnZigKPssoDXfpV9BfQJgfG/geEw=";
+  cargoHash = "sha256-A3gZF2oJVt5WR56JVwsPOVvgu/d9veD01+gQESNV0Qc=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -6,7 +6,7 @@
   # Build deps
   bun,
   tailwindcss_4,
-  typescript,
+  typescript_7,
   makeBinaryWrapper,
 
   # Runtime deps
@@ -78,10 +78,17 @@ in
 stdenvNoCC.mkDerivation {
   inherit pname version src;
 
+  # tsconfig.json:13:5 - error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+  # https://github.com/C4illin/ConvertX/pull/615
+  postPatch = ''
+    substituteInPlace tsconfig.json \
+      --replace-fail '"downlevelIteration": true,' ""
+  '';
+
   nativeBuildInputs = [
     makeBinaryWrapper
     tailwindcss_4
-    typescript
+    typescript_7
   ];
 
   dontConfigure = true;

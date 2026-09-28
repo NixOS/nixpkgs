@@ -12,7 +12,7 @@
   glib,
   gtk3,
   libxtst,
-  jdk,
+  jdk25,
   gsettings-desktop-schemas,
   webkitgtk_4_1 ? null, # for internal web browser
   buildEnv,
@@ -59,7 +59,6 @@ let
       libx11
       libxrender
       zlib
-      jdk
       glib
       gtk
       libxtst
@@ -67,6 +66,7 @@ let
       webkitgtk_4_1
       makeWrapper
       ;
+    jdk = jdk25;
   };
   buildEclipse =
     eclipseData:

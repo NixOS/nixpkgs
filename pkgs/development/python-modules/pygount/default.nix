@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "chardet"
+  ];
+
   dependencies = [
     chardet
     gitpython

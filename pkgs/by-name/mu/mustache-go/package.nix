@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "mustache-go";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "cbroglie";
     repo = "mustache";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
+    hash = "sha256-1Kx3CnNxyRyRixMd49HfVAPQhyxU0qMw/H1mD0ugOdk=";
   };
 
-  vendorHash = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";
+  vendorHash = "sha256-8IuIjowz7NoUUEIuEQ55uvvOT5PsaIJhaNIeZIIaXY4=";
 
   ldflags = [
     "-s"

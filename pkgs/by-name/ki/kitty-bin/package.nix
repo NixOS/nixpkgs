@@ -8,20 +8,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kitty-bin";
-  version = "0.48.2";
+  version = "0.49.1";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/kovidgoyal/kitty/releases/download/v${finalAttrs.version}/kitty-${finalAttrs.version}.dmg";
-    hash = "sha256-+AT1juS2nHb4TrMoHhQHSCaaY/P0qBYBWo3sKgbSsZU=";
+    hash = "sha256-0li23KsYZqm8RWxVs3VMbN9qemqT0DhHUnVnW7nyBTo=";
   };
 
-  # undmg can't read the APFS dmg; -snld keeps the .app's symlinks intact.
   nativeBuildInputs = [ _7zz ];
   sourceRoot = ".";
-  unpackCmd = "7zz x -snld $curSrc";
 
   installPhase = ''
     runHook preInstall

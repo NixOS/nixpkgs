@@ -7,13 +7,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lexbor";
-  version = "3.0.0-unstable-2026-07-15";
+
+  # https://github.com/lexbor/lexbor/blob/${finalAttr.src.rev}/source/lexbor/core/base.h#L29-L31
+  version = "3.1.0-unstable-2026-09-17";
 
   src = fetchFromGitHub {
     owner = "lexbor";
     repo = "lexbor";
-    rev = "de1d07a7765aad37090cc36f7fac3bb59e21467d";
-    hash = "sha256-e8NcTvLCbyCLeGdmmZBM4fmTirWYrQ/46nNqAjAnDzM=";
+    rev = "61ef2bc586e1a8a42d257b5b3e6a83689d4b8bce";
+    hash = "sha256-XwalZYWJ33t92ld7MlhKefm8BK6zdsZzJp/KIpRQG+Y=";
   };
 
   nativeBuildInputs = [

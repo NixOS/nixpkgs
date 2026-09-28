@@ -27,17 +27,17 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.25.0";
+  version = "3.26.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+7K8hy6zzLUshLc2I24md5FOYq3lB0ivx1VbCRHIXII=";
+    hash = "sha256-PFPHGY8akIZntz/LHUyQph6c+YD4OlppAPd3ols8Htg=";
   };
 
-  cargoHash = "sha256-fAdS77fBUFlSbXu1aw3X3z0ema2FC5fDo8At2GQpGn0=";
+  cargoHash = "sha256-Sl7122Z8irYPVTGUlkwTyrt/f3ZCPlLJG6GP+C7ENGM=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
@@ -51,6 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals withSound soundDependencies;
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # no notification on first save
+    "--skip=watch::tests::test_watch_file_saved_by_replacement"
+    "--skip=watch::tests::test_watch_symlinked_file"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -81,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen
+      GaetanLepage
       matthiasbeyer
     ];
   };

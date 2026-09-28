@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gdscript-formatter";
-  version = "0.24.0";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "GDQuest";
     repo = "GDScript-formatter";
     tag = finalAttrs.version;
-    hash = "sha256-dcA4U4bxFBSL41m+2svxl18iKMuExOf30c0Rcepaa8g=";
+    hash = "sha256-9x9ign+Y4K0M+VRDpT+mjpzwx3KZIXI/UIpW4JBSDY8=";
     # Needed due to .gitattributes being used for the Godot addon and export-ignoring all files
     deepClone = true;
     # Avoid hash differences due to differences in .git
     leaveDotGit = false;
   };
 
-  cargoHash = "sha256-D3a4DMzxS+UFM8HDSG58LC3joyaT/hFpgx3YmIEdPLI=";
+  cargoHash = "sha256-0bnGxlPfjNTZXRk2uLn1efHT8j+CBDWs9Ad6wrGiZ+g=";
 
   cargoBuildFlags = [
     "--bin=gdscript-formatter"

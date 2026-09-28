@@ -20,6 +20,10 @@
     "clipboard-line-cleaner@epiphanius.github.io",
     "clipboard-line-cleaner@example.com"
   ],
+  "focus-timer": [
+    "focus-timer@focustimerhq.github.io",
+    "pomodoro@lsbcodes"
+  ],
   "fuzzy-clock": [
     "FuzzyClock@fire-man-x",
     "FuzzyClock@johngoetz"
@@ -46,6 +50,7 @@
   ],
   "night-light-toggle": [
     "night-light-toggle@egoistpizza.github.com",
+    "night-light-toggle@shivamksharma.github.io",
     "nightlighttoggle@sam"
   ],
   "panel-workspace-scroll": [
@@ -55,6 +60,10 @@
   "persian-calendar": [
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
+  ],
+  "power-menu": [
+    "power-menu@dodog.github.io",
+    "power-menu@e6ad2020"
   ],
   "proxy-switcher": [
     "ProxySwitcher@flannaghan.com",
@@ -70,6 +79,10 @@
     "system-monitor@axet.github.com",
     "system-monitor@gnome-shell-extensions.gcampax.github.com",
     "system-monitor@jtourteau"
+  ],
+  "system-monitor-panel": [
+    "system-monitor-panel@gnome-shell-extensions",
+    "system-monitor-panel@naimur"
   ],
   "systemquest": [
     "system-rpg@conan513",

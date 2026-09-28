@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "leetgo";
-  version = "1.4.18";
+  version = "1.4.19";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gbpSosOeEe0sapzDzQdokx8/PnfN/vDK5IRDvUgxMZs=";
+    hash = "sha256-ndepxGGT7cS6hriTFye0sFDTuSlHFG0DKe3KHdfhIxM=";
   };
 
   vendorHash = "sha256-d+/XnkVODIg8tyiEUU+/01l8rKj7e6NeIEyWbvJ2Cyw=";

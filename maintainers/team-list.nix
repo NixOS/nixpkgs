@@ -108,7 +108,6 @@ with lib.maintainers;
     members = [
       lopsided98
       mic92
-      zowoq
     ];
     scope = "Maintain Buildbot CI framework";
     shortName = "Buildbot";
@@ -325,13 +324,7 @@ with lib.maintainers;
   };
 
   gnome-circle = {
-    members = [
-      aleksana
-      getchoo
-      michaelgrahamevans
-    ];
-    scope = "Maintain GNOME Circle applications.";
-    shortName = "GNOME Circle";
+    github = "gnome-circle";
   };
 
   golang = {
@@ -757,7 +750,6 @@ with lib.maintainers;
 
   swift = {
     members = [
-      dduan
       samasaur
       stephank
     ];

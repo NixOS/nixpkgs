@@ -19,16 +19,16 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "2.5.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     tag = "v${version}";
-    hash = "sha256-rNoQafBIxE0xoBFQNy6GoeIE93Uq3QEsktko77P2ps8=";
+    hash = "sha256-om2oqjlk/Jg1q7HTdGv41PYRXViDtQkhYa6rqe3uCfI=";
   };
 
-  vendorHash = "sha256-h8/DBqkaSSxIIFrdbun4doN3qyKbR3BhO4SwL5H/sfc=";
+  vendorHash = "sha256-tabupT5OF1BzMWuSNPEe7G6DF/PJWZ7WeRLNHefYvP0=";
 
   nativeBuildInputs = [ pkg-config ];
 

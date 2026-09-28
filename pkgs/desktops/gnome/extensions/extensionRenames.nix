@@ -20,6 +20,9 @@
   "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner";
   "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner-2";
 
+  "pomodoro@lsbcodes" = "focus-timer";
+  "focus-timer@focustimerhq.github.io" = "focus-timer-2";
+
   "FuzzyClock@johngoetz" = "fuzzy-clock";
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3"; # '-3' preserves backwards compatibility
 
@@ -40,12 +43,16 @@
 
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
+  "night-light-toggle@shivamksharma.github.io" = "night-light-toggle-3";
 
   "panel-workspace-scroll@polymeilex.github.io" = "panel-workspace-scroll";
   "panel-scroll@taygun86" = "panel-workspace-scroll-2";
 
   "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
   "PersianCalendar@oxygenws.com" = "persian-calendar";
+
+  "power-menu@e6ad2020" = "power-menu";
+  "power-menu@dodog.github.io" = "power-menu-2";
 
   "ProxySwitcher@flannaghan.com" = "proxy-switcher";
   "proxy-switcher@seydef" = "proxy-switcher-2";
@@ -58,6 +65,9 @@
   "system-monitor@axet.github.com" = "system-monitor-3";
   "sysmonitor@talhasiddique7" = "system-monitor-4";
   "system-monitor@jtourteau" = "system-monitor-5";
+
+  "system-monitor-panel@naimur" = "system-monitor-panel";
+  "system-monitor-panel@gnome-shell-extensions" = "system-monitor-panel-2";
 
   "system-rpg@conan513" = "systemquest";
   "system-rpg@gnome-rpg.local" = "systemquest-2";

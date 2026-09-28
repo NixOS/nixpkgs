@@ -85,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLB_RELEASE" true)
     (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Auto would raise the baseline to rv64gcv_zba
+    (lib.cmakeFeature "FLB_SIMD" "Off")
+  ]
   ++ lib.optionals stdenv.cc.isClang [
     # `FLB_SECURITY` causes bad linker options for Clang to be set.
     (lib.cmakeBool "FLB_SECURITY" false)
@@ -122,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fast and lightweight logs and metrics processor for Linux, BSD, OSX and Windows";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;

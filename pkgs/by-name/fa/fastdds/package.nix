@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_SHARED_LIBS=ON"
     "-DSECURITY=ON"
     "-DCOMPILE_EXAMPLES=OFF"

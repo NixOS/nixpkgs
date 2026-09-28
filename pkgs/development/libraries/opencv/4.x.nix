@@ -531,7 +531,7 @@ effectiveStdenv.mkDerivation {
 
     # OpenCV respects at least three variables:
     # -DCUDA_GENERATION takes a single arch name, e.g. Volta
-    # -DCUDA_ARCH_BIN takes a semi-colon separated list of real arches, e.g. "8.0;8.6"
+    # -DCUDA_ARCH_BIN takes a semicolon-separated list of real arches, e.g. "8.0;8.6"
     # -DCUDA_ARCH_PTX takes the virtual arch, e.g. "8.6"
     (cmakeFeature "CUDA_ARCH_BIN" cmakeCudaArchitecturesString)
     (cmakeFeature "CUDA_ARCH_PTX" (last cudaCapabilities))

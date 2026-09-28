@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
     (lib.cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
     (lib.cmakeFeature "ROCM_PATH" "${clr}")

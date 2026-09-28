@@ -23,17 +23,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitcomet";
-  version = "0.2.1";
+  version = "0.2.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Auto-Explore";
     repo = "GitComet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VRd3HHYuHfOebAT3yC5Tv4CJdFUJkZJHQ8vTzY78OQ0=";
+    hash = "sha256-V8OFHimks8QzV1sSz0DKR5j1HzMFF3mm81SueH87S9E=";
   };
 
-  cargoHash = "sha256-L/UXaXC1zymbNfv7SGmOYSvUy/767mAWqL+3jwJwWcE=";
+  cargoHash = "sha256-RwrSuN8xaE/QyX5IUbdWc5q7qWnm5MSbbSoq1iKTobY=";
 
   # Disable upstream's rustflags overrides to avoid linker and CPU target issues
   postPatch = ''

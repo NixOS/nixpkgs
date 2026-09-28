@@ -21,7 +21,7 @@
 }:
 stdenv.mkDerivation {
   pname = "xdg-desktop-portal-umbriel";
-  version = "0-unstable-2026-08-24";
+  version = "0-unstable-2026-09-24";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
     owner = "noctalia-dev";
     repo = "xdg-desktop-portal-umbriel";
     # No tagged releases yet
-    rev = "515c9f70f13ba4b4b9e19930b3e899c4ac8a50a4";
-    hash = "sha256-fqU58lZeFchlY5aqyQgIfrN5ec/jqbhXNwNxyL2lp/g=";
+    rev = "ee380d66984a45310ef48a283ad806ebab752788";
+    hash = "sha256-NIjks+J3+GcAUWZxWiFLl/rtNYl/VrlIZOm1PMAO4Ss=";
   };
 
   nativeBuildInputs = [

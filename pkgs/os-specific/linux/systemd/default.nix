@@ -806,6 +806,9 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
+          switchTest-basics
+          switchTest-units
+          switchTest-user
           systemd
           systemd-analyze
           systemd-bpf

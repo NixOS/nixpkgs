@@ -283,6 +283,10 @@ let
     # Components that require access to input devices (/dev/input/*)
     "keyboard_remote"
   ];
+  componentsUsingCecDevices = [
+    # Components that require access to cec devices (/dev/cec*)
+    "hdmi_cec"
+  ];
 in
 {
   imports = [
@@ -1031,6 +1035,9 @@ in
             ]
             ++ optionals (any useComponent componentsUsingInputDevices) [
               "char-input rw"
+            ]
+            ++ optionals (any useComponent componentsUsingCecDevices) [
+              "char-cec rw"
             ];
           DevicePolicy = "closed";
           LockPersonality = true;
@@ -1082,6 +1089,9 @@ in
             ]
             ++ optionals (any useComponent componentsUsingInputDevices) [
               "input"
+            ]
+            ++ optionals (any useComponent componentsUsingCecDevices) [
+              "video"
             ];
           SystemCallArchitectures = "native";
           SystemCallFilter = [

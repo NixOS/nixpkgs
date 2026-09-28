@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "signal-export";
-  version = "3.9.2";
+  version = "3.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "signal_export";
-    hash = "sha256-ZAQ/qGpNzlpvFMIxKCDhtm5sez0tATY+l+jvXWaNbIc=";
+    hash = "sha256-i4VV1mOlUWz4mSXcSkMUB7mHnWlBu+6hcQR5oxshzqE=";
   };
 
   build-system = with python3.pkgs; [

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openfga-cli";
-  version = "0.7.20";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9IBq5CThdc1Azmp0Vv+GzpXmIQAASpPay304X08+eG4=";
+    hash = "sha256-zpWA7+uveWQPWV7eCqqf5C1Juubpu11qm2svIHMt2N0=";
   };
 
-  vendorHash = "sha256-AUvbL/OjUcmRkzkcUuumwDsnpNWxsO6arnvM9M5hvgc=";
+  vendorHash = "sha256-wxQG7MzVzwY9PBZ3DJ8TiOW5xJsMXXU7MaxmBfNAm30=";
 
   nativeBuildInputs = [ installShellFiles ];
 

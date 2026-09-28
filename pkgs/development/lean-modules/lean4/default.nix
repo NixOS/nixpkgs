@@ -95,6 +95,7 @@ let
       "-DINSTALL_LICENSE=OFF"
       "-DINSTALL_CADICAL=OFF"
       "-DINSTALL_LEANTAR=OFF"
+      "-DSTAGE1_CMAKE_INSTALL_PREFIX=${placeholder "out"}"
       "-DUSE_MIMALLOC=ON"
     ];
 

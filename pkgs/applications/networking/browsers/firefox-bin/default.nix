@@ -130,8 +130,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit applicationName binaryName;
     libName = "firefox-bin-${version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
 
     # update with:

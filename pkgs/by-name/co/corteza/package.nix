@@ -4,29 +4,18 @@
   buildGoModule,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
-  applyPatches,
   lib,
   nixosTests,
   stdenvNoCC,
 }:
 
 let
-  version = "2024.9.9";
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "cortezaproject";
-      repo = "corteza";
-      tag = version;
-      hash = "sha256-r6/z5yplkT2d1iEhA4S29C1LcbdEJQiOWr0JRP5Pvb0=";
-    };
-    patches = [
-      # CVE-2026-6093
-      (fetchpatch {
-        url = "https://github.com/cortezaproject/corteza/commit/64b58b9d7324e77248bacd183fb994ff338091ec.patch";
-        hash = "sha256-0Ume1zkksS3kwf6QS6T5lDXklAboZVlTt5ZJReqwu3w=";
-      })
-    ];
+  version = "2024.9.10";
+  src = fetchFromGitHub {
+    owner = "cortezaproject";
+    repo = "corteza";
+    tag = version;
+    hash = "sha256-Q80uFf3mb1yIfG6HrMKbMpi8pncnSKhg4Bgc8BLtSmM=";
   };
   meta = {
     description = "Low-code platform";
@@ -58,13 +47,13 @@ let
     };
 
   webApps = lib.mapAttrs mkWebApp {
-    admin = "sha256-fen4KxPbYpH0ikWco1w3Zr+4WeghFITdmsOqHMGa3gA=";
-    compose = "sha256-UHhyzCeSWTROgzULYkDKN/2hgZ25aDZ7roHTLkt466o=";
-    discovery = "sha256-GHmALrqLTBie0VTDmZz4zJ9Ls2JYsfV0A3VkRwCKSuQ=";
-    one = "sha256-GHCtouGYrFgghWlBVbF5rD9cXrAfleVVxVqZtuLOSr0=";
-    privacy = "sha256-PlmeAJZY/S+osdM650tpJI3XSOanc80WYuMQ6jsiJwQ=";
-    reporter = "sha256-4O6FEF7Ol4V0FxznKGISaIA0w68XL0E3HvQ8bbt2klE=";
-    workflow = "sha256-2vyx3lCxICtVlRFLPkpy0fzXZ9W4li9ESm9sJzInc8g=";
+    admin = "sha256-TjgdG+MNojJDmgv1oEb4lzP4EzHBMKbY+Ep0jrnxxKI=";
+    compose = "sha256-XxAjyYU/zlHNf+OKbMX3eGnXEI5/Fdz0rbjgsTqTTsk=";
+    discovery = "sha256-YN6co0Pixau6x2ulm32PYgmtGMpysHT2KnPcJMol3XU=";
+    one = "sha256-uTuQD2+PZ8NrG6rM7V8KiV/3+bY+xYsvhWJdHTHLhI4=";
+    privacy = "sha256-PsJnWW5D8a0O8zXwEtR6xhRxyJWJX/xrAC66Y27UG+0=";
+    reporter = "sha256-YZoVEsM6nlJbs+pIjIktQ6FYpSgs6GArUywZzUug/ZY=";
+    workflow = "sha256-4oM13BVvW/9hQozfqNCjANMZpSZhpDf+YvPZm8Yxj/c=";
   };
 
   server-webconsole = callPackage ./buildYarnDistOnly.nix {
@@ -79,7 +68,7 @@ let
     owner = "cortezaproject";
     repo = "corteza-locale";
     rev = "57b1f2403207c44055ebce19d95cedd5573f39df";
-    sha256 = "sha256-j+mfWG6tED8AACkUcRWpol2G05qknTxp8b+kwu7c2NA=";
+    hash = "sha256-j+mfWG6tED8AACkUcRWpol2G05qknTxp8b+kwu7c2NA=";
   };
 
   corteza-webapp = stdenvNoCC.mkDerivation (finalAttrs: {

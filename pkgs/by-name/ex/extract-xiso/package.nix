@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "extract-xiso";
-  version = "202505152050";
+  version = "202609111233";
 
   src = fetchFromGitHub {
     owner = "XboxDev";
     repo = "extract-xiso";
     tag = "build-${finalAttrs.version}";
-    hash = "sha256-KZxnS63MhpmzwxCPFi+op5l/vM6P9GYc+SXmNFmEyc8=";
+    hash = "sha256-LvPSyCD8moyV3BLLuMWrXt83CIY/oNNGxoRLt836YIo=";
   };
 
   buildInputs = [ cmake ];

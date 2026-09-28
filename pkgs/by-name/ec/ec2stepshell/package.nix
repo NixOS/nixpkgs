@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "AWS post-exploitation tool";
     mainProgram = "ec2stepshell";
     homepage = "https://github.com/saw-your-packet/EC2StepShell";
-    changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${finalAttrs.version}/CHANGELOG.txt";
+    changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

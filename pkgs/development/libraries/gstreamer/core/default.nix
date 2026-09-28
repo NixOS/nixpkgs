@@ -146,6 +146,26 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = directoryListingUpdater { odd-unstable = true; };
+
+    # From around version 1.12.0 on, there is a single CPE identifier for all of GStreamer.
+    # FIXME: Should gst-plugins-rs follow the main GStreamer versioning or its own deviating version?
+    gstreamerCpeParts =
+      let
+        commonGstreamerVersion = finalAttrs.version;
+      in
+      version:
+      lib.warnIf (version != commonGstreamerVersion)
+        ''
+          Detected mismatch between common GStreamer version (${commonGstreamerVersion}) and version used for gstreamerCpeParts (${version}).
+          Note that GStreamer uses a common CPE identifier for its components.
+          Having a deviating version is unusual, but may occur e.g. if overriding a subset of GStreamer libraries.
+        ''
+        (
+          lib.meta.cpeFullVersionWithVendor "gstreamer" version
+          // {
+            product = "gstreamer";
+          }
+        );
   };
 
   meta = {
@@ -159,5 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tmarkus
     ];
+    identifiers.cpeParts = finalAttrs.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

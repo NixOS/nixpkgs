@@ -1,43 +1,109 @@
 {
-  fetchzip,
   lib,
-  pkgs,
-  stdenvNoCC,
+  stdenv,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  makeWrapper,
+  npmHooks,
+  gradle,
+  jdk_headless,
+  jre_minimal,
+  nodejs,
+  protobuf_35,
 }:
-stdenvNoCC.mkDerivation rec {
-  pname = "traccar";
-  version = "6.15.2";
-  nativeBuildInputs = [ pkgs.makeWrapper ];
-
-  src = fetchzip {
-    stripRoot = false;
-    url = "https://github.com/traccar/traccar/releases/download/v${version}/traccar-other-${version}.zip";
-    hash = "sha256-PxZFun5fxe7Y9xU25WfeuxZGodD/vbs2dSqOzkzJgQc=";
+let
+  jre = jre_minimal.override {
+    jdk = jdk_headless;
+    modules = [
+      "java.desktop"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "jdk.crypto.ec"
+    ];
   };
+  protobuf = protobuf_35;
+  protobufJavaVer = import ./protobuf-java-version.nix;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "traccar";
+  version = "6.15.3";
+
+  src = fetchFromGitHub {
+    owner = "traccar";
+    repo = "traccar";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ic9l5WnbsCLl+THyz9LXkTGTTwyrm3gU4IPi3B362Gc=";
+    fetchSubmodules = true;
+  };
+
+  nativeBuildInputs = [
+    makeWrapper
+    npmHooks.npmConfigHook
+    gradle
+    nodejs
+  ];
+
+  patches = [ ./use-protobuf-from-nixpkgs.patch ];
+
+  postPatch = ''
+    substituteAllInPlace build.gradle
+    substituteInPlace build.gradle \
+      --replace-fail "\$protobufVersion" "${protobufJavaVer}"
+  '';
+
+  env.protocPath = lib.getExe' protobuf "protoc";
+
+  mitmCache = gradle.fetchDeps {
+    pkg = finalAttrs.finalPackage;
+    data = ./deps.json;
+  };
+
+  npmRoot = "traccar-web";
+
+  npmDeps = fetchNpmDeps {
+    src = "${finalAttrs.src}/traccar-web";
+    hash = "sha256-C/jfTuFFGdGNGyoYb5fhEmsKdWb5XfsoJ388Rzh35fY=";
+  };
+
+  preBuild = ''
+    pushd traccar-web
+    npm run build
+    popd
+  '';
+
+  gradleBuildTask = "build";
+
+  doCheck = true;
 
   installPhase = ''
     runHook preInstall
-
-    for dir in lib schema templates web ; do
-      mkdir -p $out/$dir
-      cp -a $dir $out
-    done
-
-    mkdir -p $out/share/traccar
-    install -Dm644 tracker-server.jar $out
-
-    makeWrapper ${pkgs.openjdk}/bin/java $out/bin/traccar \
+    mkdir -p $out/bin
+    cp -r {schema,target/*,templates} $out
+    cp -r traccar-web/build $out/web
+    cp -r traccar-web/src/resources/l10n $out/templates/translations
+    makeWrapper ${lib.getExe jre} $out/bin/traccar \
       --add-flags "-jar $out/tracker-server.jar"
-
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Open source GPS tracking system";
     homepage = "https://www.traccar.org/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      fromSource
+    ];
     license = lib.licenses.asl20;
     mainProgram = "traccar";
-    maintainers = with lib.maintainers; [ frederictobiasc ];
+    maintainers = with lib.maintainers; [
+      frederictobiasc
+      ungeskriptet
+    ];
   };
-}
+})

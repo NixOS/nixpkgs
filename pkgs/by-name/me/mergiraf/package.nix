@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromCodeberg {
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eBq7xNuV0Z6DVdgaKVgk07WmGEgu7k14hkvVWwtplOo=";
+    hash = "sha256-belYegVxLLrXr3h+n1qjmF14+rJoadkXoNwL+S/2jZE=";
   };
 
-  cargoHash = "sha256-dxTR5mvov5FvnkIZalDMnl99BH8sBx6EsqJyGRMiPfQ=";
+  cargoHash = "sha256-DioS90ecNOEryE7zVddu3ov2S3ylTRtLxe+Zmw2hkmM=";
 
   nativeCheckInputs = [
     git

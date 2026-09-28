@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pvz-portable-unwrapped";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "wszqkzqk";
     repo = "PvZ-Portable";
     tag = finalAttrs.version;
-    hash = "sha256-9a57X0JikJd6iEcvdkDGzr6o4jych4Mpuo6z/xPv3+Q=";
+    hash = "sha256-crRtEjVuDWp+tWMx6OaeadFA6nPwh1bwR3WguUvXxAw=";
   };
 
   nativeBuildInputs = [

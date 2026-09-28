@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onvif-parsers";
-  version = "2.3.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvideolibs";
     repo = "onvif-parsers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LJzkjXBd7V12lrUuaHMlddGjD1BJq7kbPW+VVoQ4Qq4=";
+    hash = "sha256-gFbyzQ7GUjFDjp2Pbnc3FzQLu35kXjmTD8H2g3nY4KE=";
   };
 
   build-system = [ setuptools ];

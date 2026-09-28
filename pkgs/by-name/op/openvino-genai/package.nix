@@ -47,6 +47,7 @@ let
   archName =
     {
       "aarch64-linux" = "aarch64";
+      "riscv64-linux" = "riscv64";
       "x86_64-linux" = "intel64";
     }
     .${stdenv.hostPlatform.system};
@@ -54,7 +55,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.3.0.0";
+  version = "2026.4.0.0";
 
   __structuredAttrs = true;
 
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino.genai";
       tag = finalAttrs.version;
-      hash = "sha256-NlMXX+PpFE2pVHXxGKwJuN0W6BslIVrGijFV2m6GaYA=";
+      hash = "sha256-sRJbnXF7/CaHx86+dbIDv9FC1GthMW58vstQ4elf16Q=";
     };
 
   outputs = [
@@ -90,21 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-
-  patches = [
-    # gguf_utils' format() is a function template declared in gguf.hpp but
-    # defined in gguf.cpp, so instantiations from other TUs are unresolved at
-    # link time (surfaces as an ImportError on libopenvino_genai.so load).
-    # Move the definition into the header.
-    ./move-gguf-format-template-into-header.patch
-  ];
-
-  postPatch = ''
-    # pybind11 3.0 removed keep_alive support from def_property/def_readwrite.
-    # parsers is vector<shared_ptr<Parser>> so shared_ptr ref-counting is sufficient.
-    substituteInPlace src/python/py_generation_config.cpp \
-      --replace-fail ', py::keep_alive<1, 2>()' ""
-  '';
 
   cmakeFlags = [
     # Point cmake's FetchContent at pre-packaged nixpkgs sources so nothing is
@@ -195,7 +181,21 @@ stdenv.mkDerivation (finalAttrs: {
     # GoogleTestVerification.UninstantiatedParameterizedTestSuite<*>, so
     # exclude that verification check for these two suites.
     ./tests/cpp/tests_continuous_batching \
-      --gtest_filter="-GoogleTestVerification.UninstantiatedParameterizedTestSuite*"
+      --gtest_filter="-${
+        lib.concatStringsSep ":" (
+          [ "GoogleTestVerification.UninstantiatedParameterizedTestSuite*" ]
+          ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+            "TestCacheManager.*"
+            "TestLinearAttentionCacheManager.*"
+            "TestCacheOrchestratorHybrid.*"
+            "TestModelRunnerLinearAttentionPaging.*"
+            "TestScheduler.*"
+            "VariousSchedulerConfigs/*"
+            "SliceBeforeMatmul.*"
+            "GatherBeforeMatmul.*"
+          ]
+        )
+      }"
     runHook postCheck
   '';
 

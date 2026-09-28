@@ -1,39 +1,6 @@
 { lib }:
 let
-  inherit (lib) optionalAttrs;
-
-  mkLicense =
-    lname:
-    {
-      shortName ? lname,
-      # Most of our licenses are Free, explicitly declare unfree additions as such!
-      free ? true,
-      deprecated ? false,
-      spdxId ? null,
-      url ? null,
-      fullName ? null,
-      redistributable ? free,
-    }@attrs:
-    {
-      inherit
-        shortName
-        free
-        deprecated
-        redistributable
-        ;
-      licenseType = "simple";
-    }
-    // optionalAttrs (attrs ? spdxId) {
-      inherit spdxId;
-      url = "https://spdx.org/licenses/${spdxId}.html";
-    }
-    // optionalAttrs (attrs ? url) {
-      inherit url;
-    }
-    // optionalAttrs (attrs ? fullName) {
-      inherit fullName;
-    };
-
+  mkLicense = shortName: license: lib.licenses.mkLicense ({ inherit shortName; } // license);
 in
 lib.mapAttrs mkLicense (
   {
@@ -734,11 +701,6 @@ lib.mapAttrs mkLicense (
     generaluser = {
       fullName = "GeneralUser GS License v2.0";
       url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
-    };
-
-    gfl = {
-      fullName = "GUST Font License";
-      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
     };
 
     gfsl = {

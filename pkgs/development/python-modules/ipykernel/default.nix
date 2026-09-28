@@ -11,7 +11,7 @@
   jupyter-client,
   jupyter-core,
   matplotlib-inline,
-  nest-asyncio,
+  nest-asyncio2,
   packaging,
   psutil,
   pyzmq,
@@ -22,14 +22,15 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipykernel";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WKP8iFM9WTDDVG3H6sZsbSiKzeT4AeIAHmXtxdyc8Ns=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-msqq+X0WNVFm5Aha/p0iW/vfK371IPnfO+jyskgnXgk=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     jupyter-client
     jupyter-core
     matplotlib-inline
-    nest-asyncio
+    nest-asyncio2
     packaging
     psutil
     pyzmq
@@ -63,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "IPython Kernel for Jupyter";
     homepage = "https://ipython.org/";
-    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
+    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

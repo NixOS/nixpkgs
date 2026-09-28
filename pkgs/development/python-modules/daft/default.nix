@@ -14,7 +14,6 @@
   nasm,
 
   # dependencies
-  fsspec,
   packaging,
   pyarrow,
   tqdm,
@@ -79,7 +78,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.24";
+  version = "0.7.25";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HCqkeN9kmQTvzlPlweeE1nYPf2YjLep2RUUIFRXlGGw=";
+    hash = "sha256-XVtMB+fZ1zbFoStwlZmmam3/t8eD7vRop+7YlNhuLhs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -143,11 +142,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonRelaxDeps = [
-    "fsspec"
     "tqdm"
   ];
   dependencies = [
-    fsspec
     packaging
     pyarrow
     tqdm
@@ -349,6 +346,11 @@ buildPythonPackage (finalAttrs: {
     "test_download_with_none" # None vs nan
     "test_from_pandas_roundtrip" # Timestamp[us] vs Timestamp[ns]
     "test_infer_from_type" # issubclass() arg 1 must be a class (numpy_ndarray_int)
+
+    # Regression from the pyiceberg 0.12.0 bump: https://github.com/NixOS/nixpkgs/pull/560480
+    #   AssertionError: assert result is None
+    "test_type_promotion_float_to_double"
+    "test_type_promotion_int_to_long"
   ];
 
   pythonImportsCheck = [ "daft" ];

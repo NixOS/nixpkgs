@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-08-08";
+  version = "0-unstable-2026-09-14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "3d2848d03184344664b9a8ed7685033e87744742";
-    hash = "sha256-gmvr8d0vGlkFcSbjSvECGiYWM69Y2c8ZWqL59+s34Yw=";
+    rev = "53da7919d4e45c63f4acbcbbc00cbe0f60a1ce65";
+    hash = "sha256-oKVxMoyMWZCuwLbsimTXO05Hdsw/2u2SVeYSFm1XsFg=";
   };
 
   build-system = with python3Packages; [
@@ -90,6 +90,10 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     cp *.py $out/${python3Packages.python.sitePackages}/
     cp -r {common,endpoints,backends,templates} $out/${python3Packages.python.sitePackages}/
+
+    # They are wanted during runtime
+    mkdir -p $out/share/tabbyapi
+    cp -r sampler_overrides $out/share/tabbyapi/
   '';
 
   postFixup = ''

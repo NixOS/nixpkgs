@@ -25,12 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y0pCGkvCjZ1F9Ojouesozn2Lxj+x7/0ck6/9tJmdkWw=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   outputs = [
     "out"
     "man"
     "dev"
+    "scripts"
   ];
 
   nativeBuildInputs = [
@@ -61,15 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # cmake script is buggy, move file manually
-    mkdir -p $out/${perl.libPrefix}
-    mv $out/share/perl5/* $out/${perl.libPrefix}
+    mkdir -p $scripts/${perl.libPrefix}
+    mv $out/share/perl5/* $scripts/${perl.libPrefix}
   '';
 
   postFixup = ''
-    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+    for pls in ibfindnodesusing.pl ibidsverify.pl check_lft_balance.pl; do
       echo "wrapping $pls"
-      substituteInPlace $pls --replace \
-        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      substituteInPlace $out/bin/$pls \
+        --replace-fail "${perl}/bin/perl" "${perl}/bin/perl -I $scripts/${perl.libPrefix}"
+      moveToOutput bin/$pls "$scripts"
     done
   '';
 
@@ -78,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
+
+  outputChecks.out.disallowedRequisites = [
+    perl
+  ];
 
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";

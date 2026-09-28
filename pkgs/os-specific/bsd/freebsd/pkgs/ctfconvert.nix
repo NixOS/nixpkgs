@@ -34,4 +34,5 @@ mkDerivation {
   ];
 
   meta.license = lib.licenses.cddl;
+  meta.platforms = lib.platforms.unix;
 }

@@ -12,13 +12,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "vod";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "dio-az";
     repo = "nginx-vod-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-18LA3Thiz4EnVkRp6j5BuTyIcd0zXgyyvW6yuzm7vRs=";
+    hash = "sha256-60uBMyP6RjedqsQ5kT/gHPXfpSovBagSPXfYl2rjsEw=";
   };
 
   postPatch = ''

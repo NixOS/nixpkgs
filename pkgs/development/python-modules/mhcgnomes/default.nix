@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcgnomes";
-  version = "3.33.5";
+  version = "3.64.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pirl-unc";
     repo = "mhcgnomes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WcYSSgzSOFmgZEX9TZSQAITWxpIjNG1/b6t1RXjfGKs=";
+    hash = "sha256-59Z3AQJNr+jZ035G+st4VB2m60Jb98Qh6omkGm5Mwu0=";
   };
 
   build-system = [

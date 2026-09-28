@@ -55,7 +55,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "12.8.1";
+      cuda = "12.8.2";
       cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
@@ -82,7 +82,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "12.9.1";
+      cuda = "12.9.2";
       cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
@@ -135,7 +135,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.1.1";
+      cuda = "13.1.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -158,7 +158,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.2.1";
+      cuda = "13.2.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -181,7 +181,30 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.3.0";
+      cuda = "13.3.1";
+      cudnn =
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+      cudss = "0.6.0";
+      cuquantum = "25.09.0";
+      cusolvermp = "0.8.0";
+      cusparselt = "0.8.1";
+      cutensor = "2.3.1";
+      nppplus = "0.10.0";
+      nvcomp = "5.0.0.6";
+      nvjpeg2000 = "0.9.0";
+      nvpl = "25.5";
+      nvtiff = "0.5.1";
+      tensorrt =
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+    };
+
+  cudaPackages_13_4 =
+    let
+      inherit (cudaPackages_13_4.backendStdenv) requestedJetsonCudaCapabilities;
+    in
+    mkCudaPackages {
+      cublasmp = "0.8.1";
+      cuda = "13.4.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";
@@ -207,5 +230,6 @@ in
     cudaPackages_13_1
     cudaPackages_13_2
     cudaPackages_13_3
+    cudaPackages_13_4
     ;
 }

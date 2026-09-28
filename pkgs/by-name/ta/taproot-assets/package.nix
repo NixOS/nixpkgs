@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "taproot-assets";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rLr/nPnmB2DJsCuQLdBTN0H4rJwTuQ1KDM2VriBKgEI=";
+    hash = "sha256-eMT6hQx5zzSouusgSmD5IWh93/KakW9PitrwxP3sSj4=";
   };
 
-  vendorHash = "sha256-X3uKIEEDGx2ut73yXlCVFQYz7jItEFSZITr9wF+D/qA=";
+  vendorHash = "sha256-YpxWfNln7YwpKEINbOVbLf1iHEVCRWXj53tC2DhLI6w=";
 
   subPackages = [
     "cmd/tapcli"

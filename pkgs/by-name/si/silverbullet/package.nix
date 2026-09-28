@@ -2,44 +2,45 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  buildGoModule,
+  rustPlatform,
   replaceVars,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silverbullet";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "silverbulletmd";
     repo = "silverbullet";
     rev = finalAttrs.version;
-    hash = "sha256-XQ0OKkiQrrmwmdGXk3dcim/2qosenF3EG2lkglQQ/iY=";
+    hash = "sha256-aEqmvxtWzvXM8Cv8YrHK9o0G2jlbeqqahAveKr6M+Ps=";
   };
 
-  vendorHash = "sha256-8zZlhVptJq8y3k2DBghJ0lPNcIcaZYkrxN67b6dNBPs=";
+  cargoHash = "sha256-t2RDrdZsCMReDGUUu3r59OAosZNY3TMlvjo/uM2xL8g=";
 
-  subPackages = [ "." ];
+  cargoBuildFlags = [
+    "-p"
+    "silverbullet"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   frontend = buildNpmPackage {
     pname = "silverbullet-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-Twcv3I3scF09onJQdYsc1zOFzMFPOEyPF7VPYa7LBko=";
+    npmDepsHash = "sha256-EseKAqUJbpIAfJhG1hNlvLgMie/jsXbbVqwea8bEuJQ=";
 
     patches = [
-      (replaceVars ./override-public-version.patch { inherit (finalAttrs) version; })
+      (replaceVars ./override-version.patch { inherit (finalAttrs) version; })
     ];
-
-    postBuild = ''
-      npm run build:plug-compile
-    '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out
-      cp -r client_bundle public_version.ts $out/
+      cp -r client_bundle version.json $out/
 
       runHook postInstall
     '';
@@ -47,21 +48,17 @@ buildGoModule (finalAttrs: {
 
   preBuild = ''
     cp -r ${finalAttrs.frontend}/client_bundle .
-    cp ${finalAttrs.frontend}/public_version.ts .
+    cp ${finalAttrs.frontend}/version.json .
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 "$GOPATH/bin/silverbullet" $out/bin/silverbullet
-
-    runHook postInstall
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
+    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/docs/CHANGELOG.md";
     description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;

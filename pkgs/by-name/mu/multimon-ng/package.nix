@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multimon-ng";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = finalAttrs.version;
-    sha256 = "sha256-elDyVU95rNt0b698qmzmkiD4JG2Jt5+gMW31BlQO7Vo=";
+    sha256 = "sha256-FxX01+bFcca+wvnilOV4xJx1bSV9lxy83EhpwWhi/Cs=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [

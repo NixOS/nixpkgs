@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-rq";
-  version = "4.1.1";
+  version = "4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "django-rq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pp8/7pMG4CHEe+jsmZ9euAV8eEMW0Hh4ecTTHnP6DiE=";
+    hash = "sha256-sd1qPPjr4MmS/74OIlmfNCVAJIVXLFC71cwn18n/wNk=";
   };
 
   build-system = [ hatchling ];

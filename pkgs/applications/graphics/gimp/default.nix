@@ -57,7 +57,7 @@
   json-glib,
   libmypaint,
   llvmPackages,
-  gexiv2,
+  gexiv2_0_10,
   harfbuzz,
   makeFontsConf,
   mypaint-brushes,
@@ -83,7 +83,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.2.4";
+  version = "3.2.6";
 
   outputs = [
     "out"
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cxK8U+nG0tAFbKe5PxxrmHB5Rt2TT3FMIbh0bstgFYg=";
+    hash = "sha256-QLFekK0MDGMbdto8Rn6phH+lwk83QTrFtJKASGCijNg=";
   };
 
   patches = [
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     cairo
     libarchive
-    gexiv2
+    gexiv2_0_10
     harfbuzz
     isocodes
     freetype
@@ -197,7 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
     adwaita-icon-theme
 
-    # for Lua plug-ins
+  ]
+  # for Lua plug-ins; LuaJIT is unavailable on riscv64
+  # https://github.com/LuaJIT/LuaJIT/issues/628
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) [
     (luajit.withPackages (pp: [
       pp.lgi
     ]))
@@ -220,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
     gegl
     cairo
     pango
-    gexiv2
+    gexiv2_0_10
   ];
 
   strictDeps = true;

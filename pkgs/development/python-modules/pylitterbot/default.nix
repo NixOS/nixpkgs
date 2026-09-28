@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylitterbot";
-  version = "2025.6.4";
+  version = "2025.6.5";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = finalAttrs.version;
-    hash = "sha256-kAs1iRNyyr0lV4yJ13GVIZ7T3n44HMEwPSONPcBetrI=";
+    hash = "sha256-Rj7vRxrBnx0sghr4RO6KS1y5Sn21xe3ll0ai2hEY/eg=";
   };
 
   build-system = [

@@ -7,9 +7,9 @@
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "5.13.0";
+  version = "5.17.2";
 
-  nugetHash = "sha256-5Ann8sD07LhtRkW0fpm4P90cjVfujyeb8LW4ffZ/EBI=";
+  nugetHash = "sha256-XJB59cqLDsEtcyAvbbuhSkjkooFKiHiwp9jrKouPPtk=";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
@@ -24,8 +24,8 @@ buildDotnetGlobalTool (finalAttrs: {
   meta = {
     description = "F# to JavaScript compiler";
     mainProgram = "fable";
-    homepage = "https://github.com/fable-compiler/fable";
-    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/fable-compiler/Fable";
+    changelog = "https://github.com/fable-compiler/Fable/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [

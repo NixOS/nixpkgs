@@ -77,6 +77,10 @@ mkMesonDerivation (finalAttrs: {
     "--print-errorlogs"
   ];
 
+  mesonFlags = lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.35") (
+    lib.mesonBool "plugin-c-api" nix-cli.exportsPluginCApi
+  );
+
   doCheck = true;
 
   installPhase = ''

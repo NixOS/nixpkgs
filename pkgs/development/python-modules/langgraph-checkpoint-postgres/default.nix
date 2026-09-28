@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-postgres";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${finalAttrs.version}";
-    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
+    hash = "sha256-7UJh+ObKOdU5QlGOlvF/8uHd+uOfiAjuGAkIVdEBLHQ=";
   };
 
   postgresqlTestSetupPost = ''
@@ -88,6 +88,11 @@ buildPythonPackage (finalAttrs: {
     "test_non_ascii"
     # Flaky under a parallel build (database in use)
     "test_store_ttl"
+  ];
+
+  disabledTestPaths = [
+    # Imports langgraph.checkpoint.conformance (not mature enough to package)
+    "tests/test_conformance_delta.py"
   ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];

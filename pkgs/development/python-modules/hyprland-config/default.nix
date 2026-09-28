@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-config";
-  version = "0.9.14";
+  version = "0.9.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlueManCZ";
     repo = "hyprland-config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jgh/X7M+hdp0NPuA0YnfdYU/sxY9hfl/OCihnzobvm8=";
+    hash = "sha256-wfxZqqBdA4P8uBuuFpr0MlmeSGg0jkUwkENqYiPdhHA=";
   };
 
   # The Lua reader shells out to an interpreter it looks up on PATH at runtime.

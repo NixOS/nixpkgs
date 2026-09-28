@@ -1,0 +1,40 @@
+diff --git a/unoconv b/unoconv
+index 6aa1bfa..0e53113 100755
+--- a/unoconv
++++ b/unoconv
+@@ -1000,7 +1000,7 @@ class Convertor:
+                 inputurl = 'private:stream'
+             else:
+                 if os.path.exists(inputfn):
+-                    inputurl = unohelper.absolutize(self.cwd, unohelper.systemPathToFileUrl(inputfn))
++                    inputurl = pyuno.absolutize(self.cwd, unohelper.systemPathToFileUrl(inputfn))
+                 else:
+                     inputurl = inputfn
+             document = self.desktop.loadComponentFromURL( inputurl , "_blank", 0, inputprops )
+@@ -1014,7 +1014,7 @@ class Convertor:
+                 if os.path.exists(op.template):
+                     info(1, "Template file: %s" % op.template)
+                     templateprops = UnoProps(OverwriteStyles=True)
+-                    templateurl = unohelper.absolutize(self.cwd, unohelper.systemPathToFileUrl(op.template))
++                    templateurl = pyuno.absolutize(self.cwd, unohelper.systemPathToFileUrl(op.template))
+                     document.StyleFamilies.loadStylesFromURL(templateurl, templateprops)
+                 else:
+                     print('unoconv: template file `%s\' does not exist.' % op.template, file=sys.stderr)
+@@ -1157,7 +1157,7 @@ class Convertor:
+                 else:
+                     outputfn = realpath(inbase + os.extsep + outputfmt.extension)
+ 
+-                outputurl = unohelper.absolutize( self.cwd, unohelper.systemPathToFileUrl(outputfn) )
++                outputurl = pyuno.absolutize( self.cwd, unohelper.systemPathToFileUrl(outputfn) )
+ 
+             info(1, "Output file: %s" % outputurl)
+ 
+@@ -1376,7 +1376,7 @@ if __name__ == '__main__':
+         office_environ(of)
+ #       debug_office()
+         try:
+-            import uno, unohelper
++            import pyuno, uno, unohelper
+             office = of
+             break
+         except:

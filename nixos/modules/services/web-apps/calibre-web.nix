@@ -85,6 +85,14 @@ in
           '';
         };
 
+        calibreSplitBookDirectory = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            Path to directory to store ebook files.
+          '';
+        };
+
         enableBookConversion = mkOption {
           type = types.bool;
           default = false;
@@ -150,6 +158,10 @@ in
           ++ optional (
             cfg.options.calibreLibrary != null
           ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optionals (cfg.options.calibreSplitBookDirectory != null) [
+            "config_calibre_split = true"
+            "config_calibre_split_dir = '${cfg.options.calibreSplitBookDirectory}'"
+          ]
           ++ optionals cfg.options.enableBookConversion [
             "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
             "config_binariesdir = '${cfg.calibrePackage}/bin/'"
@@ -179,6 +191,9 @@ in
             + optionalString (cfg.options.calibreLibrary != null) ''
               test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
+            + optionalString (cfg.options.calibreSplitBookDirectory != null) ''
+              test -d "${cfg.options.calibreSplitBookDirectory}" || { echo "Invalid Calibre split book directory"; exit 1; }
+            ''
           );
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
@@ -191,7 +206,10 @@ in
           ProtectSystem = "strict";
           ReadWritePaths =
             lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
-            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary;
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary
+            ++ lib.optional (
+              cfg.options.calibreSplitBookDirectory != null
+            ) cfg.options.calibreSplitBookDirectory;
           PrivateTmp = true;
           PrivateDevices = true;
           PrivateIPC = true;

@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.24.3";
+  version = "2.25.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gDQl5UjSOyXg3l9yD1CXhfrSbUWUDYoquVvc2K4nv14=";
+    hash = "sha256-vwlN4VdyVhaALT8Ob233Lcc7261teCD7jyfn8uiH0MA=";
   };
 
   build-system = with python3Packages; [
@@ -101,6 +101,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pyyaml
       referencing
       requests
+      rfc8785
       rich
       rpds-py
       sentry-sdk
@@ -150,13 +151,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
+    # The finite stdio input closes before all responses are flushed in the sandbox.
+    "test_stdio_server_uses_the_same_json_rpc_lifecycle"
+
+    # AssertionError: assert <MCPSourceStatus.UNAVAILABLE: 'unavailable'> is <MCPSourceStatus.ENABLED: 'enabled'>
+    "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
+
     # vibe is spawned in a sub-process and fails to import `mcp`
     # ModuleNotFoundError: No module named 'mcp'
     "test_aclose_terminates_real_subprocess"
     "test_persists_real_subprocess_state_across_calls"
-
-    # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
-    "test_changes_when_file_changes"
 
     # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
     # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
@@ -167,6 +171,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Timed out waiting for UI state
+    "test_rewind_preview_error_does_not_fail_worker"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError
@@ -180,10 +188,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # This tests the install_script and fails. This is not relevant for nixpkgs.
-    "tests/test_install_script.py"
-
-    # All snapshot tests fail with AssertionError
+    # All snapshot tests use syrupy 4.8.0, which is not packaged here.
     "tests/snapshots/"
 
     # These tests invoke uv run and fail to import the packaged pydantic extension.

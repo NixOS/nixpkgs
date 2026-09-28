@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
     license = lib.licenses.free;
     mainProgram = "pdfid";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
     platforms = lib.platforms.unix;
   };
 })

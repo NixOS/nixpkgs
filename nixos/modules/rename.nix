@@ -242,6 +242,10 @@ in
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "honk"
+    ] "The honk module has been removed.")
     (mkRemovedOptionModule
       [
         "services"
@@ -331,6 +335,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
+    '')
+    (mkRemovedOptionModule [ "services" "prosody-filer" ] ''
+      The Prosody Filer package and module have been removed because the project was discontinued upstream. Use Prosody's built-in `services.prosody.httpFileShare` support or Rusty Filer instead.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -519,6 +526,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "filesender" ] ''
       services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "pghero" ] ''
+      services.pghero has been removed because the (unmaintained) package was removed from Nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "postfixadmin" ] ''
       services.postfixadmin has been removed since it was unmaintained in nixpkgs and the version

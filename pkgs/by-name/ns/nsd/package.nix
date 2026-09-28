@@ -33,22 +33,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsd";
-  version = "4.15.0";
+  version = "4.15.2";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/nsd/nsd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hPG+4ukqna20HZXsxkET5NPe+GIk3ndM2SADrdjE9XA=";
+    hash = "sha256-u01XdTwswqZByS2rECEBbSX7S5cpIL9PC7uMQMGpzOI=";
   };
-
-  patches = [
-    # https://github.com/NLnetLabs/nsd/pull/495 -- Without this patch, the build
-    # breaks with { openssl = libressl; bind8Stats = true; }. The patch will be
-    # included in 4.15.1, so we can drop it here on the next update.
-    (fetchurl {
-      url = "https://github.com/NLnetLabs/nsd/commit/15cf8736e3bfa0fd8f426b13637c44e638fa0d40.patch";
-      hash = "sha256-JVazJ83U80ASZypjic0epE92PZd3F1yi8UU6EapdW5U=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

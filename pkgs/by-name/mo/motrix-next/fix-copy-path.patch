@@ -1,0 +1,13 @@
+diff --git a/scripts/build-native-messaging-launcher.mjs b/scripts/build-native-messaging-launcher.mjs
+index e80f6137fd..1cecabafb6 100644
+--- a/scripts/build-native-messaging-launcher.mjs
++++ b/scripts/build-native-messaging-launcher.mjs
+@@ -26,7 +26,7 @@
+ 
+ execFileSync('cargo', cargoArgs, { cwd: tauriDir, stdio: 'inherit' })
+ 
+-const source = join(tauriDir, 'target', targetTriple, 'release', binaryName)
++const source = join(root, 'target', targetTriple, 'release', binaryName)
+ const destination = join(
+   tauriDir,
+   'generated-binaries',

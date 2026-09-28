@@ -4,10 +4,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  hypothesis_6_136,
+  hypothesis,
   mypy,
   poetry-core,
   pytest-aio,
+  pytest-benchmark,
   pytest-cov-stub,
   pytest-mypy,
   pytest-mypy-plugins,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.26.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     tag = version;
-    hash = "sha256-VQzsa/uNTQVND0kc20d25to/6LELEiS3cqvG7a1kDw4=";
+    hash = "sha256-xCdCZtbo1AmBeKdY4CeQdK8s+23EfTyQa5o78j1+yVw=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -36,11 +37,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     httpx
-    # https://github.com/dry-python/returns/issues/2224
-    hypothesis_6_136
+    hypothesis
     mypy
     pytestCheckHook
     pytest-aio
+    pytest-benchmark
     pytest-cov-stub
     pytest-mypy
     pytest-mypy-plugins

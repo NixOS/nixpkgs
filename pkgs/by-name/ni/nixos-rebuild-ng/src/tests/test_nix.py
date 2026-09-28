@@ -749,6 +749,32 @@ def test_set_profile(mock_run: Mock) -> None:
         elevate=e.NO_ELEVATOR,
     )
 
+    mock_run.reset_mock()
+    target_host = m.Remote("user@localhost", [], "ssh")
+
+    n.set_profile(
+        m.Profile("something", profile_path),
+        config_path,
+        target_host=target_host,
+        elevate=e.NO_ELEVATOR,
+    )
+
+    mock_run.assert_has_calls(
+        [
+            call(
+                ["mkdir", "-p", profile_path.parent],
+                remote=target_host,
+                elevate=e.NO_ELEVATOR,
+            ),
+            call(
+                ["nix-env", "-p", profile_path, "--set", config_path],
+                remote=target_host,
+                elevate=e.NO_ELEVATOR,
+            ),
+        ]
+    )
+
+    mock_run.reset_mock()
     mock_run.return_value = CompletedProcess([], 1)
 
     with pytest.raises(m.NixOSRebuildError) as exc:

@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.11";
+  version = "0.4.9.13";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-LmwXIBGMgSrPAHn9R8+Rtr+rpddmwyHE09KijWoRqO0=";
+    hash = "sha256-XnSNMnLN9Ep9d0EXPzccje89lu7Ld+k8icUGY86cx5I=";
   };
 
   outputs = [
@@ -153,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       prusnak
+      whispersofthedawn
     ];
     platforms = lib.platforms.unix;
   };

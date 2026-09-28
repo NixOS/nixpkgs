@@ -4,7 +4,7 @@
 # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
 #
 # This test does the following:
-# - Sets up a DNS server (tinydns) listening on the eth1 ip address, serving .ntp and fake.ntp records.
+# - Sets up a DNS server (tinydns) listening on loopback, serving .ntp and fake.ntp records.
 # - Configures that DNS server as a resolver and enables DNSSEC in systemd-resolved settings.
 # - Configures systemd-timesyncd to use fake.ntp hostname as an NTP server.
 # - Performs a regular DNS lookup, to ensure it fails due to broken DNSSEC.
@@ -13,31 +13,22 @@
 #   server running. For this test to succeed, we only need to ensure that systemd-timesyncd
 #   resolves the IP address of the fake.ntp host.
 
-{ pkgs, ... }:
-
 let
   ntpHostname = "fake.ntp";
   ntpIP = "192.0.2.1";
+  dnsIP = "127.0.0.1";
 in
 {
   name = "systemd-timesyncd-nscd-dnssec";
   nodes.machine =
+    { lib, ... }:
     {
-      pkgs,
-      lib,
-      config,
-      ...
-    }:
-    let
-      eth1IP = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;
-    in
-    {
-      # Setup a local DNS server for the NTP domain on the eth1 IP address
+      # Setup a local DNS server for the NTP domain on loopback
       services.tinydns = {
         enable = true;
-        ip = eth1IP;
+        ip = dnsIP;
         data = ''
-          .ntp:${eth1IP}
+          .ntp:${dnsIP}
           +.${ntpHostname}:${ntpIP}
         '';
       };
@@ -45,7 +36,7 @@ in
       # Enable systemd-resolved with DNSSEC and use the local DNS as a name server
       services.resolved.enable = true;
       services.resolved.settings.Resolve.DNSSEC = true;
-      networking.nameservers = [ eth1IP ];
+      networking.nameservers = [ dnsIP ];
 
       # Configure systemd-timesyncd to use our NTP hostname
       services.timesyncd.enable = lib.mkForce true;

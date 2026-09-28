@@ -32,7 +32,7 @@ jobs:
           client-id: ${{ vars.NIXPKGS_CI_CLIENT_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
           permission-contents: write
-          permission-pull-requests: write
+          permission-issues: write
 
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -66,4 +66,4 @@ jobs:
             Periodic merge from `${{ inputs.from }}` into [`${{ inputs.into }}`](https://github.com/NixOS/nixpkgs/tree/${{ inputs.into }}) has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          gh pr comment 105153 --body "$BODY_TEXT"
+          gh issue comment 562905 --body "$BODY_TEXT"

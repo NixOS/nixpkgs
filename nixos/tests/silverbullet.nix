@@ -46,8 +46,8 @@
       SPACEDIR = "${nodes.configured.services.silverbullet.spaceDir}"
       configured.wait_for_unit("silverbullet.service")
       configured.wait_for_open_port(PORT)
-      assert int(configured.succeed(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/test.md -H'Authorization: Bearer test'")) == 200
-      assert int(configured.fail(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/test.md -H'Authorization: Bearer wrong'")) == 401
+      assert int(configured.succeed(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/.fs/test.md -H'Authorization: Bearer test'")) == 200
+      assert int(configured.fail(f"curl --max-time 5 -s -o /dev/null -w '%{{http_code}}' -XPUT -d 'test' --fail http://{ADDRESS}:{PORT}/.fs/test.md -H'Authorization: Bearer wrong'")) == 401
       configured.succeed(f"test -d '{SPACEDIR}'")
     '';
 }

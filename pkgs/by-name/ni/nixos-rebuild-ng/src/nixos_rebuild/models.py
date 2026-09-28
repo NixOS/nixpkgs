@@ -206,11 +206,16 @@ class Profile:
     path: Path
 
     @classmethod
+    def _is_custom_name(cls, name: str) -> bool:
+        return name != "system"
+
+    @classmethod
     def from_arg(cls, name: str) -> Self:
-        match name:
-            case "system":
-                return cls(name, Path("/nix/var/nix/profiles/system"))
-            case _:
-                path = Path("/nix/var/nix/profiles/system-profiles") / name
-                path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
-                return cls(name, path)
+        if cls._is_custom_name(name):
+            path = Path("/nix/var/nix/profiles/system-profiles") / name
+            return cls(name, path)
+        else:
+            return cls(name, Path("/nix/var/nix/profiles/system"))
+
+    def is_custom(self) -> bool:
+        return self._is_custom_name(self.name)

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmysofa";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-gP/RjKzMx8JIYcyiivBGvy3kIdwHMEKY6abssyVUKNQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HxYSQNk7V0IQaZn/K1MdtSgL+7mxBNNPn7HNors5Vkk=";
   };
 
   outputs = [
@@ -23,18 +23,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ zlib ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
-    "-DCODE_COVERAGE=OFF"
+    (lib.cmakeBool "BUILD_TESTS" false)
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Reader for AES SOFA files to get better HRTFs";
     homepage = "https://github.com/hoene/libmysofa";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })

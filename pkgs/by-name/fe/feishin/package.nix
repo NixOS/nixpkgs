@@ -8,7 +8,6 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_11,
-  nodejs-slim_latest,
   darwin,
   actool,
   copyDesktopItems,
@@ -20,18 +19,17 @@
 let
   electron = electron_43;
 
-  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
+  pnpm = pnpm_11;
 in
 buildNpmPackage (finalAttrs: {
   pname = "feishin";
-  version = "1.15.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
+    hash = "sha256-1ZIw5XiN+2EhpHmdvN0HxgMSvn4QvN9B+ZJ3RlPXhLw=";
   };
 
   __structuredAttrs = true;
@@ -48,7 +46,7 @@ buildNpmPackage (finalAttrs: {
       src
       ;
     fetcherVersion = 4;
-    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
+    hash = "sha256-ltpz4e5Vv2vxt/93M4+vHUFJZjwTRwb2zrwvl1Lqjo8=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -65,7 +63,7 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
-      --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
+      --replace-fail '"postinstall": "install-electron && electron-builder install-app-deps",' ""
   '';
 
   postBuild = lib.optionalString (!webVersion) ''

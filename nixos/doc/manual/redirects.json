@@ -1,4 +1,13 @@
 {
+  "module-services-netbird-relay": [
+    "index.html#module-services-netbird-relay"
+  ],
+  "module-services-netbird-relay-quickstart": [
+    "index.html#module-services-netbird-relay-quickstart"
+  ],
+  "module-services-netbird-relay-tls": [
+    "index.html#module-services-netbird-relay-tls"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
@@ -68,6 +77,18 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-cliproxyapi": [
+    "index.html#module-services-cliproxyapi"
+  ],
+  "module-services-cliproxyapi-authentication": [
+    "index.html#module-services-cliproxyapi-authentication"
+  ],
+  "module-services-cliproxyapi-authentication-cli": [
+    "index.html#module-services-cliproxyapi-authentication-cli"
+  ],
+  "module-services-cliproxyapi-authentication-management-api": [
+    "index.html#module-services-cliproxyapi-authentication-management-api"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
@@ -124,6 +145,21 @@
   ],
   "module-services-mautrix-discord-troubleshooting": [
     "index.html#module-services-mautrix-discord-troubleshooting"
+  ],
+  "module-services-navidrome": [
+    "index.html#module-services-navidrome"
+  ],
+  "module-services-navidrome-basic-usage": [
+    "index.html#module-services-navidrome-basic-usage"
+  ],
+  "module-services-navidrome-configuration-options": [
+    "index.html#module-services-navidrome-configuration-options"
+  ],
+  "module-services-navidrome-plugins": [
+    "index.html#module-services-navidrome-plugins"
+  ],
+  "module-services-navidrome-secrets": [
+    "index.html#module-services-navidrome-secrets"
   ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
@@ -1066,12 +1102,6 @@
   "module-services-jitsi-configuration": [
     "index.html#module-services-jitsi-configuration"
   ],
-  "module-services-honk": [
-    "index.html#module-services-honk"
-  ],
-  "module-services-honk-basic-usage": [
-    "index.html#module-services-honk-basic-usage"
-  ],
   "module-services-hatsu": [
     "index.html#module-services-hatsu"
   ],
@@ -1486,9 +1516,6 @@
   ],
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
-  ],
-  "ex-gitlab-runner-podman": [
-    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"
@@ -2925,5 +2952,16 @@
   ],
   "sec-release-13.10": [
     "release-notes.html#sec-release-13.10"
+  ],
+  "ch-services": [
+    "index.html#ch-services"
+  ],
+  "ch-reference": [
+    "index.html#ch-reference"
+  ],
+  "sec-release-26.05-incompatibilities-services-honk-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-services-honk-removed",
+    "index.html#module-services-honk",
+    "index.html#module-services-honk-basic-usage"
   ]
 }

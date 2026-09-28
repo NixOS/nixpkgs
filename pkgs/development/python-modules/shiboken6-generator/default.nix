@@ -5,6 +5,7 @@
   python,
   cmake,
   stdenv,
+  makeShellWrapper,
 }:
 
 let
@@ -33,6 +34,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.packaging
       ps.setuptools
     ]))
+    makeShellWrapper
   ];
 
   buildInputs = [
@@ -53,6 +55,12 @@ stdenv'.mkDerivation (finalAttrs: {
     python3 setup.py egg_info --build-type=shiboken6-generator
     cp -r shiboken6_generator.egg-info $out/${python.sitePackages}/
   '';
+
+  postFixup = ''
+    wrapProgramShell $out/bin/shiboken6 --add-flags '--typesystem-paths=$NIXPKGS_SHIBOKEN6_TYPESYSTEMS_PATH'
+  '';
+
+  setupHook = ./shiboken6-hook.sh;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - tools";

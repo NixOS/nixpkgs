@@ -32,6 +32,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
+  passthru = {
+    internal = callPackage ./internal.nix { };
+
+    signingKey = callPackage ./signing-key.nix { };
+
+    sign = callPackage ./sign.nix { };
+
+    x509 = callPackage ./x509.nix { };
+
+    authenticode = callPackage ./authenticode.nix { };
+
+    mkTest = callPackage ./tests { };
+
+    testSigningKey = autopen.signingKey.import {
+      name = "autopen-test-rsa3072-pkcs1-sha256";
+      path = ./tests/test-rsa3072-pkcs1-sha256-signing-key.bin;
+    };
+
+    tests = {
+      softwareKey = autopen.mkTest {
+        signingKey = autopen.testSigningKey;
+      };
+    };
+  };
+
   meta = {
     description = "Cryptographic signing tool with an object‐capability interface";
     homepage = "https://github.com/emilazy/autopen";

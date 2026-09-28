@@ -28,7 +28,9 @@ let
           }
         else
           {
-            http.address = "${cfg.host}:${toString cfg.port}";
+            http = (cfg.settings.http or { }) // {
+              address = "${cfg.host}:${toString cfg.port}";
+            };
           }
       )
     else

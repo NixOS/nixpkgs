@@ -16,5 +16,4 @@ mkDerivation {
   ];
   MK_TESTS = "no";
   meta.mainProgram = "jail";
-  meta.platforms = lib.platforms.freebsd;
 }

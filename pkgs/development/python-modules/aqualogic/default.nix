@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aqualogic";
-  version = "3.9";
+  version = "3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swilson";
     repo = "aqualogic";
     tag = finalAttrs.version;
-    hash = "sha256-azrss+Jkf9ijTxPSvWmruZSGemOOCSesWcVQZlwLO5o=";
+    hash = "sha256-9+auDJaXCEpANYm2FzsDCvr8jXmIMZFIQs1Za2BIriY=";
   };
 
   build-system = [ setuptools ];

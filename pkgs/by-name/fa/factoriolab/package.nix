@@ -7,6 +7,7 @@
   jq,
   makeWrapper,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 buildNpmPackage rec {
   pname = "factoriolab";
@@ -48,6 +49,8 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/factoriolab/factoriolab";
     changelog = "https://github.com/factoriolab/factoriolab/releases/tag/v${version}";
     description = "Angular-based calculator for factory games like Factorio and Dyson Sphere Program";

@@ -59,13 +59,13 @@ let
           withPackages =
             f:
             (callPackage ../applications/science/logic/coq/with-packages.nix {
-              inherit coq;
+              inherit (self) coq;
             })
               (f self);
         };
       });
 
-      rocq-core = coq;
+      rocq-core = self.coq;
 
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 

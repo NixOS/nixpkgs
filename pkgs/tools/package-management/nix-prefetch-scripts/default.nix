@@ -44,6 +44,8 @@ let
 
       preferLocalBuild = true;
 
+      __structuredAttrs = true;
+
       meta = {
         description = "Script used to obtain source hashes for fetch${tool}";
         maintainers = with lib.maintainers; [ bennofs ];

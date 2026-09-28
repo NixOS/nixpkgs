@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "python-didl-lite";
     tag = version;
-    hash = "sha256-pdXdGRycMB6M6qnPl+Z+ezRw6td45IqYkEpx4YtL1rQ=";
+    hash = "sha256-kzE3k1GXn+6dZTiywr4YYBrjmWY13ZQSRWL4N882+7U=";
   };
 
   build-system = [ setuptools ];

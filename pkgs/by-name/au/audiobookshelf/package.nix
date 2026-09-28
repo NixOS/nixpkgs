@@ -17,10 +17,10 @@ let
   ffmpeg-full = ffmpeg_8-full;
 
   source = {
-    version = "2.36.0";
-    hash = "sha256-oohjRiKARpIyoPFEXR24nlKK4xBBEHUMVTaq/i6NfV8=";
-    npmDepsHash = "sha256-uDIL9PxbFUa3MwLoPomTfq1A/R1ewDIv+EFWml/8uy8=";
-    clientNpmDepsHash = "sha256-0xqqpls8FLuXngjjdwjoNLpq9dSixWouROviTjsFCbU=";
+    version = "2.36.1";
+    hash = "sha256-HBaTTfZEbhR2n/XafScZB/gX29erTQHZ+IdErwhA11A=";
+    npmDepsHash = "sha256-kp0LbSKaHTBppeyfLAFrGYnSWS3V2trO5yaZWoxVPo8=";
+    clientNpmDepsHash = "sha256-g3Y/4UU2YH/CeU8Z/NNkLP0OTeBM+4/rQfL406uVdio=";
   };
 
   src = fetchFromGitHub {

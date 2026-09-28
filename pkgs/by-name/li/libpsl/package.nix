@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
   ];
 
+  strictDeps = true;
+
   propagatedBuildInputs = [
     publicsuffix-list
   ];
@@ -82,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C library for the Publix Suffix List";

@@ -25,7 +25,6 @@ let
     packagesFor
     packageAliases
     vanillaPackages
-    rpiPackages
     ;
 in
 {
@@ -86,14 +85,6 @@ in
 
         linux_6_18 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.18";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_7_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.1";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -176,6 +167,7 @@ in
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
         linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
+        linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -201,55 +193,10 @@ in
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
 
-        # Remove warning added on 2026-04-01
-        linux_rpi1 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 1;
-              }
-            );
-        linux_rpi2 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 2;
-              }
-            );
-        linux_rpi3 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 3;
-              }
-            );
-        linux_rpi4 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 4;
-              }
-            );
+        linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
       }
     )
   );
@@ -357,12 +304,6 @@ in
 
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
-        e1000e =
-          if lib.versionOlder kernel.version "4.10" then
-            callPackage ../os-specific/linux/e1000e { }
-          else
-            null;
-
         iio-utils =
           if lib.versionAtLeast kernel.version "4.1" then
             callPackage ../os-specific/linux/iio-utils { }
@@ -376,6 +317,8 @@ in
             null;
 
         ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers { };
+
+        ipu7-drivers = callPackage ../os-specific/linux/ipu7-drivers { };
 
         ivsc-driver = callPackage ../os-specific/linux/ivsc-driver { };
 
@@ -582,12 +525,6 @@ in
 
         vmware = callPackage ../os-specific/linux/vmware { };
 
-        wireguard =
-          if lib.versionOlder kernel.version "5.6" then
-            callPackage ../os-specific/linux/wireguard { }
-          else
-            null;
-
         x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
         xone =
@@ -675,7 +612,6 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_1 = recurseIntoAttrs (packagesFor kernels.linux_7_1);
     linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -691,18 +627,11 @@ in
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
     linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
-  };
-
-  rpiPackages = {
-    linux_rpi1 = packagesFor kernels.linux_rpi1;
-    linux_rpi2 = packagesFor kernels.linux_rpi2;
-    linux_rpi3 = packagesFor kernels.linux_rpi3;
-    linux_rpi4 = packagesFor kernels.linux_rpi4;
+    linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
   };
 
   packages = recurseIntoAttrs (
     vanillaPackages
-    // rpiPackages
     // {
 
       # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -734,6 +663,11 @@ in
       linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
       linux_hardened = throw "linux_hardened has been removed due to lack of maintenance";
       linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
+
+      linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
 
       linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
       linux_rt_5_10 = throw "linux_rt_5_10 has been removed due to lack of maintenance";

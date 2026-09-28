@@ -6,12 +6,12 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "n-m3u8dl-re";
-  version = "0.5.1-beta";
+  version = "0.6.0-beta";
   src = fetchFromGitHub {
     owner = "nilaoda";
     repo = "N_m3u8DL-RE";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-LLBlSalYqOEPTttEMK/pBoxwiHXeAxFIUm/yuLb1WRo=";
+    sha256 = "sha256-YqLlrQ5D16J9i/smEUaAsKeEvk7L+NhCBBPO0l5Y5Qo=";
   };
 
   patches = [
@@ -29,8 +29,8 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "N_m3u8DL-RE" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   postFixup = ''
     ln -s $out/bin/N_m3u8DL-RE $out/bin/n-m3u8dl-re

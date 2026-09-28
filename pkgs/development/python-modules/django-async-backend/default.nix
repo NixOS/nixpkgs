@@ -3,6 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
+  libcst,
   poetry-core,
   postgresql,
   postgresqlTestHook,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "django-async-backend";
-  version = "6.0.7";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arfey";
     repo = "django-async-backend";
     tag = "v${version}";
-    hash = "sha256-4zaXPfHIE9RwkSbHPt1DHFInn8LP+JXiBiMJYkZeR6M=";
+    hash = "sha256-pfcqTtyV37bZFSZaRcFIt9cgR8XZ7PDijVC18lMziRU=";
   };
 
   postPatch = ''
@@ -47,24 +48,26 @@ buildPythonPackage rec {
     PGUSER = "postgres";
   };
 
-  preCheck = ''
-    export PYTHONPATH=$PYTHONPATH:$PWD/tests
+  checkPhase = ''
+    runHook preCheck
+
+    cd tests/
+    python manage.py test
+
+    runHook postCheck
   '';
 
   nativeCheckInputs = [
     django # must come first as vtasks only works with django 6
 
+    libcst
     postgresql
     postgresqlTestHook
     psycopg-pool
-    pytest-django
-    pytestCheckHook
   ];
 
-  pytestFlags = [ "./tests" ];
-
   meta = {
-    description = "Django extension providing async capabilities for database and other components";
+    description = "True async Django ORM and PostgreSQL backend with connection pooling and async transactions";
     homepage = "https://github.com/Arfey/django-async-backend";
     changelog = "https://github.com/Arfey/django-async-backend/releases/tag/${src.tag}";
     license = lib.licenses.asl20;

@@ -420,8 +420,8 @@ in
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
   openssl_3 = common {
-    version = "3.0.21";
-    hash = "sha256-YX4pr45CH0ZklISkk35IxoXkf0ZIgWfJgviLxOwdUi8=";
+    version = "3.0.22";
+    hash = "sha256-Z+vKflDRc4MCgEVIZlNJIZW4PblfhVhwlwG7R7XB74E=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -450,8 +450,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.7";
-    hash = "sha256-qMDSilKcpID582z1eS4s0hmEVSo8jkqhGiSqMa6smOg=";
+    version = "3.5.8";
+    hash = "sha256-qPhKOZGOxkFc52XZtCnTE7qXuBQxacFy5zS5UURk9bI=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -482,8 +482,8 @@ in
   };
 
   openssl_3_6 = common {
-    version = "3.6.3";
-    hash = "sha256-JDqGZJz28j7rai/yRW4J5dd92QGKVNPZawxr3Wumx/E=";
+    version = "3.6.4";
+    hash = "sha256-m/+qGtHgezVMIb0zJOwC+hVXn0Wn0ElLPnS8RJtzM+8=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -511,8 +511,8 @@ in
   };
 
   openssl_4_0 = common {
-    version = "4.0.1";
-    hash = "sha256-LbPzoNbqS1nh8JSs4sjNU23/uHzcOQhMWvoeb3833Qk=";
+    version = "4.0.2";
+    hash = "sha256-c2tGdTD5FnN7cDExDMsh2CGMYinmHo4WDNHTRYzVQ6g=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

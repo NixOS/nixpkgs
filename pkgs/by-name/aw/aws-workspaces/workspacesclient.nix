@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "workspacesclient";
-  version = "2025.1.5526-1";
+  version = "2026.0.5677-1";
 
   src = fetchurl {
     urls = [
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/noble/main/binary-amd64/workspacesclient_${finalAttrs.version}_amd64.ubuntu2404.deb"
     ];
-    hash = "sha256-iGYKpbpzGNeEUKgozhSwVd9dWRgQEbozIAWRu7wu2D8=";
+    hash = "sha256-11bSNQANgLIoi2FbAtJSlEXzKe9KPRlbFdbLQAPQQ5g=";
   };
 
   nativeBuildInputs = [

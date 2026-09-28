@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  aioredis,
   buildPythonPackage,
   coloredlogs,
   fastapi,
@@ -35,7 +34,6 @@ buildPythonPackage (finalAttrs: {
     json = [ ujson ];
     PIL = [ pillow ];
     redis = [ redis ];
-    aioredis = [ aioredis ];
     aiohttp = [ aiohttp ];
     fastapi = [ fastapi ];
     uvicorn = [ uvicorn ];

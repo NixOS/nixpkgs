@@ -16,7 +16,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.3.4";
+  version = "2.4.0";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     tag = "v${version}";
-    hash = "sha256-IGgToUpkbqtjGJD+GtCPSeHW9ZRnSS8NMfECok9HgjU=";
+    hash = "sha256-Oj2issWNh6kH4C3hVjSliThDiIKHgVMXIiFgkvqvxm4=";
   };
 
   postPatch = ''

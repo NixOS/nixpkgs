@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "glab-tui";
-  version = "0.8.4";
+  version = "0.9.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rcieri";
     repo = "glab-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SJpIYrtYirbk72/XZsQ1DqicGzovrUqp99KZ+/xD01I=";
+    hash = "sha256-F8uBKQSSOMCWc2zahFbOdLculEJ4g80kLVj9y0JrPOM=";
   };
 
-  cargoHash = "sha256-IcScQ4vY5Q1BusNSgpwF2EiykACBlFr6GZK3t0V8fV4=";
+  cargoHash = "sha256-Yev+34z2bTSXxspUn+vyEqyz2Yz+XulBrXG6avaI5bM=";
 
   nativeBuildInputs = [
     makeWrapper

@@ -26,24 +26,28 @@
   writableTmpDirAsHomeHook,
 
   buildRemoteServer ? true,
+  buildExtensionCli ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "3.2.0";
+  version = "3.3.0";
 
   outputs = [
     "out"
   ]
   ++ lib.optionals buildRemoteServer [
     "remote_server"
+  ]
+  ++ lib.optionals buildExtensionCli [
+    "extension_cli"
   ];
 
   src = fetchFromCodeberg {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-AzS9+7HrWbPpjQpmTxwFbOHiLCX7Qzj+vE4zzSJQBRI=";
+    hash = "sha256-9HtHVx40XCydGMXeiJIJViNAI/tItk5ccmMeglaVT3A=";
   };
 
   postPatch = ''
@@ -53,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
   '';
 
-  cargoHash = "sha256-Setp4mO6PFnLbpjM1UdqZNHfNNk59M2jj9NtwQFXm3A=";
+  cargoHash = "sha256-dAHpDdEchTaqiWtsa6u8O9qbNwTjt4ldYADzXQHgqzU=";
 
   __structuredAttrs = true;
 
@@ -89,9 +93,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=gram"
     "--package=cli"
   ]
-  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
+  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ]
+  ++ lib.optionals buildExtensionCli [ "--package=extension_cli" ];
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     ALLOW_MISSING_LICENSES = true;
     OPENSSL_NO_VENDOR = true;
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
@@ -157,6 +165,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ''
   + lib.optionalString buildRemoteServer ''
     install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
+  ''
+  + lib.optionalString buildExtensionCli ''
+    install -Dm755 $release_target/gram-extension $extension_cli/bin/gram-extension
   ''
   + ''
     runHook postInstall

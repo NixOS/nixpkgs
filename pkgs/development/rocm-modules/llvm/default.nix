@@ -180,10 +180,10 @@ let
         pname = name;
         # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
         # nix why-depends --precise .#rocmPackages.llvm.rocm-toolchain.linked /store/path/its/not/allowed
-        disallowedRequisites = disallowedRefsForToolchain;
+        outputChecks.out.disallowedRequisites = disallowedRefsForToolchain;
         passthru.linked = linked;
-        linkPaths = linkPaths;
-        passAsFile = [ "linkPaths" ];
+        inherit linkPaths;
+        __structuredAttrs = true;
         # TODO(@LunNova): Try to use --sysroot with clang in its original location instead of
         # relying on copying the binary?
         # $clang/bin/clang++ --sysroot=$rocm-toolchain is not equivalent
@@ -221,7 +221,7 @@ let
           builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
         } $out/ # create links *within* the sysroot to save space
 
-        for i in $(cat $linkPathsPath); do
+        for i in "''${linkPaths[@]}"; do
           ${lib.getExe lndir} -silent $i $out
         done
 

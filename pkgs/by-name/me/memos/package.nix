@@ -1,25 +1,25 @@
 {
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   stdenvNoCC,
   nix-update-script,
   nodejs,
   lib,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "memos";
-  version = "0.30.0";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MXvEMJN/XyZux/qL/9qZYkbo6fQzYFeCWHxFCtN1M8o=";
+    hash = "sha256-O6r+M+T6zDr9getunGgNSXJlmt3ZsSwTCYoSpVgDcM4=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
       inherit (finalWebAttrs) pname version src;
       inherit pnpm;
       sourceRoot = "${finalWebAttrs.src.name}/web";
-      fetcherVersion = 3;
-      hash = "sha256-4oUA0z6VXL0belhK23wZgwCpGmLqDnEez3nMA/uHUTw=";
+      fetcherVersion = 4;
+      hash = "sha256-GkLRGTefn85bZ652/sW4xrBHZ6QsVn/cTBb7UoU8UQQ=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -50,15 +50,15 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-nyUBXPC8nt+7s2jFHohF0PWBGky24ZSXWtSI4XVf2kU=";
+  vendorHash = "sha256-AJkTk34kYa2I24F+naj9GX8b2YYhqTuK6i9MvDUoBU0=";
 
   ldflags = [
     "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
   ];
 
   preBuild = ''
-    rm -rf server/router/frontend/dist
-    cp -r ${finalAttrs.memos-web} server/router/frontend/dist
+    rm -rf server/frontend/dist
+    cp -r ${finalAttrs.memos-web} server/frontend/dist
   '';
 
   checkFlags =
@@ -66,6 +66,7 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestEntrypointDoesNotLoopWhenTargetUIDIsRoot" # requires root
         "TestUserWebhookSigningSecretLifecycle" # requires internet access for example.com
+        "TestDetectAttachmentMimeType" # REMOVE NEXT RELEASE: bug in test, fixed by https://github.com/usememos/memos/pull/6353
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

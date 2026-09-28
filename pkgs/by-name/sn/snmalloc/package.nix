@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   clangStdenv,
   fetchFromGitHub,
   cmake,

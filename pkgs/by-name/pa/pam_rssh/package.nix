@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
     homepage = "https://github.com/z4yx/pam_rssh";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       xyenon
     ];

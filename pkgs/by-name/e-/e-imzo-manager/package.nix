@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://git.oss.uzinfocom.uz/xinux/e-imzo-manager";
-    mainProgram = "E-IMZO-Manager";
+    mainProgram = "e-imzo-manager";
     description = "GTK application for managing E-IMZO keys";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;

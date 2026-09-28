@@ -11,15 +11,13 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = final: prev: {
-      # The ast-serialize package, a dependency for mypy, depends on
-      # fetchCargoVendor and is part of the bootstrap chain for requests.
-      charset-normalizer = prev.charset-normalizer.override { withMypyc = false; };
+  python3Packages = python3.pkgs // {
+    # Break the requests -> charset-normalizer -> mypy -> ast-serialize ->
+    # fetchCargoVendor bootstrap cycle without overriding the whole Python scope.
+    requests = python3.pkgs.requests.override {
+      charset-normalizer = python3.pkgs.charset-normalizer.override { withMypyc = false; };
     };
   };
-  python3Packages = python.pkgs;
 
   replaceWorkspaceValues = writers.writePython3Bin "replace-workspace-values" {
     libraries = with python3Packages; [

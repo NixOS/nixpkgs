@@ -55,5 +55,8 @@ buildPythonApplication {
     export PYTHONPATH=pkgs/applications/editors/vim/plugins:$PYTHONPATH
   '';
 
-  meta.mainProgram = "vim-plugins-updater";
+  meta = {
+    mainProgram = "vim-plugins-updater";
+    license = lib.licenses.mit;
+  };
 }

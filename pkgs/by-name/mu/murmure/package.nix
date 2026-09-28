@@ -13,7 +13,7 @@
   cargo-tauri,
   nodejs,
   pkg-config,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
 
   # buildInputs
@@ -38,6 +38,8 @@
 }:
 
 let
+  pnpm = pnpm_11;
+
   parakeet-model = fetchzip {
     url = "https://github.com/Kieirra/murmure-model/releases/download/1.0.0/parakeet-tdt-0.6b-v3-int8.zip";
     hash = "sha256-rlV7mi5Y6qu/9jRWRPNBlABW8GxsvVAMCM6Ye2tVb2s=";
@@ -70,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 4;
     hash = "sha256-ixBGVKYAk1FYcAayvKKJMT5v3JLjSK17ds0mrBEj850=";
   };

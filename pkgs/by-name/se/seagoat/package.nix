@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "chardet"
     "chromadb"
+    "deepmerge"
     "ollama"
     "psutil"
     "setuptools"

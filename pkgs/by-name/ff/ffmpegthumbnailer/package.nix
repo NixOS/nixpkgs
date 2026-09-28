@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/thumbnailers/ffmpegthumbnailer.thumbnailer \
+    substituteInPlace $out/share/thumbnailers/ffmpegthumbnailer{,-audio}.thumbnailer \
       --replace-fail '=ffmpegthumbnailer' "=$out/bin/ffmpegthumbnailer"
   '';
 

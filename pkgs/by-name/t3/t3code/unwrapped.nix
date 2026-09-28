@@ -1,17 +1,20 @@
 {
   cctools,
   copyDesktopItems,
-  electron_41,
+  electron_44,
   fetchFromGitHub,
   installShellFiles,
   lib,
   libicns,
+  libsecret,
   makeBinaryWrapper,
   makeDesktopItem,
   nix-update-script,
   node-gyp,
   nodejs,
+  pkg-config,
   python3,
+  spdx-license-list-data,
   stdenv,
   writeDarwinBundle,
   xcbuild,
@@ -26,7 +29,7 @@ stdenv.mkDerivation (
   finalAttrs:
   let
     appName = "T3 Code (Alpha)";
-    electron = electron_41;
+    electron = electron_44;
     pnpm = pnpm_11;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
@@ -37,7 +40,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.0.33";
+    version = "0.0.42";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -45,13 +48,17 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-qZi9hMGzqpmnpqvvVtsQvkZIiVqTgOMWv1y15MiSAYg=";
+      hash = "sha256-YV86WqqpGQwjeovXB0IoE3f/o4IUC5DDVdBEdT4xzjc=";
     };
 
     postPatch = ''
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
+
+      mkdir -p .generated/third-party-licenses/spdx/v3.28.0
+      cp ${spdx-license-list-data.json}/json/details/*.json \
+        .generated/third-party-licenses/spdx/v3.28.0
     '';
 
     nativeBuildInputs = [
@@ -65,13 +72,18 @@ stdenv.mkDerivation (
       pnpm
       cacert
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+      pkg-config
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
       libicns
       writeDarwinBundle
       xcbuild
     ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
     pnpmWorkspaces = [
       # `...` suffix is used to also include other workspace packages that are
@@ -93,7 +105,7 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 4;
-      hash = "sha256-i/K5bj7CS7PGIX5hfayxAJ7ngNib92w3SDKGXTVWccA=";
+      hash = "sha256-gEY2em9pNTC1EuVX0V3L/Wu1apZ+BKBXxALEcPQ/pwA=";
     };
 
     preBuild = ''
@@ -139,6 +151,13 @@ stdenv.mkDerivation (
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \
         "$out"/libexec/t3code/apps/desktop/prod-resources/icon.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm755 \
+        native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
+        "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
+    ''
+    + ''
 
       find "$out"/libexec/t3code -xtype l -delete
 
@@ -168,9 +187,9 @@ stdenv.mkDerivation (
     ''
     + ''
       mkdir --parents \
-        "$out"/share/icons/hicolor/scalable/apps
+        "$out"/share/icons/hicolor/{1024x1024,scalable}/apps
       install --mode=444 ${desktopIcon} \
-        "$out"/share/icons/t3code.png
+        "$out"/share/icons/hicolor/1024x1024/apps/t3code.png
       install --mode=444 assets/prod/logo.svg \
         "$out"/share/icons/hicolor/scalable/apps/t3code.svg
 

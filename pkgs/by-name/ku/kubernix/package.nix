@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/abdmhDCakSbVj1SK9EqVw2MDdCc760IFIUIg3HGAJU=";
+    sha256 = "sha256-d+W7V/9TiEqG4q0MIq3Tan5XH/w7vJl5vpCax5Qf7r0=";
   };
 
-  cargoHash = "sha256-0buTnenDDLTW8Cy72Hsg4raTj0t3TaHskh1ed1QzmLc=";
+  cargoHash = "sha256-83dfQnZ3/6k8fJIr5jyleX2ztevhttnSSfaHLJEWwks=";
 
   # Tests require network access
   doCheck = false;

@@ -5,7 +5,7 @@
 }:
 
 buildHomeAssistantComponent (finalAttrs: {
-  version = "1.3.0";
+  version = "1.3.3";
   domain = "econet300";
   owner = "jontofront";
 
@@ -13,7 +13,7 @@ buildHomeAssistantComponent (finalAttrs: {
     owner = "jontofront";
     repo = "ecoNET-300-Home-Assistant-Integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E5C0onRXNlzxwqz/Z653CRi/xT8FA+uOWiwOX3rkdlg=";
+    hash = "sha256-nJ0xoSGmvPNqGKl8nYoNGfL5phXRbDzFsG/0HihLRmk=";
   };
 
   meta = {
@@ -21,6 +21,6 @@ buildHomeAssistantComponent (finalAttrs: {
     description = "Home Assistant component for Plum ecoNET300 devices";
     homepage = "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration";
     maintainers = with lib.maintainers; [ implr ];
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
   };
 })

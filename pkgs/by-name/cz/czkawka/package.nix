@@ -30,16 +30,16 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "czkawka";
-    version = "12.0.1";
+    version = "12.0.2";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
       tag = self.version;
-      hash = "sha256-nRXmRt+yJjOEffyyuWI/mCp+l4bxBJbJzIf3Nj7I1AU=";
+      hash = "sha256-adatuaG4sR1OJkjJdVgzm+wYqDAYBjId/thQj5rs3nI=";
     };
 
-    cargoHash = "sha256-oGgQqACKp4RGkowPJARPWEpfWuSz1FFucMY/Mykz970=";
+    cargoHash = "sha256-nTqzQrEWqN89XjQ4bgdCfWAXdyfB7UTQ3tAuL7LtNhA=";
 
     nativeBuildInputs = [
       gobject-introspection

@@ -16,7 +16,6 @@
 
 buildDunePackage {
   pname = "letsencrypt-app";
-  minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)
     src

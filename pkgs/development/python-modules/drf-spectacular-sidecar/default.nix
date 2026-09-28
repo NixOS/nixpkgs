@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-spectacular-sidecar";
-  version = "2026.8.1";
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    tag = version;
-    hash = "sha256-bH/0W+LZeC9zlqpJyXEfRPqhQhOdOktzf/1XOhtMbL4=";
+    tag = finalAttrs.version;
+    hash = "sha256-fjrXNUR2IyMrK2ZmaxbSkjCSfoIr82x6y83OxZQFD4k=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

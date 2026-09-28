@@ -78,6 +78,7 @@ let
   # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
   # but cross is currently very broken anyway, so we can figure this out later.
   deps = map (dep: self.${dep}) filteredDepNames;
+  pyDeps = builtins.concatMap (dep: if dep ? python then [ dep.python ] else [ ]) deps;
 
   traceDuplicateDeps =
     attrName: attrValue:
@@ -127,9 +128,13 @@ let
     buildInputs = [
       qt6.qtbase
     ]
-    ++ lib.optionals hasPythonBindings [
-      python3Packages.pyside6
-    ]
+    ++ lib.optionals hasPythonBindings (
+      [
+        python3Packages.pyside6
+      ]
+      # pyDeps manually propagated in moveOutputsHook
+      ++ pyDeps
+    )
     ++ extraBuildInputs;
 
     # FIXME: figure out what to propagate here

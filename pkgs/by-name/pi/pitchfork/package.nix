@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "pitchfork";
-    version = "2.23.0";
+    version = "2.24.0";
 
     __structuredAttrs = true;
 
@@ -56,10 +56,10 @@ rustPlatform.buildRustPackage (
       owner = "jdx";
       repo = "pitchfork";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-P3N4YquQPJ+xr/M6foK9r2EDKjOsslRVMU3aIsJr04U=";
+      hash = "sha256-T8VB47SdwIVSjoZLr5gxL7BXC1TVehicmTSjqUQRIGA=";
     };
 
-    cargoHash = "sha256-jNf0dTsZgS8CWBrGu+o1d11Nil9OgsLykxNkGxTd9aY=";
+    cargoHash = "sha256-01rGoLun4cfyBn5rPwTPd2iGDUlyBJV2e1/5Xbsfobc=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) pname src version;

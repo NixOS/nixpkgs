@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     git config --global user.email ""
     git config --global user.name nixbld
+    git config --global gc.auto 0
     git -C llvm-project init
     git -C llvm-project add .
     git -C llvm-project commit -m stub >/dev/null

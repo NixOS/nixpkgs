@@ -89,6 +89,7 @@ let
         passthru = {
           withPlugins = plugins': withPlugins (plugins ++ plugins');
         };
+        meta.license = lib.licenses.mit; # License of wrapper itself
       }
       ''
         mkdir -p $out/bin

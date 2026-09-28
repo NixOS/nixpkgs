@@ -5,7 +5,7 @@
   python-manilaclient,
   python-openstackclient,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   tempest,
   testtools,
 }:
@@ -24,12 +24,8 @@ buildPythonPackage {
     python-manilaclient
     python-openstackclient
     requests-mock
-    stestr
+    stestrCheckHook
     tempest
     testtools
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

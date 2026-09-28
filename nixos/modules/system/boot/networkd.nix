@@ -2497,11 +2497,6 @@ let
   networkdOptions = {
     networkConfig = mkOption {
       default = { };
-      defaultText = lib.literalExpression ''
-        {
-          IPv6PrivacyExtensions = true;
-        }
-      '';
       example = {
         SpeedMeter = true;
         ManageForeignRoutingPolicyRules = false;
@@ -4001,10 +3996,7 @@ let
       };
 
       config = {
-        networkConfig = {
-          IPv6PrivacyExtensions = lib.mkOptionDefault true;
-        }
-        // optionalAttrs (config.routeTables != { }) {
+        networkConfig = optionalAttrs (config.routeTables != { }) {
           RouteTable = mapAttrsToList (name: number: "${name}:${toString number}") config.routeTables;
         };
       };

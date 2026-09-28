@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   gitMinimal,
@@ -30,6 +31,7 @@
   omegaconf,
   pandas,
   parameterized,
+  py-cpuinfo,
   pytorch-tokenizers,
   ruamel-yaml,
   scikit-learn,
@@ -40,6 +42,8 @@
   typing-extensions,
 
   # tests
+  perl,
+  pillow,
   pytest-json-report,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -63,7 +67,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -77,7 +81,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-l8Wpjbu+jcuGAlt0kEGvmRQ/Xh4+mrPzTOpChc8g5nA=";
+    hash = "sha256-wxv+lQ7Cb/S0hDuLHVv6uG+xr8KqfCH2ZEgLosn4Ovw=";
   };
 
   postPatch =
@@ -92,7 +96,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     + ''
       substituteInPlace pyproject.toml \
         --replace-fail '"pip>=23",' "" \
-        --replace-fail "cmake>=3.24,<4.0.0" "cmake"
+        --replace-fail "cmake>=3.26,<4.0.0" "cmake" \
+        --replace-fail "\"patchelf; sys_platform == 'linux'\"," ""
     ''
     # CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
     # https://github.com/NixOS/nixpkgs/issues/445447
@@ -188,6 +193,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     packaging
     pandas
     parameterized
+    py-cpuinfo
     pytorch-tokenizers
     pyyaml
     ruamel-yaml
@@ -202,6 +208,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "executorch" ];
 
   nativeCheckInputs = [
+    # Used by the `scripts/lint_*.sh` scripts exercised in `.ci/scripts/tests`
+    perl
+    pillow
     pytest-json-report
     pytest-rerunfailures
     pytestCheckHook
@@ -258,6 +267,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
     "test_flatbuffer_paths_match"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: badly formed help string
+    "test_with_config"
+    "test_with_config_and_cli"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

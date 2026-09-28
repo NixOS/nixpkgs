@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs_24,
+  nodejs_26,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
@@ -16,7 +16,7 @@
   fetchpatch2,
 }:
 let
-  nodeSources = srcOnly nodejs_24;
+  nodeSources = srcOnly nodejs_26;
 in
 
 buildNpmPackage (finalAttrs: {
@@ -76,12 +76,12 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/lib/node_modules/draupnir
     mkdir $out/bin
     # Install outputs
-    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
+    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/branch.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
     # Fix dangling symlink pointing to relative path ../apps/draupnir
     rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_26} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
       --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
 

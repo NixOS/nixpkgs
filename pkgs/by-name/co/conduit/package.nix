@@ -15,14 +15,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conduit";
-  version = "0.9.7";
+  version = "0.9.8";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DmnHGj6Q/i+wVNIbaTGrFX9f0Kry2X5bC7zahXv29I4=";
+    hash = "sha256-uGHOz15jv8RHM2JTuJpzppMBKCqMqoWX7w0QZqJ+h8c=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simplified Data Exchange for HPC Simulations";
     homepage = "https://github.com/LLNL/conduit";
-    changelog = "https://github.com/LLNL/conduit/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/LLNL/conduit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3Lbnl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;

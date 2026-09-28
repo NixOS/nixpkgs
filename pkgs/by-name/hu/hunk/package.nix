@@ -5,18 +5,20 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  installAgentSkills,
+  installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 
 let
   pname = "hunk";
-  version = "0.19.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "modem-dev";
     repo = "hunk";
     tag = "v${version}";
-    hash = "sha256-PWblqDS86PaSl5ToFawCNGTxmrWcmoBAfq8R5lMDbyk=";
+    hash = "sha256-dc4/xLAyQe7mL/KMcpjsjgHzgf0tRomQAemVABwUWFY=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -56,7 +58,7 @@ let
 
     dontFixup = true;
 
-    outputHash = "sha256-Ixsv2wXb39kSRck9ZbjJjRlzn4KS2fkfl3v4MEeD7cE=";
+    outputHash = "sha256-hWfG2T3Tfa69nX50OFW5XNRQxMc5lideDEUPw6G26qA=";
     outputHashMode = "recursive";
   };
 in
@@ -68,18 +70,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     bun
+    installAgentSkills
+    installShellFiles
     writableTmpDirAsHomeHook
   ];
-
-  # Teach `hunk skill path` to find the FHS layout under share/skills/$pname
-  # (https://github.com/NixOS/nixpkgs/issues/547426) instead of $out/skills.
-  postPatch = ''
-    substituteInPlace src/core/paths.ts \
-      --replace-fail \
-        'join("node_modules", "hunkdiff", skillRelativePath),' \
-        'join("node_modules", "hunkdiff", skillRelativePath),
-    join("share", "skills", "hunk", name, "SKILL.md"),'
-  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -94,24 +88,31 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
+    # Entry points mirror upstream's scripts/build/build-bin.ts.
     mkdir -p .bun-tmp .bun-install
     BUN_TMPDIR=$PWD/.bun-tmp \
     BUN_INSTALL=$PWD/.bun-install \
       bun build --compile \
         --no-compile-autoload-bunfig \
         --no-compile-autoload-dotenv \
-        src/main.tsx \
+        packages/hunk/src/main.tsx \
+        packages/hunk/src/highlightWorkerEntry.ts \
         --outfile hunk
 
     runHook postBuild
   '';
 
+  dontInstallAgentSkills = true;
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/skills/hunk
-    cp -R skills/hunk-review skills/hunk-extensions $out/share/skills/hunk/
+    installBin hunk
+    for skill in packages/hunk/skills/*; do
+      installSkill "$skill"
+    done
+
+    # `hunk skill path` looks for skills/<name>/SKILL.md above the executable.
+    ln -s share/skills/${pname} $out/skills
 
     runHook postInstall
   '';
@@ -129,9 +130,8 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/hunk --version | grep -F ${version}
-    test -f "$($out/bin/hunk skill path)"
-    test -f "$($out/bin/hunk skill path hunk-extensions)"
+    cmp "$out/share/skills/${pname}/hunk-review/SKILL.md" "$($out/bin/hunk skill path)"
+    cmp "$out/share/skills/${pname}/hunk-extensions/SKILL.md" "$($out/bin/hunk skill path hunk-extensions)"
 
     runHook postInstallCheck
   '';

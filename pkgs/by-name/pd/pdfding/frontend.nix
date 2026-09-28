@@ -9,9 +9,9 @@
 }:
 let
   pdfjsVersion = "6.1.200"; # see update script
-  pdfjsHash = "sha256-8hByPf4BXTXakRxomXtknthlCLcjG/pCLVnjMxqrROI=";
+  pdfjsHash = "sha256-IylR6X6qmyP7jvT12AerDd2UD0nqqOWljfT8wgKoFsg=";
   pdfjs = fetchzip {
-    url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-dist.zip";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-legacy-dist.zip";
     hash = pdfjsHash;
     stripRoot = false;
     postFetch = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "pdfding-${finalAttrs.version}-npm-deps";
-    hash = "sha256-4mnw9sLQBZCBqmTKkjNHx03pgmvQ4CuDg3NOke4vMHs=";
+    hash = "sha256-1Yf6jEKB9a1nRAmeHj7hhnDlMPzKCz3ufp0thgGnGtQ=";
   };
 
   nativeBuildInputs = [

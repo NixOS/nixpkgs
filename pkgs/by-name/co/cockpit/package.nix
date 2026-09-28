@@ -34,7 +34,7 @@
   pam,
   pkg-config,
   polkit,
-  python312Packages,
+  python3Packages,
   removeReferencesTo,
   sscg,
   systemd,
@@ -45,22 +45,15 @@
   withBranding ? true,
   nixos-icons,
 }:
-
-let
-  # Pinned to 3.12 due to cockpit-zfs dependency py-libzfs not being compatible
-  # with 3.13+
-  python3Packages = python312Packages;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "366";
+  version = "368";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-WyV6I8u83ETVLmjJ7Mjh0D1cLY+RQkxGAIMTkRfy3T0=";
+    hash = "sha256-2bFQwK5L0S84nLSkUeHmbNgBkjBJIxR88t/21h5jmps=";
     fetchSubmodules = true;
   };
 

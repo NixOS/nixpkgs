@@ -5,7 +5,7 @@
   pythonAtLeast,
 
   ## wandb-core
-  buildGoModule,
+  buildGo127Module,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -25,16 +25,17 @@
   # dependencies
   click,
   opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
   packaging,
   platformdirs,
   protobuf,
   pydantic,
   pyyaml,
   requests,
-  sentry-sdk,
   setproctitle,
-  pythonOlder,
   typing-extensions,
+  xxhash,
 
   # tests
   azure-containerregistry,
@@ -73,6 +74,7 @@
   responses,
   scikit-learn,
   soundfile,
+  sweeps,
   tenacity,
   torch,
   torchvision,
@@ -80,12 +82,12 @@
 }:
 
 let
-  version = "0.28.2";
+  version = "0.30.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-kmgLHb+1NjStqcjMOYPPU2v2js4m8O3b2OpM6BiSbXI=";
+    hash = "sha256-4ccIM8bXbz8IkZeMBdr5zqoG7IxwwW8lb/VKIOOJWeE=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -95,7 +97,7 @@ let
 
     sourceRoot = "${src.name}/xpu";
 
-    cargoHash = "sha256-YKuXtttLam4NmJsJPQH8sFbj1Qs5Gc2uoFJEvTYxkew=";
+    cargoHash = "sha256-arb96ajbju/CeAglgvTjD5/omrEpigEORjXVAVSSV2Q=";
 
     checkFlags = [
       # fails in sandbox
@@ -143,7 +145,7 @@ let
     __darwinAllowLocalNetworking = true;
   };
 
-  wandb-core = buildGoModule {
+  wandb-core = buildGo127Module {
     pname = "wandb-core";
     inherit src version;
 
@@ -239,17 +241,17 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     click
     opentelemetry-api
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-sdk
     packaging
     platformdirs
     protobuf
     pydantic
     pyyaml
     requests
-    sentry-sdk
     setproctitle
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
+    xxhash
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -292,11 +294,12 @@ buildPythonPackage (finalAttrs: {
     responses
     scikit-learn
     soundfile
+    sweeps
     tenacity
-    versionCheckHook
     torch
     torchvision
     tqdm
+    versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -308,9 +311,6 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
-
-    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
-    "tests/unit_tests/test_analytics/test_sentry.py"
 
     # Server connection times out under load
     "tests/unit_tests/test_wandb_login.py"

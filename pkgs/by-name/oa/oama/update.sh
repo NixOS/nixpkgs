@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p haskell.packages.ghc910.cabal2nix nix-prefetch-git curl jq
+#!nix-shell -i bash -p haskell.packages.ghc912.cabal2nix nix-prefetch-git curl jq nixfmt
 
 set -euo pipefail
 
@@ -11,12 +11,15 @@ latest_version="$(curl --silent https://api.github.com/repos/pdobsan/oama/releas
 echo "Updating oama to version ${latest_version}."
 echo "Running cabal2nix and outputting to ${derivation_file}..."
 
-cat > "${derivation_file}" << EOF
+cat > "${derivation_file}.tmp.nix" << EOF
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
 EOF
 
-cabal2nix --revision "${latest_version}" https://github.com/pdobsan/oama.git >> "${derivation_file}"
+cabal2nix --dont-fetch-submodules --revision "${latest_version}" https://github.com/pdobsan/oama.git >> "${derivation_file}.tmp.nix"
+nixfmt "${derivation_file}.tmp.nix"
+grep -v githash "${derivation_file}.tmp.nix" > "${derivation_file}"
 nixfmt "${derivation_file}"
+rm "${derivation_file}.tmp.nix"
 
 echo "Finished."

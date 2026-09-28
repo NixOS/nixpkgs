@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   sphinx,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -15,13 +15,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     sphinx
-    stestr
+    stestrCheckHook
     stevedore
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 }

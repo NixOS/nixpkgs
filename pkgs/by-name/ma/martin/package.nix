@@ -47,18 +47,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
-  version = "1.13.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     tag = "martin-v${finalAttrs.version}";
-    hash = "sha256-rtlq6XdLvb3T82wKgrjr8m1HGDgqGLy4L/NMzTrJYi0=";
+    hash = "sha256-VFBdFTquqTOJQUl3m3pu5sPD8z7kvuQMclKcOhC5qGc=";
   };
 
   patches = [ ./dont-build-webui.patch ];
 
-  cargoHash = "sha256-8eGbmZx6mt8CKsa90gLnrSxEQnd19jQFSM+qED79+JY=";
+  cargoHash = "sha256-p5sAkmMTirMdmXnVb2aqGKhPYpX/uluvzq0uw4W1Bt8=";
 
   webui = buildNpmPackage {
     pname = "martin-ui";
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${finalAttrs.src}/demo/frontend/public/favicon.ico public/_/assets/favicon.ico
     '';
 
-    npmDepsHash = "sha256-CYJOL06jCpbZ5ewiuwkoBUj0umwQMgIFqFBlvazlj3c=";
+    npmDepsHash = "sha256-ngYv8qtpUEiseE//tDauzvTzWJxyN2QMYvyV6ObsSvc=";
 
     buildPhase = ''
       runHook preBuild

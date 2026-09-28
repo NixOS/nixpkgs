@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-control-center";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-control-center";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rsEu3Ig6GxqPOvAFOXhkEoXM+etyjWpQWHGOsA+myJs=";
+    hash = "sha256-gBU8/P7Mopm1hDEQJCg/J6UbgzlMH5repDqmqglRFj8=";
   };
 
   nativeBuildInputs = [

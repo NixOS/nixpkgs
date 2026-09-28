@@ -44,6 +44,11 @@
   };
 
   testScript = ''
+    def with_unit_path(node, cmd):
+        """Run cmd with the PATH systemd hands to komodo-periphery.service."""
+        unit_path = "$(systemctl show -p Environment --value komodo-periphery | grep -o 'PATH=[^ ]*' | cut -d= -f2)"
+        node.succeed(f"export PATH={unit_path}; {cmd}")
+
     start_all()
 
     with subtest("Inbound periphery starts and serves /version"):
@@ -59,9 +64,15 @@
         periphery.succeed("test -d /var/lib/komodo-periphery/keys")
         periphery.succeed("test -d /var/lib/komodo-periphery/ssl")
 
+    with subtest("Service PATH provides docker, docker compose and git"):
+        with_unit_path(periphery, "command -v docker && command -v git && docker compose version")
+
     with subtest("Outbound periphery stays active despite unreachable core"):
         peripheryOutbound.wait_for_unit("komodo-periphery.service")
         peripheryOutbound.sleep(15)
         peripheryOutbound.succeed("systemctl is-active komodo-periphery")
+
+    with subtest("Terminal-enabled periphery sees system-wide tools on PATH"):
+        with_unit_path(peripheryOutbound, "command -v bash")
   '';
 }

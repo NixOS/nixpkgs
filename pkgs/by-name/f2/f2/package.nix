@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo125Module,
+  buildGoModule,
   exiftool,
   nix-update-script,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "f2";
   version = "2.2.2";
 

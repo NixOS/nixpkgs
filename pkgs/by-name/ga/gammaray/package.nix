@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gammaray";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sxzYp6+x06cb67f+Mi2hc4kGhYGvIctLGJdjjyGTrjs=";
+    hash = "sha256-JgAzrYjLLa8R2SRBLfWYhizNUoF/tb9TbBdzzLNOqtE=";
   };
 
   nativeBuildInputs = [

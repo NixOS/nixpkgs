@@ -46,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = false;
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   passthru.updateScript = nix-update-script { };
 

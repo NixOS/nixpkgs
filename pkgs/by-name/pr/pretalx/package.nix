@@ -14,7 +14,7 @@ let
   python = python314.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_6;
+      django = prev.django_6_0;
 
       django-hierarkey = prev.django-hierarkey.overrideAttrs (oldAttrs: {
         version = "2.0.1";

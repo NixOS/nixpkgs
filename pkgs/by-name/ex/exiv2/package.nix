@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   doxygen,
   gettext,
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exiv2";
-  version = "0.28.8";
+  version = "0.28.9";
 
   outputs = [
     "out"
@@ -34,8 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exiv2";
     repo = "exiv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Qe+lNBO24qQyKDXe7RMCqoDa61iha2QFhRpLJlCSMo=";
+    hash = "sha256-ESRiiBBckGIhnhSOMmcF/m1PYi2sLGv1xxE0b22nl5M=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-i686-lens-rounding.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/7d25da6045556c8b9a81632cffd1bd2e2a9d0977.patch";
+      hash = "sha256-wA14qgkGIM7hvYRfv4+jPcMIbbr2oE9UvdaanVm4Sy0=";
+    })
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [
     cmake

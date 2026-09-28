@@ -38,6 +38,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    environment.etc."upki/config.toml".source = configFile;
+
     services.upki.settings = {
       cache-dir = lib.mkDefault "/var/cache/upki";
       revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/";
@@ -54,11 +56,14 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      restartTriggers = [ config.environment.etc."upki/config.toml".source ];
+
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${lib.getExe cfg.package} --config-file ${configFile} fetch";
+        ExecStart = "${lib.getExe cfg.package} --config-file /etc/upki/config.toml fetch";
         User = "upki";
         Group = "upki";
+        ConfigurationDirectory = "upki";
         CacheDirectory = "upki";
         CacheDirectoryMode = "0755";
         UMask = "0022";
@@ -93,5 +98,9 @@ in
         OnUnitActiveSec = cfg.interval;
       };
     };
+  };
+
+  meta = {
+    maintainers = [ lib.maintainers.skyesoss ];
   };
 }

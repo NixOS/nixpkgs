@@ -1,31 +1,56 @@
 {
   lib,
   fetchFromGitHub,
+  fetchNpmDeps,
   buildNpmPackage,
   nodejs,
+  npmHooks,
   nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "scanservjs";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "sbs20";
     repo = "scanservjs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VfFahIyn2MIW4E0sMCpqdduP7F0U7t4a5c1fwpQl7Dc=";
+    hash = "sha256-UyNSEjwqL+DHTJWgJ6lrNXfPuNJv2H3rUtpRqdNeEkg=";
   };
 
-  npmDepsHash = "sha256-VB4z7PCOUzhSbSbxLj/47oppMdTvd2lT7WZKDqd+jfo=";
+  appServerNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-server-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-server";
+    hash = "sha256-zp8gguoc+OdSABCOKUzLMuKIrnuYVX39kCD8b7ZTIgQ=";
+  };
+
+  appUiNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-ui-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-ui";
+    hash = "sha256-/30JnlN66N3pWQHHxeGG6k0nW3miFfiYlb3Snx2BP6E=";
+  };
+
+  npmDepsHash = "sha256-BNYRDVGC7wFdv7VKARZee2ea1QcLSX3iwoCGGcsVtag=";
 
   patches = [
     ./nix-compatibility.patch
   ];
 
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+  ];
+
+  preConfigure = ''
+    npmRoot=app-server npmDeps=${finalAttrs.appServerNpmDeps} npmConfigHook
+    npmRoot=app-ui npmDeps=${finalAttrs.appUiNpmDeps} npmConfigHook
+  '';
+
   postBuild = ''
     # Install runtime dependencies
-    npm install \
+    npm_config_cache=${finalAttrs.appServerNpmDeps} npm install \
       --prefix ./dist \
       --offline \
       --production \

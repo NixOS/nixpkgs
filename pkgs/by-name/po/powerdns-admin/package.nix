@@ -11,12 +11,12 @@
 
 let
   pname = "powerdns-admin";
-  version = "0.6.1";
+  version = "2026.08.1";
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
     repo = "PowerDNS-Admin";
     tag = "v${version}";
-    hash = "sha256-VhUz3Uw2MKN7rJgCrFd5nSN8FVTHM6LHCc01scMNjbc=";
+    hash = "sha256-henbXspZfO8n0V0v63/7nOO5s01f5c7QMtcseeBFKVY=";
   };
 
   inherit (yarn-berry_4-fetcher) fetchYarnBerryDeps yarnBerryConfigHook;
@@ -28,7 +28,6 @@ let
   python = python3;
 
   pythonDeps = with python.pkgs; [
-    distutils
     flask
     flask-assets
     flask-login
@@ -44,7 +43,6 @@ let
     sqlalchemy
     certifi
     cffi
-    configobj
     cryptography
     bcrypt
     requests
@@ -62,17 +60,14 @@ let
     bravado-core
     lima
     lxml
-    passlib
     pyasn1
     pytimeparse
     pyyaml
     jinja2
-    itsdangerous
+    setuptools
     webcolors
     werkzeug
-    zipp
     zxcvbn
-    standard-imghdr
   ];
 
   assets = stdenv.mkDerivation {
@@ -95,9 +90,6 @@ let
     ]
     ++ pythonDeps;
 
-    patches = [
-      ./0002-Remove-cssrewrite-filter.patch
-    ];
     buildPhase = ''
       runHook preBuild
 
@@ -105,18 +97,23 @@ let
         mv node_modules powerdnsadmin/static/node_modules
       fi
 
-      SESSION_TYPE=filesystem FLASK_APP=./powerdnsadmin/__init__.py flask assets build
+      SESSION_TYPE=filesystem \
+      SQLALCHEMY_DATABASE_URI="sqlite:///:memory:" \
+      FLASK_APP=./powerdnsadmin/__init__.py \
+        flask assets build
 
       runHook postBuild
     '';
+
     installPhase = ''
       runHook preInstall
 
-      # https://github.com/PowerDNS-Admin/PowerDNS-Admin/blob/54b257768f600c5548a1c7e50eac49c40df49f92/docker/Dockerfile#L43
+      # https://github.com/PowerDNS-Admin/PowerDNS-Admin/blob/v2026.08.1/docker/common/Dockerfile.app
       mkdir $out
-      cp -r powerdnsadmin/static/{generated,assets,img} $out
-      find powerdnsadmin/static/node_modules -name webfonts -exec cp -r {} $out \; -printf "Copying %P\n"
-      find powerdnsadmin/static/node_modules -name fonts -exec cp -r {} $out \; -printf "Copying %P\n"
+      cp -r powerdnsadmin/static/{generated,assets,img,custom} $out
+      mkdir -p $out/node_modules/@fortawesome/fontawesome-free
+      cp -r powerdnsadmin/static/node_modules/@fortawesome/fontawesome-free/webfonts \
+        $out/node_modules/@fortawesome/fontawesome-free/
 
       runHook postInstall
     '';
@@ -126,7 +123,6 @@ let
     from flask_assets import Environment
     assets = Environment()
     assets.register('js_login', 'generated/login.js')
-    assets.register('js_validation', 'generated/validation.js')
     assets.register('css_login', 'generated/login.css')
     assets.register('js_main', 'generated/main.js')
     assets.register('css_main', 'generated/main.css')

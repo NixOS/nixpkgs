@@ -20,26 +20,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rclone-ui";
-  version = "3.5.4";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "rclone-ui";
     repo = "rclone-ui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VnMNKBtZu5mdsvW7ljl+RNNj44bK+s5QrdGFaYvS2o0=";
+    hash = "sha256-H/4qU1FJ+EHSdXB0DH8YrfUa8sKfXOGnwOZrQeQfLYI=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     forceGitDeps = true;
-    hash = "sha256-cBPJgaPHjgn+SByZFZ/SCOZG/YY4OQWUUlX844YHyUU=";
+    hash = "sha256-i1czFB8EvS1KE8ukWp+02/K51FK/M9pabcNcbhtGWnM=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-r4orImEIUC+wQgnvkiO8/apXSgQ18LxJFoWgweYGgks=";
+  cargoHash = "sha256-KVrHpJsB8yMknWPxXE3F/SdIlMoRhqFWmxdKe/HIIxE=";
 
   # Disable tauri bundle updater, can be removed when #389107 is merged
   patches = [ ./remove_updater.patch ];
@@ -74,6 +74,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/rclone-ui \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libappindicator ]}
   '';
+
+  checkFlags = [
+    # don't have internet access
+    "--skip=notifications::webhooks::tests::dispatch_posts_and_records_outcomes_end_to_end"
+    "--skip=notifications::webhooks::tests::dispatch_records_last_error_on_unreachable_endpoint"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -240,5 +240,6 @@ stdenv.mkDerivation (finalAttrs: {
     );
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

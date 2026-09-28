@@ -70,9 +70,7 @@ let
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
         if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -g ${cfg.group} ${
-            lib.optionalString enableRedis " -g " + redisServer.group
-          } -E'"
+          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
         else
           ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
       }
@@ -123,7 +121,6 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = lib.optional enableRedis redisServer.group;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       "@system-service"

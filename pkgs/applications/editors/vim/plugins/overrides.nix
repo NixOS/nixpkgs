@@ -14,15 +14,20 @@
   yarnConfigHook,
   python3,
   # Misc dependencies
+  notmuch,
+  file,
   charm-freeze,
   code-minimap,
   dailies,
   dasht,
   deno,
+  distant,
   direnv,
   fzf,
+  fzy,
   gawk,
   git,
+  glow,
   helm-ls,
   himalaya,
   htop,
@@ -30,7 +35,9 @@
   khard,
   kulala-core,
   languagetool,
+  llm-ls,
   libgit2,
+  manix,
   llvmPackages,
   neovim-unwrapped,
   nix,
@@ -40,12 +47,14 @@
   openssl,
   ranger,
   ripgrep,
+  slang-server,
   sqlite,
   sshfs,
+  sops,
   stylish-haskell,
   tabnine,
   tmux,
-  typescript,
+  typescript_7,
   typescript-language-server,
   vim,
   which,
@@ -55,6 +64,7 @@
   xwininfo,
   xxd,
   ycmd,
+  yq,
   zenity,
   zoxide,
   zsh,
@@ -1024,18 +1034,11 @@ assertNoAdditions {
   };
 
   copilot-lua = super.copilot-lua.overrideAttrs {
-    # Avoid copying the bundled 500MB language server into the plugin output.
-    preInstall = ''
-      rm -rf copilot/js
-    '';
-
-    postInstall = ''
-      mkdir -p $target/copilot
-      ln -s ${copilot-language-server}/share/copilot-language-server $target/copilot/js
-
-      substituteInPlace $target/lua/copilot/lsp/nodejs.lua \
-        --replace-fail "copilot/js/language-server.js" "copilot/js/main.js"
-      sed -i 's/version = "[^"]*"/version = "${copilot-language-server.version}"/' $target/lua/copilot/util.lua
+    # Use the packaged language server instead of the runtime installer.
+    postPatch = ''
+      substituteInPlace lua/copilot/config/server.lua \
+        --replace-fail 'custom_server_filepath = nil,' \
+        'custom_server_filepath = "${lib.getExe copilot-language-server}",'
     '';
 
     runtimeDeps = [
@@ -1375,6 +1378,10 @@ assertNoAdditions {
     '';
   });
 
+  distant-nvim = super.distant-nvim.overrideAttrs {
+    runtimeDeps = [ distant ];
+  };
+
   dotnet-nvim = super.dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       telescope-nvim
@@ -1681,6 +1688,10 @@ assertNoAdditions {
       license = lib.licenses.vim;
     };
   });
+
+  glow-nvim = super.glow-nvim.overrideAttrs {
+    runtimeDeps = [ glow ];
+  };
 
   go-nvim = super.go-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2368,6 +2379,10 @@ assertNoAdditions {
         '"crypto",' \
         '"${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}",'
     '';
+  };
+
+  llm-nvim = super.llm-nvim.overrideAttrs {
+    runtimeDeps = [ llm-ls ];
   };
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
@@ -3074,6 +3089,13 @@ assertNoAdditions {
     ];
   };
 
+  neovim-fuzzy = super.neovim-fuzzy.overrideAttrs {
+    runtimeDeps = [
+      fzy
+      ripgrep
+    ];
+  };
+
   neovim-project = super.neovim-project.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3160,6 +3182,32 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  notmuch-nvim = super.notmuch-nvim.overrideAttrs {
+    checkInputs = [
+      notmuch
+    ];
+
+    # NOTE: for best user experience, consider installing optional handlers to display attachements within neovim. For instance: [ w3m catimg mupdf-headless pandoc zip ]
+    # See https://github.com/yousefakbar/notmuch.nvim/blob/v0.4.0/lua/notmuch/handlers.lua for supported handlers.
+    runtimeDeps = [
+      file
+      notmuch
+    ];
+
+    postPatch =
+      let
+        ext = stdenv.hostPlatform.extensions.sharedLibrary;
+        notmuchLib = "${lib.getLib notmuch}/lib/libnotmuch${ext}";
+      in
+      # bash
+      ''
+        substituteInPlace lua/notmuch/cnotmuch.lua \
+          --replace-fail 'ffi.load("notmuch")' 'ffi.load("${notmuchLib}")'
+      '';
+
+    meta.license = lib.licenses.mit;
+  };
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
@@ -3375,6 +3423,13 @@ assertNoAdditions {
     };
   });
 
+  nvim-jqx = super.nvim-jqx.overrideAttrs {
+    runtimeDeps = [
+      jq
+      yq
+    ];
+  };
+
   nvim-julia-autotest = super.nvim-julia-autotest.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.agpl3Only;
@@ -3500,6 +3555,10 @@ assertNoAdditions {
       # Optional cmp integration
       self.nvim-cmp
     ];
+  };
+
+  nvim-sops = super.nvim-sops.overrideAttrs {
+    runtimeDeps = [ sops ];
   };
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
@@ -3982,10 +4041,6 @@ assertNoAdditions {
     };
   });
 
-  range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
-    dependencies = [ self.cmd-parser-nvim ];
-  };
-
   ranger-nvim = super.ranger-nvim.overrideAttrs {
     runtimeDeps = [
       ranger
@@ -4164,6 +4219,10 @@ assertNoAdditions {
   });
 
   slang-server-nvim = super.slang-server-nvim.overrideAttrs {
+    runtimeDeps = [
+      slang-server
+    ];
+
     dependencies = [ self.nui-nvim ];
   };
 
@@ -4540,6 +4599,10 @@ assertNoAdditions {
     ];
   };
 
+  telescope-manix = super.telescope-manix.overrideAttrs {
+    runtimeDeps = [ manix ];
+  };
+
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {
     dependencies = with self; [
       telescope-nvim
@@ -4633,6 +4696,13 @@ assertNoAdditions {
     };
   });
 
+  tiny-code-action-nvim = super.tiny-code-action-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # test for optional previewer
+      "tiny-code-action.previewers.snacks"
+    ];
+  };
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
@@ -4690,7 +4760,7 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/tsc/utils.lua --replace-fail \
       'bin_name = bin_name or "tsc"' \
-      'bin_name = bin_name or "${typescript}/bin/tsc"'
+      'bin_name = bin_name or "${typescript_7}/bin/tsc"'
     '';
 
     # Unit test

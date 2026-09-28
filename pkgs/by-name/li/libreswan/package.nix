@@ -23,7 +23,7 @@
   coreutils,
   gnused,
   gawk,
-  nss,
+  nss_latest,
   which,
   python3,
   libselinux,
@@ -44,18 +44,18 @@ let
     coreutils
     gnused
     gawk
-    nss.tools
+    nss_latest.tools
     which
   ];
 in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.3.2";
+  version = "5.4";
 
   src = fetchurl {
     url = "https://download.libreswan.org/libreswan-${version}.tar.gz";
-    hash = "sha256-+5GK+gu5K9BDDB2oYe+AaIZNJdchMN8MYweh+dp2EIg=";
+    hash = "sha256-0mNAz2JTFsyRJ+BbOSIUokoQiJ9PHZlAwupkurcQqFU=";
   };
 
   strictDeps = true;
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libxcrypt
     curl
     nspr
-    nss
+    nss_latest
     ldns
     # needed to patch shebangs
     python3
@@ -95,6 +95,14 @@ stdenv.mkDerivation rec {
     # Replace wget with curl to save a dependency
     substituteInPlace programs/letsencrypt/letsencrypt.in \
       --replace-fail 'wget -q -P' '${curl}/bin/curl -s --remote-name-all --output-dir'
+
+    # Replace /bin/sh with runtimeShell for purity
+    substituteInPlace programs/pluto/extract.c \
+      --replace-fail '/bin/sh' '${runtimeShell}'
+
+    # Fix pluto running with empty PATH
+    substituteInPlace include/pluto_constants.h \
+      --replace-fail 'ipsec _updown' "$out/bin/ipsec _updown"
   '';
 
   makeFlags = [
@@ -102,6 +110,7 @@ stdenv.mkDerivation rec {
     "INITSYSTEM=systemd"
     "SYSTEMUNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
+    "SHELL_BINARY=${runtimeShell}"
     "LINUX_VARIANT=nixos"
     "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
     # Fix invalid XML files with libxml 2.14
@@ -123,7 +132,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Add a PATH to the main "ipsec" script
     sed -e '0,/^$/{s||export PATH=${binPath}:$PATH|}' \
-        -i $out/bin/ipsec
+        -i "$out/bin/ipsec"
+
+    # Add a PATH to all pluto hooks
+    hooks=$(find "$out/libexec" -type f -exec grep -qI . {} \; -print)
+    sed -e '0,/^$/{s||export PATH=${binPath}:${placeholder "out"}/bin:$PATH|}' \
+        -i $hooks
   '';
 
   passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };

@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromCodeberg,
   stdenv,
   _experimental-update-script-combinators,
   nix-update-script,
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   pname = "spade";
   version = "0.20.0";
 
-  src = fetchFromGitLab {
+  src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
@@ -75,8 +75,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Better hardware description language";
-    homepage = "https://gitlab.com/spade-lang/spade";
-    changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://codeberg/spade-lang/spade";
+    changelog = "https://codeberg.org/spade-lang/spade/src/branch/main/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
     license = with lib.licenses; [
       eupl12

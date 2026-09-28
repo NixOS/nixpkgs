@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  nix-update-script,
   go,
   buildGoModule,
   nodejs,
@@ -37,9 +38,7 @@
 }:
 
 let
-  source = import ./source.nix;
-
-  inherit (source) version vendorHash;
+  version = "3.14.0";
 
   pname = "prometheus";
 
@@ -47,7 +46,7 @@ let
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = source.hash;
+    hash = "sha256-7PSfh+KWUpmL3BZ7INa1DOZ/ysaXXdWG9n/F+H0cGYo=";
   };
 
   assets = stdenv.mkDerivation (finalAssetsAttrs: {
@@ -66,7 +65,7 @@ let
       inherit (finalAssetsAttrs) pname version src;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = source.pnpmDepsHash;
+      hash = "sha256-lmKUkeDdinb6WlnZSx3FnBlF/ACgUmvSMpYo84tRdCw=";
     };
 
     nativeBuildInputs = [
@@ -111,9 +110,10 @@ buildGoModule (finalAttrs: {
   inherit
     pname
     version
-    vendorHash
     src
     ;
+
+  vendorHash = "sha256-sCgxO2/w3Bi6Ncs/Q+JVZVtQC448FEx3llYxe/UxWEE=";
 
   proxyVendor = true;
 
@@ -234,7 +234,12 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit assets;
     tests = { inherit (nixosTests) prometheus; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "assets"
+      ];
+    };
   };
 
   meta = {

@@ -24,11 +24,11 @@
       "dependency": "direct main",
       "description": {
         "name": "archive",
-        "sha256": "be169cf6ac481e052c4538715d88841d567150dfe1df38aaec76461a4e7b39f2",
+        "sha256": "ace891da0862b0e4cabbb064ee3fd87b2728b898949fdb366d83fe98342c9f19",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.1.0"
+      "version": "4.2.0"
     },
     "args": {
       "dependency": "direct main",
@@ -124,21 +124,21 @@
       "dependency": "transitive",
       "description": {
         "name": "clock",
-        "sha256": "fddb70d9b5277016c77a80201021d40a2247104d9f4aa7bab7157b7e3f05b84b",
+        "sha256": "e51d50bca3217c9a9fa2b41a30e4a38971133f5f9ec7a3d57bae095007f1d28e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.2"
+      "version": "1.1.3"
     },
     "code_builder": {
       "dependency": "direct main",
       "description": {
         "name": "code_builder",
-        "sha256": "6a6cab2ba4680d6423f34a9b972a4c9a94ebe1b62ecec4e1a1f2cba91fd1319d",
+        "sha256": "aa5932e94c6c39c2f9ec4e5e06dfdd11a9430a61f6c41b6ba75b28ce0c481baf",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.11.1"
+      "version": "4.12.0"
     },
     "collection": {
       "dependency": "direct main",
@@ -264,11 +264,11 @@
       "dependency": "transitive",
       "description": {
         "name": "glob",
-        "sha256": "c3f1ee72c96f8f78935e18aa8cecced9ab132419e8625dc187e1c2408efc20de",
+        "sha256": "218aeb56050c714f62a3182775320dfa04602b55074873e24e31bbd39bda96fb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.3"
+      "version": "2.2.0"
     },
     "http": {
       "dependency": "direct main",
@@ -314,11 +314,11 @@
       "dependency": "transitive",
       "description": {
         "name": "io",
-        "sha256": "dfd5a80599cf0165756e3181807ed3e77daf6dd4137caaad72d0b7931597650b",
+        "sha256": "2635216ca6a737e60de577ffa1a48a0bec76ca8a62917cfc1bb88c14c570646f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.5"
+      "version": "1.1.0"
     },
     "json_annotation": {
       "dependency": "transitive",
@@ -394,11 +394,11 @@
       "dependency": "transitive",
       "description": {
         "name": "mime",
-        "sha256": "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6",
+        "sha256": "bd47de35f07e27267e69c8c8b22edf9473bfee170a60d60fcc93730c5144b7f6",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.1.0"
     },
     "node_preamble": {
       "dependency": "transitive",
@@ -444,11 +444,11 @@
       "dependency": "transitive",
       "description": {
         "name": "pool",
-        "sha256": "978783255c543aa3586a1b3c21f6e9d720eb315376a915872c61ef8b5c20177d",
+        "sha256": "4177f68c237ea2128d1bee66ac17b2ce05ba3dbaafcbdd54c5d40a39d0b6b11c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.2"
+      "version": "1.5.3"
     },
     "posix": {
       "dependency": "transitive",
@@ -474,21 +474,21 @@
       "dependency": "direct main",
       "description": {
         "name": "pub_semver",
-        "sha256": "5bfcf68ca79ef689f8990d1160781b4bad40a3bd5e5218ad4076ddb7f4081585",
+        "sha256": "261236774e8b1d69cfc6b9eabbc96c40f25e7a2d6b171f3385d4f65d5734fb24",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.0"
+      "version": "2.2.1"
     },
     "pubspec_parse": {
       "dependency": "direct main",
       "description": {
         "name": "pubspec_parse",
-        "sha256": "0560ba233314abbed0a48a2956f7f022cce7c3e1e73df540277da7544cad4082",
+        "sha256": "c38b81cbf34450b67e0265d73433569d12e34782e30ed769c9cc99c9d5f2e796",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.0"
+      "version": "1.6.0"
     },
     "recase": {
       "dependency": "direct main",
@@ -514,51 +514,51 @@
       "dependency": "transitive",
       "description": {
         "name": "serverpod_client",
-        "sha256": "abc79908adf3042c113dd7792dd0e183dc93208794299309bbf56821f3153d7c",
+        "sha256": "8388185c0eefe2c356c271427d37427cf2b366b3c095da79b7d8be9940cb10bd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.12"
+      "version": "3.4.13"
     },
     "serverpod_lints": {
       "dependency": "direct dev",
       "description": {
         "name": "serverpod_lints",
-        "sha256": "0d16adb1de3ea4ea25172089bd609259708cba288a78fae7b8ecd9cf26a09bb6",
+        "sha256": "61dd19505fb02a4df0fe9cfb9b6c14890b2cc54d10034bf2cafd19eabc8362ac",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.12"
+      "version": "3.4.13"
     },
     "serverpod_serialization": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_serialization",
-        "sha256": "80d6bb6e4c8a01bc25b30fbbebc1991fd4c1ce301164599030942c39eee6a95b",
+        "sha256": "807afab39b758f7b21a870af87abfaa24ebdf49aa5d1d9d122b0f3e51157873e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.12"
+      "version": "3.4.13"
     },
     "serverpod_service_client": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_service_client",
-        "sha256": "31f8fe432822cf07c75aa3ec38ca1614d008de7d0d8c83bb966f0ae52d2a0d5c",
+        "sha256": "18e8a001a4b901392d02ba337fe63f64a532ca347a5b6f85243cfe4bd229d00d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.12"
+      "version": "3.4.13"
     },
     "serverpod_shared": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_shared",
-        "sha256": "2fe566d6623af3e3f6423652feeb1b96613bad18d1b83590d78b746eeefdfa07",
+        "sha256": "31691846277a6610a63bdec41dca61cd794ddc746becf875a1cc7bdd572fd651",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.12"
+      "version": "3.4.13"
     },
     "shelf": {
       "dependency": "transitive",
@@ -634,11 +634,11 @@
       "dependency": "transitive",
       "description": {
         "name": "stack_trace",
-        "sha256": "8b27215b45d22309b5cddda1aa2b19bdfec9df0e765f2de506401c071d38d1b1",
+        "sha256": "277654b3034d17ac6f9f1cb5595db011b1d5d41e8806866db28e0abaa101c490",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.12.1"
+      "version": "1.12.2"
     },
     "stream_channel": {
       "dependency": "direct main",
@@ -814,11 +814,11 @@
       "dependency": "direct main",
       "description": {
         "name": "yaml",
-        "sha256": "b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce",
+        "sha256": "f67cdd8e07d3c6329146aaef1ba043542b3134c12489f553ca9a7435d1068aea",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.1.3"
+      "version": "3.1.4"
     },
     "yaml_edit": {
       "dependency": "direct main",

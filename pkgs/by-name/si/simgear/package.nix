@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
-  version = "2024.1.6-rc1";
+  version = "2024.1.7";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
     tag = finalAttrs.version;
-    hash = "sha256-uj8yVJNjAsrO0ydL5xMVtRRqx+5mXZ60qrPW2BAHl0g=";
+    hash = "sha256-GC8cAUREtdXZHgx6pxxbU3MhhMe3mhpGeO4ieS8XibI=";
   };
 
   nativeBuildInputs = [ cmake ];

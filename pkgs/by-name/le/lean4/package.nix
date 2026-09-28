@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
     "-DINSTALL_CADICAL=OFF"
+    "-DSTAGE1_CMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 

@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "2.5.2";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HR9C76TBmxLElZzNC/+Eyt61T2HYn6ElOGG50Oj3Eng=";
+    hash = "sha256-E2/OoUfkNP7c2drpXMky6IKNglfvLXTT0DrCRAhTsZM=";
   };
 
-  cargoHash = "sha256-6SgCcaPLQ6pj7bJU6iBV8mk8EsulCpFDL+26ip6TSgY=";
+  cargoHash = "sha256-qYX3ZLHasJWE4VHdFaIWuM332SBJqJDojrpFZSA4SSg=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       flemzord
       flupke
+      maxence-lefebvre
     ];
   };
 })

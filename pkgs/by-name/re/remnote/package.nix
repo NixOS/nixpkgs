@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "remnote";
-  version = "1.28.0";
+  version = "1.28.28";
 
   src = fetchurl {
     url = "https://download2.remnote.io/remnote-desktop2/RemNote-${finalAttrs.version}.AppImage";
-    hash = "sha256-ufoxkQhlrf2BSf/D3whS3tfKlkfle0KHwJR/amEpads=";
+    hash = "sha256-YUnIWxtMg7zJjJVkhkp+MPKnQ0uUOSZC2tmQ7JjXcaI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -6,13 +6,15 @@
   makeBinaryWrapper,
   nodejs,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   stdenv,
   versionCheckHook,
   yarn-berry,
   plugins ? [ ],
 }:
 let
+  pnpm = pnpm_11;
+
   ## Blame NodeJS
   exportRelativePathOf =
     let

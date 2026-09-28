@@ -12,14 +12,25 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "twingate";
+let
   version = "2026.160.6555";
 
-  src = fetchurl {
-    url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-Sk2pALZtcraNpca6wkDiPCvWgU0hYlSeiwwszfZeKeM=";
+  sources = {
+    x86_64-linux = {
+      url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
+      hash = "sha256-Sk2pALZtcraNpca6wkDiPCvWgU0hYlSeiwwszfZeKeM=";
+    };
+    aarch64-linux = {
+      url = "https://binaries.twingate.com/client/linux/DEB/aarch64/${version}/twingate-arm64.deb";
+      hash = "sha256-rK6bSSdkCNWHpOpojHn+CtZejiy6jarCb34aumBbmbs=";
+    };
   };
+in
+stdenv.mkDerivation {
+  pname = "twingate";
+  inherit version;
+
+  src = fetchurl sources.${stdenv.hostPlatform.system};
 
   buildInputs = [
     dbus
@@ -57,6 +68,9 @@ stdenv.mkDerivation rec {
     description = "Twingate Client";
     homepage = "https://twingate.com";
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

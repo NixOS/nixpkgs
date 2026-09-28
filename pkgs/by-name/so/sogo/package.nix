@@ -58,6 +58,12 @@ clangStdenv.mkDerivation rec {
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+
     # Exclude NIX_ variables
     sed -i 's/grep GNUSTEP_/grep ^GNUSTEP_/g' configure
 

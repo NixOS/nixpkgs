@@ -2,71 +2,79 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
+
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  numpy,
+  packaging,
+  scikit-build-core,
+  setuptools-scm,
+
+  # dependencies
+  cloudpickle,
+  llvmlite,
+  numba,
+  pandas,
+  scikit-learn,
+  scipy,
+  slicer,
+  tqdm,
+
   pytestCheckHook,
   writeText,
   catboost,
-  cloudpickle,
-  cython,
   ipython,
   lightgbm,
   lime,
   matplotlib,
-  numba,
-  numpy,
   opencv4,
-  pandas,
   pyspark,
   pytest-mpl,
-  scikit-learn,
-  scipy,
   sentencepiece,
-  setuptools,
-  setuptools-scm,
-  slicer,
-  tqdm,
   transformers,
   xgboost,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shap";
-  version = "0.50.0";
+  version = "0.52.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
-    tag = "v${version}";
-    hash = "sha256-sf9EYa15/5xEOtHSesuq97dFP4frtteoGSpHE8kGP9Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/U/FdJlsLcu4m1X4R5rr4S7Q79L57Q6MKIVQppW/LR0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "cython>=3.0.11" cython \
-      --replace-fail "numpy>=2.0" "numpy"
-  '';
-
   build-system = [
-    cython
+    cmake
+    nanobind
+    ninja
     numpy
-    setuptools
+    packaging
+    scikit-build-core
     setuptools-scm
   ];
+  dontUseCmakeConfigure = true;
+
+  env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
 
   dependencies = [
     cloudpickle
+    llvmlite
     numba
     numpy
+    packaging
     pandas
     scikit-learn
     scipy
     slicer
     tqdm
-  ];
-
-  pythonRelaxDeps = [
-    "numba"
-    "llvmlite"
   ];
 
   optional-dependencies = {
@@ -152,11 +160,11 @@ buildPythonPackage rec {
   meta = {
     description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
-    changelog = "https://github.com/slundberg/shap/releases/tag/${src.tag}";
+    changelog = "https://github.com/slundberg/shap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       evax
       natsukium
     ];
   };
-}
+})

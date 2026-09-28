@@ -17,19 +17,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1138.0";
+  version = "2.1142.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-dbmzhgRiFmj48X3WlR7UDvq80+K3yc9WrkC/AzCvjmc=";
+    hash = "sha256-6CYUcMXwP2yNsIix+2ECTX1k9nMZ3R3JeIsIjTNoYvk=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rT4GqlZdVuat3Jz95g6Lyy3donWKNbCwmemhvvRBbTY=";
+    hash = "sha256-lTT7hO0dZxrUlmah7d9UQEIAt/STLoH0xZ3oxx2Vh5I=";
   };
 
   nativeBuildInputs = [

@@ -58,7 +58,9 @@ let
 
         ao = callPackage ../development/ocaml-modules/ao { };
 
-        apron = callPackage ../development/ocaml-modules/apron { };
+        apron = callPackage ../development/ocaml-modules/apron {
+          inherit (pkgs) flint;
+        };
 
         apronext = callPackage ../development/ocaml-modules/apronext { };
 
@@ -110,6 +112,8 @@ let
           cmdliner = cmdliner_1;
           inherit (pkgs.llvmPackages) llvm;
         };
+
+        base32 = callPackage ../development/ocaml-modules/base32 { };
 
         base64 = callPackage ../development/ocaml-modules/base64 { };
 
@@ -246,6 +250,8 @@ let
         cascade = callPackage ../development/ocaml-modules/cascade { };
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
+
+        cborl = callPackage ../development/ocaml-modules/cborl { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -463,12 +469,7 @@ let
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
-        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix {
-          lsp = lsp.override {
-            jsonrpc = jsonrpc.override { yojson = yojson_2; };
-            ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
-          };
-        };
+        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
 
         dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
@@ -600,6 +601,8 @@ let
 
         eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
 
+        eris = callPackage ../development/ocaml-modules/eris { };
+
         erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
         erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
@@ -688,6 +691,10 @@ let
         };
 
         flex = callPackage ../development/ocaml-modules/flex { };
+
+        flint = callPackage ../development/ocaml-modules/flint {
+          flint-c = pkgs.flint;
+        };
 
         fmt = callPackage ../development/ocaml-modules/fmt { };
 
@@ -1041,6 +1048,8 @@ let
         junit_alcotest = callPackage ../development/ocaml-modules/junit/alcotest.nix { };
         junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };
 
+        jws = callPackage ../development/ocaml-modules/jws { };
+
         jwto = callPackage ../development/ocaml-modules/jwto { };
 
         ### K ###
@@ -1050,6 +1059,8 @@ let
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
           cmdliner = cmdliner_1;
         };
+
+        kapla = callPackage ../development/ocaml-modules/kapla { };
 
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
@@ -1127,11 +1138,7 @@ let
 
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
-        linol = callPackage ../development/ocaml-modules/linol {
-          ppx_yojson_conv_lib = ppx_yojson_conv_lib.override {
-            yojson = yojson_2;
-          };
-        };
+        linol = callPackage ../development/ocaml-modules/linol { };
 
         linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
@@ -1367,6 +1374,8 @@ let
 
         mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
 
+        mlcuddidl = callPackage ../development/ocaml-modules/mlcuddidl { };
+
         mldoc = callPackage ../development/ocaml-modules/mldoc { };
 
         mlgmpidl = callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1377,10 +1386,13 @@ let
 
         mmap = callPackage ../development/ocaml-modules/mmap { };
 
+        monocypher = callPackage ../development/ocaml-modules/monocypher { };
+
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
         mopsa = callPackage ../development/ocaml-modules/mopsa {
           inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+          inherit (pkgs) flint;
         };
 
         morbig = callPackage ../development/ocaml-modules/morbig {
@@ -1681,7 +1693,11 @@ let
 
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
 
-        oxenstored = callPackage ../development/ocaml-modules/oxenstored { };
+        oxenstored = callPackage ../development/ocaml-modules/oxenstored {
+          xen = pkgs.xen.override {
+            ocamlPackages = self;
+          };
+        };
 
         ### P ###
 
@@ -1800,6 +1816,8 @@ let
 
         ppx_deriving_encoding = callPackage ../development/ocaml-modules/ppx_deriving_encoding { };
 
+        ppx_deriving_hash = callPackage ../development/ocaml-modules/ppx_deriving_hash { };
+
         ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf { };
 
         ppx_deriving_qcheck = callPackage ../development/ocaml-modules/qcheck/ppx_deriving_qcheck.nix { };
@@ -1816,9 +1834,13 @@ let
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
+        ppx_expect_nobase = callPackage ../development/ocaml-modules/ppx_expect_nobase { };
+
         ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec { };
 
         ppx_import = callPackage ../development/ocaml-modules/ppx_import { };
+
+        ppx_inline_test_nobase = callPackage ../development/ocaml-modules/ppx_inline_test_nobase { };
 
         ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
@@ -2181,6 +2203,8 @@ let
 
         twt = callPackage ../development/ocaml-modules/twt { };
 
+        typegist = callPackage ../development/ocaml-modules/typegist { };
+
         type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
@@ -2413,7 +2437,7 @@ rec {
 
   ocamlPackages_latest = ocamlPackages_5_5;
 
-  ocamlPackages = ocamlPackages_5_4;
+  ocamlPackages = ocamlPackages_5_5;
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

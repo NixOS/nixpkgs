@@ -8,7 +8,7 @@
   SDL2,
   wget,
   which,
-  ffmpeg,
+  ffmpeg-headless,
   autoAddDriverRunpath,
   makeWrapper,
   nix-update-script,
@@ -110,7 +110,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
-    ++ optional withFFmpegSupport ffmpeg
+    ++ optional withFFmpegSupport ffmpeg-headless
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
@@ -118,7 +118,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
     (cmakeBool "GGML_CUDA" cudaSupport)
-    (cmakeBool "GGML_HIPBLAS" rocmSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeBool "WHISPER_SDL2" withSDL)
     (cmakeBool "GGML_LTO" true)
@@ -163,7 +163,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withFFmpegSupport ''
     wrapProgram "$out/bin/whisper-server" \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build

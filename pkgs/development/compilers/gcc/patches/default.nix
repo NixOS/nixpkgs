@@ -120,6 +120,17 @@ optionals noSysDirs (
   hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
 })
 
+## AArch64
+
+# Fix an ICE when a function type carries a C++11 attribute without a namespace.
+# Fixed in GCC 15, never backported to the GCC 14 branch:
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116598
+++ optional (is14 && targetPlatform.isAarch64) (fetchpatch {
+  name = "aarch64-fix-ice-in-lookup-shared-state-flags.patch";
+  url = "https://github.com/gcc-mirror/gcc/commit/1247fa6e95cdf4a6422ec802f733f1f7ecaa3557.patch";
+  hash = "sha256-p8fyIcAx8CvLtQboXPevw/J3LsvkSZp36bHtGHjxsiQ=";
+})
+
 ## Darwin
 
 # Here we apply patches by Iains (https://github.com/iains)
@@ -133,8 +144,8 @@ optionals noSysDirs (
       # Patches from https://github.com/iains/gcc-16-branch
       (fetchpatch {
         name = "gcc-16-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff";
-        hash = "sha256-dXfozKH//TRjAph7hUok7850hOdujTTi/iFM2HFA8fw=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/f236c82e26ee095ff098966820e40a8566f1704e/Patches/gcc/gcc-16.2.0.diff";
+        hash = "sha256-RqJfcA4mL17Wu+alLSu5SzZuPhfY6n5htufuof7xhKQ=";
       })
       # Fixes detection of Darwin deployment target.
       ./14/libgcc-darwin-detection.patch

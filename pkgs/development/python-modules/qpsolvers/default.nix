@@ -2,12 +2,15 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  unittestCheckHook,
+
+  # build-system
   flit-core,
+
+  # dependencies
   numpy,
   scipy,
 
-  # optional dependencies
+  # optional-dependencies
   clarabel,
   cvxopt,
   daqp,
@@ -20,29 +23,31 @@
   highspy,
   piqp,
   proxsuite,
+
+  # tests
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qpsolvers";
   version = "4.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JgrfHyZ5bhD5XBuxZsASnmFU080XZs0EjdOOj5Lr1Hg=";
   };
 
   build-system = [ flit-core ];
-
-  pythonImportsCheck = [ "qpsolvers" ];
 
   dependencies = [
     numpy
     scipy
   ];
 
-  optional-dependencies = {
+  optional-dependencies = lib.fix (self: {
     # FIXME commented out solvers have not been packaged yet
     clarabel = [ clarabel ];
     cvxopt = [ cvxopt ];
@@ -59,7 +64,7 @@ buildPythonPackage rec {
     quadprog = [ quadprog ];
     scs = [ scs ];
     open_source_solvers =
-      with optional-dependencies;
+      with self;
       lib.flatten [
         clarabel
         cvxopt
@@ -73,15 +78,32 @@ buildPythonPackage rec {
         quadprog
         scs
       ];
-  };
+  });
 
-  nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
+  pythonImportsCheck = [ "qpsolvers" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.open_source_solvers;
+
+  enabledTestPaths = [ "tests/" ];
+
+  pytestFlags = [
+    # Marginally exceed the hard-coded tolerances with scs 3.3.0.
+    # `disabledTests` cannot be used: `test_scs` is a substring of other, passing test IDs
+    "--deselect=tests/test_solve_ls.py::TestSolveLS::test_scs"
+    "--deselect=tests/test_solve_qp.py::TestSolveQP::test_bounds_scs"
+    "--deselect=tests/test_solve_qp.py::TestSolveQP::test_scs"
+    "--deselect=tests/test_solve_qp.py::TestSolveQP::test_sparse_bounds_scs"
+    "--deselect=tests/test_solve_qp.py::TestSolveQP::test_warmstart_scs"
+  ];
 
   meta = {
-    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
+    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/qpsolvers/qpsolvers";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

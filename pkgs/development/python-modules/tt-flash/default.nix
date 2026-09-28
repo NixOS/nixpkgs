@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tt-flash";
-  version = "3.10.0";
+  version = "4.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-flash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wE8qDgoXiYeUbrcGY46JnPVT4neNGu3U5DTXlMuewjc=";
+    hash = "sha256-efl6Ecz7nBtixGZBv6wLU6Bdq+TLXRXIttgUvKXxQz4=";
   };
 
   pythonRelaxDeps = [

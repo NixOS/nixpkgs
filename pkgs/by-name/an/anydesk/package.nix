@@ -37,7 +37,6 @@
   freetype,
   fontconfig,
   polkit,
-  polkit_gnome,
   pciutils,
   copyDesktopItems,
   pulseaudio,
@@ -86,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     polkit
-    polkit_gnome
     pulseaudio
     libxcb
     libxkbfile

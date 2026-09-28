@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-server-ydoc";
-  version = "3.0.0";
+  version = "3.0.3";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_server_ydoc";
     inherit (finalAttrs) version;
-    hash = "sha256-8lJJjnapC+6cC2uEmd11iFyWRuCpKMfmHwH0VsH4XAQ=";
+    hash = "sha256-ndjyC6jrkZu0wPWIMkPb4iCXJqtLfMgpM1xQWv6/nFw=";
   };
 
   build-system = [ hatchling ];

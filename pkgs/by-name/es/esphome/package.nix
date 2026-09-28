@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  callPackage,
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
   platformio,
+  platformio-core,
   esptool,
   git,
   versionCheckHook,
@@ -17,22 +17,20 @@ let
   python = python3Packages.python.override {
     self = python;
     packageOverrides = self: super: {
-      esphome-dashboard = self.callPackage ./dashboard.nix { };
-
       paho-mqtt = self.paho-mqtt_1;
     };
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.6.5";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-4sbc/X86OWN/Bx2sPk3H2lgzGxdQNS6bIspNLAVqHz8=";
+    hash = "sha256-IgNE3+qqptFYL3wuFZWgkoT8bpjMMmI56nQcSMl4i/o=";
   };
 
   patches = [
@@ -64,7 +62,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "setuptools==84.0.0" "setuptools" \
       --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
@@ -75,17 +73,17 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     aioesphomeapi
     argcomplete
     bleak
-    cairosvg
     click
     colorama
     cryptography
-    esphome-dashboard
     esphome-glyphsets
+    filelock
     freetype-py
-    icmplib
     jinja2
     paho-mqtt
     pillow
+    platformdirs
+    (toPythonModule (platformio-core.override { python3 = python; }))
     puremagic
     py7zr
     pyparsing
@@ -94,8 +92,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     requests
     resvg-py
     ruamel-yaml
+    ruamel-yaml-clib
     smpclient
-    tornado
     tzdata
     tzlocal
     voluptuous
@@ -128,12 +126,14 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs =
     with python.pkgs;
     [
+      (python3Packages.toPythonModule esptool)
       hypothesis
       mock
       pytest-asyncio
       pytest-cov-stub
       pytest-mock
       pytestCheckHook
+      ruff
     ]
     ++ [
       git
@@ -167,6 +167,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "test_clean_build_empty_cache_dir"
     "test_clean_all"
     "test_clean_all_partial_exists"
+    "test_get_platformio_config_returns_project_config"
+    "test_resolve_registry_version_raises_without_pkg_file"
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_passes_crystal_callback"
     "test_upload_using_esptool_path_conversion"
@@ -184,8 +186,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    dashboard = python.pkgs.esphome-dashboard;
-    updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
@@ -198,7 +198,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with lib.maintainers; [
-      hexa
       picnoir
       thanegill
       karlbeecken

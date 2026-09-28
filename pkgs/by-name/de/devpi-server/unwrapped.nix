@@ -5,7 +5,7 @@
   versionCheckHook,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   aiohttp,
@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
-  version = "6.19.2";
+  version = "6.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
+    hash = "sha256-6OoINJu8DoDCZzu/umdINH0UQXh19pQ2e6XQjJpdAYc=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/server";
 
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
@@ -79,7 +79,7 @@ buildPythonPackage (finalAttrs: {
     py
     pyramid
     repoze-lru
-    setuptools
+    setuptools_80
     strictyaml
     waitress
   ]

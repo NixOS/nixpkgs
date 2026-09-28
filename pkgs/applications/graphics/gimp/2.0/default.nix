@@ -40,7 +40,7 @@
   libxpm,
   glib-networking,
   libmypaint,
-  gexiv2,
+  gexiv2_0_10,
   harfbuzz,
   mypaint-brushes1,
   libwebp,
@@ -182,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     pango
     cairo
-    gexiv2
+    gexiv2_0_10
     harfbuzz
     isocodes
     freetype

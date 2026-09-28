@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.3.10";
+  version = "3.3.11";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3x3idLqfh3SiyyMWaCUencgvY82yjP2nTeOFASEBFbM=";
+    hash = "sha256-a8gs53zcq5qssqnxlMGjxfZaBICisdjqkLfzqZStPfQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {

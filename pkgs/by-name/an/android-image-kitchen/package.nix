@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace {cleanup,repackimg,unpackimg}.sh \
       --replace-fail "bin=\"\$aik/bin\";" "bin=$out/share"
+    substituteInPlace unpackimg.sh \
+      --replace-fail "cleanup.sh" "aik-cleanup"
   '';
 
   installPhase = ''

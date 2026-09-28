@@ -81,5 +81,18 @@
         "echo 'select id from nixos_test_marker;' | sudo -u flarum mysql -u flarum flarum -N | grep -q 1"
     )
     machine.succeed("[ -f /var/lib/flarum/.flarum-installed ]")
+
+    # A config.php present without the .flarum-installed marker (hand-maintained,
+    # or from before this module managed config.php) must be left untouched.
+    machine.succeed("rm /var/lib/flarum/.flarum-installed")
+    machine.succeed(
+        "echo '<?php return array (\"url\" => \"http://localhost\", \"database\" => "
+        + "array (\"driver\" => \"mysql\", \"host\" => \"localhost\", \"database\" => "
+        + "\"flarum\", \"username\" => \"flarum\", \"password\" => \"flarum-db-password\"), "
+        + "\"nixos_test_marker\" => \"foreign-config\");' "
+        + "| sudo -u flarum tee /var/lib/flarum/config.php"
+    )
+    machine.succeed("systemctl restart flarum-install.service")
+    machine.succeed("grep -q 'nixos_test_marker' /var/lib/flarum/config.php")
   '';
 }

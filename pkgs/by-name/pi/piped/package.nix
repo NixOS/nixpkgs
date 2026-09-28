@@ -12,13 +12,13 @@ let
 in
 buildNpmPackage rec {
   pname = "piped";
-  version = "0-unstable-2026-08-13";
+  version = "0-unstable-2026-09-11";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
     repo = "piped";
-    rev = "15f7e8a23b0f048e8110a449fa3720902ffed308";
-    hash = "sha256-zQqkF+MFDokN0DPBWfJfEhqaYzQkIGT/0ityYXMi5PM=";
+    rev = "70453d1b5795d4acee90a33a2596a315ef72d961";
+    hash = "sha256-dDdTUgxJb3/WXCf4os8Q2KzSljBGPXqKq2zOeyuT7pk=";
   };
 
   nativeBuildInputs = [ pnpm ];
@@ -39,7 +39,7 @@ buildNpmPackage rec {
       pnpm
       ;
     fetcherVersion = 4;
-    hash = "sha256-mBEzm+GzF/V3W/6JPOn81YawAMaSTw8THtOUb3qtmvc=";
+    hash = "sha256-oEovHI8CcuOo6WaohMj3mEN/AbPOPUBGFE5q9NvCV0s=";
   };
 
   passthru.updateScript = nix-update-script {

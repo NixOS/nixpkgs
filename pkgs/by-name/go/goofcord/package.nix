@@ -17,17 +17,17 @@
 }:
 let
   patchcordAddon = callPackage ./patchcord-addon.nix { };
-  venbindAddon = callPackage ./venbind-addon.nix { };
+  goofbindAddon = callPackage ./goofbind-addon.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qcgEUkPh671q9aJtge+PSbBTrg7vY+iz+H+SKXPFqFI=";
+    hash = "sha256-cg9NVL/dPIQ9xyMrUmWd42HxEsTSnhUGiqB7qaU2LuQ=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
     GOOFCORD_PATCHCORD_PATH = "${patchcordAddon}/bin/patchcord";
-    GOOFCORD_VENBIND_PATH = "${venbindAddon}/lib/libvenbind.so";
+    GOOFCORD_VENBIND_PATH = "${goofbindAddon}/lib/libvenbind.so";
   };
 
   configurePhase = ''

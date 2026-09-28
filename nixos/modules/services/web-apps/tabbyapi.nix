@@ -50,8 +50,26 @@ in
               default = false;
               description = ''
                 Disable HTTP token authentication with requests.
-                WARNING: This will make your instance vulnerable! Only turn this on if you are ONLY connecting from localhost.
+                WARNING: This will make your instance vulnerable!
+                Only turn this on if nothing but trusted local clients can reach the API.
+                Note that web pages open in a browser on this machine also count as local
+                callers; restrict allowed_origins if you disable auth.
               '';
+            };
+
+            allowed_origins = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ "*" ];
+              description = ''
+                Origins allowed to call the API from a browser.
+                This is a CORS allowlist, not an auth mechanism: it only governs which
+                web pages a browser will let read this API's responses.
+                The default "*" means any site open in your browser can send requests to
+                this instance, which matters most when disable_auth is on. Restrict this to
+                your own frontends to close that off, or use an empty list to block all
+                browser (cross-origin) callers.
+              '';
+              example = [ "http://localhost:8000" ];
             };
 
             disable_fetch_requests = lib.mkOption {
@@ -89,6 +107,16 @@ in
               '';
               example = 0;
             };
+
+            access_log = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Log every HTTP request with client address, method, path and status.
+                Generation requests are already logged in detail; this adds the rest,
+                such as model list and health polls.
+              '';
+            };
           };
 
           logging = {
@@ -108,6 +136,15 @@ in
               type = lib.types.bool;
               default = false;
               description = "Enable request logging. NOTE: Only use this for debugging!";
+            };
+
+            log_timestamps = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Prefix console log lines with the time of day.
+                The log files under logs/ always carry full timestamps.
+              '';
             };
 
             log_chat_completion_requests = lib.mkOption {
@@ -275,7 +312,7 @@ in
               default = [ ];
               description = ''
                 List of VRAM sizes to split between GPUs, in GB.
-                Used with tensor parallelism.
+                Used both with and without tensor parallelism.
               '';
               example = [
                 16
@@ -289,8 +326,47 @@ in
               description = ''
                 Number of mixture-of-expert layers to offload to CPU inference.
                 Only affects MoE models. Set a large value such as 999 to offload all layers.
+                Mutually exclusive with cpu_moe_split_experts.
               '';
               example = 999;
+            };
+
+            cpu_moe_split_experts = lib.mkOption {
+              type = lib.types.ints.unsigned;
+              default = 0;
+              description = ''
+                Number of routed experts per MoE layer to offload to CPU inference.
+                Unlike cpu_moe_offload_layers, this splits every MoE layer instead of
+                offloading whole layers: the coldest experts are kept in system RAM and
+                computed on the CPU, overlapping each layer's own GPU compute, with dynamic
+                placement keeping hot experts in VRAM.
+                Mutually exclusive with cpu_moe_offload_layers; not supported with tensor
+                parallelism.
+              '';
+              example = 4;
+            };
+
+            cpu_moe_threads = lib.mkOption {
+              type = lib.types.nullOr lib.types.ints.unsigned;
+              default = null;
+              description = ''
+                Worker thread count for CPU MoE inference.
+                Applies to both cpu_moe_offload_layers and cpu_moe_split_experts. When null,
+                defers to the EXL3_MOE_CPU_THREADS environment variable, then half the CPU core
+                count.
+              '';
+              example = 8;
+            };
+
+            ngram_ram = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Load a model's n-gram embedding table fully into system RAM.
+                Only affects PLE models with n-gram embeddings (e.g. Qwen3.8-Flash-Next).
+                By default the table is streamed from disk during inference; loading it into
+                RAM avoids per-token disk reads at the cost of tens of GB of system memory.
+              '';
             };
 
             rope_scale = lib.mkOption {
@@ -381,6 +457,16 @@ in
               description = "Enables vision support if the model supports it.";
             };
 
+            vision_offload = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Keep the vision model's weights in system RAM instead of VRAM.
+                Weights are stored in pinned host memory and streamed to the GPU during
+                inference, trading vision speed for VRAM. Only applies when vision is enabled.
+              '';
+            };
+
             template_vars_default = lib.mkOption {
               type = lib.types.attrsOf lib.types.anything;
               default = { };
@@ -455,6 +541,33 @@ in
               '';
             };
 
+            reasoning_budget_tokens = lib.mkOption {
+              type = lib.types.nullOr lib.types.int;
+              default = null;
+              description = ''
+                Default reasoning token budget.
+                When a request's reasoning content exceeds the budget, the server forces the
+                end of the reasoning phase by injecting reasoning_budget_message followed by
+                the model's end-of-reasoning tokens. 0 ends reasoning as soon as it starts;
+                null or a negative value disables the budget. Overridable per request via
+                reasoning_budget_tokens (aliases: reasoning_budget, thinking_budget,
+                thinking_token_budget) or reasoning.max_tokens.
+                Requires a reasoning format: reasoning tags, Harmony or Muse Glimmer.
+              '';
+              example = 1024;
+            };
+
+            reasoning_budget_message = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = ''
+                Text injected before the end-of-reasoning tokens when the reasoning budget is
+                exhausted. When null, only the end-of-reasoning tokens are forced.
+                Overridable per request via reasoning_budget_message.
+              '';
+              example = "Time to answer.";
+            };
+
             tool_format = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               default = null;
@@ -473,6 +586,17 @@ in
                 Auto-detected from the model's special tokens when null; set to true or false
                 to override. Setting tool_format to "harmony" is equivalent to setting this to
                 true. When active, supersedes the reasoning and tool format settings.
+              '';
+            };
+
+            muse_glimmer = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = null;
+              description = ''
+                Parse responses in the Muse Glimmer message format.
+                Auto-detected from the model's special tokens when null; set to true or false
+                to override. Setting tool_format to "muse_glimmer" is equivalent to setting
+                this to true. When active, supersedes the reasoning and tool format settings.
               '';
             };
           };
@@ -595,10 +719,13 @@ in
               type = lib.types.nullOr lib.types.str;
               default = null;
               description = ''
-                Select a sampler override preset, found in the sampler-overrides folder.
+                Select a sampler override preset, found in the sampler_overrides folder of the
+                package.
                 This overrides default fallbacks for sampler values that are passed to the API.
-                NOTE: "safe_defaults" is noob friendly and provides fallbacks for frontends that
-                don't send sampling parameters. Leave this null for any advanced usage.
+                NOTE: "safe_defaults" provides llama.cpp-style fallbacks (temperature 0.8,
+                top_k 40, top_p 0.95, min_p 0.05) for frontends that don't send sampling
+                parameters. Leaving this null means no fallbacks at all.
+                A preset that cannot be found makes TabbyAPI exit at startup.
               '';
               example = "safe_defaults";
             };
@@ -654,14 +781,28 @@ in
               example = 4096;
             };
 
+            sysmem_multimodal_cache = lib.mkOption {
+              type = lib.types.ints.unsigned;
+              default = 1024;
+              description = ''
+                Size of the image embedding cache in system memory, in MB.
+                Encoded images are kept so repeated turns of a conversation don't re-run the
+                vision model. Images already in use by a request are never evicted; a context
+                whose images exceed the budget is cached only partially, with a warning.
+                Only applies when vision is enabled.
+              '';
+              example = 4096;
+            };
+
             cuda_malloc_async = lib.mkOption {
               type = lib.types.bool;
-              default = true;
+              default = false;
               description = ''
-                Use the cudaMallocAsync backend in Torch.
-                Enabling this is generally preferable, but it may cause issues with certain
-                workloads. Try disabling it if you experience intermittent OoM errors. If false,
-                Torch will use the allocator defined by the system environment.
+                Use the cudaMallocAsync allocator backend in Torch.
+                When false, the allocator is left to the environment: unless
+                PYTORCH_CUDA_ALLOC_CONF is set, ExLlamaV3 enables expandable segments in
+                Torch's native allocator, which performs better than cudaMallocAsync.
+                Enable this to force the cudaMallocAsync backend instead.
               '';
             };
           };
@@ -689,6 +830,14 @@ in
             services.tabbyapi.settings.model.template_vars_force.enable_thinking = true;
         '';
       }
+      {
+        assertion =
+          !(cfg.settings.model.cpu_moe_offload_layers > 0 && cfg.settings.model.cpu_moe_split_experts > 0);
+        message = ''
+          services.tabbyapi.settings.model.cpu_moe_offload_layers and
+          services.tabbyapi.settings.model.cpu_moe_split_experts are mutually exclusive.
+        '';
+      }
     ];
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
       cfg.settings.network.port
@@ -705,6 +854,10 @@ in
         XDG_CACHE_HOME = "/var/lib/tabbyapi/.cache";
         TRITON_CACHE_DIR = "/tmp/triton";
       };
+
+      preStart = ''
+        ln -sfn ${cfg.package}/share/tabbyapi/sampler_overrides sampler_overrides
+      '';
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} --config=${configFile}";

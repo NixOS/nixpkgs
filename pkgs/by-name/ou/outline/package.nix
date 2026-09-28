@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6w4Pso7I0ojbsbACEZrYuJsW9J2W38jY9uiErMQNeXE=";
+    hash = "sha256-IKkk9jerGkSEJXl5DU/Lel/7BUjmW4VFLCfC6zIxWhk=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7nREE+sGd6ZUGfZ+YSIIGUaysMSEdap189koFQcV+hs=";
+    hash = "sha256-QRdoS5fpbr9eYFAYgoH2s8Lsu8FYppNrKcAFBhWrbV0=";
   };
 
   buildPhase = ''
@@ -49,8 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    yarn workspaces focus --production
+
     mkdir -p $out/bin $out/share/outline
     mv build server public node_modules $out/share/outline/
+    find $out/share/outline/node_modules -name "*.map" -delete
+    find $out/share/outline/node_modules -name "*.d.ts" -delete
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build

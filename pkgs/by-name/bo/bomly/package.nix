@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "bomly";
-  version = "0.23.0";
+  version = "0.24.2";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "bomly-dev";
     repo = "bomly-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WA0RgFBKUMPcxcTQBJ6kXquCR8a2ltUTu+QS7Xeb5/E=";
+    hash = "sha256-Io2bjFwKghi0Y9Zjq2W3q8pplh9LrKmDH0iK8y3igfM=";
   };
 
-  vendorHash = "sha256-wXHeXqM0F6sZ9BFTZuvh0VsuA9aaqipCFdzfqSrHlqI=";
+  vendorHash = "sha256-vCYu//mzWyc5DKwnPzDAd1QkwUU4JGFE6yxwCEFZjyo=";
 
   # .gitattributes excludes all testdata from the GitHub tarball
   postPatch = ''

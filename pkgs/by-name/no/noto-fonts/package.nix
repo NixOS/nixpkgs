@@ -23,13 +23,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts${suffix}";
-  version = "2026.08.01";
+  version = "2026.09.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     tag = "noto-monthly-release-${finalAttrs.version}";
-    hash = "sha256-u7M7xKL/Gj/IxF4XuCG5KFjVcGW+imIdUT5V6QO1QPM=";
+    hash = "sha256-dRmooEURoF0VUAn/VIfHxj3LphhxWfCj6AkxNPxrFAE=";
   };
 
   nativeBuildInputs = [

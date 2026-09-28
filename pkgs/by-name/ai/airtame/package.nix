@@ -71,11 +71,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "airtame-application";
-  version = "4.15.0";
+  version = "4.16.0";
 
   src = fetchurl {
     url = "https://downloads.airtame.com/app/latest/linux/Airtame-${finalAttrs.version}.deb";
-    hash = "sha256-NCk//XCtn5wguMh2FjGpW28ksfUg2+euEln4gczBweY=";
+    hash = "sha256-wjWuPqXXonxbaobwl6dpYmUHA5W3+LXYskFJLUsjDf8=";
   };
 
   nativeBuildInputs = [

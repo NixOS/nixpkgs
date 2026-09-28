@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "urn-gtk";
+    platforms = lib.platforms.linux;
   };
 }

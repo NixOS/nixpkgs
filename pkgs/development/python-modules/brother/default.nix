@@ -11,12 +11,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "6.1.1";
+  version = "6.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "brother";
     tag = version;
-    hash = "sha256-7m0fakQCckIpG8Tc09P81xzHlIgeal9L2BwerUvBuX8=";
+    hash = "sha256-e7yBi7oGghPvdYiKYxodSeR+MQQHu5lCb3eERvXTXpQ=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "brother" ];

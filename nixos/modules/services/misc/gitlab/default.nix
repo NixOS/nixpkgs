@@ -1800,6 +1800,8 @@ in
         Group = cfg.group;
         Slice = "system-gitlab.slice";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
+        Type = "oneshot";
+        RemainAfterExit = true;
       };
     };
 

@@ -1,26 +1,26 @@
 {
   "airgap-images-amd64-tar-gz": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-amd64.tar.gz",
-    "sha256": "c109b42bce8de6f258be41f3f83393ff2693b7ede95bce0e80a1ff394b590507"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-amd64.tar.gz",
+    "sha256": "a2893ea3234e01facd06cdb2ca879b65348fccf6b43be20501d72a949ece45f7"
   },
   "airgap-images-amd64-tar-zst": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-amd64.tar.zst",
-    "sha256": "d28bbfef8a86b740e8235b6b2cfa6e29ecb0da457a55275d788a18d09142ee1f"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-amd64.tar.zst",
+    "sha256": "807160da9a1b3ec86183a777241a6fe948d27fd6fdf3b88d0da39fa3b1ceeddc"
   },
   "airgap-images-arm-tar-gz": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-arm.tar.gz",
-    "sha256": "589150e3493a5cd29bf7b8b57f9e3f7968c1b2d1f79e8a072352d63abb59e978"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-arm.tar.gz",
+    "sha256": "08118b95556457b8a191357b329a42298d485b4597f720c14c5625d256f1e656"
   },
   "airgap-images-arm-tar-zst": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-arm.tar.zst",
-    "sha256": "c6d57e5fb17ba142464bc8db9debfa701f560b4defa70c2e06981bf52cb9e26b"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-arm.tar.zst",
+    "sha256": "3f502e7d64a87b5b5afc5ed8ed27febb73e090d81a5b7df9db51cfd5a7a144a1"
   },
   "airgap-images-arm64-tar-gz": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-arm64.tar.gz",
-    "sha256": "b686b4c09dc335535889d5630ae5b0283d421d40af1029b271938cfd3b358f11"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-arm64.tar.gz",
+    "sha256": "23d82e394d9ad41ea2912afaf0a6ead69bacede819c12678ba5dec22d16784da"
   },
   "airgap-images-arm64-tar-zst": {
-    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.7%2Bk3s1/k3s-airgap-images-arm64.tar.zst",
-    "sha256": "47bc05eb1b21f0f76530a927ec5e1c5c2dec457f0190bf423e7be1d49348b5e6"
+    "url": "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s-airgap-images-arm64.tar.zst",
+    "sha256": "18c53139e7ad39009057d5c52ec5501aeea1ada235986e43c7357a3863ff3fdd"
   }
 }

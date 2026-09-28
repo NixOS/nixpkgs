@@ -6,6 +6,7 @@
   buildPackages,
   pkg-config,
   texinfo,
+  bashNonInteractive,
   gettext,
   libassuan,
   libgcrypt,
@@ -34,12 +35,12 @@
 
 assert guiSupport -> !enableMinimal;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnupg";
   version = "2.4.9";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/gnupg/gnupg-${finalAttrs.version}.tar.bz2";
     hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
   };
 
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     libgpg-error
   ];
   buildInputs = [
+    bashNonInteractive
     gettext
     libassuan
     libgcrypt
@@ -75,6 +77,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ];
+
+  strictDeps = true;
 
   # FreePG (https://freepg.org) is a set of commonly-used patches for GnuPG that
   # have not been merged upstream. It is used by Arch Linux, Debian, Fedora and
@@ -103,7 +107,7 @@ stdenv.mkDerivation rec {
     # in the patch file.
     ./static.patch
   ]
-  ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+  ++ lib.map (v: "${finalAttrs.freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
     "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
     "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
     "0004-tests-add-test-cases-for-import-without-uid.patch"
@@ -204,9 +208,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.gnupg;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gnupg.org";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=NEWS;hb=refs/tags/gnupg-${finalAttrs.version}";
     description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
@@ -227,6 +233,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "gpg";
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
-}
+})

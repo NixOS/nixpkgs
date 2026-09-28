@@ -1,6 +1,6 @@
 {
   lib,
-  electron_40,
+  electron_43,
   zip,
   makeWrapper,
   udev,
@@ -17,17 +17,17 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "winboat";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "TibixDev";
     repo = "winboat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DgH6CAZf+XIgBav2xd2FF2MGRgGIyOs/98vqWHA3XYw=";
+    hash = "sha256-B+Pbi3nQsY3sHACGoaL8PhbHrTjlQbEDgVRWabwm8Iw=";
   };
 
   postPatch = ''
@@ -44,10 +44,12 @@ buildNpmPackage (finalAttrs: {
   buildInputs = [ udev ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  npmDepsHash = "sha256-DLkI9a030uM2X1et94e4nd/HEyw5ugtK8NEAn/J8p9U=";
+  npmDepsHash = "sha256-38hDI0z3lrdSvMTUZAotIuT7Kt/NZcl8UdrYpum1i1M=";
   makeCacheWritable = true;
 
-  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix { };
+  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix {
+    winboat = finalAttrs.finalPackage;
+  };
   passthru = {
     guest-server = finalAttrs.guest-server;
     updateScript = nix-update-script {

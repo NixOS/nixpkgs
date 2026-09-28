@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # tests require network facilities intentionally unavailable in the Nix sandbox
     ./skip-sandbox-incompatible-tests.patch
+
+    ./skip-tests-with-expired-certs.patch
   ];
 
   postPatch = lib.optionalString isDesktopVariant ''
@@ -182,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       + (if isDesktopVariant then "runnable as a desktop app" else "hostable as a web app");
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
     license = lib.licenses.mit; # TODO: figure out what proper licensing should be
-    mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
+    mainProgram = "Stirling-PDF";
     maintainers = with lib.maintainers; [
       tomasajt
       staticdev

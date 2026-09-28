@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.1.7";
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchPypi {

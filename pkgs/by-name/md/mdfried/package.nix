@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.22.5";
+  version = "0.22.6";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BdcwU+9qY7gOIMgOfw7rpdh3KpBTLI1oGuNyOqO0AY8=";
+    hash = "sha256-xdCO8BjwIN840zn4i2bO4CNGt3QZzULywtzYa/DNot4=";
   };
 
-  cargoHash = "sha256-Gi+mdABVs11TJSmOhXsC+Cc48QRbCUxODhW06y190w0=";
+  cargoHash = "sha256-7eIatSt4uSNefjWGBmcbjiA+mvvvai3X2NBvkMAcNUc=";
 
   buildFeatures = [ "pdf" ];
 

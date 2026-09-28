@@ -7,7 +7,7 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace sbapp/main.py \
       --replace-fail \
         "1.9.2" \
-        "2.0.0"
+        ${finalAttrs.version}
   '';
 
   build-system = with python313Packages; [

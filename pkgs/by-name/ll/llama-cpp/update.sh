@@ -1,52 +1,39 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils gitMinimal gnused nix-update
+#!nix-shell -i bash -p curl gitMinimal gnused jq nix-update
 # shellcheck shell=bash
 
 set -euo pipefail
 
-repo_url="https://github.com/ggml-org/llama.cpp.git"
+repo="ggml-org/llama.cpp"
+api="https://api.github.com/repos/$repo"
+package="pkgs/by-name/ll/llama-cpp/package.nix"
 
-version="$({
-  git ls-remote --refs --tags "$repo_url" 'refs/tags/v*' \
-    | sed -nE 's|^[^[:space:]]+[[:space:]]+refs/tags/v([0-9]+\.[0-9]+\.[0-9]+)$|\1|p' \
-    | sort -V \
-    | tail -n1
-})"
+github() {
+  # shellcheck disable=SC2086
+  curl -sSfL ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$@"
+}
 
-if [[ -z "$version" ]]; then
-  echo "Failed to find the latest semantic version tag" >&2
+set_attr() {
+  sed -i -E "s|($1 = \")[^\"]*|\1$2|" "$package"
+  grep -q "$1 = \"$2\";" "$package" || {
+    echo "failed to set $1 in $package" >&2
+    exit 1
+  }
+}
+
+# The bNNNNN nightly releases are pre-releases, so the latest release is the newest semantic version.
+# Upstream only started flagging them as such at the v0.2.0 cutover, hence the shape check.
+version="$(github "$api/releases/latest" | jq -er '.tag_name | ltrimstr("v") | select(test("^[0-9]+(\\.[0-9]+)+$"))')" || {
+  echo "latest release is not a semantic version" >&2
   exit 1
-fi
+}
 
-tag_refs="$(
-  git ls-remote --tags "$repo_url" \
-    "refs/tags/v$version" "refs/tags/v$version^{}" 'refs/tags/b*'
-)"
-release_commit="$(
-  awk -v ref="refs/tags/v$version^{}" '$2 == ref { print $1 }' <<<"$tag_refs"
-)"
-if [[ -z "$release_commit" ]]; then
-  release_commit="$(
-    awk -v ref="refs/tags/v$version" '$2 == ref { print $1 }' <<<"$tag_refs"
-  )"
-fi
-build_number="$({
-  awk -v commit="$release_commit" '
-    $1 == commit && $2 ~ /^refs\/tags\/b[0-9]+(\^\{\})?$/ {
-      sub(/^refs\/tags\/b/, "", $2)
-      sub(/\^\{\}$/, "", $2)
-      print $2
-    }
-  ' <<<"$tag_refs" | sort -n | tail -n1
-})"
-
-if [[ -z "$release_commit" || -z "$build_number" ]]; then
-  echo "Failed to find the build number for v$version" >&2
-  exit 1
-fi
+# llama.cpp reads the build number and commit from git, which the release tarball does not ship.
+# Every release carries the matching nightly tag as an asset.
+build_number="$(github "https://github.com/$repo/releases/download/v$version/nightly-tag.txt")"
+build_commit="$(github -H "Accept: application/vnd.github.sha" "$api/commits/v$version")"
 
 cd "$(git rev-parse --show-toplevel)"
 nix-update "${UPDATE_NIX_ATTR_PATH:-llama-cpp}" --version "$version"
-sed -i -E \
-  's|(buildNumber = ")[0-9]+(";)|\1'"$build_number"'\2|' \
-  pkgs/by-name/ll/llama-cpp/package.nix
+set_attr buildNumber "${build_number#b}"
+set_attr buildCommit "${build_commit:0:7}"

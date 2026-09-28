@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "listenbrainz-mpd";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromCodeberg {
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-087+l3calge6hKu3h84C98mIpW6qFAZwRMe4lkQCU4o=";
+    hash = "sha256-hrQihozxUie3hq980axioMVABAW0grx27/jAefgfqxM=";
   };
 
-  cargoHash = "sha256-SxXEathWAGqdgeJmIn5h9Zvv7Z3DGXa4htkODf/ANRQ=";
+  cargoHash = "sha256-9ftZusoJEvInOEaWIzm6KskJKN6KUMSVP9jNOA0GBvA=";
 
   nativeBuildInputs = [
     pkg-config

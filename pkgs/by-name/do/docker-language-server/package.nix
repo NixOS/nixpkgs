@@ -12,6 +12,7 @@
 buildGoModule (finalAttrs: {
   pname = "docker-language-server";
   version = "0.20.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
