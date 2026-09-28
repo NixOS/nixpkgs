@@ -511,8 +511,10 @@ buildStdenv.mkDerivation {
   ++ lib.optionals (!buildStdenv.hostPlatform.isDarwin && lib.versionAtLeast version "141") [
     "--with-onnx-runtime=${lib.getLib onnxruntime}/lib"
   ]
-  ++ [
+  ++ lib.optionals (lib.versionOlder version "157") [
     (enableFeature withFFmpeg "ffmpeg")
+  ]
+  ++ [
     (enableFeature withGSSAPI "negotiateauth")
     (enableFeature withJemalloc "jemalloc")
 
