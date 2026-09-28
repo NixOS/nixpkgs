@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, nodejs
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nodejs,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nodejs ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
@@ -31,12 +35,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight website SEO audit tool and CLI by SEOWebChecker";
     homepage = "https://seowebchecker.com/";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "seowebchecker";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
