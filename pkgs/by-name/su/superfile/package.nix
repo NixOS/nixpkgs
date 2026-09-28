@@ -6,23 +6,22 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
   exiftool,
+  zoxide,
 }:
-let
-  version = "1.3.3";
-  tag = "v${version}";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "superfile";
-  inherit version;
+  version = "1.6.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    inherit tag;
-    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JETdQ42vGPnpviCAR29BSdBTG+huWRr5syN5NysnAlo=";
   };
 
-  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
+  vendorHash = "sha256-d2Yo8fWJ2fj7RJrnktljY6TkEPq6Tnbdh2BM4DIAr0E=";
 
   ldflags = [
     "-s"
@@ -31,7 +30,20 @@ buildGoModule {
 
   nativeBuildInputs = [ exiftool ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    # Upstream's TestZoxide initializes a go-zoxide client, which looks up the
+    # zoxide binary on PATH (exec.LookPath). Without it, the test fails with
+    # "zoxide initialization failed" on Linux.
+    zoxide
+  ];
+
+  # New file panels open in $HOME; layout validation rejects empty directories
+  # (cursor 0 with element count 0). Dotfiles are hidden by default, so use a
+  # visible file to keep $HOME non-empty for TestLayout.
+  preCheck = ''
+    touch "$HOME/keep"
+  '';
 
   # Upstream notes that this could be flaky, and it consistently fails for me.
   checkFlags = [
@@ -48,11 +60,12 @@ buildGoModule {
   meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    changelog = "https://github.com/yorukot/superfile/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      r4nmaru314
       redyf
     ];
     mainProgram = "superfile";
   };
-}
+})
