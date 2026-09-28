@@ -52,6 +52,7 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [
       sodiboo
       returntoreality
+      FlorianFranzen
     ];
     mainProgram = "wootility";
   };
