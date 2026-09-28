@@ -132,8 +132,8 @@ python3Packages.buildPythonApplication rec {
           # https://github.com/codemirror/codemirror5
           codemirror = lib.licenses.mit;
           # https://github.com/cure53/DOMPurify
-          dompurify = [
-            asl20 # or
+          dompurify = OR [
+            asl20
             mpl20
           ];
           # https://github.com/FortAwesome/Font-Awesome

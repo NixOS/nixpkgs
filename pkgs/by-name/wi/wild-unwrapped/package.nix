@@ -53,8 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Very fast linker for Linux";
     homepage = "https://github.com/wild-linker/wild";
     changelog = "https://github.com/wild-linker/wild/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = [
-      lib.licenses.asl20 # or
+    license = lib.licenses.OR [
+      lib.licenses.asl20
       lib.licenses.mit
     ];
     mainProgram = "wild";

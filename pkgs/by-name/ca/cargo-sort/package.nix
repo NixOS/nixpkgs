@@ -22,10 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-sort";
     homepage = "https://github.com/devinr528/cargo-sort";
     changelog = "https://github.com/devinr528/cargo-sort/blob/v${finalAttrs.version}/changelog.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

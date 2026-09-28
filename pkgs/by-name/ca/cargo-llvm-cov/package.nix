@@ -90,10 +90,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       wucke13
       matthiasbeyer

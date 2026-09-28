@@ -71,10 +71,12 @@ rustPlatform.buildRustPackage {
   meta = {
     description = metaDescription;
     homepage = "https://codeberg.org/wiktor/ssh-openpgp-auth";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = pname;
   };

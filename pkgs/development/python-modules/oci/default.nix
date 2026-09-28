@@ -48,10 +48,12 @@ buildPythonPackage rec {
     description = "Oracle Cloud Infrastructure Python SDK";
     homepage = "https://github.com/oracle/oci-python-sdk";
     changelog = "https://github.com/oracle/oci-python-sdk/blob/${src.tag}/CHANGELOG.rst";
-    license = with lib.licenses; [
-      asl20 # or
-      upl
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        upl
+      ];
     maintainers = with lib.maintainers; [
       ilian
     ];

@@ -62,10 +62,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/PyO3/maturin";
     changelog = "https://github.com/PyO3/maturin/blob/v${finalAttrs.version}/Changelog.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       getchoo
       miniharinn

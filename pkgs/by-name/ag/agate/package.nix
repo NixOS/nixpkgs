@@ -52,11 +52,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       static files. It uses async I/O, and should be quite efficient even when
       running on low-end hardware and serving many concurrent requests.
     '';
-    license = with lib.licenses; [
-      asl20
-      # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ jk ];
   };
 })

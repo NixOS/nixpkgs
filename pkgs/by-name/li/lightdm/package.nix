@@ -144,11 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
       gpl3Plus
-      # and (
-      lgpl2Only
-      # or
-      lgpl3Only
-      # )
+      (OR [
+        lgpl2Only
+        lgpl3Only
+      ])
     ];
     teams = [ lib.teams.pantheon ];
   };

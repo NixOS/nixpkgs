@@ -56,10 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Command line tool for working with C2PA manifests and media assets";
     homepage = "https://github.com/contentauth/c2pa-rs/tree/main/cli";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };
