@@ -13,8 +13,9 @@ let
     else
       assert licenseAccepted;
       args:
-      (fetchzip args).overrideAttrs (old: {
-        UNZIP = "-j -P iagreetotheeula";
+      (fetchzip args).overrideAttrs (_: {
+        # unzip takes the password as an argument, not from the environment.
+        unpackCmd = ''unzip -j -P iagreetotheeula "$curSrc"'';
       });
 in
 {
