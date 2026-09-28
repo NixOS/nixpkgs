@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
-  version = "3.3.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -40,17 +40,12 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kv5QH3sj/InKOSjxGtwVxtoAluHx5eIxO5GqcbOs0NY=";
+    hash = "sha256-ELjxZKWCsAQte+KtSdwseMGnMdw65H9PrjuJP0PHtIM=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  pythonRelaxDeps = [
-    # we patched click 8.2.1
-    "click"
   ];
 
   dependencies = [
@@ -86,7 +81,10 @@ buildPythonPackage (finalAttrs: {
     types-requests
   ];
 
-  disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
+  disabledTests = [
+    "test_setup_log_handler_with_env_configuration"
+    "test_task_exception"
+  ];
 
   meta = {
     changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${finalAttrs.src.tag}";

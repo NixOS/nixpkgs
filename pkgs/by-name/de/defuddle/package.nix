@@ -7,20 +7,16 @@
 
 buildNpmPackage rec {
   pname = "defuddle";
-  version = "0.18.1";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "kepano";
     repo = "defuddle";
     tag = version;
-    hash = "sha256-e/+eigIzpP0g+ZqTeyZnF6mloaY6UeKcMWfqryCcLbM=";
+    hash = "sha256-H6/hZVe5nj6GNv00RMu1tKDRhCTvB7PX5gc70JWh9ik=";
   };
 
-  npmDepsHash = "sha256-1NFwhYEGTKpjzCdK/eHK0TWtOEpn67FA+B3QZ11w1Rs=";
-
-  # jsdom is both a peerDependency and devDependency; pruning
-  # devDependencies removes it, but the CLI needs it at runtime.
-  dontNpmPrune = true;
+  npmDepsHash = "sha256-B5uX7lIfII9nlCHn6d3zchsokpZFOuP1fuRRLJb7g1M=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libcxx";
   # Keep this in sync with the corresponding LLVM libc++ version
   # defined as `_LIBCPP_VERSION` in `usr/include/c++/v1/__config`.
-  version = "20.1.0+apple-sdk-${apple-sdk_26.version}";
+  version = "21.1.6+apple-sdk-${apple-sdk_26.version}";
   inherit (apple-sdk_26) src;
 
   dontConfigure = true;

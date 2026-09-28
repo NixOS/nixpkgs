@@ -5,12 +5,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webdump";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchgit {
     url = "git://git.codemadness.org/webdump";
     tag = finalAttrs.version;
-    hash = "sha256-YtgZkAnbQkIr2fhUYpSp/PaduuBFjxIkrkaROxrmT/0=";
+    hash = "sha256-XaqnFaCfTlzTkuMXrt1sQRCnO29yD1aCj/owmVAqDXU=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

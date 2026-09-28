@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-49ZKgK96a9uFip+svOdnw397xcEjiftXzd9gyv1H3sU=";
   };
 
-  postUnpack = lib.optional cavaSupport ''
+  postUnpack = lib.optionalString cavaSupport ''
     pushd "$sourceRoot"
     cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-${libcava.version}
     patchShebangs .

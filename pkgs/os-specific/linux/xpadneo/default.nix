@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
-  version = "0.10.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = "xpadneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GeQls+DeJrzduBRQw0rc9hf58Ncd5fRmn6Xwn0kMaXs=";
+    hash = "sha256-yaCC+/hRoLQAdR6L9ek5aED8+o8iv0OwfiamWxB7ACc=";
   };
 
   setSourceRoot = ''

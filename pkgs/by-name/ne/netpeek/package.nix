@@ -14,14 +14,16 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "netpeek";
-  version = "0.2.6";
+  version = "0.3.4";
   pyproject = false;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFY/bUUS4AOniOGjngH/fUHrYiq+dMWxHYvoSkhfnkA=";
+    hash = "sha256-x7MI1sJThY6aEq5LF++DzWEQqhL50cGNChiaKBv+z74=";
   };
 
   nativeBuildInputs = [

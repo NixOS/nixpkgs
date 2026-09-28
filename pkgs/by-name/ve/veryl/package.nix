@@ -5,22 +5,24 @@
   pkg-config,
   installShellFiles,
   dbus,
+  writableTmpDirAsHomeHook,
+  git,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veryl";
-  version = "0.20.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZHt62r/mxPRNG0nv9IqTtmR4V++K8e6ttJ1zDeVjv+Q=";
+    hash = "sha256-ldibFrtU/lEL4a0QIhVKx8A0noZF2qyH9iExYNZedoU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-aouhM9rbMmlm78k6LTT5UGpFFpYRJXCo/2pnuiIxQag=";
+  cargoHash = "sha256-mpI3Eo5fkP66Ywr/anQ3ajPrVuuK6Ku7qJ/jpVPHE6Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,6 +39,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/veryl metadata --completion fish) \
       --zsh <($out/bin/veryl metadata --completion zsh)
   '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    git
+  ];
 
   checkFlags = [
     # takes over an hour

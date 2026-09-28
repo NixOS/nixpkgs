@@ -7,21 +7,21 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cwltool";
-  version = "3.1.20260315121657";
+  version = "3.2.20260720092025";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     tag = finalAttrs.version;
-    hash = "sha256-0cd64fkaCMX+eaZ4maZW8sE+ZX7bTFy1DDY5leqf9B0=";
+    hash = "sha256-88u6DzBxfK4DvNUOZqIocm7Pf11QJJ9XnyUUTERYIBQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.19.1" "mypy"
+      --replace-fail "mypy==2.1.0" "mypy"
   '';
 
   pythonRelaxDeps = [
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
+    distutils
     mock
     nodejs
     pytest-mock

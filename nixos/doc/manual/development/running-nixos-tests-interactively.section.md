@@ -43,6 +43,11 @@ test script).
 
 ## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
 
+::: {.warning}
+Using `shell_interact()` is deprecated. Use the
+[interactive SSH backdoor](#sec-nixos-test-ssh-access) instead.
+:::
+
 The function `<yourmachine>.shell_interact()` grants access to a shell running
 inside a virtual machine. To use it, replace `<yourmachine>` with the name of a
 virtual machine defined in the test, for example: `machine.shell_interact()`.

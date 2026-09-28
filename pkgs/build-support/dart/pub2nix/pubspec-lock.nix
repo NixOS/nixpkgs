@@ -94,8 +94,9 @@ let
 
   mkPathDependencySource =
     name: details:
-    assert lib.assertMsg details.description.relative
-      "Only relative paths are supported - ${name} has an absolue path!";
+    assert
+      details.description.relative
+      || throw "Only relative paths are supported - ${name} has an absolue path!";
     (
       if lib.isDerivation src then
         src
@@ -150,7 +151,7 @@ let
                 "sdk" = mkSdkDependencySource;
               }
               .${details.source}
-              name
+                name
             )
               details
           ))

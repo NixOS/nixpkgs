@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  poetry-core,
+  hatchling,
+  hatch-vcs,
+  ipykernel,
   jupyter-client,
   writableTmpDirAsHomeHook,
   pytestCheckHook,
@@ -13,29 +15,23 @@
 
 buildPythonPackage rec {
   pname = "xontrib-jupyter";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xontrib-jupyter";
     tag = "v${version}";
-    hash = "sha256-gf+jyA2il7MD+Moez/zBYpf4EaPiNcgr5ZrJFK4uD2k=";
+    hash = "sha256-3Nmp7fmIgRvSpxog3Hu9jyqYzC/m/jnmEgmvPZvFCT8=";
   };
 
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'xonsh = ">=0.12"' ""
-
-    substituteInPlace xonsh_jupyter/shell.py \
-      --replace-fail 'xonsh.base_shell' 'xonsh.shells.base_shell'
-  '';
-
   build-system = [
-    poetry-core
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
+    ipykernel
     jupyter-client
   ];
 
@@ -52,6 +48,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/xonsh/xontrib-jupyter";
     changelog = "https://github.com/xonsh/xontrib-jupyter/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

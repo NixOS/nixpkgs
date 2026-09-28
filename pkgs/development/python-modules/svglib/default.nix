@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/deeplook/svglib";
     changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
   };
 }

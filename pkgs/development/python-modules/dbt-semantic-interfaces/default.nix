@@ -33,7 +33,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-LA5GvSm8M15NOG6f2f/gXplqburO+SpAzMZr178jx9k=";
   };
 
-  pythonRelaxDeps = [ "importlib-metadata" ];
+  pythonRelaxDeps = [
+    "importlib-metadata"
+    "more-itertools"
+  ];
 
   build-system = [
     hatchling

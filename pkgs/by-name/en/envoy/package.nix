@@ -38,9 +38,9 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.36.5";
-    rev = "41749943780b54b70b510b1b1a4805ae529e174a";
-    hash = "sha256-dT6ehfmW/huuyitqIlYAlEzUE6WrVA39sDKxatkZGaY=";
+    version = "1.36.10";
+    rev = "053a8989382dd91542ecf0cef8f379b9cb761cdd";
+    hash = "sha256-6bGXZfU2JutiriefwBudt46BrJRnwEqQCjYVRjUgyaY=";
   };
 
   # When GO_VERSION changes upstream, update the four sha256 hex strings in the
@@ -54,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-+oEQV3VfZu+p/f6Sif9pj2AkaA9+u0M8k+czdlcDLXI=";
-        aarch64-linux = "sha256-FcZfRinOd5KO6VnO9cx6ZQxJJ+KCFfB3Nk2k7zMuVU4";
+        x86_64-linux = "sha256-EUPWZ8N8wXtnOle8WMLfdxQEdCnTv1JJSbgG39UOoMc=";
+        aarch64-linux = "sha256-WltewtSjwvmYfZQwYAslCCoBdLY1MyO9jnMC/bCzVeg=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "napari-nifti";
-  version = "0.0.17";
+  version = "0.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "napari-nifti";
     tag = "v${version}";
-    hash = "sha256-JDyJMg6rsGkfEHBwqKc2L6oRO5Y1MJJlEjUuuqp7URQ=";
+    hash = "sha256-pj2olQ0znppG0xE/fpFNIGXx0nzN+lAgGdEOtrzS7Vc=";
   };
 
   build-system = [ setuptools ];

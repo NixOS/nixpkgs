@@ -87,21 +87,27 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+          )
       else
         src;
 
@@ -222,7 +228,42 @@ stdenv.mkDerivation (
               hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
               stripLen = 1;
             }
-          );
+          )
+      ++ lib.optionals (lib.versions.major release_version == "21") [
+        # Several LLVM versions have a bug in SelectionDAG that causes
+        # miscompilations around conditional poisions. This was exposed due to
+        # Rust 1.97.0 exercising the involved code path heavily and generating
+        # segfaulting code. The patch was made to LLVM 23, but the tests have
+        # many conflicts, so we vendor a version-specific modified version.
+        #
+        # This should be backported to older LLVM versions as well, but this
+        # has not yet been done in order to ship the more important fixes
+        # quickly.
+        #
+        # Rust issue: https://github.com/rust-lang/rust/issues/159035
+        # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
+        # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
+        (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+      ]
+      ++ lib.optionals (lib.versions.major release_version == "22") [
+        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+        # the time of the LLVM PR, and was thus not backported upstream, the
+        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+        # fetch the patch from there.
+        (fetchpatch {
+          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          stripLen = 1;
+          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
+        # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
+        # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
+        # Hopefully, Apple does not change the version number scheme again any time soon.
+        (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
+      ];
 
     nativeBuildInputs = [
       cmake
@@ -254,6 +295,8 @@ stdenv.mkDerivation (
       which
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
+
+    strictDeps = true;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -298,20 +341,15 @@ stdenv.mkDerivation (
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
         +
-          # Fails on macOS ≥ 26 due to the changed OS version scheme.
-          #
-          # This was fixed upstream in LLVM 21 with
-          # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
-          # painful to backport all the way.
-          lib.optionalString (lib.versionOlder release_version "21") ''
-            substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-          ''
-        +
           # This test fails with a `dysmutil` crash; have not yet dug into what's
           # going on here (TODO(@rrbutani)).
           lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
             rm test/tools/dsymutil/ARM/obfuscated.test
+          ''
+        +
+          # Requires a version of `codesign` that supports signing bundles, which sigtool does not support.
+          lib.optionalString (lib.versionAtLeast release_version "23") ''
+            rm test/tools/dsymutil/codesign.test
           ''
       )
 
@@ -586,6 +624,9 @@ stdenv.mkDerivation (
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
+
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://llvm.org/";
       description = "Collection of modular and reusable compiler and toolchain technologies";
@@ -626,6 +667,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man pages for LLVM ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

@@ -44,7 +44,7 @@ in
     settings = mkOption {
       description = ''
         Headplane configuration options. Generates a YAML config file.
-        See: https://github.com/tale/headplane/blob/main/config.example.yaml
+        See <https://github.com/tale/headplane/blob/main/config.example.yaml>.
       '';
       type = types.submodule {
         options = {
@@ -62,6 +62,16 @@ in
                   type = types.port;
                   default = 3000;
                   description = "The port to listen on.";
+                };
+
+                base_url = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                  description = ''
+                    The base URL for Headplane. Used for OIDC redirect callback URL
+                    detection. Should not include the dashboard prefix (/admin).
+                  '';
+                  example = "https://headplane.example.com";
                 };
 
                 cookie_secret_path = mkOption {
@@ -84,16 +94,119 @@ in
                   '';
                 };
 
+                cookie_max_age = mkOption {
+                  type = types.ints.positive;
+                  default = 86400;
+                  description = "The maximum age of the session cookie in seconds.";
+                };
+
+                cookie_domain = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                  description = ''
+                    Restrict the cookie to a specific domain.
+                    This may not work as expected if not using a reverse proxy.
+                  '';
+                  example = "example.com";
+                };
+
                 data_path = mkOption {
                   type = types.path;
                   default = "/var/lib/headplane";
                   description = ''
                     The path to persist Headplane specific data.
                     All data going forward is stored in this directory, including the internal database and any cache related files.
-                    Data formats prior to 0.6.1 will automatically be migrated.
                   '';
                   example = "/var/lib/headplane";
                 };
+
+                proxy_auth = mkOption {
+                  type = types.nullOr (
+                    types.submodule {
+                      options = {
+                        enabled = mkEnableOption ''
+                          delegating Headplane authentication to a trusted reverse proxy
+                          instead of logging in through Headplane directly. Identity
+                          headers are only trusted on requests whose client IP matches
+                          `allowed_cidrs`; all Headscale API calls then use
+                          `headscale.api_key_path`
+                        '';
+
+                        allowed_cidrs = mkOption {
+                          type = types.listOf types.str;
+                          default = [
+                            "127.0.0.1/32"
+                            "::1/128"
+                          ];
+                          description = ''
+                            Client CIDRs allowed to authenticate via the configured proxy
+                            headers.
+                          '';
+                          example = [ "10.0.0.0/8" ];
+                        };
+
+                        trusted_proxy_cidrs = mkOption {
+                          type = types.listOf types.str;
+                          default = [
+                            "127.0.0.1/32"
+                            "::1/128"
+                          ];
+                          description = ''
+                            Direct proxy CIDRs trusted to supply `ip_header`.
+                          '';
+                          example = [ "127.0.0.1/32" ];
+                        };
+
+                        ip_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = ''
+                            Header containing the original client IP, such as
+                            `X-Forwarded-For` or `X-Real-IP`. Only read when the direct
+                            socket peer matches `trusted_proxy_cidrs`.
+                          '';
+                          example = "X-Forwarded-For";
+                        };
+
+                        user_header = mkOption {
+                          type = types.str;
+                          default = "Remote-User";
+                          description = ''
+                            Header containing the stable authenticated user identity.
+                          '';
+                          example = "Remote-User";
+                        };
+
+                        email_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's email address.";
+                          example = "Remote-Email";
+                        };
+
+                        name_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's display name.";
+                          example = "Remote-Name";
+                        };
+
+                        picture_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's profile picture URL.";
+                          example = "Remote-Picture";
+                        };
+                      };
+                    }
+                  );
+                  default = null;
+                  description = ''
+                    Delegate Headplane authentication to a trusted reverse proxy. See the
+                    upstream [Proxy Authentication docs](https://github.com/tale/headplane/blob/main/docs/features/proxy-auth.md).
+                  '';
+                };
+
               };
             };
             default = { };
@@ -103,6 +216,16 @@ in
           headscale = mkOption {
             type = types.submodule {
               options = {
+                api_key_path = mkOption {
+                  type = types.nullOr types.path;
+                  default = null;
+                  description = ''
+                    Path to a file containing a Headscale API key.
+                    This is required for OIDC authentication aswell for the Headplane agent.
+                  '';
+                  example = lib.literalExpression "config.sops.secrets.headplane_pre_authkey.path";
+                };
+
                 url = mkOption {
                   type = types.str;
                   default = "http://127.0.0.1:${toString config.services.headscale.port}";
@@ -195,21 +318,10 @@ in
                           '';
                         };
 
-                        pre_authkey_path = mkOption {
-                          type = types.nullOr types.path;
-                          default = null;
-                          description = ''
-                            Path to a file containing the agent preauth key.
-                            To connect to your Tailnet, you need to generate a pre-auth key.
-                            This can be done via the web UI or through the `headscale` CLI.
-                          '';
-                          example = lib.literalExpression "config.sops.secrets.agent_pre_authkey.path";
-                        };
-
                         host_name = mkOption {
                           type = types.str;
                           default = "headplane-agent";
-                          description = "Optionally change the name of the agent in the Tailnet";
+                          description = "Optionally change the name of the agent in the Tailnet.";
                         };
 
                         cache_ttl = mkOption {
@@ -219,12 +331,6 @@ in
                             How long to cache agent information (in milliseconds).
                             If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
                           '';
-                        };
-
-                        cache_path = mkOption {
-                          type = types.path;
-                          default = "/var/lib/headplane/agent_cache.json";
-                          description = "Where to store the agent cache.";
                         };
 
                         work_dir = mkOption {
@@ -271,6 +377,15 @@ in
             type = types.nullOr (
               types.submodule {
                 options = {
+                  enabled = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = ''
+                      Explicitly control OIDC availability.
+                      Set to false to define OIDC config without enabling it.
+                    '';
+                  };
+
                   issuer = mkOption {
                     type = types.str;
                     description = "URL to OpenID issuer.";
@@ -299,42 +414,28 @@ in
                   };
 
                   token_endpoint_auth_method = mkOption {
-                    type = types.enum [
-                      "client_secret_post"
-                      "client_secret_basic"
-                      "client_secret_jwt"
-                    ];
-                    default = "client_secret_post";
-                    description = "The token endpoint authentication method.";
-                  };
-
-                  headscale_api_key_path = mkOption {
-                    type = types.nullOr types.path;
+                    type = types.nullOr (
+                      types.enum [
+                        "client_secret_post"
+                        "client_secret_basic"
+                        "client_secret_jwt"
+                      ]
+                    );
                     default = null;
                     description = ''
-                      Path to a file containing the Headscale API key.
-                      Required when `services.headplane.settings.oidc` is set.
+                      The token endpoint authentication method.
+                      If not set, Headplane will auto-detect the best method
+                      and fall back to client_secret_basic.
                     '';
-                    example = lib.literalExpression "config.sops.secrets.headscale_api_key.path";
                   };
 
-                  redirect_uri = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
+                  use_pkce = mkOption {
+                    type = types.bool;
+                    default = false;
                     description = ''
-                      This should point to your publicly accessible URL
-                      for your Headplane instance with /admin/oidc/callback.
+                      Whether to use PKCE when authenticating users.
+                      Your OIDC provider must support PKCE and it must be enabled on the client.
                     '';
-                    example = "https://headscale.example.com/admin/oidc/callback";
-                  };
-
-                  user_storage_file = mkOption {
-                    type = types.path;
-                    default = "/var/lib/headplane/users.json";
-                    description = ''
-                      Path to a file containing the users and their permissions for Headplane.
-                    '';
-                    example = "/var/lib/headplane/users.json";
                   };
 
                   profile_picture_source = mkOption {
@@ -344,12 +445,6 @@ in
                     ];
                     default = "oidc";
                     description = "Source for user profile pictures.";
-                  };
-
-                  strict_validation = mkOption {
-                    type = types.bool;
-                    default = true;
-                    description = "Enable strict validation of OIDC configuration.";
                   };
 
                   scope = mkOption {
@@ -423,29 +518,37 @@ in
         '';
       }
       {
-        assertion =
-          cfg.settings.integration.agent == null
-          || !cfg.settings.integration.agent.enabled
-          || cfg.settings.integration.agent.pre_authkey_path != null;
+        assertion = cfg.settings.oidc == null || cfg.settings.headscale.api_key_path != null;
         message = ''
-          services.headplane.settings.integration.agent.pre_authkey_path must be set
-          when services.headplane.settings.integration.agent.enabled is true.
+          services.headplane.settings.headscale.api_key_path must be set
+          when services.headplane.settings.oidc is non-null.
+          Headplane's OIDC flow requires a Headscale API key to mint sessions.
         '';
       }
       {
-        assertion = cfg.settings.oidc == null || cfg.settings.oidc.headscale_api_key_path != null;
+        assertion =
+          agentSettings == null || !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
-          services.headplane.settings.oidc.headscale_api_key_path must be set
-          when services.headplane.settings.oidc is non-null. Headplane's OIDC
-          flow requires a Headscale API key to mint sessions; upstream config
-          validation rejects an OIDC block without it.
+          services.headplane.settings.headscale.api_key_path must be set when the agent is enabled.
+        '';
+      }
+      {
+        assertion =
+          cfg.settings.server.proxy_auth == null
+          || !cfg.settings.server.proxy_auth.enabled
+          || cfg.settings.headscale.api_key_path != null;
+        message = ''
+          services.headplane.settings.headscale.api_key_path must be set
+          when services.headplane.settings.server.proxy_auth.enabled is true.
+          Proxy authentication requires a Headscale API key to make Headscale
+          API calls on behalf of proxy-authenticated users.
         '';
       }
     ];
 
     environment = {
       systemPackages = [ cfg.package ];
-      etc."headplane/config.yaml".source = "${settingsFile}";
+      etc."headplane/config.yaml".source = settingsFile;
     };
 
     systemd.services.headplane = {
@@ -458,6 +561,7 @@ in
         config.systemd.services.headscale.name
       ];
       requires = [ config.systemd.services.headscale.name ];
+      restartTriggers = [ settingsFile ];
 
       environment = {
         HEADPLANE_DEBUG_LOG = toString cfg.debug;

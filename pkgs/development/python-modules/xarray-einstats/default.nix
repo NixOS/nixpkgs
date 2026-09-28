@@ -11,16 +11,16 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray-einstats";
-  version = "0.9.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "xarray-einstats";
-    tag = "v${version}";
-    hash = "sha256-CgyMc2Yvut+1LfH9F2FAd62HuLu+58Xr50txbWj4mYU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mGRalZ9OSh3CtfhLy2E6LOQVBDoq8c777Q9WnyMtjpU=";
   };
 
   build-system = [ flit-core ];
@@ -36,7 +36,10 @@ buildPythonPackage rec {
     numba = [ numba ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "xarray_einstats" ];
 
@@ -48,7 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stats, linear algebra and einops for xarray";
     homepage = "https://github.com/arviz-devs/xarray-einstats";
+    changelog = "https://github.com/arviz-devs/xarray-einstats/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

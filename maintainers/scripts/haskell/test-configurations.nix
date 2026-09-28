@@ -6,7 +6,7 @@
   and builds all derivations (or at least a reasonable subset) affected by
   these overrides.
 
-  By default, it checks `configuration-{common,nix,ghc-9.8.x}.nix`. You can
+  By default, it checks `configuration-{common,nix,ghc-9.10.x}.nix`. You can
   invoke it like this:
 
     nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
@@ -55,6 +55,8 @@
   nixpkgsPath ? ../../..,
   config ? {
     allowBroken = true;
+    # TODO(@sternenseemann): better way to workaround throw-ing aliases?
+    allowAliases = false;
   },
   skipEvalErrors ? true,
   skipBinaryGHCs ? true,

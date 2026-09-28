@@ -26,19 +26,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.30.0";
+  version = "0.32.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/8BTH2nuqO+du6PsTPB59L21HvvAIZKDcG1kV9XHxsg=";
+    hash = "sha256-GM+LS1jrt7cCjkjM5T/nJEVRBdTm0Jd4ib+SvCbTAdA=";
   };
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [ "click" ];
 
   dependencies = [
     click
@@ -61,13 +60,10 @@ buildPythonPackage (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTestPaths = [
-    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
-    "tests/functional_tests/test_end_to_end.py"
-    "tests/unit_tests/test_cli.py"
-  ];
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for sqlfmt
+  dontCheckPythonMetadata = true;
 
   meta = {
     description = "Formatter for dbt SQL files";

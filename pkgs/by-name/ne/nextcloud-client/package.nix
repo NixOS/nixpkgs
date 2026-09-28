@@ -7,12 +7,13 @@
   cmake,
   inotify-tools,
   kdePackages,
+  kdsingleapplication,
   libcloudproviders,
   libp11,
   librsvg,
   libsecret,
   openssl,
-  pcre,
+  pcre2,
   pkg-config,
   sphinx,
   sqlite,
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "4.0.8";
+  version = "34.0.4";
 
   outputs = [
     "out"
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EKJj2z3CkWrNL2idBHu5jHuPXQXKwjEjUAgo6OOY/08=";
+    hash = "sha256-5qHhhMpgmdfNCO88ZtEtE+HcqeTOgxPUXYb8cgC6YiA=";
   };
 
   patches = [
@@ -62,17 +63,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     inotify-tools
     kdePackages.kio
+    kdsingleapplication
     libcloudproviders
     libp11
     libsecret
     openssl
-    pcre
+    pcre2
     qt6Packages.qt5compat
     qt6Packages.qtbase
     qt6Packages.qtkeychain
     qt6Packages.qtsvg
     qt6Packages.qttools
-    qt6Packages.qtwebengine
     qt6Packages.qtwebsockets
     qt6Packages.qtwayland
     sqlite

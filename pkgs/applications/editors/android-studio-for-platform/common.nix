@@ -19,12 +19,14 @@
   gnugrep,
   gnused,
   gnutar,
-  gtk2,
+  gtk3,
   glib,
   gzip,
   fontsConf,
   fontconfig,
   freetype,
+  libGL,
+  libsecret,
   libx11,
   libxext,
   libxi,
@@ -117,11 +119,14 @@ let
             libxrandr
 
             # For GTKLookAndFeel
-            gtk2
+            gtk3
             glib
 
             # For Soong sync
             e2fsprogs
+
+            libsecret
+            libGL
           ]
         }"
     '';

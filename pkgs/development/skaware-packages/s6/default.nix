@@ -7,8 +7,8 @@
 
 skawarePackages.buildPackage {
   pname = "s6";
-  version = "2.14.0.1";
-  sha256 = "sha256-wlr+gXy8P1lO/FBQNR+LkQG6eGFtDOkVZY83Dn7i4lg=";
+  version = "2.15.1.0";
+  sha256 = "sha256-6rnEbiK2axYTX5oF7Gig6ih9kGC4TRDe+qosqtFYq1I=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-man-pages";
@@ -18,7 +18,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "skarnet.org's small & secure supervision software suite";
+  meta.description = "skarnet.org's small & secure supervision software suite";
 
   # NOTE lib: cannot split lib from bin at the moment,
   # since some parts of lib depend on executables in bin.
@@ -30,20 +30,20 @@ skawarePackages.buildPackage {
     "doc"
   ];
 
+  buildInputs = [
+    skalibs
+    execline
+  ];
+
   # TODO: nsss support
   configureFlags = [
-    "--libdir=\${out}/lib"
-    "--libexecdir=\${out}/libexec"
-    "--dynlibdir=\${out}/lib"
-    "--bindir=\${out}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "out"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
   ];
 
   postInstall = ''

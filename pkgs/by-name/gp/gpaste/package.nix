@@ -15,16 +15,17 @@
   pkg-config,
   vala,
   desktop-file-utils,
+  directoryListingUpdater,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.3";
+  version = "45.5";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UU8pw7bqEwg2Vh7S6GTx8swI/2IhlwjQgkGNZCzoMwc=";
+    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
   };
 
   patches = [
@@ -36,10 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
-
-    substituteInPlace src/gnome-shell/metadata.json.in --replace-fail \
-      '"shell-version": [ "45", "46", "47", "48" ],' \
-      '"shell-version": [ "45", "46", "47", "48", "49" ],'
   '';
 
   nativeBuildInputs = [
@@ -82,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
+  passthru.updateScript = directoryListingUpdater { pname = "GPaste"; };
+
   meta = {
     homepage = "https://github.com/Keruspe/GPaste";
     changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
@@ -90,5 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
+    maintainers = with lib.maintainers; [ fabiob ];
   };
 })

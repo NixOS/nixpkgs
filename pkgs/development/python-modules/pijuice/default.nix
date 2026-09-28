@@ -23,7 +23,7 @@ buildPythonPackage rec {
   patches = [
     # The pijuice_cli.cli file doesn't have a shebang as the first line of the
     # script. Without it, the pythonWrapPrograms hook will not wrap the program.
-    # Add a python shebang here so that the the hook is triggered.
+    # Add a python shebang here so that the hook is triggered.
     ./patch-shebang.diff
   ];
 
@@ -43,18 +43,14 @@ buildPythonPackage rec {
 
   # Remove the following files from the package:
   #
-  # pijuice_cli - A precompiled ELF binary that is a setuid wrapper for calling
-  #               pijuice_cli.py
-  #
-  # pijuiceboot - a precompiled ELF binary for flashing firmware. Not needed for
-  #               the python library.
+  # pijuiceboot{32,64} - precompiled ELF binaries for flashing firmware.
+  #                      Not needed for the python library.
   #
   # pijuice_sys.py - A program that acts as a system daemon for monitoring the
   #                  pijuice.
-  preFixup = ''
-    rm $out/bin/pijuice_cli
+  postFixup = ''
     rm $out/bin/pijuice_sys.py
-    rm $out/bin/pijuiceboot
+    rm $out/bin/pijuiceboot{32,64}
     mv $out/bin/pijuice_cli.py $out/bin/pijuice_cli
   '';
 

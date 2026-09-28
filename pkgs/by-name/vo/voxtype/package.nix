@@ -21,6 +21,7 @@
   pciutils,
   wl-clipboard,
   wtype,
+  which,
   xclip,
   xdotool,
 
@@ -34,6 +35,10 @@
 
   onnxSupport ? false,
   onnxruntime,
+
+  hipSupport ? false,
+  rocmPackages,
+  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
 
   waylandSupport ? stdenv.hostPlatform.isLinux,
   waylandRuntimePackages ? [
@@ -51,20 +56,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "0.6.6";
+  version = "1.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0CgT0Avb7il6/GU8CtxWUGlMHhYZIPbHX952L4orDM=";
+    hash = "sha256-OT0tVSi9x3U7NwgZU00mojXk3RRWxuFoezpdSknLmmU=";
   };
 
-  cargoHash = "sha256-h0b3H+79v8G28XNBDdCOZ+Vo+6wpfzckPCsDbRzp1m4=";
+  cargoHash = "sha256-kJFI9sSMzaaYHuc7ze5Lkwt3ZVskM9rB9bvTon0XguU=";
 
   buildFeatures =
     [ ]
     ++ lib.optionals vulkanSupport [ "gpu-vulkan" ]
+    ++ lib.optionals hipSupport [ "gpu-hipblas" ]
     ++ lib.optionals onnxSupport [
       "parakeet-load-dynamic"
       "moonshine"
@@ -82,7 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
     pkg-config
   ]
-  ++ lib.optional vulkanSupport [
+  ++ lib.optionals hipSupport [
+    rocmPackages.clr
+  ]
+  ++ lib.optionals vulkanSupport [
     shaderc
     vulkan-headers
     vulkan-loader
@@ -92,6 +103,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     openssl
   ]
+  ++ lib.optionals hipSupport (
+    with rocmPackages;
+    [
+      clr
+      hipblas
+      rocblas
+    ]
+  )
   ++ lib.optionals vulkanSupport [
     vulkan-headers
     vulkan-loader
@@ -109,6 +128,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTFLAGS = lib.optionalString (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
     ) "-C target-cpu=x86-64-v3";
+  }
+  // lib.optionalAttrs hipSupport {
+    HIP_PATH = "${rocmPackages.clr}";
+    AMDGPU_TARGETS = rocmGpuTargets;
   };
 
   preBuild = ''
@@ -131,6 +154,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         (lib.makeBinPath (
           [
             libnotify
+            which
           ]
           ++ lib.optionals vulkanSupport [
             pciutils
@@ -171,7 +195,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     downloadPage = "https://voxtype.io/download/";
     changelog = "https://github.com/peteonrails/voxtype/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ DuskyElf ];
+    maintainers = with lib.maintainers; [
+      DuskyElf
+      pbek
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "voxtype";
   };

@@ -1,16 +1,15 @@
 {
   lib,
-  llvmPackages_18,
   fetchFromGitHub,
   makeBinaryWrapper,
   which,
   nix-update-script,
   wgpu-native,
   enableWgpu ? true, # currently only available for x86_64-linux
+  llvmPackages,
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
   wgpu = wgpu-native.overrideAttrs (oldAttrs: rec {
     version = "29.0.0.0";
@@ -25,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-05";
+  version = "dev-2026-09";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-fgN6Lz1CnUPXrmnQr+sPEfwSF/7y0+eZBX6TKFcFA50=";
+    hash = "sha256-wJm7J1DU9XxUGrh4AKqHtDJEzxSSVKqOVKWEhckl94Q=";
   };
 
   patches = [
@@ -51,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/build_settings.cpp \
       --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
 
-    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+    rm -r vendor/raylib/{linux,macos,wasm,windows}
 
     patchShebangs --build build_odin.sh
   ''
@@ -100,9 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --set-default ODIN_ROOT $out/share
 
-    make -C "$out/share/vendor/cgltf/src/"
-    make -C "$out/share/vendor/stb/src/"
-    make -C "$out/share/vendor/miniaudio/src/"
+    patchShebangs $out/share/vendor/
+
+    $out/share/vendor/cgltf/src/build_cgltf.sh
+    $out/share/vendor/stb/src/build_stb.sh
+    $out/share/vendor/miniaudio/src/build_miniaudio.sh
+    $out/share/vendor/kb_text_shape/src/build_unix.sh
 
     runHook postInstall
   '';
@@ -119,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       astavie
       atomicptr
-      diniamo
+      yvnth
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

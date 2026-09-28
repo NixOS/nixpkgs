@@ -15,32 +15,27 @@ in
 buildGo126Module (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.18.1";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = "mediamtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3ZKN2J3M8JhjbGWnYjweERM2GvlT+GK2OahPcFEpsLA=";
+    hash = "sha256-L9dRwOD5JCu3ZczTxeb3a6ShHMXGWNXVN5KAa/7bcjM=";
   };
 
-  vendorHash = "sha256-QCUMMYMwg/5a8dPqCegEkm4yChk7BrdOjSoAFZS9Arg=";
+  vendorHash = "sha256-15ERQ4TYJ+atLS3ZrOMtSq5UDWh0Q2xejepQlEJWPL4=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
     echo "v${finalAttrs.version}" > internal/core/VERSION
 
     # disable binary-only rpi camera support
-    substituteInPlace internal/staticsources/rpicamera/camera_other.go \
+    substituteInPlace internal/staticsources/rpicamera/source_other.go \
       --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
-    substituteInPlace internal/staticsources/rpicamera/{params_serialize,pipe}.go \
+    substituteInPlace internal/staticsources/rpicamera/*_arm_.go \
       --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/camera_arm32_.go \
-      --replace-fail 'linux && arm' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/camera_arm64_.go \
-      --replace-fail 'linux && arm64' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/camera_arm_.go \
-      --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
+    rm internal/staticsources/rpicamera/camera_linux_arm*.go
   '';
 
   subPackages = [ "." ];

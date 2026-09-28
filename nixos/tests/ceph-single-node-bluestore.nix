@@ -9,17 +9,14 @@ let
     };
     osd0 = {
       name = "0";
-      key = "AQBCEJNa3s8nHRAANvdsr93KqzBznuIWm2gOGg==";
       uuid = "55ba2294-3e24-478f-bee0-9dca4c231dd9";
     };
     osd1 = {
       name = "1";
-      key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
       uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
     osd2 = {
       name = "2";
-      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
   };
@@ -50,6 +47,11 @@ let
         ];
         vlans = [ 1 ];
       };
+
+      # Ceph 20.2.4 introduced the aes256k cipher for authentication.
+      # Linux started supporting these in kernel version 7.0.
+      # Remove this line at the earliest convenience (i.e. when tests are run by 7.0 or higher by default).
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
       networking = networkConfig;
 
@@ -92,6 +94,10 @@ let
           cfg.osd2.name
         ];
       };
+      rgw = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
     };
   };
 
@@ -100,6 +106,8 @@ let
   # For other ways to deploy a ceph cluster, look at the documentation at
   # https://docs.ceph.com/docs/master/
   testScript = ''
+    import json
+
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -109,13 +117,18 @@ let
         "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
         "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
         "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
-        "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
+        # Create the monmap with both a msgr2 (v2) and a legacy (v1) address.
+        # Using plain `--add` yields a v1-only monmap, which leaves the cluster
+        # in HEALTH_WARN with MON_MSGR2_NOT_ENABLED. Running `ceph mon
+        # enable-msgr2` afterwards is not enough: it rewrites the monmap (a
+        # subsequent `ceph mon dump` does show the v2 address), but the health
+        # check keeps reporting the mon as v1-only indefinitely.
+        "monmaptool --create --addv ${cfg.monA.name} '[v2:${cfg.monA.ip}:3300,v1:${cfg.monA.ip}:6789]' --fsid ${cfg.clusterId} /tmp/monmap",
         "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
         "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
         "systemctl start ceph-mon-${cfg.monA.name}",
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
-    monA.succeed("ceph mon enable-msgr2")
     monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
 
     # Can't check ceph status until a mon is up
@@ -142,13 +155,23 @@ let
         "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
         "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd2.name}/type",
         "ln -sf /dev/vdd /var/lib/ceph/osd/ceph-${cfg.osd2.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --gen-key",
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --gen-key",
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --gen-key",
     )
+
+    # Register the OSDs with the generated keys read back from their keyrings.
+    for osd_name, osd_uuid in [
+        ("${cfg.osd0.name}", "${cfg.osd0.uuid}"),
+        ("${cfg.osd1.name}", "${cfg.osd1.uuid}"),
+        ("${cfg.osd2.name}", "${cfg.osd2.uuid}"),
+    ]:
+        key = monA.succeed(
+            f"ceph-authtool --print-key /var/lib/ceph/osd/ceph-{osd_name}/keyring --name osd.{osd_name}"
+        ).strip()
+        monA.succeed(
+            f"echo '{{\"cephx_secret\": \"{key}\"}}' | ceph osd new {osd_uuid} -i -"
+        )
 
     # Initialize the OSDs with regular filestore
     monA.succeed(
@@ -194,6 +217,16 @@ let
         "ceph osd pool delete single-node-other-test single-node-other-test --yes-i-really-really-mean-it",
     )
 
+    # Bootstrap RGW
+    monA.succeed(
+        "sudo -u ceph mkdir -p /var/lib/ceph/radosgw/ceph-${cfg.monA.name}",
+        "ceph auth get-or-create client.${cfg.monA.name} osd 'allow rwx' mon 'allow rw' > /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "chown ceph:ceph /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "systemctl start ceph-rgw-${cfg.monA.name}",
+    )
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
+    monA.wait_for_open_port(7480)
+
     # Shut down ceph by stopping ceph.target.
     monA.succeed("systemctl stop ceph.target")
 
@@ -204,6 +237,7 @@ let
     monA.wait_for_unit("ceph-osd-${cfg.osd0.name}")
     monA.wait_for_unit("ceph-osd-${cfg.osd1.name}")
     monA.wait_for_unit("ceph-osd-${cfg.osd2.name}")
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
 
     # Ensure the cluster comes back up again
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
@@ -211,6 +245,56 @@ let
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Enable the dashboard and recheck health
+    monA.succeed(
+        "ceph mgr module enable dashboard",
+        "ceph config set mgr mgr/dashboard/ssl false",
+        # default is 8080 but it's better to be explicit
+        "ceph config set mgr mgr/dashboard/server_port 8080",
+    )
+
+    # The dashboard does not listen on localhost:
+    # `server_addr` defaults to the wildcard address, but the dashboard module
+    # resolves that to the active mgr's own IP and binds only to it,
+    # so loopback is never bound.
+    # See https://github.com/ceph/ceph/blob/v20.2.2/src/pybind/mgr/dashboard/module.py#L213-L214
+    # Therefore address the dashboard via the mgr's IP instead of localhost.
+    dashboard = "http://${cfg.monA.ip}:8080"
+
+    monA.wait_for_open_port(8080, addr="${cfg.monA.ip}")
+    monA.wait_until_succeeds(f"curl -q --fail {dashboard}")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Initialize dashboard creds.
+    # In a the query below, we test the Dashboard's `/api/rgw/daemon`,
+    # which needs that the dashboard can talk to RGW.
+    # `set-rgw-credentials` needs a running RGW daemon.
+    monA.succeed(
+        "echo 'foo bar baz qux' > /tmp/dashboard_pw",
+        "ceph dashboard ac-user-create admin -i /tmp/dashboard_pw administrator",
+        "ceph dashboard set-rgw-credentials",
+    )
+
+    # Get dashboard auth token
+    auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
+    auth_response = json.loads(monA.succeed(
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' {dashboard}/api/auth",
+    ))
+    token = auth_response["token"]
+
+    # Check cluster health via dashboard API
+    health = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/health/minimal",
+    ))
+    assert health["health"]["status"] == "HEALTH_OK"
+
+    # List daemons via REST API.
+    # This also requires a running RGW daemon, as it asserts on the first one.
+    rgw_daemons = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/rgw/daemon",
+    ))
+    assert rgw_daemons[0]["id"] == "${cfg.monA.name}"
   '';
 in
 {

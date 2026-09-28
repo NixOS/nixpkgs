@@ -10,6 +10,7 @@
   alcotest,
   ca-certs,
   eio_main,
+  ppx_expect,
   tls-eio,
 }:
 
@@ -32,11 +33,14 @@ buildDunePackage {
     uri
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkInputs = [
     alcotest
     ca-certs
     eio_main
+    ppx_expect
     tls-eio
   ];
 

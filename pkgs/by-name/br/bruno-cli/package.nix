@@ -119,7 +119,6 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       gepbird
       kashw2
-      lucasew
       mattpolzin
       water-sucks
     ];

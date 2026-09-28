@@ -95,7 +95,9 @@ in
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
       ${pkgs.stdenv.cc.libc}/share/locale/** r,
       ${pkgs.stdenv.cc.libc}/share/locale.alias r,
-      ${config.i18n.glibcLocales}/lib/locale/locale-archive r,
+      ${lib.optionalString (
+        config.i18n.glibcLocales != null
+      ) "${config.i18n.glibcLocales}/lib/locale/locale-archive r,"}
       ${etcRule "localtime"}
       ${pkgs.tzdata}/share/zoneinfo/** r,
       ${pkgs.stdenv.cc.libc}/share/i18n/** r,

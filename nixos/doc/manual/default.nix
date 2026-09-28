@@ -24,8 +24,8 @@ let
     mkOption
     escapeShellArg
     concatMapStringsSep
+    sortOn
     sourceFilesBySuffices
-    modules
     ;
 
   common = import ./common.nix;
@@ -104,12 +104,17 @@ let
 
     cp -r ${../../../doc/release-notes} ./release-notes-nixpkgs
 
+    cp --no-preserve=all ${./nav.json} nav.json
+
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
-    substituteInPlace ./configuration/configuration.md \
+    # Module chapters sorted by filename
+    substituteInPlace ./nav.json \
       --replace-fail \
-          '@MODULE_CHAPTERS@' \
-          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          '"@MODULE_CHAPTERS@"' \
+          ${escapeShellArg (
+            concatMapStringsSep ",\n" (p: ''{ "file": "${p.value}" }'') (sortOn (p: p.file) config.meta.doc)
+          )}
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -134,7 +139,7 @@ let
     inherit
       (evalModules {
         modules = [
-          (modules.importApply ../../../lib/services/service.nix {
+          (pkgs.lib.importService {
             pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
           })
         ];
@@ -201,8 +206,10 @@ rec {
           --script ./highlightjs/loader.js \
           --script ./anchor.min.js \
           --script ./anchor-use.js \
-          --toc-depth 1 \
-          --chunk-toc-depth 1 \
+          --sidebar-depth 4 \
+          --header ${./header.html}\
+          --no-navheader \
+          --experimental-config nav.json \
           ./manual.md \
           $dst/${common.indexPath}
 
@@ -250,17 +257,17 @@ rec {
             </chapter>
           </book>
         '';
-        passAsFile = [ "doc" ];
+        __structuredAttrs = true;
       }
       ''
         # Generate the epub manual.
         dst=$out/${common.outputPath}
 
-        xsltproc \
+        printf "%s" "$doc" | xsltproc \
           --param chapter.autolabel 0 \
           --nonet --xinclude --output $dst/epub/ \
           ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
-          $docPath
+          -
 
         echo "application/epub+zip" > mimetype
         manual="$dst/nixos-manual.epub"

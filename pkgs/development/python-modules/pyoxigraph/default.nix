@@ -1,36 +1,48 @@
 {
+  lib,
   stdenv,
   apple-sdk_15,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   pkg-config,
   pytestCheckHook,
   rustPlatform,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "pyoxigraph";
   pyproject = true;
-  version = "0.5.5";
+  version = "0.5.9";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "oxigraph";
     repo = "oxigraph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Sg4C9NW2grrlLFY2mDGOdsucX7cdT2028erJL8xaqLE=";
+    hash = "sha256-I5NI1IoK+FPCmUUcLdyzBao7tuB8XIycPYQ6slYCtJc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-fR3s3RSYlpUVqsPOyPwZaCjTSNWoOYwFDBzcYxTE8kY=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-QMbhtKoVa1fN6BQwAZfPelxCV5MCqodqpN7qHJs70KE=";
   };
 
   buildAndTestSubdir = "python";
 
-  dependencies = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_15
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
+
+  dependencies = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pyoxigraph" ];
 
   disabledTests = [
     "test_update_load"
@@ -44,24 +56,15 @@ buildPythonPackage rec {
     "oxrocksdb-sys/rocksdb/tools"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    rustPlatform.bindgenHook
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
-  ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "pyoxigraph" ];
-
   meta = {
-    homepage = "https://github.com/oxigraph/oxigraph";
     description = "SPARQL graph database";
-    maintainers = with lib.maintainers; [ dadada ];
+    homepage = "https://github.com/oxigraph/oxigraph";
+    changelog = "https://github.com/oxigraph/oxigraph/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       asl20
       mit
     ];
+    maintainers = with lib.maintainers; [ dadada ];
     platforms = lib.platforms.unix;
   };
-}
+})

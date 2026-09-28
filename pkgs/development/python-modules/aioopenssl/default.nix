@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
-    # compatibility with python3.14: set a asyncio event loop for the unit tetsts
+    # compatibility with python3.14: set a asyncio event loop for the unit tests
     (fetchpatch {
       name = "fix-asyncio-event-loop.patch";
       url = "https://github.com/theobori/aioopenssl/commit/47b1a1e5593fd8c3f4dedcdbc68c17e83d5c88ec.patch";
@@ -65,8 +65,6 @@ buildPythonPackage rec {
     "test_send_recv_large_data"
     "test_starttls"
   ];
-
-  __darwinAlowLocalNetworking = true;
 
   meta = {
     description = "TLS-capable transport using OpenSSL for asyncio";

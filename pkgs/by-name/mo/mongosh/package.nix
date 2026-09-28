@@ -2,25 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
 }:
 
-buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.8.3";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CHHGQYJBv1sVo2LT9jxx+c15TU8ecG9R5DVQOA9yG+A=";
+    hash = "sha256-P6gT2+cFuPYc3oN2O0h/83Tz7J65tQfD92GDLBybY3M=";
   };
 
-  npmDepsHash = "sha256-FlVKJqXiDW3FdBrm2lN2vw+xFkvm7J1FgCEI6rFfR4o=";
+  npmDepsHash = "sha256-UhSze1kTMzJ2OuEEn6D0oTtuV5titsaFrWS/Gm1HJtU=";
 
-  patches = [
-    ./disable-telemetry.patch
-  ];
+  postPatch = ''
+    # Disable telemetry by default; users can still opt in via enableTelemetry().
+    substituteInPlace packages/cli-repl/src/cli-repl.ts \
+      --replace-fail "enableTelemetry: true" "enableTelemetry: false"
+  '';
 
   npmFlags = [
     "--omit=optional"
@@ -30,9 +31,11 @@ buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   dontNpmInstall = true;
   installPhase = ''
     runHook preInstall
+
     npmWorkspace=packages/mongosh npmInstallHook
     cp -r packages configs $out/lib/node_modules/mongosh/
     rm $out/lib/node_modules/mongosh/node_modules/@mongosh/docker-build-scripts # dangling symlink
+
     runHook postInstall
   '';
 

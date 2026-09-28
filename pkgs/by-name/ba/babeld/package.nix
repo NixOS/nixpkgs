@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babeld";
-  version = "1.13.1";
+  version = "1.14";
 
   src = fetchurl {
     url = "https://www.irif.fr/~jch/software/files/babeld-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FfJNJtoMz8Bzq83vAwnygeRoTyqnESb4JlcsTIRejdk=";
+    hash = "sha256-xO0TwEiAzMOoWplkXctkE0vqyKsGB/4ypNB+EFetc7c=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

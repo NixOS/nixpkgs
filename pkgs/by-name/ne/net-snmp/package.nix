@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FnB3GfgzGEpLcoNdrDWa4YgSOwa15CgXwAeQ19wThL8=";
   };
 
+  patches = [
+    # https://salsa.debian.org/debian/net-snmp/-/blob/master/debian/patches/makefile_trap_needs_agent, vendored because of Anubis
+    ./link-error.patch
+  ];
+
   outputs = [
     "bin"
     "out"

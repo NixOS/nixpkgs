@@ -1,7 +1,9 @@
 {
+  lib,
   stdenv,
   which,
   callPackage,
+  python3,
 
   # apparmor deps
   libapparmor,
@@ -28,9 +30,16 @@ stdenv.mkDerivation {
     apparmor-utils
   ];
 
+  checkInputs = [
+    python3
+  ];
+
   preCheck = ''
     export USE_SYSTEM=1
     export LOGPROF="aa-logprof --configdir ${callPackage ./test_config.nix { }} --no-check-mountpoint"
+    patchShebangs ../parser/tst
+    substituteInPlace ../parser/tst/test_profile.py \
+      --replace-fail '../parser/apparmor_parser' '${lib.getExe apparmor-parser}'
   '';
 
   doCheck = true;

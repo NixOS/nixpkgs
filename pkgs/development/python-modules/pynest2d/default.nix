@@ -10,7 +10,7 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "5.3.0";
   pname = "pynest2d";
   pyproject = false;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "pynest2d";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-J7QFzWvqOaUx4Gfi5VLLWi0hJIyfYc0Htu2CM7ze6xA=";
   };
 
@@ -33,8 +33,6 @@ buildPythonPackage rec {
     sip4
   ];
 
-  strictDeps = true;
-
   env.CLIPPER_PATH = clipper.out;
 
   postPatch = ''
@@ -47,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

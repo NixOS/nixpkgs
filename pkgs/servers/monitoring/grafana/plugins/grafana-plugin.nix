@@ -31,7 +31,6 @@ stdenvNoCC.mkDerivation (
             + {
               x86_64-linux = "?os=linux&arch=amd64";
               aarch64-linux = "?os=linux&arch=arm64";
-              x86_64-darwin = "?os=darwin&arch=amd64";
               aarch64-darwin = "?os=darwin&arch=arm64";
             }
             .${plat} or (throw "Unsupported system: ${plat}");

@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  setuptools,
   click,
-  requests,
   packaging,
   dparse,
   ruamel-yaml,
@@ -18,26 +16,26 @@
   safety-schemas,
   typing-extensions,
   filelock,
-  psutil,
   httpx,
   tenacity,
   tomlkit,
+  truststore,
   git,
   pytestCheckHook,
   tomli,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "safety";
-  version = "3.7.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
-    tag = version;
-    hash = "sha256-BPLK/V7YQBCGopfRFAWdra8ve8Ww5KN1+oZKyoEPiFc=";
+    tag = finalAttrs.version;
+    hash = "sha256-xKZ8uhwuM6eu1NTppPFTBkxSjrguTw9GuIvPhPaTIAI=";
   };
 
   patches = [
@@ -47,16 +45,11 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
-    "filelock"
-    "pydantic"
-    "psutil"
     "safety-schemas"
   ];
 
   dependencies = [
-    setuptools
     click
-    requests
     packaging
     dparse
     ruamel-yaml
@@ -69,10 +62,10 @@ buildPythonPackage rec {
     safety-schemas
     typing-extensions
     filelock
-    psutil
     httpx
     tenacity
     tomlkit
+    truststore
   ];
 
   nativeCheckInputs = [
@@ -82,28 +75,21 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # Disable tests depending on online services
-    "test_announcements_if_is_not_tty"
-    "test_check_live"
-    "test_debug_flag"
-    "test_get_packages_licenses_without_api_key"
-    "test_init_project"
-    "test_validate_with_basic_policy_file"
+  disabledTestPaths = [
+    # Failed to initialize SafetyPlatformClient: [Errno -3] Temporary failure in name resolution
+    "tests/firewall/test_command.py"
+    "tests/test_cli.py"
   ];
-
-  # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
-  disabledTestPaths = [ "tests/alerts/test_utils.py" ];
 
   meta = {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
-    changelog = "https://github.com/pyupio/safety/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyupio/safety/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thomasdesr
       dotlambda
     ];
   };
-}
+})

@@ -8,7 +8,7 @@
   dbutils,
   mysqlclient,
   pymysql,
-  mysql-connector,
+  mysql-connector-python,
   psycopg2,
 }:
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     dbutils
     mysqlclient
     pymysql
-    mysql-connector
+    mysql-connector-python
     psycopg2
   ];
 

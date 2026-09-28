@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "yatto";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "handlebargh";
     repo = "yatto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sso0LlKzE/OJILCf7O5mdPgk6BUTiziQq2tcxcPMtkI=";
+    hash = "sha256-W0e9aSzbIJtWns3SNcfjqf9iStJC3hNxcaKwR96HBEw=";
   };
 
-  vendorHash = "sha256-8bCk6c/EyghsHKLinWGIJhbl76j3V/rzTmrCWh+5cIU=";
+  vendorHash = "sha256-XpS/iQWALoPBncVneCQfLY+oJqTlr6xrYTqsNnnAANc=";
 
   ldflags = [
     "-s"

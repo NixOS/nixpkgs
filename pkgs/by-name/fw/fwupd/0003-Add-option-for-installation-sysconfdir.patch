@@ -3,19 +3,23 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Tue, 15 Oct 2024 11:46:38 +0200
 Subject: [PATCH] Add option for installation sysconfdir
 
+Since /etc is the domain of NixOS, not Nix, we cannot install files
+there. Let's install the files to $prefix/etc while still reading them
+from /etc. NixOS module for fwupd will take care of copying the files
+appropriately.
 ---
  data/bios-settings.d/meson.build |  2 +-
  data/meson.build                 |  2 +-
  data/pki/meson.build             |  4 ++--
- data/remotes.d/meson.build       |  8 ++++----
+ data/remotes.d/meson.build       | 10 +++++-----
  docs/meson.build                 | 16 ++++++++--------
  meson.build                      |  6 ++++++
  meson_options.txt                |  6 ++++++
  plugins/uefi-capsule/meson.build |  4 ++--
- 8 files changed, 30 insertions(+), 18 deletions(-)
+ 8 files changed, 31 insertions(+), 19 deletions(-)
 
 diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
-index 2a2a07016..99df55afb 100644
+index 2a2a0701612e54a838d4d72f2bb00a793a31e0a3..99df55afb7636b090e2f57a5033bec6fe0017c15 100644
 --- a/data/bios-settings.d/meson.build
 +++ b/data/bios-settings.d/meson.build
 @@ -2,6 +2,6 @@ if build_standalone and host_machine.system() == 'linux'
@@ -27,7 +31,7 @@ index 2a2a07016..99df55afb 100644
    )
  endif
 diff --git a/data/meson.build b/data/meson.build
-index 70d08c55e..5a5d8bf46 100644
+index 74a9104c333330ce2aacaa7cac45c87d6c5c8e53..3d9cc87b443078888c6e72075095d644a9258dab 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -29,7 +29,7 @@ if build_standalone
@@ -38,27 +42,26 @@ index 70d08c55e..5a5d8bf46 100644
 +    install_dir: join_paths(sysconfdir_install, 'fwupd'),
      install_mode: 'rw-r-----',
    )
-   plugin_quirks += files('cfi.quirk', 'ds20.quirk', 'power.quirk', 'vendors.quirk')
+   plugin_quirks += files(
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index b87068405..21f59753a 100644
+index 7574aebc60617d8d8456c210bb19fcaf25263e74..05e6642454123e715e2f80501cf1919f96905fde 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
-@@ -8,11 +8,11 @@ if supported_pkcs7
-   install_data(
-     ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
-     install_tag: 'runtime',
--    install_dir: join_paths(sysconfdir, 'pki', 'fwupd'),
-+    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd'),
-   )
-   install_data(
-     ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
-     install_tag: 'runtime',
--    install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata'),
-+    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata'),
-   )
- endif
+@@ -1,10 +1,10 @@
+ install_data(
+   ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
+   install_tag: 'runtime',
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd'),
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd'),
+ )
+ install_data(
+   ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
+   install_tag: 'runtime',
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata'),
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata'),
+ )
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index b8d24c267..0dd4ad32a 100644
+index c0b4862ce6e13861da967cc2b8442849f63f0520..8bd00e9dbefd0ff386ad61f08ec861e7ad005090 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
 @@ -12,7 +12,7 @@ if build_standalone and get_option('lvfs') != 'false'
@@ -77,9 +80,18 @@ index b8d24c267..0dd4ad32a 100644
 -    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
    )
+   configure_file(
+     input: 'lvfs-embargo.conf',
+@@ -28,7 +28,7 @@ if build_standalone and get_option('lvfs') != 'false'
+     configuration: con3,
+     install: true,
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+   )
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
-@@ -59,7 +59,7 @@ configure_file(
+@@ -67,7 +67,7 @@ configure_file(
    configuration: con2,
    install: get_option('vendor_metadata'),
    install_tag: 'runtime',
@@ -88,7 +100,7 @@ index b8d24c267..0dd4ad32a 100644
  )
  configure_file(
    input: 'vendor-directory.conf',
-@@ -67,5 +67,5 @@ configure_file(
+@@ -75,5 +75,5 @@ configure_file(
    configuration: con2,
    install: true,
    install_tag: 'runtime',
@@ -96,7 +108,7 @@ index b8d24c267..0dd4ad32a 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/docs/meson.build b/docs/meson.build
-index b4d48b086..8a1f8fc8c 100644
+index b4d48b086baf03a2f713ab9c7cb17e60b2a9d12b..8a1f8fc8ca9fc21f278575233348ca918635c161 100644
 --- a/docs/meson.build
 +++ b/docs/meson.build
 @@ -196,7 +196,7 @@ if build_docs
@@ -161,10 +173,10 @@ index b4d48b086..8a1f8fc8c 100644
    )
  endif
 diff --git a/meson.build b/meson.build
-index bf77bf6d6..f1f51e841 100644
+index 1561d1837a73425d9dda510d0ba25d16f92ed7f7..917770b38abb86056d6c42fa9c99dedf27ebe999 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -248,6 +248,12 @@ endif
+@@ -250,6 +250,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -178,7 +190,7 @@ index bf77bf6d6..f1f51e841 100644
  gio = dependency(
    'gio-2.0',
 diff --git a/meson_options.txt b/meson_options.txt
-index 420997355..67b3058d5 100644
+index b89ba371cee9dccf8457414f316ca697ef33216a..0dc66c4ec1ecb1547a21c4ec673ac1032462d91e 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -14,6 +14,12 @@ option(
@@ -195,7 +207,7 @@ index 420997355..67b3058d5 100644
    'build',
    type: 'combo',
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
-index f104f36d7..30356ea53 100644
+index c2eb3b4300437d0d6b87d934441e69c306ba99a8..5c90240170c11ad3c75840ab6913018b6f7de85f 100644
 --- a/plugins/uefi-capsule/meson.build
 +++ b/plugins/uefi-capsule/meson.build
 @@ -23,7 +23,7 @@ if host_machine.system() == 'linux'

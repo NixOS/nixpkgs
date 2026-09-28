@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.18.1";
+  version = "4.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
     tag = version;
-    hash = "sha256-iRUrIb3pknT92Pk6jdkQzE1pWx85i+T31Yy+Wt8Q7bQ=";
+    hash = "sha256-golJzx+ikMblGjat5lnraE+u0bwZeOjYK2f5ZuWGvmA=";
   };
 
   build-system = [ setuptools ];

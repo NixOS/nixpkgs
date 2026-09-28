@@ -3,8 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud32Packages,
   nextcloud33Packages,
+  nextcloud34Packages,
+  nextcloud35Packages,
 }:
 
 let
@@ -20,16 +21,12 @@ let
       pname = "nextcloud";
       inherit version;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       src = fetchurl {
         url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
         inherit hash;
-      };
-
-      passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
-        inherit packages;
       };
 
       installPhase = ''
@@ -38,6 +35,13 @@ let
         cp -R . $out/
         runHook postInstall
       '';
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
 
       meta = {
         changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
@@ -52,18 +56,24 @@ let
     };
 in
 {
-  nextcloud32 = generic {
-    version = "32.0.9";
-    hash = "sha256-/W1ZGXXv3hyvDoQnqCuqVaSot65kPaKe2D4pnCCMHu4=";
-    packages = nextcloud32Packages;
-  };
-
   nextcloud33 = generic {
-    version = "33.0.3";
-    hash = "sha256-XBBS+GCzWqVrJLwmE6a+oMIjE7n70CuwJHwfC52/d9I=";
+    version = "33.0.9";
+    hash = "sha256-8zHBBB0CfmWIUm0qAM5CvHCpYi6rWHHAvpF3JSz3dCM=";
     packages = nextcloud33Packages;
   };
 
+  nextcloud34 = generic {
+    version = "34.0.4";
+    hash = "sha256-APIm5jZPluCRirBhVxWPZmAbjO3CWvd39e5aMFb0K4M=";
+    packages = nextcloud34Packages;
+  };
+
+  nextcloud35 = generic {
+    version = "35.0.0";
+    hash = "sha256-2MFl52SnpN6C6z3sUQ1m4Z8tgiGFcmBK+cFdmamKKaA=";
+    packages = nextcloud35Packages;
+  };
+
   # tip: get the sha with:
-  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
+  # curl  "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha512" | grep '.tar.bz2'  | cut -f1 -d' ' | xargs nix hash convert --hash-algo sha512 --to sri
 }

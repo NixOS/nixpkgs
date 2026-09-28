@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ouch";
-  version = "0.7.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = finalAttrs.version;
-    hash = "sha256-XT2CWYZiY5UskTmHKl9EVWBIJoOiR9rOCQUoN8U9o40=";
+    hash = "sha256-dQK+kfTsh+w0Ul7RGkkIUKEsgfRNpyKUt94YcUAx8r8=";
   };
 
-  cargoHash = "sha256-ckqzptKk6aituDMTA5JGzMWoXiVuOoK3N29KNUJnmgw=";
+  cargoHash = "sha256-k9wSfxKH499eH1jY5HfSlsmjGtK45VPs9scdA6J50bk=";
 
   nativeBuildInputs = [
     cmake

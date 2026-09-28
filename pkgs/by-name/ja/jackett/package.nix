@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jackett";
-  version = "0.24.1831";
+  version = "0.24.2663";
 
   src = fetchFromGitHub {
     owner = "jackett";
     repo = "jackett";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ipOlkUz1DK0U01OUI2Kd3gQTF2/MULkk5CVu4EfELmI=";
+    hash = "sha256-zPPEFitw2g68EjUql8m7Ad+nFHAmTAC9bB6rmMb0d3w=";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
@@ -39,8 +39,6 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [ openssl ];
   # mono is not available on aarch64-darwin
-  #x86_64-darwin is failed with
-  #System.Net.Sockets.SocketException (13): Permission denied
   doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ mono ];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";

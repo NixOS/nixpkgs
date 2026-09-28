@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   grpc-google-iam-v1,
+  grpcio,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -13,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.27.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_secret_manager";
     inherit version;
-    hash = "sha256-avhkwlK9PBHbe7ArgMsLFKjJoz/H7E1vJF8z2M4ffNE=";
+    hash = "sha256-JuyHc3cxtIP3+VwmqMereeIstmMXyVAG5/aYXbxDyKI=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +32,9 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    google-auth
     grpc-google-iam-v1
+    grpcio
     proto-plus
     protobuf
   ]

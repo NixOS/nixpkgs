@@ -1,9 +1,8 @@
 {
-  buildGoModule,
+  buildGo127Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
-  fetchpatch,
   lib,
   nodejs_24,
   npmHooks,
@@ -19,25 +18,25 @@
   plugins ? [ ],
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "navidrome";
-  version = "0.61.2";
+  version = "0.64.2";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-epSgGiDdfNRUaQtWoOd4ADKtF7Ptt3p9UOqsWBzZg7I=";
+    hash = "sha256-6667wi23YSPdF/LL5k7VmYEAM5rxQYjqlvAtg5vJzj4=";
   };
 
-  vendorHash = "sha256-RmmZudmWBxiw+c9g8KFEX+ALFD0xP/SBsYc6b6RWWO8=";
+  vendorHash = "sha256-/3NhF/OHDxWrciN5GdROiO1yhjjdm5F5ntW7h6tzFGc=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-7hy2vLCEicKzjORpJZ0mrRS8PT3GsJ8DWdvj/7SrB70=";
+    hash = "sha256-uRF9cf6HZE0gyCvGTEZ520d2gMsxmccEYLJBgc47pMg=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +82,10 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/plugins/
     ${lib.concatMapStringsSep "\n" (plugin: ''
-      ln -s ${plugin}/share/${plugin.pname}.ndp $out/share/plugins/
+      find ${plugin}/share/ \
+        -type f \
+        -name "*.ndp" \
+        -exec ln -s {} $out/share/plugins/${plugin.bundleName or plugin.pname}.ndp \;
     '') plugins}
   '';
 
@@ -115,6 +117,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       aciceri
       tebriel
+      RossSmyth
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

@@ -11,7 +11,6 @@
   readline,
   gmp,
   gnutls,
-  gtk2,
   cairo,
   SDL,
   sqlite,
@@ -63,14 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     gmp
     gnutls
-    gtk2
     cairo
     SDL
     sqlite
   ]
   ++ lib.optional emacsSupport emacs;
 
-  configureFlags = lib.optional (!emacsSupport) "--without-emacs";
+  configureFlags = [ "--enable-gtk=no" ] ++ lib.optionals (!emacsSupport) [ "--without-emacs" ];
 
   hardeningDisable = [ "format" ];
 

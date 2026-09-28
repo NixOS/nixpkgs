@@ -19,13 +19,13 @@
 
 buildDotnetModule rec {
   pname = "galaxy-buds-client";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
-    owner = "ThePBone";
+    owner = "timschneeb";
     repo = "GalaxyBudsClient";
     tag = version;
-    hash = "sha256-rFaI5coTGuWoxM3QZyCBJdvwvR6LeB2jjvcJ3xXw5X8=";
+    hash = "sha256-jPVrSkf6Bybwc5glkxId5VeWkwLBoTjOzM3CCgO6h9I=";
   };
 
   projectFile = [ "GalaxyBudsClient/GalaxyBudsClient.csproj" ];
@@ -85,7 +85,7 @@ buildDotnetModule rec {
 
   meta = {
     description = "Unofficial Galaxy Buds Manager";
-    homepage = "https://github.com/ThePBone/GalaxyBudsClient";
+    homepage = "https://github.com/timschneeb/GalaxyBudsClient";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ icy-thought ];
     platforms = lib.platforms.linux;

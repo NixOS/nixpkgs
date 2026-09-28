@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
 
   # build-system
@@ -22,27 +21,15 @@
 
 buildPythonPackage rec {
   pname = "beets-alternatives";
-  version = "0.14.0";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-leZYXf6Oo/jAKbnJbP+rTnuRsh9P1BQXYAbthMNT60A=";
+    hash = "sha256-jRVzKqvGvAKn3D3s1KEqF7uh9S28Yw4TarMRVRBB6ug=";
   };
-
-  patches = [
-    # Fixes a failing test, see:
-    # https://github.com/geigerzaehler/beets-alternatives/issues/212
-    (fetchpatch {
-      url = "https://github.com/geigerzaehler/beets-alternatives/commit/8b75974636897aabcf2ca75fb0987f7beb68f50f.patch";
-      hash = "sha256-lIJwuf3UklcJM4m7CO2+aNpPekHXuC5rpPVjK+kb+FQ=";
-      includes = [
-        "test/cli_test.py"
-      ];
-    })
-  ];
 
   build-system = [
     hatchling

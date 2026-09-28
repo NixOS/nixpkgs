@@ -14,7 +14,6 @@
 
   # tests
   awkward,
-  dask-awkward,
   notebook,
   numba,
   papermill,
@@ -24,14 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k54tCCGZ0ix112u8oxuHPl3LDNV6Fp5s79iVE85b33k=";
+    hash = "sha256-7LssN38bnxZDc1lUp0Tq+6oNjJcA5pTkR3UHAizKvoc=";
   };
 
   build-system = [
@@ -46,7 +46,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     awkward
-    dask-awkward
     notebook
     numba
     papermill
@@ -86,7 +85,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
     homepage = "https://github.com/scikit-hep/vector";
     changelog = "https://github.com/scikit-hep/vector/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

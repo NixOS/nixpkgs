@@ -25,11 +25,11 @@ buildFHSEnv {
     [
       # Dependencies from the Debian package
       glibc.out
-      libgcc.lib
+      libgcc
       libz
       krb5.lib
       lttng-ust.out
-      openssl_3.out
+      openssl_3_5.out
       icu76
 
       # Transitive dependencies from the Debian package

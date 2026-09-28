@@ -102,28 +102,6 @@ let
           }
         ];
       };
-      x86_64-darwin = {
-        variantSuffix = "";
-        src = {
-          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-          sha256 = "de7baacfb1513ab0e4ccf8911045cceee84bc8a4e39b89bd975ed3135e5f7d96";
-        };
-        exePathForLibraryCheck = null; # we don't have a library check for darwin yet
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = ncurses6;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = libiconv;
-            fileToCheckFor = null;
-          }
-        ];
-      };
       aarch64-darwin = {
         variantSuffix = "";
         src = {
@@ -345,6 +323,15 @@ stdenv.mkDerivation {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''

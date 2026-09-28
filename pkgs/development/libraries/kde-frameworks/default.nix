@@ -32,7 +32,6 @@
 
 let
   maintainers = with lib.maintainers; [
-    ttuegel
     nyanloutre
   ];
   license = with lib.licenses; [

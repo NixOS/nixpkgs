@@ -8,22 +8,25 @@
   uv-dynamic-versioning,
 
   # dependencies
-  httpx,
+  anyio,
   logfire-api,
   pydantic,
   typing-inspection,
 }:
 
+# Update together with pydantic-ai-slim
+# nixpkgs-update: no auto update
+
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-graph";
-  version = "1.90.0";
+  version = "2.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+yFaSnMfgaTzhvQmFRiYoOnAf60JW45c7QsOrxRIElw=";
+    hash = "sha256-vrbBnSFnmIzqFJUVd2dZ8tDaO4/XXsVZvUUH+idttw8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_graph";
@@ -34,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    httpx
+    anyio
     logfire-api
     pydantic
     typing-inspection
@@ -47,6 +50,7 @@ buildPythonPackage (finalAttrs: {
   doCheck = false; # no tests
 
   meta = {
+    changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     description = "GenAI Agent Framework, the Pydantic way";
     homepage = "https://github.com/pydantic/pydantic-ai";
     license = lib.licenses.mit;

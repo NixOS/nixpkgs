@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "5.1.2";
+  version = "5.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joerick";
     repo = "pyinstrument";
     tag = "v${version}";
-    hash = "sha256-OP4B2E3le67oT5nV8OmOFQvkrEog5qoq4pihRpXIxcY=";
+    hash = "sha256-eq1nclGpaBOW52UCzUeZHsq6GwMdkT2IU8RhnnuKirM=";
   };
 
   nativeBuildInputs = [

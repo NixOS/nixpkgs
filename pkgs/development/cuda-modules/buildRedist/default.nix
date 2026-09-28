@@ -6,6 +6,7 @@
   autoAddDriverRunpath,
   autoPatchelfHook,
   backendStdenv,
+  cudaMajorMinorPatchVersion,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
@@ -17,10 +18,11 @@
   srcOnly,
   stdenv,
   stdenvNoCC,
+  zstd,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
-  inherit (_cuda.lib) getNixSystems _mkCudaVariant mkRedistUrl;
+  inherit (_cuda.lib) getNixSystems _mkCudaVariants mkRedistUrl;
   inherit (lib.attrsets)
     foldlAttrs
     getDev
@@ -69,7 +71,7 @@ let
 
   getSupportedReleases =
     let
-      desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
+      desiredCudaVariants = _mkCudaVariants cudaMajorMinorPatchVersion;
     in
     release:
     # Always show preference to the "source", then "linux-all" redistSystem if they are available, as they are
@@ -91,9 +93,16 @@ let
         acc
         # If the value is an attribute, and when hasCudaVariants is true it has the relevant CUDA variant,
         # then add it to the set.
-        // optionalAttrs (isAttrs value && (hasCudaVariants -> hasAttr desiredCudaVariant value)) {
-          ${name} = value.${desiredCudaVariant} or value;
-        }
+        // (
+          let
+            desiredCudaVariant = findFirst (
+              variant: isAttrs value && hasAttr variant value
+            ) null desiredCudaVariants;
+          in
+          optionalAttrs (isAttrs value && (hasCudaVariants -> desiredCudaVariant != null)) {
+            ${name} = if desiredCudaVariant == null then value else value.${desiredCudaVariant};
+          }
+        )
       ) { } release;
 
   getPreferredRelease =
@@ -164,7 +173,7 @@ extendMkDerivation {
         "stubs"
       ],
 
-      # Traversed in the order of the outputs speficied in outputs;
+      # Traversed in the order of the outputs specified in outputs;
       # entries are skipped if they don't exist in outputs.
       # NOTE: The nil LSP gets angry if we do not parenthesize the default attrset.
       outputToPatterns ? {
@@ -256,6 +265,7 @@ extendMkDerivation {
             url = mkRedistUrl finalAttrs.passthru.redistName relative_path;
             inherit sha256;
           };
+          nativeBuildInputs = lib.optional (lib.hasSuffix ".zst" relative_path) zstd;
         }
       ) (getPreferredRelease finalAttrs.passthru.supportedReleases);
 
@@ -375,7 +385,7 @@ extendMkDerivation {
         # outputNameVarFallbacks!
         inherit expectedOutputs;
 
-        # Traversed in the order of the outputs speficied in outputs;
+        # Traversed in the order of the outputs specified in outputs;
         # entries are skipped if they don't exist in outputs.
         inherit outputToPatterns;
 

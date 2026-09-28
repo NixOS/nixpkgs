@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Language Server Protocol implementation for Swift and C-based languages";
     mainProgram = "sourcekit-lsp";
-    homepage = "https://github.com/apple/sourcekit-lsp";
+    homepage = "https://github.com/swiftlang/sourcekit-lsp";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
     teams = [ lib.teams.swift ];

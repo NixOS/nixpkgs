@@ -90,22 +90,6 @@ in
             required for text search.
           '';
         };
-
-        # TODO: remove when this is either handled by karakeep or becomes default
-        #       in services.meilisearch.
-        experimental_dumpless_upgrade = lib.mkOption {
-          default = true;
-          description = ''
-            Whether to enable (experimental) dumpless upgrade of the search index.
-            Allows upgrading Meilisearch without manually dumping and importing
-            the database.
-            {option}`services.meilisearch.settings.experimental_dumpless_upgrade`
-            overrides this option if set explicitly.
-
-            More information at <https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade>.
-          '';
-          type = lib.types.bool;
-        };
       };
     };
   };
@@ -121,7 +105,6 @@ in
 
     services.meilisearch = {
       enable = cfg.meilisearch.enable;
-      settings.experimental_dumpless_upgrade = lib.mkDefault cfg.meilisearch.experimental_dumpless_upgrade;
     };
 
     systemd.services.karakeep-init = {

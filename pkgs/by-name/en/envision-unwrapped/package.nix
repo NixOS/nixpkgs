@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    broken = true;
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";
     homepage = "https://gitlab.com/gabmus/envision";
     license = lib.licenses.agpl3Only;
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     # envision (wrapped) requires frequent updates to the dependency list;
     # the more people that can help with this, the better.
     maintainers = with lib.maintainers; [
-      pandapip1
+      coolGi
       Scrumplex
       txkyel
     ];

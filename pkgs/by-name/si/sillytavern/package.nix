@@ -5,17 +5,22 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "sillytavern";
-  version = "1.17.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
     tag = finalAttrs.version;
-    hash = "sha256-M4YvPsiCimbxHZoPO4+aIdwmYa4o5By+qnSl7FeAD5k=";
+    hash = "sha256-qBlR/4OnIyJeX9JWpzlrhGp/M+KeYqJDpAzI803jUqc=";
   };
-  npmDepsHash = "sha256-BE8B7yALOi5WLWHAvSPC2lUCgAFjUCOUMc4Ru2RBdJM=";
+  npmDepsHash = "sha256-wAVmQuchjDXh7sTj8Q7+bJJoYCi7JdvlEeC5G9VtjMU=";
 
   dontNpmBuild = true;
+
+  postPatch = ''
+    # `.npmrc` breaks `npm pack`.
+    rm .npmrc
+  '';
 
   # These dirs are not installed automatically.
   # And if they were not in place, the app would try to create them at runtime, which is of course impossible to achieve.
@@ -36,6 +41,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://docs.sillytavern.app/";
     mainProgram = "sillytavern";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.wrvsrx ];
+    maintainers = [ lib.maintainers.Notarin ];
   };
 })

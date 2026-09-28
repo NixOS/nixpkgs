@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.6.0";
 
   src = fetchFromGitHub {
-    owner = "martinmoene";
+    owner = "nonstd-lite";
     repo = "optional-lite";
     tag = "v${finalAttrs.version}";
     hash = "sha256-qmKuxYc0cpoOtRRb4okJZ8pYPvzQid1iqBctnhGlz6M=";
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++17-like optional, a nullable object for C++98, C++11 and later in a single-file header-only library";
-    homepage = "https://github.com/martinmoene/optional-lite";
-    changelog = "https://github.com/martinmoene/optional-lite/blob/v${finalAttrs.version}/CHANGES.txt";
+    homepage = "https://github.com/nonstd-lite/optional-lite";
+    changelog = "https://github.com/nonstd-lite/optional-lite/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ titaniumtown ];
   };

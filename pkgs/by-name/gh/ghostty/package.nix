@@ -149,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+
+    substituteInPlace $out/share/applications/com.mitchellh.ghostty.desktop \
+      --replace-fail "Exec=$out/bin/ghostty" "Exec=ghostty"
   '';
 
   nativeInstallCheckInputs = [
@@ -174,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       features, or native UIs. Ghostty provides all three.
     '';
     homepage = "https://ghostty.org/";
+    donationPage = "https://ghostty.org/docs/sponsor";
     downloadPage = "https://ghostty.org/download";
     changelog = "https://ghostty.org/docs/install/release-notes/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version

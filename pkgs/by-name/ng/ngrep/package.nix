@@ -47,12 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       more common packet sniffing tools, such as tcpdump and snoop.
     '';
     homepage = "https://github.com/jpr5/ngrep/";
-    license = {
-      shortName = "ngrep"; # BSD-style, see README.md and LICENSE
-      url = "https://github.com/jpr5/ngrep/blob/master/LICENSE";
-      free = true;
-      redistributable = true;
-    };
+    license = lib.licenses.AND [
+      lib.licenses.ngrep
+      lib.licenses.bsd3
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "ngrep";

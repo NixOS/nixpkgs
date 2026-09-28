@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  pythonSupport ? false,
+  python3,
+  swig,
   udev,
   libcec_platform,
   withLibraspberrypi ? false,
@@ -12,27 +15,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcec";
-  version = "7.1.1";
+  version = "8.1.7";
 
   src = fetchFromGitHub {
     owner = "Pulse-Eight";
     repo = "libcec";
     rev = "libcec-${finalAttrs.version}";
-    sha256 = "sha256-t8GUQKWTcxjyaAlsTP4C+heYiVYowG7x+fmjHPND7As=";
+    sha256 = "sha256-teh4w6pDn0HJ9W0FnqhnMYFBd6JxgK9QYfVqYHXviiI=";
   };
 
   # Fix dlopen path
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace "\"libcec." "\"$out/lib/libcec."
+    substituteInPlace include/cecloader.h --replace-fail "\"libcec." "\"$out/lib/libcec."
   '';
 
   nativeBuildInputs = [
     pkg-config
     cmake
-  ];
+  ]
+  ++ lib.optional pythonSupport swig;
   buildInputs = [
     libcec_platform
   ]
+  ++ lib.optional pythonSupport python3
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optional withLibraspberrypi libraspberrypi;
 

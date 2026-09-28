@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "meh";
-  version = "unstable-2018-10-22";
+  version = "0.3-unstable-2018-10-22";
 
   src = fetchFromGitHub {
     owner = "jhawthorn";
@@ -34,6 +34,8 @@ stdenv.mkDerivation {
     libpng
     giflib
   ];
+
+  patches = [ ./gif.patch ];
 
   meta = {
     description = "Minimal image viewer using raw XLib";

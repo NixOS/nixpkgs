@@ -1,31 +1,41 @@
 {
   aiofiles,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   lib,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "imgw-pib";
-  version = "2.1.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = finalAttrs.version;
-    hash = "sha256-R1WhKOboItkKamO+hyyJyTl0veDCHDc4N70UE7IuFqI=";
+    hash = "sha256-pvPPdtTO4Eq2fge8gjXMPrFTtw+qnUvVN+FqimFLQqg=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
 
   dependencies = [
     aiofiles
@@ -36,11 +46,12 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "imgw_pib" ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   meta = {

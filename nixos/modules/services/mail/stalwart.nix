@@ -57,7 +57,7 @@ in
       default = { };
       description = ''
         Configuration options for the Stalwart server.
-        See <https://stalw.art/docs/category/configuration> for available options.
+        See <https://stalw.art/docs/configuration> for available options.
 
         By default, the module is configured to store everything locally.
       '';
@@ -273,6 +273,7 @@ in
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
+            "AF_UNIX"
           ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
@@ -303,7 +304,6 @@ in
   meta = {
     maintainers = with lib.maintainers; [
       happysalada
-      euxane
       onny
       norpol
     ];

@@ -2,26 +2,28 @@
   lib,
   python3,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "getmail6";
-  version = "6.19.12";
+  version = "6.20.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E+S6p12eqVDkzTv6RdeBpUJqPd4a4LMVoGaYOr2XKVo=";
+    hash = "sha256-U5/vOpVVuPc1ITn0SCr7bnDFUwSBqFr51dUsyiMbORM=";
   };
 
   build-system = with python3.pkgs; [
     setuptools
   ];
 
-  # needs a Docker setup
-  doCheck = false;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "getmailcore" ];
 
@@ -37,6 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://getmail6.org";
     changelog = "https://github.com/getmail6/getmail6/blob/${finalAttrs.src.tag}/docs/CHANGELOG";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "getmail";
     maintainers = with lib.maintainers; [
       abbe
       dotlambda

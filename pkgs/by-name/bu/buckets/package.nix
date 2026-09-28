@@ -32,7 +32,7 @@ let
     url = "https://github.com/buckets/application/releases/download/v${version}/Buckets-linux-latest-${platform}-${version}.AppImage";
     inherit hash;
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

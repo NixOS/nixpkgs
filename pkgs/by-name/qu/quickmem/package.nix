@@ -4,6 +4,7 @@
   fetchFromGitLab,
   cmake,
   doxygen,
+  gitUpdater,
   graphviz,
   arpa2common,
   arpa2cm,
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickmem";
-  version = "0.3.0";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "Quick-MEM";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cqg8QN4/I+zql7lVDDAgFA05Dmg4ylBTvPSPP7WATdc=";
+    hash = "sha256-I6WTBzY275a82YM+qsH9k2Zbb8SqAIF3qboxv9o3f4Q=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
   meta = {
     description = "Memory pooling for ARPA2 projects";
     homepage = "https://gitlab.com/arpa2/Quick-MEM/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ leungbk ];
   };
 })

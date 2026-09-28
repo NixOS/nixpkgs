@@ -46,5 +46,6 @@ stdenvNoCC.mkDerivation {
       glyphs were improved, and glyph set was expanded to GF Cyrillic Plus.
     '';
     platforms = lib.platforms.all;
+    license = lib.licenses.ofl;
   };
 }

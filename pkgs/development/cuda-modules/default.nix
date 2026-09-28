@@ -141,10 +141,12 @@ let
           srcOnly
           stdenv
           stdenvNoCC
+          zstd
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
           backendStdenv
+          cudaMajorMinorPatchVersion
           cudaMajorMinorVersion
           cudaMajorVersion
           cudaNamePrefix

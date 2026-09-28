@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation {
   pname = "dm-mono";
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-Xj6UmvH7tqW6xdobBxuafqc7TB1nrTFwHWv4DaZmwx8=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m644 --target $out/share/fonts/truetype -D exports/*.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Monospace typeface";

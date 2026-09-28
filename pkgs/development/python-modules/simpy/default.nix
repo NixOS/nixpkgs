@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "simpy";
   version = "4.1.1";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -55,7 +52,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/simpx/simpy";
     homepage = "https://simpy.readthedocs.io/en/${version}/";
     description = "Process-based discrete-event simulation framework based on standard Python";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       shlevy
     ];

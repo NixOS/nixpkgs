@@ -4,21 +4,20 @@
   git,
   grype,
   nix,
-  nixVersions,
   nix-visualize,
   python3,
   vulnix,
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sbomnix";
-  version = "1.7.6";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LApJvPeyViGJiJPLu7dFBU79SbMKieLVFKbDtFHo7f4=";
+    hash = "sha256-oMIFcfjbt+lgAcdJbA64opu1qCwUVUIEukotqQEox3Q=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -31,9 +30,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "--prefix PATH : ${
       lib.makeBinPath [
         git
-        # nix
-        # TODO: remove once sbomnix support new JSON format: https://github.com/tiiuae/sbomnix/issues/267
-        nixVersions.nix_2_31
+        nix
         python3.pkgs.graphviz
         nix-visualize
         vulnix

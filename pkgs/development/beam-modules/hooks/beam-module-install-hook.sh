@@ -7,13 +7,15 @@
 beamModuleInstallHook() {
   echo "Executing beamModuleInstallHook"
 
+  runHook preInstall
+
   mkdir -p "$out/lib/erlang/lib/${beamModuleName}-${version}"
 
   # default to rebar3
   local fromDir=(./{ebin,priv,include})
 
   # replace if mix project
-  if [ -n "$MIX_BUILD_PREFIX" ]; then
+  if [ -n "${MIX_BUILD_PREFIX-}" ]; then
     fromDir=(_build/{$MIX_BUILD_PREFIX,shared}/lib/"${beamModuleName}"/{src,ebin,priv,include})
   fi
 
@@ -24,6 +26,8 @@ beamModuleInstallHook() {
       cp -vHrt "$out/lib/erlang/lib/${beamModuleName}-${version}" "$reldir"
     fi
   done
+
+  runHook postInstall
 
   echo "Finished beamModuleInstallHook"
 }

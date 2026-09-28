@@ -14,6 +14,11 @@ let
     value = lib.singleton k;
   }) hosts;
 
+  hostsDns = {
+    type = "hosts";
+    tag = "dns:hosts";
+  };
+
   vmessPort = 1080;
   vmessUUID = "bf000d23-0752-40b4-affe-68f7707a9661";
   vmessInbound = {
@@ -255,6 +260,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               tunInbound
             ];
@@ -270,6 +279,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -314,6 +324,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               tunInbound
             ];
@@ -341,6 +355,7 @@ in
               }
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -386,6 +401,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               {
                 tag = "inbound:tproxy";
@@ -407,6 +426,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -511,6 +531,31 @@ in
           };
         };
       };
+
+    empty_settings =
+      { ... }:
+      {
+        environment.etc."sing-box/config.json".text = builtins.toJSON {
+          inbounds = [
+            {
+              type = "mixed";
+              listen = "127.0.0.1";
+              listen_port = 1088;
+            }
+          ];
+          outbounds = [
+            {
+              type = "direct";
+              tag = "outbound:direct";
+            }
+          ];
+        };
+
+        services.sing-box = {
+          enable = true;
+          settings = { };
+        };
+      };
   };
 
   testScript = ''
@@ -558,6 +603,9 @@ in
       fakeip.wait_for_unit("sing-box.service")
       fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
+
+    with subtest("empty settings"):
+      empty_settings.wait_for_unit("sing-box.service")
   '';
 
 }

@@ -5,7 +5,6 @@
       lib.types.enum [
         "modern"
         "intermediate"
-        "old"
       ]
     );
     default = null;
@@ -27,10 +26,6 @@
       intermediate
       : General-purpose servers with a variety of clients, recommended for
         almost all systems
-
-      old
-      : Compatible with a number of very old clients, & should be used only as
-        a last resort
 
       The default for all virtual hosts can be set with
       services.h2o.defaultTLSRecommendations, but this value can be overridden

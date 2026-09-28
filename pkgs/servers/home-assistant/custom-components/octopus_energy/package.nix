@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
   pydantic,
   mock,
@@ -11,19 +11,19 @@
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";
   domain = "octopus_energy";
-  version = "18.2.1";
+  version = "19.2.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HomeAssistant-OctopusEnergy";
     tag = "v${version}";
-    hash = "sha256-wEVD1Ixriv4C6TbG+IrQoEl9f+tIfV/OysXRytVQ8FE=";
+    hash = "sha256-KkQxLmp/5X/Z1WwklLzOCvL49Tn6ZinID2Rf2GZngXI=";
   };
 
   dependencies = [ pydantic ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_0CheckHook
     pytest-homeassistant-custom-component
     mock
   ];

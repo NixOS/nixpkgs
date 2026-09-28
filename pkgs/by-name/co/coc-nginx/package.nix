@@ -36,13 +36,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-nginx";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "yaegassy";
     repo = "coc-nginx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9dca1YUQZCbzmGe+9qVJABCWZCGUUZDvtznMQEP/CCQ=";
+    hash = "sha256-J2Xt09bF8jdeVC739vxaEfJh5kUfU4mB7gnSHVNQrro=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

@@ -4,27 +4,32 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  cacert,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustical";
-  version = "0.12.11";
+  version = "0.16.4";
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "lennart-k";
     repo = "rustical";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KxECcpXjfqmirJBE1Rzh+KbngXACVUf2DTaKy7+XOSA=";
+    hash = "sha256-JOpUK5JWHyCk/a/Uw8oi9HD8hpvWKRVRhMzhURk+W34=";
   };
 
-  cargoHash = "sha256-uP1lZarcwQhBKyASQIiNUs053EuxJy112P2e3hy2uZY=";
+  cargoHash = "sha256-30SsiWHIu/gN5080xGxLGBPECfTFkIAxr3c6sC54b0w=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  env.OPENSSL_NO_VENDOR = true;
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   passthru.tests = {
     inherit (nixosTests) rustical;

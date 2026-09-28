@@ -17,13 +17,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "pgcopydb";
-  version = "0.17";
+  version = "0.17-unstable-2026-05-21";
 
   src = fetchFromGitHub {
     owner = "dimitri";
     repo = "pgcopydb";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-g5MC4F0BYgTimpJZDX+PepFLXv1QuH7XGlzV66xM11M=";
+    rev = "984269274ccdaf0d297ed82db635e6746be55b75";
+    hash = "sha256-qTtziRdsge4YtQTTfWQ5KD8SQn2HYnj3rDMcrbI56SY=";
   };
 
   nativeBuildInputs = [
@@ -31,18 +31,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     postgresql.pg_config
   ];
 
-  buildInputs = [
+  buildInputs = postgresql.buildInputs ++ [
     boehmgc
-    libkrb5
-    openssl
     postgresql
-    readline
     sqlite
-    zlib
     python3Packages.sphinxHook
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-    pam
   ];
 
   hardeningDisable = [ "format" ];

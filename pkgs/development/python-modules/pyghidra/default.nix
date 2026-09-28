@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyghidra";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ea1P1XHjLzQ88/zb2E/G4zPvGiZHWjqPcrYpqfPIedo=";
+    hash = "sha256-IQasEx65pJkKee6E3C05p5LPey0N5eqvGw5tfS0pC7Y=";
   };
 
   pythonRelaxDeps = [ "jpype1" ];
@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     description = "Native CPython for Ghidra";
     homepage = "https://pypi.org/project/pyghidra";
     license = lib.licenses.asl20;
+    mainProgram = "pyghidra";
     maintainers = with lib.maintainers; [ fab ];
   };
 })

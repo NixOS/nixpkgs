@@ -7,7 +7,7 @@
   dune-configurator,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gsl";
   version = "1.25.1";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mmottl";
     repo = "gsl-ocaml";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-h1jO2RheBBzxiBgig2yEPk4YyBaZxStt5f+KNZqHdBo=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

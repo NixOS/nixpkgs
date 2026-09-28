@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
       the sacred lead of stained glass, the lead of print characters
       and the heavy metal. Despite its organic look inherited for the
       molted metal, Hyper Scrypt is based upon a rigorous grid,
-      allowing some neat alignements between shapes in multi lines
+      allowing some neat alignments between shapes in multi lines
       layouts.
     '';
     license = lib.licenses.ofl;

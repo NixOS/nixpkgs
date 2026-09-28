@@ -101,7 +101,7 @@ in
       };
 
       autobanAttempts = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 10;
         description = ''
           Number of attempts a client is allowed to make in
@@ -111,7 +111,7 @@ in
       };
 
       autobanTimeframe = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 120;
         description = ''
           Timeframe in which a client can connect without being banned
@@ -120,7 +120,7 @@ in
       };
 
       autobanTime = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 300;
         description = "The amount of time an IP ban lasts (in seconds).";
       };
@@ -154,7 +154,7 @@ in
       };
 
       bandwidth = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 72000;
         description = ''
           Maximum bandwidth (in bits per second) that clients may send
@@ -163,19 +163,19 @@ in
       };
 
       users = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 100;
         description = "Maximum number of concurrent clients allowed.";
       };
 
       textMsgLength = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 5000;
         description = "Max length of text messages. Set 0 for no limit.";
       };
 
       imgMsgLength = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 131072;
         description = "Max length of image messages. Set 0 for no limit.";
       };
@@ -355,17 +355,13 @@ in
       ]
       ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
       wants = lib.mkIf (cfg.tls.useACMEHost != null) [ "acme-${cfg.tls.useACMEHost}.service" ];
-      preStart = ''
-        ${pkgs.envsubst}/bin/envsubst \
-          -o /run/murmur/murmurd.ini \
-          -i ${configFile}
-      '';
 
       serviceConfig = {
         # murmurd doesn't fork when logging to the console.
         Type = if forking then "forking" else "simple";
         PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o /run/murmur/murmurd.ini";
         ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
         LogsDirectory = lib.mkIf cfg.logToFile "murmur";
@@ -386,6 +382,7 @@ in
         PrivateMounts = true;
         PrivateTmp = true;
         PrivateUsers = true;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = true;

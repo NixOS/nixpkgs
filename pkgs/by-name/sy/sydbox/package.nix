@@ -80,10 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
     changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      mvs
-      getchoo
-    ];
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "syd";
     platforms = lib.platforms.linux;
   };

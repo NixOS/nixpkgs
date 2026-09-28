@@ -68,17 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/jsnli/Samira/releases/tag/v${finalAttrs.version}";
     license = [
       lib.licenses.gpl3
-      (
-        # while the license itself is unfree, it allows redistributing files
-        # inside "redistributable_bin/" directory, that `libsteam_api.so`
-        # conveniently is inside that folder
-        lib.licenses.unfreeRedistributableFirmware
-        // {
-          fullName = "Valve Corporation Steamworks SDK Access Agreement";
-          shortName = "valveSDKLicense";
-          url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
-        }
-      )
+      lib.licenses.valveSDK
     ];
     # the libsteam_api.so supports only x86_64-linux
     platforms = [ "x86_64-linux" ];

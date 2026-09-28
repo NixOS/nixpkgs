@@ -4,21 +4,41 @@
   fetchurl,
   writeScript,
   installShellFiles,
+  unzip,
+  zip,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "babashka-unwrapped";
-  version = "1.12.218";
+  version = "1.13.220";
 
   src = fetchurl {
     url = "https://github.com/babashka/babashka/releases/download/v${finalAttrs.version}/babashka-${finalAttrs.version}-standalone.jar";
-    sha256 = "sha256-CEApb2noPYfRYRDTo1RBLOZELvEuxGO4HW1CB//bky8=";
+    sha256 = "sha256-0fpvbrEJU89mMo9A9IM7kAqiGCdnexrEslGtjt+iBxg=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    unzip
+    zip
+  ];
+
+  dontUnpack = false;
+  unpackCmd = "unzip -d babashka $curSrc";
+
+  patches = [
+    ./default-tools-dir.patch
+  ];
+
+  preBuild = ''
+    zip -r ../babashka.jar .
+    cd ..
+    src=babashka.jar
+  '';
 
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
+    "-H:+SharedArenaSupport"
     "--no-fallback"
     "--native-image-info"
     "--enable-preview"

@@ -6,10 +6,7 @@
 #
 # See https://github.com/NixOS/nixpkgs/pull/430969 for measurements.
 
-{ lib, config }:
-
-stdenv:
-
+lib:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
@@ -32,6 +29,7 @@ let
     isBool
     isDerivation
     isInt
+    isFunction
     isList
     isPath
     isString
@@ -41,117 +39,22 @@ let
     optional
     optionalString
     optionals
-    pipe
     remove
     seq
     splitString
     subtractLists
-    toExtension
     toFunction
     typeOf
     unique
     unsafeDiscardStringContext
     unsafeGetAttrPos
-    warnIf
+    warn
     zipAttrsWith
+    any
     ;
 
   inherit (lib.generators) toPretty;
   inherit (lib.strings) sanitizeDerivationName;
-
-  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
-  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
-
-  /**
-    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
-    that refers to the derivation's outputs.
-
-    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
-    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
-
-    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
-    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
-
-    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
-
-    :::{.note}
-    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
-
-    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
-    :::
-  */
-  mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
-
-  checkMeta = import ./check-meta.nix {
-    inherit lib config;
-    # Nix itself uses the `system` field of a derivation to decide where
-    # to build it. This is a bit confusing for cross compilation.
-    inherit (stdenv) hostPlatform;
-  };
-
-  # Based off lib.makeExtensible, with modifications:
-  makeDerivationExtensible =
-    rattrs:
-    let
-      # NOTE: The following is a hint that will be printed by the Nix cli when
-      # encountering an infinite recursion. It must not be formatted into
-      # separate lines, because Nix would only show the last line of the comment.
-
-      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage overrideAttrs; });
-      #              ^^^^
-
-      /**
-        Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
-      */
-      # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
-      overrideAttrs =
-        f0:
-        makeDerivationExtensible (
-          final:
-          let
-            prev = rattrs final;
-            thisOverlay = toExtension f0 final prev;
-            pos = unsafeGetAttrPos "version" thisOverlay;
-          in
-          warnIf
-            (
-              prev ? src
-              && thisOverlay ? version
-              && prev ? version
-              # We could check that the version is actually distinct, but that
-              # would probably just delay the inevitable, or preserve tech debt.
-              # && prev.version != thisOverlay.version
-              && !(thisOverlay ? src)
-              && !(thisOverlay.__intentionallyOverridingVersion or false)
-            )
-            ''
-              ${
-                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                toString pos.line or "<unknown line>"
-              }:${toString pos.column or "<unknown column>"}.
-
-              This is most likely not what you want. In order to properly change the version of a package, override
-              both the `version` and `src` attributes:
-
-              hello.overrideAttrs (oldAttrs: rec {
-                version = "1.0.0";
-                src = pkgs.fetchurl {
-                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                  hash = "...";
-                };
-              })
-
-              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-            ''
-            (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
-        );
-
-      finalPackage = mkDerivationSimple overrideAttrs args;
-
-    in
-    finalPackage;
 
   knownHardeningFlags = [
     "bindnow"
@@ -174,10 +77,6 @@ let
     "trivialautovarinit"
     "zerocallusedregs"
   ];
-
-  concretizeFlagImplications =
-    flag: impliesFlags: list:
-    if elem flag list then (list ++ impliesFlags) else list;
 
   removedOrReplacedAttrNames = [
     "checkInputs"
@@ -212,17 +111,15 @@ let
   ];
 
   attrsToRemoveLast = [
-    # Fixed-output derivations may not reference other paths, which means that
-    # for a fixed-output derivation, the corresponding inputDerivation should
-    # *not* be fixed-output. To achieve this we simply delete the attributes that
-    # would make it fixed-output.
+    # Fixed-output derivations may not reference other paths, which means that for a fixed-output
+    # derivation, the corresponding inputDerivation should *not* be fixed-output. To achieve this we
+    # simply delete the attributes that would make it fixed-output.
     "outputHashAlgo"
     "outputHash"
     "outputHashMode"
 
-    # inputDerivation produces the inputs; not the outputs, so any
-    # restrictions on what used to be the outputs don't serve a purpose
-    # anymore.
+    # inputDerivation produces the inputs; not the outputs, so any restrictions on what used to be
+    # the outputs don't serve a purpose anymore.
     "allowedReferences"
     "allowedRequisites"
     "disallowedReferences"
@@ -236,72 +133,7 @@ let
     ./default-builder.sh
   ];
 
-  inherit (stdenv)
-    hostPlatform
-    buildPlatform
-    targetPlatform
-    extraNativeBuildInputs
-    extraBuildInputs
-    extraSandboxProfile
-    __extraImpureHostDeps
-    ;
-
-  stdenvHasCC = stdenv.hasCC;
-  stdenvShell = stdenv.shell;
-
-  buildPlatformSystem = buildPlatform.system;
-  buildIsDarwin = buildPlatform.isDarwin;
-
-  inherit (hostPlatform)
-    isLinux
-    isWindows
-    isCygwin
-    isStatic
-    isMusl
-    ;
-
-  # Target is not included by default because most programs don't care.
-  # Including it then would cause needless mass rebuilds.
-  #
-  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
-  useDefaultConfigurePlatforms = hostPlatform != buildPlatform || config.configurePlatformsByDefault;
-  defaultConfigurePlatforms = optionals useDefaultConfigurePlatforms [
-    "build"
-    "host"
-  ];
-  buildPlatformConfigureFlag = "--build=${buildPlatform.config}";
-  hostPlatformConfigureFlag = "--host=${hostPlatform.config}";
-  targetPlatformConfigureFlag = "--target=${targetPlatform.config}";
-  defaultConfigurePlatformsFlags = optionals useDefaultConfigurePlatforms [
-    buildPlatformConfigureFlag
-    hostPlatformConfigureFlag
-  ];
-
-  # TODO(@Ericson2314): Make always true and remove / resolve #178468
-  defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
-
   isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
-
-  canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
-  defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or knownHardeningFlags;
-  hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
-  stdenvHostSuffix = "-${hostPlatform.config}";
-  stdenvStaticMarker = optionalString isStatic "-static";
-  userHook = config.stdenv.userHook or null;
-
-  requiredSystemFeaturesShouldBeSet =
-    buildPlatform ? gcc.arch
-    && !(
-      buildPlatform.isAarch64
-      && (
-        # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
-        buildPlatform.isDarwin
-        ||
-          # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
-          buildPlatform.gcc.arch == "armv8-a"
-      )
-    );
-  gccArchFeature = [ "gccarch-${buildPlatform.gcc.arch}" ];
 
   cachedOutputChecks = {
     out = { };
@@ -350,6 +182,197 @@ let
       ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
         mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
+in
+config:
+let
+  doCheckByDefault = config.doCheckByDefault or false;
+  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
+  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
+  userHook = config.stdenv.userHook or null;
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+  };
+in
+stdenv:
+
+let
+  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
+  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+
+  # Nix itself uses the `system` field of a derivation to decide where
+  # to build it. This is a bit confusing for cross compilation.
+  commonMeta = checkMeta.commonMeta hostPlatform;
+  assertValidity = checkMeta.assertValidity hostPlatform;
+
+  /**
+    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
+    that refers to the derivation's outputs.
+
+    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
+    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
+
+    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
+    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
+
+    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
+
+    :::{.note}
+    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
+
+    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    :::
+  */
+  mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
+
+  # Based off lib.makeExtensible, with modifications:
+  makeDerivationExtensible =
+    rattrs:
+    let
+      # NOTE: The following is a hint that will be printed by the Nix cli when
+      # encountering an infinite recursion. It must not be formatted into
+      # separate lines, because Nix would only show the last line of the comment.
+
+      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
+      args = rattrs (args // { inherit finalPackage overrideAttrs; });
+      #              ^^^^
+
+      /**
+        Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
+      */
+      # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
+      overrideAttrs =
+        f0:
+        makeDerivationExtensible (
+          final:
+          let
+            prev = rattrs final;
+            # inlined version of toExtension
+            thisOverlay =
+              if isFunction f0 then
+                let
+                  fPrev = f0 prev;
+                in
+                if isFunction fPrev then
+                  # f is (final: prev: { ... })
+                  f0 final prev
+                else
+                  # f is (prev: { ... })
+                  fPrev
+              else
+                # f is not a function; probably { ... }
+                f0;
+          in
+          (
+            if
+              prev ? src
+              && thisOverlay ? version
+              && prev ? version
+              # We could check that the version is actually distinct, but that
+              # would probably just delay the inevitable, or preserve tech debt.
+              # && prev.version != thisOverlay.version
+              && !(thisOverlay ? src)
+              && !(thisOverlay.__intentionallyOverridingVersion or false)
+
+            then
+              warn (
+                let
+                  pos = unsafeGetAttrPos "version" thisOverlay;
+                in
+                ''
+                  ${
+                    args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+                  } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                    toString pos.line or "<unknown line>"
+                  }:${toString pos.column or "<unknown column>"}.
+
+                  This is most likely not what you want. In order to properly change the version of a package, override
+                  both the `version` and `src` attributes:
+
+                  hello.overrideAttrs (oldAttrs: rec {
+                    version = "1.0.0";
+                    src = pkgs.fetchurl {
+                      url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                      hash = "...";
+                    };
+                  })
+
+                  (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+                ''
+              )
+            else
+              x: x
+          )
+            (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+        );
+
+      finalPackage = mkDerivationSimple overrideAttrs args;
+
+    in
+    finalPackage;
+
+  inherit (stdenv)
+    hostPlatform
+    buildPlatform
+    targetPlatform
+    extraNativeBuildInputs
+    extraBuildInputs
+    extraSandboxProfile
+    __extraImpureHostDeps
+    ;
+
+  stdenvHasCC = stdenv.hasCC;
+  stdenvShell = stdenv.shell;
+
+  buildPlatformSystem = buildPlatform.system;
+  buildIsDarwin = buildPlatform.isDarwin;
+
+  inherit (hostPlatform)
+    isLinux
+    isWindows
+    isCygwin
+    isStatic
+    isMusl
+    ;
+
+  # Target is not included by default because most programs don't care.
+  # Including it then would cause needless mass rebuilds.
+  #
+  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
+  useDefaultConfigurePlatforms = hostPlatform != buildPlatform || config.configurePlatformsByDefault;
+  defaultConfigurePlatforms = optionals useDefaultConfigurePlatforms [
+    "build"
+    "host"
+  ];
+  buildPlatformConfigureFlag = "--build=${buildPlatform.config}";
+  hostPlatformConfigureFlag = "--host=${hostPlatform.config}";
+  targetPlatformConfigureFlag = "--target=${targetPlatform.config}";
+  defaultConfigurePlatformsFlags = optionals useDefaultConfigurePlatforms [
+    buildPlatformConfigureFlag
+    hostPlatformConfigureFlag
+  ];
+
+  # TODO(@Ericson2314): Make always true and remove / resolve #178468
+  defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
+
+  canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
+  defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or knownHardeningFlags;
+  hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
+  stdenvHostSuffix = "-${hostPlatform.config}";
+  stdenvStaticMarker = optionalString isStatic "-static";
+
+  requiredSystemFeaturesShouldBeSet =
+    buildPlatform ? gcc.arch
+    && !(
+      buildPlatform.isAarch64
+      && (
+        # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
+        buildPlatform.isDarwin
+        ||
+          # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
+          buildPlatform.gcc.arch == "armv8-a"
+      )
+    );
+  gccArchFeature = [ "gccarch-${buildPlatform.gcc.arch}" ];
 
   makeDerivationArgument =
 
@@ -399,16 +422,16 @@ let
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # Check phase
-      doCheck ? config.doCheckByDefault or false,
+      doCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # InstallCheck phase
-      doInstallCheck ? config.doCheckByDefault or false,
+      doInstallCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
       strictDeps ? defaultStrictDeps,
 
-      enableParallelBuilding ? config.enableParallelBuildingByDefault,
+      enableParallelBuilding ? enableParallelBuildingByDefault,
 
       separateDebugInfo ? false,
       outputs ? [ "out" ],
@@ -427,11 +450,11 @@ let
 
       __contentAddressed ?
         (!attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-        && config.contentAddressedByDefault,
+        && contentAddressedByDefault,
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       ...
     }@attrs:
@@ -462,11 +485,6 @@ let
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
-      # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
-        hardeningEnable ++ remove "all" hardeningDisable
-      );
-
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
@@ -482,15 +500,30 @@ let
             if isSingularDependency dep then
               index + 1
             else if isList dep then
-              seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
+              warn
+                ''
+                  Dependency of package '${attrs.name or attrs.pname}' uses a nested list in attribute '${name}'.
+                  This is deprecated as of Nixpkgs release 26.05, and support will
+                  be removed in a future nixpkgs release.''
+                (seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1))
             else
               throw "Dependency is not of a valid type: ${
                 concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
               }${name} for ${attrs.name or attrs.pname}"
           ) 1 deps) deps;
+
+      isErroneous = flag: !elem flag knownHardeningFlags;
     in
-    if erroneousHardeningFlags != [ ] then
+    if
+      # Check if any hardening flag is erroneous
+      any isErroneous hardeningEnable || any (flag: flag != "all" && isErroneous flag) hardeningDisable
+    then
       abort (
+        let
+          erroneousHardeningFlags = subtractLists knownHardeningFlags (
+            hardeningEnable ++ remove "all" hardeningDisable
+          );
+        in
         "mkDerivation was called with unsupported hardening flags: "
         + toPretty { } {
           inherit
@@ -696,7 +729,6 @@ let
           propagatedBuildInputs = propagatedHostTargetOutputs;
           depsTargetTargetPropagated = propagatedTargetTargetOutputs;
 
-          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
             configureFlags
             ++ (
@@ -733,23 +765,21 @@ let
             else
               null
           } =
-            let
-              enabledHardeningOptions =
-                if elem "all" hardeningDisable then
-                  [ ]
-                else
-                  subtractLists (unique (
-                    pipe hardeningDisable [
-                      # disabling fortify implies fortify3 should also be disabled
-                      (concretizeFlagImplications "fortify" [ "fortify3" ])
-                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-                    ]
-                  )) (defaultHardeningFlags ++ hardeningEnable);
-            in
-            concatStringsSep " " enabledHardeningOptions;
+            concatStringsSep " " (
+              if elem "all" hardeningDisable then
+                [ ]
+              else
+                filter (
+                  flag:
+                  !(elem flag hardeningDisable)
+                  # disabling fortify implies fortify3 should also be disabled
+                  && (flag == "fortify3" -> !elem "fortify" hardeningDisable)
+                  # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                  && (flag == "strictflexarrays3" -> !elem "strictflexarrays1" hardeningDisable)
+                  # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                  && (flag == "libcxxhardeningextensive" -> !elem "libcxxhardeningfast" hardeningDisable)
+                ) (defaultHardeningFlags ++ hardeningEnable)
+            );
 
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
@@ -912,7 +942,7 @@ let
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       env ? { },
 
@@ -942,7 +972,7 @@ let
         }
       );
 
-      meta = checkMeta.commonMeta {
+      meta = commonMeta {
         inherit validity attrs pos;
         references =
           attrs.nativeBuildInputs or [ ]
@@ -950,7 +980,7 @@ let
           ++ attrs.propagatedNativeBuildInputs or [ ]
           ++ attrs.propagatedBuildInputs or [ ];
       };
-      validity = checkMeta.assertValidity { inherit meta attrs; };
+      validity = assertValidity { inherit meta attrs; };
 
       checkedEnv =
         let

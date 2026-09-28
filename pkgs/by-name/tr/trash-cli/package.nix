@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trash-cli";
-  version = "0.24.5.26";
+  version = "0.26.9.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = finalAttrs.version;
-    hash = "sha256-ltuMnxtG4jTTSZd6ZHWl8wI0oQMMFqW0HAPetZMfGtc=";
+    hash = "sha256-gmLJDTlCGFOmrUgjrQbdr5WBsS+H0czSKnxcmS8F8MI=";
   };
 
   nativeBuildInputs = [

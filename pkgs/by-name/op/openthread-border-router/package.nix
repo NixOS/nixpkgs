@@ -5,26 +5,25 @@
   cmake,
   pkg-config,
   systemdLibs,
-  avahi,
   dbus,
   protobuf,
   jsoncpp,
-  boost,
-  libnetfilter_queue,
-  libnfnetlink,
   nodejs,
+  cjson,
   bashNonInteractive,
   buildNpmPackage,
+  libnftnl,
+  libmnl,
 }:
 let
   pname = "openthread-border-router";
-  version = "0-unstable-2025-06-12";
+  version = "2026.09.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
-    rev = "thread-reference-20250612";
-    hash = "sha256-lPMMLtbPu9NpDcBCZE6XID7u1maCAhkZiSDEyFq7yvg=";
+    tag = "v${version}";
+    hash = "sha256-b/RuAy/A1e5kWJ2x4+/sZ7VDGW1StiXMF/g6kXHSoWQ=";
     fetchSubmodules = true;
   };
 
@@ -32,7 +31,7 @@ let
     pname = "${pname}-frontend";
     inherit version;
     src = "${src}/src/web/web-service/frontend";
-    npmDepsHash = "sha256-7UVfPICyIbHEClpr3p7eDR46OUzS8mVf6P7phnDpVLk=";
+    npmDepsHash = "sha256-8KenFVtfxC0jkfZHHuYeV2Dj2kmzHUQTeACvRtOyZLA=";
     dontNpmBuild = true;
   };
 in
@@ -41,14 +40,6 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   __structuredAttrs = true;
-
-  # warning _FORTIFY_SOURCE requires compiling with optimization (-O)
-  env.NIX_CFLAGS_COMPILE = "-O";
-
-  patches = [
-    # Patch the firewall script so we can run it within the systemd start script
-    ./firewall-script.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -62,15 +53,14 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    avahi # TODO: upstream deprecated OTBR_MDNS=avahi after this release (https://github.com/openthread/ot-br-posix/pull/3240)
     systemdLibs
     protobuf
     jsoncpp
-    boost
-    libnetfilter_queue
-    libnfnetlink
     dbus
+    cjson
     (lib.getBin bashNonInteractive)
+    libnftnl
+    libmnl
   ];
 
   postInstall = ''
@@ -78,12 +68,12 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
-
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "INSTALL_SYSTEMD_UNIT" false)
-    (lib.cmakeBool "Boost_USE_STATIC_LIBS" false)
     (lib.cmakeBool "OTBR_REST" true)
+
+    # OpenThread's built-in mDNS publisher (upstream default). No Avahi daemon needed.
+    (lib.cmakeFeature "OTBR_MDNS" "openthread")
 
     (lib.cmakeBool "OTBR_WEB" true)
     (lib.cmakeBool "OTBR_NAT64" true)
@@ -91,11 +81,15 @@ stdenv.mkDerivation {
     (lib.cmakeBool "OTBR_BORDER_ROUTING" true)
     (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
+    (lib.cmakeBool "OTBR_NFTABLES" true)
 
     (lib.cmakeFeature "OTBR_VERSION" version)
-    (lib.cmakeBool "OTBR_DNSSD_DISCOVERY_PROXY" true)
-    (lib.cmakeBool "OTBR_SRP_ADVERTISING_PROXY" true)
-    (lib.cmakeBool "OTBR_DUA_ROUTING" true)
+    # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
+    # and product name are baked in at build time.
+    (lib.cmakeFeature "OTBR_VENDOR_NAME" "NixOS")
+    (lib.cmakeFeature "OTBR_PRODUCT_NAME" "OpenThread Border Router")
+    # OTBR_MDNS=openthread turns on the OT-core advertising and discovery proxies by default.
+    # The discovery proxy gives us the DNS-SD server OTBR_DNS_UPSTREAM_QUERY needs.
     (lib.cmakeBool "OTBR_DNS_UPSTREAM_QUERY" true)
 
     (lib.cmakeBool "OT_CHANNEL_MANAGER" true)

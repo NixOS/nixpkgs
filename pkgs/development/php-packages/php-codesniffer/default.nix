@@ -6,16 +6,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-codesniffer";
-  version = "4.0.1";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "PHPCSStandards";
     repo = "PHP_CodeSniffer";
     tag = finalAttrs.version;
-    hash = "sha256-63W9GMTDrIIMWSieYjv+xAHEj9xjsnvXsUXQ1I7fQFo=";
+    hash = "sha256-ZBiPTjDnnjaRWXzqB7soJsvJgU06GU79VzwsfEA9NhI=";
   };
 
-  vendorHash = "sha256-h+EVwPtIeXnVHEMCMYJFwuqeWXvZaYLTxrb/RKycIx0=";
+  vendorHash = "sha256-qLYXFgY5cg2Fz33lrhwHHoqmbmtZo81ngVuUFh6N648=";
 
   meta = {
     changelog = "https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/${finalAttrs.version}";

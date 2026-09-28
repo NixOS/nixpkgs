@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loksh";
-  version = "7.8";
+  version = "7.9";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-daodwoq2NoJ343CWjtT6qqBirEIuHBWLQO9MkAN4s/Q=";
+    hash = "sha256-S3oIiCgdh8lYqDuXnLHmdQZxK+OMIPTc9W5ozHrTmls=";
   };
 
   outputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       vulnerabilities and makes loksh a good fit for resource-constrained
       systems.
     '';
-    license = with lib.licenses; [ publicDomain ];
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };

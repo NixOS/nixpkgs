@@ -6,7 +6,7 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs_22,
+  nodejs-slim_22,
   python3,
   python3Packages,
   sqlite,
@@ -15,25 +15,25 @@
 }:
 
 let
-  nodejs = nodejs_22;
-  pnpm = pnpm_10.override { inherit nodejs; };
+  nodejs-slim = nodejs-slim_22;
+  pnpm = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seerr";
-  version = "3.2.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "seerr-team";
     repo = "seerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rZ4o0ccfQjZBzWItEEFfxVi/cNO3HWnoDeNGpQ94H6E=";
+    hash = "sha256-OF8iX6Q7NK8d3ugGOw7FFcKQul2ERRNqD3SKWtlQuAg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-j/qMS792IFr0Cn/cFUargHSOTw4vz79kr58XhJVikBQ=";
+    hash = "sha256-qSkPC2d3DfM+g/JLf8Jkv0T9Wxnp4m0Sx+wHTyhch34=";
   };
 
   buildInputs = [ sqlite ];
@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     python3
     python3Packages.distutils
-    nodejs
+    nodejs-slim
     makeWrapper
     pnpmConfigHook
     pnpm
   ];
 
   preBuild = ''
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     pushd node_modules
     pnpm rebuild bcrypt sqlite3
     popd
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/bin
-    makeWrapper '${nodejs}/bin/node' "$out/bin/seerr" \
+    makeWrapper '${nodejs-slim}/bin/node' "$out/bin/seerr" \
       --add-flags "$out/share/dist/index.js" \
       --chdir "$out/share" \
       --set NODE_ENV production

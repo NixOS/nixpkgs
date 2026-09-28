@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "convert.yazi";
-  version = "0-unstable-2026-04-22";
+  version = "0-unstable-2025-06-28";
 
   src = fetchFromGitHub {
     owner = "atareao";

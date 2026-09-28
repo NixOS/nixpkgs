@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Light-weight implementation of Standard ML";
     longDescription = ''
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict

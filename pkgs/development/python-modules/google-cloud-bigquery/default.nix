@@ -12,6 +12,7 @@
   google-cloud-core,
   google-resumable-media,
   grpcio,
+  packaging,
   proto-plus,
   protobuf,
   python-dateutil,
@@ -37,13 +38,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.40.0";
+  version = "3.41.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery";
     inherit version;
-    hash = "sha256-s8yxHK8AKfFbKVaVGPZnVT/gj28UWblZAgyD+72PLmg=";
+    hash = "sha256-IhfkiLR+1XY2DJsswH1Z2IOlS4MWfA7zf5FcJrAaBv4=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     google-cloud-core
     google-resumable-media
     grpcio
+    packaging
     proto-plus
     protobuf
     python-dateutil

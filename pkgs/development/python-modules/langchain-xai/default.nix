@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -25,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-xai";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-xai==${finalAttrs.version}";
-    hash = "sha256-RUklm627HiwMcpKkm+0uWZgHp4iDtSsmEpLb9MxumqI=";
+    hash = "sha256-5eUyYr+xyEiHZgMKXW6jQhabVdSZTDT2e93Fy7RwUGM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/xai";
@@ -68,11 +67,12 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-xai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with X AI";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/xai";
     license = lib.licenses.mit;

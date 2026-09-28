@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";
     tag = version;
-    hash = "sha256-nY8Hn+EsKOXqAQV9TtuZaQY+XnxNNzIaHYM2n0gD5rY=";
+    hash = "sha256-uWln6+r9QsGnH4I4JQm2/y80zTQkAflVPlIN9KQNzy0=";
   };
 
   build-system = [
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rmcgibbo
-      philipwilk
+      jadewilk
     ];
   };
 }

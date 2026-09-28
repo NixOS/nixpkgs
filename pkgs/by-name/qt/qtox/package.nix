@@ -17,7 +17,6 @@
   libopus,
   libvpx,
   openal,
-  pcre,
   qrencode,
   qt6,
   sqlcipher,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtox";
-  version = "1.18.3";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "qTox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5pH39NsJdt4+ldlbpkvA0n/X/LkEUEv4UL1K/W3BqmM=";
+    hash = "sha256-A+jHcvK/8aDTcKluaBKFgEQbxDhE3DdGu233nYLIgmc=";
   };
 
   buildInputs = [
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     libvpx
     openal
-    pcre
     qrencode
     qt6.qtbase
     qt6.qtsvg

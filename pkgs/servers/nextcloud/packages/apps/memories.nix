@@ -18,10 +18,11 @@ let
       srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
     };
     "33" = {
-      version = "8.0.1";
-      appHash = "sha256-B+O78qjBQbmMnFAvH/5a+YBive+rkBG9AKTX7G3qNR0=";
-      srcHash = "sha256-t/DiGJzSey9YpV5GkepKSGjr5gXc9KWDBtSY5UPRlEU=";
+      version = "8.1.0";
+      appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
+      srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
     };
+    "34" = latestVersionForNc."33";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}

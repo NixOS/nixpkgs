@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "capnproto-rust";
-  version = "0.25.3";
+  version = "0.27.0";
 
   src = fetchCrate {
     crateName = "capnpc";
     inherit (finalAttrs) version;
-    hash = "sha256-jDdsGy/T41R4duclyMpPmPZeflXg+Zp7wdBxbR527ZM=";
+    hash = "sha256-lFMezKqz29LvujoC18OPOYKzvPVZHYXmFLVFyveQ5P0=";
   };
 
-  cargoHash = "sha256-egb4Jpwzkj3PSVStqCX5ZLKgrH7nGHgZUCIleZcWIeI=";
+  cargoHash = "sha256-BuuH+7JB8shgDltpUlSNZUwvScErmezrYMLRyHF9swY=";
 
   postInstall = ''
     mkdir -p $out/include/capnp

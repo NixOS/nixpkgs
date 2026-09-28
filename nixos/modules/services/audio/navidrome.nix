@@ -45,7 +45,7 @@ in
         default = [ ];
         description = "List of Navidrome plugins";
         example = literalExpression ''
-          with pkgs.navidromePlugins; [
+          with pkgs.pkgsCross.wasi32.navidromePlugins; [
             listenbrainz-daily-playlist
           ];
         '';
@@ -90,12 +90,9 @@ in
 
             Plugins = {
               Enabled = mkOption {
-                default = (builtins.length cfg.plugins) != 0;
-                defaultText = literalExpression "builtins.length \"\${config.services.navidrome.plugins != 0}\"";
+                default = true;
                 description = ''
                   Enable plugin support in navidrome.
-
-                  This is automatically enabled if {option}`services.navidrome.plugins` is used.
                 '';
               };
               Folder = mkOption {
@@ -239,6 +236,8 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
+
+  meta.doc = ./navidrome.md;
   meta.maintainers = with maintainers; [
     fsnkty
     tebriel

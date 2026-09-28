@@ -405,17 +405,17 @@ in
         commands = [
           {
             # Ability to restart homebridge service
-            command = "${pkgs.systemd}/bin/systemctl restart homebridge";
+            command = "${config.systemd.package}/bin/systemctl restart homebridge";
             options = [ "NOPASSWD" ];
           }
           {
             # Ability to shutdown server
-            command = "${pkgs.systemd}/bin/shutdown -h now";
+            command = "${config.systemd.package}/bin/shutdown -h now";
             options = [ "NOPASSWD" ];
           }
           {
             # Ability to restart server
-            command = "${pkgs.systemd}/bin/shutdown -r now";
+            command = "${config.systemd.package}/bin/shutdown -r now";
             options = [ "NOPASSWD" ];
           }
         ];

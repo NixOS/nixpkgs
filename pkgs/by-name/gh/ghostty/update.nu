@@ -7,7 +7,7 @@ let latest = ^list-git-tags --url=https://github.com/ghostty-org/ghostty
   | last
   | str trim --left --char "v"
 
-let current = ^nix-instantiate --eval -A ghostty.version | str trim -c '"'
+let current = ^nix-instantiate --eval --raw -A ghostty.version
 
 if $latest == $current {
   print "Up to date!"

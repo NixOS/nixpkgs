@@ -8,7 +8,6 @@ in
 {
   imports = [
     ./2bwm.nix
-    ./afterstep.nix
     ./berry.nix
     ./bspwm.nix
     ./cwm.nix
@@ -34,9 +33,7 @@ in
     ./openbox.nix
     ./pekwm.nix
     ./notion.nix
-    ./ragnarwm.nix
     ./ratpoison.nix
-    ./sawfish.nix
     ./smallwm.nix
     ./stumpwm.nix
     ./spectrwm.nix

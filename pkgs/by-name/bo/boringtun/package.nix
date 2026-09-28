@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boringtun";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "boringtun";
     tag = "boringtun-${finalAttrs.version}";
-    hash = "sha256-QrgKO0SVU4Z9GlNtZZmOV+Xcm1PonzLbUTGAFFOV/BM=";
+    hash = "sha256-IilQNWcN4cyTRiHppQzFxLPZvz0ep4nrvCrP2FWXerM=";
   };
 
-  cargoHash = "sha256-j1I16QC46MMxcK7rbZJgI8KiKJvF29hkuGKiYLc6uW0=";
+  cargoHash = "sha256-Sm46l+/6QBa54PdTCNcWltRM9bMkzASYbEvuKsM6zHk=";
 
   # Testing this project requires sudo, Docker and network access, etc.
   doCheck = false;

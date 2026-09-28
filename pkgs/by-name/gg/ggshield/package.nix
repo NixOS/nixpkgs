@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   git,
   python3,
@@ -7,27 +8,32 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.45.0";
+  version = "1.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UjdAnDcUxs/2pdhnJYncw2NBPiLpxUL5T74qbX5AcY=";
+    hash = "sha256-8U8kY8IiYM1NXL30cRHrh3Sy5UWIiS8eATKhiugHVik=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ pdm-backend ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     charset-normalizer
     click
+    configupdater
     cryptography
+    filelock
+    keyring
     marshmallow
     marshmallow-dataclass
+    notify-py
     oauthlib
+    packaging
     platformdirs
     pygitguardian
     pyjwt
@@ -35,8 +41,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyyaml
     requests
     rich
+    sigstore
+    tomli
+    tomlkit
     truststore
     typing-extensions
+    unearth
     urllib3
   ];
 
@@ -79,7 +89,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_generate_files_from_paths"
     # Nixpkgs issue
     "test_get_file_sha_in_ref"
+    # Generated hooks config references pytest binary, instead of ggshield CLI. Odd!
+    "test_install_cursor_local_fresh"
+    "test_install_vibe_global"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_git_command_includes_longpaths_on_windows"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";

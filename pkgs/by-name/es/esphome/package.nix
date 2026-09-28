@@ -1,14 +1,15 @@
 {
   lib,
   stdenv,
-  callPackage,
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
   platformio,
+  platformio-core,
   esptool,
   git,
   versionCheckHook,
+  addBinToPathHook,
   nixosTests,
 }:
 
@@ -16,31 +17,20 @@ let
   python = python3Packages.python.override {
     self = python;
     packageOverrides = self: super: {
-      esphome-dashboard = self.callPackage ./dashboard.nix { };
-
-      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
-        };
-        build-system = with self; [ setuptools ];
-        doCheck = false;
-      });
+      paho-mqtt = self.paho-mqtt_1;
     };
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.4.5";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-uMlkrHg4cZYsdSv8D8U57mEZnjwcRkJe2zKI8VFsTRk=";
+    hash = "sha256-IgNE3+qqptFYL3wuFZWgkoT8bpjMMmI56nQcSMl4i/o=";
   };
 
   patches = [
@@ -72,8 +62,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.47" "wheel"
+      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -83,27 +73,27 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     aioesphomeapi
     argcomplete
     bleak
-    cairosvg
     click
     colorama
     cryptography
-    esphome-dashboard
     esphome-glyphsets
+    filelock
     freetype-py
-    icmplib
     jinja2
     paho-mqtt
     pillow
-    platformio
+    platformdirs
+    (toPythonModule (platformio-core.override { python3 = python; }))
     puremagic
+    py7zr
     pyparsing
     pyserial
     pyyaml
     requests
     resvg-py
     ruamel-yaml
+    ruamel-yaml-clib
     smpclient
-    tornado
     tzdata
     tzlocal
     voluptuous
@@ -136,26 +126,29 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs =
     with python.pkgs;
     [
+      (python3Packages.toPythonModule esptool)
       hypothesis
       mock
       pytest-asyncio
       pytest-cov-stub
       pytest-mock
       pytestCheckHook
+      ruff
     ]
     ++ [
       git
       versionCheckHook
+      addBinToPathHook
     ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
     "tests/integration"
-  ];
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
+    # tries to dynamically patch platformio module
+    "tests/unit_tests/test_writer.py"
+    "tests/unit_tests/test_espidf_component.py"
+  ];
 
   postInstall =
     let
@@ -168,14 +161,14 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --fish <(${argcomplete} --shell fish esphome)
     '';
 
-  doInstallCheck = true;
-
   disabledTests = [
     # tries to import platformio, which is wrapped in an fhsenv
     "test_clean_build"
     "test_clean_build_empty_cache_dir"
     "test_clean_all"
     "test_clean_all_partial_exists"
+    "test_get_platformio_config_returns_project_config"
+    "test_resolve_registry_version_raises_without_pkg_file"
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_passes_crystal_callback"
     "test_upload_using_esptool_path_conversion"
@@ -189,11 +182,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # Patched to run platformio without the esphome wrapper
     "test_run_platformio_cli_strips_win_long_path_prefix"
     "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
+    "test_patch_file_downloader_recovers_against_real_server"
   ];
 
   passthru = {
-    dashboard = python.pkgs.esphome-dashboard;
-    updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
@@ -206,10 +198,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with lib.maintainers; [
-      hexa
       picnoir
       thanegill
       karlbeecken
+      tmarkus
     ];
     mainProgram = "esphome";
   };

@@ -9,7 +9,7 @@
   cuda_nvcc,
 
   # buildInputs
-  boost,
+  argparse,
   cuda_cudart,
   cuda_nvml_dev,
 
@@ -21,7 +21,7 @@
 }:
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nvbandwidth";
-  version = "0.9";
+  version = "0.10.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     owner = "NVIDIA";
     repo = "nvbandwidth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j1bKWXHIkjsE/M+w5rRF0UGjkj1gLA2yi+5hc1sWl/A=";
+    hash = "sha256-bmE9EEe4mPzgo2QQucs+gof/NYN0rkvV/4ZxPWP1mMs=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    argparse
     cuda_cudart # cuda_runtime.h, libcuda stub
     cuda_nvml_dev # libnvidia-ml
   ];

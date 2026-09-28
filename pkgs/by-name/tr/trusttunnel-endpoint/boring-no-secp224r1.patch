@@ -1,0 +1,47 @@
+--- a/src/nid.rs
++++ b/src/nid.rs
+@@ -173,7 +173,6 @@ impl Nid {
+     pub const SECP160R2: Nid = Nid(ffi::NID_secp160r2);
+     pub const SECP192K1: Nid = Nid(ffi::NID_secp192k1);
+     pub const SECP224K1: Nid = Nid(ffi::NID_secp224k1);
+-    pub const SECP224R1: Nid = Nid(ffi::NID_secp224r1);
+     pub const SECP256K1: Nid = Nid(ffi::NID_secp256k1);
+     pub const SECP384R1: Nid = Nid(ffi::NID_secp384r1);
+     pub const SECP521R1: Nid = Nid(ffi::NID_secp521r1);
+--- a/src/ssl/mod.rs
++++ b/src/ssl/mod.rs
+@@ -708,8 +708,6 @@ pub struct SslCurveNid(c_int);
+ pub struct SslCurve(c_int);
+
+ impl SslCurve {
+-    pub const SECP224R1: SslCurve = SslCurve(ffi::SSL_CURVE_SECP224R1 as _);
+-
+     pub const SECP256R1: SslCurve = SslCurve(ffi::SSL_CURVE_SECP256R1 as _);
+
+     pub const SECP384R1: SslCurve = SslCurve(ffi::SSL_CURVE_SECP384R1 as _);
+@@ -774,7 +772,6 @@ impl SslCurve {
+     #[allow(dead_code)]
+     pub fn nid(&self) -> Option<SslCurveNid> {
+         match self.0 {
+-            ffi::SSL_CURVE_SECP224R1 => Some(ffi::NID_secp224r1),
+             ffi::SSL_CURVE_SECP256R1 => Some(ffi::NID_X9_62_prime256v1),
+             ffi::SSL_CURVE_SECP384R1 => Some(ffi::NID_secp384r1),
+             ffi::SSL_CURVE_SECP521R1 => Some(ffi::NID_secp521r1),
+--- a/src/ssl/test/mod.rs
++++ b/src/ssl/test/mod.rs
+@@ -989,7 +989,6 @@ fn get_curve() {
+
+ #[test]
+ fn get_curve_name() {
+-    assert_eq!(SslCurve::SECP224R1.name(), Some("P-224"));
+     assert_eq!(SslCurve::SECP256R1.name(), Some("P-256"));
+     assert_eq!(SslCurve::SECP384R1.name(), Some("P-384"));
+     assert_eq!(SslCurve::SECP521R1.name(), Some("P-521"));
+@@ -1001,7 +1000,6 @@ fn get_curve_name() {
+ fn set_curves() {
+     let mut ctx = SslContext::builder(SslMethod::tls()).unwrap();
+     ctx.set_curves(&[
+-        SslCurve::SECP224R1,
+         SslCurve::SECP256R1,
+         SslCurve::SECP384R1,
+         SslCurve::X25519,

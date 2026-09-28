@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxytunnel";
-  version = "1.12.3";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "proxytunnel";
     repo = "proxytunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+IRbL3VcnW+uYLIkwvaFJ8zBYbQAkqmzVluDsCrdURk=";
+    hash = "sha256-4+EGVtohM0vL/fXHCXohwWqIBTiIUGbt6AZ7JKpRCT8=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     mainProgram = "proxytunnel";
-    homepage = "http://proxytunnel.sf.net/";
+    homepage = "https://proxytunnel.sourceforge.io";
     description = "Stealth tunneling through HTTP(S) proxies";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;

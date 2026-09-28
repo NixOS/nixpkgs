@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   hypothesis,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srt";
   version = "3.5.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SIQxUEOk8HQP0fh47WyqN2rAbXDhNfMGptxEYy7tDMA=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
@@ -29,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

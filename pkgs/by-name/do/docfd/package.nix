@@ -54,7 +54,7 @@ ocamlPackages.buildDunePackage rec {
     nottui
     nottui-unix
     notty-community
-    ocaml_sqlite3
+    sqlite3
     ocolor
     oseq
     ppx_deriving
@@ -88,7 +88,7 @@ ocamlPackages.buildDunePackage rec {
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "docfd";
   };

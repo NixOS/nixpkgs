@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-manuals";
-  version = "49.0";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/manuals/${lib.versions.major finalAttrs.version}/manuals-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7WRGxMLSnCuQYrKoynJxzbrPx4z9tP3NDzvEjYyefwg=";
+    hash = "sha256-foRBdV0N5xdCjIAORa4GyF7JZK9GrFO53GW0G8OjLHQ=";
   };
 
   nativeBuildInputs = [

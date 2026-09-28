@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   autoPatchelfHook,
   copyDesktopItems,
   pango,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
-    squashfsTools
+    squashfs-tools
     wrapGAppsHook3
   ];
 

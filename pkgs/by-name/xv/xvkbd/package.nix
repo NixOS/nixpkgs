@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Virtual keyboard for X window system";
     longDescription = ''
       xvkbd is a virtual (graphical) keyboard program for X Window System which provides
-      facility to enter characters onto other clients (softwares) by clicking on a
+      facility to enter characters onto other clients (software) by clicking on a
       keyboard displayed on the screen.
     '';
     homepage = "http://t-sato.in.coocan.jp/xvkbd";

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microfetch";
-  version = "0.4.13";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "microfetch";
     tag = "${finalAttrs.version}";
-    hash = "sha256-aJ2QuMbUM/beMD8b62AqzTNljQ8RtBNOSvj9nJfRXbA=";
+    hash = "sha256-Hi9U1WqCCoXnZx8ZgT5+fT2grTdNPC73fTAn0l9kzkg=";
   };
 
-  cargoHash = "sha256-vGvpjRJr4ez322JWUwboVml22vnRVRlwpZ9W4F5wATA=";
+  cargoHash = "sha256-7tN5E95uEJBUT1OMAnjkXnbSZjO23KWi8Vc3Cic9nek=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ mold ];
 
@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       NotAShelf
     ];
     mainProgram = "microfetch";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
   };
 })

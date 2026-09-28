@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnmp-pyasn1";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pyasn1";
-    tag = "v${version}";
-    hash = "sha256-W74aWMqGlat+aZfhbP1cTKRz7SomHdGwfK5yJwxgyqI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o+YVlLs0xIKOcpFANGlSSpbK3YGBDDNOdlYvH1OliYM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/pysnmp/pyasn1";
-    changelog = "https://github.com/pysnmp/pyasn1/releases/tag/v${version}";
+    changelog = "https://github.com/pysnmp/pyasn1/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

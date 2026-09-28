@@ -72,6 +72,14 @@ least specific (the system profile)"
                          (nix--profile-paths))
                  woman-manpath)))
 
+;;; Make info manuals of installed elisp pkgs available (work around Emacs bug#81105)
+(when-let* ((path (getenv "INFOPATH")))
+  ;; Normally, Emacs 31 extends `Info-default-directory-list' when activating elisp pkgs.
+  ;; We add a trailing path-separator ":" to INFOPATH when needed
+  ;; to ensure `Info-default-directory-list' is used to initialize `Info-directory-list'.
+  (unless (string-suffix-p path-separator path)
+    (setenv "INFOPATH" (concat path path-separator))))
+
 ;;; Make tramp work for remote NixOS machines
 (defvar tramp-remote-path)
 (eval-after-load 'tramp

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  writableTmpDirAsHomeHook,
   boilerpy3,
   events,
   httpx,
@@ -70,7 +71,7 @@
   pytesseract,
   faiss-cpu,
   # , faiss-gpu
-  pinecone-client,
+  pinecone,
   onnxruntime,
   onnxruntime-tools,
   # , onnxruntime-gpu
@@ -103,6 +104,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -130,8 +132,6 @@ buildPythonPackage rec {
     tqdm
     transformers
   ];
-
-  env.HOME = "$(mktemp -d)";
 
   optional-dependencies = {
     # all = [
@@ -209,7 +209,7 @@ buildPythonPackage rec {
     # only-faiss-gpu = [
     #   faiss-gpu
     # ];
-    only-pinecone = [ pinecone-client ];
+    only-pinecone = [ pinecone ];
     onnx = [
       onnxruntime
       onnxruntime-tools

@@ -30,6 +30,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Test framework for unit tests, integration tests, and regression tests";
+    homepage = "https://gitlab.com/nomadic-labs/tezt";
     license = lib.licenses.mit;
     broken = lib.versionAtLeast lwt.version "6.0.0";
   };

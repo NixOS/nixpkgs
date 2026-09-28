@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ahocorapy";
-  version = "1.6.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abusix";
     repo = "ahocorapy";
     tag = version;
-    hash = "sha256-ynVkDnrZ12dpNPoKfUdw0/X06aORFkmXFMVH9u0Payo=";
+    hash = "sha256-mRSWkWCHjdSq9Rxj+GuflTBHEDRQCBMnKsb6LcbJudo=";
   };
 
   build-system = [ setuptools ];

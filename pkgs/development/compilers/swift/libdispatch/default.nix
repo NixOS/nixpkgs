@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Grand Central Dispatch";
-    homepage = "https://github.com/apple/swift-corelibs-libdispatch";
+    homepage = "https://github.com/swiftlang/swift-corelibs-libdispatch";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cmm ];

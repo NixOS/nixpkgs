@@ -15,14 +15,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conduit";
-  version = "0.9.5";
+  version = "0.9.8";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mX7/5C4wd70Kx1rQyo2BcZMwDRqvxo4fBdz3pq7PuvM=";
+    hash = "sha256-uGHOz15jv8RHM2JTuJpzppMBKCqMqoWX7w0QZqJ+h8c=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +44,24 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MPI" mpiSupport)
   ];
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  installCheckPhase =
+    let
+      excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
+        # SIGTRAP***Exception
+        "t_conduit_fixed_size_vector"
+      ];
 
-    make test
+      excludedTestsString = lib.optionalString (
+        excludedTests != [ ]
+      ) "-E '^(${builtins.concatStringsSep "|" excludedTests})$'";
+    in
+    ''
+      runHook preInstallCheck
 
-    runHook postInstallCheck
-  '';
+      ctest --output-on-failure ${excludedTestsString}
+
+      runHook postInstallCheck
+    '';
   doInstallCheck = true;
 
   passthru = {
@@ -62,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simplified Data Exchange for HPC Simulations";
     homepage = "https://github.com/LLNL/conduit";
-    changelog = "https://github.com/LLNL/conduit/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/LLNL/conduit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3Lbnl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;

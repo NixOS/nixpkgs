@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
   version = "7.10.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
@@ -70,9 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gfortran
+    mpi
     pkg-config
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
     blas
@@ -100,12 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_nvtx
+    cudaPackages.libcufft
+    cudaPackages.libcusolver
     cudaPackages.libcublas
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
+    rocmPackages.rocsolver
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -149,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     "-DSIRIUS_USE_CUDA=ON"
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
@@ -160,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
   ];
 
-  doCheck = true;
+  doCheck = !umpire.passthru.rocmSupport;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
   # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox

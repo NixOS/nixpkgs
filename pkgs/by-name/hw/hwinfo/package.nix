@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
-  version = "25.2";
+  version = "25.5";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = finalAttrs.version;
-    hash = "sha256-eYUUec9IRzR573i8SiZcxBQWGFGkUnuOR3e1u+AZfiw=";
+    hash = "sha256-8IzggH+ANAJWP+fxKuE2pI4jc6H23t18W67aeqfzu7M=";
   };
 
   nativeBuildInputs = [
@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput lib "$lib"
+    moveToOutput share/bash-completion "$bin"
   '';
 
   passthru = {

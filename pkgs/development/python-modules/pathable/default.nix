@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pathable";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "pathable";
     tag = version;
-    hash = "sha256-D3TYVMcKXPA6fmy2JND5o8ja3Rk8Ne17Sxm4+fLw3Dw=";
+    hash = "sha256-DjIn+hXZvx4tKyzQlWPwIxHD8vWy/jEvhdFY6HC+sdo=";
   };
 
   build-system = [ poetry-core ];

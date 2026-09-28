@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "AleoHQ";
+    owner = "howardwu";
     repo = "wagyu";
     rev = "v${finalAttrs.version}";
     hash = "sha256-5n8BmETv5jUvgu0rskAPYaBgYyNL2QU2t/iUb3hNMMw=";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Rust library for generating cryptocurrency wallets";
-    homepage = "https://github.com/AleoHQ/wagyu";
+    homepage = "https://github.com/howardwu/wagyu";
     license = with lib.licenses; [
       mit
       asl20

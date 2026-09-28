@@ -8,22 +8,22 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-agent-acp";
-  version = "0.32.0";
+  version = "0.81.2";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "claude-agent-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-egYGwkN8iexw42EIhUgKb+QuAKfH4lKts0lftzfHAiY=";
+    hash = "sha256-5c4WTVtG628EwQq7WXDbFLu1u8wSAjlI7HbXsTH5xDg=";
   };
 
-  npmDepsHash = "sha256-sUB/S3EycM3FGibAaZMA1T7tCyDu2XfkSg86qcABmYk=";
+  npmDepsHash = "sha256-0Zjla0bbKrRKMT7SfBOKYmnbMw6zq27ddD2wxnbqg/Y=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/claude-agent-acp \
-      --prefix CLAUDE_CODE_EXECUTABLE ${lib.getExe claude-code}
+      --set-default CLAUDE_CODE_EXECUTABLE ${lib.getExe claude-code}
   '';
 
   meta = {

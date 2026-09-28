@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "oauth2l";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "oauth2l";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jD8VFyAq6qcQhgvMmJj3D1xWGUvq3tMISbztLf1a72I=";
+    hash = "sha256-oRiR5x+9AGFeua4DvtNJQQ9DeuPSiNT6zUI91h4FdaI=";
   };
 
   vendorHash = null;

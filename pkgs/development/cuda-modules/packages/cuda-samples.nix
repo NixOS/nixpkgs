@@ -3,7 +3,7 @@
   backendStdenv,
   _cuda,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_culibos,
   cuda_cudart,
   cuda_nvcc,
@@ -71,10 +71,10 @@ backendStdenv.mkDerivation (finalAttrs: {
           "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/nv" \
-          "${lib.getOutput "include" cuda_cccl}/include/nv" \
+          "${lib.getOutput "include" cccl}/include/nv" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/cuda" \
-          "${lib.getOutput "include" cuda_cccl}/include/cuda"
+          "${lib.getOutput "include" cccl}/include/cuda"
     ''
     + lib.optionalString (samplesAtLeast "13") ''
       nixLog "patching sample 0_Introduction/matrixMul_nvrtc"
@@ -85,10 +85,10 @@ backendStdenv.mkDerivation (finalAttrs: {
           "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/nv" \
-          "${lib.getOutput "include" cuda_cccl}/include/nv" \
+          "${lib.getOutput "include" cccl}/include/nv" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/cuda" \
-          "${lib.getOutput "include" cuda_cccl}/include/cuda"
+          "${lib.getOutput "include" cccl}/include/cuda"
     ''
     # These three samples give undefined references, like
     # nvlink error   : Undefined reference to '__cudaCDP2Free' in 'CMakeFiles/cdpBezierTessellation.dir/BezierLineCDP.cu.o'
@@ -184,7 +184,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvrtc
     cuda_nvtx

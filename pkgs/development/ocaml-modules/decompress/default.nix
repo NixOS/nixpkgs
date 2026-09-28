@@ -1,31 +1,26 @@
 {
   lib,
+  ocaml,
   fetchurl,
   buildDunePackage,
   checkseum,
   optint,
   cmdliner,
-  bigstringaf,
   alcotest,
   camlzip,
   base64,
-  ctypes,
   fmt,
   crowbar,
-  rresult,
-  astring,
-  bos,
+  bstr,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "decompress";
-  version = "1.5.3";
-
-  minimalOCamlVersion = "4.08";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${finalAttrs.version}/decompress-${finalAttrs.version}.tbz";
-    hash = "sha256-+R5peL7/P8thRA0y98mcmfHoZUtPsYQIdB02A1NzrGA=";
+    hash = "sha256-qi6ELcAJvN3LtcB5H12+7ivaWhBOzHaBqjesQlN+MSE=";
   };
 
   buildInputs = [ cmdliner ];
@@ -35,17 +30,14 @@ buildDunePackage (finalAttrs: {
   ];
   checkInputs = [
     alcotest
-    astring
-    bigstringaf
-    bos
-    ctypes
     fmt
     camlzip
     base64
     crowbar
-    rresult
+    bstr
   ];
-  doCheck = true;
+  # bstr is not available for OCaml < 4.13
+  doCheck = lib.versionAtLeast ocaml.version "4.13";
 
   meta = {
     description = "Pure OCaml implementation of Zlib";

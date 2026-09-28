@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "close-and-restore-tab.yazi";
-  version = "0-unstable-2026-04-22";
+  version = "0-unstable-2026-05-30";
 
   src = fetchFromGitHub {
     owner = "MasouShizuka";
     repo = "close-and-restore-tab.yazi";
-    rev = "5047217e59f9c2f4aa5ae15baa92df7b3f724e67";
-    hash = "sha256-bsx6HVdB2CcKXQG+tGxY2T8Ys8TluIe6xWHhOhv4L4I=";
+    rev = "b2153bc68696edc8e17fc90e73310e274035c674";
+    hash = "sha256-3bcnXXYfmvJGxxVKEHAy3so1KRFr1oIdj01A8WIU5VM=";
   };
 
   meta = {

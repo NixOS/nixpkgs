@@ -27,23 +27,23 @@ let
     )
   ];
   snakeCaseName = lib.replaceStrings [ "-" ] [ "_" ] name;
-  drvPrefix = "python-${name}";
   # If the name of the grammar attribute differs from the grammar's symbol name,
   # it could cause a symbol mismatch at load time. This manually curated collection
   # of overrides ensures the binding can find the correct symbol
   langIdentOverrides = {
     tree_sitter_org_nvim = "tree_sitter_org";
+    tree_sitter_go_template_helm = "tree_sitter_helm";
   };
   langIdent = langIdentOverrides.${snakeCaseName} or snakeCaseName;
 in
 buildPythonPackage {
   inherit version;
-  pname = drvPrefix;
+  pname = name;
   pyproject = true;
   build-system = [ setuptools ];
 
   src = symlinkJoin {
-    name = "${drvPrefix}-source";
+    name = "${name}-source";
     paths = [
       (writeTextDir "${snakeCaseName}/__init__.py" /* python */ ''
         # AUTO-GENERATED DO NOT EDIT

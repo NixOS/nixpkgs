@@ -40,13 +40,13 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elinks";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "elinks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aQ+q2I6uTVv5kpKBaGJ1xiE/9vv9T7JI05VX/ROkAqA=";
+    hash = "sha256-oh9nArQ8dkYL4fLSjnnCHbSnxNxJnQmAWD/6Nu7OiiQ=";
   };
 
   outputs = [

@@ -12,24 +12,30 @@
   qtdeclarative,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-rGs+MTt/Z+Gk3jSxU7tfNAUdypG/HJ4pDqvC+U722Eg=";
+    hash = "sha256-9K9+zS2MDqARTlGH2bu363ysrCg82D53sBkKiLSXBoI=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # Need to replace prefix to not try to install into lomiri-api prefix
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # Need to replace prefix to not try to install into lomiri-api prefix
+  + ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail '--variable=plugindir' '--define-variable=prefix=''${CMAKE_INSTALL_PREFIX} --variable=plugindir'
+      --replace-fail \
+        '--variable=plugindir lomiri-shell-api' \
+        '--define-variable=libdir=''${CMAKE_INSTALL_LIBDIR} --variable=plugindir lomiri-shell-api'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
@@ -60,8 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
     # In case anything still depends on deprecated hints
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true)
+    (lib.strings.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tsshd";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "trzsz";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9llfXzAAQgAOeaD+o3AVyhP0uL88uQsCNlqAPNfzDVw=";
+    hash = "sha256-/h18WuKkPWD5sDvLckQPcL7f5VG2dlD6uGheUrwMXFQ=";
   };
 
-  vendorHash = "sha256-btTWkuLkT2e58TYqe0e/cE/0Try/g8XoahiABSSFaGU=";
+  vendorHash = "sha256-+hX81OgNBNs85c51WXSsIBMClRTvsmmiVdvQtV5ml2g=";
 
   ldflags = [
     "-s"

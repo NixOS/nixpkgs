@@ -4,29 +4,38 @@
   fetchPypi,
   importlib-metadata,
   psutil,
+  setuptools,
+  pip,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "helpdev";
   version = "0.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gfvj28i82va7c264jl2p4cdsl3lpf9fpb9cyjnis55crfdafqmv";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-u2KnmsusFB2t9Cyt65K7dFDdGLmCSmIEO2oLFJGQ2z0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace helpdev/__init__.py \
+      --replace-fail "'pip'," "'${lib.getExe pip}',"
+  '';
+
+  dependencies = [
     importlib-metadata
     psutil
   ];
 
-  # No tests included in archive
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Extracts information about the Python environment easily";
     mainProgram = "helpdev";
     license = lib.licenses.mit;
   };
-}
+})

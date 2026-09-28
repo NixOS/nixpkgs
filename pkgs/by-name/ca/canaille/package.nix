@@ -2,24 +2,39 @@
   lib,
   python3,
   fetchFromGitLab,
+  fetchFromGitHub,
   openldap,
   nixosTests,
   postgresql,
 }:
 
 let
-  python = python3;
+  python = python3.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      # TODO remove when wtforms has a 3.3 stable release
+      wtforms = prev.wtforms.overridePythonAttrs (_old: rec {
+        version = "3.3.0b3";
+        src = fetchFromGitHub {
+          owner = "wtforms";
+          repo = "wtforms";
+          tag = version;
+          hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
+        };
+      });
+    };
+  };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "canaille";
-  version = "0.2.7";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    tag = version;
-    hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-Zn1MZa4TYNfdVrDmi6KHQxrdK9UfRxYqJpCXVbqnvII=";
   };
 
   build-system = with python.pkgs; [
@@ -64,7 +79,7 @@ python.pkgs.buildPythonApplication rec {
       time-machine
       pytest-scim2-server
     ]
-    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
+    ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -79,10 +94,18 @@ python.pkgs.buildPythonApplication rec {
     export SCHEMA="${openldap}/etc/schema"
   '';
 
+  # Cap xdist workers; concurrent slapd fixtures race the 10s bind window.
+  dontUsePytestXdist = true;
+  pytestFlags = [ "--numprocesses=4" ];
+
   disabledTests = [
     # Tries to use DNS resolution
     "test_send_new_email_error"
     "test_send_test_email_ssl"
+    # flaky: timing-sensitive intruder lockout retry window
+    "test_intruder_lockout_fail_second_attempt_then_succeed_in_third"
+    # requires external network for logo fetch
+    "test_mail_with_unreachable_external_logo"
   ];
 
   optional-dependencies = with python.pkgs; {
@@ -92,14 +115,13 @@ python.pkgs.buildPythonApplication rec {
       flask-talisman
       flask-themer
       isodate
-      pycountry
       pytz
-      tomlkit
       zxcvbn-rs-py
     ];
     oidc = [
       authlib
       joserfc
+      tomlkit
     ];
     scim = [
       authlib
@@ -149,11 +171,11 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 
-}
+})

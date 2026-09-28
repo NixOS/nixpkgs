@@ -28,14 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-tests";
-  version = "1.1.7";
+  version = "1.1.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${finalAttrs.version}";
-    hash = "sha256-zesNbesiLMayvlVrU6NagmE2+o0l6ozwZlOGqvyGpnQ=";
+    hash = "sha256-GbOasYdPGqk1WJeoqL8DYd1Qizvhjeq8Dc+RgE4iBaA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/standard-tests";
@@ -80,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-tests==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

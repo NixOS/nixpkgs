@@ -13,7 +13,7 @@
 
 let
   pname = "quiet";
-  version = "6.6.0";
+  version = "9.0.2";
 
   meta = {
     description = "Private, p2p alternative to Slack and Discord built on Tor & IPFS";
@@ -37,9 +37,12 @@ let
   linux = appimageTools.wrapType2 {
     inherit pname version passthru;
 
+    # Quiet invokes pgrep and ps when managing its bundled Tor process. Without them, Tor startup fails with command not found.
+    extraPkgs = pkgs: [ pkgs.procps ];
+
     src = fetchurl {
       url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.AppImage";
-      hash = "sha256-MMfovDYEqppn+8wQcg1dflShuWkMDwMbFbTJl0MmCxw=";
+      hash = "sha256-CRQoTc7BbsWeA+6+X5ZjPYHNT4dqd1xZb6b2P83kC90=";
     };
 
     meta = meta // {
@@ -51,8 +54,8 @@ let
     inherit pname version passthru;
 
     src = fetchurl {
-      url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.dmg";
-      hash = "sha256-8k6X29Gxl5ZhAwj9SKn6E7ITjXhxAgsRT5dbP4MjgB8=";
+      url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}-arm64.dmg";
+      hash = "sha256-G4Hj3YTsVX5Q3x4RnpXI6FPovm9fKXrfaUsZJ5EEUl8=";
     };
 
     nativeBuildInputs = [

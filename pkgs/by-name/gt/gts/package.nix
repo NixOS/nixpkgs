@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Doesn't build on Darwin with -std=gnu23.
+  env = {
+    # Doesn't build on Darwin with -std=gnu23. Apply uniformly as C standard target is something unlikely to vary across platforms.
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       3D surfaces meshed with interconnected triangles.
     '';
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

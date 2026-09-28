@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "2024.9.2";
+  version = "2024.9.10";
   src = fetchFromGitHub {
     owner = "cortezaproject";
     repo = "corteza";
     tag = version;
-    hash = "sha256-1mekSiRfFSNa/6MSzwRrI3rb9GHABkn3i1b6tX+73fI=";
+    hash = "sha256-Q80uFf3mb1yIfG6HrMKbMpi8pncnSKhg4Bgc8BLtSmM=";
   };
   meta = {
     description = "Low-code platform";
@@ -47,13 +47,13 @@ let
     };
 
   webApps = lib.mapAttrs mkWebApp {
-    admin = "sha256-34lfnK2mecvu1Lgg9IM61+fbnqRgZC/Agi7iyugn0fM=";
-    compose = "sha256-1/Fyl6Z27TtZzNBeerKYNs4VhLWEW3wJyr0SCapzc9E=";
-    discovery = "sha256-mL+ibAgVFCRV5AvN0VZc4LCCY8hyaIC8gOlgEdXayuU=";
-    one = "sha256-SuGf72y4PXatZJQgbW5X4mPjtJmQlpwbjfFYCEZElBU=";
-    privacy = "sha256-yHi6pq0OKCh+2reygNL7TvwULCHwxeD8BXVVMjlnpLc=";
-    reporter = "sha256-AWKSzULOTdUZ5wdlTo8dJwVGc7RlYbimR4YF4ZAN1pQ=";
-    workflow = "sha256-cxD2mG4uuO8KT1r2Y4opPlY84Hvqu7cbWh2BSo8CcEc=";
+    admin = "sha256-TjgdG+MNojJDmgv1oEb4lzP4EzHBMKbY+Ep0jrnxxKI=";
+    compose = "sha256-XxAjyYU/zlHNf+OKbMX3eGnXEI5/Fdz0rbjgsTqTTsk=";
+    discovery = "sha256-YN6co0Pixau6x2ulm32PYgmtGMpysHT2KnPcJMol3XU=";
+    one = "sha256-uTuQD2+PZ8NrG6rM7V8KiV/3+bY+xYsvhWJdHTHLhI4=";
+    privacy = "sha256-PsJnWW5D8a0O8zXwEtR6xhRxyJWJX/xrAC66Y27UG+0=";
+    reporter = "sha256-YZoVEsM6nlJbs+pIjIktQ6FYpSgs6GArUywZzUug/ZY=";
+    workflow = "sha256-4oM13BVvW/9hQozfqNCjANMZpSZhpDf+YvPZm8Yxj/c=";
   };
 
   server-webconsole = callPackage ./buildYarnDistOnly.nix {
@@ -67,8 +67,8 @@ let
   corteza-locale = fetchFromGitHub {
     owner = "cortezaproject";
     repo = "corteza-locale";
-    rev = "64b6d5d562dce642652db55949231abf8b9af4ef";
-    sha256 = "sha256-OKr/M91sEDlTwYBiDXwWkShlfazJBm21G0uU429fjW0=";
+    rev = "57b1f2403207c44055ebce19d95cedd5573f39df";
+    hash = "sha256-j+mfWG6tED8AACkUcRWpol2G05qknTxp8b+kwu7c2NA=";
   };
 
   corteza-webapp = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -116,6 +116,7 @@ let
       cp -r ${server-webconsole}/* webconsole/dist/
     ''
     + lib.optionalString withLocales ''
+      chmod -R u+w pkg/locale/src
       cp -r ${corteza-locale}/src/* pkg/locale/src/
     '';
 

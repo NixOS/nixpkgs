@@ -23,12 +23,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apprise";
-  version = "1.10.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-t2jzLZnkXtX0w+7x9nkD6APJf5e6YaUxpdCkXUDfkKg=";
+    hash = "sha256-mlaWS/PKAEs+DbmKuKjYf60FHY7bN3vBZtxL6CZmbIE=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

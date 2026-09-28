@@ -1,18 +1,13 @@
 {
   lib,
   stdenv,
-  python312,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-let
-  # more-itertools unsupported on 3.13
-  python3 = python312;
-in
-
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dmarc-metrics-exporter";
-  version = "1.3.0";
+  version = "1.3.1";
 
   pyproject = true;
 
@@ -20,20 +15,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B2a/F0Ebz6zpe4apVRl7+lX0IS099EmuWOatW2HZdVM=";
+    hash = "sha256-Mp4gQi+cLAoVKVSmGbgruPYPVJV6vxwzVOnx+CZhxS8=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
   dependencies =
-    with python3.pkgs;
+    with python3Packages;
     [
       bite-parser
-      dataclasses-serialization
       prometheus-client
       pydantic
       structlog
@@ -42,7 +36,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     aiohttp
     pytest-asyncio
     pytestCheckHook

@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LDcGeRiDYUKDrQZ8pXrRhPFLS0tE16wtgJ8AN3gIVd0=";
+    hash = "sha256-zO+2UFu/KD2dtE2AkUVv5A1EBFMsSTl8gP18bCxquI8=";
   };
 
-  cargoHash = "sha256-IYprp5XEc2DSGWmf9IOKAHfnMX8JbmUWgvKK+CoA1i8=";
+  cargoHash = "sha256-fWdzaqyFT2ZFTy5AsejDgEm3E55syLKbYz5DW9Ra2PQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

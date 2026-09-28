@@ -11,7 +11,7 @@ let
     url = "https://github.com/jeffvli/sonixd/releases/download/v${version}/Sonixd-${version}-linux-x86_64.AppImage";
     sha256 = "sha256-j8B+o/CJ5SsZPMNbugyP3T9Kb+xuxlVxH02loxlwwDg=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;

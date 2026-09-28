@@ -477,7 +477,11 @@ recurseIntoAttrs {
 
     yaml = expectDataEqual {
       file = writeYAML "data.yaml" { hello = "world"; };
-      expected = "hello: world\n";
+      expected = ''
+        %YAML 1.1
+        ---
+        hello: world
+      '';
     };
   };
 

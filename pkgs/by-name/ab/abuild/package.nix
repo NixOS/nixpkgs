@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abuild";
-  version = "3.15.0";
+  version = "3.17.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "abuild";
     tag = finalAttrs.version;
-    hash = "sha256-vHRh36igfb6WZ8JdtxW8OOqgiVBAXreTy+QOOKaWEwA=";
+    hash = "sha256-CiKOvYEidpykufpEwZLvLys97VRhpEabiVEJ6NJexb4=";
   };
 
   buildInputs = [
@@ -84,7 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "_rc";
+  };
 
   meta = {
     description = "Alpine Linux build tools";

@@ -39,7 +39,6 @@ makeScopeWithSplicing' {
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
         "aarch64-linux" = "linux-arm64";
-        "x86_64-darwin" = "osx-x64";
         "aarch64-darwin" = "osx-arm64";
         "x86_64-windows" = "win-x64";
         "i686-windows" = "win-x86";
@@ -84,12 +83,10 @@ makeScopeWithSplicing' {
       let
         dotnet_6 = callWithUtils ./dotnet.nix {
           channel = "6.0";
-          withVMR = false;
         };
 
         dotnet_7 = callWithUtils ./dotnet.nix {
           channel = "7.0";
-          withVMR = false;
         };
 
         dotnet_8 = callWithUtils ./dotnet.nix {

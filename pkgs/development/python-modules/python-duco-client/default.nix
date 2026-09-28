@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-duco-client";
-  version = "0.4.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ronaldvdmeer";
     repo = "python-duco-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q7Y+66/vJvm05gHyg8mk0vWYySso3DDRvqw6w9hvn9w=";
+    hash = "sha256-259aAdOltH/Yr+acIhFCe6M/JXCUQS80e8b15wlnVQM=";
   };
 
   build-system = [ setuptools ];

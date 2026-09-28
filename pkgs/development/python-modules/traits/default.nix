@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Explicitly typed attributes for Python";
-    homepage = "https://pypi.python.org/pypi/traits";
+    homepage = "https://pypi.org/project/traits/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };

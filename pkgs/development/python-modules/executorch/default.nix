@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   gitMinimal,
@@ -30,6 +31,7 @@
   omegaconf,
   pandas,
   parameterized,
+  py-cpuinfo,
   pytorch-tokenizers,
   ruamel-yaml,
   scikit-learn,
@@ -40,11 +42,12 @@
   typing-extensions,
 
   # tests
+  perl,
+  pillow,
   pytest-json-report,
   pytest-rerunfailures,
   pytestCheckHook,
   torchaudio,
-  torchtune,
   transformers,
   writableTmpDirAsHomeHook,
   yaspin,
@@ -52,10 +55,21 @@
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
 }:
+let
+  # The Cortex-M backend fetches CMSIS-NN through `FetchContent` at configure time.
+  # Revision taken from `CMSIS_NN_VERSION` in `backends/cortex_m/CMakeLists.txt`.
+  cmsis-nn-src = fetchFromGitHub {
+    owner = "ARM-software";
+    repo = "CMSIS-NN";
+    rev = "dbf45dbfcc515421dd6099037d3e2637b90748c8";
+    hash = "sha256-FOr7DevJxroGAOmnqKK9/suXjOeaZYQFlFIrYmU19WQ=";
+  };
+in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.2.0";
+  version = "1.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
@@ -67,7 +81,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-Rkw6+keOygQaf6iOCpGoW9JgXiCimgx8gsxLEH3bxME=";
+    hash = "sha256-wxv+lQ7Cb/S0hDuLHVv6uG+xr8KqfCH2ZEgLosn4Ovw=";
   };
 
   postPatch =
@@ -75,14 +89,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ''
       substituteInPlace exir/_serialize/_flatbuffer.py \
         --replace-fail \
-          'flatc_path = "flatc"' \
-          'flatc_path = "${lib.getExe pkgs.flatbuffers}"'
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "flatc")' \
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "${lib.getExe pkgs.flatbuffers}")'
     ''
     # Relax build-system dependencies
     + ''
       substituteInPlace pyproject.toml \
         --replace-fail '"pip>=23",' "" \
-        --replace-fail "cmake>=3.24,<4.0.0" "cmake"
+        --replace-fail "cmake>=3.26,<4.0.0" "cmake" \
+        --replace-fail "\"patchelf; sys_platform == 'linux'\"," ""
     ''
     # CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
     # https://github.com/NixOS/nixpkgs/issues/445447
@@ -110,12 +125,18 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # But the build script is sensitive to this env variable.
     # Fixes:
     #  Some binaries contain forbidden references to /build/. Check the error above!
-    CMAKE_ARGS = lib.concatStringsSep " " [
+    CMAKE_ARGS = toString [
       (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
 
       # For some cmake-tier reason, cmakeBool does not work here
       (lib.cmakeFeature "EXECUTORCH_BUILD_CUDA" (if cudaSupport then "ON" else "OFF"))
+
+      # Avoid fetching CMSIS-NN from the network
+      (lib.cmakeFeature "CMSIS_NN_LOCAL_PATH" cmsis-nn-src.outPath)
     ];
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
   };
 
   build-system = [
@@ -139,6 +160,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   buildInputs = lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
+    cudaPackages.libcurand
   ];
 
   pythonRemoveDeps = [
@@ -152,7 +174,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "pytest-xdist"
   ];
   pythonRelaxDeps = [
+    "mpmath"
     "scikit-learn"
+    # Upstream requires a torch nightly (>=2.13.0a0), but builds fine against the released 2.12
+    "torch"
     "torchao"
   ];
   dependencies = [
@@ -168,6 +193,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     packaging
     pandas
     parameterized
+    py-cpuinfo
     pytorch-tokenizers
     pyyaml
     ruamel-yaml
@@ -182,11 +208,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "executorch" ];
 
   nativeCheckInputs = [
+    # Used by the `scripts/lint_*.sh` scripts exercised in `.ci/scripts/tests`
+    perl
+    pillow
     pytest-json-report
     pytest-rerunfailures
     pytestCheckHook
     torchaudio
-    torchtune
     transformers
     writableTmpDirAsHomeHook
     yaspin
@@ -199,6 +227,16 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Try to download models from HuggingFace hub
     "extension/llm/tokenizers/test/test_hf_tokenizer.py"
+
+    # Required unmaintained and removed `torchtune`
+    "examples/models/llama3_2_vision/preprocess/test_preprocess.py"
+    "examples/models/llama3_2_vision/text_decoder/test/test_text_decoder.py"
+    "examples/models/llama3_2_vision/vision_encoder/test/test_vision_encoder.py"
+    "exir/tests/test_memory_format_ops_pass.py"
+    "extension/llm/modules/test/test_attention.py"
+    "extension/llm/modules/test/test_kv_cache.py"
+    "extension/llm/modules/test/test_position_embeddings.py"
+    "extension/llm/modules/test/test_turboquant_kv_cache.py"
   ];
 
   disabledTests = [
@@ -229,6 +267,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
     "test_flatbuffer_paths_match"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: badly formed help string
+    "test_with_config"
+    "test_with_config_and_cli"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

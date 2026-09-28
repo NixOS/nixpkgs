@@ -2,23 +2,25 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  makeFontsConf,
   buildLua,
   buildGoModule,
+  installFonts,
 }:
 
 buildLua (finalAttrs: {
   pname = "uosc";
-  version = "5.12.0";
+  version = "5.13.0";
   scriptPath = "src/uosc";
 
   src = fetchFromGitHub {
     owner = "tomasklaen";
     repo = "uosc";
     rev = finalAttrs.version;
-    hash = "sha256-vSs6X++WIM9NfTvcsJgwiKmTuU0eu3i3cffsdCVSyV4=";
+    hash = "sha256-5fHihGI2rodEByqTRs3NasmLUBjG3VY9l/YnKDCKSt8=";
   };
   passthru.updateScript = gitUpdater { };
+
+  nativeBuildInputs = [ installFonts ];
 
   tools = buildGoModule {
     pname = "uosc-bin";
@@ -27,14 +29,8 @@ buildLua (finalAttrs: {
   };
 
   # the script uses custom "texture" fonts as the background for ui elements.
-  # In order for mpv to find them, we need to adjust the fontconfig search path.
-  postInstall = "cp -r src/fonts $out/share";
+  passthru.fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
   passthru.extraWrapperArgs = [
-    "--set"
-    "FONTCONFIG_FILE"
-    (toString (makeFontsConf {
-      fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
-    }))
     "--set"
     "MPV_UOSC_ZIGGY"
     (lib.getExe' finalAttrs.tools "ziggy")

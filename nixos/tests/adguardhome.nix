@@ -22,12 +22,25 @@
       };
     };
 
+    syslogConf = {
+      services.adguardhome = {
+        enable = true;
+
+        settings.log.file = "syslog";
+      };
+    };
+
     declarativeConf = {
       services.adguardhome = {
         enable = true;
 
+        host = "127.0.0.1";
         mutableSettings = false;
-        settings.dns.bootstrap_dns = [ "127.0.0.1" ];
+        port = 43074;
+        settings = {
+          dns.bootstrap_dns = [ "127.0.0.1" ];
+          http.doh.insecure_enabled = true;
+        };
       };
     };
 
@@ -122,10 +135,22 @@
       schemaVersionBefore23.wait_for_unit("adguardhome.service")
       schemaVersionBefore23.wait_for_open_port(3000)
 
+    with subtest("Logging to syslog test"):
+      # AdGuard is expected to fail when it cannot connect to syslog
+      # hence its sufficient to look whether the service starts at all
+      syslogConf.wait_for_unit("adguardhome.service")
+      syslogConf.wait_for_open_port(3000)
+
     with subtest("Declarative config test, DNS will be reachable"):
       declarativeConf.wait_for_unit("adguardhome.service")
       declarativeConf.wait_for_open_port(53)
-      declarativeConf.wait_for_open_port(3000)
+      declarativeConf.wait_for_open_port(43074)
+      declarativeConf.succeed(
+          "grep -qFx '  address: 127.0.0.1:43074' /var/lib/AdGuardHome/AdGuardHome.yaml"
+      )
+      declarativeConf.succeed(
+          "grep -qFx '    insecure_enabled: true' /var/lib/AdGuardHome/AdGuardHome.yaml"
+      )
 
     with subtest("Mixed config test, check whether merging works"):
       mixedConf.wait_for_unit("adguardhome.service")

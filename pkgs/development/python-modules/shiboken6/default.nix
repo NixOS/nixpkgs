@@ -21,22 +21,17 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python.pkgs.ninja
+    shiboken6-generator
     (python.pythonOnBuildForHost.withPackages (ps: [
       ps.packaging
       ps.setuptools
     ]))
   ];
 
-  propagatedNativeBuildInputs = [
-    shiboken6-generator
-  ];
-
   buildInputs = [
     python.pkgs.qt6.qtbase
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    python.pkgs.qt6.darwinVersionInputs
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin python.pkgs.qt6.darwinVersionInputs;
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"

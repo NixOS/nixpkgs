@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macmon";
-  version = "0.6.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "macmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GiSF5PBRUcKZzd9vWf9MmKKZbtqchnu0DjFgbXmp7bg=";
+    hash = "sha256-tdWuxpV+AAN189etks6LVo4OYDYQNd9dzfopECFgoR8=";
   };
 
-  cargoHash = "sha256-b9CpHSC3/kj7lHs+QhDqnRZfda9rtJJEs3j24NDZSPQ=";
+  cargoHash = "sha256-U71Qrplz2CY5CiYpDjFrtWQOy1J4HE3tMhnRbLXUD7k=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

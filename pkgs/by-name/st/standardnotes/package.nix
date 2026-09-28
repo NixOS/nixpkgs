@@ -84,7 +84,7 @@ stdenv.mkDerivation {
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
-    homepage = "https://standardnotes.org";
+    homepage = "https://standardnotes.com";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       mgregoire

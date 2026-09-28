@@ -261,6 +261,8 @@ lib.warnIf (withDocs != null)
       });
     };
 
+    __structuredAttrs = true;
+
     meta = {
       homepage = "https://www.gnu.org/software/bash/";
       description =

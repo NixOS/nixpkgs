@@ -73,14 +73,14 @@
     lowerBoundSatisfied && upperBoundSatisfied;
 
   /**
-    Generates a CUDA variant name from a version.
+    Generates CUDA variant names from a version.
 
     NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
 
     # Type
 
     ```
-    _mkCudaVariant :: (version :: String) -> String
+    _mkCudaVariants :: (version :: String) -> [ String ]
     ```
 
     # Inputs
@@ -92,15 +92,21 @@
     # Examples
 
     :::{.example}
-    ## `_cuda.lib._mkCudaVariant` usage examples
+    ## `_cuda.lib._mkCudaVariants` usage examples
 
     ```nix
-    _mkCudaVariant "11.0"
-    => "cuda11"
+    _mkCudaVariants "13.2.2"
+    => [ "cuda13.2.2" "cuda13.2" "cuda13" ]
     ```
     :::
   */
-  _mkCudaVariant = version: "cuda${lib.versions.major version}";
+  _mkCudaVariants =
+    cudaMajorMinorPatchVersion:
+    lib.map (f: "cuda" + (f cudaMajorMinorPatchVersion)) [
+      lib.id
+      lib.versions.majorMinor
+      lib.versions.major
+    ];
 
   /**
     A predicate which, given a package, returns true if the package has a free license or one of NVIDIA's licenses.
@@ -115,13 +121,22 @@
   */
   allowUnfreeCudaPredicate =
     let
-      cudaLicenseNames = [
-        lib.licenses.nvidiaCuda.shortName
+      cudaLicenses = [
+        lib.licenses.nvidiaCuda
+        lib.licenses.nvidiaCudaRedist
       ]
-      ++ lib.map (license: license.shortName) (lib.attrValues _cuda.lib.licenses);
+      ++ lib.attrValues _cuda.lib.licenses;
+      cudaLicenseNames = lib.map (license: license.shortName) cudaLicenses;
     in
     package:
-    lib.all (license: license.free || lib.elem (license.shortName or null) cudaLicenseNames) (
-      lib.toList package.meta.license
-    );
+    # new compound licenses
+    if lib.isAttrs package.meta.license && lib.hasAttr "licenseType" package.meta.license then
+      lib.licenses.evaluateProperty (
+        license: (license.free or false) || lib.elem license cudaLicenses
+      ) true (package.meta.license or [ ])
+    else
+      # old license list
+      lib.all (
+        license: (license.free or false) || lib.elem (license.shortName or null) cudaLicenseNames
+      ) (lib.toList package.meta.license);
 }

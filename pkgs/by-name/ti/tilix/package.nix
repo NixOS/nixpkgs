@@ -73,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       midchildan
-      jtbx
     ];
     platforms = lib.platforms.linux;
     mainProgram = "tilix";

@@ -31,14 +31,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chatlas";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "chatlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8dME+zY+yzPiUK2WUKlOJS6GF7UA2qSym617P2DoV68=";
+    hash = "sha256-wf+YYC7coJ9euOXIP9Oq7k2z8zhLZdfjVM+yxmM9MAY=";
   };
 
   build-system = [
@@ -81,6 +82,9 @@ buildPythonPackage (finalAttrs: {
     "tests/test_provider_openai.py"
     "tests/test_provider_snowflake.py"
     "tests/test_register_tool_models.py"
+
+    # Requires a DeeSeek API key and internet access
+    "tests/test_provider_deepseek.py"
   ];
 
   disabledTests = [
@@ -158,6 +162,9 @@ buildPythonPackage (finalAttrs: {
     "test_tool_yielding_with_error"
     "test_translate_model_params_openai"
     "test_unknown_tool_error_format_updated"
+
+    # Require an AWS key and internet access
+    "test_provider_instances"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the sandbox

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "0.9.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-0rCXz/vKFF5rvBXyvtt9DH0Jz+1i7rIylh07FqKBrZM=";
+    sha256 = "sha256-JRoSCmoTIXHsUWZt9OyDVp1Veuy2w1ZPFe0rUGdJv0k=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.
@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misuzu ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "3proxy" finalAttrs.version;
   };
 })

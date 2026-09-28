@@ -1,4 +1,4 @@
-{ pkgs, runTest, ... }:
+{ runTest }:
 builtins.listToAttrs (
   map
     (packageName: {
@@ -29,6 +29,5 @@ builtins.listToAttrs (
       "nginxMainline"
       "nginxShibboleth"
       "openresty"
-      "tengine"
     ]
 )

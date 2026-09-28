@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pyyaml,
   hypothesis,
@@ -24,6 +25,10 @@ buildPythonPackage rec {
   build-system = [
     hatch-vcs
     hatchling
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [ pyyaml ];

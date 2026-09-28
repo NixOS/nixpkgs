@@ -40,6 +40,7 @@ def create_http_session() -> requests.Session:
         status_forcelist=[500, 502, 503, 504]
     )
     session = requests.Session()
+    session.headers["User-Agent"] = "nixpkgs-fetchCargoVendor/2 (https://github.com/NixOS/nixpkgs)"
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
@@ -68,7 +69,9 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
         raise Exception("Only the default crates.io registry is supported.")
 
-    return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
+    # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
+    # rate limit on the API servers.
+    return f"https://static.crates.io/crates/{pkg["name"]}/{pkg["version"]}/download"
 
 
 def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
@@ -289,6 +292,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     source_to_ind: dict[str, str] = {}
+    selector_to_ind: dict[tuple, str] = {}
     source_config = {}
     next_registry_ind = 0
     next_git_ind = 0
@@ -324,24 +328,35 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
             continue
 
         if source.startswith("git+"):
-            ind = f"git-{next_git_ind}"
-            next_git_ind += 1
             source_info = parse_git_source(source, lockfile_version)
             selector = make_git_source_selector(source_info)
+            selector_key = (source_info["url"], source_info["type"], source_info["value"])
+            if selector_key in selector_to_ind:
+                ind = selector_to_ind[selector_key]
+            else:
+                ind = f"git-{next_git_ind}"
+                next_git_ind += 1
+                selector_to_ind[selector_key] = ind
+                add_source_replacement(
+                    orig_key=f"original-source-{ind}",
+                    orig_selector=selector,
+                    vendored_key=f"vendored-source-{ind}",
+                    vendored_dir=f"@vendor@/source-{ind}"
+                )
         elif source.startswith("registry+") or source.startswith("sparse+"):
             ind = f"registry-{next_registry_ind}"
             next_registry_ind += 1
             selector = make_registry_source_selector(source)
+            add_source_replacement(
+                orig_key=f"original-source-{ind}",
+                orig_selector=selector,
+                vendored_key=f"vendored-source-{ind}",
+                vendored_dir=f"@vendor@/source-{ind}"
+            )
         else:
             raise Exception(f"Can't process source: {source}.")
 
         source_to_ind[source] = ind
-        add_source_replacement(
-            orig_key=f"original-source-{ind}",
-            orig_selector=selector,
-            vendored_key=f"vendored-source-{ind}",
-            vendored_dir=f"@vendor@/source-{ind}"
-        )
 
     config_path = out_dir / ".cargo" / "config.toml"
     config_path.parent.mkdir()

@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace neo/extern/nvrhi/tools/shaderCompiler/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
+    substituteInPlace neo/extern/ShaderMake/CMakeLists.txt \
+      --replace-fail "AppleClang" "Clang"
   '';
 
   nativeBuildInputs = [

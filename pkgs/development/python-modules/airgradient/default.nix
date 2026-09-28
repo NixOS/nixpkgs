@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,15 +17,17 @@
 
 buildPythonPackage rec {
   pname = "airgradient";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "airgradienthq";
     repo = "python-airgradient";
     tag = "v${version}";
-    hash = "sha256-llhdLqVueATKCb4wyPYjnsdOpbbE2BnUU0PH0jwHPMU=";
+    hash = "sha256-OlCCImVvoDqOA/LiSShCXwQACHw5Hmwc10BXaMz1DD8=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 

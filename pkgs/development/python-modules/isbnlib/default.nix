@@ -6,6 +6,7 @@
 
   # build-system
   setuptools,
+  pkg-resources-backport,
 
   # tests
   pytestCheckHook,
@@ -29,9 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    setuptools # needed for 'pkg_resources'
-  ];
+  dependencies = [ pkg-resources-backport ];
 
   nativeCheckInputs = [
     pytestCheckHook

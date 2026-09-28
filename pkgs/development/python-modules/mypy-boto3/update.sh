@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nixpkgs-fmt nix-update xmlstarlet
+#!nix-shell -i bash -p curl jq nixfmt-tree nix-update xmlstarlet
 
 set -eu -o pipefail
 
@@ -383,7 +383,7 @@ for package in "${packages[@]}"; do
       { print }
     ' ${source_file}
 
-    nixfmt ${source_file}
+    treefmt ${source_file}
 
     git commit ${source_file} -m "python3Packages.${package}: ${old_version} -> ${version}"
   fi

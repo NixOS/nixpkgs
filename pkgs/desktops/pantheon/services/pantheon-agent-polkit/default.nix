@@ -7,24 +7,26 @@
   meson,
   ninja,
   vala,
+  gcr_4,
   gtk4,
   libadwaita,
   libgee,
   granite7,
   pantheon-wayland,
   polkit,
+  systemd,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "8.0.2";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "pantheon-agent-polkit";
     rev = version;
-    hash = "sha256-tuugtrnamY9QMlF/ju5+4gwcEESFqH4jDH/kz790v5Y=";
+    hash = "sha256-ge/RZhzujI++ye7Gka/28W9CQjbmy+/5NstjqcVDUXw=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +38,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gcr_4
     granite7
     gtk4
     libadwaita
     libgee
     pantheon-wayland
     polkit
+    systemd
   ];
 
   passthru = {

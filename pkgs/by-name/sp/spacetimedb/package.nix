@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "2.2.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KlMkgxfsUoLJ4h05td62eKfqWl9fYQ61FTsA1COkQrQ=";
+    hash = "sha256-9FDx9oOAEBFUkec58hpFYNFR2IXoCYe7nQKijcPoAD8=";
   };
 
-  cargoHash = "sha256-csiDZKGLcorwVemK0g8Vi0+/Zq+b2UtC047ROrC/nOI=";
+  cargoHash = "sha256-EezB0iXBb0G7k46nfAm3+XUhIG3SuUI4Wv8oRL5K3XE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SPACETIMEDB_NIX_BUILD_GIT_COMMIT = finalAttrs.src.rev;
     # required to make jemalloc_tikv_sys build
     CFLAGS = "-O";
+    RUSTFLAGS = "--cfg tokio_unstable";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -86,6 +87,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     description = "Full-featured relational database system that lets you run your application logic inside the database";
     homepage = "https://github.com/clockworklabs/SpacetimeDB";
     license = lib.licenses.bsl11;

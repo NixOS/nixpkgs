@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonOption "validate" (if finalAttrs.doCheck then "enabled" else "disabled"))
+    (lib.mesonOption "validate" (if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"))
   ];
 
   doCheck = true;

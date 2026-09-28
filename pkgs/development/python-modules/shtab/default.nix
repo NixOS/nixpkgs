@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.8.0";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "tqdm";
     repo = "shtab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VK3+JLb9Lh+YHixMa1Hjm5bYJ9vSmMPIkN6c3DeHDo8=";
+    hash = "sha256-+9M0IfiD5CJcg4AHqCfq1UON/E63etwzvx7Gc82H0PE=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +37,10 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "shtab" ];
 
   meta = {
-    description = "Module for shell tab completion of Python CLI applications";
+    description = "Automagic shell tab completion for Python CLI applications";
     mainProgram = "shtab";
-    homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://tqdm.github.io/shtab/";
+    changelog = "https://github.com/tqdm/shtab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

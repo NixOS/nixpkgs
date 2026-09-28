@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "librespeed-cli";
-  version = "1.0.13";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "librespeed";
     repo = "speedtest-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q6JdkXl6EaM/Uh2u2xH4Afa+aFvssZh98J7uUtJv/H0=";
+    hash = "sha256-5UFF2DCFHjt+PR2neir8tR+cRe5Clx1UkB0w+dW7IKs=";
   };
 
-  vendorHash = "sha256-LXSCOAX3EwDBJ37mkS/BZCllgEai8tC7WFy6pebNAyo=";
+  vendorHash = "sha256-c7t6cYWB4eifhAKH5cNbzB5eA9pcdzBiJyHmNp3MCr4=";
 
   # Tests have additional requirements
   doCheck = false;

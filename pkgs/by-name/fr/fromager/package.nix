@@ -1,76 +1,71 @@
 {
   lib,
-  stdenv,
-  python3,
   fetchFromGitHub,
+  python3Packages,
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fromager";
-  version = "0.71.0";
+  version = "0.97.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = finalAttrs.version;
-    hash = "sha256-3zz37BZx8FcKNl8mSmClIrZxvL+2AS0hJDct6K7BhBE=";
+    hash = "sha256-u+avrDFOWhpPMXjY5ZlAprjinkUxY1nUqbGtndrbMkY=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatchling
     hatch-vcs
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     elfdeps
-    html5lib
+    license-expression
     packaging
-    pkginfo
+    packageurl-python
     psutil
     pydantic
+    pypi-simple
     pyproject-hooks
     pyyaml
     requests
-    requests-mock
     resolvelib
     rich
-    setuptools
+    starlette
     stevedore
     tomlkit
     tqdm
     uv
+    uvicorn
     wheel
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-xdist
     requests-mock
+    spdx-tools
     twine
     uv
     writableTmpDirAsHomeHook
   ];
 
+  # Some tests launch ignored background requests to placeholder URLs. Avoid
+  # backoff retries: https://github.com/python-wheel-build/fromager/pull/1348
+  env.FROMAGER_HTTP_RETRIES = 0;
+
+  # Tests share repository directories and race during setup:
+  # https://github.com/python-wheel-build/fromager/pull/1349
+  dontUsePytestXdist = true;
+  pytestFlags = [ "--numprocesses=0" ];
+
   pythonImportsCheck = [
     "fromager"
-  ];
-
-  disabledTestPaths = [
-    # Depends on wheel.cli module that is private since wheel 0.46.0
-    "tests/test_wheels.py"
-  ];
-
-  disabledTests = [
-    # Accessing pypi.org (not allowed in sandbox)
-    "test_get_build_backend_dependencies"
-    "test_get_build_sdist_dependencies"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-    # Assumes platform.machine() returns 'arm64' on ARM64, which is not true for Linux.
-    # Re-enable once https://github.com/python-wheel-build/fromager/pull/849 is merged.
-    "test_add_constraint_conflict"
   ];
 
   meta = {

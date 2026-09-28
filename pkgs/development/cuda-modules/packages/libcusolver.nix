@@ -35,5 +35,10 @@ buildRedist {
       Optimization applications.
     '';
     homepage = "https://developer.nvidia.com/cusolver";
+    # The static output vendors METIS 5.1.0 (lib/libmetis_static.a).
+    license = [
+      lib.licenses.nvidiaCudaRedist
+      lib.licenses.asl20
+    ];
   };
 }

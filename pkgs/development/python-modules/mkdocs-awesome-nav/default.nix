@@ -3,6 +3,7 @@
   gitMinimal,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   flit-core,
   mkdocs,
   mkdocs-exclude,
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-guv+c4QwaATYEZ6XcWVZaOcZ7U9oLsW+RdWBtB1Xrnc=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ flit-core ];
 

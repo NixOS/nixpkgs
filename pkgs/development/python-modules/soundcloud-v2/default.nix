@@ -33,6 +33,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "soundcloud" ];
 
+  pythonRelaxDeps = [ "curl_cffi" ];
+
   meta = {
     description = "Python wrapper for the v2 SoundCloud API";
     homepage = "https://github.com/7x11x13/soundcloud.py";

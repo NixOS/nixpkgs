@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildkite-cli";
-  version = "3.40.0";
+  version = "3.54.2";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Fij2SG6dLnyc4U2Q+jIx2ZDzbGd6ETTWiiz3ciRaE8=";
+    hash = "sha256-VnahUKqJiGjnvBeTY+6CTZidGyH1betUyWQGVXl7reI=";
   };
 
-  vendorHash = "sha256-pxVSzEc/pgPaMMBOl5LYjbmPVpjr1M2obFmeiGqfgik=";
+  vendorHash = "sha256-ttEJqnImFRq7n03eGssx+oyhtVJ6xVst1yaZ2fhXgkc=";
 
   ldflags = [
     "-s"
@@ -40,6 +40,8 @@ buildGoModule (finalAttrs: {
 
         # Requires a git repository (which is removed by nix after fetching the source)
         "TestResolvePipelinesFromPath"
+        "TestPreflightCmd_Run"
+        "TestSnapshotContext_CancelsPush"
       ]
       ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         # Expected timeout error but got none

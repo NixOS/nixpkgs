@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "openslide";
-  version = "1.4.3";
+  version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide-python";
     tag = "v${version}";
-    hash = "sha256-v8JrZdDwZPtnWYOmvJXbq22k6/MQqMzWweD86Eof0e4=";
+    hash = "sha256-uo1jcfxbx9v9vNQGnzAhO4N/QKQycMh5y4ICWstnZA0=";
   };
 
   postPatch = ''

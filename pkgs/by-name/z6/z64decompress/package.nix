@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.3-unstable-2023-12-21";
 
   src = fetchFromGitHub {
-    owner = "z64tools";
+    owner = "z64dev";
     repo = "z64decompress";
     rev = "e2b3707271994a2a1b3afc6c3997a7cf6b479765";
     hash = "sha256-PHiOeEB9njJPsl6ScdoDVwJXGqOdIIJCZRbIXSieBIY=";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Zelda 64 rom decompressor";
-    homepage = "https://github.com/z64tools/z64decompress";
+    homepage = "https://github.com/z64dev/z64decompress";
     license = with lib.licenses; [
       gpl3Only
 

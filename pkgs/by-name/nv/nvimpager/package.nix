@@ -4,7 +4,7 @@
   stdenv,
   bash,
   ncurses,
-  neovim,
+  neovim-unwrapped,
   procps,
   scdoc,
   lua51Packages,
@@ -36,14 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim}'
+    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim-unwrapped}'
   '';
 
   doCheck = true;
   nativeCheckInputs = [
     lua51Packages.busted
     ncurses # for tput
-    neovim
+    neovim-unwrapped
     procps # for nvim_get_proc() which uses ps(1)
     util-linux
   ];

@@ -26,21 +26,36 @@ stdenv.mkDerivation (finalAttrs: {
     && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/mlir "$out"
-    cp -r ${monorepoSrc}/third-party "$out/third-party"
+  src =
+    runCommand "${finalAttrs.pname}-src-${version}"
+      {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/mlir "$out"
+        cp -r ${monorepoSrc}/third-party "$out/third-party"
 
-    mkdir -p "$out/llvm"
-  '';
+        mkdir -p "$out/llvm"
+      '';
 
   sourceRoot = "${finalAttrs.src.name}/mlir";
 
   patches = [
     ./gnu-install-dirs.patch
+    # MLIRConfig.cmake unconditionally overwrites MLIR_TABLEGEN_EXE, breaking standalone
+    # builds that provide their own pre-built mlir-tblgen (e.g. in Nix sandboxed builds).
+    # The patch adds guards to respect caller-set values and auto-creates an imported
+    # mlir-tblgen target for downstream consumers. This replaces the previous dummy target
+    # workaround in flang's CMakeLists.txt.
+
+    # Upstream issue: https://github.com/llvm/llvm-project/issues/150986
+    (getVersionFile "mlir/mlir-tablegen-imported-target.patch")
   ]
-  ++ lib.optional (lib.versionOlder release_version "20") [
+  ++ lib.optionals (lib.versionOlder release_version "20") [
     # Fix build with gcc15
     # https://github.com/llvm/llvm-project/commit/41eb186fbb024898bacc2577fa3b88db0510ba1f
     # https://github.com/llvm/llvm-project/commit/101109fc5460d5bb9bb597c6ec77f998093a6687
@@ -56,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm
     libxml2
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
@@ -88,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://mlir.llvm.org/";
     description = "Multi-Level IR Compiler Framework";

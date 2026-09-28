@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cjs";
-  version = "140.0";
+  version = "140.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     tag = finalAttrs.version;
-    hash = "sha256-zbYcKzTuDLnFEVeSXgoZDUK8Wx3gysGSqZyXjKrBStI=";
+    hash = "sha256-KGcu7QkocH1FeO5Dt2GBC1Y+xYk7OqgvAF7DAJHzn/I=";
   };
 
   outputs = [

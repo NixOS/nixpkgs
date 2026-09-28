@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
   replaceVars,
 
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.7.2";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     tag = version;
-    hash = "sha256-WV344gxcmq08sIUVevn6uD50FSy4JvLt4aret5ZakYQ=";
+    hash = "sha256-+2wUMbswg2yltNMLPc9U8MbEFx2xKVWxGjP/TBfCjto=";
   };
 
   # force pyproj to use ${proj}
@@ -33,23 +32,6 @@ buildPythonPackage rec {
     (replaceVars ./001.proj.patch {
       proj = proj;
       projdev = proj.dev;
-    })
-    # PROJ 9.8.0 compatibility
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1557.diff?full_index=1";
-      hash = "sha256-3iK/JaQEgyQvPjybJF/ATxOy3fFl7q6aa9tdfsrhajM=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1560.diff?full_index=1";
-      hash = "sha256-fr+lvDeVFDagc9aHzaQhyZtWK2sy5kR7iImJsuxW8Z4=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1568.diff?full_index=1";
-      hash = "sha256-fVFg3/ikOk6LiRHA/u14g+ZFsROGE7me878Vvq4mxG4=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1581.diff?full_index=1";
-      hash = "sha256-EdzUCt4P99ENS2qCBU30FUNnJYD0B2CqcmZXwEYLdVA=";
     })
   ];
 
@@ -90,6 +72,10 @@ buildPythonPackage rec {
     "test_sync__source_id__list"
     "test_sync_download"
     "test_transformer_group__download_grids"
+    # https://github.com/pyproj4/pyproj/issues/1588
+    "test_coordinate_operation__from_string"
+    "test_transformer_from_pipeline__input_types"
+    "test_transformer_from_pipeline__wkt_json"
   ];
 
   pythonImportsCheck = [

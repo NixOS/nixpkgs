@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvinfo";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xvinfo-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Pt5x7LJtlhTMvGkWcgKF6VosfgxeGbhXDqr3KtfFxAQ=";
+    hash = "sha256-pDaUXmpKtwWQNY7sK4XSaXD33kgNJ+iiWvj+hCHoiuI=";
   };
 
   strictDeps = true;

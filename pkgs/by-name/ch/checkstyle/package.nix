@@ -8,17 +8,22 @@
 }:
 
 maven.buildMavenPackage (finalAttrs: {
-  version = "13.4.2";
+  version = "14.0.0";
   pname = "checkstyle";
 
   src = fetchFromGitHub {
     owner = "checkstyle";
     repo = "checkstyle";
     tag = "checkstyle-${finalAttrs.version}";
-    hash = "sha256-0ENLO/hP/MXVU358Ys83cH1Adl8CTbT/zcG9/tOBIC8=";
+    hash = "sha256-8XrYOILxxPMFkSjJyFULzFiqF1T63F/PIzPiRevUYws=";
   };
 
-  mvnHash = "sha256-eRNJOrSP9GcuF226kZi5ef3shm1PdTEsGvjpi46cfSw=";
+  patches = [
+    # PR: https://github.com/checkstyle/checkstyle/pull/21242
+    ./drop-nexus-codehaus-snapshot-plugin-repository.patch
+  ];
+
+  mvnHash = "sha256-8HMUvqhvI8dl2E4uPj3qmgwnyY5fAMtbTbXm67P1Wpo=";
 
   nativeBuildInputs = [
     maven

@@ -15,8 +15,8 @@
 }:
 
 let
-  sabctoolsVersion = "9.4.0";
-  sabctoolsHash = "sha256-JkRRtZnzp83dMKXiuqOXaTm8UOpkkhmjH2ysS8TY0DI=";
+  sabctoolsVersion = "9.6.3";
+  sabctoolsHash = "sha256-+qzSDV7JER45yBMmyh5Jor4rJLlcE8KPguPnrBmMkSk=";
 
   pythonEnv = python3.withPackages (
     ps: with ps; [
@@ -24,13 +24,14 @@ let
       babelfish
       cffi
       chardet
-      cheetah3
       cheroot
       cherrypy
       configobj
       cryptography
+      ct3
       feedparser
       guessit
+      hachoir
       jaraco-classes
       jaraco-collections
       jaraco-context
@@ -73,14 +74,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "5.0.1";
+  version = "5.1.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-wx3lNGeHsNvd+nLiI9jfIKHcsVstfjEpZry6o3xbWd4=";
+    hash = "sha256-Ya7AagLwupKmkeOWPbsQB/lWyl/7egTGbcxXqM5yY54=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -111,7 +112,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jojosch
-      adamcstephens
     ];
     mainProgram = "sabnzbd";
   };

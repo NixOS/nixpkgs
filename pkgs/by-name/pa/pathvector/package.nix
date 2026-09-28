@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Declarative edge routing platform that automates route optimization and control plane configuration";
     homepage = "https://pathvector.io";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewpi ];
     mainProgram = "pathvector";
   };

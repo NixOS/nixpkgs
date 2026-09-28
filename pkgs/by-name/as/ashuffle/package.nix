@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/joshkunz/ashuffle";
     description = "Automatic library-wide shuffle for mpd";
-    maintainers = [ lib.maintainers.tcbravo ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     mainProgram = "ashuffle";

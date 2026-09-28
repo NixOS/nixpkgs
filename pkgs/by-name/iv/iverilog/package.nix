@@ -93,10 +93,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # Several tests fail with:
-      # ==> Failed - running iverilog.
-      "x86_64-darwin"
-    ];
   };
 })

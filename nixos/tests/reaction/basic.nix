@@ -83,8 +83,6 @@
   # Debug interactively with:
   # - nix run .#nixosTests.reaction.driverInteractive -L
   # - run_tests()
-  # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
-  # ssh -o User=root vsock%4
   interactive.sshBackdoor.enable = true;
 
   interactive.nodes.server =

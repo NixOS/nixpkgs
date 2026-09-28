@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  fuse,
+  fuse3,
   pkg-config,
   libpcap,
   zlib,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.59.1";
+  version = "4.59.2";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ASI3iwygGeF9HaoZaSMUIuELJ/pMzRwJL8VmOAXs8cM=";
+    sha256 = "sha256-kWJI0lsVy4KmCIUbuIHswuN/lnMgG/eR6goya+keoy0=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     libpcap
     zlib
     python3
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = lib.platforms.unix;

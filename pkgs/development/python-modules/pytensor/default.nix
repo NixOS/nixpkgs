@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -25,16 +26,17 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  tensorflow-probability,
   writableTmpDirAsHomeHook,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.38.3";
+  version = "3.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
@@ -43,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-+yfALDxNIjQUgzEJ3/ZtvLIGNmx6bPYRQ9zGXFbcMNM=";
+    hash = "sha256-tUHBpMyArqM61X3LqNbQQioD1Fe38bQj9jqkHDojVwU=";
   };
 
   build-system = [
@@ -64,6 +66,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  # `tensorflow-probability` is deliberately omitted: it only unlocks a handful of jax tests but
+  # drags in `tensorflow-bin`/`tf2onnx`, which fail to evaluate on Python 3.14 and on Darwin.
+  # Most of them are guarded upstream by `TFP_INSTALLED`, the rest are listed in `disabledTests`.
   nativeCheckInputs = [
     jax
     jaxlib
@@ -71,7 +76,6 @@ buildPythonPackage (finalAttrs: {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
     writableTmpDirAsHomeHook
   ];
 
@@ -85,15 +89,24 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTests = [
-    # TypeError: jax_funcified_fgraph() takes 2 positional arguments but 3 were given
-    "test_jax_Reshape_shape_graph_input"
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
 
-    # AssertionError: equal_computations failed
-    "test_infer_shape_db_handles_xtensor_lowering"
+    # `det` of a singular matrix: jax returns -1.3e-116 where numpy returns 0.0
+    "test_jax_basic"
 
-    # Crashes with jax>=0.9.0
-    # in .../jax/_src/compiler.py", line 362 in backend_compile_and_load
-    "test_higher_order_derivatives"
+    # NotImplementedError: No JAX implementation for Op {betaincinv,gammainccinv,gammaincinv}.
+    # These need `tensorflow-probability` but, unlike the other tfp tests, are not guarded
+    # upstream by `TFP_INSTALLED`.
+    "test_betaincinv"
+    "test_gammainccinv"
+    "test_gammaincinv"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
+    # references, so the count is one lower.
+    "test_sparse_creation_refcount"
+    "test_sparse_passthrough_refcount"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error

@@ -1,61 +1,111 @@
 {
-  fetchFromGitHub,
-  helix,
-  installShellFiles,
-  lib,
   rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  helix,
+  helix-unwrapped,
+  grammarsOverlay ? (
+    final: prev: {
+      tree-sitter-beancount = prev.tree-sitter-beancount.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
+        dontCheckForBrokenSymlinks = true;
+      };
+      tree-sitter-strace = prev.tree-sitter-strace.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tact = prev.tree-sitter-tact.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.override {
+        dontPatch = true;
+      };
+      tree-sitter-vue = prev.tree-sitter-vue.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-wit = prev.tree-sitter-wit.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+    }
+  ),
 }:
+let
+  steelix-unwrapped = helix-unwrapped.overrideAttrs (
+    finalAttrs: _: {
+      pname = "steelix-unwrapped";
+      version = "0-unstable-2026-09-26";
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "steelix";
-  version = "0-unstable-2026-05-02";
+      src = fetchFromGitHub {
+        owner = "mattwparas";
+        repo = "helix";
+        rev = "df595c7dc5729e2712c79dd2e35977e3474b3ec6";
+        hash = "sha256-zWOzgArhg4PCgi8AMKLtcttBtchlQJay6atEpobCASk=";
+      };
 
-  src = fetchFromGitHub {
-    owner = "mattwparas";
-    repo = "helix";
-    rev = "ff73544b3d7d7c264a127a7d78944133015b285a";
-    hash = "sha256-AkotCZTWiQ5KAUDwmHcRuA7G0y8vqJYiLSXEtT+y/po=";
-  };
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) src pname version;
+        hash = "sha256-h4HkOppmseHzX1gHUGO1XSwrg4uCJ4PjmI/3WsYp2C4=";
+      };
 
-  cargoHash = "sha256-eECfZ7UZGsbTnbfclBhSTNDj8fbfJNT9oBHjNsXpAG0=";
+      cargoBuildFlags = [
+        "--package"
+        "helix-term"
+        "--features"
+        "steel,git"
+      ];
 
-  nativeBuildInputs = [ installShellFiles ];
+      # This fork is built from Helix master, whose loader expects tree-sitter
+      # grammars with the platform-native extension (`.dylib` on Darwin) since
+      # helix-editor/helix#14982. We reuse the grammars from `helix.runtime`, built
+      # from the last Helix *release*, which still names them `.so` on Darwin, so
+      # revert that commit to make the loader look for `.so`. Remove once a Helix
+      # release ships #14982 and nixpkgs' grammars switch to `.dylib`.
+      patches = [
+        (fetchpatch {
+          name = "revert-dylib-grammar-extension.patch";
+          url = "https://github.com/helix-editor/helix/commit/430914b298a32653ab1847fdfdf2177a002be04c.patch";
+          revert = true;
+          hash = "sha256-4KUFppkso4/XwNU+mGIgLvl+mJXHZWkmaguYMy8oTyI=";
+        })
+      ];
 
-  # Don't use cargo xtask steel since it needs network access
-  cargoBuildFlags = [
-    "--package"
-    "helix-term"
-    "--features"
-    "steel,git"
-  ];
+      doInstallCheck = false;
+    }
+  );
+in
+(helix.override {
+  helix-unwrapped = steelix-unwrapped;
+  lockedGrammars = lib.importJSON ./grammars.json;
+  inherit grammarsOverlay;
+}).overrideAttrs
+  (
+    _: previousAttrs: {
+      pname = "steelix";
+      strictDeps = true;
 
-  env = {
-    # Disable fetching and building of tree-sitter grammars in the helix-term build.rs
-    HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-    # Use tree-sitter grammars and runtime from the helix package
-    HELIX_DEFAULT_RUNTIME = helix.runtime;
-  };
+      meta = previousAttrs.meta // {
+        description = "Helix editor with Steel (Scheme) scripting support";
+        longDescription = ''
+          Steelix is a fork of the Helix editor with Steel (Scheme) scripting support.
+        '';
+        homepage = "https://github.com/mattwparas/helix";
+        changelog = "https://github.com/mattwparas/helix/blob/${steelix-unwrapped.src.rev}/CHANGELOG.md";
+        license = lib.licenses.mpl20;
+        mainProgram = "hx";
+        maintainers = with lib.maintainers; [
+          aciceri
+          Ra77a3l3-jar
+        ];
+      };
 
-  postInstall = ''
-    installShellCompletion contrib/completion/hx.{bash,fish,zsh}
-    mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
-    cp contrib/Helix.desktop $out/share/applications
-    cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
-  '';
-
-  passthru.updateScript = ./update.sh;
-
-  meta = {
-    description = "Helix editor with Steel (Scheme) scripting support";
-    longDescription = ''
-      Steelix is a fork of the Helix text editor with Steel (Scheme) scripting support.
-    '';
-    homepage = "https://github.com/mattwparas/helix";
-    changelog = "https://github.com/mattwparas/helix/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    mainProgram = "hx";
-    maintainers = with lib.maintainers; [
-      Ra77a3l3-jar
-    ];
-  };
-})
+      passthru = previousAttrs.passthru // {
+        updateScript = [
+          previousAttrs.passthru.updateSh
+          "steelix"
+        ];
+        unwrapped = steelix-unwrapped;
+      };
+    }
+  )

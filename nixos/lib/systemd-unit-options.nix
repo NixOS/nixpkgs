@@ -625,7 +625,7 @@ rec {
 
       listenStreams = mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = types.listOf (types.coercedTo types.port toString types.str);
         example = [
           "0.0.0.0:993"
           "/run/my-socket"

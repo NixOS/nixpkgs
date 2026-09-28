@@ -104,7 +104,7 @@ git clone --branch "$tag" https://github.com/apple-oss-distributions/distributio
 cd distribution-macOS
 
 for package in "${packages[@]}"; do
-    # If the tag exists in `release.json`, use that as an optimization to avoid downloading unnecessarily from Github.
+    # If the tag exists in `release.json`, use that as an optimization to avoid downloading unnecessarily from GitHub.
     packageTag=$(jq -r --arg package "$package" '.projects[] | select(.project == $package) | .tag' release.json)
     packageCommit=$(git ls-tree -d HEAD "$package" | awk '{print $3}')
 

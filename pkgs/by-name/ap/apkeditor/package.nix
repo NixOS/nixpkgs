@@ -55,7 +55,7 @@ let
   apkeditor =
     let
       pname = "apkeditor";
-      version = "1.4.8";
+      version = "1.4.9";
       projectName = "APKEditor";
     in
     REAndroidLibrary {
@@ -71,7 +71,7 @@ let
         owner = "REAndroid";
         repo = "APKEditor";
         tag = "V${version}";
-        hash = "sha256-1XNefeEPs8SEBw+hY2CzZ+rPojNcAbg1AqvzhVcNyy4=";
+        hash = "sha256-NVUv09mMAJDJA/jCIB/EtjQbry0Ej43a7KGR1+5cknY=";
       };
 
       patches = [

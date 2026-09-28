@@ -22,9 +22,21 @@
           installTestHelpers = true;
         };
 
+        # NOTE: on aarch64-linux github actions runer due to lack of kvm, we need to delay pdfding start and give it more time to finish
+        systemd.services.pdfding.wantedBy = lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (lib.mkForce [ ]);
+        systemd.services.pdfding.serviceConfig.TimeoutStartSec =
+          lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 "900";
+        systemd.services.pdfding-background.wantedBy = lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (
+          lib.mkForce [ ]
+        );
+
         environment.systemPackages = [
           config.services.postgresql.finalPackage
         ];
+
+        # allows running nixos test on qemu without kvm, eg. github actions on aarch64-linux
+        systemd.settings.Manager.DefaultDeviceTimeoutSec = lib.mkForce 1800;
+        boot.initrd.kernelModules = [ "virtio_console" ];
       };
   };
 
@@ -42,6 +54,8 @@
 
       # create admin
       machine.wait_for_unit("multi-user.target")
+      machine.succeed("systemctl start pdfding.service")
+      machine.succeed("systemctl start pdfding-background.service")
       machine.wait_for_open_port(${toString port})
 
       machine.succeed("DJANGO_SUPERUSER_PASSWORD=admin pdfding-manage createsuperuser --no-input --username admin --email admin@localhost")
@@ -72,7 +86,7 @@
   # Debug interactively with:
   # - nix run .#nixosTests.pdfding.postgres.driverInteractive -L
   # - start_all() / run_tests()
-  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
+  interactive.sshBackdoor.enable = true;
   interactive.nodes.machine =
     { config, ... }:
     let

@@ -10,12 +10,12 @@
   python3,
 }:
 let
-  version = "18.7.0";
+  version = "20.4.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${version}";
-    hash = "sha256-Z+PtS88Rv9Vv6FA15KxSBWCmOtwmTqO1etgCV7WaTXo=";
+    hash = "sha256-EMN54PR9lhrZcGMq2iNUsdyBP3wVk4G/isjsneIGslI=";
   };
   missingHashes = ./missing-hashes.json;
   patches = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes patches;
-    hash = "sha256-KtFLJc2bEBS0sgTqbF68574fFMxwSlaSKcR0RedVJ4k=";
+    hash = "sha256-dOx4T009+FMFEvTZtlyJpAUo2UYBm1O1hIyBnSbqIgw=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     tmpfile="$(mktemp)"
     jq '.useNx = false' lerna.json > "$tmpfile"
     mv "$tmpfile" lerna.json
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
   '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.

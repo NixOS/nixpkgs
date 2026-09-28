@@ -2,7 +2,6 @@
   lib,
   callPackage,
   buildFHSEnv,
-  cudaPackages,
   config,
   cudaSupport ? config.cudaSupport,
 
@@ -28,16 +27,7 @@
 }:
 
 let
-  pixinsight = callPackage ./. { inherit cudaSupport; };
-
-  # For CUDA support (PixInsight ships with `libtensorflow-cpu`)
-  #
-  # PixInsight uses C API `libtensorflow`, which differs from library shipped
-  # with `tensorflow-bin`: in particular it contains `VERS_1.0` embedded.
-  # Variants from `tensorflow-bin` don't embed it and are rejected as
-  # incompatible, when PixInsight installs plugins to its internal runtime
-  # environment and loads their dependencies.
-  libtensorflow-gpu = callPackage ./libtensorflow-gpu.nix { };
+  pixinsight = callPackage ./. { };
 
   deployPath = "$HOME/.local/share/pixinsight";
   storePathFile = "${deployPath}/opt/PixInsight/.store-path";
@@ -62,6 +52,7 @@ buildFHSEnv {
 
       libGL
       libdrm
+      vulkan-loader
       qt6Packages.qtbase
       gtk3
       fontconfig
@@ -71,6 +62,7 @@ buildFHSEnv {
       libssh2
       libpsl
       libidn2
+      libnghttp2
 
       brotli
       libdeflate
@@ -101,13 +93,10 @@ buildFHSEnv {
       # libxcb-cursor # Bundled by PixInsight
     ])
     ++ lib.optionals cudaSupport (
+      with pkgs.cudaPackages;
       [
-        libtensorflow-gpu
-      ]
-      ++ (with pkgs.cudaPackages; [
         cudatoolkit
-        cudnn
-      ])
+      ]
     );
 
   extraInstallCommands = ''
@@ -150,24 +139,19 @@ buildFHSEnv {
       ''--ro-bind "${pixinsight}"/opt /opt''
     ];
 
-  profile = lib.optionalString cudaSupport ''
-    export XLA_FLAGS=--xla_gpu_cuda_data_dir=${cudaPackages.cudatoolkit}
-  '';
-
   runScript = "/opt/PixInsight/bin/PixInsight.sh";
 
-  passthru = {
-    inherit libtensorflow-gpu;
-    unwrapped = pixinsight;
-  };
+  passthru.unwrapped = pixinsight;
 
-  inherit (pixinsight.meta)
-    description
-    homepage
-    license
-    maintainers
-    platforms
-    sourceProvenance
-    hydraPlatforms
-    ;
+  meta = {
+    inherit (pixinsight.meta)
+      description
+      homepage
+      license
+      maintainers
+      platforms
+      sourceProvenance
+      hydraPlatforms
+      ;
+  };
 }

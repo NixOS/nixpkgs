@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "audiusGmbH";
+    owner = "audius";
     repo = "cups-printers";
     tag = finalAttrs.version;
     hash = "sha256-Fne7V9dEZwdV6OsQPg2gzrz/wloAOOuwlx3CqXOyWBc=";

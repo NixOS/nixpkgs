@@ -31,13 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gmp
-    mpfr
     ppl
-    camlidl
     flint
     pplite
   ];
-  propagatedBuildInputs = [ mlgmpidl ];
+  propagatedBuildInputs = [
+    camlidl
+    mlgmpidl
+    mpfr
+  ];
 
   outputs = [
     "out"
@@ -58,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     license = lib.licenses.lgpl21;
-    homepage = "http://apron.cri.ensmp.fr/library/";
+    homepage = "https://github.com/antoinemine/apron";
     maintainers = [ lib.maintainers.vbgl ];
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;

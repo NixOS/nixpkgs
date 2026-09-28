@@ -18,6 +18,7 @@
   pypaInstallHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
+  pythonMetadataCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
   pythonRelaxDepsHook,
@@ -40,7 +41,6 @@ let
     flip
     getName
     hasSuffix
-    head
     isBool
     max
     optional
@@ -48,12 +48,10 @@ let
     optionals
     optionalString
     removePrefix
-    splitString
     stringLength
+    all
+    seq
     ;
-
-  getOptionalAttrs =
-    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 
   leftPadName =
     name: against:
@@ -61,6 +59,8 @@ let
       len = max (stringLength name) (stringLength against);
     in
     fixedWidthString len " " name;
+
+  hasZipSuffix = hasSuffix "zip";
 
   isPythonModule =
     drv:
@@ -94,6 +94,16 @@ let
     "wheel"
   ];
 
+  bootstrappedPypaBuildHook = pypaBuildHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
+    wheel = null;
+  };
+  bootstrappedPypaInstallHook = pypaInstallHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
+  };
+  bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+  };
 in
 
 lib.extendMkDerivation {
@@ -268,10 +278,10 @@ lib.extendMkDerivation {
 
           checkDrv =
             attrName: drv:
-            if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
+            if isPythonModule drv && isMismatchedPython drv then throwMismatch attrName drv else true;
 
         in
-        attrName: inputs: map (checkDrv attrName) inputs;
+        attrName: inputs: seq (all (checkDrv attrName) inputs) inputs;
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
@@ -282,13 +292,7 @@ lib.extendMkDerivation {
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
       runtimeDepsCheckHook =
-        if isBootstrapPackage then
-          pythonRuntimeDepsCheckHook.override {
-            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-          }
-        else
-          pythonRuntimeDepsCheckHook;
-
+        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
@@ -320,22 +324,14 @@ lib.extendMkDerivation {
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
+      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
         setuptoolsBuildHook
       ]
       ++ optionals (format' == "pyproject") [
-        (
-          if isBootstrapPackage then
-            pypaBuildHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
-              wheel = null;
-            }
-          else
-            pypaBuildHook
-        )
+        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
         runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
@@ -348,19 +344,27 @@ lib.extendMkDerivation {
         eggInstallHook
       ]
       ++ optionals (format' != "other") [
-        (
-          if isBootstrapInstallPackage then
-            pypaInstallHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
-            }
-          else
-            pypaInstallHook
-        )
+        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
       ]
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
       ]
+      ++
+        optionals
+          (
+            finalAttrs ? "pname"
+            && finalAttrs ? "version"
+            # We don't care about the METADATA of Python applications.
+            && isPythonModule finalAttrs.passthru
+            # METADATA is unlikely to be correct if pyproject is false or null.
+            && pyproject == true
+            && !lib.hasInfix "unstable-" finalAttrs.version
+            && !isBootstrapPackage
+          )
+          [
+            pythonMetadataCheckHook
+          ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
         pythonNamespacesHook
@@ -373,16 +377,16 @@ lib.extendMkDerivation {
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-      propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
-        propagatedBuildInputs
-        ++ getFinalPassthru "dependencies"
+      propagatedBuildInputs =
+        validatePythonMatches "propagatedBuildInputs" (
+          propagatedBuildInputs ++ getFinalPassthru "dependencies"
+        )
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
           # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
           python
-        ]
-      );
+        ];
 
       inherit strictDeps;
 
@@ -463,13 +467,11 @@ lib.extendMkDerivation {
             attrs.${name} == [ ]
           ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
         )
-        (
-          getOptionalAttrs [
-            "enabledTestMarks"
-            "enabledTestPaths"
-            "enabledTests"
-          ] attrs
-        );
+        {
+          ${if attrs ? enabledTestMarks then "enabledTestMarks" else null} = attrs.enabledTestMarks;
+          ${if attrs ? enabledTestPaths then "enabledTestPaths" else null} = attrs.enabledTestPaths;
+          ${if attrs ? enabledTests then "enabledTests" else null} = attrs.enabledTests;
+        };
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.

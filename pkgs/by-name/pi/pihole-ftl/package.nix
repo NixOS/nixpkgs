@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pihole-ftl";
-  version = "6.6.1";
+  version = "6.7.1";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "FTL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UMLTym9LSx8rlWKkFtHGtSEM0Stdpkfkz/7Iy/05jf8=";
+    hash = "sha256-TP4HFgZKAbrLaMeIkY4MKAAs86cAALXbgPwd8oc0BrA=";
   };
 
   nativeBuildInputs = [

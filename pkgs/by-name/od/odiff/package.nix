@@ -3,28 +3,36 @@
   stdenv,
   installShellFiles,
   fetchFromGitHub,
-  zig_0_15,
-  callPackage,
+  zig_0_16,
   versionCheckHook,
   nasm,
+  nix-update-script,
 }:
 
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odiff";
-  version = "4.3.8";
+  version = "4.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "odiff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YiyhhVV73XfVoYCRcYU7PL+Vrcwaf2FINH0W+Ejcu4Q=";
+    hash = "sha256-kUkt1N21ZuaXBuMFSrQbHgX2ItvSt8CIM3sT4d4bv5c=";
+  };
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-12dowp2dcZtvV7t2pZHgMMpywviAMZHFW1N6YG5uaXk=";
   };
 
   postConfigure = ''
-    ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
   nativeBuildInputs = [
@@ -37,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/dmtrKovalenko/odiff";

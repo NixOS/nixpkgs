@@ -4,20 +4,22 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  nodejs_22,
 }:
 
-buildNpmPackage rec {
+# Override can be removed once cross-seed v7 releases
+buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "cross-seed";
-  version = "6.13.6";
+  version = "6.13.7";
 
   src = fetchFromGitHub {
     owner = "cross-seed";
     repo = "cross-seed";
     tag = "v${version}";
-    hash = "sha256-E2tnlDU2/msNcSsoDXvwGWFhWpXEByloUmlVp2tckwo=";
+    hash = "sha256-+7A4UGIY75hvF0JvtIr6nGNdXkUE0XV9TFpEQz9OW+Y=";
   };
 
-  npmDepsHash = "sha256-tR7zPoIX6yjlRx8QbRSxskvueQ1BsP3gGAlonKHH0RY=";
+  npmDepsHash = "sha256-HoIiO7cj4JNY+sJEuH1v0AgagDuBTySJaoVo/4SsfIc=";
 
   passthru = {
     updateScript = nix-update-script { };

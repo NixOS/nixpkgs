@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_13,
+  zig_0_16,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigimports";
-  version = "0.1.0";
+  version = "0.1.0-unstable-2026-07-25";
 
   src = fetchFromGitHub {
     owner = "tusharsadhwani";
     repo = "zigimports";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-2cri+5mhhTQqlkv9db/3CQ3rCMq4yW4drMoRTZBhndE=";
+    rev = "bcfbb03a85553638f8a80e6596bdfaa93a0cc266";
+    hash = "sha256-ARM+pmk0elu+uYnrEdIixq6AS0eyUeqobOAPteER76w=";
   };
 
   nativeBuildInputs = [
-    zig_0_13
+    zig_0_16
   ];
 
   # Remove the system suffix on the program name.
@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "zigimports";
-    inherit (zig_0_13.meta) platforms;
+    inherit (zig_0_16.meta) platforms;
   };
 })

@@ -5,17 +5,18 @@
   makeWrapper,
   makeDesktopItem,
   nodejs,
-  electron_41,
+  electron_42,
   element-web,
   callPackage,
-  typescript,
+  typescript_7,
   tsx,
   sqlcipher,
   # command line arguments which are always set
   commandLineArgs ? "",
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
+  faketty,
   asar,
   copyDesktopItems,
   darwin,
@@ -23,18 +24,19 @@
 }:
 
 let
-  electron = electron_41;
+  pnpm = pnpm_11;
+  electron = electron_42;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.14";
+  version = "1.12.29";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yy7CfMOMT1DBXHDHaDyAaOgp3s2KQIKA1A6zUhVOUhM=";
+    hash = "sha256-0LiasFrVMnMX1Z4TcP+Eti58X7+ICksqKnerQKj2ayI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -43,8 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 3;
-    hash = "sha256-0yqWObZtRntsH7gk+OB8pMuWsrvCQ4L9173Qv0o5abk=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-eLTMKzVgP1oSiat80ygWUH2zGF7ukKSLvOEGay/pr9Y=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -54,10 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     nodejs
     makeWrapper
-    typescript
+    typescript_7
     pnpm
     pnpmConfigHook
     tsx
+    faketty
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -83,13 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../../
   '';
 
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
   buildPhase = ''
     runHook preBuild
 
     export VERSION=${finalAttrs.version}
 
-    pnpm -C apps/desktop run build:ts
-    pnpm -C apps/desktop run build:res
+    # Not used here because we link element-web in installPhase, but electron-builder throws an error if it is not present
+    asar p ${element-web} apps/desktop/webapp.asar
+
+    faketty pnpm -C apps/desktop exec nx build:ts
+    faketty pnpm -C apps/desktop exec nx build:res
     pnpm -C apps/desktop exec electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version} -c.mac.identity=null
 
     cd apps/desktop
@@ -102,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $seshat tmp-app/node_modules/matrix-seshat
 
     asar pack tmp-app "$packed"
+
+    # element-web is linked into the output during installPhase.
+    find ./dist -name webapp.asar -delete
 
     runHook postBuild
   '';
@@ -143,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/element-hq/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-web/blob/develop/apps/desktop/package.json
   desktopItems = [
     (makeDesktopItem {
       name = "element-desktop";
@@ -170,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Feature-rich client for Matrix.org";
+    description = "Matrix client for desktop";
     homepage = "https://element.io/";
     changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;

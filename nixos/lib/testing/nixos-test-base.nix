@@ -8,6 +8,7 @@ in
 {
   imports = [
     ../../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+    ../../modules/virtualisation/guest-networking-options.nix
     {
       key = "no-manual";
       documentation.nixos.enable = false;

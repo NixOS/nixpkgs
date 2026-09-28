@@ -5,7 +5,7 @@
   fixtures,
   pbr,
   six,
-  subunit,
+  python-subunit,
   callPackage,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     fixtures
     six
-    subunit
+    python-subunit
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components

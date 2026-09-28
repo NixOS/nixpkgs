@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       It can be used to create an Internet radio station or a privately
       running jukebox and many things in between. It is very versatile
       in that new formats can be added relatively easily and supports
-      open standards for commuincation and interaction.
+      open standards for communication and interaction.
     '';
 
     homepage = "https://www.icecast.org";

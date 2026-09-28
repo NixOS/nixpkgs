@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   utils,
   ...
@@ -201,8 +202,12 @@ let
       --notify-ready=yes \
       --kill-signal=SIGRTMIN+3 \
       --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
+      ${optionalString config.nix.enable "--bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT"} \
+      ${
+        optionalString (
+          config.nix.enable && config.nix.daemon.enable
+        ) "--bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT"
+      } \
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
       ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
@@ -520,9 +525,22 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
-    localmacAddress = null;
+    localMacAddress = null;
     tmpfs = null;
   };
+
+  # Parses an IP address with an optional prefix
+  ipFromString =
+    str: defaultPrefix:
+    let
+      segments = lib.splitString "/" str;
+      prefix = lib.elemAt segments 1;
+      hasPrefix = builtins.length segments == 2;
+    in
+    {
+      address = lib.head segments;
+      prefixLength = if hasPrefix then builtins.fromJSON prefix else defaultPrefix;
+    };
 
 in
 
@@ -594,6 +612,16 @@ in
                                 boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
+                                networking.interfaces = lib.mkIf config.privateNetwork (
+                                  lib.mkMerge [
+                                    (lib.mkIf (config.localAddress != null) {
+                                      eth0.ipv4.addresses = [ (ipFromString config.localAddress 32) ];
+                                    })
+                                    (lib.mkIf (config.localAddress6 != null) {
+                                      eth0.ipv6.addresses = [ (ipFromString config.localAddress6 128) ];
+                                    })
+                                  ]
+                                );
                                 assertions = [
                                   {
                                     assertion =
@@ -968,12 +996,51 @@ in
 
       assertions =
         let
+          # Host Nix config info
+          inherit
+            (rec {
+              disabledOpts = filter (x: !x.value) [
+                options.nix.enable
+                options.nix.daemon.enable
+              ];
+              hostNixSocketEnabled = disabledOpts == [ ];
+              hostNixSocketIsDisabled =
+                if lib.length disabledOpts == 1 then
+                  "host option ${lib.head disabledOpts} is disabled"
+                else
+                  "host options ${lib.concatStringsSep " and " disabledOpts} are disabled";
+            })
+            hostNixSocketEnabled
+            hostNixSocketIsDisabled
+            ;
+
+          # Tested in: nixos/tests/containers-eval.nix
           mapper =
-            name: cfg:
+            name:
+            { cfg, opt }:
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
-              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces."
+            ++
+              optional (cfg.flake != null && !config.nix.enable)
+                "${options.containers}.${strings.escapeNixIdentifier name}.flake is defined, so the container is built with nix on the host, but ${options.nix.enable} is disabled"
+            ++
+              optional
+                (
+                  !hostNixSocketEnabled
+                  && opt.config.isDefined
+                  && cfg.config.nix.enable
+                  && cfg.config.nix.daemon.enable
+                )
+                "${options.containers}.${strings.escapeNixIdentifier name} has nix.daemon.enable = true, but the host does not provide a nix daemon socket, as ${hostNixSocketIsDisabled}. Disable nix.daemon.enable in the container, or enable the daemon on the host.";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        (lib.concatMap
+          # This could be done in mapper but causes a reformat
+          (map (msg: {
+            assertion = false;
+            message = msg;
+          }))
+          (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers))
+        );
     }
 
     (mkIf (config.boot.enableContainers) (

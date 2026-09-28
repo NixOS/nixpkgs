@@ -19,13 +19,13 @@ assert portaudioSupport -> portaudio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fmit";
-  version = "1.3.3";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fi5/JCgum+TYexUuTRZNFWPPsR87P73gfYhozQYx3Rw=";
+    sha256 = "sha256-ydX5Yic0GZkOYyC4EHhf4XPPsdZJDEACssHkLlZrgkY=";
   };
 
   nativeBuildInputs = [

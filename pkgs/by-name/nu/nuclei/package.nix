@@ -2,21 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "nuclei";
-  version = "3.8.0";
+  version = "3.11.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jzXV9QBpeH26nrViHdKR6Id7Dkdl0Ob1r71RhorCJvM=";
+    hash = "sha256-iXeMYiri3gwfjXnWgSgGOtcXFqZynSzGXnVIM6hOH5Y=";
   };
 
-  vendorHash = "sha256-dxyyaletTVud6p81QzOsitw7m4yAZG3r1ZoEb2vQqOY=";
+  vendorHash = "sha256-N7Oj55t5PO17sRkxafbG4UsejjpLBVAoSC5t0R2tD1k=";
 
   proxyVendor = true; # hash mismatch between Linux and Darwin
 
@@ -24,10 +27,7 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
 
   # Test files are not part of the release tarball
   doCheck = false;
@@ -35,6 +35,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = "-version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for configurable targeted scanning";

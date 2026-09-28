@@ -169,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxrender
     libxcursor
   ]
-  ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -219,7 +218,11 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     gl2ps
   ]
-  # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
+  ++ lib.optionals ((lib.versionAtLeast finalAttrs.version "9.6.0") && stdenv.hostPlatform.isLinux) [
+    libxcursor
+  ]
+  ++ lib.optionals withQt6 [ qt6.qttools ]
+  # create meta package providing dist-info for python3Packages.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
       inherit (finalAttrs) pname version meta;
@@ -227,7 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
         with python3Packages;
         [
           numpy
-          wslink
           matplotlib
         ]
         ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
@@ -320,7 +322,6 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
 
         nativeBuildInputs = lib.optionals withQt6 [
-          qt6.qttools
           qt6.wrapQtAppsHook
         ];
       };

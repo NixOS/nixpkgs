@@ -42,11 +42,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.9.7";
+  version = "3.10.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+c/u99Td3nitiXiHbLNSWEOjAlBPVHwiXpwiyB1xB2A=";
+    hash = "sha256-Agw1fHTDnJMUNbSedAkyjQt/baVJG1jC9zLtcjbqmkU=";
   };
 
   nativeBuildInputs = [
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
         "kid3"
       else
         "kid3-cli";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = lib.platforms.linux;
   };
 })

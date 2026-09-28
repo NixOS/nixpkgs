@@ -8,19 +8,20 @@
   makeDesktopItem,
   icoutils,
 
+  openxr-loader,
   ffmpeg,
   yt-dlp,
   deno,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "vrcvideocacher";
-  version = "2026.4.6";
+  version = "2026.5.2";
 
   src = fetchFromGitHub {
     owner = "EllyVR";
     repo = "VRCVideoCacher";
     tag = finalAttrs.version;
-    hash = "sha256-0jQK/VFbiMlX9txA/FuyCLe5AADH3IzvvIffZNU5Hes=";
+    hash = "sha256-rabx93WBYnVPAQHndNkz+lN45S8lWufoMQ6s50gW+rY=";
   };
 
   __structuredAttrs = true;
@@ -43,6 +44,13 @@ buildDotnetModule (finalAttrs: {
   makeWrapperArgs = [
     "--add-flags"
     "--global-path"
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      openxr-loader
+    ])
 
     "--prefix"
     "PATH"
@@ -79,6 +87,7 @@ buildDotnetModule (finalAttrs: {
     description = "Cache VRChat videos locally and fix YouTube videos that fail to load";
     homepage = "https://github.com/EllyVR/VRCVideoCacher";
     license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [ coolGi ];
     mainProgram = "VRCVideoCacher";
     platforms = [ "x86_64-linux" ];

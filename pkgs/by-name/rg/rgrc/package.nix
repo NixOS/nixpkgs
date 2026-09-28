@@ -10,16 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgrc";
-  version = "0.6.12";
+  version = "0.6.34";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lazywalker";
     repo = "rgrc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PgfLDVO1OyHlJYbUzZCkKv7SV/nSPFjUhi5qpdxCDYw=";
+    hash = "sha256-awjRCCuO+3vK4CjeU8ZNJAkmfwidxpPO9MCbdowz7Hg=";
   };
 
-  cargoHash = "sha256-ek9Cf33fW6kS0L+u8mQYqsqZmv7dfptHFd+t3odtCO4=";
+  cargoHash = "sha256-v3PHi6qts5+VQmfEOkB/bls/Qrd/hXsW39N/H2SEyOo=";
 
   buildFeatures = [ "embed-configs" ];
   nativeBuildInputs = [ installShellFiles ];

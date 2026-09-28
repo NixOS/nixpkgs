@@ -25,18 +25,18 @@ let
   platforms = {
     x86_64-linux = {
       archSuffix = "x86_64";
-      hash = "sha256-UxhGe22W50cqjNMoAdxHnyFmTmiysYd8EkASRFrpuYs=";
+      hash = "sha256-RfOhcllmwX3Cy6ywIYjIC+kUX6rXkd+PM9wKj+fCuts=";
     };
     aarch64-linux = {
       archSuffix = "arm64";
-      hash = "sha256-itWnH1JiG+AhYZtNtrJtW9p7LlRF/ab5+npFODiKznY=";
+      hash = "sha256-1bo7/srdQ5M5mzXpL76Bkt1Gt9EhbW8ktLLPvOcFu5U=";
     };
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.5.1";
+  version = "3.5.4";
 
   src =
     if releasePath != null then

@@ -1,7 +1,6 @@
 {
   lib,
-  # tinygo currently only supports Go <=1.25
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitea,
   nix-update-script,
 
@@ -14,7 +13,7 @@
   tinygo,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "go-away";
   version = "0.7.0";
 

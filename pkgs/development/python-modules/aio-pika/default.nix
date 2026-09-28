@@ -3,11 +3,12 @@
   aiormq,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   uv-build,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aio-pika";
   version = "9.6.2";
   pyproject = true;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-N5MjFIolMRTTn4aV1NskBwonB/8FSuEZETumUrAa02Y=";
   };
 
@@ -24,7 +25,11 @@ buildPythonPackage rec {
       --replace-fail "uv_build>=0.9.26,<0.10.0" uv_build
   '';
 
+  pythonRelaxDeps = [ "aiormq" ];
+
   build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiormq
@@ -40,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "AMQP 0.9 client designed for asyncio and humans";
     homepage = "https://github.com/mosquito/aio-pika";
-    changelog = "https://github.com/mosquito/aio-pika/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mosquito/aio-pika/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

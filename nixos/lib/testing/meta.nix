@@ -1,6 +1,25 @@
-{ lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 let
   inherit (lib) types mkOption literalMD;
+
+  # Approximate position of meta.teams / meta.maintainers in nixos tests.
+  # Right now this assumes only one such position and ignores other definitions.
+  # FIXME allow having multiple `maintainersPosition` et al..
+  getPosition =
+    definitionsWithLocations:
+    if definitionsWithLocations == [ ] then
+      null
+    else
+      {
+        file = (lib.head definitionsWithLocations).file;
+        column = 0;
+        line = 1;
+      };
 in
 {
   options = {
@@ -12,7 +31,7 @@ in
       '';
       apply = lib.filterAttrs (k: v: v != null);
       type = types.submodule (
-        { config, ... }:
+        { options, ... }:
         {
           options = {
             maintainers = mkOption {
@@ -21,6 +40,25 @@ in
               description = ''
                 The [list of maintainers](https://nixos.org/manual/nixpkgs/stable/#var-meta-maintainers) for this test.
               '';
+            };
+            maintainersPosition = mkOption {
+              internal = true;
+              readOnly = true;
+              type = types.nullOr types.attrs;
+              default = getPosition options.maintainers.definitionsWithLocations;
+            };
+            teams = mkOption {
+              type = types.listOf types.raw;
+              default = [ ];
+              description = ''
+                The [list of maintainer-teams](https://nixos.org/manual/nixpkgs/stable/#var-meta-teams) for this test.
+              '';
+            };
+            teamsPosition = mkOption {
+              internal = true;
+              readOnly = true;
+              type = types.nullOr types.attrs;
+              default = getPosition options.teams.definitionsWithLocations;
             };
             timeout = mkOption {
               type = types.nullOr types.int;
@@ -38,7 +76,10 @@ in
             };
             platforms = mkOption {
               type = types.listOf types.raw;
-              default = lib.platforms.linux ++ lib.platforms.darwin;
+              default = lib.platforms.linux ++ lib.optionals (config.containers == { }) lib.platforms.darwin;
+              defaultText = literalMD ''
+                `lib.platforms.linux ++ lib.platforms.darwin` when no containers are configured; otherwise `lib.platforms.linux`.
+              '';
               description = ''
                 Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
               '';

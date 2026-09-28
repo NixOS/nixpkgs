@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "kmscube";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2023-09-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

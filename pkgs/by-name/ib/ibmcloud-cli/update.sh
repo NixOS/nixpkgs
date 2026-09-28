@@ -19,7 +19,6 @@ for system in \
     i686-linux \
     powerpc64le-linux \
     s390x-linux \
-    x86_64-darwin \
     aarch64-darwin; do
     tmp=$(mktemp -d)
     curl -fsSL -o $tmp/ibmcloud-cli $(nix-instantiate --eval -E "with import ./. {}; ibmcloud-cli.src.url" --system "$system" | tr -d '"')

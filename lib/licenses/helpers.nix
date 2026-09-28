@@ -1,59 +1,115 @@
 { lib }:
+
+let
+  inherit (lib)
+    all
+    any
+    elem
+    optionalAttrs
+    ;
+  handleComplexProperty =
+    evaluateSubProperty: AND: OR: license:
+    if license.licenseType == "compound" then
+      if license.operator == "OR" then
+        OR evaluateSubProperty license.licenses
+      else if license.operator == "AND" then
+        AND evaluateSubProperty license.licenses
+      else
+        throw "Unknown license operator"
+    else if license.licenseType == "exception" then
+      evaluateSubProperty license.license && evaluateSubProperty license.exception
+    else if license.licenseType == "plus" then
+      evaluateSubProperty license.license
+    else
+      throw "Unknown license type or legacy license";
+in
 rec {
   /**
     Evaluate a license expression for a given predicate.
 
-    # Example
+    # Inputs
 
-    ```nix
-    evaluateProperty (x: x.free) true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
-    ```
+    `predicate`
+    : Predicate which should get used for checking licenses
+
+    `permissive`
+    : Whether to apply checks permissive or reciprocal
+
+    `license`
+    : License expression which should be evaluated
+
     # Type
 
     ```
-    evaluateProperty :: Function -> Bool -> AttrSet -> Bool
+    evaluateProperty :: (a -> Bool) -> Bool -> { [String] :: a } -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.evaluateProperty usage example`
 
-    - [predicate] checks for each license included in the license expression
-    - [permissive] whether to apply checks permissive or reciprocal
-    - [license] license expression to check
+    ```nix
+    evaluateProperty (x: x.free) true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => true
+    ```
   */
   evaluateProperty =
-    predicate: permissive: license:
+    predicate: permissive:
     let
-      OR = if permissive then lib.any else lib.all;
-      AND = if permissive then lib.all else lib.any;
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
+      evaluateComplexProperty = handleComplexProperty (evaluateProperty predicate permissive) AND OR;
     in
-    if license.licenseType == "simple" then
-      predicate license
-    else if license.licenseType == "compound" then
-      if license.operator == "OR" then
-        OR (x: evaluateProperty predicate permissive x) license.licenses
-      else if license.operator == "AND" then
-        AND (x: evaluateProperty predicate permissive x) license.licenses
-      else
-        throw "Unknown license operator"
-    else if license.licenseType == "exception" then
-      AND (x: evaluateProperty predicate permissive x) [
-        license.license
-        license.exception
-      ]
-    else if license.licenseType == "plus" then
-      evaluateProperty predicate permissive license.license
-    else
-      throw "Unknown license type or legacy license";
+    license:
+    if license.licenseType == "simple" then predicate license else evaluateComplexProperty license;
+
+  /**
+    Evaluate a license expression for a given property name. The property must
+    be defined as a boolean attribute of all licenses passed.
+
+    # Inputs
+
+    `name`
+    : Name of the Attribute which should be checked
+
+    `permissive`
+    : Whether to apply checks permissive or reciprocal
+
+    `license`
+    : License expression which should be evaluated
+
+    # Type
+
+    ```
+    evaluateNamedProperty :: String -> Bool -> AttrSet -> Bool
+    ```
+
+    # Example
+    :::{.example}
+    ## `lib.licenses.evaluateNamedProperty` usage example
+
+    ```nix
+    evaluateNamedProperty "deprecated" true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => false
+    ```
+  */
+  evaluateNamedProperty =
+    name: permissive:
+    let
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
+      evaluateComplexProperty = handleComplexProperty (evaluateNamedProperty name permissive) AND OR;
+    in
+    license:
+    if license.licenseType == "simple" then license.${name} else evaluateComplexProperty license;
 
   /**
     Check whether a license expression is free.
 
-    # Example
+    # Inputs
 
-    ```nix
-    isFree (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
-    => true
-    ```
+    `license`
+    : License expression which should be evaluated
 
     # Type
 
@@ -61,21 +117,24 @@ rec {
     isFree :: AttrSet -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.isFree` usage example
 
-    - [license] License expression to check if free
+    ```nix
+    isFree (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
+    => true
+    ```
   */
-  isFree = evaluateProperty (x: x.free) true;
+  isFree = evaluateNamedProperty "free" true;
 
   /**
     Check whether a license expression is redistributable.
 
-    # Example
+    # Inputs
 
-    ```nix
-    isRedistributable (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
-    => true
-    ```
+    `license`
+    : License expression which should be evaluated
 
     # Type
 
@@ -83,44 +142,52 @@ rec {
     isRedistributable :: AttrSet -> Bool
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.isRedistributable` usage example
 
-    - [license] License expression to check if redistributable
+    ```nix
+    isRedistributable (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
+    => true
+    ```
   */
-  isRedistributable = evaluateProperty (x: x.redistributable) true;
+  isRedistributable = evaluateNamedProperty "redistributable" true;
 
   /**
     Check whether any of the given licenses is required in the license expression.
 
+    # Inputs
+
+    `licenses`
+    : List of licenses which are tested
+
+    `license`
+    : License expression which should be evaluated
+
+    # Type
+
+    ```
+    containsLicenses :: [AttrSet] -> AttrSet -> Bool
+    ```
+
     # Example
+    :::{.example}
+    ## `lib.licenses.containsLicenses` usage example
 
     ```nix
     containsLicenses [ lib.licenses.asl20 ] (with lib.licenses; (AND [ ncsa (WITH asl20 llvm-exception) ]))
     => true
     ```
-
-    # Type
-
-    ```
-    containsLicenses :: List -> AttrSet -> Bool
-    ```
-
-    # Arguments
-
-    - [licenses] List of licenses to look
-    - [license] License expression to check
   */
-  containsLicenses = licenses: evaluateProperty (x: lib.lists.elem x licenses) false;
+  containsLicenses = licenses: evaluateProperty (x: elem x licenses) false;
 
   /**
     Convert a license expression to an SPDX license expression string.
 
-    # Example
+    # Inputs
 
-    ```nix
-    toSPDX (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
-    => "NCSA AND (Apache-2.0 WITH LLVM-exception)"
-    ```
+    `license`
+    : License expression which to convert to an spdx expression
 
     # Type
 
@@ -128,9 +195,14 @@ rec {
     toSPDX :: AttrSet -> String
     ```
 
-    # Arguments
+    # Example
+    :::{.example}
+    ## `lib.licenses.toSPDX` usage example
 
-    - [license] License expression which to convert to spdx expression
+    ```nix
+    toSPDX (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    => "NCSA AND (Apache-2.0 WITH LLVM-exception)"
+    ```
   */
   toSPDX =
     license:
@@ -149,4 +221,58 @@ rec {
       "${mkBracket license.license}${license.operator}"
     else
       throw "Unknown license type";
+
+  /**
+    Create a license.
+
+    # Inputs
+
+    `licenseInfo`
+    : Attrset of license infromation
+
+    # Type
+
+    ```
+    mkLicense :: AttrSet -> AttrSet
+    ```
+
+    # Example
+    :::{.example}
+    ## `lib.licenses.mkLicense` usage example
+
+    ```nix
+    mkLicense { shortName = "my-license"; }
+    => { shortName = "my-license"; free = true; deprecated = false; redistributable = true; licenseType = "simple"; }
+    ```
+  */
+  mkLicense =
+    {
+      shortName,
+      # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true,
+      deprecated ? false,
+      spdxId ? null,
+      url ? null,
+      fullName ? null,
+      redistributable ? free,
+    }@attrs:
+    {
+      inherit
+        shortName
+        free
+        deprecated
+        redistributable
+        ;
+      licenseType = "simple";
+    }
+    // optionalAttrs (attrs ? spdxId) {
+      inherit spdxId;
+      url = "https://spdx.org/licenses/${spdxId}.html";
+    }
+    // optionalAttrs (attrs ? url) {
+      inherit url;
+    }
+    // optionalAttrs (attrs ? fullName) {
+      inherit fullName;
+    };
 }

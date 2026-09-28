@@ -1,16 +1,18 @@
 {
   blas,
-  cmake,
-  doxygen,
   example-robot-data,
+  jrl-cmakemodules,
   fetchFromGitHub,
+  fontconfig,
   ffmpeg,
   ipopt,
   lapack,
+  llvmPackages,
   lib,
   pinocchio,
-  pkg-config,
   stdenv,
+
+  withMultithread ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,11 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
   propagatedBuildInputs = [
     blas
@@ -45,15 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
+  buildInputs = [
+    jrl-cmakemodules
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
+    llvmPackages.openmp
+  ];
+
   checkInputs = [
     ffmpeg
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_WITH_MULTITHREADS" withMultithread)
   ];
+
+  passthru = { inherit withMultithread; };
 
   prePatch = ''
     substituteInPlace \
@@ -63,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   meta = {
     description = "Crocoddyl optimal control library";

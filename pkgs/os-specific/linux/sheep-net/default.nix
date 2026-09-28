@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/kanjitalk755/macemu";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;

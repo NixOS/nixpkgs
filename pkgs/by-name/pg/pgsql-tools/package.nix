@@ -23,10 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
           url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-linux-arm64.tar.gz";
           hash = "sha256-rD8jymGdM1RDGDbrKu6E7xoWtSMRNuc2ngCmR+sHgQI=";
         };
-        x86_64-darwin = {
-          url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-osx-x86.tar.gz";
-          hash = "sha256-KLl7HPChurzB6QYV6AqAP3g1J3VKl61+we3opzJQwG0=";
-        };
         aarch64-darwin = {
           url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-osx-arm64.tar.gz";
           hash = "sha256-tpabEKB1kqse7D58FsP/9jywk+vgAAvptL9MadwxWg8=";
@@ -81,7 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Backend service for PostgreSQL server tools, offering features such as connection management, query execution with result set handling, and language service support via the VS Code protocol";
     changelog = "https://github.com/microsoft/pgsql-tools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "ossdbtoolsservice_main";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

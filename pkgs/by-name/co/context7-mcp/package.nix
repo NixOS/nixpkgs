@@ -2,27 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
 
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
 let
   tag-prefix = "@upstash/context7-mcp";
+
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";
-  version = "2.2.3";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${tag-prefix}@${finalAttrs.version}";
-    hash = "sha256-Vse6mOfzDC65V3qoL1tZu5S9DU93PmVNI8NRm94Gcn8=";
+    hash = "sha256-T0jxHt26GUm5oM3l8dPkw0FeQu0WBhxyz3xAj1XGD/8=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     pnpmConfigHook
     makeWrapper
+    installAgentSkills
   ];
+
+  # the monorepo vendors the same skills for many agents and packages
+  dontInstallAgentSkills = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-f3PXpCdmKh2LPD5VyFsRdLR7CEvh+GozkQFSeeNuj2c=";
+    hash = "sha256-lgFTZ2HvGrCdN//s4brHq1o26vTopyvVhZyzwiSSW9Y=";
   };
 
   buildPhase = ''
@@ -58,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/context7-mcp \
       --add-flags "$out/lib/context7/dist/index.js"
 
-    cp -r $src/skills $out
+    installSkill skills/context7-mcp
 
     runHook postInstall
   '';

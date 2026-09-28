@@ -16,62 +16,48 @@
   alsa-lib,
   stdenv,
   libxcb,
-  bzip2,
-  cmake,
-  fontconfig,
-  freetype,
   pkg-config,
   makeWrapper,
   writeShellScript,
   patchelf,
 }:
 let
-  version = "0.17.0";
-  # Patch for airshipper to install veloren
-  patch =
-    let
-      runtimeLibs = [
-        udev
-        alsa-lib
-        (lib.getLib stdenv.cc.cc)
-        libxkbcommon
-        libxcb
-        libx11
-        libxcursor
-        libxrandr
-        libxi
-        vulkan-loader
-        libGL
-      ];
-    in
-    writeShellScript "patch" ''
-      echo "making binaries executable"
-      chmod +x {veloren-voxygen,veloren-server-cli}
-      echo "patching dynamic linkers"
-      ${patchelf}/bin/patchelf \
-        --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-        veloren-server-cli
+  # Patch for airshipper to install veloren client
+  patchVoxygen =
+    runtimeLibs:
+    writeShellScript "voxygen-patch" ''
+      echo "making veloren-voxygen executable"
+      chmod +x veloren-voxygen
+      echo "patching veloren-voxygen dynamic linker"
       ${patchelf}/bin/patchelf \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
         --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
         veloren-voxygen
     '';
+  # Patch for airshipper to install veloren server
+  patchServer = writeShellScript "server-cli-patch" ''
+    echo "making veloren-server-cli executable"
+    chmod +x veloren-server-cli
+    echo "patching veloren-server-cli dynamic linker"
+    ${patchelf}/bin/patchelf \
+      --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
+      veloren-server-cli
+  '';
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airshipper";
-  inherit version;
+  version = "0.17.0";
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M89RswC08MZnNfk2T1+rtDajTpDGTnJoZ2U8bU5U2+0=";
   };
 
   cargoHash = "sha256-ry0hFvMDnotDQu6mqgyt+6hKOvGRJLmZKs3SxEVtDRg=";
 
   buildInputs = [
-    fontconfig
     openssl
     wayland
     wayland-protocols
@@ -80,9 +66,10 @@ rustPlatform.buildRustPackage {
     libxrandr
     libxi
     libxcursor
+    vulkan-loader
+    libGL
   ];
   nativeBuildInputs = [
-    cmake
     pkg-config
     makeWrapper
   ];
@@ -94,30 +81,40 @@ rustPlatform.buildRustPackage {
     install -Dm444    "client/assets/net.veloren.airshipper.png"  "$out/share/icons/net.veloren.airshipper.png"
   '';
 
-  postFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        libGL
-        vulkan-loader
-        wayland
-        wayland-protocols
-        bzip2
-        fontconfig
-        freetype
-        libxkbcommon
-        libx11
-        libxrandr
-        libxi
-        libxcursor
-      ];
-    in
-    ''
-      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
-      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
-      wrapProgram "$out/bin/airshipper" \
-        --set VELOREN_PATCHER "${patch}" \
-        --prefix LD_LIBRARY_PATH : "${libPath}"
-    '';
+  passthru = {
+    inherit patchVoxygen patchServer;
+    runtimeLibs = [
+      udev
+      alsa-lib
+      (lib.getLib stdenv.cc.cc)
+      libxkbcommon
+      libxcb
+      libx11
+      libxcursor
+      libxrandr
+      libxi
+      vulkan-loader
+      libGL
+      wayland
+      wayland-protocols
+    ];
+  };
+
+  postFixup = ''
+    ${patchelf}/bin/patchelf \
+      --set-rpath ${
+        lib.makeLibraryPath (
+          finalAttrs.buildInputs
+          ++ [
+            (lib.getLib stdenv.cc.cc)
+            stdenv.cc.libc
+          ]
+        )
+      } "$out/bin/airshipper"
+    wrapProgram "$out/bin/airshipper" \
+      --set VELOREN_VOXYGEN_PATCHER "${finalAttrs.passthru.patchVoxygen finalAttrs.passthru.runtimeLibs}" \
+      --set VELOREN_SERVER_CLI_PATCHER "${finalAttrs.passthru.patchServer}"
+  '';
 
   doCheck = false;
   cargoBuildFlags = [
@@ -136,4 +133,4 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ yusdacra ];
   };
-}
+})

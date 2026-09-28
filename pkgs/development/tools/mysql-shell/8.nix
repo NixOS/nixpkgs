@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "8.4.9";
-  mysqlServerVersion = "8.4.9";
+  mysqlShellVersion = "8.4.10";
+  mysqlServerVersion = "8.4.10";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-5KqLOeQtH+B48zu9c2lfrCtU28e7E38L2+Y/e+GgLWs=";
+      hash = "sha256-1XpnMLrvFK4Rj39KbgKEW1tQkzdY32H7BuEE8nzMj5Y=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-btYUh/akFRCSOXDL1C5xuXLysHS1lm4H74kqY+4zyiQ=";
+      hash = "sha256-2pOMjkr8y1lCuh5EC34kI9V8vcQpAotJPHWHkMbgET4=";
     })
   ];
 
@@ -74,6 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
+
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator -Wno-error=nonnull";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+    };
 
   nativeBuildInputs = [
     pkg-config

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhik";
-  version = "0.4.3";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyHik";
     tag = finalAttrs.version;
-    hash = "sha256-3q1dCu/VY+4WnsLOZk+O2NLW2Ibun7IuNtXEHJ0GEms=";
+    hash = "sha256-4XNp/qw4CLir05saCr8SDaOl6B1T58rDwZRnjinJOmc=";
   };
 
   build-system = [

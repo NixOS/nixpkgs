@@ -5,14 +5,14 @@
   lmdb,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcl-lmdb";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ray2501";
     repo = "tcl-lmdb";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-HrR8VQ9cE9jkESqvKkLnYbZLErUVxau2z8xcFImH9lc=";
   };
 
@@ -32,4 +32,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

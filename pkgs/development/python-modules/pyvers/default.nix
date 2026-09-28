@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvers";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vmoens";
     repo = "pyvers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VKNwhxyc1f7tyJO7JyBNELlZwVv6U2N8ye0OYFN/nmc=";
+    hash = "sha256-aXHOgKd/w1RKdL0wLoM4F05JWTaKAL3i3UerLcBG+vs=";
   };
 
   build-system = [

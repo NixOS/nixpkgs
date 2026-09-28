@@ -1,6 +1,7 @@
 {
+  lib,
   stdenv,
-  pdfium-binaries,
+  pdfium,
   replaceVars,
 }:
 
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./printing.patch {
-      inherit pdfium-binaries;
+      pdfiumLib = lib.getLib pdfium;
+      pdfiumDev = lib.getDev pdfium;
     })
   ];
 

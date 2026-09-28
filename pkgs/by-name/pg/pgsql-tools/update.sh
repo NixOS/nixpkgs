@@ -19,7 +19,6 @@ update-source-version pgsql-tools "$latestVersion" --file=pkgs/by-name/pg/pgsql-
 declare -A platforms=(
   ["x86_64-linux"]="pgsqltoolsservice-linux-x64.tar.gz"
   ["aarch64-linux"]="pgsqltoolsservice-linux-arm64.tar.gz"
-  ["x86_64-darwin"]="pgsqltoolsservice-osx-x86.tar.gz"
   ["aarch64-darwin"]="pgsqltoolsservice-osx-arm64.tar.gz"
 )
 

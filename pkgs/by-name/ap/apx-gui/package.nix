@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vanilla-OS/apx-gui";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     mainProgram = "apx-gui";
   };
 })

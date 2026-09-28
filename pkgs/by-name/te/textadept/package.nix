@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals withQt [ libsForQt5.qtbase ] ++ lib.optionals withCurses ncurses;
 
   cmakeFlags =
-    lib.optional withQt [ "-DQT=ON" ]
-    ++ lib.optional withCurses [
+    lib.optionals withQt [ "-DQT=ON" ]
+    ++ lib.optionals withCurses [
       "-DCURSES=ON"
       "-DQT=OFF"
     ];

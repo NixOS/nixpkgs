@@ -4,20 +4,21 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "panache";
-  version = "2.41.1";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "panache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-creORKgAByvWK6yH1WT/zRlFKStY85eUq8WJottaUCM=";
+    hash = "sha256-tm9YUTjSoHHHkQLbk7JZZL6jQ/KPFJzmWuC16UuhnUM=";
   };
 
-  cargoHash = "sha256-xReCjJ1eLdzw/LyLVU62RKSyjBBrenCR4YTmt52C2ls=";
+  cargoHash = "sha256-IZtOYt8IizHIYac7iGTyZoVK3vvAyC7WwSFoEYMyNBo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+  doInstallCheck = true;
 
   postInstall = ''
     installShellCompletion --cmd panache \
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     installManPage target/man/*
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server, formatter, and linter for Pandoc, Quarto, and R Markdown";

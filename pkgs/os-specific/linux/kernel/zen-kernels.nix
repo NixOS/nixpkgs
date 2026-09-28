@@ -18,7 +18,7 @@ in
 buildLinux (
   args
   // rec {
-    version = "7.0.5";
+    version = "7.2.7";
     pname = "linux-zen";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
@@ -27,7 +27,7 @@ buildLinux (
       owner = "zen-kernel";
       repo = "zen-kernel";
       rev = "v${version}-${suffix}";
-      sha256 = "1xnxjknlsx4fr6jf62ncvnad7r7nxkjpkaj9fdj0fqq8h4bpkhh1";
+      sha256 = "1gh6ny9ncv4n9injfc30n11p3glv6v9y6jmkzb3bw0hklrf949pp";
     };
 
     # This is based on the following source:
@@ -91,6 +91,7 @@ buildLinux (
         thiagokokada
         jerrysm64
         axertheaxe
+        eljamm
       ];
       teams = [ ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";

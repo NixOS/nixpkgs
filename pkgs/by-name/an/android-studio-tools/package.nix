@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "android-studio-tools";
-  version = "14742923";
+  version = "15859902";
 
   src = fetchzip {
     # The only difference between the Linux and Mac versions is a single comment at the top of all the scripts
     # Therefore, we will use the Linux version and just patch the comment
-    url = "https://dl.google.com/android/repository/commandlinetools-linux-14742923_latest.zip";
-    hash = "sha256-oimC4ToDFIa8Rlv+5RB+swl8M5PHdX4omlrMZMQEx8M=";
+    url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip";
+    hash = "sha256-tCbccw7qa7ncHGyWPWjwQOpaisN3QMRYXRpK7WtyjWY=";
   };
 
   postPatch = ''

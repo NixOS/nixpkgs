@@ -1,12 +1,12 @@
-{ buildDunePackage, dune_3 }:
+{ buildDunePackage, dune }:
 
 buildDunePackage {
   pname = "fs-io";
-  inherit (dune_3) version src;
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Dune's file system IO library";
   };
 }
