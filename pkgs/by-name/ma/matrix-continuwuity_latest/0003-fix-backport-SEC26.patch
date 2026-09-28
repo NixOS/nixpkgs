@@ -1,0 +1,132 @@
+From a00a615799bc55bc093a6298735732565aa2b566 Mon Sep 17 00:00:00 2001
+From: Ginger <ginger@gingershaped.computer>
+Date: Tue, 11 Aug 2026 16:35:24 -0400
+Subject: [PATCH 2/2] fix(backport): SEC26
+
+Reviewed-By: timedout <git@nexy7574.co.uk>
+Reviewed-By: Ginger <ginger@gingershaped.computer>
+(cherry picked from commit 700fbe472d4a8385b96f870256bfc00f9a15f809)
+---
+ src/api/server/event_auth.rs | 27 ++++++++++-----------------
+ src/api/server/state.rs      | 13 ++++++++++++-
+ src/api/server/state_ids.rs  | 13 ++++++++++++-
+ 3 files changed, 34 insertions(+), 19 deletions(-)
+
+diff --git a/src/api/server/event_auth.rs b/src/api/server/event_auth.rs
+index a9019e8e7..433e18f46 100644
+--- a/src/api/server/event_auth.rs
++++ b/src/api/server/event_auth.rs
+@@ -1,12 +1,9 @@
+ use std::{borrow::Borrow, iter::once};
+ 
+ use axum::extract::State;
+-use conduwuit::{Err, Error, Result, info, utils::stream::ReadyExt};
++use conduwuit::{Err, Result, Event, info, utils::stream::ReadyExt};
+ use futures::StreamExt;
+-use ruma::{
+-	RoomId,
+-	api::{client::error::ErrorKind, federation::authorization::get_event_authorization},
+-};
++use ruma::api::federation::authorization::get_event_authorization;
+ 
+ use super::AccessCheck;
+ use crate::Ruma;
+@@ -42,25 +39,21 @@ pub(crate) async fn get_event_authorization_route(
+ 		return Err!(Request(NotFound("This server is not participating in that room.")));
+ 	}
+ 
+-	let event = services
++	// The event must be in the room we just authorised access to
++	if !services
+ 		.rooms
+ 		.timeline
+-		.get_pdu_json(&body.event_id)
++		.get_pdu(&body.event_id)
+ 		.await
+-		.map_err(|_| Error::BadRequest(ErrorKind::NotFound, "Event not found."))?;
+-
+-	let room_id_str = event
+-		.get("room_id")
+-		.and_then(|val| val.as_str())
+-		.ok_or_else(|| Error::bad_database("Invalid event in database."))?;
+-
+-	let room_id = <&RoomId>::try_from(room_id_str)
+-		.map_err(|_| Error::bad_database("Invalid room_id in event in database."))?;
++		.is_ok_and(|pdu| pdu.room_id_or_hash() == body.room_id)
++	{
++		return Err!(Request(NotFound("Event not found.")));
++	}
+ 
+ 	let auth_chain = services
+ 		.rooms
+ 		.auth_chain
+-		.event_ids_iter(room_id, once(body.event_id.borrow()))
++		.event_ids_iter(&body.room_id, once(body.event_id.borrow()))
+ 		.ready_filter_map(Result::ok)
+ 		.filter_map(|id| async move { services.rooms.timeline.get_pdu_json(&id).await.ok() })
+ 		.then(|pdu| services.sending.convert_to_outgoing_federation_event(pdu))
+diff --git a/src/api/server/state.rs b/src/api/server/state.rs
+index 5e1ad8ca2..05a008b74 100644
+--- a/src/api/server/state.rs
++++ b/src/api/server/state.rs
+@@ -1,7 +1,7 @@
+ use std::{borrow::Borrow, iter::once};
+ 
+ use axum::extract::State;
+-use conduwuit::{Err, Result, at, err, info, utils::IterStream};
++use conduwuit::{Err, Event, Result, at, err, info, utils::IterStream};
+ use futures::{FutureExt, StreamExt, TryStreamExt};
+ use ruma::{OwnedEventId, api::federation::event::get_room_state};
+ 
+@@ -24,6 +24,17 @@ pub(crate) async fn get_room_state_route(
+ 	.check()
+ 	.await?;
+ 
++	// The event must be in the room we just authorised access to
++	if !services
++		.rooms
++		.timeline
++		.get_pdu(&body.event_id)
++		.await
++		.is_ok_and(|pdu| pdu.room_id_or_hash() == body.room_id)
++	{
++		return Err!(Request(NotFound("Event not found.")));
++	}
++
+ 	if !services
+ 		.rooms
+ 		.state_cache
+diff --git a/src/api/server/state_ids.rs b/src/api/server/state_ids.rs
+index c9dea3116..206f3efc5 100644
+--- a/src/api/server/state_ids.rs
++++ b/src/api/server/state_ids.rs
+@@ -1,7 +1,7 @@
+ use std::{borrow::Borrow, iter::once};
+ 
+ use axum::extract::State;
+-use conduwuit::{Err, Result, at, err, info};
++use conduwuit::{Err, Event, Result, at, err, info};
+ use futures::{StreamExt, TryStreamExt};
+ use ruma::{OwnedEventId, api::federation::event::get_room_state_ids};
+ 
+@@ -25,6 +25,17 @@ pub(crate) async fn get_room_state_ids_route(
+ 	.check()
+ 	.await?;
+ 
++	// The event must be in the room we just authorised access to
++	if !services
++		.rooms
++		.timeline
++		.get_pdu(&body.event_id)
++		.await
++		.is_ok_and(|pdu| pdu.room_id_or_hash() == body.room_id)
++	{
++		return Err!(Request(NotFound("Event not found.")));
++	}
++
+ 	if !services
+ 		.rooms
+ 		.state_cache
+-- 
+2.55.0
+
