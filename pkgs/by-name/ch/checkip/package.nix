@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "checkip";
-  version = "0.54.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = "checkip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O9+YR1EjTSABQdPJHPVTPnD4MAxFpa00Uq0fHV2OsE4=";
+    hash = "sha256-UPumm2ma+kiQkw8SKApreo415oJx2mkIT6/oUpj0s1A=";
   };
 
   vendorHash = "sha256-pQCftl9hmTRUNzGssWmUqIkL6WfJXE30BVzDAPmDxPY=";
