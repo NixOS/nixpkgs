@@ -29,6 +29,7 @@
   makeWrapper,
   libiconv,
   libiconvReal,
+  runtimeShellPackage,
   svnSupport ? false,
   subversionClient,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
@@ -244,8 +245,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLIB_NG=1"
   ]
   # Git does not allow setting a shell separately for building and run-time.
-  # Therefore lets leave it at the default /bin/sh when cross-compiling
-  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
+  # Therefore lets leave it at the default /bin/sh when cross-compiling.  When
+  # compiling natively, use `sh`, not `bash`, as Git sometimes relies on
+  # POSIX-compliant behaviour that Bash only offers when invoked with that
+  # name.
+  ++ lib.optional (
+    stdenv.buildPlatform == stdenv.hostPlatform
+  ) "SHELL_PATH=${lib.getExe' runtimeShellPackage "sh"}"
   ++ (if perlSupport then [ "PERL_PATH=${perlPackages.perl}/bin/perl" ] else [ "NO_PERL=1" ])
   ++ (if pythonSupport then [ "PYTHON_PATH=${python3}/bin/python" ] else [ "NO_PYTHON=1" ])
   ++ lib.optionals stdenv.hostPlatform.isSunOS [
