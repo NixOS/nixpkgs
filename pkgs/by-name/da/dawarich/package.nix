@@ -46,6 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    # Fix for GHSA-x483-3xv3-vp52
+    # https://github.com/Freika/dawarich/security/advisories/GHSA-x483-3xv3-vp52
+    # Original diff: https://github.com/Freika/dawarich/commit/46be6bab0393522183f9f18b48d9639ebc2820f4
+    ./0003-GHSA-x483-3xv3-vp52.diff
+  ];
+
   postPatch = ''
     # move import directory to a more convenient place, otherwise its behind systemd private tmp
     substituteInPlace ./app/services/imports/watcher.rb \
