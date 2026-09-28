@@ -2028,9 +2028,9 @@ in
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
   wg-access-server = runTest ./wg-access-server.nix;
-  whisparr = runTest {
+  whisparr_2 = runTest {
     imports = [ ./whisparr.nix ];
-    _module.args.getPackage = pkgs: pkgs.whisparr;
+    _module.args.getPackage = pkgs: pkgs.whisparr_2;
   };
   whisparr_3 = runTest {
     imports = [ ./whisparr.nix ];
