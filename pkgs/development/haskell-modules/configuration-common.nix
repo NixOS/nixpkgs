@@ -2793,31 +2793,31 @@ with haskellLib;
         "print decode_qp($_)"
       ];
     in
-    appendPatches [
-      # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
-      # Fix cabal ignoring cxx because the cabal format version is too old
-      # Fix wrong license name that breaks recent cabal version
-      (fetchpatch {
-        name = "pdftotext-use-cxx-sources-for-cxx-sources.patch";
-        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69754/mbox";
-        decode = decodeSourceHutMboxPatch;
-        hash = "sha256-5DvNBFlbP0o5Hso+mzKweQAINUUTequPMoOJZfgeIzU=";
-      })
-      # Adapt the executable to range 1.0's Ranges API.
-      (fetchpatch {
-        name = "pdftotext-support-range-1.0-in-the-cli.patch";
-        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69755/mbox";
-        decode = decodeSourceHutMboxPatch;
-        hash = "sha256-hZFMSI8Yyh5QIXMRs9VkBKPPP2IM+cbU2ILcqYc9oIw=";
-      })
-      # Relax stale dependency bounds, replacing jailbreak.
-      (fetchpatch {
-        name = "pdftotext-relax-dependency-bounds.patch";
-        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69756/mbox";
-        decode = decodeSourceHutMboxPatch;
-        hash = "sha256-wYM0SsOk9eZXR+/g+VOkj7okhmy1sEONCLHcrHlV2EI=";
-      })
-    ] super.pdftotext;
+    lib.pipe super.pdftotext [
+      (warnAfterVersion "0.1.0.1")
+      (appendPatches [
+        # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
+        # Fix cabal ignoring cxx because the cabal format version is too old
+        # Fix wrong license name that breaks recent cabal version
+        (fetchpatch {
+          name = "pdftotext-use-cxx-sources-for-cxx-sources.patch";
+          url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69754/mbox";
+          decode = decodeSourceHutMboxPatch;
+          hash = "sha256-5DvNBFlbP0o5Hso+mzKweQAINUUTequPMoOJZfgeIzU=";
+        })
+        # Adapt the executable to range 1.0's Ranges API.
+        (fetchpatch {
+          name = "pdftotext-support-range-1.0-in-the-cli.patch";
+          url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69755/mbox";
+          decode = decodeSourceHutMboxPatch;
+          hash = "sha256-hZFMSI8Yyh5QIXMRs9VkBKPPP2IM+cbU2ILcqYc9oIw=";
+        })
+      ])
+      # 2026-09-28: Stale bounds on bytestring, text, aeson, ansi-wl-pprint, optparse-applicative, range
+      doJailbreak
+      # 2026-09-28: Stale test expectation: poppler 26.06 dropped the newline before the page form feed
+      dontCheck
+    ];
 
   # Allow QuickCheck 2.16
   # https://github.com/google/proto-lens/issues/403
