@@ -1,10 +1,11 @@
-{ lib, ... }:
+{ hostPkgs, lib, ... }:
 
 {
   # Strictly speaking, this is not a precise test for VZ builder, but we don't
   # have vzvm backend for nixos tests, so we use qemu here, with config that
   # matches linux-builder-vz disk layout.
   name = "linux-builder-vz-store-gc";
+  meta.maintainers = hostPkgs.darwin.linux-builder-vz.meta.maintainers;
 
   nodes.machine = {
     nix.enable = true;
