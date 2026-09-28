@@ -33,178 +33,198 @@
 {
   lib,
   lndir,
+  writeText,
   makeBinaryWrapper,
   runCommand,
+  re-plistbuddy,
 }:
 self:
 let
   inherit (self) emacs;
   withNativeCompilation = emacs.withNativeCompilation or false;
   withTreeSitter = emacs.withTreeSitter or false;
+  inherit (emacs.stdenv.hostPlatform) isDarwin;
+  withFontconfig = !isDarwin;
 in
 packagesFun: # packages explicitly requested by the user
 let
   explicitRequires = if lib.isFunction packagesFun then packagesFun self else packagesFun;
+  # Store all paths we want to add to emacs here, so that we only need to add
+  # one path to the load lists
+  deps =
+    runCommand "emacs-packages-deps"
+      (
+        {
+          inherit explicitRequires lndir emacs;
+        }
+        // lib.optionalAttrs withNativeCompilation {
+          inherit (emacs) LIBRARY_PATH;
+        }
+      )
+      ''
+        findInputsOld() {
+          local pkg="$1"; shift
+          local var="$1"; shift
+          local propagatedBuildInputsFiles=("$@")
+
+          # TODO(@Ericson2314): Restore using associative array once Darwin
+          # nix-shell doesn't use impure bash. This should replace the O(n)
+          # case with an O(1) hash map lookup, assuming bash is implemented
+          # well :D.
+          local varSlice="$var[*]"
+          # ''${..-} to hack around old bash empty array problem
+          case " ''${!varSlice-} " in
+              *" $pkg "*) return 0 ;;
+          esac
+          unset -v varSlice
+
+          eval "$var"'+=("$pkg")'
+
+          if ! [ -e "$pkg" ]; then
+            echo "build input $pkg does not exist" >&2
+            exit 1
+          fi
+
+          local file
+          for file in "''${propagatedBuildInputsFiles[@]}"; do
+            file="$pkg/nix-support/$file"
+            [[ -f "$file" ]] || continue
+
+            local pkgNext
+            for pkgNext in $(< "$file"); do
+              findInputsOld "$pkgNext" "$var" "''${propagatedBuildInputsFiles[@]}"
+            done
+          done
+        }
+        mkdir -p $out/bin
+        mkdir -p $out/share/emacs/site-lisp
+        mkdir -p $out/share/fonts
+        ${lib.optionalString withNativeCompilation ''
+          mkdir -p $out/share/emacs/native-lisp
+        ''}
+        ${lib.optionalString withTreeSitter ''
+          mkdir -p $out/lib
+        ''}
+
+        local requires
+        for pkg in $explicitRequires; do
+          findInputsOld $pkg requires propagated-user-env-packages
+        done
+        # requires now holds all requested packages and their transitive dependencies
+
+        linkPath() {
+          local pkg=$1
+          local origin_path=$2
+          local dest_path=$3
+
+          # Add the path to the search path list, but only if it exists.
+          # Executables in /bin are linked by their resolved paths in case they are
+          # relative symlinks (which break when 'lndir'ed as is);
+          # see https://github.com/NixOS/nixpkgs/issues/395442
+          if [[ -d "$pkg/$origin_path" ]]; then
+            case "$origin_path" in
+              bin)
+                for exe in $pkg/$origin_path/*; do
+                  ln -s "$(realpath "$exe")" "$out/$dest_path/$(basename "$exe")"
+                done
+                ;;
+              *) $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path";;
+            esac
+          fi
+        }
+
+        linkEmacsPackage() {
+          linkPath "$1" "bin" "bin"
+          linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
+          linkPath "$1" "share/fonts" "share/fonts"
+          ${lib.optionalString withNativeCompilation ''
+            linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
+          ''}
+          ${lib.optionalString withTreeSitter ''
+            linkPath "$1" "lib" "lib"
+          ''}
+        }
+
+        # Iterate over the array of inputs (avoiding nix's own interpolation)
+        for pkg in "''${requires[@]}"; do
+          linkEmacsPackage $pkg
+        done
+
+        siteStart="$out/share/emacs/site-lisp/site-start.el"
+        siteStartByteCompiled="$siteStart"c
+        subdirs="$out/share/emacs/site-lisp/subdirs.el"
+        subdirsByteCompiled="$subdirs"c
+
+        # A dependency may have brought the original siteStart or subdirs, delete
+        # it and create our own
+        # Begin the new site-start.el by loading the original, which sets some
+        # NixOS-specific paths. Paths are searched in the reverse of the order
+        # they are specified in, so user and system profile paths are searched last.
+        rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
+        cat >"$siteStart" <<EOF
+        ;;; -*- lexical-binding: t -*-
+        (load "$emacs/share/emacs/site-lisp/site-start" nil t)
+        ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
+        ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
+        (add-to-list 'exec-path "$out/bin")
+        ;; Also expose extra package binaries via PATH so that subprocesses
+        ;; which rebuild their environment from PATH (e.g. direnv/envrc) can
+        ;; still find them. See https://github.com/purcell/envrc/issues/9
+        (let ((deps-bin "$out/bin")
+              (current-path (or (getenv "PATH") "")))
+          (unless (member deps-bin (split-string current-path path-separator))
+            (setenv "PATH" (concat deps-bin path-separator current-path))))
+        ${lib.optionalString withTreeSitter ''
+          (add-to-list 'treesit-extra-load-path "$out/lib/")
+        ''}
+        EOF
+
+        # Generate a subdirs.el that statically adds all subdirectories to load-path.
+        cat >"$subdirs" <<EOF
+        ;;; -*- lexical-binding: t -*-
+        EOF
+        $emacs/bin/emacs \
+          --batch \
+          --load ${./mk-wrapper-subdirs.el} \
+          --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
+          >> "$subdirs"
+
+        # Byte-compiling improves start-up time only slightly, but costs nothing.
+        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
+
+        ${lib.optionalString withNativeCompilation ''
+          $emacs/bin/emacs --batch \
+            --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
+            -f batch-native-compile "$siteStart" "$subdirs"
+        ''}
+      '';
+
+  fontconfigFile =
+    if withFontconfig then
+      writeText "emacs-with-packages-fonts.conf" ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <description>Extend the standard config with fonts from the Emacs withPackages wrapper</description>
+          <dir>${deps}/share/fonts</dir>
+          <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+        </fontconfig>
+      ''
+    else
+      "";
 in
 runCommand (lib.appendToName "with-packages" emacs).name
   {
-    inherit emacs explicitRequires;
+    inherit emacs explicitRequires deps;
     nativeBuildInputs = [
       emacs
       lndir
       makeBinaryWrapper
-    ];
+    ]
+    ++ lib.optionals isDarwin [ re-plistbuddy ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
-
-    # Store all paths we want to add to emacs here, so that we only need to add
-    # one path to the load lists
-    deps =
-      runCommand "emacs-packages-deps"
-        (
-          {
-            inherit explicitRequires lndir emacs;
-          }
-          // lib.optionalAttrs withNativeCompilation {
-            inherit (emacs) LIBRARY_PATH;
-          }
-        )
-        ''
-          findInputsOld() {
-            local pkg="$1"; shift
-            local var="$1"; shift
-            local propagatedBuildInputsFiles=("$@")
-
-            # TODO(@Ericson2314): Restore using associative array once Darwin
-            # nix-shell doesn't use impure bash. This should replace the O(n)
-            # case with an O(1) hash map lookup, assuming bash is implemented
-            # well :D.
-            local varSlice="$var[*]"
-            # ''${..-} to hack around old bash empty array problem
-            case " ''${!varSlice-} " in
-                *" $pkg "*) return 0 ;;
-            esac
-            unset -v varSlice
-
-            eval "$var"'+=("$pkg")'
-
-            if ! [ -e "$pkg" ]; then
-                echo "build input $pkg does not exist" >&2
-                exit 1
-            fi
-
-            local file
-            for file in "''${propagatedBuildInputsFiles[@]}"; do
-                file="$pkg/nix-support/$file"
-                [[ -f "$file" ]] || continue
-
-                local pkgNext
-                for pkgNext in $(< "$file"); do
-                    findInputsOld "$pkgNext" "$var" "''${propagatedBuildInputsFiles[@]}"
-                done
-            done
-          }
-          mkdir -p $out/bin
-          mkdir -p $out/share/emacs/site-lisp
-          ${lib.optionalString withNativeCompilation ''
-            mkdir -p $out/share/emacs/native-lisp
-          ''}
-          ${lib.optionalString withTreeSitter ''
-            mkdir -p $out/lib
-          ''}
-
-          local requires
-          for pkg in $explicitRequires; do
-            findInputsOld $pkg requires propagated-user-env-packages
-          done
-          # requires now holds all requested packages and their transitive dependencies
-
-          linkPath() {
-            local pkg=$1
-            local origin_path=$2
-            local dest_path=$3
-
-            # Add the path to the search path list, but only if it exists.
-            # Executables in /bin are linked by their resolved paths in case they are
-            # relative symlinks (which break when 'lndir'ed as is);
-            # see https://github.com/NixOS/nixpkgs/issues/395442
-            if [[ -d "$pkg/$origin_path" ]]; then
-              case "$origin_path" in
-                bin)
-                  for exe in $pkg/$origin_path/*; do
-                    ln -s "$(realpath "$exe")" "$out/$dest_path/$(basename "$exe")"
-                  done
-                  ;;
-                *) $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path";;
-              esac
-            fi
-          }
-
-          linkEmacsPackage() {
-            linkPath "$1" "bin" "bin"
-            linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
-            ${lib.optionalString withNativeCompilation ''
-              linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
-            ''}
-            ${lib.optionalString withTreeSitter ''
-              linkPath "$1" "lib" "lib"
-            ''}
-          }
-
-          # Iterate over the array of inputs (avoiding nix's own interpolation)
-          for pkg in "''${requires[@]}"; do
-            linkEmacsPackage $pkg
-          done
-
-          siteStart="$out/share/emacs/site-lisp/site-start.el"
-          siteStartByteCompiled="$siteStart"c
-          subdirs="$out/share/emacs/site-lisp/subdirs.el"
-          subdirsByteCompiled="$subdirs"c
-
-          # A dependency may have brought the original siteStart or subdirs, delete
-          # it and create our own
-          # Begin the new site-start.el by loading the original, which sets some
-          # NixOS-specific paths. Paths are searched in the reverse of the order
-          # they are specified in, so user and system profile paths are searched last.
-          rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
-          cat >"$siteStart" <<EOF
-          ;;; -*- lexical-binding: t -*-
-          (load "$emacs/share/emacs/site-lisp/site-start" nil t)
-          ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
-          ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
-          (add-to-list 'exec-path "$out/bin")
-          ;; Also expose extra package binaries via PATH so that subprocesses
-          ;; which rebuild their environment from PATH (e.g. direnv/envrc) can
-          ;; still find them. See https://github.com/purcell/envrc/issues/9
-          (let ((deps-bin "$out/bin")
-                (current-path (or (getenv "PATH") "")))
-            (unless (member deps-bin (split-string current-path path-separator))
-              (setenv "PATH" (concat deps-bin path-separator current-path))))
-          ${lib.optionalString withTreeSitter ''
-            (add-to-list 'treesit-extra-load-path "$out/lib/")
-          ''}
-          EOF
-
-          # Generate a subdirs.el that statically adds all subdirectories to load-path.
-          cat >"$subdirs" <<EOF
-          ;;; -*- lexical-binding: t -*-
-          EOF
-          $emacs/bin/emacs \
-            --batch \
-            --load ${./mk-wrapper-subdirs.el} \
-            --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
-            >> "$subdirs"
-
-          # Byte-compiling improves start-up time only slightly, but costs nothing.
-          $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
-
-          ${lib.optionalString withNativeCompilation ''
-            $emacs/bin/emacs --batch \
-              --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
-              -f batch-native-compile "$siteStart" "$subdirs"
-          ''}
-        '';
 
     inherit (emacs) meta;
   }
@@ -216,10 +236,17 @@ runCommand (lib.appendToName "with-packages" emacs).name
       local progname=$(basename "$prog")
       rm -f "$out/bin/$progname"
 
+      if [[ ( $progname == emacs || $progname == emacs-* ) && -d "$emacs/Applications/Emacs.app" ]]; then
+        prog="$out/Applications/Emacs.app/Contents/MacOS/Emacs-unwrapped"
+      fi
+
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
@@ -235,22 +262,30 @@ runCommand (lib.appendToName "with-packages" emacs).name
     # this has to pick up resources and metadata
     # to recognize it as an "app"
     if [ -d "$emacs/Applications/Emacs.app" ]; then
-      mkdir -p $out/Applications/Emacs.app/Contents/MacOS
+      app="$out/Applications/Emacs.app/Contents"
+      mkdir -p "$app/MacOS"
       cp -r $emacs/Applications/Emacs.app/Contents/Info.plist \
             $emacs/Applications/Emacs.app/Contents/PkgInfo \
             $emacs/Applications/Emacs.app/Contents/Resources \
-            $out/Applications/Emacs.app/Contents
+            "$app"
 
+      mkdir -p "$app/Resources/Fonts"
+      find -L "$deps/share/fonts" -type f -exec ln -s {} "$app/Resources/Fonts" \;
+      ln -s "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs" "$app/MacOS/Emacs-unwrapped"
+      plutil -insert ATSApplicationFontsPath -string Fonts "$app/Info.plist"
 
-      substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
+      substitute ${./wrapper.sh} "$app/MacOS/Emacs" \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
-        --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
-      chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
-      wrapProgramBinary $out/Applications/Emacs.app/Contents/MacOS/Emacs
+        --subst-var-by prog "$out/Applications/Emacs.app/Contents/MacOS/Emacs-unwrapped"
+      chmod +x "$app/MacOS/Emacs"
+      wrapProgramBinary "$app/MacOS/Emacs"
     fi
 
     mkdir -p $out/share

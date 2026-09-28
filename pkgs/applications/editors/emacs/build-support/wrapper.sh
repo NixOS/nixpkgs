@@ -50,6 +50,21 @@ export emacsWithPackages_siteLisp=@wrapperSiteLisp@
 export EMACSNATIVELOADPATH="${newNativeLoadPath[*]}"
 export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 
+if [[ @withFontconfig@ == true ]]
+then
+    # Make sure that Emacs can find fonts even if the user has FONTCONFIG_FILE set,
+    # but FONTCONFIG_FILE includes <dir prefix="xdg">fonts</dir> in it.
+    export emacsWithPackages_siteData=@wrapperSiteData@
+    export emacsWithPackages_xdgDataDirsWasSet="${XDG_DATA_DIRS+x}"
+    export XDG_DATA_DIRS="@wrapperSiteData@${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+
+    if [[ -z ${FONTCONFIG_FILE+x} ]]
+    then
+        export emacsWithPackages_fontconfigFile=@wrapperFontconfigFile@
+        export FONTCONFIG_FILE=@wrapperFontconfigFile@
+    fi
+fi
+
 export emacsWithPackages_invocationDirectory=@wrapperInvocationDirectory@
 export emacsWithPackages_invocationName=@wrapperInvocationName@
 
