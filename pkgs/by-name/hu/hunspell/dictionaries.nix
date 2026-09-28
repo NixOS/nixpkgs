@@ -972,10 +972,12 @@ rec {
     meta = {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with lib.licenses; [
-        bsd3 # or
-        cc-by-30
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          bsd3
+          cc-by-30
+        ];
       maintainers = with lib.maintainers; [ artturin ];
     };
   };

@@ -85,10 +85,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/geiger-rs/cargo-geiger";
     changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "cargo-geiger";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       evanjs
       gepbird
