@@ -45,7 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tairesh/rustormy";
     license = lib.licenses.mit;
     mainProgram = "rustormy";
-    maintainers = with lib.maintainers; [ joseg313 ];
+    maintainers = with lib.maintainers; [
+      joseg313
+      ethancedwards8
+    ];
   };
 
 })
