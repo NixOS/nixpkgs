@@ -14,14 +14,6 @@
       };
     };
 
-    schemaVersionBefore23 = {
-      services.adguardhome = {
-        enable = true;
-
-        settings.schema_version = 20;
-      };
-    };
-
     syslogConf = {
       services.adguardhome = {
         enable = true;
@@ -130,10 +122,6 @@
     with subtest("Default config test"):
       emptyConf.wait_for_unit("adguardhome.service")
       emptyConf.wait_for_open_port(3000)
-
-    with subtest("Default schema_version 23 config test"):
-      schemaVersionBefore23.wait_for_unit("adguardhome.service")
-      schemaVersionBefore23.wait_for_open_port(3000)
 
     with subtest("Logging to syslog test"):
       # AdGuard is expected to fail when it cannot connect to syslog

@@ -18,21 +18,15 @@ let
     ++ cfg.extraArgs
   );
 
+  minimumSchemaVersion = 23;
+
   settings =
     if (cfg.settings != null) then
-      lib.recursiveUpdate cfg.settings (
-        if cfg.settings.schema_version < 23 then
-          {
-            bind_host = cfg.host;
-            bind_port = cfg.port;
-          }
-        else
-          {
-            http = (cfg.settings.http or { }) // {
-              address = "${cfg.host}:${toString cfg.port}";
-            };
-          }
-      )
+      lib.recursiveUpdate cfg.settings {
+        http = (cfg.settings.http or { }) // {
+          address = "${cfg.host}:${toString cfg.port}";
+        };
+      }
     else
       null;
 
@@ -146,12 +140,8 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_host" ] cfg.settings);
-        message = "AdGuard option `settings.bind_host' has been superseded by `services.adguardhome.host'";
-      }
-      {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_port" ] cfg.settings);
-        message = "AdGuard option `settings.bind_port' has been superseded by `services.adguardhome.port'";
+        assertion = cfg.settings != null -> cfg.settings.schema_version >= minimumSchemaVersion;
+        message = "AdGuard option `settings.schema_version' must be at least ${toString minimumSchemaVersion}";
       }
       {
         assertion =
