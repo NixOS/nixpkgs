@@ -185,28 +185,29 @@ which can be used to add skip condition and :expected-result."
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
-  (if (not (native-comp-available-p))
-      (list t)
-    ;; Give Emacs some time to generate JIT native-comp results.
-    ;; It is possible that this test passes even if there is JIT native-comp
-    ;; because we use a hardcoded time span as the synchronization point.
-    ;; Ideally, we should use a more robust synchronization point.
-    (sleep-for 2.5)
-    (defvar native-comp-eln-load-path)
-    (list (not (cl-loop for buffer being each buffer
-                        thereis (string= (buffer-name buffer)
-                                         "*Async-native-compile-log*")))
-          (let ((eln-dir (car native-comp-eln-load-path)))
-            (or (directory-empty-p eln-dir)
-                (and (not (file-exists-p eln-dir))
-                     (file-exists-p (file-name-parent-directory eln-dir))))))))
+  ;; Give Emacs some time to generate JIT native-comp results.
+  ;; It is possible that this test passes even if there is JIT native-comp
+  ;; because we use a hardcoded time span as the synchronization point.
+  ;; Ideally, we should use a more robust synchronization point.
+  (sleep-for 2.5)
+  (defvar native-comp-eln-load-path)
+  (list (not (cl-loop for buffer being each buffer
+                      thereis (string= (buffer-name buffer)
+                                       "*Async-native-compile-log*")))
+        (let ((eln-dir (car native-comp-eln-load-path)))
+          (or (directory-empty-p eln-dir)
+              (and (not (file-exists-p eln-dir))
+                   (file-exists-p (file-name-parent-directory eln-dir)))))))
 
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded
   with-packages-default-is-loaded
   with-packages-early-default-is-loaded-before-default
-  with-packages-unwrapped-site-start-is-loaded-quietly
-  with-packages-no-jit-native-comp)
+  with-packages-unwrapped-site-start-is-loaded-quietly)
+
+(define-with-packages-non-batch-ert-test
+    with-packages-no-jit-native-comp
+  (skip-unless (native-comp-available-p)))
 
 (provide 'with-packages)
 
