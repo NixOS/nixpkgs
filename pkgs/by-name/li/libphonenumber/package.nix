@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   stdenv,
   fetchFromGitHub,
   buildPackages,
@@ -96,6 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
       (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
     ];
+
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libphonenumber" ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.tag}/release_notes.txt";
