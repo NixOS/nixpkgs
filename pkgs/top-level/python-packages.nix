@@ -9598,8 +9598,6 @@ self: super: with self; {
 
   libasyncns = callPackage ../development/python-modules/libasyncns { inherit (pkgs) libasyncns; };
 
-  libbs = callPackage ../development/python-modules/libbs { };
-
   libcap_ng = callPackage (
     {
       python,
