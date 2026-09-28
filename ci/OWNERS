@@ -158,6 +158,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 # Monitoring
 /nixos/modules/services/monitoring/fluent-bit.nix @arianvp
 /nixos/tests/fluent-bit.nix                       @arianvp
+/nixos/modules/services/monitoring/prometheus/exporters/dcgm.nix @randomizedcoder
 
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
