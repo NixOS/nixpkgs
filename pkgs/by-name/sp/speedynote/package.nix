@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   pname = "speedynote";
   version = "1.6.3";
 
+  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
