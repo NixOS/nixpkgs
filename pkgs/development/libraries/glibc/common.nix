@@ -33,7 +33,7 @@
   libpng ? null,
   libidn2,
   bison,
-  gettext-tools,
+  gettext,
   python3Minimal,
 }:
 
@@ -243,7 +243,7 @@ stdenv.mkDerivation (
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [
       bison
-      gettext-tools
+      gettext
       python3Minimal
     ]
     ++ extraNativeBuildInputs;
