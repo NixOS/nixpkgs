@@ -22024,10 +22024,6 @@ self: super: with self; {
 
   unicorn = callPackage ../development/python-modules/unicorn { inherit (pkgs) unicorn; };
 
-  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
-    inherit (pkgs) unicorn-angr;
-  };
-
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
   unidata-blocks = callPackage ../development/python-modules/unidata-blocks { };

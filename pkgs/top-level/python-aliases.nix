@@ -787,6 +787,7 @@ mapAliases {
   uefi-firmware-parser = uefi-firmware; # Added 2026-08-19
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
+  unicorn-angr = throw "'unicorn-angr' has been removed as angr now uses upstream unicorn"; # Added 2026-08-20
   unicurses = lib.warnOnInstantiate "'unicurses' has been renamed to 'uni-curses'" uni-curses; # Added 2026-07-22
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unifiled = throw "'unifiled' has been removed because Home Assistant dropped the integration"; # Added 2026-06-04
