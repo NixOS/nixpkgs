@@ -24,7 +24,7 @@
   libwebp,
   systemd,
   lz4,
-  nv-codec-headers-10,
+  nv-codec-headers-13,
   nvidia_x11 ? null,
   pam,
   pandoc,
@@ -56,7 +56,6 @@
   libxkbfile,
   xorg-server,
   xxhash,
-  clang,
   withHtml ? true,
   xpra-html5,
   udevCheckHook,
@@ -90,7 +89,7 @@ let
       }
       ''
         mkdir -p $out/include $out/lib/pkgconfig
-        cp ${nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
+        cp ${nv-codec-headers-13}/include/ffnvcodec/nvEncodeAPI.h $out/include
         substituteAll ${./nvenc.pc} $out/lib/pkgconfig/nvenc.pc
       '';
 
@@ -134,7 +133,6 @@ effectiveBuildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    clang
     cython
     gobject-introspection
     pkg-config
