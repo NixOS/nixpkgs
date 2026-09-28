@@ -38,6 +38,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       tie
       untio11
+      wrbbz
     ];
   };
 })
