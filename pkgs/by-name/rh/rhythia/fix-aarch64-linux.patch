@@ -1,21 +1,21 @@
 diff --git a/export_presets.cfg b/export_presets.cfg
-index bf0e195..464fa96 100644
+index d69582c..6b2eaa1 100644
 --- a/export_presets.cfg
 +++ b/export_presets.cfg
-@@ -2,6 +2,7 @@
- 
+@@ -3,6 +3,7 @@
  "Windows Desktop"="Windows Desktop"
  Linux="Linux"
+ macOS="macOS"
 +"Linux AArch64"="Linux AArch64"
  
  [preset.0]
  
-@@ -125,3 +126,52 @@ rm -rf \"{temp_dir}\""
+@@ -388,3 +389,52 @@ rm -rf \"{temp_dir}\""
  dotnet/include_scripts_content=false
  dotnet/include_debug_symbols=true
  dotnet/embed_build_outputs=false
 +
-+[preset.2]
++[preset.3]
 +
 +name="Linux AArch64"
 +platform="Linux"
@@ -38,7 +38,7 @@ index bf0e195..464fa96 100644
 +encrypt_directory=false
 +script_export_mode=2
 +
-+[preset.2.options]
++[preset.3.options]
 +
 +custom_template/debug=""
 +custom_template/release=""
@@ -64,7 +64,7 @@ index bf0e195..464fa96 100644
 +dotnet/include_debug_symbols=true
 +dotnet/embed_build_outputs=false
 diff --git a/project.godot b/project.godot
-index f5a0450..75cf016 100644
+index b22af13..f6eaa4c 100644
 --- a/project.godot
 +++ b/project.godot
 @@ -85,6 +85,7 @@ common/physics_ticks_per_second=120
