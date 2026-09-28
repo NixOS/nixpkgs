@@ -251,7 +251,7 @@
   };
   _365tuwe = {
     name = "Uwe Schlifkowitz";
-    email = "supertuwe@gmail.com";
+    email = "uwe.schlifkowitz@secunet.com";
     github = "365tuwe";
     githubId = 10263091;
   };
