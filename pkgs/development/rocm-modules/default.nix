@@ -136,6 +136,9 @@ let
           ;
       };
 
+      # rocblas_base is the raw per-arch builder; rocblas (default.nix) assembles the
+      # per-arch Tensile shards into one joined output (see rocblas/default.nix).
+      rocblas_base = self.callPackage ./rocblas/base.nix { };
       rocblas = self.callPackage ./rocblas { };
 
       rocsolver = self.callPackage ./rocsolver { };
