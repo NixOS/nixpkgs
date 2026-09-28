@@ -138,8 +138,8 @@ buildPythonPackage (finalAttrs: {
     # Double-check:
 
     # Output mismatch
-    # "test_additional_pattern_intersections"
-    # "test_undeclared_required"
+    "test_additional_pattern_intersections"
+    "test_undeclared_required"
   ];
 
   disabledTestPaths = [
