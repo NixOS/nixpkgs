@@ -38,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_DOCS" enableDocs)
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   env = {
