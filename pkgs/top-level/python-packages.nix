@@ -17896,6 +17896,8 @@ self: super: with self; {
 
   realtime = callPackage ../development/python-modules/realtime { };
 
+  rebiber = callPackage ../development/python-modules/rebiber { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -21276,6 +21278,8 @@ self: super: with self; {
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
 
   tstr = callPackage ../development/python-modules/tstr { };
+
+  tsv = callPackage ../development/python-modules/tsv { };
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
