@@ -71,6 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html";
       free = false;
     };
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 })
