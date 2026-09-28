@@ -119,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Workaround for https://github.com/llvm/llvm-project/issues/48757
       "-Wno-elaborated-enum-base"
+      # It exceeds our log size limit! (abseil-cpp deprecations probably)
+      "-Wno-deprecated-declarations"
     ]
   );
 
