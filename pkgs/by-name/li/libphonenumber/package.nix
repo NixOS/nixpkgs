@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
   version = "9.0.40";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
@@ -80,8 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
     (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
   ];
-
-  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.tag}/release_notes.txt";
