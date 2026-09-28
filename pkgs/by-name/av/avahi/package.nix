@@ -188,6 +188,9 @@ stdenv.mkDerivation rec {
     rm common/acx_pthread.m4
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   depsBuildBuild = [
     pkg-config
   ];
