@@ -124,11 +124,13 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     emacs-nox
     flex
+    flint
     gdbm
     getconf
     gfortran
     makeWrapper
     pkg-config
+    R
     texinfo
     which
 
