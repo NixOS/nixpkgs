@@ -12437,12 +12437,12 @@ final: prev: {
 
   numb-nvim = buildVimPlugin {
     pname = "numb.nvim";
-    version = "1.2.1";
+    version = "1.3.0";
     src = fetchFromGitHub {
       owner = "nacro90";
       repo = "numb.nvim";
-      tag = "v1.2.1";
-      hash = "sha256-HlMAZhrM+HnMDwBqXhEjD26y0hkWq6orNDDuUMO0KGM=";
+      tag = "v1.3.0";
+      hash = "sha256-+3QZ4rjkDKdOGd1ck4U4oe4vHq2HTQyS7uuiqIlrrsA=";
     };
     meta.homepage = "https://github.com/nacro90/numb.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
