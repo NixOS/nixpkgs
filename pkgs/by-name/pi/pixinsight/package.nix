@@ -49,6 +49,7 @@ buildFHSEnv {
 
       alsa-lib
       libxkbcommon
+      wayland
 
       libGL
       libdrm
@@ -56,6 +57,7 @@ buildFHSEnv {
       qt6Packages.qtbase
       gtk3
       fontconfig
+      freetype
       libjpeg8
       gd
 
