@@ -171,12 +171,10 @@ class FlakeMetadataJson(TypedDict):
 
 
 class NixOSVersionJson(TypedDict):
-    nixosVersion: str
-    # Those keys are only set in nixos-version when it exists
+    # Keys are NotRequired here so we need to parse them safely
+    nixosVersion: NotRequired[str]
     configurationRevision: NotRequired[str]
     kernelVersion: NotRequired[str]
-    # The reason this key are NotRequired even when they're always set in
-    # nixos-version is because older generations may not have them yet
     specialisations: NotRequired[list[str]]
 
 
