@@ -1,18 +1,16 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
-  zathura_core,
-  girara,
-  gtk4,
-  gettext,
-  libarchive,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  libarchive,
+  girara,
+  gtk4,
   gitUpdater,
 }:
 
@@ -31,17 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    gettext
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    gtk4
-    libarchive
     zathura_core
+    libarchive
     girara
+    gtk4
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
