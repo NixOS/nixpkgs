@@ -17,6 +17,7 @@
   libevent,
   nixosTests,
   gtk3Support ? false,
+  glibSupport ? true,
   gtk3,
   qt5,
   qt5Support ? false,
@@ -194,15 +195,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    glib
     autoconf-archive
     autoreconfHook
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ];
 
   buildInputs = [
     libdaemon
     dbus
-    glib
     expat
     libiconv
     libevent
@@ -215,6 +217,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals qt5Support [
     qt5
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ];
 
   propagatedBuildInputs = lib.optionals withPython (
@@ -232,6 +237,8 @@ stdenv.mkDerivation rec {
     # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
     "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
     (lib.enableFeature gtk3Support "gtk3")
+    (lib.enableFeature glibSupport "glib")
+    (lib.enableFeature glibSupport "gobject")
     (lib.enableFeature qt5Support "qt5")
     (lib.enableFeature withPython "python")
     "--localstatedir=/var"
