@@ -3,6 +3,7 @@
   skawarePackages,
   skalibs,
   execline,
+  execlineSupport ? true,
 }:
 
 skawarePackages.buildPackage {
@@ -32,6 +33,8 @@ skawarePackages.buildPackage {
 
   buildInputs = [
     skalibs
+  ]
+  ++ lib.optionals execlineSupport [
     execline
   ];
 
@@ -44,6 +47,9 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+  ]
+  ++ lib.optionals (!execlineSupport) [
+    "--disable-execline"
   ];
 
   postInstall = ''
