@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jellyfin-apiclient-python";
   version = "1.19.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-apiclient-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZyeHkiDWf93B7sSlDqugQZ5H6HxK16DK+NAZIry+EuY=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})
