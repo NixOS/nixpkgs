@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libtool
-    libsndfile
+    libsndfile # TODO: unused when libOnly but required by meson config
     soxr
     speexdsp
     check
