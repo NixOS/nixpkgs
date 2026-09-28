@@ -34,5 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "activemq";
     maintainers = [ lib.maintainers.anthonyroussel ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "apache" finalAttrs.version;
   };
 })
