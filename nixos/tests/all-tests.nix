@@ -647,10 +647,6 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox;
   };
-  firefox-beta = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.firefox-beta;
-  };
   firefox-devedition = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-devedition;
