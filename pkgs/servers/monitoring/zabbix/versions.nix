@@ -8,12 +8,12 @@ generic: {
     postgresqlHash = "sha256-H+WwJ9RrITeWKErMW+vcEG/Z2rAjbznVg/dK3ZM7j0I=";
   };
   v70 = generic {
-    version = "7.0.30";
-    hash = "sha256-wMpAeRGa3uxBNeM1HRuEkVet4HbDUsAGco5zLxcHIyw=";
-    emberPlusHash = "sha256-BXFaELxPrUSIF8+/Jpv+WfGYpJA4VK8wdL4oDFPn+/A=";
-    mongodbHash = "sha256-DhDqLXjGAQXBn9U5fVhZgxsP0MHMKgz35YI8K74mWxo=";
-    mssqlHash = "sha256-Ow15PXUq+kKyeM7j/TNZe/LKKDcmdpB04XE3SkagdRI=";
-    postgresqlHash = "sha256-7BFLstJRAh+rdDW9G7kspMYqRubdfXS9AimMDuMB8UM=";
+    version = "7.0.31";
+    hash = "sha256-nfEGmqHP32e3Ex6T8vX+bQrQBeQWyZAgFv2Mto8zDow=";
+    emberPlusHash = "sha256-qPewZCfDbDFkX+So26d91fC41gsdnLidynJQVTSKd9M=";
+    mongodbHash = "sha256-JiWL9zg+EZFwc9OjnjcUIUF75bDgeiswsTT7mY7SOrM=";
+    mssqlHash = "sha256-5Er0oKgIPFs/NE4XrQjqBkZ6w5iIDaQgq9z4RbiPU+0=";
+    postgresqlHash = "sha256-FgqUGgRADSlYzlZSuYmE7DUZWXR1lKozwHtVdbRIbyw=";
   };
   v60 = generic {
     version = "6.0.48";
