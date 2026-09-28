@@ -11,13 +11,14 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk3,
+  gtk4,
   girara,
   gettext,
   gnome,
   libheif,
   libjxl,
   libxml2,
+  xxhash,
   check,
   sqlite,
   glib,
@@ -28,12 +29,14 @@
   librsvg,
   gtk-mac-integration,
   webp-pixbuf-loader,
+  xvfb-run,
+  weston,
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "2026.05.20";
+  version = "2026.07.18";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwmt";
     repo = "zathura";
     tag = finalAttrs.version;
-    hash = "sha256-ChrIJKPVukkW6d/grGcMJ6sZ9sctIOmyJv6TAehh1T8=";
+    hash = "sha256-LngYOW1dNR+x/4Yh1W07dTxidqK0FOvJOl2RRecchvE=";
   };
 
   outputs = [
@@ -58,11 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
-    "-Dtests=disabled"
     # by default, zathura searches for zathurarc under $out/etc
     "-Dsysconfdir=/etc"
-    # Make sure tests are enabled for doCheck
-    # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "landlock" stdenv.hostPlatform.isLinux)
   ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     girara
     libintl
     sqlite
@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     check
     json-glib
     texlive.bin.core
+    xxhash
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
   ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
@@ -105,6 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [
+    xvfb-run
+    weston
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
