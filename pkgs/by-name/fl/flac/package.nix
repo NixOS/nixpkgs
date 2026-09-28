@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
