@@ -13,7 +13,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proton-core";
   version = "0.7.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WTxFGua0OhgqsxgZJUI3M+WvUeYF9MsYVIa6Us7UfZ0=";
   };
 
@@ -35,13 +35,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [ "proton" ];
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
     pyotp
   ];
+
+  pythonImportsCheck = [ "proton" ];
 
   disabledTestPaths = [
     # Single test, requires internet connection
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})
