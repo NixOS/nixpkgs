@@ -14,6 +14,15 @@
       };
     };
 
+    deprecatedHostPortConf = {
+      services.adguardhome = {
+        enable = true;
+
+        host = "127.0.0.1";
+        port = 12345;
+      };
+    };
+
     syslogConf = {
       services.adguardhome = {
         enable = true;
@@ -26,12 +35,11 @@
       services.adguardhome = {
         enable = true;
 
-        host = "127.0.0.1";
         mutableSettings = false;
-        port = 43074;
         settings = {
           dns.bootstrap_dns = [ "127.0.0.1" ];
           http.doh.insecure_enabled = true;
+          http.address = "127.0.0.1:43074";
         };
       };
     };
@@ -122,6 +130,13 @@
     with subtest("Default config test"):
       emptyConf.wait_for_unit("adguardhome.service")
       emptyConf.wait_for_open_port(3000)
+
+    with subtest("Only setting the deprecated port option works"):
+      deprecatedHostPortConf.wait_for_unit("adguardhome.service")
+      deprecatedHostPortConf.wait_for_open_port(12345)
+      deprecatedHostPortConf.succeed(
+          "grep -qFx '  address: 127.0.0.1:12345' /var/lib/AdGuardHome/AdGuardHome.yaml"
+      )
 
     with subtest("Logging to syslog test"):
       # AdGuard is expected to fail when it cannot connect to syslog
