@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fleet-orbit,
   gtk3,
   libayatana-appindicator,
@@ -9,12 +9,10 @@
   versionCheckHook,
 }:
 
-buildGoModule {
+buildGo127Module {
   pname = "fleet-desktop";
-  inherit (fleet-orbit) version src;
+  inherit (fleet-orbit) version src vendorHash;
   __structuredAttrs = true;
-
-  vendorHash = "sha256-fhACxmzJY0PEQmMbjQxlfQh5ZJ+7a4um0s8xFQq+57w=";
 
   env.CGO_ENABLED = "1";
 
@@ -28,9 +26,7 @@ buildGoModule {
     "-X=main.version=${fleet-orbit.version}"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gtk3
@@ -43,6 +39,9 @@ buildGoModule {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  postInstallCheck = ''
+    test ! -e "$out/bin/.fleet-desktop-wrapped"
+  '';
 
   passthru.tests = {
     inherit (nixosTests) orbit;
