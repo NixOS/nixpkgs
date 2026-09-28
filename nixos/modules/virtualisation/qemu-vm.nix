@@ -337,7 +337,7 @@ let
             ${if share.writable then "--writeback" else "--readonly"} \
             --sandbox=none \
             --seccomp=none \
-            --cache=always \
+            --cache=${share.virtiofsCache} \
             --no-announce-submounts \
             --translate-uid=host:65534:0:1 \
             --translate-gid=host:65534:0:1 \
@@ -594,6 +594,18 @@ in
           };
           options.writable = lib.mkEnableOption "" // {
             description = "Whether the directory is writable on the host and guest.";
+          };
+          options.virtiofsCache = mkOption {
+            type = types.enum [
+              "auto"
+              "always"
+              "metadata"
+              "never"
+            ];
+            default = "always";
+            description = ''
+              Cache policy used by virtiofsd when sharing this directory on Linux hosts.
+            '';
           };
         }
       );
