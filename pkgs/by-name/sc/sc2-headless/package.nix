@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -ur "${maps.minigames}"/* "${maps.melee}"/* "${maps.ladder2017season1}"/* "${maps.ladder2017season2}"/* "${maps.ladder2017season3}"/* \
       "${maps.ladder2017season4}"/* "${maps.ladder2018season1}"/* "${maps.ladder2018season2}"/* \
-      "${maps.ladder2018season3}"/*  "${maps.ladder2018season4}"/* "${maps.ladder2019season1}"/* "$out"/Maps/
+      "${maps.ladder2018season3}"/*  "${maps.ladder2018season4}"/* "${maps.ladder2019season1}"/* \
+      "${maps.ladder2019season2}"/* "${maps.ladder2019season3}"/* "$out"/Maps/
   '';
 
   preFixup = ''

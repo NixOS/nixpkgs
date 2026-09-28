@@ -75,4 +75,14 @@ in
     sha256 = "1dlk9zza8h70lbjvg2ykc5wr9vsvvdk02szwrkgdw26mkssl2rg9";
     stripRoot = false;
   };
+  ladder2019season2 = fetchzip' {
+    url = "http://blzdistsc2-a.akamaihd.net/MapPacks/Ladder2019Season2.zip";
+    hash = "sha256-JlgjkNfN6pTG6mb4jjOHad+yNdZso23FBUik5UWaTvE=";
+    stripRoot = false;
+  };
+  ladder2019season3 = fetchzip' {
+    url = "http://blzdistsc2-a.akamaihd.net/MapPacks/Ladder2019Season3.zip";
+    hash = "sha256-e69aRDkHi/DJ3j0U1HyYhZjPgYaB+KQefS1lgH5DgiY=";
+    stripRoot = false;
+  };
 }
