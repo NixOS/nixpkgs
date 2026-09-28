@@ -4144,10 +4144,6 @@ assertNoAdditions {
     };
   });
 
-  rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
-    dependencies = [ self.nvim-lspconfig ];
-  };
-
   rustaceanvim = super.rustaceanvim.overrideAttrs {
     checkInputs = [
       # Optional integration
