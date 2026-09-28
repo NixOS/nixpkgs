@@ -2,6 +2,8 @@
   buildRedist,
   config,
   lib,
+  openssl,
+  stdenv,
 }:
 buildRedist {
   redistName = "cuda";
@@ -11,10 +13,19 @@ buildRedist {
   # To avoid that (and troubleshooting why), we just use a single output.
   outputs = [ "out" ];
 
+  # libnvidia-pkcs11{-openssl3}.so is only shipped on x86_64-linux
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
+    openssl
+  ];
+
   autoPatchelfIgnoreMissingDeps = [
     "libnvdla_runtime.so"
     "libnvrm_gpu.so"
     "libnvrm_mem.so"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # Used by libnvidia-pkcs11.so but openssl_1_1 has been removed from nixpkgs (EoL)
+    "libcrypto.so.1.1"
   ];
 
   meta = {
