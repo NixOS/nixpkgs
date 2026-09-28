@@ -6,6 +6,7 @@
   pkg-config,
   wayland,
   withNativeLibs ? false,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-clipboard-rs";
@@ -69,6 +70,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish target/completions/wl-paste.fish \
       --zsh target/completions/_wl-paste
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";
