@@ -7,6 +7,9 @@
 }:
 let
   inherit (lib) mkOption;
+  x11Containers = lib.filterAttrs (
+    _: machine: lib.any (target: target.backend == "x11") machine.testing.displayTargets
+  ) config.containers;
 in
 {
   options = {
@@ -46,6 +49,21 @@ in
   config = {
     interactive.qemu.package = hostPkgs.qemu;
     interactive.extraDriverArgs = [ "--interactive" ];
+    interactive.driverConfiguration = lib.mkIf hostPkgs.stdenv.hostPlatform.isLinux {
+      containers = lib.mapAttrs (_: _: {
+        display_exporters.x11 = {
+          kind = "x11-vnc";
+          server = lib.getExe hostPkgs.x11vnc;
+          relay = lib.getExe hostPkgs.socat;
+        };
+      }) x11Containers;
+      display_viewers = lib.mkIf (x11Containers != { }) {
+        vnc = {
+          kind = "vnc";
+          executable = lib.getExe' hostPkgs.virt-viewer "remote-viewer";
+        };
+      };
+    };
     passthru.driverInteractive = config.interactive.driver;
   };
 }
