@@ -20,13 +20,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "sable-unwrapped";
-  version = "1.22.6";
+  version = "1.22.9";
 
   src = fetchFromGitHub {
     owner = "SableClient";
     repo = "Sable";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AZ2gKcCLJvllC/lOL+l/zt3/RxztWd8mu25Eo0vyMBY=";
+    hash = "sha256-TZycPD+lor6pCTcJaZLUvb84CyFn5jBROltdz9hSdLg=";
   };
 
   pnpmDeps = fetchPnpmDeps {

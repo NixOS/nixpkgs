@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  name = "syncthing";
+  name = "syncthing-no-settings";
   meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
   nodes = {
