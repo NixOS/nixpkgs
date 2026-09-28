@@ -3789,17 +3789,19 @@ with pkgs;
     julia_110-bin
     julia_111-bin
     julia_112-bin
+    julia_113-bin
     julia_110
     julia_111
     julia_112
+    julia_113
     ;
 
   julia-lts = julia_110-bin;
-  julia-stable = julia_112;
+  julia-stable = julia_113;
   julia = julia-stable;
 
   julia-lts-bin = julia_110-bin;
-  julia-stable-bin = julia_112-bin;
+  julia-stable-bin = julia_113-bin;
   julia-bin = julia-stable-bin;
 
   kotlin = callPackage ../development/compilers/kotlin { };
@@ -7289,12 +7291,12 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
-      nginxModules.rtmp
       nginxModules.moreheaders
     ];
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    openssl = openssl_4_0;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
@@ -7514,6 +7516,18 @@ with pkgs;
       (callPackages ../servers/monitoring/zabbix/server.nix { postgresqlSupport = true; }).${version};
     web = (callPackages ../servers/monitoring/zabbix/web.nix { }).${version};
     agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix { }).${version};
+
+    plugins = {
+      ember-plus =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/ember-plus.nix { }).${version};
+      mongodb =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mongodb.nix { }).${version};
+      mssql = (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mssql.nix { }).${version};
+      nvidia-gpu =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/nvidia-gpu.nix { }).${version};
+      postgresql =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/postgresql.nix { }).${version};
+    };
 
     # backwards compatibility
     server = server-pgsql;
@@ -8197,8 +8211,6 @@ with pkgs;
     source-han-serif-vf-otf
     source-han-serif-vf-ttf
     ;
-
-  themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
   tex-gyre = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
 
@@ -9917,15 +9929,6 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome38Extensions
-    gnome40Extensions
-    gnome41Extensions
-    gnome42Extensions
-    gnome43Extensions
-    gnome44Extensions
-    gnome45Extensions
-    gnome46Extensions
-    gnome47Extensions
     gnome48Extensions
     gnome49Extensions
     gnome50Extensions
@@ -10670,13 +10673,6 @@ with pkgs;
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
   dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
-
-  inherit (callPackage ../applications/networking/instant-messengers/discord { })
-    discord
-    discord-ptb
-    discord-canary
-    discord-development
-    ;
 
   torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 

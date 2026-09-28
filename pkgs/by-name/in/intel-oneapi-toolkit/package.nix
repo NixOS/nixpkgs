@@ -329,6 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       balsoft
       kilyanni
+      recutita
     ];
     platforms = [ "x86_64-linux" ];
   };

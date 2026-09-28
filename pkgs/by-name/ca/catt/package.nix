@@ -7,7 +7,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catt";
-  version = "0.13.2";
+  version = "0.13.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "skorokithakis";
     repo = "catt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VjwYfaBoQ7HMKG6BztAB3mmQps42MoHSAiC2jHbRS/Q=";
+    hash = "sha256-UiO46HNzeO2wg41Zn89bUdl34UeZZmWjekGxxsLgGwQ=";
   };
 
   build-system = [
