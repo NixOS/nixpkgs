@@ -5,14 +5,12 @@
   meson,
   ninja,
   pkg-config,
-  gtk3,
-  zathura_core,
-  girara,
-  djvulibre,
-  gettext,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  girara,
+  cairo,
+  djvulibre, # ddjvuapi
   gitUpdater,
 }:
 
@@ -33,15 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    djvulibre
-    gettext
     zathura_core
-    gtk3
     girara
+    cairo
+    djvulibre
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
