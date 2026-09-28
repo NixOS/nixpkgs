@@ -23,6 +23,7 @@
   libice,
   apparmorSupport ? stdenv.hostPlatform.isLinux,
   libauditSupport ? stdenv.hostPlatform.isLinux,
+  capabilitySupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
   ]
   ++ lib.optional enableSystemd systemdMinimal
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals capabilitySupport [
     libcap_ng
   ]
   ++ lib.optionals apparmorSupport [
