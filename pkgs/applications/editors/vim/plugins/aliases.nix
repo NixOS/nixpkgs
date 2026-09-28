@@ -17,16 +17,8 @@ let
   # sets from building on Hydra.
   removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
-  # Make sure that we are not shadowing something from
-  # all-packages.nix.
-  checkInPkgs =
-    n: alias: if builtins.hasAttr n prev then throw "Alias ${n} is still in vim-plugins" else alias;
-
   mapAliases =
-    aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    aliases: lib.mapAttrs (_: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
 
   deprecations = lib.mapAttrs (
     old: info:
