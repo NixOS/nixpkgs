@@ -151,7 +151,10 @@ stdenv.mkDerivation {
     homepage = "https://www.raise3d.com/ideamaker/";
     license = lib.licenses.unfree;
     mainProgram = "ideamaker";
-    maintainers = with lib.maintainers; [ cjshearer ];
+    maintainers = with lib.maintainers; [
+      cjshearer
+      r-xyz
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
