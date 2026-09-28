@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "stalwart-cli";
     maintainers = with lib.maintainers; [
-      giomf
       debtquity
     ];
   };
