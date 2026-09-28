@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
   version = "26.9.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
