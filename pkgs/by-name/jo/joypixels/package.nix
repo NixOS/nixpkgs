@@ -23,18 +23,19 @@ let
       fontFile = "joypixels-android.ttf";
     };
 
-  joypixels-free-license = {
-    spdxId = "LicenseRef-JoyPixels-Free";
+  joypixels-free-license = lib.licenses.mkLicense {
+    shortName = "JoyPixels-Free";
     fullName = "JoyPixels Free License Agreement";
     url = "https://cdn.joypixels.com/free-license.pdf";
     free = false;
   };
 
-  joypixels-license-appendix = with systemSpecific; {
-    spdxId = "LicenseRef-JoyPixels-NixOS-Appendix";
-    fullName = "JoyPixels ${capitalized} License Appendix";
-    url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.pdf";
+  joypixels-license-appendix = lib.licenses.mkLicense {
+    shortName = "JoyPixels-NixOS-Appendix";
+    fullName = "JoyPixels ${systemSpecific.capitalized} License Appendix";
+    url = "https://cdn.joypixels.com/distributions/${systemSpecific.systemTag}/appendix/joypixels-license-appendix.pdf";
     free = false;
+    redistributable = true;
   };
 
   throwLicense = throw ''
@@ -101,20 +102,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.joypixels.com/fonts";
     hydraPlatforms = [ ]; # Just a binary file download, nothing to cache.
-    license =
-      let
-        free-license = joypixels-free-license;
-        appendix = joypixels-license-appendix;
-      in
-      with systemSpecific;
-      {
-        spdxId = "LicenseRef-JoyPixels-Free-with-${capitalized}-Appendix";
-        fullName = "${free-license.fullName} with ${appendix.fullName}";
-        url = free-license.url;
-        appendixUrl = appendix.url;
-        free = false;
-        redistributable = true;
-      };
+    license = lib.licenses.WITH joypixels-free-license joypixels-license-appendix;
     maintainers = with lib.maintainers; [
       toonn
       jtojnar
