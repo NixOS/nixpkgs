@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -22,11 +23,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # pam-sys (lockscreen) generates its bindings with bindgen; Linux only
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pam
+  ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Reads the USER environment variable, which is unset in the sandbox
+    "--skip=lockscreen::auth::macos_auth::tests::test_get_username"
+    # Checks for /usr/bin/dscl, which is not visible in the sandbox
+    "--skip=lockscreen::auth::macos_auth::tests::test_macos_available"
   ];
 
   meta = {
@@ -36,6 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alejandroqh ];
     mainProgram = "term39";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
