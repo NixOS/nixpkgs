@@ -46,6 +46,9 @@
   enableConvolution ? true,
   enableLibdaemon ? false,
   enableTinySVCmDNS ? true,
+
+  # Enabling session bus support disables system bus support
+  enableSessionBus ? true,
 }:
 
 let
@@ -104,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional stdenv.hostPlatform.isLinux glib;
 
-  postPatch = ''
+  postPatch = lib.optionalString enableSessionBus ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' mpris-service.c
   '';
