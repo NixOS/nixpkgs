@@ -122,5 +122,11 @@ mkChromiumDerivation (base: rec {
       "x86_64-linux"
     ];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    identifiers.cpeParts = {
+      vendor = "google";
+      product = "chrome";
+      version = base.version;
+      update = "*";
+    };
   };
 })
