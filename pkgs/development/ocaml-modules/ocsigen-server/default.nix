@@ -20,7 +20,6 @@
   ca-certs,
   cohttp,
   cohttp-lwt-unix,
-  lwt_log,
   re,
   logs-syslog,
   cryptokit,
@@ -52,17 +51,15 @@ let
   ];
 in
 
-buildDunePackage {
-  version = "6.0.0-unstable-2025-08-11";
+buildDunePackage (finalAttrs: {
+  version = "7.0.0";
   pname = "ocsigenserver";
-
-  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
-    rev = "0d3c74d71fbdf738d1e45a98814b7ebdd1efe6c1";
-    hash = "sha256-KEHTw4cCPRJSE4SAnUFWzeoiEz8y9nUQFpaFiNxAsiU=";
+    tag = finalAttrs.version;
+    hash = "sha256-J2XBelpRWJGeIF9RdC9+icJI1hc6Oe0k1w25QHZz0zs=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +77,6 @@ buildDunePackage {
     cohttp-lwt-unix
     cryptokit
     ipaddr
-    lwt_log
     lwt_ssl
     re
     logs-syslog
@@ -110,8 +106,7 @@ buildDunePackage {
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
     '';
     license = lib.licenses.lgpl21Only;
-    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 
-}
+})

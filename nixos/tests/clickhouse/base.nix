@@ -1,6 +1,6 @@
 { pkgs, package, ... }:
 {
-  name = "clickhouse";
+  name = "clickhouse-${package.version}";
   meta.maintainers = with pkgs.lib.maintainers; [
     jpds
     thevar1able

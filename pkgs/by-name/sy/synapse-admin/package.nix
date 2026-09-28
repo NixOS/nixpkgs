@@ -27,10 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rK1Tc1K3wx6/1J8TEw5Lb9g09gbt/1HoZdDrEFzxTQQ=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/Awesome-Technologies/synapse-admin/blob/master/package.json#L13
+    ./yarn-4.14-support.patch
+  ];
+
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
   yarnOfflineCache = stdenv.mkDerivation {
     pname = "yarn-deps";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version src patches;
 
     nativeBuildInputs = [ yarn-berry ];
 
@@ -134,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

@@ -8,10 +8,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teehee";
   version = "0.2.8";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Gskartwii";
     repo = "teehee";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yTterXAev6eOnUe1/MJV8s8dUYJcXHDKVJ6T0G/JHzI=";
   };
 

@@ -1,9 +1,9 @@
 {
-  useNixpkgsEngine ? false,
   callPackage,
   fetchzip,
   fetchFromGitHub,
   dart,
+  dart-bin,
   lib,
   stdenv,
   runCommand,
@@ -21,10 +21,6 @@ let
     {
       version,
       engineVersion,
-      engineSwiftShaderHash,
-      engineSwiftShaderRev,
-      engineHashes,
-      enginePatches,
       dartVersion,
       flutterHash,
       dartHash,
@@ -38,14 +34,9 @@ let
         inherit
           version
           engineVersion
-          engineSwiftShaderRev
-          engineSwiftShaderHash
-          engineHashes
-          enginePatches
           patches
           pubspecLock
           artifactHashes
-          useNixpkgsEngine
           channel
           ;
 
@@ -57,14 +48,14 @@ let
           in
           (
             if lib.versionAtLeast version "3.41" then
-              (dart.overrideAttrs (oldAttrs: {
+              (dart-bin.overrideAttrs (oldAttrs: {
                 version = dartVersion;
                 src = oldAttrs.src.overrideAttrs (_: {
                   inherit hash;
                 });
               }))
             else
-              (dart.overrideAttrs (_: {
+              (dart-bin.overrideAttrs (_: {
                 # This overrideAttrs is used to replace the version in src.url
                 version = dartVersion;
                 __intentionallyOverridingVersion = true;
@@ -122,7 +113,6 @@ let
         mkFlutter (
           {
             patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
-            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
           }
           // data
         )

@@ -30,7 +30,7 @@ in
     settings = lib.mkOption {
       description = ''
         Configuration of Chhoto URL.
-        See <https://github.com/SinTan1729/chhoto-url/blob/main/compose.yaml> for a list of options.
+        See <https://github.com/SinTan1729/chhoto-url/blob/main/docs/INSTALLATION.md#configuration-options> for a list of options.
       '';
       example = {
         port = 4567;
@@ -152,7 +152,7 @@ in
       description = ''
         Files to load environment variables from in addition to [](#opt-services.chhoto-url.settings).
         This is useful to avoid putting secrets into the nix store.
-        See <https://github.com/SinTan1729/chhoto-url/blob/main/compose.yaml> for a list of options.
+        See <https://github.com/SinTan1729/chhoto-url/blob/main/docs/INSTALLATION.md#configuration-options> for a list of options.
       '';
     };
   };

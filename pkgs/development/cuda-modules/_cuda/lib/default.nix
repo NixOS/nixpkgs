@@ -29,6 +29,7 @@
 
   # See ./redist.nix for documentation.
   inherit (import ./redist.nix { inherit _cuda lib; })
+    _getJetsonMinSbsaCapability
     _redistSystemIsSupported
     getNixSystems
     getRedistSystem

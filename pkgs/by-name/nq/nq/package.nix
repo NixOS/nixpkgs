@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unix command line queue utility";
     homepage = "https://github.com/leahneukirchen/nq";
     changelog = "https://github.com/leahneukirchen/nq/blob/v${finalAttrs.version}/NEWS.md";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = [ ];
   };

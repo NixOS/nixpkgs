@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/bin/${finalAttrs.pname} \
+    patchelf $out/bin/${finalAttrs.meta.mainProgram} \
       --add-rpath ${
         lib.makeLibraryPath [
           vulkan-loader

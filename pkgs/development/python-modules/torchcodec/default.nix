@@ -1,39 +1,63 @@
 {
   lib,
   stdenv,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
+  symlinkJoin,
 
   # nativeBuildInputs
   pkg-config,
 
   # buildInputs
-  ffmpeg,
-  cudaPackages,
+  ffmpeg-headless,
+  libavif,
+  libheif,
+  libjpeg,
+  libpng,
+  libwebp,
 
   # build-system
   cmake,
-  setuptools,
+  ninja,
+  pybind11,
+  scikit-build-core,
   torch,
 
   # tests
   pytestCheckHook,
   torchvision,
 
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
+  rocmSupport ? torch.rocmSupport,
 }:
 
-buildPythonPackage rec {
+let
+  inherit (torch) cudaCapabilities cudaPackages;
+
+  # Unlike the other image codecs, upstream's CMake has no `find_package` path for libavif: it
+  # unconditionally FetchContent-downloads a prebuilt tarball from S3.
+  # Point FetchContent at our own libavif instead, which it expects to find as `include/` and
+  # `lib/libavif.so.16` under a single root.
+  # https://github.com/meta-pytorch/torchcodec/blob/v0.16.0/src/torchcodec/_core/fetch_avif_from_s3.cmake
+  libavif-root = symlinkJoin {
+    name = "libavif-root";
+    paths = [
+      (lib.getDev libavif)
+      (lib.getLib libavif)
+    ];
+  };
+in
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.9.0";
+  version = "0.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
-    tag = "v${version}";
-    hash = "sha256-QG7LX9G1HV2l75jsgsbM4ts6bg0wvsNhjml19b7yYEQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eXe86DQqXWePWn9UcMVLdJTaO0YQZIQaQ4o1ao/5dH8=";
   };
 
   postPatch = ''
@@ -42,12 +66,17 @@ buildPythonPackage rec {
       test/test_encoders.py \
       --replace-fail \
         '"ffprobe"' \
-        '"${lib.getExe' ffmpeg "ffprobe"}"'
+        '"${lib.getExe' ffmpeg-headless "ffprobe"}"'
 
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg}"'
+        '"${lib.getExe ffmpeg-headless}"'
+
+    substituteInPlace test/test_transform_ops.py \
+      --replace-fail \
+        'ffmpeg_cli = "ffmpeg"' \
+        'ffmpeg_cli = "${lib.getExe ffmpeg-headless}"'
   '';
 
   nativeBuildInputs = [
@@ -55,10 +84,18 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    torch.rocmPackages.clr
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-headless
+    libavif
+    libheif
+    libjpeg
+    libpng
+    libwebp
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
@@ -69,12 +106,15 @@ buildPythonPackage rec {
       libcusolver # cusolverDn.h
       libcusparse # cusparse.h
       libnpp # nppicc
+      libnvjpeg # nvjpeg.h
     ]
   );
 
   build-system = [
     cmake
-    setuptools
+    ninja
+    pybind11
+    scikit-build-core
     torch
   ];
   dontUseCmakeConfigure = true;
@@ -89,6 +129,19 @@ buildPythonPackage rec {
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
+
+    CMAKE_ARGS = toString [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_AVIF_S3" libavif-root.outPath)
+    ];
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
+  }
+  // lib.optionalAttrs rocmSupport {
+    ROCM_PATH = torch.rocmtoolkit_joined;
+    ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
+    PYTORCH_ROCM_ARCH = torch.gpuTargetString;
+    CMAKE_CXX_FLAGS = "-I${lib.getInclude torch.rocmtoolkit_joined}/include";
   };
 
   pythonImportsCheck = [ "torchcodec" ];
@@ -98,8 +151,21 @@ buildPythonPackage rec {
     torchvision
   ];
 
+  disabledTestPaths = [
+    # Shells out to `pip install` to set up a plugin package
+    "test/plugin/test_plugins.py"
+  ];
+
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    lib.optionals rocmSupport [
+      # HSA runtime logs topology error in sandbox breaking test that asserts no output
+      "test_python_logger"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fails in the sandbox:
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      "test_python_logger"
+
       # AssertionError: index 0
       "test_get_frames_played_at"
 
@@ -146,6 +212,7 @@ buildPythonPackage rec {
       "test_contiguit"
       "test_crf_valid_value"
       "test_encode_to_tensor_long_outpu"
+      "test_num_channels"
       "test_round_trip"
       "test_video_encoder_against_ffmpeg_cli"
       "test_video_encoder_round_trip"
@@ -159,8 +226,11 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch media decoding and encoding";
     homepage = "https://github.com/meta-pytorch/torchcodec";
-    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${src.tag}";
+    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      caniko
+    ];
   };
-}
+})

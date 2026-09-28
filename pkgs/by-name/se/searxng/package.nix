@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2026-02-16";
+    version = "0-unstable-2026-09-22";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "8e824017dc88cebe5a42ee6ca04315ca9545f717";
-      hash = "sha256-9B6Oel6yfiQS5uY1jjU+BHkP13HgJubCcE2g6YJiNeY=";
+      rev = "2ed96e6fcfc96ca1045155fc52a12f5f7b070417";
+      hash = "sha256-CdOV77x0SHrdUZYS/c7RXDI4cQ1sh+eqlKNbgl2Ci6Q=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -30,7 +30,7 @@ python.pkgs.toPythonModule (
     preBuild =
       let
         versionString = lib.concatStringsSep "." (
-          builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version))
+          map (lib.removePrefix "0") (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)))
         );
         commitAbbrev = builtins.substring 0 8 src.rev;
       in
@@ -48,33 +48,26 @@ python.pkgs.toPythonModule (
 
     build-system = with python.pkgs; [ setuptools ];
 
-    dependencies =
-      with python.pkgs;
-      [
-        babel
-        certifi
-        fasttext-predict
-        flask
-        flask-babel
-        httpx
-        httpx-socks
-        isodate
-        jinja2
-        lxml
-        markdown-it-py
-        msgspec
-        pygments
-        python-dateutil
-        pyyaml
-        sniffio
-        typer
-        typing-extensions
-        valkey
-        whitenoise
-      ]
-      ++ httpx.optional-dependencies.http2
-      ++ httpx.optional-dependencies.socks
-      ++ httpx-socks.optional-dependencies.asyncio;
+    dependencies = with python.pkgs; [
+      babel
+      certifi
+      cloudscraper
+      curl-cffi
+      flask
+      flask-babel
+      isodate
+      jinja2
+      lxml
+      markdown-it-py
+      msgspec
+      pygments
+      python-dateutil
+      pyyaml
+      typer
+      typing-extensions
+      valkey
+      whitenoise
+    ];
 
     # tests try to connect to network
     doCheck = false;

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jellyfin-rpc";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
-    owner = "Radiicall";
+    owner = "JustRadical";
     repo = "jellyfin-rpc";
     tag = finalAttrs.version;
-    hash = "sha256-g4Vd++Q6rJS6nU1kR+7aItnhHc0jeFSU460iF6P1EEk=";
+    hash = "sha256-6vlbANu3Eo51Zpdng4Ub3OYijwY5wekPLyyzIsG2zSE=";
   };
 
-  cargoHash = "sha256-ltEm3hFiHBM4NtYg1qrFH26jMDgWa+al06P6O/Su1XA=";
+  cargoHash = "sha256-/g/qZM4wJuqqVUwoo8TzK1XsmRTGnDdo+toj/gO3QLo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -30,8 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Displays the content you're currently watching on Discord";
-    homepage = "https://github.com/Radiicall/jellyfin-rpc";
-    changelog = "https://github.com/Radiicall/jellyfin-rpc/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/JustRadical/jellyfin-rpc";
+    changelog = "https://github.com/JustRadical/jellyfin-rpc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "jellyfin-rpc";

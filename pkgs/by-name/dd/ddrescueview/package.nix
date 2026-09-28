@@ -8,9 +8,11 @@
   cairo,
   gdk-pixbuf,
   glib,
-  gtk2,
+  gtk3,
+  harfbuzz,
   libx11,
   pango,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     fpc
     lazarus
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -33,7 +36,8 @@ stdenv.mkDerivation rec {
     cairo
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
+    harfbuzz
     libx11
     pango
   ];
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --ws=gtk3 ddrescueview.lpi
   '';
 
   installPhase = ''

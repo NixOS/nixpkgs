@@ -48,7 +48,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/msh/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Create and manage triangular and tetrahedral meshes for Finite Element or Finite Volume PDE solvers";
     longDescription = ''
       Create and manage triangular and tetrahedral meshes for Finite Element or

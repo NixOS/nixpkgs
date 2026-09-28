@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     description = "Fresh implementation of Shadowsocks in Go";
     homepage = "https://github.com/shadowsocks/go-shadowsocks2/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "go-shadowsocks2";
   };
 })

@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (lib) optional optionalString;
+  inherit (lib) optional;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "libmikmod-config";
     homepage = "https://mikmod.shlomifish.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
 

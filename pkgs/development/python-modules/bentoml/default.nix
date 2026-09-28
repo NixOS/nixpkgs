@@ -3,6 +3,7 @@
   stdenv,
   a2wsgi,
   aiohttp,
+  aiohttp-asgi-connector,
   aiosqlite,
   attrs,
   buildPythonPackage,
@@ -62,7 +63,6 @@
   starlette,
   tomli-w,
   tritonclient,
-  uv,
   uvicorn,
   watchfiles,
   # native check inputs
@@ -78,7 +78,7 @@
 }:
 
 let
-  version = "1.4.29";
+  version = "1.4.33";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -128,7 +128,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-humzefKjnFpbWp9QVcUGPD0+3l2bOyFA35reZLtwFt4=";
+    hash = "sha256-SR84EeZ9WNoaRDG4uklYhlFSDigZv81XX3VlKCn/7Zw=";
   };
 in
 buildPythonPackage {
@@ -158,6 +158,7 @@ buildPythonPackage {
   dependencies = [
     a2wsgi
     aiohttp
+    aiohttp-asgi-connector
     aiosqlite
     attrs
     cattrs
@@ -200,7 +201,6 @@ buildPythonPackage {
     simple-di
     starlette
     tomli-w
-    uv
     uvicorn
     watchfiles
   ];
@@ -248,6 +248,14 @@ buildPythonPackage {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
+    knownVulnerabilities = [
+      "CVE-2026-27905"
+      "CVE-2026-33744"
+      "CVE-2026-35043"
+      "CVE-2026-35044"
+      "CVE-2026-44345"
+      "CVE-2026-44346"
+    ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       happysalada

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitea,
+  cctools,
   yarn-berry_3,
   nodejs,
   python311,
@@ -42,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     python311
     libsass
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -64,6 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Admin interface for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
   };
 })

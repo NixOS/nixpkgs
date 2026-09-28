@@ -5,17 +5,17 @@
   which,
   squawk,
   protobufc,
-  xxHash,
+  xxhash,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpg_query";
-  version = "17-6.1.0";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     tag = finalAttrs.version;
-    hash = "sha256-UXba2WYyIO7RcFcNZeLL+Q9CwlloMZ5oFfHfL7+j4dU=";
+    hash = "sha256-Fs9SFs8ramKYdkv1gEOMJd9SnLmKDcbf+zYKv1hHBfc=";
   };
 
   nativeBuildInputs = [ which ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r protobuf $out/include/protobuf
     ln -s ${protobufc.dev}/include/protobuf-c $out/include/protobuf-c
     cp -r ${protobufc.dev}/include/protobuf-c/* $out/include
-    ln -s ${xxHash}/include $out/include/xxhash
+    ln -s ${xxhash}/include $out/include/xxhash
     install -Dm644 pg_query.h -t $out/include
 
     runHook postInstall

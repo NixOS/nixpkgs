@@ -7,14 +7,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odhcp6c";
-  version = "0-unstable-2026-01-25";
+  version = "0-unstable-2026-06-27";
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/odhcp6c.git";
-    rev = "24485bb4b35ab84c17c2e87bd561d026d4c15c00";
-    hash = "sha256-cfBKly95vI+8u6lZ4LyrSrNvCf3ogTKtLDzuodO26qw=";
+    rev = "10a52220aec9d45803518d8cc4d63e552484ed61";
+    hash = "sha256-IDBbVWs017JcrApJ3s8fjEQghWCwrK1d+E6Wp5eHNX4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,5 +33,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "odhcp6c";
   };
-}
+})

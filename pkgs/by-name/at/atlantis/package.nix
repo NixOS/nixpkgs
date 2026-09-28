@@ -1,19 +1,19 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "atlantis";
-  version = "0.39.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/p8NfggweRHz8+BBrD/d166HJmDLkDzWloWearfqwVg=";
+    hash = "sha256-/Ix/1WYhaNQdCIXhUvuEOsDZMrIwSdO2fr0TSUVZjOE=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-d137hKsd1GrVW2fXZJTUCQmOayolSjNiJNmoOtj3ZkE=";
+  vendorHash = "sha256-EfxLEqjYtLl4a2PYJxh7+kWyLf39KvtZugLBdAMOJPs=";
 
   subPackages = [ "." ];
 
@@ -35,6 +35,8 @@ buildGoModule (finalAttrs: {
     description = "Terraform Pull Request Automation";
     mainProgram = "atlantis";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      tebriel
+    ];
   };
 })

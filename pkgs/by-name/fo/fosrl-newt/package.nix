@@ -4,20 +4,21 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  stdenv,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "newt";
-  version = "1.9.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = finalAttrs.version;
-    hash = "sha256-Ya+OVSChGmiZ8JTAfl/im8fOhLCC+r6JKSlH+CnSwP8=";
+    hash = "sha256-lwDywGs1Wh5jl9xwEd7KvXqEkLw7gCas44SbHtKx8Ps=";
   };
 
-  vendorHash = "sha256-Sib6AUCpMgxlMpTc2Esvs+UU0yduVOxWUgT44FHAI+k=";
+  vendorHash = "sha256-VOXZWcPnBSc8EKYLKhsrQTHSjXvpaEYoewYLCxJ8Nk8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -29,11 +30,15 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-version" ];
-
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+
   meta = {
+    # Networking failures in tests, even with __darwinAllowLocalNetworking on
+    # and sandbox disabled.
+    # Unclear as of 2026-04-24 whether the program works if tests are disabled.
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/newt";
     changelog = "https://github.com/fosrl/newt/releases/tag/${finalAttrs.src.tag}";

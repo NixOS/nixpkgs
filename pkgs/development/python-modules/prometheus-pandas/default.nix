@@ -7,13 +7,13 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prometheus-pandas";
   version = "0.3.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1eaTmNui3cAisKEhBMEpOv+UndJZwb4GGK2M76xiy7k=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     description = "Pandas integration for Prometheus";
     maintainers = with lib.maintainers; [ viktornordling ];
   };
-}
+})

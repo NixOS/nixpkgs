@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "helmfile";
-  version = "1.1.9";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WatJSiNi/rUaoBGgIdRjczpMiXAwRQ21ck/ATVKyZe0=";
+    hash = "sha256-sPzJ/DniVFCY4hrZvLXpvcFFaT7vdTWiwxoqly7hzOs=";
   };
 
-  vendorHash = "sha256-HTs176YgrQX8s+IrOqV4BQVZfhhFkNp+T3HbmmBFdTg=";
+  vendorHash = "sha256-bpiIOfh6hvaAS+hcwd4phv8fXwzbdUCYVxZyyejTx8k=";
 
   proxyVendor = true; # darwin/linux hash mismatch
 
@@ -57,7 +57,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      pneumaticat
       yurrriq
     ];
   };

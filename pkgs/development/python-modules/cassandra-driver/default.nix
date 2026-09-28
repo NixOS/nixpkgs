@@ -4,6 +4,7 @@
   buildPythonPackage,
   cryptography,
   cython,
+  deprecated,
   eventlet,
   fetchFromGitHub,
   geomet,
@@ -17,21 +18,22 @@
   pyyaml,
   scales,
   sure,
+  tomli,
   twisted,
   setuptools,
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cassandra-driver";
-  version = "3.29.3";
+  version = "3.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "datastax";
-    repo = "python-driver";
-    tag = version;
-    hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
+    owner = "apache";
+    repo = "cassandra-python-driver";
+    tag = finalAttrs.version;
+    hash = "sha256-8AfS9bdks4FLfqnlcDE4tjn5cWdD4g+v1ySLi/4hLV0=";
   };
 
   pythonRelaxDeps = [ "geomet" ];
@@ -40,11 +42,13 @@ buildPythonPackage rec {
     distutils
     setuptools
     cython
+    tomli
   ];
 
   buildInputs = [ libev ];
 
   dependencies = [
+    deprecated
     geomet
   ];
 
@@ -63,10 +67,10 @@ buildPythonPackage rec {
     pyyaml
     sure
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # This is used to determine the version of cython that can be used
-  CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
+  env.CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
 
   preBuild = ''
     export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
@@ -116,13 +120,18 @@ buildPythonPackage rec {
     "test_connection_initialization"
     # time-sensitive
     "test_nts_token_performance"
+    "test_empty_connections"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # AssertionError: [(1773409714.980824, <cassandra.connection.Timer object at 0x116cb2870>)] is not false
+    "test_timer_cancellation"
   ];
 
   meta = {
     description = "Python client driver for Apache Cassandra";
-    homepage = "http://datastax.github.io/python-driver";
-    changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
+    homepage = "https://github.com/apache/cassandra-python-driver";
+    changelog = "https://github.com/apache/cassandra-python-driver/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

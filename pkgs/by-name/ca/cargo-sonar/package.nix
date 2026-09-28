@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sonar";
-  version = "1.3.1";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "woshilapin";
     repo = "cargo-sonar";
     tag = finalAttrs.version;
-    hash = "sha256-QK5hri+H1sphk+/0gU5iGrFo6POP/sobq0JL7Q+rJcc=";
+    hash = "sha256-c0P6lU26ofiAd/ALjbJbLai1gynGHIk9qmyzlanGwFw=";
   };
 
-  cargoHash = "sha256-d6LXzWjt2Esbxje+gc8gRA72uxHE2kTUNKdhDlAP0K0=";
+  cargoHash = "sha256-roLHT+YPDB+HfF0MScloTSq2G69dADSXSuzUphLivWk=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Utility to produce some Sonar-compatible format from different Rust tools like cargo-clippy cargo-audit or cargo-outdated";
     mainProgram = "cargo-sonar";
     homepage = "https://gitlab.com/woshilapin/cargo-sonar";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jonboh ];
   };
 })

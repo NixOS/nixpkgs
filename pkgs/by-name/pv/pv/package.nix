@@ -2,16 +2,20 @@
   lib,
   stdenv,
   fetchurl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pv";
-  version = "1.10.3";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://www.ivarch.com/programs/sources/pv-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qhYwx5r2lgqJIv+mTSw+f4dIbaIfy1fid4JClP0mZ0I=";
+    hash = "sha256-Mf29tEnHFDzSloVnvvdZnp8DGVDmFY7nu3bkCuv2/7g=";
   };
+
+  # pv is used by syncoid (part of the sanoid package) by default
+  passthru.tests = nixosTests.sanoid;
 
   meta = {
     homepage = "https://www.ivarch.com/programs/pv.shtml";

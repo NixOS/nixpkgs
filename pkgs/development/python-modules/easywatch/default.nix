@@ -2,20 +2,25 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   watchdog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "easywatch";
   version = "0.0.5";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1b40cjigv7s9qj8hxxy6yhwv0320z7qywrigwgkasgh80q0xgphc";
   };
 
-  propagatedBuildInputs = [ watchdog ];
+  build-system = [ setuptools ];
+
+  dependencies = [ watchdog ];
 
   # There are no tests
   doCheck = false;
@@ -27,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

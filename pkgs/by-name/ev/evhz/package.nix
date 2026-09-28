@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "evhz";
-  version = "unstable-2025-10-09";
+  version = "0-unstable-2025-10-09";
 
   src = fetchFromSourcehut {
     owner = "~iank";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Show mouse refresh rate under linux + evdev";
     homepage = "https://git.sr.ht/~iank/evhz";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Tungsten842 ];
     platforms = lib.platforms.linux;
     mainProgram = "evhz";

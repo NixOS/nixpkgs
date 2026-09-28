@@ -81,7 +81,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "keyring";
     maintainers = with lib.maintainers; [
-      lovek323
       dotlambda
     ];
     platforms = lib.platforms.unix;

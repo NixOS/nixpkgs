@@ -10,7 +10,7 @@
   libxml2,
   libxslt,
   pcre2,
-  wxGTK32,
+  wxwidgets_3_2,
   xercesc,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt
     pcre2
-    wxGTK32
+    wxwidgets_3_2
     xercesc
   ];
 
@@ -62,10 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xml-copy-editor.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      candeira
-      wegank
-    ];
+    maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "xmlcopyeditor";
   };
 })

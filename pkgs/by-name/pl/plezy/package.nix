@@ -1,163 +1,167 @@
 {
   lib,
-  flutter338,
+  stdenv,
+  stdenvNoCC,
+  flutter347,
   fetchFromGitHub,
-  yq-go,
+  fetchurl,
   pkg-config,
   libsecret,
   jsoncpp,
   mpv-unwrapped,
-  fetchzip,
-  stdenv,
-  libgbm,
-  libdrm,
   libass,
   keybinder3,
   ffmpeg,
+  zlib,
+  libevdev,
+  jdk,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  _experimental-update-script-combinators,
-  nix-update-script,
+  _7zz,
+  makeBinaryWrapper,
   runCommand,
-  dart,
 }:
-
 let
-  libwebrtc = fetchzip {
-    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.2.1/libwebrtc.zip";
-    hash = "sha256-i4LRG44f//SDIOl072yZavkYoTZdiydPZndeOm6/fBM=";
-    meta = {
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
-  };
-  libwebrtcRpath = lib.makeLibraryPath [
-    libgbm
-    libdrm
-  ];
-in
-flutter338.buildFlutterApplication rec {
   pname = "plezy";
-  version = "1.15.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-tFVaLfGANkcNYqwOJEQXQya52rMNMC4rJlqmrP7VhJ0=";
+    hash = "sha256-X5EoRR65TE+LoaKksu5+F++IUBCPtyJXavprMFO4+iY=";
   };
 
-  pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  gitHashes = lib.importJSON ./git-hashes.json;
-
-  nativeBuildInputs = [
-    pkg-config
-    copyDesktopItems
-    imagemagick
-  ];
-
-  buildInputs = [
-    libsecret
-    jsoncpp
-    mpv-unwrapped
-    libass
-    keybinder3
-    ffmpeg
-  ];
-
-  env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "plezy";
-      exec = "plezy";
-      icon = "plezy";
-      desktopName = "Plezy";
-      comment = "Modern cross-platform Plex client built with Flutter";
-      categories = [
-        "AudioVideo"
-        "Video"
-        "Player"
-      ];
-    })
-  ];
-
-  customSourceBuilders = {
-    flutter_webrtc =
-      { version, src, ... }:
-      stdenv.mkDerivation {
-        pname = "flutter_webrtc";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          substituteInPlace third_party/CMakeLists.txt \
-            --replace-fail "\''${CMAKE_CURRENT_LIST_DIR}/downloads/libwebrtc.zip" ${libwebrtc}
-          ln -s ${libwebrtc} third_party/libwebrtc
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          mkdir $out
-          cp -r ./* $out/
-
-          runHook postInstall
-        '';
-      };
+  simdutf = fetchurl {
+    url = "https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip";
+    hash = "sha256-n+TW9RVySlXI3oj+5EY+CJChq+ImfNoTxLXSRdWAOeY=";
   };
 
-  postInstall = ''
-    patchelf --add-rpath ${libwebrtcRpath} $out/app/plezy/lib/libwebrtc.so
-
-    install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
-    for size in 16 24 32 48 64 256 512; do
-      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
-      convert assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
-    done
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
   '';
 
-  passthru = {
-    pubspecSource =
-      runCommand "pubspec.lock.json"
-        {
-          inherit src;
-          nativeBuildInputs = [ yq-go ];
-        }
-        ''
-          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
-        '';
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      (
-        (_experimental-update-script-combinators.copyAttrOutputToFile "plezy.pubspecSource" ./pubspec.lock.json)
-        // {
-          supportedFeatures = [ ];
-        }
-      )
-      {
-        command = [
-          dart.fetchGitHashesScript
-          "--input"
-          ./pubspec.lock.json
-          "--output"
-          ./git-hashes.json
-        ];
-        supportedFeatures = [ ];
-      }
-    ];
-  };
-
   meta = {
-    description = "Modern cross-platform Plex client built with Flutter";
+    description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
+    changelog = "https://github.com/edde746/plezy/releases/tag/${version}";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [
+      "aarch64-darwin"
+    ];
+    sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
+      with lib.sourceTypes; [ binaryNativeCode ]
+    );
   };
-}
+
+  linux = flutter347.buildFlutterApplication rec {
+    inherit pname version src;
+
+    # upstream targets 3.12 until its freezed 4 migration: https://github.com/edde746/plezy/blob/2.21.0/pubspec.yaml#L6-L9
+    pubspecLock = lib.recursiveUpdate (lib.importJSON ./pubspec.lock.json) {
+      sdks.dart = ">=3.12.0 <4.0.0";
+    };
+
+    gitHashes = lib.importJSON ./git-hashes.json;
+
+    patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      ./aarch64-linux.patch
+    ];
+
+    nativeBuildInputs = [
+      pkg-config
+      copyDesktopItems
+      imagemagick
+    ];
+
+    buildInputs = [
+      libsecret
+      jsoncpp
+      mpv-unwrapped
+      libass
+      keybinder3
+      ffmpeg
+      zlib
+      libevdev
+      jdk
+    ];
+
+    env = {
+      ZLIB_ROOT = zlib-root;
+      JAVA_HOME = "${jdk}/lib/openjdk";
+    };
+
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
+                       "URL file://${simdutf}"
+    '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "plezy";
+        exec = "plezy";
+        icon = "plezy";
+        desktopName = "Plezy";
+        comment = meta.description;
+        categories = [
+          "AudioVideo"
+          "Video"
+          "Player"
+        ];
+      })
+    ];
+
+    postInstall = ''
+      install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
+      for size in 16 24 32 48 64 256 512; do
+        mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+        convert assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
+      done
+    '';
+
+    passthru.updateScript = ./update.sh;
+
+    inherit meta;
+  };
+
+  darwin = stdenvNoCC.mkDerivation {
+    inherit pname version;
+
+    passthru.updateScript = ./update.sh;
+
+    src = fetchurl {
+      url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
+      hash = "sha256-jM4qKLT1szelq6yggbOLwyn8s3iN/gkpKIb1gsCionI=";
+    };
+
+    nativeBuildInputs = [
+      _7zz
+      makeBinaryWrapper
+    ];
+
+    sourceRoot = "Plezy.app";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/Applications/Plezy.app
+      cp -r . $out/Applications/Plezy.app
+      makeBinaryWrapper $out/Applications/Plezy.app/Contents/MacOS/Plezy $out/bin/plezy
+
+      runHook postInstall
+    '';
+
+    inherit meta;
+  };
+in
+if stdenv.hostPlatform.isDarwin then darwin else linux

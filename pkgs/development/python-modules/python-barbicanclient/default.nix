@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-barbicanclient";
-  version = "7.2.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-barbicanclient";
     tag = version;
-    hash = "sha256-HhWWUM0lK0B0ySItrT6z5QCXzStuiJzDZFoEb+WRodA=";
+    hash = "sha256-SFAldyA/M0rkKb2o6ePp+9ITWrUszyTz5jvCnUadufo=";
   };
 
   env.PBR_VERSION = version;

@@ -23,7 +23,7 @@ let
     "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
   ]
   ++ lib.optionals (cfg.remoteWrite.maxDiskUsagePerUrl != null) [
-    "-remoteWrite.maxDiskUsagePerUrl=${cfg.remoteWrite.maxDiskUsagePerUrl}"
+    "-remoteWrite.maxDiskUsagePerURL=${cfg.remoteWrite.maxDiskUsagePerUrl}"
   ];
 in
 {

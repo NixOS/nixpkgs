@@ -18,22 +18,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonmail-export";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-mail-export";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rpfTI3vcZlEK1TrxRMMHFKutwC/YqAZrZCFiUsfMafc=";
+    hash = "sha256-ZYUqbxT9Aq3iaXdaCag4xstbrm9z9X435zm/Qz8OOyM=";
   };
 
   goModules =
     (buildGoModule {
-      pname = "protonmail-export-go-modules";
-      inherit (finalAttrs) src version;
+      inherit (finalAttrs) pname src version;
       sourceRoot = "${finalAttrs.src.name}/go-lib";
-      vendorHash = "sha256-rKi3PNsYsZA+MLcLTVrVI3T2SUBZCiq9Zxtf+1SGArk=";
+      vendorHash = "sha256-jtrfxKPFTiowllHDR7fo8GaeyhcPxAAXehBTk4bXKn8=";
 
       nativeBuildInputs = [ unzip ];
 

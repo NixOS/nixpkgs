@@ -15,6 +15,7 @@
   dataclasses-json,
   numpy,
   pandas,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -24,19 +25,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint";
-  version = "3.0.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpoint==${version}";
-    hash = "sha256-3hh1KyEIsp9JzhaJW1ycp179FGpggPYzg6OwnD/cTBM=";
+    tag = "checkpoint==${finalAttrs.version}";
+    hash = "sha256-Odn44pOTMyEvEDv3s/hfV+CKG7FS8sjTjA+bUDNLS2M=";
   };
 
-  sourceRoot = "${src.name}/libs/checkpoint";
+  sourceRoot = "${finalAttrs.src.name}/libs/checkpoint";
 
   build-system = [ hatchling ];
 
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     dataclasses-json
     numpy
     pandas
+    pycryptodome
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -64,11 +66,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpoint==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     description = "Library with base interfaces for LangGraph checkpoint savers";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
@@ -76,4 +79,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -12,7 +12,7 @@
   liquid-dsp,
   pkg-config,
   soapysdr-with-plugins,
-  wxGTK32,
+  wxwidgets_3_2,
   enableDigitalLab ? false,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     hamlib
     liquid-dsp
     soapysdr-with-plugins
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://cubicsdr.com";
+    homepage = "https://github.com/cjcliffe/CubicSDR";
     description = "Software Defined Radio application";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lasandell ];

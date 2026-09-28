@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyweatherflowudp";
-  version = "1.5.1";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowudp";
     tag = finalAttrs.version;
-    hash = "sha256-07AvFvrnNainBpve3pkiHzbrqSsjcP0N/nJ2slwVdqc=";
+    hash = "sha256-79AfUVd+UuAYIkb+wTU6JvV/sASXha4LDG1BQk/ihs0=";
   };
 
   build-system = [

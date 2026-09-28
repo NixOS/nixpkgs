@@ -50,6 +50,7 @@ stdenv.mkDerivation {
     ./fix-absolute-paths.patch
     ./fix-boost-includes.patch
     ./bump-cmake-minimum.patch
+    ./boost-1.89.patch
   ];
 
   nativeBuildInputs = [

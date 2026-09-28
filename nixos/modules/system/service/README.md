@@ -43,7 +43,7 @@ Many services implement automatic reloading or reloading on e.g. `SIGUSR1`, but 
 
 ### Service Manager Integration
 
-- **Portable base**: The `configData` interface is declared in `portable/config-data.nix`, making it available to all service manager implementations.
+- **Portable base**: The `configData` interface is declared in `lib/services/config-data.nix`, making it available to all service manager implementations.
 
 - **Systemd integration**: The systemd implementation (`systemd/system.nix`) maps `configData` entries to `environment.etc` entries under `/etc/system-services/`.
 
@@ -66,11 +66,11 @@ The modular service infrastructure avoids exposing `pkgs` as a module argument t
 
 ### Implementation
 
-- **Portable layer**: Service modules in `portable/` do not receive `pkgs` as a module argument. Any required derivations must be provided by the caller.
+- **Portable layer**: Service modules in `lib/services/` do not receive `pkgs` as a module argument. Any required derivations must be provided by the caller.
 
 - **Systemd integration**: The `systemd/system.nix` module imports `config-data.nix` as a function, providing `pkgs` in lexical closure:
   ```nix
-  (import ../portable/config-data.nix { inherit pkgs; })
+  (import lib/services/config-data.nix { inherit pkgs; })
   ```
 
 - **Service modules**:

@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Simple Python cache and memoizing module";
     homepage = "https://github.com/mikeboers/PyMemoize";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

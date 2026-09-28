@@ -1,12 +1,18 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alegreya";
   version = "2.008";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "huertatipografica";
@@ -15,12 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1m5xr95y6qxxv2ryvhfck39d6q5hxsr51f530fshg53x48l2mpwr";
   };
 
-  installPhase = ''
-    install -D -m 444 fonts/otf/* -t $out/share/fonts/otf
-    install -D -m 444 fonts/ttf/* -t $out/share/fonts/ttf
-    install -D -m 444 fonts/webfonts/*.woff -t $out/share/fonts/woff
-    install -D -m 444 fonts/webfonts/*.woff2 -t $out/share/fonts/woff2
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Elegant and versatile font family for comfortable reading";

@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dump_syms";
-  version = "2.3.6";
+  version = "2.3.9";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "dump_syms";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ABfjLV6WMIiaSiyfR/uxL6+VyO/pO6oZjbJSAxRGXuE=";
+    hash = "sha256-IuWuMomxbMg/fvxAP/8hOZdWe4nHzqkzPaXQwrA9IVU=";
   };
 
-  cargoHash = "sha256-t9xK7epfBp1XgewlAuAnInlKQDQ+3gVNmJoLNcey8YU=";
+  cargoHash = "sha256-A7qHSmJNRhmRjyQJpkr2SVLuTy4g4i3TeERlJqJYxkM=";
 
   nativeBuildInputs = [
     pkg-config

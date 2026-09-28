@@ -20,7 +20,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  buildInputs = with libsForQt5.qt5; [ qtgraphicaleffects ];
+  propagatedBuildInputs = [
+    # avoid .dev outputs propagation
+    libsForQt5.qtgraphicaleffects.out
+  ];
 
   installPhase =
     let

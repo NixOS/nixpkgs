@@ -8,7 +8,7 @@ passed and a selection of packages has been built successfully
 (see `nixos/release-combined.nix` and `nixos/release-small.nix`).
 These channels are:
 
--   *Stable channels*, such as [`nixos-25.11`](https://channels.nixos.org/nixos-25.11).
+-   *Stable channels*, such as [`nixos-26.05`](https://channels.nixos.org/nixos-26.05).
     These only get conservative bug fixes and package upgrades. For
     instance, a channel update may cause the Linux kernel on your system
     to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
@@ -21,7 +21,7 @@ These channels are:
     radical changes between channel updates. It's not recommended for
     production systems.
 
--   *Small channels*, such as [`nixos-25.11-small`](https://channels.nixos.org/nixos-25.11-small)
+-   *Small channels*, such as [`nixos-26.05-small`](https://channels.nixos.org/nixos-26.05-small)
     or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
     These are identical to the stable and unstable channels described above,
     except that they contain fewer binary packages. This means they get updated
@@ -40,9 +40,23 @@ supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
-instance, if you installed from a 25.11 ISO, you will be subscribed to
-the `nixos-25.11` channel. To see which NixOS channel you're subscribed
-to, run the following as root:
+instance, if you installed from a 26.05 ISO, you will be subscribed to
+the `nixos-26.05` channel.
+
+Commands below are prefixed with `#` and have to be run as root in a
+login shell:
+
+```ShellSession
+$ sudo -i
+```
+
+Without `sudo`:
+
+```ShellSession
+$ su -
+```
+
+To see which NixOS channel you're subscribed to, run:
 
 ```ShellSession
 # nix-channel --list | grep nixos
@@ -56,16 +70,16 @@ To switch to a different NixOS channel, do
 ```
 
 (Be sure to include the `nixos` parameter at the end.) For instance, to
-use the NixOS 25.11 stable channel:
+use the NixOS 26.05 stable channel:
 
 ```ShellSession
-# nix-channel --add https://channels.nixos.org/nixos-25.11 nixos
+# nix-channel --add https://channels.nixos.org/nixos-26.05 nixos
 ```
 
 If you have a server, you may want to use the "small" channel instead:
 
 ```ShellSession
-# nix-channel --add https://channels.nixos.org/nixos-25.11-small nixos
+# nix-channel --add https://channels.nixos.org/nixos-26.05-small nixos
 ```
 
 And if you want to live on the bleeding edge:
@@ -84,9 +98,15 @@ by running
 which is equivalent to the more verbose `nix-channel --update nixos; nixos-rebuild switch`.
 
 ::: {.note}
-Channels are set per user. This means that running `nix-channel --add`
-as a non root user (or without sudo) will not affect
-configuration in `/etc/nixos/configuration.nix`
+Channels are set per user. `nix-channel` reads and writes
+`$HOME/.nix-channels`, so it acts on the channels of whoever owns the
+current `$HOME`. A login shell sets `$HOME` to `/root`, which is why the
+commands above act on root's channels — the ones
+`/etc/nixos/configuration.nix` uses.
+
+Plain `sudo` and `su` keep your own `$HOME`. `nix-channel --list` then
+lists your own channels, and prints nothing when you have none.
+`nix-channel --add` adds the channel for your user alone.
 :::
 
 ::: {.warning}
@@ -118,5 +138,5 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
-{ system.autoUpgrade.channel = "https://channels.nixos.org/nixos-25.11"; }
+{ system.autoUpgrade.channel = "https://channels.nixos.org/nixos-26.05"; }
 ```

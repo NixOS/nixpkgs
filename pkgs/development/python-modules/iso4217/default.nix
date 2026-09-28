@@ -16,15 +16,21 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.15";
+  version = "1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
     tag = version;
-    hash = "sha256-YhYCCGMj5q+QeXWElysONbFkCVkcQeOPy/Tk4+fyNLk=";
+    hash = "sha256-C7TwGlbTwpcJ0rE7notWzZHthWzXKMPbHq00zMhfHeA=";
   };
+
+  postPatch = ''
+    # get_version() appends a date to the version prefix
+    substituteInPlace setup.py \
+      --replace-fail 'version=get_version()' 'version="${version}"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -49,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with lib.licenses; [ publicDomain ];
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

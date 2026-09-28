@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "codespell";
-  version = "2.4.1";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
+    sha256 = "sha256-oWVhD9KINWNW75ufPK3yKJJ3zV2AaR6LNok4RQK1PLA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    aspell-python
+    aspell-python-py3
     chardet
     pytestCheckHook
     pytest-cov-stub

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchzip,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   zstd,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     zlib
     zstd
   ];

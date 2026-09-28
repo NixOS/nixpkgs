@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   cmake,
   ninja,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   pkg-config,
   python3,
@@ -33,7 +33,6 @@
   libopus,
   ffmpeg_7,
   soundtouch,
-  pcre,
   portaudio,
   linuxHeaders,
   at-spi2-core,
@@ -150,7 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     lilv
     lv2
-    pcre
     portaudio
     serd
     sord
@@ -160,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     sratom
     suil
     twolame
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

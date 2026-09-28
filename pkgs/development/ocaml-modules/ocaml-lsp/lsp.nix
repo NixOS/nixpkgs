@@ -20,12 +20,15 @@
   result,
   pp,
   cmdliner,
+  cmdliner_1,
   ordering,
   ocamlformat-rpc-lib,
   ocaml,
   version ?
-    if lib.versionAtLeast ocaml.version "5.4" then
-      "1.25.0"
+    if lib.versionAtLeast ocaml.version "5.5" then
+      "1.27.0"
+    else if lib.versionAtLeast ocaml.version "5.4" then
+      "1.26.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
@@ -44,6 +47,11 @@ let
   jsonrpc_v = jsonrpc.override {
     inherit version;
   };
+  ppx_yojson_conv_lib_v =
+    if lib.versionAtLeast version "1.17.0" then
+      ppx_yojson_conv_lib
+    else
+      ppx_yojson_conv_lib.override { yojson = yojson_2; };
 in
 buildDunePackage {
   pname = "lsp";
@@ -59,7 +67,7 @@ buildDunePackage {
   '';
 
   buildInputs =
-    if lib.versionAtLeast version "1.12.0" then
+    if lib.versionAtLeast version "1.17.0" then
       [
         pp
         re
@@ -73,6 +81,20 @@ buildDunePackage {
         stdune
         chrome-trace
       ]
+    else if lib.versionAtLeast version "1.12.0" then
+      [
+        pp
+        re
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner_1
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+        chrome-trace
+      ]
     else if lib.versionAtLeast version "1.10.0" then
       [
         pp
@@ -81,7 +103,7 @@ buildDunePackage {
         dune-build-info
         dune-rpc
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
         dyn
         stdune
@@ -92,7 +114,7 @@ buildDunePackage {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
       ]
     else
@@ -102,7 +124,7 @@ buildDunePackage {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
       ];
 
   nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;
@@ -117,7 +139,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "1.14.0" then
       [
         jsonrpc
-        (ppx_yojson_conv_lib.override { yojson = yojson_2; })
+        ppx_yojson_conv_lib_v
         uutf
       ]
     else if lib.versionAtLeast version "1.10.0" then
@@ -125,7 +147,7 @@ buildDunePackage {
         dyn
         jsonrpc
         ordering
-        (ppx_yojson_conv_lib.override { yojson = yojson_2; })
+        ppx_yojson_conv_lib_v
         stdune
         uutf
       ]
@@ -134,7 +156,7 @@ buildDunePackage {
         csexp
         jsonrpc
         (pp.override { version = "1.2.0"; })
-        (ppx_yojson_conv_lib.override { yojson = yojson_2; })
+        ppx_yojson_conv_lib_v
         result
         uutf
       ]

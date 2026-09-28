@@ -6,7 +6,7 @@
   pkg-config,
   poppler,
   stdenv,
-  texlive,
+  texliveMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     ghostscript
-    texlive.combined.scheme-minimal
+    texliveMinimal
   ];
 
   meta = {

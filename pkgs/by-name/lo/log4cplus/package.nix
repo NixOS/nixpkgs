@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "log4cplus";
-  version = "2.1.2";
+  version = "2.2.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/log4cplus/log4cplus-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JFDfu0qzXdLJ5k2MdQxRS/cpO4HY8yr3qxJEF/cK360=";
+    hash = "sha256-RzOWtHoFimTlsv9tUuGNnOewDEcGOfyTe5AkZRWLWzY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

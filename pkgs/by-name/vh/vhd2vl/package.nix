@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "vhd2vl";
-  version = "0-unstable-2022-12-26";
+  version = "0-unstable-2026-02-16";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";
     repo = "vhd2vl";
-    rev = "869d442987dff6b9730bc90563ede89c1abfd28f";
-    sha256 = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
+    rev = "a6ed1b45ce88bf978f18e8f6fc419e853a6676b4";
+    sha256 = "sha256-lFPGstQd7u5crEJz6bFbbMTmNoZgRFuHb3HVCDnzDYk=";
   };
 
   nativeBuildInputs = [

@@ -1,61 +1,86 @@
 {
   lib,
   buildGoModule,
-  fetchFromSourcehut,
-  fetchpatch,
+  buildNpmPackage,
+  fetchFromGitHub,
   nixosTests,
+  util-linux,
+  versionCheckHook,
 }:
-
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "alps";
-  version = "2022-10-18";
+  version = "1";
+  __structuredAttrs = true;
 
-  src = fetchFromSourcehut {
-    owner = "~migadu";
+  src = fetchFromGitHub {
+    owner = "migadu";
     repo = "alps";
-    rev = "f01fbcbc48db5e65d69a0ebd9d7cb0deb378cf13";
-    hash = "sha256-RSug3YSiqYLGs05Bee4NoaoCyPvUZ7IqlKWI1hmxbiA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uzr0N50qKpIoOr7YFfuhnJ/CTaMvcP7TZujM5YpklMs=";
   };
 
-  vendorHash = "sha256-QsGfINktk+rBj4b5h+NBVS6XV1SVz+9fDL1vtUqcKEU=";
+  postPatch = ''
+    substituteInPlace dist/alps.service \
+      --replace-fail /usr/local/bin "$out/bin" \
+      --replace-fail /bin/kill "${lib.getExe' util-linux "kill"}"
+
+    rm -r frontend/dist
+    cp -r ${finalAttrs.passthru.frontend} frontend/dist
+  '';
+
+  vendorHash = "sha256-Nm9TC0j/PSraO1AtxUJmFQWdhdLzeLP0CXY0FZZ6pV8=";
+
+  subPackages = [ "cmd/alps" ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.themesPath=${placeholder "out"}/share/alps/themes"
-    "-X git.sr.ht/~migadu/alps.PluginDir=${placeholder "out"}/share/alps/plugins"
+    "-X main.version=${finalAttrs.version}"
   ];
-
-  patches = [
-    (fetchpatch {
-      name = "Issue-160-Alps-theme-has-a-enormous-move-to-list-sel";
-      url = "https://lists.sr.ht/~migadu/alps-devel/patches/30096/mbox";
-      hash = "sha256-Sz/SCkrrXZWrmJzjfPXi+UfCcbwsy6QiA7m34iiEFX0=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace plugin.go --replace "const PluginDir" "var PluginDir"
-  '';
 
   postInstall = ''
-    mkdir -p "$out/share/alps"
-    cp -r themes plugins "$out/share/alps/"
+    install -Dm644 -t "$out/lib/systemd/system/" dist/alps.service
   '';
 
-  proxyVendor = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
-  passthru.tests = { inherit (nixosTests) alps; };
+  passthru = {
+    frontend = buildNpmPackage (finalAttrs': {
+      pname = "${finalAttrs.pname}-frontend";
+      inherit (finalAttrs) version src;
+      sourceRoot = "${finalAttrs'.src.name}/frontend";
+
+      npmDepsHash = "sha256-gR9leLQSPo/qBNf6Yy1b2klawwuhKIvofCSPYkHOJKk=";
+
+      postPatch = ''
+        rm -r dist
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out"
+        cp -r dist/. "$out"
+
+        runHook postInstall
+      '';
+    });
+    tests = { inherit (nixosTests) alps; };
+  };
 
   meta = {
     description = "Simple and extensible webmail";
-    homepage = "https://git.sr.ht/~migadu/alps";
+    homepage = "https://github.com/migadu/alps";
+    downloadPage = "https://github.com/migadu/alps/releases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       booklearner
       madonius
       hmenke
+      prince213
     ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "alps";
   };
-}
+})

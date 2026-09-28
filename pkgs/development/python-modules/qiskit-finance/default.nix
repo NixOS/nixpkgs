@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "qiskit";
-    repo = pname;
+    repo = "qiskit-finance";
     tag = version;
     hash = "sha256-zYhYhojCzlENzgYSenwewjeVHUBX2X6eQbbzc9znBsk=";
   };

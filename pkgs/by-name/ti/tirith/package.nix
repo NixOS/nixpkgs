@@ -8,32 +8,29 @@
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
-  version = "0.1.9";
+  version = "0.4.2";
   src = fetchFromGitHub {
     owner = "sheeki03";
     repo = "tirith";
     tag = "v${final.version}";
-    hash = "sha256-HrYpcVmHBNPB4I+Luq9EwZ003M5TU2FVHhP8CmRRi2I=";
+    hash = "sha256-5feylgprI/k+Y3dNeEdl3/TpNBdvjRA6u8RjD4eMQP4=";
   };
 
-  cargoHash = "sha256-RxKK9jnIRsvj2fOVq1cv0B4SSb5EwvBk5eIUGC2H7dY=";
+  cargoHash = "sha256-J58LW86QbSU4us6MCq8I0Oh8+uSHsSigEQwsXVNu4LU=";
 
   cargoBuildFlags = [
     "-p"
     "tirith"
   ];
 
-  checkFlags = [
-    # requires a fully functional shell environment, generating init scripts needs a patch under nix to work at build time
-    "--skip=init_bash_output"
-    "--skip=init_zsh_output"
-  ];
+  doCheck = false;
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tirith \

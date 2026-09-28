@@ -9,11 +9,10 @@
   rust-jemalloc-sys,
   python3,
   python3Packages,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  qt6,
   xdg-utils,
   replaceVars,
+  nodejs_22,
   buildNpmPackage,
 }:
 
@@ -39,7 +38,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
       pynput
     ];
 
@@ -69,7 +68,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
     ];
 
     pythonRelaxDeps = [
@@ -102,14 +101,14 @@ rec {
 
     dependencies = with python3Packages; [
       aw-core
-      qtbase
-      qtsvg # Rendering icons in the trayicon menu
+      qt6.qtbase
+      qt6.qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
     ];
 
     nativeBuildInputs = [
-      wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ];
 
     # Prevent double wrapping
@@ -158,6 +157,12 @@ rec {
 
     pyproject = true;
     build-system = [ python3Packages.poetry-core ];
+
+    patches = [
+      # Backport desktop-notifier 6 / rubicon-objc 0.5 support.
+      # https://github.com/ActivityWatch/aw-notify/pull/10
+      ./aw-notify-desktop-notifier-6.patch
+    ];
 
     dependencies = with python3Packages; [
       aw-client
@@ -228,6 +233,7 @@ rec {
 
     src = "${sources}/aw-server-rust/aw-webui";
 
+    nodejs = nodejs_22;
     npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
 
     makeCacheWritable = true;

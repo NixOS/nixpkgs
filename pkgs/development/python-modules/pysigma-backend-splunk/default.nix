@@ -8,16 +8,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-splunk";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
-    tag = "v${version}";
-    hash = "sha256-SiEESeF0YqPYDAK3OUEkqSHmn4uM5LQrCLOHvOy26Io=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OIW/ylN4QlguKnY2/yLICEu3Ix41lfXN5qil5dD+eTM=";
   };
 
   build-system = [ poetry-core ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support Splunk for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-splunk";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

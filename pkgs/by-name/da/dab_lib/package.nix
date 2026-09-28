@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dab_lib";
-  version = "unstable-2023-03-02";
+  version = "0.8-unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DAB/DAB+ decoding library";
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       aciceri
       alexwinter

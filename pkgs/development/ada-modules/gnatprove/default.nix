@@ -86,6 +86,9 @@ let
       patches = [
         # Disable Coq related targets which are missing in the fsf-15 branch
         ./0001-fix-install-fsf-15.patch
+
+        # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
+        ./0002-mute-aarch64-warnings.patch
       ];
       commit_date = "2025-06-10";
     };

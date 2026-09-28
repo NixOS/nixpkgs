@@ -29,7 +29,7 @@
           machine.succeed(
               """
               mkdir -p /run/nginx /var/log/nginx /var/cache/nginx
-              ${nodes.machine.config.systemd.services.nginx.runner} >&2 &
+              ${nodes.machine.systemd.services.nginx.runner} >&2 &
               echo $!>my-nginx.pid
               """
           )

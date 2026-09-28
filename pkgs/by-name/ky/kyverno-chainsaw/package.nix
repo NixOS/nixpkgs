@@ -2,7 +2,6 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  kyverno-chainsaw,
   lib,
   nix-update-script,
   stdenv,
@@ -11,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kyverno-chainsaw";
-  version = "0.2.14";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BULaac8UBF6pX7EWDKY3MFJjEEk1e5fJzTAahp/IRjs=";
   };
 
-  vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
+  vendorHash = "sha256-DTFtbinBKWmtkbCr9+j3md00tCR9Dh2i+15NvxHjuEw=";
 
   subPackages = [ "." ];
 
@@ -42,7 +41,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kyverno-chainsaw;
+    package = finalAttrs.finalPackage;
     command = "chainsaw version";
     version = "v${finalAttrs.version}";
   };
@@ -60,6 +59,8 @@ buildGoModule (finalAttrs: {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      LorenzBischof
+    ];
   };
 })

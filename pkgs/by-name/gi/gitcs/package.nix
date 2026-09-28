@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitcs";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "hrtsegv";
     repo = "gitcs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eAza/ni8MYrve0YCTkleOyOXPWmH4CEh8j5L+78wzsQ=";
+    hash = "sha256-mRQfW0sY6la8SyO+zDr/HcakDugRShW/Aea9uj6G/gA=";
   };
 
   vendorHash = "sha256-bG0BaH8yYp8TUiK/7xvghB4T48LcBEvmF1uvY5eYkww=";

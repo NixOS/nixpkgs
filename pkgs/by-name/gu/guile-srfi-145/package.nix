@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "guile-srfi-145";
-  version = "0-unstable-2023-06-04";
+  version = "0-unstable-2025-08-11";
 
   src = fetchFromCodeberg {
     owner = "rgherdt";
     repo = "srfi";
-    rev = "e598c28eb78e9c3e44f5c3c3d997ef28abb6f32e";
-    hash = "sha256-kvM2v/nDou0zee4+qcO5yN2vXt2y3RUnmKA5S9iKFE0=";
+    rev = "1f78a684e73c8d82fdd116716e341bc177e8d229";
+    hash = "sha256-mVIAg3QrH6+0VFWZ22KHGhxMn8lRYHj154b7YQf+maE=";
   };
 
   strictDeps = true;

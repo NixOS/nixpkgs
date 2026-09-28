@@ -11,6 +11,7 @@
   sparsehash,
   zstd,
   kdePackages,
+  rustc-demangle,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +26,11 @@ stdenv.mkDerivation {
     hash = "sha256-8NLpp/+PK3wIB5Sx0Z1185DCDQ18zsGj9Wp5YNKgX8E=";
   };
 
+  patches = [
+    ./boost-189.patch
+    ./cmake-minimum-required.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
@@ -38,6 +44,7 @@ stdenv.mkDerivation {
     libunwind
     sparsehash
     zstd
+    rustc-demangle
   ]
   ++ (with kdePackages; [
     qtbase
@@ -52,6 +59,11 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     elfutils
   ];
+
+  postPatch = ''
+    substituteInPlace src/interpret/demangler.cpp \
+      --replace-fail "librustc_demangle.so" "${rustc-demangle}/lib/librustc_demangle.so"
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper \

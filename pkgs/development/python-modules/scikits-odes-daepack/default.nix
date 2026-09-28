@@ -3,6 +3,7 @@
   gfortran,
   meson-python,
   numpy,
+  pyprojectVersionPatchHook,
   scikits-odes-core,
 }:
 
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   build-system = [
     meson-python
     numpy
+    pyprojectVersionPatchHook
   ];
 
   nativeBuildInputs = [ gfortran ];
@@ -29,6 +31,9 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
+
+  # https://github.com/bmcage/odes/pull/204
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   meta = scikits-odes-core.meta // {
     description = "Wrapper around daepack";

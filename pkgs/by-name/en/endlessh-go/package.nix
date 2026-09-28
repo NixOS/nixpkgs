@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "endlessh-go";
-  version = "2025.0914.0";
+  version = "2026.0328.0";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = finalAttrs.version;
-    hash = "sha256-ABrmvP8xfH1DWzepnzrIsNJDE9sDoXPQteA/ToyRtoo=";
+    hash = "sha256-EiIWgyAHAJrloIztKX1oZaSNNSG4t2OaVYyLTfJCkLU=";
   };
 
   vendorHash = "sha256-HumLc9u7jVFk7228SYHptBEOSRdLp4r5QECYlYrO6KY=";
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/shizunge/endlessh-go";
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ azahi ];
+    maintainers = [ ];
     mainProgram = "endlessh-go";
   };
 })

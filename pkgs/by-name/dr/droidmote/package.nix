@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     homepage = "https://www.videomap.it/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.attrNames srcs;
   };
 }

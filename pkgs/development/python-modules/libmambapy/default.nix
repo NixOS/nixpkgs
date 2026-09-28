@@ -1,22 +1,23 @@
 {
-  lib,
-  python,
-  buildPythonPackage,
+  bzip2,
   cmake,
-  ninja,
-  libmamba,
-  pybind11,
-  scikit-build-core,
+  curl,
+  buildPythonPackage,
   fmt,
+  lib,
+  libmamba,
+  libsolv,
+  msgpack-c,
+  ninja,
+  nlohmann_json,
+  pybind11,
+  python,
+  reproc,
+  scikit-build-core,
   spdlog,
   tl-expected,
-  nlohmann_json,
   yaml-cpp,
-  reproc,
-  libsolv,
-  curl,
   zstd,
-  bzip2,
 }:
 
 buildPythonPackage rec {
@@ -38,16 +39,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     (libmamba.override { python3 = python; })
-    curl
-    zstd
     bzip2
-    spdlog
+    curl
     fmt
-    tl-expected
-    nlohmann_json
-    yaml-cpp
-    reproc
     libsolv
+    msgpack-c
+    nlohmann_json
+    reproc
+    spdlog
+    tl-expected
+    yaml-cpp
+    zstd
   ];
 
   pythonImportsCheck = [

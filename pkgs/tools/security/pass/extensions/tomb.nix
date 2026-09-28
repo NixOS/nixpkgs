@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/roddhjav/pass-tomb";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       fpletz
       tadfisher
     ];

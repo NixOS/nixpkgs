@@ -2,26 +2,26 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-mono";
   version = "3.2";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://carrois.com/downloads/Fira/Fira_Mono_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-Ukc+K2sdSz+vUQFD8mmwJHZQ3N68oM4fk6YzGLwzAfQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 Fonts/FiraMono_OTF*/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://carrois.com/fira/";
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     platforms = lib.platforms.all;
   };
-}
+})

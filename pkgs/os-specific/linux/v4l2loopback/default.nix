@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "0.15.3";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
     tag = "v${version}";
-    hash = "sha256-KXJgsEJJTr4TG4Ww5HlF42v2F1J+AsHwrllUP1n/7g8=";
+    hash = "sha256-+9wJIeEUP6iaGnfKPl06OuPW5oZdQyHuNDN/1SeHw5s=";
   };
 
   hardeningDisable = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
   '';
 

@@ -3,21 +3,22 @@
   buildGoModule,
   fetchFromGitHub,
   fq,
+  installShellFiles,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fq";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b28zncqz0B1YIXHCjklAkVbIdXxC36bqIwJ4VrrCe18=";
+    hash = "sha256-Prd0GkLQOdVtpjeu6Ga6dq3imOm7m4m1/kLp9g/1O0I=";
   };
 
-  vendorHash = "sha256-bF3N+cPJAxAEFmr2Gl3xdKLtv7yLkxze19NgDFWaBn8=";
+  vendorHash = "sha256-oqS6j8YTllObGKR8rFvlcFaUGnT3uouOP7pfzuTcgGk=";
 
   ldflags = [
     "-s"
@@ -26,6 +27,10 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = "installManPage doc/fq.1";
 
   passthru.tests = testers.testVersion { package = fq; };
 

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
-  version = "0.8.6";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
     inherit version;
-    hash = "sha256-szwgaHLLM9vdu63lPSeKbXcSUUMAbds3K/PtY8MEuXU=";
+    hash = "sha256-/CbP6NnQFfdrYVWNTJochUU16gFA3Yfxad52C0CvPOo=";
   };
 
   pythonRelaxDeps = [ "ollama" ];

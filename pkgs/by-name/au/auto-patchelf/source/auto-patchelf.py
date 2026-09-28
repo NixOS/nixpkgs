@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import errno
 import os
 import pprint
 import subprocess
@@ -9,10 +10,10 @@ import json
 from fnmatch import fnmatch
 from collections import defaultdict
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from itertools import chain
 from pathlib import Path, PurePath
-from typing import DefaultDict, Generator, Iterator, Optional
+from typing import DefaultDict, Generator, Iterator, Optional, Protocol
 
 from elftools.common.exceptions import ELFError  # type: ignore
 from elftools.elf.dynamic import DynamicSection  # type: ignore
@@ -195,6 +196,12 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
             except ELFError:
                 # Not an ELF file in the right format
                 pass
+            except OSError as e:
+                if e.errno == errno.EINVAL:
+                    # pyelftools can raise EINVAL for certain compressed sections.
+                    pass
+                else:
+                    raise
 
 
 def find_dependency(soname: str, soarch: str, soabi: str) -> Optional[Path]:
@@ -234,39 +241,146 @@ def find_first_matching_rpath_with_origin(binary: Path, lib_dir: Path, rpaths: l
     return None
 
 
+def relativize_rpath_to_origin(*, binary_path: Path, rpath_entries: list[Path], containing_path: Path) -> list[Path]:
+    """
+    Rewrite absolute RPATH entries to use $ORIGIN when the entry sits
+    under containing_path (the --paths entry the binary was found
+    under).
+
+    The resulting RPATH is relocatable: as long as the directory layout
+    within containing_path is preserved, the whole tree can be moved
+    and the binary will still find its dependencies.
+
+    Entries that already contain $ORIGIN are left untouched.
+    Entries outside containing_path are also left absolute.
+    """
+    containing_norm: Path = Path(os.path.normpath(containing_path))
+    new_rpath_entries: list[Path] = []
+    for entry in rpath_entries:
+        if "$ORIGIN" in entry.as_posix():
+            new_rpath_entries.append(entry)
+            continue
+        entry_norm: Path = Path(os.path.normpath(entry))
+        if not entry_norm.is_relative_to(containing_norm):
+            new_rpath_entries.append(entry)
+            continue
+        rel = os.path.relpath(entry_norm, binary_path.parent)
+        new_rpath_entries.append(Path("$ORIGIN") / rel)
+    return new_rpath_entries
+
+
+class Event(Protocol):
+    """Protocol for loggable events that occur during the auto-patchelf process."""
+    def to_human_readable_str(self) -> str: ...
+
+
+@dataclass
+class SkipFile:
+    file: Path                          # The file being skipped
+    reason: str                         # Why the file is being skipped
+
+    def to_human_readable_str(self) -> str:
+        return f"skipping {self.file} because {self.reason}"
+
+
+@dataclass
+class SetInterpreter:
+    file: Path                          # The file being patched
+    interpreter_path: Path              # The interpreter being set
+
+    def to_human_readable_str(self) -> str:
+        return f"setting interpreter of {self.file}"
+
+
+@dataclass
+class IgnoredDependency:
+    file: Path                          # The file that contains the ignored dependency
+    name: Path                          # The name of the dependency
+    pattern: str                        # The pattern that caused this missing dep to be ignored
+
+    def to_human_readable_str(self) -> str:
+        return f"warn: auto-patchelf ignoring missing {self.name} wanted by {self.file}"
+
 @dataclass
 class Dependency:
-    file: Path              # The file that contains the dependency
-    name: Path              # The name of the dependency
-    found: bool = False     # Whether it was found somewhere
+    file: Path                          # The file that contains the dependency
+    name: Path                          # The name of the dependency
+    found: bool = False                 # Whether it was found somewhere
+    location: Optional[Path] = None     # Where the dependency was found (if found)
+
+    def to_human_readable_str(self) -> str:
+        if self.found:
+            return f"    {self.name} -> found: {self.location}"
+        else:
+            return f"    {self.name} -> not found!"
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, preserve_origin: bool = False, extra_args: list[str] = []) -> list[Dependency]:
+@dataclass
+class SetRpath:
+    file: Path                          # The file being patched
+    rpath: str                          # The RPATH being set
+
+    def to_human_readable_str(self) -> str:
+        return f"setting RPATH to: {self.rpath}"
+
+
+class Logger:
+    """Outputs events in either structured (JSON) or human-readable format."""
+
+    def __init__(self, structured: bool = False):
+        self.structured = structured
+
+    def debug(self, message: str):
+        """Output a debug log message (text), only if not in structured mode."""
+        if not self.structured:
+            print(message)
+
+    def log(self, event: Event) -> None:
+        """Output an event immediately. In structured mode, output JSON. In human-readable mode, output human-readable text."""
+        if self.structured:
+            event_type = type(event).__name__
+            event_data = asdict(event)
+            print(json.dumps({event_type: event_data}, default=str))
+        else:
+            print(event.to_human_readable_str())
+
+
+
+def auto_patchelf_file(
+    *,
+    logger: Logger,
+    runtime_deps: list[Path],
+    append_rpaths: list[Path] = [],
+    keep_libc: bool = False,
+    preserve_origin: bool = False,
+    relativize_rpath: bool = False,
+    extra_args: list[str] = [],
+    path: Path,
+    containing_path: Path
+) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
             if is_static_executable(elf):
                 # No point patching these
-                print(f"skipping {path} because it is statically linked")
+                logger.log(SkipFile(file=path, reason="it is statically linked"))
                 return []
 
             if elf.num_segments() == 0:
                 # no segment (e.g. object file)
-                print(f"skipping {path} because it contains no segment")
+                logger.log(SkipFile(file=path, reason="it contains no segment"))
                 return []
 
             file_arch = get_arch(elf)
             if interpreter_arch != file_arch:
                 # Our target architecture is different than this file's
                 # architecture, so skip it.
-                print(f"skipping {path} because its architecture ({file_arch})"
-                      f" differs from target ({interpreter_arch})")
+                logger.log(SkipFile(file=path, reason=f"its architecture ({file_arch}) differs from target ({interpreter_arch})"))
                 return []
 
             file_osabi = get_osabi(elf)
             if not osabi_are_compatible(interpreter_osabi, file_osabi):
-                print(f"skipping {path} because its OS ABI ({file_osabi}) is"
-                      f" not compatible with target ({interpreter_osabi})")
+                logger.log(SkipFile(file=path, reason=f"its OS ABI ({file_osabi}) is not compatible with target ({interpreter_osabi})"))
                 return []
 
             file_is_dynamic_executable = is_dynamic_executable(elf)
@@ -276,6 +390,10 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
     except ELFError:
         return []
+    except OSError as e:
+        if e.errno == errno.EINVAL:
+            return []
+        raise
 
     # these platforms are packaged in nixpkgs with ld.so in a separate derivation
     # than libc.so and friends. keep_libc is mandatory.
@@ -283,13 +401,13 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
     rpath = []
     if file_is_dynamic_executable:
-        print("setting interpreter of", path)
+        logger.log(SetInterpreter(file=path, interpreter_path=interpreter_path))
         subprocess.run(
                 ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()] + extra_args,
                 check=True)
         rpath += runtime_deps
 
-    print("searching for dependencies of", path)
+    logger.debug(f"searching for dependencies of {path}")
     dependencies = []
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
@@ -335,8 +453,9 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
                 origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
                 rpath.append(origin_rpath_entry or found_dependency)
-                dependencies.append(Dependency(path, candidate, found=True))
-                print(f"    {candidate} -> found: {found_dependency}")
+                dep = Dependency(file=path, name=candidate, found=True, location=found_dependency)
+                dependencies.append(dep)
+                logger.log(dep)
                 was_found = True
                 break
             elif is_libc and keep_libc:
@@ -345,8 +464,9 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
         if not was_found:
             dep_name = dep[0] if len(dep) == 1 else f"any({', '.join(map(str, dep))})"
-            dependencies.append(Dependency(path, dep_name, found=False))
-            print(f"    {dep_name} -> not found!")
+            dep = Dependency(file=path, name=dep_name, found=False, location=None)
+            dependencies.append(dep)
+            logger.log(dep)
 
     rpath.extend(append_rpaths)
 
@@ -356,11 +476,14 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             if "$ORIGIN" in existing_rpath:
                 rpath.append(Path(existing_rpath))
 
+    if relativize_rpath:
+        rpath = relativize_rpath_to_origin(binary_path=path, rpath_entries=rpath, containing_path=containing_path)
+
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
     if rpath:
-        print("setting RPATH to:", rpath_str)
+        logger.log(SetRpath(file=path, rpath=rpath_str))
         subprocess.run(
                 ["patchelf", "--set-rpath", rpath_str, path.as_posix()] + extra_args,
                 check=True)
@@ -369,6 +492,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
 
 def auto_patchelf(
+        logger: Logger,
         paths_to_patch: list[Path],
         lib_dirs: list[Path],
         runtime_deps: list[Path],
@@ -377,6 +501,7 @@ def auto_patchelf(
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
         preserve_origin: bool = False,
+        relativize_rpath: bool = False,
         add_existing: bool = True,
         extra_args: list[str] = []) -> None:
 
@@ -391,22 +516,33 @@ def auto_patchelf(
     populate_cache(lib_dirs)
 
     dependencies = []
-    for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
-        if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
+    for containing_path in paths_to_patch:
+        for path in glob(containing_path, '*', recursive):
+            if not path.is_symlink() and path.is_file():
+                dependencies += auto_patchelf_file(
+                    logger=logger,
+                    runtime_deps=runtime_deps,
+                    append_rpaths=append_rpaths,
+                    keep_libc=keep_libc,
+                    preserve_origin=preserve_origin,
+                    relativize_rpath=relativize_rpath,
+                    extra_args=extra_args,
+                    path=path,
+                    containing_path=containing_path
+                )
 
     missing = [dep for dep in dependencies if not dep.found]
 
     # Print a summary of the missing dependencies at the end
-    print(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
+    logger.debug(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
         for pattern in ignore_missing:
             if fnmatch(dep.name.name, pattern):
-                print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                logger.log(IgnoredDependency(file=dep.file, name=dep.name, pattern=pattern))
                 break
         else:
-            print(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+            logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
             failure = True
 
     if failure:
@@ -480,10 +616,21 @@ def main() -> None:
         help="When possible, replace absolute RPATH entries with original $ORIGIN entries that resolve to the same directory.",
     )
     parser.add_argument(
+        "--relativize-rpath",
+        dest="relativize_rpath",
+        action="store_true",
+        help="Rewrite absolute RPATH entries to use $ORIGIN when the binary and the entry live under the same --paths root, so the patched tree is relocatable.",
+    )
+    parser.add_argument(
         "--ignore-existing",
         dest="add_existing",
         action="store_false",
         help="Do not add the existing rpaths of the patched files to the list of directories to search for dependencies.",
+    )
+    parser.add_argument(
+        "--structured-logs",
+        action="store_true",
+        help="Output events as JSON Lines to stdout instead of human-readable diagnostics.",
     )
     parser.add_argument(
         "--extra-args",
@@ -496,11 +643,13 @@ def main() -> None:
         help="Extra arguments to pass to patchelf. This argument should always come last.",
     )
 
-    print("automatically fixing dependencies for ELF files")
     args = parser.parse_args()
-    pprint.pprint(vars(args))
+    logger = Logger(structured=args.structured_logs)
+    logger.debug("automatically fixing dependencies for ELF files")
+    logger.debug(pprint.pformat(vars(args)))
 
     auto_patchelf(
+        logger,
         args.paths,
         args.libs,
         args.runtime_dependencies,
@@ -509,6 +658,7 @@ def main() -> None:
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
         preserve_origin=args.preserve_origin,
+        relativize_rpath=args.relativize_rpath,
         add_existing=args.add_existing,
         extra_args=args.extra_args)
 

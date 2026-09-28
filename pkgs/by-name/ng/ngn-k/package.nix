@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "ngn-k";
-  version = "0-unstable-2025-01-04";
+  version = "0-unstable-2025-11-17";
 
   src = fetchFromCodeberg {
     owner = "ngn";
     repo = "k";
-    rev = "feb51a61443dac03213c4e97edd8df679a4a3aaa";
-    sha256 = "14v2bwbgaxi1rsq5xabp5dmv0bl0vga3lhzwdxyvsyl9q7qybf55";
+    rev = "717063f24921d5aff405a39cf7643efedb5bb365";
+    hash = "sha256-rUMi+VetQc139PjbFJXlSkmYEuK5wtM6LpQ/f1tcB1s=";
   };
 
   patches = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     "libk.so"
   ];
   checkTarget = "t";
+  doCheck = true;
 
   outputs = [
     "out"
@@ -58,9 +59,6 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-freebsd"
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

@@ -1,0 +1,20 @@
+diff --git a/buildscripts/cmake/SetupBuildEnvironment.cmake b/buildscripts/cmake/SetupBuildEnvironment.cmake
+index d45a7728590..c4c77d48198 100644
+--- a/buildscripts/cmake/SetupBuildEnvironment.cmake
++++ b/buildscripts/cmake/SetupBuildEnvironment.cmake
+@@ -159,7 +159,13 @@
+         endif()
+     endif() #MUE_COMPILE_QT5_COMPAT
+ 
+-    set(MACOSX_DEPLOYMENT_TARGET 10.15)
+-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
++    if (NOT CMAKE_OSX_DEPLOYMENT_TARGET)
++        if (NOT "$ENV{MACOSX_DEPLOYMENT_TARGET}" STREQUAL "")
++            set(CMAKE_OSX_DEPLOYMENT_TARGET "$ENV{MACOSX_DEPLOYMENT_TARGET}")
++        else()
++            set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
++        endif()
++    endif()
++    set(MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
+ endif(OS_IS_MAC)
+ 

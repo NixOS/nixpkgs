@@ -14,18 +14,18 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.3.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-ELFOffP3KabvyOu4Fl7Z4zvPhamZrmhuuqz1aTYdbnE=";
+    hash = "sha256-0KJtJd0tY8ewoaUIJ+1cIDlr7eRTWLGTpkkNMn60JIY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-qGkEc4VPShMMNgSB4JmSf7Mq4jEOxEK+BqlR680ZO9k=";
+    hash = "sha256-f9Me1dCS5GxXN4mADS6Z20M7YnX5ck3JXOXUFhM+h5o=";
   };
 
   nativeCheckInputs = [
@@ -50,7 +50,7 @@ python3Packages.buildPythonPackage rec {
     [
       pyzstd
       urllib3
-      xlib
+      python-xlib
     ]
     ++ lib.optionals withTruststore [
       truststore
@@ -99,7 +99,6 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl3;
     mainProgram = "umu-run";
     maintainers = with lib.maintainers; [
-      diniamo
       MattSturgeon
       fuzen
     ];

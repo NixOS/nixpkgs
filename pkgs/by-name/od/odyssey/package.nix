@@ -11,23 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odyssey";
-  version = "1.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "odyssey";
-    rev = finalAttrs.version;
-    sha256 = "sha256-1ALTKRjpKmmFcAuhmgpcbJBkNuUlTyau8xWDRHh7gf0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-70h8JJH9+2xmgrADz106DNBLGUH0gnvatoeAbD03eKY=";
   };
 
   patches = [
-    # Fix compression build. Remove with the next release. https://github.com/yandex/odyssey/pull/441
     (fetchpatch {
-      url = "https://github.com/yandex/odyssey/commit/01ca5b345c4483add7425785c9c33dfa2c135d63.patch";
-      sha256 = "sha256-8UPkZkiI08ZZL6GShhug/5/kOVrmdqYlsD1bcqfxg/w=";
+      url = "https://github.com/yandex/odyssey/commit/51c0e777aa45157f4f03fbd036113ce6d11ca41f.patch?full_index=1";
+      hash = "sha256-yytyA2K62v7XwJQ+WJnBGh87AVyeOv0cuzlQ7oYnhFg=";
     })
-    # Fixes kiwi build.
-    ./fix-missing-c-header.patch
   ];
 
   nativeBuildInputs = [ cmake ];

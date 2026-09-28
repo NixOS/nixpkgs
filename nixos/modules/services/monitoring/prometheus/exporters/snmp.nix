@@ -24,13 +24,10 @@ let
     if (builtins.isPath file) || (lib.isStorePath file) then
       file
     else
-      (
-        lib.warn ''
-          ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
-          If you would like to avoid that, please set enableConfigCheck to false.
-        '' /.
-        + file
-      );
+      (lib.warn ''
+        ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
+        If you would like to avoid that, please set enableConfigCheck to false.
+      '' (builtins.toFile (builtins.baseNameOf file) (builtins.readFile file)));
 
   checkConfig =
     file:

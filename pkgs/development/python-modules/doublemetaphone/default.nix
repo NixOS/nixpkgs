@@ -41,6 +41,9 @@ buildPythonPackage rec {
     "doublemetaphone"
   ];
 
+  # packaging.version.InvalidVersion: Invalid version: '1.2i'
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "Python wrapper for Double Metaphone phonetic encoding algorithm";
     homepage = "https://github.com/dedupeio/doublemetaphone";

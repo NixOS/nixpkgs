@@ -14,6 +14,7 @@
   wayland-protocols,
   libxkbcommon,
   libdecor,
+  llvmPackages,
   pulseaudio,
   nixosTests,
   withWayland ? false,
@@ -23,13 +24,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-08-15";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "8a88fb5b8c75450d2e20ae1c7839d823bb1f6fad";
-    hash = "sha256-hejdFLYJvANKOC4Jgr9XvYl/5kU9PiKSH5cWE6d6e/o=";
+    rev = "45ab4d2ce7fd2443ad7264bd0ce14bf294d8b9e6";
+    hash = "sha256-orsBajeHXW/ANpdemE1HzQaa602B4mpGrVt3QdbqCR0=";
   };
 
   enableParallelBuilding = true;
@@ -37,6 +38,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ]
   ++ lib.optionals withWayland [
     pkg-config
@@ -56,6 +60,7 @@ stdenv.mkDerivation {
       libxt
     ];
 
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
   makeFlags =
     lib.optional withWayland "CONF=linux"
     ++ lib.optional (!(withWayland || stdenv.hostPlatform.isDarwin)) "CONF=unix"
@@ -65,6 +70,7 @@ stdenv.mkDerivation {
     ];
 
   installPhase = ''
+    runHook preInstall
     installManPage drawterm.1
   ''
   + lib.optionalString withWayland ''
@@ -74,13 +80,16 @@ stdenv.mkDerivation {
     # wrapping the oss output with pulse seems to be the easiest
     mv drawterm drawterm.bin
     install -Dm755 -t $out/bin/ drawterm.bin
-    makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+    makeWrapper ${lib.getExe' pulseaudio "padsp"} $out/bin/drawterm --add-flags $out/bin/drawterm.bin
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv gui-cocoa/drawterm.app $out/Applications/
     mv drawterm $out/Applications/drawterm.app/
     ln -s $out/Applications/drawterm.app/drawterm $out/bin/
+  ''
+  + ''
+    runHook postInstall
   '';
 
   passthru = {

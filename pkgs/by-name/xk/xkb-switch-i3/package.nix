@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Switch your X keyboard layouts from the command line(i3 edition)";
     homepage = "https://github.com/Zebradil/xkb-switch-i3";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ewok ];
     platforms = lib.platforms.linux;
     mainProgram = "xkb-switch";

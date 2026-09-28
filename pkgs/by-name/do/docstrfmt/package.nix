@@ -1,39 +1,57 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "docstrfmt";
-  version = "1.11.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LilSpazJoekp";
     repo = "docstrfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Yx+omXZSlpJSzA4dTY/JdfmHQshM7qI++OVvqYg1jc=";
+    hash = "sha256-nvkSQ5yUJe+DFARPmVCO5KSCHpAUr8GVuxk4VLrOJP4=";
   };
 
   build-system = [
-    python3.pkgs.flit-core
+    python3Packages.flit-core
   ];
 
-  dependencies = with python3.pkgs; [
+  pythonRelaxDeps = [
+    # https://github.com/LilSpazJoekp/docstrfmt/issues/186
+    "types-docutils"
+  ];
+
+  dependencies = with python3Packages; [
     black
     click
+    coverage
     docutils
+    docutils-stubs
     libcst
     platformdirs
+    roman
     sphinx
     tabulate
-    toml
+    tomli
+    types-docutils
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-aiohttp
+  ];
+
+  disabledTests = [
+    # Failure due to different behavior of click, see:
+    # https://github.com/LilSpazJoekp/docstrfmt/issues/232
+    "test_invalid_line_length[tests/test_files/test_file.rst]"
+    "test_invalid_line_length[tests/test_files/py_file.py]"
+    "test_invalid_pyproject_toml"
+    "test_cache_single_file"
   ];
 
   pythonImportsCheck = [

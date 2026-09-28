@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JWCmrGS4jClSi6MCcGNiq8zUH+92fiqMtk58B+wMKQk=";
+    hash = "sha256-ILRmql+jlOhJ08yLBpnrpeI5fyMVzcXrXIll4n3lTbM=";
   };
 
   nativeBuildInputs = [

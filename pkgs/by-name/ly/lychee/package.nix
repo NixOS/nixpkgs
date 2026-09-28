@@ -6,9 +6,8 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  pkg-config,
-  openssl,
   testers,
+  cacert,
 }:
 
 let
@@ -17,13 +16,12 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.22.0-unstable-2025-12-05";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    # tag = "lychee-v${finalAttrs.version}"; # use again with next release
-    rev = "db0f8a842f594e0a879563caf7d183266c02ca95"; # one revision after 0.22.0
+    tag = "lychee-v${finalAttrs.version}";
     leaveDotGit = true;
     postFetch = ''
       GIT_DATE=$(git -C $out/.git show -s --format=%cs)
@@ -33,21 +31,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
           '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
       rm -rf $out/.git
     '';
-    hash = "sha256-l8/llYq8rwt+UQMLnsva4/2m53cwqaJXD/XvgEfxXg4=";
+    hash = "sha256-fXuLeLwrE/CINQKqk87o0Dp+8nGOqCyUkS5gTr9YOXY=";
   };
 
-  cargoHash = "sha256-03eahQ6GvOPxnvC82lfT1J/XfOg9V7gOZeOEBJx8IYY=";
+  cargoHash = "sha256-21J6eH2xSLK2VWnsrMk9WaKjPJiNP2UQGJuYkZUqsnM=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  nativeCheckInputs = [ cacert ];
 
   postFixup = lib.optionalString canRun ''
     ${lychee} --generate man > lychee.1
     installManPage lychee.1
+
+    installShellCompletion --cmd lychee \
+      --bash <(${lychee} --generate complete-bash) \
+      --fish <(${lychee} --generate complete-fish) \
+      --zsh <(${lychee} --generate complete-zsh)
   '';
 
   cargoTestFlags = [
@@ -82,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ok = callPackage ./tests/ok.nix { };
     fail = callPackage ./tests/fail.nix { };
     fail-emptyDirectory = callPackage ./tests/fail-emptyDirectory.nix { };
+    fail-rootRelative = callPackage ./tests/fail-rootRelative.nix { };
     network = testers.runNixOSTest ./tests/network.nix;
   };
 

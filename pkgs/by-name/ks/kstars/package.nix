@@ -5,8 +5,9 @@
   fetchpatch2,
   cfitsio,
   cmake,
+  pkg-config,
   curl,
-  eigen_3_4_0,
+  eigen,
   gsl,
   indi-full,
   kdePackages,
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.8.1";
+  version = "3.8.4.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1f40IdBzjKV2dt1TZtIwLE+ivuPkb0GMWM02Az0Sauo=";
+    hash = "sha256-5YymHJ15Y4ku+a740LgviLfp6b56NbE37hqi2CAw6r0=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -35,13 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     kdoctools
     wrapQtAppsHook
     cmake
+    pkg-config
   ];
 
   buildInputs = with kdePackages; [
     breeze-icons
     cfitsio
     curl
-    eigen_3_4_0
+    eigen
     gsl
     indi-full
     kconfig

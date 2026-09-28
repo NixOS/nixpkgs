@@ -57,7 +57,11 @@ lib.extendMkDerivation {
 
         # some hooks need name-version, but we've overridden name above for the nix package
         beamModuleName = args.name;
-      };
+      }
+      // (args.env or { });
+
+      __structuredAttrs = true;
+      strictDeps = true;
 
       __darwinAllowLocalNetworking = true;
 
@@ -70,6 +74,7 @@ lib.extendMkDerivation {
       '';
 
       nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        erlang
         elixir
         hex
 

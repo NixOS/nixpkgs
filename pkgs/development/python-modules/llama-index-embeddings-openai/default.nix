@@ -3,23 +3,27 @@
   buildPythonPackage,
   fetchPypi,
   llama-index-core,
+  openai,
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-openai";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_openai";
-    inherit version;
-    hash = "sha256-HImGekiw0Nqj0tRPXnazlLKy75k1ky2vkhued5Oczag=";
+    inherit (finalAttrs) version;
+    hash = "sha256-6z5mBr6By4kSUHPiPJfAphGdq7SCetvRRpfCAprXPyk=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [
+    llama-index-core
+    openai
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;
@@ -32,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Unicode Han Database";
     homepage = "https://www.unicode.org/";
-    license = lib.licenses.unicode-dfs-2016;
+    license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
   };
 })

@@ -46,27 +46,25 @@ in
 
     with subtest("create systemd-homed user on first boot prompt"):
       machine.wait_for_unit("systemd-homed.service")
-      machine.wait_until_tty_matches("1", "-- Press any key to proceed --")
-      machine.send_chars(" ")
-      machine.wait_until_tty_matches("1", "Please enter user name")
+      machine.wait_until_tty_matches("1", "Please enter user name to create")
       machine.send_chars("${username}\n")
-      machine.wait_until_tty_matches("1", "Please enter an auxiliary group")
-      machine.send_chars("wheel\n")
-      machine.wait_until_tty_matches("1", "Please enter an auxiliary group")
-      machine.send_chars("\n")
-      machine.wait_until_tty_matches("1", "Please enter the shell to use")
-      machine.send_chars("/bin/sh\n")
-      machine.wait_until_tty_matches("1", "Please enter new password")
+      machine.wait_until_tty_matches("1", "Please enter new password for user ${username}:")
       machine.send_chars("${initialPassword}\n")
       machine.wait_until_tty_matches("1", "(repeat)")
       machine.send_chars("${initialPassword}\n")
+      machine.wait_for_unit("systemd-homed-firstboot.service")
+
+    # The firstboot wizard doesn't prompt for groups; add wheel here so the
+    # later sudo subtest works. Leaving the shell unset also exercises the
+    # NixOS default-user-shell meson option.
+    machine.succeed("homectl update ${username} --offline -G wheel")
 
     with subtest("login as homed user"):
       machine.wait_until_tty_matches("1", "login: ")
       machine.send_chars("${username}\n")
       machine.wait_until_tty_matches("1", "Password: ")
       machine.send_chars("${initialPassword}\n")
-      machine.wait_until_succeeds("pgrep -u ${username} -t tty1 sh")
+      machine.wait_until_succeeds("pgrep -u ${username} -t tty1 bash")
       machine.send_chars("whoami > /tmp/2\n")
       machine.wait_for_file("/tmp/2")
       assert "${username}" in machine.succeed("cat /tmp/2")
@@ -122,11 +120,11 @@ in
       sshClient.send_chars("ssh -o StrictHostKeyChecking=no -i /tmp/id_ed25519 ${username}@machine\n")
       sshClient.wait_until_tty_matches("1", "Please enter password for user")
       sshClient.send_chars("${newPassword}\n")
-      machine.wait_until_succeeds("pgrep -u ${username} sh")
+      machine.wait_until_succeeds("pgrep -u ${username} bash")
       sshClient.send_chars("whoami > /tmp/5\n")
       machine.wait_for_file("/tmp/5")
       assert "${username}" in machine.succeed("cat /tmp/5")
       sshClient.send_chars("exit\n") # ssh
-      sshClient.send_chars("exit\n") # sh
+      sshClient.send_chars("exit\n") # bash
   '';
 }

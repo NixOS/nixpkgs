@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana-dash-n-grab";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
     owner = "esnet";
     repo = "gdg";
-    sha256 = "sha256-fKLyUaKcZfrBarKumjLmK+g9C0VZOYixxNXP7rU83co=";
+    sha256 = "sha256-K8/NhTFfYk9oL2wpRxFLobEx3aW6fx7PzLxf5wFNbFY=";
   };
 
-  vendorHash = "sha256-MXWJ/riQTzAgUNJWvAzSvdHTAzRymlHheeNyJoKGAF4=";
+  vendorHash = "sha256-8ZIu9U6OFRD4pu8K/AUBesX/SRyMkOKi8cdScHBdKnk=";
 
   ldflags = [
     "-s"

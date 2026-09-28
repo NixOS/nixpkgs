@@ -12,7 +12,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 
   ###### interface
@@ -41,7 +41,7 @@ in
       serviceConfig = {
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/lxcfs";
         ExecStart = "${pkgs.lxcfs}/bin/lxcfs /var/lib/lxcfs";
-        ExecStopPost = "-${pkgs.fuse}/bin/fusermount -u /var/lib/lxcfs";
+        ExecStopPost = "-${pkgs.fuse3}/bin/fusermount3 -u /var/lib/lxcfs";
         KillMode = "process";
         Restart = "on-failure";
       };

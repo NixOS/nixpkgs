@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "37.5.3";
+  version = "40.28.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gxXY/01vT1iL1C/+Y6vVmYhseFBz4mpEcH4Q7rpXE9w=";
+    hash = "sha256-KmP7Uaurh5BjbUAwoJTPlCQEy8zJwojRytcOLj6ezVg=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

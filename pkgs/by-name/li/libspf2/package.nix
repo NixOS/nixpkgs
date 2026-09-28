@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  CFLAGS = "-Wno-error=implicit-function-declaration";
+  env.CFLAGS = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
     ];
     maintainers = with lib.maintainers; [
-      das_j
       euxane
       helsinki-Jo
     ];

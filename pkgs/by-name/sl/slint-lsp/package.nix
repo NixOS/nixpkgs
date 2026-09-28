@@ -18,14 +18,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-lsp";
-  version = "1.15.1";
+  version = "1.18.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-WaxvwKtRwUjO0SqODDYXrtU5C10htuXBuTnolYUwl0w=";
+    hash = "sha256-eSKW6iMoiv84CglF39fdu61D87xWv5eQzuXCo0+9hjY=";
   };
 
-  cargoHash = "sha256-Wat4jcvqHz+hL49UAs5wOGZvRiIdIlOvUndginz2okc=";
+  cargoHash = "sha256-qNyuTeQ8BtLi+jPcZ4Ff0TzAl0Kbbcz4+ba0FTz3r9U=";
 
   rpathLibs = [
     fontconfig
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://slint-ui.com/";
     downloadPage = "https://github.com/slint-ui/slint/";
     changelog = "https://github.com/slint-ui/slint/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ xgroleau ];
   };
 })

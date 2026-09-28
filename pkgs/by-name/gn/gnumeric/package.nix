@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   pkg-config,
   intltool,
   libxml2,
@@ -27,15 +26,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.59";
+  version = "1.12.61";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnumeric";
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-7xCDOqPx3QLDHLoKG46e8te4smSFrLOgCcWkiJXGjDQ=";
+    hash = "sha256-SrAFYLCYacTobOmb+Jk4f4OWVLcWS8aq8OBFrdwYcbE=";
   };
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
 
   preConfigure = ''
     ./autogen.sh
@@ -74,11 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnumeric";
@@ -87,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";

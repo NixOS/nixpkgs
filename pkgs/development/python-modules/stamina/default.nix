@@ -9,19 +9,18 @@
   hatchling,
   pytestCheckHook,
   tenacity,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "stamina";
-  version = "25.1.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
     tag = version;
-    hash = "sha256-TehGqR3vbjLNByHZE2+Ytq52dpEpiL6+7TRUKwXcC1M=";
+    hash = "sha256-3cCaYAoWPriynITcMnWn1WndXP2gLro/0ba/87hrnIk=";
   };
 
   build-system = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   dependencies = [
     tenacity
-    typing-extensions
   ];
 
   nativeCheckInputs = [

@@ -10,15 +10,16 @@
   pandoc,
   systemd,
   nixosTests,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgbouncer";
-  version = "1.25.1";
+  version = "1.25.2";
 
   src = fetchurl {
     url = "https://www.pgbouncer.org/downloads/files/${finalAttrs.version}/pgbouncer-${finalAttrs.version}.tar.gz";
-    hash = "sha256-blZq6S/j739qG54m1gSffXyjnEDinns49tVQCuFdhGU=";
+    hash = "sha256-kkrTURP9CnHI4tvoW10DRFUy4rezep+KSJg77qI4szI=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     c-ares
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional systemdSupport systemd;
   enableParallelBuilding = true;
-  configureFlags = lib.optional stdenv.hostPlatform.isLinux "--with-systemd";
+  configureFlags = lib.optional systemdSupport "--with-systemd";
 
   passthru.tests = {
     pgbouncer = nixosTests.pgbouncer;

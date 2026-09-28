@@ -6,7 +6,7 @@
   intltool,
   pkg-config,
   ffmpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   wrapGAppsHook3,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ffmpeg
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ];
 

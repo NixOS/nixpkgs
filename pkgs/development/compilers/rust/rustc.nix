@@ -23,6 +23,7 @@
   openssl,
   xz,
   zlib,
+  rust-jemalloc-sys,
   bintools,
   which,
   libffi,
@@ -260,6 +261,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.isMusl [
       "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
     ]
+    ++ optionals stdenv.targetPlatform.isWasi [
+      "${setTarget}.wasi-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+    ]
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
@@ -399,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
+    rust-jemalloc-sys
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     zlib
@@ -443,6 +448,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  # Make sure our bootstrap packages don't end up in our runtime closure
+  disallowedReferences = [
+    cargo
+    rustc
+  ];
+
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
@@ -458,6 +469,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
+    mainProgram = "rustc";
     teams = [ lib.teams.rust ];
     license = [
       lib.licenses.mit

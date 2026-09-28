@@ -44,9 +44,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   sourceRoot = "multiqc";
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
-    wheel
   ];
 
   dependencies = with python3Packages; [
@@ -77,25 +76,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-dotenv
     jsonschema
   ];
-
-  optional-dependencies = {
-    dev = with python3Packages; [
-      pre-commit-hooks
-      pdoc3
-      pytest
-      pytest-cov
-      pytest-xdist
-      syrupy
-      pygithub
-      mypy
-      types-pyyaml
-      types-tqdm
-      types-requests
-      types-markdown
-      types-beautifulsoup4
-      types-pillow
-    ];
-  };
 
   # Some tests run subprocess.run() with "multiqc"
   preCheck = ''
@@ -134,7 +114,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://multiqc.info";
     changelog = "https://github.com/MultiQC/MultiQC/releases/tag/v${finalAttrs.version}/";
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.apraga ];
     mainProgram = "multiqc";
     platforms = lib.platforms.unix;

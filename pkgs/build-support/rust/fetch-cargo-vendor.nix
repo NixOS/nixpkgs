@@ -3,13 +3,22 @@
   stdenvNoCC,
   runCommand,
   writers,
-  python3Packages,
+  python3,
   cargo,
+  gitMinimal,
   nix-prefetch-git,
   cacert,
 }:
 
 let
+  python3Packages = python3.pkgs // {
+    # Break the requests -> charset-normalizer -> mypy -> ast-serialize ->
+    # fetchCargoVendor bootstrap cycle without overriding the whole Python scope.
+    requests = python3.pkgs.requests.override {
+      charset-normalizer = python3.pkgs.charset-normalizer.override { withMypyc = false; };
+    };
+  };
+
   replaceWorkspaceValues = writers.writePython3Bin "replace-workspace-values" {
     libraries = with python3Packages; [
       tomli
@@ -21,11 +30,27 @@ let
     ];
   } (builtins.readFile ./replace-workspace-values.py);
 
+  nix-prefetch-git' = nix-prefetch-git.override {
+    git = gitMinimal;
+    # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+    # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+    git-lfs = null;
+  };
+
+  removedArgs = [
+    "name"
+    "pname"
+    "version"
+    "nativeBuildInputs"
+    "hash"
+  ];
+
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
     libraries =
       with python3Packages;
       [
         requests
+        tomli-w
       ]
       ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
@@ -44,14 +69,6 @@ in
 # TODO: add asserts about pname version and name
 
 let
-  removedArgs = [
-    "name"
-    "pname"
-    "version"
-    "nativeBuildInputs"
-    "hash"
-  ];
-
   vendorStaging = stdenvNoCC.mkDerivation (
     {
       name = "${name}-vendor-staging";
@@ -61,9 +78,7 @@ let
       nativeBuildInputs = [
         fetchCargoVendorUtil
         cacert
-        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
-        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
-        (nix-prefetch-git.override { git-lfs = null; })
+        nix-prefetch-git'
       ]
       ++ nativeBuildInputs;
 
@@ -92,7 +107,6 @@ let
     // removeAttrs args removedArgs
   );
 in
-
 runCommand "${name}-vendor"
   {
     inherit vendorStaging;

@@ -27,7 +27,8 @@ stdenvNoCC.mkDerivation {
 
   dontWrapQtApps = true;
   propagatedBuildInputs = [
-    kdePackages.qt5compat
+    # avoid .dev outputs propagation
+    kdePackages.qt5compat.out
   ];
 
   installPhase = ''

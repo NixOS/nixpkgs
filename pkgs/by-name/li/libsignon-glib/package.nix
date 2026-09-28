@@ -35,6 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Remove when https://gitlab.com/accounts-sso/libsignon-glib/-/merge_requests/23 merged & in release
+    ./1001-Clean-up-declarations-definitions-usage-of-0-argument-functions.patch
+  ];
+
   nativeBuildInputs = [
     check
     docbook_xml_dtd_412

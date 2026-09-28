@@ -8,14 +8,14 @@
 # https://github.com/nianeyna/ao3downloader/blob/f8399bb8aca276ae7359157b90afd13925c90056/pyproject.toml#L8
 python312Packages.buildPythonApplication (finalAttrs: {
   pname = "ao3downloader";
-  version = "2026.2.0";
+  version = "2026.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nianeyna";
     repo = "ao3downloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NrVzRYNxvy8LOvXy0/1go0wEQyLt56inu+f93UFX1CM=";
+    hash = "sha256-cyn4bWHKKfRGade8A1kAJRJzdcXCY46nGgVw5i0OUyQ=";
   };
 
   build-system = with python312Packages; [
@@ -33,6 +33,9 @@ python312Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "requests"
+    # upstream is avoiding upgrade to support x86_64-darwin
+    # which we no longer support anyway
+    "cryptography"
   ];
 
   pythonImportsCheck = [
@@ -42,7 +45,6 @@ python312Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python312Packages; [
     pytestCheckHook
     syrupy
-    pythonImportsCheckHook
   ];
 
   meta = {

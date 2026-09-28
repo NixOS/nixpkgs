@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   c-ares,
+  cacert,
   curl,
   darwin,
   expat,
@@ -17,6 +18,7 @@
   openssl,
   stdenv,
   unzip,
+  writeShellScript,
   xercesc,
   zlib,
   acceptBroadcomEula ? false,
@@ -33,7 +35,7 @@ let
       fileName,
       version,
       toolId ? ovftoolId,
-      artifactId ? 29161,
+      artifactId ? 29848,
       fileType ? "Download",
       source ? "",
       hash ? "",
@@ -48,39 +50,54 @@ let
           ;
       };
     in
-    fetchurl {
+    stdenv.mkDerivation {
       name = fileName;
       url =
         (mkBaseUrl toolId)
         + "?p_p_id=SDK_AND_TOOL_DETAILS_INSTANCE_iwlk&p_p_lifecycle=2&p_p_resource_id=documentDownloadArtifact";
-      curlOptsList = [
-        "--json"
-        requestJson
-      ];
-      downloadToTemp = true;
-      nativeBuildInputs = [ jq ];
-      postFetch = ''
-        # Try again with the new URL
-        urls="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < "$downloadedFile" || exit $?)" \
-          downloadToTemp="" \
-          curlOptsList="" \
-          curlOpts="" \
-          postFetch="" \
-          exec "$SHELL" "''${BASH_ARGV[@]}"
+      builder = writeShellScript "builder.sh" ''
+        curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
+
+        curl=(
+          ${lib.getExe curl}
+          --location
+          --retry 3
+          --user-agent "curl/$curlVersion Nixpkgs/${lib.trivial.release}"
+          --cacert ${cacert}/etc/ssl/certs/ca-bundle.crt
+          $NIX_CURL_FLAGS
+        )
+
+        "''${curl[@]}" --json ${lib.escapeShellArg requestJson} --output details.json "$url"
+
+        echo "Details: $(<details.json)" >&2
+        url="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < details.json || exit 1)"
+
+        echo "Redirect URL: $url" >&2
+        if [ -n "$url" ]; then
+          "''${curl[@]}" --output "$out" "$url"
+        else
+          echo "Couldn't get redirect URL, exiting." >&2
+          exit 1
+        fi
       '';
-      inherit hash;
+      nativeBuildInputs = [
+        curl
+        jq
+      ];
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        # This variable allows the user to pass additional options to curl
+        "NIX_CURL_FLAGS"
+      ];
     };
 
   ovftoolSystems = {
     "x86_64-linux" = rec {
-      version = "5.0.0-24781994";
+      version = "5.1.0-25410048";
       fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
-      hash = "sha256-I389VdRZQH9BJT/qxSyUPlRZC7MHv++TDc8rJ1jY788=";
-    };
-    "x86_64-darwin" = rec {
-      version = "5.0.0-24781994";
-      fileName = "VMware-ovftool-${version}-mac.x64.zip";
-      hash = "sha256-vfhagEOnTGxOsY8kFY555c8EhI12GwQ2JwgTjEz7UT0=";
+      hash = "sha256-LIOXCiEswBJirbds47nFKvOW+tg0D/cay3SeM+hsjjM=";
     };
   };
 
@@ -155,9 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
     # with the addition of a libexec directory and a Nix-style binary wrapper.
 
     # Almost all libs in the package appear to be VMware proprietary except for
-    # libgoogleurl and libcurl.
+    # libcurl.
     #
-    # FIXME: Replace libgoogleurl? Possibly from Chromium?
     # FIXME: Tell VMware to use a modern version of OpenSSL on macOS.
 
     # Install all libs that are not patched in preFixup.
@@ -166,7 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 644 -t "$out/lib" \
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    libgoogleurl.so.59 \
     libssoclient.so \
     libvim-types.so \
     libvmacore.so \
@@ -175,7 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
   # macOS still relies on OpenSSL 1.0.2 as of v4.6.3 and later, but Linux is in the clear
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     lib/libcrypto.1.0.2.dylib \
-    lib/libgoogleurl.59.0.30.45.2.dylib \
     lib/libssl.1.0.2.dylib \
     lib/libssoclient.dylib \
     lib/libvim-types.dylib \

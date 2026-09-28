@@ -11,6 +11,7 @@
   physfs,
   SDL2,
   tinyxml-2,
+  imagemagick,
   makeAndPlay ? false,
 }:
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -68,9 +70,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
+    mkdir -p $out/share/icons/hicolor/32x32/apps
     install -Dm755 VVVVVV $out/bin/vvvvvv
-    install -Dm644 "$src/desktop_version/icon.ico" "$out/share/pixmaps/VVVVVV.png"
+    # There's only one icon in the ico anyway
+    magick "$src/desktop_version/icon.ico[-1]" "$out/share/icons/hicolor/32x32/apps/VVVVVV.png"
     cp -r "$src/desktop_version/fonts/" "$out/share/"
     cp -r "$src/desktop_version/lang/" "$out/share/"
 

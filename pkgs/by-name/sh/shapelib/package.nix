@@ -2,27 +2,16 @@
   lib,
   stdenv,
   fetchurl,
-  fetchDebianPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "shapelib";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
-    hash = "sha256-S3SjbO2U6ae+pAEVfmZK3cxb4lHn33+I1GdDYdoBLCE=";
+    hash = "sha256-P/Xq0Yym0v4knw6As2HhrWeCFlEVJo7UpYx4CmDB4Os=";
   };
-
-  patches = [
-    # Fix build with gcc 15
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "1";
-      patch = "gcc-15.patch";
-      hash = "sha256-ubd8L2hxSAxTDiOSToVHGLHkpGOap5bnozdVdv9VgCQ=";
-    })
-  ];
 
   doCheck = true;
   preCheck = ''

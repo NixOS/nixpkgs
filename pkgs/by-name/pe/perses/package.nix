@@ -10,6 +10,7 @@
   turbo,
   linkFarm,
   installShellFiles,
+  nixosTests,
 }:
 
 let
@@ -27,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.52.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VjjTi+RltB4gZloAcaEtRsmFmG9CruYtDphYyAx1Tkc=";
+    hash = "sha256-6RkRL0L2ydKujk0J5hXOrL8ju0g6y0EScehXL4zdrss=";
   };
 
   outputs = [
@@ -52,7 +53,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-TteC9/1ORUl41BvhW9rTUW6ZBmDv4ScG6OzsI6WYjiE=";
+    hash = "sha256-KjOQgR9LcRzMijeOKdXmjIwRMwxr0kZGmZI2RQ9+u6U=";
   };
 
   npmRoot = "ui";
@@ -62,7 +63,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-zb8LJIzCCX5bjKl6aDI/vjkaPbEQfiGKVJbpcR596WI=";
+  vendorHash = "sha256-vMHIdKGplPQ8opnPJbVp2034KoIid0VYT4WDbj7a6sg=";
 
   ldflags = [
     "-s"
@@ -85,6 +86,11 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
+    # Since @rspack/cli 2.x the CLI shim is installed in the workspace-level
+    # node_modules (ui/app/node_modules), which npmConfigHook's shebang
+    # patching (scoped to ui/node_modules) does not cover.
+    patchShebangs "$npmRoot"
+
     pushd "$npmRoot"
     npm run build
     popd
@@ -118,6 +124,8 @@ buildGoModule (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
 
+    tests.nixos = nixosTests.perses;
+
     inherit pluginsArchive;
   };
 
@@ -126,7 +134,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://perses.dev/";
     changelog = "https://github.com/perses/perses/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fooker ];
+    maintainers = with lib.maintainers; [
+      fooker
+      byteflavour
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "perses";
   };

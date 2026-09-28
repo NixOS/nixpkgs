@@ -13,7 +13,7 @@
   buildc2xml ? false,
 }:
 let
-  version = "1.74";
+  version = "1.75";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smatch";
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "error27";
     repo = "smatch";
     tag = finalAttrs.version;
-    hash = "sha256-LZdTwoTbNj/YE8o5xQ7MclkULJI3NTeeR38BsAtsI/4=";
+    hash = "sha256-sku4mOOniG1EN5H1pkTWhL1j5660VZhZesoQeR6ZvhI=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };

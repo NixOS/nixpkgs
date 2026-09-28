@@ -18,17 +18,18 @@
   pkg-config,
   cmake,
   aiger,
+  mpfr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.8.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     tag = finalAttrs.version;
-    hash = "sha256-v5r+BWXUUbKtkos6qmGMC9MMytS/h759SHY6lsTHU1k=";
+    hash = "sha256-3uStLdDFhXVgqzremUPRbxPUcl0IqVg5MRLltgm8rCA=";
   };
 
   strictDeps = true;
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     kissat
     aiger
+    mpfr
   ];
 
   mesonFlags = [

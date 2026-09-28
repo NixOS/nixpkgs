@@ -52,7 +52,7 @@ in
       '';
       description =
         let
-          documentationLink = "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
+          documentationLink = "https://gitlab.com/jirafeau/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
         in
         ''
           Jirefeau configuration. Refer to <${documentationLink}> for supported

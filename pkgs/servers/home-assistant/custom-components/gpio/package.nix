@@ -2,7 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromCodeberg,
-  libgpiod,
+  gpiod,
 }:
 
 buildHomeAssistantComponent rec {
@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-JyyJPI0lbZLJj+016WgS1KXU5rnxUmRMafel4/wKsYk=";
   };
 
-  dependencies = [ libgpiod ];
+  dependencies = [ gpiod ];
 
   meta = {
     description = "Home Assistant GPIO custom integration";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   python3Packages,
   libunistring,
   harfbuzz,
@@ -20,7 +21,7 @@
   libxext,
   wayland-protocols,
   wayland,
-  xxHash,
+  xxhash,
   nerd-fonts,
   lcms2,
   librsync,
@@ -39,33 +40,33 @@
   zsh,
   fish,
   nixosTests,
-  go_1_24,
-  buildGo124Module,
+  go_1_26,
+  buildGo126Module,
   nix-update-script,
   makeBinaryWrapper,
   darwin,
   cairo,
-  fetchpatch,
+  shader-slang,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.45.0";
+  version = "0.49.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-3XQWmLd8F0ndzzLOcV/7144M9enqc/7FULVLeM2Kpts=";
+    hash = "sha256-C1roiJ+mAm8rEoG5VAQABYUq2FSFVuusNQ0PtLP0tPI=";
   };
 
   goModules =
-    (buildGo124Module {
+    (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-aLl9hPfRmUE8VARwkwXhxjzDPKUGNGD+yzxY5pUIcgs=";
+      vendorHash = "sha256-G+eaFOFMIIu2Qo5Mgr3ejwoYrYmNv3EIdEEraDPIdeY=";
     }).goModules;
 
   buildInputs = [
@@ -76,7 +77,7 @@ buildPythonApplication rec {
     librsync
     matplotlib
     openssl.dev
-    xxHash
+    xxhash
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
@@ -108,11 +109,13 @@ buildPythonApplication rec {
     sphinx
     furo
     sphinx-copybutton
+    sphinx-design
     sphinxext-opengraph
     sphinx-inline-tabs
-    go_1_24
+    go_1_26
     fontconfig
     makeBinaryWrapper
+    shader-slang
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -143,6 +146,9 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    (replaceVars ./libxkbcommon-runtime-path.patch {
+      libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
+    })
   ];
 
   hardeningDisable = [
@@ -150,8 +156,11 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  env.CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+    GOTOOLCHAIN = "local";
+  };
 
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -213,29 +222,39 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
-      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
-      --replace test_ssh_copy no_test_ssh_copy \
-      --replace test_ssh_env_vars no_test_ssh_env_vars
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration \
-      --replace test_zsh_integration no_test_zsh_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+
+      # These depend on cgroups and other resources that don't work as the tests expect in the sandbox
+      rm kitty_tests/child.py
+    '';
 
   checkPhase = ''
     runHook preCheck
@@ -278,6 +297,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
+        shader-slang
       ]
     }"
 

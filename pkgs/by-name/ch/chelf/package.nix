@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Change or display the stack size of an ELF binary";
     homepage = "https://github.com/Gottox/chelf";
     license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "chelf";
   };

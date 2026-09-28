@@ -70,6 +70,7 @@
             }
             ''
               import asyncio
+              import time
               from nio import AsyncClient, MatrixRoom, RoomMemberEvent, RoomMessageNotice
 
 
@@ -78,6 +79,13 @@
 
                   async def member_callback(room: MatrixRoom, event: RoomMemberEvent) -> None:
                       if event.membership == "join" and event.sender == "@draupnir:homeserver":
+                          print("Got draupnir join event!")
+
+                  async def message_callback(room: MatrixRoom, event: RoomMessageNotice) -> None:
+                      print(f"{event.sender}:\n{event.body}" if "\n" in event.body else f"{event.sender}: {event.body}")
+
+                      if event.sender == "@draupnir:homeserver" and "Startup complete." in event.body:
+                          print("Draupnir reported ready, sending '!draupnir status'")
                           await client.room_send(
                               room_id=room.room_id,
                               message_type="m.room.message",
@@ -87,9 +95,53 @@
                               }
                           )
 
-                  async def message_callback(room: MatrixRoom, event: RoomMessageNotice) -> None:
-                      print(f"{event.sender}: {event.body}")
-                      if event.sender == "@draupnir:homeserver":
+                      if event.sender == "@draupnir:homeserver" and "Repository: " in event.body and "Version: " in event.body:
+                          print("Got status reply, creating policy list")
+                          await client.room_send(
+                              room_id=room.room_id,
+                              message_type="m.room.message",
+                              content={
+                                  "msgtype": "m.text",
+                                  "body": "!draupnir list create test test"
+                              }
+                          )
+
+                          time.sleep(3)
+                          print("Surely it's done by now (couldnt find a good way to trigger the next step), protecting a room")
+
+                          await client.room_send(
+                              room_id=room.room_id,
+                              message_type="m.room.message",
+                              content={
+                                  "msgtype": "m.text",
+                                  "body": "!draupnir rooms add #protected:homeserver"
+                              }
+                          )
+                          time.sleep(3)
+                          print("Surely it's done by now (there's no text reply), sending a ban command")
+
+                          await client.room_send(
+                              room_id=room.room_id,
+                              message_type="m.room.message",
+                              content={
+                                  "msgtype": "m.text",
+                                  "body": "!draupnir ban @bad:homeserver test spam"
+                              }
+                          )
+                          time.sleep(3)
+                          print("Surely it's done by now (there's no text reply), sending a server ban command")
+
+                          await client.room_send(
+                              room_id=room.room_id,
+                              message_type="m.room.message",
+                              content={
+                                  "msgtype": "m.text",
+                                  "body": "!draupnir ban meow test spam"
+                              }
+                          )
+                          time.sleep(3)
+                          print("Surely it's done by now (there's no text reply), assuming all is good")
+
                           await client.close()
                           exit(0)
 
@@ -110,6 +162,19 @@
                       }
                   )
                   print(room)
+
+                  protectedRoom = await client.room_create(
+                      name="Protected",
+                      alias="protected",
+                      invite=["@draupnir:homeserver"],
+                      power_level_override={
+                          "users": {
+                              "@draupnir:homeserver": 100,
+                              "@moderator:homeserver": 100,
+                          }
+                      }
+                  )
+                  print(protectedRoom)
 
                   print(await client.join(room.room_id))
 
@@ -135,9 +200,9 @@
       homeserver.succeed("matrix-synapse-register_new_matrix_user -u moderator -p password --no-admin")
 
       # get draupnir access token
-      payload = json.dumps({ "type": "m.login.password", "user": "draupnir", "password": "password" })
+      draupnir_login_payload = json.dumps({ "type": "m.login.password", "user": "draupnir", "password": "password" })
       homeserver.succeed(
-          f"curl --fail --json '{payload}' http://localhost:8008/_matrix/client/v3/login"
+          f"curl --fail --json '{draupnir_login_payload}' http://localhost:8008/_matrix/client/v3/login"
           + " | jq -r .access_token"
           + " | tee /tmp/draupnir-access-token"
        )

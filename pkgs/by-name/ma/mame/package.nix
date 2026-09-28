@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  SDL2,
-  SDL2_ttf,
+  sdl3,
+  sdl3-ttf,
   copyDesktopItems,
   expat,
   fetchurl,
@@ -24,7 +24,7 @@
   portmidi,
   pugixml,
   python3,
-  libsForQt5,
+  qt6,
   rapidjson,
   sqlite,
   utf8proc,
@@ -34,16 +34,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mame";
-  version = "0.285";
-  srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
+  version = "0.289";
+  srcVersion = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
-    rev = "mame${srcVersion}";
-    hash = "sha256-vuGQ1VOjIAEopV4X+qP1k+bgH7lJJLZ9RtYevUxgIQg=";
+    rev = "mame${finalAttrs.srcVersion}";
+    hash = "sha256-tbveDIOPZjEoTmo5rV2fR9An1I6X4P8Ec7HYHWL6H6U=";
   };
 
   outputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
     "TOOLS=1"
+    "OSD=sdl3"
     "USE_LIBSDL=1"
     # "USE_SYSTEM_LIB_ASIO=1"
     "USE_SYSTEM_LIB_EXPAT=1"
@@ -84,10 +85,10 @@ stdenv.mkDerivation rec {
     rapidjson
     pugixml
     glm
-    SDL2
-    SDL2_ttf
+    sdl3
+    sdl3-ttf
     sqlite
-    libsForQt5.qtbase
+    qt6.qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -107,7 +108,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   patches = [
@@ -135,11 +136,9 @@ stdenv.mkDerivation rec {
   # This replaces the `sw_vers` call with the macOS version actually being
   # targeted, so everything gets linked correctly.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in scripts/src/osd/{mac,sdl}.lua; do
-      substituteInPlace "$file" --replace-fail \
-        'backtick("sw_vers -productVersion")' \
-        "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
-      done
+    substituteInPlace scripts/src/osd/sdl3.lua --replace-fail \
+      'backtick("sw_vers -productVersion")' \
+      "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
   '';
 
   desktopItems = [
@@ -233,7 +232,7 @@ stdenv.mkDerivation rec {
       calculators, in addition to the arcade video games that were its initial
       focus.
     '';
-    changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
+    changelog = "https://github.com/mamedev/mame/releases/download/mame${finalAttrs.srcVersion}/whatsnew_${finalAttrs.srcVersion}.txt";
     license = with lib.licenses; [
       bsd3
       gpl2Plus
@@ -245,4 +244,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
-}
+})

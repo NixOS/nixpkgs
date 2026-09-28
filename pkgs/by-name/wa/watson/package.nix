@@ -61,7 +61,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       mguentner
       nathyong
-      oxzi
     ];
   };
 })

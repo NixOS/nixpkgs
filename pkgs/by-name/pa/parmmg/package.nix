@@ -10,10 +10,13 @@
   metis,
   mmg,
   scotch,
-  vtk-full,
+  vtk,
   withVtk ? true,
   testers,
 }:
+let
+  vtk-mpi = vtk.override { mpiSupport = true; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "parmmg";
   version = "1.5.0";
@@ -53,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     scotch
     (mmg.override {
       inherit withVtk;
-      vtk = vtk-full;
+      vtk = vtk-mpi;
     })
   ]
-  ++ lib.optional withVtk vtk-full;
+  ++ lib.optional withVtk vtk-mpi;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))

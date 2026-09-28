@@ -32,7 +32,7 @@ in
         description = ''
           Whether to enable U2F support in the i3lock program.
           U2F enables authentication using a hardware device, such as a security key.
-          When U2F support is enabled, the i3lock program will set the setuid bit on the i3lock binary and enable the pam u2fAuth service,
+          When U2F support is enabled, the i3lock program will set the setuid bit on the i3lock binary and enable the pam u2f service,
         '';
       };
     };
@@ -51,7 +51,7 @@ in
       source = "${cfg.package.out}/bin/i3lock";
     };
 
-    security.pam.services.i3lock.u2fAuth = cfg.u2fSupport;
+    security.pam.services.i3lock.u2f.enable = cfg.u2fSupport;
 
   };
 

@@ -1,52 +1,58 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  hatchling,
+
   # dependencies
   rich,
+  pillow,
 
   # tests
-  pillow,
   pytestCheckHook,
   syrupy,
-
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.8.5";
+  version = "0.13.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
-    tag = "v${version}";
-    hash = "sha256-gkLsM02oQ2H4UUhezbcmaOa2FQfzvFRsa0gd07eNucw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7TPng2rBYVY1r7Y1pkSZYo4r+MdyD8HzqJAMpzyNqZE=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pillow
     rich
   ];
 
+  pythonImportsCheck = [ "textual_image" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [ "textual_image" ];
-
-  doCheck = true;
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert [+ received] == [- snapshot]
+    "test_render"
+  ];
 
   meta = {
     description = "Render images in the terminal with Textual and rich";
     homepage = "https://github.com/lnqs/textual-image/";
-    changelog = "https://github.com/lnqs/textual-image/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/lnqs/textual-image/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ gaelj ];
   };
-}
+})

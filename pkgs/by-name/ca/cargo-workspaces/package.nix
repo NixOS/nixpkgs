@@ -8,12 +8,12 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-workspaces";
   version = "0.4.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/h7v5Wq7YsNMVzLHw3QQmcknbjARpI7HFPAUGX72wZ0=";
   };
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       commands and more.
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
-    changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       macalinao
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-workspaces";
   };
-}
+})

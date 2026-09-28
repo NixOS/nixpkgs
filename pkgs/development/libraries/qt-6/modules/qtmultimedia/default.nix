@@ -14,7 +14,6 @@
   gst-plugins-base,
   gst-plugins-good,
   gst-libav,
-  gst-vaapi,
   ffmpeg,
   libva,
   libpulseaudio,
@@ -59,7 +58,6 @@ qtModule {
     gst-plugins-base
     gst-plugins-good
     gst-libav
-    gst-vaapi
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
@@ -72,6 +70,8 @@ qtModule {
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  };
 }

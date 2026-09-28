@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -17,6 +15,9 @@
   typing-extensions,
 
   # optional-dependencies
+  backports-zstd,
+  indexed-gzip,
+  matplotlib,
   pydicom,
   pillow,
   h5py,
@@ -27,27 +28,20 @@
   pytest-doctestplus,
   pytest-httpserver,
   pytest-xdist,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nibabel";
-  version = "5.3.3";
+  version = "5.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipy";
     repo = "nibabel";
     tag = finalAttrs.version;
-    hash = "sha256-Kdz7kCY5QnA9OiV/FPW1RerjP1GGLn+YaTwFpA0dJAM=";
+    hash = "sha256-QzkmSI0JGdIXLc3XSPZrGrBYSq98tLFrozNNopR/ytg=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/nipy/nibabel/commit/3f40a3bc0c4bd996734576a15785ad0f769a963a.patch?full_index=1";
-      hash = "sha256-URsxgP6Sd5IIOX20GtAYtWBWOhw+Hiuhgu1oa8o8NXk=";
-    })
-  ];
 
   build-system = [
     hatch-vcs
@@ -62,14 +56,14 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   optional-dependencies = lib.fix (self: {
-    all = self.dicom ++ self.dicomfs ++ self.minc2 ++ self.spm ++ self.zstd;
+    all = self.dicomfs ++ self.indexed_gzip ++ self.minc2 ++ self.spm ++ self.zstd;
     dicom = [ pydicom ];
     dicomfs = [ pillow ] ++ self.dicom;
+    indexed_gzip = [ indexed-gzip ];
     minc2 = [ h5py ];
     spm = [ scipy ];
-    zstd = [
-      # TODO: pyzstd
-    ];
+    viewers = [ matplotlib ];
+    zstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
   });
 
   nativeCheckInputs = [
@@ -78,14 +72,11 @@ buildPythonPackage (finalAttrs: {
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
-    pytest7CheckHook
+    pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
 
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # https://github.com/nipy/nibabel/issues/1390
-    "test_deprecator_maker"
-  ];
+  pythonImportsCheck = [ "nibabel" ];
 
   meta = {
     homepage = "https://nipy.org/nibabel";

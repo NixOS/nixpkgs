@@ -18,6 +18,10 @@
     rtt = machine.succeed("cat /sys/module/tcp_hybla/parameters/rtt0")
     assert int(rtt) == 42, "Parameter should be respected for initrd kernel modules"
 
+    with subtest("modprobe@ services work"):
+      modprobe_service_status = machine.succeed("systemctl show --property ExecMainStatus modprobe@9pnet_virtio.service")
+      t.assertEqual("ExecMainStatus=0\n", modprobe_service_status)
+
     # Make sure it sticks in stage 2
     machine.switch_root()
     machine.wait_for_unit("multi-user.target")

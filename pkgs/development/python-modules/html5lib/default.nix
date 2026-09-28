@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   six,
   webencodings,
   pytest-expect,
@@ -25,9 +25,11 @@ buildPythonPackage {
   patches = [
     # https://github.com/html5lib/html5lib-python/pull/583
     ./python314-compat.patch
+    # https://github.com/html5lib/html5lib-python/pull/590
+    ./pytest9-compat.patch
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     six

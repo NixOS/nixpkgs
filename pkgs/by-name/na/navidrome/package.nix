@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo127Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -15,27 +15,28 @@
   nix-update-script,
   ffmpegSupport ? true,
   versionCheckHook,
+  plugins ? [ ],
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "navidrome";
-  version = "0.60.0";
+  version = "0.64.2";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K7Cen0gADYQc0jxd2keBpTJlyQyuYL02j7/yiNtjZvQ=";
+    hash = "sha256-6667wi23YSPdF/LL5k7VmYEAM5rxQYjqlvAtg5vJzj4=";
   };
 
-  vendorHash = "sha256-DCz/WKZXnZy109WgStCK7NJg8VpR3IJEaQZLMDXdegk=";
+  vendorHash = "sha256-/3NhF/OHDxWrciN5GdROiO1yhjjdm5F5ntW7h6tzFGc=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-Z1kSRNSG1zeLA6rtbcTdLJnNWclsVTS5Xfc4D9M0dl4=";
+    hash = "sha256-uRF9cf6HZE0gyCvGTEZ520d2gMsxmccEYLJBgc47pMg=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,8 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ];
+
+  runtimeInputs = plugins;
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -64,7 +67,9 @@ buildGoModule (finalAttrs: {
     "-X github.com/navidrome/navidrome/consts.gitTag=v${finalAttrs.version}"
   ];
 
-  CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    CGO_CFLAGS = toString [ "-Wno-return-local-addr" ];
+  };
 
   postPatch = ''
     patchShebangs ui/bin/update-workbox.sh
@@ -74,8 +79,19 @@ buildGoModule (finalAttrs: {
     make buildjs
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/plugins/
+    ${lib.concatMapStringsSep "\n" (plugin: ''
+      find ${plugin}/share/ \
+        -type f \
+        -name "*.ndp" \
+        -exec ln -s {} $out/share/plugins/${plugin.bundleName or plugin.pname}.ndp \;
+    '') plugins}
+  '';
+
   tags = [
     "netgo"
+    "sqlite_fts5"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -87,6 +103,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };
@@ -100,6 +117,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       aciceri
       tebriel
+      RossSmyth
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

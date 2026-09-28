@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corepad";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corepad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oGF2N0bUuvc/ixmh2nefEJKh0kDipvcL/dwaXNxwo84=";
+    hash = "sha256-TA/gwI7ukuwChBRp2xsDbNbTblkzYgQ5YHwuI53cxc8=";
   };
 
   nativeBuildInputs = [

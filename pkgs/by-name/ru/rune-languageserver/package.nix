@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.14.1";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    pname = "rune-languageserver";
+    inherit (finalAttrs) version;
     hash = "sha256-0b8XGbMQqMolOdQEMjpwHAVI3A4fXemyCowN39qY16A=";
   };
 
@@ -39,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rune-languageserver";
   };
 })

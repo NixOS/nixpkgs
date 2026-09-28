@@ -2,12 +2,15 @@
   lib,
   rustPlatform,
   fetchFromGitea,
+  fetchpatch2,
+  installShellFiles,
   openssl,
   pkg-config,
   protobuf,
   cacert,
   nix-update-script,
   nixosTests,
+  stdenv,
 }:
 let
   generic =
@@ -34,6 +37,7 @@ let
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
+        installShellFiles
         protobuf
         pkg-config
       ];
@@ -48,7 +52,7 @@ let
 
       env.OPENSSL_NO_VENDOR = true;
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.2.0/nix/compile.nix#L71-L78
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.3.0/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
       buildFeatures = [
         "bundled-libs"
@@ -63,6 +67,16 @@ let
         "syslog"
         "telemetry-otlp"
       ];
+
+      postInstall =
+        lib.optionalString
+          ((lib.versionAtLeast version "2.3.0") && (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+          ''
+            installShellCompletion --cmd garage \
+              --bash <($out/bin/garage completions bash) \
+              --fish <($out/bin/garage completions fish) \
+              --zsh <($out/bin/garage completions zsh)
+          '';
 
       passthru = {
         tests = nixosTests."garage_${lib.versions.major version}";
@@ -80,7 +94,6 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
-          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
@@ -99,9 +112,9 @@ rec {
   };
 
   garage_2 = generic {
-    version = "2.2.0";
-    hash = "sha256-UaWHZPV0/Jgeiwvvr9V9Gqthn5KXErLx8gL4JdBRDVs=";
-    cargoHash = "sha256-U6Wipvlw3XdKUBNZMznENJ9m+9fzP9Nb6217+Kytu7s=";
+    version = "2.4.1";
+    hash = "sha256-+3w4R0IGxc7GCVW3t7Izt6Y5PVUjxHsdLrr74ckR9Mg=";
+    cargoHash = "sha256-G928EsavtEgxugLzpBGSbo2RMHLzu9PZf9r3GqU5J3E=";
   };
 
   garage = garage_1;

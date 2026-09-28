@@ -10,41 +10,42 @@
   lz4,
   autoPatchelfHook,
   writeShellScript,
+  runCommand,
   curl,
   common-updater-scripts,
 }:
 
 let
-  version = "0.20.0";
+  version = "0.40.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-v+28oH/7Dp7mSsIgC/IQAn3Pp0gZ43vBMHb/1xBhiVY=";
-        "8.2" = "sha256-OXWMn71XCECh5q1kPxKyo7v/dzCT2it7S8NIKbjBli8=";
-        "8.3" = "7mlpqSPI34DTMJe6gw+77aJGOr12CXHHw+kBmy/nBI4=";
-        "8.4" = "sha256-FpkzCsak8RZBOgOT90VA5iLcfp5FOxpaOqWQJoV0HEY=";
-        "8.5" = "bMHjDJf5/prqUjVR6xOTsHl9iFGrBTL6b42KxyogWbQ=";
+        "8.1" = "sha256-pwqus2P17DirEGqwbe5CqlIZ+InPrIHbUUbcgLli8rc=";
+        "8.2" = "sha256-IeoOYVnp0sWD+Ww/d8DwDemqXv/6neEWE3g2txHEuEg=";
+        "8.3" = "OQAErtNtCIpNmz2YbfhLJ9ueH7mhZa6j1YtcuH00Ob8=";
+        "8.4" = "sha256-WP283JJfXQTnfbnyLfs0j8IIcdDGflCFtV0WxBV/JLU=";
+        "8.5" = "0zH1RD2Uq5uG4TnUsYzsYgUdUshsKNU0kzbdNG77sd8=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-Bbm+KURBJbzdyuV2RvnxYnLXLS6VN1osME6ZYCJLBhs=";
-        "8.2" = "sha256-niNBiZYOQVBg8CA/HCHkXdVJKBbbb/64Z1tjVo0m/2M=";
-        "8.3" = "sha256-CcuZ36K6nEFVIrdqHMQ5zp1zDDRXP55VKfqT3vx2+NA=";
-        "8.4" = "rvySgiePXFOctBBJqamBgn2XYQSQzeZAU2i1yCa5/lI=";
-        "8.5" = "4nkaXp2ArpndcG4BlPU7IlBrVrOEb/Tn7hSZ+0Vsm7k=";
+        "8.1" = "sha256-r6rV05ZLsi2SvFqONtYk2IIrkdbTZqsClruTMpcOOas=";
+        "8.2" = "sha256-SsHqRS3Bq4N10c06zEoVZXTv5+bfkcDgCRdntcoyD/k=";
+        "8.3" = "sha256-yQunez9xOyhGYqFKHKWtdK8BiGPz3JIyDnsfqGthIYs=";
+        "8.4" = "bC/67qQxe/Zy027r8c7tWr6S6Seeh+lbjYEl+cE7HNw=";
+        "8.5" = "3KWlZxbO8u5hpN/PsKzgCbNUhWHb56SqgNwTL8iHtSs=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-1UJMs1lhXMVLbyxQIOIF8S+p9lMMx5WzMwdYUs3eN6U=";
-        "8.2" = "sha256-zg+LSZdm3qIJ6DoRPSGRSEmKkn5uNPErlC5kMUQhxmM=";
-        "8.3" = "sha256-kvE4MavRxqQgkWHjaSBwx87r336pmqEwsIpC9CYwPxI=";
-        "8.4" = "pvYJHfkKvdyIrSrvxezwX2QWQw3kj6nPe/sHlJKys+Q=";
-        "8.5" = "Aw3oQXYjVNaDHl/qffhTmNHLTWi5bTjF1r4SKyu8nC0=";
+        "8.1" = "sha256-KgyAPCLLtmeMa5X3Akuf0nR51aSQS6+RpNYO3U4Zdp0=";
+        "8.2" = "sha256-zSl141iQ3Vfb5JmeRacFZhBcfEKQuW9rld9O2c8HRvU=";
+        "8.3" = "sha256-kdd4k6xdbbNuIk/DBTufxqH8j+4Z2xgzG4Z/c7PfKFs=";
+        "8.4" = "jteJPpdxFSBljS81Jn9x6cLLn3iLVpqeGb3qecWFw4c=";
+        "8.5" = "uFZj/cDsd6LhIeaj3IdB3Kl9btnkS/eEVfLdYhh4Mus=";
       };
     };
   };
@@ -83,30 +84,42 @@ stdenv.mkDerivation (finalAttrs: {
   internalDeps = [ php.extensions.session ];
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Temporary patch as relay isn't compatible with the latest version of hiredis out of
+    # the box.
+    patchelf \
+      --replace-needed libhiredis.so.1.1.0 libhiredis.so.1 \
+      --replace-needed libhiredis_ssl.so.1.1.0 libhiredis_ssl.so.1 \
+        relay.so
+  ''
+  + ''
     install -Dm755 relay.so -t $out/lib/php/extensions
   ''
   + (
     if stdenv.hostPlatform.isDarwin then
-      let
-        args =
-          lib.strings.concatMapStrings
-            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
-            (
-              with lib.attrsets;
-              [
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-              ]
-            );
-      in
-      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add
+      # absolute paths. Rather than hardcoding the Homebrew paths and versions relay.so happens to be
+      # linked against (which silently goes stale whenever relay or one of these libraries updates),
+      # discover the actual references via otool and remap them by matching their basename.
       ''
-        install_name_tool${args} $out/lib/php/extensions/relay.so
+        for dylib in $(otool -L $out/lib/php/extensions/relay.so | tail -n +2 | awk '{print $1}' | grep '^/opt/homebrew/'); do
+          base=$(basename "$dylib")
+          case "$base" in
+            libhiredis_ssl.*) dir="${lib.makeLibraryPath [ hiredis ]}" ;;
+            libhiredis.*) dir="${lib.makeLibraryPath [ hiredis ]}" ;;
+            libssl.*) dir="${lib.makeLibraryPath [ openssl ]}" ;;
+            libcrypto.*) dir="${lib.makeLibraryPath [ openssl ]}" ;;
+            libzstd.*) dir="${lib.makeLibraryPath [ zstd ]}" ;;
+            liblz4.*) dir="${lib.makeLibraryPath [ lz4 ]}" ;;
+            libck.*) dir="${lib.makeLibraryPath [ libck ]}" ;;
+            *)
+              echo "relay.so references unrecognized Homebrew library $dylib; add a mapping for it" >&2
+              exit 1
+              ;;
+          esac
+          install_name_tool -change "$dylib" "$dir/$base" $out/lib/php/extensions/relay.so
+        done
       ''
     else
       ""
@@ -120,6 +133,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.smokeTest = runCommand "php-relay-smoke-test" { } ''
+      ${lib.getExe php} \
+        -d extension=${finalAttrs.finalPackage}/lib/php/extensions/relay.so \
+        -r 'exit(extension_loaded("relay") ? 0 : 1);'
+      touch $out
+    '';
+
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
       export PATH="$PATH:${
@@ -176,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

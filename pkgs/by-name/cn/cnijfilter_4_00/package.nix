@@ -1,5 +1,5 @@
 {
-  gcc13Stdenv,
+  stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -21,7 +21,6 @@
 */
 
 let
-  stdenv = gcc13Stdenv;
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
@@ -48,7 +47,7 @@ stdenv.mkDerivation {
   version = "4.00";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
+    url = "https://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
@@ -67,6 +66,8 @@ stdenv.mkDerivation {
     libusb1
     libxml2
   ];
+
+  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [

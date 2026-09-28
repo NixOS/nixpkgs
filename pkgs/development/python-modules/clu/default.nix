@@ -19,6 +19,7 @@
   wrapt,
 
   # tests
+  chex,
   keras,
   pytestCheckHook,
   tensorflow,
@@ -26,17 +27,27 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clu";
   version = "0.0.12";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "CommonLoopUtils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ntqRz3fCXMf0EDQsddT68Mdi105ECBVQpVsStzk2kvQ=";
   };
+
+  # Fix Jax 0.10.0 compatibility
+  # TypeError: clip() got an unexpected keyword argument 'a_min'
+  postPatch = ''
+    substituteInPlace clu/metrics.py \
+      --replace-fail \
+        "variance = jnp.clip(variance, a_min=0.0)" \
+        "variance = jnp.clip(variance, min=0.0)"
+  '';
 
   build-system = [
     setuptools
@@ -59,6 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clu" ];
 
   nativeCheckInputs = [
+    chex
     keras
     pytestCheckHook
     tensorflow
@@ -76,8 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common training loops in JAX";
     homepage = "https://github.com/google/CommonLoopUtils";
-    changelog = "https://github.com/google/CommonLoopUtils/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/google/CommonLoopUtils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

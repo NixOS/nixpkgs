@@ -5,7 +5,7 @@
   boost,
   zlib,
   bzip2,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     zlib
     bzip2
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   configureFlags = [
-    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "--with-wx-config=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   meta = {

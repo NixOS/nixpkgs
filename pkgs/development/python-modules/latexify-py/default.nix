@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   dill,
   fetchFromGitHub,
   hatchling,
@@ -11,6 +12,10 @@ buildPythonPackage rec {
   pname = "latexify-py";
   version = "0.4.4";
   pyproject = true;
+
+  # AttributeError: module 'ast' has no attribute 'Num'
+  # https://docs.python.org/3/whatsnew/3.14.html#id9
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "google";

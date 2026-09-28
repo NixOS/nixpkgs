@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnsproxy";
-  version = "0.78.2";
+  version = "0.84.1";
 
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "dnsproxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BZ9yiw5EoSLTZux/MC8MJLV9eifQYnz+ZBzAPZaxOPI=";
+    hash = "sha256-cBbboorz7r+C9BAE8gFQP38WYp5r4Rs4xqR2xdNBLMw=";
   };
 
-  vendorHash = "sha256-NS7MsK7QXg8tcAytYd9FGvaYZcReYkO5ESPpLbzL0IQ=";
+  vendorHash = "sha256-E2tEOnGDMWXK3BFCMpkiISnW9evU6SRCN9z9vtMR+z0=";
 
   ldflags = [
     "-s"

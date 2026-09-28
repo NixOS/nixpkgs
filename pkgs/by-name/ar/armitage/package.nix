@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   jdk11,
+  jdk17,
   gradle_8,
   metasploit,
   makeWrapper,
@@ -14,7 +15,7 @@
 
 let
   pname = "armitage";
-  version = "unstable-2022-12-05";
+  version = "1.0-unstable-2022-12-05";
 
   src = fetchFromGitHub {
     owner = "r00t0v3rr1d3";
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    jdk11
+    jdk17
     gradle
     makeWrapper
     copyDesktopItems

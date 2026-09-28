@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/evansmurithi/cloak";
     description = "Command-line OTP authenticator application";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "cloak";
   };
 })

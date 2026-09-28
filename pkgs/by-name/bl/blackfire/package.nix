@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.29.7";
+  version = "2026.9.0";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -60,23 +60,19 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+        hash = "sha256-mm93TmfrSMP5+hVtWQ2CkUqmDqYraL4H7NVLXZ7xDqs=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+        hash = "sha256-nz0YYTdH0Rcs4f0aJu8Bkg/NwLNxiFwSq8kkRoa+VEA=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+        hash = "sha256-RTTNU3c9gJQRh8vjrCnhPh/mKWKs9jHUd3gund3UZWM=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "TvxIm4plE7nnTIkJNfCzxzr2r0B2Aqlxdveb1M+sqL4=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "oNDNIPBqvaARz9W967bxuvo2bpPORiHci3sryGqznsU=";
+        hash = "sha256-xa9lqDOVS0uPLeAyQ3fvkp3SNN8Hhv66gitjgKk/p6M=";
       };
     };
 
@@ -107,12 +103,11 @@ stdenv.mkDerivation rec {
     homepage = "https://blackfire.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ spk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

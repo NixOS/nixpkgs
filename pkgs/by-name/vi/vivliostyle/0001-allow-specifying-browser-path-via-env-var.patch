@@ -1,0 +1,20 @@
+---
+ src/browser.ts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/browser.ts b/src/browser.ts
+index 8e653e2..ae57d2f 100644
+--- a/src/browser.ts
++++ b/src/browser.ts
+@@ -355,6 +355,8 @@ export async function getExecutableBrowserPath({
+   type,
+   tag,
+ }: ResolvedTaskConfig['browser']): Promise<string> {
++  const envPath = process.env.VIVLIOSTYLE_BROWSER_PATH;
++  if (envPath && fs.existsSync(envPath)) return envPath;
+   const browsers = await importNodeModule('@puppeteer/browsers');
+   const buildId = await resolveBuildId({ type, tag, browsers });
+   return browsers.computeExecutablePath({
+-- 
+2.54.0
+

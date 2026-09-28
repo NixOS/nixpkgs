@@ -16,5 +16,11 @@ Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nix-req
 [project.scripts]
 nix-required-mounts = "nix_required_mounts:entrypoint"
 
+[tool.setuptools]
+py-modules = [ "nix_required_mounts" ]
+
 [tool.black]
 line-length = 79
+
+[tool.pytest.ini_options]
+addopts = ["--doctest-modules"]

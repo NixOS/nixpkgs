@@ -27,7 +27,7 @@
     "description": null,
     "name": "accounts-qt",
     "project_path": "third-party/libaccounts-qt",
-    "repo_path": null
+    "repo_path": "third-party/libaccounts-qt"
   },
   "activities-support": {
     "description": "Plugins for 3rd party applications to be able to support activities and Share Like Connect.",
@@ -82,6 +82,12 @@
     "name": "akonadi-contacts",
     "project_path": "pim/akonadi-contacts",
     "repo_path": "pim/akonadi-contacts"
+  },
+  "akonadi-e2e-tests": {
+    "description": "Test suite for end-to-end testing of Akonadi Resources against real servers.",
+    "name": "akonadi-e2e-tests",
+    "project_path": "pim/akonadi-e2e-tests",
+    "repo_path": "pim/akonadi-e2e-tests"
   },
   "akonadi-exchange": {
     "description": "Akonadi plugin for Exchange groupware functionality",
@@ -291,7 +297,7 @@
     "description": null,
     "name": "appstream-qt",
     "project_path": "third-party/appstream",
-    "repo_path": null
+    "repo_path": "third-party/appstream"
   },
   "appstream-runner": {
     "description": "KRunner plugin for looking up the search into the software database to suggest software that wasn't found.",
@@ -406,6 +412,12 @@
     "name": "aurorae",
     "project_path": "base/aurorae",
     "repo_path": "plasma/aurorae"
+  },
+  "auto-chmod": {
+    "description": "Replaces the cryptic \"permission denied\" error when running a non-executable file with a prompt asking if you want to make it executable and run it.",
+    "name": "auto-chmod",
+    "project_path": "system/auto-chmod",
+    "repo_path": "system/auto-chmod"
   },
   "automoc": {
     "description": "Automoc",
@@ -693,7 +705,7 @@
     "description": null,
     "name": "cmark",
     "project_path": "third-party/cmark",
-    "repo_path": null
+    "repo_path": "third-party/cmark"
   },
   "cmetronome": {
     "description": "Command line metronome",
@@ -948,7 +960,7 @@
     "repo_path": "multimedia/dragon"
   },
   "drawy": {
-    "description": "Your handy, infinite, brainstorming tool!",
+    "description": "Your handy, infinite brainstorming tool!",
     "name": "drawy",
     "project_path": "graphics/drawy",
     "repo_path": "graphics/drawy"
@@ -1006,6 +1018,12 @@
     "name": "emerge-history",
     "project_path": "kdesupport/emerge-history",
     "repo_path": "unmaintained/emerge-history"
+  },
+  "etc-factory": {
+    "description": "Tool for ensuring factory supplied changes apply to /etc",
+    "name": "etc-factory",
+    "project_path": "kde-linux/etc-factory",
+    "repo_path": "kde-linux/etc-factory"
   },
   "eventviews": {
     "description": "Library for displaying and creating events and calendars",
@@ -1167,13 +1185,13 @@
     "description": null,
     "name": "gpgme",
     "project_path": "third-party/gpgme",
-    "repo_path": null
+    "repo_path": "third-party/gpgme"
   },
-  "gpgmepp": {
+  "gpgmepp-legacy": {
     "description": "GPGME++ Library",
-    "name": "gpgmepp",
-    "project_path": "unmaintained/gpgmepp",
-    "repo_path": "unmaintained/gpgmepp"
+    "name": "gpgmepp-legacy",
+    "project_path": "unmaintained/gpgmepp-legacy",
+    "repo_path": "unmaintained/gpgmepp-legacy"
   },
   "granatier": {
     "description": "Granatier is a clone of the classic Bomberman game",
@@ -1475,6 +1493,12 @@
     "project_path": "kdesdk/kapptemplate",
     "repo_path": "sdk/kapptemplate"
   },
+  "kapsule": {
+    "description": "Incus-based container management with native KDE/Plasma integration",
+    "name": "kapsule",
+    "project_path": "kde-linux/kapsule",
+    "repo_path": "kde-linux/kapsule"
+  },
   "karchive": {
     "description": "Qt addon providing access to numerous types of archives",
     "name": "karchive",
@@ -1498,6 +1522,12 @@
     "name": "kartesio",
     "project_path": "edu/kartesio",
     "repo_path": "education/kartesio"
+  },
+  "karton": {
+    "description": "Libvirt-based Virtual Machine Manager for KDE.",
+    "name": "karton",
+    "project_path": "system/karton",
+    "repo_path": "system/karton"
   },
   "kasts": {
     "description": "Kirigami-based podcast player",
@@ -1697,6 +1727,12 @@
     "project_path": "frameworks/kconfig",
     "repo_path": "frameworks/kconfig"
   },
+  "kconfigeditor": {
+    "description": "Graphical editor for KConfig files",
+    "name": "kconfigeditor",
+    "project_path": "system/kconfigeditor",
+    "repo_path": "system/kconfigeditor"
+  },
   "kconfigwidgets": {
     "description": "Widgets for KConfig",
     "name": "kconfigwidgets",
@@ -1787,6 +1823,12 @@
     "project_path": "sdk/kde-builder",
     "repo_path": "sdk/kde-builder"
   },
+  "kde-buildstream": {
+    "description": "Buildstream definitions for KDE software",
+    "name": "kde-buildstream",
+    "project_path": "packaging/kde-buildstream",
+    "repo_path": "packaging/kde-buildstream"
+  },
   "kde-cli-tools": {
     "description": "Tools based on KDE Frameworks 5 to better interact with the system",
     "name": "kde-cli-tools",
@@ -1829,11 +1871,23 @@
     "project_path": "kde-linux/kde-linux",
     "repo_path": "kde-linux/kde-linux"
   },
+  "kde-linux-containers": {
+    "description": "Container images for KDE Linux",
+    "name": "kde-linux-containers",
+    "project_path": "kde-linux/kde-linux-containers",
+    "repo_path": "kde-linux/kde-linux-containers"
+  },
   "kde-linux-packages": {
     "description": "Packages for KDE Linux",
     "name": "kde-linux-packages",
     "project_path": "kde-linux/kde-linux-packages",
     "repo_path": "kde-linux/kde-linux-packages"
+  },
+  "kde-linux-sysupdated": {
+    "description": "Delta downloads negotiator between systemd and our download servers",
+    "name": "kde-linux-sysupdated",
+    "project_path": "kde-linux/kde-linux-sysupdated",
+    "repo_path": "kde-linux/kde-linux-sysupdated"
   },
   "kde-nomodeset": {
     "description": "Safe Graphics Mode Startup Utility",
@@ -2471,6 +2525,12 @@
     "project_path": "libs/kdocumentstore",
     "repo_path": "libraries/kdocumentstore"
   },
+  "kdominate": {
+    "description": "KDominate is a tactical game for one or two players, where players place and convert tiles with the goal of controlling the majority of the board.",
+    "name": "kdominate",
+    "project_path": "games/kdominate",
+    "repo_path": "games/kdominate"
+  },
   "kdots": {
     "description": "Game to catch your opponent's dots by placing your dots on the game board where the lines cross",
     "name": "kdots",
@@ -2481,7 +2541,7 @@
     "description": null,
     "name": "kdsoap",
     "project_path": "third-party/kdsoap",
-    "repo_path": null
+    "repo_path": "third-party/kdsoap"
   },
   "kdsoap-ws-discovery-client": {
     "description": "Library for finding WS-Discovery devices in the network using Qt5 and KDSoap.",
@@ -2506,6 +2566,12 @@
     "name": "keepsecret",
     "project_path": "utilities/keepsecret",
     "repo_path": "utilities/keepsecret"
+  },
+  "kemoji": {
+    "description": "Framework providing an emoji dictionary, model, search and basic components for use in applications.",
+    "name": "kemoji",
+    "project_path": "libraries/kemoji",
+    "repo_path": "libraries/kemoji"
   },
   "kemoticons": {
     "description": "KEmoticons",
@@ -2536,6 +2602,12 @@
     "name": "kf5book",
     "project_path": "books/kf5book",
     "repo_path": "documentation/kf5book"
+  },
+  "kf6-workboard": {
+    "description": "Project to track the development of Frameworks for Qt 6",
+    "name": "kf6-workboard",
+    "project_path": "frameworks/kf6-workboard",
+    "repo_path": "frameworks/kf6-workboard"
   },
   "kfilemetadata": {
     "description": "A library for extracting file metadata",
@@ -2837,6 +2909,12 @@
     "project_path": "network/kio-s3",
     "repo_path": "network/kio-s3"
   },
+  "kio-snapshot": {
+    "description": "Btrfs Filesystem snapshot integration for KDE applications",
+    "name": "kio-snapshot",
+    "project_path": "base/kio-snapshot",
+    "repo_path": "system/kio-snapshot"
+  },
   "kio-stash": {
     "description": "Virtual folder to simplify file selection in non-contiguous folder trees",
     "name": "kio-stash",
@@ -2873,11 +2951,23 @@
     "project_path": "libs/kirigami-addons",
     "repo_path": "libraries/kirigami-addons"
   },
+  "kirigami-app-components": {
+    "description": "Kirigami addons and modules necessary to do a full featured KDE application, such as integration with configurable keyboard shortcuts and standard actions.",
+    "name": "kirigami-app-components",
+    "project_path": "libraries/kirigami-app-components",
+    "repo_path": "libraries/kirigami-app-components"
+  },
   "kirigami-gallery": {
     "description": "Kirigami component gallery application",
     "name": "kirigami-gallery",
     "project_path": "kdesdk/kirigami-gallery",
     "repo_path": "sdk/kirigami-gallery"
+  },
+  "kirigami-workbench": {
+    "description": "Kirigami Workbench is designed for learning and prototyping with QML and Kirigami, whether you're experimenting for the first time or developing and testing a user interface",
+    "name": "kirigami-workbench",
+    "project_path": "sdk/kirigami-workbench",
+    "repo_path": "sdk/kirigami-workbench"
   },
   "kiriki": {
     "description": "Kiriki is an addictive and fun dice game",
@@ -2920,6 +3010,12 @@
     "name": "kitinerary-workbench",
     "project_path": "pim/kitinerary-workbench",
     "repo_path": "pim/kitinerary-workbench"
+  },
+  "kjar": {
+    "description": "OpenJDK SDK as a runnable Flatpak with a Kirigami interface",
+    "name": "kjar",
+    "project_path": "system/kjar",
+    "repo_path": "system/kjar"
   },
   "kjobwidgets": {
     "description": "KJobWidgets",
@@ -3053,6 +3149,12 @@
     "project_path": "pim/kmbox",
     "repo_path": "pim/kmbox"
   },
+  "kmcpclientinspector": {
+    "description": "App which allows the user to inspect apps which implement MCP protocol support.",
+    "name": "kmcpclientinspector",
+    "project_path": "sdk/kmcpclientinspector",
+    "repo_path": "sdk/kmcpclientinspector"
+  },
   "kmediaplayer": {
     "description": "KMediaPlayer",
     "name": "kmediaplayer",
@@ -3068,8 +3170,8 @@
   "kmime": {
     "description": "Library to assist handling MIME data",
     "name": "kmime",
-    "project_path": "pim/kmime",
-    "repo_path": "pim/kmime"
+    "project_path": "frameworks/kmime",
+    "repo_path": "frameworks/kmime"
   },
   "kmines": {
     "description": "KMines is the classic Minesweeper game",
@@ -4515,7 +4617,7 @@
     "description": null,
     "name": "libgpg-error",
     "project_path": "third-party/libgpg-error",
-    "repo_path": null
+    "repo_path": "third-party/libgpg-error"
   },
   "libgravatar": {
     "description": "Library that provides Gravatar support",
@@ -4737,7 +4839,7 @@
     "description": null,
     "name": "libquotient",
     "project_path": "third-party/libquotient",
-    "repo_path": null
+    "repo_path": "third-party/libquotient"
   },
   "libqzeitgeist": {
     "description": "A Qt interface to the Zeitgeist event tracking system",
@@ -5363,6 +5465,12 @@
     "project_path": "graphics/optiimage",
     "repo_path": "graphics/optiimage"
   },
+  "os-autoinst-distri-kdelinux": {
+    "description": "End-to-end tests for KDE Linux using openQA",
+    "name": "os-autoinst-distri-kdelinux",
+    "project_path": "kde-linux/os-autoinst-distri-kdelinux",
+    "repo_path": "kde-linux/os-autoinst-distri-kdelinux"
+  },
   "osx-patches": {
     "description": "Fixes for KDE problems that occur on Apple OS X",
     "name": "osx-patches",
@@ -5405,11 +5513,17 @@
     "project_path": "unmaintained/oxygen-transparent",
     "repo_path": "unmaintained/oxygen-transparent"
   },
+  "package-compatibility-helper": {
+    "description": "Provides support for running or finding alternatives to certain application package types on Linux",
+    "name": "package-compatibility-helper",
+    "project_path": "kde-linux/package-compatibility-helper",
+    "repo_path": "kde-linux/package-compatibility-helper"
+  },
   "packagekit-qt": {
     "description": null,
     "name": "packagekit-qt",
     "project_path": "third-party/packagekit-qt",
-    "repo_path": null
+    "repo_path": "third-party/packagekit-qt"
   },
   "pairs": {
     "description": "A memory and pairs game by KDE",
@@ -5973,7 +6087,7 @@
     "description": null,
     "name": "poppler",
     "project_path": "third-party/poppler",
-    "repo_path": null
+    "repo_path": "third-party/poppler"
   },
   "powerdevil": {
     "description": "Manages the power consumption settings of a Plasma shell",
@@ -6069,7 +6183,7 @@
     "description": null,
     "name": "qcoro",
     "project_path": "third-party/qcoro",
-    "repo_path": null
+    "repo_path": "third-party/qcoro"
   },
   "qml-lsp": {
     "description": "Collection of QML tools, including qml-lsp, qml-dap, and qml-refactor-fairy",
@@ -6093,7 +6207,7 @@
     "description": null,
     "name": "qmltermwidget",
     "project_path": "third-party/qmltermwidget",
-    "repo_path": null
+    "repo_path": "third-party/qmltermwidget"
   },
   "qmlweb": {
     "description": "QmlWeb JavaScript Library",
@@ -6118,6 +6232,12 @@
     "name": "qrca",
     "project_path": "utilities/qrca",
     "repo_path": "utilities/qrca"
+  },
+  "qrtfreader": {
+    "description": "QRtfReader is a library for reading Rtf documents",
+    "name": "qrtfreader",
+    "project_path": "libraries/qrtfreader",
+    "repo_path": "libraries/qrtfreader"
   },
   "qt1": {
     "description": "Historical copy of Qt 1, adapted to compile on modern systems (circa. 2016)",
@@ -6153,7 +6273,7 @@
     "description": null,
     "name": "qtkeychain",
     "project_path": "third-party/qtkeychain",
-    "repo_path": null
+    "repo_path": "third-party/qtkeychain"
   },
   "qtruby": {
     "description": "Ruby bindings for the Qt libraries.",
@@ -6351,7 +6471,7 @@
     "description": null,
     "name": "signond",
     "project_path": "third-party/signond",
-    "repo_path": null
+    "repo_path": "third-party/signond"
   },
   "silk": {
     "description": "Utilities and libraries for the integration of online content and communication into the user experience.",
@@ -6683,6 +6803,12 @@
     "project_path": "sysadmin/bugzilla-bot",
     "repo_path": "sysadmin/bugzilla-bot"
   },
+  "sysadmin-buildstream-management": {
+    "description": "Contains all management jobs and other data needed to run Buildstream builds",
+    "name": "sysadmin-buildstream-management",
+    "project_path": "sysadmin/buildstream-management",
+    "repo_path": "sysadmin/buildstream-management"
+  },
   "sysadmin-ci-images": {
     "description": "Images for use on the KDE CI System",
     "name": "sysadmin-ci-images",
@@ -6736,6 +6862,12 @@
     "name": "sysadmin-docs",
     "project_path": "sysadmin/sysadmin-docs",
     "repo_path": "sysadmin/sysadmin-docs"
+  },
+  "sysadmin-flatpak-external-data-checker-kde": {
+    "description": "Tool for checking for outdated or broken links of external data in Flatpak manifests (customised for KDE)",
+    "name": "sysadmin-flatpak-external-data-checker-kde",
+    "project_path": "sysadmin/flatpak-external-data-checker-kde",
+    "repo_path": "sysadmin/flatpak-external-data-checker-kde"
   },
   "sysadmin-geoip-service-backend": {
     "description": "GeoIP resolution service",
@@ -6981,7 +7113,7 @@
     "description": null,
     "name": "taglib",
     "project_path": "third-party/taglib",
-    "repo_path": null
+    "repo_path": "third-party/taglib"
   },
   "telepathy-kdeconnect": {
     "description": "KDE Connect connection manager for Telepathy.",
@@ -7143,13 +7275,13 @@
     "description": null,
     "name": "wayland",
     "project_path": "third-party/wayland",
-    "repo_path": null
+    "repo_path": "third-party/wayland"
   },
   "wayland-protocols": {
     "description": null,
     "name": "wayland-protocols",
     "project_path": "third-party/wayland-protocols",
-    "repo_path": null
+    "repo_path": "third-party/wayland-protocols"
   },
   "websites-20years-kde-org": {
     "description": "Website for the \"20 years of KDE\" book - 20years.kde.org",
@@ -7847,6 +7979,12 @@
     "project_path": "websites/l10n-kde-org",
     "repo_path": "websites/l10n-kde-org"
   },
+  "websites-labplot-org": {
+    "description": "Website for Labplot - labplot.org",
+    "name": "websites-labplot-org",
+    "project_path": "websites/labplot-org",
+    "repo_path": "websites/labplot-org"
+  },
   "websites-lakademy-kde-org": {
     "description": "Website for LaKademy - lakademy.kde.org",
     "name": "websites-lakademy-kde-org",
@@ -7966,6 +8104,12 @@
     "name": "websites-libregraphicsmeeting-org-2026",
     "project_path": "websites/libregraphicsmeeting-org-2026",
     "repo_path": "websites/libregraphicsmeeting-org-2026"
+  },
+  "websites-linux-kde-org": {
+    "description": "Website for KDE Linux - linux.kde.org",
+    "name": "websites-linux-kde-org",
+    "project_path": "websites/linux-kde-org",
+    "repo_path": "websites/linux-kde-org"
   },
   "websites-lists-kde-org": {
     "description": "Necessary code to redirect from lists.kde.org to appropriate mail archives",
@@ -8595,6 +8739,6 @@
     "description": null,
     "name": "zxing-cpp",
     "project_path": "third-party/zxing-cpp",
-    "repo_path": null
+    "repo_path": "third-party/zxing-cpp"
   }
 }

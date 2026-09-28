@@ -9,7 +9,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "update-systemd-resolved";
   # when updating this, check if additional binaries need injecting into PATH
   version = "1.3.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jonathanio";
     repo = "update-systemd-resolved";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lYJTR3oBmpENcqNHa9PFXsw7ly6agwjBWf4UXf1d8Kc=";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     ./update-systemd-resolved.patch
   ];
 
-  PREFIX = "${placeholder "out"}/libexec/openvpn";
+  env.PREFIX = "${placeholder "out"}/libexec/openvpn";
 
   postInstall = ''
-    substituteInPlace ${PREFIX}/update-systemd-resolved \
+    substituteInPlace ${finalAttrs.env.PREFIX}/update-systemd-resolved \
       --subst-var-by PATH ${
         lib.makeBinPath [
           coreutils
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eadwu ];
     platforms = lib.platforms.linux;
   };
-}
+})

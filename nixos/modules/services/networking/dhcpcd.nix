@@ -38,6 +38,7 @@ let
       ) (lib.attrValues config.networking.vswitches)
     )
     ++ lib.concatLists (lib.attrValues (lib.mapAttrs (n: v: v.interfaces) config.networking.bonds))
+    ++ lib.attrNames config.networking.wireguard.interfaces
     ++ config.networking.dhcpcd.denyInterfaces;
 
   arrayAppendOrNull =
@@ -301,7 +302,7 @@ in
         ]
         ++ lib.optional cfg.setHostname (
           pkgs.writeShellScriptBin "hostname" ''
-            ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
+            ${lib.getExe' config.systemd.package "hostnamectl"} set-hostname --transient $1
           ''
         );
 

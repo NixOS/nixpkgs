@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.fusiondirectory.org/schema2ldif-project-and-components/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 }

@@ -5,9 +5,9 @@
   backoff,
   boto3,
   buildPythonPackage,
+  cattrs,
   fetchFromGitHub,
   hatchling,
-  pyhumps,
   pytest-asyncio,
   pytestCheckHook,
   warrant-lite,
@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyoverkiz";
-  version = "1.20.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H1G85vleaV+ZWbjH3tozI6fvWPKxwrIVRIXiFwsUWOA=";
+    hash = "sha256-f43f1PNdCK8aJDQ4IsiTsHBAjOYSTY19N9Rt8WYCOys=";
   };
 
   build-system = [ hatchling ];
@@ -31,10 +31,15 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     attrs
     backoff
-    boto3
-    pyhumps
-    warrant-lite
+    cattrs
   ];
+
+  optional-dependencies = {
+    nexity = [
+      boto3
+      warrant-lite
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio

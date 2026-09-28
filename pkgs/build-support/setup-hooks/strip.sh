@@ -71,7 +71,7 @@ stripDirs() {
     paths=${pathsNew}
 
     if [ -n "${paths}" ]; then
-        echo "stripping (with command $cmd and flags $stripFlags) in $paths"
+        echo "stripping (with command $cmd and flags $stripFlags) in$paths"
         local striperr
         striperr="$(mktemp --tmpdir="$TMPDIR" 'striperr.XXXXXX')"
         # Make sure we process files only once. `strip`ping the same file through different

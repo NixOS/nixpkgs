@@ -1,5 +1,4 @@
 {
-  binutils,
   lib,
   libucontext,
   pkg-config,
@@ -21,7 +20,7 @@ let
     dontUnpack = true;
     installPhase = ''
       mkdir -p "$out"/lib
-      "${binutils}"/bin/ar r "$out"/lib/libgcc_eh.a
+      ${clangStdenv.cc.targetPrefix}ar r "$out"/lib/libgcc_eh.a
     '';
   };
 in
@@ -33,21 +32,19 @@ in
 # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "1.2.0";
+  version = "1.4.0";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    hash = "sha256-aDcn4bLZGq8915/NPPQsN5Jv8FRWd8cAspkG3078psc=";
+    hash = "sha256-CuhKOJwU+QG25lRR8F7ina+DV45ZlLzg/UJ2swf2tZ0=";
   };
 
   patches = [
     # https://github.com/capnproto/capnproto/pull/2377
     ./fix-libucontext.patch
-    # https://github.com/capnproto/capnproto/pull/2410
-    ./fix-libatomic.patch
   ];
 
   nativeBuildInputs = [

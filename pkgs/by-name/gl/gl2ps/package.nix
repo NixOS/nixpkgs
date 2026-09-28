@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://geuz.org/gl2ps/src/gl2ps-${finalAttrs.version}.tgz";
+    url = "https://geuz.org/gl2ps/src/gl2ps-${finalAttrs.version}.tgz";
     sha256 = "1sgzv547h7hrskb9qd0x5yp45kmhvibjwj2mfswv95lg070h074d";
   };
 

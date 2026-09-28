@@ -2,12 +2,14 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   cmake,
   darwin,
   ninja,
   pkg-config,
+  python3,
   writableTmpDirAsHomeHook,
 
   # buildInputs
@@ -19,23 +21,40 @@
   libGL,
   libxcursor,
   libxext,
+  libxi,
   libxinerama,
   libxrandr,
   libepoxy,
   libjack2,
   libxkbcommon,
   lv2,
+  # Highway is built static-dispatch only upstream (HWY_COMPILE_ONLY_STATIC is
+  # forced ON), so exactly one ISA is baked in -- there is no runtime dispatch.
+  # Default to the portable baseline so the cached binary runs everywhere nixpkgs
+  # targets. Override for a faster *local* build, e.g.
+  #   zlequalizer.override { simdTarget = "AVX2"; }
+  # SSE4/AVX2 map to -march=x86-64-v2/v3 and will SIGILL on CPUs lacking that ISA,
+  # which is why this must not be raised for the binary cache.
+  simdTarget ? (if clangStdenv.hostPlatform.isAarch64 then "NEON" else "SSE2"),
 }:
-
+assert lib.assertOneOf "simdTarget" simdTarget [
+  "SSE2"
+  "SSE4"
+  "AVX2"
+  "NEON"
+];
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.1.0";
+  version = "1.4.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-ix3UcTs9CEJ2TCJLdpvZOaoB0wgNDrvSQhZzer8yMRw=";
+    hash = "sha256-Q1eyWLt+AIz0DZmytBpgKJ/NHcwenYPIIQF6gQzP78M=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +62,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    python3
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
@@ -59,6 +79,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
+    libxi
     libxinerama
     libxrandr
     libepoxy
@@ -68,9 +89,15 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
     # JUCE dlopen's these at runtime, crashes without them
+    # -lXi is essential: JUCE requests the unversioned
+    # "libXi.so", which no host has already loaded, and when that dlopen fails
+    # JUCE still believes XInput2 is present (the stub for the missing
+    # XIQueryVersion returns 0, which equals Success), so it discards all core
+    # pointer events and the GUI stops responding to the mouse entirely.
     NIX_LDFLAGS = toString [
       "-lX11"
       "-lXext"
+      "-lXi"
       "-lXcursor"
       "-lXinerama"
       "-lXrandr"
@@ -89,12 +116,9 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    # see: https://github.com/ZL-Audio/ZLEqualizer#clone-and-build
-    (lib.cmakeFeature "KFR_ARCHS" (
-      if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
-    ))
+    (lib.cmakeFeature "ZL_HWY_STATIC_TARGET" simdTarget)
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
-    # set the version for in the settings screen.
+    # set the version for the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];
 
@@ -117,9 +141,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://zl-audio.github.io/plugins/zlequalizer2/";
+    changelog = "https://github.com/ZL-Audio/ZLEqualizer/releases/tag/${finalAttrs.version}";
     description = "Versatile equalizer plugin for VST3, LV2 and standalone";
+    mainProgram = "ZL Equalizer 2";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       magnetophon

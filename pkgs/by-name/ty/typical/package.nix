@@ -4,20 +4,21 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typical";
-  version = "0.12.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "typical";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
+    hash = "sha256-+CQIvZC6pv+0cENReRFgP/5lrJr+60A6Lm18mIVvCYc=";
   };
 
-  cargoHash = "sha256-+SnwxmNQDj6acr2nEKJkNmR5PqnTIvyMApyZOmCld2U=";
+  cargoHash = "sha256-ROp8TJm9J7InHwsKBmYJ5+h8dpad74vgrWWga5Pb3eo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,18 +28,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export NO_COLOR=true
   '';
 
-  patches = [
-    # Related to https://github.com/stepchowfun/typical/pull/501
-    # Committing a slightly different patch because the upstream one doesn't apply cleanly
-    ./lifetime.patch
-  ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typical \
       --bash <($out/bin/typical shell-completion bash) \
       --fish <($out/bin/typical shell-completion fish) \
       --zsh <($out/bin/typical shell-completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Data interchange with algebraic data types";

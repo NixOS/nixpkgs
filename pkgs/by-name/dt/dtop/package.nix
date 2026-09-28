@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dtop";
-  version = "0.6.7";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "amir20";
     repo = "dtop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E4sZVIgy6p8DNKC20eVaVhPeZFkgl58FFiSa7Gm5ih8=";
+    hash = "sha256-7APbKhXiqJyb0xAhUou0PfkdZFJvUTb3Ek/94bah7Lg=";
   };
 
-  cargoHash = "sha256-qU1L5aX+eC5rL+zlUY79uPx6uB2TK6XwdbypNnbwtWQ=";
+  cargoHash = "sha256-NTFWtlFiHHQoiy3IdGZeVy7q75OvHeZ2LBbY7EKHru8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

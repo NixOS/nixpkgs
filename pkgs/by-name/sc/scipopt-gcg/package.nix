@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     changelog = "https://gcg.or.rwth-aachen.de/doc-3.5.0/RN${lib.versions.major version}${lib.versions.minor version}.html";
     description = "Branch-and-Price & Column Generation for Everyone";
     license = lib.licenses.lgpl3Plus;
-    homepage = "https://gcg.zib.de";
+    homepage = "https://gcg.or.rwth-aachen.de";
     mainProgram = "gcg";
   };
 }

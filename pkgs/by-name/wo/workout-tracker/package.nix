@@ -8,19 +8,19 @@
 }:
 let
   pname = "workout-tracker";
-  version = "2.5.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-S7rKa79w5Lqv8QBKNc8Zp35GOOBN4JnoNE7FNWsCzoY=";
+    hash = "sha256-xsVPAZYrsD27pGhb0cuCZDJLgaI/4w6uDvXsameMt00=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version src;
-    npmDepsHash = "sha256-vSFwCB5qbiHLiK0ns6YUj8yr3FjeNCqT8yvLRQzZycI=";
+    npmDepsHash = "sha256-FSqOe8YlPKEoOTfNGalu+Ks/wMkfp/Gp11XEc7Hry9U=";
     makeCacheWritable = true;
     postPatch = ''
       cd frontend
@@ -35,7 +35,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = null;
+  vendorHash = "sha256-qLRS1PFlgOdm+mSmuLPgRhw0A5q7Q7LMPA2pNUsnF8M=";
 
   postPatch = ''
     rm -r assets

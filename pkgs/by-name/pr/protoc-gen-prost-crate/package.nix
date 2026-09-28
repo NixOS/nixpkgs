@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoc-gen-prost-crate";
   version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FBgvDhlyVAegF5n9U6Tunn+MpXdek4f1xWIS3sJ4soI=";
   };
 
@@ -24,9 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      felschr
-      sitaaax
-    ];
+    maintainers = with lib.maintainers; [ felschr ];
   };
-}
+})

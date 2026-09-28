@@ -4,6 +4,7 @@
   fetchFromGitHub,
   qt6,
   installShellFiles,
+  enableGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   qmakeFlags = [
     "QUsb2snes.pro"
     "CONFIG+=release"
-  ];
+  ]
+  ++ lib.optional (!enableGui) "QUSB2SNES_NOGUI=1";
 
   installPhase = ''
     runHook preInstall

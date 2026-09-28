@@ -15,12 +15,12 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openpaperwork-gtk";
   inherit (callPackage ./src.nix { }) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/openpaperwork-gtk";
+  sourceRoot = "${finalAttrs.src.name}/openpaperwork-gtk";
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

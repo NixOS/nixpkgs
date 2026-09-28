@@ -8,18 +8,18 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cyclonedx";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
-    rev = "${pname}-${version}";
-    hash = "sha256-T/9eHI2P8eCZAqMTeZz1yEi5nljQWfHrdNiU3h3h74U=";
+    rev = "cargo-cyclonedx-${finalAttrs.version}";
+    hash = "sha256-0d6e66Cvfm3YYw9Abb0Rs30qAKoNhGi8/hYLKAiPlyE=";
   };
 
-  cargoHash = "sha256-deczbMPeJsnmXbVB60stKhJJZRIIwjY5vExS3x3b6aU=";
+  cargoHash = "sha256-ZXFKe6PToXVi5o9vNaPpUjUmBiqfdvA+Bp8MKnhJTlU=";
 
   # Test suite is broken since rustc 1.90, see:
   # https://github.com/CycloneDX/cyclonedx-rust-cargo/issues/807
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nikstur ];
   };
-}
+})

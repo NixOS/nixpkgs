@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tests require network access
   doCheck = false;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";
     mainProgram = "rust-script";
@@ -29,6 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

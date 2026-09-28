@@ -4,20 +4,22 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  boost,
+  boost188,
   mdds,
   python3,
 }:
-
+let
+  boost = boost188;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libixion";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitLab {
     owner = "ixion";
     repo = "ixion";
     rev = finalAttrs.version;
-    hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
+    hash = "sha256-v72ihA/V21zM2xHe8t5MKYag1RUC9bWGpq7Sr7x+YIw=";
   };
 
   nativeBuildInputs = [

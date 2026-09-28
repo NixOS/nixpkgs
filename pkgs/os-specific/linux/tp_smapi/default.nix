@@ -6,7 +6,8 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "tp_smapi-${finalAttrs.version}-${kernel.version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "tp_smapi";
   version = "0.45";
 
   src = fetchFromGitHub {

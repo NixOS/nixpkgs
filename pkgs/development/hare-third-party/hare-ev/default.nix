@@ -3,18 +3,18 @@
   hareHook,
   lib,
   stdenv,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hare-ev";
-  version = "0-unstable-2024-12-29";
+  version = "0.26.0.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ev";
-    rev = "48bf3855a48467579321ba56c3406e574b046638";
-    hash = "sha256-fWdmZj8j3CSVsWX7Yxf42iGwSZc0ae5/hTNtdeo9dkw=";
+    tag = finalAttrs.version;
+    hash = "sha256-Chetww+F46ZJ+cgVuoFXRVYOT9g13iBK5EembWXQhuc=";
   };
 
   nativeCheckInputs = [ hareHook ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Event loop for Hare programs";
@@ -32,4 +32,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ colinsane ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
-}
+})

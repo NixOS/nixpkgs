@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cpx";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "11happy";
     repo = "cpx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZ9NQUwnbONpJ59ByvgHESqqBWz6RaPgY6842VuAlL0=";
+    hash = "sha256-pQ8Z/0zlxuWiGfWBE5hA1mj/G7Zc2WSK41uu5PN1bfs=";
   };
 
-  cargoHash = "sha256-atEB43eB8btQfMXPTCfsZ6bbAUIPzF8lUELx0Rdul84=";
+  cargoHash = "sha256-vf4uOZBfV6aUIC07pmk+D2izqKIw9AvCrHYCU+Dyysc=";
 
   doInstallCheck = true;
 

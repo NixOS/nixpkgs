@@ -2,42 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  xq-xml,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "xq";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "sibprogrammer";
     repo = "xq";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-KLpf4db3D+SQzbitc9ROO+k/VHggWpwZmwwhV3QVNiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cDZdQ0gmyx3h64l+HlPKj9AJVyKR5EGFPaNU+4xX0pw=";
   };
 
-  vendorHash = "sha256-LKkYA0wZ+MQ67Gox2e+iuWSgbxF0daJj7RWLA6C+v+I=";
+  vendorHash = "sha256-ZYZgac2AW7Yjy3wYjh+VXK5Ng7+CBZebn4bUX2lt2sc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.commit=${finalAttrs.src.rev}"
+    "-X=main.commit=v${finalAttrs.version}"
     "-X=main.version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = xq-xml;
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line XML and HTML beautifier and content extractor";
     mainProgram = "xq";
     homepage = "https://github.com/sibprogrammer/xq";
-    changelog = "https://github.com/sibprogrammer/xq/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/sibprogrammer/xq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

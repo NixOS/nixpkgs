@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ xxd ];
 
-  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   enableParallelBuilding = true;
 
   makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "CXXFLAGS_SIMD=" ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CXXFLAGS="$CXXFLAGS -DSHM_NORESERVE=0"
   '';
 

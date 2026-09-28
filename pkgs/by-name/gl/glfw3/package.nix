@@ -34,6 +34,11 @@ stdenv.mkDerivation {
   pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
   inherit version;
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
@@ -103,7 +108,6 @@ stdenv.mkDerivation {
     homepage = "https://www.glfw.org/";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
-      marcweber
       Scrumplex
       twey
     ];

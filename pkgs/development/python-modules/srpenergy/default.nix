@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "srpenergy";
-  version = "1.3.7";
+  version = "1.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lamoreauxlab";
     repo = "srpenergy-api-client-python";
     tag = version;
-    hash = "sha256-bdBF5y9hRj4rceUD5qjHOM9TIaHGElJ36YjWCJgCzX8=";
+    hash = "sha256-V0WDY1tWt5O/35wDDE0e89bqspcKMtl9/QK2A7NIZu8=";
   };
 
   postPatch = ''
@@ -33,6 +33,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # requires an account
+    "quickstart_test.py"
+  ];
 
   pythonImportsCheck = [ "srpenergy.client" ];
 

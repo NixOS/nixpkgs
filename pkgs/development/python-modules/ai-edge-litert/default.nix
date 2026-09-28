@@ -3,9 +3,13 @@
   buildPythonPackage,
   fetchurl,
   lib,
+  patchelf,
   python,
   pythonAtLeast,
   stdenv,
+
+  # native dependencies
+  openvino-native,
 
   # dependencies
   backports-strenum,
@@ -46,6 +50,8 @@ buildPythonPackage {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
+  buildInputs = [ openvino-native ];
+
   dependencies = [
     backports-strenum
     flatbuffers
@@ -61,8 +67,25 @@ buildPythonPackage {
       ml-dtypes
       # TODO :xdsl
     ];
+    # TODO: npu-intel
     # TODO: npu-sdk
   };
+
+  preFixup = ''
+    while IFS= read -r -d "" so; do
+      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2630 libopenvino.so "$so"
+      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2630 libopenvino_tensorflow_lite_frontend.so "$so"
+    done < <(find "$out" -type f \( -name '*.so' -o -name '*.so.*' \) -print0)
+  '';
+
+  autoPatchelfIgnoreMissingDeps = [
+    # Qualcomm Neural Network SDK
+    # https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk
+    "libQnnHtp.so"
+    "libQnnIr.so"
+    "libQnnSaver.so"
+    "libQnnSystem.so"
+  ];
 
   pythonRemoveDeps = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/google-ai-edge/LiteRT/pull/5298
@@ -77,7 +100,6 @@ buildPythonPackage {
   passthru.updateScript = ./update.py;
 
   meta = {
-    broken = stdenv.isDarwin; # elftools.common.exceptions.ELFError: Magic number does not match
     changelog = "https://github.com/google-ai-edge/LiteRT/releases/tag/v${release.version}";
     description = "LiteRT is for mobile and embedded devices";
     downloadPage = "https://github.com/google-ai-edge/LiteRT";
@@ -86,5 +108,9 @@ buildPythonPackage {
     platforms = lib.attrNames platforms;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ hexa ];
+    badPlatforms = [
+      # elftools.common.exceptions.ELFError: Magic number does not match
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

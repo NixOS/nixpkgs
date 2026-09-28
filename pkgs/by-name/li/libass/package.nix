@@ -44,16 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     harfbuzz
   ]
-  ++ lib.optional fontconfigSupport fontconfig
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  ++ lib.optional fontconfigSupport fontconfig;
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";
     homepage = "https://github.com/libass/libass";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
   };
 })

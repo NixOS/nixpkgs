@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "briar-desktop";
-  version = "0.6.4-beta";
+  version = "0.6.5-beta";
 
   src = fetchurl {
     url = "https://desktop.briarproject.org/jars/linux/${finalAttrs.version}/briar-desktop-linux-${finalAttrs.version}.jar";
-    hash = "sha256-S7O625SWbgi4iby76Qe377NGiw4r9+VqgQh8kclKwMo=";
+    hash = "sha256-YDFvM6EicHe6s7SDTiKRySCTO9IUwDrEtO373bavfmw=";
   };
 
   dontUnpack = true;

@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Debugging manhole for Python applications";
     mainProgram = "manhole-cli";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
   };
 }

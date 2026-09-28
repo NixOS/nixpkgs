@@ -4,18 +4,22 @@
   cmake,
   stdenv,
   nix-update-script,
+  asciidoctor,
 }:
 stdenv.mkDerivation rec {
   pname = "espresso";
-  version = "2.4";
+  version = "2.5.1";
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "espresso";
     rev = "v${version}";
-    hash = "sha256-z5By57VbmIt4sgRgvECnLbZklnDDWUA6fyvWVyXUzsI=";
+    hash = "sha256-dZigbd4md8ffFawpPB/N/TccBQL6sbMKN2VdGu+fhKY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    asciidoctor
+  ];
 
   doCheck = true;
 
@@ -37,6 +41,7 @@ stdenv.mkDerivation rec {
       heuristic Boolean minimization.
     '';
     homepage = "https://github.com/chipsalliance/espresso";
+    changelog = "https://github.com/chipsalliance/espresso/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ pineapplehunter ];
     mainProgram = "espresso";
     platforms = lib.platforms.all;

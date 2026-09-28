@@ -3,18 +3,19 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   zsh,
 }:
 
 stdenv.mkDerivation {
   pname = "fzf-zsh-plugin";
-  version = "1.0.0-unstable-2025-12-15";
+  version = "1.0.0-unstable-2026-09-07";
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "fzf-zsh-plugin";
-    rev = "cdd9d5cc3b41a3a390a0fb8605c40de652da6309";
-    hash = "sha256-i6qoaMWVofhD3K6/RaaNatzA2aokiNQ5ilqmahprJFU=";
+    rev = "e3894e83a3e8a3e8751456d56c51bb49b34e8d2b";
+    hash = "sha256-MN5CbwzTT7G0zZIkXcZNrmcey7g85ODG28/fQq9+wbQ=";
   };
 
   strictDeps = true;
@@ -32,6 +33,8 @@ stdenv.mkDerivation {
     cp -r bin/* $out/bin/
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     homepage = "https://github.com/unixorn/fzf-zsh-plugin";

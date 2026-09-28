@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "annotation-mono";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchzip {
     url = "https://github.com/qwerasd205/AnnotationMono/releases/download/v${finalAttrs.version}/AnnotationMono_v${finalAttrs.version}.zip";
-    hash = "sha256-81BcPYE4C9kuetiCzgGPl59WO4QkBML7dwAkD1DCCZo=";
+    hash = "sha256-6DEYTYAENNY/5oD9us9f7VtPae/it7qrFC3/UT1J+Qg=";
     stripRoot = false;
   };
 

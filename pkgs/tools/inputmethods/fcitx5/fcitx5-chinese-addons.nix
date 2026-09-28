@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   boost,
   gettext,
   libime,
@@ -18,6 +18,7 @@
   fmt,
   qtbase,
   luaSupport ? true,
+  nlohmann_json,
 }:
 
 let
@@ -35,29 +36,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.10";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-kVBDfr8NKsQQQX69N3/fVqJgObRNSX2p0GNSUjbZvcg=";
+    hash = "sha256-EtAoUoZQqxb049oD7r/UgdpJdS/kenMn3t1SHv+YIkg=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
     fcitx5-lua
-  ];
-
-  patches = [
-    # Without this patch, setting ENABLE_CLOUDPINYIN to off would fail to build
-    (fetchpatch {
-      name = "cloudpinyin-disable-build";
-      url = "https://github.com/fcitx/fcitx5-chinese-addons/commit/024fff9c8587ca2fb01905e9a25df838e7d99da2.patch";
-      hash = "sha256-Mo5l8tsn1JQxTFHxOZfQRmbCeWZHLyxfn2Qwv/gQXGA=";
-    })
   ];
 
   prePatch = ''
@@ -75,6 +68,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     fmt
     qtbase
+    nlohmann_json
   ]
   ++ lib.optional luaSupport fcitx5-lua;
 

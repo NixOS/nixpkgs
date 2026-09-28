@@ -1,4 +1,4 @@
-# Configurations that should only be overrided by
+# Configurations that should only be overridden by
 # overrideAttrs
 {
   pname,
@@ -41,7 +41,7 @@
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
-  squashfsTools,
+  squashfs-tools,
   squashfuse,
   # Test dependencies
   singularity-tools,
@@ -109,6 +109,7 @@ in
   # go is used to compile extensions when building container images
   allowGoReference = true;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   passthru = {
@@ -142,7 +143,7 @@ in
     gpgme
     libuuid
     openssl
-    squashfsTools # Required at build time by SingularityCE
+    squashfs-tools # Required at build time by SingularityCE
   ]
   # Optional dependencies.
   # Formatting: Optional dependencies are likely to increase.
@@ -178,7 +179,7 @@ in
     fuse2fs # Mount ext3 filesystems
     go
     mount # mount
-    squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
+    squashfs-tools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ]
   ++ lib.optional enableNvidiaContainerCli nvidia-docker;
@@ -206,15 +207,10 @@ in
   '';
 
   postConfigure = ''
-    # Code borrowed from pkgs/stdenv/generic/setup.sh configurePhase()
-
     # set to empty if unset
     : ''${configureFlags=}
 
-    # shellcheck disable=SC2086
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" $configureFlags "''${configureFlagsArray[@]}"
-
-    # End of the code from pkgs/stdenv/generic/setup.sh configurPhase()
+    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" "''${configureFlags[@]}"
   '';
 
   buildPhase = ''

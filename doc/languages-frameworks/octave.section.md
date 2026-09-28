@@ -76,6 +76,17 @@ See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/oct
 `requiredOctavePackages`
 : This is a special dependency that ensures the specified Octave packages are dependent on others, and are made available simultaneously when loading them in Octave.
 
+### Testing Octave packages {#sssec-testing-octave-packages}
+
+Octave packages built using the `buildOctavePackage` function do not have a `checkPhase` or `installCheckPhase`.
+Instead, the tests `testOctaveBuildEnv` and `testOctavePkgTests` are added to the package's `passthru.tests`.
+
+`passthru.tests.testOctaveBuildEnv` tests whether the package can be used by `octave.withPackages` successfully.
+
+`passthru.tests.testOctavePkgTests` runs a `pkg test` command for the package.
+If the package needs additional inputs to successfully run the tests, the `nativeOctavePkgTestInputs` attribute can be specified.
+If the package needs environment variables to be set to successfully run the tests, ensure that `__structuredAttrs = true;` in the package, then set the environment variables you need in `octavePkgTestEnv` (which should be an attrset where the key is the name of the variable and the value is its value (as a string)).
+
 ### Installing Octave Packages {#sssec-installing-octave-packages}
 
 By default, the `buildOctavePackage` function does _not_ install the requested package into Octave for use.

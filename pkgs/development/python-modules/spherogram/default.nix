@@ -1,26 +1,37 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  python,
+  buildPythonPackage,
+  nix-update-script,
+
+  # build-time dependencies
   setuptools,
   cython,
-  networkx,
+
+  # runtime dependencies
   decorator,
   knot-floer-homology,
-  snappy-manifolds,
+  networkx,
   snappy-15-knots,
+  snappy-manifolds,
+
+  # tests
+  runCommand,
+  sage,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "spherogram";
-  version = "2.3";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "spherogram";
     tag = "${version}_as_released";
-    hash = "sha256-uqc+3xS4xulXR0tZlNuyC5Zz5OztR6c4PZWpsvU+4Pw=";
+    hash = "sha256-zQoNuy2rj02GAuRNDufMwA/wQ4U8ZeIADb8LpIvMFOY=";
   };
 
   build-system = [
@@ -38,6 +49,38 @@ buildPythonPackage rec {
   optional-dependencies.snappy-15-knots = [ snappy-15-knots ];
 
   pythonImportsCheck = [ "spherogram" ];
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m spherogram.test
+    runHook postCheck
+  '';
+
+  passthru.tests.sage =
+    let
+      sage' = sage.override {
+        extraPythonPackages = ps: [ ps.spherogram ];
+        requireSageTests = false;
+      };
+    in
+    runCommand "spherogram-sage-tests"
+      {
+        nativeBuildInputs = [
+          sage'
+          writableTmpDirAsHomeHook
+        ];
+      }
+      ''
+        sage -python -m spherogram.test
+        touch $out
+      '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Spherical diagrams for 3-manifold topology";

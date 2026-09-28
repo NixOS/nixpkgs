@@ -6,6 +6,17 @@ import "encoding/json"
 import "fmt"
 
 type Config struct {
+	// List of libp2p bootstrap node multiaddresses for initial network discovery.
+	BootstrapPeers []string `json:"bootstrapPeers,omitempty"`
+
+	// Domain suffix used for DNS names within the Hyprspace network.
+	Domain string `json:"domain,omitempty"`
+
+	// Whether to enable filtering of private/link-local addresses from peer
+	// discovery. When enabled, the node will not attempt to connect to RFC1918,
+	// link-local, or loopback addresses advertised by other peers.
+	FilterPrivateAddresses bool `json:"filterPrivateAddresses,omitempty"`
+
 	// List of addresses to listen on for libp2p traffic.
 	ListenAddresses []string `json:"listenAddresses,omitempty"`
 
@@ -36,9 +47,9 @@ type ConfigPeersElemRoutesElem struct {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *ConfigPeersElemRoutesElem) UnmarshalJSON(b []byte) error {
+func (j *ConfigPeersElemRoutesElem) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
 	if _, ok := raw["net"]; raw != nil && !ok {
@@ -46,7 +57,7 @@ func (j *ConfigPeersElemRoutesElem) UnmarshalJSON(b []byte) error {
 	}
 	type Plain ConfigPeersElemRoutesElem
 	var plain Plain
-	if err := json.Unmarshal(b, &plain); err != nil {
+	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
 	}
 	*j = ConfigPeersElemRoutesElem(plain)
@@ -54,9 +65,9 @@ func (j *ConfigPeersElemRoutesElem) UnmarshalJSON(b []byte) error {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *ConfigPeersElem) UnmarshalJSON(b []byte) error {
+func (j *ConfigPeersElem) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
 	if _, ok := raw["id"]; raw != nil && !ok {
@@ -64,7 +75,7 @@ func (j *ConfigPeersElem) UnmarshalJSON(b []byte) error {
 	}
 	type Plain ConfigPeersElem
 	var plain Plain
-	if err := json.Unmarshal(b, &plain); err != nil {
+	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
 	}
 	if v, ok := raw["name"]; !ok || v == nil {
@@ -78,12 +89,53 @@ func (j *ConfigPeersElem) UnmarshalJSON(b []byte) error {
 }
 
 // The services this node provides via the Service Network.
-type ConfigServices map[string]string
+type ConfigServices map[string]struct {
+	// Acl corresponds to the JSON schema field "acl".
+	Acl *ConfigServicesValueAcl `json:"acl,omitempty"`
+
+	// Target address.
+	Target string `json:"target"`
+}
+
+type ConfigServicesValueAcl struct {
+	// List of peers that are explicitly not allowed to connect.
+	Blacklist []string `json:"blacklist,omitempty"`
+
+	// Whether to enable whitelist enforcement.
+	EnableWhitelist bool `json:"enableWhitelist,omitempty"`
+
+	// List of peers that are allowed to connect.
+	Whitelist []string `json:"whitelist,omitempty"`
+}
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *Config) UnmarshalJSON(b []byte) error {
+func (j *ConfigServicesValueAcl) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err := json.Unmarshal(value, &raw); err != nil {
+		return err
+	}
+	type Plain ConfigServicesValueAcl
+	var plain Plain
+	if err := json.Unmarshal(value, &plain); err != nil {
+		return err
+	}
+	if v, ok := raw["blacklist"]; !ok || v == nil {
+		plain.Blacklist = []string{}
+	}
+	if v, ok := raw["enableWhitelist"]; !ok || v == nil {
+		plain.EnableWhitelist = false
+	}
+	if v, ok := raw["whitelist"]; !ok || v == nil {
+		plain.Whitelist = []string{}
+	}
+	*j = ConfigServicesValueAcl(plain)
+	return nil
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *Config) UnmarshalJSON(value []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
 	if _, ok := raw["privateKey"]; raw != nil && !ok {
@@ -91,8 +143,38 @@ func (j *Config) UnmarshalJSON(b []byte) error {
 	}
 	type Plain Config
 	var plain Plain
-	if err := json.Unmarshal(b, &plain); err != nil {
+	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
+	}
+	if v, ok := raw["bootstrapPeers"]; !ok || v == nil {
+		plain.BootstrapPeers = []string{
+			"/ip4/152.67.75.145/tcp/110/p2p/12D3KooWQWsHPUUeFhe4b6pyCaD1hBoj8j6Z7S7kTznRTh1p1eVt",
+			"/ip4/152.67.75.145/udp/110/quic-v1/p2p/12D3KooWQWsHPUUeFhe4b6pyCaD1hBoj8j6Z7S7kTznRTh1p1eVt",
+			"/ip4/152.67.75.145/tcp/995/p2p/QmbrAHuh4RYcyN9fWePCZMVmQjbaNXtyvrDCWz4VrchbXh",
+			"/ip4/152.67.75.145/udp/995/quic-v1/p2p/QmbrAHuh4RYcyN9fWePCZMVmQjbaNXtyvrDCWz4VrchbXh",
+			"/ip4/95.216.8.12/tcp/110/p2p/Qmd7QHZU8UjfYdwmjmq1SBh9pvER9AwHpfwQvnvNo3HBBo",
+			"/ip4/95.216.8.12/udp/110/quic-v1/p2p/Qmd7QHZU8UjfYdwmjmq1SBh9pvER9AwHpfwQvnvNo3HBBo",
+			"/ip4/95.216.8.12/tcp/995/p2p/QmYs4xNBby2fTs8RnzfXEk161KD4mftBfCiR8yXtgGPj4J",
+			"/ip4/95.216.8.12/udp/995/quic-v1/p2p/QmYs4xNBby2fTs8RnzfXEk161KD4mftBfCiR8yXtgGPj4J",
+			"/ip4/152.67.73.164/tcp/995/p2p/12D3KooWL84sAtq1QTYwb7gVbhSNX5ZUfVt4kgYKz8pdif1zpGUh",
+			"/ip4/152.67.73.164/udp/995/quic-v1/p2p/12D3KooWL84sAtq1QTYwb7gVbhSNX5ZUfVt4kgYKz8pdif1zpGUh",
+			"/ip4/37.27.11.202/udp/21/quic-v1/p2p/12D3KooWN31twBvdEcxz2jTv4tBfPe3mkNueBwDJFCN4xn7ZwFbi",
+			"/ip4/37.27.11.202/udp/443/quic-v1/p2p/12D3KooWN31twBvdEcxz2jTv4tBfPe3mkNueBwDJFCN4xn7ZwFbi",
+			"/ip4/37.27.11.202/udp/500/quic-v1/p2p/12D3KooWN31twBvdEcxz2jTv4tBfPe3mkNueBwDJFCN4xn7ZwFbi",
+			"/ip4/37.27.11.202/udp/995/quic-v1/p2p/12D3KooWN31twBvdEcxz2jTv4tBfPe3mkNueBwDJFCN4xn7ZwFbi",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/12D3KooWEZXjE41uU4EL2gpkAQeDXYok6wghN7wwNVPF5bwkaNfS",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
+			"/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
+		}
+	}
+	if v, ok := raw["domain"]; !ok || v == nil {
+		plain.Domain = "hyprspace"
+	}
+	if v, ok := raw["filterPrivateAddresses"]; !ok || v == nil {
+		plain.FilterPrivateAddresses = false
 	}
 	if v, ok := raw["listenAddresses"]; !ok || v == nil {
 		plain.ListenAddresses = []string{
@@ -106,7 +188,7 @@ func (j *Config) UnmarshalJSON(b []byte) error {
 		plain.Peers = []ConfigPeersElem{}
 	}
 	if v, ok := raw["services"]; !ok || v == nil {
-		plain.Services = map[string]string{}
+		plain.Services = ConfigServices{}
 	}
 	*j = Config(plain)
 	return nil

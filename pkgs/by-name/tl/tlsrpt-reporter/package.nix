@@ -58,6 +58,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     python3.pkgs.pytestCheckHook
   ];
 
+  disabledTests = [
+    # argparse string matching offset since py314
+    "test_b0rkcmd"
+    "test_intarg_cmd_float"
+    "test_intarg_cmd_string"
+  ];
+
   pythonImportsCheck = [
     "tlsrpt_reporter"
   ];

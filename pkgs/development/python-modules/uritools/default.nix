@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "6.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aBgMrRVAYr1bXZ/83UZPjeaTRBSyVGKugHsAuN+TRd4=";
+    hash = "sha256-TWccO4yiMKXUfvpfimk/PQFTHzj09SMXApm+c0zJhRs=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "uritools" ];
 

@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  buildNpmPackage,
-  fetchpatch2,
   fetchFromGitHub,
+  fetchNpmDeps,
   stdenv,
   babel,
   beancount,
@@ -13,65 +12,47 @@
   click,
   flask,
   flask-babel,
+  hatch-vcs,
+  hatchling,
   jinja2,
-  markdown2,
+  markdown-it-py,
+  nodejs,
+  npmHooks,
   ply,
   pytestCheckHook,
-  setuptools-scm,
   simplejson,
   watchfiles,
   werkzeug,
 }:
-let
-  src = buildNpmPackage (finalAttrs: {
-    pname = "fava-frontend";
-    version = "1.30.9";
-
-    src = fetchFromGitHub {
-      owner = "beancount";
-      repo = "fava";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-/Tnu1SgYhd22HVEzOtJ8YEHyxXuQ9xW0c/1oRyVePXw=";
-    };
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-5ee044Ev2FoxcdChZwfHnLQiiP+Ag4bNSAlzEnenAa0=";
-    makeCacheWritable = true;
-
-    preBuild = ''
-      chmod -R u+w ..
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      cp -R .. $out
-      runHook postInstall
-    '';
-  });
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "fava";
-  inherit (src) version;
+  version = "1.30.16";
   pyproject = true;
 
-  inherit src;
+  src = fetchFromGitHub {
+    owner = "beancount";
+    repo = "fava";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TXsDfNZrqTfHZ1rH3JHPSS103ab6nxP3BOFrUQ8CQH4=";
+  };
 
-  patches = [
-    ./dont-compile-frontend.patch
-    # https://github.com/beancount/fava/pull/2176
-    (fetchpatch2 {
-      name = "fix-have-excel-replacement.patch";
-      url = "https://github.com/beancount/fava/commit/36eba34495d189cd391fae0276aa1b6c94940203.patch?full_index=1";
-      hash = "sha256-XSkzygnq8eHkIcp1TT7J3NdcLCIwUxDoyipO4M9M3nE=";
-    })
-  ];
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-WjdFEZqfD2rJpKs5ad7/YUlgBBrO92DGkiTp9v5PJhE=";
+  };
+
+  npmRoot = "frontend";
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
       --replace-fail '"fava"' '"${placeholder "out"}/bin/fava"'
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     babel
@@ -83,11 +64,18 @@ buildPythonPackage {
     flask
     flask-babel
     jinja2
-    markdown2
+    markdown-it-py
     ply
     simplejson
     werkzeug
     watchfiles
+  ];
+
+  pythonRelaxDeps = [ "simplejson" ];
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -114,6 +102,7 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [
       prince213
       sigmanificient
+      cbrxyz
     ];
   };
-}
+})

@@ -23,7 +23,6 @@ let
 in
 {
   meta.maintainers = with maintainers; [
-    etu
     stunkymonkey
     mattchrist
   ];

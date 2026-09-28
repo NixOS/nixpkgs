@@ -6,7 +6,7 @@
   ninja,
   nasm,
   pkg-config,
-  xxHash,
+  xxhash,
   withTools ? false, # "dav1d" binary
   withExamples ? false,
   SDL2, # "dav1dplay" binary
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   # TODO: doxygen (currently only HTML and not build by default).
   buildInputs = [
-    xxHash
+    xxhash
   ]
   ++ lib.optional withExamples SDL2
   ++ lib.optionals useVulkan [

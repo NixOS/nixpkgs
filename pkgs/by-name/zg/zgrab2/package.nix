@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Fast Application Layer Scanner";
     homepage = "https://github.com/zmap/zgrab2";
-    changelog = "https://github.com/zmap/zgrab2/releases/tag/vv${finalAttrs.version}";
+    changelog = "https://github.com/zmap/zgrab2/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       isc

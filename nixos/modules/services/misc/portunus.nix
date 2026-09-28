@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.portunus;
-
 in
 {
   options.services.portunus = {
@@ -79,9 +78,15 @@ in
         type = lib.types.listOf (
           lib.types.submodule {
             options = {
+              redirectURIs = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = [ ];
+                description = "URLs where the OIDC client should redirect";
+              };
               callbackURL = lib.mkOption {
-                type = lib.types.str;
-                description = "URL where the OIDC client should redirect";
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = "URL where the OIDC client should redirect (deprecated, use redirectURIs)";
               };
               id = lib.mkOption {
                 type = lib.types.str;
@@ -93,7 +98,7 @@ in
         default = [ ];
         example = [
           {
-            callbackURL = "https://example.com/client/oidc/callback";
+            redirectURIs = [ "https://example.com/client/oidc/callback" ];
             id = "service";
           }
         ];
@@ -227,7 +232,7 @@ in
 
           staticClients = lib.forEach cfg.dex.oidcClients (client: {
             inherit (client) id;
-            redirectURIs = [ client.callbackURL ];
+            redirectURIs = client.redirectURIs ++ lib.optional (client.callbackURL != null) client.callbackURL;
             name = "OIDC for ${client.id}";
             secretEnv = "DEX_CLIENT_${client.id}";
           });

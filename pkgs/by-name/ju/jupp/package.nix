@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "--enable-termidx"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "http://www.mirbsd.org/jupp.htm";
     downloadPage = "https://www.mirbsd.org/MirOS/dist/jupp/";

@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   buildInputs = [ libx11 ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = {

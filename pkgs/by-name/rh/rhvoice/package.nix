@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhvoice";
-  version = "1.16.5";
+  version = "1.18.4";
 
   src = fetchFromGitHub {
     owner = "RHVoice";
     repo = "RHVoice";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-4l4S4MUnVGN/El1BBuZvzPPcavUefjMyBk1hk0ux7zo=";
+    hash = "sha256-CwwWZE60YxLL4kZBHdNqI/gk5yi6MFAJ2pg8LApwwl4=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free and open source speech synthesizer for Russian language and others";
     homepage = "https://github.com/Olga-Yakovleva/RHVoice/wiki";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ berce ];
+    maintainers = [ ];
     platforms = with lib.platforms; all;
     mainProgram = "RHVoice-test";
   };

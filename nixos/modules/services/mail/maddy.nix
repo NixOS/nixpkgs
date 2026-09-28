@@ -329,8 +329,8 @@ in
           This option does not delete accounts which are not (anymore) listed.
         '';
         example = {
-          "user1@localhost".passwordFile = /secrets/user1-localhost;
-          "user2@localhost".passwordFile = /secrets/user2-localhost;
+          "user1@localhost".passwordFile = "/secrets/user1-localhost";
+          "user2@localhost".passwordFile = "/secrets/user2-localhost";
         };
         type = lib.types.attrsOf (
           lib.types.submodule {
@@ -350,11 +350,13 @@ in
       };
 
       secrets = lib.mkOption {
-        type = with lib.types; listOf path;
+        type = with lib.types; listOf (either str path);
         description = ''
           A list of files containing the various secrets. Should be in the format
           expected by systemd's `EnvironmentFile` directory. Secrets can be
           referenced in the format `{env:VAR}`.
+
+          Paths can be prefixed with `-` to ignore errors if the file does not exist.
         '';
         default = [ ];
       };

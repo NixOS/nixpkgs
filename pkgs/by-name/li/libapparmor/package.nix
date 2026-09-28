@@ -32,13 +32,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";
-  version = "4.1.3";
+  version = "5.0.2";
 
   src = fetchFromGitLab {
     owner = "apparmor";
     repo = "apparmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8L4skun873OMZISpGm25Ana4RzTzCmKhhK5tfyEmbd8=";
+    hash = "sha256-Kuc5Nrz4iq5MC5AOcJL9Sb54DWNKlEk3b3DW0vpgSZg=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
 
@@ -107,5 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = lib.teams.apparmor.members;
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "canonical" finalAttrs.version // {
+      product = "apparmor";
+    };
   };
 })

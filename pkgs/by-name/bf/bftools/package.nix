@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     homepage = "https://www.openmicroscopy.org/bio-formats/";
-    maintainers = [ lib.maintainers.tbenst ];
+    maintainers = [ ];
   };
 })

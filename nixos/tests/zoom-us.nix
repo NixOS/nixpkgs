@@ -14,5 +14,7 @@
     machine.wait_for_x()
     machine.execute("zoom >&2 &")
     machine.wait_for_window("Zoom Workplace")
+    machine.sleep(20)
+    machine.wait_for_window("Zoom Workplace")
   '';
 }

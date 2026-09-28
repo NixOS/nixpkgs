@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     [
       jinja2
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   pythonImportsCheck = [ "jinja2cli" ];
 

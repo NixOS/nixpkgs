@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.8";
+  version = "4.2.9";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-p/xqDsYivhG/21808hdMKFMWl4DfQ0huAHiftVjOdJM=";
+    hash = "sha256-Z3eg3xNGFpvzvDp9ldYwh0JnrqfoaZQ7jc58hcZo+Qo=";
   };
 
   outputs = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "jasper";
     maintainers = [ ];
     platforms = lib.platforms.unix;

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apio-udev-rules";
-  version = "0.9.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VU4tOszGkw20DWW2SerFsnjFiSkrSwqBcwosGnHJfU8=";
+    hash = "sha256-tdsp7cBmZ2RjGJxtDre8v7Xw8KUmJs6YiOG80DUwd/A=";
   };
 
   dontBuild = true;

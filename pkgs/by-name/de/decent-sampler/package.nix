@@ -4,6 +4,7 @@
   fetchzip,
   fetchurl,
   makeDesktopItem,
+  autoPatchelfHook,
   copyDesktopItems,
   buildFHSEnv,
   alsa-lib,
@@ -16,8 +17,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.15.5";
-  rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
+  version = "1.18.1";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -28,12 +28,20 @@ let
     inherit pname version;
 
     src = fetchzip {
-      # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ADKHnE9GsrZx5RepuBKy7dg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
-      hash = "sha256-uUEncrT0M4AmIokizrUdSATm8Dnvg3cBNGlH8wOPt+Y=";
+      # Download page: https://store.decentsamples.com/downloads/decent-sampler/versions
+      url = "https://cdn.decentsamples.com/production/builds/ds/${version}/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
+      hash = "sha256-wL9L4I2iw9r3r69TOr37XXEs3iECMuNGX9Ez63P/f8w=";
     };
 
-    nativeBuildInputs = [ copyDesktopItems ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      copyDesktopItems
+    ];
+
+    buildInputs = [
+      alsa-lib
+      expat
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -56,7 +64,7 @@ let
       install -Dm755 DecentSampler $out/bin/decent-sampler
       install -Dm755 DecentSampler.so -t $out/lib/vst
       install -d "$out/lib/vst3" && cp -r "DecentSampler.vst3" $out/lib/vst3
-      install -Dm444 ${icon} $out/share/pixmaps/decent-sampler.png
+      install -Dm444 ${icon} $out/share/icons/hicolor/512x512/apps/decent-sampler.png
 
       runHook postInstall
     '';
@@ -68,13 +76,11 @@ buildFHSEnv {
   inherit (decent-sampler) pname version;
 
   targetPkgs = pkgs: [
-    alsa-lib
     alsa-plugins
     decent-sampler
     freetype
     nghttp2
     libx11
-    expat
   ];
 
   runScript = "decent-sampler";
@@ -100,7 +106,6 @@ buildFHSEnv {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       adam248
-      chewblacka
       kaptcha0
     ];
   };

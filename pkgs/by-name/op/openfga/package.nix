@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openfga";
-  version = "1.11.5";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "openfga";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5VS3sx4sHiJvWFDFw929Q5n6OZfCSHPgqtHgLEEeqHQ=";
+    hash = "sha256-B26WjONQx7O83rn9nuo+j5DvC5AIsx4/z/pfzPAlcBE=";
   };
 
-  vendorHash = "sha256-m2ddB7yfZmTwWKvf/lTzmc2D4lR1JXc5sFlRgAi+q+s=";
+  vendorHash = "sha256-wMrKPEeuRKE/doD85NQF1rXONPXS6G3HRLN54Na1jhk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -11,27 +11,43 @@
   ml-dtypes,
   numpy,
   onnx,
+  sympy,
   typing-extensions,
+
+  fetchpatch,
 
   # tests
   onnxruntime,
   parameterized,
   pytestCheckHook,
+  safetensors,
   torch,
   tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-ir";
-  version = "0.1.14_1";
+  version = "0.2.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "ir-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mlUz5LGMtW4q78lBcbjo96V7k6NL+mt1lSvOU/6GEOY=";
+    hash = "sha256-vdo8BiE7m9Qr3JktgcPGDZfykjcf/VYY39tfhtzOrpA=";
   };
+
+  patches = [
+    # safetensors 0.8.0 changed `serialize_file` to require `TensorSpec` objects instead of plain
+    # dicts, breaking `save_safetensors`
+    # https://github.com/onnx/ir-py/pull/439
+    (fetchpatch {
+      name = "fix-safetensor-0.8.0-compat";
+      url = "https://github.com/onnx/ir-py/commit/c4780478d251f839ec1bacbea72d0a0948553285.patch";
+      hash = "sha256-99MeGU1B/534shCq9/TgrAPWscp+braXVcjAtnWQ3uY=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -41,6 +57,7 @@ buildPythonPackage (finalAttrs: {
     ml-dtypes
     numpy
     onnx
+    sympy
     typing-extensions
   ];
 
@@ -50,6 +67,7 @@ buildPythonPackage (finalAttrs: {
     onnxruntime
     parameterized
     pytestCheckHook
+    safetensors
     torch
     tqdm
   ];
@@ -70,6 +88,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Circular dependency with onnxscript
     "src/onnx_ir/passes/common/common_subexpression_elimination_test.py"
+
+    # ImportError: cannot import name 'hub' from 'onnx'
+    # onnx.hub was removed in 1.21.0
+    "tools/model_zoo_test/model_zoo_test.py"
   ];
 
   # Importing onnxruntime in the sandbox crashes on aarch64-linux:

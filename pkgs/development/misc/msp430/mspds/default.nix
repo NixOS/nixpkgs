@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   version = "3.15.1.1";
 
   src = fetchurl {
-    url = "http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPDS/3_15_1_001/export/MSPDebugStack_OS_Package_3_15_1_1.zip";
+    url = "https://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPDS/3_15_1_001/export/MSPDebugStack_OS_Package_3_15_1_1.zip";
     sha256 = "1j5sljqwc20zrb50mrji4mnmw5i680qc7n0lb0pakrrxqjc9m9g3";
   };
   sourceRoot = ".";
@@ -66,6 +66,8 @@ stdenv.mkDerivation {
   ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
     license = lib.licenses.bsd3;

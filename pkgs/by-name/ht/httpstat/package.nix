@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [ glibcLocales ];
   runtimeDeps = [ curl ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "Curl statistics made simple";

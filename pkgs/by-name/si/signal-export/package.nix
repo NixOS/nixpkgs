@@ -3,17 +3,18 @@
   python3,
   fetchPypi,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "signal-export";
-  version = "3.8.1";
+  version = "3.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "signal_export";
-    hash = "sha256-o+Z4vSqu2avQyzf93o5s2hKmCK2I8aoF4JGlLzM/9xI=";
+    hash = "sha256-i4VV1mOlUWz4mSXcSkMUB7mHnWlBu+6hcQR5oxshzqE=";
   };
 
   build-system = with python3.pkgs; [
@@ -24,10 +25,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     typer
     beautifulsoup4
     emoji
+    filetype
     markdown
     pycryptodome
     sqlcipher3-wheels
   ];
+
+  nativeCheckInputs = [
+    python3.pkgs.pytestCheckHook
+    # tests/test_overwrite.py asserts that Path.home() exists
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "sigexport" ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -14,23 +14,21 @@ let
     {
       x86_64-linux = "linux-amd64";
       aarch64-linux = "linux-aarch64";
-      x86_64-darwin = "macos-amd64";
       aarch64-darwin = "macos-aarch64";
     }
     .${system} or (throw "Unsupported system: ${system}");
 
   packageHashes = {
-    x86_64-linux = "sha256-B+LKXK7DFakiFNdanaqMeGxnfxoEI4caNtxnyZEcWgQ=";
-    aarch64-linux = "sha256-FMYIO1miEulnz9logtXxau2mIuR1zS8oCG04DMx0HyQ=";
-    x86_64-darwin = "sha256-I3Z1QqIu0iJBZWq6fUWouGfTYzNr/wj+0UFfq0wSy4Y=";
-    aarch64-darwin = "sha256-AL1TUJO5jSNhjfZ/rLo9Do22oqVhpLqiRdGnvVaqvog=";
+    x86_64-linux = "sha256-ruuJL5TPhh9TAlRvqgvaqCzEvjBTliEpl0am3AEfO1o=";
+    aarch64-linux = "sha256-slGinVD6XiOskkl9DdmVzmlPecQgxQG0vuE3I3nD/Sk=";
+    aarch64-darwin = "sha256-BNm1MxrNM6BlggsaDUl6nRhhHMU9LojZYtYKoLkNFV0=";
   };
 
   packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.5.1";
+  version = "4.1.0";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script
@@ -46,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gcc-unwrapped.lib
     zlib
   ];
@@ -69,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/spinframework/spin";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     mainProgram = "spin";
     maintainers = [ ];
     platforms = builtins.attrNames packageHashes;

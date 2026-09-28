@@ -28,14 +28,16 @@
   patchelf,
   undmg,
   makeWrapper,
+  libpulseaudio,
+  pipewire,
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.0.6"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.3.2"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-eEYNfVnM+qCYnirHdBG6oqBQzDio39J7tmh4BSTAF9g=";
-    darwin = "sha256-2A4Jjz0XoXxTdKq6xP0xhlBneysAkBHMbqfgaftJGFQ=";
+    linux = "sha256-F1PIsiMd+Ve9SX31PRB9D+cbsPZzJof6Yvq70CeqCm4=";
+    darwin = "sha256-0/Q6ybJFMxIguwppAwXVylyevdRqcK1xrI/dpwrFhmA=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -61,7 +63,7 @@ let
   meta = {
     description = "Nextcloud Talk Desktop Client";
     homepage = "https://github.com/nextcloud/talk-desktop";
-    changelog = "https://github.com/nextcloud/talk-desktop/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nextcloud/talk-desktop/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -102,11 +104,20 @@ let
       libxrandr
       libxfixes
       libxcursor
+      libpulseaudio
     ];
 
-    # Required to launch the application and proceed past the zygote_linux fork() process
-    # Fixes `Zygote could not fork`
-    runtimeDependencies = [ systemd ];
+    runtimeDependencies = [
+      # Required to launch the application and proceed past the zygote_linux fork() process
+      # Fixes `Zygote could not fork`
+      systemd
+
+      # Fixes input/output audio device selection
+      libpulseaudio
+
+      # Electron dynamically loads PipeWire for Wayland screen sharing.
+      pipewire
+    ];
 
     desktopItems = [
       (makeDesktopItem {

@@ -1,7 +1,7 @@
 {
   aiofiles,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.12.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-ieGjdccvk97jWKP9bnE+KCkOocNJSWEOqCPxoXv5oOs=";
+    hash = "sha256-2T92WPGyeTb0mOzbBnKMhnIbDWRc2ZSVyL3uBdG1Zhw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail setuptools==80.10.2 setuptools
+      --replace-fail setuptools==83.0.0 setuptools
   '';
 
   build-system = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioimmich" ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
     syrupy
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/mib1185/aioimmich/releases/tag/${src.tag}";
-    description = "Asynchronous library to fetch albums and assests from immich";
+    description = "Asynchronous library to fetch albums and assets from immich";
     homepage = "https://github.com/mib1185/aioimmich";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];

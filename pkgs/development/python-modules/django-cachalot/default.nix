@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-cachalot";
-  version = "2.8.0";
+  version = "2.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
     tag = "v${version}";
-    hash = "sha256-3W+9cULL3mMtAkxbqetoIj2FL/HRbzWHIDMe9O1e6BM=";
+    hash = "sha256-s3TKk8YxWQviXpG/gH6o10hFDJFhJzKSL218REPcg5A=";
   };
 
   patches = [

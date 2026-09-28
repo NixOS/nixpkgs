@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   numpy,
   scipy,
@@ -21,6 +22,13 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-kx87XY4GCL1PQIeZyovEbrPyCC/EVA6Hdvt+3P/D6VI=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/python-team/packages/python-bayespy/-/raw/071f54815608b31aebac8f8e83bc532b2c632a48/debian/patches/numpy2.4-compat.patch";
+      hash = "sha256-Tk3z94+vbGaSIqGFFRQZz0pcXI1Fzcbnva3oWnv502U=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace versioneer.py \

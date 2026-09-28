@@ -2,28 +2,26 @@
   cacert,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   openssl,
   pkg-config,
   protobuf,
-  rocksdb_8_3,
+  rocksdb,
   rust-jemalloc-sys-unprefixed,
   rustPlatform,
   rustc,
   stdenv,
 }:
 
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkadot";
-  version = "2509-1";
+  version = "2606-2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${finalAttrs.version}";
-    hash = "sha256-XisQA5WNmFaFfY7T4EMcwlOD8FUfAjmLDV7NSWsh3vA=";
+    hash = "sha256-Pwu+l4DaS/37yegNedNm3yZHBPng8ECdECdDq/XkWjs=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -44,7 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .git_commit
   '';
 
-  cargoHash = "sha256-QqtLr6SvJGYrY0wGZw196amrGqLZg/Nea+QTYM1RzIs=";
+  cargoPatches = [
+    # make picosimd compile on nix (https://github.com/koute/picosimd/pull/3)
+    ./picosimd-0.9.3.patch
+  ];
+
+  cargoHash = "sha256-2YXF6bcsSuhtdPASAb3KKQ7+y1nFeUVziDug6/PJOSk=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
@@ -72,6 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
     PROTOC = "${protobuf}/bin/protoc";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=polkadot-stable(\\d{4}(?:-\\d+)?)$" ];
   };
 
   meta = {

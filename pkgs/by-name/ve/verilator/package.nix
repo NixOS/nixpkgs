@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bash,
   perl,
   flex,
   bison,
@@ -19,15 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.044";
+  version = "5.052";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
+    hash = "sha256-3xeodLkal/crtcB091lthUe/7/wC+sjAYRqNyl7/kv0=";
   };
-
   enableParallelBuilding = true;
   buildInputs = [
     perl
@@ -72,8 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     test_regress/t/t_a1_first_cc.py \
     test_regress/t/t_a2_first_sc.py \
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
-    # verilator --gdbbt uses /bin/echo to test if gdb works.
-    substituteInPlace bin/verilator --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+    # verilator --gdbbt uses /bin/sh to test if gdb works.
+    substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
+  ''
+  # prevent rewriting the lexer signatures to size_t for macOS 26+; upstream flex's FlexLexer.h uses int.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/flexfix \
+      --replace-fail 'if platform.system() == "Darwin":' 'if False:'
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
@@ -103,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      amiloradovsky
+      carlossless
     ];
   };
 })

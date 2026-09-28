@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "aws-iam-authenticator";
-  version = "0.7.10";
+  version = "0.7.11";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "aws-iam-authenticator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-usnLBLdgEpfpjItMwlRUnuiYQDcq+3FhOpL0WPxdYyY=";
+    hash = "sha256-ObvzeAqvECQ3wdILg5fLSvANWG19PcWfE+IlN145N+A=";
   };
 
   vendorHash = "sha256-cEWsTYwWVo7UKcAjXf+dUQ8pboIUnT+0D8yFhD6WSSk=";

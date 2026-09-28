@@ -1,4 +1,9 @@
-{ stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  installFonts,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "mph-2b-damase";
@@ -9,13 +14,11 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-4x78D+c3ZBxfhTQQ4+gyxvrsuztHF2ItXLh4uA0PxvU=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = { };
+  meta = {
+    # Some other repositories list it as Public Domain; couldn't find evidence for this
+    license = lib.licenses.unfree;
+    homepage = "https://www.wazu.jp/gallery/views/View_MPH2BDamase.html";
+  };
 }

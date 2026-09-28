@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = false;
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
+    url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 

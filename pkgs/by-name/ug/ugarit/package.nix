@@ -40,7 +40,7 @@ chickenPackages_4.eggDerivation rec {
 
   meta = {
     homepage = "https://www.kitten-technologies.co.uk/project/ugarit/";
-    description = "Backup/archival system based around content-addressible storage";
+    description = "Backup/archival system based around content-addressable storage";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "egctl";
-  version = "1.6.2";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "gateway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c9kCYLzshCqOAKyRp+GsOtoB9KSnURR6xQstzVHJpWs=";
+    hash = "sha256-PszV+N0RqH06kDYvEwd1rhj8XS2+lnKZA2+fOMA2vwA=";
   };
 
-  vendorHash = "sha256-oFuxY7bQ4O/hc8r1Z6K7PRYG4dOqpt0zLgT2N4cvARE=";
+  vendorHash = "sha256-BJBNe5+ztc3WJ1RIvsbLGl0T4znlVNNg+AToXY16ixM=";
   # Fix case-insensitive conflicts producing platform-dependent checksums
   # https://github.com/microsoft/go-mssqldb/issues/234
   proxyVendor = true;

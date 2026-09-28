@@ -104,7 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
           p7zip
           cabextract
           dmg2img
-          dumpifs
           jefferson
           vmlinux-to-elf
           lz4
@@ -119,7 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           unyaffs
           zstd
         ]
-        ++ lib.optionals enableUnfree [ unrar ]
+        ++ lib.optionals enableUnfree [
+          dumpifs
+          unrar
+        ]
       )
     }
   '';

@@ -7,7 +7,6 @@
   lib,
   libpulseaudio,
   ninja,
-  pcre,
   pkg-config,
   taglib,
   zlib,
@@ -24,20 +23,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sayonara";
-  version = "1.10.0-stable1";
+  version = "1.12.0-stable1";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
     tag = finalAttrs.version;
-    hash = "sha256-ZcuWe1dsLJS4/nLXSSKB7wzPU9COFyE4vPSwZIo0bgI=";
+    hash = "sha256-XDCmqoJAlKqtia/RRplbekUaTEzD+Jn/1Z5yOPgra0c=";
   };
-
-  # error: no matching function for call to 'max'
-  postPatch = ''
-    substituteInPlace src/Components/Playlist/PlaylistModifiers.cpp \
-      --replace-fail "std::max" "std::max<MilliSeconds>"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -49,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpulseaudio
-    pcre
     libsForQt5.qtbase
     taglib
     zlib
@@ -84,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sayonara music player";
     homepage = "https://sayonara-player.com/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ deepfire ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

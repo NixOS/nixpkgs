@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodns";
-  version = "3.6.1";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saghul";
     repo = "aiodns";
-    tag = "v${version}";
-    hash = "sha256-dRniMwmDAj8KtM/qMEJieUFq5h0e+PJydXpOT6xZA34=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TLiiSRhZaEbHeyrQPk8uvj10VEttRanYEgkBy7DxH4Y=";
   };
 
   build-system = [ setuptools ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple DNS resolver for asyncio";
     homepage = "https://github.com/saghul/aiodns";
-    changelog = "https://github.com/saghul/aiodns/releases/tag/${src.tag}";
+    changelog = "https://github.com/saghul/aiodns/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

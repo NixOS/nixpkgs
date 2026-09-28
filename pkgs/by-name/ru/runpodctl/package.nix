@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "runpodctl";
-  version = "1.14.15";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "runpod";
     repo = "runpodctl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D1B5j1HYSXDgr1vW8kHzCohu3HiDljTEhQhzfa5q/Us=";
+    hash = "sha256-TFUEc6mZSE5FC++fuF7fn3bzAlo+q4glj9LkOLSTb64=";
   };
 
-  vendorHash = "sha256-/0kNURJHIRS1thqEe8d+SAsm8NPOEJa//g9tyswrvFg=";
+  vendorHash = "sha256-TZrffoC4He+ltwDkDS+6/eqA4/Pv8+BtG+kZbDHb6Fw=";
 
   postInstall = ''
     rm $out/bin/docs # remove the docs binary

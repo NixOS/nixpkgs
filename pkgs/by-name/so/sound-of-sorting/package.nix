@@ -5,7 +5,7 @@
   fetchpatch,
   pkg-config,
   SDL2,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     SDL2
   ];
 

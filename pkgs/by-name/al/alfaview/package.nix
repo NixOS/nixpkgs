@@ -29,13 +29,13 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alfaview";
-  version = "9.24.1";
+  version = "9.26.6";
 
   src = fetchurl {
-    url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
+    url = "https://assets.alfaview.com/stable/linux/deb/alfaview_${finalAttrs.version}.deb";
+    hash = "sha256-IGhwEZYVg/lLeLhayUHMbjmhTozbllP1Vrmk4Fdgf7k=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     libxcb-render-util
   ];
 
-  libPath = lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath finalAttrs.buildInputs;
 
   dontBuild = true;
   dontConfigure = true;
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     mv opt $out
 
     substituteInPlace $out/share/applications/alfaview.desktop \
-      --replace "/opt/alfaview" "$out/bin" \
-      --replace "/usr/share/pixmaps/alfaview_production.png" alfaview_production
+      --replace-fail "/opt/alfaview" "$out/bin" \
+      --replace-fail "/usr/share/pixmaps/alfaview.png" alfaview
 
     makeWrapper $out/opt/alfaview/alfaview $out/bin/alfaview \
-      --prefix LD_LIBRARY_PATH : ${libPath}
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}
 
     runHook postInstall
   '';
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

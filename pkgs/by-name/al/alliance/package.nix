@@ -12,22 +12,21 @@
   automake,
   autoconf,
   libtool,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alliance";
-  version = "unstable-2025-02-24";
+  version = "5.1.1-unstable-2025-02-24";
 
-  src =
-    let
-      src = fetchFromGitHub {
-        owner = "lip6";
-        repo = "alliance";
-        rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
-        hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
-      };
-    in
-    "${src}/alliance/src";
+  src = fetchFromGitHub {
+    owner = "lip6";
+    repo = "alliance";
+    rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
+    hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/alliance/src";
 
   nativeBuildInputs = [
     libtool
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
   ];
 
   # To avoid compiler error in LoadDataBase.c:366:27
-  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu99 -Wno-incompatible-pointer-types";
 
   postPatch = ''
     # texlive for docs seems extreme
@@ -70,6 +69,8 @@ stdenv.mkDerivation {
     cp -p distrib/*.png $out/icons/hicolor/48x48/apps/
   '';
 
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
   meta = {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
@@ -77,4 +78,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

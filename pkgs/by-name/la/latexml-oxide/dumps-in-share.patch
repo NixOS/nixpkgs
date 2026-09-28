@@ -1,0 +1,33 @@
+--- a/build.rs
++++ b/build.rs
+@@ -262,7 +262,7 @@ fn resolve_dump_path(prefer: Option<u32>) -> Option<(std::path::PathBuf, u32)> {
+     }}
+   }}
+   // 2. Directory override — pick best versioned dump in that dir.
+-  if let Ok(dir) = std::env::var("LATEXML_DUMP_DIR") {{
++  if let Some(dir) = std::env::var("LATEXML_DUMP_DIR").ok().or(Some(concat!(env!("out"),"/share/latexml-oxide/resources/dumps").to_owned())) {{
+     if let Some(found) = crate::dump_paths::resolve_versioned_in_dir(
+       std::path::Path::new(&dir), "latex", prefer
+     ) {{ return Some(found); }}
+--- a/src/latex.rs
++++ b/src/latex.rs
+@@ -16,7 +16,7 @@ use crate::prelude::*;
+ 
+ // Process-once cached env vars (see WISDOM #56 — getenv hot-path race).
+ static DUMP_PATH: Lazy<Option<String>> = Lazy::new(|| std::env::var("LATEXML_DUMP_PATH").ok());
+-static DUMP_DIR: Lazy<Option<String>> = Lazy::new(|| std::env::var("LATEXML_DUMP_DIR").ok());
++static DUMP_DIR: Lazy<Option<String>> = Lazy::new(|| std::env::var("LATEXML_DUMP_DIR").ok().or(Some(concat!(env!("out"),"/share/latexml-oxide/resources/dumps").to_owned())));
+ static INI_MODE: Lazy<bool> = Lazy::new(|| std::env::var_os("LATEXML_INI_MODE").is_some());
+ static NODUMP: Lazy<bool> = Lazy::new(|| std::env::var_os("LATEXML_NODUMP").is_some());
+ 
+--- a/src/plain_dump.rs
++++ b/src/plain_dump.rs
+@@ -36,7 +36,7 @@ const DEV_DUMPS_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../resources/d
+ static NODUMP: Lazy<bool> = Lazy::new(|| std::env::var_os("LATEXML_NODUMP").is_some());
+ static PLAIN_DUMP_PATH: Lazy<Option<String>> =
+   Lazy::new(|| std::env::var("LATEXML_PLAIN_DUMP_PATH").ok());
+-static DUMP_DIR: Lazy<Option<String>> = Lazy::new(|| std::env::var("LATEXML_DUMP_DIR").ok());
++static DUMP_DIR: Lazy<Option<String>> = Lazy::new(|| std::env::var("LATEXML_DUMP_DIR").ok().or(Some(concat!(env!("out"),"/share/latexml-oxide/resources/dumps").to_owned())));
+ 
+ pub fn load_definitions() -> Result<()> {
+   if *NODUMP {

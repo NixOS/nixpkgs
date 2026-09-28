@@ -5,20 +5,21 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  python,
+  pytest-instafail,
+  pytest-xdist,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.1.3";
+  version = "7.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";
     tag = "release-${version}";
-    hash = "sha256-vMGUoiPr+QIe1N+I++d/DM9i2jeHTI68npGoJ2vKF10=";
+    hash = "sha256-plBv24QgNzmVMV2lFxCbNwHKtd620thJayWdjs4estw=";
   };
 
   postPatch = ''
@@ -31,19 +32,23 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-instafail
+    pytest-xdist
+  ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  # In addition to the issues listed above there are some that occure due to
+  # In addition to the issues listed above there are some that occur due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sandboxing (missing specific errors)
   enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
-    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
+    "tests/test_system.py"
   ];
 
   disabledTests = [
@@ -58,6 +63,10 @@ buildPythonPackage rec {
     "user"
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ];
+
+  preCheck = ''
+    rm -rf psutil
+  '';
 
   pythonImportsCheck = [ "psutil" ];
 

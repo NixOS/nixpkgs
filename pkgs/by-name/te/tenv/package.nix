@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tenv";
-  version = "4.9.3";
+  version = "4.15.1";
 
   src = fetchFromGitHub {
     owner = "tofuutils";
     repo = "tenv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gaz2zGYYYCo3iDAiA3gVg2BYgeZrZMHcALbBHE0pRvM=";
+    hash = "sha256-E4wfG9KeW+v+KcizS9ut0S5gHzvPiChaP6uGRsXfkE4=";
   };
 
-  vendorHash = "sha256-DtcOAdkd9JrfGKwkHixx2Qgjij7u7MVr96oNpPqTz14=";
+  vendorHash = "sha256-rZBHSlP1cRB2xzVbFLyd32q9vYPytv9nCpcjQqkei+w=";
 
   excludedPackages = [ "tools" ];
 
@@ -53,7 +53,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://tofuutils.github.io/tenv";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      rmgpinto
       nmishin
       kvendingoldo
     ];

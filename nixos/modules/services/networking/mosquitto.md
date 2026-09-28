@@ -83,9 +83,10 @@ localhost).
 
 Almost all options of Mosquitto are available for configuration at their appropriate levels, some
 as NixOS options written in camel case, the remainders under `settings` with their exact names in
-the Mosquitto config file. The exceptions are `acl_file` (which is always set according to the
-`acl` attributes of a listener and its users) and `per_listener_settings` (which is always set to
-`true`).
+the Mosquitto config file. The exceptions are `per_listener_settings` (which is always set to
+`true`) and the per-listener access control, which is always configured via instances of the
+`acl-file` and `password-file` plugins generated from the `acl` and `users` attributes of each
+listener.
 
 ### Password authentication {#module-services-mosquitto-config-passwords}
 
@@ -101,8 +102,8 @@ will not be able to use the broker.
 
 ### ACL format {#module-services-mosquitto-config-acl}
 
-Every listener has a Mosquitto `acl_file` attached to it. This ACL is configured via two
-attributes of the config:
+Every listener has an instance of the Mosquitto `acl-file` plugin attached to it. This ACL is
+configured via two attributes of the config:
 
   * the `acl` attribute of the listener configures pattern ACL entries and topic ACL entries
     for anonymous users. Each entry must be prefixed with `pattern` or `topic` to distinguish

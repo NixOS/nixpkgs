@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -v -D -m 755 swingsane $out/bin/swingsane
 
       unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
-      install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
+      install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
 
       cp -v -r ${desktopItem}/share/applications $out/share
     '';
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       using both local and remote Scanner Access Now Easy (SANE) servers.
       The most powerful feature is its ability to query back-ends for scanner
       specific options which can be set by the user as a scanner profile.
-      It also has support for authentication, mutlicast DNS discovery,
+      It also has support for authentication, multicast DNS discovery,
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';

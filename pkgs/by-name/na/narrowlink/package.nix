@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       agpl3Only
       mpl20
     ]; # the gateway component is AGPLv3, the rest is MPLv2
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "narrowlink";
   };
 })

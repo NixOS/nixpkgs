@@ -1,35 +1,25 @@
-diff --git a/build.gradle.kts b/build.gradle.kts
-index 79534cdf..4f298e66 100644
---- a/build.gradle.kts
-+++ b/build.gradle.kts
-@@ -1,3 +1,2 @@
- plugins {
--	id("org.ajoberstar.grgit")
- }
 diff --git a/server/desktop/build.gradle.kts b/server/desktop/build.gradle.kts
-index 9ebb84a7..6130e45f 100644
+index d72fd8d3..7463cd05 100644
 --- a/server/desktop/build.gradle.kts
 +++ b/server/desktop/build.gradle.kts
-@@ -13,7 +13,6 @@ plugins {
- 	application
- 	id("com.gradleup.shadow")
- 	id("com.github.gmazzo.buildconfig")
--	id("org.ajoberstar.grgit")
- }
- 
- kotlin {
-@@ -86,12 +85,10 @@ buildConfig {
+@@ -88,18 +88,9 @@ buildConfig {
  	useKotlinOutput { topLevelConstants = true }
  	packageName("dev.slimevr.desktop")
  
+-	val gitCommitHash = providers.exec {
+-		commandLine("git", "rev-parse", "--short=8", "HEAD")
+-	}.standardOutput.asText.get().trim()
 -	val gitVersionTag = providers.exec {
 -		commandLine("git", "--no-pager", "tag", "--sort", "-taggerdate", "--points-at", "HEAD")
--	}.standardOutput.asText.get().split('\n').first()
--	buildConfigField("String", "GIT_COMMIT_HASH", "\"${grgit.head().abbreviatedId}\"")
-+	val gitVersionTag = "@version@"
+-	}.standardOutput.asText.get().trim()
+-	val gitIsClean = providers.exec {
+-		commandLine("git", "status", "--porcelain")
+-	}.standardOutput.asText.get().trim().isEmpty()
+-	buildConfigField("String", "GIT_COMMIT_HASH", "\"${gitCommitHash}\"")
+-	buildConfigField("String", "GIT_VERSION_TAG", "\"${gitVersionTag}\"")
+-	buildConfigField("boolean", "GIT_CLEAN", gitIsClean.toString())
 +	buildConfigField("String", "GIT_COMMIT_HASH", "\"NOT AVAILABLE\"")
- 	buildConfigField("String", "GIT_VERSION_TAG", "\"${gitVersionTag.trim()}\"")
--	buildConfigField("boolean", "GIT_CLEAN", grgit.status().isClean.toString())
++	buildConfigField("String", "GIT_VERSION_TAG", "\"@version@\"")
 +	buildConfigField("boolean", "GIT_CLEAN", "true")
  }
  

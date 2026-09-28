@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
 
   gettext,
   pkg-config,
@@ -31,6 +32,29 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/wget/wget-${finalAttrs.version}.tar.lz";
     hash = "sha256-GSJcx1awoIj8gRSNxqQKDI8ymvf9hIPxx7L+UPTgih8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-cve-2026-58471";
+      url = "https://gitlab.com/gnuwget/wget/-/commit/c2640fe5171c59f87c58dc9fcb195b2d18b010ee.patch";
+      hash = "sha256-ZnCLK9ILpHMqpmI39sBl3Q3NRNc/H8jukvBrECqJ6OI=";
+    })
+    (fetchpatch {
+      name = "fix-cve-2026-58470";
+      url = "https://gitlab.com/gnuwget/wget/-/commit/43d3ba9336bc94937e6fae2365c6ffd30c34ffcf.patch";
+      hash = "sha256-aR5lW8t6ME2Os/NPXjFaUbNr3QuiUSQKsa2Zk292mrk=";
+    })
+    (fetchpatch {
+      name = "fix-cve-2026-58469";
+      url = "https://gitlab.com/gnuwget/wget/-/commit/37a40fcb450153f69537c7cbc2a7a4fb0b6f7826.patch";
+      hash = "sha256-lkHQufl8XFZ1Ig8EoRUw3JuCgDPQod9PKAIsTBWzvm4=";
+    })
+    (fetchpatch {
+      name = "fix-cve-2026-58472";
+      url = "https://gitlab.com/gnuwget/wget/-/commit/dd692d9cea5335b181d877ae917fe6e75587a812.patch";
+      hash = "sha256-FAlglKTZili9Y4ivSRLOEaOgektFmq4u6yyH+8WzQao=";
+    })
+  ];
 
   preConfigure = ''
     patchShebangs doc

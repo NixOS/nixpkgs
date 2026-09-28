@@ -7,5 +7,4 @@
   dnstap = runTest ./dnstap.nix;
   journald-clickhouse = runTest ./journald-clickhouse.nix;
   nginx-clickhouse = runTest ./nginx-clickhouse.nix;
-  syslog-quickwit = runTest ./syslog-quickwit.nix;
 }

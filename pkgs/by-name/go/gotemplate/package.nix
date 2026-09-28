@@ -23,6 +23,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "CLI for go text/template";
+    homepage = "https://github.com/coveooss/gotemplate";
     mainProgram = "gotemplate";
     changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

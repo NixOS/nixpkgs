@@ -10,7 +10,7 @@
   libxml2,
   libxslt,
   minizip,
-  ffmpeg_6,
+  ffmpeg_8,
 }:
 {
   "brotli" = {
@@ -58,7 +58,7 @@
     path = "third_party/zlib/BUILD.gn";
   };
   "ffmpeg" = {
-    package = ffmpeg_6;
+    package = ffmpeg_8;
     path = "third_party/ffmpeg/BUILD.gn";
   };
 }

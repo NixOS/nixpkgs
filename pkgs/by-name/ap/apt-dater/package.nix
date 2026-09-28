@@ -12,17 +12,18 @@
   popt,
   libxslt,
   screen,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "apt-dater";
-  version = "1.0.4-unstable-2024-10-04";
+  version = "1.0.4-unstable-2026-02-15";
 
   src = fetchFromGitHub {
     owner = "DE-IBH";
     repo = "apt-dater";
-    rev = "113ea9b72d318f316ea7cac8ddad5be004787a22";
-    hash = "sha256-/Ufa/pEbqD25kp+k0zm9MuLS1zG+xWqhpBkL7ng2+Bo=";
+    rev = "eb3df6923262051082df2e9377516553da9ba508";
+    hash = "sha256-I5TQ6sPIWD7jllelkvYjLa/7FI2IpWsGRS4FsxXQKGs=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,12 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  # Use unstable to pull in gcc-15 fixes:
+  #   https://github.com/DE-IBH/apt-dater/pull/187
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
+
   meta = {
     homepage = "https://github.com/DE-IBH/apt-dater";
     description = "Terminal-based remote package update manager";
@@ -76,6 +83,6 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "apt-dater";
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
   };
 }

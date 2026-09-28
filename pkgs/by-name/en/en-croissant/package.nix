@@ -27,13 +27,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "en-croissant";
-  version = "0.13.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "franciscoBSalgueiro";
     repo = "en-croissant";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+s774MtqbfOhL2qco+i9uBMQPn30EGvOYtqw1nZ9KkY=";
+    hash = "sha256-a+UVorsX3A8/NYjXJM+k2uDvCdySLr88UqzTq7ROJEM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,16 +44,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-/gue4iQG8xySxsH3l5ri+GjmNr/9sow20CLVxxQo7Gs=";
+    hash = "sha256-U6iJFtbgQV8VV3tvTP0DMUQWZ5FI+QUGpqpEhQJl40E=";
   };
 
   postPatch = ''
-    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+    # disable updater and disable mac codesigning
+    jq '
+      .plugins.updater.endpoints = [ ] |
+      .bundle.createUpdaterArtifacts = false |
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";
 
-  cargoHash = "sha256-4gtGHexyR6TkI8tmtLMT2xUAn9+Bd9l3hRq43aL94yI=";
+  cargoHash = "sha256-B5LAt2SKGZ8ksQZDvajWfkTKDzFZPCWGqRWvQAJPh/c=";
 
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

@@ -63,8 +63,7 @@ stdenv.mkDerivation {
     homepage = "http://alip.github.io/mpdcron/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
   };
 }

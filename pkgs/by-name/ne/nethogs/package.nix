@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nethogs";
-  version = "0.8.8";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "nethogs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+yVMyGSBIBWYjA9jaGWvrcsNPbJ6S4ax9H1BhWHYUUU=";
+    sha256 = "sha256-ojbsCoJ8fOaHgm1tWyM59siTDYmCllXOUNqNQJwRhws=";
   };
 
   buildInputs = [

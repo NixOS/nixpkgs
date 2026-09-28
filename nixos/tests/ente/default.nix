@@ -1,11 +1,7 @@
 { lib, pkgs, ... }:
 let
-  accessKey = "BKIKJAA5BMMU2RHO6IBB";
-  secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
-  rootCredentialsFile = pkgs.writeText "minio-credentials-full" ''
-    MINIO_ROOT_USER=${accessKey}
-    MINIO_ROOT_PASSWORD=${secretKey}
-  '';
+  garageAccessKey = "GKaaaaaaaaaaaaaaaaaaaaaaaa";
+  garageSecretKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
   certs = import ./snakeoil-certs.nix;
   domain = certs.domain;
@@ -14,22 +10,29 @@ in
   name = "ente";
   meta.maintainers = [ lib.maintainers.oddlama ];
 
-  nodes.minio =
+  nodes.garage =
     { ... }:
     {
-      environment.systemPackages = [ pkgs.minio-client ];
-      services.minio = {
+      services.garage = {
         enable = true;
-        inherit rootCredentialsFile;
+        package = pkgs.garage_2;
+        settings = {
+          replication_factor = 1;
+          consistency_mode = "consistent";
+          rpc_bind_addr = "[::]:3901";
+          rpc_public_addr = "[::1]:3901";
+          rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
+          s3_api = {
+            s3_region = "us-east-1";
+            api_bind_addr = "[::]:3900";
+          };
+        };
       };
 
-      networking.firewall.allowedTCPPorts = [
-        9000
-      ];
+      networking.firewall.allowedTCPPorts = [ 3900 ];
 
-      systemd.services.minio.environment = {
-        MINIO_SERVER_URL = "https://s3.${domain}";
-      };
+      # Garage requires at least 1GiB of free disk space to run.
+      virtualisation.diskSize = 2 * 1024;
     };
 
   nodes.ente =
@@ -71,7 +74,7 @@ in
               forceSSL = true;
               sslCertificate = certs.${domain}.cert;
               sslCertificateKey = certs.${domain}.key;
-              locations."/".proxyPass = "http://${nodes.minio.networking.primaryIPAddress}:9000";
+              locations."/".proxyPass = "http://${nodes.garage.networking.primaryIPAddress}:3900";
               extraConfig = ''
                 client_max_body_size 32M;
                 proxy_buffering off;
@@ -103,8 +106,8 @@ in
                 endpoint = "https://s3.${domain}";
                 region = "us-east-1";
                 bucket = "ente";
-                key._secret = pkgs.writeText "accesskey" accessKey;
-                secret._secret = pkgs.writeText "secretkey" secretKey;
+                key._secret = pkgs.writeText "accesskey" garageAccessKey;
+                secret._secret = pkgs.writeText "secretkey" garageSecretKey;
               };
             };
             key = {
@@ -118,13 +121,19 @@ in
     };
 
   testScript = ''
-    minio.start()
-    minio.wait_for_unit("minio.service")
-    minio.wait_for_open_port(9000)
+    garage.start()
+    garage.wait_for_unit("garage.service")
+    garage.wait_for_open_port(3900)
 
-    # Create a test bucket on the server
-    minio.succeed("mc alias set minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4")
-    minio.succeed("mc mb -p minio/ente")
+    # Configure the cluster layout
+    garage_node_id = garage.succeed("garage status | tail -n1 | awk '{ print $1 }'")
+    garage.succeed(f"garage layout assign -c 1G -z garage {garage_node_id}")
+    garage.succeed("garage layout apply --version 1")
+
+    # Import the predefined API key and create the bucket
+    garage.succeed("garage key import ${garageAccessKey} ${garageSecretKey} --yes")
+    garage.succeed("garage bucket create ente")
+    garage.succeed("garage bucket allow --read --write ente --key ${garageAccessKey}")
 
     # Start ente
     ente.start()

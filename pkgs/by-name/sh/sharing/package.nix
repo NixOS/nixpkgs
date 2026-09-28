@@ -22,7 +22,7 @@ buildNpmPackage rec {
   # The prepack script runs the build script, which we'd rather do in the build phase.
   npmPackFlags = [ "--ignore-scripts" ];
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   meta = {
     description = "Command-line tool to share directories and files to mobile devices";

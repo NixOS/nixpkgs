@@ -52,7 +52,7 @@ maven.buildMavenPackage rec {
   };
 
   inherit mvnParameters;
-  mvnHash = "sha256-wm/axWJucoW9P98dKqHI4bjrUnmBTfosCOdJg9VBJ+4=";
+  mvnHash = "sha256-qFJvpxK6PDmMfeL5fKVHUzK2NRLcQhQ3PJbwv2hYZqY=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -67,6 +67,10 @@ maven.buildMavenPackage rec {
 
     classpath=$(find $mvnDeps/.m2 -name "*.jar" -printf ':%h/%f');
     install -Dm644 target/Digital.jar $out/share/java
+
+    # Install the lib folder containing 74xx series chips and other component libraries
+    # Digital.jar expects to find lib/ in the same directory as the jar file
+    cp -r src/main/dig/lib $out/share/java/
 
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \

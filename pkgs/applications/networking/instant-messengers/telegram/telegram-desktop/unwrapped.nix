@@ -6,8 +6,8 @@
   pkg-config,
   cmake,
   ninja,
-  clang,
   python3,
+  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
@@ -15,11 +15,11 @@
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
-  ffmpeg_6,
+  xxhash,
+  ffmpeg,
   protobuf,
-  openalSoft,
-  minizip,
+  openal-soft,
+  minizip-ng-compat,
   range-v3,
   tl-expected,
   hunspell,
@@ -28,6 +28,13 @@
   microsoft-gsl,
   boost,
   ada,
+  pango,
+  tlottie,
+  cmark-gfm,
+  libfido2,
+  libavif,
+  libheif,
+  libjxl,
   libicns,
   apple-sdk_15,
   nix-update-script,
@@ -42,14 +49,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.5.1";
+  version = "7.2.8";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-y2sf2wDJ6dYxRdDLKIr78z9tPBIoh2WICg4zJBmb85Q=";
+    hash = "sha256-Hhx65dqKlsoLvh7lEWYxnIiXFFd0qrDKpYYsHdhzqnk=";
   };
 
   nativeBuildInputs = [
@@ -57,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # to build bundled libdispatch
-    clang
     gobject-introspection
   ];
 
@@ -68,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     lz4
-    xxHash
-    ffmpeg_6
-    openalSoft
-    minizip
+    xxhash
+    ffmpeg
+    openal-soft
+    minizip-ng-compat
     range-v3
     tl-expected
     rnnoise
@@ -79,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
+    cmark-gfm
+    libfido2
     (tdlib.override { tde2eOnly = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -87,9 +95,18 @@ stdenv.mkDerivation (finalAttrs: {
     kcoreaddons
     hunspell
   ]
+  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped" && stdenv.hostPlatform.isLinux) [
+    pango
+  ]
+  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped") [
+    tlottie
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libicns
+    libavif
+    libheif
+    libjxl
   ];
 
   dontWrapQtApps = true;
@@ -98,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
+    # swift 6 is not available in nixpkgs
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_SWIFT6" true)
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

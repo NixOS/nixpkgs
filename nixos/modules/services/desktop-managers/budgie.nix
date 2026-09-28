@@ -61,7 +61,7 @@ let
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
 in
 {
-  meta.maintainers = lib.teams.budgie.members;
+  meta.teams = [ lib.teams.budgie ];
 
   imports = [
     (lib.mkRenamedOptionModule
@@ -185,6 +185,7 @@ in
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
+        bluejay
         nemo
         eom
         pluma
@@ -199,6 +200,7 @@ in
         gammastep
         grim
         killall
+        mesa-demos # eglinfo
         slurp
         swaybg
         swayidle
@@ -241,13 +243,15 @@ in
 
     # Required by Budgie's Polkit Dialog.
     security.polkit.enable = mkDefault true;
+    # Required by Budige's Control Center and Desktop
+    security.polkit.enablePkexecWrapper = mkDefault true;
 
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
     networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
-    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
+    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and Bluejay.
 
     xdg.portal.enable = mkDefault true; # for BCC's Applications panel.
     xdg.portal.extraPortals = with pkgs; [

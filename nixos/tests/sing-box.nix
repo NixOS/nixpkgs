@@ -14,6 +14,11 @@ let
     value = lib.singleton k;
   }) hosts;
 
+  hostsDns = {
+    type = "hosts";
+    tag = "dns:hosts";
+  };
+
   vmessPort = 1080;
   vmessUUID = "bf000d23-0752-40b4-affe-68f7707a9661";
   vmessInbound = {
@@ -255,6 +260,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               tunInbound
             ];
@@ -270,6 +279,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -314,6 +324,13 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
+            inbounds = [
+              tunInbound
+            ];
             outbounds = [
               {
                 type = "block";
@@ -324,7 +341,6 @@ in
               {
                 type = "wireguard";
                 tag = "outbound:wireguard";
-                name = "wg0";
                 address = [ "10.23.42.2/32" ];
                 mtu = 1280;
                 private_key = wg-keys.peer1.privateKey;
@@ -336,12 +352,20 @@ in
                     allowed_ips = [ "0.0.0.0/0" ];
                   }
                 ];
-                system = true;
               }
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
+              rules = [
+                {
+                  inbound = [
+                    "inbound:tun"
+                  ];
+                  outbound = "outbound:wireguard";
+                }
+              ];
             };
           };
         };
@@ -377,6 +401,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               {
                 tag = "inbound:tproxy";
@@ -398,6 +426,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -502,6 +531,31 @@ in
           };
         };
       };
+
+    empty_settings =
+      { ... }:
+      {
+        environment.etc."sing-box/config.json".text = builtins.toJSON {
+          inbounds = [
+            {
+              type = "mixed";
+              listen = "127.0.0.1";
+              listen_port = 1088;
+            }
+          ];
+          outbounds = [
+            {
+              type = "direct";
+              tag = "outbound:direct";
+            }
+          ];
+        };
+
+        services.sing-box = {
+          enable = true;
+          settings = { };
+        };
+      };
   };
 
   testScript = ''
@@ -527,7 +581,6 @@ in
 
     with subtest("tun"):
       tun.wait_for_unit("sing-box.service")
-      tun.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
       tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       tun.succeed("ip addr show ${tunInbound.interface_name}")
       tun.succeed("ip route show table ${toString tunInbound.iproute2_table_index} | grep ${tunInbound.interface_name}")
@@ -539,9 +592,8 @@ in
 
     with subtest("wireguard"):
       wireguard.wait_for_unit("sing-box.service")
-      wireguard.wait_for_unit("sys-devices-virtual-net-wg0.device")
-      wireguard.succeed("ip addr show wg0")
-      test_curl(wireguard, "--interface wg0")
+      fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
+      test_curl(wireguard)
 
     with subtest("tproxy"):
       tproxy.wait_for_unit("sing-box.service")
@@ -549,9 +601,11 @@ in
 
     with subtest("fakeip"):
       fakeip.wait_for_unit("sing-box.service")
-      fakeip.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
       fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
+
+    with subtest("empty settings"):
+      empty_settings.wait_for_unit("sing-box.service")
   '';
 
 }

@@ -5,39 +5,32 @@
   python3,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
-  };
-in
-python.pkgs.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pacu";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
+    hash = "sha256-sW2ZfrlZiK29ON9TJLAg/YHnhM8ZtWBGCiAEQ5FIWHA=";
   };
 
   pythonRelaxDeps = [
     "dsnap"
-    "sqlalchemy-utils"
-    "sqlalchemy"
+    "botocore" # constrained in https://github.com/RhinoSecurityLabs/pacu/pull/498 to fix moto issues (mocking)
     "pycognito"
     "qrcode"
     "urllib3"
   ];
 
-  build-system = with python.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = [
     awscli
   ]
-  ++ (with python.pkgs; [
+  ++ (with python3.pkgs; [
     awscli
     boto3
     botocore
@@ -57,7 +50,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     urllib3
   ]);
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     moto
     pytestCheckHook
   ];

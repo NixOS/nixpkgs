@@ -28,5 +28,5 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

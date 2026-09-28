@@ -30,6 +30,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    "tabulate"
     "typer"
   ];
 

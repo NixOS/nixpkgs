@@ -33,6 +33,7 @@
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -116,21 +117,12 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Backport crash fix
-    (fetchpatch2 {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ecf90f65ef738ae20b114691d02fb15c82e6babe.diff";
-      hash = "sha256-TW+EmCxasH5LdZ80y/0YHird3NsrVdlwciDJpgSD9x0=";
-    })
   ]
-  ++ lib.optionals stdenv.cc.isClang [
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
-    })
+  # Remove once merged with upstream
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./clang-base-path-from-cmake-compiler.patch
+
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
@@ -172,6 +164,15 @@ qtModule {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+
+    # xcbuild's xcrun doesn't implement the real (proprietary) Metal shader
+    # compiler, so this check always fails. The one build step that actually
+    # invokes it (ANGLE's internal shader precompilation) is already disabled
+    # below, so it's safe to report the toolchain as present.
+    substituteInPlace cmake/QtConfigureHelpers.cmake \
+      --replace-fail 'message(STATUS "Checking for Metal Toolchain")' 'message(STATUS "Checking for Metal Toolchain")
+    set(TEST_metal_toolchain TRUE PARENT_SCOPE)
+    return()'
   '';
 
   cmakeFlags = [
@@ -203,7 +204,8 @@ qtModule {
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' stdenv.cc "clang++"}"
   ];
 
   propagatedBuildInputs = [
@@ -237,6 +239,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -297,7 +300,6 @@ qtModule {
   meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7a-linux"

@@ -9,6 +9,7 @@
   libngspice,
   libgit2,
   clipper,
+  wrapGAppsHook3,
 }:
 
 let
@@ -53,6 +54,7 @@ stdenv.mkDerivation {
     pkg-config
     qt6.qttools
     kdePackages.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -85,7 +87,9 @@ stdenv.mkDerivation {
       --replace-fail "6.5.10" "${qt6.qtbase.version}"
 
     substituteInPlace src/simulation/ngspice_simulator.cpp \
-      --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
+      --replace-fail 'path + "/" + libName' '"${
+        libngspice + "/lib/libngspice" + stdenv.hostPlatform.extensions.sharedLibrary
+      }"'
 
     mkdir parts
     cp -a ${parts}/* parts/
@@ -112,6 +116,12 @@ stdenv.mkDerivation {
     mv $out/bin/Fritzing.app $out/Applications/Fritzing.app
     cp FritzingInfo.plist $out/Applications/Fritzing.app/Contents/Info.plist
     makeWrapper $out/Applications/Fritzing.app/Contents/MacOS/Fritzing $out/bin/Fritzing
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postFixup = ''

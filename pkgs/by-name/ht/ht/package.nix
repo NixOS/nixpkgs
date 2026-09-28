@@ -24,6 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-narrowing" ];
 
+  configureFlags = [
+    # Fails to build on -std=gnu23.
+    "CFLAGS=-std=gnu17"
+  ];
+
+  enableParallelBuilding = true;
+
   meta = {
     description = "File editor/viewer/analyzer for executables";
     homepage = "https://hte.sourceforge.net";

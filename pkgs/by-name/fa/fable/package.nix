@@ -1,14 +1,18 @@
 {
   buildDotnetGlobalTool,
+  dotnetCorePackages,
   lib,
   testers,
 }:
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.28.0";
+  version = "5.17.2";
 
-  nugetHash = "sha256-t5Kex6sVe1B/xErMfDav+WGEjeZjndRNQA2r0FvL92g=";
+  nugetHash = "sha256-XJB59cqLDsEtcyAvbbuhSkjkooFKiHiwp9jrKouPPtk=";
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -20,10 +24,10 @@ buildDotnetGlobalTool (finalAttrs: {
   meta = {
     description = "F# to JavaScript compiler";
     mainProgram = "fable";
-    homepage = "https://github.com/fable-compiler/fable";
-    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/fable-compiler/Fable";
+    changelog = "https://github.com/fable-compiler/Fable/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       anpin
       mdarocha

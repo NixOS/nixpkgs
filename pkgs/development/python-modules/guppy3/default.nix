@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "guppy3";
-  version = "3.1.6";
+  version = "3.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
     repo = "guppy3";
     tag = "v${version}";
-    hash = "sha256-9pswuHLCxb/zLtyWfIRDmNPLFPamF4Ybb+7TbLf38fU=";
+    hash = "sha256-/vu47Mzi4q1g6JOoM01j/V1SDNMSJlP/ohuip5t+GtE=";
   };
 
   build-system = [ setuptools ];

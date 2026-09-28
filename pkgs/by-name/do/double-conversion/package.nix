@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   ctestCheckHook,
@@ -11,33 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "double-conversion";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "double-conversion";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-M80H+azCzQYa4/gBLWv5GNNhEuHsH7LbJ/ajwmACnrM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gxaPqQ51RyXZaTHkvh4RBpedPopcRiuWDoT+PPbI1uw=";
   };
-
-  patches = [
-    # Fix the build with CMake 4.
-    (fetchpatch {
-      name = "double-conversion-fix-cmake-4-1.patch";
-      url = "https://github.com/google/double-conversion/commit/101e1ba89dc41ceb75090831da97c43a76cd2906.patch";
-      hash = "sha256-VRmuNXdzt/I+gWbz5mwWkx5IGn8Vsl9WkdwRsuwZdkU=";
-    })
-    (fetchpatch {
-      name = "double-conversion-fix-cmake-4-2.patch";
-      url = "https://github.com/google/double-conversion/commit/0604b4c18815aadcf7f4b78dfa6bfcb91a634ed7.patch";
-      hash = "sha256-cJBp1ou1O/bMQ/7kvcX52dWbUdhmPfQ9aWmEhQdyhis=";
-    })
-    (fetchpatch {
-      name = "double-conversion-add-pkg-config.patch";
-      url = "https://github.com/google/double-conversion/commit/ddfd18c58ecc32fc74afc1083bb8774240b54efb.patch";
-      hash = "sha256-/pKCL19vS8fNwCm27yTNP+32ApHTH5dEGpnsMI11Lf4=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -68,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     pkgConfigModules = [ "double-conversion" ];
+    changelog = "https://github.com/google/double-conversion/blob/${finalAttrs.src.tag}/Changelog";
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
     homepage = "https://github.com/google/double-conversion";
     license = lib.licenses.bsd3;

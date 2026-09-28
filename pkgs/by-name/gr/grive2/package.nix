@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace libgrive/CMakeLists.txt --replace-fail \
+      'find_package(Boost 1.40.0 COMPONENTS program_options filesystem unit_test_framework regex system REQUIRED)' \
+      'find_package(Boost 1.40.0 COMPONENTS program_options filesystem unit_test_framework regex REQUIRED)'
   '';
 
   nativeBuildInputs = [

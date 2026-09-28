@@ -38,9 +38,9 @@ writeTextFile {
       directory.
     '';
     maintainers = with lib.maintainers; [
-      qyliss
       tfc
     ];
     mainProgram = "drawio";
+    license = lib.licenses.mit; # Wrapper itself is MIT
   };
 }

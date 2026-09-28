@@ -164,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       raskin
     ];
     platforms = lib.platforms.all;

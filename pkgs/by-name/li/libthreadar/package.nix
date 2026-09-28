@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gcc-unwrapped ];
 
-  CXXFLAGS = [ "-std=c++14" ];
+  env.CXXFLAGS = toString [ "-std=c++14" ];
 
   configureFlags = [
     "--disable-build-html"

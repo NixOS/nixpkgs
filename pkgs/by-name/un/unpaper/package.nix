@@ -17,6 +17,7 @@
 
   # tests
   nixosTests,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +45,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ffmpeg-headless
   ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytest
+    pytest-xdist
+    pillow
+  ];
+
+  doCheck = true;
+
+  # Tests take quite a long time
+  # Using pytest-xdist, we launch multiple workers
+  # Restrict to max 6 to avoid having a large number of idlers
+  preCheck = ''
+    mesonCheckFlagsArray+=(--test-args "--numprocesses=auto --maxprocesses=6")
+  '';
 
   passthru.tests = {
     inherit (nixosTests) paperless;

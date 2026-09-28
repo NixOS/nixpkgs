@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-linguist (9.1.0)
+    github-linguist (9.5.0)
       cgi
       charlock_holmes (~> 0.7.7)
       mini_mime (~> 1.0)
@@ -10,26 +10,31 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
-    byebug (12.0.0)
-    cgi (0.4.2)
+    addressable (2.8.9)
+      public_suffix (>= 2.0.2, < 8.0)
+    byebug (13.0.0)
+      reline (>= 0.6.0)
+    cgi (0.5.1)
     charlock_holmes (0.7.9)
     coderay (1.1.3)
-    dotenv (3.1.8)
-    faraday (2.13.1)
+    csv (3.3.5)
+    dotenv (3.2.0)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
-    json (2.11.3)
-    licensed (4.5.0)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
+    io-console (0.8.2)
+    json (2.19.2)
+    licensed (5.0.6)
+      csv (~> 3.3)
       json (~> 2.6)
       licensee (~> 9.16)
+      ostruct (~> 0.6.3)
       parallel (~> 1.22)
       pathname-common_prefix (~> 0.0.1)
-      reverse_markdown (~> 2.1)
+      reverse_markdown (>= 2.1, < 4.0)
       ruby-xxHash (~> 0.4.0)
       thor (~> 1.2)
       tomlrb (~> 2.0)
@@ -42,40 +47,44 @@ GEM
     logger (1.7.0)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
-    minitest (5.25.5)
-    mocha (2.7.1)
+    mini_portile2 (2.8.9)
+    minitest (5.27.0)
+    mocha (2.8.2)
       ruby2_keywords (>= 0.0.5)
-    net-http (0.6.0)
-      uri
-    nokogiri (1.18.10)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
+    nokogiri (1.19.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     octokit (9.2.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
+    ostruct (0.6.3)
     parallel (1.27.0)
     pathname-common_prefix (0.0.2)
     plist (3.7.2)
-    pry (0.15.2)
+    pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (6.0.1)
+      reline (>= 0.6.0)
+    public_suffix (7.0.5)
     racc (1.8.1)
-    rake (13.2.1)
+    rake (13.3.1)
     rake-compiler (0.9.9)
       rake
-    reverse_markdown (2.1.1)
+    reline (0.6.3)
+      io-console (~> 0.5)
+    reverse_markdown (3.0.2)
       nokogiri
     ruby-xxHash (0.4.0.2)
     ruby2_keywords (0.0.5)
     rugged (1.9.0)
-    sawyer (0.9.2)
+    sawyer (0.9.3)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    thor (1.3.2)
-    tomlrb (2.0.3)
-    uri (1.0.3)
+    thor (1.5.0)
+    tomlrb (2.0.4)
+    uri (1.1.1)
     yajl-ruby (1.4.3)
 
 PLATFORMS
@@ -85,7 +94,7 @@ DEPENDENCIES
   bundler (~> 2.0)
   byebug
   github-linguist!
-  licensed (~> 4.0)
+  licensed (~> 5.0)
   licensee (~> 9.15)
   minitest (~> 5.15)
   mocha (~> 2.1)
@@ -96,4 +105,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4)
 
 BUNDLED WITH
-   2.5.22
+   2.6.9

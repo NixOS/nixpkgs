@@ -8,4 +8,14 @@ vimUtils.buildVimPlugin {
 
   # https://hurl.dev/
   src = "${hurl.src}/contrib/vim";
+
+  meta = {
+    inherit (hurl.meta)
+      description
+      homepage
+      changelog
+      maintainers
+      license
+      ;
+  };
 }

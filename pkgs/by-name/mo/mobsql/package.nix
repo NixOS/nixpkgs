@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mobsql";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mobsql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7zrM2vmaikyClNgHHO8OXmATNpJtH85/CDv/86vwzZU=";
+    hash = "sha256-Q0TMSomLDDivfDD4bDeirEpzRUuoJkC0Ph3XIhJ/dYw=";
   };
   vendorHash = "sha256-YqduGY9c4zRQscjqze3ZOAB8EYj+0/6V7NceRwLe3DY=";
 
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
       source GTFS feed archives into a SQLite database.
       Its internal SQLite schema mirrors GTFS's spec but adds a feed_id field
       to each table (thus allowing multiple feeds to be loaded
-      to the database simulatenously).
+      to the database simultaneously).
     '';
     homepage = "https://git.sr.ht/~mil/mobsql";
     license = lib.licenses.gpl3Plus;

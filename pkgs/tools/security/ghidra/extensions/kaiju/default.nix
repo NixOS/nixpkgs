@@ -11,7 +11,6 @@ let
     {
       x86_64-linux = "linux_x86_64";
       aarch64-linux = "linux_x86_64";
-      x86_64-darwin = "mac_x86_64";
       aarch64-darwin = "mac_arm_64";
     }
     .${stdenv.hostPlatform.system}
@@ -26,13 +25,13 @@ let
 
   self = buildGhidraExtension (finalAttrs: {
     pname = "kaiju";
-    version = "260116";
+    version = "260608";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
       rev = finalAttrs.version;
-      hash = "sha256-cEGBBVuXUcacPzfc1cWGjDPWt8IfGNakDvfzoDCaBAI=";
+      hash = "sha256-T8Ta8lQob7w0iPsVbZix795AjVwdo2U8yuvgCUBi5fw=";
     };
 
     buildInputs = [
@@ -64,7 +63,6 @@ let
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };

@@ -16,14 +16,13 @@
   requests,
   rich,
   setuptools,
-  testers,
   unidecode,
   termcolor,
   responses,
-  woob,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "woob";
   version = "3.7";
   pyproject = true;
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "woob";
     repo = "woob";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EZHzw+/BIIvmDXG4fF367wsdUTVTHWYb0d0U56ZXwOs=";
   };
 
@@ -63,6 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     responses
+    versionCheckHook
   ];
 
   disabledTests = [
@@ -73,17 +73,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "woob" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = woob;
-    version = "v${version}";
-  };
-
   meta = {
-    changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
+    changelog = "https://gitlab.com/woob/woob/-/blob/${finalAttrs.src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
     mainProgram = "woob";
     homepage = "https://woob.tech";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ DamienCassou ];
   };
-}
+})

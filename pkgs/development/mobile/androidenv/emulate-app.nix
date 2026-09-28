@@ -87,8 +87,10 @@ stdenv.mkDerivation {
         ''
     }
 
-    # We need to specify the location of the Android SDK root folder
-    export ANDROID_SDK_ROOT=${sdk}/libexec/android-sdk
+    # We need to specify the location of the Android SDK root folder.
+    # Still export ANDROID_SDK_ROOT for legacy compatibility.
+    export ANDROID_HOME=${sdk}/libexec/android-sdk
+    export ANDROID_SDK_ROOT="$ANDROID_HOME"
 
     ${lib.optionalString (androidAvdFlags != null) ''
       # If NIX_ANDROID_AVD_FLAGS is empty
@@ -146,7 +148,7 @@ stdenv.mkDerivation {
 
     # Launch the emulator
     echo "\nLaunch the emulator"
-    $ANDROID_SDK_ROOT/emulator/emulator -avd ${deviceName} -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
+    "$ANDROID_HOME/emulator/emulator" -avd ${deviceName} -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
 
     # Wait until the device has completely booted
     echo "Waiting until the emulator has booted the ${deviceName} and the package manager is ready..." >&2

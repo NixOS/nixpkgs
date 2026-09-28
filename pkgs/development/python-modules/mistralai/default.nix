@@ -9,13 +9,11 @@
   # dependencies
   eval-type-backport,
   httpx,
-  invoke,
+  jsonpath-python,
   opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-sdk,
+  opentelemetry-semantic-conventions,
   pydantic,
   python-dateutil,
-  pyyaml,
   typing-inspection,
 
   # optional-dependencies
@@ -23,22 +21,30 @@
   griffe,
   mcp,
   google-auth,
+  msgpack,
   requests,
+  websockets,
+  zstandard,
+  opentelemetry-exporter-otlp-proto-http,
 
   # tests
+  opentelemetry-instrumentation-httpx,
+  opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.12.2";
+  version = "2.10.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-95aHaZx4nZjqX456CGB7gAeoxkMu4tN7TMUbmxajgKU=";
+    hash = "sha256-T3B2fzhL63ttPWAJ3+/3B/+g1Qqk7bGKGY+ZnC/OChg=";
   };
 
   preBuild = ''
@@ -50,18 +56,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-semantic-conventions"
   ];
   dependencies = [
     eval-type-backport
     httpx
-    invoke
+    jsonpath-python
     opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-sdk
+    opentelemetry-semantic-conventions
     pydantic
     python-dateutil
-    pyyaml
     typing-inspection
   ];
 
@@ -75,12 +79,38 @@ buildPythonPackage (finalAttrs: {
       google-auth
       requests
     ];
+    realtime = [
+      websockets
+    ];
+    telemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
+    workflow_payload_compression = [
+      msgpack
+      zstandard
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
+    opentelemetry-instrumentation-httpx
+    pytest-asyncio
     pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.agents
+  ++ finalAttrs.passthru.optional-dependencies.gcp
+  ++ finalAttrs.passthru.optional-dependencies.realtime
+  ++ finalAttrs.passthru.optional-dependencies.telemetry
+  ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
+
+  disabledTestPaths = [
+    # Local test servers cannot bind in the Nix sandbox.
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_app_otel_does_not_enable_mistral_span_without_mistral_telemetry"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_concurrent_async_httpx_auto_instrumented_spans_are_genai_children"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_httpx_auto_instrumented_span_is_child_of_genai_span"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestPerInstanceTracerProvider::test_get_telemetry_tracer_dedicated_provider_captures_app_spans"
   ];
 
   meta = {

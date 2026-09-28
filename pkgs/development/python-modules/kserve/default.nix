@@ -3,17 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
 
   # dependencies
+  aiohttp,
   cloudevents,
+  cryptography,
   fastapi,
   grpc-interceptor,
   grpcio,
   grpcio-tools,
+  h11,
   httpx,
   kubernetes,
   numpy,
@@ -22,12 +24,16 @@
   prometheus-client,
   protobuf,
   psutil,
+  pyasn1,
   pydantic,
   python-dateutil,
+  python-multipart,
   pyyaml,
   six,
+  starlette,
   tabulate,
   timing-asgi,
+  urllib3,
   uvicorn,
 
   # optional-dependencies
@@ -54,49 +60,45 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.16.0";
+  version = "0.20.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
+    hash = "sha256-XSEdhYrsSdrKjHnFCoMPoS0nAZ+Fa8JGj+izVw3wl0o=";
   };
 
-  patches = [
-    # Fix vllm imports in python/kserve/kserve/protocol/rest/openai/types/__init__.py
-    # Submitted upstream: https://github.com/kserve/kserve/pull/4882
-    (fetchpatch2 {
-      name = "update-vllm-imports-to-fix-compat";
-      url = "https://github.com/kserve/kserve/commit/dd1575501e56f588103f448efca684bc54569b81.patch";
-      stripLen = 2;
-      hash = "sha256-K0ImsDADhH6G3R+27nRX/sD7UdRXptYIkLaoxuwB8+M=";
-    })
-  ];
-
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
-
-  pythonRelaxDeps = [
-    "fastapi"
-    "httpx"
-    "numpy"
-    "prometheus-client"
-    "protobuf"
-    "uvicorn"
-    "psutil"
-  ];
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+    "fastapi"
+    "httpx"
+    "numpy"
+    "pandas"
+    "prometheus-client"
+    "protobuf"
+    "psutil"
+    "python-multipart"
+    "starlette"
+    "uvicorn"
+  ];
   dependencies = [
+    aiohttp
     cloudevents
+    cryptography
     fastapi
     grpc-interceptor
     grpcio
     grpcio-tools
+    h11
     httpx
     kubernetes
     numpy
@@ -105,12 +107,16 @@ buildPythonPackage (finalAttrs: {
     prometheus-client
     protobuf
     psutil
+    pyasn1
     pydantic
     python-dateutil
+    python-multipart
     pyyaml
     six
+    starlette
     tabulate
     timing-asgi
+    urllib3
     uvicorn
   ]
   ++ uvicorn.optional-dependencies.standard;
@@ -173,6 +179,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: Cannot interpret '<StringDtype(na_value=nan)>' as a data type
+    "test_fp16_input_as_binary_data"
+
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    "test_health_handler"
+    "test_list_handler"
+    "test_liveness_handler"
+    "test_server_readiness"
+
     # Started failing since vllm was updated to 0.13.0
     # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
     # usage.prompt_tokens

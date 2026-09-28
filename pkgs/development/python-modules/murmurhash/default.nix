@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/murmurhash";
     changelog = "https://github.com/explosion/murmurhash/releases/tag/release-v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aborsu ];
+    maintainers = [ ];
   };
 }

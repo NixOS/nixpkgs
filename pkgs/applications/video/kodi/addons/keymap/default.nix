@@ -11,11 +11,11 @@
 buildKodiAddon rec {
   pname = "keymap";
   namespace = "script.keymap";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-y9bREG1fGY6TJYW4xMUBbsAp6DSzb78tY1+iyUrGjgQ=";
+    sha256 = "sha256-sbyI6ZK8HvXgMxNDtm2Tb/ub93IcdXB5PSdxoL+QIqU=";
   };
 
   propagatedBuildInputs = [

@@ -10,13 +10,13 @@
 
 tcl.mkTclDerivation {
   pname = "tkgl";
-  version = "1.2.1-unstable-2025-06-01";
+  version = "1.2.1-unstable-2026-01-07";
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "TkGL";
-    rev = "45bf16e6c28a070c70fc9a0eb8c47a0b6ff8a2e3";
-    hash = "sha256-AA5LZGhMTWmTZqI/wtycUYLsUe9BwO3voGMS7vGlCM0=";
+    rev = "e47636bc56f02ddca503f98abc65e31a0f0f0a7c";
+    hash = "sha256-Y5NIKWUjbtVn9qiVzc8TsKCm4M3KbNPiBjVTBWf7ALA=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -46,6 +46,9 @@ tcl.mkTclDerivation {
     description = "OpenGL drawing surface for Tk 8 and 9";
     homepage = "https://github.com/3-manifolds/TkGL";
     license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

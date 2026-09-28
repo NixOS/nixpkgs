@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spython";
   version = "0.3.15";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "singularityhub";
     repo = "singularity-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XYiudDXXiX0izFZZpQb71DBg/wRKjeupvKHixGFVuKM=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Streamlined singularity python client (spython) for singularity";
     homepage = "https://github.com/singularityhub/singularity-cli";
-    changelog = "https://github.com/singularityhub/singularity-cli/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/singularityhub/singularity-cli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "spython";
   };
-}
+})

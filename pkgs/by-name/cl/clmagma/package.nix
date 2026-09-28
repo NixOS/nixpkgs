@@ -60,12 +60,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  MKLROOT = "${mkl}";
-  clBLAS = "${clblas}";
+  env = {
+    MKLROOT = mkl;
+    clBLAS = clblas;
 
-  # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
-  # which is not available.
-  OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
+    # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
+    # which is not available.
+    OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
+  };
 
   preBuild = ''
     # By default it tries to use GPU, and thus fails for CPUs

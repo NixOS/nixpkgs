@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "re2";
-  version = "2025-08-12";
+  version = "2025-11-05";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = finalAttrs.version;
-    hash = "sha256-3cWbw8Wlnl1OMPIcbNlc3HnCsuL4VT7psuHWtldsWoQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-0J1HVk+eR7VN0ymucW9dNlT36j16XIfCzcs1EVyEIEU=";
   };
 
   outputs = [
@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ abseil-cpp ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ icu ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "RE2_BUILD_TESTING" true)
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--timeout;999999")
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3Packages) google-re2;
     haskell-re2 = haskellPackages.re2;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Regular expression library";

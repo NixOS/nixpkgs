@@ -9,18 +9,19 @@
   lazarus,
   libx11,
   libsForQt5,
+  lua,
   writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.2.1";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/R13Fwn3019uy+UUtih/CLiXHpFBSKKKKVYdOp29eXs=";
+    hash = "sha256-2WjzjBgM2GP2UlRT603X5825Iro41XL1roDJ0kbswd4=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install/linux/install.sh -I $out
+
+    cd $out/lib64/doublecmd
+
+    ln -vs ${lib.getLib lua}/lib/liblua.so.${lua.version}
+
+    ln -vs ./liblua.so.${lua.version} ./liblua.so
+    ln -vs ./liblua.so.${lua.version} ./liblua.so.${lib.versions.majorMinor lua.version}
 
     runHook postInstall
   '';

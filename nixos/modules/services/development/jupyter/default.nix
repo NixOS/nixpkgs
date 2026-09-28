@@ -31,7 +31,6 @@ let
 in
 {
   meta.maintainers = with lib.maintainers; [
-    aborsu
     b-m-f
   ];
 

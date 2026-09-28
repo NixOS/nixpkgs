@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kcoreaddons,
   kwindowsystem,
@@ -9,7 +10,10 @@
 
 mkDerivation {
   pname = "kcrash";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     kcoreaddons
     kwindowsystem

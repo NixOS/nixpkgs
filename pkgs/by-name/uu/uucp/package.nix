@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
   autoreconfHook,
   testers,
 }:
@@ -22,14 +23,28 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.am \
       --replace-fail 4555 0555
     sed -i '/chown $(OWNER)/d' Makefile.am
-
-    # don't reply on implicitly defined `exit` function in `HAVE_VOID` test:
-    substituteInPlace configure.in \
-      --replace-fail '(void) exit (0)' '(void) (0)'
   '';
 
   patches = [
     ./socklen_t.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "configure.patch";
+      hash = "sha256-6Aqghz6P+bWULHOXCQIdQLRuaE+Lci7t5ojQXJOyeA0=";
+    })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "implicit.patch";
+      hash = "sha256-EsJqZCV4x7ggzpoa4OaibCLvF8L8FGGnLlBtr4Cee18=";
+    })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "gcc15.patch";
+      hash = "sha256-+9H/gQLwkPx4GeWiZyy6oQdysvw2+P1O8wP5It/Tg5k=";
+    })
   ];
 
   # Regenerate `configure`; the checked in version was generated in 2002 and

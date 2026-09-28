@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "8.1.0";
+  version = "8.2.2";
 
   # lighthouse/common/deposit_contract/build.rs, `TAG`
   depositContractSpecVersion = "0.12.1";
@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     tag = "v${version}";
-    hash = "sha256-+MF3KbyKbaEBsrNHQOOolfhl4uJ1laOL1eGtcWEoaLE=";
+    hash = "sha256-Eb4C6uBJmrb7NOwSDp+Fxkuw7fGcPrtuU8DLGxd2cCM=";
   };
 
   patches = [
     ./use-system-sqlite.patch
   ];
 
-  cargoHash = "sha256-6C0rDVsF0wIcApc2YL3qC/Xa9qby9GDbQYGiaaJuH0k=";
+  cargoHash = "sha256-5lSDbwL1+x91yI8YjgXrkZ2C1CwiaoJjrnGcylFbArs=";
 
   buildFeatures = [
     "gnosis"

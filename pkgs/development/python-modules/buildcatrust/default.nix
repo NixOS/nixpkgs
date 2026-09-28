@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "buildcatrust";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-GYw/RN1OK5fqo3em8hia2l/IwN76hnPnFuYprqeX144=";
+    hash = "sha256-I7f2LCQ8dGFOX/d04mOUll7IL7y5Qn1EPu9UO5496So=";
   };
 
   build-system = [ flit-core ];

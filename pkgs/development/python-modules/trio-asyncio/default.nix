@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   # https://github.com/python-trio/trio-asyncio/issues/160
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio-asyncio";
     tag = "v${version}";
-    hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
+    hash = "sha256-7kp99tdJhExjg8WsfBtXJyFrKnSAtTF1fhPFxCU7eI8=";
   };
 
   postPatch = ''

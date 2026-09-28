@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace autostart/CMakeLists.txt \
-      --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
+      --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
   '';
 
   postPatch = ''

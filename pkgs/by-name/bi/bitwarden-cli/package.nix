@@ -14,19 +14,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2026.1.0";
+  version = "2026.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-Z6YMAzn1J5n27qqx3PsaMmD9uIK7FTEl1/tEzePD+6Y=";
+    hash = "sha256-YL1sYO+roK4Jin7IYYCUd9vJALV8bfELKXIAWYen1m8=";
   };
-
-  patches = [
-    # https://github.com/bitwarden/clients/pull/18308
-    ./fix-lockfile.patch
-  ];
 
   postPatch = ''
     # remove code under unfree license
@@ -34,8 +29,9 @@ buildNpmPackage (finalAttrs: {
   '';
 
   nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-lXESe2FwwJIiFVFI5adAgJLhMsK2DTc8V8jELMr5E84=";
+  npmDepsHash = "sha256-6sFt+415Valu8ZhoHb4maACGY5o3YurTMNn9fqnGVl4=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -94,6 +90,7 @@ buildNpmPackage (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
+    inherit (finalAttrs) npmDeps;
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
@@ -114,6 +111,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       dotlambda
+      caverav
     ];
   };
 })

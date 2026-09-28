@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNO_SETCAP_OR_SUID=true"
     "-Dsystemdunitdir=etc/systemd/system"
     "-DINSTALL_SYSTEMD_UNITS=true"
-    "-DSKIP_TESTS=${lib.boolToString (!finalAttrs.doCheck)}"
+    "-DSKIP_TESTS=${lib.boolToString (!finalAttrs.finalPackage.doCheck)}"
   ]
   # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
   ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
           [ libcap ] ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2
         )
       }"
-      include <local/bin.ping>
+      include if exists <local/bin.ping>
       capability net_raw,
       network inet raw,
       network inet6 raw,

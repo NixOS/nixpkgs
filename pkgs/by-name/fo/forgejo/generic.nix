@@ -12,6 +12,7 @@
   bash,
   brotli,
   buildGoModule,
+  coreutils,
   forgejo,
   git,
   gzip,
@@ -83,7 +84,6 @@ buildGoModule rec {
   patches = [
     ./static-root-path.patch
   ];
-
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
   '';
@@ -109,13 +109,30 @@ buildGoModule rec {
   # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
   # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests: | compute-go-test-packages\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }
 
     # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
     git init
+  ''
+  # Unlike NixOS, the Nix build sandbox has no /usr/bin/env and we
+  # can't just create it, so Forgejo trying to execute git hooks
+  # that have #!/usr/bin/env as shebang fails with:
+  #
+  #  To /build/repos44353414/user2/repo1.wiki.git
+  #   ! [remote rejected] fda09356fb8b1da00546f764933f9dacda1b44ea -> master (pre-receive hook declined)
+  #  error: failed to push some refs to '/build/repos44353414/user2/repo1.wiki.git'
+  #   - remote: fatal: cannot exec '/build/appdata2719412950/home/hooks/pre-receive': No such file or directory
+  #
+  # We also can't just call patchShebangs because the hooks are
+  # created just in time by the test suite. Patching the source of
+  # the hooks after go build but before go test is oddly enough
+  # the least invasive hack to have those tests pass.
+  + lib.optionalString (lib.versionAtLeast version "16") ''
+    substituteInPlace modules/git/hook_generate.go \
+      --replace-fail "#!/usr/bin/env" "#!${lib.getExe' coreutils "env"}"
   '';
 
   checkFlags =
@@ -124,8 +141,14 @@ buildGoModule rec {
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "16") [
+        "TestMigrateRepository" # requires network: codeberg.org
+      ]
+      ++ [
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
+        "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

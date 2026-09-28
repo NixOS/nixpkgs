@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "portfolio";
-  version = "1.0.2";
+  version = "1.0.3";
 
   pyproject = false;
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v86pQbj5+SqdzsW0Ko5TW/12NsFVNSPyX6g0e+MdzHE=";
+    hash = "sha256-KlFRgBXEoIF/UqZKSAC/oQ+OQBrl40NIXV+49jBq430=";
   };
 
   postPatch = ''

@@ -37,12 +37,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ctranslate2-cpp ];
-
   dependencies = [
     numpy
     pyyaml
   ];
+
+  env.CTRANSLATE2_ROOT = "${ctranslate2-cpp}";
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 
@@ -67,10 +67,15 @@ buildPythonPackage rec {
     rm -rf ctranslate2
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    "test_invalid_model_path"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+      # RuntimeError: Failed to initialize cpuinfo!"
+      "test_torch_variables"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      "test_invalid_model_path"
+    ];
 
   disabledTestPaths = [
     # TODO: ModuleNotFoundError: No module named 'opennmt'

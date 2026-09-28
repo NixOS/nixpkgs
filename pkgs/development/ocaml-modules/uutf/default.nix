@@ -17,8 +17,9 @@
       throw "uutf is not available with OCaml ${ocaml.version}",
 }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-uutf-${version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
+  pname = "uutf";
   inherit version;
 
   src = fetchurl {
@@ -56,4 +57,4 @@ stdenv.mkDerivation {
     mainProgram = "utftrip";
     inherit (ocaml.meta) platforms;
   };
-}
+})

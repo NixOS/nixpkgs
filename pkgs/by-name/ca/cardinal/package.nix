@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  carla,
   cmake,
   dbus,
   fftwFloat,
@@ -28,15 +29,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cardinal";
-  version = "26.01";
+  version = "26.02";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${finalAttrs.version}/cardinal+deps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KWQc+pcSMebP85yOtQ812qHAwaB6ZOvPpwsxG+myzDo=";
+    hash = "sha256-4xjRCYN6Y7YtFc4gCd8F7CQxB02PLZQ6DN59rZVPYh0=";
   };
 
   prePatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
+
+    substituteInPlace plugins/Cardinal/src/Carla.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
+
+    substituteInPlace plugins/Cardinal/src/Ildaeil.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
   '';
 
   dontUseCmakeConfigure = true;

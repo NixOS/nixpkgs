@@ -5,9 +5,9 @@ some programs that define these miss them if removed
 push_macro and pop_macro pragmas allegedly well supported
 by gcc, clang and msvc
 
---- a/include/fortify/poll.h
-+++ b/include/fortify/poll.h
-@@ -29,6 +29,7 @@ __extension__
+--- a/include/poll.h
++++ b/include/poll.h
+@@ -29,30 +29,39 @@ __extension__
  extern "C" {
  #endif
  
@@ -15,17 +15,40 @@ by gcc, clang and msvc
  #undef poll
  
  _FORTIFY_FN(poll) int poll(struct pollfd * _FORTIFY_POS0 __f, nfds_t __n, int __s)
-@@ -40,6 +41,8 @@ _FORTIFY_FN(poll) int poll(struct pollfd * _FORTIFY_POS0 __f, nfds_t __n, int __
+ {
+ 	__typeof__(sizeof 0) __b = __bos(__f, 0);
+ 
+ 	if (__n > __b / sizeof(struct pollfd))
+ 		__builtin_trap();
  	return __orig_poll(__f, __n, __s);
  }
+ 
+ #if defined(_GNU_SOURCE) && (!defined(_REDIR_TIME64) || !_REDIR_TIME64)
++
++#pragma push_macro("ppoll")
+ #undef ppoll
++
+ _FORTIFY_FN(ppoll) int ppoll(struct pollfd * _FORTIFY_POS0 __f, nfds_t __n,
+                              const struct timespec *__s, const sigset_t *__m)
+ {
+ 	__typeof__(sizeof 0) __b = __bos(__f, 0);
+ 
+ 	if (__n > __b / sizeof(struct pollfd))
+ 		__builtin_trap();
+ 	return __orig_ppoll(__f, __n, __s, __m);
+ }
++
++#pragma pop_macro("ppoll")
++
+ #endif
  
 +#pragma pop_macro("poll")
 +
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/stdio.h
-+++ b/include/fortify/stdio.h
+--- a/include/stdio.h
++++ b/include/stdio.h
 @@ -29,12 +29,19 @@ __extension__
  extern "C" {
  #endif
@@ -45,8 +68,8 @@ by gcc, clang and msvc
 +#pragma push_macro("sprintf")
  #undef sprintf
  
- _FORTIFY_FN(fgets) char *fgets(char * _FORTIFY_POS0 __s, int __n, FILE *__f)
-@@ -140,6 +147,14 @@ _FORTIFY_FN(sprintf) int sprintf(char *__s, const char *__f, ...)
+ __fortify_access(read_write, 1, 2)
+@@ -153,6 +160,14 @@ _FORTIFY_FN(sprintf) int sprintf(char *__s, const char *__f, ...)
  #endif /* __has_builtin(__builtin_va_arg_pack) */
  #endif /* defined(__has_builtin) */
  
@@ -61,8 +84,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/stdlib.h
-+++ b/include/fortify/stdlib.h
+--- a/include/stdlib.h
++++ b/include/stdlib.h
 @@ -38,7 +38,10 @@ extern "C" {
  
  /* FIXME clang */
@@ -71,10 +94,10 @@ by gcc, clang and msvc
 +#pragma push_macro("realpath")
  #undef realpath
 +
+ __fortify_warning_if(__p == NULL, "'realpath' called with path set to `NULL`; did you invert the arguments?")
  _FORTIFY_FN(realpath) char *realpath(const char *__p, char *__r)
  {
- #ifndef PATH_MAX
-@@ -60,6 +63,9 @@ _FORTIFY_FN(realpath) char *realpath(const char *__p, char *__r)
+@@ -61,6 +64,9 @@ _FORTIFY_FN(realpath) char *realpath(const char *__p, char *__r)
  	return __orig_realpath(__p, __r);
  #endif
  }
@@ -84,8 +107,8 @@ by gcc, clang and msvc
  #endif
  
  #ifdef __cplusplus
---- a/include/fortify/string.h
-+++ b/include/fortify/string.h
+--- a/include/string.h
++++ b/include/string.h
 @@ -29,12 +29,19 @@ __extension__
  extern "C" {
  #endif
@@ -105,9 +128,90 @@ by gcc, clang and msvc
 +#pragma push_macro("strncpy")
  #undef strncpy
  
- _FORTIFY_FN(memcpy) void *memcpy(void * _FORTIFY_POS0 __od,
-@@ -183,6 +190,14 @@ _FORTIFY_FN(strlcpy) size_t strlcpy(char * _FORTIFY_POS0 __d,
+ __fortify_access(write_only, 1, 3)
+@@ -84,30 +91,39 @@ _FORTIFY_FN(memset) void *memset(void * _FORTIFY_POS0 __d, int __c, size_t __n)
+ #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
+  || defined(_BSD_SOURCE)
++
++#pragma push_macro("stpcpy")
+ #undef stpcpy
++
+ __fortify_access(write_only, 1)
+ __fortify_access(read_only, 2)
+ _FORTIFY_FN(stpcpy) char *stpcpy(char * _FORTIFY_POS0 __d, const char *__s)
+ {
+ 	size_t __b = __bos(__d, 0);
+ 
+ 	if (strlen(__s) + 1 > __b)
+ 		__builtin_trap();
+ 	return __orig_stpcpy(__d, __s);
  }
+ 
++#pragma push_macro("stpncpy")
+ #undef stpncpy
++
+ __fortify_access(write_only, 1)
+ __fortify_access(read_only, 2)
+ _FORTIFY_FN(stpncpy) char *stpncpy(char * _FORTIFY_POS0 __d, const char *__s,
+                                    size_t __n)
+ {
+ 	size_t __b = __bos(__d, 0);
+ 
+ 	if (__n > __b && strlen(__s) + 1 > __b)
+ 		__builtin_trap();
+ 	return __orig_stpncpy(__d, __s, __n);
+ }
++
++#pragma pop_macro("stpcpy")
++#pragma pop_macro("stpncpy")
++
+ #endif
+ 
+ __fortify_access(read_write, 1)
+@@ -164,24 +180,34 @@ _FORTIFY_FN(strncpy) char *strncpy(char * _FORTIFY_POS0 __d,
+ }
+ 
+ #ifdef _GNU_SOURCE
++
++#pragma push_macro("mempcpy")
+ #undef mempcpy
++
+ __fortify_access(write_only, 1, 3)
+ __fortify_access(read_only, 2, 3)
+ _FORTIFY_FN(mempcpy) void *mempcpy(void * _FORTIFY_POS0 __d,
+                                    const void * _FORTIFY_POS0 __s, size_t __n)
+ {
+ 	size_t __bd = __bos(__d, 0);
+ 	size_t __bs = __bos(__s, 0);
+ 
+ 	if (__n > __bd || __n > __bs)
+ 		__builtin_trap();
+ 	return __orig_mempcpy(__d, __s, __n);
+ }
++
++#pragma pop_macro("mempcpy")
++
+ #endif
+ 
+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++
++#pragma push_macro("strlcat")
+ #undef strlcat
++#pragma push_macro("strlcpy")
+ #undef strlcpy
++
+ __fortify_access(read_write, 1)
+ __fortify_access(read_only, 2)
+ _FORTIFY_FN(strlcat) size_t strlcat(char * _FORTIFY_POS0 __d,
+@@ -205,8 +231,20 @@ _FORTIFY_FN(strlcpy) size_t strlcpy(char * _FORTIFY_POS0 __d,
+ 		__builtin_trap();
+ 	return __orig_strlcpy(__d, __s, __n);
+ }
++
++#pragma pop_macro("strlcat")
++#pragma pop_macro("strlcpy")
++
  #endif
  
 +#pragma pop_macro("memcpy")
@@ -121,8 +225,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/strings.h
-+++ b/include/fortify/strings.h
+--- a/include/strings.h
++++ b/include/strings.h
 @@ -29,8 +29,12 @@ extern "C" {
  #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE) || defined(_POSIX_SOURCE) \
   || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE+0 < 200809L) \
@@ -133,10 +237,10 @@ by gcc, clang and msvc
 +#pragma push_macro("bzero")
  #undef bzero
 +
+ __fortify_access(write_only, 2, 3)
+ __fortify_access(read_only, 1, 3)
  _FORTIFY_FN(bcopy) void bcopy(const void * _FORTIFY_POS0 __s,
-                               void * _FORTIFY_POS0 __d, size_t __n)
- {
-@@ -52,6 +56,9 @@ _FORTIFY_FN(bzero) void bzero(void * _FORTIFY_POS0 __s, size_t __n)
+@@ -55,6 +59,9 @@ _FORTIFY_FN(bzero) void bzero(void * _FORTIFY_POS0 __s, size_t __n)
  }
  #endif
  
@@ -146,8 +250,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/sys/socket.h
-+++ b/include/fortify/sys/socket.h
+--- a/include/sys/socket.h
++++ b/include/sys/socket.h
 @@ -29,9 +29,13 @@ __extension__
  extern "C" {
  #endif
@@ -161,8 +265,8 @@ by gcc, clang and msvc
 +#pragma push_macro("sendto")
  #undef sendto
  
- _FORTIFY_FN(recv) ssize_t recv(int __f, void * _FORTIFY_POS0 __s, size_t __n,
-@@ -76,6 +80,11 @@ _FORTIFY_FN(sendto) ssize_t sendto(int __f, const void * _FORTIFY_POS0 __s,
+ __fortify_access(write_only, 2, 3)
+@@ -80,6 +84,11 @@ _FORTIFY_FN(sendto) ssize_t sendto(int __f, const void * _FORTIFY_POS0 __s,
  	return __orig_sendto(__f, __s, __n, __fl, __a, __l);
  }
  
@@ -174,8 +278,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/unistd.h
-+++ b/include/fortify/unistd.h
+--- a/include/unistd.h
++++ b/include/unistd.h
 @@ -29,16 +29,27 @@ __extension__
  extern "C" {
  #endif
@@ -203,10 +307,52 @@ by gcc, clang and msvc
 +#pragma push_macro("write")
  #undef write
  
- _FORTIFY_FN(confstr) size_t confstr(int __n, char * _FORTIFY_POS0 __s, size_t __l)
-@@ -158,6 +169,18 @@ _FORTIFY_FN(write) ssize_t write(int __f, const void * _FORTIFY_POS0 __s,
- 	return __orig_write(__f, __s, __n);
+ __fortify_access(write_only, 2, 3)
+@@ -63,16 +74,22 @@ _FORTIFY_FN(getcwd) char *getcwd(char * _FORTIFY_POS0 __s, size_t __l)
  }
+ 
+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++
++#pragma push_macro("getdomainname")
+ #undef getdomainname
++
+ __fortify_access(write_only, 1, 2)
+ _FORTIFY_FN(getdomainname) int getdomainname(char * _FORTIFY_POS0 __s, size_t __l)
+ {
+ 	size_t __b = __bos(__s, 0);
+ 
+ 	if (__l > __b)
+ 		__builtin_trap();
+ 	return __orig_getdomainname(__s, __l);
+ }
++
++#pragma pop_macro("getdomainname")
++
+ #endif
+ 
+ _FORTIFY_FN(getgroups) int getgroups(int __l, gid_t * _FORTIFY_POS0 __s)
+@@ -169,21 +186,37 @@ _FORTIFY_FN(write) ssize_t write(int __f, const void * _FORTIFY_POS0 __s,
+ }
+ 
+ #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++
++#pragma push_macro("swab")
+ #undef swab
+ 
+ _FORTIFY_FN(swab) void swab(const void * _FORTIFY_POS0 __os,
+                                  void * _FORTIFY_POS0 __od, ssize_t __n)
+ {
+ 	size_t __bs = __bos(__os, 0);
+ 	size_t __bd = __bos(__od, 0);
+ 
+ 	if ((size_t)__n > __bs || (size_t)__n > __bd)
+ 		__builtin_trap();
+ 	return __orig_swab(__os, __od, __n);
+ }
+ 
++#pragma pop_macro("swab")
++
+ #endif
  
 +#pragma pop_macro("confstr")
 +#pragma pop_macro("getcwd")
@@ -223,9 +369,9 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/wchar.h
-+++ b/include/fortify/wchar.h
-@@ -43,19 +43,33 @@ __extension__
+--- a/include/wchar.h
++++ b/include/wchar.h
+@@ -46,33 +46,49 @@ __extension__
  extern "C" {
  #endif
  
@@ -249,8 +395,6 @@ by gcc, clang and msvc
  #undef wcsrtombs
 +#pragma push_macro("wcstombs")
  #undef wcstombs
-+#pragma push_macro("wctomb")
- #undef wctomb
 +#pragma push_macro("wmemcpy")
  #undef wmemcpy
 +#pragma push_macro("wmemmove")
@@ -259,7 +403,56 @@ by gcc, clang and msvc
  #undef wmemset
  
  _FORTIFY_FN(fgetws) wchar_t *fgetws(wchar_t * _FORTIFY_POS0 __s,
-@@ -269,6 +283,21 @@ _FORTIFY_FN(wmemset) wchar_t *wmemset(wchar_t * _FORTIFY_POS0 __s,
+                                     int __n, FILE *__f)
+ {
+ 	size_t __b = __bos(__s, 0);
+ 
+ 	if ((size_t)__n > __b / sizeof(wchar_t))
+ 		__builtin_trap();
+ 	return __orig_fgetws(__s, __n, __f);
+ }
+ 
+ #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)  || defined(_BSD_SOURCE)
++
++#pragma push_macro("mbsnrtowcs")
+ #undef mbsnrtowcs
++
+ _FORTIFY_FN(mbsnrtowcs) size_t mbsnrtowcs(wchar_t * _FORTIFY_POS0 __d,
+                                           const char **__s, size_t __n,
+                                           size_t __wn, mbstate_t *__st)
+@@ -92,6 +108,9 @@ _FORTIFY_FN(mbsnrtowcs) size_t mbsnrtowcs(wchar_t * _FORTIFY_POS0 __d,
+ 	}
+ 	return __r;
+ }
++
++#pragma pop_macro("mbsnrtowcs")
++
+ #endif
+ 
+ _FORTIFY_FN(mbsrtowcs) size_t mbsrtowcs(wchar_t * _FORTIFY_POS0 __d,
+@@ -187,7 +206,10 @@ _FORTIFY_FN(wcsncpy) wchar_t *wcsncpy(wchar_t * _FORTIFY_POS0 __d,
+ 
+ #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)  || defined(_BSD_SOURCE)
++
++#pragma push_macro("wcsnrtombs")
+ #undef wcsnrtombs
++
+ _FORTIFY_FN(wcsnrtombs) size_t wcsnrtombs(char * _FORTIFY_POS0 __d,
+                                           const wchar_t **__s, size_t __wn,
+                                           size_t __n, mbstate_t *__st)
+@@ -207,6 +229,9 @@ _FORTIFY_FN(wcsnrtombs) size_t wcsnrtombs(char * _FORTIFY_POS0 __d,
+ 	}
+ 	return __r;
+ }
++
++#pragma pop_macro("wcsnrtombs")
++
+ #endif
+ 
+ _FORTIFY_FN(wcsrtombs) size_t wcsrtombs(char * _FORTIFY_POS0 __d,
+@@ -262,6 +287,20 @@ _FORTIFY_FN(wmemset) wchar_t *wmemset(wchar_t * _FORTIFY_POS0 __s,
  	return __orig_wmemset(__s, __c, __n);
  }
  
@@ -273,7 +466,6 @@ by gcc, clang and msvc
 +#pragma pop_macro("wcsncpy")
 +#pragma pop_macro("wcsrtombs")
 +#pragma pop_macro("wcstombs")
-+#pragma pop_macro("wctomb")
 +#pragma pop_macro("wmemcpy")
 +#pragma pop_macro("wmemmove")
 +#pragma pop_macro("wmemset")

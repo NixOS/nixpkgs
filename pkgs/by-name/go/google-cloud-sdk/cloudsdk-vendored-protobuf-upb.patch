@@ -1,0 +1,22 @@
+diff --git a/lib/third_party/cloudsdk/google/protobuf/internal/api_implementation.py b/lib/third_party/cloudsdk/google/protobuf/internal/api_implementation.py
+--- a/lib/third_party/cloudsdk/google/protobuf/internal/api_implementation.py
++++ b/lib/third_party/cloudsdk/google/protobuf/internal/api_implementation.py
+@@ -55,7 +55,7 @@ _implementation_type = 'python'
+ if _implementation_type is None:
+-  if _CanImport('google._upb._message'):
++  if _CanImport('cloudsdk.google._upb._message'):
+     _implementation_type = 'upb'
+-  elif _CanImport('google.protobuf.pyext._message'):
++  elif _CanImport('cloudsdk.google.protobuf.pyext._message'):
+     _implementation_type = 'cpp'
+   else:
+     _implementation_type = 'python'
+@@ -96,7 +96,7 @@ if _implementation_type == 'cpp':
+ if _implementation_type == 'upb':
+   try:
+     # pylint: disable=g-import-not-at-top
+-    from google._upb import _message
++    from cloudsdk.google._upb import _message
+     _c_module = _message
+     del _message
+   except ImportError:

@@ -2,35 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   kinparse,
   pyspice,
   graphviz,
   sexpdata,
+  simp-sexp,
 }:
 buildPythonPackage rec {
   pname = "skidl";
-  version = "2.0.1";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "devbisme";
     repo = "skidl";
-    tag = version;
-    sha256 = "sha256-EzKtXdQFB6kjaIuCYAsyFPlwmkefb5RJcnpFYCVHHb8=";
+    tag = "v${version}";
+    sha256 = "sha256-7rauFhaLXyZ5SGtEF7qoAbrj/VgP4qpl+BWUeERefb4=";
   };
 
   propagatedBuildInputs = [
-    future
     kinparse
     pyspice
     graphviz
     sexpdata
+    simp-sexp
   ];
 
   # Checks require availability of the kicad symbol libraries.
   doCheck = false;
-  pythonImportsCheck = [ "skidl" ];
 
   meta = {
     description = "SKiDL is a module that extends Python with the ability to design electronic circuits";

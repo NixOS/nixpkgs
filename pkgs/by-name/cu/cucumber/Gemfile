@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'cucumber'
+gem 'cucumber', '10.2.0'

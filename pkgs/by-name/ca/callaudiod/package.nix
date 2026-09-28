@@ -15,7 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.10";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "mobian1";
     repo = "callaudiod";
     tag = finalAttrs.version;

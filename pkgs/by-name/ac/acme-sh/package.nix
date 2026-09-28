@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acme.sh";
-  version = "3.1.2";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     tag = finalAttrs.version;
-    hash = "sha256-eTNligdr4LV+yer+D2GJ1tdv2APP3I4Revjw1q8WrH0=";
+    hash = "sha256-wybDNQ0shmRPvYpBkMWZA0UQjh866+yFclqyMAlNeiE=";
   };
 
   nativeBuildInputs = [
@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })

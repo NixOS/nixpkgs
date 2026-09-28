@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.8";
 
   src = fetchurl {
-    url = "http://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
+    url = "https://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
     hash = "sha256-ZEm3u3XcKC7GvxuYp1PJUHRupbGQ7JruCXiB5NxcS/E=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
   meta = {
-    homepage = "http://www.liblogging.org/";
+    homepage = "https://github.com/rsyslog/liblogging";
     description = "Lightweight signal-safe logging library";
     mainProgram = "stdlogctl";
     license = lib.licenses.bsd2;

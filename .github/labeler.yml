@@ -9,6 +9,7 @@
           - '^release-'
           - '^staging-\d'
           - '^staging-next-\d'
+          - '^staging-nixos-\d'
 
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
@@ -41,14 +42,6 @@
           - any-glob-to-any-file:
               - .github/**/*
               - ci/**/*.*
-
-"6.topic: coq":
-  - any:
-      - changed-files:
-          - any-glob-to-any-file:
-              - pkgs/applications/science/logic/coq/**/*
-              - pkgs/development/coq-modules/**/*
-              - pkgs/top-level/coq-packages.nix
 
 "6.topic: COSMIC":
   - any:
@@ -270,8 +263,14 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
+              - doc/packages/linux.section.md
+              - lib/kernel.nix
+              - nixos/doc/manual/configuration/linux-kernel.chapter.md
+              - nixos/modules/system/boot/kernel.nix
+              - nixos/tests/kernel-generic/**/*
               - pkgs/build-support/kernel/**/*
               - pkgs/os-specific/linux/kernel/**/*
+              - pkgs/top-level/linux-kernels.nix
 
 "6.topic: lib":
   - any:
@@ -459,6 +458,18 @@
           - any-glob-to-any-file:
               - pkgs/development/rocm-modules/**/*
 
+"6.topic: rocq":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/science/logic/coq/**/*
+              - pkgs/applications/science/logic/rocq-core/**/*
+              - pkgs/build-support/coq/**/*
+              - pkgs/build-support/rocq/**/*
+              - pkgs/development/rocq-modules/**/*
+              - pkgs/top-level/coq-packages.nix
+              - pkgs/top-level/rocq-packages.nix
+
 "6.topic: ruby":
   - any:
       - changed-files:
@@ -545,7 +556,6 @@
               - pkgs/by-name/*/*tree-sitter*/**/*
               - pkgs/by-name/ne/neovim-unwrapped/treesitter-parsers.nix
               - pkgs/development/python-modules/*tree-sitter*/**/*
-              - pkgs/development/tools/parsing/tree-sitter/**/*
 
 "6.topic: updaters":
   - any:

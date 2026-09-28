@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "youtube-tui";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = "youtube-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2Y0CATnKmZsYr3eUch3EUgHw41X1a2iOP0CjEJLXnc=";
+    hash = "sha256-bTdhncgtQaC367P7OLfX5om+Zn0+V5HHGaWJ252xnrA=";
   };
 
-  cargoHash = "sha256-W3MBYcxb51cBjHUF7zXMOrRVzcxUX/TxiLyYGuOPFyI=";
+  cargoHash = "sha256-Mq0FyapMGufTyPJXfRVZtPa3XMdimZ8nSXqTue1tdA0=";
 
   nativeBuildInputs = [
     pkg-config

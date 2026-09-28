@@ -6,10 +6,13 @@
   phira-unwrapped,
   makeWrapper,
   libGL,
+  libx11,
+  libxi,
+  libxcursor,
   # A derivation or a path that contains a dir `assets`.
   overrideAssets ? fetchzip {
-    url = "https://github.com/TeamFlos/phira/releases/download/v${phira-unwrapped.version}/Phira-windows-v${phira-unwrapped.version}.zip";
-    hash = "sha256-kgmIIIzg+wxyspQTyW1GucW0RVPfBhIRlK5DEGXK1Qs=";
+    url = "https://github.com/TeamFlos/phira/releases/download/v${phira-unwrapped.version}/Phira-windows-x86_64-v${phira-unwrapped.version}.zip";
+    hash = "sha256-1/FBg1i8O83yusEAFlXiYWyabv04n1qkXwLgWaw8sTc=";
     stripRoot = false;
     meta.license = lib.licenses.unfree;
   },
@@ -29,14 +32,19 @@ symlinkJoin {
     cp -r ${overrideAssets}/assets $phira_root
 
     wrapper_options=(
-      ${lib.optionalString stdenv.hostPlatform.isLinux "--suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}"}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--suffix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libx11
+          libxi
+          libxcursor
+        ]
+      }"}
       --run '
         export PHIRA_ROOT=''${PHIRA_ROOT-"''${XDG_DATA_HOME-"$HOME/.local/share"}/phira"}
-        if [[ ! -d "$PHIRA_ROOT/assets" ]]; then
-          mkdir -p "$PHIRA_ROOT"
-          cp -r "'$phira_root/assets'" "$PHIRA_ROOT"
-          chmod -R +w "$PHIRA_ROOT/assets"
-        fi
+        mkdir -p "$PHIRA_ROOT"
+        cp -L -r --update=none "'$phira_root/assets'" "$PHIRA_ROOT"
+        chmod -R +w "$PHIRA_ROOT/assets"
       '
     )
 
@@ -46,6 +54,9 @@ symlinkJoin {
 
   passthru.assets = overrideAssets;
 
-  meta = phira-unwrapped.meta;
+  meta = phira-unwrapped.meta // {
+    # trick meta.position
+    description = phira-unwrapped.meta.description;
+  };
 
 }

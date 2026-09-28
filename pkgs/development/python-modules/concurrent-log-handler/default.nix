@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "concurrent-log-handler";
-  version = "0.9.28";
+  version = "0.9.29";
   pyproject = true;
 
   src = fetchPypi {
     pname = "concurrent_log_handler";
     inherit version;
-    hash = "sha256-TMJ5abNCAjm9FTd5Jm9A2XE+zoFOMSt6p1POYsbqzbg=";
+    hash = "sha256-vDenbT84TL9KmPaT69dwVD7cD0zVxqtrxw6eHX1YImU=";
   };
 
   build-system = [ hatchling ];

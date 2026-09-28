@@ -95,14 +95,15 @@ Without it, only the user's primary group is used in authentication!
 +}
 --- dbus-1.6.8/dbus/dbus-sysdeps-unix.c.orig	2013-02-28 13:08:52.171215237 +0000
 +++ dbus-1.6.8/dbus/dbus-sysdeps-unix.c	2013-02-28 13:13:52.224615146 +0000
-@@ -21,6 +21,10 @@
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-  *
-  */
+@@ -26,6 +26,11 @@
+ 
+ #include <config.h>
+ 
 +#ifndef HAVE_GETGROUPLIST
 +#include "getgrouplist.c"
 +#define HAVE_GETGROUPLIST
 +#endif
- 
- #include <config.h>
- 
++
+ #include "dbus-internals.h"
+ #include "dbus-sysdeps.h"
+ #include "dbus-sysdeps-unix.h"

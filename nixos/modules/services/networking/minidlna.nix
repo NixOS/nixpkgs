@@ -10,6 +10,12 @@ let
   format = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
   cfgfile = format.generate "minidlna.conf" cfg.settings;
 
+  # Match a media_dir entry under /home, allowing an optional `A,`/`V,`/`P,`
+  # media-type prefix.
+  mediaDirsUnderHome = lib.any (
+    dir: builtins.match "([AVP],)?/home/.*" dir != null
+  ) cfg.settings.media_dir;
+
 in
 {
   options.services.minidlna.enable = lib.mkEnableOption "MiniDLNA, a simple DLNA server. Consider adding `openFirewall = true` into your config";
@@ -133,6 +139,49 @@ in
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
         ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${cfgfile}";
+
+        # Hardening
+        AmbientCapabilities = [ "" ];
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        # Many users keep media under /home; auto-disable ProtectHome when
+        # any media_dir entry is under /home. Override explicitly to force.
+        ProtectHome = lib.mkDefault (!mediaDirsUnderHome);
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        # AF_NETLINK is required for getifaddrs() to enumerate interfaces
+        # for SSDP multicast (239.255.255.250:1900) advertisements.
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
       };
     };
   };

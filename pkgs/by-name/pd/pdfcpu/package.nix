@@ -4,17 +4,18 @@
   stdenv,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pdfcpu";
-  version = "0.11.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = "pdfcpu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0xsa7/WlqjRMP961FTonfty40+C1knI3szCmCDfZJ/0=";
+    hash = "sha256-thbm0QgIP5ANPz+Fp9At5zhTOsVOjUCvIGRltmEDjsI=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -32,12 +33,12 @@ buildGoModule (finalAttrs: {
     postFetch = ''
       cd "$out"
       git rev-parse HEAD > $out/COMMIT
-      git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > $out/SOURCE_DATE
+      git log -1 --pretty=%cd --date=format:'%Y-%m-%d %H:%M:%S UTC' > $out/SOURCE_DATE
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
 
-  vendorHash = "sha256-wZYYIcPhyDlmIhuJs91EqPB8AjLIDHz39lXh35LHUwQ=";
+  vendorHash = "sha256-5Yc9wrsnExS6+bA9uqioEik2qFLiMJhsokD1LPwCqLY=";
 
   ldflags = [
     "-s"
@@ -47,8 +48,21 @@ buildGoModule (finalAttrs: {
 
   # ldflags based on metadata from git and source
   preBuild = ''
-    ldflags+=" -X main.commit=$(cat COMMIT)"
-    ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+    ldflags+=(
+      "-X 'main.commit=$(cat COMMIT)'"
+      "-X 'main.date=$(cat SOURCE_DATE)'"
+    )
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd pdfcpu \
+      --zsh <($out/bin/pdfcpu completion zsh) \
+      --fish <($out/bin/pdfcpu completion fish) \
+      --bash <($out/bin/pdfcpu completion bash)
   '';
 
   # No tests
@@ -65,9 +79,9 @@ buildGoModule (finalAttrs: {
       if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
     }"/pdfcpu
     versionOutput="$($out/bin/pdfcpu version)"
-    for part in ${finalAttrs.version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
+    for part in ${finalAttrs.version} "$(cut -c1-8 COMMIT)" "$(cat SOURCE_DATE)"; do
       if [[ ! "$versionOutput" =~ "$part" ]]; then
-          echo version output did not contain expected part $part . Output was:
+          echo version output did not contain expected part \"$part\" . Output was:
           echo "$versionOutput"
           exit 3
       fi
@@ -78,6 +92,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "PDF processor written in Go";
+    changelog = "https://pdfcpu.io/changelog/";
     homepage = "https://pdfcpu.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];

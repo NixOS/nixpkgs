@@ -30,13 +30,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "frankenphp";
-  version = "1.11.2";
+  version = "1.12.7";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JzZXg/tkSZqLZn56RyLb8Q8SaeG/tHA8Sqxu99s5ks0=";
+    hash = "sha256-UDxtI/+QSBRLZouHD3Lxdg4GFpU8tqybyPMvWpP/FA0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-9RHD2ZcolhgQO0UKxkqFjxXGAVijSYQxVt7s+/aXNIo=";
+  vendorHash = "sha256-RXD7mJIV7cgo1YG8ECepuWtvIiOHbcZ1by/noaQZVFI=";
 
   buildInputs = [
     phpUnwrapped
@@ -80,7 +80,7 @@ buildGoModule (finalAttrs: {
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${finalAttrs.version} PHP ${phpUnwrapped.version} Caddy'"
     # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
   ]
-  ++ (lib.optional pieBuild [ "-static-pie" ]);
+  ++ (lib.optionals pieBuild [ "-static-pie" ]);
 
   preBuild = ''
     export CGO_CFLAGS="$(${phpConfig} --includes)"

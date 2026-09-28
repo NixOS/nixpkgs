@@ -6,12 +6,12 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trashy";
   version = "2.0.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1xHyhAV8hpgMngQdamRzEliyG60t+I3KfsDJi0+180o=";
   };
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
-    changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/oberblastmeister/trashy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8
     platforms = lib.platforms.linux;
   };
-}
+})

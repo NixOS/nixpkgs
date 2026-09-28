@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdserve";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jfernandez";
     repo = "mdserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8eQBzdR5+O5U85HSRj6P7PgE7ubZhY8IkNXsDEpy+w=";
+    hash = "sha256-f84Fkd3nONE+nJM27c+1kRztXEzsDye77heJDG8MUm0=";
   };
 
-  cargoHash = "sha256-jBTbScyflkvhwfOu4DHkcsfxogjgSGXBAF2euq3lZEo=";
+  cargoHash = "sha256-SuCLJE0uSUGCzF4OXL4I9go0rw5GMvCBHxnRpIKTqi0=";
 
   __darwinAllowLocalNetworking = true;
 

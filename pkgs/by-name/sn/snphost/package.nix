@@ -57,7 +57,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/virtee/snphost/";
     changelog = "https://github.com/virtee/snphost/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [
+      katexochen
+      charludo
+    ];
     mainProgram = "snphost";
     platforms = [ "x86_64-linux" ];
   };

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+  env.CXXFLAGS = toString [ "-DU_USING_ICU_NAMESPACE=1" ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

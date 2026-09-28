@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "BGP swiss army knife of networking";
     homepage = "https://github.com/Exa-Networks/exabgp";
-    changelog = "https://github.com/Exa-Networks/exabgp/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/Exa-Networks/exabgp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     mainProgram = "exabgp";
     maintainers = with lib.maintainers; [

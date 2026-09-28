@@ -36,6 +36,6 @@ buildNpmPackage {
     description = "Simple online fake REST API server";
     homepage = "https://jsonplaceholder.typicode.com/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

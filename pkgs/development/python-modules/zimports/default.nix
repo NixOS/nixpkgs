@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "zimports";
-  version = "0.6.2";
+  version = "0.7.0";
   format = "setuptools";
 
   # upstream technically support 3.7 through 3.9, but 3.10 happens to work while 3.11 breaks with an import error
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "sqlalchemyorg";
     repo = "zimports";
     tag = "v${version}";
-    hash = "sha256-yI/ZTNqVIu76xivXJ+MoLpPupf0RQjQOnP6OWMPajBo=";
+    hash = "sha256-5RSVRI1sgCXkkkMQo4azKj8AlShxDWEF6qQoU3VfoI8=";
   };
 
   propagatedBuildInputs = [

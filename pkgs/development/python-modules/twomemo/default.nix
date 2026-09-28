@@ -11,7 +11,7 @@
   typing-extensions,
   xmlschema,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twomemo";
   version = "2.1.0";
   pyproject = true;
@@ -19,11 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-twomemo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OVZmssJuufKwyEd8q25h9AcDprZZPm588khncBqTaJA=";
   };
-
-  strictDeps = true;
 
   build-system = [ setuptools ];
 
@@ -47,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Backend implementation of the urn:xmpp:omemo:2 namespace for python-omemo";
     homepage = "https://github.com/Syndace/python-twomemo";
-    changelog = "https://github.com/Syndace/python-twomemo/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Syndace/python-twomemo/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ themadbit ];
   };
-}
+})

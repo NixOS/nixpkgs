@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acme";
-  version = "unstable-2021-11-05";
+  version = "0.97-unstable-2021-11-05";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "= gcc" "?= gcc"
+      --replace-fail "= gcc" "?= gcc"
   '';
 
   enableParallelBuilding = true;

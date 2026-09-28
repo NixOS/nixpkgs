@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/linuxquota/";
     license = lib.licenses.gpl2Plus; # With some files being BSD as an exception
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
   };
 })

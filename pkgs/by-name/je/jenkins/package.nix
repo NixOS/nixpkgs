@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  jdk21,
+  jdk25,
   writeScript,
   nixosTests,
   jq,
@@ -18,11 +18,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.541.2";
+  version = "2.568.3";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-3J1TLlTUt+t9eO3NMheHbdSBG0nRo7ZuWZrUpkLVcZM=";
+    hash = "sha256-zNv9zq3oNInjQoWk1XwSE0/+oKCcogBiKC5YDL+l8J4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,10 +36,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+    ${jdk25}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
       && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${jdk25}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 

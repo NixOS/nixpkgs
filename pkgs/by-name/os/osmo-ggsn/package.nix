@@ -5,17 +5,18 @@
   autoreconfHook,
   pkg-config,
   libosmocore,
+  libosmo-netif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-ggsn";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-ggsn";
     rev = finalAttrs.version;
-    hash = "sha256-qsBjoLyMlRgUjhX1tyI/MoHGmww1XUT3OMH4dVZzLU4=";
+    hash = "sha256-KBD5uD5W10WGaUypWDFQIRp32AQfRpeeYEKy3TuPmWg=";
   };
 
   postPatch = ''
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libosmocore
+    libosmo-netif
   ];
 
   enableParallelBuilding = true;

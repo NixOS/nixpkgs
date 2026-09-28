@@ -1,11 +1,9 @@
 {
-  cmake,
-  doxygen,
   eiquadprog,
   fetchFromGitHub,
+  jrl-cmakemodules,
   lib,
   osqp-eigen,
-  pkg-config,
   pinocchio,
   proxsuite,
   stdenv,
@@ -13,16 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsid";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-enSYneV/Av7lF8ADdLqU1Wj2z8/ePocgecFtOBXS0EY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f/SecQfEmrlelVR5584KIHFwwrp5Cy2aBMKI/rxuPmc=";
   };
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_OSQP" true)
     (lib.cmakeBool "BUILD_WITH_PROXQP" true)
@@ -34,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [
@@ -48,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Efficient Task Space Inverse Dynamics (TSID) based on Pinocchio";

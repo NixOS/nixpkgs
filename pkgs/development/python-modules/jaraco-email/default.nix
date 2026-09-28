@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.email/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/jaraco.email/blob/${src.tag}/NEWS.rst";
     description = "E-mail facilities by jaraco";
     homepage = "https://github.com/jaraco/jaraco.email";
     license = lib.licenses.mit;

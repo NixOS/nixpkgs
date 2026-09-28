@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   preCheck = ''
@@ -40,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Disabled because the tests can time-out.
   doCheck = false;
+
+  __structuredAttrs = true;
 
   meta =
 

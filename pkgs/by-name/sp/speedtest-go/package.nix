@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "speedtest-go";
-  version = "1.7.10";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = "speedtest-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w0gIyeoQP+MfA9Q2CD7+laABmSrJ9u836E+UIhJeWdk=";
+    hash = "sha256-ItZypVHoqs12wR21GNIat4baRh2RIYuMBQiqQGoEJ78=";
   };
 
-  vendorHash = "sha256-2z241HQOckNFvQWkxfjVVmmdFW4XevQBLj8huxYAheg=";
+  vendorHash = "sha256-n4cF6P/eeQlPd5I6r79XtQnmRWTDvQ/nMEs791D7kn0=";
 
   excludedPackages = [ "example" ];
 

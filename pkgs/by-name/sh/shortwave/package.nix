@@ -9,6 +9,7 @@
   gettext,
   gitMinimal,
   glib,
+  glib-networking,
   gst_all_1,
   gtk4,
   libadwaita,
@@ -20,27 +21,29 @@
   rustc,
   sqlite,
   wrapGAppsHook4,
+  libglycin-gtk4,
   libshumate,
   libseccomp,
+  libxml2,
   lcms2,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "shortwave";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "sha256-MbkfbpX2av/o+wC1pORHfaLXnchEIFmhQ5mqPuMElak=";
+    hash = "sha256-MiaozChp5QF/Q0fCTCgnyGJLyIftTkMAbmfRQ/73QP8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-DBWg9Xss1ChbPyI3MiN7eTXhSUG37ZaYS/HFxou9d/w=";
+    hash = "sha256-v6aphHunZrXPiuKRFT+EcWJySmQOOT433ST+m8j1z4w=";
   };
 
   nativeBuildInputs = [
@@ -61,12 +64,15 @@ stdenv.mkDerivation rec {
     dbus
     gdk-pixbuf
     glib
+    glib-networking
     gtk4
     libadwaita
+    libglycin-gtk4
     openssl
     sqlite
     libshumate
     libseccomp
+    libxml2
     lcms2
   ]
   ++ (with gst_all_1; [

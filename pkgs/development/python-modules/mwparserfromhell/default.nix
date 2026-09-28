@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mwparserfromhell";
   version = "0.7.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "earwig";
     repo = "mwparserfromhell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yPj272bMh/pLapc7lDgP4+AnDBpE2FrDICRUxizIcSA=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parser for MediaWiki wikicode";
     homepage = "https://mwparserfromhell.readthedocs.io/";
-    changelog = "https://github.com/earwig/mwparserfromhell/releases/tag/${src.tag}";
+    changelog = "https://github.com/earwig/mwparserfromhell/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

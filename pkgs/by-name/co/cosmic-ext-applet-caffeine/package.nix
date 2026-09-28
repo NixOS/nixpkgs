@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-caffeine";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-06-03";
 
   src = fetchFromGitHub {
     owner = "tropicbliss";
     repo = "cosmic-ext-applet-caffeine";
-    rev = "f101f568c5e6bd5c1acbd1f32a09026898cd5a4c";
-    hash = "sha256-tnuNOuTUdwGnS3mIHs5K4ByA6C9uymDTqYDwevJVNFw=";
+    rev = "e427a1a903fd612a09477d0e90bd4aed4a494a08";
+    hash = "sha256-nsO6UMW9T2wHtpcuZNm6VB7PMsqdiNUxKrU2K9/VYV4=";
   };
 
   cargoHash = "sha256-9EUrO8JNU0FPrqT6WDE+jfVgQSgODK8rbNZLgUb26EQ=";

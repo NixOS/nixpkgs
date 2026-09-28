@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's/getline/my_getline/' -i score.c
     sed -e 's/getpass/my_getpass/' -i externs.h display.c
+    # gcc15
+    sed -e 's/Score(_false_)/Score()/g' -i main.c
 
     chmod a+rw config.h
     cat >>config.h <<EOF

@@ -1,9 +1,7 @@
 {
   lib,
   buildNpmPackage,
-  fetchNpmDeps,
   fetchFromGitHub,
-  nodejs_22,
   pkg-config,
   node-gyp,
   vips,
@@ -11,15 +9,15 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "librechat";
-  version = "0.8.0";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
-    tag = "v${version}";
-    hash = "sha256-DTmb9J2nsMy6f+V6BgRtFgpTwOi9OQnvikSx4QZQ0HI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-egnmkYpQS/AshMmXP5C8qhwA+7TPZYnu0ct552HFjGg=";
   };
 
   patches = [
@@ -30,31 +28,13 @@ buildNpmPackage rec {
     # Also, we set the `bin` property to the server script to benefit from the
     # auto-generated wrapper.
     ./0001-npm-pack.patch
-    # LibreChat tries writing logs to the package directory, which is immutable
-    # in our case. We patch the log directory to target the current working directory
-    # instead, which in case of NixOS will be the service's data directory.
-    ./0002-logs.patch
-    # Similarly to the logs, user uploads are by default written to the package
-    # directory as well. Again, we patch this to be relative to the current working
-    # directory instead.
-    ./0003-upload-paths.patch
-    # The npm dependencies are causing issues with the build. The package @testing-library/react
-    # appears to not be included in NPM deps, even though it is present in the project
-    # This patch fixes this by placing the dependency in different files and regenerating the
-    # lock file.
-    ./0004-fix-deps-v080.patch
+    # User uploads are by default written to the package directory as well.
+    # We patch this to be relative to the current working directory instead.
+    ./0002-upload-paths.patch
   ];
 
-  npmDepsHash = "sha256-97cEw6VD7FoVayrxClHuS1iUcQmDw7/aUoUV6ektvOY=";
-  npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-${version}-npm-deps-patched";
-    hash = npmDepsHash;
-    patches = [ ./0004-fix-deps-v080.patch ];
-  };
-
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-U2DzvfzKCmAYLFG0FbFcng5goj1mYCjTpJuQ36fVNuA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -65,11 +45,25 @@ buildNpmPackage rec {
     vips
   ];
 
-  # required for sharp
-  makeCacheWritable = true;
-
   npmBuildScript = "frontend";
   npmPruneFlags = [ "--production" ];
+
+  makeWrapperArgs = [
+    # Upstream defaults to the immutable package directory.
+    # As a functioning default, we set this to the current working directory (through a relative logs path),
+    # but make it easy for the module to override.
+    "--set-default LIBRECHAT_LOG_DIR ./logs"
+  ];
+
+  # npmConfigHook only patches the root node_modules
+  postConfigure = ''
+    patchShebangs $(find "$PWD" -type d -name node_modules -prune ! -path "$PWD/node_modules" -print)
+  '';
+
+  preInstall = ''
+    # not sure why this is something npm pack tries to keep
+    rm -rf ./packages/data-schemas/node_modules/winston-transport/.nyc_output
+  '';
 
   # For reasons beyond my understanding, the api and client directory disappears after the build finishes.
   # Hence, the build fails with broken symlinks and if the symlink is removed,
@@ -97,8 +91,12 @@ buildNpmPackage rec {
   meta = {
     description = "Open-source app for all your AI conversations, fully customizable and compatible with any AI provider";
     homepage = "https://github.com/danny-avila/LibreChat";
+    changelog = "https://www.librechat.ai/changelog/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      niklaskorz
+    ];
     mainProgram = "librechat-server";
   };
-}
+})

@@ -11,6 +11,7 @@
   pkg-config,
   python3,
   rinutils,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,9 +75,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_LIBRARY" false)
   ];
 
-  postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+  preFixup = ''
+    # This is a module and should not be wrapped, or it causes import errors
+    # on the scripts that are actually executable
+    chmod a-x $out/bin/fc_solve_find_index_s2ints.py
   '';
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  postInstallCheck = ''
+    # Check that the python wrappers work correctly:
+    # * fc_solve_find_index_s2ints.py should be unwrapped (we get SyntaxError otherwise)
+    # * the wrapper should provide all modules from the pythonPath (we get ModuleNotFoundError otherwise)
+    # * we don't provide valid input so expect IndexError
+    unset PYTHONPATH
+    ($out/bin/make_pysol_freecell_board.py 2>&1 | tee /dev/stderr || true) | grep -q "IndexError:"
+  '';
+  doInstallCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://fc-solve.shlomifish.org/";

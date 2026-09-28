@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "stc";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "stc";
     rev = finalAttrs.version;
-    sha256 = "sha256-ftlq7vrnTb4N2bqwiF9gtRj7hZlo6PTUMb/bk2hn/cU=";
+    sha256 = "sha256-/h5T7xzUvguHhrE1DyIep/z7Xt1jNdDFtWeQdpwq6iE=";
   };
 
-  vendorHash = "sha256-qLpWXikTr+vB2bIw2EqnoJ0uOxUc/qc6SdGEJQXwmTQ=";
+  vendorHash = "sha256-M86CoiTN03a7cXtUobsO8CYmfcRsVrHaekIPiYIeV50=";
 
   ldflags = [ "-X main.GitTag=${finalAttrs.version}" ];
 

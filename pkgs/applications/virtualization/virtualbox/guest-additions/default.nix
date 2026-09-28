@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.6";
+  virtualboxVersion = "7.2.18";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
+  virtualboxSha256 = "06db4060caadc70346335c0a731ca6667cdabf206de289c64f3f96f2d341b9d0";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -76,12 +76,17 @@ stdenv.mkDerivation {
   src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
-
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=implicit-function-declaration"
+    ];
+
+    KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  };
 
   nativeBuildInputs = [
     patchelf
@@ -90,6 +95,13 @@ stdenv.mkDerivation {
     kmod
   ]
   ++ kernel.moduleBuildDependencies;
+
+  # https://github.com/VirtualBox/virtualbox/issues/812
+  postPatch = ''
+    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c \
+      --replace-fail "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0)" \
+      "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0) || RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999)"
+  '';
 
   buildPhase = ''
     runHook preBuild

@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Simple Authentication for Sanic";
     homepage = "https://github.com/pyx/sanic-auth/";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ arnoldfarkas ];
+    maintainers = [ ];
   };
 }

@@ -6,27 +6,24 @@
   ninja,
   pkg-config,
   vala,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gdk-pixbuf,
   glib,
-  granite,
-  gtk3,
-  libhandy,
+  granite7,
+  gtk4,
+  libportal,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  # nixpkgs-update: no auto update
-  # We disabled x-d-p-pantheon due to https://github.com/elementary/portals/issues/157
-  # so hold back this before the issue is fixed since later versions enforce using portals.
-  version = "8.0.0";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    hash = "sha256-z7FP+OZYF/9YLXYCQF/ElihKjKHVfeHc38RHdPb2aIE=";
+    hash = "sha256-hVYzriIRvBDBdRRZRiXZwEazu9ZPhPaVY/pOfw95ZkU=";
   };
 
   nativeBuildInputs = [
@@ -34,15 +31,15 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gdk-pixbuf
     glib
-    granite
-    gtk3
-    libhandy
+    granite7
+    gtk4
+    libportal
   ];
 
   passthru = {

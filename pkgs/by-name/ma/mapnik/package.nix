@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-olAM49kcYlhtQUwPk+YjQrLc+ChU+rl3f/A2DDbDLf4=";
+    hash = "sha256-CrE/Td/JllzhcrRvNHunw0HaWAiKEAyQpAdHpVM7lPM=";
     fetchSubmodules = true;
   };
 

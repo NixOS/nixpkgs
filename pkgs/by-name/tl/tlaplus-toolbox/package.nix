@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --set-interpreter ${bintools.dynamicLinker} \
       "$(find "$out/libexec/toolbox" -name jspawnhelper)"
 
+    # Populate gappsWrapperArgs now instead of in a preFixupPhase.
+    gappsWrapperArgsHook
+
     makeShellWrapper $out/libexec/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/libexec/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       versions of your modules, run the TLC model checker, and run TLAPS, the TLA+ proof system.
     '';
     # http://lamport.azurewebsites.net/tla/license.html
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];

@@ -9,17 +9,17 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  version = "0.1.6";
+  version = "0.2.0";
   pname = "to-html";
 
   src = fetchFromGitHub {
     owner = "Aloso";
     repo = "to-html";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eNFt9/yK4oHOspNM8PMTewhx8APaHzmgNdrWqrUuQSU=";
+    hash = "sha256-6gmctDk4zQgH0tyjVfUAFj6kGEe+0B44vEnQIyC7l9k=";
   };
 
-  cargoHash = "sha256-EeR0nzTKQ4fB/tXuPIWokSNBQIthGpxSySsASo74A/A=";
+  cargoHash = "sha256-r/gd8yjR7xgI0n7u+NvaoAD6ZHrGPoQ6RVnQlhYsCbI=";
 
   # Requires external resources
   doCheck = false;

@@ -3,7 +3,7 @@
   SDL2,
   cmake,
   enet,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitHub,
   faad2,
   libGL,
@@ -29,23 +29,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonds";
-  version = "1.1-unstable-2026-02-02";
+  version = "1.1-unstable-2026-08-24";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "8104a20be1d8370499667da32a5196939e5af584";
-    hash = "sha256-8taczrHnez2lW++grMF/nfONZcGmq1Qg/QiuhXYHbms=";
+    rev = "906e9ebb27da8c6a715cd7abab4abfe8a8d29427";
+    hash = "sha256-hJFzH7qPk2NIXl9OQQyqSId6uofJ//FoslmbyX5ZjUk=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     SDL2
     enet
     faad2
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       - (WIP) GBA slot add-ons
       - and more are planned!
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "melonDS";
     maintainers = with lib.maintainers; [
       artemist

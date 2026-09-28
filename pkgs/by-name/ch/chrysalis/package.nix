@@ -32,9 +32,9 @@ appimageTools.wrapType2 {
         -t $out/share/applications
     substituteInPlace \
         $out/share/applications/Chrysalis.desktop \
-        --replace-fail 'Exec=Chrysalis' 'Exec=${pname}'
+        --replace-fail 'Exec=Chrysalis' 'Exec=chrysalis'
 
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
+    cp -r ${appimageContents}/usr/share $out/share
   '';
 
   passthru.updateScript = ./update.sh;

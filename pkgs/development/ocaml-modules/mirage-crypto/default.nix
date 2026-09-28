@@ -12,11 +12,11 @@ buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.13";
 
   pname = "mirage-crypto";
-  version = "2.0.2";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-crypto/releases/download/v${finalAttrs.version}/mirage-crypto-${finalAttrs.version}.tbz";
-    hash = "sha256-c5qdOfNAJ/vJNVf4fFysQZClK92t/3LyEvqoA9YhWHQ=";
+    hash = "sha256-MyiGw2XGA1B3485namPaj3UAwVoWKLPAfhObDlUfH28=";
   };
 
   doCheck = true;
@@ -41,7 +41,6 @@ buildDunePackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       sternenseemann
-      momeemt
     ];
   };
 })

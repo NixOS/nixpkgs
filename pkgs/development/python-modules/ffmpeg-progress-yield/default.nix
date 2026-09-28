@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "ffmpeg-progress-yield";
     tag = "v${version}";
-    hash = "sha256-Cy2ShWEwtfk/eDCXZL3qPrTRMJZtCtjOVHfmW0NbuN4=";
+    hash = "sha256-OEE23gzPYcjKjrar+aV2zZuZyhrvqkYPhnWC3GzefUI=";
   };
 
   build-system = [ uv-build ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     procps
   ];
 
-  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # cannot access /usr/bin/pgrep from the sandbox
     "test_context_manager"
     "test_context_manager_with_exception"

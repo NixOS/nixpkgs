@@ -16,45 +16,31 @@
   m17n_db,
   expat,
   withAnthy ? true,
-  anthy ? null,
+  anthy,
   withGtk ? true,
   withGtk2 ? withGtk,
-  gtk2 ? null,
+  gtk2,
   withGtk3 ? withGtk,
-  gtk3 ? null,
+  gtk3,
   # Was never enabled in the history of this package and is not needed by any
   # dependent package, hence disabled to save up closure size.
   withQt ? false,
   withQt5 ? withQt,
-  qt5 ? null,
+  qt5,
   withLibnotify ? true,
-  libnotify ? null,
+  libnotify,
   withSqlite ? true,
-  sqlite ? null,
+  sqlite,
   withNetworking ? true,
-  curl ? null,
-  openssl ? null,
+  curl,
+  openssl,
   withFFI ? true,
-  libffi ? null,
+  libffi,
 
   # Things that are clearly an overkill to be enabled by default
   withMisc ? false,
-  libeb ? null,
+  libeb,
 }:
-
-let
-  automake = automake116x;
-in
-
-assert withGtk2 -> gtk2 != null;
-assert withGtk3 -> gtk3 != null;
-
-assert withAnthy -> anthy != null;
-assert withLibnotify -> libnotify != null;
-assert withSqlite -> sqlite != null;
-assert withNetworking -> curl != null && openssl != null;
-assert withFFI -> libffi != null;
-assert withMisc -> libeb != null;
 
 stdenv.mkDerivation (finalAttrs: {
   version = "1.9.6";
@@ -70,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoconf
-    automake
+    automake116x
     intltool
     libtool
     pkg-config

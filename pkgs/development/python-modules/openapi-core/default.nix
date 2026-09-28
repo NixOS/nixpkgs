@@ -30,17 +30,21 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-fdONzFde9k2NAd5Rd8vTLt/lQX72JdNSFJhPVWryRQw=";
+    hash = "sha256-wGaRx+IEqsvs7ygCDgh1H4di662SQhjmpB9LMP/YGKM=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "jsonschema-path"
+  ];
 
   dependencies = [
     isodate
@@ -81,9 +85,20 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Requires secrets and additional configuration
     "tests/integration/contrib/django/"
+  ];
+
+  disabledTests = [
+    # https://github.com/p1c2u/jsonschema-path/pull/262 broke comparison of `SchemaPath`s
+    "test_returns_default_server"
   ];
 
   pythonImportsCheck = [

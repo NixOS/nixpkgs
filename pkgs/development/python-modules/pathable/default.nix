@@ -9,17 +9,17 @@
 
 buildPythonPackage rec {
   pname = "pathable";
-  version = "0.4.4";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "pathable";
     tag = version;
-    hash = "sha256-nN5jpI0Zi5ofdSuN9QbTHDXPmQRq9KAn8SoHuNDpZaw=";
+    hash = "sha256-DjIn+hXZvx4tKyzQlWPwIxHD8vWy/jEvhdFY6HC+sdo=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook

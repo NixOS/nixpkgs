@@ -25,10 +25,10 @@ pub fn lockfile(
     let mut packages = lock::packages(content)
         .context("failed to extract packages from lockfile")?
         .into_par_iter()
-        .map(|p| {
+        .filter_map(|p| {
             let n = p.name.clone().unwrap();
 
-            Package::from_lock(p).with_context(|| format!("failed to parse data for {n}"))
+            Package::from_lock(p).with_context(|| format!("failed to parse data for {n}")).transpose()
         })
         .collect::<anyhow::Result<Vec<_>>>()?;
 
@@ -112,6 +112,7 @@ pub fn lockfile(
 #[derive(Debug)]
 pub struct Package {
     pub name: String,
+    pub version: Option<String>,
     pub url: Url,
     specifics: Specifics,
 }
@@ -123,7 +124,7 @@ enum Specifics {
 }
 
 impl Package {
-    fn from_lock(pkg: lock::Package) -> anyhow::Result<Package> {
+    fn from_lock(pkg: lock::Package) -> anyhow::Result<Option<Package>> {
         let mut resolved = match pkg
             .resolved
             .expect("at this point, packages should have URLs")
@@ -131,6 +132,10 @@ impl Package {
             UrlOrString::Url(u) => u,
             UrlOrString::String(_) => panic!("at this point, all packages should have URLs"),
         };
+
+        if resolved.scheme() == "file" {
+            return Ok(None);
+        }
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
@@ -173,11 +178,12 @@ impl Package {
             },
         };
 
-        Ok(Package {
+        Ok(Some(Package {
             name: pkg.name.unwrap(),
+            version: pkg.version,
             url: resolved,
             specifics,
-        })
+        }))
     }
 
     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {

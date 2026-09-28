@@ -1,0 +1,26 @@
+diff --git a/lib/asset_processor.rb b/lib/asset_processor.rb
+index 0c602a85220..be1e22061b0 100644
+--- a/lib/asset_processor.rb
++++ b/lib/asset_processor.rb
+@@ -5,7 +5,7 @@ class AssetProcessor
+ 
+   BUNDLE =
+     PrecompiledBundle.new(
+-      dir: "tmp/asset-processor",
++      dir: "frontend/asset-processor.build",
+       filename_prefix: "asset-processor",
+       dependency_globs: %w[
+         node_modules/.pnpm/lock.yaml
+diff --git a/lib/pretty_text.rb b/lib/pretty_text.rb
+index 6f176324799..9815f579212 100644
+--- a/lib/pretty_text.rb
++++ b/lib/pretty_text.rb
+@@ -54,7 +54,7 @@ module PrettyText
+ 
+   CORE_BUNDLE =
+     PrecompiledBundle.new(
+-      dir: "tmp/pretty-text-processor",
++      dir: "frontend/pretty-text-processor.build",
+       filename_prefix: "pretty-text",
+       dependency_globs:
+         %w[

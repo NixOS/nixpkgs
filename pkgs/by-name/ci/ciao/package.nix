@@ -14,6 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-jsHz50+R/bs19ees3kKYalYk72ET9eSAAUY7QogI0go=";
   };
 
+  postPatch = ''
+    # hotfix https://github.com/ciao-lang/ciao/issues/122
+    substituteInPlace builder/sh_src/build_car.sh \
+      --replace-fail 'ln -s "$i" "$b"' 'ln -sr "$i" "$b"'
+  '';
+
   configurePhase = ''
     ./ciao-boot.sh configure --instype=global --prefix=$prefix
   '';

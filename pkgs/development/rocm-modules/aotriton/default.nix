@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   rocm-cmake,
   clr,
@@ -106,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This builds+installs
   installPhase = ''
     runHook preInstall
-    ninja -v install
+    ninja install
     runHook postInstall
   '';
   # tests are intended to be ran manually as test/ python scripts and need accelerator

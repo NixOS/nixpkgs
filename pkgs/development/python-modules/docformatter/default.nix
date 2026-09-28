@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.7.7";
+  version = "1.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "docformatter";
     tag = "v${version}";
-    hash = "sha256-eLjaHso1p/nD9K0E+HkeBbnCnvjZ1sdpfww9tzBh0TI=";
+    hash = "sha256-Z1ZW5ljWRDnS2mlAmbQyAcE97nU+PrpKaP1aox3VQtQ=";
   };
 
   patches = [ ./test-path.patch ];

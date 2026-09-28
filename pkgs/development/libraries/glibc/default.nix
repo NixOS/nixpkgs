@@ -42,8 +42,6 @@ in
     # override the patches in `common.nix` -- so instead you should
     # write `patches = (previousAttrs.patches or []) ++ [ ... ]`.
 
-    NIX_NO_SELF_RPATH = true;
-
     postConfigure = ''
       # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
       # This has to be done *after* `configure' because it builds some
@@ -68,6 +66,8 @@ in
     ];
 
     env = (previousAttrs.env or { }) // {
+      NIX_NO_SELF_RPATH = true;
+
       NIX_CFLAGS_COMPILE =
         (previousAttrs.env.NIX_CFLAGS_COMPILE or "")
         + lib.concatStringsSep " " (

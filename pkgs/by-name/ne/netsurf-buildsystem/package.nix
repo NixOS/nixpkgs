@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.10";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/buildsystem-${finalAttrs.version}.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/buildsystem-${finalAttrs.version}.tar.gz";
     hash = "sha256-PT451WnkRnfEsXkSm95hTGV5jis+YlMWAjnR/W6uTXk=";
   };
 

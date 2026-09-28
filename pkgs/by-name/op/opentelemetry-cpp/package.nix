@@ -16,24 +16,26 @@
   enablePrometheus ? false,
   enableElasticSearch ? false,
   enableZipkin ? false,
+  # for passthru.tests
+  opentelemetry-cpp,
 }:
 let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.8.0";
-    hash = "sha256-5rNJDMjRFIOY/3j+PkAujbippBmxtAudU9busK0q8p0=";
+    rev = "v1.10.0";
+    hash = "sha256-RJrS0C4GZfUdETff+ZlbJr67Z+JObrLsDvyGqobf4UI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.25.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/iuAv8UcRYkuQjV6Hgs1HHqW0SSVH+By5narF+vy7JU=";
+    hash = "sha256-+S/C+msuUEzOVIcx/1lEuQh6ZmyujALVXsiSqb0s2FM=";
   };
 
   patches = [
@@ -99,10 +101,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  passthru.tests = {
+    # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
+    # so we have to resort to this.
+    full = opentelemetry-cpp.override {
+      enableHttp = true;
+      enableGrpc = true;
+      enablePrometheus = true;
+      enableElasticSearch = true;
+      enableZipkin = true;
+    };
+  };
+
   meta = {
     description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jfroche
       panicgh

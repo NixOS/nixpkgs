@@ -2,23 +2,20 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tokenize-rt";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "tokenize-rt";
-    rev = "v${version}";
-    hash = "sha256-7ykczY73KkqR99tYLL/5bgr9bqU444qHs2ONz+ldVyg=";
+    tag = "v${version}";
+    hash = "sha256-25HeYVS5pN7mBllycumnrEkgP/a1HjrPNgqo6qJOStU=";
   };
 
   nativeBuildInputs = [ setuptools ];

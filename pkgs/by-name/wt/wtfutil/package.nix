@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wtfutil";
-  version = "0.46.1";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GLLTI/hxlkt3OvtTWRNdzQ9jzO4xzJV9RruiJUyWD5g=";
+    sha256 = "sha256-sq+8r317JMY8Wbl3KlrmHgIicbs6HZ3BLtG4VGBSHM4=";
   };
 
-  vendorHash = "sha256-OSoQkBAx0kJKiKq0pRGrkkSowTynw/MJvYSdhd1Jt/k=";
+  vendorHash = "sha256-L6ZXbSsmsYH8yPcxNgJ99iJwGOjelsssPoYkeYQmglQ=";
   proxyVendor = true;
 
   doCheck = false;
@@ -35,7 +35,9 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${finalAttrs.version}"'
+    substituteInPlace flags/flags.go \
+      --replace-fail 'version := info.Main.Version' 'version := "v${finalAttrs.version}"' \
+      --replace-fail 'var official bool' 'official := true'
   '';
 
   postInstall = ''
@@ -45,7 +47,7 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   # Darwin Error: mkdir /var/empty: file exists
-  nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
+  nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
 
   passthru.updateScript = nix-update-script { };
 

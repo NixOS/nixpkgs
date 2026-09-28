@@ -23,7 +23,6 @@
   dbus,
   cups,
   libexif,
-  ffmpeg,
   systemd,
   libva,
   libGL,
@@ -47,6 +46,7 @@
   libdrm,
   libgbm,
   vulkan-loader,
+  addDriverRunpath,
   nss,
   nspr,
   patchelf,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.8.3925.66";
+  version = "8.2.4133.52";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-+gDl4+gtnEkSi29JT7zsDs29dabgfpzR2RIMlKglwoM=";
-        x86_64-linux = "sha256-RpIsJTUAKiD1GfF78RigrHtivqbW+qZuF+HUJsFcKI0=";
+        aarch64-linux = "sha256-5v9DCL6B8JnZrFoniAFg5fpLD1ojOnT7HIt4HuQZJzI=";
+        x86_64-linux = "sha256-QOXpNQULSr7dR98o2AODBHMbvw/3NhqXlh1iB6i8rQM=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -130,7 +130,6 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     libexif
-    ffmpeg
     systemd
     libva
     qt6.qtbase
@@ -162,7 +161,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.is64bit) (
       ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
     )
-    + ":$out/opt/vivaldi/lib";
+    + ":$out/opt/vivaldi";
 
   buildPhase = ''
     runHook preBuild
@@ -172,10 +171,6 @@ stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/vivaldi/$f
-    done
-
-    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
     done
   ''
   + lib.optionalString proprietaryCodecs ''
@@ -208,9 +203,13 @@ stdenv.mkDerivation rec {
         "$out"/opt/vivaldi/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
+    # replace bundled vulkan-loader with the NixOS-patched one to enable Vulkan ICD discovery
+    rm $out/opt/vivaldi/libvulkan.so.1
+    ln -s "${lib.getLib vulkan-loader}/lib/libvulkan.so.1" $out/opt/vivaldi/libvulkan.so.1
+
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
-      --prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --prefix XDG_DATA_DIRS : "${addDriverRunpath.driverLink}/share:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --prefix LD_LIBRARY_PATH : ${libPath} \
       --prefix PATH : ${coreutils}/bin \
       ''${qtWrapperArgs[@]}

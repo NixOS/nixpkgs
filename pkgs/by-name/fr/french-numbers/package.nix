@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "french-numbers";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6mcqT0RZddHlzjyZzx0JGTfCRcQ2UQ3Qlmk0VVNzsnI=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "french-numbers";
     maintainers = with lib.maintainers; [ samueltardieu ];
   };
-}
+})

@@ -27,6 +27,10 @@ libfprint.overrideAttrs (
       hash = "sha256-xkywuFbt8EFJOlIsSN2hhZfMUhywdgJ/uT17uiO3YV4=";
     };
 
+    # Different source than libfprint, so override any patches, because they
+    # would only apply to the original source tree
+    patches = [ ];
+
     mesonFlags = [
       # Include virtual drivers for fprintd tests
       "-Ddrivers=all"
@@ -39,7 +43,7 @@ libfprint.overrideAttrs (
       patchShebangs \
         ./libfprint/tod/tests/*.sh \
         ./tests/*.py \
-        ./tests/*.sh \
+        ./tests/*.sh
     '';
 
     meta = {

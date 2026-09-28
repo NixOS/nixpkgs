@@ -11,34 +11,34 @@ buildDotnetModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "fiso64";
-    repo = "slsk-batchdl";
+    repo = "sockseek";
     tag = "v${finalAttrs.version}";
     hash = "sha256-H10pApWZ6zUkL1FuSrpbEzGGpDVAiBJB2aZtV9jDTz4=";
   };
 
   postPatch = ''
     # .NET 6 is EOL, .NET 8 works fine modulo the trimming flag.
-    # See: https://github.com/fiso64/slsk-batchdl/issues/112
+    # See: https://github.com/fiso64/sockseek/issues/112
     substituteInPlace \
         slsk-batchdl/slsk-batchdl.csproj \
         slsk-batchdl.Tests/slsk-batchdl.Tests.csproj \
-        --replace-fail "<TargetFramework>net6.0</TargetFramework>" "<TargetFramework>net8.0</TargetFramework>"
+        --replace-fail "<TargetFramework>net6.0</TargetFramework>" "<TargetFramework>net10.0</TargetFramework>"
   '';
 
   projectFile = "slsk-batchdl/slsk-batchdl.csproj";
 
   # Tests fail to build.
-  # See: https://github.com/fiso64/slsk-batchdl/issues/111
+  # See: https://github.com/fiso64/sockseek/issues/111
   # testProjectFile = "slsk-batchdl.Tests/slsk-batchdl.Tests.csproj";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   nugetDeps = ./deps.json;
   executables = [ "sldl" ];
 
   dotnetFlags = [
     "--property:PublishSingleFile=true"
     # Note: This breaks Spotify authentication!
-    # See: https://github.com/fiso64/slsk-batchdl/issues/112
+    # See: https://github.com/fiso64/sockseek/issues/112
     # "--property:PublishTrimmed=true"
   ];
 
@@ -47,7 +47,7 @@ buildDotnetModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/fiso64/slsk-batchdl";
+    homepage = "https://github.com/fiso64/sockseek";
     description = "Advanced download tool for Soulseek";
     license = lib.licenses.gpl3Only;
     maintainers = [

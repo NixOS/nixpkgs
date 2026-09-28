@@ -2,7 +2,6 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
-  fetchpatch,
   libxml2,
   openssl,
   openldap,
@@ -15,24 +14,24 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.3";
+  version = "5.12.9";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
     rev = "SOPE-${version}";
-    hash = "sha256-GeJ1o8Juw7jm3/pkfuMqVpfMxKewU6hQmBoPmb0HgTc=";
+    hash = "sha256-0G28qDXygDe/TJ2znNE+NVQry3bkqUO59jqtJm/t2S4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2025-53603.patch";
-      url = "https://github.com/Alinto/sope/commit/e954ab0cd254dc1837af690329b04504410cbe63.patch";
-      hash = "sha256-F/dexphHH8S90njmTDvm+NZChbKekv78tUgB+VFOsSY=";
-    })
-  ];
+  postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+  '';
 
-  nativeBuildInputs = lib.optional (libpq != null) [ libpq.pg_config ];
+  nativeBuildInputs = lib.optional (libpq != null) libpq.pg_config;
   buildInputs = [
     gnustep-base
     libxml2

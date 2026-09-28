@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terminal-toys";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Seebass22";
     repo = "terminal-toys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-42NaTYEerkhexsmG6WEaC9uEC+YCJsShVlAsQFT4eJ0=";
+    hash = "sha256-OIzVs09tUYQu5NQyNMx+3bkHJe733yYmHQ/pW0oZzSQ=";
   };
 
-  cargoHash = "sha256-/L0JQDyjn5xuWIrx4EM2+uTbQt6uuOTHE27xfhmUjjY=";
+  cargoHash = "sha256-RGxVyqBxM6LBycdzKdp6Vm/KlZaPZgLsQovamBLzex8=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

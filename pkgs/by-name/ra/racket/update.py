@@ -49,7 +49,7 @@ down_page_path = homepage.find(
 down_page = BeautifulSoup(requests.get(SITE + "/" + down_page_path).text, "html.parser")
 down_table = down_page.find(class_="download-table")
 
-full = find_info(down_table, "Racket", "Unix")
+full = find_info(down_table, "Racket", "All Platforms")
 minimal = find_info(down_table, "Minimal Racket", "All Platforms")
 
 with open(MANIFEST_FILENAME, "w", encoding="utf-8") as f:

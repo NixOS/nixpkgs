@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "amqp" ];
 
   meta = {
-    description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
+    description = "Python client for the Advanced Message Queuing Protocol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
     homepage = "https://github.com/celery/py-amqp";
     changelog = "https://github.com/celery/py-amqp/releases/tag/v${version}";
     license = lib.licenses.bsd3;

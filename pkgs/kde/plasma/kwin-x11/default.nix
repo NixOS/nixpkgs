@@ -41,4 +41,7 @@ mkKdeDerivation {
 
     libxcvt
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

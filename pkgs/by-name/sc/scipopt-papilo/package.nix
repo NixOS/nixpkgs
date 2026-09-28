@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-papilo";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oxuXv/xWQiApxrrVdH3aEUOp40Em6kCz/DJXXpCxdzs=";
+    hash = "sha256-YDaahgsE7NqTNE1WvkSp5DwyvfJrP19IcytTkM8VKZo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doCheck = true;
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     description = "Parallel Presolve for Integer and Linear Optimization";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/scipopt/papilo";

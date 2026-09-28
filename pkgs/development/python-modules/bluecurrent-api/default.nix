@@ -5,6 +5,7 @@
   setuptools,
   pytz,
   websockets,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -22,12 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-px4kZOvMUP5aGOQ1uxWnY6w77Woie/hVVdyylW8uSX4=";
   };
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
     pytz
     websockets
   ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   pythonImportsCheck = [ "bluecurrent_api" ];
 

@@ -8,12 +8,12 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "panamax";
   version = "1.0.14";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gIgw6JMGpHNXE/PZoz3jRdmjIWy4hETYf24Nd7/Jr/g=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

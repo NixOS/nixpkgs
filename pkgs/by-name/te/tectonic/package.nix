@@ -1,7 +1,6 @@
 {
   lib,
   symlinkJoin,
-  tectonic,
   tectonic-unwrapped,
   biber-for-tectonic,
   makeBinaryWrapper,
@@ -19,13 +18,6 @@ symlinkJoin {
     unwrapped = tectonic-unwrapped;
     biber = biber-for-tectonic;
     tests = callPackage ./tests.nix { };
-
-    # The version locked tectonic web bundle, redirected from:
-    #   https://relay.fullyjustified.net/default_bundle_v33.tar
-    # To check for updates, see:
-    #   https://github.com/tectonic-typesetting/tectonic/blob/master/crates/bundles/src/lib.rs
-    # ... and look up `get_fallback_bundle_url`.
-    bundleUrl = "https://data1.fullyjustified.net/tlextras-2022.0r0.tar";
   };
 
   # Replace the unwrapped tectonic with the one wrapping it with biber
@@ -48,7 +40,6 @@ symlinkJoin {
   + ''
     makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
       --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
-      --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}" \
       --inherit-argv0 ## make sure binary name e.g. `nextonic` is passed along
     ln -s $out/bin/tectonic $out/bin/nextonic
   '';

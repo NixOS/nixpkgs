@@ -11,15 +11,15 @@
   kdePackages,
   lib,
   libGL,
+  libdecor,
+  libjack2,
+  libpulseaudio,
+  libusb1,
   libx11,
   libxcursor,
   libxext,
   libxrandr,
   libxxf86vm,
-  libjack2,
-  libpulseaudio,
-  libusb1,
-  mesa-demos,
   openal,
   pciutils,
   pipewire,
@@ -28,6 +28,8 @@
   symlinkJoin,
   udev,
   vulkan-loader,
+  wayland,
+  wrapGAppsHook3,
   xrandr,
 
   additionalLibs ? [ ],
@@ -62,7 +64,10 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    kdePackages.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     kdePackages.qtbase
@@ -72,6 +77,10 @@ symlinkJoin {
   ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
+    # Required for org.gtk.Settings.FileChooser
+    gappsWrapperArgsHook
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
     wrapQtAppsHook
   '';
 
@@ -96,6 +105,8 @@ symlinkJoin {
         libxext
         libxrandr
         libxxf86vm
+        wayland
+        libdecor
 
         udev # oshi
 
@@ -107,14 +118,16 @@ symlinkJoin {
       ++ additionalLibs;
 
       runtimePrograms = [
-        mesa-demos
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ]
       ++ additionalPrograms;
 
     in
-    [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
+    [
+      "--set NIX_LAUNCHER_WRAPPER ${placeholder "out"}/bin/prismlauncher"
+      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"

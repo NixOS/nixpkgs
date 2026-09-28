@@ -57,7 +57,7 @@ for pname in depsDict:
         repository = depDict["repository"]
         strippedRepo = repository[4:]
         eprint(f"Fetching {pname}@{version} ({strippedRepo})")
-        command = ["nix-prefetch-git", strippedRepo, version]
+        command = ["nix-prefetch-git", "--fetch-submodules", strippedRepo, version]
         rawRes = subprocess.run(command, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout
         sha256 = json.loads(rawRes)["sha256"]
         lockedDepsDict[pname] = {"version": version, "repository": strippedRepo, "sha256": sha256}

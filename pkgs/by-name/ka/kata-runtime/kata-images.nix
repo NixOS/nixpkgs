@@ -17,8 +17,8 @@ let
 
   imageHash =
     {
-      "x86_64-linux" = "sha256-roS2pGO00ORN+xxNU3/uqJG9RzhVqf8gCkt8EJJbY/g=";
-      "aarch64-linux" = "sha256-AuK5a2Qtd176B91+vSsEFwuWICpe8wcGTbXoE7B8b20=";
+      "x86_64-linux" = "sha256-ea4/6xjuoiqFebGF+NegGa4B+3Imf/4uULfQbJxqKtc=";
+      "aarch64-linux" = "sha256-cPx6uHXyMZ0x56dLUKx91FjhgkJaYW0nUtLrnfHz0as=";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

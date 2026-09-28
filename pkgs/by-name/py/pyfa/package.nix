@@ -11,7 +11,7 @@
   copyDesktopItems,
 }:
 let
-  version = "2.65.4";
+  version = "2.69.0";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -22,8 +22,10 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-dBJmtKZD2MvQjLhz2Jcn/ldAEbo0wllXDItQu5pyrW8=";
+    hash = "sha256-sLZ5907hsiYerYDKOWrBfnoNueqg7lbff0e1Eh4ia0g=";
   };
+
+  patches = [ ./dark-theme-wxpython-4.2-compat.patch ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -43,9 +45,10 @@ python3Packages.buildPythonApplication rec {
     matplotlib
     python-dateutil
     requests
-    sqlalchemy_1_4
+    sqlalchemy
     cryptography
     markdown2
+    packaging
     beautifulsoup4
     pyaml
     roman
@@ -72,7 +75,7 @@ python3Packages.buildPythonApplication rec {
   #
   # upstream does not include setup.py
   #
-  patchPhase = ''
+  postPatch = ''
     cat > setup.py <<EOF
       from setuptools import setup
       setup(
@@ -110,11 +113,9 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/share/pixmaps
     mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
-    cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
     cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 

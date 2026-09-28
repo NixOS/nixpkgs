@@ -42,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.8.0";
+  version = "5.8.7";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-container-tools";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0rpEmdx/IUgIvsqCxVyydXZXUm/r7cJG7xlHlEIz1G8=";
+    hash = "sha256-E13EjBqCK/ABVxWJSZKn6vqpYXjTqqoBR5N7YnOqURI=";
   };
 
   patches = [
@@ -181,12 +181,12 @@ buildGoModule (finalAttrs: {
           gvproxy
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
-          aardvark-dns
+          aardvark-dns # dns
           catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-          netavark
-          passt
-          conmon
-          crun
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
         ]
         ++ extraRuntimes;
     };
@@ -200,9 +200,10 @@ buildGoModule (finalAttrs: {
 
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
-    changelog = "https://github.com/containers/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
+    changelog = "https://github.com/podman-container-tools/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.unix;
   };
 })

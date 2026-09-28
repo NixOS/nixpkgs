@@ -128,5 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mikroskeem ];
     mainProgram = "quake";
+    license = lib.licenses.AND [
+      lib.licenses.gpl2Only
+      lib.licenses.cc-by-30
+    ];
   };
 })

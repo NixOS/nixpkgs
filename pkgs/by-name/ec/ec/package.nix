@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ec";
-  version = "0.2.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "ec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vpl9Gz/DVjdplx80oQsTbH2hTS/3Y7dKZw4x52V6wJU=";
+    hash = "sha256-bVUe9UCi+zJH1qx3JFCNxRNX8hgdIGHkRvGpP8ANx38=";
   };
 
-  vendorHash = "sha256-bV5y8zKculYULkFl9J95qebLOzdTT/LuYycqMmHKZ+g=";
+  vendorHash = "sha256-7OjCWmOoTYTbZ1XXevkrHEGx9Q0qdBqUBo10kvBDDPA=";
 
   postPatch = ''
     substituteInPlace cmd/ec/main.go \
@@ -53,9 +53,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Easy terminal-native 3-way git conflict resolver vim-like workflow";
     homepage = "https://github.com/chojs23/ec";
-    changelog = "https://github.com/chojs23/ec/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/chojs23/ec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      neo
+    ];
     mainProgram = "ec";
   };
 })

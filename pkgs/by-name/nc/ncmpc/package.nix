@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncmpc";
-  version = "0.52";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "ncmpc";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-j/hZdKl1LQ/yEGDUv9k5PQJ6pngAl52mVCpfacWrRw0=";
+    sha256 = "sha256-POeMWDpN0tXo/8NpDVHv9MGAe5O6fukVph3rfmjACZY=";
   };
 
   buildInputs = [

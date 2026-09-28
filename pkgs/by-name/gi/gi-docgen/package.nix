@@ -5,17 +5,18 @@
   ninja,
   python3,
   gnome,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2025.5";
+  version = "2026.1";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
-    hash = "sha256-JXmjP/h7Yi0Q0QLJG30OzlBjQLcONNu2UiFj4WyQrKM=";
+    hash = "sha256-wxbWwEaZl2toI5Eqrh+ypqP/olU7Qivoj7VuuIGs9Hk=";
   };
 
   depsBuildBuild = [
@@ -36,12 +37,17 @@ python3.pkgs.buildPythonApplication rec {
     typogrify
   ];
 
-  doCheck = false; # no tests
+  # For Python this must be placed in nativeCheckInputs instead of nativeInstallCheckInputs
+  # https://github.com/nixos/nixpkgs/issues/420531
+  nativeCheckInputs = [ versionCheckHook ];
+  # doCheck = false; # no tests - restore this after versionCheckHook can be moved
+
+  __structuredAttrs = true;
 
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
+      --replace-fail "${python3}" ""
   '';
 
   passthru = {

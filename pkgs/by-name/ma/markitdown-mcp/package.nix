@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "markitdown-mcp";
-  version = "0.1.5b1";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-twZEkUih76QEl2dkh81eCBnfX/+tKAHI9wDyCkjfOsQ=";
+    hash = "sha256-sqWfft/yaI/0FavhIbAHqltgVfTNk0GJk/phyvdn7Ck=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/markitdown-mcp";
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "markitdown_mcp"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "MCP server for the markitdown library";

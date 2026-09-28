@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hostapd";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchurl {
     url = "https://w1.fi/releases/hostapd-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
+    sha256 = "sha256-9DUCVhwoukerd+GOGpc9BzYcaMyLFBeOYZvVeWtw6r0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -38,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
   ];
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   # Based on hostapd's defconfig. Only differences are tracked.
   extraConfig = ''
@@ -103,12 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     CONFIG_SQLITE=y
   '';
 
-  passAsFile = [ "extraConfig" ];
-
   configurePhase = ''
     cd hostapd
     cp -v defconfig .config
-    cat $extraConfigPath >> .config
+    printf "%s" "$extraConfig" >> .config
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
@@ -124,10 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) wpa_supplicant;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://w1.fi/hostapd/";
     description = "User space daemon for access point and authentication servers";
     license = lib.licenses.bsd3;
+    mainProgram = "hostapd";
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.linux;
   };

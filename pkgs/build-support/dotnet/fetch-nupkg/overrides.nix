@@ -63,6 +63,15 @@
       }
     );
 
+  "Avalonia.BuildServices" =
+    package:
+    package.overrideAttrs (old: {
+      postPatch = ''
+        shopt -s extglob
+        rm -rf !(*.nuspec)
+      '';
+    });
+
   "SkiaSharp.NativeAssets.Linux" =
     package:
     package.overrideAttrs (
@@ -70,7 +79,10 @@
       lib.optionalAttrs stdenv.hostPlatform.isLinux {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ autoPatchelfHook ];
 
-        buildInputs = old.buildInputs or [ ] ++ [ fontconfig ];
+        buildInputs =
+          old.buildInputs or [ ]
+          ++ [ fontconfig ]
+          ++ lib.optional (lib.versionAtLeast old.version "4") (lib.getLib stdenv.cc.cc);
 
         preInstall = old.preInstall or "" + ''
           cd runtimes

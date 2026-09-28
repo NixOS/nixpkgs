@@ -35,6 +35,8 @@ buildPythonPackage rec {
     parsimonious
   ];
 
+  pythonRelaxDeps = [ "parsimonious" ];
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook

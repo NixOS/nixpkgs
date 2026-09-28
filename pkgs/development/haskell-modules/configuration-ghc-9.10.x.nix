@@ -68,6 +68,51 @@ in
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
+  stack =
+    # Setup.hs depends on Cabal-syntax >= 3.14
+    overrideCabal
+      (drv: {
+        setupHaskellDepends = drv.setupHaskellDepends or [ ] ++ [
+          self.Cabal-syntax_3_14_2_0
+          self.Cabal_3_14_2_0
+        ];
+        # We need to tell GHC to ignore the Cabal core libraries while
+        # compiling Setup.hs since it depends on Cabal >= 3.14.
+        # ATTN: This override assumes we are using GHC 9.10.3 since we need
+        # to give an exact Cabal version at the GHC (!) command line.
+        # FIXME(@sternenseemann): make direct argument to generic-builder.nix
+        env = drv.env or { } // {
+          setupCompileFlags = lib.concatStringsSep " " [
+            "-hide-package"
+            "Cabal-syntax-3.12.1.0"
+            "-hide-package"
+            "Cabal-3.12.1.0"
+          ];
+        };
+      })
+
+      # Stack itself depends on Cabal >= 3.14 which also needs to be updated for deps
+      (
+        super.stack.overrideScope (
+          sself: ssuper:
+          let
+            upgradeCabal =
+              drv:
+              lib.pipe drv [
+                (addBuildDepends [ sself.Cabal_3_14_2_0 ])
+                (appendConfigureFlags [ "--constraint=Cabal>=3.14" ])
+              ];
+          in
+          {
+            pantry = upgradeCabal ssuper.pantry_0_11_2;
+            rio-prettyprint = upgradeCabal ssuper.rio-prettyprint;
+            hackage-security = upgradeCabal ssuper.hackage-security;
+            hpack = upgradeCabal sself.hpack_0_39_1;
+            stack = upgradeCabal ssuper.stack;
+          }
+        )
+      );
+
   #
   # Version upgrades
   #

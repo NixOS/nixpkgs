@@ -1,11 +1,15 @@
+import os.path
+import sys
+
 import json
 import re
 from pathlib import Path
 from xmltodict import parse
+from subprocess import CalledProcessError
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
-from jetbrains_nix_updater.ides import Ide
+from jetbrains_nix_updater.ides import Ide, by_name_path
 from jetbrains_nix_updater.update_src_maven import (
     get_maven_deps_for_ide,
     ensure_is_list,
@@ -145,14 +149,22 @@ def generate_jps_hash(config: UpdaterConfig, root_path: Path) -> str:
     )
 
 
-def maven_out_path(jb_root: Path, name: str) -> Path:
-    return jb_root / "source" / f"{name}_maven_artefacts.json"
-
-
-def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
+def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     variant = ide.name.removesuffix("-oss")
-    intellij_hash, intellij_outpath = prefetch_intellij_community(variant, info.version)
-    android_hash = prefetch_android(variant, info.version)
+    try:
+        intellij_hash, intellij_outpath = prefetch_intellij_community(
+            variant, info.version
+        )
+        android_hash = prefetch_android(variant, info.version)
+    except CalledProcessError:
+        print(
+            f"[!] Unable to fetch sources for version {info.version}. "
+            f"This probably means, that JetBrains has not published a source release yet for this version. "
+            f"Check: https://github.com/JetBrains/intellij-community/releases and https://github.com/JetBrains/android/tags",
+            file=sys.stderr,
+        )
+        print(f"[!] Skipping update of {ide.name}.", file=sys.stderr)
+        return False
     jps_hash = generate_jps_hash(config, intellij_outpath)
     restarter_hash = generate_restarter_hash(config, intellij_outpath)
     repositories = jar_repositories(intellij_outpath)
@@ -179,7 +191,7 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
                         androidHash = "{android_hash}";
                         jpsHash = "{jps_hash}";
                         restarterHash = "{restarter_hash}";
-                        mvnDeps = ../source/{variant}_maven_artefacts.json;
+                        mvnDeps = ./maven_artefacts.json;
                         repositories = [
                             {repositories_nix}
                         ];
@@ -192,12 +204,18 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
             ],
         )
     except Exception as e:
-        print(f"[!] Writing update info to file failed: {e}")
-        return
+        print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
+        return False
 
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
         maven_hashes = get_maven_deps_for_ide(config, ide)
-        with open(maven_out_path(config.jetbrains_root, variant), "w") as f:
-            json.dump(maven_hashes, f, indent=4)
-            f.write("\n")
+        maven_out_path = by_name_path(ide.name, config.nixpkgs_root) / "maven_artefacts.json"
+        if config.dry_run:
+            assert maven_out_path.parent.exists()
+            print(f"[D] --dry-run: {maven_out_path} not modified", file=sys.stderr)
+        else:
+            with open(maven_out_path, "w") as f:
+                json.dump(maven_hashes, f, indent=4)
+                f.write("\n")
+    return True

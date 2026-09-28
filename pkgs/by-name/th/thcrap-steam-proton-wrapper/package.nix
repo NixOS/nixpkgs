@@ -5,17 +5,16 @@
   makeWrapper,
   bash,
   subversion,
-  zenity,
 }:
 stdenv.mkDerivation {
   pname = "thcrap-proton";
-  version = "0-unstable-2024-04-03";
+  version = "0-unstable-2026-02-11";
 
   src = fetchFromGitHub {
-    owner = "tactikauan";
+    owner = "nerusuki";
     repo = "thcrap-steam-proton-wrapper";
-    rev = "2b636c3f5f1ce1b9b41f731aa9397aa68d2ce66b";
-    hash = "sha256-J2O8F75NMdsxSaNVr8zLf+vLEJE6CHqWQIIscuuJZ3o=";
+    rev = "a5edfe44ead2df2e6bca54bd738ae0dc3284e679";
+    hash = "sha256-4RTVfcwlYW+KPyPIon0X1d4SPsF6cFkRSXBfe4yzAyQ=";
   };
 
   buildInputs = [ subversion ];
@@ -37,14 +36,13 @@ stdenv.mkDerivation {
         lib.makeBinPath [
           bash
           subversion
-          zenity
         ]
       }
   '';
 
   meta = {
     description = "Wrapper script for launching the official Touhou games on Steam with patches through Proton on GNU/Linux";
-    homepage = "https://github.com/tactikauan/thcrap-steam-proton-wrapper";
+    homepage = "https://github.com/nerusuki/thcrap-steam-proton-wrapper";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ashuramaruzxc ];
     platforms = [

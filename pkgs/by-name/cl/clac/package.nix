@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clac";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "soveran";
     repo = "clac";
     tag = finalAttrs.version;
-    hash = "sha256-DcW35jKIZQqkNa5Y6am2e5/TAEg3Fo2n+fHG3nOpNzM=";
+    hash = "sha256-o/KYsiQDRva2mercTz1dmdcuXWCv7x8fy4LvPgk9Qn4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

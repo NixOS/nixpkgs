@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -10,23 +11,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-procps";
-  version = "0.0.1-unstable-2026-02-04";
+  version = "0.0.1-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "procps";
-    rev = "99bc7776eb666b2b9592ed31b58917d80b75dabe";
-    hash = "sha256-gKv+P0AGP0E0hjF70s8OYkYH5vFovaNkfyoGR/973MI=";
+    rev = "dcec30bf9d9b83f993968db82a6ebf03aa8fc2fe";
+    hash = "sha256-8kq+yLYHatsyTCqsL+iYH2GYu2v9N8f5CwrGND15PY0=";
   };
 
-  cargoHash = "sha256-bQneJ0rScnz6KsDLBBzv5s9pzC6V5f1p4kxSe6FSPS4=";
+  cargoHash = "sha256-Ykq6+hAT2960k3FTxgGmJxl0+K9uroinrwgV4mzo9hc=";
+
+  cargoBuildFlags = [ "--workspace" ];
 
   nativeBuildInputs = [
     pkg-config
     writableTmpDirAsHomeHook
   ];
 
-  buildInputs = [ systemdLibs ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ];
 
   checkFlags = [
     # can't run on sandbox
@@ -45,6 +48,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_ps::test_real_user_selection"
     "--skip=test_pkill::test_inverse"
     "--skip=test_pgrep::test_pidfile"
+    # pgrep: pattern that searches for process name longer than 15 characters will result in zero matches
+    "--skip=test_pgrep::test_pool_workqueue_release"
   ];
 
   passthru.updateScript = nix-update-script {

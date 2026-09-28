@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndpi";
-  version = "4.10";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
     tag = finalAttrs.version;
-    hash = "sha256-iXqvDMJsOXcg9YkqKFgInLLfH6j/HEp4bEaIl6dpVtc=";
+    hash = "sha256-C6SNdXGaKu2MHDK2eA8bA/2yRzDQt8jZWsbPfJzRg2g=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     json_c
     libpcap
+  ];
+
+  configureFlags = [
+    "--enable-static"
   ];
 
   meta = {

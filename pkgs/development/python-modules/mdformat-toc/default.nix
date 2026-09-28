@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-toc";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-toc";
     tag = version;
-    hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
+    hash = "sha256-Rj1lp5Ub+UriOuE896tywN4myovna2RLYO3LRa96FCM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -35,6 +35,5 @@ buildPythonPackage rec {
       aldoborrero
       polarmutex
     ];
-    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }

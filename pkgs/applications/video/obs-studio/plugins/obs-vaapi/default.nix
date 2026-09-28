@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   # - We need "getLib" instead of default derivation, otherwise it brings gstreamer-bin;
   # - without gst-plugins-base it won't even show proper errors in logs;
   # - Without gst-plugins-bad it won't find element "vapostproc";
-  # - gst-vaapi adds "VA-API" to "Encoder type";
   # Tip: "could not link appsrc to videoconvert1" can mean a lot of things, enable GST_DEBUG=2 for help.
   passthru.obsWrapperArguments =
     let
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
       gstreamer
       gst-plugins-base
       gst-plugins-bad
-      gst-vaapi
     ];
 
   # Fix output directory

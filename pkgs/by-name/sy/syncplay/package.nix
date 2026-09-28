@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "syncplay";
-  version = "1.7.4";
+  version = "1.7.6";
 
   pyproject = false;
 
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Syncplay";
     repo = "syncplay";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-23OTj+KUmYtrhzIS4A9Gq/tClOLwaeo50+Fcm1tn47M=";
+    sha256 = "sha256-DXkigo3XzR9G0g1egte96LEynSHyfhW7PjVG8i2r8Lc=";
   };
 
   patches = [

@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchzip,
+  writeShellScript,
+  nix-update,
+  jq,
+  common-updater-scripts,
 }:
 
 let
@@ -13,24 +17,22 @@ let
       x86_64-linux = "linux_amd64";
       aarch64-linux = "linux_arm64";
       armv7l-linux = "linux_armv7";
-      x86_64-darwin = "darwin_amd64";
       aarch64-darwin = "darwin_arm64";
     }
     .${system} or throwSystem;
 
   hash =
     {
-      x86_64-linux = "sha256-ytksYeWHLWrNeeTW0aCBw+dc0N7WtLtNpqRZ10Y3WbA=";
-      aarch64-linux = "sha256-HbO+IjAiccbyquWrvXrCFRkYKlbvJ2wlk49ydGDbGbs=";
-      armv7l-linux = "sha256-mvZz4MCe9IGdfjfFbrNhmjAidPB8e7IeOLATclTKdcw=";
-      x86_64-darwin = "sha256-mDEn3rnE7FBDlGqrd3pmOL4mplOf7WpGi4A1W1UqVok=";
-      aarch64-darwin = "sha256-yxL9zJDRWrkmizEZ5Da0Lo1YBJEBOJinsOKpOrMKMlY=";
+      x86_64-linux = "sha256-eO+Pg2ndcs56871NrFOPWy9gFoKZ9poDcDX/IKpIDuw=";
+      aarch64-linux = "sha256-wTQVPXIegws7xXiWELbvwawKraQeEwD6g7ZgmaKaouw=";
+      armv7l-linux = "sha256-JJh5GttKnkIbafl0IoiMcQeEbjIBX2IRB9+jq9c+deE=";
+      aarch64-darwin = "sha256-8X1mVkD4stRy9AFHc9h0HUz07WQ48zL+IXk2i9dFjKQ=";
     }
     .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "2.0.0-rc4";
+  version = "2.0.4";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";
@@ -38,19 +40,28 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  passthru.updateScript = ./update.sh;
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp zrok $out/bin/
-    chmod +x $out/bin/zrok
+    install -D --mode=0755 zrok2 $out/bin/zrok
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --set-interpreter "$(< "$NIX_CC/nix-support/dynamic-linker")" "$out/bin/zrok"
     ''}
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeShellScript "update-script" ''
+    ${lib.getExe nix-update} $UPDATE_NIX_ATTR_PATH --system x86_64-linux
+    latestVersion=$(nix eval --raw --file . $UPDATE_NIX_ATTR_PATH.version)
+    if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
+      exit 0
+    fi
+    systems=$(nix eval --json -f . $UPDATE_NIX_ATTR_PATH.meta.platforms | ${lib.getExe jq} --raw-output '.[]')
+    for system in $systems; do
+      hash=$(nix store prefetch-file --unpack --json $(nix eval --raw --file . $UPDATE_NIX_ATTR_PATH.src.url --system "$system") | ${lib.getExe jq} --raw-output .hash)
+      ${lib.getExe' common-updater-scripts "update-source-version"} $UPDATE_NIX_ATTR_PATH $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
+    done
   '';
 
   meta = {
@@ -63,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

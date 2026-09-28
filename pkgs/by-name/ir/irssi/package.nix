@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       fab
-      lovek323
     ];
     platforms = lib.platforms.unix;
   };

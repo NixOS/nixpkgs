@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  stdenv, # for meta.broken
 }:
 
 buildGoModule (finalAttrs: {
@@ -29,6 +30,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Work with Kubernetes manifests using the KCL programming language";
     mainProgram = "kubectl-kcl";
     homepage = "https://github.com/kcl-lang/kubectl-kcl";

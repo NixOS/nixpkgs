@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  isPy27,
   libopus,
   pytestCheckHook,
   lib,
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "opuslib";
   version = "3.0.3";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "orion-labs";
@@ -52,6 +49,12 @@ buildPythonPackage {
     "tests/encoder.py"
     "tests/hl_decoder.py"
     "tests/hl_encoder.py"
+  ];
+
+  disabledTests = [
+    # Likely related to libopus 1.5.2 -> 1.6.1 bump
+    # AssertionError: 1500000 not less than 700000
+    "test_bitrate"
   ];
 
   meta = {

@@ -3,30 +3,37 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "spirit";
-  version = "0.10.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "spirit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lgDEYIc6NgDkqoYdwluaZ9VCockE3gbyP8O7LfoTrl0=";
+    hash = "sha256-yYj5/Gb0vjAnJAM8PkP/oOdmfsIfxjRFjpeKyKIcHjM=";
   };
 
-  vendorHash = "sha256-WSMziaE6ldYa915fAAecXGmJkFhh8Sk/IHjfBqXf9FI=";
+  vendorHash = "sha256-aaxSnF/iKEdvTBGgm8kjCfanHYEvY9PR2C07ytbN8pg=";
 
   subPackages = [ "cmd/spirit" ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
+    "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {

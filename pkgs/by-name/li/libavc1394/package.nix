@@ -20,7 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libraw1394 ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-largp";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-largp";
+  };
 
   meta = {
     description = "Programming interface for the 1394 Trade Association AV/C (Audio/Video Control) Digital Interface Command Set";

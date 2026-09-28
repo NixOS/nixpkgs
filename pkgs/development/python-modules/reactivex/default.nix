@@ -2,29 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonAtLeast,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reactivex";
-  version = "4.1.0";
+  version = "5.1.0";
   pyproject = true;
-
-  # https://github.com/ReactiveX/RxPY/issues/737
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "RxPY";
-    tag = "v${version}";
-    hash = "sha256-napPfp72gqy43UmkPu1/erhjmJbZypHZQikmjIFVBqA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wgUbZsHIqBSXVnFjYFosoj1FptAwHz3Lqz+rlAG/Zw4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ typing-extensions ];
 
@@ -33,19 +29,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream doesn't set a version for their GitHub releases
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
-  '';
-
   pythonImportsCheck = [ "reactivex" ];
 
   meta = {
-    changelog = "https://github.com/ReactiveX/RxPY/releases/tag/${src.tag}";
     description = "Library for composing asynchronous and event-based programs";
     homepage = "https://github.com/ReactiveX/RxPY";
+    changelog = "https://github.com/ReactiveX/RxPY/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

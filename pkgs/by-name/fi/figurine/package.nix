@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "figurine";
-  version = "1.3.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "arsham";
     repo = "figurine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1q6Y7oEntd823nWosMcKXi6c3iWsBTxPnSH4tR6+XYs=";
+    hash = "sha256-5UCvC3gweOqEzJdTob0mgmljMneYZ4m3G9SD03Xg9tM=";
   };
 
-  vendorHash = "sha256-mLdAaYkQH2RHcZft27rDW1AoFCWKiUZhh2F0DpqZELw=";
+  vendorHash = "sha256-4A40TbUeqsw7RHO/1qbAURE1ntarh2GmtPgE7dglGoc=";
 
   ldflags = [
     "-s"

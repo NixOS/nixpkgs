@@ -25,6 +25,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mt-940
   ];
 
+  pythonRelaxDeps = [ "fints" ];
+
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "pretix_banktool" ];

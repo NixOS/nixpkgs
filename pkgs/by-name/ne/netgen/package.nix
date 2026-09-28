@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2505";
+  version = "6.2.2605";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
+    hash = "sha256-067PzJymS6ayVoenaXEdvK3fraLTKPJTC54Aok1UUtg=";
   };
 
   patches = [
@@ -141,6 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+  ) "-flax-vector-conversions";
 
   __darwinAllowLocalNetworking = true;
 

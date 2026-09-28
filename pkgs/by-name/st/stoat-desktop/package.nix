@@ -9,31 +9,31 @@
   makeWrapper,
   removeReferencesTo,
   copyDesktopItems,
-  pnpm_10,
+  pnpm_11,
   nodejs,
-  electron_38,
+  electron_43,
   zip,
+  nix-update-script,
 }:
 let
-  electron = electron_38;
+  electron = electron_43;
   stdenv = stdenvNoCC;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.2.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Q1FKQBxtlrGmdfx7gLd0aQx/5Pqd4atFdMykxK997Rw=";
+    hash = "sha256-UKMuMtBTfiA31K2i1buCFOtL9lf9xbv6BXVD5m4TARo=";
   };
 
   postPatch = ''
     # Disable auto-updates
-    substituteInPlace src/main.ts \
-      --replace-fail "updateElectronApp();" ""
+    sed -i '/updateElectronApp([^)]*)/d' src/main.ts
   '';
 
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
     nodejs
-    pnpm_10
+    pnpm_11
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -54,13 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    pnpm = pnpm_10;
-    hash = "sha256-m0EuM8qTCFLxxO0RNze5WgMkuHZXeIi+U/Jiuv91eCg=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    fetcherVersion = 4;
+    pnpm = pnpm_11;
+    hash = "sha256-uiKTkXU0THzW46FiAfftqMWfrnFPCfgS/30ZuWmpHMI=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
 
   buildPhase = ''
     runHook preBuild
@@ -140,14 +147,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open source user-first chat platform";
     homepage = "https://stoat.chat/";
     changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      heyimnova
-      magistau
       v3rm1n0
       RossSmyth
     ];

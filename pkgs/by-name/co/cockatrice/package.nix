@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockatrice";
-  version = "2025-04-03-Release-2.10.2";
+  version = "2026-05-08-Release-3.0.0";
 
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
     rev = finalAttrs.version;
-    sha256 = "sha256-zXAK830SdGT3xN3ST8h9LLy/oWr4MH6TZf57gLfI0e8=";
+    sha256 = "sha256-jLHGWtHbJTQ5Gefrnd8aUq1K3f2QzyE4YU5bW//gH4Y=";
   };
 
   nativeBuildInputs = [

@@ -9,17 +9,17 @@
 
 buildGoModule {
   pname = "packwiz";
-  version = "0-unstable-2025-01-19";
+  version = "0-unstable-2026-02-18";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "241f24b550f6fe838913a56bdd58bac2fc53254a";
-    sha256 = "sha256-VmNsWzsFVNRciNIPUXUVos4cBdpawgN1/nPwMjNpx+0=";
+    rev = "dfd8b68a4796c763e25bad50265ea1f1233e24f1";
+    sha256 = "sha256-QK8sY7e6QHhg+GH8NiiePGFlsQBI0jjUlsgBuq1Yopc=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  vendorHash = "sha256-krdrLQHM///dtdlfEhvSUDV2QljvxFc2ouMVQVhN7A0=";
+  vendorHash = "sha256-ChUE4hWl+UyPpbzK0GbJTD0AoBCogI7qGstga4+WujI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,7 +36,10 @@ buildGoModule {
     description = "Command line tool for editing and distributing Minecraft modpacks, using a git-friendly TOML format";
     homepage = "https://packwiz.infra.link/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ infinidoge ];
+    maintainers = with lib.maintainers; [
+      infinidoge
+      bddvlpr
+    ];
     mainProgram = "packwiz";
   };
 }

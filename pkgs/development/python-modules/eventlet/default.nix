@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.40.3";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
     tag = version;
-    hash = "sha256-yieyNx91jvKoh02zDFIEFk70yf3I27DWiumqoOjtdzQ=";
+    hash = "sha256-g/AmHqCtWExp8XAdb9/knfATPne9Ma8MbIhYBHZxyOY=";
   };
 
   pythonRelaxDeps = lib.optionals isPyPy [ "greenlet" ];
@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_ssl_close"
     # flaky test
     "test_send_timeout"
+    # greenlet 3.5.1 compat issue
+    "test_patcher_existing_logging_module_lock"
   ];
 
   pythonImportsCheck = [ "eventlet" ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   # GitHub does not contain tags
   # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
+    url = "https://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
     hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Workaround build failure on -fno-common toolchains:
     #   ld: dnd.o:src/main.h:136: multiple definition of
     #     `MENU_EXT'; main.o:src/main.h:136: first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    NIX_CFLAGS_COMPILE = "-fcommon -std=gnu99";
     NIX_LDFLAGS = "-lX11";
   };
 

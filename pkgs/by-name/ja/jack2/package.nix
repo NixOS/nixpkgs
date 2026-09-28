@@ -16,6 +16,7 @@
 
   # Optional Dependencies
   dbus ? null,
+  expat, # for dbus
   libffado ? null,
   alsa-lib ? null,
 
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     optLibffado
     optAlsaLib
   ]
+  ++ lib.optionals (optDbus != null) [ expat ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     aften
   ]

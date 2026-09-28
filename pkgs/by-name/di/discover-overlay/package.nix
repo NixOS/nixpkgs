@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     requests
     pillow
     setuptools
-    xlib
+    python-xlib
   ];
   postPatch = ''
     substituteInPlace discover_overlay/image_getter.py \

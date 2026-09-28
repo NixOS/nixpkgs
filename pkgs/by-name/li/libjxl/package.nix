@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   brotli,
   cmake,
   ctestCheckHook,
@@ -32,18 +31,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.11.1";
+  version = "0.12.0";
 
   outputs = [
     "out"
+    "bin"
     "dev"
+    "benchmark"
   ];
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-ORwhKOp5Nog366UkLbuWpjz/6sJhxUO6+SkoJGH+3fE=";
+    hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -68,7 +69,6 @@ stdenv.mkDerivation rec {
   # that the cmake build can apparently use:
   #     OpenGL/GLUT (for Examples -> comparison with sjpeg)
   #     viewer (see `cmakeFlags`)
-  #     plugins like for GDK and GIMP (see `cmakeFlags`)
 
   # Vendored libraries:
   # `libjxl` currently vendors many libraries as git submodules that they
@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
-    # * the `gimp` one, which allows GIMP to load jpeg-xl files
     "-DJPEGXL_ENABLE_PLUGINS=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -145,41 +144,36 @@ stdenv.mkDerivation rec {
     rm -rf third_party/!(sjpeg)/
     shopt -u extglob
 
-    # Fix the build with CMake 4.
-    #
-    # See:
-    #
-    # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
-    # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
-    substituteInPlace third_party/sjpeg/CMakeLists.txt \
-      --replace-fail \
-        'cmake_minimum_required(VERSION 2.8.7)' \
-        'cmake_minimum_required(VERSION 3.5...3.10)'
-
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
     substituteInPlace CMakeLists.txt \
       --replace 'sh$' 'sh( -e$|$)'
   '';
 
-  postInstall =
-    lib.optionalString enablePlugins ''
-      GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
-      GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
-        gdk-pixbuf-query-loaders --update-cache
-    ''
-    # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p "$out/bin"
-      makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
-        --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
-    '';
+  # Move `benchmark_xl` into a separate output to avoid a file collision
+  # with the `benchmark_xl` binary provided by `jpegli`.
+  postInstall = ''
+    moveToOutput "bin/benchmark_xl" "$benchmark"
+  ''
+  + lib.optionalString enablePlugins ''
+    GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+  '';
 
-  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
+    CXXFLAGS = "-mfp16-format=ieee";
+  };
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
-  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
+  doCheck = with stdenv.hostPlatform; !(isi686 || isDarwin && isx86_64);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
     # https://github.com/libjxl/libjxl/issues/3629

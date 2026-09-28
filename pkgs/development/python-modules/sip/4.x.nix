@@ -62,8 +62,7 @@ buildPythonPackage rec {
     mainProgram = "sip";
     homepage = "https://riverbankcomputing.com/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
     platforms = lib.platforms.all;
   };

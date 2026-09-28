@@ -12,7 +12,7 @@ in
 {
 
   meta = {
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   options = {
@@ -30,7 +30,7 @@ in
 
     services.dbus.packages = [
       pkgs.gnome-keyring
-      pkgs.gcr
+      pkgs.gcr_3
     ];
 
     xdg.portal.extraPortals = [ pkgs.gnome-keyring ];

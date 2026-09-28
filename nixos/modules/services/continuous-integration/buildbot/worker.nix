@@ -196,6 +196,6 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.buildbot.members;
+  meta.teams = [ lib.teams.buildbot ];
 
 }

@@ -7,30 +7,28 @@
   colorama,
   cryptoparser,
   dnspython,
-  fetchPypi,
+  fetchFromGitLab,
   pathlib2,
   pyfakefs,
   python-dateutil,
+  pycryptodome,
   requests,
   setuptools,
   setuptools-scm,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.0.2";
+  version = "1.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c/cBOrvqyvdGfDKPRUhIu9FqtQUERb/fJBGmncZpbSM=";
+  src = fetchFromGitLab {
+    owner = "coroner";
+    repo = "cryptolyzer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2U+7y88m+r1LzOiDp4QydnlQCjBfN6p56Yh9mZMjnyE=";
   };
-
-  patches = [
-    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
-    ./fix-dirs-exclude.patch
-  ];
 
   pythonRemoveDeps = [ "bs4" ];
 
@@ -49,6 +47,7 @@ buildPythonPackage rec {
     pathlib2
     pyfakefs
     python-dateutil
+    pycryptodome
     requests
     urllib3
   ];
@@ -66,13 +65,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
-    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})

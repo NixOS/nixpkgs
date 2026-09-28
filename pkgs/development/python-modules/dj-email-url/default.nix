@@ -1,31 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  python,
+  fetchFromGitHub,
+  setuptools,
+  unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dj-email-url";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Vf/jMp5I9U+Kdao27OCPNl4J1h+KIJdz7wmh1HYOaZo=";
+  src = fetchFromGitHub {
+    owner = "migonzalvar";
+    repo = "dj-email-url";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xjJZyQE/7zgFzFM3JnlkiT0juOv94o4X5398AqCn5Qg=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} test_dj_email_url.py
-  '';
+  build-system = [ setuptools ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlags = [ "." ];
 
   meta = {
     description = "Use an URL to configure email backend settings in your Django Application";
     homepage = "https://github.com/migonzalvar/dj-email-url";
-    license = lib.licenses.bsd0;
+    # https://github.com/migonzalvar/dj-email-url/blob/master/LICENSE
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        cc-by-40
+        cc0
+      ];
     maintainers = [ ];
   };
-}
+})

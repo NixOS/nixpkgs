@@ -9,7 +9,7 @@
   libpulseaudio,
   openssl,
   rsync,
-  typescript,
+  typescript_5,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       openssl
       libpulseaudio
-      typescript
+      typescript_5
       nodejs
     ];
 

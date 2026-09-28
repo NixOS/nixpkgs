@@ -17,6 +17,7 @@
   lsof,
   pillow,
   pytest-cov-stub,
+  pytest-rerunfailures,
   pytest,
   pyvirtualdisplay,
   xvfb-run,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     lsof
     pillow
     pytest-cov-stub
+    pytest-rerunfailures
     pytest
     pyvirtualdisplay
     xvfb-run
@@ -55,7 +57,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    xvfb-run pytest -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    xvfb-run pytest -v -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
     runHook postCheck
   '';
 

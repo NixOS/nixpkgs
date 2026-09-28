@@ -10,6 +10,7 @@
   fftwFloat,
   libfishsound,
   libid3tag,
+  libjack2,
   liblo,
   libmad,
   liboggz,
@@ -23,9 +24,8 @@
   serd,
   sord,
   capnproto,
-  pkg-config,
-  libjack2,
   libsForQt5,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,22 +39,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch2 {
-      url = "https://github.com/sonic-visualiser/svcore/commit/5a7b517e43b7f0b3f03b7fc3145102cf4e5b0ffc.patch";
+      url = "https://github.com/sonic-visualiser/svcore/commit/5a7b517e43b7f0b3f03b7fc3145102cf4e5b0ffc.patch?full_index=1";
       stripLen = 1;
       extraPrefix = "svcore/";
-      sha256 = "sha256-DOCdQqCihkR0g/6m90DbJxw00QTpyVmFzCxagrVWKiI=";
+      hash = "sha256-ReFOGRyM7IXKOUuzNoGIVX+C+zMz3/fftQN7k5BHp0k=";
     })
     ./match-vamp.patch
+    (fetchpatch2 {
+      url = "https://github.com/piper-audio/piper-vamp-cpp/commit/6f16a09b78b995b3cf2844f00033bde90e5e0936.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "piper-vamp-cpp/";
+      hash = "sha256-G9O9t1Niesffj4bDFO0q8KMgygTdYJUVHkq/7nkGSRk=";
+    })
   ];
 
   buildInputs = [
     alsa-lib
     boost
     bzip2
+    capnproto
     fftw
     fftwFloat
     libfishsound
     libid3tag
+    libjack2
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     liblo
     libmad
     liboggz
@@ -67,14 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     rubberband
     serd
     sord
-    capnproto
-    libjack2
   ];
 
   nativeBuildInputs = [
     capnproto # capnp
-    pkg-config
     libsForQt5.wrapQtAppsHook
+    pkg-config
   ];
 
   strictDeps = true;

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -34,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.10.1";
+  version = "3.11.1";
 
   outputs = [
     "out"
@@ -46,8 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-Wn8+eJ22ZxpVDtYoDtT2CmC+p3No2pK+aNx9jX4jAmU=";
+    hash = "sha256-z9RgIe4VFK1DXnFPeqHsenh8f1FqlPTHQ4iX7j1uyh4=";
   };
+
+  patches = [
+    # sqlite changed the precision of float <-> text conversions, causing
+    # failures in the test suite. patch here until this appears in a release.
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/work_items/496
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/811
+    (fetchpatch {
+      name = "tinysparql-sqlite-double-value-precision.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/47d5bf9313d0ccb1feb7169eed9047d0e1597a39.patch";
+      hash = "sha256-k6eELZCEEtD8s7GiMckjTlf6QcAiUNY1Mraw7GROsm4=";
+    })
+  ];
 
   strictDeps = true;
 

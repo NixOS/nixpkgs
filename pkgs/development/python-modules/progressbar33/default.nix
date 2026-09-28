@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://pypi.python.org/pypi/progressbar33";
+    homepage = "https://pypi.org/project/progressbar33/";
     description = "Text progressbar library for python";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ twey ];

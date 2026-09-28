@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "elevenlabs";
-  version = "2.35.0";
+  version = "2.68.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elevenlabs";
     repo = "elevenlabs-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8O/gpG0XAJeD6g52mdO7T43NBHfpctuHm8mu4CVvZ78=";
+    hash = "sha256-OHXk9pdQpTZkI+6gl8jn6UkUMDMlLv/XVtpnCbXkUEc=";
   };
 
   build-system = [ poetry-core ];

@@ -123,15 +123,13 @@ installtl_do_path_adjustments () {
     ln -s "$texmfdist" "$out"/share/texmf
 
     # generate other outputs
-    local otherOutput otherOutputName
-    local otherOutputs="$otherOutputs"
-    for otherOutputName in $outputs ; do
+    local otherOutputIdx=0 otherOutputName
+    for otherOutputName in "${!outputs[@]}" ; do
         if [[ $otherOutputName == out ]] ; then
             continue
         fi
-        otherOutput="${otherOutputs%% *}"
-        otherOutputs="${otherOutputs#* }"
-        ln -s "$otherOutput" "${!otherOutputName}"
+        ln -s "${otherOutputs[$otherOutputIdx]}" "${outputs[$otherOutputName]}"
+        ((otherOutputIdx++)) || true
     done
 }
 

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "COSTA";
-  version = "2.2.4";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "COSTA";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-smrDK7iucGWlL1pDv+O4QXefxr1QirC00q5Wva0S+ks=";
+    hash = "sha256-6U0L5Bthcspv0McMEUWvb68+W+/oaAx2wvE5lVgqlKQ=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -157,6 +157,15 @@ let
     {
       options = {
         package = mkPackageOption pkgs "wordpress" { };
+        finalPackage = mkOption {
+          type = types.package;
+          readOnly = true;
+          default = pkg name config;
+          defaultText = literalExpression "pkg name config";
+          description = ''
+            WordPress package with bundled configuration, plugins and themes.
+          '';
+        };
 
         uploadsDir = mkOption {
           type = types.path;
@@ -489,9 +498,9 @@ in
           mkMerge [
             cfg.virtualHost
             {
-              documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+              documentRoot = mkForce "${cfg.finalPackage}/share/wordpress";
               extraConfig = ''
-                <Directory "${pkg hostName cfg}/share/wordpress">
+                <Directory "${cfg.finalPackage}/share/wordpress">
                   <FilesMatch "\.php$">
                     <If "-f %{REQUEST_FILENAME}">
                       SetHandler "proxy:unix:${
@@ -571,7 +580,7 @@ in
         enable = true;
         virtualHosts = mapAttrs (hostName: cfg: {
           serverName = mkDefault hostName;
-          root = "${pkg hostName cfg}/share/wordpress";
+          root = "${cfg.finalPackage}/share/wordpress";
           extraConfig = ''
             index index.php;
           '';
@@ -628,7 +637,7 @@ in
           hostName: cfg:
           (nameValuePair hostName {
             extraConfig = ''
-              root    * /${pkg hostName cfg}/share/wordpress
+              root    * /${cfg.finalPackage}/share/wordpress
               file_server
 
               php_fastcgi unix/${config.services.phpfpm.pools."wordpress-${hostName}".socket}

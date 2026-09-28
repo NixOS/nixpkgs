@@ -8,20 +8,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "pack";
-  version = "0.37.0";
+  version = "0.40.9";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
+    hash = "sha256-RBDkPqlck64ChnXGFa1sa0WmC2T66ZBN6nQbstymSHU=";
   };
 
-  vendorHash = "sha256-W8FTk2eJYaTE9gCRwrT+mDhda/ZZeCytqQ9vvVZZHSQ=";
+  vendorHash = "sha256-iJTEdnWJb1YyZ0mkamlKkCq/dJsMP6s0h+S8Bh3CnVM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/pack" ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -42,6 +42,6 @@ buildGoModule (finalAttrs: {
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

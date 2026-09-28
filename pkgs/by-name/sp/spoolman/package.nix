@@ -10,6 +10,13 @@ let
   common = callPackage ./common.nix { };
   frontend = callPackage ./frontend.nix { };
   python = python312;
+  hishel_0_1 = python.pkgs.hishel.overrideAttrs (old: rec {
+    version = "0.1.5";
+    src = old.src.override {
+      tag = version;
+      hash = "sha256-OyQR/ruowNk5z4ITRHcIJn1kc0xLZiofmxajf6hNR9k=";
+    };
+  });
 in
 
 python.pkgs.buildPythonPackage rec {
@@ -21,22 +28,39 @@ python.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    python.pkgs.pdm-backend
+    python.pkgs.setuptools
     python.pkgs.pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [ "setuptools" ];
+  pythonRelaxDeps = [
+    "setuptools"
+    "websockets"
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail psycopg2-binary psycopg2
+
+    # upstream removed [build-system] in 0.23.x, causing setuptools
+    # to fail on the flat layout with multiple top-level directories
+    cat >> pyproject.toml <<EOF
+
+    [build-system]
+    requires = ["setuptools"]
+    build-backend = "setuptools.build_meta"
+
+    [tool.setuptools.packages.find]
+    include = ["spoolman*"]
+    EOF
   '';
 
   propagatedBuildInputs = with python.pkgs; [
     uvloop
     alembic
+    aiomysql
+    anysqlite
     asyncpg
     fastapi
-    hishel
+    hishel_0_1
     httptools
     httpx
     aiosqlite

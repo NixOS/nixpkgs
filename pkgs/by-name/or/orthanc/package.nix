@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.10";
+  version = "1.12.11";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-+y+99NKyAWoQmvgCfubNuGiJ68uUwUvE2O64gZ/3uNA=";
+    hash = "sha256-EoohVYrnGN3dJUlXAd+10glcKA0AdZSyQ3wy2luycMQ=";
   };
 
   outputs = [
@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "DCMTK_DICTIONARY_DIR_AUTO" "${dcmtk}/share/dcmtk-${dcmtk.version}")
     (lib.cmakeFeature "DCMTK_LIBRARIES" "dcmjpls;oflog;ofstd")
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
 
     (lib.cmakeBool "BUILD_CONNECTIVITY_CHECKS" false)
     (lib.cmakeBool "UNIT_TESTS_WITH_HTTP_CONNEXIONS" false)

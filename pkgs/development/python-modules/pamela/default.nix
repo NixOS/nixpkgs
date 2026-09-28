@@ -1,26 +1,39 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pkgs,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pamela";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DqbiqZ3e2Md4OkoG8tMfW9ytiU15EB6PCTIuOHo0qs8=";
   };
 
-  postUnpack = ''
-    substituteInPlace $sourceRoot/pamela.py --replace \
-      'find_library("pam")' \
-      '"${lib.getLib pkgs.pam}/lib/libpam.so"'
+  postPatch = ''
+    substituteInPlace pamela.py \
+      --replace-fail \
+        'find_library("pam")' \
+        '"${lib.getLib pkgs.pam}/lib/libpam${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  # No tests
   doCheck = false;
 
   meta = {
@@ -28,4 +41,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/minrk/pamela";
     license = lib.licenses.mit;
   };
-}
+})

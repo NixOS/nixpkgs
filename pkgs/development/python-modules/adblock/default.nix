@@ -60,7 +60,7 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
+  env.PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
   nativeCheckInputs = [
     pytestCheckHook

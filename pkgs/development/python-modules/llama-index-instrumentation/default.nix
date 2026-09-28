@@ -7,15 +7,15 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-instrumentation";
-  version = "0.4.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_instrumentation";
-    inherit version;
-    hash = "sha256-3ElXtk2gkiBgaQ6Fpr6WmKwI404PaekLATZN3sTz3n8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-sYXE4op/MomcJ2ScwuLX1UJn+i/wzUPL4rUhK66Y/jo=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

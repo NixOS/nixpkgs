@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # libtool.m4 only matches macOS 10.*
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
-      --replace "10.*)" "*)"
+      --replace-fail "10.*)" "*)"
   '';
 
   buildInputs = [
@@ -82,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       eleanor
     ];
     platforms = lib.platforms.all;

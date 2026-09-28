@@ -34,13 +34,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "5.16.0.2";
+  version = "6.6.2.0";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-Bkye2Is3GbdnYYaS//AkNfrt8ppWP9zE58obcmUm0wE=";
+    hash = "sha256-q3eaq3oZ1SUiZhUoML31GWjWsR8nQm9ec0tEa+AwrXg=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace cmake/modules/desktopapp_options.cmake \
       --replace-fail "ENABLE_ISOLATED_GFX ON" "ENABLE_ISOLATED_GFX OFF"
+
+    substituteInPlace src/MEGASync/platform/linux/PlatformImplementation.cpp \
+      --replace-fail "/usr/share/applications/megasync.desktop" "$out/share/applications/megasync.desktop"
 
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace-warn "/bin/bash" "${stdenv.shell}"
@@ -152,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     mainProgram = "megasync";
   };
 })

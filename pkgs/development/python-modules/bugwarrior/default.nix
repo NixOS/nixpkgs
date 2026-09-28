@@ -34,7 +34,6 @@
 
   # tests
   docutils,
-  pytest-subtests,
   pytestCheckHook,
   responses,
   sphinx,
@@ -85,7 +84,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     docutils
-    pytest-subtests
     pytestCheckHook
     responses
     sphinx

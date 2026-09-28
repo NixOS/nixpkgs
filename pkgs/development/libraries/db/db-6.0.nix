@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
+  autoconf269,
   ...
 }@args:
 

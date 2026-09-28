@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hurry-filesize";
   version = "0.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hurry.filesize";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-9TaDKa2++GrM07yUkFIjQLt5JgRVromxpCwQ9jgBuaY=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

@@ -6,16 +6,17 @@
   nixosTests,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "calibre-web";
-  version = "0.6.25";
+  version = "0.6.27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
-    tag = version;
-    hash = "sha256-tmSp6ABQ4KnNdUHYZPnXGfhhyhM6aczEUPd57APZnLA=";
+    tag = finalAttrs.version;
+    hash = "sha256-ULUEQ35R+jI0nCrwYkTvmaUqpi1a/Sjvs5kWHYfTTWY=";
   };
 
   patches = [
@@ -36,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     mv cps src/calibreweb
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'cps = "calibreweb:main"' 'calibre-web = "calibreweb:main"'
+      --replace-fail 'cps = "calibreweb.__main__:main"' 'calibre-web = "calibreweb:main"'
   '';
 
   build-system = [ python3Packages.setuptools ];
@@ -56,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     iso-639
     lxml
     netifaces-plus
+    nh3
     pycountry
     pypdf
     python-magic
@@ -126,17 +128,21 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "apscheduler"
     "bleach"
+    "certifi"
+    "chardet"
     "cryptography"
     "flask"
     "flask-limiter"
     "lxml"
     "pypdf"
     "regex"
+    "requests"
     "tornado"
     "unidecode"
+    "wand"
   ];
 
-  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "calibreweb" ];
 
@@ -148,10 +154,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
-    changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
+    changelog = "https://github.com/janeczku/calibre-web/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pborzenkov ];
+    maintainers = with lib.maintainers; [ juli0604 ];
     mainProgram = "calibre-web";
     platforms = lib.platforms.all;
   };
-}
+})

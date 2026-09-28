@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyfritzhome";
-  version = "0.6.19";
+  version = "0.6.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
     tag = finalAttrs.version;
-    hash = "sha256-UYRqGNEbbxw0jgbVoeE01t/vZCVgnDl1HJvHRUgSVBw=";
+    hash = "sha256-ZUJUugUkg2vOv4g8sUFkBPR4Whr9ucGhnFUBdJftaMk=";
   };
 
   build-system = [ setuptools ];

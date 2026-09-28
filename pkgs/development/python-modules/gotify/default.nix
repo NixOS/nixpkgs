@@ -66,5 +66,7 @@ buildPythonPackage rec {
     maintainers = [
       lib.maintainers.joblade
     ];
+    # https://github.com/d-k-bo/python-gotify/issues/6
+    broken = lib.versionAtLeast gotify-server.version "2.9.0";
   };
 }

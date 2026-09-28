@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.7.0";
+  version = "11.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-neutronclient";
     tag = version;
-    hash = "sha256-nkKADTdqYaPMmQU8Fulc8rE5lmMwPjFonyvMNOBvulA=";
+    hash = "sha256-wf+ZTLaBEzQPRVQOZ6JaqH88ymgGIgtRKKdJi2UvKdM=";
   };
 
   env.PBR_VERSION = version;
