@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.9.15";
+  version = "2026.9.16";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-atiEHEDKlAfqGdJa46v0z2aTt03CKLHFaEuJ5QKyD0Y=";
+    hash = "sha256-Tc/3ty4yxiYTc7YiRALBc2+j4Bii5Mm48weGqMd8TAY=";
   };
 
-  cargoHash = "sha256-i96rOfxrL95T6RHWbFlKhRfzicctp3bbQK7LewT7wIg=";
+  cargoHash = "sha256-/geEorOwjXui4cSra0mbqE3V4S8sqmU50TA4whi6VfE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
 
     # tests spawn helpers with PATH=/usr/bin:/bin, which is near-empty here
-    substituteInPlace ./crates/mise-util/src/cmd.rs \
+    substituteInPlace ./crates/mise-util/src/cmd/tests.rs \
       --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")'
 
     substituteInPlace ./crates/mise-util/src/inline_command.rs \
@@ -134,9 +134,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # un_dmg shells out to hdiutil
     "--skip"
-    "file::tests::un_dmg_accepts_license_and_extracts_app"
+    "file::tests::links::un_dmg_accepts_license_and_extracts_app"
     "--skip"
-    "file::tests::un_dmg_extracts_app_without_license"
+    "file::tests::links::un_dmg_extracts_app_without_license"
     # the copy probe symlinks /bin/cp, which the sandbox does not provide
     "--skip"
     "backend::spm::tests::test_inline_install_command_uses_install_environment"
