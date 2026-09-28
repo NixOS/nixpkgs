@@ -27,7 +27,7 @@ die() {
 }
 
 listAsJSON() {
-  nix-instantiate --eval --strict --json "${MAINTAINERS_DIR}/maintainer-list.nix"
+  nix-instantiate --eval --strict --json -A maintainer-list "${MAINTAINERS_DIR}/default.nix"
 }
 
 parseArgs() {
