@@ -7,6 +7,8 @@
   name = "linux-builder-vz-store-gc";
 
   nodes.machine = {
+    nix.enable = true;
+
     virtualisation = {
       # Match the vz-vm drive order: the read-only store image is /dev/vda,
       # followed by the writable data disk at /dev/vdb.
