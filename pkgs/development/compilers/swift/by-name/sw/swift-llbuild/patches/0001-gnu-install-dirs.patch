@@ -1,0 +1,61 @@
+From ff5456f94260823fb9c7f1af728123019b31dc3b Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 6 Dec 2025 20:09:51 -0500
+Subject: [PATCH] gnu-install-dirs
+
+---
+ products/libllbuild/CMakeLists.txt   | 10 +++++-----
+ products/llbuildSwift/CMakeLists.txt |  6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/products/libllbuild/CMakeLists.txt b/products/libllbuild/CMakeLists.txt
+index dcf5d40b..30db822d 100644
+--- a/products/libllbuild/CMakeLists.txt
++++ b/products/libllbuild/CMakeLists.txt
+@@ -40,21 +40,21 @@ include_directories(BEFORE
+   ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ 
+ install(DIRECTORY include/
+-  DESTINATION include
++  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   COMPONENT libllbuild
+   FILES_MATCHING
+   PATTERN "*.h")
+ 
+ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
+-  DESTINATION include
++  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   COMPONENT libllbuild
+   FILES_MATCHING
+   PATTERN "*.h")
+ 
+ install(TARGETS libllbuild
+-  ARCHIVE DESTINATION lib${LLBUILD_LIBDIR_SUFFIX}
+-  LIBRARY DESTINATION lib${LLBUILD_LIBDIR_SUFFIX}
+-  RUNTIME DESTINATION bin
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+   COMPONENT libllbuild)
+ set_property(GLOBAL APPEND PROPERTY LLBuild_EXPORTS libllbuild)
+ 
+diff --git a/products/llbuildSwift/CMakeLists.txt b/products/llbuildSwift/CMakeLists.txt
+index fe12e7f3..cd0a4f64 100644
+--- a/products/llbuildSwift/CMakeLists.txt
++++ b/products/llbuildSwift/CMakeLists.txt
+@@ -62,9 +62,9 @@ set_target_properties(llbuildSwift PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR};${PROJECT_SOURCE_DIR}/products/libllbuild/include")
+ 
+ install(TARGETS llbuildSwift
+-  ARCHIVE DESTINATION lib/swift/pm/llbuild COMPONENT libllbuildSwift
+-  LIBRARY DESTINATION lib/swift/pm/llbuild COMPONENT libllbuildSwift
+-  RUNTIME DESTINATION bin COMPONENT libllbuildSwift)
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT libllbuildSwift
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT libllbuildSwift
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT libllbuildSwift)
+ set_property(GLOBAL APPEND PROPERTY LLBuild_EXPORTS llbuildSwift)
+ 
+ # Add install target.
+-- 
+2.51.2
+

@@ -1,6 +1,8 @@
 {
   fetchFromGitHub,
+  substitute,
   callPackage,
+  yarn-berry,
 }:
 let
   args = rec {
@@ -15,10 +17,26 @@ let
       owner = "tilt-dev";
       repo = "tilt";
       tag = "v${version}";
-      hash = "sha256-VoPTJDbg17xd20Ja8MT53H5+fuWJg5dJum8T3vt9ubY=";
+      hash = "sha256-0q27Tzb/kA2QWu7NzcrLFpl4HbGUXAosRuKx/9nanS8=";
+
+      # Remove after upstream updates to Yarn 4.15
+      # https://github.com/tilt-dev/tilt/blob/master/web/package.json#L98
+      postFetch = ''
+        cd $out/web
+        patch -p1 < ${
+          (substitute {
+            src = ./yarn-fix.patch;
+            substitutions = [
+              "--replace-fail"
+              "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+              yarn-berry.lockfileVersion
+            ];
+          })
+        }
+      '';
     };
   };
 
-  tilt-assets = callPackage ./assets.nix args;
+  tilt-assets = callPackage ./assets.nix (args // { inherit yarn-berry; });
 in
 callPackage ./binary.nix (args // { inherit tilt-assets; })

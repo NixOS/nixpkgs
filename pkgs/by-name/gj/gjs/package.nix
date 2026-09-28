@@ -37,6 +37,7 @@ let
     gdk-pixbuf
     harfbuzz
     glib.out
+    gobject-introspection
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

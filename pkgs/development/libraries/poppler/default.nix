@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchpatch,
   cairo,
   clang-tools,
   cmake,
@@ -12,12 +11,14 @@
   fontconfig,
   freetype,
   glib,
+  harfbuzz,
   lcms,
   libiconv,
   libintl,
   libjpeg,
   libtiff,
   ninja,
+  noto-fonts-cjk-sans,
   openjpeg,
   pkg-config,
   python3,
@@ -58,13 +59,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "f0068e9c530017ad811d1f28b95f9b7f59264e37";
-    hash = "sha256-Xf8duSh0r1o09b5BKB7mBvzrMfXYlzTuTOuK2ZCeItc=";
+    rev = "48b6219b84fc0a708040cb279d51095cc4e1c603";
+    hash = "sha256-2eH4dZs2J0CeTWrXOYEHb0Xnpfa7tX8mi7AX2E9D41U=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.06.0";
+  version = "26.09.0";
 
   outputs = [
     "out"
@@ -73,18 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
+    hash = "sha256-gFnq22gFNAdo8TjEZbV/gWTJK0oHc8N+8DHqbA2Yey4=";
   };
-
-  patches = [
-    # Backports Darwin crash fix from upstream
-    # https://gitlab.freedesktop.org/poppler/poppler/-/work_items/1743
-    (fetchpatch {
-      name = "darwin-mutex-lock-crash.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/08f4bca6a669f9fce75dbab743db559a86591738.patch";
-      hash = "sha256-+eWqVK/v3Ys9k2+z/dCoS2o82m039UER1StMUW4PIgM=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -105,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    harfbuzz
     libiconv
     libintl
   ]
@@ -135,6 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals gpgmeSupport [
     gpgme
+  ];
+
+  # Test `fontsubsetting-basic-test` needs a font that supports cjk.
+  nativeCheckInputs = [
+    noto-fonts-cjk-sans
   ];
 
   cmakeFlags = [

@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-L6lF8VaycAz7PcFArAgLhI8+sc0jnAHY3gum/uDIYz4=";
   };
 
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

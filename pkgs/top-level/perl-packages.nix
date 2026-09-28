@@ -2096,10 +2096,10 @@ with self;
 
   AuthenSASL = buildPerlPackage {
     pname = "Authen-SASL";
-    version = "2.1900";
+    version = "2.2100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1900.tar.gz";
-      hash = "sha256-vjUzpokbLmdxULR5waDUvxHIu+6+0+e466NAU+k5I7A=";
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.2100.tar.gz";
+      hash = "sha256-Tw8QCu7TS1KXepS335c+fwuPktFnsJ8rJJurgehZDlc=";
     };
     propagatedBuildInputs = [
       CryptURandom

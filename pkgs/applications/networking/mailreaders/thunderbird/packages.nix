@@ -15,6 +15,7 @@ let
       sha512,
       updateScript,
       applicationName ? "Thunderbird",
+      broken ? stdenv.buildPlatform.is32bit,
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
@@ -49,6 +50,7 @@ let
         '';
 
       meta = {
+        inherit broken;
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://www.thunderbird.net/";
@@ -61,7 +63,6 @@ let
           vcunat
         ];
         platforms = lib.platforms.unix;
-        broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
         license = lib.licenses.mpl20;
@@ -120,6 +121,8 @@ rec {
       versionPrefix = "140";
       versionSuffix = "esr";
     };
+
+    broken = true;
   };
 }
 // lib.optionalAttrs config.allowAliases {
