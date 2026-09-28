@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ASCII art graphics library";
     homepage = "https://aa-project.sourceforge.net/aalib";
     license = lib.licenses.lgpl2Plus; # multiple files have LGPL header with the "any later version"
+    maintainers = [ lib.maintainers.quantenzitrone ];
     platforms = lib.platforms.unix;
   };
 })
