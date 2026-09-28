@@ -201,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5" (!libOnly && bluetoothSupport))
     # advanced bluetooth audio codecs are provided by gstreamer
     (lib.mesonEnable "bluez5-gstreamer" (!libOnly && bluetoothSupport && advancedBluetoothCodecs))
+    (lib.mesonBool "daemon" (!libOnly))
     (lib.mesonOption "database" "simple")
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
