@@ -15,6 +15,7 @@ let
       "10" = sources.nv-codec-headers-10;
       "11" = sources.nv-codec-headers-11;
       "12" = sources.nv-codec-headers-12;
+      "13" = sources.nv-codec-headers-13;
     }
     .${majorVersion};
 in
