@@ -347,9 +347,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hexa
-    ];
+    maintainers = [ ];
     mainProgram = "mass";
   };
 })
