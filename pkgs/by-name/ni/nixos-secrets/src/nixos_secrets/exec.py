@@ -109,7 +109,6 @@ def set_secret(
 # while garbage collecting).
 def delete_secret(
     args: SecretsArgs,
-    config: SecretsConfig,
     backend: SecretsStoreBackend,
     gen_name: str,
     file_name: str,
