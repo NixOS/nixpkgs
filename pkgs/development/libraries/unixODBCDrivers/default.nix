@@ -144,12 +144,28 @@
       "--with-sqlite3=${sqlite.dev}"
     ];
 
-    installTargets = [ "install-3" ];
+    installPhase = ''
+      install -Dm755 .libs/libsqlite3odbc-*.so $out/lib/libsqlite3odbc.so
+      install -Dm644 libsqlite3odbc.la $out/lib/libsqlite3odbc.la
+      mkdir -p $out/lib/odbc $out/bin
+      ln -sf ../libsqlite3odbc.so $out/lib/odbc/libsqlite3odbc.so
 
-    # move libraries to $out/lib where they're expected to be
-    postInstall = ''
-      mkdir -p "$out/lib"
-      mv "$out"/*.* "$out/lib"
+      for m in blobtoxy impexp csvtable zipfile; do
+        if [ -f .libs/libsqlite3_mod_$m-*.so ]; then
+          install -Dm755 .libs/libsqlite3_mod_$m-*.so $out/lib/odbc/libsqlite3_mod_$m.so
+          [ -f libsqlite3_mod_$m.la ] && install -Dm644 libsqlite3_mod_$m.la $out/lib/odbc/libsqlite3_mod_$m.la
+        fi
+      done
+
+      [ -f sqlite3odbc.h ] && install -Dm644 sqlite3odbc.h $out/include/sqlite3odbc.h
+
+      for d in README ChangeLog license.txt; do
+        [ -f $d ] && install -Dm644 $d $out/share/doc/sqliteodbc/$d
+      done
+
+      echo '#!/bin/sh' > $out/bin/setup.sh
+      echo 'echo SQLite ODBC ready' >> $out/bin/setup.sh
+      chmod +x $out/bin/setup.sh
     '';
 
     # see the top of the file for an explanation
