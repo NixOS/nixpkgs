@@ -13,5 +13,6 @@ buildRedist {
       ptx text from host binaries.
     '';
     homepage = "https://docs.nvidia.com/cuda/cuda-binary-utilities#cuobjdump";
+    mainProgram = "cuobjdump";
   };
 }
