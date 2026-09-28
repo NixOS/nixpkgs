@@ -566,6 +566,7 @@ mapAliases {
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
+  pyqodeng-angr = warnAlias "'pyqodeng-angr' has been renamed to 'pyqodeng'" pyqodeng; # Added 2026-08-20
   pyqt5-stubs = throw "'pyqt5-stubs' has been removed as it was unused and depended on vulnerable qt5 webengine"; # Added 2026-01-15
   pyqt5-webkit = throw "'pyqt5-webkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
