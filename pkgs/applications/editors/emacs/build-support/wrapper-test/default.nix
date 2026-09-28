@@ -12,14 +12,34 @@ let
       pname,
       version ? "0.1.0", # a dummy value
       src ? lib.path.append ./. "${pname}.el",
+      doLint ? true,
     }:
 
     {
       melpaBuild,
+      package-lint,
     }:
     melpaBuild {
       inherit pname version src;
       turnCompilationWarningToError = true;
+
+      packageRequires = lib.optional doLint package-lint;
+
+      doInstallCheck = doLint;
+      preInstallCheck = ''
+        lintEachFile() {
+          find $out/share/emacs \
+            -type f -name '*.el' \
+            -not -name "*-pkg.el" -not -name "*-autoloads.el" \
+            -print0 \
+          | xargs --verbose -0 -I {} -n 1 -P "$NIX_BUILD_CORES" "$@"
+        }
+
+        lintEachFile \
+          emacs --batch \
+            --funcall=package-activate-all \
+            --funcall=package-lint-batch-and-exit "{}"
+      '';
     };
 in
 runCommand "test-emacs-withPackages-wrapper"
@@ -32,8 +52,14 @@ runCommand "test-emacs-withPackages-wrapper"
           pname = "with-packages";
           src = replaceVars ./with-packages.el { inherit (builtins) storeDir; };
         }) { })
-        (epkgs.callPackage (mkEpkg { pname = "early-default"; }) { })
-        (epkgs.callPackage (mkEpkg { pname = "default"; }) { })
+        (epkgs.callPackage (mkEpkg {
+          pname = "early-default";
+          doLint = false; # no need to lint this simple file
+        }) { })
+        (epkgs.callPackage (mkEpkg {
+          pname = "default";
+          doLint = false; # no need to lint this simple file
+        }) { })
         hello
         (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
