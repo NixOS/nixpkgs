@@ -21,6 +21,9 @@ in
 stdenvNoCC.mkDerivation {
   inherit (pick) pname version src;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   makeFlags = [
     "PREFIX=$(out)"
   ];
