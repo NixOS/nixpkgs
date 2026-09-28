@@ -148,10 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString finalAttrs.doInstallCheck ''
-    # ensure we are using the correct shell when executing the test scripts
-    patchShebangs t/*.sh
-  ''
   + lib.optionalString withSsh ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
       substituteInPlace "$x" \
