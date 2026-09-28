@@ -3,14 +3,22 @@
   emacs,
   hello,
   replaceVars,
+  lib,
 }:
 
 let
   mkEpkg =
-    pname: src: melpaBuild:
+    {
+      pname,
+      version ? "0.1.0", # a dummy value
+      src ? lib.path.append ./. "${pname}.el",
+    }:
+
+    {
+      melpaBuild,
+    }:
     melpaBuild {
-      inherit pname src;
-      version = "0.1.0"; # a dummy value
+      inherit pname version src;
       turnCompilationWarningToError = true;
     };
 in
@@ -20,11 +28,12 @@ runCommand "test-emacs-withPackages-wrapper"
       (emacs.pkgs.withPackages (epkgs: [
         epkgs.dash
         epkgs.flx-ido
-        (mkEpkg "with-packages" (replaceVars ./with-packages.el {
-          inherit (builtins) storeDir;
-        }) epkgs.melpaBuild)
-        (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
-        (mkEpkg "default" ./default.el epkgs.melpaBuild)
+        (epkgs.callPackage (mkEpkg {
+          pname = "with-packages";
+          src = replaceVars ./with-packages.el { inherit (builtins) storeDir; };
+        }) { })
+        (epkgs.callPackage (mkEpkg { pname = "early-default"; }) { })
+        (epkgs.callPackage (mkEpkg { pname = "default"; }) { })
         hello
         (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
