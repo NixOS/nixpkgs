@@ -16564,12 +16564,12 @@ final: prev: {
 
   smear-cursor-nvim = buildVimPlugin {
     pname = "smear-cursor.nvim";
-    version = "0.6.1";
+    version = "0.6.2";
     src = fetchFromGitHub {
       owner = "sphamba";
       repo = "smear-cursor.nvim";
-      tag = "v0.6.1";
-      hash = "sha256-OVdgXkaj498iejXDuX00E9aAKCJuqb45oTUQh0+UOfU=";
+      tag = "v0.6.2";
+      hash = "sha256-PI83Zvgx90Fvd52Ng1pmB1kL7SGIkq7R/T1awCUqKdY=";
     };
     meta.homepage = "https://github.com/sphamba/smear-cursor.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
