@@ -349,7 +349,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       hexa
-      emilylange
     ];
     mainProgram = "mass";
   };
