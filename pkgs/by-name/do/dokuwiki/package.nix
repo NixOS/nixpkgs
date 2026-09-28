@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "dokuwiki" finalAttrs.version;
     maintainers = with lib.maintainers; [
       _1000101
       e1mo
