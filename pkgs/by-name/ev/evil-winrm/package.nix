@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bad3r ];
   };
 })
