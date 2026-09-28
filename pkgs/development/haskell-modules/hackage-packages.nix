@@ -229345,7 +229345,10 @@ self: {
       description = "Visualise an eventlog";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "eventlog2html";
-      maintainers = [ lib.maintainers.maralorn ];
+      maintainers = [
+        lib.maintainers.alexfmpe
+        lib.maintainers.maralorn
+      ];
     }
   ) { };
 
@@ -266587,7 +266590,10 @@ self: {
       description = "A simple TUI using ghc-debug";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "ghc-debug-brick";
-      maintainers = [ lib.maintainers.maralorn ];
+      maintainers = [
+        lib.maintainers.alexfmpe
+        lib.maintainers.maralorn
+      ];
     }
   ) { };
 
@@ -266742,7 +266748,10 @@ self: {
       ];
       description = "Functions for instrumenting your application so the heap can be analysed with ghc-debug-common";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      maintainers = [ lib.maintainers.maralorn ];
+      maintainers = [
+        lib.maintainers.alexfmpe
+        lib.maintainers.maralorn
+      ];
     }
   ) { };
 
@@ -500427,6 +500436,7 @@ self: {
       description = "Easy dependency management for Nix projects";
       license = lib.meta.getLicenseFromSpdxId "MIT";
       mainProgram = "niv";
+      maintainers = [ lib.maintainers.alexfmpe ];
     }
   ) { };
 
@@ -709545,7 +709555,10 @@ self: {
       description = "A graphical tool for profiling parallel Haskell programs";
       license = lib.licenses.bsd3;
       mainProgram = "threadscope";
-      maintainers = [ lib.maintainers.maralorn ];
+      maintainers = [
+        lib.maintainers.alexfmpe
+        lib.maintainers.maralorn
+      ];
     }
   ) { };
 
@@ -761221,7 +761234,10 @@ self: {
       description = "Detect dead code";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "weeder";
-      maintainers = [ lib.maintainers.maralorn ];
+      maintainers = [
+        lib.maintainers.alexfmpe
+        lib.maintainers.maralorn
+      ];
     }
   ) { };
 

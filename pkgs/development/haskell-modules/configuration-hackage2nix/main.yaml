@@ -121,7 +121,10 @@ package-maintainers:
   alexfmpe:
     - basic-sop
     - commutative-semigroups
+    - eventlog2html
     - generics-sop
+    - ghc-debug-brick
+    - ghc-debug-stub
     - ghcide
     - ghcjs-base
     - ghcjs-dom
@@ -144,14 +147,17 @@ package-maintainers:
     - lsp-test
     - lsp-types
     - monoidal-containers
+    - niv
     - proto-lens-arbitrary
     - proto3-suite
     - proto3-wire
     - records-sop
     - th-abstraction
+    - threadscope
     - universe
     - universe-some
     - warp
+    - weeder
   artem:
     - BNFC-meta
     - alex-meta
