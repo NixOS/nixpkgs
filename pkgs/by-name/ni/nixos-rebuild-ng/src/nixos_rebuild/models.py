@@ -5,7 +5,7 @@ from argparse import Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, Self, TypedDict, override
+from typing import Any, ClassVar, NotRequired, Self, TypedDict, override
 
 from . import nix
 from .process import Remote, run_wrapper
@@ -168,6 +168,14 @@ class GenerationJson(TypedDict):
 
 class FlakeMetadataJson(TypedDict):
     resolvedUrl: str
+
+
+class NixOSVersionJson(TypedDict):
+    # Keys are NotRequired here so we need to parse them safely
+    nixosVersion: NotRequired[str]
+    configurationRevision: NotRequired[str]
+    kernelVersion: NotRequired[str]
+    specialisations: NotRequired[list[str]]
 
 
 @dataclass(frozen=True)

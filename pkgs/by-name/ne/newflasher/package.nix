@@ -2,13 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
   expat,
   zlib,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newflasher";
   version = "61";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "munjeni";
@@ -17,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9qEGFzA5sMn+1MOKNTJeBukurzytksXitgXraPL0KDU=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [
     expat
     zlib
@@ -24,9 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 newflasher $out/bin/newflasher
+    installBin newflasher
+    installManPage newflasher.1
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Flash tool for new Sony flash tool protocol (Xperia XZ Premium and newer)";

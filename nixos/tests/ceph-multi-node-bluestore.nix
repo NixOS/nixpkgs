@@ -25,19 +25,16 @@ let
     osd0 = {
       name = "0";
       ip = "192.168.1.2";
-      key = "AQBCEJNa3s8nHRAANvdsr93KqzBznuIWm2gOGg==";
       uuid = "55ba2294-3e24-478f-bee0-9dca4c231dd9";
     };
     osd1 = {
       name = "1";
       ip = "192.168.1.3";
-      key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
       uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
     osd2 = {
       name = "2";
       ip = "192.168.1.4";
-      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
     # Client that mounts CephFS using the in-kernel client.
@@ -57,6 +54,14 @@ let
         fsid = cfg.clusterId;
         monHost = cfg.monA.ip;
         monInitialMembers = cfg.monA.name;
+      };
+      extraConfig = {
+        log_to_syslog = "false";
+        log_to_file = "false";
+        log_to_stderr = "true";
+        debug_rocksdb = "1/5";
+        debug_mgr = "1/5";
+        mon_host = "v2:${cfg.monA.ip}:3300 v1:${cfg.monA.ip}:6789";
       };
     }
     // daemonConfig;
@@ -81,6 +86,7 @@ let
         bash
         sudo
         ceph
+        cryptsetup
         netcat
       ];
 
@@ -142,6 +148,11 @@ let
         daemons = [ cfg.monA.name ];
       };
       mgr = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      # TODO: move this to a separate machine
+      rgw = {
         enable = true;
         daemons = [ cfg.monA.name ];
       };
@@ -208,6 +219,11 @@ let
       virtualisation = {
         vlans = [ 1 ];
       };
+
+      # Ceph 20.2.4 introduced the aes256k cipher for authentication.
+      # Linux started supporting these in kernel version 7.0.
+      # Remove this line at the earliest convenience (i.e. when tests are run by 7.0 or higher by default).
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
       networking = networkConfig;
 
@@ -285,6 +301,8 @@ let
   # Based on the "manual deployment" approach from:
   # https://docs.ceph.com/en/tentacle/install/manual-deployment/
   baseScript = ''
+    import json
+
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -297,14 +315,15 @@ let
         "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
         "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
         "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
-        "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
+        # Creating the mon with v2 (and a legacy v1) address right away removes the need for running `enable-msgr2` later on.
+        # It is also makes the test more consistent by fixing the address to a known value instead of letting it derive the address.
+        "monmaptool --create --addv ${cfg.monA.name} '[v2:${cfg.monA.ip}:3300,v1:${cfg.monA.ip}:6789]' --auth-allowed-ciphers aes256k --auth-preferred-cipher aes256k --auth-service-cipher aes256k --fsid ${cfg.clusterId} /tmp/monmap",
         "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
         "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
         "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
         "systemctl start ceph-mon-${cfg.monA.name}",
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
-    monA.succeed("ceph mon enable-msgr2")
     monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
 
     # Can't check ceph status until a mon is up
@@ -320,59 +339,63 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
 
-    # Send the admin keyring to the OSD machines.
-    monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
-    osd0.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd1.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
+    # Send the bootstrap-osd keyring to the OSD machines.
+    monA.succeed("ceph auth get client.bootstrap-osd -o /etc/ceph/ceph.client.bootstrap-osd.keyring")
+    monA.succeed("cp /etc/ceph/ceph.client.bootstrap-osd.keyring /tmp/shared")
 
     # Bootstrap the BlueStore OSDs.
-    osd0.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd0.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-    )
-    osd1.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd1.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-    )
-    osd2.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd2.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd2.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
-    )
+    #
+    # The steps for this are roughly the same for all OSDs:
+    # 1. get the bootstrap-osd keyring
+    # 2. prepare the osd via ceph-volume lvm, the second line contains the OSD specific configuration
+    # 3. deactivate it to unmount the tmpfs
+    # 4. activate it without a tmpfs for persistent data
+    # 5. sync, so the osd has at least one consistent state saved
+    # 6. start it
 
-    # We `sync` so that the config survives the forced crashes below.
+    # osd.0: plain
     osd0.succeed(
-        "ceph-osd -i ${cfg.osd0.name} --mkfs --osd-uuid ${cfg.osd0.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-id ${cfg.osd0.name} --osd-fsid ${cfg.osd0.uuid} "
+          "--data /dev/vdb",
+        "ceph-volume lvm deactivate ${cfg.osd0.name} ${cfg.osd0.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd0.name} ${cfg.osd0.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd0.name}",
     )
+    # osd.1: plain
     osd1.succeed(
-        "ceph-osd -i ${cfg.osd1.name} --mkfs --osd-uuid ${cfg.osd1.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-id ${cfg.osd1.name} --osd-fsid ${cfg.osd1.uuid} "
+          "--data /dev/vdb --dmcrypt",
+        "ceph-volume lvm deactivate ${cfg.osd1.name} ${cfg.osd1.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd1.name} ${cfg.osd1.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd1.name}",
     )
+    # osd.2: plain
     osd2.succeed(
-        "ceph-osd -i ${cfg.osd2.name} --mkfs --osd-uuid ${cfg.osd2.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-fsid ${cfg.osd2.uuid} --osd-id ${cfg.osd2.name} "
+          "--data /dev/vdb",
+        "ceph-volume lvm deactivate ${cfg.osd2.name} ${cfg.osd2.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd2.name} ${cfg.osd2.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd2.name}",
     )
+
+
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     monA.succeed(
+        # Autoscaling will cause PGs to be peering, causing the tests to become flakey.
+        "ceph osd pool set noautoscale",
+
         "ceph osd pool create multi-node-test 32 32",
         "ceph osd pool ls | grep 'multi-node-test'",
 
@@ -389,6 +412,7 @@ let
         "ceph osd pool ls | grep 'multi-node-other-test'",
     )
     monA.succeed("ceph osd pool set multi-node-other-test size 2")
+    # TODO: actually write to the pool using rados directly
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
     monA.wait_until_succeeds("! ceph -s | grep -e 'unknown' -e 'pgs inactive'")
     monA.fail(
@@ -396,23 +420,100 @@ let
         "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it",
     )
 
+    # Bootstrap RGW
+    monA.succeed(
+        "sudo -u ceph mkdir -p /var/lib/ceph/radosgw/ceph-${cfg.monA.name}",
+        "ceph auth get-or-create client.${cfg.monA.name} osd 'allow rwx' mon 'allow rw' > /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "chown ceph:ceph /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "systemctl start ceph-rgw-${cfg.monA.name}",
+    )
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
+    monA.wait_for_open_port(7480)
+
+    # Enable the dashboard and recheck health
+    monA.succeed(
+        "ceph mgr module enable dashboard",
+        "ceph config set mgr mgr/dashboard/ssl false",
+        # default is 8080 but it's better to be explicit
+        "ceph config set mgr mgr/dashboard/server_port 8080",
+    )
+
+    # The dashboard does not listen on localhost:
+    # `server_addr` defaults to the wildcard address, but the dashboard module
+    # resolves that to the active mgr's own IP and binds only to it,
+    # so loopback is never bound.
+    # See https://github.com/ceph/ceph/blob/v20.2.2/src/pybind/mgr/dashboard/module.py#L213-L214
+    # Therefore address the dashboard via the mgr's IP instead of localhost.
+    dashboard = "http://${cfg.monA.ip}:8080"
+
+    monA.wait_for_open_port(8080, addr="${cfg.monA.ip}")
+    monA.wait_until_succeeds(f"curl -s --fail {dashboard}")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Initialize dashboard creds.
+    # In a the query below, we test the Dashboard's `/api/rgw/daemon`,
+    # which needs that the dashboard can talk to RGW.
+    # `set-rgw-credentials` needs a running RGW daemon.
+    monA.succeed(
+        "echo 'foo bar baz qux' > /tmp/dashboard_pw",
+        "ceph dashboard ac-user-create admin -i /tmp/dashboard_pw administrator",
+        "ceph dashboard set-rgw-credentials",
+        "sync",
+    )
+
+    # Get dashboard auth token
+    auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
+    auth_response = json.loads(monA.succeed(
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' {dashboard}/api/auth",
+    ))
+    token = auth_response["token"]
+
+    # Check cluster health via dashboard API
+    health = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/health/minimal",
+    ))
+    assert health["health"]["status"] == "HEALTH_OK"
+
+    # List daemons via REST API.
+    # This also requires a running RGW daemon, as it asserts on the first one.
+    rgw_daemons = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/rgw/daemon",
+    ))
+    assert rgw_daemons[0]["id"] == "${cfg.monA.name}"
+
     # Shut down ceph on all machines in a very unpolite way
     monA.crash()
     osd0.crash()
     osd1.crash()
     osd2.crash()
 
-    # Start it up
+    # Start the mon first and mark the OSDs as down.
+    # Since the heartbeats are pretty high by default, the OSDs would otherwise be marked as up still.
+    # However we do not want to lower the heartbeats since this might cause flakey tests.
+    monA.start()
+    monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
+    monA.wait_until_succeeds("ceph osd down all")
+    # Then start the OSDs as normal.
     osd0.start()
     osd1.start()
     osd2.start()
-    monA.start()
+    # Ensure they are all up.
+    osd0.wait_for_unit("network.target")
+    osd1.wait_for_unit("network.target")
+    osd2.wait_for_unit("network.target")
 
-    # Ensure the cluster comes back up again.
+    # FIXME: dmcrypt OSDs currently do not work out of the box.
+    # For a potential long-term fix see: https://github.com/NixOS/nixpkgs/pull/512912#discussion_r3140295546
+    osd1.succeed(
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd1.name} ${cfg.osd1.uuid}",
+        "systemctl start ceph-osd-${cfg.osd1.name}",
+    )
+
+    # Test the cluster state thoroughly.
     monA.wait_until_succeeds("ceph -s | grep 'mon: 1 daemons'")
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
-    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
+    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     # Verify the recovery.
@@ -444,45 +545,50 @@ let
 
     # Create a CephFS.
     monA.succeed(
-        "ceph osd pool create cephfs-data 32 32",
-        "ceph osd pool create cephfs-metadata 32 32",
-        "ceph fs new cephfs cephfs-metadata cephfs-data",
+        "ceph fs volume create testing",
+        "ceph osd pool set cephfs.testing.data pg_num 32",
+        "ceph osd pool set cephfs.testing.meta pg_num 32",
     )
     # Wait for the MDS to claim the filesystem and become active.
-    monA.wait_until_succeeds("ceph fs status cephfs | grep -e 'active'", timeout=60)
+    monA.wait_until_succeeds("ceph fs status testing | grep -e 'active'", timeout=60)
 
-    # Distribute the admin keyring (and a plain secret file for the kernel
-    # client) to both client machines, so that they can authenticate.
+    # Create a subvolume, issue credentials, then distribute those credentials.
     monA.succeed(
-        "cp /etc/ceph/ceph.client.admin.keyring /tmp/shared",
-        "ceph-authtool -p /etc/ceph/ceph.client.admin.keyring > /tmp/shared/admin.secret",
+        "ceph fs subvolumegroup create testing group",
+        "ceph fs subvolume create testing subvolume --group_name group",
+        "ceph fs subvolume authorize testing subvolume kclient group",
+        "ceph fs subvolume authorize testing subvolume fuseclient group",
+        "ceph auth get client.kclient -o /tmp/shared/ceph.client.kclient.keyring",
+        "ceph auth get client.fuseclient -o /tmp/shared/ceph.client.fuseclient.keyring",
     )
-    kclient.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    fuseclient.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    kclient.succeed("cp /tmp/shared/admin.secret /etc/ceph/admin.secret")
+    kclient.succeed("cp /tmp/shared/ceph.client.kclient.keyring /etc/ceph")
+    fuseclient.succeed("cp /tmp/shared/ceph.client.fuseclient.keyring /etc/ceph")
+
+    # Get the volume path generated by Ceph.
+    volume_path = monA.succeed("ceph fs subvolume getpath testing subvolume group | tee /dev/stderr").strip()
 
     # Mount CephFS on the kernel client.
     # We force the messenger v2 protocol via "ms_mode=secure"; the cluster
-    # has msgr2 enabled (see "ceph mon enable-msgr2" above) and the legacy v1
+    # has msgr2 enabled (the monmap is created with a v2 address above) and the legacy v1
     # protocol apparently does not reconnect reliably after the servers are restarted.
     # The msgr2 monitor listens on port 3300 (instead of legacy v1 port 6789),
     # so we have to point the device string at that port explicitly.
     # `recover_session=clean` makes the kernel client automatically reconnect
     # (discarding its stale session) after the whole cluster has been down,
-    # which would otherwise leave the mount blocklisted and hanging forever.
+    # which would otherwise leave the mount blocklisted and hanging.
     # Real CephFS use may not prefer hanging `recover_session=clean`, and
     # prefer manual de-blocklisting to avoid any failed OS syscalls,
     # but for this test, discarding stale sessions is good enough.
     kclient.succeed("mkdir -p /mnt/cephfs")
     kclient.wait_until_succeeds(
-        "mount -t ceph ${cfg.monA.ip}:3300:/ /mnt/cephfs -o name=admin,secretfile=/etc/ceph/admin.secret,ms_mode=secure,recover_session=clean"
+        f"mount -t ceph kclient@.testing={volume_path} /mnt/cephfs -o ms_mode=secure,recover_session=clean"
     )
     kclient.succeed("mountpoint /mnt/cephfs")
 
     # Mount CephFS on the FUSE client using ceph-fuse.
     fuseclient.succeed("mkdir -p /mnt/cephfs")
     fuseclient.wait_until_succeeds(
-        "ceph-fuse --id admin -m ${cfg.monA.ip}:6789 /mnt/cephfs"
+        f"ceph-fuse --id fuseclient -m ${cfg.monA.ip}:3300 -r {volume_path} /mnt/cephfs"
     )
     fuseclient.succeed("mountpoint /mnt/cephfs")
 
@@ -510,24 +616,40 @@ let
     osd1.crash()
     osd2.crash()
 
-    # Start it up
+    # Start the mon first and mark the OSDs as down.
+    # Since the heartbeats are pretty high by default, the OSDs would otherwise be marked as up still.
+    # However we do not want to lower the heartbeats since this might cause flakey tests.
+    monA.start()
+    monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
+    monA.wait_until_succeeds("ceph osd down all")
+    # Then start the OSDs as normal.
     osd0.start()
     osd1.start()
     osd2.start()
-    monA.start()
+    # Ensure they are all up.
+    osd0.wait_for_unit("network.target")
+    osd1.wait_for_unit("network.target")
+    osd2.wait_for_unit("network.target")
+
+    # FIXME: dmcrypt OSDs currently do not work out of the box.
+    # For a potential long-term fix see: https://github.com/NixOS/nixpkgs/pull/512912#discussion_r3140295546
+    osd1.succeed(
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd1.name} ${cfg.osd1.uuid}",
+        "systemctl start ceph-osd-${cfg.osd1.name}",
+    )
 
     # Ensure the cluster comes back up again.
     # See the note above on why this uses `wait_until_succeeds`.
     monA.wait_until_succeeds("ceph -s | grep 'mon: 1 daemons'")
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
-    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
+    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
 
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'", timeout=60)
 
     # Ensure the MDS/CephFS comes back up again, too.
     monA.wait_for_unit("ceph-mds-${cfg.monA.name}")
-    monA.wait_until_succeeds("ceph fs status cephfs | grep -e 'active'", timeout=60)
+    monA.wait_until_succeeds("ceph fs status testing | grep -e 'active'", timeout=60)
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     # The clients kept running across the outage, so their CephFS mounts
