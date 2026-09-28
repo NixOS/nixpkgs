@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   name = "continuwuity";
   user = "alice";
@@ -11,6 +11,7 @@ in
     continuwuity = {
       services.matrix-continuwuity = {
         enable = true;
+        package = pkgs.matrix-continuwuity_latest;
         settings.global = {
           server_name = name;
           address = [ "0.0.0.0" ];
