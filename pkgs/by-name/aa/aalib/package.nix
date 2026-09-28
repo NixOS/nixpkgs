@@ -8,6 +8,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aalib";
   version = "1.4rc5";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/aa-project/aalib-${finalAttrs.version}.tar.gz";
@@ -38,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure =
     # The configure script does the correct thing when 'system' is already set
-    # Export it explicitly in case __structuredAttrs is true.
+    # Export it explicitly for __structuredAttrs.
     ''
       export system
     ''
