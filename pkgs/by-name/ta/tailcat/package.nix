@@ -19,6 +19,14 @@ buildGo127Module (finalAttrs: {
     hash = "sha256-Hue5NZAmAf8mxFqgoDcjt7YHiROeudpAoanxSFnZkTk=";
   };
 
+  patches = [
+    # The sandbox has no non-loopback interface, so magicsock starts with
+    # its network down. The server's first netcheck can then run before
+    # SetNetworkUp(true) and it never picks a home DERP, which makes the
+    # e2e tests time out on "tailcat Ping: context deadline exceeded".
+    ./network-up-before-first-netcheck.patch
+  ];
+
   vendorHash = "sha256-yfOl/gWIijLlqchXFiTRZ7vlgS/kn0xOmv52TFMYs+E=";
 
   subPackages = [ "cmd/tailcat" ];
