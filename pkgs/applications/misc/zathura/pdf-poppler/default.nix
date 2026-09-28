@@ -1,16 +1,15 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
+  desktop-file-utils,
+  appstream,
   zathura_core,
   girara,
   poppler,
-  desktop-file-utils,
-  appstream,
-  appstream-glib,
   gitUpdater,
 }:
 
@@ -31,13 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     desktop-file-utils
     appstream
-    appstream-glib
-    zathura_core
   ];
 
   buildInputs = [
-    poppler
+    zathura_core
     girara
+    poppler
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
