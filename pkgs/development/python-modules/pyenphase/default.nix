@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyenphase";
-  version = "4.0.5";
+  version = "4.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsKB6sSfUhhMeF6j0MP+sbPmKeCz6c3wlm7TIL5Ls2I=";
+    hash = "sha256-N9jNlLJDRThCshbbe/9eP77L3+KoJUIFxfgoQHd0ock=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
