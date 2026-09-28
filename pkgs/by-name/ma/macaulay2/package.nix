@@ -17,7 +17,6 @@
   cohomcalg,
   csdp,
   eigen,
-  emacs-nox,
   fflas-ffpack,
   flex,
   flint,
@@ -70,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-2e39qzBO63Ft+yw+tJChLsupeinalTkDwXp3WBF2wms=";
-    fetchSubmodules = true;
+    hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
   };
 
   docs = fetchurl {
@@ -122,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     bison
-    emacs-nox
     flex
     flint
     gdbm
@@ -154,6 +151,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
+    # remove editor stuff from Makefiles
+    substituteInPlace Macaulay2/Makefile.in \
+      --replace-fail "all-in-editors" "" \
+      --replace-fail "editors" ""
   '';
 
   preConfigure = ''
