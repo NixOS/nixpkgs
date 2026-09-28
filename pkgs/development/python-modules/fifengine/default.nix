@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   toPythonModule,
   python,
   pythonImportsCheckHook,
@@ -30,7 +30,7 @@ let
   # commit behind the fife 0.4.3-1 upload.
   debianPatch =
     { name, hash }:
-    fetchpatch {
+    fetchpatch2 {
       inherit name hash;
       url = "https://salsa.debian.org/games-team/fife/-/raw/913e09dd8ec30530fb08e1a3e12c885d228cb3fd/debian/patches/${name}";
     };
