@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +27,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Requires a running substrate node
   doCheck = false;
+
+  __structuredAttrs = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # subxt exposes its version through a subcommand, not a --version flag
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/paritytech/subxt";
