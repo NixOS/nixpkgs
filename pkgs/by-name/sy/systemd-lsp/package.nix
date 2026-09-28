@@ -13,8 +13,8 @@
 }:
 
 let
-  crateVersion = "0.2.0";
-  releaseDate = "2026.08.03";
+  crateVersion = "0.2.1";
+  releaseDate = "2026.09.28";
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-lsp";
@@ -26,16 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "JFryy";
     repo = "systemd-lsp";
     tag = "v${releaseDate}";
-    hash = "sha256-yMUUtcSpXn02zbxcljbkzT02DUEJPQBwCopmDxbTmR4=";
+    hash = "sha256-ATzepUemul9vWfHFCCAH2yHrhNjsBzTqsjJB2dLi3vE=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/cli_tests.rs \
-      --replace-fail 'target/release' \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
-  '';
-
-  cargoHash = "sha256-2+JTKSzreTmdUiv++WaG8kVV2hXDn6qeY9Cp7n51MP4=";
+  cargoHash = "sha256-qajr9g7l9Nix9JLZg9yGWx8kn8xAuGC9Yo2Q+4dAS/M=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
