@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # <https://github.com/uxlfoundation/oneTBB/pull/1849>
     ./fix-libtbbmalloc-dlopen.patch
+
+    # <https://github.com/uxlfoundation/oneTBB/pull/2194>
+    ./fix-hwloc-nullptr-deref.patch
   ];
 
   nativeBuildInputs = [

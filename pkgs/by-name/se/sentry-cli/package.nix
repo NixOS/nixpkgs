@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
   dontUseSwiftpmCheck = true;
+  dontUseSwiftpmInstall = true;
 
   __darwinAllowLocalNetworking = true;
 

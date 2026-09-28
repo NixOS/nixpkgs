@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  # For dependents that compile the protos themselves.
+  passthru.opentelemetry-proto = opentelemetry-proto;
+
   passthru.tests = {
     # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
     # so we have to resort to this.

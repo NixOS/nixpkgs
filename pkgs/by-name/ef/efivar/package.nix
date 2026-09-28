@@ -6,6 +6,7 @@
   pkg-config,
   popt,
   mandoc,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ popt ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  patches = [
+    # fix build with glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/rhboot/efivar/commit/f521cd7f584c95d8308659ab9d89d750e2bd76da.patch";
+      hash = "sha256-I19UIS0tNTsEipuoMQPlTEwih1RrYPz9Q4Wy98u1z0Q=";
+    })
+  ];
 
   makeFlags = [
     "prefix=$(out)"

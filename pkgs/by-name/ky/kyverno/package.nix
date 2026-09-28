@@ -60,5 +60,6 @@ buildGoModule (finalAttrs: {
       LorenzBischof
       Scrumplex
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kyverno" finalAttrs.version;
   };
 })

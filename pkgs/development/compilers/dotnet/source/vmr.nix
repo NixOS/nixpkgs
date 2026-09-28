@@ -16,8 +16,8 @@
   glibcLocales,
   ensureNewerSourcesForZipFilesHook,
   darwin,
+  swift,
   xcbuild,
-  swiftPackages,
   openssl,
   getconf,
   python3,
@@ -47,7 +47,6 @@ let
     targetPlatform
     ;
   inherit (stdenv.hostPlatform) isLinux isDarwin;
-  inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
   inherit (releaseManifest) sourceRepository tag;

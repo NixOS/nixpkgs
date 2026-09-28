@@ -314,6 +314,35 @@ overrideLlvmPackagesRocm (s: {
         hash = "sha256-6Pj3pRESaho60YhXWwaQxEKteSuziZseeT4FbZqZANk=";
       })
     ]
+    # https://github.com/NixOS/nixpkgs/pull/564039 introduces minimal-arm64e_x1-support.patch that depends on llvm 22.1.0
+    # Patches to clang, compiler-rt-libc, and these patches bridge the gap between llvm 22.0.0 and ~22.1.8
+    # arm64e_x1: Can be removed when upgrading to rocm 10
+    ++ [
+      (fetchpatch {
+        name = "wasm-add-wasm32-linux-muslwali-target.patch";
+        url = "https://github.com/llvm/llvm-project/commit/7e7c923b5890e62f4b5920c2f8a2e51f586a186c.patch";
+        relative = "llvm";
+        hash = "sha256-KbM7M4osxaaxkn5UN+csNm+aKvaWgJ0KQnKHHpI+Qxo=";
+      })
+      (fetchpatch {
+        name = "adt-allow-arbitrary-number-of-cases-in-stringswitch.patch";
+        url = "https://github.com/llvm/llvm-project/commit/8642762ac356f0b8432b78d7a32c1f5213e494b3.patch";
+        relative = "llvm";
+        hash = "sha256-aQBmMSJ+aunE7HLpfIizBH7Be1kmcN6nxUk2sV9d3Qo=";
+      })
+      (fetchpatch {
+        name = "adt-migrate-stringswitch-cases-to-new-overload.patch";
+        url = "https://github.com/llvm/llvm-project/commit/2ed7baafc3bf5b4321e3f77dfb1ce291e62bcadc.patch";
+        relative = "llvm";
+        hash = "sha256-cV9POhuJFCnjCdPL6Lym2cmKLeW/2k34N2rwauxU7MA=";
+      })
+      (fetchpatch {
+        name = "lfi-introduce-aarch64-lfi-target.patch";
+        url = "https://github.com/llvm/llvm-project/commit/2c05ae4b8f85927d55f862fdf61bea564e2ea944.patch";
+        relative = "llvm";
+        hash = "sha256-yxvmZg3BTlIrNeer90cYnF7yuRyraeVg1nbiaRVr+zc=";
+      })
+    ]
     ++ old.patches
     ++ [
       ./perf-increase-namestring-size.patch
@@ -406,6 +435,27 @@ overrideLlvmPackagesRocm (s: {
             url = "https://github.com/llvm/llvm-project/commit/f5759eeb63a3a5ce7d555c13c3126cea84e0c7b1.patch";
             relative = "clang";
             hash = "sha256-73IDPGZWKX4vny3x5FJ3/NQw8XRad9UNwfYkvQdMB4s=";
+          })
+        ]
+        # arm64e_x1: Can be removed when upgrading to rocm 10
+        ++ [
+          (fetchpatch {
+            name = "wasm-add-wasm32-linux-muslwali-target.patch";
+            url = "https://github.com/llvm/llvm-project/commit/7e7c923b5890e62f4b5920c2f8a2e51f586a186c.patch";
+            relative = "clang";
+            hash = "sha256-QGqil4rs9wFFa8J25ghWKTE8YG2+AbGG81dt5ReAw9k=";
+          })
+          (fetchpatch {
+            name = "adt-migrate-stringswitch-cases-to-new-overload.patch";
+            url = "https://github.com/llvm/llvm-project/commit/2ed7baafc3bf5b4321e3f77dfb1ce291e62bcadc.patch";
+            relative = "clang";
+            hash = "sha256-w9sS+pwawHqxGkTAWMinzF1r9ZyWMTmI119X/NdQoc8=";
+          })
+          (fetchpatch {
+            name = "lfi-introduce-aarch64-lfi-target.patch";
+            url = "https://github.com/llvm/llvm-project/commit/2c05ae4b8f85927d55f862fdf61bea564e2ea944.patch";
+            relative = "clang";
+            hash = "sha256-CcwqLvhDAJSr3dkRDqJKe3pVD2G+w5JMgtGkUx6pUPc=";
           })
         ]
         ++ old.patches
@@ -509,6 +559,16 @@ overrideLlvmPackagesRocm (s: {
       isGNU = false;
     };
   compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
+    patches = [
+      # arm64e_x1: Can be removed when upgrading to rocm 10
+      (fetchpatch {
+        name = "lfi-introduce-aarch64-lfi-target.patch";
+        url = "https://github.com/llvm/llvm-project/commit/2c05ae4b8f85927d55f862fdf61bea564e2ea944.patch";
+        relative = "compiler-rt";
+        hash = "sha256-xgvVXG+IGa9qwv60ioER6N5nC7XPRPEDHVUrQ5n9RBI=";
+      })
+    ]
+    ++ old.patches;
     meta = old.meta // llvmMeta;
   });
   compiler-rt = s.final.compiler-rt-libc;

@@ -49,6 +49,13 @@ let
     url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
     hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
   };
+
+  lixSyscallhPatch = fetchpatch {
+    name = "lix-libutil-always-include-sys-syscallh.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/570f5b8d1f7ad4e3146dd307a223e8a6993ddcc5.patch";
+    hash = "sha256-7fs1D50XhUIQj09VNPsWRLobSwWpr3s7u4qexQFK1lw=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -193,6 +200,7 @@ lib.makeExtensible (
       lix-args = (import ./2.94.nix { inherit fetchFromGitea rustPlatform; }) // {
         patches = [
           lixMdbookPatch
+          lixSyscallhPatch
         ];
       };
     };

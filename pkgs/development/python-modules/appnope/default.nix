@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "appnope";
-  version = "0.1.4";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minrk";
     repo = "appnope";
     tag = finalAttrs.version;
-    hash = "sha256-We7sZKVbQFIMdZpS+VMdi0RH1O/qtFNrfJNg/98tO5A=";
+    hash = "sha256-saJ68R4zdquTWWT/QuWZk6oQhcx3R+AmVBYt/NmFtyM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   checkInputs = [ pytestCheckHook ];
 
