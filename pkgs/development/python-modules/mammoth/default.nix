@@ -11,7 +11,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mammoth";
   version = "1.13.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-mammoth";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-F8lgtxlvM44qvHTv5wK6CKGepV6Jh+SWUoWEzdnLkEI=";
   };
 
@@ -32,8 +32,6 @@ buildPythonPackage rec {
 
   dependencies = [ cobble ];
 
-  pythonImportsCheck = [ "mammoth" ];
-
   nativeCheckInputs = [
     funk
     pytestCheckHook
@@ -45,13 +43,15 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  pythonImportsCheck = [ "mammoth" ];
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Convert Word documents (.docx files) to HTML";
     homepage = "https://github.com/mwilliamson/python-mammoth";
-    changelog = "https://github.com/mwilliamson/python-mammoth/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/mwilliamson/python-mammoth/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})
