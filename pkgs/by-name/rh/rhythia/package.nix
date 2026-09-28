@@ -86,6 +86,7 @@ buildDotnetModule (finalAttrs: {
 
   patches = [
     # ./godot-dotnet-sdk-4.6.3.patch
+    ./fix-renderer-node-fallback.patch
   ]
   ++ lib.optional (stdenv.hostPlatform.system == "aarch64-linux") ./fix-aarch64-linux.patch;
 
