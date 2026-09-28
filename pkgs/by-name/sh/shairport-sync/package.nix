@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableAirplay2 "--with-airplay-2";
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   passthru.updateScript = nix-update-script {
     # ignore -dev tagged releases
