@@ -179,7 +179,8 @@ let
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta;
+    inherit pname;
+    meta = meta // mkCpeParts finalAttrs.version;
     version = "154.0.8037.57";
 
     src =
@@ -305,7 +306,8 @@ let
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta;
+    inherit pname;
+    meta = meta // mkCpeParts finalAttrs.version;
     version = "154.0.8037.58";
 
     src = fetchurl {
@@ -364,6 +366,15 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
+  };
+
+  mkCpeParts = version: {
+    identifiers.cpeParts = {
+      vendor = "google";
+      product = "chrome";
+      update = "*";
+      inherit version;
+    };
   };
 in
 if stdenvNoCC.hostPlatform.isDarwin then
