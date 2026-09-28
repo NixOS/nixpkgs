@@ -11,13 +11,14 @@
 let
   maps = callPackage ./maps.nix { inherit licenseAccepted; };
 in
-stdenv.mkDerivation rec {
-  version = "4.7.1";
+stdenv.mkDerivation (finalAttrs: {
   pname = "sc2-headless";
+  # Last Linux package Blizzard published.
+  version = "4.10";
 
   src = fetchurl {
-    url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
-    sha256 = "0q1ry9bd3dm8y4hvh57yfq7s05hl2k2sxi2wsl6h0r3w690v1kdd";
+    url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${finalAttrs.version}.zip";
+    hash = "sha256-EFLySfMKJCv14XzDMVMkkZ+WiTB8ptvNswu0HqMASIQ=";
   };
 
   unpackCmd =
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
     else
       assert licenseAccepted;
       ''
-        unzip -P 'iagreetotheeula' $curSrc
+        # Info-ZIP cannot inflate the empty Cache/TMP entries; skip them.
+        unzip -P 'iagreetotheeula' "$curSrc" -x 'StarCraftII/Battle.net/Cache/TMP/*'
       '';
 
   nativeBuildInputs = [ unzip ];
@@ -71,4 +73,4 @@ stdenv.mkDerivation rec {
     };
     maintainers = [ ];
   };
-}
+})
