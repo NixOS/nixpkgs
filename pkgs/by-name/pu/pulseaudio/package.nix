@@ -80,6 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${finalAttrs.version}.tar.xz";
     hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
