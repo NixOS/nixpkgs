@@ -467,8 +467,9 @@ stdenv.mkDerivation (
       substituteInPlace tools/Makefile \
         --replace-fail \
           'TOOLS = enc_recon_frame_test enum_options qt-faststart scale_slice_test trasher uncoded_frame' \
-          'TOOLS = enum_options qt-faststart trasher uncoded_frame
-      TOOLS-$(CONFIG_SWSCALE) += enc_recon_frame_test scale_slice_test'
+          'TOOLS = enum_options qt-faststart trasher
+      TOOLS-$(CONFIG_SWSCALE) += enc_recon_frame_test scale_slice_test
+      TOOLS-$(CONFIG_AVDEVICE:yes=$(CONFIG_AVFILTER)) += uncoded_frame'
     '';
 
     patches =
