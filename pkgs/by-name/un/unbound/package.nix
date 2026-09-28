@@ -250,5 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nlnetlabs" finalAttrs.version;
   };
 })

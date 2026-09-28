@@ -111,7 +111,7 @@ effectiveBuildPythonApplication rec {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-OXcZs2bt+ub59buDkw56A3gfOnDHSYP7RBAFOBvwrKY=";
+    hash = "sha256-TXqnheJjq3WZZffbEPjS5/u/02OlJkDJ9IqyCabYr1E=";
   };
 
   patches = [

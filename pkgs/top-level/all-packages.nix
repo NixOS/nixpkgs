@@ -6320,11 +6320,10 @@ with pkgs;
   };
 
   openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+    conf = ../development/libraries/openssl/openssl_legacy.cnf;
   };
 
   inherit (callPackages ../development/libraries/openssl { })
-    openssl_3
     openssl_3_5
     openssl_3_6
     openssl_4_0
@@ -8473,18 +8472,6 @@ with pkgs;
       buildMozillaMach
       ;
   };
-  firefox-beta-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-beta.nix
-      {
-        inherit
-          stdenv
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-devedition-unwrapped =
     import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix
       {
@@ -8522,7 +8509,6 @@ with pkgs;
   firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
