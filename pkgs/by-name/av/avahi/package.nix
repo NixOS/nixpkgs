@@ -15,6 +15,7 @@
   autoreconfHook,
   libiconv,
   libevent,
+  libeventSupport ? true,
   nixosTests,
   gtk3Support ? false,
   glibSupport ? true,
@@ -210,13 +211,15 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     expat
     libiconv
-    libevent
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libpcap
   ]
   ++ lib.optionals gtk3Support [
     gtk3
+  ]
+  ++ lib.optionals libeventSupport [
+    libevent
   ]
   ++ lib.optionals qt5Support [
     qt5
