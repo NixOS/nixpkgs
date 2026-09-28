@@ -29,7 +29,10 @@
         ubuntu-classic
       ];
 
-      services.printing.enable = true;
+      services.printing = {
+        enable = true;
+        cups-pdf.enable = true;
+      };
       services.upower.enable = true;
     };
 
