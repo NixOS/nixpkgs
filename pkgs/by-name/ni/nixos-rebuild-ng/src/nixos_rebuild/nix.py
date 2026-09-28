@@ -511,15 +511,16 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             profile.path.parent / f"{profile.path.name}-{generation.id}-link"
         )
 
-        j: NixOSVersionJson = {}
+        j: NixOSVersionJson
         try:
             result = run_wrapper(
                 [generation_path / "sw/bin/nixos-version", "--json"],
                 capture_output=True,
             ).stdout
             j = json.loads(result)
-        except (OSError, CalledProcessError) as ex:
+        except (OSError, CalledProcessError, json.JSONDecodeError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
+            j = {}
 
         return GenerationJson(
             generation=generation.id,

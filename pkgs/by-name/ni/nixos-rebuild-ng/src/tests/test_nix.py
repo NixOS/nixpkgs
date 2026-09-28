@@ -590,65 +590,64 @@ def test_list_generations(
     mock_get_generations: Mock,
     tmp_path: Path,
 ) -> None:
-    mock_run.return_value = CompletedProcess(
-        args=[],
-        returncode=0,
-        stdout=json.dumps({"nixosVersion": "26.11.20260926.dirty"}),
-    )
-    assert n.list_generations(m.Profile("system", tmp_path)) == [
-        {
-            "configurationRevision": "Unknown",
-            "current": True,
-            "date": "2024-11-07 23:54:17",
-            "generation": 2,
-            "kernelVersion": "Unknown",
-            "nixosVersion": "26.11.20260926.dirty",
-            "specialisations": [],
-        },
-        {
-            "configurationRevision": "Unknown",
-            "current": False,
-            "date": "2024-11-07 23:54:17",
-            "generation": 1,
-            "kernelVersion": "Unknown",
-            "nixosVersion": "26.11.20260926.dirty",
-            "specialisations": [],
-        },
-    ]
-
+    # happy path
     mock_run.return_value = CompletedProcess(
         args=[],
         returncode=0,
         stdout=json.dumps(
             {
-                "configurationRevision": "dirty",
+                "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
                 "kernelVersion": "7.2.8",
-                "nixosVersion": "26.11.20260926.dirty",
-                "specialisations": [],
+                "nixosVersion": "26.11.20260925.e94cb15",
+                "specialisations": ["foo", "bar"],
             }
         ),
     )
     assert n.list_generations(m.Profile("system", tmp_path)) == [
         {
-            "configurationRevision": "dirty",
+            "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
             "current": True,
             "date": "2024-11-07 23:54:17",
             "generation": 2,
             "kernelVersion": "7.2.8",
-            "nixosVersion": "26.11.20260926.dirty",
-            "specialisations": [],
+            "nixosVersion": "26.11.20260925.e94cb15",
+            "specialisations": ["foo", "bar"],
         },
         {
-            "configurationRevision": "dirty",
+            "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
             "current": False,
             "date": "2024-11-07 23:54:17",
             "generation": 1,
             "kernelVersion": "7.2.8",
-            "nixosVersion": "26.11.20260926.dirty",
+            "nixosVersion": "26.11.20260925.e94cb15",
+            "specialisations": ["foo", "bar"],
+        },
+    ]
+
+    # parsing invalid JSON
+    mock_run.return_value = CompletedProcess(args=[], returncode=0, stdout="garbage")
+    assert n.list_generations(m.Profile("system", tmp_path)) == [
+        {
+            "configurationRevision": "Unknown",
+            "current": True,
+            "date": "2024-11-07 23:54:17",
+            "generation": 2,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "Unknown",
+            "specialisations": [],
+        },
+        {
+            "configurationRevision": "Unknown",
+            "current": False,
+            "date": "2024-11-07 23:54:17",
+            "generation": 1,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "Unknown",
             "specialisations": [],
         },
     ]
 
+    # error calling nixos-version
     mock_run.side_effect = CalledProcessError(returncode=1, cmd=[])
     assert n.list_generations(m.Profile("system", tmp_path)) == [
         {
