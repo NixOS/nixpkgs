@@ -198,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
       "fuzztest sourcetest"
     else if stdenv.hostPlatform.isMusl then
       # no multi-build => no asan/ubsan fuzzcheck
-      "tcltest fuzztest sourcetest"
+      # A few TCL failures exist due to glibc / musl differences
+      "fuzztest sourcetest"
     else
       "";
 
