@@ -66,6 +66,6 @@ stdenv.mkDerivation {
       url = "https://www.cle.org.pk/software/license/Nafees_Pakistani_Naskh_License.html";
     };
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bergey ];
+    maintainers = [ ];
   };
 }
