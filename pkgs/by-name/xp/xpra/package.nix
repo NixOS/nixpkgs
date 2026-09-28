@@ -59,6 +59,7 @@
   withHtml ? true,
   xpra-html5,
   udevCheckHook,
+  versionCheckHook,
 }:
 
 let
@@ -101,15 +102,16 @@ let
     stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
   };
 in
-effectiveBuildPythonApplication rec {
+effectiveBuildPythonApplication (finalAttrs: {
   pname = "xpra";
   version = "6.5.4";
-  format = "setuptools";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TXqnheJjq3WZZffbEPjS5/u/02OlJkDJ9IqyCabYr1E=";
   };
 
@@ -138,9 +140,10 @@ effectiveBuildPythonApplication rec {
     pkg-config
     wrapGAppsHook3
     pandoc
+    python3.pkgs.setuptools
     udevCheckHook
   ]
-  ++ lib.optionals withNvenc [ cudaPackages.cudatoolkit ];
+  ++ lib.optionals withNvenc [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     libx11
@@ -282,9 +285,9 @@ effectiveBuildPythonApplication rec {
     ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
   '';
 
-  # doCheck = false;
-
   enableParallelBuilding = true;
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   passthru = {
     inherit xf86videodummy;
@@ -294,7 +297,7 @@ effectiveBuildPythonApplication rec {
   meta = {
     homepage = "https://github.com/Xpra-org/xpra";
     description = "Persistent remote applications for X";
-    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
@@ -302,4 +305,4 @@ effectiveBuildPythonApplication rec {
       mvnetbiz
     ];
   };
-}
+})
