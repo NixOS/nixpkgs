@@ -152,10 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
-    substituteInPlace configure.ac \
-      --replace-fail "[\$gfan_version], [ge], [0.8]" "[\$gfan_version], [ge], [0.6]"
-    substituteInPlace Macaulay2/packages/gfanInterface.m2 \
-      --replace-fail 'MinimumVersion => ("0.8"' 'MinimumVersion => ("0.6"'
   '';
 
   preConfigure = ''
