@@ -5,6 +5,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  makeBinaryWrapper,
   coreutils,
   bash,
   direnv,
@@ -22,19 +23,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.8.6";
+  version = "2026.9.15";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dm+cIb6i+npYSIUfxaEi3ohumeT9lXXlQwYREndwZFE=";
+    hash = "sha256-atiEHEDKlAfqGdJa46v0z2aTt03CKLHFaEuJ5QKyD0Y=";
   };
 
-  cargoHash = "sha256-VzRNo2fa4n4oOw27itjFebKpIhSdm8UmI/xdBBJIh9g=";
+  cargoHash = "sha256-i96rOfxrL95T6RHWbFlKhRfzicctp3bbQK7LewT7wIg=";
 
   nativeBuildInputs = [
     installShellFiles
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -44,24 +46,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchShebangs --build \
       ./test/data/plugins/**/bin/* \
       ./src/fake_asdf.rs \
-      ./src/cli/generate/git_pre_commit.rs \
-      ./src/cli/generate/snapshots/*.snap
+      ./src/cli/generate/git_pre_commit.rs
 
-    substituteInPlace ./src/test.rs \
-      --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
-
-    substituteInPlace ./src/git.rs \
-      --replace-fail '"git"' '"${lib.getExe git}"'
-
-    substituteInPlace ./src/env_diff.rs \
-      --replace-fail '"bash"' '"${lib.getExe bash}"'
-
+    # env + direnv are still invoked by name from the top-level crate; pin them.
+    # (The git and bash spawns moved into the mise-util crate in 2026.9.x and now
+    # resolve via PATH — they are provided at runtime by the wrapper below.)
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace-fail '"env"' '"${lib.getExe' coreutils "env"}"' \
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
   nativeCheckInputs = [
+    bash
     cacert
     cmake
     # gix spawns git-upload-pack by name in file:// clone tests.
@@ -79,12 +75,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # shell out to macOS system binaries that the darwin sandbox refuses to exec
-    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
-    # we don't care about brew tests and a lot of them fails here
+    # brew cask tests refuse to operate through the sandbox's "untrusted" root
+    # directory (and are macOS-oriented anyway); we don't test brew here.
     "--skip=system::packages::brew::cask::tests::"
+    # performs a privileged filesystem operation the build sandbox forbids (EPERM).
+    "--skip=system_install::tests::archive_boundary"
+    # shells out to the Swift toolchain, which is unavailable in the sandbox.
+    "--skip=backend::spm::tests::test_inline_install_command_uses_install_environment"
+    # runs the built mise binary to write a node-gyp trampoline, which the build
+    # sandbox blocks (EACCES).
+    "--skip=mise_binary_services_aube_node_gyp_bootstrap_trampoline"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # exercise the macOS `defaults` binary and per-user containers, which the
+    # darwin sandbox refuses to exec / write to.
+    "--skip=system::defaults::tests::"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -97,10 +102,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     installManPage ./man/man1/mise.1
 
-    substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
-      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
-
     installShellCompletion \
       --bash ./completions/mise.bash \
       --fish ./completions/mise.fish \
@@ -108,6 +109,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/lib/mise
     touch $out/lib/mise/.disable-self-update
+
+    # mise shells out to git (plugin/repo operations) and bash (env_diff sources
+    # scripts through it). Since 2026.9.x these resolve via PATH from the mise-util
+    # crate, so ensure nixpkgs' git and bash are on mise's PATH.
+    wrapProgram $out/bin/mise \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          bash
+        ]
+      }
   '';
 
   passthru = {
