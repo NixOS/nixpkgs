@@ -15807,12 +15807,12 @@ final: prev: {
 
   remember-nvim = buildVimPlugin {
     pname = "remember.nvim";
-    version = "1.5.1";
+    version = "1.5.2";
     src = fetchFromGitHub {
       owner = "vladdoster";
       repo = "remember.nvim";
-      tag = "v1.5.1";
-      hash = "sha256-kJABTjY6p+wFlNZ9VLmK5LvusHcbD/0aaZP6yOpR1Zc=";
+      tag = "v1.5.2";
+      hash = "sha256-qZnSzOr6ImGZ6uiV4GQCQGUPsSxYHdjHlAlAjMz83sE=";
     };
     meta.homepage = "https://github.com/vladdoster/remember.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
