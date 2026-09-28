@@ -1,5 +1,13 @@
 ;;; with-packages.el --- Utils and ERT tests for withPackages  -*- lexical-binding: t; -*-
 
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "29.1"))
+;; URL: https://example.com
+
+;;; Commentary:
+
+;; Utils and ERT tests for emacs.pkgs.withPackages.
+
 ;;; Code:
 
 (require 'ert)
