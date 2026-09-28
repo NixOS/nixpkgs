@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "insulator2";
-  version = "2.14.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = "insulator2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3eDA+pwchnwWtweGeSDlf+Vt0Hoylmanf4hnvJ2YOGU=";
+    hash = "sha256-KO6c75VT+WZ5peLeORQfAJiDZYwSqiRAKVF+7UqhwXk=";
   };
 
   patches = [
