@@ -16,7 +16,6 @@
     environment.systemPackages = [
       aspell
       aspellDicts.en
-      aspellDicts.en-computers
       aspellDicts.en-science
     ];
     ~~~~
@@ -26,8 +25,7 @@
 
     ~~~~
     master en_US
-    extra-dicts en-computers.rws
-    add-extra-dicts en_US-science.rws
+    extra-dicts en_US-science.rws
     ~~~~
 
     to `/etc/aspell.conf` or `~/.aspell.conf`.
@@ -1084,31 +1082,6 @@ rec {
   };
 
   ### Jargons
-
-  en-computers = buildTxtDict {
-    shortName = "en-computers";
-    fullName = "English Computer Jargon";
-    version = "0";
-
-    src = fetchurl {
-      url = "https://mrsatterly.com/computer.dic";
-      sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
-    };
-
-    langInputs = [ en ];
-
-    buildPhase = ''
-      runHook preBuild
-      cat $src | aspell-affix en-computers --dont-validate-words --lang=en
-      runHook postBuild
-    '';
-    installPhase = "aspell-install en-computers";
-
-    meta = {
-      homepage = "https://mrsatterly.com/spelling.html";
-      license = lib.licenses.wtfpl; # as a comment the source file
-    };
-  };
 
   en-science = buildTxtDict {
     shortName = "en-science";
