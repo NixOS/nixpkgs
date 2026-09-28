@@ -32,7 +32,7 @@
         src = fetchFromGitHub {
           owner = "simdutf";
           repo = "simdutf";
-          rev = "v6.5.0";
+          tag = "v6.5.0";
           hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
         };
       }
