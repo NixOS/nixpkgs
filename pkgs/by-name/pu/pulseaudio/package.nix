@@ -110,7 +110,18 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Fails in LXC containers where not all cores are enabled, where this setaffinity call will return EINVAL
     sed -i "/fail_unless(pthread_setaffinity_np/d" src/tests/once-test.c
-  '';
+  ''
+  + (lib.optionalString libOnly ''
+    # Disable the CLI tools when libonly
+    substituteInPlace src/meson.build \
+      --replace-fail "  'pulsecore/sndfile-util.c'," "" \
+      --replace-fail "iconv_dep, sndfile_dep, dbus_dep," "iconv_dep, dbus_dep," \
+      --replace-fail "subdir('utils')" ""
+    # libsndfile is only used in the daemon aned the CLI tools
+    substituteInPlace meson.build \
+      --replace-fail "sndfile_dep = dependency('sndfile', version : '>= 1.0.20')" \
+                     "sndfile_dep = declare_dependency()"
+  '');
 
   outputs = [
     "out"
@@ -134,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libtool
-    libsndfile # TODO: unused when libOnly but required by meson config
     soxr
     speexdsp
     check
@@ -152,6 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       fftwFloat
       libasyncns
+      libsndfile
       webrtc-audio-processing_1
     ]
     ++ lib.optional jackaudioSupport libjack2
@@ -248,7 +259,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
-  ] ++ lib.optionals (udevSupport && !libOnly) [
+  ]
+  ++ lib.optionals (udevSupport && !libOnly) [
     udevCheckHook
   ];
 
