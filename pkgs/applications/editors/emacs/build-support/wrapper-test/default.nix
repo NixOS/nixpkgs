@@ -2,7 +2,7 @@
   runCommand,
   emacs,
   hello,
-  replaceVars,
+  replaceVarsWith,
   lib,
 }:
 
@@ -50,7 +50,16 @@ runCommand "test-emacs-withPackages-wrapper"
         epkgs.flx-ido
         (epkgs.callPackage (mkEpkg {
           pname = "with-packages";
-          src = replaceVars ./with-packages.el { inherit (builtins) storeDir; };
+          src = replaceVarsWith {
+            src = ./with-packages.el;
+            replacements = { inherit (builtins) storeDir; };
+
+            # generate a file in a store path dir
+            #   /nix/store/hash-with-packages.el/with-packages.el
+            # instead of a store path file, which checkdoc doesn't like
+            #   /nix/store/hash-with-packages.el
+            dir = "/";
+          };
         }) { })
         (epkgs.callPackage (mkEpkg {
           pname = "early-default";
