@@ -53,6 +53,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # Some tests launch ignored background requests to placeholder URLs. Avoid
+  # backoff retries: https://github.com/python-wheel-build/fromager/pull/1348
+  env.FROMAGER_HTTP_RETRIES = 0;
+
   pythonImportsCheck = [
     "fromager"
   ];
