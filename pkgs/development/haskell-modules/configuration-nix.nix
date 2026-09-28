@@ -1569,6 +1569,7 @@ builtins.intersectAttrs super {
   hasql-notifications_0_2_5_0 = dontCheck super.hasql-notifications_0_2_5_0;
   hasql-pool_1_4_2 = dontCheck super.hasql-pool_1_4_2;
   hasql-transaction_1_2_2 = dontCheck super.hasql-transaction_1_2_2;
+  hasql-transaction_1_2_3_1 = dontCheck super.hasql-transaction_1_2_3_1;
   postgresql-binary_0_15_0_1 = dontCheck super.postgresql-binary_0_15_0_1;
 
   users-postgresql-simple = lib.pipe super.users-postgresql-simple [

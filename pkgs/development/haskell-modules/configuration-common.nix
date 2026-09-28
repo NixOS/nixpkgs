@@ -3003,6 +3003,9 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
   hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
 
+  # 2026-09-28: hasql-mapping 0.1.1.0 needs hasql-transaction >= 1.2.3; remove at next Stackage bump.
+  hasql-transaction = doDistribute super.hasql-transaction_1_2_3_1;
+
   # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
   pipes-text = warnAfterVersion "1.0.1" (doJailbreak super.pipes-text);
 
