@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./0001-Disable-tests-requiring-network-access.patch
     (fetchpatch2 {
       # Add missing cstdint include to predicate_factory.h
       url = "https://github.com/open-telemetry/opentelemetry-cpp/commit/e62f627ccb220e9c72eaebf32b246ec0bf98d60f.patch?full_index=1";
@@ -48,6 +47,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
+
+  # gtest_add_tests registers every gtest case as its own ctest test, and a few
+  # test binaries bind a hardcoded port, so running those cases concurrently makes them fight over the port.
+  # Use a ctest resource lock per port to serialise only the affected binaries
+  postPatch = ''
+    # curl_http_test.cc: every case drives a server on port 19000.
+    cat >> ext/test/http/CMakeLists.txt <<'EOF'
+    if(OTELCPP_WITH_HTTP_CLIENT_CURL)
+      set_tests_properties(''${curl_http_test} PROPERTIES RESOURCE_LOCK otelcpp_port_19000)
+    endif()
+    EOF
+    # prometheus exporter_test.cc: constructing an exporter starts a
+    # prometheus-cpp Exposer on port 9464.
+    cat >> exporters/prometheus/test/CMakeLists.txt <<'EOF'
+    set_tests_properties(''${exporter_test} PROPERTIES RESOURCE_LOCK otelcpp_port_9464)
+    EOF
+  '';
 
   nativeBuildInputs = [ cmake ];
 
