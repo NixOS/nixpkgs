@@ -172,7 +172,7 @@ which can be used to add skip condition and :expected-result."
 (defun with-packages-unwrapped-site-start-is-loaded-quietly ()
   (list (with-packages-unwrapped-site-start-is-loaded)
         (not (save-excursion
-               (with-current-buffer "*Messages*"
+               (with-current-buffer (messages-buffer)
                  (goto-char (point-min))
                  (save-match-data
                    (re-search-forward (rx line-start
