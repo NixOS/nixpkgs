@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   pkg-config,
   openssl,
@@ -65,6 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-mSPuvUzfvm/kZS0LDJhve7SAB35jSH7hhOcOxPXuLww=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "decode-classic-l16-uncompressed-pcm-in-ffmpeg-builds.patch";
+      url = "https://github.com/mikebrady/shairport-sync/commit/be30b6b2cc08fb679bbe9a1bff3f76068736952d.patch";
+      hash = "sha256-1mLRp4tH7DZQ3HFDXI7Rm99g2jJp+aIkY1tsov9Yi38=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
