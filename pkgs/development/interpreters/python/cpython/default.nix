@@ -189,6 +189,7 @@ let
           "null"
         ])
         || n == "packageOverrides"
+        || n == "allowedReferenceNames"
       ) inputs;
       override =
         attr:
