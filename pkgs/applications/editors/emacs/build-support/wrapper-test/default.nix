@@ -1,7 +1,6 @@
 {
   runCommand,
   emacs,
-  writeText,
   cowsay,
   replaceVars,
 }:
