@@ -64,7 +64,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.55.0";
+  version = "2.56.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-RX/bBNyHKOAH1GiGleaRLm9oByeSDypAvxHqzBdQU1c=";
+    hash = "sha256-JsVsKWs4wGlbJvqV9HXx0BcE0tOOc0ZcowsLL13HidM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -133,12 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
       name = "t7703-ignore-ls-total.patch";
       url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
       hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
-    })
-    # Fix fortify darwin crashes when dealing with unicode filenames.
-    (fetchurl {
-      name = "darwin-unicode-filename-fix.patch";
-      url = "https://lore.kernel.org/git/20260704233724.16928-1-ihar.hrachyshka@gmail.com/raw";
-      hash = "sha256-lpGz3nFKQvFDtW2TtQLx/684ECJVBLGPGqip0XEtOdU=";
     })
   ]
   ++ lib.optionals withSsh [
