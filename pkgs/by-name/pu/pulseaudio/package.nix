@@ -137,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     soxr
     speexdsp
-    fftwFloat
     check
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -151,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!libOnly) (
     [
+      fftwFloat
       libasyncns
       webrtc-audio-processing_1
     ]
@@ -204,6 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "database" "simple")
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
+    (lib.mesonEnable "fftw" (!libOnly))
     (lib.mesonEnable "glib" glibSupport)
     # gsettings does not support cross-compilation
     (lib.mesonEnable "gsettings" gsettingsSupport)
