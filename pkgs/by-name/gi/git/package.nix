@@ -180,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     makeWrapper
     pkg-config
+    (lib.getDev curl)
   ]
   ++ lib.optionals withManual [
     asciidoc
@@ -232,10 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
   };
 
-  configureFlags = [
-    "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
