@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       driverArch =
         {
           aarch64-darwin = "mac64_m1";
+          x86_64-darwin = "mac64";
           x86_64-linux = "linux64";
         }
         .${stdenvNoCC.hostPlatform.system};
@@ -28,6 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       hash =
         {
           mac64_m1 = "sha256-6nwe/vRPh5MkQLTiZNXepfFsLtILwoK925mgLCUUVNg=";
+          mac64 = "sha256-p/cnNKQub6sSEWPz2fJ+FoU7rgzeoZQMkv3PphvvHLw=";
           linux64 = "sha256-XbOQl9FyckF3Qybb+40474ImJDKahBkekPoydf/TxV0=";
         }
         .${driverArch};
