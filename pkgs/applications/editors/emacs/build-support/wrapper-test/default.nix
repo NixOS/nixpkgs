@@ -39,6 +39,12 @@ let
           emacs --batch \
             --funcall=package-activate-all \
             --funcall=package-lint-batch-and-exit "{}"
+
+        lintEachFile \
+          emacs --batch \
+            "{}" \
+            --eval='(setopt checkdoc-arguments-in-order-flag t)' \
+            --funcall=checkdoc-batch
       '';
     };
 in
