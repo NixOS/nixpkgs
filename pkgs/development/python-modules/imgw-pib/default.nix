@@ -12,19 +12,19 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "imgw-pib";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = finalAttrs.version;
-    hash = "sha256-nxQeYLDf7TEbbvbEygssH0X/sXLnoXoB1teZM8w70jQ=";
+    hash = "sha256-pvPPdtTO4Eq2fge8gjXMPrFTtw+qnUvVN+FqimFLQqg=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   meta = {

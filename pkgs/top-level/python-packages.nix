@@ -12426,6 +12426,8 @@ self: super: with self; {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  odl-renderer = callPackage ../development/python-modules/odl-renderer { };
+
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   odsgenerator = callPackage ../development/python-modules/odsgenerator { };
@@ -18099,6 +18101,8 @@ self: super: with self; {
   resampy = callPackage ../development/python-modules/resampy { };
 
   resend = callPackage ../development/python-modules/resend { };
+
+  resize-image = callPackage ../development/python-modules/resize-image { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
 

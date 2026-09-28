@@ -574,7 +574,7 @@
     sha512.doc = "ece447f4c12da8509be155f2743ca52988f32ce62edb361a85fdcd7733bb401cf8ecbbc0fa6bbd7d1662593f1084aa89a29b2f1b822a765bc6f7e581b46bc153";
     sha512.source = "cb628c51f7f4d972f81b2e23495e7ac6e82e422c7e85ffcdd7c3cbb753b055178adb9ea386bb4b1f1f1c4d2cdc561eba27cd82c7ef33830db0cde9af99e7730f";
     license = [
-      "gfl"
+      "lppl13c"
       "gpl3Plus"
     ];
     version = "1";
@@ -927,7 +927,7 @@
     shortdesc = "Arabic-Latin Modern Fixed extends TeX-Gyre Latin Modern Mono 10 Regular to full Arabic Unicode support";
     stripPrefix = 0;
     sha512.doc = "f51af6e63070fbf94a3f8ed756d544dc7d9460f37b016fcded0d2c56a6cf672d2e60c7b2cb8be9f9942f43e46b5ff2bfb59c6ae301a5d88a8858d6e60a3fbaa9";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "0.92";
     sha512.run = "1a5e41cac48a33c4336fe03576c49165b47a0bec606b0a15a3563922b964a9a3c2de735cd88cf10423b054b5131193441fbcd64fb2edc47d4944ff33cf6367ef";
   };
@@ -15559,7 +15559,7 @@
       "Map cyklop.map"
     ];
     sha512.doc = "547abc1404bd1b7d16d738554f8594c21a5c7a838ab0107bdc5ee9f900e2f3aff51c8e172e485ad0011b3ba03d166bbad4d7a0b37ff6e06d637f1443ed5b0075";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "0.915";
     sha512.run = "9043b05db99d8013f423b2224fe0f289a675d3a103e8e9b685f9440e5d2bbe19a6611b62c1436408ace651c6d47b0e639dd4eb7a4bd9c7e049398f5fa4455c72";
   };
@@ -27769,7 +27769,7 @@
       "Map iwona.map"
     ];
     sha512.doc = "650a01e7432380eb2124547c0e00b63e5a38cd52fa6f4242894cfe30132ebedb853403290dda4ed62664a86aac922a5d1c26a98c51d8c96661113a8b71c3bcb8";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "0.995b";
     sha512.run = "354e4d877a493b45ee48382bc12ce0da96cce046c2a5b7e7d76c1de39fae434f2ea63325f9fce9400b033b5ca0327047ce35812d825c26d4cea7a664e5e37b75";
   };
@@ -29075,7 +29075,7 @@
       "Map kurier.map"
     ];
     sha512.doc = "3ae2d3f1192c36be372090ebbf76ace680e52e6eb24f274a2550dc11487ddee22e3360e18afd0d59a6955421806d59cd00007ca30c73961bf9db17f4c37911f5";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "0.995b";
     sha512.run = "66bd4a620cd3e6d7b59390df07a95afd6d720657c3f3aad93f00c5a185eeeaada5d82008e9d34bd927ef1d570872091dae9e04a6b4782ace2f2b9d1f56b6f268";
   };
@@ -31199,7 +31199,7 @@
       "Map lm.map"
     ];
     sha512.doc = "232d070d59563d339a5c59e6dac93d7662280f6186cc591f5b520322a879a97214af2fee3a006c85660864635773355b357f6aa1eb48b9a10a50bfa4702208e6";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "2.005";
     sha512.run = "bacdb541c99bcf1b25fdfd87094a98ce48642e534e0017676fccdc81843f9f1e64af271180589a96513915dfa15a782458e151c760ddb26929a29ba0b9e141ef";
   };
@@ -31208,7 +31208,7 @@
     shortdesc = "OpenType maths fonts for Latin Modern";
     stripPrefix = 0;
     sha512.doc = "fb1800349628229dd522d4dffa182ffd2bc9411803f5b349c88f4046d81117d050a3b681e3021a514a6ada5bc49b648b8dda8b553f9294f6d4fc317db0cd5990";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "1.959";
     sha512.run = "2fad475b347824d564525de51ed5bd1cc7ab2fc27fd826a00e86ebabd7d85afce2f7a4c85d9620c9b66d14ea0c813a269a13843a0b27eb7d0ca3e294114aad26";
   };
@@ -36308,7 +36308,7 @@
     shortdesc = "Computer Modern fonts including matching non-latin alphabets";
     stripPrefix = 0;
     sha512.doc = "53c08c7ed1e48259bf4d2795aece253081b1e3fc1920d670ee905a1ee5bd0a8724dd716cc7e2837813d6550ddedf84db8a67ea3411ad5e2eef6374ece0a172fe";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "7.1.1";
     sha512.run = "897ca5aa04f2517482db7a0c6b7b657b2b3f8bf1592768163d46ab64fbe267b182e55fc301b18ca3f33d160b9bff2df59992cfa1a1417c9aa5ffb8978c59ef64";
   };
@@ -36372,7 +36372,7 @@
     sha512.source = "2280bc1acd7b0b5a091cb2fc9dea593f9c14249af05f2949a81474ef98e1c2c03411f5e63658e0e5dcdb006bb4c3821bc46c1c6828b218498a4c1782c11fec3a";
     license = [
       "lppl13c"
-      "gfl"
+      "lppl13c"
     ];
     version = "1.551";
     sha512.run = "b30fc096da4b1a8b377a8f6a78f86c497228237b103c4788a95112f9aee3f3a13872cefb68edb9d447f9f9e95789c167825b5787b38d7c3a2b588536bdcdd575";
@@ -37407,7 +37407,7 @@
     sha512.doc = "0ab232aa7af2a308f92701d901690d1315c64ff7cb868deca6097ed7b59c9a40fb19a781ee142e1a7af0b625870e1e867306eb06bc8478c7e36f05171d4d08be";
     license = [
       "ofl"
-      "gfl"
+      "lppl13c"
       "lppl13c"
       "fdl13Only"
     ];
@@ -40340,7 +40340,7 @@
       "Map ap.map"
     ];
     sha512.doc = "0e1506e25c75d7da08d0f35f50bb5b6b8a9cde365b6ad9a19cdb90a71c4b086189b59474961e499625fa19f33173279a2dabdf58259a1151d81eff721b5c9a96";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "1.101";
     sha512.run = "ee05ea8e1e992b9f08b62ee02da4090d2bc965445e6357cda3c9b5cded34387c290aed7d6119e7a73731ba99547ebdfb276a0b7e9ba8917218e8d9cdeb011c5b";
   };
@@ -47917,7 +47917,7 @@
     shortdesc = "A Greek cult font from the eighties";
     stripPrefix = 0;
     sha512.doc = "9bdbd72f86e0b957580bb008ba349eb428721913010e9fe2cd9ee9b01733d6259914712b60a4a7f0f5804041e6cf876d8bdda2910de1b191715c1d9c8d8fbf77";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "1.0";
     sha512.run = "50a35159c65afa43900ee8633d2b86effa5aec6a430f2e8fa85f77442da35b140012b27959155564e29286aba465d9bab17c9f5ce5ec0a889ec4ed5dff1b4dcb";
   };
@@ -48346,7 +48346,7 @@
     ];
     sha512.doc = "db2bcc8da6d3bfb6f2165c1fb127b2b4a7471e41a0cebb851ce5465a18740d34948ce8292b4f6bd359621166602cf62a978bb179346dbd1dcfada49cc7972686";
     sha512.source = "e958408e6e64a54b25fa89b38de181c96fffb9eb8762959209799c39cead7a5525f220b7b3cd278e35cb9e3e49c1c85d565d518ffacb0695b0c3c09ede935266";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "2.501";
     sha512.run = "5422f349d15233e6f49576fe3a65f8afb5cae6a3c51e5ad7cb56617d7d064e9cf574f233f789c029c04bbfc24e5948c115b2d33569e881373d68615ac709153f";
   };
@@ -48356,7 +48356,7 @@
     stripPrefix = 0;
     sha512.doc = "cd346226dc36bb4fb5324a43dfab7790cd80ec6bba992849dfcca74ea6fe8d85fe7e0ac66408a41ac1ef644e6b32c9b06d337c4f394fbfd8fba4153fbc1abfe9";
     sha512.source = "3c58821e5307257578ec149317cb621331aafa00bfa465eeb055f1f93691ce57a489a32a7eea068b12b70228433031de33c0ffe36b0e8e10b368e0ef5e33fe24";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     sha512.run = "a50a9eaa30cfd7754ae702a3bd6fced2d07fac858215b913945665940c71a0aafd2b59a0d0baa0fb9d5090773ef69a86864cc11126a5e30adc3d0e94cdbd2594";
   };
   tex-ini-files = {
@@ -52806,7 +52806,7 @@
     shortdesc = "Font definitions for the variable Latin Modern fonts";
     stripPrefix = 0;
     sha512.doc = "56bbeff2f9cb4a99c05416d7fae7cea8cef81e712092ae8b5d1ca644769debdd95c443fb6af7edc034fe9d778147e1b37da50d951278a7f64c407dead5f6e7cb";
-    license = [ "gfl" ];
+    license = [ "lppl13c" ];
     version = "1.2";
     sha512.run = "1c34d4afa65db4993f3098cb32b604c68a75bc2c0b56b026a6d50c2de61392d4bace210dab2fb5ca0c15253e7486406aa3aa5084e2296bd5e8f1e9c953419627";
   };

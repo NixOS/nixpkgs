@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyrsa";
-  version = "3.2.6";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xzCaUR97kS5pbUCTyV9i4lF59nudPJqnI7T2VkReJko=";
+    hash = "sha256-3uGAFb5nrW+35hdwMoESi3Xu8SIuwZ22B9ZAfyd9MSY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

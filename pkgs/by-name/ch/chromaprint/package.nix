@@ -10,7 +10,6 @@
   testers,
   validatePkgConfig,
   nix-update-script,
-  withExamples ? true,
   withTools ? true,
 }:
 
@@ -80,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
     license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.quantenzitrone ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "libchromaprint" ];
   }
