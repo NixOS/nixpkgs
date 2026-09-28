@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight website SEO audit tool and CLI by SEOWebChecker";
     homepage = "https://seowebchecker.com/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "seowebchecker";
     platforms = lib.platforms.all;
   };
