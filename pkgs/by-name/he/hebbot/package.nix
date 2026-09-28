@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  nixosTests,
   runCommand,
   sqlite,
 }:
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.OPENSSL_NO_VENDOR = 1;
 
   passthru.tests = {
+    nixos = nixosTests.hebbot;
+    module-options = nixosTests.hebbot-module-options;
     startup = runCommand "hebbot-startup-test" { } ''
       unset BOT_PASSWORD
       export CONFIG_PATH="$TMPDIR/missing-config.toml"
