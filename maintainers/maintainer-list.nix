@@ -31393,6 +31393,12 @@
     email = "zoey.spessanha@outlook.com";
     keys = [ { fingerprint = "EAA1 51DB 472B 0122 109A  CB17 1E1E 889C DBD6 A315"; } ];
   };
+  zoharbabin = {
+    email = "z.babin@gmail.com";
+    github = "zoharbabin";
+    githubId = 150514;
+    name = "Zohar Babin";
+  };
   zohl = {
     email = "zohl@fmap.me";
     github = "zohl";
