@@ -72,12 +72,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Use GitHub Copilot with any editor or IDE via the Language Server Protocol";
     homepage = "https://github.com/features/copilot";
-    license = {
+    license = lib.licenses.mkLicense {
       deprecated = false;
       free = false;
       fullName = "GitHub Copilot Product Specific Terms";
       redistributable = false;
-      shortName = "GitHub Copilot License";
+      shortName = "GitHub-Copilot-License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
     sourceProvenance = with lib.sourceTypes; [
