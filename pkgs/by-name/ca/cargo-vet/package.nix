@@ -28,10 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mozilla/cargo-vet/releases/tag/v${finalAttrs.version}";
     mainProgram = "cargo-vet";
     homepage = "https://mozilla.github.io/cargo-vet";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       jk
       matthiasbeyer

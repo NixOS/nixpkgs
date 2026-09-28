@@ -25169,10 +25169,12 @@ with self;
     meta = {
       description = "Perl bindings to the msgpack C library";
       homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
-      license = with lib.licenses; [
-        gpl1Plus # or
-        artistic1
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          gpl1Plus
+          artistic1
+        ];
       maintainers = [ ];
     };
   };
@@ -25329,10 +25331,12 @@ with self;
     meta = {
       description = "Perl bindings for Neovim";
       homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
-      license = with lib.licenses; [
-        gpl1Plus # or
-        artistic1
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          gpl1Plus
+          artistic1
+        ];
       maintainers = [ ];
     };
   };

@@ -44,10 +44,12 @@ buildPythonPackage rec {
     description = "Quickly rewrite git repository history";
     homepage = "https://github.com/newren/git-filter-repo";
     changelog = "https://github.com/newren/git-filter-repo/releases/tag/v${version}";
-    license = with lib.licenses; [
-      mit # or
-      gpl2Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        gpl2Plus
+      ];
     maintainers = with lib.maintainers; [
       aiotter
       fab

@@ -34,10 +34,12 @@ stdenv.mkDerivation rec {
     description = "Accessibility tools helper library, used e.g. by screen readers";
     homepage = "https://github.com/KDE/libqaccessibilityclient";
     maintainers = with lib.maintainers; [ artturin ];
-    license = with lib.licenses; [
-      lgpl3Only # or
-      lgpl21Only
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        lgpl3Only
+        lgpl21Only
+      ];
     platforms = lib.platforms.linux;
   };
 }

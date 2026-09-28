@@ -54,10 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Small programming language for writing short programs processing textual data";
     mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ ];
   };
 })

@@ -58,10 +58,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/sharkdp/fd";
     changelog = "https://github.com/sharkdp/fd/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       dywedir
       ma27

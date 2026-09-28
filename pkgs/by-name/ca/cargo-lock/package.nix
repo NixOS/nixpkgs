@@ -22,10 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-lock";
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${finalAttrs.version}/cargo-lock/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

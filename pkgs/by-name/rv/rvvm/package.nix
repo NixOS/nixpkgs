@@ -61,10 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/LekKit/RVVM";
     description = "RISC-V Virtual Machine";
-    license = with lib.licenses; [
-      gpl3 # or
-      mpl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        gpl3
+        mpl20
+      ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ kamillaova ];
     mainProgram = "rvvm";

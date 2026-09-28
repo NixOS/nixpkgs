@@ -49,10 +49,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI tool to extract the graph of derivations from a Nix flake";
     homepage = "https://github.com/tweag/nixtract";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     mainProgram = "nixtract";
     maintainers = with lib.maintainers; [ aleksana ];
   };

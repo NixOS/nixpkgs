@@ -45,10 +45,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Accessible image processing and conversion from the terminal";
     homepage = "https://github.com/foresterre/sic";
     changelog = "https://github.com/foresterre/sic/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ig";
   };

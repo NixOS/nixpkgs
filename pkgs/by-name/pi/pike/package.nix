@@ -105,13 +105,13 @@ let
         powerful built-in data types allowing simple and really fast data manipulation.
       '';
       homepage = "https://pike.lysator.liu.se/";
-      license = with lib.licenses; [
-        gpl2Only
-        # or
-        lgpl2Plus
-        # or
-        mpl20
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          gpl2Only
+          lgpl2Plus
+          mpl20
+        ];
       maintainers = with lib.maintainers; [ siraben ];
       platforms = [ "x86_64-linux" ];
       mainProgram = "pike";
@@ -200,13 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
       powerful built-in data types allowing simple and really fast data manipulation.
     '';
     homepage = "https://pike.lysator.liu.se/";
-    license = with lib.licenses; [
-      gpl2Only
-      # or
-      lgpl2Plus
-      # or
-      mpl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Only
+        lgpl2Plus
+        mpl20
+      ];
     maintainers = with lib.maintainers; [ siraben ];
     # Bootstrap binary is only available for x86_64-linux
     platforms = [ "x86_64-linux" ];

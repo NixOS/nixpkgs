@@ -44,10 +44,12 @@ buildPythonPackage (finalAttrs: {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     changelog = "https://github.com/svinota/pyroute2/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
-    license = with lib.licenses; [
-      asl20 # or
-      gpl2Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        gpl2Plus
+      ];
     maintainers = with lib.maintainers; [
       fab
       mic92

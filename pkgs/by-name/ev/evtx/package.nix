@@ -33,10 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Parser for the Windows XML Event Log (EVTX) format";
     homepage = "https://github.com/omerbenamram/evtx";
     changelog = "https://github.com/omerbenamram/evtx/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evtx_dump";
   };

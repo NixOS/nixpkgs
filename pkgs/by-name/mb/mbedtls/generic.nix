@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
-    license = [
-      lib.licenses.asl20 # or
+    license = lib.licenses.OR [
+      lib.licenses.asl20
       lib.licenses.gpl2Plus
     ];
     platforms = lib.platforms.all;

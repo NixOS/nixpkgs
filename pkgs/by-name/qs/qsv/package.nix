@@ -70,11 +70,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
     changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit
-      # or
-      unlicense
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        unlicense
+      ];
     inherit mainProgram;
     maintainers = with lib.maintainers; [
       detroyejr
