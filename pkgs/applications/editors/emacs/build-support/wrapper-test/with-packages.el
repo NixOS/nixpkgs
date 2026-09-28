@@ -137,11 +137,14 @@ Return test result, a list of values.  Each is non-nil if the test passes."
      ;; Run the non-batch test and return test result.
      (eval-in-non-batch-emacs `(,test-name)))))
 
-(defmacro define-with-packages-non-batch-ert-test (test-name)
-  "See `with-packages--run-non-batch-test' for how the test is run."
-  (declare (indent 1) (debug (symbolp)))
+(defmacro define-with-packages-non-batch-ert-test (test-name &rest ert-forms)
+  "See `with-packages--run-non-batch-test' for how the test is run.
+ERT-FORMS are placed at the start of the ERT test,
+which can be used to add skip condition and :expected-result."
+  (declare (indent 1) (debug (symbolp &rest sexp)))
   (cl-check-type test-name symbol)
   `(ert-deftest ,test-name ()
+     ,@ert-forms
      (should (stringp with-packages-non-batch-emacs-socket))
      (should (file-readable-p with-packages-non-batch-emacs-socket))
      (let ((test-result (with-packages--run-non-batch-test (quote ,test-name))))
