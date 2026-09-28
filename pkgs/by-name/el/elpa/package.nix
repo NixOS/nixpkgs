@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs ./fdep/fortran_dependencies.pl
-    patchShebangs ./test-driver
+    patchShebangs --build ./fdep/fortran_dependencies.pl
 
     # Fix the test script generator
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
@@ -125,8 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
   preCheck = ''
-    #patchShebangs ./
-
     # Reduce test problem sizes
     export TEST_FLAGS="1500 50 16"
   '';
