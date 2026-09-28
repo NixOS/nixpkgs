@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   runtimeLibs = lib.makeLibraryPath [
@@ -75,11 +78,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.smoke-test = nixosTests.whisparr;
+    tests = { inherit (nixosTests) whisparr_2; };
   };
 
   meta = {
-    description = "Adult movie collection manager for Usenet and BitTorrent users";
+    description = "Adult video collection manager for Usenet and BitTorrent users";
     homepage = "https://wiki.servarr.com/en/whisparr";
     changelog = "https://whisparr.servarr.com/v1/update/nightly/changes";
     license = lib.licenses.gpl3Only;
