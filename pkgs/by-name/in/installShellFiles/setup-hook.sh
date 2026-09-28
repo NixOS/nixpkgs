@@ -103,9 +103,9 @@ installManPage() {
 # installShellCompletion [--cmd <name>] ([--bash|--fish|--zsh] [--name <name>] <path>)...
 #
 # Each path is installed into the appropriate directory for shell completions for the given shell.
-# If one of `--bash`, `--fish`, `--zsh`, or `--nushell` is given the path is assumed to belong to
-# that shell. Otherwise the file extension will be examined to pick a shell. If the shell is
-# unknown a warning will be logged and the command will return a non-zero status code after
+# If one of `--bash`, `--fish`, `--zsh`, `--elvish`, or `--nushell` is given the path is assumed
+# to belong to that shell. Otherwise the file extension will be examined to pick a shell. If the
+# shell is unknown a warning will be logged and the command will return a non-zero status code after
 # processing any remaining paths. Any of the shell flags will affect all subsequent paths (unless
 # another shell flag is given).
 #
@@ -135,6 +135,7 @@ installManPage() {
 # renaming is involved:
 #
 #   installShellCompletion --bash --name foobar.bash share/completions.bash
+#   installShellCompletion --elvish --name foobar share/completions.elv
 #   installShellCompletion --fish --name foobar.fish share/completions.fish
 #   installShellCompletion --nushell --name foobar share/completions.nu
 #   installShellCompletion --zsh --name _foobar share/completions.zsh
@@ -143,8 +144,9 @@ installManPage() {
 #
 #   installShellCompletion --cmd foobar \
 #     --bash <($out/bin/foobar --bash-completion) \
+#     --elvish <($out/bin/foobar --elvish-completion) \
 #     --fish <($out/bin/foobar --fish-completion) \
-#     --nushell <($out/bin/foobar --nushell-completion)
+#     --nushell <($out/bin/foobar --nushell-completion) \
 #     --zsh <($out/bin/foobar --zsh-completion)
 #
 # If any argument is `--` the remaining arguments will be treated as paths.
@@ -154,7 +156,7 @@ installShellCompletion() {
         # Parse arguments
         if (( parseArgs )); then
             case "$arg" in
-            --bash|--fish|--zsh|--nushell)
+            --bash|--elvish|--fish|--zsh|--nushell)
                 shell=${arg#--}
                 continue;;
             --name)
@@ -200,7 +202,7 @@ installShellCompletion() {
         elif [[ -p "$arg" ]]; then
             # this is a named fd or fifo
             if [[ -z "$curShell" ]]; then
-                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, --zsh, or --nushell"
+                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, --zsh, --elvish, or --nushell"
                 return 1
             elif [[ -z "$name" && -z "$cmdname" ]]; then
                 nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --cmd or --name"
@@ -214,6 +216,7 @@ installShellCompletion() {
                 # auto-detect the shell
                 case "$argbase" in
                 ?*.bash) curShell=bash;;
+                ?*.elv) curShell=elvish;;
                 ?*.fish) curShell=fish;;
                 ?*.nu) curShell=nushell;;
                 ?*.zsh) curShell=zsh;;
@@ -237,6 +240,7 @@ installShellCompletion() {
         elif [[ -n "$cmdname" ]]; then
             case "$curShell" in
             bash|fish) outName=$cmdname.$curShell;;
+            elvish) outName=$cmdname.elv;;
             nushell) outName=$cmdname.nu;;
             zsh) outName=_$cmdname;;
             *)
@@ -248,6 +252,7 @@ installShellCompletion() {
         local sharePath
         case "$curShell" in
         bash) sharePath=bash-completion/completions;;
+        elvish) sharePath=elvish/completions;;
         fish) sharePath=fish/vendor_completions.d;;
         nushell) sharePath=nushell/vendor/autoload;;
         zsh)
