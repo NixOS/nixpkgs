@@ -45,9 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   qmakeFlags = [
-    # qtpass.pri expects lrelease/lupdate next to qmake ($$[QT_INSTALL_BINS]);
-    # in nixpkgs they live in qttools, and the build runs both.
-    "QMAKE_LRELEASE=${lib.getDev qt6Packages.qttools}/bin/lrelease"
+    # lrelease/lupdate live in qttools, not next to qmake. CONFIG += lrelease
+    # resolves the tool through qtPrepareTool, which only honours
+    # QT_TOOL.lrelease.binary (see https://github.com/NixOS/nixpkgs/issues/214765);
+    # QMAKE_LUPDATE covers qtpass.pri's lupdate.
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6Packages.qttools}/bin/lrelease"
     "QMAKE_LUPDATE=${lib.getDev qt6Packages.qttools}/bin/lupdate"
   ];
 
