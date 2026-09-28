@@ -86,10 +86,12 @@ buildPythonPackage (finalAttrs: {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
     changelog = "https://pyzmq.readthedocs.io/en/latest/changelog.html";
-    license = with lib.licenses; [
-      bsd3 # or
-      lgpl3Only
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        bsd3
+        lgpl3Only
+      ];
     maintainers = [ ];
   };
 })
