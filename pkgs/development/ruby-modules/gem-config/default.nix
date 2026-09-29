@@ -1064,6 +1064,8 @@ in
       substituteInPlace ext/sass/Rakefile \
         --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
         --replace ' => %w[dart-sass]' ""
+
+      sed -i "/^file File.absolute_path('cli.rb', ARCHDIR)/a\\  mkdir_p ARCHDIR" ext/sass/Rakefile
     '';
   };
 
