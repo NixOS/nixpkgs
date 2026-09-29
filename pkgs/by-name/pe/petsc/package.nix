@@ -109,11 +109,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.25.5";
+  version = "3.25.6";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-atNPjeL59fJqPMJ4LVS2goh1riyA3ewwMynUA+YPVd4=";
+    hash = "sha256-/yo7CdbtqNiV7RrjpYyUHIk4Puvj4s/X7MYS97wTsqc=";
   };
 
   postPatch = ''
