@@ -175,7 +175,7 @@ in
 
               Defaults are _mostly_ equal to the default linux config file: <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
 
-              See the upstream documenation for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
+              See the upstream documentation for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
             '';
             type = lib.types.submodule {
               freeformType = yaml.type;
