@@ -63,6 +63,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Offensive security framework for AI agents and MCP servers";
     homepage = "https://github.com/agentsploit/agentsploit";
