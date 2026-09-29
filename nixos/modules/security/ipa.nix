@@ -66,6 +66,16 @@ in
         description = "IPA Server hostname.";
       };
 
+      backupServers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "ipa-backup.example.com" ];
+        description = ''
+          A list of backup servers for SSSD to resolve against in case
+          `security.ipa.server` is unavailable.
+        '';
+      };
+
       basedn = lib.mkOption {
         type = lib.types.str;
         example = "dc=example,dc=com";
@@ -201,6 +211,7 @@ in
           admin_server = ${cfg.server}:749
           default_domain = ${cfg.domain}
           pkinit_anchors = FILE:/etc/ipa/ca.crt
+          ${lib.concatLines (map (host: "kdc = ${host}:88") cfg.backupServers)}
         }
 
         [domain_realm]
@@ -269,6 +280,9 @@ in
 
           ipa_domain = cfg.domain;
           ipa_server = "_srv_, ${cfg.server}";
+          ipa_backup_server = lib.mkIf (cfg.backupServers != [ ]) (
+            lib.concatStringsSep ", " cfg.backupServers
+          );
           ipa_hostname = cfg.ipaHostname;
 
           cache_credentials = cfg.cacheCredentials;
