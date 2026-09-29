@@ -5,7 +5,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "open-websearch";
-  version = "2.1.9";
+  version = "2.2.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -14,10 +14,10 @@ buildNpmPackage (finalAttrs: {
     owner = "Aas-ee";
     repo = "open-webSearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZS56Eoy9IePLeyopv4AK6FU8+b1E8r/WPK6RYDvy6yA=";
+    hash = "sha256-5Hf1e3AgSC0brQqMqAbTt718ly1Ms5GoV0JuDAE1BCc=";
   };
 
-  npmDepsHash = "sha256-Ua20YOYr/D06eMQsgBgfN/W7F74wfjjHXL10XIB0nFA=";
+  npmDepsHash = "sha256-fcRKZroEokDjEY1xiIu5kOqthIK0zx6ZnjpWMkzyIj0=";
 
   meta = {
     description = "Web search MCP server";
