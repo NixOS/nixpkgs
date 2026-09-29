@@ -97,11 +97,56 @@ let
     featureVersionPrefix = tagPrefix + featureVersion;
   };
 
-  atLeast11 = lib.versionAtLeast featureVersion "11";
-  atLeast17 = lib.versionAtLeast featureVersion "17";
-  atLeast21 = lib.versionAtLeast featureVersion "21";
-  atLeast23 = lib.versionAtLeast featureVersion "23";
-  atLeast25 = lib.versionAtLeast featureVersion "25";
+  # Version comparison functions since we check for versions so often
+  atLeast = lib.versionAtLeast featureVersion;
+  is = major: featureVersion == major;
+  # If a JDK version is between two versions, i.e `between "8" "11"` to match versions between 8 and 11.
+  # Note this is inclusive at low end and exclusive at top end, so 8 would match the above example, but 11 will not.
+  between = old: new: (atLeast old) && (lib.versionOlder featureVersion new);
+
+  atLeast11 = atLeast "11";
+  atLeast17 = atLeast "17";
+  atLeast21 = atLeast "21";
+  atLeast23 = atLeast "23";
+  atLeast25 = atLeast "25";
+
+  allPatches = import ./patches.nix fetchurl fetchpatch;
+
+  # Checks if a single patch object is applicable to the featureVersion being called.
+  isPatchApplicable =
+    patch:
+    let
+      a = patch.atLeast or "0";
+      # If this doesn't exist, return a number we assume JDK featureVersions will never reach
+      b = patch.before or "9999";
+    in
+    if patch ? only then (is patch.only) else (between a b);
+
+  # Filters all patches in a patchset(list of patch attrs) to find ones applicable to this version
+  findApplicable =
+    name: patchSet:
+    let
+      # Returns a single patch matching this predicate
+      patch = builtins.filter isPatchApplicable patchSet;
+    in
+    # If no patches, return an empty list.
+    # If there is a patch, construct it from the path and patch name, or function if available.
+    if patch == [ ] then
+      [ ]
+    else
+      let
+        # We only expect a single patch.
+        # TODO warn if there's more than one patch.
+        p = builtins.head patch;
+      in
+      [
+        (p.func or /${p.path}/patches/${name})
+      ];
+
+  # `patches` builder
+  # Does not encode any logic for `headless` or `enableGtk` so any patches relying on that
+  # should concat to this list below instead
+  patchesForVersion = lib.concatAttrValues (builtins.mapAttrs findApplicable allPatches);
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -143,98 +188,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (source) src;
 
-  patches = [
-    (
-      if atLeast25 then
-        ./25/patches/fix-java-home-jdk25.patch
-      else if atLeast21 then
-        ./21/patches/fix-java-home-jdk21.patch
-      else if atLeast11 then
-        ./11/patches/fix-java-home-jdk10.patch
-      else
-        ./8/patches/fix-java-home-jdk8.patch
-    )
-    (
-      if atLeast25 then
-        ./25/patches/read-truststore-from-env-jdk25.patch
-      else if atLeast11 then
-        ./11/patches/read-truststore-from-env-jdk10.patch
-      else
-        ./8/patches/read-truststore-from-env-jdk8.patch
-    )
-  ]
-  ++ lib.optionals (!atLeast23) [
-    (
-      if atLeast11 then
-        ./11/patches/currency-date-range-jdk10.patch
-      else
-        ./8/patches/currency-date-range-jdk8.patch
-    )
-  ]
-  ++ lib.optionals atLeast11 [
-    (
-      if atLeast17 then
-        ./17/patches/increase-javadoc-heap-jdk13.patch
-      else
-        ./11/patches/increase-javadoc-heap.patch
-    )
-  ]
-  ++ lib.optionals atLeast17 [
-    (
-      if atLeast21 then
-        ./21/patches/ignore-LegalNoticeFilePlugin-jdk18.patch
-      else
-        ./17/patches/ignore-LegalNoticeFilePlugin-jdk17.patch
-    )
-  ]
-  ++ lib.optionals (!atLeast21) [
-    (
-      if atLeast17 then
-        ./17/patches/fix-library-path-jdk17.patch
-      else if atLeast11 then
-        ./11/patches/fix-library-path-jdk11.patch
-      else
-        ./8/patches/fix-library-path-jdk8.patch
-    )
-  ]
-  ++ lib.optionals (atLeast17 && !atLeast23) [
-    # -Wformat etc. are stricter in newer gccs, per
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
-    # so grab the work-around from
-    # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
-      sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
-    })
-  ]
-  ++ lib.optionals (featureVersion == "17") [
-    # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
-    # This is applied anywhere to prevent patchrot.
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
-      sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
-    })
-  ]
-  ++ lib.optionals (atLeast11 && !atLeast25) [
-    # Fix build for gnumake-4.4.1:
-    #   https://github.com/openjdk/jdk/pull/12992
-    (fetchpatch {
-      name = "gnumake-4.4.1";
-      url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
-      hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
-    })
-  ]
-  ++ lib.optionals atLeast25 [
-    ./25/patches/make-4.4.1.patch
-  ]
-  ++ lib.optionals (!headless && enableGtk) [
-    (
-      if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
-    )
-  ]
-  ++ lib.optionals (featureVersion == "11") [
-    ./11/patches/fix-oopdesc-ptr-alignment-ub.patch
-  ];
+  patches =
+    patchesForVersion
+    ++ lib.optionals (!headless && enableGtk) [
+      (
+        if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
+      )
+    ];
 
   strictDeps = true;
 
