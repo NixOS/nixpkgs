@@ -1106,7 +1106,10 @@ rec {
       ''
         printf "%s" "$text" | ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 - > $out
         ${lib.getExe pkgs.gnused} -i 's/ ;/;/g' $out
-        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
+        # Fail only on HIGH-severity findings: gixy >= 0.2 ships advisory
+        # LOW/MEDIUM checks (e.g. missing default_server) that flag most
+        # module-generated configs and are not build errors.
+        gixy -lll $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
