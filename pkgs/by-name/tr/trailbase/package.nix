@@ -19,6 +19,7 @@
 let
   pnpm = pnpm_11;
 in
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
   version = "0.33.22";
@@ -29,9 +30,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RG3/JvsIyOxT6E/yxNvpmnaUAhhImnQY2U9tDbiEr48=";
+    hash = "sha256-VfLmV5vjdUoR3M5hnzTbET69fw9bTNQaxekWZaUPX+M=";
     fetchSubmodules = true;
+    fetchTags = true; # required for `git describe`. implies `leaveDotGit`
+    postFetch = ''
+      pushd $out
+      git describe --tags --match=v* --long > describe.txt
+      rm -rf .git
+      popd
+    '';
   };
+
+  postPatch = ''
+    # `trail --version` prints the git tag, but we remove `.git` from fetchFromGitHub
+    substituteInPlace crates/build/src/version.rs \
+      --replace-fail \
+        'get_output("git", &["describe", "--tags", "--match=v*", "--long"])' \
+        "Some(\"$(cat describe.txt)\".to_string())"
+  '';
 
   cargoHash = "sha256-JDeIqUKKNdVqtjKl/3RTCfbOycIhJzOtORCU2pEssP8=";
 
@@ -72,13 +88,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ geos ];
 
-  postPatch = ''
-    # `trail --version` prints the git tag. fetchFromGitHub has no .git.
-    substituteInPlace crates/build/src/version.rs \
-      --replace-fail 'get_output("git", &["describe", "--tags", "--match=v*", "--long"])' \
-      'Some("v${finalAttrs.version}".to_string())'
-  '';
-
   cargoBuildFlags = [
     "--bin"
     "trail"
@@ -107,7 +116,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [ (lib.modules.importApply ./service.nix { }) ];
       trailbase.package = lib.mkDefault finalAttrs.finalPackage;
     };
-    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   meta = {
