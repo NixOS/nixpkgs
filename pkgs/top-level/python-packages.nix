@@ -15762,8 +15762,6 @@ self: super: with self; {
 
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
-  pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
-
   pyotb = callPackage ../development/python-modules/pyotb { };
 
   pyotgw = callPackage ../development/python-modules/pyotgw { };
