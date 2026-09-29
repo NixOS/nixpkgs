@@ -82,6 +82,13 @@ let
           '') (builtins.attrNames pythonScriptsToInstall)}
           patchShebangs tools
           patchShebangs scripts
+        ''
+        # This warning got removed in
+        # https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=cba90ce82064ad1e6d25f20d8eaa940bd2fc97ed
+        + ''
+          for f in scripts/Makefile.lib dts/upstream/Makefile; do
+            substituteInPlace "$f" --replace-fail -Wno-graph_child_address ""
+          done
         '';
 
         nativeBuildInputs = [
