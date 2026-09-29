@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.60.3";
+  version = "9.70.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-13dM4+PYQTyTmM4pEhQ3FGTA/ELo8uDslWPbPxfJpow=";
+        sha256 = "sha256-WV5IcKghJqkiPutAfjEy4seak2aFcGe7nj1Nh2YmF70=";
       }
     else
       throw "Platform not supported";
