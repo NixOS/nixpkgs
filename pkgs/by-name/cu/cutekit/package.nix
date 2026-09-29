@@ -9,6 +9,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cutekit";
   version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "cute-engineering";
