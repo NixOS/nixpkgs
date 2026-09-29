@@ -4,7 +4,7 @@
   meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
   containers = rec {
-    a = {
+    a = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         curl
         libxml2

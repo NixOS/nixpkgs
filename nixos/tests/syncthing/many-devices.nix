@@ -70,7 +70,7 @@ let
     ''
       print("Searching for a ${t} with id ${id}")
       configVal_${t} = machine.succeed(
-          "${pkgs.libxml2}/bin/xmllint "
+          "xmllint "
           "--xpath 'string(//${t}[@id=\"${id}\"]/@id)' ${configPath}"
       )
       print("${t}.id = {}".format(configVal_${t}))
@@ -87,7 +87,7 @@ let
     ''
       print("checking whether setting ${t}.${n} is set to ${v}")
       configVal_${t}_${n} = machine.succeed(
-          "${pkgs.libxml2}/bin/xmllint "
+          "xmllint "
           "--xpath 'string(/configuration/${t}/${n})' ${configPath}"
       )
       print("${t}.${n} = {}".format(configVal_${t}_${n}))
@@ -131,54 +131,63 @@ let
       id = "Delete Me";
     }
   ];
-  addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
-    set -euo pipefail
-
-    export RUNTIME_DIRECTORY=/tmp
-
-    curl() {
-        # get the api key by parsing the config.xml
-        while
-            ! ${pkgs.libxml2}/bin/xmllint \
-                --xpath 'string(configuration/gui/apikey)' \
-                ${configPath} \
-                >"$RUNTIME_DIRECTORY/api_key"
-        do sleep 1; done
-
-        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-
-        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
-            --retry 5 --retry-delay 1 --retry-all-errors \
-            "$@"
-    }
-    ${lib.concatMapStringsSep "\n" (obj: ''
-      curl -d ${
-        lib.escapeShellArg (
-          builtins.toJSON (
-            if obj.t == "device" then
-              {
-                deviceID = obj.id;
-                inherit (obj) name;
-              }
-            else if obj.t == "folder" then
-              {
-                inherit (obj) id;
-                path = "/var/lib/syncthing/${obj.id}";
-              }
-            else
-              throw "unsupported object type ${obj.t}"
-          )
-        )
-      } \
-        -X POST 127.0.0.1:8384/rest/config/${obj.t}s
-    '') IDsToDelete}
-  '';
 in
 {
   name = "syncthing-many-devices";
   meta.maintainers = with lib.maintainers; [ doronbehar ];
 
-  containers.machine = {
+  containers.machine = { lib, pkgs, ... }: {
+    environment.systemPackages =
+      let
+        addDeviceToDeleteScript = pkgs.writers.writeBashBin "syncthing-add-device-to-delete.sh" ''
+          set -euo pipefail
+
+          export RUNTIME_DIRECTORY=/tmp
+
+          curl() {
+              # get the api key by parsing the config.xml
+              while
+                  ! xmllint \
+                      --xpath 'string(configuration/gui/apikey)' \
+                      ${configPath} \
+                      >"$RUNTIME_DIRECTORY/api_key"
+              do sleep 1; done
+
+              (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+
+              ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+                  --retry 5 --retry-delay 1 --retry-all-errors \
+                  "$@"
+          }
+          ${lib.concatMapStringsSep "\n" (obj: ''
+            curl -d ${
+              lib.escapeShellArg (
+                builtins.toJSON (
+                  if obj.t == "device" then
+                    {
+                      deviceID = obj.id;
+                      inherit (obj) name;
+                    }
+                  else if obj.t == "folder" then
+                    {
+                      inherit (obj) id;
+                      path = "/var/lib/syncthing/${obj.id}";
+                    }
+                  else
+                    throw "unsupported object type ${obj.t}"
+                )
+              )
+            } \
+              -X POST 127.0.0.1:8384/rest/config/${obj.t}s
+          '') IDsToDelete}
+        '';
+      in
+      [
+        pkgs.initool
+        pkgs.libxml2
+        addDeviceToDeleteScript
+      ];
+
     services.syncthing = {
       enable = true;
       overrideDevices = true;
@@ -220,7 +229,7 @@ in
   ])
   + ''
     # Run the script on the machine
-    machine.succeed("${addDeviceToDeleteScript}")
+    machine.succeed("syncthing-add-device-to-delete.sh")
   ''
   + (checkSettingsToDelete {
     not = false;
@@ -242,7 +251,7 @@ in
     # Copy the systemd unit's bash script, to inspect it for debugging.
     mergeScript = machine.succeed(
         "systemctl cat syncthing-init.service | "
-        "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
+        "initool g - Service ExecStart --value-only"
     ).strip() # strip from new lines
     machine.copy_from_machine(mergeScript, "")
   '';
