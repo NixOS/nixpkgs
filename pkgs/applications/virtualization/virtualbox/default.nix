@@ -61,7 +61,6 @@
   headless ? false,
   enable32bitGuests ? true,
   enableWebService ? false,
-  enableKvm ? false,
   extraConfigureFlags ? "",
 }:
 
@@ -75,14 +74,6 @@ let
   virtualboxVersion = "7.2.18";
   virtualboxSubVersion = "";
   virtualboxSha256 = "06db4060caadc70346335c0a731ca6667cdabf206de289c64f3f96f2d341b9d0";
-
-  kvmPatchVboxVersion = "7.2.6";
-  kvmPatchVersion = "20260201";
-  kvmPatchHash = "sha256-pq4DPLwHRRAMJjmfXympDxJK9+d+LwTOxBqxAm0pl3o=";
-
-  # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
-  # modsrc at all.
-  withModsrc = !enableKvm;
 
   virtualboxGuestAdditionsIso = callPackage ./guest-additions-iso {
     inherit virtualboxVersion;
@@ -113,8 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     virtualboxVersion
     virtualboxSubVersion
     virtualboxSha256
-    kvmPatchVersion
-    kvmPatchHash
     virtualboxGuestAdditionsIso
     ;
 
@@ -123,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = finalAttrs.virtualboxSha256;
   };
 
-  outputs = [ "out" ] ++ optional withModsrc "modsrc";
+  outputs = [
+    "out"
+    "modsrc"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -245,13 +237,6 @@ stdenv.mkDerivation (finalAttrs: {
         qtPluginPath = "${qtbase}/bin/${qtbase.qtPluginPrefix}:${qtsvg}/bin/${qtbase.qtPluginPrefix}:${qtwayland}/bin/${qtbase.qtPluginPrefix}";
       }
     )
-    # While the KVM patch should not break any other behavior if --with-kvm is not specified,
-    # we don't take any chances and only apply it if people actually want to use KVM support.
-    ++ optional enableKvm (fetchpatch {
-      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
-      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${kvmPatchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
-      hash = finalAttrs.kvmPatchHash;
-    })
     ++ [
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
@@ -311,7 +296,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
@@ -374,9 +358,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -sv $libexec/nls "$out/share/virtualbox/nls"
     ''}
 
-    ${optionalString withModsrc ''
-      cp -rv out/linux.*/${finalAttrs.buildType}/bin/src "$modsrc"
-    ''}
+    cp -rv out/linux.*/${finalAttrs.buildType}/bin/src "$modsrc"
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
