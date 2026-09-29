@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "certigo";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "certigo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-U+VbtY34lxLBHWI1BjkPxzSS6q41R9DQkGvDvSDX9WY=";
+    sha256 = "sha256-Y2m+uO/jxwWdutry859Y6IdNJpXjjkrlJ+LJrjS616Y=";
   };
 
-  vendorHash = "sha256-5DpgOb0YxZ/os23y+siCB73dUwutxXIW5RlCZqdbxao=";
+  vendorHash = "sha256-u10YSa2xFswJk/2iC7eyfQ51oTaa30/6JA5aLk5021k=";
 
   meta = {
     description = "Utility to examine and validate certificates in a variety of formats";
