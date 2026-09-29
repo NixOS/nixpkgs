@@ -6,7 +6,7 @@ This directory houses the source files for the Nixpkgs manual, including
 - [Onboarding guides](https://github.com/nixOS/nixpkgs/blob/master/doc/using-nixpkgs.md) for using Nixpkgs
 - [Language frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) shipped with Nixpkgs.
 
-There are [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/) and [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/) renderings.
+There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/unstable/) and [latest stable release](https://nixos.org/manual/nixpkgs/stable/).
 
 > [!NOTE]
 >
