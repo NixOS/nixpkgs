@@ -134,7 +134,9 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    changelog = "https://zammad.com/en/product/releases/${lib.replaceString "." "-" version}";
+    changelog = "https://zammad.com/en/product/releases/${
+      lib.replaceString "." "-" (lib.removeSuffix ".0" version)
+    }";
     description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = lib.licenses.agpl3Plus;
