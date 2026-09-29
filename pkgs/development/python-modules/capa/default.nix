@@ -32,6 +32,7 @@
   sarif-om,
   setuptools-scm,
   setuptools,
+  stdenv, # for meta.broken
   stix2,
   types-colorama,
   types-protobuf,
@@ -127,5 +128,8 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "capa";
+    # Never built on darwin since first introduction in nixpkgs
+    # see https://hydra.nixos.org/build/345235630
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
