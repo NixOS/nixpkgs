@@ -66,6 +66,9 @@ bash.runCommand "${pname}-${common.version}"
     ];
   }
   ''
+    # Unpack
+    ln -s ${common.monorepoSrc} src
+
     # Configure
     mkdir -p build-${buildPlatform.config}/libiberty/
     ln -s ${libiberty}/lib/libiberty.a build-${buildPlatform.config}/libiberty/
@@ -95,7 +98,7 @@ bash.runCommand "${pname}-${common.version}"
     export OBJDUMP_FOR_TARGET=${lib.getExe' binutils "${binutilsTargetPrefix}objdump"}
 
     export CFLAGS_FOR_BUILD="-DGENERATOR_FILE=1"
-    ${common.monorepoSrc}/gcc/configure \
+    ../src/gcc/configure \
       --build=${buildPlatform.config} \
       --host=${buildPlatform.config} \
       --target=${hostPlatform.config} \
@@ -150,7 +153,7 @@ bash.runCommand "${pname}-${common.version}"
 
     export CFLAGS="-O0 ${lib.optionalString hostPlatform.isMusl "-isystem ${gcc}/lib/gcc/${hostPlatform.config}/${common.version}/include-fixed"}"
 
-    ${common.monorepoSrc}/libgcc/configure --disable-dependency-tracking \
+    ../../../src/libgcc/configure --disable-dependency-tracking \
      --prefix="$out" \
      --build=${buildPlatform.config} \
      --host=${hostPlatform.config} \
