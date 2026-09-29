@@ -33,6 +33,9 @@ in
 callPackage ./default.nix {
   inherit version;
 
+  # default luaAttr would be luajit_2_1, the wrong interpreter for the lua package set
+  luaAttr = "luajit_openresty";
+
   src = if stdenv.hostPlatform.isRiscV64 then srcWithRiscv64Port else src;
 
   extraMeta = {
