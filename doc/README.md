@@ -1,6 +1,12 @@
 # Contributing to the Nixpkgs manual
 
-This directory houses the source files for the Nixpkgs manual.
+This directory houses the source files for the Nixpkgs manual, including
+
+- [Getting Started](https://github.com/NixOS/nixpkgs/tree/master/doc/getting-started) guides
+- [Onboarding guides](https://github.com/nixOS/nixpkgs/blob/master/doc/using-nixpkgs.md) for using Nixpkgs
+- [Language frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) shipped with Nixpkgs.
+
+There are [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/) and [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/) renderings.
 
 > [!NOTE]
 >
@@ -15,9 +21,6 @@ When writing new docs use **Progressive Disclosure:**
 
 Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
-Documentation about Nixpkgs belongs here.
-This includes getting started guides and onboarding guides for *using* Nixpkgs and the language frameworks it ships.
-
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
@@ -29,10 +32,6 @@ nix-repl> :doc lib.mapAttrsToList
 ```
 
 See [Document structure](#document-structure) for a structural template.
-
-Rendered documentation:
-- [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
-- [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
 
 The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs), sometimes abbreviated `nrd`.
 
