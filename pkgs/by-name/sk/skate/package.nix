@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "skate";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "skate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ihzcto41ltV5LQjLP9AF5XGl5b6QDbgZ/q4BMzfrDC8=";
+    hash = "sha256-BswVm5YH8TR0svPFWsIiNHLIQGqdXfysjy0KwZZ6Io8=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-H0j0za/+pNEYQAfTvLcECU7jt+2HJMJRcK+n/GbLNO0=";
+  vendorHash = "sha256-kIENDHcO/aLEfzJv1dCDSb0NmZf0/khIn0qqlxiFS1c=";
 
   ldflags = [
     "-s"

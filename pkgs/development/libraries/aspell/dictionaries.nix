@@ -5,6 +5,7 @@
   aspell,
   which,
   writeScript,
+  config,
 }:
 
 /*
@@ -226,7 +227,7 @@ let
     );
 
 in
-rec {
+{
 
   ### Languages
 
@@ -1082,65 +1083,8 @@ rec {
     sha256 = "15k7gaxrnqnssdyk9l6g27dq317dqp9jz5yzafd25ri01g6mb8iz";
     meta.license = lib.licenses.lgpl21Only;
   };
-
-  ### Jargons
-
-  en-computers = buildTxtDict {
-    shortName = "en-computers";
-    fullName = "English Computer Jargon";
-    version = "0";
-
-    src = fetchurl {
-      url = "https://mrsatterly.com/computer.dic";
-      sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
-    };
-
-    langInputs = [ en ];
-
-    buildPhase = ''
-      runHook preBuild
-      cat $src | aspell-affix en-computers --dont-validate-words --lang=en
-      runHook postBuild
-    '';
-    installPhase = "aspell-install en-computers";
-
-    meta = {
-      homepage = "https://mrsatterly.com/spelling.html";
-      license = lib.licenses.wtfpl; # as a comment the source file
-    };
-  };
-
-  en-science = buildTxtDict {
-    shortName = "en-science";
-    fullName = "English Scientific Jargon";
-    version = "0-unstable-2015-07-27";
-
-    src1 = fetchurl {
-      url = "https://web.archive.org/web/20180806094650if_/http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
-      hash = "sha256-I5d/jf/5v9Nptu2H9qfvMBzSwJYoQOTEzJfQTxKoWN8=";
-    };
-
-    src2 = fetchurl {
-      url = "https://web.archive.org/web/20180131231829if_/http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
-      hash = "sha256-oT4nUiev5q4QjHeuF8jNVBcyyHE9fdH9+uDMkZsOWp8=";
-    };
-
-    langInputs = [ en ];
-
-    buildPhase = ''
-      runHook preBuild
-      cat $src1 | aspell-plain en_US-science --dont-validate-words --lang=en
-      cat $src2 | aspell-plain en_GB-science --dont-validate-words --lang=en
-      runHook postBuild
-    '';
-    installPhase = "aspell-install en_US-science en_GB-science";
-
-    meta = {
-      homepage = "https://web.archive.org/web/20210425104207/http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
-      # no license is given so we have to assume it is unfree
-      license = lib.licenses.unfree;
-    };
-
-  };
-
+}
+// lib.optionalAttrs config.allowAliases {
+  en-computers = throw "'aspellDicts.en-computers' has been removed as upstream url pointed to a gambling website."; # Added 2026-09-28
+  en-science = throw "'aspellDicts.en-science' has been removed as upstream was removed."; # Added 2026-09-28
 }

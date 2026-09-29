@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protonup-rs";
-  version = "0.15.0";
+  version = "0.15.1";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "auyer";
     repo = "protonup-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fEDrWc3IXRuEV8bqtU366Dw9WiQ9+YMC9ByDYeUy//s=";
+    hash = "sha256-b4ZYHoJoGayt2jTFMBaLP8UrVqKQDNXzM9/kLbkSgaA=";
   };
 
-  cargoHash = "sha256-bbt+EJfhIf95LFDzZXKsAi14RwqEy+IOGCtrsjqOUOU=";
+  cargoHash = "sha256-j4eWSQUIsH4E45NgMLIWA+IpyBLh3IJwLoXIr8wSEaY=";
 
   checkFlags = [
     # Requires internet access
