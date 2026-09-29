@@ -54,6 +54,7 @@ mixReleaseRemoveErlangReferences() {
     # use bbe to substitute strings in binary files, because using substituteInPlace
     # on binaries will raise errors
     bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
+    chmod --reference="$file" "$file".tmp
     rm -f "$file"
     mv "$file".tmp "$file"
   done
@@ -75,11 +76,11 @@ mixReleaseStripDebugHook() {
 }
 
 if [ -z "${dontMixReleaseFixup-}" ]; then
-  preFixupHooks+=(mixReleaseFixupHook)
+  postFixupHooks+=(mixReleaseFixupHook)
 fi
 
 if [ -n "${removeCookie-1}" ]; then
-  preFixupHooks+=(mixReleaseRemoveCookieHook)
+  postFixupHooks+=(mixReleaseRemoveCookieHook)
 fi
 
 if [ -n "${stripDebug-}" ]; then
