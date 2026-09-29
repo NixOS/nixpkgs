@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.10";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/ttf-bitstream-vera/${lib.versions.majorMinor finalAttrs.version}/ttf-bitstream-vera-${finalAttrs.version}.tar.bz2";
