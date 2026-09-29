@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   kernel,
   kernelModuleMakeFlags,
 }:
@@ -21,6 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-j/0iK/I+pj69Z39lZJFaCQ3WxzZL6663Kxy4Sf46tOo=";
   };
+
+  patches = [
+    # Fix build with Linux 7.2
+    (fetchpatch2 {
+      name = "fix-build-with-kernel-7.2.patch";
+      url = "https://github.com/lkrg-org/lkrg/commit/72495a45d85ca9c1881f7b5ac34837b2948b0a22.patch?full_index=1";
+      hash = "sha256-0M18Q9aCw13ZxwwJfIcbd7668WCKgENM2Ft+ZDmsw6M=";
+    })
+    (fetchpatch2 {
+      name = "use-memcpy-instead-of-strncpy.patch";
+      url = "https://github.com/lkrg-org/lkrg/commit/ae1edab2984db76969343e1c4661a3103fbe0566.patch?full_index=1";
+      hash = "sha256-hD6X6o4fq51lh9G9t7K0jhV4nhfJs/Q8j494h10GRII=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 
