@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index bb15ab443..2bc46d2dc 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -85,6 +85,9 @@ Repository = "https://opendev.org/openstack/openstacksdk/"
+ # TODO(mordred) Move this to an OSC command at some point
+ openstack-inventory = "openstack.cloud.cmd.inventory:main"
+ 
++[tool.setuptools.package-data]
++"*" = ["**/*"]
++
+ [tool.setuptools.packages.find]
+ include = ["openstack*"]
+ 

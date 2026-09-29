@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 793a4bb15..446d5b721 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,10 +117,6 @@ endif ()
+ #------------------------------------------------------------------------------
+ # Prepare gobal CMAKE configuration specific to the current project
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)#Needed for Qt
+-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/OUTPUT" CACHE PATH "Default linphone-app installation prefix" FORCE)
+-	set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT FALSE)
+-endif()
+ 
+ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+ 	message(STATUS "Setting build type to 'RelWithDebInfo' as none was specified")

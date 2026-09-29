@@ -1,0 +1,15 @@
+diff --git a/lsusb.py b/lsusb.py
+index 8f19ec4..ae81134 100755
+--- a/lsusb.py
++++ b/lsusb.py
+@@ -27,9 +27,7 @@ showwakeup = False
+ 
+ prefix = "/sys/bus/usb/devices/"
+ usbids = [
+-	"/usr/share/hwdata/usb.ids",
+-	"/usr/share/misc/usb.ids",
+-	"/usr/share/usb.ids",
++	"@hwdata@/share/hwdata/usb.ids",
+ ]
+ cols = ("", "", "", "", "", "")
+ 

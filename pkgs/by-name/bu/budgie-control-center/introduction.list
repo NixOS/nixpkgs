@@ -1,0 +1,5 @@
+# Introduction panel default applications
+# This file contains full paths to .desktop files to display
+# Lines starting with # are comments
+@wdisplays@/share/applications/network.cycles.wdisplays.desktop
+@budgie_desktop@/share/applications/org.buddiesofbudgie.BudgieDesktopSettings.desktop

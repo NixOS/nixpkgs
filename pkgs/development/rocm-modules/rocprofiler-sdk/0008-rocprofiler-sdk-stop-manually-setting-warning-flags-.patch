@@ -1,0 +1,269 @@
+From ae4cffc06a368893d91be2739bb6482182681efc Mon Sep 17 00:00:00 2001
+From: Robin Voetter <rvoetter@amd.com>
+Date: Sat, 4 Apr 2026 22:22:56 +0000
+Subject: [PATCH] [rocprofiler-sdk] stop manually setting warning flags on
+ integration tests
+
+The primary motivation for this change is that -Werror is added to the compiler
+options unconditionally, which causes problems when compiling these tests during
+downstream packaging builds. The rocprofiler-sdk::tests-build-flags and
+rocprofiler-sdk::tests-common targets already include these warning flags, and this
+target also already handles setting -Werror conditionally based on ROCPROF_BUILD_WERROR.
+Some integration tests also set -Wpedantic, these have been left as-is. When
+ROCPROF_BUILD_WERROR is set to ON (default), behavior is the same as before this commit.
+---
+ tests/bin/attachment-test/CMakeLists.txt                  | 6 +++---
+ tests/bin/hip-graph/CMakeLists.txt                        | 5 +++--
+ tests/bin/hip-in-libraries/CMakeLists.txt                 | 6 +++---
+ tests/bin/hsa-code-object/CMakeLists.txt                  | 1 -
+ tests/bin/hsa-memory-allocation/CMakeLists.txt            | 3 +--
+ tests/bin/hsa-queue-dependency/CMakeLists.txt             | 1 -
+ tests/bin/multistream/CMakeLists.txt                      | 5 +++--
+ .../bin/pc-sampling/exec-mask-manipulation/CMakeLists.txt | 6 +++---
+ tests/bin/reproducible-dispatch-count/CMakeLists.txt      | 8 ++++----
+ tests/bin/reproducible-runtime/CMakeLists.txt             | 8 ++++----
+ tests/bin/scratch-memory/CMakeLists.txt                   | 3 +--
+ tests/bin/simple-transpose/CMakeLists.txt                 | 8 ++++----
+ tests/bin/transpose/CMakeLists.txt                        | 2 +-
+ tests/bin/vector-operations/CMakeLists.txt                | 2 +-
+ 14 files changed, 31 insertions(+), 33 deletions(-)
+
+diff --git a/tests/bin/attachment-test/CMakeLists.txt b/tests/bin/attachment-test/CMakeLists.txt
+index 332f5e551a..50c644942d 100644
+--- a/tests/bin/attachment-test/CMakeLists.txt
++++ b/tests/bin/attachment-test/CMakeLists.txt
+@@ -42,8 +42,8 @@ find_package(rocprofiler-sdk-roctx REQUIRED)
+ set_source_files_properties(attachment_test.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(attachment-test)
+ target_sources(attachment-test PRIVATE attachment_test.cpp)
+-target_compile_options(attachment-test PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                               -Werror)
++target_compile_options(attachment-test PRIVATE -Wpedantic)
+ 
+ target_link_libraries(
+-    attachment-test PRIVATE Threads::Threads rocprofiler-sdk-roctx::rocprofiler-sdk-roctx)
++    attachment-test PRIVATE Threads::Threads rocprofiler-sdk-roctx::rocprofiler-sdk-roctx
++                            rocprofiler-sdk::tests-build-flags)
+diff --git a/tests/bin/hip-graph/CMakeLists.txt b/tests/bin/hip-graph/CMakeLists.txt
+index e4d984b68a..dfa9233097 100644
+--- a/tests/bin/hip-graph/CMakeLists.txt
++++ b/tests/bin/hip-graph/CMakeLists.txt
+@@ -35,10 +35,11 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(hip-graph.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(hip-graph)
+ target_sources(hip-graph PRIVATE hip-graph.cpp)
+-target_compile_options(hip-graph PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow -Werror)
++target_compile_options(hip-graph PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+-target_link_libraries(hip-graph PRIVATE Threads::Threads)
++target_link_libraries(hip-graph PRIVATE Threads::Threads
++                                        rocprofiler-sdk::tests-build-flags)
+ 
+ # find_package(rocprofiler-sdk-roctx REQUIRED) target_link_libraries(hip-graph PRIVATE
+ # rocprofiler-sdk-roctx::rocprofiler-sdk-roctx)
+diff --git a/tests/bin/hip-in-libraries/CMakeLists.txt b/tests/bin/hip-in-libraries/CMakeLists.txt
+index d908704604..5f5d92b80a 100644
+--- a/tests/bin/hip-in-libraries/CMakeLists.txt
++++ b/tests/bin/hip-in-libraries/CMakeLists.txt
+@@ -11,8 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ add_executable(hip-in-libraries)
+ target_sources(hip-in-libraries PRIVATE hip-in-libraries.cpp)
+-target_compile_options(hip-in-libraries PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                                -Werror)
++target_compile_options(hip-in-libraries PRIVATE -Wpedantic)
+ target_link_libraries(hip-in-libraries PRIVATE transpose-shared-library
+                                                vector-ops-shared-library)
+ 
+@@ -20,7 +19,8 @@ find_package(hip REQUIRED)
+ target_link_libraries(hip-in-libraries PRIVATE hip::host)
+ 
+ find_package(Threads REQUIRED)
+-target_link_libraries(hip-in-libraries PRIVATE Threads::Threads)
++target_link_libraries(hip-in-libraries PRIVATE Threads::Threads
++                                               rocprofiler-sdk::tests-build-flags)
+ 
+ if(TRANSPOSE_USE_MPI)
+     find_package(MPI REQUIRED)
+diff --git a/tests/bin/hsa-code-object/CMakeLists.txt b/tests/bin/hsa-code-object/CMakeLists.txt
+index 2e11314509..099606dc26 100644
+--- a/tests/bin/hsa-code-object/CMakeLists.txt
++++ b/tests/bin/hsa-code-object/CMakeLists.txt
+@@ -72,7 +72,6 @@ add_custom_target(generate_hsaco_targets_code_object DEPENDS ${HSACO_TARGET_LIST
+ 
+ add_executable(hsa_code_object_testapp)
+ target_sources(hsa_code_object_testapp PRIVATE hsa_code_object_app.cpp)
+-target_compile_options(hsa_code_object_testapp PRIVATE -W -Wall -Wextra -Wshadow -Werror)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(hsa_code_object_testapp PRIVATE stdc++fs Threads::Threads)
+diff --git a/tests/bin/hsa-memory-allocation/CMakeLists.txt b/tests/bin/hsa-memory-allocation/CMakeLists.txt
+index 485b866209..b0d12490b6 100644
+--- a/tests/bin/hsa-memory-allocation/CMakeLists.txt
++++ b/tests/bin/hsa-memory-allocation/CMakeLists.txt
+@@ -35,8 +35,7 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(hsa-memory-allocation.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(hsa-memory-allocation)
+ target_sources(hsa-memory-allocation PRIVATE hsa-memory-allocation.cpp)
+-target_compile_options(hsa-memory-allocation PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                                     -Werror)
++target_compile_options(hsa-memory-allocation PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(hsa-memory-allocation PRIVATE Threads::Threads hsa-runtime64
+diff --git a/tests/bin/hsa-queue-dependency/CMakeLists.txt b/tests/bin/hsa-queue-dependency/CMakeLists.txt
+index 6753da98f2..e02b57f802 100644
+--- a/tests/bin/hsa-queue-dependency/CMakeLists.txt
++++ b/tests/bin/hsa-queue-dependency/CMakeLists.txt
+@@ -49,7 +49,6 @@ add_custom_target(generate_hsaco_targets DEPENDS ${HSACO_TARGET_LIST})
+ 
+ add_executable(multiqueue_testapp)
+ target_sources(multiqueue_testapp PRIVATE multiqueue_app.cpp)
+-target_compile_options(multiqueue_testapp PRIVATE -W -Wall -Wextra -Wshadow -Werror)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(multiqueue_testapp PRIVATE stdc++fs Threads::Threads)
+diff --git a/tests/bin/multistream/CMakeLists.txt b/tests/bin/multistream/CMakeLists.txt
+index 13ef8dee31..37c837976d 100644
+--- a/tests/bin/multistream/CMakeLists.txt
++++ b/tests/bin/multistream/CMakeLists.txt
+@@ -35,7 +35,8 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(multistream_app.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(multistream)
+ target_sources(multistream PRIVATE multistream_app.cpp)
+-target_compile_options(multistream PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow -Werror)
++target_compile_options(multistream PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+-target_link_libraries(multistream PRIVATE Threads::Threads)
++target_link_libraries(multistream PRIVATE Threads::Threads
++                                          rocprofiler-sdk::tests-build-flags)
+diff --git a/tests/bin/pc-sampling/exec-mask-manipulation/CMakeLists.txt b/tests/bin/pc-sampling/exec-mask-manipulation/CMakeLists.txt
+index 1e84318f63..aa5d9c88a0 100644
+--- a/tests/bin/pc-sampling/exec-mask-manipulation/CMakeLists.txt
++++ b/tests/bin/pc-sampling/exec-mask-manipulation/CMakeLists.txt
+@@ -36,8 +36,8 @@ set_source_files_properties(exec_mask_manipulation.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(exec-mask-manipulation)
+ target_sources(exec-mask-manipulation PRIVATE exec_mask_manipulation.cpp)
+ # debug symbols required for PC sampling decoding validation
+-target_compile_options(exec-mask-manipulation PRIVATE -W -Wall -Wextra -Wpedantic
+-                                                      -Wshadow -Werror -g)
++target_compile_options(exec-mask-manipulation PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+-target_link_libraries(exec-mask-manipulation PRIVATE Threads::Threads)
++target_link_libraries(exec-mask-manipulation PRIVATE Threads::Threads
++                                                     rocprofiler-sdk::tests-build-flags)
+diff --git a/tests/bin/reproducible-dispatch-count/CMakeLists.txt b/tests/bin/reproducible-dispatch-count/CMakeLists.txt
+index df10dd7e3f..40fd04cdfc 100644
+--- a/tests/bin/reproducible-dispatch-count/CMakeLists.txt
++++ b/tests/bin/reproducible-dispatch-count/CMakeLists.txt
+@@ -42,15 +42,15 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(reproducible-dispatch-count.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(reproducible-dispatch-count)
+ target_sources(reproducible-dispatch-count PRIVATE reproducible-dispatch-count.cpp)
+-target_compile_options(reproducible-dispatch-count PRIVATE -W -Wall -Wextra -Wpedantic
+-                                                           -Wshadow -Werror)
++target_compile_options(reproducible-dispatch-count PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(reproducible-dispatch-count PRIVATE Threads::Threads)
+ 
+ find_package(rocprofiler-sdk-roctx REQUIRED)
+-target_link_libraries(reproducible-dispatch-count
+-                      PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx)
++target_link_libraries(
++    reproducible-dispatch-count PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx
++                                        rocprofiler-sdk::tests-build-flags)
+ 
+ if(REPRODUCIBLE_DISPATCH_COUNT_USE_MPI)
+     find_package(MPI REQUIRED)
+diff --git a/tests/bin/reproducible-runtime/CMakeLists.txt b/tests/bin/reproducible-runtime/CMakeLists.txt
+index 721b1e190b..4a65e9d60d 100644
+--- a/tests/bin/reproducible-runtime/CMakeLists.txt
++++ b/tests/bin/reproducible-runtime/CMakeLists.txt
+@@ -41,15 +41,15 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(reproducible-runtime.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(reproducible-runtime)
+ target_sources(reproducible-runtime PRIVATE reproducible-runtime.cpp)
+-target_compile_options(reproducible-runtime PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                                    -Werror)
++target_compile_options(reproducible-runtime PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(reproducible-runtime PRIVATE Threads::Threads)
+ 
+ find_package(rocprofiler-sdk-roctx REQUIRED)
+-target_link_libraries(reproducible-runtime
+-                      PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx)
++target_link_libraries(
++    reproducible-runtime PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx
++                                 rocprofiler-sdk::tests-build-flags)
+ 
+ if(REPRODUCIBLE_RUNTIME_USE_MPI)
+     find_package(MPI REQUIRED)
+diff --git a/tests/bin/scratch-memory/CMakeLists.txt b/tests/bin/scratch-memory/CMakeLists.txt
+index 06ba7ddadb..419830ec51 100644
+--- a/tests/bin/scratch-memory/CMakeLists.txt
++++ b/tests/bin/scratch-memory/CMakeLists.txt
+@@ -35,8 +35,7 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(scratch-memory.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(scratch-memory)
+ target_sources(scratch-memory PRIVATE scratch-memory.cpp)
+-target_compile_options(scratch-memory PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                              -Werror)
++target_compile_options(scratch-memory PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(scratch-memory PRIVATE Threads::Threads hsa-runtime64
+diff --git a/tests/bin/simple-transpose/CMakeLists.txt b/tests/bin/simple-transpose/CMakeLists.txt
+index 41f4954e79..6370289c4a 100644
+--- a/tests/bin/simple-transpose/CMakeLists.txt
++++ b/tests/bin/simple-transpose/CMakeLists.txt
+@@ -35,12 +35,12 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(simple-transpose.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(simple-transpose)
+ target_sources(simple-transpose PRIVATE simple-transpose.cpp)
+-target_compile_options(simple-transpose PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow
+-                                                -Werror)
++target_compile_options(simple-transpose PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(simple-transpose PRIVATE Threads::Threads)
+ 
+ find_package(rocprofiler-sdk-roctx REQUIRED)
+-target_link_libraries(simple-transpose
+-                      PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx)
++target_link_libraries(
++    simple-transpose PRIVATE rocprofiler-sdk-roctx::rocprofiler-sdk-roctx
++                             rocprofiler-sdk::tests-build-flags)
+diff --git a/tests/bin/transpose/CMakeLists.txt b/tests/bin/transpose/CMakeLists.txt
+index 7d85195a9a..8c98307329 100644
+--- a/tests/bin/transpose/CMakeLists.txt
++++ b/tests/bin/transpose/CMakeLists.txt
+@@ -40,7 +40,7 @@ function(transpose_build_target _NAME _COMPILE_DEFS _LINK_TARGETS)
+     add_executable(${_NAME})
+     target_sources(${_NAME} PRIVATE transpose.cpp)
+     target_compile_definitions(${_NAME} PRIVATE ${_COMPILE_DEFS})
+-    target_compile_options(${_NAME} PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow -Werror)
++    target_compile_options(${_NAME} PRIVATE -Wpedantic)
+     target_link_libraries(
+         ${_NAME} PRIVATE Threads::Threads rocprofiler-sdk::tests-build-flags
+                          ${_LINK_TARGETS})
+diff --git a/tests/bin/vector-operations/CMakeLists.txt b/tests/bin/vector-operations/CMakeLists.txt
+index efd16ab04d..9fa1d8fb96 100644
+--- a/tests/bin/vector-operations/CMakeLists.txt
++++ b/tests/bin/vector-operations/CMakeLists.txt
+@@ -35,7 +35,7 @@ set(CMAKE_HIP_STANDARD_REQUIRED ON)
+ set_source_files_properties(vector-ops.cpp PROPERTIES LANGUAGE HIP)
+ add_executable(vector-ops)
+ target_sources(vector-ops PRIVATE vector-ops.cpp)
+-target_compile_options(vector-ops PRIVATE -W -Wall -Wextra -Wpedantic -Wshadow -Werror)
++target_compile_options(vector-ops PRIVATE -Wpedantic)
+ 
+ find_package(Threads REQUIRED)
+ target_link_libraries(vector-ops PRIVATE Threads::Threads
+-- 
+2.43.0
+

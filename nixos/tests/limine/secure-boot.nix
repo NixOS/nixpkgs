@@ -1,0 +1,46 @@
+{ lib, pkgs, ... }:
+{
+  name = "secureBoot";
+  meta = {
+    inherit (pkgs.limine.meta) maintainers;
+  };
+
+  meta.platforms = [
+    "aarch64-linux"
+    "i686-linux"
+    "x86_64-linux"
+  ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      virtualisation.useBootLoader = true;
+      virtualisation.useEFIBoot = true;
+      virtualisation.efi.keepVariables = true;
+
+      boot.loader.efi.canTouchEfiVariables = true;
+
+      boot.loader.limine.enable = true;
+      boot.loader.limine.efiSupport = true;
+      boot.loader.limine.secureBoot.enable = true;
+      boot.loader.limine.secureBoot.autoGenerateKeys = true;
+      boot.loader.limine.secureBoot.autoEnrollKeys.enable = true;
+      boot.loader.limine.secureBoot.autoEnrollKeys.extraArgs = [ "--yes-this-might-brick-my-machine" ];
+      boot.loader.timeout = 0;
+
+      services.fwupd.enable = true;
+
+      environment.systemPackages = [ pkgs.mokutil ];
+    };
+
+  testScript = ''
+    machine.start()
+    assert "SecureBoot enabled" in machine.succeed("mokutil --sb-state")
+
+    # fwupd is D-Bus activated, so the signing unit only runs on demand.
+    machine.succeed("systemctl start fwupd.service")
+    machine.wait_for_unit("fwupd-efi.service")
+    # the unsigned app is copied in by the fwupd module, the signed one added here
+    machine.succeed("ls /run/fwupd-efi/fwupd*.efi")
+    machine.succeed("ls /run/fwupd-efi/fwupd*.efi.signed")
+  '';
+}

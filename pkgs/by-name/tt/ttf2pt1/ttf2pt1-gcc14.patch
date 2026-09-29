@@ -1,0 +1,47 @@
+diff --git a/ft.c b/ft.c
+index 4ca1ca6..3ae9ac9 100644
+--- a/ft.c
++++ b/ft.c
+@@ -457,7 +457,7 @@ static double lastx, lasty;
+ 
+ static int
+ outl_moveto(
+-	FT_Vector *to,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -477,7 +477,7 @@ outl_moveto(
+ 
+ static int
+ outl_lineto(
+-	FT_Vector *to,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -493,8 +493,8 @@ outl_lineto(
+ 
+ static int
+ outl_conicto(
+-	FT_Vector *control1,
+-	FT_Vector *to,
++	const FT_Vector *control1,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -514,9 +514,9 @@ outl_conicto(
+ 
+ static int
+ outl_cubicto(
+-	FT_Vector *control1,
+-	FT_Vector *control2,
+-	FT_Vector *to,
++	const FT_Vector *control1,
++	const FT_Vector *control2,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+

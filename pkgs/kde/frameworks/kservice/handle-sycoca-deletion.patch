@@ -1,0 +1,14 @@
+diff --git a/src/sycoca/ksycoca.cpp b/src/sycoca/ksycoca.cpp
+index 981342e6..5940f65f 100644
+--- a/src/sycoca/ksycoca.cpp
++++ b/src/sycoca/ksycoca.cpp
+@@ -218,6 +218,10 @@ KSycoca::KSycoca()
+         connect(d->m_fileWatcher.get(), &KDirWatch::dirty, this, [this]() {
+             d->slotDatabaseChanged();
+         });
++        // NIXPKGS: we sometimes delete sycoca externally
++        connect(d->m_fileWatcher.get(), &KDirWatch::deleted, this, [this]() {
++            d->slotDatabaseChanged();
++        });
+     }
+ }

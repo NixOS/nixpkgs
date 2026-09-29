@@ -1,0 +1,96 @@
+diff --git a/Makefile b/Makefile
+index 3383a64b36..b658f49c23 100644
+--- a/Makefile
++++ b/Makefile
+@@ -53,7 +53,7 @@
+ 
+ default: ____art_all
+ 
+-____art_all: dalvikvm art dex2oat libjavacore libcore libopenjdk libopenjdkjvm core-libart-hostdex core-oj-hostdex apachehttp-hostdex apache-xml-hostdex hamcrest-hostdex core-junit-hostdex junit-runner-hostdex bouncycastle-hostdex wolfssljni-hostdex okhttp-hostdex libandroidfw art-standalone.pc
++____art_all: dalvikvm art dex2oat libjavacore libcore libopenjdk libopenjdkjvm core-libart-hostdex core-oj-hostdex apachehttp-hostdex apache-xml-hostdex hamcrest-hostdex core-junit-hostdex junit-runner-hostdex bouncycastle-hostdex okhttp-hostdex libandroidfw art-standalone.pc
+ 
+ art-standalone.pc: art-standalone.pc.in
+ 	sed -e 's|@prefix@|$(____PREFIX)|g' \
+@@ -68,8 +68,7 @@
+ 	install -Dt $(____INSTALL_LIBDIR)/java/dex/art/natives/ $(____TOPDIR)/out/host/linux-x86/lib64/libjavacore.so \
+ 	                                                        $(____TOPDIR)/out/host/linux-x86/lib64/libnativehelper.so \
+ 	                                                        $(____TOPDIR)/out/host/linux-x86/lib64/libopenjdk.so \
+-	                                                        $(____TOPDIR)/out/host/linux-x86/lib64/libopenjdkjvm.so \
+-	                                                        $(____TOPDIR)/out/host/linux-x86/lib64/libwolfssljni.so
++	                                                        $(____TOPDIR)/out/host/linux-x86/lib64/libopenjdkjvm.so
+ #
+ # these are mostly internal libs which there's no point in versioning because they don't have any kind of stable ABI - so we just shove them in art/ namespace
+ # even the libunwind is actually a fork of libunwind 1.1 with added stuff that will likely never be upstreamed, especially since google stopped using libunwind
+@@ -108,8 +107,7 @@
+ 	                                                $(____TOPDIR)/out/host/linux-x86/framework/core-oj-hostdex.jar \
+ 	                                                $(____TOPDIR)/out/host/linux-x86/framework/hamcrest-hostdex.jar \
+ 	                                                $(____TOPDIR)/out/host/linux-x86/framework/junit-runner-hostdex.jar \
+-	                                                $(____TOPDIR)/out/host/linux-x86/framework/okhttp-hostdex.jar \
+-	                                                $(____TOPDIR)/out/host/linux-x86/framework/wolfssljni-hostdex.jar
++	                                                $(____TOPDIR)/out/host/linux-x86/framework/okhttp-hostdex.jar
+ #
+ # packaging note: this is needed as bootclasspath when compiling android_translation_layer. Can be in -dev package.
+ 	install -D $(____TOPDIR)/out/host/common/obj/JAVA_LIBRARIES/core-all-hostdex_intermediates/classes.jar $(____INSTALL_LIBDIR)/java/core-all_classes.jar
+diff --git a/art/runtime/parsed_options.cc b/art/runtime/parsed_options.cc
+index 1f8936114a..b8f7566401 100644
+--- a/art/runtime/parsed_options.cc
++++ b/art/runtime/parsed_options.cc
+@@ -597,8 +597,7 @@
+                                         bootclasspath_prefix + "/core-libart-hostdex.jar"  + ':' +
+                                         bootclasspath_prefix + "/hamcrest-hostdex.jar"     + ':' +
+                                         bootclasspath_prefix + "/junit-runner-hostdex.jar" + ':' +
+-                                        bootclasspath_prefix + "/okhttp-hostdex.jar"       + ':' +
+-                                        bootclasspath_prefix + "/wolfssljni-hostdex.jar";
++                                        bootclasspath_prefix + "/okhttp-hostdex.jar";
+       free(bootclasspath_prefix);
+ 
+       if(args.Exists(M::BootClassPath_a))
+diff --git a/libcore/luni/src/main/java/java/security/security.properties b/libcore/luni/src/main/java/java/security/security.properties
+index ca55328279..b17437f81e 100644
+--- a/libcore/luni/src/main/java/java/security/security.properties
++++ b/libcore/luni/src/main/java/java/security/security.properties
+@@ -18,15 +18,13 @@
+ # Providers
+ # See also: J2SE doc. "How to Implement a Provider for the JavaTM Cryptography Architecture"
+ #
+-# Android's provider of OpenSSL backed implementations
+-security.provider.1=com.wolfssl.provider.jsse.WolfSSLProvider
+ # Android's stripped down BouncyCastle provider
+-security.provider.2=com.android.org.bouncycastle.jce.provider.BouncyCastleProvider
++security.provider.1=com.android.org.bouncycastle.jce.provider.BouncyCastleProvider
+ # provides implementations that would normally be provided by sun.security.provider.Sun
+ # (CertPathValidator, CertPathBuilder and (ATL added) JKS)
+-security.provider.3=sun.security.provider.CertPathProvider
++security.provider.2=sun.security.provider.CertPathProvider
+ # Remaining Harmony providers
+-security.provider.4=org.apache.harmony.security.provider.crypto.CryptoProvider
++security.provider.3=org.apache.harmony.security.provider.crypto.CryptoProvider
+ 
+ 
+ 
+@@ -39,13 +37,6 @@
+ # javax/net/ssl/SSLSocketFactory.html#getDefault()
+ # javax/net/ssl/SSLServerSocketFactory.html#getDefault()
+ 
+-# For regular SSLSockets, we have two implementations:
+-ssl.SocketFactory.provider=com.wolfssl.provider.jsse.WolfSSLSocketFactory
+-#ssl.SocketFactory.provider=com.android.org.conscrypt.SSLSocketFactoryImpl
+-
+-# For SSLServerSockets, there's only the new, OpenSSL-based implementation:
+-ssl.ServerSocketFactory.provider=com.wolfssl.provider.jsse.WolfSSLServerSocketFactory
+-
+ # Default KeyStore type.
+ # See specification for java/security/KeyStore.html#getDefaultType()
+ keystore.type=BKS
+diff --git a/libcore/ojluni/src/main/java/sun/security/jca/Providers.java b/libcore/ojluni/src/main/java/sun/security/jca/Providers.java
+index e60c3e3ba8..ec66dcb8f0 100644
+--- a/libcore/ojluni/src/main/java/sun/security/jca/Providers.java
++++ b/libcore/ojluni/src/main/java/sun/security/jca/Providers.java
+@@ -103,7 +103,6 @@
+         */
+         "com.android.org.bouncycastle.jce.provider.BouncyCastleProvider",
+         "org.apache.harmony.security.provider.crypto.CryptoProvider", // we need SecureRandom
+-        "com.wolfssl.provider.jsse.WolfSSLProvider",
+         // END Android-changed: Use Conscrypt and BC, not the sun.security providers.
+         BACKUP_PROVIDER_CLASSNAME,
+     };

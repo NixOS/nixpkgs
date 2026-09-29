@@ -1,0 +1,26 @@
+diff --git a/xbattbar.c b/xbattbar.c
+index 1e26019..cb3eab5 100644
+--- a/xbattbar.c
++++ b/xbattbar.c
+@@ -75,9 +75,8 @@ char *ONOUT_C  = "olive drab";
+ char *OFFIN_C  = "blue";
+ char *OFFOUT_C = "red";
+ 
+-char *EXTERNAL_CHECK = "/usr/lib/xbattbar/xbattbar-check-apm";
++char *EXTERNAL_CHECK = "/usr/lib/xbattbar/xbattbar-check-sys";
+ char *EXTERNAL_CHECK_ACPI = "/usr/lib/xbattbar/xbattbar-check-acpi";
+-char *EXTERNAL_CHECK_SYS = "/usr/lib/xbattbar/xbattbar-check-sys";
+ 
+ int alwaysontop = False;
+ 
+@@ -245,10 +244,6 @@ main(int argc, char **argv)
+       EXTERNAL_CHECK = EXTERNAL_CHECK_ACPI;
+       break;
+ 
+-    case 'r':
+-      EXTERNAL_CHECK = EXTERNAL_CHECK_SYS;
+-      break;
+-
+     case 's':
+       EXTERNAL_CHECK = optarg;
+       break;

@@ -1,0 +1,14 @@
+diff --git a/svgui/view/Pane.cpp b/svgui/view/Pane.cpp
+index fb802c4..9a8124c 100644
+--- a/svgui/view/Pane.cpp
++++ b/svgui/view/Pane.cpp
+@@ -1423,7 +1423,7 @@ modifierNames(Qt::KeyboardModifiers m)
+     if (m & Qt::GroupSwitchModifier) s << "GroupSwitch";
+     m &= (~ (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier |
+              Qt::MetaModifier | Qt::KeypadModifier | Qt::GroupSwitchModifier));
+-    if (m) s << QString(" (residue %1)").arg(m);
++    if (m) s << QString(" (residue %1)").arg(static_cast<int>(m));
+     if (s.empty()) return "(none)";
+     else return s.join(" | ");
+ }
+

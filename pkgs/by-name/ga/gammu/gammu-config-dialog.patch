@@ -1,0 +1,22 @@
+diff --git a/utils/gammu-config b/utils/gammu-config
+index abf278ada..fc12493cd 100755
+--- a/utils/gammu-config
++++ b/utils/gammu-config
+@@ -59,16 +59,7 @@ while [ "$#" -ge 1 ] ; do
+     shift
+ done
+ 
+-if command -v dialog > /dev/null 2>&1 ; then
+-    DIALOG=dialog
+-elif command -v cdialog > /dev/null 2>&1 ; then
+-    DIALOG=cdialog
+-elif command -v whiptail > /dev/null 2>&1 ; then
+-    DIALOG=whiptail
+-else
+-    echo "You need dialog, cdialog or whiptail installed to make this work"
+-    exit 1
+-fi
++DIALOG=@dialog@
+ 
+ if [ -f "$CONFIG" ] ; then
+     if [ ! -w "$CONFIG" ] ; then

@@ -1,0 +1,26 @@
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 9ee6370f6..552beed1b 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -295,9 +295,6 @@ catalogs:
+       specifier: ^3.25.76
+       version: 3.25.76
+ 
+-overrides:
+-  '@textlint/ast-node-types': workspace:*
+-
+ importers:
+ 
+   .:
+diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
+index 300a519e0..bf41d5370 100644
+--- a/pnpm-workspace.yaml
++++ b/pnpm-workspace.yaml
+@@ -130,7 +130,5 @@ minimumReleaseAgeExclude:
+ # Force all @textlint/ast-node-types references to use the workspace version
+ # This prevents version conflicts where some packages might reference old versions (e.g., 13.4.1)
+ # that cause TypeScript type incompatibility errors in monorepo
+-overrides:
+-  "@textlint/ast-node-types": "workspace:*"
+ # https://pnpm.io/settings#verifydepsbeforerun
+ verifyDepsBeforeRun: "install"

@@ -1,0 +1,22 @@
+diff --git a/platformio/proc.py b/platformio/proc.py
+index 707245a1..cae17a29 100644
+--- a/platformio/proc.py
++++ b/platformio/proc.py
+@@ -165,7 +165,7 @@ def is_container():
+ 
+ 
+ def get_pythonexe_path():
+-    return os.environ.get("PYTHONEXEPATH", os.path.normpath(sys.executable))
++    return "@interpreter@"
+ 
+ 
+ def copy_pythonpath_to_osenv():
+@@ -181,7 +181,7 @@ def copy_pythonpath_to_osenv():
+             )
+         if all(conditions):
+             _PYTHONPATH.append(p)
+-    os.environ["PYTHONPATH"] = os.pathsep.join(_PYTHONPATH)
++    os.environ["PYTHONPATH"] = os.pathsep.join(sys.path)
+ 
+ 
+ def where_is_program(program, envpath=None):

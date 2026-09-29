@@ -1,0 +1,24 @@
+From b0d000d959a27f962f6e4bd55d601d22ff443f94 Mon Sep 17 00:00:00 2001
+From: Tom van Dijk <18gatenmaker6@gmail.com>
+Date: Thu, 23 Oct 2025 15:45:03 +0200
+Subject: [PATCH 2/4] zlib missing include
+
+---
+ src/zlib/gzguts.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/zlib/gzguts.h b/src/zlib/gzguts.h
+index 990a4d2..7c89751 100644
+--- a/src/zlib/gzguts.h
++++ b/src/zlib/gzguts.h
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include "zlib.h"
+ #ifdef STDC
++#  include <unistd.h>
+ #  include <string.h>
+ #  include <stdlib.h>
+ #  include <limits.h>
+-- 
+2.51.2
+
