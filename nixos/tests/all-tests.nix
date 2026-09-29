@@ -1127,6 +1127,7 @@ in
   minidlna = runTest ./minidlna.nix;
   miniflux = runTest ./miniflux.nix;
   minio = runTest ./minio.nix;
+  minuspod = runTest ./minuspod.nix;
   miracle-wm = runTest ./miracle-wm.nix;
   miriway = runTest ./miriway.nix;
   misc = runTest ./misc.nix;
