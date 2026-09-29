@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "syncthing-guiPassword";
-  meta.maintainers = with lib.maintainers; [ nullcube ];
+  meta.maintainers = with lib.maintainers; [
+    nullcube
+    me-and
+  ];
   enableOCR = true;
 
   nodes.machine = { pkgs, ... }: {

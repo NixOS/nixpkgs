@@ -154,7 +154,10 @@ let
 in
 {
   name = "syncthing-folders";
-  meta.maintainers = with lib.maintainers; [ zarelit ];
+  meta.maintainers = with lib.maintainers; [
+    zarelit
+    me-and
+  ];
 
   # Run from the root of the nixpkgs repository with
   #

@@ -134,7 +134,10 @@ let
 in
 {
   name = "syncthing-many-devices";
-  meta.maintainers = with lib.maintainers; [ doronbehar ];
+  meta.maintainers = with lib.maintainers; [
+    doronbehar
+    me-and
+  ];
 
   containers.machine = { lib, pkgs, ... }: {
     environment.systemPackages =

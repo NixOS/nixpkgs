@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "syncthing-relay";
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.me-and ];
 
   containers.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];

@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "syncthing-no-settings";
-  meta.maintainers = with lib.maintainers; [ chkno ];
+  meta.maintainers = with lib.maintainers; [
+    chkno
+    me-and
+  ];
 
   containers = {
     a = {

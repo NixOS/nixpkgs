@@ -6,7 +6,10 @@ let
 in
 {
   name = "syncthing-init";
-  meta.maintainers = with lib.maintainers; [ lassulus ];
+  meta.maintainers = with lib.maintainers; [
+    lassulus
+    me-and
+  ];
 
   containers.machine = {
     services.syncthing = {

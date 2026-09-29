@@ -4,7 +4,10 @@ let
 in
 {
   name = "syncthing-defaults";
-  meta.maintainers = with lib.maintainers; [ seudonym ];
+  meta.maintainers = with lib.maintainers; [
+    seudonym
+    me-and
+  ];
 
   containers.machine =
     { pkgs, ... }:
