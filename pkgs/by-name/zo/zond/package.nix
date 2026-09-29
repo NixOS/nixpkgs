@@ -10,18 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zond";
-  version = "0-unstable-2026-09-11";
+  version = "0.18.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zond-rs";
     repo = "zond";
-    # https://github.com/zond-rs/zond/issues/1
-    rev = "12bcb6181f10f27ba939aa0ebe39d3f05077758b";
-    hash = "sha256-UUby3GNU5ttyJuybw9wVpreQxcfYkOQD22j6kLgJWao=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-onWvfTPc7GBH/mN5HPz5mIAOJFUi2l45Z2dXD0ea1xg=";
   };
 
-  cargoHash = "sha256-MO+bYGHZQi0g4d+Mhz7+tF6ZxYDetL2rTievNeJkvQY=";
+  cargoHash = "sha256-V2+7//z64mKODelryd2SEWJLrQoxPsNOT6vFBV1Yl7c=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI for Zond Engine";
     homepage = "https://github.com/zond-rs/zond";
+    changelog = "https://github.com/zond-rs/zond/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "zond";
