@@ -185,7 +185,8 @@ let
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta;
+    inherit pname;
+    meta = meta // mkCpeParts finalAttrs.version;
     version = "154.0.4258.37";
 
     src = fetchurl {
@@ -295,7 +296,8 @@ let
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta;
+    inherit pname;
+    meta = meta // mkCpeParts finalAttrs.version;
     version = "154.0.4258.37";
     uuid = "f7dec597-801d-4c4b-ae51-c8a53c78925c";
 
@@ -361,6 +363,14 @@ let
     mainProgram = "microsoft-edge-stable";
   };
 
+  mkCpeParts = version: {
+    identifiers.cpeParts = {
+      vendor = "microsoft";
+      product = "edge_chromium";
+      inherit version;
+      update = "*";
+    };
+  };
 in
 if stdenvNoCC.hostPlatform.isDarwin then
   darwin
