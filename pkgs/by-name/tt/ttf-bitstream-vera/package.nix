@@ -16,5 +16,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ installFonts ];
 
-  meta.license = lib.licenses.bitstreamVera;
+  meta = {
+    description = "Typeface superfamily based on Bitstream Prima";
+    downloadPage = "https://download.gnome.org/sources/ttf-bitstream-vera/";
+    license = lib.licenses.bitstreamVera;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
+  };
 })
