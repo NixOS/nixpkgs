@@ -116,7 +116,7 @@
       };
     }
   ];
-  "gnumake-4.4-fix.patch" = [
+  "make-4.4.1.patch" = [
     {
       atLeast = "25";
       path = ./25;
