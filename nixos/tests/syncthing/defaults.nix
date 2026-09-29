@@ -1,10 +1,10 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   expectedPath = "/tmp/syncthing-default";
 in
 {
   name = "syncthing-defaults";
-  meta.maintainers = with pkgs.lib.maintainers; [ seudonym ];
+  meta.maintainers = with lib.maintainers; [ seudonym ];
 
   containers.machine =
     { pkgs, ... }:

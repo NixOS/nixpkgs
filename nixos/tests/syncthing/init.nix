@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
 
   testId = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
@@ -6,7 +6,7 @@ let
 in
 {
   name = "syncthing-init";
-  meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
+  meta.maintainers = with lib.maintainers; [ lassulus ];
 
   containers.machine = {
     services.syncthing = {

@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing-no-settings";
-  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
+  meta.maintainers = with lib.maintainers; [ chkno ];
 
   containers = {
     a = {

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 # This nixosTest is supposed to check the following:
 #

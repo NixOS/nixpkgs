@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing";
-  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
+  meta.maintainers = with lib.maintainers; [ chkno ];
 
   containers = rec {
     a = { pkgs, ... }: {

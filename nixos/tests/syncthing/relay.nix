@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing-relay";
   meta.maintainers = [ ];
