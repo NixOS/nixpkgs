@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslang";
-  version = "16.4.0";
+  version = "16.5.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     tag = finalAttrs.version;
-    hash = "sha256-nPXwBROAj/zYccM5Lydwws13e/nW96gm+f4218sQhE8=";
+    hash = "sha256-usrfmjyJjumM/pjMGa59tHaQ6b2tC5hNSjgSZY3YGkI=";
   };
 
   outputs = [
