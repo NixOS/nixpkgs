@@ -1,0 +1,18 @@
+--- a/install.sh
++++ b/install.sh
+@@ -139,15 +139,6 @@
+   mv -f assets/process-working.svg process-working.svg
+   mv -f assets/no-notifications.svg no-notifications.svg
+ 
+-  mkdir -p                                                                                   "${THEME_DIR}/gtk-2.0"
+-  cp -r "${SRC_DIR}/main/gtk-2.0/gtkrc${color}${theme}"                                      "${THEME_DIR}/gtk-2.0/gtkrc"
+-  cp -r "${SRC_DIR}/main/gtk-2.0/menubar-toolbar${color}.rc"                                 "${THEME_DIR}/gtk-2.0/menubar-toolbar.rc"
+-  cp -r "${SRC_DIR}/main/gtk-2.0/common/"*'.rc'                                              "${THEME_DIR}/gtk-2.0"
+-  cp -r "${SRC_DIR}/assets/gtk-2.0/assets${color}"                                           "${THEME_DIR}/gtk-2.0/assets"
+-
+-  if [[ ${theme} != '-default' ]]; then
+-    cp -r "${SRC_DIR}/assets/gtk-2.0/assets${color}${theme}/"*'.png'                         "${THEME_DIR}/gtk-2.0/assets"
+-  fi
+ 
+   mkdir -p                                                                                   "${THEME_DIR}/gtk-3.0"
+   cp -r "${SRC_DIR}/assets/gtk/common-assets/assets"                                         "${THEME_DIR}/gtk-3.0"
