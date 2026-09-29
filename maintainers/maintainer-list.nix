@@ -18773,6 +18773,13 @@
     github = "mfairley";
     githubId = 4374785;
   };
+  mfocko = {
+    name = "Matej Focko";
+    github = "mfocko";
+    githubId = 8149784;
+    email = "me@mfocko.xyz";
+    matrix = "@mfocko:fedora.im";
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
@@ -26016,6 +26023,12 @@
     github = "sayanarijit";
     githubId = 11632726;
     name = "Arijit Basu";
+  };
+  saylesss88 = {
+    email = "saylesss87@proton.me";
+    github = "saylesss88";
+    githubId = 209646716;
+    name = "T. Sawyer";
   };
   sb0 = {
     email = "sb@m-labs.hk";
