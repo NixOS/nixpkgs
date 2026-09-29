@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sshuttle";
-  version = "1.3.2";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rvhh99DO/4J1p0JZJauOnvQZKtZBvxu+7hNnNgsXn2w=";
+    hash = "sha256-0hrk1te20OcCvAFRkkBPTpv2A5w9EpF5ETIcheofG8o=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     homepage = "https://github.com/sshuttle/sshuttle";
-    changelog = "https://github.com/sshuttle/sshuttle/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    changelog = "https://github.com/sshuttle/sshuttle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       carlosdagos
