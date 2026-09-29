@@ -5,6 +5,7 @@
   blas,
 
   # passthru
+  python3Packages,
   nix-update-script,
 }:
 
@@ -33,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
+    tests = {
+      pythonPackage = python3Packages.plumed;
+    };
+
     updateScript = nix-update-script { };
   };
 
