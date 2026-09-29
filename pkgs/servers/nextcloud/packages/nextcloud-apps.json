@@ -1,5 +1,6 @@
 {
   "app_api" : "agpl3Plus"
+, "assistant": "agpl3Only"
 , "bookmarks": "agpl3Plus"
 , "calendar": "agpl3Plus"
 , "checksum": "agpl3Plus"
