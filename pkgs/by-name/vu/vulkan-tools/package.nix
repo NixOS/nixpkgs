@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.4.357.0";
+  version = "1.4.363.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-kbySCu2c5nh6icnPQV6qplfg1gHFnGPEYOG6G6TG8EU=";
+    hash = "sha256-N0N4ORT1gNe3SWu28498j/UzACBxgkVujTADhegBWIs=";
   };
 
   patches = [ ./wayland-scanner.patch ];
