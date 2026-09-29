@@ -21,10 +21,5 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta.license = {
-    shortName = "bitstream-vera";
-    fullName = "Bitstream Vera Fonts Copyright";
-    free = false; # Cannot be sold by itself
-    redistributable = true;
-  };
+  meta.license = lib.licenses.bitstreamVera;
 }

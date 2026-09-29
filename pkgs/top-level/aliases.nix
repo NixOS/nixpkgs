@@ -856,6 +856,8 @@ mapAliases {
   firefox-devedition-bin = warnAlias "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead." firefox-devedition; # Added 2025-06-06
   firefox-esr-128 = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-140` instead."; # Added 2025-08-21
   firefox-esr-128-unwrapped = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-140-unwrapped` instead."; # Added 2025-08-21
+  firefox-esr-140 = throw "The Firefox 140 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-153` instead."; # Added 2026-09-28
+  firefox-esr-140-unwrapped = throw "The Firefox 140 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-153-unwrapped` instead."; # Added 2026-09-28
   firefox-wayland = throw "'firefox-wayland' has been renamed to/replaced by 'firefox'"; # Converted to throw 2025-10-27
   firmwareLinuxNonfree = throw "'firmwareLinuxNonfree' has been renamed to/replaced by 'linux-firmware'"; # Converted to throw 2025-10-27
   fishfight = throw "'fishfight' has been renamed to/replaced by 'jumpy'"; # Converted to throw 2025-10-27

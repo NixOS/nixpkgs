@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    abseil-cpp
+    (abseil-cpp.override { cxxStandard = "17"; })
     libusb1
     flatbuffers_23_5_26
   ];
