@@ -474,8 +474,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.8";
-    hash = "sha256-qPhKOZGOxkFc52XZtCnTE7qXuBQxacFy5zS5UURk9bI=";
+    version = "3.5.9";
+    hash = "sha256-YD9WAuLu8A13+9Qp003NWCK7MBdXobyc2yTGcPHrhZo=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
