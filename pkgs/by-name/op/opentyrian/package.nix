@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
         gpl2Plus # opentyrian
         unfree # First-party assets we bundle
       ];
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = with lib.maintainers; [
+      iedame
+      keenanweaver
+    ];
   };
 })
