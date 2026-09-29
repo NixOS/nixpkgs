@@ -5334,6 +5334,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  direnv-nvim = buildVimPlugin {
+    pname = "direnv.nvim";
+    version = "0-unstable-2026-06-28";
+    src = fetchFromGitHub {
+      owner = "NotAShelf";
+      repo = "direnv.nvim";
+      rev = "9258f9f10c4c729d8296fce0e3ecb12543daad06";
+      hash = "sha256-b5PpmkYWaDGLNcu+36tRR5ycATHYBjs9WrV8/jfmooQ=";
+    };
+    meta.homepage = "https://github.com/NotAShelf/direnv.nvim/";
+    meta.license = getLicenseFromSpdxId "MPL-2.0";
+    meta.hydraPlatforms = [ ];
+  };
+
   direnv-vim = buildVimPlugin {
     pname = "direnv.vim";
     version = "0-unstable-2023-12-02";
