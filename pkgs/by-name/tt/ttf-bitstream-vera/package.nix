@@ -10,6 +10,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ttf-bitstream-vera";
   version = "1.10";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://gnome/sources/ttf-bitstream-vera/${lib.versions.majorMinor finalAttrs.version}/ttf-bitstream-vera-${finalAttrs.version}.tar.bz2";
     hash = "sha256-21sn33u7MYA269t1rNPpjxvW62YI+3CmfUeM0kPReNw=";
