@@ -1290,8 +1290,8 @@ in
       "sha256-Psjh5lHoMK/89/4VGy4wkLjqmNc8sGkFOwnKTH9MhjY=";
 
   mypy-boto3-ssm =
-    buildMypyBoto3Package "ssm" "1.43.53"
-      "sha256-8govEDWg1YthZHxvXIg+BYFSrNzNipfn0ZFkdtyOfHs=";
+    buildMypyBoto3Package "ssm" "1.43.104"
+      "sha256-Gx4Ydi5rnOr3NegWWm29eJsQ2U9W9wTvAQ0Mi77wWcw=";
 
   mypy-boto3-ssm-contacts =
     buildMypyBoto3Package "ssm-contacts" "1.43.0"
