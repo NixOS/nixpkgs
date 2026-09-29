@@ -23649,6 +23649,11 @@
     githubId = 737477;
     name = "Sibi Prabakaran";
   };
+  psmedianator = {
+    name = "psmedianator";
+    github = "psmedianator";
+    githubId = 292812452;
+  };
   pstn = {
     email = "philipp@xndr.de";
     github = "pstn";
