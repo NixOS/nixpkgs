@@ -6,13 +6,13 @@
 }:
 
 callPackage ./default.nix rec {
-  version = "2.1-20260724";
+  version = "2.1-20260824";
 
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "luajit2";
-    rev = "v${version}";
-    hash = "sha256-cvy9FgHWFuacCFl7/conLwNuMgaol1LnIUiqcnXy9H8=";
+    tag = "v${version}";
+    hash = "sha256-IynlDQOyjCr1C3qibLg3OJ9Qd/Rb5jzjy30ETKdKvFM=";
   };
 
   extraMeta = {
