@@ -45,7 +45,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "capa";
+  pname = "flare-capa";
   version = "9.4.0";
   pyproject = true;
 
