@@ -73,4 +73,27 @@ lib.recurseIntoAttrs {
       ) == [ ];
     # testing is done during evaluation above so this derivation is irrelevant
     vim-full;
+
+  test_vim_plugin_install_phase =
+    let
+      plugin = vimUtils.buildVimPlugin {
+        pname = "vim-plugin-install-phase-test";
+        version = "0";
+        src = pkgs.runCommand "vim-plugin-install-phase-test-src" { } ''
+          mkdir -p $out/plugin $out/extra
+          touch $out/plugin/probe.vim $out/extra/unwanted
+        '';
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r plugin $out/
+          runHook postInstall
+        '';
+      };
+    in
+    pkgs.runCommand "vim-plugin-install-phase-test" { } ''
+      test -f ${plugin}/plugin/probe.vim
+      test ! -e ${plugin}/extra
+      mkdir -p "$out"
+    '';
 }
