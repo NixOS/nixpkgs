@@ -7096,7 +7096,8 @@ with pkgs;
   cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
     # Effective Cassandra 4.0.2 there is full Java 11 support
     #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
-    jre = pkgs.jdk11_headless;
+    # JDK 11 has no riscv64 port.
+    jre = if stdenv.hostPlatform.isRiscV64 then pkgs.jdk17_headless else pkgs.jdk11_headless;
   };
   cassandra = cassandra_4;
 
