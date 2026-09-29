@@ -303,15 +303,6 @@ with pkgs;
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
 
-  updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
-    name = "update-autotools-gnu-config-scripts-hook";
-    substitutions = {
-      gnu_config = gnu-config.override {
-        runtimeShell = if stdenv.buildPlatform == stdenv.hostPlatform then stdenv.shell else runtimeShell;
-      };
-    };
-    meta.license = lib.licenses.mit;
-  } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
