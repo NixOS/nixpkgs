@@ -5,7 +5,6 @@
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
-  scons,
   addDriverRunpath,
   autoPatchelfHook,
   cmake,
@@ -36,9 +35,6 @@ let
     cmakeFeature
     getLib
     ;
-
-  # prevent scons from leaking in the default python version
-  scons' = scons.override { inherit python3Packages; };
 
   python = python3Packages.python.withPackages (
     ps: with ps; [
@@ -83,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf
     pkg-config
     python
-    scons'
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -97,21 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Upstream PR: https://github.com/openvinotoolkit/openvino/pull/38268/changes
     ./gcc-16-fix.patch
   ];
-
-  # Fix arm computelib ar/ranlib toolchain paths for LTO awareness
-  postPatch = ''
-    substituteInPlace src/plugins/intel_cpu/thirdparty/ComputeLibrary/SConstruct \
-      --replace-fail \
-        "env['AR'] = toolchain_prefix + \"ar\"" \
-        "env['AR'] = \"${lib.getExe' stdenv.cc.cc "gcc-ar"}\"" \
-      --replace-fail \
-        "env['RANLIB'] = toolchain_prefix + \"ranlib\"" \
-        "env['RANLIB'] = \"${lib.getExe' stdenv.cc.cc "gcc-ranlib"}\""
-  '';
-
-  dontUseSconsCheck = true;
-  dontUseSconsBuild = true;
-  dontUseSconsInstall = true;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -159,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
+    (cmakeBool "ENABLE_ARM_COMPUTE_CMAKE" true)
   ];
 
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
@@ -192,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
       --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
   '';
+
+  disallowedRequisites = [
+    stdenv.cc.cc
+  ];
 
   meta = {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${finalAttrs.src.tag}";
