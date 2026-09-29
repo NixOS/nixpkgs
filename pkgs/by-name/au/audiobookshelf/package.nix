@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   callPackage,
-  nodejs_22,
+  nodejs_24,
   ffmpeg_8-full,
   nunicode,
   util-linux,
@@ -16,6 +16,7 @@
 
 let
   ffmpeg-full = ffmpeg_8-full;
+  nodejs = nodejs_24;
 
   wrapper = import ./wrapper.nix {
     inherit
@@ -28,18 +29,18 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
-  version = "2.36.1";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HBaTTfZEbhR2n/XafScZB/gX29erTQHZ+IdErwhA11A=";
+    hash = "sha256-zo9xByg1QMdqfy161rnmfJ0Mt5CJvKbZIMijj2kQpQM=";
   };
 
-  npmDepsHash = "sha256-kp0LbSKaHTBppeyfLAFrGYnSWS3V2trO5yaZWoxVPo8=";
+  npmDepsHash = "sha256-S9RGAc5ge+ULtRMbiY1ZOaxY5Ra2ltZdCHcGbkhUxzs=";
 
-  nodejs = nodejs_22;
+  inherit nodejs;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -58,7 +59,7 @@ buildNpmPackage (finalAttrs: {
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
 
