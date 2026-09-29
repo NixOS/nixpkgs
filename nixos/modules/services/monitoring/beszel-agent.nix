@@ -278,7 +278,10 @@ in
         AmbientCapabilities = serviceCapabilities;
         CapabilityBoundingSet = serviceCapabilities;
 
-        DeviceAllow = lib.mkIf (deviceAllowList != [ ]) deviceAllowList;
+        # /dev/zfs MUST be mounted rw, mounting read-only does not work
+        DeviceAllow =
+          (lib.mkIf (deviceAllowList != [ ]) deviceAllowList)
+          ++ lib.optionals config.boot.zfs.enabled [ "/dev/zfs rw" ];
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
