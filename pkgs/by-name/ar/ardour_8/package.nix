@@ -17,7 +17,7 @@
   flac,
   fluidsynth,
   glibc,
-  glibmm,
+  glibmm_2_4,
   graphviz,
   harvid,
   hidapi,
@@ -31,7 +31,7 @@
   libpulseaudio,
   librdf_rasqal,
   libsamplerate,
-  libsigcxx,
+  libsigcxx_2_0,
   libsndfile,
   libusb1,
   libuv,
@@ -129,7 +129,7 @@ stdenv.mkDerivation (
       fftwSinglePrec
       flac
       fluidsynth
-      glibmm
+      glibmm_2_4
       hidapi
       itstool
       kissfft
@@ -141,7 +141,7 @@ stdenv.mkDerivation (
       libpulseaudio
       librdf_rasqal
       libsamplerate
-      libsigcxx
+      libsigcxx_2_0
       libsndfile
       libusb1
       libuv

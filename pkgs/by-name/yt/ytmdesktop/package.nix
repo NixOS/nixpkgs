@@ -9,6 +9,7 @@
   makeWrapper,
   nodejs,
   yarn-berry_4,
+  substitute,
   zip,
 
   electron,
@@ -34,19 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
       cd $out
       git rev-parse HEAD > .COMMIT
       find -name .git -print0 | xargs -0 rm -rf
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
     '';
 
-    hash = "sha256-fT5UdJ9YYK3hXC8GkEeJ/LK1bCyXofcKA0aCJUnjZdk=";
+    hash = "sha256-48PeFM6azfPJBc3c6gNRE6mQnfYWMkMI9WQOcnFQCuA=";
   };
 
   patches = [
     # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
-    ./yarn-4.14-support.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -61,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-G/ASfWCR9euEs76TWV3DUbvwVjpb73gjdPngAiDHL+w=";
+    hash = "sha256-18H8hlhMPwBptTd2oBY2pjLgAnxG9QNzcjmney4EaMc=";
   };
 
   nativeBuildInputs = [

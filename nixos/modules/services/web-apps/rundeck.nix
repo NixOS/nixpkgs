@@ -12,6 +12,13 @@ let
   scheme = if cfg.ssl.enable then "https" else "http";
 
   configFile = settingsFormat.generate "rundeck-config.properties" cfg.settings;
+
+  jaasLoginModuleClass =
+    if lib.versionAtLeast cfg.package.version "6" then
+      "org.rundeck.jaas.PropertyFileLoginModule"
+    else
+      "org.eclipse.jetty.jaas.spi.PropertyFileLoginModule";
+
   frameworkFile = settingsFormat.generate "framework.properties" cfg.frameworkSettings;
 
   realmFile = pkgs.writeText "realm.properties" ''
@@ -133,7 +140,43 @@ in
 
       aclPolicies = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = { };
+        default = {
+          "admin.aclpolicy" = ''
+            description: Admin, all access.
+            context:
+              project: '.*'
+            for:
+              resource:
+                - allow: '*'
+              adhoc:
+                - allow: '*'
+              job:
+                - allow: '*'
+              node:
+                - allow: '*'
+              runner:
+                - allow: '*'
+            by:
+              group: admin
+
+            ---
+
+            description: Admin, all access.
+            context:
+              application: 'rundeck'
+            for:
+              resource:
+                - allow: '*'
+              project:
+                - allow: '*'
+              project_acl:
+                - allow: '*'
+              storage:
+                - allow: '*'
+            by:
+              group: admin
+          '';
+        };
         description = "ACL policies for Rundeck, where the attribute name is the filename and the value is the policy content";
         example = lib.literalExpression ''
           {
@@ -493,9 +536,9 @@ in
       group = cfg.group;
       text = ''
         RDpropertyfilelogin {
-          org.eclipse.jetty.jaas.spi.PropertyFileLoginModule required
+          ${jaasLoginModuleClass} required
           debug="true"
-          file="/etc/rundeck/realm.properties";
+          file="${cfg.configDir}/realm.properties";
         };
       '';
     };
@@ -631,9 +674,7 @@ in
           replaceSecret "@SERVER_UUID@" "${cfg.dataDir}/.uuid" "${cfg.configDir}/framework.properties"
         )}
 
-        if [ -f ${cfg.dataDir}/etc/framework.properties ]; then
-          install -m 0640 ${cfg.configDir}/framework.properties ${cfg.dataDir}/etc/framework.properties
-        fi
+        install -C -m 0640 ${cfg.configDir}/framework.properties ${cfg.dataDir}/etc/framework.properties
 
         ${lib.concatStringsSep "\n" (
           lib.mapAttrsToList (

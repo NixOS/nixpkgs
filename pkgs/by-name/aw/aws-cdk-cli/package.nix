@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     NX_VERBOSE_LOGGING = "true";
     # Needed to properly embed version info
     CODEBUILD_RESOLVED_SOURCE_VERSION = finalAttrs.version;
-    YARN_LOCKFILE_VERSION_OVERRIDE = "8";
   };
 
   # Regular "build" is very heavy and does things we don't need.
@@ -64,13 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       echo '${cliVersionJson}' > packages/@aws-cdk/cloud-assembly-schema/cli-version.json
-      cat >> .yarnrc.yml <<'EOF'
-      approvedGitRepositories:
-        - "**"
-      enableScripts: true
-      enableNetwork: false
-      enableHardenedMode: false
-      EOF
     '';
 
   preBuild = ''

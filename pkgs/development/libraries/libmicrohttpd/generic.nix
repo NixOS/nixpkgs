@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  libgcrypt,
   curl,
   gnutls,
   pkg-config,
@@ -24,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libgcrypt
     curl
     gnutls
     libiconv

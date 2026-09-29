@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  glibmm,
+  glibmm_2_4,
   gtk4-layer-shell,
   gtkmm4,
   libevdev,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     gtk4-layer-shell
     gtkmm4
     libevdev

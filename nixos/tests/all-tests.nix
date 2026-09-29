@@ -402,22 +402,10 @@ in
   ceph-multi-node-bluestore-cephfs = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
     import ./ceph-multi-node-bluestore.nix { withCephfs = true; }
   );
-  ceph-multi-node-deprecated-filestore = runTestOn [
-    "aarch64-linux"
-    "x86_64-linux"
-  ] ./ceph-multi-node-deprecated-filestore.nix;
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore.nix;
-  ceph-single-node-bluestore-dmcrypt = runTestOn [
-    "aarch64-linux"
-    "x86_64-linux"
-  ] ./ceph-single-node-bluestore-dmcrypt.nix;
-  ceph-single-node-deprecated-filestore = runTestOn [
-    "aarch64-linux"
-    "x86_64-linux"
-  ] ./ceph-single-node-deprecated-filestore.nix;
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
@@ -659,10 +647,6 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox;
   };
-  firefox-beta = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.firefox-beta;
-  };
   firefox-devedition = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-devedition;
@@ -671,10 +655,6 @@ in
     # used in `tested` job
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr;
-  };
-  firefox-esr-140 = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
   firefox-esr-153 = runTest {
     imports = [ ./firefox.nix ];
@@ -1282,6 +1262,7 @@ in
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
   nginx-njs = runTest ./nginx-njs.nix;
+  nginx-otel = runTest ./nginx-otel.nix;
   nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = runTest ./nginx-pubhtml.nix;
   nginx-redirectcode = runTest ./nginx-redirectcode.nix;
@@ -1321,6 +1302,9 @@ in
   };
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
+  };
+  nixos-rebuild-target-host-interrupted = runTest {
+    imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =

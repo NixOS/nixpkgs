@@ -15,7 +15,7 @@
   pkg-config,
   pango,
   giflib,
-  firefox-esr-140-unwrapped,
+  firefox-esr-153-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
   libGL,
@@ -253,10 +253,10 @@ buildNpmPackage (finalAttrs: {
       mkdir -p app/xulrunner/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+      cp -r "${firefox-esr-153-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
+      cp -r "${firefox-esr-153-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
         lib.replaceString "aarch64" "arm64" stdenv.hostPlatform.parsed.cpu.name
       }"
     ''

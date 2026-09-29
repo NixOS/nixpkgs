@@ -144,5 +144,6 @@ symlinkJoin {
       mainProgram
       platforms
       ;
+    identifiers = { inherit (prismlauncher'.meta.identifiers) cpeParts; };
   };
 }

@@ -24,6 +24,7 @@ from .models import (
     GenerationJson,
     ImageVariants,
     NixOSRebuildError,
+    NixOSVersionJson,
     Profile,
     Remote,
 )
@@ -46,7 +47,9 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
-    "--pipe",
+    "--wait",
+    "--verbose",
+    "--output=cat",
     "--quiet",
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
@@ -509,37 +512,25 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         generation_path = (
             profile.path.parent / f"{profile.path.name}-{generation.id}-link"
         )
+
+        j: NixOSVersionJson
         try:
-            nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except OSError as ex:
-            logger.debug("could not get nixos-version: %s", ex)
-            nixos_version = "Unknown"
-        try:
-            kernel_version = next(
-                (generation_path / "kernel-modules/lib/modules").iterdir()
-            ).name
-        except OSError as ex:
-            logger.debug("could not get kernel version: %s", ex)
-            kernel_version = "Unknown"
-        specialisations = [
-            s.name for s in (generation_path / "specialisation").glob("*") if s.is_dir()
-        ]
-        try:
-            configuration_revision = run_wrapper(
-                [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
+            result = run_wrapper(
+                [generation_path / "sw/bin/nixos-version", "--json"],
                 capture_output=True,
-            ).stdout.strip()
-        except (OSError, CalledProcessError) as ex:
+            ).stdout
+            j = json.loads(result)
+        except (OSError, CalledProcessError, json.JSONDecodeError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
-            configuration_revision = "Unknown"
+            j = {}
 
         return GenerationJson(
             generation=generation.id,
             date=generation.timestamp,
-            nixosVersion=nixos_version,
-            kernelVersion=kernel_version,
-            configurationRevision=configuration_revision,
-            specialisations=specialisations,
+            nixosVersion=j.get("nixosVersion", "Unknown"),
+            kernelVersion=j.get("kernelVersion", "Unknown"),
+            configurationRevision=j.get("configurationRevision", "Unknown"),
+            specialisations=j.get("specialisations", []),
             current=generation.current,
         )
 

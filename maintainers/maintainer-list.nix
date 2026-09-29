@@ -251,7 +251,7 @@
   };
   _365tuwe = {
     name = "Uwe Schlifkowitz";
-    email = "supertuwe@gmail.com";
+    email = "uwe.schlifkowitz@secunet.com";
     github = "365tuwe";
     githubId = 10263091;
   };
@@ -10812,6 +10812,12 @@
     githubId = 273582;
     name = "greg";
   };
+  gregl83 = {
+    email = "general+nixpkgs@gregorylanglais.com";
+    github = "gregl83";
+    githubId = 1258023;
+    name = "gregory langlais";
+  };
   gregshuflin = {
     email = "greg@everdayimshuflin.com";
     github = "neunenak";
@@ -12657,6 +12663,12 @@
     github = "j0hax";
     githubId = 3802620;
   };
+  j0schu = {
+    name = "Jonas";
+    email = "Joschu2015@t-online.de";
+    github = "J0schu";
+    githubId = 56407950;
+  };
   j0xaf = {
     email = "j0xaf@j0xaf.de";
     name = "Jörn Gersdorf";
@@ -14106,6 +14118,12 @@
     email = "j.loos@posteo.net";
     github = "jooooscha";
     githubId = 57965027;
+  };
+  joseg313 = {
+    name = "Jose Garcia";
+    email = "501jag3@gmail.com";
+    github = "joseg313";
+    githubId = 215610619;
   };
   josephschmitt = {
     name = "Joseph Schmitt";
@@ -31604,10 +31622,10 @@
     ];
   };
   wrench-exile-legacy = {
-    email = "user@wrench-exile-legacy.site";
+    email = "hello@wrenchd.dev";
     github = "wrench-exile-legacy";
     githubId = 280737824;
-    name = "wrench";
+    name = "wrenchd";
   };
   wrmilling = {
     name = "Winston R. Milling";

@@ -32,7 +32,6 @@
     description = "Web browser built from Firefox Developer Edition source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [
-      jopejoe1
       rhendric
     ];
     platforms = lib.platforms.unix;

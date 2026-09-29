@@ -4807,6 +4807,8 @@ self: super: with self; {
 
   django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
 
+  django-pgware = callPackage ../development/python-modules/django-pgware { };
+
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
@@ -16518,6 +16520,8 @@ self: super: with self; {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-django_4_12 = callPackage ../development/python-modules/pytest-django_4_12 { };
+
   pytest-docker = callPackage ../development/python-modules/pytest-docker { };
 
   pytest-docker-tools = callPackage ../development/python-modules/pytest-docker-tools { };
@@ -17893,6 +17897,8 @@ self: super: with self; {
   real-ladybug = callPackage ../development/python-modules/real-ladybug { };
 
   realtime = callPackage ../development/python-modules/realtime { };
+
+  rebiber = callPackage ../development/python-modules/rebiber { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
@@ -21275,6 +21281,8 @@ self: super: with self; {
 
   tstr = callPackage ../development/python-modules/tstr { };
 
+  tsv = callPackage ../development/python-modules/tsv { };
+
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
   tt-perf-report = callPackage ../development/python-modules/tt-perf-report { };
@@ -22674,6 +22682,8 @@ self: super: with self; {
   whool = callPackage ../development/python-modules/whool { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
+
+  whoosh-compat = callPackage ../development/python-modules/whoosh-compat { };
 
   whoosh-reloaded = callPackage ../development/python-modules/whoosh-reloaded { };
 

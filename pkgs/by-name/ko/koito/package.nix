@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  substitute,
+  yarn-berry_4,
   callPackage,
   pkg-config,
   vips,
@@ -15,7 +17,23 @@ buildGoModule (finalAttrs: {
     owner = "gabehf";
     repo = "koito";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-68+Z4Alzu+4v/PxU1IOboqZkF1pO+y6gswuO+HPS7dk=";
+    hash = "sha256-z0HeuPYQwkyKkt8K7PKUYseECz2p1C/6UO5sUSxopBQ=";
+
+    # Remove when upstream updates to Yarn 4.15
+    # https://github.com/gabehf/Koito/blob/main/client/package.json#L44
+    postFetch = ''
+      cd $out/client
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
   __structuredAttrs = true;
 
@@ -47,6 +65,7 @@ buildGoModule (finalAttrs: {
   passthru = {
     client = callPackage ./client.nix {
       inherit (finalAttrs) src version;
+      inherit yarn-berry_4;
     };
 
     tests = {

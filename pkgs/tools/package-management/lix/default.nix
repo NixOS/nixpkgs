@@ -28,6 +28,7 @@
   nixos-rebuild-ng,
   colmena,
   nix-update,
+  nix-update-script,
   nix-init,
   nurl,
 
@@ -48,6 +49,13 @@ let
     url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
     hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
   };
+
+  lixSyscallhPatch = fetchpatch {
+    name = "lix-libutil-always-include-sys-syscallh.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/570f5b8d1f7ad4e3146dd307a223e8a6993ddcc5.patch";
+    hash = "sha256-7fs1D50XhUIQj09VNPsWRLobSwWpr3s7u4qexQFK1lw=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -189,25 +197,10 @@ lib.makeExtensible (
     lix_2_94 = self.makeLixScope {
       attrName = "lix_2_94";
 
-      lix-args = rec {
-        version = "2.94.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-Nmqsl/YCnBW5U3TUfFWHGVUbyS2/Ll655BAE3qZilC4=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
-        };
-
+      lix-args = (import ./2.94.nix { inherit fetchFromGitea rustPlatform; }) // {
         patches = [
           lixMdbookPatch
+          lixSyscallhPatch
         ];
       };
     };
@@ -215,23 +208,7 @@ lib.makeExtensible (
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
-      lix-args = rec {
-        version = "2.95.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-nFxJMIdcGTI9NiHAa5HZ2BmcGFLwC2pTq+V4Gjc499I=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
         ];
@@ -241,23 +218,7 @@ lib.makeExtensible (
     git = self.makeLixScope {
       attrName = "git";
 
-      lix-args = rec {
-        version = "2.96.0-pre-20260408_${builtins.substring 0 12 src.rev}";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = "bc9fb560ac2d36cd317a856ee96785ea2055fbff";
-          hash = "sha256-bONRPjhk5OZdnkQZexZNJzlvwIPg31Gy7fNiwGoX3BQ=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-      };
+      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
     };
 
     latest = self.lix_2_95;

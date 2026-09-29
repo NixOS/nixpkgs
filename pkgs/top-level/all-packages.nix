@@ -2495,7 +2495,7 @@ with pkgs;
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
-  netbox_4_6 = netbox;
+  netbox_4_7 = netbox;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
@@ -3188,7 +3188,7 @@ with pkgs;
   gerbilPackages-unstable = pkgs.gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
   glow-lang = pkgs.gerbilPackages-unstable.glow-lang;
 
-  default-gcc-version = 15;
+  default-gcc-version = 16;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -4075,12 +4075,14 @@ with pkgs;
     ];
   };
 
-  swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
+  swiftPackages = recurseIntoAttrs (callPackage ./swift-packages.nix { });
   inherit (swiftPackages)
-    swift
-    swiftpm
+    fetchSwiftPMDeps
     sourcekit-lsp
+    swift
+    swift-corelibs-libdispatch
     swift-format
+    swiftpm
     swiftpm2nix
     ;
 
@@ -4888,7 +4890,6 @@ with pkgs;
       };
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
-  libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
 
   bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
@@ -6015,9 +6016,7 @@ with pkgs;
     libprom
     ;
 
-  libsigcxx = callPackage ../development/libraries/libsigcxx { };
-
-  libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
+  libsigcxx_2_0 = callPackage ../by-name/li/libsigcxx_3_0/2.0.nix { };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
@@ -6300,7 +6299,7 @@ with pkgs;
     libressl_4_3
     ;
 
-  openssl = openssl_3_6;
+  openssl = openssl_3_5;
 
   openssl_oqs = openssl.override {
     providers = [
@@ -6319,11 +6318,10 @@ with pkgs;
   };
 
   openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+    conf = ../development/libraries/openssl/openssl_legacy.cnf;
   };
 
   inherit (callPackages ../development/libraries/openssl { })
-    openssl_3
     openssl_3_5
     openssl_3_6
     openssl_4_0
@@ -6744,9 +6742,10 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
 
-  apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
-  apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
-  apple-sdk_26 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "26"; };
+  apple-sdk_14 = apple-sdk.override { darwinSdkMajorVersion = "14"; };
+  apple-sdk_15 = apple-sdk.override { darwinSdkMajorVersion = "15"; };
+  apple-sdk_26 = apple-sdk.override { darwinSdkMajorVersion = "26"; };
+  apple-sdk_27 = apple-sdk.override { darwinSdkMajorVersion = "27"; };
 
   darwinMinVersionHook =
     deploymentTarget:
@@ -8471,18 +8470,6 @@ with pkgs;
       buildMozillaMach
       ;
   };
-  firefox-beta-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-beta.nix
-      {
-        inherit
-          stdenv
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-devedition-unwrapped =
     import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix
       {
@@ -8506,31 +8493,14 @@ with pkgs;
           buildMozillaMach
           ;
       };
-  firefox-esr-140-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
-      {
-        inherit
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-153 = wrapFirefox firefox-esr-153-unwrapped {
-    nameSuffix = "-esr";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
@@ -10764,8 +10734,6 @@ with pkgs;
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
-  swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 

@@ -3,6 +3,7 @@
   stdenv,
   nodejs,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   python3,
   pkg-config,
@@ -24,15 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
     '';
-    hash = "sha256-4o8mao7wAqDzwQgJ4QY+DPs9rtsnga6LLnq744l7HVM=";
+    hash = "sha256-g5b1DwSG0JgzGeL17q50CaTU0mG6u/v5IUwoVBcoMsM=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
@@ -40,10 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs)
       src
       missingHashes
-      patches
       postPatch
       ;
-    hash = "sha256-CHjvFu6r5zak19dqtRkcGkPhPoKgt1nkBVa71ZcvdgE=";
+    hash = "sha256-IyOnSB21bOYiPnYUorne8/11zxUItIqMtT88ExCoEmU=";
   };
 
   nativeBuildInputs = [
