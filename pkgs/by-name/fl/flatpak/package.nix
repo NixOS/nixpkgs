@@ -288,7 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
 
   meta = {
