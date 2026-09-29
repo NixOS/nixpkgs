@@ -4,13 +4,14 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
   nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
+
 buildGoModule (finalAttrs: {
   pname = "turso-cli";
-  version = "1.0.31";
+  version = "1.0.32";
 
   __structuredAttrs = true;
 
@@ -18,16 +19,16 @@ buildGoModule (finalAttrs: {
     owner = "tursodatabase";
     repo = "turso-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B1sm1RBJneSoNYUrXTXMzB7n+UAmn6RlFtV1BZpOdZM=";
+    hash = "sha256-hRmDoyj6rdqB+P0nAS+Xxg/6gUjxJm3qetiSGn+Nuaw=";
   };
 
-  vendorHash = "sha256-4OIJVL3N2mWOw7ZDP4xFCxa9zmUTPCA8N79TVoi1lys=";
+  vendorHash = "sha256-wutbVEWWoTdgwtG6IXgCYEGn/rdmaPbLGcFeCTS2VNE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
-    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
+    "-X=github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -40,13 +41,15 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI for Turso";
-    homepage = "https://turso.tech";
+    homepage = "https://github.com/tursodatabase/turso-cli";
+    changelog = "https://github.com/tursodatabase/turso-cli/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "turso";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

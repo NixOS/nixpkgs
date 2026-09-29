@@ -23,6 +23,10 @@ buildNpmPackage rec {
     hash = "sha256-Vl6VPcwDrYAC4HWeY+6eWPl/2+Mw6fkScS5fsrLlWxw=";
   };
 
+  # Prevent unrs-resolver's postinstall script from running,
+  # which tries to download binaries on exotic platforms and fails
+  npmRebuildFlags = [ "--ignore-scripts" ];
+
   buildPhase = ''
     runHook preBuild
     npm run build

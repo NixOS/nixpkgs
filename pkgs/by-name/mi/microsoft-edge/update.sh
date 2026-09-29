@@ -215,10 +215,11 @@ update_msedgedriver() {
     # msedgedriver/package.nix
     declare -A hashes=(
         [mac64_m1]=""
+        [mac64]=""
         [linux64]=""
     )
 
-    for driver_arch in mac64_m1 linux64; do
+    for driver_arch in mac64_m1 mac64 linux64; do
         url="https://msedgedriver.microsoft.com/${version}/edgedriver_${driver_arch}.zip"
 
         new_hash="$(
@@ -238,7 +239,7 @@ update_msedgedriver() {
         "/pname = \"msedgedriver\";/,/^  meta = {/s/version = \".*\"/version = \"$version\"/" \
         "$DRIVER_NIX"
 
-    for driver_arch in mac64_m1 linux64; do
+    for driver_arch in mac64_m1 mac64 linux64; do
         sed -i \
             "/pname = \"msedgedriver\";/,/^  meta = {/s|${driver_arch} = \".*\"|${driver_arch} = \"${hashes[$driver_arch]}\"|" \
             "$DRIVER_NIX"
