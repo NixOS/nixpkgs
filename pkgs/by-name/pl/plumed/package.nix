@@ -3,6 +3,9 @@
   lib,
   fetchFromGitHub,
   blas,
+
+  # passthru
+  nix-update-script,
 }:
 
 assert !blas.isILP64;
@@ -10,6 +13,9 @@ assert !blas.isILP64;
 stdenv.mkDerivation (finalAttrs: {
   pname = "plumed";
   version = "2.10.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "plumed";
@@ -26,10 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Molecular metadynamics library";
     homepage = "https://github.com/plumed/plumed2";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.sheepforce ];
+    mainProgram = "plumed";
   };
 })
