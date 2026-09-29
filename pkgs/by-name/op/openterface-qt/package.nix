@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "openterface-qt";
-  version = "0.5.30";
+  version = "0.5.31";
 
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
     tag = "${finalAttrs.version}";
-    hash = "sha256-7ZgdAEQXy9QS7hRzrHOQEuimllRQ4w+u1/3DWXB3jUc=";
+    hash = "sha256-K8MHBKtjVV+Mi6L2emG958T3bWDW28ba1Lx5kQOT8I8=";
   };
 
   nativeBuildInputs = [
