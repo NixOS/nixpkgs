@@ -29,6 +29,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "ACP-compatible coding agent powered by the Claude Agent SDK";
     homepage = "https://github.com/agentclientprotocol/claude-agent-acp";
+    changelog = "https://github.com/agentclientprotocol/claude-agent-acp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       amadejkastelic
