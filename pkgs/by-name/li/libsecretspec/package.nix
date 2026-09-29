@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsecretspec";
-  version = "0.21.0";
+  version = "0.21.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "secretspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-12jIhLZhtyQwkt2vKHqjGOuKSwwevcxzp8Ii02RTMLY=";
+    hash = "sha256-8OC1WS8VWTSwUJlT/qWx9CCPmO90G2OWJxEKZGUgXqM=";
   };
 
-  cargoHash = "sha256-yqBAhnHBwKbSyH8sEDo6y0xGUdKJgHd3Gsr1sTS/bRc=";
+  cargoHash = "sha256-48k3UKeT8qjRRLrf5yqmxULIynD6FgXiW063VEoTqmU=";
 
   nativeBuildInputs = [ cargo-c ];
 
