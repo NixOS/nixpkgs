@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   installFonts,
+  gnome,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,6 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ installFonts ];
+
+  passthru.updateScript = gnome.updateScript {
+    packageName = "ttf-bitstream-vera";
+  };
 
   meta = {
     description = "Typeface superfamily based on Bitstream Prima";
