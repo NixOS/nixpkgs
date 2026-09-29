@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "ov";
-  version = "0.54.0";
+  version = "0.55.0";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ buildGoModule (finalAttrs: {
     owner = "noborus";
     repo = "ov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cIjtu4T9It+u/ZVC+XoUacvnYw51QSnbTNge1QaHr0s=";
+    hash = "sha256-zYxgXVUHLBY1VBh1JNyeIhkU444UFak77+rEZ1TTSGI=";
   };
 
-  vendorHash = "sha256-eQh/S2isNvT9l+A4uK+/APcw+krsFL54OD5E6yEduxU=";
+  vendorHash = "sha256-KFx2ZCh0DT5a5cp/CG3dnPwTLQgl5we43usyVdf/ihU=";
 
   ldflags = [
     "-s"
