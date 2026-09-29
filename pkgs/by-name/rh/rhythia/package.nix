@@ -62,7 +62,7 @@ buildDotnetModule (finalAttrs: {
   pname = "rhythia";
   # version = "0.1.2";
   # indev branch
-  version = "0-unstable-2026-09-27";
+  version = "0-unstable-2026-09-29";
 
   # src = fetchFromGitHub {
   #   owner = "Rhythia";
@@ -76,8 +76,8 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Rhythia";
     repo = "Client";
-    rev = "b32f5bdaeca8d92f6a4bc388d1479c63f4259e73";
-    hash = "sha256-h49VIIIsro8mJO4QJk2MOA8Lrh5Nj7rUgOLghXfD0so=";
+    rev = "62a79cf2bd4f77e607552d74c81c99ca9bef6ec5";
+    hash = "sha256-hqtFVnBzYzqSOfkDGqyvqFXVN5Y5Gqttfy201apTJm4=";
     fetchLFS = true;
   };
 
