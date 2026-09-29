@@ -8496,17 +8496,6 @@ with pkgs;
           buildMozillaMach
           ;
       };
-  firefox-esr-140-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
-      {
-        inherit
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -8515,11 +8504,6 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-153 = wrapFirefox firefox-esr-153-unwrapped {
-    nameSuffix = "-esr";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
     icon = "firefox-esr";

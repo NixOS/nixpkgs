@@ -547,8 +547,8 @@ let
         mktplcRef = {
           name = "vscode-bazel";
           publisher = "bazelbuild";
-          version = "0.14.0";
-          sha256 = "sha256-JrXx/ICXQPlAKh7m6+eWWQ2bP1Nfls4PbW426PNJVBc=";
+          version = "0.15.0";
+          sha256 = "sha256-A4d62d5g0IDsMPeIDZA4e7LibIin0ZQ3QXPRX0mndB0=";
         };
         meta = {
           description = "Bazel support for Visual Studio Code";
@@ -1023,8 +1023,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.16.3";
-          hash = "sha256-8wPhSUBez7NEaUUr9osnS4gIbkpOj0gRjA1j7l558aM=";
+          version = "1.16.4";
+          hash = "sha256-uQrtTY+iKljPuRhH5Jg4Aro3pZKm3z4xtcWNTclyn/w=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1391,8 +1391,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.9.1789051951";
-          hash = "sha256-Et8v+Yl51tKTGoKx8rOMW3VscFkfIKwwqcLyw9fmI90=";
+          version = "2026.9.1789578855";
+          hash = "sha256-9WQ+FvOTMB/jiPbmp9qE2i7yubRS4czskJJIvKvtEyM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -1427,8 +1427,8 @@ let
         mktplcRef = {
           name = "dotenv-vscode";
           publisher = "dotenv";
-          version = "0.28.1";
-          hash = "sha256-Ye3T/u/2mmezAi1ErtJBX7M/3rAb7Mc3wvMGJaX3r5s=";
+          version = "1.5.7";
+          hash = "sha256-urwvY5sa15HwIE0hhcogSq+G2yhc8TeB6vheNjgxw6I=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dotenv.dotenv-vscode/changelog";
@@ -4193,8 +4193,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.20.0";
-          hash = "sha256-s2CAzAXMXdmCyOoMmyHjz5GRPHi5riDf/Og3SVrW7QI=";
+          version = "1.21.0";
+          hash = "sha256-bQQ+bRMsm1F8kiNqudWOp8Tmtmp6aMBtznaPOfCjV6g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";

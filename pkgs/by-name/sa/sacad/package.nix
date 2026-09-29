@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sacad";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "sacad";
     tag = finalAttrs.version;
-    hash = "sha256-dzVppb6Lg/yjLrPAwII/GMy+56jzaWn0WS7vRZOXkgU=";
+    hash = "sha256-ViiIDkew1C2leADGbGldtKfAenafABP2UUlMzaj4ixA=";
   };
 
-  cargoHash = "sha256-tySgM7j26vztPOGkIq1kQeZn6YwDbk9mt3SEg94SW2o=";
+  cargoHash = "sha256-39xtrZbTZPsNQ7rvgftaH6kSPF/qjQMzwuAmbj47j08=";
 
   # Tests require internet connection.
   doCheck = false;
