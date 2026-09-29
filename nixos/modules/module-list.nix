@@ -1869,6 +1869,7 @@
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/tuliprox.nix
   ./services/web-apps/umami.nix
+  ./services/web-apps/vernissage.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
   ./services/web-apps/wealthfolio.nix
