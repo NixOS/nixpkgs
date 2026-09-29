@@ -3,7 +3,7 @@
   name = "syncthing-no-settings";
   meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
-  nodes = {
+  containers = {
     a = {
       environment.systemPackages = with pkgs; [
         curl

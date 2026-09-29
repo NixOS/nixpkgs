@@ -8,7 +8,7 @@ in
   name = "syncthing-init";
   meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
 
-  nodes.machine = {
+  containers.machine = {
     services.syncthing = {
       enable = true;
       settings.devices.testDevice = {

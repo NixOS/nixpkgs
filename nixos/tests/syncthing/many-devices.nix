@@ -178,7 +178,7 @@ in
   name = "syncthing-many-devices";
   meta.maintainers = with lib.maintainers; [ doronbehar ];
 
-  nodes.machine = {
+  containers.machine = {
     services.syncthing = {
       enable = true;
       overrideDevices = true;

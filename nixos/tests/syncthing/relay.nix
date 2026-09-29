@@ -3,7 +3,7 @@
   name = "syncthing-relay";
   meta.maintainers = [ ];
 
-  nodes.machine = {
+  containers.machine = {
     environment.systemPackages = [ pkgs.jq ];
     services.syncthing.relay = {
       enable = true;

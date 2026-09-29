@@ -184,7 +184,7 @@ in
     '';
   };
 
-  nodes = lib.genAttrs nodeNames (n: {
+  containers = lib.genAttrs nodeNames (n: {
     imports = [
       commonNodeConfigModule
       nodeConfigModules."${n}"

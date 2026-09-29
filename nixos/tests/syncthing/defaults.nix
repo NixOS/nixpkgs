@@ -6,7 +6,7 @@ in
   name = "syncthing-defaults";
   meta.maintainers = with pkgs.lib.maintainers; [ seudonym ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       environment.systemPackages = [
