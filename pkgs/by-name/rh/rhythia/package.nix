@@ -187,7 +187,10 @@ buildDotnetModule (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ poz ];
+    maintainers = with lib.maintainers; [
+      karol-broda
+      poz
+    ];
     mainProgram = "Rhythia";
   };
 })
