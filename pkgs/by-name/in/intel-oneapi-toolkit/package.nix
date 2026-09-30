@@ -50,7 +50,9 @@
   libuuid,
   sqlite,
   libffi,
+  openssl,
   bash,
+  ocl-icd,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
@@ -243,6 +245,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     # Required for patchShebangs to discover the correct interpreter
     bash
+    # libstdc++/libgcc_s for non-vtune components (vtune uses its bundled copies)
+    (lib.getLib stdenv.cc.cc)
+    # libcrypto.so.3 for ippcp's crypto_mb
+    openssl
   ]
   ++ lib.concatMap (
     comp:
@@ -288,9 +294,31 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf "$out"/logs
     rm -rf "$out"/.toolkit_linking_tool
 
+    # The bundled OpenCL loader reads /etc/OpenCL/vendors; point it to ocl-icd,
+    # which reads /run/opengl-driver/etc/OpenCL/vendors where NixOS puts the
+    # drivers. Keep the file names: libomptarget dlopens libOpenCL.so.
+    for f in "$out"/compiler/*/lib/libOpenCL.so*; do
+      [[ ! -e $f ]] || ln -sf "${lib.getLib ocl-icd}/lib/''${f##*/}" "$f"
+    done
+
     ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt,include} "$out"
 
     runHook postInstall
+  '';
+
+  # Patch vtune separately: autoPatchelf prefers libraries in the patched paths,
+  # so other components would pick up vtune's old bundled libstdc++.
+  dontAutoPatchelf = true;
+  postFixup = ''
+    others=()
+    for dir in "$out"/*; do
+      [[ -L $dir || $dir == "$out/vtune" ]] || others+=("$dir")
+    done
+    autoPatchelf -- "''${others[@]}"
+    if [[ -d $out/vtune ]]; then
+      addAutoPatchelfSearchPath "''${others[@]}"
+      autoPatchelf -- "$out/vtune"
+    fi
   '';
 
   autoPatchelfIgnoreMissingDeps = [

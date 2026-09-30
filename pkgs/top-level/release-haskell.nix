@@ -185,17 +185,6 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate { };
 
-  # Remove multiple elements from a list at once.
-  #
-  # removeMany
-  #   :: [a]  -- list of elements to remove
-  #   -> [a]  -- list of elements from which to remove
-  #   -> [a]
-  #
-  # > removeMany ["aarch64-linux" "aarch64-darwin"] ["aarch64-linux" "aarch64-darwin" "x86_64-linux"]
-  # ["x86_64-linux"]
-  removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
-
   # Recursively remove platforms from the values in an attribute set.
   #
   # removePlatforms
@@ -219,7 +208,7 @@ let
   removePlatforms =
     platformsToRemove: packageSet:
     lib.mapAttrsRecursive (
-      _: val: if lib.isList val then removeMany platformsToRemove val else val
+      _: val: if lib.isList val then lib.subtractLists platformsToRemove val else val
     ) packageSet;
 
   jobs = recursiveUpdateMany [
