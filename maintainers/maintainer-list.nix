@@ -16412,6 +16412,12 @@
     githubId = 480920;
     name = "Luca Bruno";
   };
+  lethargii = {
+    email = "l.sevault@proton.me";
+    github = "lethargii";
+    githubId = 127450613;
+    name = "Lucien Sevault Wolber";
+  };
   leungbk = {
     email = "leungbk@mailfence.com";
     github = "leungbk";
