@@ -89,6 +89,10 @@ let
           for f in scripts/Makefile.lib dts/upstream/Makefile; do
             substituteInPlace "$f" --replace-fail -Wno-graph_child_address ""
           done
+          # Binman uses @-prefixed template nodes, rejected by dtc 1.8.
+          substituteInPlace scripts/Makefile.lib \
+            --replace-fail 'DTC_FLAGS += -Wno-interrupt_provider' \
+              'DTC_FLAGS += -Wno-interrupt_provider -Eno-node_name_not_empty'
         '';
 
         nativeBuildInputs = [
