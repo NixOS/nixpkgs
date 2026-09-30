@@ -1117,6 +1117,7 @@ in
   };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
+  memgraph = runTest ./memgraph.nix;
   merecat = runTest ./merecat.nix;
   meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
