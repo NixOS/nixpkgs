@@ -81,6 +81,13 @@ buildPythonPackage (finalAttrs: {
     "enable_socket"
   ];
 
+  disabledTests = [
+    # timing sensitive, these allocate hundreds of megabytes and assert on a
+    # five second pytest-timeout, which slower builders cannot meet
+    "test_dictionary_object__read_from_stream__missing_length__limit"
+    "test_flatedecode__decode_png_prediction__speed"
+  ];
+
   meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
