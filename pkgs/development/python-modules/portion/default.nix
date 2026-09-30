@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "portion";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "AlexandreDecan";
     repo = "portion";
     tag = finalAttrs.version;
-    hash = "sha256-ns9kUoSufegx0I3ag/KVl68ZviEIRx+zPA+BSWq3k80=";
+    hash = "sha256-2v93zKB9oowjklxRTkZtb1yk7XpOA0tEe6f6rQqPerY=";
   };
 
   build-system = [ hatchling ];
