@@ -49,8 +49,8 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # Rebuild only node-pty (native addon for terminal emulation)
-    npm rebuild node-pty
+    npm_config_build_from_source=true npm_config_nodedir=${finalAttrs.nodejs} \
+      npm rebuild node-pty --workspace @getpaseo/server
 
     npm run build:server
     npm run build:daemon-web-ui
@@ -70,6 +70,9 @@ buildNpmPackage (finalAttrs: {
       mkdir -p "$out/lib/paseo/$(dirname "$path")"
       cp -a "$path" "$out/lib/paseo/$path"
     done < daemon-files.txt
+
+    nodePty=packages/server/node_modules/node-pty
+    cp -a "$nodePty/build" "$out/lib/paseo/$nodePty/"
 
     # Root package.json lets node resolve the workspace layout when the
     # CLI/server bin starts from $out.
