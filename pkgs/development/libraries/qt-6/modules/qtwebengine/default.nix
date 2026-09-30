@@ -1,5 +1,6 @@
 {
   qtModule,
+  fetchzip,
   qtdeclarative,
   qtwebchannel,
   qtpositioning,
@@ -7,7 +8,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -75,6 +75,13 @@
 
 qtModule {
   pname = "qtwebengine";
+
+  version = "6.140.0-rc";
+  src = fetchzip {
+    url = "https://download.qt.io/development_releases/qtwebengine/6.140.0-rc/qtwebengine-everywhere-src-6.140.0-rc.tar.xz";
+    hash = "sha256-ij7oWNkbzf98FwKjhub3lyvDb32G4qFtUiYJvdlw01Y=";
+  };
+
   nativeBuildInputs = [
     bison
     coreutils
@@ -189,7 +196,6 @@ qtModule {
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
-    "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
