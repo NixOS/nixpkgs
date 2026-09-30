@@ -160,7 +160,6 @@ in
             Type = "simple";
             PIDFile = "/run/nfqws.pid";
             Restart = "always";
-            RuntimeMaxSec = "1h"; # This service loves to crash silently or cause network slowdowns. It also restarts instantly. Restarting it at least hourly provided the best experience.
 
             # Hardening.
             DevicePolicy = "closed";
@@ -178,6 +177,25 @@ in
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
             SystemCallArchitectures = "native";
+          };
+        };
+
+        # This service loves to crash silently or cause network slowdowns. It also restarts instantly. Restarting it at least hourly provided the best experience.
+        # A timer does the restart, so it ends with result `success` instead of
+        # counting as a unit failure, as a `RuntimeMaxSec` stop does.
+        systemd.services.zapret-restart = {
+          description = "Restart the DPI bypass service";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${config.systemd.package}/bin/systemctl try-restart zapret.service";
+          };
+        };
+        systemd.timers.zapret-restart = {
+          description = "Restart the DPI bypass service hourly";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnActiveSec = "1h";
+            OnUnitActiveSec = "1h";
           };
         };
       }
