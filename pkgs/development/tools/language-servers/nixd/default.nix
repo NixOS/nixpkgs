@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  versionCheckHook,
   boost,
   gtest,
   llvmPackages,
@@ -163,6 +164,9 @@ in
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;
+
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [ versionCheckHook ];
 
       passthru = {
         updateScript = nix-update-script { };
