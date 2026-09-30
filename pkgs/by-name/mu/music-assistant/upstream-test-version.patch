@@ -1,0 +1,22 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -1,6 +1,7 @@
+ import asyncio
+ import logging
+ import os
++from unittest.mock import patch
+ import pathlib
+ import tempfile
+ import threading
+@@ -21,6 +22,12 @@
+ NUMBA_CACHE_DIR = pytest.StashKey[tempfile.TemporaryDirectory[str]]()
+ 
+ 
++@pytest.fixture(autouse=True, scope="session")
++def upstream_source_version():
++    with patch("music_assistant.mass.MASS_VERSION", "0.0.0"):
++        yield
++
++
+ def pytest_configure(config: pytest.Config) -> None:

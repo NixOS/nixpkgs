@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.10.13";
+  version = "2.11.0b10";
   builtinProviders = [
     "builtin"
     "coverartarchive"
@@ -9,24 +9,24 @@
     "itunes_artwork"
     "loudness_analysis"
     "lrclib"
+    "mcp_server"
     "musicbrainz"
     "playlist_metadata"
     "radio_playlist"
     "recommendations"
     "sendspin"
-    "sendspin_source"
     "sync_group"
     "theaudiodb"
-    "universal_player"
     "wikipedia"
   ];
   providerDependencies = {
     hass_players = [ "hass" ];
     hue_entertainment = [ "sendspin" ];
+    neteasecloudmusic_scrobble = [ "neteasecloudmusic" ];
     plex_connect = [ "plex" ];
-    sendspin_source = [ "sendspin" ];
     sonic_similarity = [ "sonic_analysis" ];
     subsonic_scrobble = [ "opensubsonic" ];
+    wled_audio_sync = [ "sendspin" ];
     yandex_ynison = [ "yandex_music" ];
   };
   providerPackages = {
@@ -73,23 +73,27 @@
       ps: with ps; [
         aioaudiobookshelf
       ];
+    audiomuse_ai = _: [
+    ];
     bandcamp =
       ps: with ps; [
         bandcamp-async-api
       ];
-    bbc_sounds =
-      ps: with ps; [
-        pytz
-      ]; # missing auntie-sounds
+    bbc_sounds = _: [
+    ]; # missing auntie-sounds
     bluesound =
       ps: with ps; [
         pyblu
       ];
+    bookorbit = _: [
+    ];
     bose_soundtouch =
       ps: with ps; [
         defusedxml
       ];
     builtin = _: [
+    ];
+    cbc_listen = _: [
     ];
     chromecast =
       ps: with ps; [
@@ -108,6 +112,8 @@
         async-upnp-client
         defusedxml
       ];
+    dr_lyd = _: [
+    ];
     emby = _: [
     ];
     fanarttv = _: [
@@ -116,19 +122,21 @@
       ps: with ps; [
         fastmcp
       ];
+    feiniu_music = _: [
+    ];
     filesystem_google_drive =
       ps: with ps; [
         python-google-drive-api
       ];
     filesystem_local = _: [
     ];
-    filesystem_nfs = _: [
-    ];
     filesystem_onedrive =
       ps: with ps; [
         onedrive-personal-sdk
       ];
-    filesystem_smb = _: [
+    filesystem_yandex_disk = _: [
+    ]; # missing yadisk
+    fip = _: [
     ];
     fully_kiosk =
       ps: with ps; [
@@ -136,6 +144,8 @@
       ];
     genius_lyrics = _: [
     ]; # missing lyricsgenius
+    global_player = _: [
+    ];
     gpodder = _: [
     ];
     hass =
@@ -152,6 +162,8 @@
     ]; # missing hue-entertainment
     ibroadcast = _: [
     ]; # missing ibroadcastaio
+    iheartradio = _: [
+    ];
     internet_archive = _: [
     ];
     itunes_artwork = _: [
@@ -176,11 +188,15 @@
       ];
     local_audio = _: [
     ];
+    local_metadata = _: [
+    ];
     loudness_analysis = _: [
     ];
     lrclib = _: [
     ];
     mammamiradio = _: [
+    ];
+    mcp_server = _: [
     ];
     milkdrop_visualizer = _: [
     ];
@@ -205,6 +221,8 @@
     ];
     neteasecloudmusic = _: [
     ];
+    neteasecloudmusic_scrobble = _: [
+    ];
     nicovideo =
       ps: with ps; [
         pydantic
@@ -223,8 +241,10 @@
       ];
     orf_radiothek = _: [
     ];
-    overcast = _: [
-    ];
+    overcast =
+      ps: with ps; [
+        segno
+      ];
     pandora = _: [
     ];
     party = _: [
@@ -266,6 +286,10 @@
     ];
     rain_mood = _: [
     ];
+    raumfeld =
+      ps: with ps; [
+        async-upnp-client
+      ];
     recommendations = _: [
     ];
     roku_media_assistant =
@@ -281,14 +305,13 @@
       [
         aiosendspin
         av
+        soxr
       ]
       ++ aiosendspin.optional-dependencies.server;
-    sendspin_source =
-      ps: with ps; [
-        soxr
-      ];
+    share_provider = _: [
+    ];
     siriusxm = _: [
-    ]; # missing sxm
+    ]; # missing aiosxm
     smart_fades =
       ps: with ps; [
         beat-this
@@ -322,6 +345,8 @@
     sonos =
       ps: with ps; [
         aiosonos
+        async-upnp-client
+        defusedxml
       ];
     sonos_s1 =
       ps: with ps; [
@@ -332,10 +357,8 @@
       ps: with ps; [
         soundcloudpy
       ];
-    spotify =
-      ps: with ps; [
-        pkce
-      ];
+    spotify = _: [
+    ];
     spotify_connect = _: [
     ];
     squeezelite =
@@ -348,11 +371,15 @@
       ];
     subsonic_scrobble = _: [
     ];
+    sunshine_live = _: [
+    ];
     sverigesradio = _: [
     ];
     sync_group = _: [
     ];
     teddycloud = _: [
+    ];
+    telmore = _: [
     ];
     test = _: [
     ];
@@ -364,12 +391,12 @@
     ];
     universal_group = _: [
     ];
-    universal_player = _: [
-    ];
     vban_receiver =
       ps: with ps; [
         aiovban
       ];
+    vrt_max = _: [
+    ];
     webdav = _: [
     ];
     wiim =
@@ -378,6 +405,8 @@
         wiim
       ];
     wikipedia = _: [
+    ];
+    wled_audio_sync = _: [
     ];
     yandex_music =
       ps: with ps; [
@@ -389,10 +418,12 @@
       ps: with ps; [
         segno
       ]; # missing ya-passport-auth
-    yandex_ynison =
+    yandex_ynison = _: [
+    ]; # missing ya-passport-auth
+    yoto =
       ps: with ps; [
-        segno
-      ]; # missing ya-passport-auth
+        yoto-api
+      ];
     yousee = _: [
     ];
     ytmusic =
@@ -410,6 +441,7 @@
     "amplipi"
     "bbc_sounds"
     "deezer"
+    "filesystem_yandex_disk"
     "genius_lyrics"
     "hue_entertainment"
     "ibroadcast"
