@@ -1,8 +1,8 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index 2eea3bcff..055f8f2e8 100644
+index a9d40851c..f3e5bdd9f 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -1413,35 +1413,11 @@ async def _get_provider_module() -> ProviderModuleType:
+@@ -1449,35 +1449,11 @@ async def _get_provider_module() -> ProviderModuleType:
          module = await import_module_in_thread(f".{domain}", "music_assistant.providers")
          return cast("ProviderModuleType", module)
  
@@ -40,10 +40,10 @@ index 2eea3bcff..055f8f2e8 100644
  
  async def has_tmpfs_mount() -> bool:
 diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/providers/ytmusic/__init__.py
-index 81d209910..40516d7be 100644
+index db5a284d9..2fe33f771 100644
 --- a/music_assistant/providers/ytmusic/__init__.py
 +++ b/music_assistant/providers/ytmusic/__init__.py
-@@ -59,9 +59,7 @@
+@@ -62,9 +62,7 @@
  )
  from music_assistant.controllers.cache import use_cache
  from music_assistant.helpers.util import (
@@ -53,7 +53,7 @@ index 81d209910..40516d7be 100644
      parse_title_and_version,
  )
  from music_assistant.models.music_provider import MusicProvider
-@@ -181,7 +179,6 @@ async def get_config_entries(self) -> tuple[ConfigEntry, ...]:
+@@ -201,7 +199,6 @@ async def get_config_entries(self) -> tuple[ConfigEntry, ...]:
      async def handle_async_init(self) -> None:
          """Set up the YTMusic provider."""
          logging.getLogger("yt_dlp").setLevel(self.logger.level + 10)
@@ -61,11 +61,10 @@ index 81d209910..40516d7be 100644
          self._cookie = str(self.get_setup_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.get_setup_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
-@@ -1219,16 +1216,3 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
-                 )
+@@ -1313,19 +1310,6 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
              )
          return result
--
+ 
 -    async def _install_packages(self) -> None:
 -        """Install frequently changing packages dynamically."""
 -        # NOTE: Google breaks things quite often which requires us to update
@@ -78,3 +77,19 @@ index 81d209910..40516d7be 100644
 -            await import_module_in_thread("yt_dlp")
 -        except ImportError:
 -            raise SetupFailedError("Package yt_dlp failed to install")
+-
+ 
+ def _favorite_from_like_status(item: dict[str, Any]) -> bool | None:
+     """Translate the like status YouTube Music reports on an item to a favorite state."""
+diff --git a/tests/providers/ytmusic/test_ytmusic.py b/tests/providers/ytmusic/test_ytmusic.py
+index 1d6262e11..403ad6293 100644
+--- a/tests/providers/ytmusic/test_ytmusic.py
++++ b/tests/providers/ytmusic/test_ytmusic.py
+@@ -89,7 +89,6 @@ async def test_init_unreachable_po_token_server_is_a_retried_setup_failure(
+         return_value=_ping_context_manager(exc=ClientError("connection refused"))
+     )
+     with (
+-        patch.object(provider, "_install_packages", AsyncMock()),
+         patch.object(provider, "get_setup_value", return_value=""),
+         pytest.raises(SetupFailedError) as exc_info,
+     ):

@@ -1,5 +1,5 @@
 diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/providers/airplay/helpers.py
-index e7f38aae7..ec81fe539 100644
+index fcda7caca..40665446f 100644
 --- a/music_assistant/providers/airplay/helpers.py
 +++ b/music_assistant/providers/airplay/helpers.py
 @@ -8,6 +8,7 @@
@@ -10,7 +10,7 @@ index e7f38aae7..ec81fe539 100644
  from typing import TYPE_CHECKING, Any
  
  from aiohttp import ClientError, ClientTimeout
-@@ -291,14 +292,7 @@ async def get_cli_binary() -> str:
+@@ -304,14 +305,7 @@ async def get_cli_binary() -> str:
  
      :raises RuntimeError: If the binary cannot be found.
      """
@@ -26,7 +26,7 @@ index e7f38aae7..ec81fe539 100644
  
      try:
          returncode, output = await check_output(
-@@ -309,14 +303,14 @@ async def get_cli_binary() -> str:
+@@ -322,14 +316,14 @@ async def get_cli_binary() -> str:
              return binary_path
      except TimeoutError:
          msg = (
