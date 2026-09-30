@@ -11,6 +11,7 @@
   coreutils,
   curl,
   gawk,
+  nix,
   nix-prefetch-darcs,
   nix-prefetch-fossil,
   nix-prefetch-git,
@@ -21,7 +22,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.10.1";
+  version = "2.0.1";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -30,8 +31,17 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-cKYsuwUq2IVr50Tnc7qzMZANkldFAVDaXFWfgx7i8Ks=";
+    hash = "sha256-KECJUCvlQz6YpDpktlmLSMiBZPn4qZkA0Ye3aaHHi0Q=";
   };
+
+  outputs = [
+    "bin"
+    "data"
+    "doc"
+    "lib"
+    "man"
+    "out"
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -61,12 +71,18 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     (jsont.override {
       withBrr = false;
       withBytesrw = true;
+      withTypegist = false;
     })
+    ppx_blob
     kdl
     logs
     saturn
     stdint
     xdg
+  ];
+
+  nativeCheckInputs = [
+    nix
   ];
 
   checkInputs = with ocamlPackages; [
@@ -83,15 +99,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   '';
 
   doCheck = true;
-
-  outputs = [
-    "bin"
-    "data"
-    "doc"
-    "lib"
-    "man"
-    "out"
-  ];
 
   installPhase = ''
     runHook preInstall
