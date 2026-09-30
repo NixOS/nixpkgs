@@ -408,6 +408,8 @@ let
         };
       };
 
+      astral-sh.ty = callPackage ./astral-sh.ty { };
+
       astro-build.astro-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "astro-vscode";
