@@ -49,6 +49,8 @@ buildPythonPackage (finalAttrs: {
     "test_invalid_messages"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Library to receive UDP Packets from Weatherflow Weatherstations";
     homepage = "https://github.com/briis/pyweatherflowudp";
