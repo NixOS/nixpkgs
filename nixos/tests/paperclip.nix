@@ -1,6 +1,17 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 let
   package = pkgs.paperclip;
+  shared = import ../modules/services/misc/paperclip-shared.nix { inherit lib pkgs; };
+  validateConfig = pkgs.writeText "paperclip-validate-fixture-config.mjs" ''
+    import { readFileSync } from "node:fs";
+    import { paperclipConfigSchema } from "${package}/lib/paperclip/packages/shared/src/config-schema.ts";
+
+    paperclipConfigSchema.parse(JSON.parse(readFileSync(process.argv[2], "utf8")));
+  '';
   fakeGateway = pkgs.writeText "paperclip-fake-hermes.py" ''
     import json
     import re
@@ -144,81 +155,89 @@ in
         pkgs.jq
       ];
     };
-    controller = { lib, config, ... }: {
-      virtualisation = {
-        memorySize = 8192;
-        cores = 4;
-        diskSize = 24576;
-      };
-      services.paperclip.instances.control = {
-        enable = true;
-        executionProfile = "trusted-local";
-        host = "0.0.0.0";
-        port = 3115;
-        openFirewall = true;
-        allowedHostnames = [
-          "controller"
-          "localhost"
-        ];
-        auth = {
-          secretFile = "/var/lib/paperclip-control/credentials/auth";
-          publicBaseUrl = "http://localhost:3115";
+    controller =
+      {
+        lib,
+        config,
+        ...
+      }:
+      {
+        virtualisation = {
+          memorySize = 8192;
+          cores = 4;
+          diskSize = 24576;
         };
-        database.local.enable = true;
-        bootstrap = {
-          email = "operator@example.test";
-          name = "Fixture operator";
-          passwordFile = "/var/lib/paperclip-control/credentials/password";
-        };
-        credentialFiles.gateway = "/var/lib/paperclip-control/credentials/gateway";
-        manifest = {
-          version = 1;
-          owner = "split-network-fixture";
-          companies.example.fields.name = "Split fixture";
-          companies.other.fields.name = "Other company";
-          agents.worker = {
-            company = "example";
-            fields = {
-              name = "Remote worker";
-              adapterType = "hermes_gateway";
-              adapterConfig = {
-                apiBaseUrl = "http://worker:8642";
-                paperclipApiUrl = "http://controller:3115";
-                dangerouslyAllowInsecureRemoteHttp = true;
+        services.paperclip.instances.control = {
+          enable = true;
+          executionProfile = "trusted-local";
+          host = "0.0.0.0";
+          port = 3115;
+          openFirewall = true;
+          allowedHostnames = [
+            "controller"
+            "localhost"
+          ];
+          auth = {
+            secretFile = "/var/lib/paperclip-control/credentials/auth";
+            publicBaseUrl = "http://localhost:3115";
+          };
+          database.local.enable = true;
+          bootstrap = {
+            email = "operator@example.test";
+            name = "Fixture operator";
+            passwordFile = "/var/lib/paperclip-control/credentials/password";
+          };
+          credentialFiles.gateway = "/var/lib/paperclip-control/credentials/gateway";
+          manifest = {
+            version = 1;
+            owner = "split-network-fixture";
+            companies.example.fields.name = "Split fixture";
+            companies.other.fields.name = "Other company";
+            agents.worker = {
+              company = "example";
+              fields = {
+                name = "Remote worker";
+                adapterType = "hermes_gateway";
+                adapterConfig = {
+                  apiBaseUrl = "http://worker:8642";
+                  paperclipApiUrl = "http://controller:3115";
+                  dangerouslyAllowInsecureRemoteHttp = true;
+                };
               };
+              credentials.apiKey = "gateway";
             };
-            credentials.apiKey = "gateway";
           };
         };
-      };
-      systemd.services.paperclip-control.serviceConfig.Restart = lib.mkForce "no";
-      systemd.services.paperclip-fixture-credentials = {
-        requiredBy = [ "paperclip-control.service" ];
-        before = [ "paperclip-control.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
+        systemd.services.paperclip-control.serviceConfig.Restart = lib.mkForce "no";
+        environment.etc."paperclip-fixture-config.json".source =
+          (shared.render "control" config.services.paperclip.instances.control).configFile;
+        systemd.services.paperclip-fixture-credentials = {
+          requiredBy = [ "paperclip-control.service" ];
+          before = [ "paperclip-control.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            umask 0077
+            root=/var/lib/paperclip-control/credentials
+            install -d -m 0700 -o paperclip-control -g paperclip-control "$root"
+            for key in auth password; do
+              test -f "$root/$key" || ${pkgs.openssl}/bin/openssl rand -hex 32 > "$root/$key"
+              chown paperclip-control:paperclip-control "$root/$key"
+            done
+            install -m 0600 -o paperclip-control -g paperclip-control /tmp/shared/gateway-key "$root/gateway"
+          '';
         };
-        script = ''
-          umask 0077
-          root=/var/lib/paperclip-control/credentials
-          install -d -m 0700 -o paperclip-control -g paperclip-control "$root"
-          for key in auth password; do
-            test -f "$root/$key" || ${pkgs.openssl}/bin/openssl rand -hex 32 > "$root/$key"
-            chown paperclip-control:paperclip-control "$root/$key"
-          done
-          install -m 0600 -o paperclip-control -g paperclip-control /tmp/shared/gateway-key "$root/gateway"
-        '';
+        environment.systemPackages = [
+          package
+          config.services.postgresql.package
+          pkgs.curl
+          pkgs.jq
+          pkgs.python3
+          pkgs.util-linux
+        ];
       };
-      environment.systemPackages = [
-        package
-        config.services.postgresql.package
-        pkgs.curl
-        pkgs.jq
-        pkgs.python3
-        pkgs.util-linux
-      ];
-    };
   };
   testScript = ''
     import json
@@ -230,6 +249,7 @@ in
     worker.succeed("install -m 0600 /var/lib/hermes-fixture/gateway-key /tmp/shared/gateway-key")
 
     controller.start()
+    controller.succeed("${pkgs.nodejs}/bin/node --import ${package}/lib/paperclip/server/node_modules/tsx/dist/loader.mjs ${validateConfig} /etc/paperclip-fixture-config.json")
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=180)
     controller.fail("curl -fsS http://controller:3115/api/companies")
     worker.fail("test -e /var/lib/paperclip-control/credentials/auth")

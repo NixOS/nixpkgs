@@ -1,4 +1,7 @@
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+}:
 let
   inherit (lib) mkOption types;
   json = pkgs.formats.json { };
@@ -153,7 +156,7 @@ in
         "$meta" = {
           version = 1;
           updatedAt = "1970-01-01T00:00:00.000Z";
-          source = "nixos-module";
+          source = "configure";
         };
         server = {
           deploymentMode = if cfg.auth.enable then "authenticated" else "local_trusted";
