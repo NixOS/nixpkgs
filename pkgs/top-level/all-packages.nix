@@ -4606,6 +4606,7 @@ with pkgs;
   tcl = tcl-8_6;
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
   tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
+  tcl-9_1 = callPackage ../development/interpreters/tcl/9.1.nix { };
 
   tclPackages = dontRecurseIntoAttrs tcl8Packages;
   # We don't need minor-versioned package sets thanks to the tcl stubs mechanism.
