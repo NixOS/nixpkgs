@@ -3,30 +3,28 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
-  makeDesktopItem,
   nix-update-script,
 
-  copyDesktopItems,
-  icoutils,
   makeWrapper,
 
   ffmpeg,
   hunspell,
   libGL,
-  libx11,
+  libxcursor,
   mpv,
+  libvlc,
   tesseract4,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "subtitleedit";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "SubtitleEdit";
     repo = "subtitleedit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3WwRXD1JhZisJ/1sOF91PvrklfjCiI2Ena4i8AdLcm0=";
+    hash = "sha256-OuCaHSk/wMx3kwQY5J9S2dQcy87KfvG+nuKGCJZpiCk=";
   };
 
   projectFile = "src/ui/UI.csproj";
@@ -36,51 +34,42 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "SubtitleEdit" ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    icoutils
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   runtimeDeps = [
-    libGL
-    libx11
-    hunspell
-    mpv
-    tesseract4
-  ];
-
-  runtimePathDeps = [
     ffmpeg
     hunspell
+    mpv
+    libvlc
     tesseract4
+    libGL
+    libxcursor
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = finalAttrs.pname;
-      desktopName = "Subtitle Edit";
-      exec = "subtitleedit";
-      icon = "subtitleedit";
-      comment = finalAttrs.meta.description;
-      categories = [ "AudioVideo" ];
-    })
-  ];
+  patchPhase = ''
+    # fix video player because the lib directory paths they use to find mpv are hard-coded
+    substituteInPlace src/ui/Logic/VideoPlayers/LibMpvDynamic/LibMpvDynamicPlayer.cs \
+      --replace-fail '"/usr/local/lib",' '"${mpv}/lib",'
+
+    substituteInPlace src/ui/Logic/VideoPlayers/LibVlcDynamic/LibVlcDynamicPlayer.cs \
+      --replace-fail '"/usr/local/lib",' '"${libvlc}/lib",'
+  '';
+
+  preFixup = ''
+    install -Dm644 installer/flatpak/dk.nikse.subtitleedit.desktop $out/share/applications/dk.nikse.subtitleedit.desktop
+    install -Dm644 installer/flatpak/dk.nikse.subtitleedit.metainfo.xml $out/share/metainfo/dk.nikse.subtitleedit.metainfo.xml
+    install -Dm644 src/ui/Assets/SE.png $out/share/icons/hicolor/256x256/apps/dk.nikse.subtitleedit.png
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Subtitle editor";
-    longDescription = ''
-      With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
-      the video in several different ways. You can also use it for making
-      new subtitles from scratch (using the time-line /waveform/spectrogram)
-      or for translating subtitles.
-    '';
-    homepage = "https://nikse.dk/subtitleedit";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = [ ];
+    description = "Free, open-source editor for video subtitles";
+    homepage = "https://subtitleedit.github.io/subtitleedit/";
+    license = lib.licenses.mit;
+    platforms = finalAttrs.dotnet-runtime.meta.platforms;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ fqidz ];
+    mainProgram = "SubtitleEdit";
   };
 })
