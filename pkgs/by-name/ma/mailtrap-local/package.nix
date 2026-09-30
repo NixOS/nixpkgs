@@ -60,6 +60,8 @@ buildGo126Module (finalAttrs: {
   pname = "mailtrap-local";
   inherit src version vendorHash;
 
+  __structuredAttrs = true;
+
   env.CGO_ENABLED = 0;
 
   ldflags = [
