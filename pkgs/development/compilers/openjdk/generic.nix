@@ -54,37 +54,20 @@
   # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
   # which should be fixable, this is a no-rebuild workaround for GHC.
   headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs,
+  javaPackages,
 
   enableJavaFX ? false,
-  openjfx17,
-  openjfx21,
-  openjfx25,
   openjfx_jdk ?
-    {
-      "17" = openjfx17;
-      "21" = openjfx21;
-      "25" = openjfx25;
-    }
-    .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
+    javaPackages."openjfx${featureVersion}"
+      or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
   enableGtk ? true,
   gtk3,
   glib,
 
-  temurin-bin-8,
-  temurin-bin-11,
-  temurin-bin-17,
-  temurin-bin-21,
-  temurin-bin-25,
   jdk-bootstrap ?
-    {
-      "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
-      "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
-      "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
-      "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
-    }
-    .${featureVersion},
+    javaPackages.compiler.temurin-bin."jdk-${featureVersion}".__spliced.buildBuild
+      or javaPackages.compiler.temurin-bin."jdk-${featureVersion}",
 }:
 
 assert lib.assertMsg (enableGtk -> lib.versionAtLeast featureVersion "11")
