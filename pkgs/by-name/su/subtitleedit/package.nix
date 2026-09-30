@@ -7,26 +7,25 @@
   nix-update-script,
 
   copyDesktopItems,
-  icoutils,
   makeWrapper,
 
   ffmpeg,
   hunspell,
   libGL,
-  libx11,
+  libxcursor,
   mpv,
   tesseract4,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "subtitleedit";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "SubtitleEdit";
     repo = "subtitleedit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3WwRXD1JhZisJ/1sOF91PvrklfjCiI2Ena4i8AdLcm0=";
+    hash = "sha256-OuCaHSk/wMx3kwQY5J9S2dQcy87KfvG+nuKGCJZpiCk=";
   };
 
   projectFile = "src/ui/UI.csproj";
@@ -38,49 +37,57 @@ buildDotnetModule (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
-    icoutils
     makeWrapper
   ];
 
   runtimeDeps = [
-    libGL
-    libx11
+    ffmpeg
     hunspell
     mpv
     tesseract4
-  ];
-
-  runtimePathDeps = [
-    ffmpeg
-    hunspell
-    tesseract4
+    libGL
+    libxcursor
   ];
 
   desktopItems = [
     (makeDesktopItem {
       name = finalAttrs.pname;
       desktopName = "Subtitle Edit";
-      exec = "subtitleedit";
+      exec = "SubtitleEdit";
       icon = "subtitleedit";
-      comment = finalAttrs.meta.description;
+      comment = "Subtitle editor";
       categories = [ "AudioVideo" ];
     })
   ];
 
+  patchPhase = ''
+    # fix video player because the lib directory paths they use to find mpv are hard-coded
+    substituteInPlace src/ui/Logic/VideoPlayers/LibMpvDynamic/LibMpvDynamicPlayer.cs \
+      --replace-fail '"/usr/local/lib",' '"${mpv}/lib",'
+  '';
+
+  preFixup = ''
+    install -D src/libse/Icon.png $out/share/icons/hicolor/256x256/apps/subtitleedit.png
+
+    wrapProgram $out/bin/SubtitleEdit \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          hunspell
+          tesseract4
+        ]
+      }
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Subtitle editor";
-    longDescription = ''
-      With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
-      the video in several different ways. You can also use it for making
-      new subtitles from scratch (using the time-line /waveform/spectrogram)
-      or for translating subtitles.
-    '';
-    homepage = "https://nikse.dk/subtitleedit";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = [ ];
+    description = "Free, open-source editor for video subtitles";
+    homepage = "https://subtitleedit.github.io/subtitleedit/";
+    license = lib.licenses.mit;
+    platforms = finalAttrs.dotnet-runtime.meta.platforms;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ fqidz ];
+    mainProgram = "SubtitleEdit";
   };
 })
