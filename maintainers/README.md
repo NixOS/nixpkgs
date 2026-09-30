@@ -164,6 +164,81 @@ Once approved, the team will have the right privileges to be pinged and requeste
 
 After the first [weekly team sync](../.github/workflows/teams.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
+### External maintainer affiliations
+
+Apart from formal teams, there can be other affiliations shaping a maintainer's contributions.
+
+- maintenance only during work time for affiliated organisation: time limit might be limited or subject to
+- give transparency on wearing a certain "hat" that shapes decisions for that particular package or module
+- different contact addresses at an organisation
+- provide fallback contact and maintainers
+- adjusted addresses can improve visibility of activity within the affiliated organisation
+
+Whether and how an affiliation shapes the maintainership can differ vastly on individual and company. The recombinable, composable approach of affiliation data allows choosing only what applies here.
+
+A maintainer entry may optionally hold an attrset named `affiliations`, each key in it signifying an external affiliation of that maintainer.
+
+  ``` nix
+  {
+    example = {
+      email = "user@example.com";
+      name = "Example User";
+      /* […] */
+      affiliation = {
+        "somecompany.example" = {
+          # overrides or additions of general maintainer properties
+          email = "user@comecompany.example";
+
+          # additional contact data
+          contactUnresponsive = "mailto:tickets@somecompany.example";
+          fallbackMaintainers = [ self.anotherMaintainer ];
+        };
+        yourFriendlyNeighbourhoodTechCollective = {
+          contactUnresponsive = "matrix:#lobby:tech.collective.example";
+        };
+      };
+    };
+  }
+  ```
+
+See the prelude of `maintainer-list.nix` for detailed per-field descriptions.
+
+Concrete maintainer entries are thus still [people first](https://nixos.org/governance/#community-values-people) and subject to community-internal management, but allow wearing different "hats".
+Affiliations are managed by the maintainer alone and constitute no endorsement of the nixpkgs community in any way.
+
+
+The `meta.maintainers` entry then needs to point to the concrete affiliation-shaped entry. Evaluating that attribute applies the additional and overriding data automatically.
+
+  ```nix
+  meta.maintainers = with lib.maintainers; [
+    example."somecompany.example"
+    ];
+  ```
+
+
+#### Verifying affiliations
+
+***To be implemented yet, just marks an idea***
+
+Affiliation entries of maintainers can fall into 2 namespaces:
+
+**affiliation is a domain name**: verifiable affiliation
+
+Domain names as affiliations need to be resolvable. A json file served via HTTPS at `/.well-known/nixpkgs-maintainers` has the form
+
+  ```json
+  { "maintainers" = ["example"] }
+  ```
+
+and confirms the affiliation of these maintainers to the domain holding entity.
+This gives the domain holder the ability to retract or deny an affiliation, balancing out the maintainer-initiated ability to declare such affilitaions in the first place.
+
+
+TODO: periodically run a verification script from maintainer-scripts
+
+**all other**: free-form affiliation, usually just informative
+
+
 # Maintainer scripts
 
 Various utility scripts, which are mainly useful for nixpkgs maintainers, are available under `./scripts/`.
