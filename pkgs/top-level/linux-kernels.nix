@@ -229,6 +229,12 @@ in
           inherit kernel;
         };
 
+        # systemd compiled against this kernel's BTF, so its BPF programs
+        # (nsresourced/mountfsd, networkd) match the kernel that will run.
+        systemd = pkgs.systemd.override {
+          vmlinux-btf = self.ebpf-headers;
+        };
+
         inherit (kernel) stdenv; # in particular, use the same compiler by default
 
         # to help determine module compatibility
