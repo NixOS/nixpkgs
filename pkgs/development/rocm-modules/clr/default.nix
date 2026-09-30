@@ -178,6 +178,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
                      '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
+  ''
+  # HIP defines __noinline__ as an empty macro for host compilers, which breaks
+  # [[__gnu__::__noinline__]] in libstdc++ 16's <format>
+  # https://github.com/ROCm/rocm-systems/pull/12596
+  + ''
+    substituteInPlace hipamd/include/hip/amd_detail/host_defines.h \
+      --replace-fail $'#define __noinline__\n' ""
   '';
 
   postInstall = ''
