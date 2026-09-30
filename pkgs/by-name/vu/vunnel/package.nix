@@ -79,6 +79,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_status"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
