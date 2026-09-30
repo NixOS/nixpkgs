@@ -68,14 +68,14 @@ let
       # Required, otherwise the fixed-output derivation references store paths.
       dontFixup = true;
 
-      outputHash = "sha256-GHLJ04D+f7uzWhFDxWVP++XGF2tPziMcfYrgaz2oQL8=";
+      outputHash = "sha256-dW1OJ2AE4HaaJQAHPuyLu5vyv7It3r6OeXlAzEc4OlI=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zerobyte";
-  version = "0.42.0";
+  version = "0.43.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nicotsx";
     repo = "zerobyte";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gueZUwoEetsEuAG5QXvLgUUrib79sk2azcmD0XZMhQo=";
+    hash = "sha256-iZmXWxPnp7vYt3joPbluYQ3GXKGoN9qcrUfkWTO3Y7c=";
   };
 
   nativeBuildInputs = [

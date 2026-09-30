@@ -10,9 +10,11 @@
       services.cliproxyapi = {
         enable = true;
         settings = {
-          host = "127.0.0.1";
-          port = 8317;
-          api-keys = [ { _secret = "/etc/cliproxyapi-api-key"; } ];
+          server = {
+            host = "127.0.0.1";
+            port = 8317;
+          };
+          access.api-keys = [ { _secret = "/etc/cliproxyapi-api-key"; } ];
         };
       };
 
