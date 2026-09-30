@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "extension-helpers";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "extension-helpers";
     tag = "v${version}";
-    hash = "sha256-coSgaPoz93CqJRb65xYs1sNOwoGhcxWGJF7Jc9N2W1I=";
+    hash = "sha256-HHFz4GYWVgnIHx8hXIWHY1sKEfF6UhTK4sJJ3YfKB4A=";
   };
 
   build-system = [
