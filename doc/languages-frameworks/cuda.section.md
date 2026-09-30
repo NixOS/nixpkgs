@@ -49,7 +49,7 @@ The `cudaForwardCompat` boolean configuration option determines whether PTX supp
 
 ### Pre-built CUDA packages {#cuda-pre-built-packages}
 
-NVIDIA CUDA packages are generally unfree. `cache.nixos.org` does not normally provide pre-built store paths for them. This same constraint applies to CUDA-enabled packages whose closures depend on proprietary NVIDIA software. This includes packages such as PyTorch and MAGMA, which because of their large transitive closures, typically require considerable time and resources to build.
+NVIDIA CUDA packages are generally unfree, so `cache.nixos.org` does not provide them. This same constraint applies to CUDA-enabled packages whose closures depend on proprietary NVIDIA software. This includes packages such as PyTorch and ONNX Runtime, which because of their large transitive closures, require considerable resources to build.
 
 Flox is [one of the providers](https://discourse.nixos.org/t/nix-flox-nvidia-opening-up-cuda-redistribution-on-nix/69189) that NVIDIA works with to redistribute CUDA libraries and runtime packages. Flox also distributes PyTorch, MAGMA, and other CUDA-enabled packages whose Nix store closures include proprietary NVIDIA software. This agreement allows Flox to publish pre-built store paths that are not normally available from `cache.nixos.org`.
 
