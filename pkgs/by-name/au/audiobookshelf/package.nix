@@ -29,16 +29,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
-  version = "2.37.0";
+  version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zo9xByg1QMdqfy161rnmfJ0Mt5CJvKbZIMijj2kQpQM=";
+    hash = "sha256-rTn64PrGPSKwDbsQmzvdSRa7UQEV1f2xXaYGtcVfrpk=";
   };
 
-  npmDepsHash = "sha256-S9RGAc5ge+ULtRMbiY1ZOaxY5Ra2ltZdCHcGbkhUxzs=";
+  npmDepsHash = "sha256-xHjZ3E1DGeb5NueP67hEX3vHH0Qlk4LTeZkMEFBhGyE=";
 
   inherit nodejs;
 
