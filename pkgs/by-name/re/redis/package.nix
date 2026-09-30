@@ -151,5 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
     mainProgram = "redis-cli";
     teams = [ lib.teams.redis ];
+    identifiers.cpeParts = {
+      vendor = "redis";
+      product = "redis";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })
