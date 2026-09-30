@@ -188,6 +188,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       hexa
+      niklaskorz
     ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "servoshell";
