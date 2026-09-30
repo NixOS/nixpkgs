@@ -44,7 +44,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://fyne.io";
     description = "Cross platform GUI toolkit in Go";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      graysontinker
+    ];
     mainProgram = "fyne";
   };
 })
