@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mongo-tools";
-  version = "100.18.0";
+  version = "tools-4100-prestack-v2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
     tag = finalAttrs.version;
-    hash = "sha256-cNz5qQhTcW7hBdvXQRnnnvIz4UpC0ZmFVxMfxUSJ2y8=";
+    hash = "sha256-1dZV9IyAxGN7bl/SGm2PGK17ZopeRTFSlVRRdaUzoy0=";
   };
 
   vendorHash = null;
