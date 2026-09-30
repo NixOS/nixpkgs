@@ -3183,7 +3183,7 @@ assertNoAdditions {
     };
   });
 
-  notmuch-nvim = super.notmuch-nvim.overrideAttrs {
+  notmuch-nvim = super.notmuch-nvim.overrideAttrs (old: {
     checkInputs = [
       notmuch
     ];
@@ -3206,8 +3206,10 @@ assertNoAdditions {
           --replace-fail 'ffi.load("notmuch")' 'ffi.load("${notmuchLib}")'
       '';
 
-    meta.license = lib.licenses.mit;
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
@@ -4143,10 +4145,6 @@ assertNoAdditions {
       license = lib.licenses.gpl3Only;
     };
   });
-
-  rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
-    dependencies = [ self.nvim-lspconfig ];
-  };
 
   rustaceanvim = super.rustaceanvim.overrideAttrs {
     checkInputs = [

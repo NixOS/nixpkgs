@@ -291,7 +291,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Defense-in-depth: never inherit an executable stack from a dependency.
     # It does happen: https://github.com/NixOS/nixpkgs/issues/567777.
-    NIX_LDFLAGS = "-z,noexecstack";
+    # ELF only: Apple's ld64 rejects `-z`, and Mach-O stacks are already
+    # non-executable unless linked with `-allow_stack_execute`.
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isElf "-z,noexecstack";
   };
 
   propagatedBuildInputs = [
