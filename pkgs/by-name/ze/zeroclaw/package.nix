@@ -12,6 +12,8 @@
   gitMinimal,
   jq,
   versionCheckHook,
+  makeBinaryWrapper,
+  which,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Pycl0MMyxWtfcssoFhvDT4UQJuVVBDNzN536eBFlND4=";
+
+  # zerocode is a separate workspace member and expects the daemon beside it.
+  cargoBuildFlags = [
+    "--package"
+    "zeroclawlabs"
+    "--package"
+    "zerocode"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -50,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     nodejs
     npmHooks.npmConfigHook
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -68,6 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
     gitMinimal
     jq
+    which
   ];
 
   # wiremock tests require socket binding, which is denied in the darwin sandbox
@@ -87,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin/web
     cp -r web/dist $out/bin/web/dist
+    wrapProgram $out/bin/zerocode --prefix PATH : ${lib.makeBinPath [ which ]}
   '';
 
   doInstallCheck = true;
