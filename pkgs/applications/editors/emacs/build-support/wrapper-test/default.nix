@@ -45,6 +45,24 @@ let
             "{}" \
             --eval='(setopt checkdoc-arguments-in-order-flag t)' \
             --funcall=checkdoc-batch
+
+        lintEachFile \
+          emacs --batch \
+            "{}" \
+            --eval='
+              (progn
+                ;; load indentation settings, if any, see (info "(emacs) Lisp Indent")
+                (eval-buffer)
+                (indent-region (point-min) (point-max))
+                (with-current-buffer
+                    (diff-no-select buffer-file-name (current-buffer) nil t)
+                  (goto-char (point-min))
+                  (condition-case nil
+                      (let ((case-fold-search nil))
+                        (search-forward "Diff finished (no differences)"))
+                    (search-failed
+                     (princ (buffer-string))
+                     (error "%s" "File indentation is wrong")))))'
       '';
     };
 in
