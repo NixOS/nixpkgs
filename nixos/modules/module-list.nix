@@ -1039,7 +1039,6 @@
   ./services/misc/ytdl-sub.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
-  ./services/monitoring/alerta.nix
   ./services/monitoring/alloy.nix
   ./services/monitoring/amazon-cloudwatch-agent.nix
   ./services/monitoring/apcupsd.nix

@@ -132,6 +132,9 @@ in
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
     '')
+    (mkRemovedOptionModule [ "services" "alerta" ]
+      "Was removed,as the `alerta-server` package has been removed after having been marked as insecure, as no new maintainer stepped up to update the package to a fixed version."
+    )
     (mkRemovedOptionModule [ "services" "antennas" ]
       "The antennas package and the corresponding module have been removed as they only work with tvheadend, which nobody was willing to maintain and was stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
     )
