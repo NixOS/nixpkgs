@@ -3395,6 +3395,30 @@ with haskellLib;
         self.microlens-pro
       ])
     ];
+    # amazonka-dynamodb needs the DynamoDB AttributeValue type, split out of
+    # the same amazonka git tree into its own package that isn't published to
+    # Hackage, which is why amazonka-dynamodb is otherwise marked broken.
+    amazonka-dynamodb-attributevalue = self.mkDerivation {
+      pname = "amazonka-dynamodb-attributevalue";
+      version = "2.0-unstable-2025-04-16";
+      src = amazonkaSrc + "/lib/amazonka-dynamodb-attributevalue";
+      libraryHaskellDepends = [
+        self.aeson
+        self.amazonka-core
+        self.containers
+        self.hashable
+        self.vector
+      ];
+      jailbreak = true; # upper aeson bound excludes newer versions nixpkgs ships
+      homepage = "https://github.com/brendanhay/amazonka/tree/main/lib/amazonka-dynamodb-attributevalue";
+      description = "Package exposing the DynamoDB AttributeValue type for other packages to reuse";
+      license = lib.licenses.mpl20;
+    };
+    amazonka-dynamodb = lib.pipe super.amazonka-dynamodb [
+      (setAmazonkaSourceRoot "lib/services/amazonka-dynamodb")
+      (addBuildDepends [ self.amazonka-dynamodb-attributevalue ])
+      unmarkBroken
+    ];
     amazonka = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka)
     );
