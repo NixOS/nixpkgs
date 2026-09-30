@@ -470,6 +470,9 @@ in
 
     extraMeta = {
       license = lib.licenses.asl20;
+      knownVulnerabilities = [
+        "OpenSSL 3.0 reached its end of life on 2026/09/07"
+      ];
     };
   };
 
