@@ -1,15 +1,15 @@
 {
   buildPythonPackage,
   libeduvpn-common,
-  selenium,
   setuptools,
 }:
 
 buildPythonPackage rec {
   inherit (libeduvpn-common) version src;
   pname = "eduvpn-common";
+  pyproject = true;
 
-  sourceRoot = "${pname}-${version}/wrappers/python";
+  sourceRoot = "${src.name}/wrappers/python";
 
   patches = [ ./use-nix-lib.patch ];
 
@@ -18,14 +18,9 @@ buildPythonPackage rec {
                       --subst-var-by libeduvpn-common ${libeduvpn-common.out}/lib/lib${pname}-${version}.so
   '';
 
-  pyproject = true;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    libeduvpn-common
-    setuptools
-  ];
-
-  nativeCheckInputs = [ selenium ];
+  dependencies = [ libeduvpn-common ];
 
   pythonImportsCheck = [ "eduvpn_common" ];
 
