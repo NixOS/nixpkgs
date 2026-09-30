@@ -4,7 +4,7 @@
   unzip,
 }:
 let
-  version = "4.6.7";
+  version = "4.6.8";
 in
 stdenv.mkDerivation {
   pname = "yeswiki";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   # The release archive contains the bundled PHP and JavaScript dependencies.
   src = fetchurl {
     url = "https://github.com/YesWiki/yeswiki/releases/download/v${version}/yeswiki-v${version}.zip";
-    hash = "sha256-QgF08amdCh4q3E3/wat4e/KhIWMtBTkFJzT3p5m61FU=";
+    hash = "sha256-AvGFZhY8qw9yewjAl5PlU/08XEFnOtNoQSGXlY9l8PI=";
   };
 
   nativeBuildInputs = [
