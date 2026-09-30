@@ -127,6 +127,17 @@ in
         Port ranges are delimited with a colon like this "50000:50099".
       '';
     };
+    restartInterval = lib.mkOption {
+      default = "1h";
+      type = with lib.types; nullOr str;
+      example = "6h";
+      description = ''
+        How often to restart the service, as a time span in the format of
+        {manpage}`systemd.time(7)`. A timer runs `systemctl try-restart`, so the
+        restart ends with result `success` and doesn't count as a unit failure.
+        Set to `null` to disable the periodic restart.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -183,19 +194,19 @@ in
         # This service loves to crash silently or cause network slowdowns. It also restarts instantly. Restarting it at least hourly provided the best experience.
         # A timer does the restart, so it ends with result `success` instead of
         # counting as a unit failure, as a `RuntimeMaxSec` stop does.
-        systemd.services.zapret-restart = {
+        systemd.services.zapret-restart = lib.mkIf (cfg.restartInterval != null) {
           description = "Restart the DPI bypass service";
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${config.systemd.package}/bin/systemctl try-restart zapret.service";
           };
         };
-        systemd.timers.zapret-restart = {
-          description = "Restart the DPI bypass service hourly";
+        systemd.timers.zapret-restart = lib.mkIf (cfg.restartInterval != null) {
+          description = "Restart the DPI bypass service periodically";
           wantedBy = [ "timers.target" ];
           timerConfig = {
-            OnActiveSec = "1h";
-            OnUnitActiveSec = "1h";
+            OnActiveSec = cfg.restartInterval;
+            OnUnitActiveSec = cfg.restartInterval;
           };
         };
       }
