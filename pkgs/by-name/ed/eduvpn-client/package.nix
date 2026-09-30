@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eduvpn-client";
-  version = "4.6.0";
+  version = "4.7.2";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "linux-app";
-    rev = finalAttrs.version;
-    hash = "sha256-oI/hc1XAddXGtwaLY6+zFoshs82lDTRESF4+xUmi+jc=";
+    tag = finalAttrs.version;
+    hash = "sha256-vJZ2C4z5qB5wWwl9LPyaDj60Lne1jcbLml/4Q5tTC/o=";
   };
 
   nativeBuildInputs = [
@@ -36,19 +36,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     networkmanager
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     eduvpn-common
     pygobject3
-    setuptools
   ];
 
   postInstall = ''
     ln -s $out/${python3Packages.python.sitePackages}/eduvpn/data/share/ $out/share
   '';
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = {
     changelog = "https://codeberg.org/eduVPN/linux-app/raw/tag/${finalAttrs.version}/CHANGES.md";
