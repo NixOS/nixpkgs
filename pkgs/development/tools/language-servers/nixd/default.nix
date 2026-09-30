@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
   boost,
   gtest,
   llvmPackages,
@@ -39,7 +38,6 @@ let
       ninja
       python3
       pkg-config
-      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -148,7 +146,16 @@ in
         zlib
       ];
 
-      nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+      nativeBuildInputs = common.nativeBuildInputs ++ [
+        # Meson can use either llvm-config (which lives in libllvm.dev) or CMake to find LLVM
+        # Since finding LLVM via CMake is more fragile, prefer llvm-config
+        (lib.getDev llvmPackages.libllvm)
+      ];
+
+      # Required when cross compiling to make Meson find llvm-config-native
+      preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+        export PATH="${lib.getDev llvmPackages.llvm}/bin:$PATH"
+      '';
 
       mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
 
