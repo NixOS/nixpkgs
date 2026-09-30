@@ -594,5 +594,7 @@ stdenv'.mkDerivation (finalAttrs: {
       # the ability to load shared modules at runtime, but dlopen() is stubbed out in static
       # musl builds. The important part is, that the separate libpq package builds in pkgsStatic.
       || stdenv.hostPlatform.isStatic;
+
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "postgresql" finalAttrs.version;
   };
 })
