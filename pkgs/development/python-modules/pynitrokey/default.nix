@@ -29,7 +29,7 @@ let
   mainProgram = "nitropy";
 in
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   inherit pname version;
   pyproject = true;
 
@@ -57,7 +57,8 @@ buildPythonPackage {
     tlv8
     semver
     nethsm
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.pcsc;
 
   optional-dependencies = {
     pcsc = [
@@ -95,4 +96,4 @@ buildPythonPackage {
     ];
     inherit mainProgram;
   };
-}
+})
