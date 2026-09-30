@@ -93,5 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = lib.platforms.all;
     priority = 10;
+    identifiers.cpeParts = {
+      vendor = "gnu";
+      product = "tar";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })
