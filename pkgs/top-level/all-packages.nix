@@ -7878,6 +7878,7 @@ with pkgs;
     withImportd = false;
     withImds = false;
     withLibBPF = false;
+    vmlinux-btf = null;
     withLibidn2 = false;
     withLocaled = false;
     withLogind = false;
