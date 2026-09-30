@@ -209,5 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
       dotlambda
       lewo
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "postfix" finalAttrs.version;
   };
 })
