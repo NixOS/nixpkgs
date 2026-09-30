@@ -23,7 +23,7 @@ let
   ];
 in
 
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "coq${coq.coq-version}-VST";
   namePrefix = [ ];
   displayVersion = {
@@ -79,6 +79,15 @@ mkCoqDerivation {
     "IGNORECOMPCERTVERSION=true"
   ];
 
+  # The default target is `vst progs64`, where progs64 is the test suite;
+  # `vst` alone is the library, as built by the opam package.
+  buildFlags = [ "vst" ];
+
+  # `make test` is `make vst progs64`, so this only builds the test suite.
+  # It runs before the install phase, which installs progs64 as well.
+  doCheck = true;
+  checkTarget = "test";
+
   postInstall = ''
     for d in msl veric floyd sepcomp progs64
     do
@@ -91,4 +100,12 @@ mkCoqDerivation {
     homepage = "https://vst.cs.princeton.edu/";
     inherit (compcert.meta) platforms;
   };
-}
+}).overrideAttrs
+  (
+    o:
+    # The `vst` and `test` targets appeared in VST 2.10.
+    lib.optionalAttrs (o.version != "dev" && lib.versionOlder o.version "2.10") {
+      buildFlags = [ ];
+      doCheck = false;
+    }
+  )
