@@ -165,5 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
       > Something has gone wrong getting the pointer size; see config.log
     */
     badPlatforms = lib.platforms.darwin;
+    identifiers.cpeParts = {
+      vendor = "racket-lang";
+      product = "racket";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })
