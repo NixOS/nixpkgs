@@ -209,9 +209,9 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
   ;; Ideally, we should use a more robust synchronization point.
   (sleep-for 2.5)
   (defvar native-comp-eln-load-path)
+  (defvar comp-async-buffer-name)
   (list (not (cl-loop for buffer being each buffer
-                      thereis (string= (buffer-name buffer)
-                                       "*Async-native-compile-log*")))
+                      thereis (string= (buffer-name buffer) comp-async-buffer-name)))
         (let ((eln-dir (car native-comp-eln-load-path)))
           (or (directory-empty-p eln-dir)
               (and (not (file-exists-p eln-dir))
