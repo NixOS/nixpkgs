@@ -43,17 +43,17 @@ let
   sources = {
     x86_64-linux = {
       arch = "x64";
-      hash = "sha256-/C4q9JpFrv7pVYvOVqqku94A1WDTVDV68bg0qd1DzTM=";
+      hash = "sha256-Rrgvo0oyo5xJi9dFqmyCc4gUkurqRbZgzkied290Pa8=";
     };
     aarch64-linux = {
       arch = "arm";
-      hash = "sha256-cgSbIH0cF5qFJKTc8TxPhtjLulmdhF/cRX3g9/ES6Rg=";
+      hash = "sha256-15dUBnSjUWeFnmRkBFYyFEOKzNn5LCK5RJ85EA582yc=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "antigravity-hub";
-  version = "2.12.2";
+  version = "2.18.1";
 
   src =
     let
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Download URLs embed a build ID next to the version, e.g. `2.12.2-6298742303883264`.
-    buildId = "6298742303883264";
+    buildId = "4945794252537856";
     updateScript = ./update.sh;
   };
 
