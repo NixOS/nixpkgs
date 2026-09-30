@@ -222,6 +222,14 @@ let
     "systemd-repart@.service"
     "systemd-repart.socket"
   ]
+  ++ optionals cfg.package.withNsresourced [
+    "systemd-nsresourced.service"
+    "systemd-nsresourced.socket"
+  ]
+  ++ optionals cfg.package.withMountfsd [
+    "systemd-mountfsd.service"
+    "systemd-mountfsd.socket"
+  ]
   ++ [
     "systemd-exit.service"
     "systemd-update-done.service"
@@ -259,7 +267,17 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" { };
+    package = mkOption {
+      type = types.package;
+      default = config.boot.kernelPackages.systemd or pkgs.systemd;
+      defaultText = literalExpression "config.boot.kernelPackages.systemd";
+      description = ''
+        systemd package to use. Defaults to the one built against
+        {option}`boot.kernelPackages`, so that its BPF programs are compiled
+        against the running kernel; falls back to `pkgs.systemd` when the
+        kernel package set has no `systemd`.
+      '';
+    };
 
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
