@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.10.9";
+  version = "2.11.0b8";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -63,6 +63,8 @@
       ps: with ps; [
         aioaudiobookshelf
       ];
+    audiomuse_ai = ps: [
+    ];
     bandcamp =
       ps: with ps; [
         bandcamp-async-api
@@ -75,6 +77,8 @@
       ps: with ps; [
         pyblu
       ];
+    bookorbit = ps: [
+    ];
     bose_soundtouch =
       ps: with ps; [
         defusedxml
@@ -106,19 +110,21 @@
       ps: with ps; [
         fastmcp
       ];
+    feiniu_music = ps: [
+    ];
     filesystem_google_drive =
       ps: with ps; [
         python-google-drive-api
       ];
     filesystem_local = ps: [
     ];
-    filesystem_nfs = ps: [
-    ];
     filesystem_onedrive =
       ps: with ps; [
         onedrive-personal-sdk
       ];
-    filesystem_smb = ps: [
+    filesystem_yandex_disk = ps: [
+    ]; # missing yadisk
+    fip = ps: [
     ];
     fully_kiosk =
       ps: with ps; [
@@ -126,6 +132,8 @@
       ];
     genius_lyrics = ps: [
     ]; # missing lyricsgenius
+    global_player = ps: [
+    ];
     gpodder = ps: [
     ];
     hass =
@@ -142,6 +150,8 @@
     ]; # missing hue-entertainment
     ibroadcast = ps: [
     ]; # missing ibroadcastaio
+    iheartradio = ps: [
+    ];
     internet_archive = ps: [
     ];
     itunes_artwork = ps: [
@@ -165,6 +175,8 @@
         liblistenbrainz
       ];
     local_audio = ps: [
+    ];
+    local_metadata = ps: [
     ];
     loudness_analysis = ps: [
     ];
@@ -195,6 +207,8 @@
     ];
     neteasecloudmusic = ps: [
     ];
+    neteasecloudmusic_scrobble = ps: [
+    ];
     nicovideo =
       ps: with ps; [
         pydantic
@@ -213,8 +227,10 @@
       ];
     orf_radiothek = ps: [
     ];
-    overcast = ps: [
-    ];
+    overcast =
+      ps: with ps; [
+        segno
+      ];
     pandora = ps: [
     ];
     party = ps: [
@@ -256,6 +272,10 @@
     ];
     rain_mood = ps: [
     ];
+    raumfeld =
+      ps: with ps; [
+        async-upnp-client
+      ]; # missing hassfeld
     recommendations = ps: [
     ];
     roku_media_assistant =
@@ -278,7 +298,7 @@
         soxr
       ];
     siriusxm = ps: [
-    ]; # missing sxm
+    ]; # missing aiosxm
     smart_fades =
       ps: with ps; [
         beat-this
@@ -322,10 +342,8 @@
       ps: with ps; [
         soundcloudpy
       ];
-    spotify =
-      ps: with ps; [
-        pkce
-      ];
+    spotify = ps: [
+    ];
     spotify_connect = ps: [
     ];
     squeezelite =
@@ -344,6 +362,8 @@
     ];
     teddycloud = ps: [
     ];
+    telmore = ps: [
+    ];
     test = ps: [
     ];
     theaudiodb = ps: [
@@ -360,6 +380,8 @@
       ps: with ps; [
         aiovban
       ];
+    vrt_max = ps: [
+    ];
     webdav = ps: [
     ];
     wiim =
@@ -368,6 +390,8 @@
         wiim
       ];
     wikipedia = ps: [
+    ];
+    wled_audio_sync = ps: [
     ];
     yandex_music =
       ps: with ps; [
@@ -379,10 +403,12 @@
       ps: with ps; [
         segno
       ]; # missing ya-passport-auth
-    yandex_ynison =
+    yandex_ynison = ps: [
+    ]; # missing ya-passport-auth
+    yoto =
       ps: with ps; [
-        segno
-      ]; # missing ya-passport-auth
+        yoto-api
+      ];
     yousee = ps: [
     ];
     ytmusic =
