@@ -49,6 +49,21 @@
   shader-slang,
 }:
 
+let
+  shader-slang' = shader-slang.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "2026.18";
+      src = fetchFromGitHub {
+        owner = "shader-slang";
+        repo = "slang";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-GlXTDfC6BLENmrzBceJGZIP4FU5ItqtyoxmbnFZ5fdQ=";
+        fetchSubmodules = true;
+      };
+      cmakeFlags = previousAttrs.cmakeFlags ++ [ (lib.cmakeBool "SLANG_ENABLE_DXIL" false) ];
+    }
+  );
+in
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
@@ -115,7 +130,7 @@ buildPythonApplication rec {
     go_1_26
     fontconfig
     makeBinaryWrapper
-    shader-slang
+    shader-slang'
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -297,7 +312,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
-        shader-slang
+        shader-slang'
       ]
     }"
 
