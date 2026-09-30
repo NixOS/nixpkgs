@@ -341,9 +341,8 @@ rec {
     f: g: final: prev:
     let
       fApplied = f final prev;
-      prev' = prev // fApplied;
     in
-    fApplied // g final prev';
+    fApplied // g final (prev // fApplied);
 
   /**
     Composes a list of [`overlays`](#chap-overlays) and returns a single overlay function that combines them.
