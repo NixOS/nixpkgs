@@ -44,7 +44,9 @@ let
 
     mesonBuildType = "release";
 
+    __structuredAttrs = true;
     strictDeps = true;
+    separateDebugInfo = true;
 
     doCheck = true;
 
