@@ -1857,6 +1857,7 @@ in
   systemd-no-tainted = runTest ./systemd-no-tainted.nix;
   systemd-nspawn = runTest ./systemd-nspawn.nix;
   systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
+  systemd-nsresourced-mountfsd = runTest ./systemd-nsresourced-mountfsd.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;
   systemd-pstore = runTest ./systemd-pstore.nix;

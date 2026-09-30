@@ -822,6 +822,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd
           systemd-analyze
           systemd-bpf
+          systemd-nsresourced-mountfsd
           systemd-confinement
           systemd-coredump
           systemd-cryptenroll
