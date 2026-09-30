@@ -4201,7 +4201,7 @@ with pkgs;
     zulu21
     zulu25
     ;
-  zulu = zulu21;
+  zulu = zulu25;
 
   ### DEVELOPMENT / INTERPRETERS
 
