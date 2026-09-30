@@ -76,9 +76,9 @@ buildNpmPackage (finalAttrs: {
     runHook postCheck
   '';
 
+  # vitest caches run results under node_modules, which the install hook then
+  # copies into $out; removing it keeps the output deterministic.
   postCheck = ''
-    # vitest caches run results under node_modules, which the install hook then
-    # copies into $out; removing it keeps the output deterministic.
     rm -rf node_modules/.vite
   '';
 
