@@ -28,15 +28,16 @@
   wget,
 }:
 let
-  version = "0.3.1-unstable-2026-09-28";
+  version = "0.3.1-unstable-2026-09-30";
   # Draft packaging source. Replace with a paperclipai release before merging.
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "8c0a08fdb2f1f212b81e7d1ea0b28294310643a8";
-    hash = "sha256-IKHe3yrVazjX0WD5S1jB0C/gzNfnhDMFCIiuN+pudCY=";
+    rev = "7359c6356dc260c342acf478dae44eb8a0effe28";
+    hash = "sha256-TI/kcXMhlhn41J/6MaebhV5ELyKDPThkTLL81+HgHMc=";
   };
   runtimePath = lib.makeBinPath [
+    coreutils
     curl
     gh
     git
@@ -69,10 +70,6 @@ let
       which
     ];
     postPatch = ''
-      substituteInPlace runner/crates/runner-core/src/codex_provider.rs \
-        --replace-fail '"/bin/cat"' '"${coreutils}/bin/cat"'
-      substituteInPlace runner/crates/runner-core/tests/codex_provider.rs \
-        --replace-fail '"/bin/kill"' '"${procps}/bin/kill"'
       substituteInPlace runner/crates/runner-core/tests/process_supervisor.rs \
         --replace-fail '"/usr/bin/which"' '"${which}/bin/which"'
       substituteInPlace runner/crates/runner-core/src/process_supervisor.rs \
@@ -107,7 +104,10 @@ let
       pnpm config set fetch-retry-mintimeout 20000
       pnpm config set fetch-retry-maxtimeout 120000
       pnpm config set fetch-timeout 600000
-      ${nodejs}/bin/node scripts/nix-pnpm-patch-hashes.mjs
+      # Upstream's bot owns the source lock and does not update it on PRs.
+      # Pin the qualified resolution here, with pnpm 10's SHA-256 patch hashes.
+      # Both dependency fetching and the offline build consume the same bytes.
+      cp ${./pnpm-lock.yaml} pnpm-lock.yaml
     '';
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
