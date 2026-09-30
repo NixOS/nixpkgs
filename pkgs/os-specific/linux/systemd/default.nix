@@ -162,6 +162,10 @@
   # attempt to load a service which does not exist, resulting in errors.
   withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
+  # The BPF programs backing nsresourced/mountfsd need a vmlinux.h, which is
+  # only available when a kernel BTF is provided (see vmlinux-btf above).
+  withNsresourced ? withLibBPF && vmlinux-btf != null,
+  withMountfsd ? withLibBPF && vmlinux-btf != null,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
@@ -190,6 +194,8 @@ assert withHomed -> withPam;
 assert withHomed -> withOpenSSL;
 assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
+assert withNsresourced -> withLibBPF;
+assert withMountfsd -> withLibBPF;
 assert withImportd -> (withGcrypt || withOpenSSL);
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
@@ -546,6 +552,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "hwdb" withHwdb)
     (lib.mesonBool "timedated" withTimedated)
     (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "nsresourced" withNsresourced)
+    (lib.mesonBool "mountfsd" withMountfsd)
     (lib.mesonBool "userdb" withUserDb)
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
@@ -718,6 +726,8 @@ stdenv.mkDerivation (finalAttrs: {
       withLogind
       withMachined
       withNetworkd
+      withNsresourced
+      withMountfsd
       withNspawn
       withRepart
       withPortabled
