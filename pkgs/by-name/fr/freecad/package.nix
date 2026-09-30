@@ -105,6 +105,8 @@ freecad-utils.makeCustomizable (
     ]
     ++ pythonDeps;
 
+    patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
+
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
         --replace-fail 'self.gmsh_bin = ""' 'self.gmsh_bin = "${lib.getExe gmsh}"'

@@ -43,6 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xcbuild
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+      --replace-fail 'lib.bundle_compiler_rt = true;' 'lib.bundle_compiler_rt = false;' \
+      --replace-fail 'lib.bundle_ubsan_rt = true;' 'lib.bundle_ubsan_rt = false;'
+  '';
+
   # Upstream binary tests are renamed, added, or changed between releases and
   # depend on host process details, so Nix-only patches for them are brittle.
   doCheck = false;
