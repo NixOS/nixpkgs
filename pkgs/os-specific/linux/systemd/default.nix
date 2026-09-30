@@ -80,6 +80,10 @@
   bpftools,
   libbpf,
 
+  # vmlinux.h (kernel BTF) for the systemd BPF programs.
+  # This is used for the linuxPackages*.systemd packages.
+  vmlinux-btf ? null,
+
   # Needed to produce a ukify that works for cross compiling UKIs.
   targetPackages,
 
@@ -558,6 +562,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
+  ]
+  ++ lib.optionals (withLibBPF && vmlinux-btf != null) [
+    (lib.mesonOption "vmlinux-h" "provided")
+    (lib.mesonOption "vmlinux-h-path" "${vmlinux-btf}/vmlinux.h")
   ]
   ++ lib.optionals withVConsole [
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
