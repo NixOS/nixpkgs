@@ -95,6 +95,17 @@ rustPlatform.buildRustPackage rec {
     binaryName = "firefoxpwa";
     applicationName = "firefoxpwa";
     inherit (firefoxRuntime) gtk3;
+    # Inherit all variables that related for wrapping, since this derivation is
+    # wrapped similarly to `firefoxRuntime`, and these passthru variables are
+    # read when `wrapFirefox` wraps this derivation too.
+    inherit (firefoxRuntime)
+      ffmpegSupport
+      gssSupport
+      alsaSupport
+      pipewireSupport
+      sndioSupport
+      jackSupport
+      ;
   };
 
   meta = {
