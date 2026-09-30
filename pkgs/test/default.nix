@@ -148,6 +148,7 @@ in
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchRepoProject = recurseIntoAttrs (callPackages ../build-support/fetchrepoproject/tests.nix { });
   fetchNextcloudApp = recurseIntoAttrs (
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
