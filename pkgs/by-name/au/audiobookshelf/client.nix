@@ -11,7 +11,7 @@ buildNpmPackage {
 
   src = "${src}/client";
 
-  npmDepsHash = "sha256-l7vdcggcVs9LYQ7DLumUUh67lxZ5giVMrtwUU6prfwI=";
+  npmDepsHash = "sha256-Rvy/bULWyVkGthfpIGkTMO8Lv1miywwea7jLODfm54Y=";
 
   env = {
     # don't download the Cypress binary
