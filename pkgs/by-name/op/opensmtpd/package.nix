@@ -93,6 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       obadz
       vifino
     ];
+    identifiers.cpeParts = {
+      vendor = "openbsd";
+      product = "opensmtpd";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
