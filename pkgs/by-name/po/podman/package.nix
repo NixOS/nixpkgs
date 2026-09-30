@@ -205,5 +205,6 @@ buildGoModule (finalAttrs: {
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "podman_project" finalAttrs.version;
   };
 })
