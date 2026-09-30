@@ -1,6 +1,7 @@
 gradle.projectsLoaded {
   rootProject.allprojects {
     task nixDownloadDeps {
+      notCompatibleWithConfigurationCache("configuration cache not supported")
       doLast {
         configurations.findAll{it.canBeResolved}.each{it.resolve()}
         buildscript.configurations.findAll{it.canBeResolved}.each{it.resolve()}
