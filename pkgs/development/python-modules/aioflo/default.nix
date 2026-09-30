@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioflo";
-  version = "2026.09.3";
+  version = "2026.09.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioflo";
     tag = finalAttrs.version;
-    hash = "sha256-VZ0kHqv+SAZ5JfXJRN6kFFYl2V5ahJJCDdf1kdzIj/Q=";
+    hash = "sha256-tyNZcQIr50rXMZiBZSWKRqvro7xW6wlqmCd61mXDLu4=";
   };
 
   build-system = [ poetry-core ];
