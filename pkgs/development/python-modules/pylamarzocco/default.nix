@@ -47,6 +47,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pylamarzocco" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Library to interface with La Marzocco's cloud";
     homepage = "https://github.com/zweckj/pylamarzocco";
