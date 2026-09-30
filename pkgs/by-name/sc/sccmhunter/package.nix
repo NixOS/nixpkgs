@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Post exploitation tool to identify and attack SCCM related assets in an Active Directory domain";
     homepage = "https://github.com/garrettfoster13/sccmhunter";
     changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${finalAttrs.src.tag}/changelog.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "sccmhunter.py";
     maintainers = with lib.maintainers; [ purpole ];
   };
