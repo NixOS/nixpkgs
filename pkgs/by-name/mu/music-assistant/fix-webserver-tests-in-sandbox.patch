@@ -1,8 +1,8 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index 2eea3bcff..01974fddd 100644
+index a9d40851c..d63d5f5b8 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -1072,7 +1072,7 @@ def _enumerate_ip_addresses(include_ipv6: bool, publish_candidates_only: bool) -
+@@ -1108,7 +1108,7 @@ def _enumerate_ip_addresses(include_ipv6: bool, publish_candidates_only: bool) -
                  continue
              # ifaddr returns IPv6 addresses as (address, flowinfo, scope_id) tuples
              ip_str = ip.ip[0] if isinstance(ip.ip, tuple) else ip.ip

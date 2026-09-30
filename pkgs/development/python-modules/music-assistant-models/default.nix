@@ -25,14 +25,14 @@ buildPythonPackage (finalAttrs: {
   pname = "music-assistant-models";
   # Must be compatible with music-assistant-client package
   # nixpkgs-update: no auto update
-  version = "1.1.189";
+  version = "1.1.216";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
     tag = finalAttrs.version;
-    hash = "sha256-oB2ifUUysaJU/nUyTip0C06QujoFSjgowctadIHxDiQ=";
+    hash = "sha256-oB2ifUUysaJU/nUyTip4C06QujoFSjgowctadIHxDiQ=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
