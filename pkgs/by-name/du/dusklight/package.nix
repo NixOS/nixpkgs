@@ -12,7 +12,7 @@
   freetype,
   libGL,
   libglvnd,
-  libjpeg_turbo,
+  libpng,
   libpulseaudio,
   libusb1,
   libx11,
@@ -34,6 +34,7 @@
   vulkan-loader,
   wayland,
   xxhash,
+  zlib,
   zstd,
 }:
 
@@ -41,18 +42,24 @@ let
   auroraSrc = fetchFromGitHub {
     owner = "encounter";
     repo = "aurora";
-    rev = "22351fb0b76a4f4f2c4a4dff95aa300101e861aa";
-    hash = "sha256-gDY09IKlTu1Pj7mKw4eQYVXFDJ7j/aTp0iT/Ke93s6s=";
+    rev = "08122911e8621acb7ded6563813b264bec1494b5";
+    hash = "sha256-vdeHq7b+RHEwHN60pGU/FEWW/CqYZMJ2MC86CnF3iMg=";
+  };
+  borealisSrc = fetchFromGitHub {
+    owner = "encounter";
+    repo = "borealis";
+    rev = "8a1c87eb89c8448183e8d9054bcb1efac380940c";
+    hash = "sha256-dwqUh1fhDAmc1JBv0D6c8TSCNdrsDulmfhUD7GEw8EA=";
   };
   dawnSrc = fetchzip (
     {
       x86_64-linux = {
-        url = "https://github.com/encounter/dawn-build/releases/download/v20260603.191052/dawn-linux-x86_64.tar.gz";
-        hash = "sha256-yTanM4TUIv6akgpt2tai/2W6q4RAt48CxKobRgxK8WU=";
+        url = "https://github.com/encounter/dawn/releases/download/v20260807.225922/dawn-linux-x86_64.tar.gz";
+        hash = "sha256-deRtiZ221q6PO9zejJBwa56fCM63KEh6y2p7nM+MOYU=";
       };
       aarch64-linux = {
-        url = "https://github.com/encounter/dawn-build/releases/download/v20260603.191052/dawn-linux-aarch64.tar.gz";
-        hash = "sha256-EiNj16S0sIOWzOByiecsl2bZScBA5MOK348sqyxDchc=";
+        url = "https://github.com/encounter/dawn/releases/download/v20260807.225922/dawn-linux-aarch64.tar.gz";
+        hash = "sha256-WUs7dDxNbQtt5x8AIDmVuFWhcZVgSyUUuRJvr5yrREo=";
       };
     }
     .${stdenv.hostPlatform.system}
@@ -71,19 +78,30 @@ let
     hash = "sha256-pNMR8zxaaqfAzQ0AQBOXMct4usdjey1Q0Gnitg06UhM=";
   };
   rmluiSrc = fetchzip {
-    url = "https://github.com/mikke89/RmlUi/archive/f9b8c9e2935d5df2c7dff2c190d3968e99b0c3dc.tar.gz";
-    hash = "sha256-g4O/JZUrrcseOz8o2QJRt+2CeuiLnVeuDJc906xvuIg=";
+    url = "https://github.com/encounter/RmlUi/archive/215513c51ee1b3b75fc794518dda0576c462279f.tar.gz";
+    hash = "sha256-erJDGImoTfgr6IeZDYTsqK2bOTgVRm3F3iQGXhch5YA=";
+  };
+  minizSrc = fetchzip {
+    url = "https://github.com/richgel999/miniz/releases/download/3.0.2/miniz-3.0.2.zip";
+    hash = "sha256-DXysXkQEmoDAMMg1F8KexkwpXNyiHNzLJqXR9SMEkxk=";
+    stripRoot = false;
+  };
+  picosha2Src = fetchFromGitHub {
+    owner = "okdshin";
+    repo = "PicoSHA2";
+    tag = "v1.0.1";
+    hash = "sha256-3psCzbrwR+vO9TyTKOx+gEaWuHDx6pSgLOQ3DqrJsnI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dusklight";
-  version = "1.4.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "TwilitRealm";
     repo = "dusklight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wrbsgK9lAiO3+qfQcQ/o+6zEFS27CymJm76FAEanrdM=";
+    hash = "sha256-STM59AiwArcuVzZVyk4DsrM3aRfKdLCvd1zui/3cx5M=";
   };
 
   strictDeps = true;
@@ -106,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGL
     libglvnd
-    libjpeg_turbo
+    libpng
     libpulseaudio
     libusb1
     libx11
@@ -120,28 +138,35 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     nodtool
     sdl3
-    tracy
     vulkan-loader
     wayland
     xxhash
+    zlib
     zstd
   ];
 
   postUnpack = ''
     chmod -R u+w "$sourceRoot"
-    mkdir -p "$sourceRoot/extern/aurora"
+    mkdir -p "$sourceRoot/extern/aurora" "$sourceRoot/extern/borealis"
     cp -rT --no-preserve=mode "${auroraSrc}" "$sourceRoot/extern/aurora"
+    cp -rT --no-preserve=mode "${borealisSrc}" "$sourceRoot/extern/borealis"
     sed -i '/add_subdirectory(tests)/d' "$sourceRoot/extern/aurora/CMakeLists.txt"
+  '';
+
+  postPatch = ''
+    sed -i '1i #include <nlohmann/json.hpp>' src/dusk/imgui/ImGuiStateShare.cpp
   '';
 
   cmakeBuildType = "RelWithDebInfo";
 
   cmakeFlags = [
-    (lib.cmakeFeature "DUSK_WC_DESCRIBE" "v${finalAttrs.version}")
+    (lib.cmakeFeature "BOREALIS_APP_DESCRIBE" "v${finalAttrs.version}")
     (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_Git" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CXXOPTS" cxxopts.src.outPath)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" nlohmann_json.src.outPath)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON" nlohmann_json.src.outPath)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MINIZ" minizSrc.outPath)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PICOSHA2" picosha2Src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DAWN_PREBUILT" dawnSrc.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_XXHASH" xxhash.src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FMT" fmt.src.outPath)
@@ -157,7 +182,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS_INIT" "-include cstring")
     (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
-    (lib.cmakeBool "DUSK_ENABLE_SENTRY_NATIVE" false)
+    (lib.cmakeBool "DUSK_ENABLE_CODE_MODS" false)
+    (lib.cmakeFeature "BOREALIS_HTTP_BACKEND" "none")
   ];
 
   installPhase = ''
