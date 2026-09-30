@@ -43,7 +43,7 @@
 
             target=$out/${rtpPath}/${path}
             mkdir -p $out/${rtpPath}
-            cp -r . $target
+            ${lib.optionalString (!(attrs.dontUnpack or false)) "cp -r . $target"}
 
             runHook postInstall
           '';
