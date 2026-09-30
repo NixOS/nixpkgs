@@ -197,7 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
     mainProgram = "tclsh";
-    maintainers = with lib.maintainers; [ agbrooks ];
+    maintainers = with lib.maintainers; [
+      agbrooks
+      fgaz
+    ];
   };
 
   passthru =

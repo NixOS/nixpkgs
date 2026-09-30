@@ -154,6 +154,7 @@ let
 
       patches = [
         ./fix-plugin-copy.patch
+        ./fix-plugin-updater-cxx20.patch
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
