@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
       "libpcre"
       "libpcreposix"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pcre" version;
   };
 }
