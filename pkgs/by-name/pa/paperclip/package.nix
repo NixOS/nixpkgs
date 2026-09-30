@@ -72,6 +72,9 @@ let
     postPatch = ''
       substituteInPlace runner/crates/runner-core/tests/process_supervisor.rs \
         --replace-fail '"/usr/bin/which"' '"${which}/bin/which"'
+      # This process-exit probe clears PATH before spawning kill.
+      substituteInPlace runner/crates/runner-core/tests/native_provider_backend.rs \
+        --replace-fail 'Command::new("kill")' 'Command::new("${procps}/bin/kill")'
       substituteInPlace runner/crates/runner-core/src/process_supervisor.rs \
         --replace-fail 'Command::new("kill")' 'Command::new("${procps}/bin/kill")'
     '';
