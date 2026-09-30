@@ -341,9 +341,8 @@ rec {
     f: g: final: prev:
     let
       fApplied = f final prev;
-      prev' = prev // fApplied;
     in
-    fApplied // g final prev';
+    fApplied // g final (prev // fApplied);
 
   /**
     Composes a list of [`overlays`](#chap-overlays) and returns a single overlay function that combines them.
@@ -409,7 +408,7 @@ rec {
     ```
     :::
   */
-  composeManyExtensions = lib.foldr (x: y: composeExtensions x y) (final: prev: { });
+  composeManyExtensions = lib.foldr composeExtensions (final: prev: { });
 
   /**
     Create an overridable, recursive attribute set. For example:
@@ -510,13 +509,16 @@ rec {
     :::
   */
   toExtension =
+    let
+      inherit (lib) isFunction;
+    in
     f:
-    if lib.isFunction f then
+    if isFunction f then
       final: prev:
       let
         fPrev = f prev;
       in
-      if lib.isFunction fPrev then
+      if isFunction fPrev then
         # f is (final: prev: { ... })
         f final prev
       else
