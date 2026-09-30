@@ -409,7 +409,7 @@ rec {
     ```
     :::
   */
-  composeManyExtensions = lib.foldr (x: y: composeExtensions x y) (final: prev: { });
+  composeManyExtensions = lib.foldr composeExtensions (final: prev: { });
 
   /**
     Create an overridable, recursive attribute set. For example:
