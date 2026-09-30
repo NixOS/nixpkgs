@@ -53,12 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # these 5 tests fail in the lix sandbox because they rely on io_uring
+    # these tests fail in the lix sandbox because they rely on io_uring
     "--skip=cpu_worker::tests::cancel"
     "--skip=cpu_worker::tests::complete"
     "--skip=eventfd_cache::tests::test"
-    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_kernel"
-    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_userspace"
+    "--skip=io_uring::"
+    "--skip=utils::client_trace::"
+    "--skip=utils::cross_process_ring_buffer::"
   ];
 
   postInstall = ''
