@@ -60,7 +60,7 @@ Flox builds the [release-cuda jobset](https://github.com/nixos/nixpkgs/blob/mast
 | Cache URL | `https://cache.flox.dev` |
 | Public Key | `flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=` |
 
-Which store paths are available in the cache depends on which Nixpkgs revisions Flox builds against. Flox currently evaluates and builds CUDA packages against revisions from its own Nixpkgs fork at `https://github.com/flox/nixpkgs`. This repo tracks the upstream `nixos-unstable` branch across four Flox-maintained branches (`unstable`, `staging`, `stable`, and `lts`). These branch names describe _Flox’s_ Nixpkgs update schedules, _not_ the stability of the software they reference. In general Flox’s `unstable` branch tracks upstream `nixos-unstable` most closely, sampling and updating on a daily schedule.
+Flox evaluates and builds CUDA packages against revisions from its own Nixpkgs fork at `https://github.com/flox/nixpkgs`, which tracks the upstream `nixos-unstable` branch across four Flox-maintained branches (`unstable`, `staging`, `stable`, and `lts`). These branch names describe _Flox’s_ Nixpkgs update schedules, _not_ the stability of the software they reference. In general Flox’s `unstable` branch tracks upstream `nixos-unstable` most closely, sampling and updating on a daily schedule.
 
 Notably, Flox does not currently build against Nixpkgs [release channels](#how-channels-work), so users that pin to revisions from these channels are unlikely to get a cache hit from the Flox binary cache. Because different Nixpkgs revisions can produce different store paths for the same package, using a Nixpkgs revision that Flox builds against significantly increases the likelihood of a cache hit.
 
