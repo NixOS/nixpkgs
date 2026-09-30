@@ -1,0 +1,31 @@
+diff -ura native.a/vendor/wasm3/CMakeLists.txt native.b/vendor/wasm3/CMakeLists.txt
+--- native.a/vendor/wasm3/CMakeLists.txt	2025-12-06 14:49:28.961968261 -0800
++++ native.b/vendor/wasm3/CMakeLists.txt	2025-12-06 15:00:16.322022055 -0800
+@@ -99,7 +99,7 @@
+ 
+ #-fno-optimize-sibling-calls
+ 
+-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
++#set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
+ 
+ if(EMSCRIPTEN OR EMSCRIPTEN_LIB)
+ 
+diff -ura native.a/vendor/wasm3/source/m3_config_platforms.h native.b/vendor/wasm3/source/m3_config_platforms.h
+--- native.a/vendor/wasm3/source/m3_config_platforms.h	2025-12-06 14:49:04.189291630 -0800
++++ native.b/vendor/wasm3/source/m3_config_platforms.h	2025-12-06 15:09:41.626372007 -0800
+@@ -118,6 +118,7 @@
+  * Apply settings
+  */
+ 
++/*
+ # if defined (M3_COMPILER_MSVC)
+ #   define vectorcall   // For MSVC, better not to specify any call convention
+ # elif defined(__x86_64__)
+@@ -141,6 +142,7 @@
+ # elif defined (FOMU)
+ #   define vectorcall   __attribute__((section(".ramtext")))
+ # endif
++*/
+ 
+ #ifndef vectorcall
+ #define vectorcall
