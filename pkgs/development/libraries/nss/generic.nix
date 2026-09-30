@@ -76,6 +76,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   ''
+  + lib.optionalString (lib.versionAtLeast version "3.129") ''
+    substituteInPlace build.sh --replace "\$obj_dir/lib/pkgconfig/nspr.pc" "${nspr.dev}/lib/pkgconfig/nspr.pc"
+  ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
     substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
