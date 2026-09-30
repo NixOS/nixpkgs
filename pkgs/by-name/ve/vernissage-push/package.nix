@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "vernissage-push";
@@ -35,7 +36,12 @@ buildNpmPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) vernissage;
+    };
+  };
 
   meta = {
     description = "Vernissage push service";

@@ -12,6 +12,7 @@
   zlib,
   libpng,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -89,7 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) vernissage;
+    };
+  };
 
   meta = {
     description = "Vernissage API server";
