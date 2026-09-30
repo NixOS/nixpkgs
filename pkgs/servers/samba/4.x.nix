@@ -378,5 +378,6 @@ stdenv.mkDerivation (finalAttrs: {
       "smbclient"
       "wbclient"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "samba" finalAttrs.version;
   };
 })
