@@ -882,5 +882,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken =
       (lib.versions.minor version != "11" && stdenv.hostPlatform.isWindows)
       || (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin);
+
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "python" version;
   };
 })
