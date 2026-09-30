@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
-  version = "20260408";
+  version = "20260930";
 
   src = fetchFromGitHub {
-    owner = "acpica";
+    owner = "open-acpica";
     repo = "acpica";
     tag = finalAttrs.version;
-    hash = "sha256-m6xugPmjwa/67IB8GiOd0Rasfry/vMbX0lC6OIEbyvU=";
+    hash = "sha256-sUSikZrofGXMjiYG/5/bQCbtT9uSvM/0eeawZrLrm5M=";
   };
 
   nativeBuildInputs = [
@@ -65,9 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
-    changelog = "https://github.com/acpica/acpica/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/open-acpica/acpica/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
-      iasl
       gpl2Only
       bsd3
     ];
