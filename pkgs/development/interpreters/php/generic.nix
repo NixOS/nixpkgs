@@ -431,6 +431,7 @@ let
               "out"
               "dev"
             ];
+            identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "php" finalAttrs.version;
           };
         };
         final = attrs // (lib.toExtension phpAttrsOverrides) final attrs;
