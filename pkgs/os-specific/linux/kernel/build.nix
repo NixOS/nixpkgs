@@ -188,11 +188,13 @@ lib.makeOverridable (
       "pic"
     ];
 
-    ${if isModular then "outputs" else null} = [
+    # `dev` carries `vmlinux` (with its .BTF section) so that BPF consumers
+    # (e.g. systemd's nsresourced/mountfsd) can derive a matching vmlinux.h.
+    outputs = [
       "out"
       "dev"
-      "modules"
-    ];
+    ]
+    ++ lib.optional isModular "modules";
 
     # We remove a bunch of stuff that is symlinked from other places to save space,
     # which trips the broken symlink check. So, just skip it. We'll know if it explodes.
@@ -357,10 +359,11 @@ lib.makeOverridable (
       cd $buildRoot
     '';
 
-    postInstall = optionalString isModular ''
+    postInstall = ''
       mkdir -p $dev
       cp vmlinux $dev/
-
+    ''
+    + optionalString isModular ''
       mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
       # Installing from source dir instead of $buildRoot so as to omit intermediate artifacts.
       cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
