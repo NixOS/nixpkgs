@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   cmake,
   pkg-config,
   unzip,
@@ -308,12 +308,20 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals (cudaPackages.cudaAtLeast "13.2") [
       # Backport https://github.com/opencv/opencv_contrib/pull/4097
-      (fetchpatch {
-        name = "fix-cuda-13-2-compat";
-        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch";
-        stripLen = 2;
+      (fetchpatch2 {
+        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch?full_index=1";
+        hash = "sha256-bvxauVyLtHmvTaTJnnoGLr5A97Qf7DF2buXkeynDxow=";
         extraPrefix = "opencv_contrib/";
-        hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
+        stripLen = 2;
+      })
+    ]
+    ++ optionals (cudaPackages.cudaAtLeast "13.3") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4130
+      (fetchpatch2 {
+        url = "https://github.com/opencv/opencv_contrib/commit/054007b78c8288ef2fd040e77dc0cf2e45f70c15.patch?full_index=1";
+        hash = "sha256-CavwPNVW3CapGmh/8cDDfuA+ufDgxbNipVeSFp5+PDg=";
+        extraPrefix = "opencv_contrib/";
+        stripLen = 2;
       })
     ]
   );
