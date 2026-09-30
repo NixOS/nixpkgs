@@ -218,13 +218,13 @@
     "vendorHash": "sha256-scHNFyHn4VYm8wtuBdVCpgKCzwPhzrC3KBs1YHXPwos="
   },
   "cloudflare_cloudflare": {
-    "hash": "sha256-F/Qkcu9XHxWrVbGVqWw2/AB1CDcY4hKm5cGDDtnsxP8=",
+    "hash": "sha256-cazO/sszoutiwMYjM709aHNzKIpOzZbB/5nHDEgbm08=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.25.0",
+    "rev": "v5.26.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-FGt4e+WyF5Wx3jw+U+L2kdybOnnAW/AA+mBeVbRQI0Y="
+    "vendorHash": "sha256-9blJRFzwwOcdFAB93C109qqXsh2tYft1bTOldvW0a/Y="
   },
   "cloudfoundry-community_cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -1148,13 +1148,13 @@
     "vendorHash": "sha256-6M6jTrukO0VhyZRdYbbICm22upbGyOkUSuHqMLTPcEM="
   },
   "rootlyhq_rootly": {
-    "hash": "sha256-bn5QMl+9okXzkfZDOdbYPpMs5x0JDL22cwW6AXFkE5A=",
+    "hash": "sha256-sWCG6mD7fYi2Yon5Wu/54+m+T8KcUYd38yDt8M3LS+E=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v5.21.1",
+    "rev": "v5.23.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2zHDQyIQQm9ySpPSjobQXTXFopT4290b1O0y+lvVD88="
+    "vendorHash": "sha256-Lusa+8VL8wQGIHYMiuiNTy4tqza4zO1A4ROpZ7X42KM="
   },
   "rundeck_rundeck": {
     "hash": "sha256-g8unbz8+UGLiAOJju6E2bLkygvZgHkv173PdMDefmrc=",

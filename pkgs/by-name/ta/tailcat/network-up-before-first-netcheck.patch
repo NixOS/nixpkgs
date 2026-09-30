@@ -1,0 +1,29 @@
+Mark magicsock's network up before SetPrivateKey starts the first netcheck.
+
+With no non-loopback interface (e.g. the Nix build sandbox) the engine
+starts with magicsock's network down. SetPrivateKey and SetDERPMap kick
+off endpoint updates in the background, and if one of them runs before
+the later SetNetworkUp(true), updateNetInfo bails out on networkDown()
+without ever picking a home DERP. A server then is not reachable over
+DERP until the periodic re-STUN 20-26s later, and clients give up after
+10s with "tailcat Ping: context deadline exceeded".
+
+diff --git a/tailcat.go b/tailcat.go
+--- a/tailcat.go
++++ b/tailcat.go
+@@ -1577,6 +1577,7 @@ func (lb *locoBackend) Start() error {
+ 	mc := lb.sys.MagicSock.Get()
+ 	lb.logf("disco pub key: %v", mc.DiscoPublicKey())
+ 
++	mc.SetNetworkUp(true)
+ 	mc.SetPrivateKey(lb.priv)
+ 	mc.SetDERPMap(lb.dm)
+ 
+@@ -1632,7 +1633,6 @@ func (lb *locoBackend) Start() error {
+ 	mc.SetNetworkMap(nm.SelfNode, nm.Peers)
+ 	e.SetSelfNode(nm.SelfNode)
+ 	lb.sys.Netstack.Get().UpdateNetstackIPs(nm)
+-	mc.SetNetworkUp(true)
+ 	lb.logf("NetworkMap: %v", logger.AsJSON(nm))
+ 
+ 	// Install the live per-peer config sources. WireGuard peers are

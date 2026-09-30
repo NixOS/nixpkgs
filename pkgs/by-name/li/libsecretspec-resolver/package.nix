@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsecretspec-resolver";
-  version = "0.21.0";
+  version = "0.21.1";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cachix";
     repo = "secretspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-12jIhLZhtyQwkt2vKHqjGOuKSwwevcxzp8Ii02RTMLY=";
+    hash = "sha256-8OC1WS8VWTSwUJlT/qWx9CCPmO90G2OWJxEKZGUgXqM=";
   };
 
   cmakeDir = "../libsecretspec-resolver";
