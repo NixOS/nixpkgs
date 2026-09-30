@@ -231,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     fontconfig
   ]
-  ++ lib.optionals (atLeast11 && !atLeast21) [
+  ++ lib.optionals (between "11" "22") [
     harfbuzz
   ]
   ++ lib.optionals atLeast11 [
@@ -296,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21 && atLeast11) [
+  ++ lib.optionals (between "11" "22") [
     "--with-freetype=system"
     "--with-harfbuzz=system"
   ]
@@ -305,7 +305,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libpng=system"
     "--with-lcms=system"
   ]
-  ++ lib.optionals (featureVersion == "11") [
+  ++ lib.optionals (is "11") [
     "--disable-warnings-as-errors"
   ]
   # OpenJDK 11 cannot be built by recent versions of Clang, as far as I can tell (see
@@ -320,9 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This probably shouldn’t apply to OpenJDK 21; see
   # b7e68243306833845cbf92e2ea1e0cf782481a51 which removed it for
   # versions 15 through 20.
-  ++ lib.optional (
-    (featureVersion == "11" || featureVersion == "21") && stdenv.hostPlatform.isx86_64
-  ) "--with-jvm-features=zgc"
+  ++ lib.optional ((is "11" || is "21") && stdenv.hostPlatform.isx86_64) "--with-jvm-features=zgc"
   ++ lib.optional headless (if atLeast11 then "--enable-headless-only" else "--disable-headful")
   ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx_jdk}";
 
@@ -353,7 +351,7 @@ stdenv.mkDerivation (finalAttrs: {
           # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
           # when building jtreg
           [ "-Wformat" ]
-          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+          ++ lib.optionals (stdenv.cc.isGNU && is "11") [
             # Fix build with gcc15
             "-std=gnu17"
           ]
@@ -378,7 +376,7 @@ stdenv.mkDerivation (finalAttrs: {
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
           ]
-          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+          ++ lib.optionals (stdenv.cc.isGNU && is "8") [
             # Fix build with gcc15
             "-std=gnu17"
           ]
