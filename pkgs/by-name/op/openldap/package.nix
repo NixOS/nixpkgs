@@ -171,5 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
       helsinki-Jo
     ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openldap" finalAttrs.version;
   };
 })
