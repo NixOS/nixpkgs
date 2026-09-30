@@ -22,7 +22,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.34.0";
+  version = "0.34.1";
 
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-waUP6pItEjA3KuTcL+2rlTjnB7ciGfOwvfwutAyJvPg=";
+    hash = "sha256-qJm1vQYhE/kVZL4bUC2pMHGjw9h4E9QGZ00qwEi3los=";
     fetchSubmodules = true;
     fetchTags = true; # required for `git describe`. implies `leaveDotGit`
     postFetch = ''
