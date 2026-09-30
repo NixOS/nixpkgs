@@ -85,14 +85,12 @@ in
         nlohmann_json
       ];
 
-      passthru.tests.pkg-config = testers.hasPkgConfigModules {
-        package = nixf;
-        moduleNames = [ "nixf" ];
-      };
+      passthru.tests.pkg-config = testers.testMetaPkgConfig nixf;
 
       meta = common.meta // {
         description = "Nix language frontend, parser & semantic analysis";
         mainProgram = "nixf-tidy";
+        pkgConfigModules = [ "nixf" ];
       };
     }
   );
@@ -118,13 +116,11 @@ in
         boost
       ];
 
-      passthru.tests.pkg-config = testers.hasPkgConfigModules {
-        package = nixt;
-        moduleNames = [ "nixt" ];
-      };
+      passthru.tests.pkg-config = testers.testMetaPkgConfig nixt;
 
       meta = common.meta // {
         description = "Supporting library that wraps C++ nix";
+        pkgConfigModules = [ "nixt" ];
       };
     }
   );
