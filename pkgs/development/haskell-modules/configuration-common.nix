@@ -3409,7 +3409,6 @@ with haskellLib;
         self.hashable
         self.vector
       ];
-      jailbreak = true; # upper aeson bound excludes newer versions nixpkgs ships
       homepage = "https://github.com/brendanhay/amazonka/tree/main/lib/amazonka-dynamodb-attributevalue";
       description = "Package exposing the DynamoDB AttributeValue type for other packages to reuse";
       license = lib.licenses.mpl20;
@@ -3418,6 +3417,14 @@ with haskellLib;
       (setAmazonkaSourceRoot "lib/services/amazonka-dynamodb")
       (addBuildDepends [ self.amazonka-dynamodb-attributevalue ])
       unmarkBroken
+      doDistribute
+    ];
+    # Also needs amazonka-dynamodb-attributevalue, same as amazonka-dynamodb above.
+    amazonka-dynamodb-streams = lib.pipe super.amazonka-dynamodb-streams [
+      (setAmazonkaSourceRoot "lib/services/amazonka-dynamodb-streams")
+      (addBuildDepends [ self.amazonka-dynamodb-attributevalue ])
+      unmarkBroken
+      doDistribute
     ];
     amazonka = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka)
