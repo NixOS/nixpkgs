@@ -6632,6 +6632,7 @@ with pkgs;
 
   tk = tk-8_6;
 
+  tk-9_1 = callPackage ../development/libraries/tk/9.1.nix { tcl = tcl-9_1; };
   tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
 
