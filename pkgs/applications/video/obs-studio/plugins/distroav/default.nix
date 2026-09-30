@@ -5,7 +5,7 @@
   obs-studio,
   cmake,
   qtbase,
-  ndi-6,
+  ndi,
   curl,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     obs-studio
     qtbase
-    ndi-6
+    ndi
     curl
   ];
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Add path (variable added in hardcode-ndi-path.patch
-    substituteInPlace src/plugin-main.cpp --replace-fail "@NDI@" "${ndi-6}"
+    substituteInPlace src/plugin-main.cpp --replace-fail "@NDI@" "${ndi}"
 
     # Replace bundled NDI SDK with the upstream version
     # (This fixes soname issues)
     rm -rf lib/ndi
-    ln -s ${ndi-6}/include lib/ndi
+    ln -s ${ndi}/include lib/ndi
   '';
 
   cmakeFlags = [ "-DENABLE_QT=ON" ];
