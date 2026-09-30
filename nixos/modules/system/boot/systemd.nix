@@ -692,7 +692,10 @@ in
         "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
       };
 
-    services.dbus.enable = true;
+    services.dbus = {
+      enable = true;
+      packages = [ cfg.package ];
+    };
 
     users.users.systemd-network = {
       uid = config.ids.uids.systemd-network;
