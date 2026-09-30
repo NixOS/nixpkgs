@@ -36,20 +36,22 @@
   qt5,
   testers,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "14.4.0";
+  version = "14.5.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I1ftlmxs7Xv6cgsGQMAjEGWvARWPvqIVCT/6Fa7UQ3E=";
+    hash = "sha256-fi+k6MfJjo2BQGcfV3JUKvqqaszPvXRlBohrbYX3+NY=";
   };
 
   # This test fails reliably when executed through mesonCheckPhase but passes with
   # a direct 'meson test' checkPhase, the validated symbols are fine but msan is not happy
   # skipping this for now as it is not relevant for the packaging
-  patches = [ ./disable-check-symbols-test.patch ];
+  patches = [
+    ./disable-check-symbols-test.patch
+    ./fix-disabled-vector-tests.patch
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
