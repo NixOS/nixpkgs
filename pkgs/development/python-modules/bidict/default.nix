@@ -2,49 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   hypothesis,
   pytest-xdist,
   pytestCheckHook,
+  sortedcollections,
   typing-extensions,
-  wheel,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.23.1";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jab";
     repo = "bidict";
     tag = "v${version}";
-    hash = "sha256-WE0YaRT4a/byvU2pzcByuf1DfMlOpYA9i0PPrKXsS+M=";
+    hash = "sha256-usY8oJoU72IXS1Um46Eir1aHGjZRuwipHAQ6uACyJEg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.13,<0.12" "uv_build"
+  '';
+
   build-system = [
-    setuptools
-    wheel
+    uv-build
   ];
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
+    sortedcollections
     typing-extensions
   ];
-
-  # Remove the bundled pytest.ini, which adds options to run additional integration
-  # tests that are overkill for our purposes.
-  preCheck = ''
-    rm pytest.ini
-  '';
 
   pythonImportsCheck = [ "bidict" ];
 
   meta = {
-    homepage = "https://bidict.readthedocs.io";
-    changelog = "https://bidict.readthedocs.io/changelog.html";
+    homepage = "https://github.com/jab/bidict";
+    changelog = "https://github.com/jab/bidict/blob/main/CHANGELOG.rst";
     description = "Bidirectional mapping library for Python";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
