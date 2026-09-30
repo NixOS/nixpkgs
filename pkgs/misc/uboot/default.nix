@@ -83,11 +83,13 @@ let
           patchShebangs tools
           patchShebangs scripts
         ''
-        # This warning got removed in
-        # https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=cba90ce82064ad1e6d25f20d8eaa940bd2fc97ed
+        # dtc 1.8 removed the `graph_child_address` check and added the
+        # `node_name_not_empty` error. This now rejects binman's
+        # "@<name>-SEQ" template nodes. Upstream has yet to update
+        # binman, so we use this workaround for now.
         + ''
           for f in scripts/Makefile.lib dts/upstream/Makefile; do
-            substituteInPlace "$f" --replace-fail -Wno-graph_child_address ""
+            substituteInPlace "$f" --replace-fail -Wno-graph_child_address -Eno-node_name_not_empty
           done
         '';
 
