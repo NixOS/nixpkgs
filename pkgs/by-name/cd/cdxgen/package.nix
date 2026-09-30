@@ -4,7 +4,7 @@
   lib,
   makeWrapper,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -15,28 +15,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "13.0.1";
+  version = "13.2.0";
 
   src = fetchFromGitHub {
     owner = "cdxgen";
     repo = "cdxgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wnvAeZprSUDCFO5UXyycrF2cZ+a/E70k5V8CM6IJ0NM=";
+    hash = "sha256-mOCLKCpxSBqIk3VN5IBIW3SxZWYT2mD8nF197D1VELc=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_12
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_11;
+    pnpm = pnpm_12;
     fetcherVersion = 4;
-    hash = "sha256-hVa6Um0WkcsI8MwwkqwFwOqESTMzR2Ox9DSmESzEDfQ=";
+    hash = "sha256-xgxO0AgtAKyVIpqaEDtaYK0Tzx+JD+rZvTXLcLyg94I=";
   };
 
   installPhase = ''
@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
     homepage = "https://github.com/cdxgen/cdxgen";
+    changelog = "https://github.com/cdxgen/cdxgen/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       quincepie
