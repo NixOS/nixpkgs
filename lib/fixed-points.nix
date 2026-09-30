@@ -509,13 +509,16 @@ rec {
     :::
   */
   toExtension =
+    let
+      inherit (lib) isFunction;
+    in
     f:
-    if lib.isFunction f then
+    if isFunction f then
       final: prev:
       let
         fPrev = f prev;
       in
-      if lib.isFunction fPrev then
+      if isFunction fPrev then
         # f is (final: prev: { ... })
         f final prev
       else
