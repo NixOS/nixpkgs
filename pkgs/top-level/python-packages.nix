@@ -8822,6 +8822,8 @@ self: super: with self; {
 
   jiwer = callPackage ../development/python-modules/jiwer { };
 
+  jmap-email = callPackage ../development/python-modules/jmap-email { };
+
   jmespath = callPackage ../development/python-modules/jmespath { };
 
   jmp = callPackage ../development/python-modules/jmp { };
