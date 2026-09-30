@@ -41,6 +41,7 @@ rec {
     rm -rf toolkit/components/ml/vendor/openai
 
     cp -r ${source}/themes/browser .
+    cp ${source}/assets/icons/* browser/themes/shared/icons/
     cp ${source}/assets/search-config-v2.json services/settings/dumps/main/search-config-v2.json
     cp ${source}/assets/search-config-icons.json services/settings/dumps/main/search-config-icons.json
     cp ${source}/assets/2c4b8834-030c-4097-a887-c7506689095c services/settings/dumps/main/search-config-icons
