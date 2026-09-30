@@ -303,7 +303,8 @@ in
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-5\"].status == \"cancelled\" and .runs[\"fixture-5\"].stops == 1'")
     # The default permits concurrent runs; bound this agent to one slot so a
     # second board invoke is a genuine queued successor before the crash.
-    controller.succeed(f"curl -fsS -X PATCH -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{\"runtimeConfig\":{{\"heartbeat\":{{\"wakeOnDemand\":true,\"maxConcurrentRuns\":1}}}}' {board_url}/api/agents/{agent_id} > /run/serial-agent.json")
+    serial_policy = json.dumps({"runtimeConfig": {"heartbeat": {"wakeOnDemand": True, "maxConcurrentRuns": 1}}})
+    controller.succeed(f"curl -fsS -X PATCH -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{serial_policy}' {board_url}/api/agents/{agent_id} > /run/serial-agent.json")
     controller.succeed("jq -e '.runtimeConfig.heartbeat.maxConcurrentRuns == 1' /run/serial-agent.json")
     worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/hold-next")
     controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/crash-active.json")
