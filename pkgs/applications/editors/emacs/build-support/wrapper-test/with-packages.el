@@ -58,6 +58,10 @@ EMACS-PROGRAM specifies the subprocess Emacs to start."
                      "--eval" (format "(prin1 %S)" form))
     (`(,result) (read result))))
 
+(defvar with-packages-unwrapped-emacs-program nil
+  "Absoluate file of an unwrapped Emacs binary.
+Set this variable before running related tests.")
+
 ;;;; Tests that can be run in a batch Emacs
 
 (ert-deftest with-packages-requested-packages-are-available ()
@@ -110,6 +114,22 @@ EMACS-PROGRAM specifies the subprocess Emacs to start."
 (ert-deftest with-packages-tree-sitter-dir-is-added-to-treesit-extra-load-path ()
   (skip-unless (treesit-available-p))
   (should (treesit-language-available-p 'nix)))
+
+(ert-deftest with-packages-invocation-name-and-directory-are-wrapped ()
+  "Test https://github.com/NixOS/nixpkgs/pull/361145."
+  ;; Generally, to a build filename, `expand-file-name' is better than `concat',
+  ;; because `expand-file-name' accepts a dir not ending with "/".
+  ;; We use `concat' because we want to support existing `concat' usages, such as esup.el:
+  ;; https://github.com/jschaf/esup/blob/4b49c8d599d4cc0fbf994e9e54a9c78e5ab62a5f/esup.el#L161
+  (ert-info ("wrapped Emacs has correct invocation-name and -directory")
+    (should (equal (file-truename (executable-find "emacs"))
+                   (concat invocation-directory invocation-name))))
+  (ert-info ("unwrapped subprocess Emacs has correct invocation-name and -directory")
+    (should (file-name-absolute-p with-packages-unwrapped-emacs-program))
+    (should
+     (equal with-packages-unwrapped-emacs-program
+            (with-packages-eval-in-sub-emacs '(concat invocation-directory invocation-name)
+                                             with-packages-unwrapped-emacs-program)))))
 
 ;;;; Utils for non-batch tests
 
