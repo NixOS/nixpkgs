@@ -15062,6 +15062,11 @@
     githubId = 45126464;
     name = "Adam J.";
   };
+  kfears = {
+    github = "kfearsoff";
+    githubId = 66781795;
+    name = "KFears";
+  };
   kfiz = {
     email = "doroerose@gmail.com";
     github = "kfiz";
