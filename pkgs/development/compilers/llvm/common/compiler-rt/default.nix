@@ -128,7 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
+    lib.optionals (!stdenv.hostPlatform.useLLVM) [
+      python3 # FIXME: infinite recursion for pkgsLLVM
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   strictDeps = true;
