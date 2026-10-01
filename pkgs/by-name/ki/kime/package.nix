@@ -5,6 +5,7 @@
   rustc,
   cargo,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -49,15 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FP7uHsLVozB6kpwCuNFrYY2j6RQUL6n41hfvlFN5/qI=";
   };
 
+  patches = [
+    # Qt5 input context discovery fix from upstream #785, merged after the 3.2.0 release.
+    (fetchpatch {
+      url = "https://github.com/Riey/kime/commit/bf443176f2eb49899daf819618c0be322cba3d55.patch";
+      hash = "sha256-PTomeZnWegDtbyZGVxGHtdK+jp9fB7zp1Du9EdOsHuM=";
+    })
+  ];
+
   # Replace autostart path
   postPatch = ''
     substituteInPlace res/kime.desktop res/kime-xdg-autostart \
       --replace-warn "/usr/bin/kime" "kime"
 
-    # Qt5 also requires the versioned platform input context interface ID.
-    substituteInPlace src/frontends/qt5/src/plugin.hpp \
-      --replace-fail '#define KIME_QT_IID "org.qt-project.Qt.QPlatformInputContextFactoryInterface"' \
-        '#define KIME_QT_IID QPlatformInputContextFactoryInterface_iid'
   '';
 
   dontWrapQtApps = true;
