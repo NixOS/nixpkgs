@@ -2,8 +2,8 @@
 {
   name = "Wakapi";
 
-  nodes = {
-    wakapiPsql =
+  containers = {
+    psql =
       { pkgs, ... }:
       {
         services.wakapi = {
@@ -32,7 +32,7 @@
         };
       };
 
-    wakapiSqlite =
+    sqlite =
       { pkgs, ... }:
       {
         services.wakapi = {
@@ -61,16 +61,16 @@
   # catch very basic mistakes in the module.
   testScript = ''
     with subtest("Test Wakapi with postgresql backend"):
-      wakapiPsql.start()
-      wakapiPsql.wait_for_unit("wakapi.service")
-      wakapiPsql.wait_for_open_port(3000)
-      wakapiPsql.succeed("curl --fail http://localhost:3000")
+      psql.start()
+      psql.wait_for_unit("wakapi.service")
+      psql.wait_for_open_port(3000)
+      psql.succeed("curl --fail http://localhost:3000")
 
     with subtest("Test Wakapi with sqlite3 backend"):
-      wakapiSqlite.start()
-      wakapiSqlite.wait_for_unit("wakapi.service")
-      wakapiSqlite.wait_for_open_port(3001)
-      wakapiSqlite.succeed("curl --fail http://localhost:3001")
+      sqlite.start()
+      sqlite.wait_for_unit("wakapi.service")
+      sqlite.wait_for_open_port(3001)
+      sqlite.succeed("curl --fail http://localhost:3001")
   '';
 
   meta.maintainers = [ lib.maintainers.NotAShelf ];
