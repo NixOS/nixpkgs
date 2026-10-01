@@ -30,7 +30,7 @@ let
       # extra actions upon
       postBuild = ''
         wrapProgram "$out/bin/helm" \
-          "--set" "HELM_PLUGINS" "$HELM_PLUGINS:${pluginsDir}" ${extraMakeWrapperArgs}
+          "--suffix" "HELM_PLUGINS" ":" "${pluginsDir}" ${extraMakeWrapperArgs}
       '';
       paths = [
         helm
