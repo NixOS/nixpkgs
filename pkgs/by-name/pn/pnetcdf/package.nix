@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnetcdf";
-  version = "1.14.1";
+  version = "1.15.0-alpha";
 
   src = fetchFromGitHub {
     owner = "Parallel-NetCDF";
     repo = "PnetCDF";
     tag = "checkpoint.${finalAttrs.version}";
-    hash = "sha256-nz40Ji9qh6UatlLOuChsWYvHwfVNacJI87usGBcYyFk=";
+    hash = "sha256-FAsBr8jWzJcRWSpfq8MLov6G9WmkRKAmFz6PSZ7qUWU=";
   };
 
   nativeBuildInputs = [
