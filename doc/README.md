@@ -35,7 +35,7 @@ See [Document structure](#document-structure) for a structural template.
 
 ## Building and navigating documentation locally
 
-The Nixpkgs manual is rendered by [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs/) (sometimes abbreviated `nrd`).
+The Nixpkgs manual is rendered by [`nixos-render-docs`](../pkgs/by-name/ni/nixos-render-docs/).
 
 Its index is [`nav.json`](./nav.json).
 
@@ -52,7 +52,7 @@ $ nix-shell
 
 Within the developer environment, run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual.
 
-Changes to the renderer `pkgs/by-name/ni/nixos-render-docs` need a manual restart: run `devmode` again.
+If the `nixos-render-docs` source-code changes, `devmode` must be restarted.
 
 ### Building the docs
 
