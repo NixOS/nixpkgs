@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ghr";
-  version = "0.18.4";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zgRtu8RYyfBwSRs1nCOONyFLCRS6wCKqSLmqOLdJ9H0=";
+    sha256 = "sha256-uUVZ26GE73LKQ/s0I4VX60EC5dLGA5UotJw0ndpSv0k=";
   };
 
   vendorHash = "sha256-j5wa8rK4+gjjdJP7BlixDlztHdvSHzUeTuJKitQzc1M=";

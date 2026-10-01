@@ -679,13 +679,13 @@
     "vendorHash": "sha256-hfSLa5MrrQ0JFZntykbU33TQnuAoYYFasOzUOzi1RV8="
   },
   "hashicorp_time": {
-    "hash": "sha256-kdCdph+H3fWizMh+7AGBEscKpCwP7naj+3NSmPK25Us=",
+    "hash": "sha256-7els7FaCojWzXp+0YP9YYJTAKS2PqpR1SMC1WxsfVb0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/time",
     "owner": "hashicorp",
     "repo": "terraform-provider-time",
-    "rev": "v0.14.1",
+    "rev": "v0.14.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pIuZNark35Aqstd2hDf5QGmegzfFa439+5zI/qBsWLA="
+    "vendorHash": "sha256-t20uPPaKr43Al7ExOPD+cw1hVwaVwxljHHR0tVPmrYw="
   },
   "hashicorp_tls": {
     "hash": "sha256-lUaVcnN+1Siz78XqrPLUlpUPRNLzp1VtWxgZEysL3pM=",
