@@ -19,8 +19,14 @@ in
       {
         services.liberaforms = {
           enable = true;
+          reverseProxy = {
+            enable = true;
+            ssl = false;
+            host = "liberaforms.test";
+            webserver.nginx = { };
+          };
           settings = {
-            BASE_URL = "http://0.0.0.0:80";
+            BASE_URL = "http://0.0.0.0:${toString ports.service}";
             ROOT_USER = "ngi@nixos.org";
             SECRET_KEY = "a_secret_key";
             SESSION_TYPE = "filesystem";
@@ -45,6 +51,13 @@ in
 
     machine.wait_for_unit("liberaforms.service")
     machine.wait_until_succeeds("curl --fail http://0.0.0.0:${toString ports.service}/")
+
+    machine.wait_for_unit("nginx.service")
+    machine.wait_until_succeeds(
+        "curl --fail --resolve liberaforms.test:80:127.0.0.1 http://liberaforms.test/")
+    machine.succeed(
+        "curl -sI --resolve liberaforms.test:80:127.0.0.1 http://liberaforms.test/"
+        " | grep -qi 'x-frame-options: SAMEORIGIN'")
   '';
 
   # Debug interactively with:
