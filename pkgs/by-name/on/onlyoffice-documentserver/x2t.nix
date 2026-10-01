@@ -1076,5 +1076,6 @@ buildCoreComponent "X2tConverter/build/Qt" {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ raboof ];
     platforms = lib.platforms.linux;
+    mainProgram = "x2t";
   };
 }
