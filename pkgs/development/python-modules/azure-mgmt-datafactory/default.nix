@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "9.3.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_datafactory";
     inherit version;
-    hash = "sha256-9f3VzUFvDtcd/t8F3HZ3uPDlLzQo/VsXsEySAN2NNrM=";
+    hash = "sha256-yD7rKwksHx5bskmf+7pv14CaEnRzmTD52x4zYnNAVYc=";
   };
 
   build-system = [ setuptools ];
