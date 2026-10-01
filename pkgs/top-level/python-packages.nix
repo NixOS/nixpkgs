@@ -12456,6 +12456,8 @@ self: super: with self; {
 
   oic = callPackage ../development/python-modules/oic { };
 
+  oinker = callPackage ../development/python-modules/oinker { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
@@ -15765,8 +15767,6 @@ self: super: with self; {
   pyosf = callPackage ../development/python-modules/pyosf { };
 
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
-
-  pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
 

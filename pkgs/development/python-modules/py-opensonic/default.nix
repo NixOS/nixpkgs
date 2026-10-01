@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/khers/py-opensonic";
     changelog = "https://github.com/khers/py-opensonic/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

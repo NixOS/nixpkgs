@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -37,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.9";
+  version = "0.12.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,24 +44,8 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zh5PE9pq+loJCIW5EPvtWTco/ouIK3TzJ0o3Ydthz00=";
+    hash = "sha256-cgtRncxqT6ZKBUR3NpN08+c7zddxU3EoeIF5Xt9omc0=";
   };
-
-  patches = [
-    # Adapt to the `jax.experimental.hijax` changes in jax 0.11.2, which removed `HiPrimitive` and
-    # renamed `VJPHiPrimitive` to `HiPrim`.
-    # Both commits are merged upstream but not part of any release yet (latest is 0.12.9).
-    (fetchpatch {
-      name = "hijax-migrate-hiprimitive-to-vjphiprimitive.patch";
-      url = "https://github.com/google/flax/commit/d2b105f0c688d94f4334a7d74e573da382f0b71d.patch";
-      hash = "sha256-fQAQ2AWRYB5RAHkcRsgcNGgusvJxVpiGK6PRn+ZPv7M=";
-    })
-    (fetchpatch {
-      name = "hijax-rename-vjphiprimitive-to-hiprim.patch";
-      url = "https://github.com/google/flax/commit/01854da11286b4109c59d7fd9205f3822fe807d6.patch";
-      hash = "sha256-c28ppUZZkX/5qlLg88r0bQDLWMzkLr7MkzUhGkUm9gA=";
-    })
-  ];
 
   build-system = [
     setuptools

@@ -1,0 +1,34 @@
+Backported from upstream commit a2d5c363b5e457ed842971d68f8b945247cc4a04
+("REFAC(plugin): Add constructors to UpdateEntry struct"), which landed on
+master but was never backported to the 1.5.x branch.  Adjusted for the
+member ordering used in 1.5.x.
+
+UpdateEntry declares a defaulted default constructor, which keeps it an
+aggregate under C++17 but not under C++20, so the brace-enclosed initialiser
+below stops compiling.  abseil-cpp exports cxx_std_20 as an interface compile
+feature and protobuf::libprotobuf propagates it, which raises the standard used
+for the client targets above the C++17 requested via CMAKE_CXX_STANDARD.
+
+--- a/src/mumble/PluginUpdater.h
++++ b/src/mumble/PluginUpdater.h
+@@ -29,6 +29,8 @@
+ /// the same plugin.
+ struct UpdateEntry {
+ 	UpdateEntry() = default;
++	explicit UpdateEntry(plugin_id_t id, const QUrl &url, const QString &name, int redirectCount = 0)
++		: pluginID(id), updateURL(url), fileName(name), redirects(redirectCount) {}
+ 
+ 	plugin_id_t pluginID = std::numeric_limits< plugin_id_t >::max();
+ 	QUrl updateURL;
+--- a/src/mumble/PluginUpdater.cpp
++++ b/src/mumble/PluginUpdater.cpp
+@@ -45,8 +45,7 @@
+ 				QUrl updateURL = plugin->getUpdateDownloadURL();
+ 
+ 				if (updateURL.isValid() && !updateURL.isEmpty() && !updateURL.fileName().isEmpty()) {
+-					UpdateEntry entry = { plugin->getID(), updateURL, updateURL.fileName(), 0 };
+-					m_pluginsToUpdate << entry;
++					m_pluginsToUpdate.append(UpdateEntry(plugin->getID(), updateURL, updateURL.fileName()));
+ 				}
+ 			}
+ 

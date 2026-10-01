@@ -38,15 +38,16 @@
             postInstall
             ;
 
-          installPhase = ''
-            runHook preInstall
+          installPhase =
+            attrs.installPhase or ''
+              runHook preInstall
 
-            target=$out/${rtpPath}/${path}
-            mkdir -p $out/${rtpPath}
-            ${lib.optionalString (!(attrs.dontUnpack or false)) "cp -r . $target"}
+              target=$out/${rtpPath}/${path}
+              mkdir -p $out/${rtpPath}
+              ${lib.optionalString (!(attrs.dontUnpack or false)) "cp -r . $target"}
 
-            runHook postInstall
-          '';
+              runHook postInstall
+            '';
 
           meta = {
             platforms = lib.platforms.all;

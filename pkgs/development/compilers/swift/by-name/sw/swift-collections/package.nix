@@ -5,6 +5,7 @@
   gitUpdater,
   ninja,
   stdenv,
+  stdlib,
   swift-minimal,
 }:
 
@@ -59,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@include@' "''${!outputDev}" \
       --replace-fail '@lib@' "''${!outputLib}" \
       --replace-fail '@swiftPlatform@' ${stdenv.hostPlatform.swift.platform}
+  ''
+  # The CMake build doesn’t include the Span backdeploy, but we need it to support all supported deployment targets.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for dylib in "''${!outputLib}/lib"/*.dylib; do
+      if otool -L "$dylib" | grep -q "libswiftCompatibilitySpan.dylib"; then
+        install_name_tool "$dylib" \
+          -add_rpath /usr/lib/swift \
+          -add_rpath ${lib.escapeShellArg (lib.getLib stdlib)}/lib/swift-6.2/macosx
+      fi
+    done
   '';
 
   __structuredAttrs = true;

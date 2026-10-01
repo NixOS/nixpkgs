@@ -101,6 +101,6 @@ tcl.mkTclDerivation {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
     mainProgram = "wish";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }
