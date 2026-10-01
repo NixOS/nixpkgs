@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchFromForgejo,
   pkg-config,
   clang,
   libclang,
@@ -17,25 +17,28 @@
   sqlite,
   fontconfig,
   freetype,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moxnotify";
-  version = "0.1.0";
+  version = "0.1.0-unstable-2026-05-09";
 
-  src = fetchFromGitHub {
+  src = fetchFromForgejo {
+    domain = "git.r0chd.pl";
     owner = "mox-desktop";
     repo = "moxnotify";
-    rev = "6726af08621072e0c95a147cf4ae63ea66c7e857";
-    hash = "sha256-tTgY/813WaW3K8QKbj6qwCVKOAA8zMqy97Q7Z5qA0JM=";
+    rev = "bc57c855579631fdd7dd755c8918827fc8405fdd";
+    hash = "sha256-N6pYVU2LPC7Kc9y6gPc+rrWSvXEYJXN/NoCXmzY3uJg=";
   };
 
-  cargoHash = "sha256-o2YyPa7bX9585lsicJjhj1xJ1jMdU5mlxbEn/6zSy8U=";
+  cargoHash = "sha256-de6gM296GMbEntIbsTrQJQWK1SQiZCN8hBS+dqtQJqA=";
 
   nativeBuildInputs = [
     pkg-config
     clang
     makeWrapper
+    protobuf
   ];
 
   buildInputs = [
@@ -65,10 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Install both binaries with proper names
   postInstall = ''
-    # Rename binaries to have more descriptive names
-    mv $out/bin/daemon $out/bin/moxnotify
-    mv $out/bin/ctl $out/bin/moxctl
-
     # Install D-Bus service file
     mkdir -p $out/share/dbus-1/services
     substitute ${finalAttrs.src}/pl.mox.notify.service.in $out/share/dbus-1/services/pl.mox.notify.service \
@@ -99,6 +98,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ logger ];
     platforms = lib.platforms.linux; # Wayland-specific, Linux only
-    mainProgram = "moxnotify";
+    mainProgram = "client";
   };
 })
