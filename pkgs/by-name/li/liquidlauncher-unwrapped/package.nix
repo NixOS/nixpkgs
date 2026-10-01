@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "liquidlauncher-unwrapped";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "CCBlueX";
     repo = "LiquidLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XNTXZuUYoDnfN0NrAjRyCPstA5/vZYWNc9jlfuaVl/Y=";
+    hash = "sha256-hwNXrC3Zg0uOZiS124FSiv3X5EgB8d44vL9ypjQdt9k=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-cw7KMBtwF6/s9oTVG9LajbWjJrYHQ3j2akdUOm6pix0=";
+  cargoHash = "sha256-TGIue9NkgF2X7uDbrhrpyGag2vNdsjzOmLURzVS6Ghw=";
 
   postPatch = ''
     cp -r ${finalAttrs.node_modules}/node_modules .
