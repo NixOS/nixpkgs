@@ -2,9 +2,9 @@
 
 This directory houses the source files for the Nixpkgs manual, including
 
-- [Getting Started](https://github.com/NixOS/nixpkgs/tree/master/doc/getting-started) guides
-- [Onboarding guides](https://github.com/nixOS/nixpkgs/blob/master/doc/using-nixpkgs.md) for using Nixpkgs
-- [Language frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) shipped with Nixpkgs.
+- [Getting Started](./getting-started) guides
+- [Onboarding guides](./using-nixpkgs.md) for using Nixpkgs
+- [Language frameworks](./languages-frameworks) shipped with Nixpkgs.
 
 There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/unstable/) and [latest stable release](https://nixos.org/manual/nixpkgs/stable/).
 
@@ -35,9 +35,9 @@ See [Document structure](#document-structure) for a structural template.
 
 ## Building and navigating documentation locally
 
-The Nixpkgs manual is rendered by [nixos-render-docs](https://github.com/nixos/nixpkgs/tree/master/pkgs/by-name/ni/nixos-render-docs/) (sometimes abbreviated `nrd`)
+The Nixpkgs manual is rendered by [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs/) (sometimes abbreviated `nrd`).
 
-Its index is [`nav.json`](https://github.com/NixOS/nixpkgs/blob/master/doc/nav.json).
+Its index is [`nav.json`](./nav.json).
 
 ### Development environment
 
