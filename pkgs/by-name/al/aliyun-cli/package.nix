@@ -22,6 +22,16 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "main" ];
 
+  # Build like upstream's release artifacts: bake the OpenAPI metadata into the
+  # binary. The default "dev" build resolves the metadata from
+  # $ALIYUN_CLI_META_DIR or ./aliyun-openapi-meta at runtime and panics in
+  # meta.LoadRepository() when neither is present.
+  tags = [ "aliyun_cli_packed_meta" ];
+
+  preBuild = ''
+    GOOS= GOARCH= go generate ./bundledmeta
+  '';
+
   ldflags = [
     "-s"
     "-w"
