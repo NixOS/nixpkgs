@@ -83,6 +83,9 @@ maven.buildMavenPackage (finalAttrs: {
     mainProgram = "digital";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ Dettorer ];
+    maintainers = with lib.maintainers; [
+      Dettorer
+      miniharinn
+    ];
   };
 })
