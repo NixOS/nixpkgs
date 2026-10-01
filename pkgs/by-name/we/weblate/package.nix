@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch2,
   gettext,
   pango,
   harfbuzz,
@@ -64,6 +65,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "weblate-${finalAttrs.version}";
     hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-86035.patch";
+      url = "https://github.com/WeblateOrg/weblate/commit/f60a9759a6d851bd10ccdefe9b1b7f0cdb9e9bbd.patch";
+      hash = "sha256-MDzU6cp2SXQU+iS3/wxaPH01fbgRy1DXMMuLfpJn4y0=";
+      excludes = [ "docs/changes.rst" ];
+    })
+  ];
 
   postPatch = ''
     sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
