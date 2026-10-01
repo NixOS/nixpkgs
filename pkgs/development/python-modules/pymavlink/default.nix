@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymavlink";
   version = "2.4.50";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jWWosFspcbq+70tsp0okenInb2L3VZRmxk6W7OfxAGI=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python MAVLink interface and utilities";
     homepage = "https://github.com/ArduPilot/pymavlink";
-    changelog = "https://github.com/ArduPilot/pymavlink/releases/tag/${version}";
+    changelog = "https://github.com/ArduPilot/pymavlink/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       lgpl3Plus
       mit
     ];
     maintainers = with lib.maintainers; [ lopsided98 ];
   };
-}
+})
