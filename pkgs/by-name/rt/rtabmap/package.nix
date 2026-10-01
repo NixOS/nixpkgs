@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.23.8";
+  version = "0.23.13-lyrical";
 
   outputs = [
     "out"
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-bVy/C6ZQdY7LmMW3vxxM5PCEtY/hBqrNsIdGcEulagU=";
+    hash = "sha256-hTvAp2XCXbCYm1zQFDFej2Y/DnEZSVcMCsxC45wXW5I=";
   };
 
   postPatch =
