@@ -13,16 +13,15 @@
 
     services.mihomo = {
       enable = true;
-      configFile = pkgs.writeTextFile {
-        name = "config.yaml";
-        text = ''
-          mixed-port: 7890
-          external-controller: 127.0.0.1:9090
-          authentication:
-          - "user:supersecret"
-        '';
-      };
+      configFile = "/etc/mihomo/config.yaml";
     };
+
+    environment.etc."mihomo/config.yaml".text = ''
+      mixed-port: 7890
+      external-controller: 127.0.0.1:9090
+      authentication:
+      - "user:supersecret"
+    '';
   };
 
   testScript = ''
