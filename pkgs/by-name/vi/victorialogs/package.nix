@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.52.0";
+  version = "1.52.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.recurseIntoAttrs nixosTests.victorialogs;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=v(1\\.52\\.[0-9]+)" ]; };
   };
 
   meta = {
