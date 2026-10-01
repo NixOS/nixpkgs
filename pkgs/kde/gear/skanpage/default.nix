@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  tesseractLanguages ? [ ],
+  tesseractLanguages ? null,
   tesseract5,
   leptonica,
 }:
