@@ -14,7 +14,7 @@
 
         package = pkgs.caddy.withPlugins {
           plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20250618171559-80962887e4c6" ];
-          hash = "sha256-oj0IpspxslpNZbJFsexh0W2Sja19XRUsbShoCuY6qkQ=";
+          hash = "sha256-ZXv/2HW/tiUl9/1xmVjZHjCeuLZknVWN7hM20uJXPto=";
         };
 
         globalConfig = ''
