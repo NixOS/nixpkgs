@@ -4,9 +4,9 @@
   stdenv,
   fetchFromGitHub,
   abseil-cpp,
+  applyPatches,
   buildPackages,
   cmake,
-  cpuinfo,
   eigen,
   flatbuffers_23,
   glibcLocales,
@@ -65,16 +65,24 @@ let
     name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.21.0";
-    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
+    tag = "v1.22.0";
+    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
   };
 
   cutlass-src = fetchFromGitHub {
     name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.4.2";
-    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
+    tag = "v4.7.0";
+    hash = "sha256-y8xejQ57FQH2NuyRdzrOQy11p3r40v8hrGoRTp265zU=";
+  };
+
+  deep_gemm-src = fetchFromGitHub {
+    name = "deep_gemm-src";
+    owner = "deepseek-ai";
+    repo = "DeepGEMM";
+    rev = "559d79fb6994a58b8a15b4b93bf13ccc16edf247";
+    hash = "sha256-g7mFyGrNqjS8I52Yu4c6Jf9SAUAToI9D7VbmfGMulEo=";
   };
 
   dlpack-src = fetchFromGitHub {
@@ -109,18 +117,26 @@ let
     hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
   };
 
+  pytorch-cpuinfo-src = fetchFromGitHub {
+    name = "pytorch-cpuinfo-src";
+    owner = "pytorch";
+    repo = "cpuinfo";
+    rev = "66ee79c038d70dad9f08705b2c9b3e58f6d8f512";
+    hash = "sha256-A+kTj3GthwmO2kKeG3gG/zjvvt45OmuEvAtRLzwfEyM=";
+  };
+
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.27.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
+    hash = "sha256-kU6e9oK77k67vdBVtweuTgraV5L8SmyBzOgCEssaOTs=";
   };
 
   patches = [
@@ -135,7 +151,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
-    # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
+    # Drop once upstream ports the op instead: https://github.com/microsoft/onnxruntime/pull/31191
     ./drop-orphaned-sharded-moe.patch
   ];
 
@@ -195,9 +211,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     protobuf
     zlib
-  ]
-  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
-    cpuinfo
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -289,6 +302,19 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint-src}")
+    # onnxruntime only builds against its vendored cpuinfo, because it relies on
+    # deinitialization refcounting from https://github.com/pytorch/cpuinfo/pull/400.
+    # FetchContent skips PATCH_COMMAND for a pre-populated source dir, so we apply
+    # the same patches as cmake/external/onnxruntime_external_deps.cmake here.
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO" "${applyPatches {
+      name = "pytorch-cpuinfo-src-patched";
+      src = pytorch-cpuinfo-src;
+      patches =
+        lib.optionals effectiveStdenv.hostPlatform.isLinux [
+          "${finalAttrs.src}/cmake/patches/cpuinfo/fix_missing_sysfs_fallback.patch"
+        ]
+        ++ [ "${finalAttrs.src}/cmake/patches/cpuinfo/enable_deinit_refcounting.patch" ];
+    }}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
     (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
@@ -329,6 +355,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DEEP_GEMM" "${deep_gemm-src}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
