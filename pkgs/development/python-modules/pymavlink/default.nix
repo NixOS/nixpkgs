@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pymavlink";
-  version = "2.4.49";
+  version = "2.4.50";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-188Q1VktA4oYqpcnERd+u4i+IUPvzCWN9jCwUT6dosI=";
+    hash = "sha256-jWWosFspcbq+70tsp0okenInb2L3VZRmxk6W7OfxAGI=";
   };
 
   build-system = [
