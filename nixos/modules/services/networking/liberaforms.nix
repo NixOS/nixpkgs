@@ -20,7 +20,13 @@ in
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
-      description = "";
+      description = "Liberaforms service port.";
+    };
+
+    openPorts = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Open the ports in the firewall";
     };
 
     settings = lib.mkOption {
@@ -465,5 +471,8 @@ in
         group = "liberaforms";
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [ cfg.port ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openPorts [ cfg.port ];
   };
 }
