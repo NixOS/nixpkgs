@@ -1418,6 +1418,11 @@ lib.mapAttrs mkLicense (
       fullName = "Sun Industry Standards Source License 1.1";
     };
 
+    sl = {
+      spdxId = "SL";
+      fullName = "SL License";
+    };
+
     sleepycat = {
       spdxId = "Sleepycat";
       fullName = "Sleepycat License";
