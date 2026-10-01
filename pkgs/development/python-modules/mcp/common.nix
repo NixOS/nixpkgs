@@ -5,6 +5,7 @@
     homepage = "https://github.com/modelcontextprotocol/python-sdk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      anish
       bryanhonof
       josh
     ];
