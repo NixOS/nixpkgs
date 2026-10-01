@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "but"
   ];
-  checkFlags = lib.concatMap (t: [ "--skip=${t}" ]) [
+  checkFlags = lib.map (t: "--skip=${t}") [
     # TUI SVG snapshots resolve the system file-opener (xdg-open → desktop
     # associations; e.g. Thunar on Xfce) instead of upstream's fixture opener.
     "command::legacy::status::tui::tests::open_tests::"
