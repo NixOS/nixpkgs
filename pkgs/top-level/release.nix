@@ -47,6 +47,8 @@
         "olm-3.2.16" # see PR #347899
         "kanidm_1_8-1.8.6"
         "kanidmWithSecretProvisioning_1_8-1.8.6"
+        "kanidm_1_9-1.9.4"
+        "kanidmWithSecretProvisioning_1_9-1.9.4"
       ];
     };
 
