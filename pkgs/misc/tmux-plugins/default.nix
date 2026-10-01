@@ -566,7 +566,7 @@ in
 
   net-speed = mkTmuxPlugin {
     pluginName = "net-speed";
-    version = "unstable-2018-12-02";
+    version = "0.3";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-net-speed";
