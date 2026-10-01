@@ -1063,7 +1063,7 @@ in
 
   tmux-powerline = mkTmuxPlugin {
     pluginName = "powerline";
-    version = "3.0.0";
+    version = "3.2.0";
     src = fetchFromGitHub {
       owner = "erikw";
       repo = "tmux-powerline";
