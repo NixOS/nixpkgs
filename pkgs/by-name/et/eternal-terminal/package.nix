@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
   };
 
+  patches = [
+    ./cmake-cxx-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
@@ -46,10 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDISABLE_SENTRY=TRUE"
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    CXXFLAGS = toString [ "-std=c++17" ];
-  };
 
   doCheck = true;
   doInstallCheck = true;
