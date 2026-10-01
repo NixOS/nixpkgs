@@ -29,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  cmakeFlags = [ "-DKTX_FEATURE_DOC=ON" ];
+  cmakeFlags = [
+    "-DKTX_FEATURE_DOC=ON"
+    # 4.4.x does not build with GCC 16's default of gnu++20; fixed upstream in 5.0.0
+    # https://github.com/KhronosGroup/KTX-Software/issues/1172
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+  ];
 
   postPatch = ''
     patchShebangs .
