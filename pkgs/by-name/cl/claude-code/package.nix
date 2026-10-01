@@ -8,6 +8,7 @@
   fetchurl,
   makeBinaryWrapper,
   autoPatchelfHook,
+  buildPackages,
   alsa-lib,
   procps,
   ripgrep,
@@ -23,6 +24,10 @@ let
   baseUrl = "https://downloads.claude.ai/claude-code-releases";
   platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
   platformManifestEntry = manifest.platforms.${platformKey};
+  # Drop the patch once nixpkgs' patchelf includes NixOS/patchelf#665
+  patchelf = buildPackages.patchelf.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./patchelf-update-dt-verdef.patch ];
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "claude-code";
@@ -43,7 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    patchelf
+  ];
+
+  # DT_RPATH, not DT_RUNPATH: only DT_RPATH also serves the dlopen'd
+  # audio-capture.node, which needs libasound for voice mode
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  patchelfFlags = [ "--force-rpath" ];
 
   strictDeps = true;
 
@@ -59,9 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
-      ''}--prefix PATH : ${
+      --prefix PATH : ${
         lib.makeBinPath (
           [
             # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
@@ -87,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "--version";
+  postInstallCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    readelf -dW $out/bin/.claude-wrapped | grep '(RPATH).*${lib.getLib alsa-lib}/lib' >/dev/null
+  '';
 
   passthru.updateScript = ./update.sh;
 

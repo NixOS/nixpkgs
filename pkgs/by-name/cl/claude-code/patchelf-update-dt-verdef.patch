@@ -1,0 +1,14 @@
+Backport of the unmerged https://github.com/NixOS/patchelf/pull/665 (src/ only)
+to 0.15.2; drop once nixpkgs' patchelf includes it.
+
+--- a/src/patchelf.cc
++++ b/src/patchelf.cc
+@@ -1031,6 +1031,8 @@
+             }
+             else if (d_tag == DT_VERNEED)
+                 dyn->d_un.d_ptr = findSectionHeader(".gnu.version_r").sh_addr;
++            else if (d_tag == DT_VERDEF)
++                dyn->d_un.d_ptr = findSectionHeader(".gnu.version_d").sh_addr;
+             else if (d_tag == DT_VERSYM)
+                 dyn->d_un.d_ptr = findSectionHeader(".gnu.version").sh_addr;
+             else if (d_tag == DT_MIPS_RLD_MAP_REL) {
