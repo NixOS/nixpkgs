@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
-  pyelftools,
+  jsonschema,
   packaging,
   pretend,
+  pyelftools,
   pytestCheckHook,
+  setuptools-scm,
   # non-python dependencies
   bzip2,
   gnutar,
@@ -16,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "6.7.0";
+  version = "6.8.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cKpP6OJNRH6ftHCC8KoN4ta96Kqpu/5RcCAyjOqA4PE=";
+    hash = "sha256-0AfE/YycS1ETaQqwsVngXFqpstMbae/ECHWCbMCVWUs=";
   };
 
   build-system = [ setuptools-scm ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    jsonschema
     pretend
     pytestCheckHook
   ];
