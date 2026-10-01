@@ -94,7 +94,30 @@ Set this variable before running related tests.")
   (ert-info ("search eln files of Emacs proper")
     (should (with-packages--in-nix-store-p (with-packages--locate-eln-file "files"))))
   (ert-info ("search eln files of requested packages")
-    (should (with-packages--in-nix-store-p (with-packages--locate-eln-file "dash")))))
+    (should (with-packages--in-nix-store-p (with-packages--locate-eln-file "dash"))))
+  ;; `load' does not try to find .eln files if it cannot find .elc or .el files.
+  ;; Assuming unwrapped subprocess Emacs cannot find .elc or .el files of requested packages,
+  ;; which is tested in `with-packages-requested-packages-are-available',
+  ;; probably, the tested code in our site-start.el and this test are unnecessary.
+  ;; In addition, what we really want to test is that unwrapped subprocess Emacs does not
+  ;; see eln files of requested packages, which is not easy to test.
+  ;; So we test an easier-to-test proxy, which unfortunately can be seen as
+  ;; implementation detail of the wrapper.
+  (ert-info ("subprocess does not see wrapper-modified EMACSNATIVELOADPATH")
+    (let ((eln-dirs-added-by-wrapper
+           (cl-set-difference
+            (parse-colon-path (getenv-internal "EMACSNATIVELOADPATH" initial-environment))
+            (parse-colon-path (getenv "EMACSNATIVELOADPATH"))
+            :test #'string=)))
+      (should (equal (length eln-dirs-added-by-wrapper) 1))
+      (let ((eln-dir-added-by-wrapper (car eln-dirs-added-by-wrapper)))
+        (should (with-packages--in-nix-store-p eln-dir-added-by-wrapper))
+        (cl-flet ((ancestor-dir-of-file-p (dir file)
+                    (locate-dominating-file file
+                                            (lambda (current-dir)
+                                              (string= current-dir dir)))))
+          (should (ancestor-dir-of-file-p eln-dir-added-by-wrapper
+                                          (with-packages--locate-eln-file "dash"))))))))
 
 (ert-deftest with-packages-unwrapped-site-start-is-loaded ()
   (should (with-packages-unwrapped-site-start-is-loaded)))
