@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "lxmf";
-    hash = "sha256-8vfqF9eT/MMsq4JugejpgkQE0CXR/HGxQ74yQtReal4=";
+    hash = "sha256-8UJDKDuQrQY1YHHZA5Q1dkCSQgH5yZLc3+y8I2FPswk=";
   };
 
   build-system = [ setuptools ];
