@@ -53,6 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace res/kime.desktop res/kime-xdg-autostart \
       --replace-warn "/usr/bin/kime" "kime"
+
+    # Qt5 also requires the versioned platform input context interface ID.
+    substituteInPlace src/frontends/qt5/src/plugin.hpp \
+      --replace-fail '#define KIME_QT_IID "org.qt-project.Qt.QPlatformInputContextFactoryInterface"' \
+        '#define KIME_QT_IID QPlatformInputContextFactoryInterface_iid'
   '';
 
   dontWrapQtApps = true;
