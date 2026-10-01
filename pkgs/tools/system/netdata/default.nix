@@ -66,13 +66,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.11.0";
+    version = "2.12.0";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-ANXncPtAo3qkhqmOWEQ4wY8oAT5tWvIRS7QVxoT/cMs=";
+      hash = "sha256-FcxnWKwkBG/OxKuT7QFAtsS+GxIExD3esdAE/u0L8vk=";
       fetchSubmodules = true;
     };
 
@@ -322,7 +322,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-hjq91syiZYhVT8udA2LTrBSr0IoYs1WolwAKhO+yTj4=";
+          vendorHash = "sha256-wE3sCKlqBw4GuNRtGaN0hc6LBG+gXXFHCP41fgjDhK0=";
           proxyVendor = true;
           doCheck = false;
 
@@ -375,7 +375,7 @@ stdenv.mkDerivation (
             src
             cargoRoot
             ;
-          hash = "sha256-u8x2vYIStJQvHokHmgL0fl6kCamM2dpl81re1BxSi0Y=";
+          hash = "sha256-eUsgb82KDB9T2UjAIUzp7+EGt8qZDI2kc5y/ykeT6ZA=";
         })
         (rustPlatform.fetchCargoVendor {
           pname = "${finalAttrs.pname}-nd-jf";
