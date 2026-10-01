@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url =
       with finalAttrs;
-      "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-aUnc3ifUHOutH9dB/K/DbVWhAg0thy1KbrORTKq7raI=";
+      "https://github.com/fribidi/fribidi/releases/download/v${version}/fribidi-${version}.tar.xz";
+    hash = "sha256-aUnc3ifUHOutH9dB/K/DbVWhAg0thy1KbrORTKq7raI=";
   };
 
   postPatch = ''
