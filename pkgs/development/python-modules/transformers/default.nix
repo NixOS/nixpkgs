@@ -93,7 +93,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.17.0";
+  version = "5.19.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -101,7 +101,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zPVsX4i4Qe7yMW3gmTysPsIvXZ4cQWU0gITA/1vSlEw=";
+    hash = "sha256-lK9wUcQeC1Aj18P3evBAHtu2AVtI+GB+qShk3dmc9y0=";
   };
 
   build-system = [ setuptools ];
