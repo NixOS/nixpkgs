@@ -18756,6 +18756,12 @@
     githubId = 101197249;
     name = "Tim";
   };
+  melqtx = {
+    email = "melqtx@proton.me";
+    github = "melqtx";
+    githubId = 105978905;
+    name = "melqtx";
+  };
   melsigl = {
     email = "melanie.bianca.sigl@gmail.com";
     github = "melsigl";
