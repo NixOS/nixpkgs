@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   stdenv,
   versionCheckHook,
   nix-update-script,
@@ -20,9 +21,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-C3OORW5aeDrRDTlfvRNW3RLE0p8wFs1qbIKl/XpzThs=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \
       'target/debug' "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
+  '';
+
+  postInstall = ''
+    installShellCompletion completions/tspin.{bash,fish,zsh}
+    installManPage man/tspin.1
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
