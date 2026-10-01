@@ -87,7 +87,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
   # 8.5.3 tag is on fix branch, but we need new dependency lookup behavior (currently only on master branch)
-  version = "8.5.3.26051504-unstable-2026-05-17";
+  version = "8.5.3.26051504";
 
   src = fetchFromGitHub {
     owner = "renpy";
