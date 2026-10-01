@@ -1,0 +1,6 @@
+add_library(gamespy::gamespy STATIC IMPORTED)
+set_target_properties(gamespy::gamespy PROPERTIES
+  IMPORTED_LOCATION "@out@/lib/libgamespy.a"
+  INTERFACE_INCLUDE_DIRECTORIES "@out@/include;@out@/include/gamespy"
+  INTERFACE_LINK_LIBRARIES "Threads::Threads"
+)
