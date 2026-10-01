@@ -1711,6 +1711,9 @@
   "var-meta-mainProgram": [
     "index.html#var-meta-mainProgram"
   ],
+  "var-meta-mainDarwinApp": [
+    "index.html#var-meta-mainDarwinApp"
+  ],
   "var-meta-priority": [
     "index.html#var-meta-priority"
   ],
