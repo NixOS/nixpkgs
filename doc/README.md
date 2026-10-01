@@ -36,7 +36,6 @@ See [Document structure](#document-structure) for a structural template.
 ## Building and navigating documentation locally
 
 The Nixpkgs manual is rendered by [`nixos-render-docs`](../pkgs/by-name/ni/nixos-render-docs/).
-
 Its index is [`nav.json`](./nav.json).
 
 ### Development environment
@@ -51,13 +50,11 @@ $ nix-shell
 ### Live preview
 
 Within the developer environment, run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual.
-
 If the `nixos-render-docs` source-code changes, `devmode` must be restarted.
 
 ### Building the docs
 
 To build the documentation, run `nix-build doc`.
-
 A successful build is stored in `./result/share/doc/nixpkgs/manual.html`.
 
 ### Testing redirects
