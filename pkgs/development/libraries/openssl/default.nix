@@ -470,12 +470,15 @@ in
 
     extraMeta = {
       license = lib.licenses.asl20;
+      knownVulnerabilities = [
+        "OpenSSL 3.0 reached its end of life on 2026/09/07"
+      ];
     };
   };
 
   openssl_3_5 = common {
-    version = "3.5.8";
-    hash = "sha256-qPhKOZGOxkFc52XZtCnTE7qXuBQxacFy5zS5UURk9bI=";
+    version = "3.5.9";
+    hash = "sha256-YD9WAuLu8A13+9Qp003NWCK7MBdXobyc2yTGcPHrhZo=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -535,8 +538,8 @@ in
   };
 
   openssl_4_0 = common {
-    version = "4.0.2";
-    hash = "sha256-c2tGdTD5FnN7cDExDMsh2CGMYinmHo4WDNHTRYzVQ6g=";
+    version = "4.0.3";
+    hash = "sha256-MltcgGFnwTtAsf/q3+AkgZfADszEzxI+weKNLS/SFtk=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

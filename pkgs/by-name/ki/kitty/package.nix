@@ -46,26 +46,42 @@
   makeBinaryWrapper,
   darwin,
   cairo,
+  shader-slang,
 }:
 
+let
+  shader-slang' = shader-slang.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "2026.18";
+      src = fetchFromGitHub {
+        owner = "shader-slang";
+        repo = "slang";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-GlXTDfC6BLENmrzBceJGZIP4FU5ItqtyoxmbnFZ5fdQ=";
+        fetchSubmodules = true;
+      };
+      cmakeFlags = previousAttrs.cmakeFlags ++ [ (lib.cmakeBool "SLANG_ENABLE_DXIL" false) ];
+    }
+  );
+in
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.48.2";
+  version = "0.49.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-qNgVPpvMm8Y/nbBjVvWVuZ954ZXIuWmXhldP3w8MBhU=";
+    hash = "sha256-YVjTfJnsNEBjcHWQCq2nJBFPvLg7RqQcyWjgR4ijUqc=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-BZudfNfREwNrgalaimC5Lp+UIdFS+jHFLl9mEXcHYMI=";
+      vendorHash = "sha256-urQMf5lGYPgS65VjGw0pi/ZM6CETtGWfi/kvVDAkIoc=";
     }).goModules;
 
   buildInputs = [
@@ -108,11 +124,13 @@ buildPythonApplication rec {
     sphinx
     furo
     sphinx-copybutton
+    sphinx-design
     sphinxext-opengraph
     sphinx-inline-tabs
     go_1_26
     fontconfig
     makeBinaryWrapper
+    shader-slang'
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -294,6 +312,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
+        shader-slang'
       ]
     }"
 
