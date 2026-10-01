@@ -6,7 +6,7 @@
   pkg-config,
   libmpdclient,
   openssl,
-  lua5_3,
+  lua5_4,
   libid3tag,
   flac,
   pcre2,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     gzip
     perl
     jq
-    lua5_3 # luac is needed for cross builds
+    lua5_4 # luac is needed for cross builds
   ];
   preConfigure = ''
     env MYMPD_BUILDDIR=$PWD/build ./build.sh createassets
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libmpdclient
     openssl
-    lua5_3
+    lua5_4
     libid3tag
     flac
     pcre2
