@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "md-toc";
   version = "9.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dgbAAaQDxeOkJV+XI9ZTaHPhrLUrm7v5zFr9LVT48ow=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Table of contents generator for Markdown";
-    mainProgram = "md_toc";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
     changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "md_toc";
   };
-}
+})
