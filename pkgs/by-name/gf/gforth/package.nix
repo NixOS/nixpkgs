@@ -8,10 +8,10 @@
   texinfo,
   libffi,
   writableTmpDirAsHomeHook,
+  swig,
 }:
 
 let
-  swig = buildPackages.callPackage ./swig.nix { };
   bootForth = buildPackages.callPackage ./boot-forth.nix { };
   lispDir = "${placeholder "out"}/share/emacs/site-lisp";
 in
