@@ -1,9 +1,9 @@
 {
+  abseil-cpp,
   bc-ur,
   boost186,
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
   hidapi,
   lib,
   libsodium,
@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    (abseil-cpp.override { cxxStandard = "17"; })
     bc-ur
     boost186
     hidapi
