@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import sys
 import textwrap
 import uuid
@@ -47,9 +48,6 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
-    "--wait",
-    "--verbose",
-    "--output=cat",
     "--quiet",
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
@@ -734,6 +732,10 @@ def switch_to_configuration(
         cmd = []
     elif os.environ.get("NIXOS_REBUILD_NO_SYSTEMD_RUN"):
         cmd = []
+    elif _systemd_run_supports_output_cat(target_host):
+        cmd = [*cmd, "--wait", "--verbose", "--output=cat"]
+    else:
+        cmd = [*cmd, "--pipe"]
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
@@ -751,6 +753,23 @@ def switch_to_configuration(
         # its stdout to our stderr defensively.
         stdout=sys.stderr,
     )
+
+
+# TODO: remove this after release-27.05 and assume systemd 261+
+def _systemd_run_supports_output_cat(target_host: Remote | None) -> bool:
+    """Check whether the target's systemd-run supports --output=cat (systemd 261+)."""
+    try:
+        result = run_wrapper(
+            ["systemd-run", "--version"],
+            remote=target_host,
+            capture_output=True,
+        )
+    except CalledProcessError:
+        logger.debug("systemd-run version detection failed, assuming <261")
+        return False
+
+    match = re.search(r"^systemd (\d+)(?:\D|$)", result.stdout, re.MULTILINE)
+    return match is not None and int(match.group(1)) >= 261
 
 
 def upgrade_channels(
