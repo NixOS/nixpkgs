@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-managementgroups";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_managementgroups";
     inherit (finalAttrs) version;
-    hash = "sha256-5hmbrxGIkLor2jXdqDqIhhwLG77xJjEbIOwS7tloGVE=";
+    hash = "sha256-AtAI+t/XYQsccFnjw6ijPe2u9LZUdJuBl4tDe68mTx0=";
   };
 
   build-system = [ setuptools ];
