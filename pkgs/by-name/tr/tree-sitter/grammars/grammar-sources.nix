@@ -1205,9 +1205,9 @@
   };
 
   haskell = {
-    version = "0.23.1";
+    version = "0.24.1";
     url = "github:tree-sitter/tree-sitter-haskell";
-    hash = "sha256-bggXKbV4vTWapQAbERPUszxpQtpC1RTujNhwgbjY7T4=";
+    hash = "sha256-R4KAAaBoDUGuQtR2U+0xdB9iLclWBrm+/blqsCX5ZjQ=";
     meta = {
       license = lib.licenses.mit;
     };
