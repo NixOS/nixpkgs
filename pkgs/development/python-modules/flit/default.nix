@@ -23,7 +23,7 @@
 # python-packages.nix. When it will be used to build wheels,
 # care should be taken that there is no mingling of PYTHONPATH.
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flit";
   version = "3.12.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "flit";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-oWV+KK22+iK99iCOCKCV1OCLq2Ef1bcYRKXT5GHwiL8=";
   };
 
@@ -61,11 +61,13 @@ buildPythonPackage rec {
     "test_symlink_module_pep621"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
+    changelog = "https://github.com/pypa/flit/blob/${finalAttrs.version}/doc/history.rst";
     description = "Simple packaging tool for simple packages";
     mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
     license = lib.licenses.bsd3;
   };
-}
+})

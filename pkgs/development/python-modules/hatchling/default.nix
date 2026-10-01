@@ -63,6 +63,8 @@ buildPythonPackage (finalAttrs: {
     runHook postCheck
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Modern, extensible Python build backend";
     mainProgram = "hatchling";

@@ -18,7 +18,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "build";
   version = "1.5.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vm47wuSEKfU4CjonokylTyGe62jGS/5m2dhLKhY5TPc=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = buildPythonPackage {
-      pname = "${pname}-pytest";
-      inherit src version;
+      pname = "${finalAttrs.pname}-pytest";
+      inherit (finalAttrs) src version;
       pyproject = false;
 
       dontBuild = true;
@@ -96,6 +96,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "build" ];
 
+  __structuredAttrs = true;
+
   meta = {
     mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
@@ -104,9 +106,9 @@ buildPythonPackage rec {
       is a simple build tool and does not perform any dependency management.
     '';
     homepage = "https://github.com/pypa/build";
-    changelog = "https://github.com/pypa/build/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/pypa/build/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fab ];
     teams = [ lib.teams.python ];
   };
-}
+})

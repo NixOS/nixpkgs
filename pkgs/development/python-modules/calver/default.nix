@@ -8,7 +8,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "calver";
     version = "2025.10.20";
     pyproject = true;
@@ -16,13 +16,13 @@ let
     src = fetchFromGitHub {
       owner = "di";
       repo = "calver";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-8CfPQ4uMgKDqMMgutLdsjn/MaAVBJQAp1KqUfxzNMQw=";
     };
 
     postPatch = ''
       substituteInPlace setup.py \
-        --replace "version=calver_version(True)" 'version="${version}"'
+        --replace "version=calver_version(True)" 'version="${finalAttrs.version}"'
     '';
 
     build-system = [ setuptools ];
@@ -38,13 +38,15 @@ let
 
     passthru.tests.calver = self.overridePythonAttrs { doCheck = true; };
 
+    __structuredAttrs = true;
+
     meta = {
-      changelog = "https://github.com/di/calver/releases/tag/${src.tag}";
+      changelog = "https://github.com/di/calver/releases/tag/${finalAttrs.src.tag}";
       description = "Setuptools extension for CalVer package versions";
       homepage = "https://github.com/di/calver";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [ dotlambda ];
     };
-  };
+  });
 in
 self
