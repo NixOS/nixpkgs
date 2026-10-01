@@ -499,6 +499,7 @@ in
           themePolicy =
             let
               builtinThemes = [
+                "builtin-flat-fields"
                 "builtin-qui"
                 "builtin-nord"
                 "builtin-catppuccin"
