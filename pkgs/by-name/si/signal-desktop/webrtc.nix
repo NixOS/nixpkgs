@@ -125,6 +125,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # NASM's bundled macOS config enables endian APIs unavailable in our SDK.
+    # Use machine/endian.h and NASM's own byte-order conversion functions.
+    for feature in HAVE_ENDIAN_H HAVE_SYS_ENDIAN_H \
+      HAVE_HTOBE16 HAVE_HTOBE32 HAVE_HTOBE64 \
+      HAVE_HTOLE16 HAVE_HTOLE32 HAVE_HTOLE64; do
+      substituteInPlace third_party/nasm/config/config-mac.h \
+        --replace-fail "#define $feature 1" "/* #undef $feature */"
+    done
+
     # Fix Darwin Python script shebangs for sandbox builds
     patchShebangs build/mac/should_use_hermetic_xcode.py build/toolchain/apple/linker_driver.py
 
