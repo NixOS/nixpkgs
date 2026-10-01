@@ -892,18 +892,9 @@ in
           program = "sendmail";
           source = lib.getExe' cfg.package "sendmail";
           owner = "root";
-          group = setgidGroup;
+          group = "root";
           setuid = false;
-          setgid = true;
-        };
-
-        security.wrappers.mailq = {
-          program = "mailq";
-          source = lib.getExe' cfg.package "mailq";
-          owner = "root";
-          group = setgidGroup;
-          setuid = false;
-          setgid = true;
+          setgid = false;
         };
 
         security.wrappers.postqueue = {
