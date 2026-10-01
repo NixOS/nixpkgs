@@ -28,6 +28,7 @@
   python3,
   readline,
   nix-update-script,
+  nixosTests,
   writeShellScript,
   xcbuild,
   libx11,
@@ -156,7 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) amuled; };
+  };
 
   meta = {
     description = "Peer-to-peer client for the eD2K and Kademlia networks";
