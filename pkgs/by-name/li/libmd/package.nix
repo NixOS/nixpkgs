@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.hadrons.org/software/libmd/";
     changelog = "https://archive.hadrons.org/software/libmd/libmd-${finalAttrs.version}.announce";
