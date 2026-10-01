@@ -23113,6 +23113,8 @@ self: super: with self; {
 
   zenoh = callPackage ../development/python-modules/zenoh { };
 
+  zensical = callPackage ../development/python-modules/zensical { };
+
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
   zephyr-test-management = callPackage ../development/python-modules/zephyr-test-management { };
