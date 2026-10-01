@@ -20345,6 +20345,12 @@
     github = "NanamiNakano";
     githubId = 64841155;
   };
+  nandedamana = {
+    email = "nandakumar@nandakumar.co.in";
+    github = "nandedamana";
+    githubId = 32795897;
+    name = "Nandakumar Edamana";
+  };
   nanotwerp = {
     email = "nanotwerp@gmail.com";
     github = "nanotwerp";
