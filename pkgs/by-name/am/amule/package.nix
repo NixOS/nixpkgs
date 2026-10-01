@@ -66,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IO0sAqCEWNsLtf7jQUHOAbCs50M13KN1vVSO2lBG7d0=";
   };
 
+  patches = [
+    # https://github.com/amule-org/amule/commit/d7f492d029b4fab1eacddb72278c82b29cf56dcd
+    # Remove once a release includes https://github.com/amule-org/amule/pull/1711.
+    ./amuleapi-kad-bootstrap-byte-order.patch
+  ];
+
   __structuredAttrs = true;
   strictDeps = true;
 
