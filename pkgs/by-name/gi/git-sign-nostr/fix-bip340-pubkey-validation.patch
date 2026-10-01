@@ -1,0 +1,44 @@
+Upstream issue: https://github.com/block/buzz/issues/6175
+In nostr 0.44, PublicKey::from_hex only checks 32-byte hex decoding and does not
+validate curve points or BIP-340 validity unless .xonly() is called.
+
+--- a/crates/git-sign-nostr/src/lib.rs
++++ b/crates/git-sign-nostr/src/lib.rs
+@@ -1017,7 +1017,7 @@
+     let oa = load_auth_tag()?;
+     if let Some(ref oa_val) = oa {
+         // Owner pubkey must be a valid BIP-340 key
+-        if PublicKey::from_hex(&oa_val.0).is_err() {
++        if PublicKey::from_hex(&oa_val.0).and_then(|k| k.xonly()).is_err() {
+             return Err(Error::Fatal(
+                 "auth tag owner (oa[0]) is not a valid BIP-340 public key".to_string(),
+             ));
+@@ -1243,7 +1243,7 @@
+     let oa_result = if let Some(ref oa) = envelope.oa {
+         // Validate oa[0] is a valid BIP-340 public key. Per NIP-GS spec,
+         // an invalid owner pubkey is a structural error → ERRSIG.
+-        if PublicKey::from_hex(&oa.0).is_err() {
++        if PublicKey::from_hex(&oa.0).and_then(|k| k.xonly()).is_err() {
+             write_errsig(status, Some(&envelope.pk));
+             return Err(Error::VerifyFailed {
+                 pk: Some(envelope.pk),
+@@ -1420,7 +1420,8 @@
+         }
+ 
+         // Validate oa[0] is a valid BIP-340 x-only public key (not just hex)
+-        PublicKey::from_hex(owner)
++        PublicKey::from_hex(owner)
++            .and_then(|k| k.xonly())
+             .map_err(|e| format!("oa[0] is not a valid BIP-340 public key: {e}"))?;
+ 
+         // Signer must not be the owner (self-attestation is meaningless)
+@@ -2261,7 +2262,8 @@
+         if !is_lower_hex(&owner, 64) {
+             return Err("auth tag owner must be 64 lowercase hex chars".to_string());
+         }
+-        PublicKey::from_hex(&owner)
++        PublicKey::from_hex(&owner)
++            .and_then(|k| k.xonly())
+             .map_err(|e| format!("auth tag owner is not a valid BIP-340 key: {e}"))?;
+         if !is_lower_hex(&sig, 128) {
+             return Err("auth tag sig must be 128 lowercase hex chars".to_string());
