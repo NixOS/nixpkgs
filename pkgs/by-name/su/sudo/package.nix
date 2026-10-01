@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   buildPackages,
   coreutils,
   pam,
@@ -28,6 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
     hash = "sha256-SjihqzrbEZklftwqfEor1xRmXrYFsENohDsG2tos/Ps=";
   };
+
+  patches = [
+    # CVE-2026-35535: treat failed privilege drop before running the mailer as fatal
+    (fetchpatch {
+      name = "CVE-2026-35535.patch";
+      url = "https://github.com/sudo-project/sudo/commit/3e474c2f201484be83d994ae10a4e20e8c81bb69.patch";
+      hash = "sha256-Kq3moF9rkRhOhknzZAyF02aW0h+GR0iQ8m2PqCKbPto=";
+    })
+  ];
 
   prePatch = ''
     # do not set sticky bit in nix store
