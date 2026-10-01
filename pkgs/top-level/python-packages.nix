@@ -9736,6 +9736,8 @@ self: super: with self; {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
 
+  libpff-python = callPackage ../development/python-modules/libpff-python { };
+
   libpulse = callPackage ../development/python-modules/libpulse { };
 
   libpurecool = callPackage ../development/python-modules/libpurecool { };
