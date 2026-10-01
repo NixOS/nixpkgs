@@ -7,7 +7,7 @@
   xalanc,
   xercesc,
   openssl,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.atlassian.net/wiki/spaces/DEV/pages/3726671873/Santuario";
