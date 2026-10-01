@@ -22,9 +22,9 @@ let
       cargoHash = "sha256-T7ci14LlPWYJ41moizwzsR4bH5AU1GdqRJRL8Iks3q8=";
     };
     main = {
-      version = "48.0.1";
-      hash = "sha256-nvDiKIyo0/BmwjPTfNGIX1kSVVJQbmjjT4qed0dr8cc=";
-      cargoHash = "sha256-NVea5PiuFTr1NrIcyEJSq0gFf2XkDZj/VKubHwO34U4=";
+      version = "48.0.3";
+      hash = "sha256-mS8/AohD5o9WvGErc1cseHZizLlVEqTqiHKO4/ulPaw=";
+      cargoHash = "sha256-PDaNI8PVmHGxFYjSC7wWfcU4hIfBSP/vjEpIrJBN3Ps=";
     };
   };
   source = sources.${variant};
