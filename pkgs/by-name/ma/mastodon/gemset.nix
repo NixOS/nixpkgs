@@ -350,15 +350,16 @@
       "bigdecimal"
       "jmespath"
       "logger"
+      "rexml"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1zhj444iybzs1ikw1p4arv3zayw9xkk1ifnsb6g3r2j6p0h34gpf";
+      sha256 = "1iljck5b1s02vagyvgivg9j81nk2wl721qwfd33cws7ngyfd2am9";
       type = "gem";
     };
-    version = "3.254.0";
+    version = "3.257.0";
   };
   aws-sdk-kms = {
     dependencies = [
@@ -384,10 +385,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0gjm1xbdjssjjhwhn4fm7jlj000vs43q3zm658x73ab8s33gcrc8";
+      sha256 = "1jpf3wgxd5inczqd0ga5d002qmrc3m71vj56nd78s1lzapsxn5cx";
       type = "gem";
     };
-    version = "1.228.1";
+    version = "1.232.3";
   };
   aws-sigv4 = {
     dependencies = [ "aws-eventstream" ];
@@ -1010,10 +1011,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1xyk49b88pcxrc08lgawkp5x57kxgyfwa3wgdbisy4jz13h46jnd";
+      sha256 = "11pchqkzd0jp5alh0554yqybnhr3bj2jdghqal3prsn22mwch7v9";
       type = "gem";
     };
-    version = "5.9.2";
+    version = "5.9.9";
   };
   dotenv = {
     groups = [ "default" ];
@@ -3302,10 +3303,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1c0sw5l6v80ffrv8ac70v5l6q8118p96qb0xshkycx5ybj36w26k";
+      sha256 = "0x723aalhz38zpwsh766vdxv1mqq14hkbi5ps7g2533j91mabbz7";
       type = "gem";
     };
-    version = "0.8.2";
+    version = "2.0.1";
   };
   rack-session = {
     dependencies = [
@@ -4740,10 +4741,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "11lsr9c9v7xpyz0z6yxvw992aaqxcxivm5pmh7fbn2hqxd8m8inv";
+      sha256 = "1k8df709ajljxx9avmv81rlsq6hrbcfi8pkmas9n7qbar1qnaa2i";
       type = "gem";
     };
-    version = "3.10.2";
+    version = "3.11.1";
   };
   warden = {
     dependencies = [ "rack" ];
