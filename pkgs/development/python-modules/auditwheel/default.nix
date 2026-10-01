@@ -15,13 +15,13 @@
   unzip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "auditwheel";
   version = "6.8.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0AfE/YycS1ETaQqwsVngXFqpstMbae/ECHWCbMCVWUs=";
   };
 
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pypa/auditwheel/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pypa/auditwheel/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Auditing and relabeling cross-distribution Linux wheels";
     homepage = "https://github.com/pypa/auditwheel";
     license = with lib.licenses; [
@@ -71,4 +71,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ davhau ];
     platforms = lib.platforms.linux;
   };
-}
+})
