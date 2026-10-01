@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.6.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
     tag = "v${version}";
-    hash = "sha256-rkkdnpkl9UHcBDjp6lsFXR1zNn7tH1KeTQ7wV+yJ3m0=";
+    hash = "sha256-r0LqyyYKnwyabxuV4xRlr+0ix77zw519+VAat2it1G4=";
   };
 
   patches = [
