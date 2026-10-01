@@ -1,7 +1,21 @@
 {
-  "ente_crypto_dart": "sha256-/Pz9HPyQ6ts/sbqopShRSQCC99seiE5pCK0pR5mNji8=",
-  "fk_user_agent": "sha256-GmuQPohnTi4SVta1FyEErOb7n0Jp6UdLcX/Cf+koJNA=",
-  "flutter_local_authentication": "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=",
+  "battery_info": "sha256-At1kO01ROFxIUrB+KtoHD/bfmywGNLsKqZ6focA9EkY=",
+  "cast": "sha256-Q+36QRHC4N5RGjzfUznly4uAmx4gidfjCqURogmU/MM=",
+  "computer": "sha256-UkoNcZOsrKiw52zUUjTAZZLyf7w9jInOK8aqZK2ikUo=",
+  "ente_crypto_dart": "sha256-thlqvz5objVPU0Tp5burRV7ZuXgq8Mya5Fpq0A3Hi+U=",
+  "ffmpeg_kit_flutter": "sha256-sryZ9TlUIhNqctXdd9XQcKcol55cTpF37GN6/idCOQQ=",
+  "ffmpeg_kit_flutter_platform_interface": "sha256-sryZ9TlUIhNqctXdd9XQcKcol55cTpF37GN6/idCOQQ=",
+  "flutter_sodium": "sha256-9pUdU+LQLFk1r3KZN/01LwaW/RHiq79Xp5NiYrauufs=",
+  "media_extension": "sha256-+O3mw8/etd8jb657dq+xmvRSLr7oWPovJ/FehhgDDxc=",
+  "mobile_ocr": "sha256-S+BGOmIcZlXwmLPV7B36fGxq0tsHEDvUNaE8jEoZs3k=",
+  "motion_sensors": "sha256-UzYcDQ1iSzOEjCwsCmMm9lttVij0q9UKcBN3pmU4+3s=",
+  "motionphoto": "sha256-uIL8M/xvEVCb5hCfdHpjjEcZL9M8Ogmzy+ri3x2fikM=",
   "move_to_background": "sha256-cLH3vUrPmEtYKlfn2hi6Wl4JQG4dt9aEyTmVCj7zBe0=",
-  "qr_code_scanner": "sha256-g8CUwQVOgEhJO5BZAdsM5bBS485nu7POO8eu8mknga8="
+  "onnxruntime": "sha256-x28fZHdRi0L9z3UB6i3KGfeQApU/7ugGZ/IfxRtuZwg=",
+  "open_mail_app": "sha256-NFHCiTjkjg7/ostCPSmxt9gubo8r/lWD9myFQavqvMk=",
+  "panorama": "sha256-t/Uxh9Z7z02JSfvv78YxVpm4Vst3pnXSsC6L2YpRMzU=",
+  "pretty_qr_code": "sha256-JaPsH157Sb4z9QR5kDxoh7BwOjG+nNvp3tVzHT/QTno=",
+  "receive_sharing_intent": "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=",
+  "video_editor": "sha256-ZC+W26HVD5oqS2wq4zU/xo9MyjONHBZuvb9O+A1rTLY=",
+  "video_player_avfoundation": "sha256-HqZyhoqzBkF9Fq112xBBB0GJ03VbR3kFmldlGAol4Mw="
 }
