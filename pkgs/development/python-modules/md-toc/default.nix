@@ -3,26 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   fpyutils,
+  hatchling,
   pyfakefs,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "9.0.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
     tag = version;
-    hash = "sha256-YVDFYxxKMKOrHyymewLTTkmBgg6YVqWou4hTKHJmbOg=";
+    hash = "sha256-dgbAAaQDxeOkJV+XI9ZTaHPhrLUrm7v5zFr9LVT48ow=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ fpyutils ];
+  dependencies = [ fpyutils ];
 
   nativeCheckInputs = [
     pyfakefs
