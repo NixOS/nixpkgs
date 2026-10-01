@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -39,6 +40,14 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   postInstall = ''
     mv $out/bin/main $out/bin/aliyun
