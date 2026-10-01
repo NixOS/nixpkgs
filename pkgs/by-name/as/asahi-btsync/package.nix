@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-btsync";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-lAfbr2D6dITdlFCbz++OVz2SxYGapiZtrNjeBruBDJ8=";
+    hash = "sha256-hQE93lhD82gJaeVNtGQtIHIbyhrhfTsgY2FjClQ1QbE=";
   };
 
-  cargoHash = "sha256-80B47vRUgb+QWYoxqPWk1gCdWFM5bIxq0tR5FpssRQ4=";
+  cargoHash = "sha256-U1TOJO9LsT0Mu4HEjwFW0CKkuDkM1c4HdtHy0O4PaMM=";
   cargoDepsName = finalAttrs.pname;
 
   nativeBuildInputs = [ pkg-config ];
