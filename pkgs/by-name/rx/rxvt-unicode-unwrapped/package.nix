@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchurl,
   fetchpatch,
   makeDesktopItem,
@@ -24,6 +24,8 @@
 }:
 
 let
+  stdenv = gcc15Stdenv;
+
   pname = "rxvt-unicode";
   version = "9.31";
   description = "Clone of the well-known terminal emulator rxvt";
