@@ -43,6 +43,9 @@ in
     enableXonshIntegration = enabledOption ''
       Xonsh integration
     '';
+    enableNushellIntegration = enabledOption ''
+      Nushell integration
+    '';
 
     direnvrcExtra = lib.mkOption {
       type = lib.types.lines;
@@ -125,6 +128,47 @@ in
         if ${lib.boolToString cfg.loadInNixShell}; or printenv PATH | grep -vqc '/nix/store';
           ${lib.getExe cfg.package} hook fish | source
         end
+      '';
+
+      nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+        if ${lib.boolToString cfg.loadInNixShell} or not ($env.PATH | any {|p| $p | str contains "/nix/store" }) {
+          $env.config = ($env.config? | default {})
+          $env.config.hooks = ($env.config.hooks? | default {})
+          $env.config.hooks.pre_prompt = (
+              $env.config.hooks.pre_prompt?
+              | default []
+              | append {||
+                  let direnv = (
+                      ${lib.getExe cfg.package} export json
+                      | from json --strict
+                      | default {}
+                  )
+                  for key in ($direnv | columns) {
+                      if ($direnv | get $key) == null {
+                          hide-env --ignore-errors $key
+                      }
+                  }
+                  $direnv
+                  | items {|key, value|
+                      let value = do (
+                          {
+                            "PATH": {
+                              from_string: {|s| $s | split row (char esep) | path expand --no-symlink }
+                              to_string: {|v| $v | path expand --no-symlink | str join (char esep) }
+                            }
+                          }
+                          | merge ($env.ENV_CONVERSIONS? | default {})
+                          | get ([[value, optional, insensitive]; [$key, true, true] [from_string, true, false]] | into cell-path)
+                          | if ($in | is-empty) { {|x| $x} } else { $in }
+                      ) $value
+                      return [ $key $value ]
+                  }
+                  | where {|pair| $pair.1 != null }
+                  | into record
+                  | load-env
+              }
+          )
+        }
       '';
 
       xonsh = lib.mkIf cfg.enableXonshIntegration {
