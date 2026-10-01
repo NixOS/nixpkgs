@@ -94,6 +94,11 @@
   libxfs,
   liburing,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+
+  # Test Dependencies
+  net-tools,
+
+  enableTests ? true,
 }:
 
 # We must have one crypto library
@@ -306,7 +311,7 @@ stdenv.mkDerivation {
     # So it's probably not worth trying to fix that for this Ceph version,
     # and instead just disable Ceph's Jaeger support.
     (lib.cmakeBool "WITH_JAEGER" false)
-    (lib.cmakeBool "WITH_TESTS" false)
+    (lib.cmakeBool "WITH_TESTS" enableTests)
 
     # Use our own libraries, where possible
     (lib.cmakeBool "WITH_SYSTEM_ARROW" true) # Only used if other options enable Arrow support.
@@ -379,7 +384,20 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  doCheck = false; # uses pip to install things from the internet
+  nativeCheckInputs = [
+    net-tools # for unittest_hostname
+  ];
+
+  doCheck = enableTests;
+
+  # The CMake setup hook enables parallel building at runtime, but it does not
+  # enable parallel *checking*. Without this, the generic `checkPhase` runs
+  # `make check` without `-j`, and since Ceph's `check` target first builds the
+  # `tests` target (compiling every test executable), the test compilation ends
+  # up single-threaded. Setting this at the Nix level ensures `enableParallelChecking`
+  # is exported (see pkgs/stdenv/generic/make-derivation.nix), so `checkPhase`
+  # compiles the tests with `-j$NIX_BUILD_CORES`.
+  enableParallelBuilding = true;
 
   # Takes 7+h to build with 2 cores.
   requiredSystemFeatures = [ "big-parallel" ];
