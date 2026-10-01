@@ -106,6 +106,10 @@ in
     ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
     (mkRemovedOptionModule [
       "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
