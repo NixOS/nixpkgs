@@ -8,6 +8,7 @@
   fetchurl,
   makeBinaryWrapper,
   autoPatchelfHook,
+  patchelfUnstable,
   alsa-lib,
   procps,
   ripgrep,
@@ -43,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ]
+  # Adding the rpath with patchelf 0.15 makes the aarch64 binary segfault;
+  # 0.18 with --no-clobber-old-sections works there (but breaks x86_64).
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    patchelfUnstable
+  ];
 
   strictDeps = true;
 
@@ -59,9 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
-      ''}--prefix PATH : ${
+      --prefix PATH : ${
         lib.makeBinPath (
           [
             # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
@@ -79,6 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontAutoPatchelf = true;
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isElf ''
+      autoPatchelf $out
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf ${lib.optionalString stdenv.hostPlatform.isAarch64 "--no-clobber-old-sections "}--force-rpath --add-rpath ${
+        lib.makeLibraryPath [ alsa-lib ]
+      } $out/bin/.claude-wrapped
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
