@@ -3128,7 +3128,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_9_0) compcert;
+  inherit (coqPackages_9_2) compcert;
 
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
