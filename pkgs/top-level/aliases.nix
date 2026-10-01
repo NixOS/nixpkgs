@@ -1276,13 +1276,7 @@ mapAliases {
   kak-lsp = throw "'kak-lsp' has been renamed to/replaced by 'kakoune-lsp'"; # Converted to throw 2025-10-27
   kanagawa-gtk-theme = throw "'kanagawa-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   kanidm = throw "'kanidm' alias has been removed. You must use a versioned package, e.g. 'kanidm_1_x'."; # Added 2026-01-29
-  kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
-  kanidm_1_5 = throw "'kanidm_1_5' has been removed as it has reached end of life"; # Added 2026-01-29
-  kanidm_1_6 = throw "'kanidm_1_6' has been removed as it has reached end of life"; # Added 2026-01-29
   kanidmWithSecretProvisioning = throw "'kanidmWithSecretProvisioning' was removed. You must use a versioned package, e.g. 'kanidmWithSecretProvisioning_1_x'."; # Added 2026-04-30
-  kanidmWithSecretProvisioning_1_4 = throw "'kanidmWithSecretProvisioning_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
-  kanidmWithSecretProvisioning_1_5 = throw "'kanidmWithSecretProvisioning_1_5' has been removed as it has reached end of life"; # Added 2026-01-29
-  kanidmWithSecretProvisioning_1_6 = throw "'kanidmWithSecretProvisioning_1_6' has been removed as it has reached end of life"; # Added 2026-01-29
   kapitano = throw "'kapitano' has been removed, as it is unmaintained upstream"; # Added 2025-10-29
   karing = throw "'karing' has been removed, as it is unmaintained in nixpkgs"; # Added 2026-01-31
   katawa-shoujo = throw "'katawa-shoujo' has been removed, as it bundles insecure Python 2. You may install 'katawa-shoujo-re-engineered' instead, which is an updated version remade by Fleeting Heartbeat Studios."; # Added 2026-03-27
