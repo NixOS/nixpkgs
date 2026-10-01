@@ -7,6 +7,8 @@
   pkg-config,
   openssl,
   nix-update-script,
+  testers,
+  tytanic,
   versionCheckHook,
 }:
 
@@ -53,10 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.version = testers.testVersion {
+      package = tytanic;
+    };
   };
 
   meta = {
