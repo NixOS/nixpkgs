@@ -80,14 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
   ];
 
-  buildInputs = [
-    libdeflate
+  # Things listed in the
+  # pkg-config file need to be propagated or else
+  # they will not be picked up properly
+  propagatedBuildInputs = [
     libjpeg
-    # libwebp depends on us; this will cause infinite recursion otherwise
-    (libwebp.override { tiffSupport = false; })
-    xz
     zlib
     zstd
+    libdeflate
+    xz
+    # libwebp depends on us; this will cause infinite recursion otherwise
+    (libwebp.override { tiffSupport = false; })
   ]
   ++ lib.optionals withLerc [
     lerc
