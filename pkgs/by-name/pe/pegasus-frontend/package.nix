@@ -53,6 +53,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       tengkuizdihar
       irgolic
+      xelacodes
     ];
     platforms = lib.platforms.linux;
   };
