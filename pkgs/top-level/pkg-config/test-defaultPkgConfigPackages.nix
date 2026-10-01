@@ -44,14 +44,28 @@ let
     else if !pkg ? meta.broken then
       throw "pkg-config module `${escapeNixIdentifier moduleName}` does not have a `meta.broken` attribute. This can't be right. Please check the attribute value for `${escapeNixIdentifier moduleName}` in `pkgs/top-level/pkg-config.packages.nix` in Nixpkgs."
 
-    else if pkg.meta.broken then
-      null
-
     else
-      testers.hasPkgConfigModules {
-        moduleNames = [ moduleName ];
-        package = pkg;
-      };
+
+      # TODO make hard requirement instead of warning.
+      assert lib.warnIf (!lib.elem moduleName pkg.meta.pkgConfigModules or [ ])
+        "pkg-config module `${escapeNixIdentifier moduleName}` is not listed in the `meta.pkgConfigModules` of the package it is mapped to."
+        true;
+
+      # Less urgent to make hard requirement given annoyance of
+      # `tests.pkg-config` boilerplate (see
+      # https://github.com/NixOS/nixpkgs/issues/215162).
+      assert lib.warnIf ((pkg.tests.pkg-config or false) != testers.testMetaPkgConfig pkg)
+        "pkg-config module `${escapeNixIdentifier moduleName}` does not test its `meta.pkgConfigModules`."
+        true;
+
+      if pkg.meta.broken then
+        null
+
+      else
+        testers.hasPkgConfigModules {
+          moduleNames = [ moduleName ];
+          package = pkg;
+        };
 
 in
 lib.recurseIntoAttrs allTests // { inherit tests-combined; }
