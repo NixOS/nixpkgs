@@ -1,3 +1,19 @@
+let
+  # Relative executable paths inside a browser directory, see EXECUTABLE_PATHS
+  # in playwright-core's registry (lib/server/registry/index.ts). The aarch64
+  # builds are not Chrome-for-Testing, hence the different layout.
+  browserPathsBySystem = {
+    x86_64-linux = {
+      chromium = "chrome-linux64/chrome";
+      shell = "chrome-headless-shell-linux64/chrome-headless-shell";
+    };
+    aarch64-linux = {
+      chromium = "chrome-linux/chrome";
+      shell = "chrome-linux/headless_shell";
+    };
+  };
+in
+
 {
   lib,
   buildNpmPackage,
@@ -16,13 +32,21 @@
   # nixpkgs Chromium is wired in instead. Set to null to build without browser
   # support. Deliberately not named `chromium`, as that would be auto-filled
   # with `pkgs.chromium` by the by-name callPackage.
-  withBrowser ? lib.meta.availableOn stdenv.hostPlatform ungoogled-chromium,
+  withBrowser ?
+    lib.meta.availableOn stdenv.hostPlatform ungoogled-chromium
+    && browserPathsBySystem ? ${stdenv.hostPlatform.system},
   nix-update-script,
 }:
 
+let
+  browserPaths =
+    browserPathsBySystem.${stdenv.hostPlatform.system}
+      or (throw "omniroute: unsupported system for withBrowser: ${stdenv.hostPlatform.system}");
+in
+
 buildNpmPackage (finalAttrs: {
   pname = "omniroute";
-  version = "3.8.50";
+  version = "3.8.51";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -30,22 +54,17 @@ buildNpmPackage (finalAttrs: {
     owner = "diegosouzapw";
     repo = "OmniRoute";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+2FMc9wrvPtQS3+mGsBVvKrd5RprYe/r/GJvjAVMBpc=";
+    hash = "sha256-ZYRjwynEw3cziFp8tM483QN96mDH0ZuHCFuhcJDwelA=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-wa5vQMYugA8E7lXOh4lgNH7JNbKOinNaW6Zk8Mw2e8k=";
+  npmDepsHash = "sha256-YDkHaJp0RDTlwOT79DM+qxSQJ74UjiOFalDiG+nAgpE=";
 
   # Prevent onnxruntime-node to download GPU support files
   env.ONNXRUNTIME_NODE_INSTALL = "skip";
 
   # Prevent bun trying to download binaries
   npmFlags = [ "--ignore-scripts" ];
-
-  patches = [
-    # Prevent next.js from downloading Google Fonts during build
-    ./disable-google-fonts.patch
-  ];
 
   postPatch = ''
     # The build of opencode-plugin tries to use the internet
@@ -73,39 +92,28 @@ buildNpmPackage (finalAttrs: {
   + lib.optionalString withBrowser ''
     # Playwright only launches a browser whose revision matches the one pinned
     # in its own browsers.json, so `playwright-driver.browsers` cannot be reused
-    # here (the two vendored playwright-core copies pin different revisions).
-    # Link every pinned revision to the nixpkgs Chromium instead.
+    # here. npm hoists a single playwright-core copy to the top level, but a
+    # nested one is picked up too should hoisting ever change. Link every
+    # pinned revision to the nixpkgs Chromium instead.
     browsersDir="$out/share/omniroute/playwright-browsers"
+    mkdir -p "$browsersDir"
 
-    # Layout is platform dependent, see EXECUTABLE_PATHS in playwright-core's
-    # registry (lib/server/registry/index.ts).
-    ${
-      if stdenv.hostPlatform.isAarch64 then
-        ''
-          chromiumPath="chrome-linux/chrome"
-          shellPath="chrome-linux/headless_shell"
-        ''
-      else
-        ''
-          chromiumPath="chrome-linux64/chrome"
-          shellPath="chrome-headless-shell-linux64/chrome-headless-shell"
-        ''
-    }
-
-    jq -r '.browsers[]
-      | select(.name == "chromium" or .name == "chromium-headless-shell")
-      | "\(.name) \(.revision)"' \
-      $out/lib/node_modules/omniroute/node_modules/playwright-core/browsers.json \
-      $out/lib/node_modules/omniroute/node_modules/playwright/node_modules/playwright-core/browsers.json \
+    find "$out/lib/node_modules/omniroute/node_modules" \
+      -path '*/playwright-core/browsers.json' \
+      -exec jq -r '.browsers[]
+        | select(.name == "chromium" or .name == "chromium-headless-shell")
+        | "\(.name) \(.revision)"' {} + \
       | sort -u | \
     while read -r name revision; do
-      if [ "$name" = chromium ]; then relPath="$chromiumPath"; else relPath="$shellPath"; fi
+      if [ "$name" = chromium ]; then
+        relPath="${browserPaths.chromium}"
+      else
+        relPath="${browserPaths.shell}"
+      fi
+      # Playwright splits browser directory names on "-", hence the underscores.
       mkdir -p "$(dirname "$browsersDir/''${name//-/_}-$revision/$relPath")"
       ln -s ${lib.getExe ungoogled-chromium} "$browsersDir/''${name//-/_}-$revision/$relPath"
     done
-
-    # Marker file, without it playwright considers the install incomplete.
-    touch "$browsersDir/.links"
   ''
   + ''
 
