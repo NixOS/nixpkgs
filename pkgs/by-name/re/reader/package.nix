@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  installShellFiles,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "reader";
@@ -15,6 +17,15 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-xs8zNXTYhbj6Ilhmf1IRyQUwV95Em7qwV/V3+IXRxFI=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd reader \
+      --bash <($out/bin/reader completion bash) \
+      --fish <($out/bin/reader completion fish) \
+      --zsh <($out/bin/reader completion zsh)
+  '';
 
   meta = {
     description = "Lightweight tool offering better readability of web pages on the CLI";
