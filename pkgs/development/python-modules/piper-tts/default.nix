@@ -134,9 +134,11 @@ buildPythonPackage (finalAttrs: {
 
   postInstall = ''
     ln -s ${espeak-ng'}/share/espeak-ng-data $out/${python.sitePackages}/piper/
-    train=$out/${python.sitePackages}/piper/train/vits
-    rm -v src/piper/train/vits/monotonic_align/{Makefile,setup.py,core.c,core.pyx}
-    cp -Rv src/piper/train/vits $train/
+
+    # imported as piper.train.vits.monotonic_align.monotonic_align.core,
+    # see build_monotonic_align.sh
+    install -Dm755 -t $out/${python.sitePackages}/piper/train/vits/monotonic_align/monotonic_align \
+      src/piper/train/vits/monotonic_align/core.*.so
   '';
 
   nativeCheckInputs = [

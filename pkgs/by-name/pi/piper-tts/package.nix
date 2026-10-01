@@ -17,5 +17,10 @@ python3Packages.toPythonApplication (
       ++ lib.optionals withHTTP oldAttrs.optional-dependencies.http
       ++ lib.optionals withJapanese oldAttrs.optional-dependencies.ja
       ++ lib.optionals withTrain oldAttrs.optional-dependencies.train;
+
+    pythonImportsCheck =
+      oldAttrs.pythonImportsCheck
+      # needs torch, so only checkable with the train extra
+      ++ lib.optionals withTrain [ "piper.train.vits.monotonic_align" ];
   })
 )
