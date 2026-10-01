@@ -26,9 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qtscript ];
 
+  enableParallelBuilding = true;
+
   dontUseQmakeConfigure = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  # https://github.com/smplayer-dev/smplayer/issues/1318
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
 
   meta = {
     homepage = "https://www.smplayer.info";
