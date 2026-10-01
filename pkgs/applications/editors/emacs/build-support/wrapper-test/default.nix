@@ -112,6 +112,7 @@ runCommand "test-emacs-withPackages-wrapper"
 
     emacs --batch --load=with-packages \
       --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
+      --eval='(setq with-packages-unwrapped-emacs-program "${lib.getExe emacs}")' \
       --funcall=ert-run-tests-batch-and-exit
 
     touch $out
