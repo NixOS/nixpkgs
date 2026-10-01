@@ -11,6 +11,7 @@
   pnpmBuildHook,
   electron_43,
   python3,
+  rustPackages_1_97,
   makeWrapper,
   callPackage,
   fetchFromGitHub,
@@ -39,6 +40,7 @@ let
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
     pnpm = pnpm_10;
+    inherit (rustPackages_1_97) cargo rustPlatform;
     inherit nodejs;
   };
 
