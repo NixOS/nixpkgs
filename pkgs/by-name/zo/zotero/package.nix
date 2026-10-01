@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   darwin,
+  callPackage,
   nodejs_22,
   perl,
   python3,
@@ -15,7 +16,6 @@
   pkg-config,
   pango,
   giflib,
-  firefox-esr-153-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
   libGL,
@@ -31,6 +31,8 @@
 let
   # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
   nodejs = nodejs_22;
+
+  firefox = callPackage ./firefox-esr-140.nix { };
 
   pname = "zotero";
   version = "10.0.4";
@@ -253,10 +255,10 @@ buildNpmPackage (finalAttrs: {
       mkdir -p app/xulrunner/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r "${firefox-esr-153-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+      cp -r "${firefox}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      cp -r "${firefox-esr-153-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
+      cp -r "${firefox}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
         lib.replaceString "aarch64" "arm64" stdenv.hostPlatform.parsed.cpu.name
       }"
     ''
