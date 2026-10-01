@@ -18,7 +18,6 @@
   nix-update-script,
   pkg-config,
   udev,
-  openssl,
   sqlite,
   pam,
   bashInteractive,
@@ -76,38 +75,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
       socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
       profile = {
         cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
-      }
-      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.5") {
         client_config_path = "/etc/kanidm/config";
         resolver_config_path = "/etc/kanidm/unixd";
         resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
         server_admin_bind_path = socket_path;
         server_config_path = "/etc/kanidm/server.toml";
         server_ui_pkg_path = "@htmx_ui_pkg_path@";
-      }
-      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.8") {
         resolver_service_account_token_path = "/etc/kanidm/token";
-      }
-      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.9") {
         server_migration_path = "/etc/kanidm/migrations.d";
       };
-      # lower required rust-version in Cargo.toml to allow backporting
-      rustVersion =
-        if lib.versionAtLeast finalAttrs.version "1.11" then
-          {
-            from = "1.96";
-            to = "1.95";
-          }
-        else
-          null;
     in
     ''
       cp ${format profile} libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
-    ''
-    + lib.optionalString (rustVersion != null) ''
-      substituteInPlace Cargo.toml \
-        --replace-fail 'rust-version = "${rustVersion.from}"' 'rust-version = "${rustVersion.to}"'
     '';
 
   nativeBuildInputs = [
@@ -122,9 +102,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ]
-  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.10") [
-    openssl
   ];
 
   # The UI needs to be in place before the tests are run.
