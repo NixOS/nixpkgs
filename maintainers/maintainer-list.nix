@@ -15062,6 +15062,11 @@
     githubId = 45126464;
     name = "Adam J.";
   };
+  kfears = {
+    github = "kfearsoff";
+    githubId = 66781795;
+    name = "KFears";
+  };
   kfiz = {
     email = "doroerose@gmail.com";
     github = "kfiz";
@@ -16423,6 +16428,12 @@
     github = "levigross";
     githubId = 80920;
     name = "Levi Gross";
+  };
+  levihuayuzhang = {
+    email = "zhanghuayu.dev@gmail.com";
+    name = "Huayu Zhang";
+    github = "levihuayuzhang";
+    githubId = 68364307;
   };
   Levizor = {
     email = "levizor@disroot.org";

@@ -9,21 +9,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yara-x";
-  version = "1.20.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TR9P4QYDxHSpAmPShiRNdNK1c4v3hGAx8mNOEhAo/HQ=";
+    hash = "sha256-OFDNOskhhX0ch0QmIV/2SHrTJUt5pEoJBin8Lu68f+w=";
   };
 
   buildAndTestSubdir = "py";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-/D4/H/+O1bCHecEO92aq05U3lPG2P/CFTWVlHekuH98=";
+    hash = "sha256-mvMhxRXSq6IFZaGXn7mwe2XlkyZhgJffUoWruWC6Yj0=";
   };
 
   nativeBuildInputs = [
