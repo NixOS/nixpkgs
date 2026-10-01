@@ -14,7 +14,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.1.3";
   pyproject = true;
 
-
   src = fetchFromGitHub {
     owner = "erenseymen";
     repo = "android-tv-remote";
@@ -22,7 +21,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-oGSDMGpOvIt1NFBx6g1dLtoCJBBQi+3Yl7g+XvIcRn8=";
   };
 
-  scrcpy-server = fetchurl{
+  __structuredAttrs = true;
+
+  scrcpy-server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v3.1/scrcpy-server-v3.1";
     hash = "sha256-lY8JRKYvI7HzOhbp6xSETBoEuILKF1pzjBbSPLIrhsA=";
   };
@@ -62,7 +63,6 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
 
   postInstall = ''
     # Les icônes sont installées par setup.py dans un chemin que GTK n' parcourt pas.
