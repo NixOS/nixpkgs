@@ -380,6 +380,9 @@ in
 
     environment.etc."gdm/Xsession".source = config.services.displayManager.sessionData.wrapper;
 
+    # GDM gsettings schema is required for the fingerprint settings panel
+    services.desktopManager.gnome.sessionPath = lib.mkIf config.services.fprintd.enable [ pkgs.gdm ];
+
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment = {
