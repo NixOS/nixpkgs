@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svix-server";
-  version = "1.96.1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NRzumAmgpqCfoLC0s6cAUcQYCFMFD6MElhDFpW79CQs=";
+    hash = "sha256-JjCaDFOBUnTEAZhcL31pu4/+e7yqN6Pm5cikG2nRFTY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  cargoHash = "sha256-IZ3YPEU4QpTia3ekvr1AQDZCrg4xUmEj82ZU0y/dDzM=";
+  cargoHash = "sha256-dJJPWxzYc8bMeiBleUZYB1yQ5+5o8l2hr5wPzQ6nUUI=";
 
   nativeBuildInputs = [ pkg-config ];
 
