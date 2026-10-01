@@ -10695,6 +10695,12 @@
     githubId = 77560236;
     name = "Gordon Clark";
   };
+  gorgeous-patrick = {
+    email = "baichuanli@yahoo.com";
+    github = "Gorgeous-Patrick";
+    githubId = 33488623;
+    name = "Patrick Li";
+  };
   gotcha = {
     email = "gotcha@bubblenet.be";
     github = "gotcha";
