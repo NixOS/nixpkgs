@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
+      ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g' | sed -re 's/(^ *| *$)//g;')'';
     in
     ''
       wrapProgram $out/bin/startlazarus \
