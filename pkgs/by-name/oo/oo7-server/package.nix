@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   cargo,
   meson,
   ninja,
@@ -17,6 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/server";
   cargoRoot = "../";
+
+  patches = [
+    (fetchpatch {
+      name = "resolve-aliases-in-set_locked.patch";
+      url = "https://github.com/linux-credentials/oo7/pull/585.patch";
+      hash = "sha256-L2ZoNUFOJpEnkU44buks7Dje/U7FAS8Jz1d4OHs1Ot8=";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
 
   nativeBuildInputs = [
     pkg-config
