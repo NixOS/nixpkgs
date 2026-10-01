@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-xalan"
   ];
 
+  env.CXXFLAGS = "-std=gnu++17";
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
