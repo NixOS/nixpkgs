@@ -5,21 +5,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "loqedapi";
-  version = "2.1.11";
+  version = "2.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpolhout";
     repo = "loqedAPI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DLnjIq0YQIspPWYP9KT0UZ9UPGg5SOjYuVM7XqCUqTo=";
+    hash = "sha256-i6suZdme6M1lNVsI1zd23I8JQNfVmiCooQTkQCeOJYU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp
