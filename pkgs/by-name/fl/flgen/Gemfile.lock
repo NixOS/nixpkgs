@@ -1,0 +1,17 @@
+GEM
+  specs:
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    flgen (0.22.0)
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  flgen (= 0.22.0)!
+
+BUNDLED WITH
+   2.7.2
