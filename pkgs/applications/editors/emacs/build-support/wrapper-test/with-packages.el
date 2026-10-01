@@ -66,7 +66,14 @@ Set this variable before running related tests.")
 
 (ert-deftest with-packages-requested-packages-are-available ()
   (should (package-installed-p 'dash))
-  (should (package-installed-p 'flx-ido)))
+  (should (package-installed-p 'flx-ido))
+  ;; Test 23d4bfb6661ca57a9e331a2cf4184232d38ac38b.
+  (ert-info ("unwrapped subprocess Emacs does not have requested packages installed")
+    (should (file-name-absolute-p with-packages-unwrapped-emacs-program))
+    (should-not (with-packages-eval-in-sub-emacs '(package-installed-p 'dash)
+                                                 with-packages-unwrapped-emacs-program))
+    (should-not (with-packages-eval-in-sub-emacs '(package-installed-p 'flx-ido)
+                                                 with-packages-unwrapped-emacs-program))))
 
 (ert-deftest with-packages-deps-of-requested-packages-are-available ()
   "Test https://github.com/NixOS/nixpkgs/issues/388829."
