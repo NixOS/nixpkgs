@@ -16,8 +16,11 @@
   vulkan-headers,
   vulkan-loader,
   libGL,
-  obs-vkcapture32,
+  pkgsi686Linux,
 }:
+let
+  obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
