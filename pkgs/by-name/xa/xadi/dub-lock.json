@@ -1,0 +1,52 @@
+{
+  "dependencies": {
+    "automem": {
+      "version": "0.6.11",
+      "sha256": "0l3cbkji47p9myhdpmm83s4j8rjvdwkyln1hinlw1kzph4dgb5wn"
+    },
+    "cachetools": {
+      "version": "0.4.2",
+      "sha256": "0l24y3pwnwxdf1zkx7nxgiscf2ycyj4a4cqhy2qn9syvmdgy6rd4"
+    },
+    "dxml": {
+      "version": "0.4.5",
+      "sha256": "1kh6a9ah8rd0qhqvvriskfzrb7ba88yaplg13ana7zw5nj8ml7jc"
+    },
+    "dynamic-loader": {
+      "version": "9202b389affa6be0740e7295dea8f0146537a784",
+      "repository": "https://github.com/Dadoum/dynamicloader.git",
+      "sha256": "0l2d7pd5r3crkvgi9i8fbcmcbzkw12syf1i7pnics75w1gk5f717"
+    },
+    "plist": {
+      "version": "a425458e2c3d8195c6a9ad68e643f2d823850693",
+      "repository": "https://github.com/Dadoum/plist.git",
+      "sha256": "0174dpkkf8l235f8p0d1ql26646xd8y869ckz1xmg6rjc71vlvnc"
+    },
+    "plist-d": {
+      "version": "6fdaa60d62bbf7c55044069e8f03cbe74401c444",
+      "repository": "https://github.com/Dadoum/libplist-d.git",
+      "sha256": "00v556i9ky3r8dixa53dmy3dfbq19mih6fd7a38cjwpk6pvc1is2"
+    },
+    "provision": {
+      "version": "135c9bd1671e0607fe1dfa4f5c1e0003f6709442",
+      "repository": "https://github.com/xtool-org/Provision.git",
+      "sha256": "03p7vi5gchr6qlzp62rmqw97smfqr5xdlp8l97w97vplzf8rgh9g"
+    },
+    "requests": {
+      "version": "2.2.1",
+      "sha256": "1ahmri14c1hj5yhxdha9v3m9a2i30nz86gsssl7615am3nqrwqgn"
+    },
+    "slf4d": {
+      "version": "2.4.3",
+      "sha256": "1745wzkial5yk0900649wh8f73nwf7wja0xyawvh5gx4zwssw04a"
+    },
+    "test_allocator": {
+      "version": "0.3.4",
+      "sha256": "1xpjz6smxwgm4walrv3xbzi46cddc80q5n4gs7j9gm2yx11sf7gj"
+    },
+    "unit-threaded": {
+      "version": "2.2.5",
+      "sha256": "19dphqfd14ybfw0g9q4pr2djmq6m70l907dqbf94ybmw2bnadwwk"
+    }
+  }
+}
