@@ -11156,12 +11156,6 @@
     githubId = 9850776;
     name = "Hans-Jörg Schurr";
   };
-  happy-river = {
-    email = "happyriver93@runbox.com";
-    github = "happy-river";
-    githubId = 54728477;
-    name = "Happy River";
-  };
   happyalu = {
     email = "alok@parlikar.com";
     github = "happyalu";
