@@ -4,28 +4,17 @@
   name = "autobrr";
   meta.maintainers = with lib.maintainers; [ av-gal ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    let
-      # We create this secret in the Nix store (making it readable by everyone).
-      # DO NOT DO THIS OUTSIDE OF TESTS!!
-      testSecretFile = pkgs.writeText "session_secret" "not-secret";
-    in
-    {
+  nodes.machine = {
+    services.autobrr.enable = true;
+
+    # Use port other than default to test if settings options work.
+    specialisation.settingsPort.configuration = {
       services.autobrr = {
         enable = true;
-        secretFile = testSecretFile;
-      };
-
-      # Use port other than default to test if settings options work.
-      specialisation.settingsPort.configuration = {
-        services.autobrr = {
-          enable = true;
-          secretFile = testSecretFile;
-          settings.port = 7777;
-        };
+        settings.port = 7777;
       };
     };
+  };
 
   testScript =
     { nodes, ... }:
