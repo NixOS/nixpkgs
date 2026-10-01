@@ -40,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "BitTorrent DHT library";
     homepage = "https://www.irif.fr/~jch/software/bittorrent/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    # Build and install phases probably need minor adaptation to
+    # get working on darwin.
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       dvn0
     ];
