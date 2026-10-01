@@ -17,14 +17,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-plugin-prometheus-sd";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/TvpRRtyCNPmAuFk+wmcJldDniHEkV1t4Vvwa9Sl5eg=";
+    hash = "sha256-Qzbq779vMWUo+W0h8SgEW85OH1BUrCg7L3yjGskAqec=";
   };
 
   build-system = [ poetry-core ];
