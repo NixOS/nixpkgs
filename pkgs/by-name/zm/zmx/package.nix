@@ -7,6 +7,10 @@
   writeShellScriptBin,
   zig_0_16,
   nix-update-script,
+  bats,
+  python3,
+  unixtools,
+  versionCheckHook,
 }:
 let
   zig = zig_0_16;
@@ -58,8 +62,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    # only needed for postCheck
+    bats
+    python3
+    unixtools.hostname
+  ];
+
   preCheck = ''
     export ZMX_DIR="$TMPDIR/zmx-test"
+  '';
+
+  postCheck = ''
+    bats test
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -68,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       --zsh <($out/bin/zmx completions zsh) \
       --fish <($out/bin/zmx completions fish)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
