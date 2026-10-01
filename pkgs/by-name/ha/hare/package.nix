@@ -175,7 +175,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [
+      sikmir
+      snifexx
+    ];
     mainProgram = "hare";
     inherit (harec.meta) platforms badPlatforms;
   };
