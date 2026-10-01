@@ -13,8 +13,8 @@ let
   firmwareSrc = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "scarlett2-firmware";
-    rev = "f628dfb4d2e874b2078dbb43e8c1d59dd6553dd1";
-    hash = "sha256-s61eyS47SuIbK9KR59XxHpybvl9tHFWPLkpHmdqwO24=";
+    rev = "a81d62812903cddde15f6d84d07152802cab10b2";
+    hash = "sha256-r1Wj9cq8+HwXOrC5OIsC8D0XuN8WpqvZPdPWAH1Ohfs=";
   };
 
 in
@@ -22,13 +22,13 @@ stdenv.mkDerivation {
 
   pname = "scarlett2";
 
-  version = "0-unstable-2024-04-06";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "scarlett2";
-    rev = "1c262bcac11bceb6da8334b8f5b56d3c9331bfc8";
-    hash = "sha256-yhmXVfys300NwZ8UJ7WvOyNkGP3OkIVoRaToF+SenQA=";
+    rev = "1.0";
+    hash = "sha256-GfWfIOQfH5SoBdExIT1p/OHXJG2pwzTW/RS8Rs4QSGQ=";
   };
 
   buildInputs = [
