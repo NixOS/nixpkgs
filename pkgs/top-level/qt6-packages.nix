@@ -10,17 +10,13 @@
   __splicedPackages,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
-  stdenv,
-  pkgsHostTarget,
+  # Allow to override qt6 packages used within
+  qt6,
   kdePackages,
 }:
 
 let
   pkgs = __splicedPackages;
-  # qt6 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
-  # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.qt6Packages.qtbase' should not have a `__spliced` but if qt6 is pre-spliced then it will have one.
-  # pkgsHostTarget == pkgs
-  qt6 = pkgsHostTarget.qt6;
 in
 
 makeScopeWithSplicing' {
