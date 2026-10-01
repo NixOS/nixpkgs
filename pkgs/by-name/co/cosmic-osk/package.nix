@@ -3,26 +3,26 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  just,
   libcosmicAppHook,
-  autoAddDriverRunpath,
-  nixosTests,
+  just,
+  udev,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "cosmic-monitor";
+  pname = "cosmic-osk";
   version = "1.9.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-monitor";
+    repo = "cosmic-osk";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-pYBS7pe9si+KzgIHjheYdPQ4mrZM47XV0cD/WM34Xvc=";
+    hash = "sha256-9lLzO+s1o3Vj68cEnqE6wnke89ZDargZxlz7vY5VsBk=";
   };
 
-  cargoHash = "sha256-oUNAhoJcT1Dlu89d9OgoeKdH6ykLtYFWWI4KbM0ThNY=";
+  cargoHash = "sha256-r5XlNx1GIy4gEiHX9QVYLEufRnuwxe9X4OBbz3tinIo=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -30,8 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     libcosmicAppHook
-    rustPlatform.bindgenHook
-    autoAddDriverRunpath # for GPU monitoring
+  ];
+
+  buildInputs = [
+    udev
   ];
 
   dontUseJustBuild = true;
@@ -65,9 +67,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://github.com/pop-os/cosmic-monitor";
-    description = "COSMIC System Monitor";
-    mainProgram = "cosmic-monitor";
+    homepage = "https://github.com/pop-os/cosmic-osk";
+    description = "COSMIC On-Screen Keyboard";
+    mainProgram = "cosmic-osk";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
