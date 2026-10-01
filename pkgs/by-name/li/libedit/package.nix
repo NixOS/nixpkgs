@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libedit";
-  version = "20260508-3.1";
+  version = "20260512-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/libedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kfQtZXHdjZL67dE0ETTOWrygxdC0s1KBQYbTPysRJy4=";
+    hash = "sha256-Qy1efqiwEW3Tny7Ke8EdDu13+qa3fqUmrOiZB8I+pKA=";
   };
 
   outputs = [
