@@ -44,6 +44,6 @@ symlinkJoin {
 
   inherit (obs-studio) meta;
   passthru = obs-studio.passthru // {
-    passthru.unwrapped = obs-studio;
+    unwrapped = obs-studio;
   };
 }
