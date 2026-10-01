@@ -32,6 +32,7 @@ let
     # SBCL, and the previous one in case someone quickly needs to roll back.
     "2.6.7".sha256 = "sha256-Hr3DXJ3I4nG4zRrESWXgC/JV+cAiFlD8t38Ps0wtOt4=";
     "2.6.8".sha256 = "sha256-rVEm39+6XbJ+53vMJYkwIP5SLQt2U9RbTEeVrePdwj0=";
+    "2.6.9".sha256 = "sha256-xv0dc1Vw60/zTK+WCZiMp37QvRK1XQmk/tB1vokNpRM=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
