@@ -9,7 +9,7 @@
   jre,
 }:
 let
-  version = "2.8";
+  version = "2.9";
 
   jre' = jre.override {
     enableJavaFX = true;
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
-    hash = "sha256-ZFBfOe35ybXUfmZpgfgePDqInU8SKzBlr34mn0jlNCM=";
+    hash = "sha256-jjXqpqURnOcRtTUwwiqqxTEzLo/f/aI1fRbrb1Iycmc=";
   };
 
   dontUnpack = true;
