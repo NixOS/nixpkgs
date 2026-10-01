@@ -3,39 +3,47 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pytestCheckHook,
+
+  # tests
   pytest-instafail,
   pytest-xdist,
+  pytestCheckHook,
+
+  # passthru
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psutil";
   version = "7.2.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-plBv24QgNzmVMV2lFxCbNwHKtd620thJayWdjs4estw=";
   };
 
-  postPatch = ''
+  postPatch =
     # stick to the old SDK name for now
     # https://developer.apple.com/documentation/iokit/kiomasterportdefault/
     # https://developer.apple.com/documentation/iokit/kiomainportdefault/
-    substituteInPlace psutil/arch/osx/cpu.c \
-      --replace-fail kIOMainPortDefault kIOMasterPortDefault
-  '';
+    ''
+      substituteInPlace psutil/arch/osx/cpu.c \
+        --replace-fail kIOMainPortDefault kIOMasterPortDefault
+    '';
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-instafail
     pytest-xdist
+    pytestCheckHook
   ];
 
   # Segfaults on darwin:
@@ -77,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/giampaolo/psutil/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
