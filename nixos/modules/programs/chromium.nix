@@ -8,6 +8,24 @@
 let
   cfg = config.programs.chromium;
 
+  copyNativeHosts =
+    packages: path:
+    pkgs.linkFarm "native-messaging-hosts" (
+      lib.concatMap (
+        pkg:
+        let
+          hostDir = "${pkg}${path}";
+        in
+        if builtins.pathExists hostDir then
+          map (fileName: {
+            name = fileName;
+            path = "${hostDir}/${fileName}";
+          }) (builtins.attrNames (builtins.readDir hostDir))
+        else
+          [ ]
+      ) packages
+    );
+
   defaultProfile = lib.filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
     DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
@@ -15,6 +33,11 @@ let
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
   };
+  nativeMessagingHostsPackages =
+    cfg.nativeMessagingHosts.packages
+    ++ lib.optionals cfg.enablePlasmaBrowserIntegration [
+      cfg.plasmaBrowserIntegrationPackage
+    ];
 in
 
 {
@@ -147,6 +170,13 @@ in
           }
         '';
       };
+      nativeMessagingHosts.packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        description = ''
+          Additional packages containing native messaging hosts that should be made available to Chromium extensions.
+        '';
+      };
     };
   };
 
@@ -155,11 +185,12 @@ in
   config = {
     environment.etc = lib.mkIf cfg.enable {
       # for chromium
-      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
+      "chromium/native-messaging-hosts" = {
+        source = copyNativeHosts nativeMessagingHostsPackages "/etc/chromium/native-messaging-hosts";
+      };
+      "opt/chrome/native-messaging-hosts" = {
+        source = copyNativeHosts nativeMessagingHostsPackages "/etc/opt/chrome/native-messaging-hosts";
+      };
       "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
         text = builtins.toJSON defaultProfile;
       };
@@ -172,12 +203,6 @@ in
       "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
         text = builtins.toJSON cfg.initialPrefs;
       };
-      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
       "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
         text = builtins.toJSON defaultProfile;
       };
