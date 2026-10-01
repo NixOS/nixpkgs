@@ -1,0 +1,182 @@
+{
+  withDPDK ? false,
+
+  lib,
+  stdenv,
+
+  autoconf,
+  automake,
+  dpdk,
+  fetchFromGitHub,
+  installShellFiles,
+  iproute2,
+  libcap_ng,
+  libpcap,
+  libtool,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
+  numactl,
+  openssl,
+  perl,
+  pkg-config,
+  procps,
+  python3,
+  sphinxHook,
+  tcpdump,
+  unbound,
+  util-linux,
+  which,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
+  version = "4.0.0";
+
+  src = fetchFromGitHub {
+    owner = "openvswitch";
+    repo = "ovs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+WjpNJkM3AztBY1gPO6RdujGi86GDTjskJyDK16/9Dc=";
+  };
+
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+    "tools"
+  ];
+
+  patches = [
+    # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
+    ./patches/disable-bash-arg-completion-test.patch
+  ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    installShellFiles
+    libtool
+    pkg-config
+    sphinxHook
+    makeWrapper
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  sphinxRoot = "./Documentation";
+
+  buildInputs = [
+    libcap_ng
+    openssl
+    perl
+    procps
+    python3
+    unbound
+    util-linux
+    which
+  ]
+  ++ (lib.optionals withDPDK [
+    dpdk
+    numactl
+    libpcap
+  ]);
+
+  preConfigure = "./boot.sh";
+
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sharedstatedir=/var"
+    "--sbindir=$(out)/bin"
+  ]
+  ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
+
+  # Leave /var out of this!
+  installFlags = [
+    "LOGDIR=$(TMPDIR)/dummy"
+    "RUNDIR=$(TMPDIR)/dummy"
+    "PKIDIR=$(TMPDIR)/dummy"
+  ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    # Install bash completions in correct location
+    rm -f $out/etc/bash_completion.d/ovs-*.bash
+    installShellCompletion utilities/ovs-appctl-bashcomp.bash
+    installShellCompletion utilities/ovs-vsctl-bashcomp.bash
+
+    mkdir -p $tools/{bin,share/openvswitch/scripts}
+    mv $out/share/openvswitch/scripts/ovs-{check-dead-ifs,monitor-ipsec,vtep} $tools/share/openvswitch/scripts
+    mv $out/share/openvswitch/scripts/usdt $tools/share/openvswitch/scripts
+    mv $out/bin/ovs-{dpctl-top,pcap,tcpdump,tcpundump} $tools/bin
+
+    wrapProgram $tools/bin/ovs-tcpdump \
+      --prefix PATH : ${lib.makeBinPath [ tcpdump ]} \
+      --prefix PYTHONPATH : $out/share/openvswitch/python
+  '';
+
+  doCheck = true;
+  preCheck = ''
+    export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
+    export RECHECK=yes
+
+    # Nix sandbox has no /etc/resolv.conf
+    export OVS_RESOLV_CONF=/dev/null
+
+    patchShebangs tests/
+  '';
+
+  nativeCheckInputs = [
+    iproute2
+    openssl
+  ]
+  ++ (with python3.pkgs; [
+    netaddr
+    pyparsing
+    pytest
+    setuptools
+    tftpy
+  ])
+  # pyftpdlib depends on pysendfile extension, which cannot be static
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ python3.pkgs.pyftpdlib ];
+
+  passthru = {
+    tests = {
+      default = nixosTests.openvswitch;
+      incus = nixosTests.incus-lts.openvswitch;
+    };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    changelog = "https://www.openvswitch.org/releases/NEWS-${finalAttrs.version}.txt";
+    description = "Multilayer virtual switch";
+    longDescription = ''
+      Open vSwitch is a production quality, multilayer virtual switch
+      licensed under the open source Apache 2.0 license. It is
+      designed to enable massive network automation through
+      programmatic extension, while still supporting standard
+      management interfaces and protocols (e.g. NetFlow, sFlow, SPAN,
+      RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
+      support distribution across multiple physical servers similar
+      to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
+    '';
+    homepage = "https://www.openvswitch.org/";
+    license = with lib.licenses; [
+      asl20
+      lgpl21Plus # ovs-bugtool
+      sissl11 # lib/sflow
+    ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      booxter
+      xddxdd
+    ];
+    platforms = lib.platforms.linux;
+  };
+})

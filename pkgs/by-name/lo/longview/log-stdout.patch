@@ -1,0 +1,38 @@
+diff -ru longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src.orig/Linode/Longview/Logger.pm longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src/Linode/Longview/Logger.pm
+--- longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src.orig/Linode/Longview/Logger.pm	2015-10-28 17:15:32.816515318 +0000
++++ longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src/Linode/Longview/Logger.pm	2015-10-28 18:00:50.760332026 +0000
+@@ -26,9 +26,7 @@
+         my ( $self, $message ) = @_;
+ 
+         my $ts = strftime( '%m/%d %T', localtime );
+-        $self->{logger}->write(
+-            sprintf( '%s %s Longview[%i] - %s', $ts, uc($level), $$, $message ),
+-            $levels->{$level} );
++        printf( "%s %s Longview[%i] - %s\n", $ts, uc($level), $$, $message );
+         die "$message" if $level eq 'logdie';
+     };
+ }
+@@ -37,12 +35,6 @@
+     my ( $class, $level ) = @_;
+     my $self = {};
+ 
+-    mkpath($LOGDIR) unless (-d $LOGDIR);
+-    $self->{logger}
+-        = Log::LogLite->new( $LOGDIR . 'longview.log', $level )
+-        or die "Couldn't create logger object: $!";
+-    $self->{logger}->template("<message>\n");
+-
+     return bless $self, $class;
+ }
+ 
+diff -ru longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src.orig/Linode/Longview/Util.pm longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src/Linode/Longview/Util.pm
+--- longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src.orig/Linode/Longview/Util.pm	2015-10-28 17:15:32.816515318 +0000
++++ longview-5bcc9b60896b72de2d14f046f911477c26eb70ba-src/Linode/Longview/Util.pm	2015-10-28 19:20:30.894314658 +0000
+@@ -225,7 +225,6 @@
+  	#<<<   perltidy ignore
+  	chdir '/'                      or $logger->logdie("Can't chdir to /: $!");
+  	open STDIN, '<', '/dev/null'   or $logger->logdie("Can't read /dev/null: $!");
+- 	open STDOUT, '>>', '/dev/null' or $logger->logdie("Can't write to /dev/null: $!");
+  	open STDERR, '>>', '/dev/null' or $logger->logdie("Can't write to /dev/null: $!");
+ 	tie *STDERR, "Linode::Longview::STDERRLogger";
+  	defined( my $pid = fork )      or $logger->logdie("Can't fork: $!");

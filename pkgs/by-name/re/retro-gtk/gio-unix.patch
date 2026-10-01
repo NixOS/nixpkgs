@@ -1,0 +1,11 @@
+--- a/retro-gtk/meson.build 2021-03-21 20:25:51.000000000 +0100
++++ b/retro-gtk/meson.build 2021-05-23 17:36:46.793693816 +0200
+@@ -103,6 +103,7 @@
+ retro_gtk_deps = [
+   epoxy,
+   gio,
++  gio_unix,
+   glib,
+   gmodule,
+   gobject,
+   

@@ -1,0 +1,16 @@
+diff --git a/plugins/fallbacks/host-sdk/plugin-host-sdk.c b/plugins/fallbacks/host-sdk/plugin-host-sdk.c
+index d3deb4fd..98ea0875 100644
+--- a/plugins/fallbacks/host-sdk/plugin-host-sdk.c
++++ b/plugins/fallbacks/host-sdk/plugin-host-sdk.c
+@@ -111,5 +111,11 @@ plugin_host_sdk_build_filename (PluginHostSdk  *self,
+   if (g_path_is_absolute (joined))
+     return g_steal_pointer (&joined);
+ 
++  if (g_strcmp0(g_get_os_info(G_OS_INFO_KEY_NAME), "NixOS") == 0) {
++    GString *str = g_string_new(joined);
++    g_string_replace(str, "usr/share", "run/current-system/sw/share", 0);
++    joined = g_string_free(str, FALSE);
++  }
++
+   return g_build_filename ("/", joined, NULL);
+ }

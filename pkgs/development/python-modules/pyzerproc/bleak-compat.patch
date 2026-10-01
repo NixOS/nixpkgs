@@ -1,0 +1,76 @@
+diff --git a/pyzerproc/discovery.py b/pyzerproc/discovery.py
+index e383996..1810bbe 100644
+--- a/pyzerproc/discovery.py
++++ b/pyzerproc/discovery.py
+@@ -4,6 +4,9 @@ import logging
+ from .light import Light
+ from .exceptions import ZerprocException
+ 
++from bleak import BLEDevice, BleakScanner, AdvertisementData
++from bleak.exc import BleakError
++
+ _LOGGER = logging.getLogger(__name__)
+ 
+ EXPECTED_SERVICES = [
+@@ -13,27 +16,25 @@ EXPECTED_SERVICES = [
+ ]
+ 
+ 
+-def is_valid_device(device):
++def is_valid_device(device: BLEDevice, advertisement_data: AdvertisementData):
+     """Returns true if the given device is a Zerproc light."""
+     for service in EXPECTED_SERVICES:
+-        if service not in device.metadata['uuids']:
++        if service not in advertisement_data.service_uuids:
+             return False
+     return True
+ 
+ 
+ async def discover(timeout=10):
+     """Returns nearby discovered lights."""
+-    import bleak
+-
+     _LOGGER.info("Starting scan for local devices")
+ 
+     lights = []
+     try:
+-        devices = await bleak.BleakScanner.discover(timeout=timeout)
+-    except bleak.exc.BleakError as ex:
++        devices = await BleakScanner.discover(timeout=timeout, return_adv=True)
++    except BleakError as ex:
+         raise ZerprocException() from ex
+-    for device in devices:
+-        if is_valid_device(device):
++    for device, advertisement_data in devices:
++        if is_valid_device(device, advertisement_data):
+             lights.append(Light(device.address, device.name))
+ 
+     _LOGGER.info("Scan complete")
+diff --git a/tests/test_discovery.py b/tests/test_discovery.py
+index 7a1442d..6b271b8 100644
+--- a/tests/test_discovery.py
++++ b/tests/test_discovery.py
+@@ -16,7 +16,6 @@ async def test_discover_devices(scanner, client_class):
+                 'AA:BB:CC:11:22:33',
+                 'LEDBlue-CC112233',
+                 {},
+-                0,
+                 uuids=[
+                     "0000ffe0-0000-1000-8000-00805f9b34fb",
+                     "0000ffe5-0000-1000-8000-00805f9b34fb",
+@@ -27,7 +26,6 @@ async def test_discover_devices(scanner, client_class):
+                 'AA:BB:CC:44:55:66',
+                 'LEDBlue-CC445566',
+                 {},
+-                0,
+                 uuids=[
+                     "0000ffe0-0000-1000-8000-00805f9b34fb",
+                     "0000ffe5-0000-1000-8000-00805f9b34fb",
+@@ -38,7 +36,6 @@ async def test_discover_devices(scanner, client_class):
+                 'DD:EE:FF:11:22:33',
+                 'Other',
+                 {},
+-                0,
+                 uuids=[
+                     "0000fe9f-0000-1000-8000-00805f9b34fb",
+                 ],

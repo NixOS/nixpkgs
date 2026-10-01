@@ -1,0 +1,18 @@
+diff --git a/themes/install.sh b/themes/install.sh
+index 71622787..e6fd4f99 100755
+--- a/themes/install.sh
++++ b/themes/install.sh
+@@ -131,13 +131,6 @@ install() {
+     ln -s assets/process-working.svg process-working.svg
+     ln -s assets/no-notifications.svg no-notifications.svg
+ 
+-    # GTK2 Themes
+-    mkdir -p "${THEME_DIR}/gtk-2.0"
+-    # cp -r "${SRC_DIR}/main/gtk-2.0/gtkrc${theme}${ELSE_DARK:-}${ctype}" 				 "${THEME_DIR}/gtk-2.0/gtkrc"
+-    cp -r "${SRC_DIR}/main/gtk-2.0/common/"*'.rc' "${THEME_DIR}/gtk-2.0"
+-    cp -r "${SRC_DIR}/assets/gtk-2.0/assets-common${ELSE_DARK:-}" "${THEME_DIR}/gtk-2.0/assets"
+-    cp -r "${SRC_DIR}/assets/gtk-2.0/assets${theme}${ELSE_DARK:-}${ctype}/"*"png" "${THEME_DIR}/gtk-2.0/assets"
+-
+     # GTK3 Themes
+     mkdir -p "${THEME_DIR}/gtk-3.0"
+     cp -r "${SRC_DIR}/assets/gtk/assets${theme}${ctype}" "${THEME_DIR}/gtk-3.0/assets"

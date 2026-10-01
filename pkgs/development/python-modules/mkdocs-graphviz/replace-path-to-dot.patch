@@ -1,0 +1,25 @@
+diff --git i/mkdocs_graphviz.py w/mkdocs_graphviz.py
+index 3aa190f..390e540 100644
+--- i/mkdocs_graphviz.py
++++ w/mkdocs_graphviz.py
+@@ -372,7 +372,7 @@ class MkdocsGraphvizPreprocessor(markdown.preprocessors.Preprocessor):
+
+                 # RAW GRAPHVIZ BLOCK CONTENT
+                 content = m.group('content')
+-                args = [command, '-T'+filetype]
++                args = [@command@, '-T'+filetype]
+
+                 try:
+                     bgcolor = self.config['bgcolor'][0]
+@@ -384,9 +384,9 @@ class MkdocsGraphvizPreprocessor(markdown.preprocessors.Preprocessor):
+                     edge_fontcolor = self.config['edge_fontcolor'][0]
+
+                     if self.config['bgcolor'][0] == 'None' or self.config['bgcolor'][0] == 'none':
+-                        args = [command, '-Gbgcolor=none', f'-Gcolor={graph_color}', f'-Gfontcolor={graph_fontcolor}', f'-Ncolor={node_color}', f'-Nfontcolor={node_fontcolor}', f'-Ecolor={edge_color}', f'-Efontcolor={edge_fontcolor}', '-T'+filetype]
++                        args = [@command@, '-Gbgcolor=none', f'-Gcolor={graph_color}', f'-Gfontcolor={graph_fontcolor}', f'-Ncolor={node_color}', f'-Nfontcolor={node_fontcolor}', f'-Ecolor={edge_color}', f'-Efontcolor={edge_fontcolor}', '-T'+filetype]
+                     else:
+-                        args = [command, f'-Gcolor={graph_color}', f'-Gfontcolor={graph_fontcolor}', f'-Gbgcolor={bgcolor}', f'-Ncolor={node_color}', f'-Nfontcolor={node_fontcolor}', f'-Ecolor={edge_color}', f'-Efontcolor={edge_fontcolor}', '-T'+filetype]
++                        args = [@command@, f'-Gcolor={graph_color}', f'-Gfontcolor={graph_fontcolor}', f'-Gbgcolor={bgcolor}', f'-Ncolor={node_color}', f'-Nfontcolor={node_fontcolor}', f'-Ecolor={edge_color}', f'-Efontcolor={edge_fontcolor}', '-T'+filetype]
+
+                     proc = subprocess.Popen(
+                         args,

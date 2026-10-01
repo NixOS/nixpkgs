@@ -1,0 +1,16 @@
+--- a/src/tools/macdeployqt/shared/shared.cpp
++++ b/src/tools/macdeployqt/shared/shared.cpp
+@@ -1300,6 +1300,13 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+     argumentList.append( "-importPath");
+     argumentList.append(qmlImportsPath);
+ 
++    // In a modularized installation of qt as we have in Nix, instead, we will
++    // read the paths from the environment, as they are spread in multiple
++    // locations and normally set in the environment like this
++    auto envQmlImportPaths = ::qgetenv("QML2_IMPORT_PATH").split(':');
++    for (const QString &importPath : envQmlImportPaths)
++        argumentList << "-importPath" << importPath;
++
+     // run qmlimportscanner
+     QProcess qmlImportScanner;
+     qmlImportScanner.start(qmlImportScannerPath, argumentList);

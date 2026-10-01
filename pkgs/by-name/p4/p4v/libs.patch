@@ -1,0 +1,54 @@
+diff -ru bin-before/p4admin bin-after/p4admin
+--- before/bin/p4admin	2026-05-05 13:38:26.865099841 -0700
++++ after/bin/p4admin	2026-05-05 13:40:01.377761574 -0700
+@@ -43,14 +43,6 @@
+             progname=`basename "$realfullprogname"`
+               prefix=`topdir   "$realfullprogname"`
+ 
+-    # check for symbolic links for libssl.so and libcrypto.so
+-    if [ ! -f $prefix/lib/libssl.so ]; then
+-        p4vlibssl=$( find $prefix/lib/libssl.so.* )
+-        ln -s $p4vlibssl $prefix/lib/libssl.so;
+-        p4vlibcrypto=$( find $prefix/lib/libcrypto.so.* )
+-        ln -s $p4vlibcrypto $prefix/lib/libcrypto.so;
+-    fi
+-
+     XDG_SESSION_TYPE=
+     QT_QPA_PLATFORM=xcb
+     P4VRES=$prefix/lib/P4VResources
+diff -ru bin-before/p4merge bin-after/p4merge
+--- before/bin/p4merge	2026-05-05 13:38:26.865161794 -0700
++++ after/bin/p4merge	2026-05-05 13:39:51.100750813 -0700
+@@ -43,14 +43,6 @@
+             progname=`basename "$realfullprogname"`
+               prefix=`topdir   "$realfullprogname"`
+ 
+-    # check for symbolic links for libssl.so and libcrypto.so
+-    if [ ! -f $prefix/lib/libssl.so ]; then
+-        p4vlibssl=$( find $prefix/lib/libssl.so.* )
+-        ln -s $p4vlibssl $prefix/lib/libssl.so;
+-        p4vlibcrypto=$( find $prefix/lib/libcrypto.so.* )
+-        ln -s $p4vlibcrypto $prefix/lib/libcrypto.so;
+-    fi
+-
+     XDG_SESSION_TYPE=
+     QT_QPA_PLATFORM=xcb
+     P4VRES=$prefix/lib/P4VResources
+diff -ru bin-before/p4v bin-after/p4v
+--- before/bin/p4v	2026-05-05 13:38:26.865192103 -0700
++++ after/bin/p4v	2026-05-05 13:39:20.028718286 -0700
+@@ -43,14 +43,6 @@
+             progname=`basename "$realfullprogname"`
+               prefix=`topdir   "$realfullprogname"`
+ 
+-    # check for symbolic links for libssl.so and libcrypto.so
+-    if [ ! -f $prefix/lib/libssl.so ]; then
+-        p4vlibssl=$( find $prefix/lib/libssl.so.* )
+-        ln -s $p4vlibssl $prefix/lib/libssl.so;
+-        p4vlibcrypto=$( find $prefix/lib/libcrypto.so.* )
+-        ln -s $p4vlibcrypto $prefix/lib/libcrypto.so;
+-    fi
+-
+     XDG_SESSION_TYPE=
+     QT_QPA_PLATFORM=xcb
+     P4VRES=$prefix/lib/P4VResources

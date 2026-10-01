@@ -1,0 +1,24 @@
+{
+    "description": "OVMF with Intel TDX support",
+    "interface-types": [
+        "uefi"
+    ],
+    "mapping": {
+        "device": "memory",
+        "filename": "@firmware@"
+    },
+    "targets": [
+        {
+            "architecture": "x86_64",
+            "machines": [
+                "pc-q35-*"
+            ]
+        }
+    ],
+    "features": [
+        "intel-tdx"
+    ],
+    "tags": [
+
+    ]
+}

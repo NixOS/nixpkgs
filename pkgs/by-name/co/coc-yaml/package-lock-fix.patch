@@ -1,0 +1,89 @@
+diff --git i/package-lock.json w/package-lock.json
+index 294a466..424d557 100644
+--- i/package-lock.json
++++ w/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "coc-yaml",
+-  "version": "1.9.0",
++  "version": "1.9.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "coc-yaml",
+-      "version": "1.9.0",
++      "version": "1.9.1",
+       "license": "MIT",
+       "dependencies": {
+         "prettier": "2.0.5"
+@@ -27,6 +27,8 @@
+     },
+     "node_modules/@chemzqm/tsconfig": {
+       "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/@chemzqm/tsconfig/-/tsconfig-0.0.3.tgz",
++      "integrity": "sha512-MjF25vbqLYR+S+JJLgBi0vn4gZqv/C87H+yPSlVKEqlIJAJOGJOgFPUFvRS7pdRHqkv2flX/oRxzxhlu2V0X1w==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -464,6 +466,8 @@
+     },
+     "node_modules/ansi-styles": {
+       "version": "6.1.0",
++      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.1.0.tgz",
++      "integrity": "sha512-VbqNsoz55SYGczauuup0MFUyXNQviSpFTj1RQtFzmQLk18qbVSpTFFGMT293rmDaQuKCT6InmbuEyUne4mTuxQ==",
+       "dev": true,
+       "license": "MIT",
+       "engines": {
+@@ -533,6 +537,8 @@
+     },
+     "node_modules/fs-extra": {
+       "version": "10.0.0",
++      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-10.0.0.tgz",
++      "integrity": "sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -546,11 +552,15 @@
+     },
+     "node_modules/graceful-fs": {
+       "version": "4.2.9",
++      "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.9.tgz",
++      "integrity": "sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==",
+       "dev": true,
+       "license": "ISC"
+     },
+     "node_modules/jsonfile": {
+       "version": "6.1.0",
++      "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
++      "integrity": "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -562,6 +572,8 @@
+     },
+     "node_modules/prettier": {
+       "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/prettier/-/prettier-2.0.5.tgz",
++      "integrity": "sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==",
+       "license": "MIT",
+       "bin": {
+         "prettier": "bin-prettier.js"
+@@ -572,6 +584,8 @@
+     },
+     "node_modules/request-light": {
+       "version": "0.5.7",
++      "resolved": "https://registry.npmjs.org/request-light/-/request-light-0.5.7.tgz",
++      "integrity": "sha512-i/wKzvcx7Er8tZnvqSxWuNO5ZGggu2UgZAqj/RyZ0si7lBTXL7kZiI/dWxzxnQjaY7s5HEy1qK21Do4Ncr6cVw==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -591,6 +605,8 @@
+     },
+     "node_modules/universalify": {
+       "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.0.tgz",
++      "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==",
+       "dev": true,
+       "license": "MIT",
+       "engines": {

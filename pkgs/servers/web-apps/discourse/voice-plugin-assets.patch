@@ -1,0 +1,38 @@
+diff --git a/plugins/voice/plugin.rb b/plugins/voice/plugin.rb
+index a715e9364e0..29b7eeb3c72 100644
+--- a/plugins/voice/plugin.rb
++++ b/plugins/voice/plugin.rb
+@@ -15,18 +15,22 @@ require "discourse_voice_assets"
+ # immutable, so the versioned URL is what busts caches on a gem bump. The
+ # client learns the current base path from the site serializer.
+ voice_javascripts_dir = File.join(__dir__, "public", "javascripts")
+-FileUtils.mkdir_p(voice_javascripts_dir)
+-Dir
+-  .children(voice_javascripts_dir)
+-  .each do |entry|
+-    if entry != DiscourseVoiceAssets::VERSION
+-      FileUtils.rm_rf(File.join(voice_javascripts_dir, entry))
+-    end
+-  end
+-Discourse::Utils.atomic_ln_s(
+-  DiscourseVoiceAssets.vendor_path,
+-  File.join(voice_javascripts_dir, DiscourseVoiceAssets::VERSION),
++unless File.symlink?(
++  File.join(voice_javascripts_dir, DiscourseVoiceAssets::VERSION)
+ )
++  FileUtils.mkdir_p(voice_javascripts_dir)
++  Dir
++    .children(voice_javascripts_dir)
++    .each do |entry|
++      if entry != DiscourseVoiceAssets::VERSION
++        FileUtils.rm_rf(File.join(voice_javascripts_dir, entry))
++      end
++    end
++  Discourse::Utils.atomic_ln_s(
++    DiscourseVoiceAssets.vendor_path,
++    File.join(voice_javascripts_dir, DiscourseVoiceAssets::VERSION),
++  )
++end
+ 
+ enabled_site_setting :voice_enabled
+ 
