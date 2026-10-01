@@ -3,22 +3,22 @@
   rustfmt,
   rustPlatform,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1JnNNapIg0uholQkgnqU+KQ1q1SCF0MJmrO8XybxBzw=";
+    hash = "sha256-FqTl2eTp2IgL+ADiHvn9SYEVksvSQ6xO4tHzvfDrNWY=";
   };
 
-  cargoHash = "sha256-tH6Unl9mFUmpIiDoHp7ZUwaKAK8QEWGf2ldKbcyBET0=";
+  cargoHash = "sha256-PWi8o+hgE/TKAsVqwbhurfsFdc2BOWD8C4VcjKeCCZY=";
 
   nativeBuildInputs = [
     rustfmt
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set RUSTFMT "${lib.getExe rustfmt}"
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "JSON Schema to Rust type converter";

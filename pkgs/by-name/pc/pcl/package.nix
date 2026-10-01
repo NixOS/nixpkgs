@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+KyaajJM0I5CAcr8AiOLC4TkGV3Gm73a0/X8LQWFZMI=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   patches = [
     (fetchpatch {
       # see https://github.com/NixOS/nixpkgs/issues/485826 to be removed at next release after 1.15.1
@@ -85,6 +90,18 @@ stdenv.mkDerivation (finalAttrs: {
     qhull
     vtk
   ];
+
+  postInstall = ''
+    moveToOutput "share/pcl-*" "$dev"
+  '';
+
+  # PCLConfig.cmake is in dev and needs an absolute path back to the libraries
+  postFixup = ''
+    substituteInPlace "$dev"/share/pcl-*/PCLConfig.cmake \
+      --replace-fail \
+        'set(PCL_LIBRARY_DIRS "''${PCL_ROOT}/lib")' \
+        "set(PCL_LIBRARY_DIRS \"$out/lib\")"
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CUDA" cudaSupport)

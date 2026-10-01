@@ -38,7 +38,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jupyterlab";
-  version = "4.6.3";
+  version = "4.6.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4HXEF24GEx+bSw86Lq0WFgdjjzSINHUFKpCSRKgs/I=";
+    hash = "sha256-UEyqx8xibK2Ll1zqWJBoilAvvjypF6zuSR2ywXXseqE=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     sourceRoot = "${finalAttrs.src.name}/jupyterlab/staging";
-    hash = "sha256-yeA3YlL7qS2xS3Z3bcXffNkbRkkoUdRDYmnYpmAD+uI=";
+    hash = "sha256-aGQkcZmNYS1plaZReN9oLMVwbDO6/zyQX/NUSGFzg+4=";
   };
 
   preBuild = ''

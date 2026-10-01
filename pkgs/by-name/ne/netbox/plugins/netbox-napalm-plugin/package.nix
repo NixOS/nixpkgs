@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-napalm-plugin";
-  version = "0.3.5";
+  version = "0.3.6";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "netbox-community";
     repo = "netbox-napalm-plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dtoiA6gvWL6aGBHmHTwqK8L0qRyA83GcUCGAmg9Xo8w=";
+    hash = "sha256-t3/iSfqtwBGI78aChZlV5XNx54DrVoH9UTZXVj4oDcs=";
   };
 
   build-system = [ setuptools ];

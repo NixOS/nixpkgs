@@ -1,16 +1,16 @@
 diff --git a/app/(main)/layout.tsx b/app/(main)/layout.tsx
-index a8af157f..9d54eb7b 100644
+index 445e20cb..c05cc89e 100644
 --- a/app/(main)/layout.tsx
 +++ b/app/(main)/layout.tsx
 @@ -1,6 +1,6 @@
  import type { Metadata, Viewport } from "next";
  import { getLocaleDirection } from "@/i18n/direction";
--import { Geist, Geist_Mono } from "next/font/google";
+-import { Geist, Geist_Mono, Hanken_Grotesk } from "next/font/google";
 +import localFont from "next/font/local";
  import { headers } from "next/headers";
  import { getLocale, getTranslations } from "next-intl/server";
  import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
-@@ -26,14 +26,14 @@ async function resolveRequestLocale(): Promise<string> {
+@@ -30,22 +30,22 @@ async function resolveRequestLocale(): Promise<string> {
    return seg ?? (await getLocale());
  }
  
@@ -28,4 +28,14 @@ index a8af157f..9d54eb7b 100644
 -  subsets: ["latin"],
  });
  
- export const viewport: Viewport = {
+ // The "Flat fields" theme's family. Not preloaded and no metric-adjusted
+ // fallback: the file is only fetched once that theme renders text in it, and
+ // scripts Hanken does not cover fall through to the theme's system stack.
+-const hankenGrotesk = Hanken_Grotesk({
++const hankenGrotesk = localFont({
++  src: '../fonts/HankenGrotesk.ttf',
+   variable: "--font-hanken",
+-  subsets: ["latin", "latin-ext"],
+   display: "swap",
+   preload: false,
+   adjustFontFallback: false,
