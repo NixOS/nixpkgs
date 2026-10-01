@@ -1,0 +1,14 @@
+[Unit]
+Description=Hooking up Ventoy File %f
+DefaultDependencies=no
+RequiresMountsFor=/run/ventoy/%f
+Requires=modprobe@loop.service
+After=modprobe@loop.service
+# Same reason the systemd-cryptsetup sets IgnoreOnIsolate
+IgnoreOnIsolate=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=@LOSETUP_BIN@ --loop-ref %i -P -f /run/ventoy/%f
+ExecStop=@LOSETUP_BIN@ -d /dev/disk/by-loop-ref/%i
