@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   eigen,
   suitesparse,
@@ -23,8 +24,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-MW1IO1P2e3KgurOW5ZfHlxK0m5sF0JhdLmvQNEHWEtI=";
   };
 
-  # Removes a reference to gcc that is only used in a debug message
-  patches = [ ./remove-compiler-reference.patch ];
+  patches = [
+    # Removes a reference to gcc that is only used in a debug message
+    ./remove-compiler-reference.patch
+    # Fix format string argument mismatch rejected at compile time by fmt 12
+    (fetchpatch {
+      url = "https://github.com/RainerKuemmerle/g2o/commit/18b1894778a7a758a8fb1d4db49f45661ea4ea38.patch";
+      hash = "sha256-sS9dYNB1RCTLVc5dnO/fDpcUD2i3ag8Gl/nDwUP43yw=";
+    })
+  ];
 
   outputs = [
     "out"
