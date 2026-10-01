@@ -2319,7 +2319,10 @@ with pkgs;
     )
   );
 
-  netdata = callPackage ../tools/system/netdata { };
+  netdata = callPackage ../tools/system/netdata {
+    go = go_1_27;
+    buildGoModule = buildGo127Module;
+  };
   netdataCloud = netdata.override {
     withCloudUi = true;
   };
