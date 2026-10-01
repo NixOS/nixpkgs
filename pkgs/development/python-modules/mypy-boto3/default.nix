@@ -567,8 +567,8 @@ in
       "sha256-xywLVBOF2ZfCHFXrTSZmlWCrzOLkVW9elRSSiY86u60=";
 
   mypy-boto3-globalaccelerator =
-    buildMypyBoto3Package "globalaccelerator" "1.43.0"
-      "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
+    buildMypyBoto3Package "globalaccelerator" "1.43.106"
+      "sha256-wf3aeGNU4zu7+6Y3ajm2y8gqRcVaWkZHk/QVK2/1TW0=";
 
   mypy-boto3-glue =
     buildMypyBoto3Package "glue" "1.43.105"
