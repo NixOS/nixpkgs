@@ -84,7 +84,7 @@ function runChecklist({
 
   if (user) {
     checklist[
-      `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers).`
+      `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) (_see [requesting a new invitation](https://github.com/NixOS/rfc39-record/blob/main/README.md#requesting-a-new-invitation)_).`
     ] = userIsMaintainer
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since

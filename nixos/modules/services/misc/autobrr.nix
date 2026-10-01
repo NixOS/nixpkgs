@@ -11,6 +11,14 @@ let
   configFile = configFormat.generate "autobrr.toml" cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "autobrr"
+      "secretFile"
+    ] "autobrr no longer uses a session secret since version 1.82.0.")
+  ];
+
   options = {
     services.autobrr = {
       enable = lib.mkEnableOption "Autobrr";
@@ -19,11 +27,6 @@ in
         type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the Autobrr web interface.";
-      };
-
-      secretFile = lib.mkOption {
-        type = lib.types.path;
-        description = "File containing the session secret for the Autobrr web interface.";
       };
 
       settings = lib.mkOption {
@@ -67,17 +70,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !(cfg.settings ? sessionSecret);
-        message = ''
-          Session secrets should not be passed via settings, as
-          these are stored in the world-readable nix store.
-
-          Use the secretFile option instead.'';
-      }
-    ];
-
     systemd = {
       tmpfiles.settings = {
         "10-autobrr" = {
@@ -101,8 +93,6 @@ in
         serviceConfig = {
           Type = "simple";
           DynamicUser = true;
-          LoadCredential = "sessionSecret:${cfg.secretFile}";
-          Environment = [ "AUTOBRR__SESSION_SECRET_FILE=%d/sessionSecret" ];
           StateDirectory = "autobrr";
           ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
           Restart = "on-failure";
