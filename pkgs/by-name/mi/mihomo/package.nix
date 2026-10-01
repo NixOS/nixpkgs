@@ -42,7 +42,10 @@ buildGoModule rec {
     description = "Rule-based tunnel in Go";
     homepage = "https://github.com/MetaCubeX/mihomo/tree/Alpha";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ oluceps ];
+    maintainers = with lib.maintainers; [
+      oluceps
+      levihuayuzhang
+    ];
     mainProgram = "mihomo";
   };
 }

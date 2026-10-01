@@ -16424,6 +16424,12 @@
     githubId = 80920;
     name = "Levi Gross";
   };
+  levihuayuzhang = {
+    email = "zhanghuayu.dev@gmail.com";
+    name = "Huayu Zhang";
+    github = "levihuayuzhang";
+    githubId = 68364307;
+  };
   Levizor = {
     email = "levizor@disroot.org";
     github = "Levizor";
