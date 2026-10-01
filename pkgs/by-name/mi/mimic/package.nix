@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=free-nonheap-object"
     # Fix build w/ glibc-2.44
     "-Wno-error=discarded-qualifiers"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   postInstall = ''
