@@ -227,6 +227,8 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess([], 0, "nixpkgs-rev")
         elif args[0] == "nix-build":
             return CompletedProcess([], 0, str(config_path))
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 261 (261.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -234,7 +236,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
 
-    assert mock_run.call_count == 8
+    assert mock_run.call_count == 9
     mock_run.assert_has_calls(
         [
             call(
@@ -290,8 +292,17 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
+                ["systemd-run", "--version"],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 [
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--wait",
+                    "--verbose",
+                    "--output=cat",
                     config_path / "bin/switch-to-configuration",
                     "boot",
                 ],
@@ -571,6 +582,8 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -593,7 +606,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 5
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
             call(
@@ -638,12 +651,19 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
+                ["systemd-run", "--version"],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 [
                     "sudo",
                     "env",
                     "-i",
                     "NIXOS_INSTALL_BOOTLOADER=1",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
@@ -685,6 +705,8 @@ def test_execute_nix_switch_build_target_host_custom_profile(
             return CompletedProcess([], 0, "/tmp/tmpdir")
         elif args[0] == "ssh" and "readlink" in args:
             return CompletedProcess([], 0, str(config_path))
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -712,7 +734,7 @@ def test_execute_nix_switch_build_target_host_custom_profile(
         ]
     )
 
-    assert mock_run.call_count == 13
+    assert mock_run.call_count == 14
     mock_run.assert_has_calls(
         [
             call(
@@ -907,12 +929,30 @@ def test_execute_nix_switch_build_target_host_custom_profile(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@target-host",
                     "--",
+                    "/bin/sh",
+                    "-c",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                    "sh",
+                    "systemd-run",
+                    "--version",
+                ],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
                     "sudo",
                     "/bin/sh",
                     "-c",
                     """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -944,6 +984,8 @@ def test_execute_nix_switch_flake_target_host(
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -962,7 +1004,7 @@ def test_execute_nix_switch_flake_target_host(
         ]
     )
 
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
             call(
@@ -1033,12 +1075,30 @@ def test_execute_nix_switch_flake_target_host(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
+                    "/bin/sh",
+                    "-c",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                    "sh",
+                    "systemd-run",
+                    "--version",
+                ],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@localhost",
+                    "--",
                     "sudo",
                     "/bin/sh",
                     "-c",
                     """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -1072,6 +1132,8 @@ def test_execute_nix_switch_flake_build_host(
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -1089,7 +1151,7 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 8
+    assert mock_run.call_count == 9
     mock_run.assert_has_calls(
         [
             call(
@@ -1165,8 +1227,15 @@ def test_execute_nix_switch_flake_build_host(
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
+                ["systemd-run", "--version"],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 [
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
@@ -1527,7 +1596,7 @@ def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
     )
 
     # --store-path skips build and write_version_suffix, so only activation calls
-    assert mock_run.call_count == 4
+    assert mock_run.call_count == 5
     mock_run.assert_has_calls(
         [
             call(
@@ -1553,8 +1622,15 @@ def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
+                ["systemd-run", "--version"],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 [
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
@@ -1600,9 +1676,15 @@ def test_execute_switch_store_path_target_host(
     )
 
     # --store-path skips build and write_version_suffix, so only copy/activation calls
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 ["nix-copy-closure", "--to", "user@remote-host", config_path],
                 check=True,
@@ -1668,12 +1750,30 @@ def test_execute_switch_store_path_target_host(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@remote-host",
                     "--",
+                    "/bin/sh",
+                    "-c",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                    "sh",
+                    "systemd-run",
+                    "--version",
+                ],
+                check=True,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@remote-host",
+                    "--",
                     "sudo",
                     "/bin/sh",
                     "-c",
                     """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    "--pipe",
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
