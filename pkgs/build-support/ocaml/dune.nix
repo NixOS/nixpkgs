@@ -43,7 +43,11 @@ lib.extendMkDerivation {
       {
         name = "ocaml${ocaml.version}-${pname}-${finalAttrs.version}";
 
+        __structuredAttrs = true;
+
         strictDeps = true;
+
+        env.DUNE_CACHE = "disabled";
 
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
