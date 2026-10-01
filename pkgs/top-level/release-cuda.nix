@@ -92,6 +92,8 @@ let
       firefox-beta-unwrapped = linux;
       firefox-devedition = linux;
       firefox-devedition-unwrapped = linux;
+      firefox-esr = linux;
+      firefox-esr-unwrapped = linux;
       freecad = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
