@@ -69,6 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = finalAttrs.cargoRoot;
   cargoHash = "sha256-TGIue9NkgF2X7uDbrhrpyGag2vNdsjzOmLURzVS6Ghw=";
 
+  __structuredAttrs = true;
+
   postPatch = ''
     cp -r ${finalAttrs.node_modules}/node_modules .
     chmod -R +w node_modules
