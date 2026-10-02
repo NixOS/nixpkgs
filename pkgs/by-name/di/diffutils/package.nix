@@ -73,9 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "gl_cv_func_getopt_gnu=yes"
+      # Musl's getopt lacks GNU-compatible behavior, so use gnulib's replacement.
+      "gl_cv_func_getopt_gnu=${if stdenv.hostPlatform.isMusl then "no" else "yes"}"
       "gl_cv_func_strcasecmp_works=yes"
-    ];
+    ]
+    # The compiler wrapper hides its static linker flag from configure.
+    ++ lib.optional (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) "gl_cv_have_weak=no";
 
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
