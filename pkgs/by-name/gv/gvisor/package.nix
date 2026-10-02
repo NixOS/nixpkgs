@@ -68,6 +68,9 @@ buildGoModule {
   # before the main build. Doing this at build time (instead of with a static
   # patch) keeps the package updateable by the update bot.
   overrideModAttrs = oldAttrs: {
+    # The main package's preBuild assumes vendor/ already exists. In the
+    # module derivation it runs before `go mod vendor`, so disable it there.
+    preBuild = "";
     postPatch = (oldAttrs.postPatch or "") + ''
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH=$TMPDIR/go
