@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-FmY9Hqwv9lWjdEMe4JZM/nw8BaeZ+4eK+nibOUwcE+8=";
   };
 
+  __structuredAttrs = true;
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
