@@ -4,6 +4,7 @@
   version = "5.4.0";
   hash = "sha256-PF1KphwRZ79tm/nq+JHadjC6n188Fb8JUVpwOb/N7F8=";
   binaryVersion = 11;
+  attrPath = "chickenPackages_5";
 
   # Disable two broken tests: "static link" and "linking tests"
   postPatch = ''
