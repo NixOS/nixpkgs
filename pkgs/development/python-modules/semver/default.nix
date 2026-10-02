@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "semver";
-  version = "3.0.4";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-semver";
     repo = "python-semver";
     tag = version;
-    hash = "sha256-ry6r2cY/DRTiPxT+ZiumgFbQyHNzL8i1QcQbLWjnDVE=";
+    hash = "sha256-93I7lNI13u9L109iv00sg2tixdC6+hgYDd/5s+iNtUY=";
   };
 
   build-system = [
