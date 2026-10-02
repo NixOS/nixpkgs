@@ -19,7 +19,7 @@ jobs:
       push: ${{ steps.files.outputs.push }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
@@ -35,7 +35,7 @@ jobs:
           #   https://github.com/octokit/plugin-retry.js/blob/9a2443746c350b3beedec35cf26e197ea318a261/src/index.ts#L14
           retry-exempt-status-codes: 400,401,403,404
           script: |
-            const { default: prepare } = await import('${{ github.workspace }}/ci/github-script/prepare.js')
+            const { default: prepare } = await import('${{ github.workspace }}/ci/github-script/prepare.ts')
             await prepare({
               github,
               context,
@@ -88,13 +88,13 @@ jobs:
               'ci/github-script/merge.js',
               'ci/github-script/package.json',
               'ci/github-script/package-lock.json',
-              'ci/github-script/prepare.js',
+              'ci/github-script/prepare.ts',
               'ci/github-script/reminders.ts',
               'ci/github-script/reviewers.js',
               'ci/github-script/reviews.ts',
               'ci/github-script/supportedBranches.ts',
               'ci/github-script/supportedSystems.ts',
-              'ci/github-script/withRateLimit.js',
+              'ci/github-script/withRateLimit.ts',
               'ci/pinned.json',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file) || file.startsWith('ci/github-script/reminders/'))) core.setOutput('pr', true)

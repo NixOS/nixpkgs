@@ -919,8 +919,8 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
-> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://nixos.github.io/nixpkgs-update/) when a new version is released.
+> The [update bot](https://github.com/NixOS/infra/blob/main/non-critical-infra/modules/nixpkgs-update/README.md) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
 > While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
 
 The `passthru.updateScript` attribute can contain one of the following:
