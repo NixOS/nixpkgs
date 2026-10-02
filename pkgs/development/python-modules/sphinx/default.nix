@@ -147,6 +147,8 @@ buildPythonPackage rec {
     "test_load_mappings_cache"
     "test_load_mappings_cache_update"
     "test_load_mappings_cache_revert_update"
+    # https://github.com/sphinx-doc/sphinx/pull/14683
+    "test_cfunction"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     "test_autodoc_special_members"
