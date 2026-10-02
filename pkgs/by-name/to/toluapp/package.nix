@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tool to integrate C/Cpp code with Lua";
-    homepage = "http://www.codenix.com/~tolua/";
+    homepage = "https://github.com/LuaDist/toluapp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ colinsane ];
     mainProgram = "tolua++";
