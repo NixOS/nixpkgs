@@ -1922,6 +1922,15 @@ with pkgs;
     tracy_0_13
     ;
 
+  inherit (callPackages ../by-name/so/solana-platform-tools/package-versions.nix { })
+    solana-platform-tools_152
+    solana-platform-tools_153
+    solana-platform-tools_154
+    solana-platform-tools_155
+    solana-platform-tools_156
+    solana-platform-tools_157
+    ;
+
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
