@@ -1,6 +1,6 @@
 { callPackage }:
 
-(callPackage ../common {
+callPackage ../common {
   version = "5.4.0";
   hash = "sha256-PF1KphwRZ79tm/nq+JHadjC6n188Fb8JUVpwOb/N7F8=";
   binaryVersion = 11;
@@ -22,11 +22,10 @@
     "cond-expand"
     "http-curl"
   ];
-}).overrideScope
-  (
-    final: prev: {
-      # egg2nix generates the hand-curated CHICKEN 4 egg set, but is itself a
-      # CHICKEN 5 program.
-      egg2nix = final.callPackage ./egg2nix.nix { };
-    }
-  )
+
+  # egg2nix generates the hand-curated CHICKEN 4 egg set, but is itself a
+  # CHICKEN 5 program.
+  extraPackages = self: {
+    egg2nix = self.callPackage ./egg2nix.nix { };
+  };
+}
