@@ -75,10 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Terminal-based text editor with LSP support and TypeScript plugins";
-    homepage = "https://github.com/sinelaw/fresh";
+    description = "Terminal based IDE & text editor: easy, powerful and fast";
+    homepage = "https://getfresh.dev";
     changelog = "https://github.com/sinelaw/fresh/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
@@ -86,8 +86,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-    ];
   };
 })
