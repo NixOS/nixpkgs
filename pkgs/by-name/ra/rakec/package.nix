@@ -12,7 +12,7 @@
 ocamlPackages.buildDunePackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "rakec";
-  version = "0.5.0-beta";
+  version = "0.6.0-beta";
   dunePackages = [ "rake" ];
   minimalOCamlVersion = "5.1";
 
@@ -20,7 +20,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     owner = "rakelang";
     repo = "rake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VpWndmeML8YyQgv9ZBUve5hFMkqKR08UFzc9b7QP5uY=";
+    hash = "sha256-UrQbA9T1y0J/4G/J9dm3/OdlSDOa22xHsxiz0c9e6oM=";
   };
 
   nativeBuildInputs = [
