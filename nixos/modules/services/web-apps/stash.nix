@@ -371,8 +371,8 @@ let
     let
       contractSecretsType = types.submodule {
         options = {
-          input = mkOption {
-            description = "Input of the contract for file secrets.";
+          request = mkOption {
+            description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
             default = { };
             type = types.submodule {
               options = {
@@ -406,8 +406,8 @@ let
             };
           };
 
-          output = mkOption {
-            description = "Output of the contract for file secrets.";
+          response = mkOption {
+            description = "Response of the file secrets contract: the provider states where the file is.";
             type = types.submodule {
               options = {
                 path = mkOption {
@@ -431,7 +431,7 @@ let
     ];
 
   # A secret option holds either a plain path or a file secrets contract.
-  secretPath = secret: if builtins.isAttrs secret then secret.output.path else secret;
+  secretPath = secret: if builtins.isAttrs secret then secret.response.path else secret;
 in
 {
   meta = {
