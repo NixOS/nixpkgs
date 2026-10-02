@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7BCNdPWzsjUuVftbxUZ6iChR5KDp2yKVjKi+1oHt9O8=";
   };
 
+  patches = [ ./fix-static-sdb-build.patch ];
+
   mesonFlags = [
     (lib.mesonBool "use_sys_capstone" true)
     (lib.mesonBool "use_sys_lz4" true)

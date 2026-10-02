@@ -1,0 +1,125 @@
+diff --git a/meson.build b/meson.build
+index d1b99a3..2f0fb23 100644
+--- a/meson.build
++++ b/meson.build
+@@ -564,9 +564,10 @@ install_data(script_files, install_dir: r2_scripts)
+
+ libsdb_sp = subproject('sdb')
+ libsdb_static = libsdb_sp.get_variable('libsdb_static')
++default_library_type = get_option('default_library')
+ if host_machine.system() == 'uefi'
+   libsdb_dynamic = libsdb_static
+-else
++elif default_library_type != 'static'
+   libsdb_dynamic = libsdb_sp.get_variable('libsdb').get_shared_lib()
+ endif
+ libsdb_includes = libsdb_sp.get_variable('sdb_inc')
+@@ -606,12 +607,14 @@ elif os_name == 'windows'
+     lib_extension = '.dll'
+ endif
+
+-libsdb_install = custom_target('libr2sdb',
+-  input : libsdb_dynamic,
+-  output : 'libsdb' + lib_extension,
+-  command : copyinout,
+-  install : true,
+-  install_dir : get_option('libdir'))
++if host_machine.system() == 'uefi' or default_library_type != 'static'
++  libsdb_install = custom_target('libr2sdb',
++    input : libsdb_dynamic,
++    output : 'libsdb' + lib_extension,
++    command : copyinout,
++    install : true,
++    install_dir : get_option('libdir'))
++endif
+
+ sdb_gen_cmd_cgen = [ sdb_exe, '-t', '-C', '-o', '@OUTPUT@', '@INPUT@' ]
+ sdb_gen_cmd = [ sdb_exe, '@OUTPUT@', '==', '@INPUT@' ]
+diff --git a/subprojects/sdb/meson.build b/subprojects/sdb/meson.build
+index 17e45ea..cc10fd0 100644
+--- a/subprojects/sdb/meson.build
++++ b/subprojects/sdb/meson.build
+@@ -56,13 +56,29 @@ if get_option('local') and get_option('default_library') == 'shared'
+   rpath_exe = '$ORIGIN/../' + get_option('libdir')
+ endif
+
+-libsdb = both_libraries(libsdb_name, libsdb_sources,
+-  include_directories: sdb_inc,
+-  implicit_include_directories: false,
+-  soversion: sdb_libversion,
+-  install: not meson.is_subproject(),
+-  install_rpath: rpath_lib
+-)
++default_library_type = get_option('default_library')
++if default_library_type == 'static'
++  libsdb = static_library(libsdb_name, libsdb_sources,
++    include_directories: sdb_inc,
++    implicit_include_directories: false,
++    install: not meson.is_subproject(),
++    install_rpath: rpath_lib
++  )
++else
++  libsdb = both_libraries(libsdb_name, libsdb_sources,
++    include_directories: sdb_inc,
++    implicit_include_directories: false,
++    soversion: sdb_libversion,
++    install: not meson.is_subproject(),
++    install_rpath: rpath_lib
++  )
++endif
++
++if default_library_type == 'static'
++  libsdb_static_link = libsdb
++else
++  libsdb_static_link = libsdb.get_static_lib()
++endif
+
+ libsdb_static = static_library('libsdb_static', libsdb_sources,
+   include_directories: sdb_inc,
+@@ -76,12 +92,12 @@ libsdb_static = static_library('libsdb_static', libsdb_sources,
+ #else
+ #  link_with = libsdb.get_shared_lib()
+ #endif
+-default_library_type = get_option('default_library')
+-
+ if default_library_type == 'shared'
+   link_with = libsdb.get_shared_lib()
++elif default_library_type == 'static'
++  link_with = libsdb
+ else
+-  link_with = libsdb.get_static_lib()
++  link_with = libsdb_static_link
+ endif
+
+ sdb_dep = declare_dependency(
+@@ -153,10 +169,16 @@ else
+   sdb_native_exe = sdb_exe
+ endif
+
++if default_library_type == 'static'
++  pkgconfig_library = libsdb
++else
++  pkgconfig_library = libsdb.get_shared_lib()
++endif
++
+ pkgconfig_mod.generate(
+   name: 'sdb',
+   filebase: 'sdb',
+-  libraries: [libsdb.get_shared_lib()],
++  libraries: [pkgconfig_library],
+   description: 'Simple DataBase',
+   subdirs: ['sdb'],
+   version: sdb_version,
+diff --git a/subprojects/sdb/test/bench/meson.build b/subprojects/sdb/test/bench/meson.build
+index 947d2ff..9817bd2 100644
+--- a/subprojects/sdb/test/bench/meson.build
++++ b/subprojects/sdb/test/bench/meson.build
+@@ -11,7 +11,7 @@ foreach test : tests
+   name = 'bench-' + test
+   exe = executable(name, name + '.c',
+     include_directories: sdb_inc,
+-    link_with: libsdb.get_static_lib()
++    link_with: libsdb_static_link
+   )
+   benchmark(name, exe)
+ endforeach
