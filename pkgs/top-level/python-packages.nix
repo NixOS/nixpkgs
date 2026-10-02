@@ -65,6 +65,8 @@ self: super: with self; {
 
   acunetix = callPackage ../development/python-modules/acunetix { };
 
+  adabmdca = callPackage ../development/python-modules/adabmdca { };
+
   adafruit-board-toolkit = callPackage ../development/python-modules/adafruit-board-toolkit { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
