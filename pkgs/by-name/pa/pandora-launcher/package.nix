@@ -134,6 +134,7 @@ symlinkJoin {
     inherit (pandora-launcher'.meta)
       description
       homepage
+      changelog
       license
       maintainers
       mainProgram
