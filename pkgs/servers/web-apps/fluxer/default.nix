@@ -3,4 +3,5 @@
   admin = callPackage ./admin.nix { };
   api = callPackage ./api.nix { };
   app-proxy = callPackage ./app-proxy.nix { };
+  gateway = callPackage ./gateway.nix { };
 }
