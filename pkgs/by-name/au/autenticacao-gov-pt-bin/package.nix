@@ -49,12 +49,12 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autenticacao-gov-pt-bin";
   version = "3.14.0";
 
   src = fetchurl {
-    url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${version}/pteid-mw-${version}.flatpak";
+    url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${finalAttrs.version}/pteid-mw-${finalAttrs.version}.flatpak";
     hash = "sha256-eOUW3sWG8ujihqNuTvYbwzQh9sP5nS4YxL2kHngQ/V0=";
   };
 
@@ -96,14 +96,14 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     ostree init --repo=pteid --mode=archive-z2
-    ostree static-delta apply-offline --repo=pteid ${src}
+    ostree static-delta apply-offline --repo=pteid ${finalAttrs.src}
     ostree checkout --repo=pteid -U $(cd pteid/objects && echo */*.commit | sed -E "s/\/|\.commit$//g") pteid_out
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
       desktopName = "Autenticação.gov";
       genericName = "Portuguese eID Data";
       comment = "Middleware for Electronic Identification in Portugal";
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    makeWrapper "${proot}/bin/proot" "$out/bin/${pname}" \
+    makeWrapper "${proot}/bin/proot" "$out/bin/${finalAttrs.pname}" \
       --add-flags "-b" \
       --add-flags "$out/app:/app" \
       --add-flags "$out/app/bin/eidguiV2" \
@@ -166,4 +166,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vaavaav ];
     platforms = lib.platforms.linux;
   };
-}
+})
