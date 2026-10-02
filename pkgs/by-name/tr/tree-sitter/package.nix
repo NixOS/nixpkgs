@@ -192,7 +192,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       substituteInPlace ./Makefile \
           --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
-      sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
+      sed -i '/^install:/,/^uninstall:/ { /$(SOEXT/d; }' ./Makefile
     ''
     # rquickjs-sys passes the raw rust target to clang, which does not know riscv64gc
     + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
