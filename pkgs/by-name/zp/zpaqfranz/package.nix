@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zpaqfranz";
-  version = "64.4";
+  version = "65.4";
 
   src = fetchFromGitHub {
     owner = "fcorbelli";
     repo = "zpaqfranz";
     rev = finalAttrs.version;
-    hash = "sha256-RSMAFEZVjI8WNzR6ipG1ev4lVvJvda8/EtHh/IJsZ2M=";
+    hash = "sha256-JGBcqmaCPt+6xvKU6NMy8Y9mqQgWD2qt1LE48ZRLZrE=";
   };
 
   nativeBuildInputs = [
