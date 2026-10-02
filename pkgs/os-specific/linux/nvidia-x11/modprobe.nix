@@ -6,6 +6,7 @@
   nvidia_x11,
   version,
   hash,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-modprobe";
@@ -19,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ gnum4 ];
+
+  # `nvidia-modprobe --version` prints the version of the source it was built
+  # from, so a source whose hash was not updated on a version bump is caught
+  # here instead of silently reusing the old tree from the store.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postPatch = ''
     substituteInPlace utils.mk --replace-fail "/usr/local" "$out"

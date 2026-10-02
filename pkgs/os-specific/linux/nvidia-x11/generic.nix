@@ -206,6 +206,22 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
 
+  # None of the packaged executables reports the driver version without a
+  # loaded driver, so check the unpacked driver itself: its libraries are named
+  # after the version.  This catches an archive whose hash was not updated on a
+  # version bump and which would otherwise be silently reused from the store.
+  # stdenv sets nullglob, so the glob is counted instead of listed.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    if ! { set -- "$out"/lib/*.so."$version"; [ $# -gt 0 ]; }; then
+      echo "no library is named after version $version, the driver archive is not the expected version:" >&2
+      ls "$out/lib" >&2 || true
+      exit 1
+    fi
+    runHook postInstallCheck
+  '';
+
   dontStrip = true;
   dontPatchELF = true;
 
