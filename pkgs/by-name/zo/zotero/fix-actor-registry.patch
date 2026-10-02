@@ -1,0 +1,21 @@
+--- a/app/scripts/fetch_xulrunner
++++ b/app/scripts/fetch_xulrunner
+@@ -204,9 +204,9 @@
+-	remove_between 'AboutTranslations: \{' '^  },' $file
+-	remove_between 'CookieBanner: \{' '^  },' $file
+-	remove_between 'PictureInPictureLauncher: \{' '^  },' $file
+-	remove_between 'PictureInPictureToggle: \{' '^  },' $file
+-	remove_between 'PictureInPicture: \{' '^  },' $file
+-	remove_between 'Thumbnails: \{' '^  },' $file
+-	remove_between 'Translations: \{' '^  },' $file
+-	remove_between 'TranslationsEngine: \{' '^  },' $file
+-	remove_between 'AudioPlayback: \{' '^  },' $file
++	remove_between 'AboutTranslations[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'CookieBanner[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'PictureInPictureLauncher[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'PictureInPictureToggle[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'PictureInPicture[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'Thumbnails[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'Translations[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'TranslationsEngine[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file
++	remove_between 'AudioPlayback[[:space:]]*(:|=)[[:space:]]*\{' '^[[:space:]]*}(,|;)$' $file

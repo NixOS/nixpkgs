@@ -200,6 +200,7 @@ buildNpmPackage (finalAttrs: {
     ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
+    ./fix-actor-registry.patch
   ];
 
   postPatch = ''
