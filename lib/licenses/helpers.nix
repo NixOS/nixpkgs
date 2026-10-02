@@ -265,14 +265,14 @@ rec {
         ;
       licenseType = "simple";
     }
-    // optionalAttrs (attrs ? spdxId) {
+    // optionalAttrs (spdxId != null) {
       inherit spdxId;
       url = "https://spdx.org/licenses/${spdxId}.html";
     }
-    // optionalAttrs (attrs ? url) {
+    // optionalAttrs (url != null) {
       inherit url;
     }
-    // optionalAttrs (attrs ? fullName) {
+    // optionalAttrs (fullName != null) {
       inherit fullName;
     };
 }
