@@ -2114,6 +2114,7 @@ mapAliases {
   pnpm_9 = throw "'pnpm_9' was removed because it reached EOL on 2026-04-30"; # added 2026-08-03
   poac = throw "'poac' has been renamed to/replaced by 'cabinpkg'"; # Converted to throw 2025-10-27
   pocket-updater-utility = throw "'pocket-updater-utility' has been renamed to/replaced by 'pupdate'"; # Converted to throw 2025-10-27
+  podgrab = throw "'podgrab' has been removed because it it was unmaintained upstream"; # Added 20206-10-02
   podofo010 = throw "'podofo010' has been renamed to 'podofo0'"; # Converted to throw 2025-10-27
   podofo_0_9 = throw "'podofo_0_9' has been deprecated, it may be replaced by 'podofo0'"; # Added 2026-05-08
   podofo_0_10 = warnAlias "'podofo_0_10' has been renamed to 'podofo0'" podofo0; # Added 2026-05-08
