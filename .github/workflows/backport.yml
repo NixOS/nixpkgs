@@ -43,6 +43,9 @@ jobs:
           sparse-checkout: .
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
+          # The PR is already merged, and its commits are only cherry-picked by
+          # git, never executed, so checking out fork PR commits is safe here.
+          allow-unsafe-pr-checkout: true
 
       - name: Log current API rate limits
         env:
