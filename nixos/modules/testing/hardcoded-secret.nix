@@ -46,7 +46,7 @@ in
               group = "me";
               mode = "0400";
             };
-            content = "My Secret";
+            providerOptions.content = "My Secret";
           };
         }
       '';
@@ -76,13 +76,19 @@ in
                 };
               };
 
-              content = mkOption {
-                type = str;
-                description = ''
-                  Content of the secret as a string.
+              providerOptions = mkOption {
+                description = "Options of this provider that are not part of the file secrets contract.";
+                default = { };
+                type = submodule {
+                  options.content = mkOption {
+                    type = str;
+                    description = ''
+                      Content of the secret as a string.
 
-                  This will be stored in the nix store and should only be used for testing or maybe in dev.
-                '';
+                      This will be stored in the nix store and should only be used for testing or maybe in dev.
+                    '';
+                  };
+                };
               };
             };
           }
@@ -101,7 +107,7 @@ in
     systemd.services = mapAttrs' (
       n: cfg':
       let
-        source = writeText "hardcodedsecret_${n}_content" cfg'.content;
+        source = writeText "hardcodedsecret_${n}_content" cfg'.providerOptions.content;
 
         inherit (cfg') request response;
       in
