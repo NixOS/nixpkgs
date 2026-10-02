@@ -22493,6 +22493,13 @@
     githubId = 20658472;
     name = "Parthiv Krishna";
   };
+  parthy = {
+    email = "markus.partheymueller@cyberus-technology.de";
+    matrix = "@parthy:cyberus-technology.de";
+    github = "parthy";
+    githubId = 101680;
+    name = "Markus Partheymueller";
+  };
   pascalj = {
     email = "nix@pascalj.de";
     github = "pascalj";
