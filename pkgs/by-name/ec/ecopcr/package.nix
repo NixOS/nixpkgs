@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://git.metabarcoding.org/obitools/ecopcr/-/archive/ecopcr_v${finalAttrs.version}/ecopcr-ecopcr_v${finalAttrs.version}.tar.gz";
-    hash = "sha256-ssvWpi7HuuRRAkpqqrX3ijLuBqM3QsrmrG+t7/m6fZA=";
+    url = "https://forge.metabarcoding.org/obitools/ecopcr/archive/ecopcr_v${finalAttrs.version}.tar.gz";
+    hash = "sha256-05jtOMt6Y7T1JUmImNFblkaZn2Ju7T1dioTeRMYfTrc=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       coverage and barcode specificity. New barcode primers can be
       developed using the ecoPrimers software.
     '';
-    homepage = "https://git.metabarcoding.org/obitools/ecopcr/wikis/home";
+    homepage = "https://forge.metabarcoding.org/obitools/ecopcr";
     license = lib.licenses.cecill20;
     maintainers = [ ];
   };
