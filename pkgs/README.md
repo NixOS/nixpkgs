@@ -912,9 +912,9 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
-`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+The [community bot `r-ryantm`](https://github.com/NixOS/infra/blob/main/non-critical-infra/modules/nixpkgs-update/README.md), periodically tries to update all packages in Nixpkgs.
+It runs the program [`nixpkgs-update`](https://nixos.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nixos.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
 However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
 ### Valid `passthru.updateScript` values
