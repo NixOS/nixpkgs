@@ -17,7 +17,7 @@ let
       else
         throw "Unknown license operator"
     else if license.licenseType == "exception" then
-      evaluateSubProperty license.license && evaluateSubProperty license.exception
+      evaluateSubProperty license.exception
     else if license.licenseType == "plus" then
       evaluateSubProperty license.license
     else
