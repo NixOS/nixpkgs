@@ -15402,12 +15402,12 @@ final: prev: {
 
   project-nvim = buildVimPlugin {
     pname = "project.nvim";
-    version = "6.4.0-1";
+    version = "6.4.1-1";
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "project.nvim";
-      tag = "v6.4.0-1";
-      hash = "sha256-YpLFIn1Kz/WwbGlJLt9urbOyVSwvjeZlr/aRnWW4o8g=";
+      tag = "v6.4.1-1";
+      hash = "sha256-LUwPYPmgu4eM6ChyNcgQ9IztCF4Pu7tkDWRsj5WofnU=";
     };
     meta.homepage = "https://github.com/DrKJeff16/project.nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
