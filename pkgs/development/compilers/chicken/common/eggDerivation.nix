@@ -2,6 +2,7 @@
   callPackage,
   lib,
   stdenv,
+  __splicedPackages,
   chicken,
   makeWrapper,
 
@@ -10,7 +11,9 @@
 }:
 
 let
-  overrides = callPackage overridesFile { };
+  # With the spliced package set, what overrides add to each list of
+  # dependencies is built for the platform that list is for.
+  overrides = callPackage overridesFile { pkgs = __splicedPackages; };
 
   binaryVersion = toString chicken.binaryVersion;
 in
