@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -72,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "50.4";
+  version = "50.5";
 
   outputs = [
     "out"
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Jz0zyHWry0tsvqP07ARdGBVfvFEMNSH8fkeSY3ExCYg=";
+    hash = "sha256-cvpaeDR7A6bpmifb21+lzDs4iyPupzzkUBKBjbmLeUE=";
   };
 
   mesonFlags = [
@@ -182,17 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.argcomplete
     ]))
-  ];
-
-  patches = [
-    # Fix HDR corruption by reverting this commit. See:
-    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4952
-    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4967
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/a1ae71798ef1ab2e0d2f753f5c98b38b1039b056.patch";
-      hash = "sha256-J2eKhM3YEFEVmcpMq2SxSOsPeEWrJTv+UcBDO+gRC4M=";
-      revert = true;
-    })
   ];
 
   postPatch = ''

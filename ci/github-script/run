@@ -48,7 +48,7 @@ program
   .argument('<pr>', 'Number of the Pull Request to check')
   .option('--no-dry', 'Make actual modifications')
   .action(async (owner, repo, pr, options) => {
-    const prepare = (await import('./prepare.js')).default
+    const prepare = (await import('./prepare.ts')).default
     await run(prepare, owner, repo, pr, options)
   })
 
@@ -90,7 +90,7 @@ program
   .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
   .argument('[outFile]', 'Path to the output file (Example: github-teams.json). If not set, prints to stdout')
   .action(async (owner, repo, outFile, options) => {
-    const getTeams = (await import('./get-teams.js')).default
+    const getTeams = (await import('./get-teams.ts')).default
     await run(getTeams, owner, repo, undefined, { ...options, outFile })
   })
 

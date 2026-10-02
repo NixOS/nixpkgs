@@ -5,7 +5,6 @@
   meson,
   ninja,
   gettext,
-  fetchpatch,
   fetchurl,
   pkg-config,
   gtk4,
@@ -40,20 +39,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "50.4";
+  version = "50.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Hib5kB8PCL/pQ6pwFjyVMzTH7D1K78jTVOipwUCzNKc=";
+    hash = "sha256-RYIiqGlM/JFOei1t6YeQZwAajWXgCpB9lhEgWcZ61EY=";
   };
 
   patches = [
-    # Required for `CVE-2026-18487.patch` to apply
-    (fetchpatch {
-      name = "fix-ipv6-address-prettification.patch";
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/e63bfdc7f117c9b60ea54b5760363ab256b9ff2b.patch";
-      hash = "sha256-9m8R5GUOBCm3xDXVHBDrV/HbjfIDL+D3wUGkkqc4RmA==";
-    })
     # Upstream issue: https://gitlab.gnome.org/GNOME/epiphany/-/work_items/2897
     # Upstream PR: https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/2123
     ./CVE-2026-18487.patch
