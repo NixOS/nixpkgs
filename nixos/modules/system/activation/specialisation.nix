@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   extendModules,
   noUserModules,
   ...
@@ -24,9 +23,7 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children = mapAttrs (
-    childName: childConfig: childConfig.configuration.system.build.toplevel
-  ) config.specialisation;
+  children = mapAttrs (_: childConfig: childConfig.toplevel) config.specialisation;
 
 in
 {
@@ -63,7 +60,13 @@ in
             options.inheritParentConfig = mkOption {
               type = types.bool;
               default = true;
-              description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+              description = ''
+                Include the entire system's configuration. Set to false to make a
+                completely differently configured system.
+
+                Only applies when `configuration` is built. It has no effect when
+                `toplevel` is set to an externally-built system.
+              '';
             };
 
             options.configuration = mkOption {
@@ -74,9 +77,29 @@ in
                 Anything you can add to a normal NixOS configuration, you can add
                 here, including imports and config values, although nested
                 specialisations will be ignored.
+
+                This is built and used as the specialisation's `toplevel` unless
+                `toplevel` is set explicitly, in which case this is ignored.
               '';
               visible = "shallow";
               inherit (extend { modules = [ ./no-clone.nix ]; }) type;
+            };
+
+            options.toplevel = mkOption {
+              type = types.package;
+              default = local.config.configuration.system.build.toplevel;
+              defaultText = lib.literalExpression "config.configuration.system.build.toplevel";
+              description = ''
+                The top-level system derivation symlinked into
+                `specialisation/<name>` and whose bootspec is embedded into the
+                parent system's `boot.json`. Defaults to this specialisation's
+                built NixOS `configuration`.
+
+                Override it to point at a system built outside the NixOS module
+                system, as long as it produces an RFC-0125 bootspec
+                (a `boot.json`) of its own. When overridden, `configuration` is
+                not evaluated, so the specialisation need not be a NixOS system.
+              '';
             };
           }
         )
