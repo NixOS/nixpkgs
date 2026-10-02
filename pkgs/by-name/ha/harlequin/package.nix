@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.15.0";
+  version = "2.16.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lxLETZ8lL13D5qWDDUIXl0UBEq0RHz16V8JVO1qOggc=";
+    hash = "sha256-0ZVqA7A8JWpUSx4uABWgaKtNlINwzY4Gld1z2cypJKc=";
   };
 
   postPatch =
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "click"
     "questionary"
     "tomlkit"
+    "wcwidth"
   ];
   dependencies =
     with python3Packages;
@@ -98,6 +99,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
+
+    # Flaky: both servers share the same `<name>.stderr` file, so the first
+    # server's output can overwrite the second's "already running" message
+    "test_a_second_server_under_the_same_name_is_refused"
+
+    # Flaky: rely on sub-second/few-second timeouts, too tight on loaded builders
+    "test_a_line_ssh_left_unfinished_is_still_shown"
+    "test_a_session_that_has_been_up_long_enough_stops_itself"
+    "test_a_session_waits_for_a_client_that_is_still_typing"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64

@@ -4,7 +4,7 @@ import type { context as actionsContext } from '@actions/github'
 import type { GitHub } from '@actions/github/lib/utils'
 import { dismissReviews, postReview } from './reviews.ts'
 import { classify } from './supportedBranches.ts'
-import withRateLimit from './withRateLimit.js'
+import withRateLimit from './withRateLimit.ts'
 
 const dirname = import.meta.dirname
 

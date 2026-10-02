@@ -21,6 +21,7 @@
   makeDesktopItem,
   makeWrapper,
   maven,
+  nix-update-script,
   pipewire,
   yt-dlp,
   zenity,
@@ -47,15 +48,15 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "tinyMediaManager";
-  version = "5.3.2";
+  version = "5.3.3";
 
-  mvnHash = "sha256-1JRA/5bXR/SpVpYBkqTT5RjQTNRzkhxgRoNSWr0O1fg=";
+  mvnHash = "sha256-pLySrUiZz55ZpTn2JABtnFjoVa1iUlLN7oDeaIg9O8s=";
 
   src = fetchFromGitLab {
     owner = "tinyMediaManager";
     repo = "tinyMediaManager";
     tag = "tinyMediaManager-${version}";
-    hash = "sha256-t6QcETlKFkahEzE4oY2InKZkvo7YToaV02ZUCvqT0Uw=";
+    hash = "sha256-Z6UAhfJdDy9nfk4R+JBpQfeSTMQZWX4Shhtnaf2Q578=";
   };
 
   # remove other builds from pom.xml to speed up build
@@ -152,6 +153,8 @@ maven.buildMavenPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Media management tool";

@@ -278,6 +278,7 @@ in
   amazon-init-shell = runTest ./amazon-init-shell.nix;
   amazon-ssm-agent = runTest ./amazon-ssm-agent.nix;
   amd-sev = runTest ./amd-sev.nix;
+  amuled = runTest ./amuled.nix;
   android-translation-layer = runTest ./android-translation-layer.nix;
   angie-api = runTest ./angie-api.nix;
   angrr = runTest ./angrr.nix;
