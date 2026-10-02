@@ -1,6 +1,6 @@
 {
   lib,
-  coq,
+  coq_8_20,
   mkCoqPackages,
   runCommand,
 }:
@@ -11,7 +11,7 @@ let
   # dontFilter to true here so that _all_ packages are visible in coqPackages.
   # There may be some versions of the top-level coq and coqPackages that don't
   # build QuickChick, which is what we are using for this test below.
-  coqWithAllPackages = coq // {
+  coqWithAllPackages = coq_8_20 // {
     dontFilter = true;
   };
 
