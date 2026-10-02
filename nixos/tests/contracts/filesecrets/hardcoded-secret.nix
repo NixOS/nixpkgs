@@ -20,7 +20,7 @@ test {
     (
       { config, ... }:
       {
-        testing.hardcoded-secret.fileSecrets.mysecret.content = config.test.content;
+        testing.hardcoded-secret.fileSecrets.mysecret.providerOptions.content = config.test.content;
       }
     )
   ];
