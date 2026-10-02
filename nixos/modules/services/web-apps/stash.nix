@@ -436,6 +436,17 @@ in
     maintainers = with lib.maintainers; [ DrakeTDL ];
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "stash" "jwtSecretKeyFile" ]
+      [ "services" "stash" "jwtSecretKey" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "stash" "sessionStoreKeyFile" ]
+      [ "services" "stash" "sessionStoreKey" ]
+    )
+  ];
+
   options = {
     services.stash = {
       enable = mkEnableOption "stash";
