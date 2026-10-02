@@ -196,10 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postInstall = ''
-    substituteInPlace "$out/bin/M2" \
-      --replace-fail "/bin/sh" "${runtimeShell}"
+    rm "$out/bin/M2"
 
-    wrapProgram "$out/bin/M2-binary" \
+    makeWrapper "$out/bin/M2-binary" "$out/bin/M2" \
       --prefix PATH : ${
         lib.makeBinPath [
           _4ti2
@@ -215,7 +214,9 @@ stdenv.mkDerivation (finalAttrs: {
           topcom
         ]
       } \
-      --prefix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${
+      --prefix ${
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+      } : $out/lib/Macaulay2/lib:${
         lib.makeLibraryPath [
           cddlib
           flint
