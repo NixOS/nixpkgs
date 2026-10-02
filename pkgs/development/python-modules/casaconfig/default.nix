@@ -7,13 +7,13 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "casaconfig";
-  version = "1.5.0";
+  version = "1.5.2";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-/O0rzef1Yqn+ezjTWfe1oRIh6FyU1W3Ev9tuXldukys=";
+    hash = "sha256-Xvg+d8ytsEQFq+y7wggJkl8Q+45bmrCY/vTroXijJKw=";
   };
 
   build-system = [ setuptools ];
