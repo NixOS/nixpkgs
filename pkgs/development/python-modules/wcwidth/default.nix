@@ -2,29 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+
+  # build-system
+  setuptools,
+
+  # tests
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wcwidth";
-  version = "0.8.2";
+  version = "0.9.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jquast";
     repo = "wcwidth";
-    tag = version;
-    hash = "sha256-PMYGLqxbTYIE+2vn0wmaBB/y8lRs9AXX+rOPpYYXHSw=";
+    tag = finalAttrs.version;
+    hash = "sha256-rOT2cJDgzKSvx6iLXzBvtcttg8B7cUKBDQma14adCE4=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
   ];
+
+  # Otherwise tests import wcwidth from the sources instead of the installed files in $out.
+  #   AssertionError: C extension not loaded in extension mode
+  preCheck = ''
+    rm -rf wcwidth
+  '';
 
   pythonImportsCheck = [ "wcwidth" ];
 
@@ -37,8 +48,8 @@ buildPythonPackage rec {
       no 3rd-party dependencies.
     '';
     homepage = "https://github.com/jquast/wcwidth";
-    changelog = "https://github.com/jquast/wcwidth/releases/tag/${src.tag}";
+    changelog = "https://github.com/jquast/wcwidth/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
