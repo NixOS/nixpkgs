@@ -1938,6 +1938,10 @@ with pkgs;
     cargo-build-sbf_44
     ;
 
+  inherit (callPackages ../by-name/sp/spl-token-cli/package-versions.nix { })
+    spl-token-cli_56
+    ;
+
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
