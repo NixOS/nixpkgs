@@ -27226,6 +27226,13 @@
     github = "kinkou";
     githubId = 931329;
   };
+  skorpy = {
+    email = "git@skorpy.space";
+    name = "skorpy";
+    github = "skorpy2009";
+    githubId = 161558;
+    matrix = "@skorpy:entropia.de";
+  };
   skovati = {
     github = "skovati";
     githubId = 49844593;
