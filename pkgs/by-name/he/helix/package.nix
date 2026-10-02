@@ -77,6 +77,9 @@ let
       };
     });
     tree-sitter-perl = prev.tree-sitter-perl.overrideAttrs {
+      # Avoid a collision with glibc 2.44's bsearch macro.
+      # Remove once the pinned Perl grammar includes:
+      # https://github.com/tree-sitter-perl/tree-sitter-perl/pull/220
       postPatch = ''
         rm src/bsearch.c
         substituteInPlace src/tsp_unicode.h \
