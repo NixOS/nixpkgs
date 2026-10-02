@@ -47,13 +47,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.28.0";
+  version = "8.29.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-zQQ5z9abHoVSYt9d/buN7G9gsG+JhaBW1xgcja98iZI=";
+    hash = "sha256-QwI3OzZc1octWZZ7G4SNlG1Ohi7w2BManPFFN5gTorQ=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -86,7 +86,7 @@ let
         pnpm config set fetch-timeout 300000
       '';
       fetcherVersion = 4;
-      hash = "sha256-vYMT1yBAZ+ABQN9KXfBX4j08i3xKw5BUfpG2kYqs8MY=";
+      hash = "sha256-tDyhLzyG5Vo00nH/WAdVABLFn+SZVPs/WRjqReNDIZM=";
     };
 
     strictDeps = true;
@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpm config set fetch-timeout 300000
     '';
     fetcherVersion = 4;
-    hash = "sha256-vYMT1yBAZ+ABQN9KXfBX4j08i3xKw5BUfpG2kYqs8MY=";
+    hash = "sha256-tDyhLzyG5Vo00nH/WAdVABLFn+SZVPs/WRjqReNDIZM=";
   };
 
   env = {
@@ -201,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     SIGNAL_ENV = "production";
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
-    SOURCE_DATE_EPOCH = 1790198139;
+    SOURCE_DATE_EPOCH = 1790889255;
   }
   // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-darwin") {
     # Test Node's legacy async-context implementation for the Rolldown

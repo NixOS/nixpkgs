@@ -97,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # --warning-suppression-mappings is a Clang-only option.
+    # https://github.com/signalapp/webrtc/pull/180
+    ./guard-clang-only-warning-flags.patch
+
     # clang++: error: unknown argument: '-fno-lifetime-dse'
     ./chromium-147-llvm-22.patch
 
