@@ -48,6 +48,7 @@ libc = CDLL("libc.so.6")
 limine_install_dir: Optional[str] = None
 can_use_direct_paths = False
 paths: Dict[str, bool] = {}
+entry_payloads: dict[str, str] = {}
 
 
 def config(*path: str) -> Optional[Any]:
@@ -312,10 +313,11 @@ def xen_config_entry(
     return entry
 
 
-def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
-    entry = "/" * levels + label + "\n"
-    entry += "protocol: linux\n"
-    entry += f"comment: {bootspec.label}, built on {time}\n"
+def config_entry_payload(bootspec: BootSpec, label: str) -> str:
+    if bootspec.toplevel in entry_payloads:
+        return entry_payloads[bootspec.toplevel]
+
+    entry = "protocol: linux\n"
     entry += "kernel_path: " + get_kernel_uri(bootspec.kernel) + "\n"
     entry += (
         "cmdline: "
@@ -347,7 +349,12 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             os.path.basename(bootspec.toplevel) + "-secrets"
         )
 
-        if subprocess.run([bootspec.initrdSecrets, initrd_secrets_path_temp]).returncode != 0:
+        if (
+            subprocess.run(
+                [bootspec.initrdSecrets, initrd_secrets_path_temp]
+            ).returncode
+            != 0
+        ):
             print(
                 f'warning: failed to create initrd secrets for "{label}"',
                 file=sys.stderr,
@@ -362,6 +369,17 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             entry += "module_path: " + get_kernel_uri(initrd_secrets_path) + "\n"
 
         os.umask(old_umask)
+    entry_payloads[bootspec.toplevel] = entry
+    return entry
+
+
+def config_entry(levels: int, bootspec: BootSpec, label: str, time: str | None) -> str:
+    entry = "/" * levels + label + "\n"
+    entry += f"comment: {bootspec.label}"
+    if time is not None:
+        entry += f", built on {time}"
+    entry += "\n"
+    entry += config_entry_payload(bootspec, label)
     return entry
 
 
@@ -518,11 +536,10 @@ def install_bootloader() -> None:
     editor_enabled = bool_to_yes_no(config("enableEditor"))
     hash_mismatch_panic = bool_to_yes_no(config("panicOnChecksumMismatch"))
 
-    last_gen = get_gens()[-1]
-    last_gen_json = json.load(
-        open(os.path.join(get_system_path("system", last_gen), "boot.json"), "r")
-    )
-    last_gen_boot_spec = bootjson_to_bootspec(last_gen_json)
+    current_system = sys.argv[1]
+    with open(os.path.join(current_system, "boot.json"), "r") as file:
+        current_system_json = json.load(file)
+    current_system_boot_spec = bootjson_to_bootspec(current_system_json)
 
     config_file = str(config("extraConfig")) + "\n"
     config_file += textwrap.dedent(f"""
@@ -530,7 +547,7 @@ def install_bootloader() -> None:
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
         graphics: yes
-        default_entry: {3 if len(last_gen_boot_spec.specialisations.items()) > 0 else 2}
+        default_entry: 1
     """)
 
     for wallpaper in config("style", "wallpapers"):
@@ -593,6 +610,10 @@ def install_bootloader() -> None:
     config_file += textwrap.dedent(f"""
         # {config("distroName")} boot entries start here
     """)
+
+    config_file += config_entry(
+        1, current_system_boot_spec, str(config("distroName")), None
+    )
 
     for profile, gens in profiles:
         group_name = (
