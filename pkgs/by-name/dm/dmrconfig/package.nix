@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   fetchpatch,
   libusb1,
   systemd,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "dmrconfig";
   version = "1.1";
 
