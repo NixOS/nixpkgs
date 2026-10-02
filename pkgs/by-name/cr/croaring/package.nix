@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   cmocka,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   cmakeFlags = [ (lib.cmakeBool "ROARING_USE_CPM" false) ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Compressed bitset library for C and C++";
