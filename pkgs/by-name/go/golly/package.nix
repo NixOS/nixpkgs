@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace wxprefs.cpp \
       --replace-fail 'PYTHON_SHLIB' '${python3}/lib/libpython3.so'
+
+    substituteInPlace ../cmdline/bgolly.cpp \
+      --replace-fail '&popcount' '&::popcount' \
+      --replace-fail 'if (popcount)' 'if (::popcount)'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace makefile-gtk \
