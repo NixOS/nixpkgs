@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
   versionCheckHook,
   nix-update-script,
 
@@ -113,6 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   checkInputs = [
     catch2_3
   ];
@@ -129,12 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  doInstallCheck = true;
+  disabledTests = [
+    "et-test.LargeInputNoDeadlock"
+  ];
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  checkPhase = ''
-    ctest --output-on-failure -E 'et-test\.LargeInputNoDeadlock'
-  '';
 
   passthru.updateScript = nix-update-script { };
 
