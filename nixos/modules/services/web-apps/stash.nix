@@ -372,8 +372,8 @@ let
   # Type of the options that take a file secrets contract.
   secretContractType = types.submodule {
     options = {
-      input = mkOption {
-        description = "Input of the contract for file secrets.";
+      request = mkOption {
+        description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
         default = { };
         type = types.submodule {
           options = {
@@ -407,8 +407,8 @@ let
         };
       };
 
-      output = mkOption {
-        description = "Output of the contract for file secrets.";
+      response = mkOption {
+        description = "Response of the file secrets contract: the provider states where the file is.";
         type = types.submodule {
           options = {
             path = mkOption {
@@ -549,13 +549,13 @@ in
   config = mkIf cfg.enable {
     # A contract option that is set gives the path of its `*File` option.
     services.stash.passwordFile = mkIf (cfg.passwordSecret != null) (
-      mkDefault cfg.passwordSecret.output.path
+      mkDefault cfg.passwordSecret.response.path
     );
     services.stash.jwtSecretKeyFile = mkIf (cfg.jwtSecretKeySecret != null) (
-      mkDefault cfg.jwtSecretKeySecret.output.path
+      mkDefault cfg.jwtSecretKeySecret.response.path
     );
     services.stash.sessionStoreKeyFile = mkIf (cfg.sessionStoreKeySecret != null) (
-      mkDefault cfg.sessionStoreKeySecret.output.path
+      mkDefault cfg.sessionStoreKeySecret.response.path
     );
 
     assertions = [

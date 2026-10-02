@@ -45,7 +45,7 @@ in
 
       config = lib.mkMerge [
         (setAttrByPath providerRoot {
-          input = {
+          request = {
             inherit (config.test) owner group mode;
           };
         })
@@ -62,26 +62,26 @@ in
     { nodes, ... }:
     let
       cfg = nodes.machine;
-      inherit (getAttrFromPath providerRoot nodes.machine) output;
+      inherit (getAttrFromPath providerRoot nodes.machine) response;
     in
     ''
-      owner = machine.succeed("stat -c '%U' ${output.path}").strip()
+      owner = machine.succeed("stat -c '%U' ${response.path}").strip()
       print(f"Got owner {owner}")
       if owner != "${cfg.test.owner}":
           raise Exception(f"Owner should be '${cfg.test.owner}' but got '{owner}'")
 
-      group = machine.succeed("stat -c '%G' ${output.path}").strip()
+      group = machine.succeed("stat -c '%G' ${response.path}").strip()
       print(f"Got group {group}")
       if group != "${cfg.test.group}":
           raise Exception(f"Group should be '${cfg.test.group}' but got '{group}'")
 
-      mode = str(int(machine.succeed("stat -c '%a' ${output.path}").strip()))
+      mode = str(int(machine.succeed("stat -c '%a' ${response.path}").strip()))
       print(f"Got mode {mode}")
       wantedMode = str(int("${cfg.test.mode}"))
       if mode != wantedMode:
           raise Exception(f"Mode should be '{wantedMode}' but got '{mode}'")
 
-      content = machine.succeed("cat ${output.path}").strip()
+      content = machine.succeed("cat ${response.path}").strip()
       print(f"Got content {content}")
       if content != "${cfg.test.content}":
           raise Exception(f"Content should be '${cfg.test.content}' but got '{content}'")
