@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   gettext,
   meson,
   mesonEmulatorHook,
