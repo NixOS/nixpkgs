@@ -78,6 +78,11 @@ rustPlatform.buildRustPackage (
         --set WF_STATIC_DIR "$out/share/wealthfolio/dist"
     '';
 
+    passthru = {
+      inherit frontend;
+      updateScript = ./update.sh;
+    };
+
     meta = {
       description = "Self-hosted web app for Wealthfolio";
       homepage = "https://wealthfolio.app/";
