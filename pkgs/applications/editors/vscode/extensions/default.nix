@@ -3224,8 +3224,8 @@ let
         mktplcRef = {
           name = "vscode-dotnet-runtime";
           publisher = "ms-dotnettools";
-          version = "3.1.0";
-          hash = "sha256-jmdf/l82dEMNY+KNLcBatA82yElOlUnnnTmV1yGxP1o=";
+          version = "3.2.0";
+          hash = "sha256-DvoaWpG8qFNjGl9xVRqBvymucGm9UQ9VOMx+X7EvBUA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
