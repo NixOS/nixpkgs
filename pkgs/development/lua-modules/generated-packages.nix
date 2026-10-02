@@ -6809,6 +6809,40 @@ final: prev: {
     }
   ) { };
 
+  warna = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "warna";
+      version = "0.3.5-2";
+      knownRockspec =
+        (fetchurl {
+          url = "https://luarocks.org/warna-0.3.5-2.rockspec";
+          sha256 = "0vkkpldgaav9cnx63wal6851rlcq6n93fpv5xpvm9al308q45d0r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "komothecat";
+        repo = "warna";
+        tag = "v0.3.5-2";
+        hash = "sha256-6L2MNVlBwhQC/dqnXIMqQh+U11LqEx0KU3/FOCLySOA=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/komothecat/warna#readme";
+        maintainers = with lib.maintainers; [ Freed-Wu ];
+        license = lib.licenses.mit;
+        description = "🎨 Terminal text styling for Lua";
+        longDescription = "Warna is a simple text styling for the terminal. View more on GitHub.";
+      };
+    }
+  ) { };
+
   xml2lua = callPackage (
     {
       buildLuarocksPackage,
