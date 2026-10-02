@@ -16,63 +16,79 @@ let
   inherit (pkgs) writeText;
 in
 {
-  options.testing.hardcoded-secret = mkOption {
-    default = { };
-    description = ''
-      Hardcoded file secrets. These should only be used in tests.
+  options.testing.hardcoded-secret = {
+    directory = mkOption {
+      type = str;
+      default = "/run/hardcodedsecrets";
+      description = ''
+        Directory in which the provider writes the secret files.
+        Each secret file has the name of its entry in
+        [](#opt-testing.hardcoded-secret.fileSecrets).
+      '';
+    };
 
-      They aim to replace the usage of pkgs.writeText in NixOS VM tests
-      as those make the file world readable
-      while this module set runtime permissions on the file.
-      This makes the tests more accurate, ensuring the permissions
-      set by the contract consumer are correct.
-    '';
-    example = lib.literalExpression ''
-      {
-        mySecret = {
-          request = {
-            user = "me";
-            mode = "0400";
-          };
-          content = "My Secret";
-        };
-      }
-    '';
-    type = attrsOf (
-      submodule (
-        { name, ... }:
+    fileSecrets = mkOption {
+      default = { };
+      description = ''
+        Hardcoded file secrets. These should only be used in tests.
+
+        They aim to replace the usage of pkgs.writeText in NixOS VM tests
+        as those make the file world readable
+        while this module set runtime permissions on the file.
+        This makes the tests more accurate, ensuring the permissions
+        set by the contract consumer are correct.
+      '';
+      example = lib.literalExpression ''
         {
-          imports = [ ../contracts/file-secrets.nix ];
-
-          options = {
-            request = mkOption {
-              type = submodule {
-                options = {
-                  owner = mkOption { default = "root"; };
-                  group = mkOption { default = "root"; };
-                };
-              };
+          mySecret = {
+            request = {
+              owner = "me";
+              group = "me";
+              mode = "0400";
             };
-
-            response = mkOption {
-              default = { };
-              type = submodule {
-                options.path = mkOption { default = "/run/hardcodedsecrets/${name}"; };
-              };
-            };
-
-            content = mkOption {
-              type = str;
-              description = ''
-                Content of the secret as a string.
-
-                This will be stored in the nix store and should only be used for testing or maybe in dev.
-              '';
-            };
+            content = "My Secret";
           };
         }
-      )
-    );
+      '';
+      type = attrsOf (
+        submodule (
+          { name, ... }:
+          {
+            imports = [ ../contracts/file-secrets.nix ];
+
+            options = {
+              request = mkOption {
+                type = submodule {
+                  options = {
+                    owner = mkOption { default = "root"; };
+                    group = mkOption { default = "root"; };
+                  };
+                };
+              };
+
+              response = mkOption {
+                default = { };
+                type = submodule {
+                  options.path = mkOption {
+                    default = "${cfg.directory}/${name}";
+                    defaultText = lib.literalExpression ''"''${config.testing.hardcoded-secret.directory}/<name>"'';
+                  };
+                };
+              };
+
+              content = mkOption {
+                type = str;
+                description = ''
+                  Content of the secret as a string.
+
+                  This will be stored in the nix store and should only be used for testing or maybe in dev.
+                '';
+              };
+            };
+          }
+        )
+      );
+    };
   };
 
   config = {
@@ -90,6 +106,6 @@ in
         chown ${request.owner}:${request.group} "${response.path}"
         cp ${source} "${response.path}"
       ''
-    ) cfg;
+    ) cfg.fileSecrets;
   };
 }

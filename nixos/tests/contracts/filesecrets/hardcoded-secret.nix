@@ -12,6 +12,7 @@ test {
   providerRoot = [
     "testing"
     "hardcoded-secret"
+    "fileSecrets"
     "mysecret"
   ];
   extraModules = [
@@ -19,7 +20,7 @@ test {
     (
       { config, ... }:
       {
-        testing.hardcoded-secret.mysecret.content = config.test.content;
+        testing.hardcoded-secret.fileSecrets.mysecret.content = config.test.content;
       }
     )
   ];
