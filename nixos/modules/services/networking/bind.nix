@@ -372,10 +372,9 @@ in
       '';
 
       serviceConfig = {
-        Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindNamedExe} ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
-        ExecReload = "${bindRndcExe} -k '${bindRndcKeyFile}' reload";
-        ExecStop = "${bindRndcExe} -k '${bindRndcKeyFile}' stop";
+        Restart = "always";
+        Type = "notify-reload";
+        ExecStart = "${bindNamedExe} -f ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
         User = bindUser;
         RuntimeDirectory = "named";
         RuntimeDirectoryPreserve = "yes";
