@@ -21,8 +21,8 @@ let
 
   inherit (yarn-berry_4-fetcher) fetchYarnBerryDeps yarnBerryConfigHook;
 
-  yarnLock = runCommand "yarn-v9.lock" { } ''
-    sed -e 's/^  version: 8$/  version: 9/' ${src}/yarn.lock > $out
+  yarnLock = runCommand "yarn-v10.lock" { } ''
+    sed -e 's/^  version: 8$/  version: 10/' ${src}/yarn.lock > $out
   '';
 
   python = python3;
@@ -76,7 +76,7 @@ let
 
     offlineCache = fetchYarnBerryDeps {
       inherit yarnLock;
-      hash = "sha256-VVew6/rjc0Uz6xM2komL9Sceym3vFrGnAqrdLtGxQVI=";
+      hash = "sha256-jdYmtAbEhZwaNGmUVTyvz4ejhTRJg95fsy+7r8dwWS8=";
     };
 
     postPatch = ''

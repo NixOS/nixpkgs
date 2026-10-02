@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zond";
-  version = "0.18.0";
+  version = "0.19.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zond-rs";
     repo = "zond";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-onWvfTPc7GBH/mN5HPz5mIAOJFUi2l45Z2dXD0ea1xg=";
+    hash = "sha256-diVKZ8Es3TqdR8U7ZtJvEFc/6izWRDwFnq4jo0nMdo8=";
   };
 
-  cargoHash = "sha256-V2+7//z64mKODelryd2SEWJLrQoxPsNOT6vFBV1Yl7c=";
+  cargoHash = "sha256-A535727DTdBuNnXYm5xCzGauQ1agUTJkF/z7+bjXcpU=";
 
   nativeBuildInputs = [ pkg-config ];
 

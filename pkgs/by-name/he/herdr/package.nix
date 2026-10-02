@@ -43,11 +43,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xcbuild
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
-      --replace-fail 'lib.bundle_compiler_rt = true;' 'lib.bundle_compiler_rt = false;' \
-      --replace-fail 'lib.bundle_ubsan_rt = true;' 'lib.bundle_ubsan_rt = false;'
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+        --replace-fail 'lib.bundle_compiler_rt = true;' 'lib.bundle_compiler_rt = false;' \
+        --replace-fail 'lib.bundle_ubsan_rt = true;' 'lib.bundle_ubsan_rt = false;'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace vendor/libghostty-vt/pkg/apple-sdk/native_link.zig \
+        --replace-fail '"/usr/bin/xcrun"' '"xcrun"'
+
+      substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+        --replace-fail '"/bin/ln"' '"ln"'
+
+      substituteInPlace vendor/libghostty-vt/src/build/LibtoolStep.zig \
+        --replace-fail '/bin/cp ' 'cp ' \
+        --replace-fail '/usr/bin/ranlib ' 'ranlib '
+    '';
 
   # Upstream binary tests are renamed, added, or changed between releases and
   # depend on host process details, so Nix-only patches for them are brittle.
