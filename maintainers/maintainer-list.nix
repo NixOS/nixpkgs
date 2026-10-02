@@ -9412,6 +9412,11 @@
     githubId = 35940434;
     name = "Francois LaBerge";
   };
+  ficaa1 = {
+    name = "ficaa1";
+    github = "ficaa1";
+    githubId = 17272851;
+  };
   fidgetingbits = {
     name = "fidgetingbits";
     email = "nixpkgs.xe7au@passmail.net";
