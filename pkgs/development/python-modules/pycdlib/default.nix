@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pycdlib";
-  version = "1.20.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clalancette";
     repo = "pycdlib";
     tag = "v${version}";
-    hash = "sha256-4FkB1QkvbZ/GIlBM14jiGbc6m7MA5EIlq1LjeXGVXC0=";
+    hash = "sha256-8GRbjTkTT7xl/SpHoVdFZq8ZMDitdbhpEiN41RwAWnk=";
   };
 
   build-system = [ setuptools ];

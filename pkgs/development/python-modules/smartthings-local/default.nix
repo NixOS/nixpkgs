@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "smartthings-local";
-  version = "0.1.20";
+  version = "0.1.21";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "QuiteYellow";
     repo = "SmartThings-Local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l1zCNdshRxUrUp5kYcgZBRO8ZWlz1rWRnxAtmVM2LpY=";
+    hash = "sha256-coLCgFTu//mWt7XZsrvXSUBg2dwn/mHq4EJTW+NhWpo=";
   };
 
   build-system = [

@@ -434,9 +434,6 @@
                   "file": "hooks/pkg-config.section.md"
                 },
                 {
-                  "file": "hooks/pnpm.section.md"
-                },
-                {
                   "file": "hooks/postgresql-test-hook.section.md"
                 },
                 {
