@@ -12,6 +12,7 @@ test {
   providerRoot = [
     "testing"
     "hardcoded-secret"
+    "fileSecrets"
     "mysecret"
   ];
   extraModules = [
@@ -23,7 +24,7 @@ test {
         # fails when the provider sets the owner before the user exists.
         test.owner = "secretowner";
         test.group = "secretgroup";
-        testing.hardcoded-secret.mysecret.content = config.test.content;
+        testing.hardcoded-secret.fileSecrets.mysecret.content = config.test.content;
       }
     )
   ];
