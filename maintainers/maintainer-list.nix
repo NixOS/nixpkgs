@@ -10601,6 +10601,8 @@
     name = "Gliczy";
     github = "Gliczy";
     githubId = 129636582;
+    email = "gliczy.h+nix@gmail.com";
+    matrix = "@gliczy:matrix.org";
   };
   glittershark = {
     name = "Griffin Smith";
