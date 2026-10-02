@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchurl,
-  fetchpatch,
   pkg-config,
   docutils,
   gettext,
