@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-z";
-  version = "2.0.0";
+  version = "2.0.1";
 
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "agkozak";
     repo = "zsh-z";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r12crTTTYRYztuTCz7/59d4ig/O1x+I7lvf4r+b2fFM=";
+    hash = "sha256-3dDvvDoXfSZlFv0L5wQZW/v/3FdVS9U5gT/r9DfUvjk=";
   };
 
   strictDeps = true;
