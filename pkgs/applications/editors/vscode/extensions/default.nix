@@ -1304,8 +1304,8 @@ let
         mktplcRef = {
           publisher = "denoland";
           name = "vscode-deno";
-          version = "3.53.0";
-          hash = "sha256-M+wFee1x/cCgGMFrDaV7OtIhEORHkLHf/Z06/VuZZmg=";
+          version = "3.53.1";
+          hash = "sha256-9OGG/ZvqzRzTQ6ERT0fKBkGwx1+zwD2FUWr9Hp1wLK0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
@@ -4304,8 +4304,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.36";
-          hash = "sha256-acmubrmOUirHkam1CreoP7p/LR2/6A6kpBku8Den83Y=";
+          version = "0.8.39";
+          hash = "sha256-bRFEb6YtLFOTe9K1Y0vyfQDTgYVa6udy2CU2wz4Ht3w=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";

@@ -44,11 +44,21 @@ let
 
   cfg = config.services.kanidm;
   settingsFormat = pkgs.formats.toml { };
+  jsonFormat = pkgs.formats.json { };
+
   # Remove null values, so we can document optional values that don't end up in the generated TOML file.
   filterConfig = converge (filterAttrsRecursive (_: v: v != null));
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.server.settings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.client.settings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unix.settings);
+
+  entryManagementDir = pkgs.linkFarm "kanidm-entry-management" (
+    mapAttrsToList (name: value: {
+      name = "${name}.json";
+      path = jsonFormat.generate "${name}.json" value;
+    }) cfg.server.entryManagement.migrations
+  );
+
   provisionSecretFiles = filter (x: x != null) (
     [
       cfg.provision.idmAdminPasswordFile
@@ -293,6 +303,37 @@ in
     };
 
     server.enable = mkEnableOption "the Kanidm server";
+
+    server.entryManagement.migrations = mkOption {
+      description = ''
+        Entry management (migrations) to apply to the Kanidm database.
+        These are JSON formatted person and group records that are imported to the server on startup.
+        Keys of this attribute set should follow the pattern `xx-name` (e.g. `00-base`, `99-accounts`),
+        and values are the JSON representation of the migration.
+        See [the documentation](https://kanidm.github.io/kanidm/stable/entry_management.html)
+        for details on the record syntax.
+      '';
+      default = { };
+      type = types.attrsOf jsonFormat.type;
+      example = {
+        "00-base" = {
+          id = "a2b58e97-0aaf-4b04-a4e4-7984616fe1df";
+          assertions = [
+            {
+              state = "present";
+              id = "0ee875bd-408d-4ff9-85ca-c162f262493d";
+              class = [
+                "person"
+                "account"
+              ];
+              name = "tobias";
+              displayname = "Tobias";
+            }
+          ];
+        };
+      };
+    };
+
     server.settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -732,6 +773,7 @@ in
     services.kanidm = {
       unix.settings.version = "2";
       server.settings.version = "2";
+      server.settings.migration_path = entryManagementDir;
     };
 
     assertions =
@@ -768,6 +810,10 @@ in
             assertion = (cfg.server.enable && cfg.provision.enable) -> unknownEntities == [ ];
             message = "${opt} refers to unknown entities: ${toString unknownEntities}";
           };
+
+        invalidEntryManagementNames = filter (name: builtins.match "[0-9]{2}-.+" name == null) (
+          attrNames cfg.server.entryManagement.migrations
+        );
       in
       [
         {
@@ -848,6 +894,14 @@ in
             You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
           '';
         }
+        # Entry Management file name validation
+        {
+          assertion = invalidEntryManagementNames == [ ];
+          message = ''
+            The keys in <option>services.kanidm.server.entryManagement.migrations</option> must follow the pattern `XX-<name>` where `XX` is a two-digit number (e.g., "00-base", "99-accounts").
+            Invalid keys found: ${toString invalidEntryManagementNames}
+          '';
+        }
         # Entity names must be globally unique:
         (
           let
@@ -858,9 +912,7 @@ in
             assertion = cfg.provision.enable -> duplicateNames == { };
             message = ''
               services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
-              ${concatLines (
-                mapAttrsToList (name: xs: "  - '${name}' used as: ${toString xs}") duplicateNames
-              )}'';
+              ${concatLines (mapAttrsToList (name: xs: "  - '${name}' used as:${toString xs}") duplicateNames)}'';
           }
         )
       ]
