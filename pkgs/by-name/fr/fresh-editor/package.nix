@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.4.10";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TrWsqoFvARUBoSLLm0mHdidIOCzNldBun8U7BsMUHVI=";
+    hash = "sha256-g+G/g7Q5jFl7CPsodHQPBimg99BHXiezW01hYLfwI8c=";
   };
 
-  cargoHash = "sha256-xmsgsSoJ8INa0BE6LpebBSBTXMmjGmqkCPmEZSxYDP0=";
+  cargoHash = "sha256-Q4Vf8i8jOr6H1rYXiQHc7TAckzk49512THkjDgKiPes=";
 
   __structuredAttrs = true;
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags "--no-upgrade-check" \
       --prefix PATH : ${lib.makeBinPath [ python3 ]}
-    rm -rf $out/bin/fresh.dSYM
   '';
 
   # Tests create a local http server to check update functionality
@@ -67,6 +66,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--lib"
     "--bins"
   ];
+  # cfg(debug_assertions) is not set for release builds, so we need to run tests in debug mode to get the assertions enabled.
+  checkType = "debug";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
