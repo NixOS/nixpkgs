@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.28";
+  version = "1.12.29";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-goP/f1Go7227R2euXu8aJrwHeUp84DQ+18ztyf4uXhM=";
+    hash = "sha256-0LiasFrVMnMX1Z4TcP+Eti58X7+ICksqKnerQKj2ayI=";
   };
 
   pnpmDeps = fetchPnpmDeps {

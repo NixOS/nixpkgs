@@ -20,6 +20,9 @@
   "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner";
   "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner-2";
 
+  "pomodoro@lsbcodes" = "focus-timer";
+  "focus-timer@focustimerhq.github.io" = "focus-timer-2";
+
   "FuzzyClock@johngoetz" = "fuzzy-clock";
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3"; # '-3' preserves backwards compatibility
 
@@ -40,6 +43,7 @@
 
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
+  "night-light-toggle@shivamksharma.github.io" = "night-light-toggle-3";
 
   "panel-workspace-scroll@polymeilex.github.io" = "panel-workspace-scroll";
   "panel-scroll@taygun86" = "panel-workspace-scroll-2";

@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       counters and less contrast that allow it to work on small sizes in any
       screen.
     '';
-    homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
+    homepage = "https://github.com/impallari/Libre-Baskerville";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;

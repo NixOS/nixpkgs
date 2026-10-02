@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bandcamp-async-api";
-  version = "0.2.4";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ALERTua";
     repo = "bandcamp_async_api";
     tag = finalAttrs.version;
-    hash = "sha256-Ui72fKzsDbDPISP4jDnkU7xZ8QhvrA0v2lhx6WNx87Y=";
+    hash = "sha256-JXW0pnIYIy+TmhmgRAk/arWC3RMTV23n1DTOwqyDPmY=";
   };
 
   build-system = [

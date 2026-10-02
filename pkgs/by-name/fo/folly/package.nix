@@ -182,6 +182,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # fails in containerized environments due to fork behavior
     "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
+
+    # several tests in this suite bound on specific ranges of random numbers,
+    # which is not compatible with gcc 16's implementation of
+    # "P0952R2: A new specification for std::generate_canonical"
+    # https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p0952r2.html
+    "stats_tdigest_test.*/DistributionTest.ReasonableError/*"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"

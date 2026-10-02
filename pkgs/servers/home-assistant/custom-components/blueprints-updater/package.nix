@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.14.6";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-udj68ZlkSR2oldFfCEJh5A1gHF8GWb/iNluDrZ8L6us=";
+    hash = "sha256-ZfPfMrnUSaIEstkoocweit+wpk+/r+/L04uVGwZmKYc=";
   };
 
   patches = [
@@ -44,6 +44,11 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant-custom-component
     pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # validate_compatibility.py: error: Invalid --verify-pair-python: Python executable not found at .venv/bin/python
+    "test_compatibility_main_configures_global_uv_before_verification"
   ];
 
   meta = {

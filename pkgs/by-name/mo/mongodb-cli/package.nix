@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mongodb-cli";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-cli";
     tag = "mongocli/v${finalAttrs.version}";
-    hash = "sha256-pSxIOiow1G1CQ/lJnmtyVPQdukRDczkbjajblbymcVM=";
+    hash = "sha256-0d4sWiq7/fPxuaiNyPmbmCsbSkAUyxM9rbcncCReSfg=";
   };
 
   vendorHash = "sha256-F+WP6/QCQTb19b8LX1CnOJuPSJMmbY3HIgyPQfjVrKE=";

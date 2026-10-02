@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.29.3";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
+    (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
     (lib.getExe (writeShellApplication {
       name = "podman-desktop-dependencies-updater";
       runtimeInputs = [

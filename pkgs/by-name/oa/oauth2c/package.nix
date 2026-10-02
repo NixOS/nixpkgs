@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "oauth2c";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "SecureAuthCorp";
     repo = "oauth2c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IYZYdx8oe5L7zB6HwtSOWXe+JveMWiORLN+j8h3pQug=";
+    hash = "sha256-pZ7TgmjNMUJSLvKBu4eo8HbGIjtoHHjXhdyMsW/Nkjo=";
   };
 
   vendorHash = "sha256-H5iRmX6Wcef7IVOY5NQ+jX9zyJCzZ34Haf7cIflK5GY=";

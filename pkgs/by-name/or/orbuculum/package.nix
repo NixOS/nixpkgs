@@ -39,8 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  # fix build w/ glibc-2.44
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  # fix build w/ glibc-2.44, gcc-16
+  # unused variables: https://github.com/orbcode/orbuculum/issues/171
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=unused-but-set-variable";
 
   nativeBuildInputs = [
     meson

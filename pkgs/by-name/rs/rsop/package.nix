@@ -7,6 +7,7 @@
   nix-update-script,
   testers,
   rsop,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,5 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "rsop";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

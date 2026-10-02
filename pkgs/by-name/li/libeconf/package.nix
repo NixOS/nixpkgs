@@ -5,6 +5,7 @@
   meson,
   ninja,
   nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jIEsfX3Oz/koX0srLPGII99WaeFjKtXvB4kzMu7LbWs=";
   };
 
+  # unsupported flags that we can just remove
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace-fail "'-ffat-lto-objects'," "" \
+      --replace-fail "version_flag = ['-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), mapfile)]" "version_flag = []"
+  '';
+
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -26,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Enhanced config file parser, which merges config files placed in several locations into one";
@@ -36,5 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ grimmauld ];
     mainProgram = "econftool";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libeconf" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "opensuse" finalAttrs.version;
   };
 })

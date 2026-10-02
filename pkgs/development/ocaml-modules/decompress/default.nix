@@ -16,11 +16,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "decompress";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${finalAttrs.version}/decompress-${finalAttrs.version}.tbz";
-    hash = "sha256-qi6ELcAJvN3LtcB5H12+7ivaWhBOzHaBqjesQlN+MSE=";
+    hash = "sha256-yYmMvJhTXV3R1NdUkuwnwRBbj2zOX3naXTQFP9pAxYU=";
   };
 
   buildInputs = [ cmdliner ];

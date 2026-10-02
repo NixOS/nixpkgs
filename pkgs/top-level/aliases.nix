@@ -569,6 +569,7 @@ mapAliases {
   classads = throw "'classads' has been removed, as it is unmaintained both upstream and in nixpkgs"; # Added 2026-06-27
   claude-code-acp = warnAlias "'claude-code-acp' has been renamed to 'claude-agent-acp'" claude-agent-acp; # Added 2026-03-31
   claude-code-bin = warnAlias "'claude-code-bin' has been merged into 'claude-code'" claude-code; # Added 2026-04-18
+  clblas = throw "'clblas' has been removed as it was unmaintained upstream"; # Added 2026-09-02
   clearlyU = clearly-u; # Added 2026-02-08
   clerk = throw "'clerk' has been removed as the upstream repository has been archived"; # Added 2026-09-21
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
@@ -577,6 +578,7 @@ mapAliases {
   clipbuzz = throw "clipbuzz has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   clipgrab = throw "'clipgrab' has been removed, as it was unmaintained in nixpkgs since 2022 and depended on vulnerable qt5 webengine."; # Added 2026-02-11
   clipit = throw "'clipit' has been removed as it is unmaintained upstream and broken"; # Added 2026-05-16
+  clmagma = throw "'clmagma' has been removed as it was unmaintained upstream"; # Added 2026-09-02
   clorinde = throw "'clorinde' has been merged into 'cornucopia'"; # Added 2026-06-03
   cloudlogoffline = throw "cloudlogoffline has been removed"; # Added 2025-05-18
   clucene_core = warnAlias "'clucene_core' has been renamed to 'clucene-core'" clucene-core; # Added 2026-01-12
@@ -675,6 +677,7 @@ mapAliases {
   cwe-client-cli = throw "cwe-client-cli has been removed because it is archived and has unclear licensing"; # Added 2026-01-10
   cwiid = throw "'cwiid' was removed because it depended on the deprecated GTK2 engine."; # Added 2026-07-22
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
+  daed = throw "daed has been removed, as it has been unmaintained and archived upstream"; # Added 2026-09-24
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
   darkly-qt5 = throw "'darkly-qt' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
@@ -850,10 +853,14 @@ mapAliases {
   fingerd_bsd = throw "'fingerd_bsd' has been renamed to/replaced by 'bsd-fingerd'"; # Converted to throw 2025-10-27
   fira-code-nerdfont = throw "'fira-code-nerdfont' has been renamed to/replaced by 'nerd-fonts.fira-code'"; # Converted to throw 2025-10-27
   firebird_2_5 = throw "'firebird_2_5' has been removed as it has reached end-of-life and does not build."; # Added 2025-06-10
+  firefox-beta = warnAlias "'firefox-beta' has been removed as it has a too large maintaince overhead while not providing enough benefits. Please use 'firefox'" firefox; # Added 2026-09-28
   firefox-beta-bin = warnAlias "`firefox-beta-bin` is removed.  Please use `firefox-beta` or `firefox-bin` instead." firefox-beta; # Added 2025-06-06
+  firefox-beta-unwrapped = warnAlias "'firefox-beta-unwrapped' has been removed as it has a too large maintaince overhead while not providing enough benefits. Please use 'firefox-unwrapped'" firefox-unwrapped; # Added 2026-09-28
   firefox-devedition-bin = warnAlias "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead." firefox-devedition; # Added 2025-06-06
   firefox-esr-128 = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-140` instead."; # Added 2025-08-21
   firefox-esr-128-unwrapped = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-140-unwrapped` instead."; # Added 2025-08-21
+  firefox-esr-140 = throw "The Firefox 140 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-153` instead."; # Added 2026-09-28
+  firefox-esr-140-unwrapped = throw "The Firefox 140 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-153-unwrapped` instead."; # Added 2026-09-28
   firefox-wayland = throw "'firefox-wayland' has been renamed to/replaced by 'firefox'"; # Converted to throw 2025-10-27
   firmwareLinuxNonfree = throw "'firmwareLinuxNonfree' has been renamed to/replaced by 'linux-firmware'"; # Converted to throw 2025-10-27
   fishfight = throw "'fishfight' has been renamed to/replaced by 'jumpy'"; # Converted to throw 2025-10-27
@@ -1057,6 +1064,15 @@ mapAliases {
   gnome2.libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # Added 2026-07-23
   gnome2.libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # Added 2026-07-23
   gnome2.ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # Added 2026-07-23
+  gnome38Extensions = throw "'gnome38Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 38"; # Added 2026-09-27
+  gnome40Extensions = throw "'gnome40Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 40"; # Added 2026-09-27
+  gnome41Extensions = throw "'gnome41Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 41"; # Added 2026-09-27
+  gnome42Extensions = throw "'gnome42Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 42"; # Added 2026-09-27
+  gnome43Extensions = throw "'gnome43Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 43"; # Added 2026-09-27
+  gnome44Extensions = throw "'gnome44Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 44"; # Added 2026-09-27
+  gnome45Extensions = throw "'gnome45Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 45"; # Added 2026-09-27
+  gnome46Extensions = throw "'gnome46Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 46"; # Added 2026-09-27
+  gnome47Extensions = throw "'gnome47Extensions' has been removed as this package set contained GNOME extensions for the unsupported GNOME Shell version 47"; # Added 2026-09-27
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
@@ -1811,6 +1827,7 @@ mapAliases {
   netbox_4_3 = throw "netbox 4.3 series has been removed as it was EOL"; # Added 2026-08-24
   netbox_4_4 = throw "netbox 4.4 series has been removed as it was EOL"; # Added 2026-08-24
   netbox_4_5 = throw "netbox 4.5 series has been removed as it was EOL"; # Added 2026-08-24
+  netbox_4_6 = throw "netbox 4.6 series has been removed as it was EOL"; # Added 2026-08-24
   netbsdCross = throw "'netbsdCross' has been renamed to/replaced by 'netbsd'"; # Converted to throw 2025-10-27
   netsurf.browser = throw "'netsurf.browser' has been renamed to/replaced by 'netsurf-browser'"; # Converted to throw 2025-10-27
   netsurf.buildsystem = throw "'netsurf.buildsystem' has been renamed to/replaced by 'netsurf-buildsystem'"; # Converted to throw 2025-10-27
@@ -1965,7 +1982,8 @@ mapAliases {
   openmw-tes3mp = throw "'openmw-tes3mp' has been removed due to lack of maintenance upstream"; # Added 2025-08-30
   openslp = throw "'openslp' has been removed because upstream has not released since 2013 and the package has an unfixable UDP reflection vulnerability (CVE-2023-29552)."; # Added 2026-09-02
   openssl_1_1 = throw "'openssl_1_1' has been removed, because it was end of life'"; # Added 2026-07-24
-  openssl_3_0 = throw "'openssl_3_0' has been renamed to/replaced by 'openssl_3'"; # Converted to throw 2025-10-27
+  openssl_3 = throw "'openssl_3' has been removed, because it was end of life"; # Added 2026-09-17
+  openssl_3_0 = throw "'openssl_3_0' has been removed, because it was end of life"; # Converted to throw 2025-10-27
   opensycl = throw "'opensycl' has been renamed to/replaced by 'adaptivecpp'"; # Converted to throw 2025-10-27
   opensyclWithRocm = throw "'opensyclWithRocm' has been renamed to/replaced by 'adaptivecppWithRocm'"; # Converted to throw 2025-10-27
   opentofu-ls = warnAlias "'opentofu-ls' has been renamed to 'tofu-ls'" tofu-ls; # Added 2025-06-10
@@ -2330,6 +2348,7 @@ mapAliases {
   sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
   seafile-server = throw "'seafile-server' has been removed as it is unmaintained"; # Added 2025-08-21
   seahub = throw "'seahub' has been removed as it is unmaintained"; # Added 2025-08-21
+  secretspec-ffi = libsecretspec; # Added 2026-09-23
   securefs = throw "'securefs' has been removed as it depends on fuse2"; # Added 2026-05-05
   semantik = throw "'semantik' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   semiphemeral = throw "'semiphemeral' has been removed as it is archived upstream"; # Added 2025-11-06
@@ -2565,6 +2584,7 @@ mapAliases {
   theme-jade1 = throw "'theme-jade1' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   theme-obsidian2 = throw "'theme-obsidian2' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   theme-vertex = throw "'theme-vertex' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
+  themes = throw "'themes' has ben removed because it was unused"; # Added 2026-09-27
   thinkingRock = throw "'thinkingRock' has been removed due to being unmaintained decades old software"; # Added 2026-02-12
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
@@ -2632,6 +2652,7 @@ mapAliases {
   uhttpmock_1_0 = warnAlias "'uhttpmock_1_0' has been renamed to 'uhttpmock'" uhttpmock; # Added 2026-05-30
   unicap = throw "'unicap' has been removed because it is unmaintained"; # Added 2025-05-17
   unifi-poller = throw "'unifi-poller' has been renamed to/replaced by 'unpoller'"; # Converted to throw 2025-10-27
+  unifiedpush-common-proxies = warnAlias "'unifiedpush-common-proxies' has been renamed to 'common-proxies'" common-proxies; # Added 2026-09-27
   unixODBC = warnAlias "'unixODBC' has been renamed to 'unixodbc'" unixodbc; # Added 2026-02-12
   unixODBCDrivers = warnAlias "'unixODBCDrivers' has been renamed to 'unixodbcDrivers'" unixodbcDrivers; # Added 2026-02-12
   unrar_6 = throw "'unrar_6' has been renamed to/replaced by 'unrar'"; # Added 2026-03-11
@@ -3144,6 +3165,7 @@ mapAliases {
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   zabbix72 = throw "'zabbix72' was removed as it has reached its end of life"; # Added 2026-02-11
+  zabbix-agent2-plugin-postgresql = throw "'zabbix-agent2-plugin-postgresql' is moved to 'zabbix74.plugins.postgresql'"; # Added 2026-09-27
   zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
   zandronum-alpha-server = throw "'zandronum-alpha-server' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
   zap-chip-gui = throw "the gui variant of zap-chip was removed as it was not really functional"; # Added 2026-05-30

@@ -35,7 +35,7 @@ buildDunePackage rec {
   '';
 
   meta = {
-    homepage = "http://savonet.rastageeks.org/";
+    homepage = "https://www.liquidsoap.info/ocaml-ssl/ssl/index.html";
     description = "OCaml bindings for libssl";
     license = with lib.licenses; [
       lgpl21Plus

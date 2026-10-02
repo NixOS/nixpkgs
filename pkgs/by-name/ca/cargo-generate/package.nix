@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=hooks_and_rhai::it_fails_when_a_system_command_returns_non_zero_exit_code"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=git::utils::should_canonicalize"
+    "--skip=utils::tests::should_canonicalize"
   ];
 
   env = {

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
   runCommand,
@@ -14,18 +14,18 @@
 }:
 
 let
-  package = buildGoModule rec {
+  package = buildGo127Module rec {
     pname = "opentofu";
-    version = "1.12.6";
+    version = "1.13.1";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-gtbgfjnGrB1J+7smGpFGavP6r/IDrcd5MgI0hS5FzHw=";
+      hash = "sha256-F9F8/g3Ge7YDUgI6beB/DeinliuHr+sRM/14eHc02uo=";
     };
 
-    vendorHash = "sha256-70b/19/kquvOwjDeB8+WH6IwB4J0nBTjIw4+rfvqzkI=";
+    vendorHash = "sha256-NwHu+t6GFPCGMLt9PHdz+PMAzcrUBGXwmi5vvl2NsEw=";
     ldflags = [
       "-s"
       "-w"

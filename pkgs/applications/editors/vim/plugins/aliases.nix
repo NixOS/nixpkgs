@@ -17,16 +17,8 @@ let
   # sets from building on Hydra.
   removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
-  # Make sure that we are not shadowing something from
-  # all-packages.nix.
-  checkInPkgs =
-    n: alias: if builtins.hasAttr n prev then throw "Alias ${n} is still in vim-plugins" else alias;
-
   mapAliases =
-    aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    aliases: lib.mapAttrs (_: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
 
   deprecations = lib.mapAttrs (
     old: info:
@@ -64,7 +56,7 @@ mapAliases (
     playground = throw "'vimPlugins.playground' has been archived"; # Added 2025-12-18
     pure-lua = lib.warnOnInstantiate "Please replace 'vimPlugins.pure-lua' with 'vimPlugins.moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
     registers-nvim = throw "'vimPlugins.registers-nvim' has been removed: the upstream repository got deleted"; # Added 2026-04-30
-    rust-tools-nvim = lib.warnOnInstantiate "'vimPlugins.rust-tools-nvim' is abandoned by upstream; you should use 'vimPlugins.rustaceanvim'" rust-tools-nvim; # Added 2026-02-04
+    rust-tools-nvim = throw "'vimPlugins.rust-tools-nvim' has been removed: abandoned by upstream. Use rustaceanvim"; # Added 2026-09-28
     Spacegray-vim = throw "'vimPlugins.Spacegray-vim' has been removed: abandoned by upstream"; # Added 2025-03-24
     SpaceVim = throw "'vimPlugins.SpaceVim' didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # Added 2024-11-27
     spacevim = throw "'vimPlugins.spacevim' was unmaintained for the last 6 years, please use top-level 'spacevim'"; # Added 2024-11-27

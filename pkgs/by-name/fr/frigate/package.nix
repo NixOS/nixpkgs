@@ -141,7 +141,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
     substituteInPlace frigate/events/audio.py \
-      --replace-fail "/cpu_audio_model.tflite" "${frigate.models.tflite.yamnet_classification_v1.model}" \
+      --replace-fail "/cpu_audio_model.tflite" "${frigate.models.tflite.yamnet_classification_v1.model}"
+
+    substituteInPlace frigate/events/audio.py frigate/api/app.py \
       --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
   '';
 

@@ -17,7 +17,6 @@
   cohomcalg,
   csdp,
   eigen,
-  emacs-nox,
   fflas-ffpack,
   flex,
   flint,
@@ -70,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-2e39qzBO63Ft+yw+tJChLsupeinalTkDwXp3WBF2wms=";
-    fetchSubmodules = true;
+    hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
   };
 
   docs = fetchurl {
@@ -122,13 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     bison
-    emacs-nox
     flex
+    flint
     gdbm
     getconf
     gfortran
     makeWrapper
     pkg-config
+    R
     texinfo
     which
 
@@ -152,10 +151,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
-    substituteInPlace configure.ac \
-      --replace-fail "[\$gfan_version], [ge], [0.8]" "[\$gfan_version], [ge], [0.6]"
-    substituteInPlace Macaulay2/packages/gfanInterface.m2 \
-      --replace-fail 'MinimumVersion => ("0.8"' 'MinimumVersion => ("0.6"'
+    # remove editor stuff from Makefiles
+    substituteInPlace Macaulay2/Makefile.in \
+      --replace-fail "all-in-editors" "" \
+      --replace-fail "editors" ""
   '';
 
   preConfigure = ''
@@ -286,6 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
       decomposition of ideals, integral closure of rings, and more.
     '';
     homepage = "https://macaulay2.com/";
+    changelog = "https://macaulay2.com/doc/Macaulay2/share/doc/Macaulay2/Macaulay2Doc/html/_changes_cm_sp${finalAttrs.version}.html";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

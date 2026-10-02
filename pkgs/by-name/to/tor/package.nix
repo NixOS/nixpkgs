@@ -103,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
+  # some tests (e.g. util/socketpair_ersatz) fail in the darwin sandbox otherwise.
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor

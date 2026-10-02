@@ -80,6 +80,7 @@ let
   toGnFlags = lib.mapAttrsToList (name: value: "${name}=${toGnValue value}");
 
   commonGnFlags = {
+    extra_cxxflags = "-std=c++20";
     is_debug = false;
     is_system_compiler = true;
     is_clang = stdenv.cc.isClang;

@@ -109,5 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "prismlauncher";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "prismlauncher" finalAttrs.version // {
+      product = "prism_launcher";
+    };
   };
 })

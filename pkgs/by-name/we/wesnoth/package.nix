@@ -10,6 +10,9 @@
   SDL2_net,
   makeBinaryWrapper,
   SDL2_ttf,
+  sdl3,
+  sdl3-image,
+  sdl3-mixer,
   pango,
   gettext,
   boost186,
@@ -22,12 +25,30 @@
   lua5_4,
   curl,
   nix-update-script,
+  versionCheckHook,
   enableDevel ? false,
 }:
 
 let
   boost = boost186;
   suffix = lib.optionalString enableDevel "-devel";
+
+  sdl =
+    if enableDevel then
+      [
+        sdl3
+        sdl3-image
+        sdl3-mixer
+      ]
+    else
+      [
+        SDL2
+        SDL2_image
+        SDL2_mixer
+        SDL2_net
+        SDL2_ttf
+      ];
+
   # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
   lua = lua5_4.override {
     postConfigure = ''
@@ -38,7 +59,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.24" else "1.18.8";
+  version = if enableDevel then "1.19.28" else "1.18.8";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -46,10 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-q6gdzHDPkG/RqpJxIHqWsxD0n8dzKajDhAT49bjmq78="
+        "sha256-5S2kgqn+HZIPguQP+FYaK79Cvx0IRnmcGSeWPQflt/g="
       else
         "sha256-Tgp3y120j5nqoBrDo7D9C0FcVO3TH5lf+/SoCjR+ikc=";
   };
+
+  strictDeps = true;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/wesnothd${suffix}";
 
   nativeBuildInputs = [
     cmake
@@ -58,11 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
   buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
     pango
     gettext
     boost
@@ -74,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     lua
     curl
-  ];
+  ]
+  ++ sdl;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SYSTEM_LUA" true)

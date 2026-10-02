@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ezratweaver";
     repo = "adw-bluetooth";
     tag = version;
-    hash = "sha256-0rySzx03KeKeqtl0yrbnj/tVbpVPBAKDz+1qLQ5kZRc=";
+    hash = "sha256-UQg2pEmRfTOt6QKdiL1Z86SeGYJ/zZ4XM09l7F/4+UU=";
   };
 
   daemon = buildGoModule {

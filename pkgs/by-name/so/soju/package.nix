@@ -12,13 +12,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "soju";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromCodeberg {
     owner = "emersion";
     repo = "soju";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pen7Lb/aUWY67Y8KBCGfBkG1pX3sdQ8+D9L7xw8afaQ=";
+    hash = "sha256-OoFAdHnExm6Li5bTAmS/KdRkkpHPLP321GAYYqByrNI=";
   };
 
   vendorHash = "sha256-LiTr+ilKYRA3K93RjVGsmWm2jvImmt9YIYTZPtXv6cE=";

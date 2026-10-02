@@ -16,6 +16,8 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "airplay-cli";
+  # nixpkgs-update: no auto update
+  # updated together with music-assistant
   version = "0.5.3";
 
   __structuredAttrs = true;

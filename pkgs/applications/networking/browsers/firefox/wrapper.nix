@@ -22,6 +22,7 @@
   alsa-lib,
   libpulseaudio,
   libcanberra-gtk3,
+  libdbusmenu-gtk3,
   libglvnd,
   libnotify,
   opensc,
@@ -113,6 +114,7 @@ let
             libva
             libgbm
             libnotify
+            libdbusmenu-gtk3
             libxscrnsaver
             cups
             pciutils

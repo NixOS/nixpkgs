@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   unittestCheckHook,
 }:
 
@@ -11,13 +10,17 @@ buildPythonPackage rec {
   version = "0.1.1";
   format = "setuptools";
 
-  # https://github.com/myint/untokenize/issues/4
-  disabled = pythonAtLeast "3.14";
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "3865dbbbb8efb4bb5eaa72f1be7f3e0be00ea8b7f125c69cbd1f5fda926f37a2";
   };
+
+  # the deprecated ast.Constant.s alias was removed in Python 3.14
+  # https://github.com/myint/untokenize/pull/6
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "body[0].value.s" "body[0].value.value"
+  '';
 
   nativeCheckInputs = [ unittestCheckHook ];
 

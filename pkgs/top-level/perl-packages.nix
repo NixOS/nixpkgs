@@ -3591,7 +3591,7 @@ with self;
     ];
     meta = {
       description = "Catalyst Development Tools";
-      homepage = "http://dev.catalyst.perl.org";
+      homepage = "https://metacpan.org/pod/Catalyst";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -3700,7 +3700,7 @@ with self;
     ];
     meta = {
       description = "Catalyst Framework Runtime";
-      homepage = "http://dev.catalyst.perl.org";
+      homepage = "https://metacpan.org/pod/Catalyst";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -12709,7 +12709,7 @@ with self;
     ];
     meta = {
       description = "Exporting done right";
-      homepage = "http://open-exodus.net/projects/Exporter-Declare";
+      homepage = "https://metacpan.org/pod/Export::Declare";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -13418,7 +13418,7 @@ with self;
     };
     meta = {
       description = "Minimalist Fennec, the commonly used bits";
-      homepage = "http://open-exodus.net/projects/Fennec-Lite";
+      homepage = "https://metacpan.org/pod/Fennec::Lite";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -17391,7 +17391,7 @@ with self;
     meta = {
       changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
-      homepage = "http://imager.perl.org";
+      homepage = "https://metacpan.org/pod/Imager";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -23414,7 +23414,7 @@ with self;
     ];
     meta = {
       description = "Postmodern object system for Perl 5";
-      homepage = "http://moose.perl.org";
+      homepage = "https://metacpan.org/pod/Moose";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -28114,7 +28114,7 @@ with self;
     '';
     meta = {
       description = "Critique Perl source code for best-practices";
-      homepage = "http://perlcritic.com";
+      homepage = "https://metacpan.org/pod/perlcritic";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -28404,7 +28404,7 @@ with self;
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
       description = "LDAP client library";
-      homepage = "https://ldap.perl.org";
+      homepage = "https://github.com/perl-ldap/perl-ldap";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -31772,7 +31772,7 @@ with self;
     };
     meta = {
       description = "Turn on strict and make most warnings fatal";
-      homepage = "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git";
+      homepage = "https://metacpan.org/pod/strictures";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -33230,7 +33230,7 @@ with self;
     ];
     meta = {
       description = "Comprehensive template processing system";
-      homepage = "http://www.template-toolkit.org";
+      homepage = "http://template-toolkit.org";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -35431,7 +35431,7 @@ with self;
     doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Analyze tests from the command line using Test::Run";
-      homepage = "http://web-cpan.berlios.de/modules/Test-Run";
+      homepage = "https://metacpan.org/pod/Test::Run::CmdLine";
       license = lib.licenses.mit;
       mainProgram = "runprove";
     };
@@ -39620,7 +39620,7 @@ with self;
       rm t/plugin/auth/github.t t/plugin/form/bootstrap4.t
     '';
     meta = {
-      homepage = "http://preaction.me/yancy/";
+      homepage = "https://github.com/preaction/Yancy";
       description = "Best Web Framework Deserves the Best CMS";
       license = with lib.licenses; [
         artistic1

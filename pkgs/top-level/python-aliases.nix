@@ -156,6 +156,7 @@ mapAliases {
   bz2file = throw "'bz2file' has beem removed, as it was not longed maintained upstream since 2020"; # added 2025-08-26
   calysto-scheme = throw "'calysto-scheme' has been removed as it is no longer maintained upstream"; # Added 2026-01-31
   can = throw "'can' has been renamed to/replaced by 'python-can'"; # Converted to throw 2025-10-29
+  capa = flare-capa; # added 2026-09-29
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   chai = throw "'chai' has been removed as it is no longer maintained upstream and the repository was archived"; # Added 2026-06-08
@@ -424,7 +425,7 @@ mapAliases {
   monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   more-properties = throw "'more-properties' has been removed to due lack of upstream maintenance"; # Added 2026-07-14
   moretools = throw "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
-  mpd2 = warnAlias "'mpd2' has been renamed to 'python-mpd2'"; # Added 2026-06-14
+  mpd2 = warnAlias "'mpd2' has been renamed to 'python-mpd2'" python-mpd2; # Added 2026-06-14
   mpire = throw "'mpire' has been removed because it is unused in Nixpkgs"; # Added 2026-06-22
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
@@ -534,6 +535,7 @@ mapAliases {
   pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
   pyflunearyou = throw "'pyflunearyou' has been renamed to/replaced by 'pyoutbreaksnearme'"; # Converted to throw 2025-10-29
+  pyfribidi = throw "'pyfribidi' has been removed because it is unmaintained upstream"; # added 2026-09-27
   pygame_sdl2 = throw "'pygame_sdl2' has been renamed to/replaced by 'pygame-sdl2'"; # Converted to throw 2025-10-29
   PyGithub = throw "'PyGithub' has been renamed to/replaced by 'pygithub'"; # Converted to throw 2025-10-29
   pygls_2 = pygls; # added 2026-01-05
@@ -559,6 +561,7 @@ mapAliases {
   pynslookup = throw "'pynslookup' has been renamed to 'nslookup'"; # Added 2026-08-10
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
   pyosmium = warnAlias "'pyosmium' has been renamed to 'osmium'" osmium; # Added 2026-07-27
+  pyosohotwaterapi = throw "'pyosohotwaterapi' has been renamed to 'pyosoenergyapi'"; # Added 2026-09-29
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30

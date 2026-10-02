@@ -60,6 +60,11 @@ buildRustPackage {
 
   cargoHash = "sha256-ed2k0D5tp7tlvpqXdxr4uGJozI2gvW1Dvz1SSJDR4NI=";
 
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail '"pkg-config",' '"pkg-config", "link-dynamic",'
+  '';
+
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";

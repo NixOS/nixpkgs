@@ -310,15 +310,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK
-    "test_beat_detection"
-    "test_digital_silence_yields_finite_spectral_centroid"
-    "test_extended_analysis_fields"
-    "test_finalize_returns_audio_analysis_data"
-    "test_finalize_returns_none_on_early_exit"
+    # TODO: revisit with 2.11.0
+    "tests/providers/smart_fades/test_provider.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
@@ -347,10 +343,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hexa
-      emilylange
-    ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "mass";
   };
 })

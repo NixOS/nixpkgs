@@ -103,12 +103,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # Flaky test: reads the AGENT_BROWSER_CDP env variable without using the
-  # shared test lock.
-  checkFlags = [
-    "--skip"
-    "native::actions::tests::test_execute_unknown_command"
-  ];
+  # Some tests use a shared state that makes them flaky when run concurrently.
+  dontUseCargoParallelTests = true;
 
   __darwinAllowLocalNetworking = true;
 
@@ -135,7 +131,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ codgician ];
+    maintainers = with lib.maintainers; [
+      baptiste0928
+      codgician
+    ];
     mainProgram = "agent-browser";
   };
 })

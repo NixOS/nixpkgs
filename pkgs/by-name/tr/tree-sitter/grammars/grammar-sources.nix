@@ -1205,9 +1205,9 @@
   };
 
   haskell = {
-    version = "0.23.1";
+    version = "0.24.1";
     url = "github:tree-sitter/tree-sitter-haskell";
-    hash = "sha256-bggXKbV4vTWapQAbERPUszxpQtpC1RTujNhwgbjY7T4=";
+    hash = "sha256-R4KAAaBoDUGuQtR2U+0xdB9iLclWBrm+/blqsCX5ZjQ=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2260,10 +2260,10 @@
   };
 
   php-only = {
-    version = "0.24.2-unstable-2026-03-19";
+    version = "0.25.0-unstable-2026-09-24";
     url = "github:tree-sitter/tree-sitter-php";
-    rev = "3f2465c217d0a966d41e584b42d75522f2a3149e";
-    hash = "sha256-RV6wHYVTOFdRYMqXdPw2Ryk3FadJJ4jcJVFjsJG8Ri0=";
+    rev = "92b5271b60bec77fb65b5e5bc41561e8dac81299";
+    hash = "sha256-EkKYb9jatSl0/o+7tO2O3vx44ufDmZ4YJ/6t4il/Yk0=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2290,10 +2290,10 @@
   };
 
   pkl = {
-    version = "0.20.0-unstable-2026-03-27";
+    version = "0.21.0-unstable-2026-09-25";
     url = "github:apple/tree-sitter-pkl";
-    rev = "f5beed1da8e5fc856a1a11e29a929d0b7cdcfe3c";
-    hash = "sha256-q0K+q8GEOiwbgFjA/jiY/Hg6kPlgqMUvH8g+GdEDU3I=";
+    rev = "c95d8284940f5e1da2cd0d8f1ee45d7ef9ef75d1";
+    hash = "sha256-dnGqTZ7Kga1sIJkzRSbqkhvIrPJMxOEhHnDKJuLyudM=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -2587,10 +2587,10 @@
   };
 
   rescript = {
-    version = "6.0.0-unstable-2026-07-13";
+    version = "6.0.0-unstable-2026-09-25";
     url = "github:rescript-lang/tree-sitter-rescript";
-    rev = "19ed8a8e6bcc844b71c37e9edaffc60c77f74d7c";
-    hash = "sha256-mQJSmb9Qy5pFS+nNz4+C7RPs1mpAoxxqbx7seYo8+JI=";
+    rev = "90643a6302057b969c51e1bf235b8ecf1da49232";
+    hash = "sha256-k510+GOLhputcgoo3l8JyoaI9IAtDw+aEKoPjMjRyWI=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2910,9 +2910,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.8.27";
+    version = "2026.9.24";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-yTdEinKdEmWPiw6+fBq15tXe8GsoC7PFk2pVaDSFCYA=";
+    hash = "sha256-M5PwCbNxs8Ow5YZl178PLJy3Lq9vxm9PEDvsR5UVJHE=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [

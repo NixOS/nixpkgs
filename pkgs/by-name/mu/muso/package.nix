@@ -9,7 +9,9 @@
 
 rustPlatform.buildRustPackage {
   pname = "muso";
-  version = "unstable-2021-09-02";
+  version = "2.0.0-unstable-2021-09-02";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "quebin31";

@@ -56,7 +56,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       sweenu
-      emilylange
     ];
   };
 })

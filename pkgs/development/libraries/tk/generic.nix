@@ -97,10 +97,10 @@ tcl.mkTclDerivation {
 
   meta = {
     description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
-    homepage = "https://www.tcl.tk/";
+    homepage = "https://www.tcl-lang.org/";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
     mainProgram = "wish";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

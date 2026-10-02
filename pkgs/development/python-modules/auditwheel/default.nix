@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
-  pyelftools,
+  jsonschema,
   packaging,
   pretend,
+  pyelftools,
   pytestCheckHook,
+  setuptools-scm,
   # non-python dependencies
   bzip2,
   gnutar,
@@ -14,14 +15,14 @@
   unzip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "auditwheel";
-  version = "6.7.0";
+  version = "6.8.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cKpP6OJNRH6ftHCC8KoN4ta96Kqpu/5RcCAyjOqA4PE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-0AfE/YycS1ETaQqwsVngXFqpstMbae/ECHWCbMCVWUs=";
   };
 
   build-system = [ setuptools-scm ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    jsonschema
     pretend
     pytestCheckHook
   ];
@@ -57,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pypa/auditwheel/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pypa/auditwheel/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Auditing and relabeling cross-distribution Linux wheels";
     homepage = "https://github.com/pypa/auditwheel";
     license = with lib.licenses; [
@@ -69,4 +71,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ davhau ];
     platforms = lib.platforms.linux;
   };
-}
+})

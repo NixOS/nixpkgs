@@ -39,6 +39,12 @@
 }:
 
 let
+  # this standard version needs to match the version that migraphx pins, or
+  # compilation fails if the pinned version is not the same as the compiler's
+  # default.
+  # https://github.com/ROCm/AMDMIGraphX/blob/07ef4ba4f9ef95d241b7be165e60ad148f3344ee/CMakeLists.txt#L143-L148
+  abseil-cpp' = abseil-cpp.override { cxxStandard = "17"; };
+
   latex = lib.optionalAttrs buildDocs (
     texliveSmall.withPackages (
       ps: with ps; [
@@ -143,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp}/include -I${hipblas-common}/include -I${lib.getInclude protobuf}/include"
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp'}/include -I${hipblas-common}/include -I${lib.getInclude protobuf}/include"
     patchShebangs tools
 
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`

@@ -4,6 +4,8 @@
   lib,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
+  applyPatches,
   makeBinaryWrapper,
 }:
 
@@ -199,6 +201,13 @@ rec {
 
   luajit_openresty = import ../luajit/openresty.nix {
     self = luajit_openresty;
-    inherit callPackage fetchFromGitHub passthruFun;
+    inherit
+      callPackage
+      fetchFromGitHub
+      fetchpatch2
+      applyPatches
+      stdenv
+      passthruFun
+      ;
   };
 }

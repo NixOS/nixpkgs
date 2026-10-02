@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
-    homepage = "https://ldmud.eu";
+    homepage = "https://github.com/ldmud/ldmud";
     changelog = "https://github.com/ldmud/ldmud/blob/${finalAttrs.version}/HISTORY";
     longDescription = ''
       LDMud started as a project to clean up and modernize Amylaar's LPMud

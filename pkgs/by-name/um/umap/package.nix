@@ -19,7 +19,7 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "umap";
-  version = "3.7.3";
+  version = "3.8.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -28,7 +28,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "umap-project";
     repo = "umap";
     tag = finalAttrs.version;
-    hash = "sha256-rM1o83/udkqiVD0nSiAjNVAzriJr2ztvSXh45wxmYzU=";
+    hash = "sha256-uhWa8CqNjqUAaPALWq6YiOFHahNmw4AVQWhAyfs18CU=";
   };
 
   build-system = [
@@ -43,6 +43,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       django-environ
       django-probes
       django-storages
+      httpx
       pillow
       psycopg
       pydantic
@@ -95,6 +96,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     with python.pkgs;
     [
       pytest
+      pytest-asyncio
       pytest-django
       pytest-playwright
       pytest-xdist
@@ -122,10 +124,22 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTests = [
-    # The proxy_request tests require network
+    # Needs network: umap.utils.validate_url resolves the target hostname to
+    # reject private IPs, so every AjaxProxy test fails DNS in the sandbox.
     "proxy_request_with"
-    "test_good_request_passes"
     "test_valid_proxy_request"
+    "test_invalid_ttl_is_coerced_to_default"
+    "test_proxy_caches_response"
+    "test_proxy_clears_stale_semaphore"
+    "test_proxy_does_not_cache_upstream_error"
+    "test_proxy_falls_back_when_no_content_type"
+    "test_proxy_fast_path_ignores_held_semaphore"
+    "test_proxy_long_url_does_not_exceed_filename_limit"
+    "test_proxy_long_urls_with_common_prefix_do_not_collide"
+    "test_proxy_sets_nosniff"
+    "test_proxy_tolerates_raw_spaces_in_url"
+    # Needs network: fetches a real URL
+    "test_good_request_passes"
   ];
 
   meta = {

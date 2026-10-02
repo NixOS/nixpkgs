@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "depot-cli";
-  version = "2.102.9";
+  version = "2.102.14";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "depot";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SBsNhg4r9FuqLvXBBg7AAX8rVrqGSc527GxwPG1r02Y=";
+    hash = "sha256-9/XgZKG4amV04Mu9SPDVszsfAngDaCbRn+kZlu7fnKo=";
   };
 
   vendorHash = "sha256-VCd0qdEmjuTB5HvQ9jEVoKKSKJpPxQ7iHOFQoifPIgY=";

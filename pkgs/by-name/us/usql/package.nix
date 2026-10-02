@@ -11,13 +11,13 @@
 
 buildGo126Module (finalAttrs: {
   pname = "usql";
-  version = "0.21.5";
+  version = "0.21.6";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ikDmV5OoiiUTolIxkiPG0UIcgrDJrR3Xq7MHU4GthsM=";
+    hash = "sha256-GBCu2zPQNRMuP6uispht9Cuff+e1lpQuu+qG1Ndzc9M=";
   };
 
   buildInputs = [

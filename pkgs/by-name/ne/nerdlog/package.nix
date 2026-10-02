@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nerdlog";
-  version = "1.11.0";
+  version = "1.12.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "dimonomid";
     repo = "nerdlog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jKOpFPLqRy4aU3RTEloX+RjFTW0E65XbbL/uSMRHyJA=";
+    hash = "sha256-Q478aeetAu+lWJYCn3IE4anpghNXRazlFIKPXf+hEhA=";
   };
 
-  vendorHash = "sha256-D/1iKXTJuV9RM4IbC/FmpxJDIaBDBts1GEO8YyCGq7A=";
+  vendorHash = "sha256-joQY9gJiyw0fit6bp0gHZ31VxQ4+qHlqeOr/fXfnDPg=";
 
   buildInputs = [ libx11 ];
 

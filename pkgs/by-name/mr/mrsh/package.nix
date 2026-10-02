@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Minimal POSIX shell";
     mainProgram = "mrsh";
-    homepage = "https://mrsh.sh";
+    homepage = "https://github.com/emersion/mrsh";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;

@@ -80,7 +80,6 @@ optionals noSysDirs (
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
-        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -107,18 +106,6 @@ optionals noSysDirs (
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
-
-## Linux
-
-# Linux 7.1 removed `linux/scc.h`.
-# For GCC 14 and higher, there have already been releases with the fix.
-++ optional (is13 && targetPlatform.isLinux) (fetchpatch {
-  name = "libsanitizer-fix-with-linux-7.1-headers.patch";
-  url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch";
-  relative = "compiler-rt/lib";
-  extraPrefix = "libsanitizer/";
-  hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
-})
 
 ## AArch64
 
@@ -176,8 +163,14 @@ optionals noSysDirs (
       (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
         url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/d23df58f83aeb2c3f43bdcc277a9fac0bbe3e896/Patches/gcc/gcc-13.4.0.diff";
-        hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
+        excludes = [ "gcc/config.gcc" ];
+        hash = "sha256-doecTdFl6wkyvrk+44g1TMcZgVhbMF2W/5+ZOsEmwEY=";
       })
+      # The only file which conflicts with the 13.5.0 source tree in the patch
+      # above is gcc/config.gcc. In order to avoid vendoring the whole 15k line
+      # patch into Nixpkgs, we omit just gcc/config.gcc and vendor the rebased
+      # version of the patch for only that file.
+      ./13/gcc-13-darwin-aarch64-support-config-gcc.patch
     ];
   }
   .${majorVersion} or [ ]

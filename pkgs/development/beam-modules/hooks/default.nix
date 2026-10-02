@@ -13,6 +13,11 @@
     meta.license = lib.licenses.mit;
   } ./beam-module-install-hook.sh;
 
+  mixAppConfigPatchHook = makeSetupHook {
+    name = "mix-config-patch-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./mix-app-config-patch-hook.sh;
+
   mixBuildDirHook = makeSetupHook {
     name = "mix-configure-hook.sh";
     meta.license = lib.licenses.mit;
@@ -23,10 +28,30 @@
     meta.license = lib.licenses.mit;
   } ./mix-compile-hook.sh;
 
-  mixAppConfigPatchHook = makeSetupHook {
-    name = "mix-config-patch-hook.sh";
+  mixDepsCompileHook = makeSetupHook {
+    name = "mix-deps-compile-hook.sh";
     meta.license = lib.licenses.mit;
-  } ./mix-app-config-patch-hook.sh;
+  } ./mix-deps-compile-hook.sh;
+
+  mixEscriptSetupHook = makeSetupHook {
+    name = "mix-escript-setup-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./mix-escript-setup-hook.sh;
+
+  mixFodDepsSetupHook = makeSetupHook {
+    name = "mix-fod-deps-setup-hook";
+    meta.license = lib.licenses.mit;
+  } ./mix-fod-deps-setup-hook.sh;
+
+  mixNixDepsSetupHook = makeSetupHook {
+    name = "mix-nix-deps-setup-hook";
+    meta.license = lib.licenses.mit;
+  } ./mix-nix-deps-setup-hook.sh;
+
+  mixReleaseSetupHook = makeSetupHook {
+    name = "mix-release-setup-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./mix-release-setup-hook.sh;
 
   rebar3CompileHook = makeSetupHook {
     name = "rebar3-compile-hook.sh";

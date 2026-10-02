@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mic92
-      hexa
     ];
   };
 })

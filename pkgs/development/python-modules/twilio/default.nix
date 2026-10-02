@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "twilio";
-  version = "9.11.1";
+  version = "9.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     tag = finalAttrs.version;
-    hash = "sha256-GS8Okhxd2T9BG9bFh6uZY4zPmHDYT++wpYq4A2sy1ek=";
+    hash = "sha256-RbamHPCGYGZgkipYf8Wz0D7cOB7AsGhxPRJC/BXR1qE=";
   };
 
   # https://github.com/twilio/twilio-python/pull/919

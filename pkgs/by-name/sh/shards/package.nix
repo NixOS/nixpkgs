@@ -27,7 +27,10 @@ crystal.buildCrystalPackage rec {
     description = "Dependency manager for the Crystal language";
     mainProgram = "shards";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      Fijxu
+    ];
     inherit (crystal.meta) homepage platforms;
   };
 }

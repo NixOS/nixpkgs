@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Vector tile server specialized on publishing MVT tiles";
-    homepage = "https://t-rex.tileserver.ch/";
+    homepage = "https://t-rex.bbox.earth/";
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];

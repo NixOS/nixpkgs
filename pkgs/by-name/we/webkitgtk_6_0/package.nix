@@ -28,7 +28,6 @@
   libepoxy,
   libjxl,
   at-spi2-core,
-  cairo,
   expat,
   libxml2,
   libsoup_3,
@@ -83,7 +82,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.6";
+  version = "2.54.0";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -98,7 +97,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-F5ouo/j27dS+fzH9xVr8V70HKfH7pkjGHUGBU5rBFvw=";
+    hash = "sha256-hG/RnM7brh2/6QTybb8taKgAozpQyvKtUiLI3LPyVoI=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -114,6 +113,15 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
+    })
+
+    # Fix https://bugs.webkit.org/show_bug.cgi?id=322394
+    # Upstream PR: https://github.com/WebKit/WebKit/pull/74512
+    # Fetching the patch vendored by gnome-build-meta because the upstream
+    # patch doesn't apply.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-build-meta/-/raw/7e4afe649fa1acbe9203004ad8fe1749c26e619d/patches/webkitgtk/main-thread.patch";
+      hash = "sha256-Dm6Yytt4mQy7qxSWiudGBqfQUVJRhNAc1n+o/NMR1cg=";
     })
   ];
 
@@ -139,7 +147,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     at-spi2-core
-    cairo # required even when using skia
     enchant
     expat
     flite

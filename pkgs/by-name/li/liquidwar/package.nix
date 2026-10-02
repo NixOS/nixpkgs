@@ -90,21 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      # Needed with GCC 12 but problematic with some old GCCs
-      "-Wno-error=address"
-      "-Wno-error=use-after-free"
-      "-std=gnu17"
-      # Fix build w/ glibc-2.44
-      "-Wno-error=discarded-qualifiers"
-    ]
-    ++ [
-      "-Wno-error=deprecated-declarations"
-      # Avoid GL_GLEXT_VERSION double definition
-      " -DNO_SDL_GLEXT"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc-12 and above generate many benign warnings
+    "-Wno-error"
+    "-std=gnu17"
+    # Avoid GL_GLEXT_VERSION double definition
+    "-DNO_SDL_GLEXT"
+  ];
 
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${lib.getDev SDL}/include/SDL" ];

@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-greeter";
-  version = "1.5.0";
+  version = "1.6.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "noctalia-dev";
     repo = "noctalia-greeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JgPgbmlUOKlgCX/KDfRF+z9ID80+Q7CcdaJFh5eaFjU=";
+    hash = "sha256-agpHRmhsUL4ZNFseCNilGSiC/cc0S2tC1ZvC5rXmgtY=";
   };
 
   nativeBuildInputs = [

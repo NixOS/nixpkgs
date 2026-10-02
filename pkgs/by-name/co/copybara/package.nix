@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchurl,
-  jdk21_headless,
+  jdk25_headless,
   makeWrapper,
   git,
   gnused,
   gnugrep,
   gawk,
   which,
+  versionCheckHook,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -22,10 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  buildInputs = [
-    jdk21_headless
   ];
 
   runtimeDeps = [
@@ -45,12 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/copybara.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jdk21_headless}/bin/java $out/bin/copybara \
+    makeWrapper ${jdk25_headless}/bin/java $out/bin/copybara \
       --add-flags "-jar $out/share/java/copybara.jar" \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
     runHook postInstall
   '';
+
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -69,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/copybara";
     changelog = "https://github.com/google/copybara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ shinbunbun ];
+    inherit (jdk25_headless.meta) platforms;
     mainProgram = "copybara";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };

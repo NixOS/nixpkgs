@@ -18,6 +18,7 @@
   n64recomp,
   directx-shader-compiler,
   bk_rom_compressor,
+  fetchpatch,
 }:
 
 let
@@ -54,6 +55,17 @@ llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  patches = [
+    # Fix building with gcc16
+    (fetchpatch {
+      name = "rmlui-cstdint.patch";
+      url = "https://github.com/mikke89/RmlUi/commit/8c27b0a5cb601a3c57ecddc6ce8769ca93a97cb8.patch";
+      stripLen = 1;
+      extraPrefix = "lib/RecompFrontend/recompui/lib/RmlUi/";
+      hash = "sha256-G4Qzawd2HkBh19B3jpIp4QZcrQDnUCvkXlw23nkBKHo=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

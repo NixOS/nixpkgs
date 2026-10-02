@@ -193,11 +193,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tcl scripting language";
-    homepage = "https://www.tcl.tk/";
+    homepage = "https://www.tcl-lang.org/";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
     mainProgram = "tclsh";
-    maintainers = with lib.maintainers; [ agbrooks ];
+    maintainers = with lib.maintainers; [
+      agbrooks
+      fgaz
+    ];
   };
 
   passthru =

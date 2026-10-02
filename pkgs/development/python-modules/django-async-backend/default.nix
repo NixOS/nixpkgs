@@ -9,8 +9,6 @@
   postgresqlTestHook,
   psycopg,
   psycopg-pool,
-  pytest-django,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

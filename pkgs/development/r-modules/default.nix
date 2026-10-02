@@ -237,15 +237,12 @@ let
   # }
   overrideRequireX =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          requireX = true;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        requireX = true;
+      }
+    );
 
   # Overrides package definition requiring a home directory to install or to
   # run tests.
@@ -267,18 +264,15 @@ let
   # }
   overrideRequireHome =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
-          preInstall = ''
-            ${oldAttrs.preInstall or ""}
-            export HOME=$(mktemp -d)
-          '';
-        });
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.overrideAttrs (oldAttrs: {
+        preInstall = ''
+          ${oldAttrs.preInstall or ""}
+          export HOME=$(mktemp -d)
+        '';
+      })
+    );
 
   # Overrides package definition to skip check.
   # For example,
@@ -296,15 +290,12 @@ let
   # }
   overrideSkipCheck =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          doCheck = false;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        doCheck = false;
+      }
+    );
 
   # Overrides package definition to mark it broken.
   # For example,
@@ -322,15 +313,12 @@ let
   # }
   overrideBroken =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          broken = true;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        broken = true;
+      }
+    );
 
   defaultOverrides =
     old: new:

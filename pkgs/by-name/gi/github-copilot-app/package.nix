@@ -17,7 +17,7 @@
   webkitgtk_4_1,
   atk,
   libsoup_3,
-  openssl_3,
+  openssl_3_5,
   libayatana-appindicator,
 }:
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     webkitgtk_4_1
     atk
     libsoup_3
-    openssl_3
+    openssl_3_5
     libayatana-appindicator
     stdenv.cc.cc.lib
   ];

@@ -26,12 +26,12 @@
 # integrating with ipython-sql
 buildPythonPackage rec {
   pname = "pgcli";
-  version = "4.6.0";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SwYzps51PqOPsf4txUtmtzLE0LKfrfSMrXiy5/ZjbZ0=";
+    hash = "sha256-GV0ArplMidQ+2OVw3foKn7YQXmt4Pfwets6psybcM0Y=";
   };
 
   pythonRelaxDeps = [ "click" ];

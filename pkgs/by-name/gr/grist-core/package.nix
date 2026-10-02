@@ -189,7 +189,7 @@ stdenv.mkDerivation (
 
       mkdir -p "$out/grist-core"
 
-      cp -r {_build,node_modules,sandbox,static,bower_components} "$out/grist-core"
+      cp -r {_build,node_modules,plugins,sandbox,static,bower_components} "$out/grist-core"
       ${lib.optionalString enterpriseEdition ''
         mkdir -p "$out/grist-core/ext"
         cp -r ext/assets "$out/grist-core/ext/"

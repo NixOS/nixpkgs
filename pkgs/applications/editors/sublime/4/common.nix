@@ -33,7 +33,7 @@ let
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
   binaries = [
     "sublime_text"
-    "plugin_host-3.${if lib.versionAtLeast buildVersion "4205" then "14" else "8"}"
+    "plugin_host-3.14"
     crashHandlerBinary
   ];
   primaryBinary = "sublime_text";
@@ -42,8 +42,7 @@ let
     "sublime"
     "sublime4"
   ];
-  crashHandlerBinary =
-    if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
+  crashHandlerBinary = "crash_handler";
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
@@ -58,8 +57,6 @@ let
     cairo
     pango
     curl
-  ]
-  ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
 
@@ -88,7 +85,6 @@ let
 
       # Remove old plugin host because it depends on EOL openssl 1.1
       rm plugin_host-3.3
-      echo '{"disable_plugin_host_3.3": true}' > Packages/Preferences.sublime-settings
 
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
@@ -98,15 +94,12 @@ let
       done
 
       # Unable to get plugin_host-3.14 not crash with Python from Nixpkgs
-      ${lib.optionalString (lib.versionAtLeast buildVersion "4205") "patchelf --set-rpath ${
+      patchelf --set-rpath ${
         lib.makeLibraryPath [
           sqlite
           openssl_3_5
         ]
-      } libpython3.14.so.1.0"}
-
-      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
-      ${lib.optionalString (lib.versionOlder buildVersion "4205") "sed -i -e 's,/bin/cp\\x00,cp\\x00\\x00\\x00\\x00\\x00\\x00,g' ${primaryBinary}"}
+      } libpython3.14.so.1.0
 
       runHook postBuild
     '';
@@ -116,8 +109,8 @@ let
 
       # No need to patch these libraries, it works well with our own
       rm libcrypto.so.1.1 libssl.so.1.1
-      ${lib.optionalString (lib.versionAtLeast buildVersion "4145") "rm libsqlite3.so"}
-      ${lib.optionalString (lib.versionAtLeast buildVersion "4205") "rm libcrypto.so.3 libssl.so.3"}
+      rm libsqlite3.so
+      rm libcrypto.so.3 libssl.so.3
 
       mkdir -p $out
       cp -r * $out/
@@ -128,8 +121,6 @@ let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      ${lib.optionalString (lib.versionOlder buildVersion "4205") "sed -i 's#/usr/bin/pkexec#pkexec\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00#g' \"$out/${primaryBinary}\""}
-
       wrapProgram $out/${primaryBinary} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
@@ -230,11 +221,5 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    problems = {
-      removal.message = "We have removed Python 3.3 package support ahead of upstream schedule but if you do not use any old packages, this should just work.";
-    }
-    // lib.optionalAttrs (lib.versionOlder buildVersion "4205") {
-      broken.message = "Packages, including core ones, do not run without plug-in host depending on insecure OpenSSL.";
-    };
   };
 })

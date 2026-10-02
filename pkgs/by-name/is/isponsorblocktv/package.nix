@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   python3Packages,
 }:
@@ -15,6 +16,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-VbhkSrF18JluKAKqUsFKkjC0jdYsvjFotYr0aJ4BTKs=";
   };
+
+  patches = [
+    # Fix iSponsorBlockTV with async-cache 2.x - https://github.com/dmunozv04/iSponsorBlockTV/pull/505
+    (fetchpatch {
+      url = "https://github.com/lukegb/iSponsorBlockTV/commit/110ce5de788ccb262a323f743543e37af914f7fa.patch";
+      hash = "sha256-AW9VwFBMDKo3pJCNc/r5b8vrqpcL1bV8jUl/z85x+jE=";
+    })
+  ];
 
   build-system = with python3Packages; [
     hatchling

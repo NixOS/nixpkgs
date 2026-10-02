@@ -37,6 +37,7 @@
   bzip2,
   libx11,
   sdl_gamecontrollerdb,
+  fetchpatch,
 }:
 
 let
@@ -132,6 +133,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./darwin-fixes.patch
     ./disable-downloading-stb_image.patch
+
+    # Fix building with gcc16
+    # Remove after 9.2.3
+    (fetchpatch {
+      name = "libultraship-fix-gcc16.patch";
+      url = "https://github.com/Kenix3/libultraship/commit/42ecb8ed48e4b15c21fe2e0d7e34cb5c02efa23d.patch";
+      stripLen = 1;
+      extraPrefix = "libultraship/";
+      hash = "sha256-LuaYeBdYf+pzRxUhZfFup4/r6oYzWi0YpAZzW1SR8Wk=";
+    })
   ];
 
   nativeBuildInputs = [

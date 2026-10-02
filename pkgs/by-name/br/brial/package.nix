@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   boost,
   m4ri,
   gd,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   version = "1.2.15";
   pname = "brial";
@@ -19,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     sha256 = "sha256-I8p2jdc2/oq9piy1QvNl+N0+MHDE5Xv1kawkRTjrWSU=";
   };
+
+  patches = [
+    # https://github.com/BRiAl/BRiAl/pull/64
+    (fetchpatch {
+      url = "https://github.com/BRiAl/BRiAl/commit/df5b4fd300cdbdd4cda920a27fdc5257f3cfea26.patch";
+      hash = "sha256-MwpXTmK+3hJB/J7V8iHPfgyrxc/s9LhHgkAZDq7wZb0=";
+    })
+  ];
 
   # FIXME package boost-test and enable checks
   doCheck = false;

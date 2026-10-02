@@ -1887,7 +1887,7 @@ with pkgs;
 
   cudaPackages_12 = cudaPackages_12_9;
 
-  cudaPackages_13 = cudaPackages_13_3;
+  cudaPackages_13 = cudaPackages_13_4;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -2495,7 +2495,7 @@ with pkgs;
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
-  netbox_4_6 = netbox;
+  netbox_4_7 = netbox;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
@@ -4395,7 +4395,7 @@ with pkgs;
 
   luaPackages = lua52Packages;
 
-  luajit = luajit_2_1;
+  luajit = if stdenv.hostPlatform.isRiscV64 then luajit_openresty else luajit_2_1;
 
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
@@ -6320,11 +6320,10 @@ with pkgs;
   };
 
   openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+    conf = ../development/libraries/openssl/openssl_legacy.cnf;
   };
 
   inherit (callPackages ../development/libraries/openssl { })
-    openssl_3
     openssl_3_5
     openssl_3_6
     openssl_4_0
@@ -7097,7 +7096,8 @@ with pkgs;
   cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
     # Effective Cassandra 4.0.2 there is full Java 11 support
     #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
-    jre = pkgs.jdk11_headless;
+    # JDK 11 has no riscv64 port.
+    jre = if stdenv.hostPlatform.isRiscV64 then pkgs.jdk17_headless else pkgs.jdk11_headless;
   };
   cassandra = cassandra_4;
 
@@ -7293,12 +7293,12 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
-      nginxModules.rtmp
       nginxModules.moreheaders
     ];
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    openssl = openssl_4_0;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
@@ -7518,6 +7518,16 @@ with pkgs;
       (callPackages ../servers/monitoring/zabbix/server.nix { postgresqlSupport = true; }).${version};
     web = (callPackages ../servers/monitoring/zabbix/web.nix { }).${version};
     agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix { }).${version};
+
+    plugins = {
+      ember-plus =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/ember-plus.nix { }).${version};
+      mongodb =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mongodb.nix { }).${version};
+      mssql = (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/mssql.nix { }).${version};
+      postgresql =
+        (callPackages ../servers/monitoring/zabbix/zabbix-agent2-plugins/postgresql.nix { }).${version};
+    };
 
     # backwards compatibility
     server = server-pgsql;
@@ -8202,8 +8212,6 @@ with pkgs;
     source-han-serif-vf-ttf
     ;
 
-  themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
-
   tex-gyre = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
 
   tex-gyre-math = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
@@ -8463,18 +8471,6 @@ with pkgs;
       buildMozillaMach
       ;
   };
-  firefox-beta-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-beta.nix
-      {
-        inherit
-          stdenv
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-devedition-unwrapped =
     import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix
       {
@@ -8498,31 +8494,14 @@ with pkgs;
           buildMozillaMach
           ;
       };
-  firefox-esr-140-unwrapped =
-    import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
-      {
-        inherit
-          lib
-          callPackage
-          fetchurl
-          nixosTests
-          buildMozillaMach
-          ;
-      };
   firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-153 = wrapFirefox firefox-esr-153-unwrapped {
-    nameSuffix = "-esr";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
@@ -8944,7 +8923,9 @@ with pkgs;
 
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio { };
 
-  obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
+  obs-studio-plugins = recurseIntoAttrs (
+    callPackage ../applications/video/obs-studio/plugins.nix { }
+  );
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
   open-music-kontrollers = recurseIntoAttrs {
@@ -9921,15 +9902,6 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome38Extensions
-    gnome40Extensions
-    gnome41Extensions
-    gnome42Extensions
-    gnome43Extensions
-    gnome44Extensions
-    gnome45Extensions
-    gnome46Extensions
-    gnome47Extensions
     gnome48Extensions
     gnome49Extensions
     gnome50Extensions

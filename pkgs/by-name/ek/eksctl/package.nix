@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/weaveworks/eksctl/pkg/version.gitCommit=${finalAttrs.src.rev}"
     "-X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
   ];
@@ -43,6 +43,10 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/eksctl completion fish) \
       --zsh  <($out/bin/eksctl completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI for Amazon EKS";

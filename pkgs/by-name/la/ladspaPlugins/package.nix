@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://plugin.org.uk/";
+    homepage = "https://github.com/swh/ladspa";
     description = "LADSPA format audio plugins";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.magnetophon ];

@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "9.4.6";
+  version = "9.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = finalAttrs.version;
-    hash = "sha256-h21DLKl2bwjaJihhoD34JzjRJ7II8NWw6npln6LoW8E=";
+    hash = "sha256-Me5RMVB5ZHokrT5tNROZmXhN16f30f+Y0vPvpj5H4zM=";
   };
 
   build-system = [ hatchling ];

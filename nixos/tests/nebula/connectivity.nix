@@ -1,6 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 let
-
   # We'll need to be able to trade cert files between nodes via scp.
   inherit (import ../ssh-keys.nix pkgs)
     snakeOilPrivateKey
@@ -44,13 +47,11 @@ let
       }
       extraConfig
     ];
-
 in
 {
   name = "nebula";
 
   nodes = {
-
     lighthouse =
       { ... }@args:
       makeNebulaNode args "lighthouse" {
@@ -96,6 +97,24 @@ in
               port = 53; # answer on standard DNS port
             };
           };
+        };
+
+        # A lighthouse can run without a tun interface, no device name = skip length check pr 565501
+        services.nebula.networks.tunless = {
+          ca = "/etc/nebula/ca.crt";
+          cert = "/etc/nebula/lighthouse.crt";
+          key = "/etc/nebula/lighthouse.key";
+          isLighthouse = true;
+          listen = {
+            host = "0.0.0.0";
+            port = 4243;
+          };
+          tun = {
+            disable = true;
+            device = "nebula.tunless-too-long";
+          };
+          user = "nebula-smoke";
+          group = "nebula-smoke";
         };
       };
 
@@ -265,12 +284,10 @@ in
           };
         };
       };
-
   };
 
   testScript =
     let
-
       setUpPrivateKey = name: ''
         ${name}.start()
         ${name}.succeed(
@@ -378,6 +395,11 @@ in
       lighthouse.wait_for_unit("nebula@smoke.service")
       lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
       lighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
+
+      # The tunless network starts without a tun device despite its (deliberately over-long) configured device name. pr 565501
+      lighthouse.wait_for_unit("nebula@tunless.service")
+      lighthouse.wait_until_succeeds("ss -lun | grep -q ':4243'", timeout=10)
+      lighthouse.fail("ip link show nebula.tunless-too-long")
 
       # Start all the machines to be set up
       allowAny.start()

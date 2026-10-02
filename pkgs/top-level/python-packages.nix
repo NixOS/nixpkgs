@@ -2877,8 +2877,6 @@ self: super: with self; {
 
   cantools = callPackage ../development/python-modules/cantools { };
 
-  capa = callPackage ../development/python-modules/capa { };
-
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
   capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
@@ -3728,6 +3726,8 @@ self: super: with self; {
   countryinfo = callPackage ../development/python-modules/countryinfo { };
 
   courlan = callPackage ../development/python-modules/courlan { };
+
+  covdefaults = callPackage ../development/python-modules/covdefaults { };
 
   coverage = callPackage ../development/python-modules/coverage { };
 
@@ -4804,6 +4804,8 @@ self: super: with self; {
   django-pgpubsub = callPackage ../development/python-modules/django-pgpubsub { };
 
   django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
+
+  django-pgware = callPackage ../development/python-modules/django-pgware { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
 
@@ -6196,6 +6198,8 @@ self: super: with self; {
   flametree = callPackage ../development/python-modules/flametree { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
+
+  flare-capa = callPackage ../development/python-modules/flare-capa { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
 
@@ -10533,6 +10537,8 @@ self: super: with self; {
 
   marko = callPackage ../development/python-modules/marko { };
 
+  markovify = callPackage ../development/python-modules/markovify { };
+
   markuppy = callPackage ../development/python-modules/markuppy { };
 
   markups = callPackage ../development/python-modules/markups { };
@@ -12424,6 +12430,8 @@ self: super: with self; {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  odl-renderer = callPackage ../development/python-modules/odl-renderer { };
+
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   odsgenerator = callPackage ../development/python-modules/odsgenerator { };
@@ -12449,6 +12457,8 @@ self: super: with self; {
   ohme = callPackage ../development/python-modules/ohme { };
 
   oic = callPackage ../development/python-modules/oic { };
+
+  oinker = callPackage ../development/python-modules/oinker { };
 
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
@@ -13798,6 +13808,10 @@ self: super: with self; {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
+  plumed = callPackage ../development/python-modules/plumed {
+    inherit (pkgs) plumed;
+  };
+
   pluralizer = callPackage ../development/python-modules/pluralizer { };
 
   pluthon = callPackage ../development/python-modules/pluthon { };
@@ -15012,8 +15026,6 @@ self: super: with self; {
 
   pyfreshr = callPackage ../development/python-modules/pyfreshr { };
 
-  pyfribidi = callPackage ../development/python-modules/pyfribidi { };
-
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
   pyfronius = callPackage ../development/python-modules/pyfronius { };
@@ -15757,8 +15769,6 @@ self: super: with self; {
   pyosf = callPackage ../development/python-modules/pyosf { };
 
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
-
-  pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
 
@@ -17894,6 +17904,8 @@ self: super: with self; {
 
   realtime = callPackage ../development/python-modules/realtime { };
 
+  rebiber = callPackage ../development/python-modules/rebiber { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -18099,6 +18111,8 @@ self: super: with self; {
   resampy = callPackage ../development/python-modules/resampy { };
 
   resend = callPackage ../development/python-modules/resend { };
+
+  resize-image = callPackage ../development/python-modules/resize-image { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
 
@@ -18784,6 +18798,8 @@ self: super: with self; {
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
 
   selenium-wire-roadtx = callPackage ../development/python-modules/selenium-wire-roadtx { };
+
+  selfies = callPackage ../development/python-modules/selfies { };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
@@ -21271,6 +21287,8 @@ self: super: with self; {
 
   tstr = callPackage ../development/python-modules/tstr { };
 
+  tsv = callPackage ../development/python-modules/tsv { };
+
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
   tt-perf-report = callPackage ../development/python-modules/tt-perf-report { };
@@ -23096,6 +23114,8 @@ self: super: with self; {
   zenlog = callPackage ../development/python-modules/zenlog { };
 
   zenoh = callPackage ../development/python-modules/zenoh { };
+
+  zensical = callPackage ../development/python-modules/zensical { };
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 

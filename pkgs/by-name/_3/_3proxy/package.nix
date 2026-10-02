@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misuzu ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "3proxy" finalAttrs.version;
   };
 })

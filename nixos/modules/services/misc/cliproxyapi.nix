@@ -10,14 +10,9 @@ let
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/cliproxyapi";
   configPath = "${stateDir}/config.yaml";
-  settings = {
-    auth-dir = stateDir;
-  }
-  // cfg.settings;
   secretsReplacement = utils.genJqSecretsReplacement {
     loadCredential = true;
-  } settings configPath;
-  port = cfg.settings.port or 8317;
+  } cfg.settings configPath;
 in
 {
   options.services.cliproxyapi = {
@@ -26,14 +21,30 @@ in
     package = lib.mkPackageOption pkgs "cliproxyapi" { };
 
     settings = lib.mkOption {
-      type = format.type;
+      type = lib.types.submodule {
+        freeformType = format.type;
+        options = {
+          server.port = lib.mkOption {
+            type = lib.types.port;
+            default = 8317;
+            description = "Port on which CLIProxyAPI listens.";
+          };
+          oauth.auth-dir = lib.mkOption {
+            type = lib.types.str;
+            default = stateDir;
+            description = "Directory where OAuth tokens are stored.";
+          };
+        };
+      };
       default = { };
       example = lib.literalExpression ''
         {
-          host = "127.0.0.1";
-          port = 8317;
-          api-keys = [ { _secret = "/run/secrets/cliproxyapi-api-key"; } ];
-          remote-management.secret-key._secret = "/run/secrets/cliproxyapi-management-key";
+          server = {
+            host = "127.0.0.1";
+            port = 8317;
+          };
+          access.api-keys = [ { _secret = "/run/secrets/cliproxyapi-api-key"; } ];
+          management.secret-key._secret = "/run/secrets/cliproxyapi-management-key";
         }
       '';
       description = ''
@@ -54,7 +65,7 @@ in
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for {option}`services.cliproxyapi.settings.server.port`.";
     };
 
     user = lib.mkOption {
@@ -142,7 +153,7 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ port ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
   };
 

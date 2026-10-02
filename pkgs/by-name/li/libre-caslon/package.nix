@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
-    homepage = "http://www.impallari.com/librecaslon";
+    homepage = [
+      "https://github.com/impallari/Libre-Caslon-Text"
+      "https://github.com/impallari/Libre-Caslon-Display/"
+    ];
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
