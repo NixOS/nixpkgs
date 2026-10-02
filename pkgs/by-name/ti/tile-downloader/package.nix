@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "tile-downloader";
     homepage = "https://gitlab.scd31.com/stephen/tile-downloader";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ scd31 ];
+    maintainers = with lib.maintainers; [ n3tcat ];
   };
 })
