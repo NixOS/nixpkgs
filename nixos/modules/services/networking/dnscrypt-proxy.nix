@@ -91,7 +91,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    networking.nameservers = lib.optional cfg.resolveLocalQueries "127.0.0.1";
+    networking.nameservers = lib.mkIf cfg.resolveLocalQueries (lib.mkDefault [ "127.0.0.1" ]);
 
     systemd.services.dnscrypt-proxy = {
       description = "DNSCrypt-proxy client";
