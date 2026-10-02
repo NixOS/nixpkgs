@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      exec = finalAttrs.meta.mainProgram;
       desktopName = "Autenticação.gov";
       genericName = "Portuguese eID Data";
       comment = "Middleware for Electronic Identification in Portugal";
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    makeWrapper "${proot}/bin/proot" "$out/bin/${finalAttrs.pname}" \
+    makeWrapper "${proot}/bin/proot" "$out/bin/${finalAttrs.meta.mainProgram}" \
       --add-flags "-b" \
       --add-flags "$out/app:/app" \
       --add-flags "$out/app/bin/eidguiV2" \
@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/amagovpt/autenticacao.gov/releases/tag/v${finalAttrs.version}";
     description = "Middleware for Electronic Identification in Portugal (with precompiled binaries by AMA)";
     homepage = "https://www.autenticacao.gov.pt/";
     license = lib.licenses.eupl12;
@@ -164,6 +165,8 @@ stdenv.mkDerivation (finalAttrs: {
       official binary avoids this limitation and provides full functionality.
     '';
     maintainers = with lib.maintainers; [ vaavaav ];
+    mainProgram = "autenticacao-gov-pt-bin";
     platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })
