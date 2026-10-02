@@ -9,6 +9,7 @@
   patches,
   broken,
   hash ? null,
+  kmod,
 }:
 
 assert open -> hash != null;
@@ -54,6 +55,28 @@ stdenv.mkDerivation {
   installFlags = [ "INSTALL_MOD_STRIP=1" ];
   installTargets = [ "modules_install" ];
   enableParallelBuilding = true;
+
+  # Both variants end up with MODULE_VERSION from the version of the sources
+  # they were built from (version.mk for the open module, the driver's
+  # NV_VERSION_STRING for the non-open one).  Reading it back catches a hash
+  # that was not updated on a version bump, which would otherwise silently
+  # reuse the old tree from the store.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ kmod ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+    module=$(find "$out/lib/modules" \( -name nvidia.ko -o -name 'nvidia.ko.*' \) -print -quit)
+    if [ -z "$module" ]; then
+      echo "no nvidia.ko found under $out/lib/modules" >&2
+      exit 1
+    fi
+    got=$(modinfo -F version "$module")
+    if [ "$got" != "${nvidia_x11.version}" ]; then
+      echo "nvidia.ko reports version '$got', expected '${nvidia_x11.version}'" >&2
+      exit 1
+    fi
+    runHook postInstallCheck
+  '';
 
   allowedReferences = [ ];
 

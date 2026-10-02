@@ -9,6 +9,7 @@ nvidia_x11: sha256:
   pkg-config,
   addDriverRunpath,
   libtirpc,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -34,6 +35,11 @@ stdenv.mkDerivation {
     pkg-config
     addDriverRunpath
   ];
+
+  # `nvidia-persistenced --version` prints the version of the source it was
+  # built from, catching a hash that was not updated on a version bump.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildInputs = [
     libtirpc
