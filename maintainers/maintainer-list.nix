@@ -22112,6 +22112,12 @@
     githubId = 135209509;
     name = "Oliver Richter";
   };
+  ornicar = {
+    email = "t@lichess.org";
+    github = "ornicar";
+    githubId = 140370;
+    name = "Thibault D";
+  };
   ornxka = {
     email = "ornxka@littledevil.sh";
     github = "warmdarksea";
@@ -29242,12 +29248,6 @@
     githubId = 844343;
     name = "Thiago K. Okada";
     matrix = "@k0kada:matrix.org";
-  };
-  thibaultd = {
-    email = "t@lichess.org";
-    github = "ornicar";
-    githubId = 140370;
-    name = "Thibault D";
   };
   thibaultlemaire = {
     email = "thibault.lemaire@protonmail.com";
