@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
