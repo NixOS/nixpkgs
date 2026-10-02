@@ -22,6 +22,9 @@ let
   busIDType = lib.types.strMatching "([[:print:]]+:[0-9]{1,3}(@[0-9]{1,10})?:[0-9]{1,2}:[0-9])?";
   ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
+  nvlsmSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  };
 in
 {
   options = {
@@ -83,6 +86,88 @@ in
         description = ''
           Additional configuration options for fabricmanager.
         '';
+      };
+
+      datacenter.nvswitch.enable = lib.mkEnableOption ''
+        NVLSM (NVLink Subnet Manager) and NVSwitch fabric management for
+        systems with 4th-generation NVSwitch silicon (e.g. B200 SXM).
+
+        This enables the nvidia-nvlsm service and configures
+        nvidia-fabricmanager to use the management GUID discovered by NVLSM.
+        Only enable this on nodes with NVSwitch silicon; running it on
+        NVLink bridge-only systems can cause GPU instability (Xid 119).
+
+        NVLSM is required on DGX B200/B300, NVIDIA HGX B200/B300, and
+        NVIDIA HGX B100 systems, which use 4th-generation NVSwitches.
+        It originates from NVIDIA's InfiniBand Subnet Manager (OpenSM)
+        and manages NVSwitch routing tables, LID assignment, and
+        partition keys, while Fabric Manager handles GPU-side routing
+        and NVLink configuration.
+
+        See the NVIDIA Fabric Manager User Guide for details:
+        <https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/>
+        Chapters: "Systems Using Fourth Generation NVSwitches" and
+        "Getting Started with NVLink Subnet Manager".
+      '';
+
+      datacenter.nvswitch.settings = lib.mkOption {
+        type = nvlsmSettingsFormat.type;
+        default = { };
+        defaultText = lib.literalExpression "{ }";
+        description = ''
+          User overrides for the NVLSM (NVLink Subnet Manager)
+          configuration, applied on top of the `nvlsm.conf` that ships
+          with the nvlsm package. Each key is written as a
+          space-separated `key value` line; if a key already exists in
+          the shipped config, its value is replaced, otherwise the line
+          is appended.
+
+          The shipped `nvlsm.conf` already contains the correct defaults
+          for 4th-generation NVSwitch systems (HGX B200/B300/B100) and is
+          updated by NVIDIA across releases. Only set values here if you
+          need to override a specific option.
+
+          NVLSM is derived from NVIDIA's InfiniBand Subnet Manager
+          (OpenSM), so many options have the same semantics as their
+          OpenSM counterparts. See the OpenSM manual for details:
+          `man opensm` or
+          <https://github.com/linux-rdma/opensm/blob/master/man/opensm.8.in>
+
+          NVIDIA Fabric Manager User Guide (for NVLSM-specific options):
+          <https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/>
+          Chapter: "Getting Started with NVLink Subnet Manager" →
+          "NVLink Subnet Manager Configuration".
+
+          The `device_configuration_file` and `plugin_options` paths are
+          patched automatically from the nvlsm package and should not
+          normally need to be overridden.
+        '';
+      };
+
+      datacenter.nvswitch.cudaPackages = lib.mkOption {
+        type = lib.types.attrs;
+        default = pkgs.cudaPackages;
+        defaultText = lib.literalExpression "pkgs.cudaPackages";
+        description = ''
+          The CUDA package set to source nvlsm, libnvidia_nscq, and
+          libnvsdm from. The NSCQ and NVSDM library versions in the
+          selected package set {option}`must` match the NVIDIA driver
+          version in {option}`hardware.nvidia.package`. A version
+          mismatch between these user-space libraries and the kernel
+          driver will cause NVLSM and Fabric Manager to fail.
+
+          The CUDA redist manifests bundle NSCQ/NVSDM versions that
+          correspond to each CUDA release's associated driver. Use the
+          package set whose NSCQ/NVSDM version matches your driver:
+
+          - `pkgs.cudaPackages_13_1` for DC 590 drivers (NSCQ/NVSDM 590.x)
+          - `pkgs.cudaPackages_13_0` for DC 580 drivers (NSCQ/NVSDM 580.x)
+          - `pkgs.cudaPackages_12_9` for DC 575 drivers (NSCQ/NVSDM 575.x)
+
+          If left at the default (`pkgs.cudaPackages`, currently CUDA 12.9),
+          ensure it matches your driver, or override it explicitly.
+        '';
+        example = lib.literalExpression "pkgs.cudaPackages_13_1";
       };
 
       powerManagement.enable = lib.mkEnableOption ''
@@ -855,63 +940,180 @@ in
           );
         })
         # Data Center
-        (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
-
-          systemd = {
-            tmpfiles.rules =
-              lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-                "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
-
-            services = lib.mkMerge [
-              {
-                nvidia-fabricmanager = {
-                  enable = true;
-                  description = "Start NVIDIA NVLink Management";
-                  wantedBy = [ "multi-user.target" ];
-                  unitConfig.After = [ "network-online.target" ];
-                  unitConfig.Requires = [ "network-online.target" ];
-                  serviceConfig = {
-                    Type = "forking";
-                    TimeoutStartSec = 240;
-                    ExecStart =
-                      let
-                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
-                        # unsuitable to be mentioned in the configuration defaults, but they _can_
-                        # be overridden in `cfg.datacenter.settings` if needed.
-                        fabricManagerConfDefaults = {
-                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                        };
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
-                          fabricManagerConfDefaults // cfg.datacenter.settings
-                        );
-                      in
-                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
-                    LimitCORE = "infinity";
-                  };
-                };
-              }
-              (lib.mkIf cfg.nvidiaPersistenced {
-                "nvidia-persistenced" = {
-                  description = "NVIDIA Persistence Daemon";
-                  wantedBy = [ "multi-user.target" ];
-                  serviceConfig = {
-                    Type = "forking";
-                    Restart = "always";
-                    PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                    ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                  };
-                };
+        (lib.mkIf (cfg.datacenter.enable) (
+          let
+            nvswitchEnabled = cfg.datacenter.nvswitch.enable;
+            # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+            # unsuitable to be mentioned in the configuration defaults, but they _can_
+            # be overridden in `cfg.datacenter.settings` if needed.
+            fabricManagerConfDefaults = {
+              TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+              DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+            };
+            nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
+              fabricManagerConfDefaults
+              // (lib.optionalAttrs nvswitchEnabled {
+                DATABASE_PATH = "/var/lib/nvidia-fabricmanager";
               })
-            ];
-          };
+              // cfg.datacenter.settings
+            );
+          in
+          lib.mkMerge [
+            {
+              assertions = lib.optional nvswitchEnabled {
+                assertion =
+                  lib.versions.major cfg.datacenter.nvswitch.cudaPackages.libnvidia_nscq.version
+                  == lib.versions.major nvidia_x11.version
+                  &&
+                    lib.versions.major cfg.datacenter.nvswitch.cudaPackages.libnvsdm.version
+                    == lib.versions.major nvidia_x11.version;
+                message = ''
+                  The libnvidia_nscq version (${cfg.datacenter.nvswitch.cudaPackages.libnvidia_nscq.version}) and libnvsdm version (${cfg.datacenter.nvswitch.cudaPackages.libnvsdm.version}) from hardware.nvidia.datacenter.nvswitch.cudaPackages do not
+                  match the NVIDIA driver version (${nvidia_x11.version}).
+                  The NSCQ and NVSDM libraries must share the driver's major
+                  version branch. Set hardware.nvidia.datacenter.nvswitch.cudaPackages
+                  to the cudaPackages version that matches your driver. For example,
+                  use pkgs.cudaPackages_13_1 for DC 590 drivers.
+                '';
+              };
 
-          environment.systemPackages =
-            lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
-            ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
-        })
+              boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
+
+              systemd = {
+                tmpfiles.rules =
+                  lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+                    "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+                services = lib.mkMerge [
+                  {
+                    nvidia-fabricmanager = {
+                      enable = true;
+                      description = "Start NVIDIA NVLink Management";
+                      wantedBy = [ "multi-user.target" ];
+                      unitConfig.After = [ "network-online.target" ];
+                      unitConfig.Requires = [ "network-online.target" ];
+                      serviceConfig = {
+                        Type = "forking";
+                        TimeoutStartSec = 240;
+                        ExecStart = "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                        LimitCORE = "infinity";
+                      };
+                    };
+                  }
+                  (lib.mkIf cfg.nvidiaPersistenced {
+                    "nvidia-persistenced" = {
+                      description = "NVIDIA Persistence Daemon";
+                      wantedBy = [ "multi-user.target" ];
+                      serviceConfig = {
+                        Type = "forking";
+                        Restart = "always";
+                        PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                        ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                        ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                      };
+                    };
+                  })
+                ];
+              };
+
+              environment.systemPackages =
+                lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
+                ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+            }
+
+            # NVSwitch / NVLSM
+            (lib.mkIf nvswitchEnabled (
+              let
+                cudaPkgs = cfg.datacenter.nvswitch.cudaPackages;
+                nvlsmPkg = cudaPkgs.nvlsm;
+                libnvidiaNscqPkg = cudaPkgs.libnvidia_nscq;
+                libnvsdmPkg = cudaPkgs.libnvsdm;
+                nvlinkUserLibPath = lib.concatStringsSep ":" [
+                  "${lib.getLib libnvidiaNscqPkg}/lib"
+                  "${lib.getLib libnvsdmPkg}/lib"
+                  "${nvlsmPkg}/lib"
+                ];
+                nvlsmOverrides = nvlsmSettingsFormat.generate "nvlsm-overrides.conf" (
+                  cfg.datacenter.nvswitch.settings
+                );
+                nvlsmConf = pkgs.runCommand "nvlsm.conf" { } ''
+                  substitute ${nvlsmPkg}/share/nvidia/nvlsm/nvlsm.conf $out \
+                    --replace-fail "/usr/share/nvidia/nvlsm/device_configuration.conf" "${nvlsmPkg}/share/nvidia/nvlsm/device_configuration.conf" \
+                    --replace-fail "/usr/share/nvidia/nvlsm/grpc_mgr.conf" "${nvlsmPkg}/share/nvidia/nvlsm/grpc_mgr.conf"
+
+                  # Apply user overrides: remove existing lines with the same key,
+                  # then append the override value.
+                  while IFS= read -r line; do
+                    [ -n "$line" ] || continue
+                    key="''${line%% *}"
+                    sed -i "/^$key /d" $out
+                    echo "$line" >> $out
+                  done < ${nvlsmOverrides}
+                '';
+                # NVIDIA's start script handles IB device polling, GUID discovery
+                # (via ibstat), and launching both nvlsm and fabric manager with
+                # the discovered GUID (-g flag). We patch its hardcoded FHS binary
+                # paths and wrap it with the runtime dependencies it needs.
+                fabricManagerStartScript =
+                  pkgs.runCommand "nvidia-fabricmanager-start" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+                    ''
+                      cp ${nvidia_x11.fabricmanager}/bin/nvidia-fabricmanager-start.sh nvidia-fabricmanager-start.sh
+                      chmod +w nvidia-fabricmanager-start.sh
+                      substituteInPlace nvidia-fabricmanager-start.sh \
+                        --replace-fail "/usr/bin/nv-fabricmanager" "${nvidia_x11.fabricmanager}/bin/nv-fabricmanager" \
+                        --replace-fail "/opt/nvidia/nvlsm/sbin/nvlsm" "${nvlsmPkg}/sbin/nvlsm"
+                      mkdir -p $out/bin
+                      mv nvidia-fabricmanager-start.sh $out/bin/nvidia-fabricmanager-start
+                      wrapProgram $out/bin/nvidia-fabricmanager-start \
+                        --prefix PATH : ${
+                          lib.makeBinPath [
+                            pkgs.rdma-core
+                            pkgs.pciutils
+                            pkgs.kmod
+                            pkgs.which
+                            pkgs.gnused
+                            pkgs.gnugrep
+                            pkgs.gawk
+                            pkgs.coreutils
+                            pkgs.procps
+                          ]
+                        } \
+                        --set FM_CONFIG_FILE ${nv-fab-conf} \
+                        --set NVLSM_CONFIG_FILE ${nvlsmConf} \
+                        --set FM_PID_FILE /var/run/nvidia-fabricmanager/nv-fabricmanager.pid \
+                        --set NVLSM_PID_FILE /var/run/nvidia-fabricmanager/nvlsm.pid
+                    '';
+              in
+              {
+                hardware.infiniband.enable = true;
+
+                systemd.tmpfiles.rules = [
+                  "d /run/nvidia-fabricmanager 0755 root root -"
+                  "d /var/lib/nvidia-fabricmanager 0755 root root -"
+                ];
+
+                systemd.services.nvidia-fabricmanager = {
+                  serviceConfig = {
+                    TimeoutStartSec = lib.mkForce 720;
+                    PIDFile = "/var/run/nvidia-fabricmanager/nv-fabricmanager.pid";
+                    ExecStartPre = [
+                      "${fabricManagerStartScript}/bin/nvidia-fabricmanager-start --mode precheck"
+                    ];
+                    ExecStart = lib.mkForce "${fabricManagerStartScript}/bin/nvidia-fabricmanager-start --mode start";
+                    ExecStop = lib.mkForce ("${fabricManagerStartScript}/bin/nvidia-fabricmanager-start --mode stop");
+                    Environment = [ "LD_LIBRARY_PATH=${nvlinkUserLibPath}" ];
+                  };
+                };
+
+                environment.systemPackages = [
+                  nvlsmPkg
+                  libnvidiaNscqPkg
+                  libnvsdmPkg
+                ];
+              }
+            ))
+          ]
+        ))
       ]
     );
 }
