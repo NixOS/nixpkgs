@@ -429,6 +429,9 @@ let
       types.path
       contractSecretsType
     ];
+
+  # A secret option holds either a plain path or a file secrets contract.
+  secretPath = secret: if builtins.isAttrs secret then secret.output.path else secret;
 in
 {
   meta = {
@@ -588,15 +591,9 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${
-                    if lib.isPath cfg.passwordFile then cfg.passwordFile else cfg.passwordFile.output.path
-                  }) \
-                  jwtSecretKeyFile=$(< ${
-                    if lib.isPath cfg.jwtSecretKey then cfg.jwtSecretKey else cfg.jwtSecretKey.output.path
-                  }) \
-                  sessionStoreKeyFile=$(< ${
-                    if lib.isPath cfg.sessionStoreKey then cfg.sessionStoreKey else cfg.sessionStoreKey.output.path
-                  }) \
+                  password=$(< ${secretPath cfg.passwordFile}) \
+                  jwtSecretKeyFile=$(< ${secretPath cfg.jwtSecretKey}) \
+                  sessionStoreKeyFile=$(< ${secretPath cfg.sessionStoreKey}) \
                   ${lib.getExe pkgs.yq-go} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |
