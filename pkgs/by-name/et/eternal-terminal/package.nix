@@ -62,7 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MisterTea";
     repo = "EternalTerminal";
     tag = "et-v${finalAttrs.version}";
-    hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
+    hash = "sha256-m0wIwJC3M+4/xgUuDDPbPcRKnCkjGdSjSWUN5tOaH7k=";
+
+    # Remove vendored dependencies directly to reduce resource consumption:
+    # As of version 7.0.0, unvendoring reduces the source tarball size from 164 MiB to around 2MiB.
+    postCheckout = deleteVendoredDependencies "$out";
   };
 
   __structuredAttrs = true;
@@ -82,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-unvendor-platform-folders.patch
   ];
 
+  # Mirror postCheckout behavior to ensure src can still be overridden by external users if desired.
   postPatch = deleteVendoredDependencies ".";
 
   nativeBuildInputs = [
