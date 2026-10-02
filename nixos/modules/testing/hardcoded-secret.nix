@@ -42,54 +42,22 @@ in
       submodule (
         { name, ... }:
         {
+          imports = [ ../contracts/file-secrets.nix ];
+
           options = {
             request = mkOption {
-              description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
-              type = lib.types.submodule {
+              type = submodule {
                 options = {
-                  mode = mkOption {
-                    description = ''
-                      Mode the secret file must have.
-                    '';
-                    type = str;
-                    default = "0400";
-                  };
-
-                  owner = mkOption {
-                    description = ''
-                      Linux user that must own the secret file.
-                    '';
-                    type = str;
-                    default = "root";
-                  };
-
-                  group = mkOption {
-                    description = ''
-                      Linux group that must own the secret file.
-                    '';
-                    type = str;
-                    default = "root";
-                  };
+                  owner = mkOption { default = "root"; };
+                  group = mkOption { default = "root"; };
                 };
               };
             };
 
             response = mkOption {
-              description = "Response of the file secrets contract: the provider states where the file is.";
               default = { };
-              type = lib.types.submodule {
-                options = {
-                  path = mkOption {
-                    type = str;
-                    description = ''
-                      Path to the file containing the secret generated out of band.
-
-                      This path will exist after deploying to a target host,
-                      it is not available through the nix store.
-                    '';
-                    default = "/run/hardcodedsecrets/${name}";
-                  };
-                };
+              type = submodule {
+                options.path = mkOption { default = "/run/hardcodedsecrets/${name}"; };
               };
             };
 

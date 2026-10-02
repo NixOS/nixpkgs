@@ -370,55 +370,21 @@ let
   secretOptionType =
     let
       contractSecretsType = types.submodule {
-        options = {
-          request = mkOption {
-            description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
-            default = { };
-            type = types.submodule {
-              options = {
-                mode = mkOption {
-                  description = ''
-                    Mode the secret file must have.
-                  '';
-                  type = types.str;
-                  default = "0400";
-                  readOnly = true;
-                };
-
-                owner = mkOption {
-                  description = ''
-                    Linux user that must own the secret file.
-                  '';
-                  type = types.str;
-                  default = cfg.user;
-                  readOnly = true;
-                };
-
-                group = mkOption {
-                  description = ''
-                    Linux group that must own the secret file.
-                  '';
-                  type = types.str;
-                  default = cfg.group;
-                  readOnly = true;
-                };
+        imports = [ ../../contracts/file-secrets.nix ];
+        options.request = mkOption {
+          default = { };
+          type = types.submodule {
+            options = {
+              mode = mkOption { readOnly = true; };
+              owner = mkOption {
+                default = cfg.user;
+                defaultText = literalExpression "config.services.stash.user";
+                readOnly = true;
               };
-            };
-          };
-
-          response = mkOption {
-            description = "Response of the file secrets contract: the provider states where the file is.";
-            type = types.submodule {
-              options = {
-                path = mkOption {
-                  type = types.str;
-                  description = ''
-                    Path to the file containing the secret generated out of band.
-
-                    This path will exist after deploying to a target host,
-                    it is not available through the nix store.
-                  '';
-                };
+              group = mkOption {
+                default = cfg.group;
+                defaultText = literalExpression "config.services.stash.group";
+                readOnly = true;
               };
             };
           };
