@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     libseccomp
-    systemdMinimal
   ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) systemdMinimal
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
     glibc
     glibc.static
@@ -47,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   # manpage requires building the vendored go-md2man
   makeFlags = [
     "bin/conmon"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "DISABLE_SYSTEMD=1";
 
   installPhase = ''
     runHook preInstall
