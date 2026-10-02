@@ -22,6 +22,9 @@ let
   busIDType = lib.types.strMatching "([[:print:]]+:[0-9]{1,3}(@[0-9]{1,10})?:[0-9]{1,2}:[0-9])?";
   ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
+  nvlsmSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  };
 in
 {
   options = {
@@ -83,6 +86,196 @@ in
         description = ''
           Additional configuration options for fabricmanager.
         '';
+      };
+
+      datacenter.nvswitch.enable = lib.mkEnableOption ''
+        NVLSM (NVLink Subnet Manager) and NVSwitch fabric management for
+        systems with 4th-generation NVSwitch silicon (e.g. B200 SXM).
+
+        This enables the nvidia-nvlsm service and configures
+        nvidia-fabricmanager to use the management GUID discovered by NVLSM.
+        Only enable this on nodes with NVSwitch silicon; running it on
+        NVLink bridge-only systems can cause GPU instability (Xid 119).
+
+        NVLSM is required on DGX B200/B300, NVIDIA HGX B200/B300, and
+        NVIDIA HGX B100 systems, which use 4th-generation NVSwitches.
+        It originates from NVIDIA's InfiniBand Subnet Manager (OpenSM)
+        and manages NVSwitch routing tables, LID assignment, and
+        partition keys, while Fabric Manager handles GPU-side routing
+        and NVLink configuration.
+
+        See the NVIDIA Fabric Manager User Guide for details:
+        <https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/>
+        Chapters: "Systems Using Fourth Generation NVSwitches" and
+        "Getting Started with NVLink Subnet Manager".
+      '';
+
+      datacenter.nvswitch.settings = lib.mkOption {
+        type = nvlsmSettingsFormat.type;
+        default = {
+          log_file = "/var/log/nvlsm.log";
+          log_flags = "0x03";
+          log_max_size = 4096;
+          log_num_backlogs = 1;
+          routing_threads_num = 4;
+          smp_threads = 4;
+          gmp_threads = 4;
+          nvlink_enable = "TRUE";
+          enable_sa = "FALSE";
+          routing_engine = "ar_minhop";
+          ar_sl_mask = "0x0";
+          hbf_sl_mask = "0xFFFF";
+          nvl_hbf_hash_type = 0;
+          nvl_hbf_packet_hash_bitmask = "0x0";
+          nvl_hbf_seed = "0x0";
+          nvl_hbf_hash_fields = "0x00011FFF00011FFF";
+          qos = "TRUE";
+          max_op_vls = 4;
+          qos_sl2vl = "0,1,2,3,2,3,2,3,0,1,2,3,0,1,2,0";
+          qos_sw2sw_sl2vl = "0,1,2,3,4,3,2,3,0,1,2,3,0,1,2,0";
+          use_optimized_slvl = "FALSE";
+          reply_lid_smps_in_dr = "TRUE";
+          sweep_interval = 15;
+          force_heavy_sweep_window = 0;
+          enable_ar_group_copy = "FALSE";
+          enable_empty_arlft_optimization = "TRUE";
+          nvl_cnd_for_access_links_enabled = "TRUE";
+          guid = "0x0";
+          plugin_name = "grpc_mgr";
+        };
+        defaultText = lib.literalExpression ''
+          {
+            log_file = "/var/log/nvlsm.log";
+            log_flags = "0x03";
+            log_max_size = 4096;
+            log_num_backlogs = 1;
+            routing_threads_num = 4;
+            smp_threads = 4;
+            gmp_threads = 4;
+            nvlink_enable = "TRUE";
+            enable_sa = "FALSE";
+            routing_engine = "ar_minhop";
+            ar_sl_mask = "0x0";
+            hbf_sl_mask = "0xFFFF";
+            nvl_hbf_hash_type = 0;
+            nvl_hbf_packet_hash_bitmask = "0x0";
+            nvl_hbf_seed = "0x0";
+            nvl_hbf_hash_fields = "0x00011FFF00011FFF";
+            qos = "TRUE";
+            max_op_vls = 4;
+            qos_sl2vl = "0,1,2,3,2,3,2,3,0,1,2,3,0,1,2,0";
+            qos_sw2sw_sl2vl = "0,1,2,3,4,3,2,3,0,1,2,3,0,1,2,0";
+            use_optimized_slvl = "FALSE";
+            reply_lid_smps_in_dr = "TRUE";
+            sweep_interval = 15;
+            force_heavy_sweep_window = 0;
+            enable_ar_group_copy = "FALSE";
+            enable_empty_arlft_optimization = "TRUE";
+            nvl_cnd_for_access_links_enabled = "TRUE";
+            guid = "0x0";
+            plugin_name = "grpc_mgr";
+          }
+        '';
+        description = ''
+          Configuration options for the NVLSM (NVLink Subnet Manager)
+          daemon, rendered as space-separated `key value` lines in the
+          nvlsm.conf format.
+
+          The `guid` field defaults to `0x0` and is replaced at runtime
+          by the management GUID discovered from the InfiniBand management
+          port (CX7 bridge device) by the ExecStartPre discovery script.
+
+          NVLSM is derived from NVIDIA's InfiniBand Subnet Manager
+          (OpenSM), so many options have the same semantics as their
+          OpenSM counterparts. See the OpenSM manual for details:
+          `man opensm` or
+          <https://github.com/linux-rdma/opensm/blob/master/man/opensm.8.in>
+
+          NVIDIA Fabric Manager User Guide (for NVLSM-specific options):
+          <https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/>
+          Chapter: "Getting Started with NVLink Subnet Manager" →
+          "NVLink Subnet Manager Configuration".
+
+          The device-specific configuration file
+          (`device_configuration_file`) and gRPC plugin configuration
+          (`plugin_options`) are set automatically from the nvlsm
+          package and should not normally need to be overridden.
+
+          The defaults below are correct for all 4th-generation NVSwitch
+          systems (HGX B200/B300/B100). They are specific to the fixed
+          2-NVSwitch-ASIC, 8-GPU baseboard topology and should not be
+          changed unless NVIDIA ships updated values in a newer nvlsm
+          release. The values for `qos_sl2vl` and `qos_sw2sw_sl2vl` are
+          topology-dependent: they encode the SL-to-VL mapping that
+          breaks routing cycles and prevents deadlocks. See the IBA
+          specification (IBA §7.6.6 for SL2VL, §7.6.9 for VL Arbitration)
+          and the OpenSM "QOS CONFIGURATION" section in `man opensm`.
+
+          Logging options (`log_file`, `log_flags`, `log_max_size`,
+          `log_num_backlogs`) follow the OpenSM logging format documented
+          in `man opensm` under the `-D` (log flags) and `-f` (log file)
+          options. The `log_flags` bitmask is: `0x01` = ERROR,
+          `0x02` = INFO, `0x04` = VERBOSE, `0x08` = DEBUG,
+          `0x10` = FUNCS, `0x20` = FRAMES, `0x40` = ROUTING,
+          `0x80` = SYS (also log to syslog).
+
+          The `routing_engine` option selects the routing algorithm.
+          `ar_minhop` (Adaptive Routing with Minimum Hop) is an NVLSM
+          extension of OpenSM's `minhop` engine. Other OpenSM engines
+          (`updn`, `ftree`, `lash`, `dor`, `nue`, `dfsssp`, `sssp`)
+          are documented in `man opensm` under "ROUTING", but only
+          `ar_minhop` and related NVLink-specific engines are
+          appropriate for NVSwitch fabrics.
+
+          The `qos` option enables QoS setup (SL2VL mapping tables and
+          VL arbitration tables on all switches and ports). `max_op_vls`
+          sets the maximum number of operational Virtual Lanes. The
+          `qos_sl2vl` table maps Service Levels (SL 0–15) to Virtual
+          Lanes on access links (GPU↔NVSwitch); `qos_sw2sw_sl2vl` does
+          the same for trunk links (NVSwitch↔NVSwitch). The trunk-link
+          table uses an extra VL (VL 4) for SL 4 traffic to break
+          deadlock cycles that can occur between the two NVSwitch ASICs.
+          These tables are specific to the 4th-gen NVSwitch topology
+          (2 ASICs, 8 GPUs, 9 NVLinks per GPU per switch) and are
+          documented in the IBA specification §7.6.6 and the OpenSM
+          "QOS CONFIGURATION" section.
+
+          The `sweep_interval` controls how often (in seconds) NVLSM
+          re-scans the fabric for topology changes. See `man opensm`
+          under `-s` (`--sweep`).
+
+          The `guid` option is overwritten at runtime — do not set it
+          manually. The `plugin_name` and `plugin_options` configure the
+          gRPC IPC channel between NVLSM and Fabric Manager; see the
+          Fabric Manager User Guide, "Configuring NVLink Subnet Manager
+          to Load the Fabric Manager GRPC Plugin".
+        '';
+      };
+
+      datacenter.nvswitch.cudaPackages = lib.mkOption {
+        type = lib.types.attrs;
+        default = pkgs.cudaPackages;
+        defaultText = lib.literalExpression "pkgs.cudaPackages";
+        description = ''
+          The CUDA package set to source nvlsm, libnvidia_nscq, and
+          libnvsdm from. The NSCQ and NVSDM library versions in the
+          selected package set {option}`must` match the NVIDIA driver
+          version in {option}`hardware.nvidia.package`. A version
+          mismatch between these user-space libraries and the kernel
+          driver will cause NVLSM and Fabric Manager to fail.
+
+          The CUDA redist manifests bundle NSCQ/NVSDM versions that
+          correspond to each CUDA release's associated driver. Use the
+          package set whose NSCQ/NVSDM version matches your driver:
+
+          - `pkgs.cudaPackages_13_1` for DC 590 drivers (NSCQ/NVSDM 590.x)
+          - `pkgs.cudaPackages_13_0` for DC 580 drivers (NSCQ/NVSDM 580.x)
+          - `pkgs.cudaPackages_12_9` for DC 575 drivers (NSCQ/NVSDM 575.x)
+
+          If left at the default (`pkgs.cudaPackages`, currently CUDA 12.9),
+          ensure it matches your driver, or override it explicitly.
+        '';
+        example = lib.literalExpression "pkgs.cudaPackages_13_1";
       };
 
       powerManagement.enable = lib.mkEnableOption ''
@@ -855,63 +1048,228 @@ in
           );
         })
         # Data Center
-        (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
-
-          systemd = {
-            tmpfiles.rules =
-              lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-                "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
-
-            services = lib.mkMerge [
-              {
-                nvidia-fabricmanager = {
-                  enable = true;
-                  description = "Start NVIDIA NVLink Management";
-                  wantedBy = [ "multi-user.target" ];
-                  unitConfig.After = [ "network-online.target" ];
-                  unitConfig.Requires = [ "network-online.target" ];
-                  serviceConfig = {
-                    Type = "forking";
-                    TimeoutStartSec = 240;
-                    ExecStart =
-                      let
-                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
-                        # unsuitable to be mentioned in the configuration defaults, but they _can_
-                        # be overridden in `cfg.datacenter.settings` if needed.
-                        fabricManagerConfDefaults = {
-                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                        };
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
-                          fabricManagerConfDefaults // cfg.datacenter.settings
-                        );
-                      in
-                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
-                    LimitCORE = "infinity";
-                  };
-                };
-              }
-              (lib.mkIf cfg.nvidiaPersistenced {
-                "nvidia-persistenced" = {
-                  description = "NVIDIA Persistence Daemon";
-                  wantedBy = [ "multi-user.target" ];
-                  serviceConfig = {
-                    Type = "forking";
-                    Restart = "always";
-                    PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                    ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                  };
-                };
+        (lib.mkIf (cfg.datacenter.enable) (
+          let
+            nvswitchEnabled = cfg.datacenter.nvswitch.enable;
+            # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+            # unsuitable to be mentioned in the configuration defaults, but they _can_
+            # be overridden in `cfg.datacenter.settings` if needed.
+            fabricManagerConfDefaults = {
+              TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+              DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+            };
+            nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
+              fabricManagerConfDefaults
+              // (lib.optionalAttrs nvswitchEnabled {
+                DATABASE_PATH = "/var/lib/nvidia-fabricmanager";
               })
-            ];
-          };
+              // cfg.datacenter.settings
+              // (lib.optionalAttrs nvswitchEnabled {
+                FM_SM_MGMT_PORT_GUID = "0x0";
+              })
+            );
+          in
+          lib.mkMerge [
+            {
+              assertions = lib.optional nvswitchEnabled {
+                assertion =
+                  lib.versions.major cfg.datacenter.nvswitch.cudaPackages.libnvidia_nscq.version
+                  == lib.versions.major nvidia_x11.version
+                  && lib.versions.major cfg.datacenter.nvswitch.cudaPackages.libnvsdm.version
+                  == lib.versions.major nvidia_x11.version;
+                message = ''
+                  The libnvidia_nscq version (${
+                    cfg.datacenter.nvswitch.cudaPackages.libnvidia_nscq.version
+                  }) and libnvsdm version (${
+                    cfg.datacenter.nvswitch.cudaPackages.libnvsdm.version
+                  }) from hardware.nvidia.datacenter.nvswitch.cudaPackages do not
+                  match the NVIDIA driver version (${nvidia_x11.version}).
+                  The NSCQ and NVSDM libraries must share the driver's major
+                  version branch. Set hardware.nvidia.datacenter.nvswitch.cudaPackages
+                  to the cudaPackages version that matches your driver. For example,
+                  use pkgs.cudaPackages_13_1 for DC 590 drivers.
+                '';
+              };
 
-          environment.systemPackages =
-            lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
-            ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
-        })
+              boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
+
+              systemd = {
+                tmpfiles.rules =
+                  lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+                    "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+                services = lib.mkMerge [
+                  {
+                    nvidia-fabricmanager = {
+                      enable = true;
+                      description = "Start NVIDIA NVLink Management";
+                      wantedBy = [ "multi-user.target" ];
+                      unitConfig.After = [ "network-online.target" ];
+                      unitConfig.Requires = [ "network-online.target" ];
+                      serviceConfig = {
+                        Type = "forking";
+                        TimeoutStartSec = 240;
+                        ExecStart = "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                        LimitCORE = "infinity";
+                      };
+                    };
+                  }
+                  (lib.mkIf cfg.nvidiaPersistenced {
+                    "nvidia-persistenced" = {
+                      description = "NVIDIA Persistence Daemon";
+                      wantedBy = [ "multi-user.target" ];
+                      serviceConfig = {
+                        Type = "forking";
+                        Restart = "always";
+                        PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                        ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                        ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                      };
+                    };
+                  })
+                ];
+              };
+
+              environment.systemPackages =
+                lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
+                ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+            }
+
+            # NVSwitch / NVLSM
+            (lib.mkIf nvswitchEnabled (
+              let
+                cudaPkgs = cfg.datacenter.nvswitch.cudaPackages;
+                nvlsmPkg = cudaPkgs.nvlsm;
+                libnvidiaNscqPkg = cudaPkgs.libnvidia_nscq;
+                libnvsdmPkg = cudaPkgs.libnvsdm;
+                nvlinkUserLibPath = lib.concatStringsSep ":" [
+                  "${lib.getLib libnvidiaNscqPkg}/lib"
+                  "${lib.getLib libnvsdmPkg}/lib"
+                  "${nvlsmPkg}/lib"
+                ];
+                nvlsmConf = nvlsmSettingsFormat.generate "nvlsm.conf" (
+                  {
+                    device_configuration_file = "${nvlsmPkg}/share/nvidia/nvlsm/device_configuration.conf";
+                    plugin_options = "-grpc_mgr --config_file ${nvlsmPkg}/share/nvidia/nvlsm/grpc_mgr.conf";
+                  }
+                  // cfg.datacenter.nvswitch.settings
+                );
+                prepareNvlinkMgmtConfigs = pkgs.writeShellScript "prepare-nvlink-mgmt-configs" ''
+                  set -euo pipefail
+
+                  run_dir=/run/nvidia-fabricmanager
+                  mkdir -p "$run_dir"
+
+                  pick_guid=""
+                  pick_name=""
+                  pick_score=-1
+
+                  for d in /sys/class/infiniband/*; do
+                    [ -d "$d" ] || continue
+                    name="$(basename "$d")"
+                    node_guid="$(cat "$d/node_guid" 2>/dev/null || true)"
+                    [ -n "$node_guid" ] || continue
+
+                    vpd_file="$(readlink -f "$d/device")/vpd"
+                    vpd_is_sw_mng=0
+                    if [ -r "$vpd_file" ] \
+                      && ${pkgs.gnugrep}/bin/grep -aq 'SW_MNG' "$vpd_file" \
+                      && ${pkgs.gnugrep}/bin/grep -aq 'SMDL' "$vpd_file"; then
+                      vpd_is_sw_mng=1
+                    fi
+
+                    for p in "$d"/ports/*; do
+                      [ -e "$p/state" ] || continue
+                      state="$(cat "$p/state" 2>/dev/null || true)"
+                      phys="$(cat "$p/phys_state" 2>/dev/null || true)"
+                      link="$(cat "$p/link_layer" 2>/dev/null || true)"
+
+                      if ! echo "$link" | ${pkgs.gnugrep}/bin/grep -qi 'InfiniBand'; then
+                        continue
+                      fi
+
+                      link_score=0
+                      if echo "$phys" | ${pkgs.gnugrep}/bin/grep -qi 'LinkUp'; then
+                        link_score=10
+                      fi
+
+                      state_score=0
+                      if echo "$state" | ${pkgs.gnugrep}/bin/grep -qi 'ACTIVE'; then
+                        state_score=2
+                      elif echo "$state" | ${pkgs.gnugrep}/bin/grep -qi 'INIT'; then
+                        state_score=1
+                      fi
+
+                      score=$(( (vpd_is_sw_mng * 100) + link_score + state_score ))
+                      if [ "$score" -gt "$pick_score" ]; then
+                        pick_score="$score"
+                        pick_guid="0x$(${pkgs.gnused}/bin/sed 's/://g' <<< "$node_guid")"
+                        pick_name="$name"
+                      fi
+                    done
+                  done
+
+                  if [ -z "$pick_guid" ]; then
+                    echo "No suitable InfiniBand management GUID found" >&2
+                    exit 1
+                  fi
+
+                  echo "Selected NVSwitch management GUID $pick_guid from $pick_name (score=$pick_score)" > "$run_dir/selected-mgmt-port"
+
+                  ${pkgs.gnused}/bin/sed "s/^guid .*/guid $pick_guid/" ${nvlsmConf} > "$run_dir/nvlsm.conf"
+                  ${pkgs.gnused}/bin/sed "s/^FM_SM_MGMT_PORT_GUID=.*/FM_SM_MGMT_PORT_GUID=$pick_guid/" ${nv-fab-conf} > "$run_dir/fabricmanager.conf"
+                '';
+              in
+              {
+                hardware.infiniband.enable = true;
+
+                systemd.tmpfiles.rules = [
+                  "d /run/nvidia-fabricmanager 0755 root root -"
+                  "d /var/lib/nvidia-fabricmanager 0755 root root -"
+                ];
+
+                systemd.services = {
+                  nvidia-nvlsm = {
+                    enable = true;
+                    description = "NVIDIA NVLSM service for 4th-gen NVSwitch";
+                    wantedBy = [ "multi-user.target" ];
+                    unitConfig = {
+                      After = [ "network-online.target" ];
+                      Requires = [ "network-online.target" ];
+                    };
+                    serviceConfig = {
+                      Type = "simple";
+                      Restart = "on-failure";
+                      RestartSec = 3;
+                      Environment = [ "LD_LIBRARY_PATH=${nvlinkUserLibPath}" ];
+                      ExecStartPre = [ "${prepareNvlinkMgmtConfigs}" ];
+                      ExecStart = "${nvlsmPkg}/sbin/nvlsm -F /run/nvidia-fabricmanager/nvlsm.conf";
+                    };
+                  };
+
+                  nvidia-fabricmanager = {
+                    unitConfig = {
+                      After = [ "nvidia-nvlsm.service" ];
+                      Requires = [ "nvidia-nvlsm.service" ];
+                    };
+                    serviceConfig = {
+                      TimeoutStartSec = lib.mkForce 720;
+                      ExecStart = lib.mkForce "${lib.getExe nvidia_x11.fabricmanager} -c /run/nvidia-fabricmanager/fabricmanager.conf";
+                      SuccessExitStatus = [ 1 ];
+                      Environment = [ "LD_LIBRARY_PATH=${nvlinkUserLibPath}" ];
+                    };
+                  };
+                };
+
+                environment.systemPackages = [
+                  nvlsmPkg
+                  libnvidiaNscqPkg
+                  libnvsdmPkg
+                ];
+              }
+            ))
+          ]
+        ))
       ]
     );
 }
