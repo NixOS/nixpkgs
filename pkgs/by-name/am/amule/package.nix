@@ -2,6 +2,7 @@
   monolithic ? true, # build monolithic amule
   enableDaemon ? false, # build amule daemon
   httpServer ? false, # build web interface for the daemon
+  apiServer ? false, # build REST API daemon and its Web UI
   client ? false, # build amule remote gui
   textClient ? false, # build amule remote command line client
   mainProgram ? "amule",
@@ -24,8 +25,10 @@
   libmaxminddb,
   libpng,
   pkg-config,
+  python3,
   readline,
   nix-update-script,
+  nixosTests,
   writeShellScript,
   xcbuild,
   libx11,
@@ -44,23 +47,31 @@ let
 in
 
 # daemon, clients and web interface are not built monolithic
-assert monolithic || (!monolithic && (enableDaemon || client || textClient || httpServer));
+assert
+  monolithic || (!monolithic && (enableDaemon || client || textClient || httpServer || apiServer));
 
 stdenv.mkDerivation (finalAttrs: {
   pname =
     "amule"
     + lib.optionalString httpServer "-web"
+    + lib.optionalString apiServer "-api"
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui"
     + lib.optionalString textClient "-cmd";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "amule-org";
     repo = "amule";
     tag = finalAttrs.version;
-    hash = "sha256-zLd8mt+dYEilGcFn3qspZv5EkZ4TmBbKgvgcuSvswFk=";
+    hash = "sha256-IO0sAqCEWNsLtf7jQUHOAbCs50M13KN1vVSO2lBG7d0=";
   };
+
+  patches = [
+    # https://github.com/amule-org/amule/commit/d7f492d029b4fab1eacddb72278c82b29cf56dcd
+    # Remove once a release includes https://github.com/amule-org/amule/pull/1711.
+    ./amuleapi-kad-bootstrap-byte-order.patch
+  ];
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -69,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gettext
     pkg-config
+    python3
   ];
 
   postPatch =
@@ -80,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     # which neither the modern SDK libedit headers nor GNU readline 8.3
     # provide; both declare rl_completion_entry_function with the typedef
     # used here.
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && (textClient || httpServer)) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && (textClient || httpServer || apiServer)) ''
       substituteInPlace src/ExternalConnector.cpp \
         --replace-fail "(Function *)&command_completion" "(rl_compentry_func_t *)&command_completion"
     '';
@@ -112,8 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (monolithic || enableDaemon || client) libmaxminddb
   # gettext runtime for NLS; on glibc libintl is part of libc
   ++ lib.optional (!stdenv.hostPlatform.isGnu) libintl
-  # line editing in the interactive consoles of amulecmd and amuleweb
-  ++ lib.optional (textClient || httpServer) readline
+  # line editing in the interactive consoles of amulecmd and amuleweb;
+  # amuleapi shares ExternalConnector.cpp with them and links it too
+  ++ lib.optional (textClient || httpServer || apiServer) readline
   ++ lib.optional client libx11;
 
   cmakeFlags = [
@@ -122,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_REMOTEGUI" client)
     (lib.cmakeBool "BUILD_AMULECMD" textClient)
     (lib.cmakeBool "BUILD_WEBSERVER" httpServer)
+    (lib.cmakeBool "BUILD_AMULEAPI" apiServer)
+    (lib.cmakeBool "ENABLE_VERSION_CHECK" false)
     # with strictDeps FindwxWidgets cannot find wx-config in PATH
     # the script runs on the build machine even when wxwidgets is a host dependency
     (lib.cmakeFeature "wxWidgets_CONFIG_EXECUTABLE" (
@@ -142,7 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) amuled; };
+  };
 
   meta = {
     description = "Peer-to-peer client for the eD2K and Kademlia networks";

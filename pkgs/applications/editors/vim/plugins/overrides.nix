@@ -1841,7 +1841,7 @@ assertNoAdditions {
     runtimeDeps = [ xxd ];
   };
 
-  himalaya-vim = super.himalaya-vim.overrideAttrs {
+  himalaya-vim9 = super.himalaya-vim9.overrideAttrs {
     buildInputs = [ himalaya ];
     # Optional integrations
     checkInputs = with self; [

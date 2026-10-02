@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-msFMfjNkpXaJisbTpJMQowyD0KZ5zfvSgTutEeLp9Vk=";
+    hash = "sha256-xFNWxsNrihrcdFqrl1I9RYuIlHufoFtl8IFJhquhJfI=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/outline/outline/blob/main/package.json#L393
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-bEsnu4NL/Dgv6yPXXvV/4uMvQ7Sc9eDfeAD2fhFCB98=";
+    hash = "sha256-rgqRRWZdy938rPuTV+E1pWfJ6O1w6Z3F84qlGUZgorM=";
   };
 
   buildPhase = ''

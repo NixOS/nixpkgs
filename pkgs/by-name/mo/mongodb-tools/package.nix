@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mongo-tools";
-  version = "100.18.0";
+  version = "100.19.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
     tag = finalAttrs.version;
-    hash = "sha256-cNz5qQhTcW7hBdvXQRnnnvIz4UpC0ZmFVxMfxUSJ2y8=";
+    hash = "sha256-vhtNqDkhn46LArMN9Fe0wPjmFUjYCC+8mOsrY7NBlwk=";
   };
 
   vendorHash = null;
@@ -55,7 +55,9 @@ buildGoModule (finalAttrs: {
       runHook postBuild
     '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([0-9.]+)$" ];
+  };
 
   meta = {
     homepage = "https://github.com/mongodb/mongo-tools";
