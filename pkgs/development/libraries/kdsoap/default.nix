@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kdsoap";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
-    sha256 = "sha256-2e8RlIRCGXyfpEvW+63IQrcoCmDfxAV3r2b97WN681Y=";
+    sha256 = "sha256-0hhJURRct2jMMDdqEHAb4ThpoWTBJy0J+DG6LRlfAt4=";
   };
 
   outputs = [
