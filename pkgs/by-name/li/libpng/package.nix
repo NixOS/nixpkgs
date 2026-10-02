@@ -56,6 +56,8 @@ stdenv'.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description =
       "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
