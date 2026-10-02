@@ -353,6 +353,13 @@ in
           };
         }
       ]
+      ++ lib.optionals (!config.security.pam.p11.enable) [
+        {
+          settings."org/gnome/login-screen" = {
+            enable-smartcard-authentication = false;
+          };
+        }
+      ]
       ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
