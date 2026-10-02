@@ -9,6 +9,7 @@
   patches,
   broken,
   hash ? null,
+  kmod,
 }:
 
 assert open -> hash != null;
@@ -49,6 +50,28 @@ stdenv.mkDerivation {
   buildTargets = [ "modules" ];
   installTargets = [ "modules_install" ];
   enableParallelBuilding = true;
+
+  # Both variants carry MODULE_VERSION from the sources they were built from, so
+  # reading it back catches a hash left behind on a version bump, which would
+  # otherwise silently reuse the old store tree.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ kmod ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+    # The kernel also writes the module signing certificate next to the module
+    # as `nvidia.ko.cer`; it is not a module, and modinfo rejects it.
+    module=$(find "$out/lib/modules" \( -name nvidia.ko -o -name 'nvidia.ko.*' \) ! -name '*.cer' -print -quit)
+    if [ -z "$module" ]; then
+      echo "no nvidia.ko found under $out/lib/modules" >&2
+      exit 1
+    fi
+    got=$(modinfo -F version "$module")
+    if [ "$got" != "${nvidia_x11.version}" ]; then
+      echo "nvidia.ko reports version '$got', expected '${nvidia_x11.version}'" >&2
+      exit 1
+    fi
+    runHook postInstallCheck
+  '';
 
   allowedReferences = [ ];
 
