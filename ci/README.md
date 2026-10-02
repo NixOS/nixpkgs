@@ -48,7 +48,7 @@ To ensure security and a focused utility, the bot adheres to specific limitation
   - approved by a [committer][@NixOS/nixpkgs-committers].
   - backported via label.
   - opened by a [committer][@NixOS/nixpkgs-committers].
-  - opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
+  - opened by [@r-ryantm](https://nixos.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
 - No [committer][@NixOS/nixpkgs-committers] has an outstanding "changes requested" review.
