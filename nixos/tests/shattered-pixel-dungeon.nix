@@ -2,7 +2,10 @@
 {
   name = "shattered-pixel-dungeon";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
+    maintainers = [
+      fgaz
+      philocalyst
+    ];
   };
 
   nodes.machine =
