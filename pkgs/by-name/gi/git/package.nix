@@ -125,9 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     # and (2) make sure `gitman.info' isn't produced since it's broken
     # (duplicate node names).
     ./docbook2texi.patch
-    # Fix references to gettext.sh at runtime: hard-code it to
-    # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
-    ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
     # The 'total N' header from ls -l is unstable on ZFS and similar
@@ -149,14 +146,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
     # searching in $PATH
     ./ssh-path.patch
-  ];
+  ]
+  # Fix references to gettext.sh at runtime: hard-code it to
+  # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
+  ++ lib.optional (!stdenv.hostPlatform.isMusl) ./git-sh-i18n.patch;
 
   postPatch = ''
-    # Fix references to gettext introduced by ./git-sh-i18n.patch
-    substituteInPlace git-sh-i18n.sh \
-        --subst-var-by gettext ${gettext}
     substituteInPlace contrib/credential/libsecret/Makefile \
-        --replace-fail 'pkg-config' "$PKG_CONFIG"
+      --replace-fail 'pkg-config' "$PKG_CONFIG"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isMusl) ''
+    substituteInPlace git-sh-i18n.sh \
+      --subst-var-by gettext ${gettext}
   ''
   + lib.optionalString finalAttrs.doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
