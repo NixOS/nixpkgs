@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   # Without 'sse' enforcement tests fail on i686 as due to excessive precision as:
   #   error reading back channel B pixel 21,-76 got -nan expected -nan
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
