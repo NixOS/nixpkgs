@@ -11,24 +11,20 @@
   yarn-berry_4,
   nodejs,
   stdenv,
-  pkgsBuildHost,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.14";
-  yarnHash = "sha256-mJa5L8N40JWogQ8/LllSdX/uJHMzKULCow9+e5gFe/A=";
+  version = "9.18";
+  yarnHash = "sha256-D9LN9+CsVTvfZKDsHrWUD1uvsa033tj34a52DNwYaDc=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
+    hash = "sha256-oaNheNF4e1nL45fQM9/2ZIdLDwVvKWIRJnR93KmqR3M=";
   };
-
-  # Remove after https://github.com/pgadmin-org/pgadmin4/commit/79e490c5fa6031af7baa83f04f751bdc790dc408 is released
-  yarnPatch = ./yarn-4.14-support.patch;
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
@@ -55,7 +51,6 @@ pythonPackages.buildPythonApplication rec {
     inherit missingHashes;
     src = src + "/web";
     hash = yarnHash;
-    patches = [ yarnPatch ];
   };
 
   # from Dockerfile
@@ -127,8 +122,6 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-      PATH=$PATH:${lib.makeBinPath [ pkgsBuildHost.git ]}
-      git apply ${yarnPatch}
       export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
       yarnBerryConfigHook
     )
@@ -175,7 +168,6 @@ pythonPackages.buildPythonApplication rec {
     flask-sqlalchemy
     flask-wtf
     flask-compress
-    passlib
     pytz
     simplejson
     sqlparse
