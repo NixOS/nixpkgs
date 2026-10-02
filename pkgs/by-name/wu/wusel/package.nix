@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     # The Nautilus extension's Makefile pulls in gtk4's headers via pkg-config
     # (used for the GDK clipboard in the "copy internal link" action) but
     # deliberately does not link against it — Nautilus already has GTK loaded.
