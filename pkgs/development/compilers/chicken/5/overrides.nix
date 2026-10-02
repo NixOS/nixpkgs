@@ -37,6 +37,18 @@ let
   };
 in
 {
+  # Upstream builds its components only for the host, for compiling against,
+  # which leaves it empty when cross-compiling, yet the eggs using it load it
+  # at run time, so it is built for the target, too.
+  bind =
+    old:
+    lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace bind.egg \
+          --replace-fail "(host" "" \
+          --replace-fail "(component-dependencies bind-translator)))))" "(component-dependencies bind-translator))))"
+      '';
+    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
@@ -49,7 +61,37 @@ in
       srfi-13
     ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  crypt = addToBuildInputs pkgs.libxcrypt;
+  crypt =
+    old:
+    (addToBuildInputs pkgs.libxcrypt old)
+    # When cross-compiling, the build script cannot run its probe of which hash
+    # types crypt() supports, so they are forced to those libxcrypt is built
+    # with, which the probe would find. The DES ones have no scheme id, so the
+    # egg always provides those.
+    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+      env =
+        let
+          hashTypes = {
+            "2a" = "blowfish";
+            "6" = "sha512";
+            "5" = "sha256";
+            "1" = "md5";
+          };
+        in
+        old.env
+        // {
+          FORCE_CRYPT_HASHTYPES = toString (
+            map (id: hashTypes.${id}) (lib.filter (id: hashTypes ? ${id}) pkgs.libxcrypt.enabledCryptSchemeIds)
+          );
+        };
+      # The build script also compiles the import library for the build
+      # platform, which the compiler for the target cannot do; the one for the
+      # target is built separately anyway.
+      postPatch = ''
+        substituteInPlace build-crypt.scm \
+          --replace-fail '(compile-file "crypt.import.scm" #:options `("-s" "-O2"))' ""
+      '';
+    };
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
@@ -129,6 +171,11 @@ in
   leveldb = addToBuildInputs pkgs.leveldb;
   libyaml = old: {
     env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+    # The bindings pass pointers for the va_list arguments of libfyaml, which
+    # only works where va_list is one, unlike on ARM outside of Darwin.
+    meta = old.meta // {
+      broken = stdenv.hostPlatform.isAarch && !stdenv.hostPlatform.isDarwin;
+    };
   };
   lmdb-ht = addToBuildInputs pkgs.lmdb;
   magic = addToBuildInputs pkgs.file;
