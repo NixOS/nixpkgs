@@ -1,0 +1,24 @@
+--- a/src/runtime/src/coreclr/tools/aot/crossgen2/crossgen2_publish.csproj
++++ b/src/runtime/src/coreclr/tools/aot/crossgen2/crossgen2_publish.csproj
+@@ -22,6 +22,9 @@
+     <PublishReadyToRun Condition="'$(TargetOS)' == 'netbsd' Or '$(TargetOS)' == 'illumos' Or '$(TargetOS)' == 'solaris'">false</PublishReadyToRun>
+     <!-- Disable crossgen on FreeBSD when cross building from Linux. -->
+     <PublishReadyToRun Condition="'$(TargetOS)' == 'freebsd' and '$(CrossBuild)' == 'true'">false</PublishReadyToRun>
++    <!-- crossgen is not supported on riscv64 yet -->
++    <PublishReadyToRun Condition="'$(TargetArchitecture)' == 'riscv64'">false</PublishReadyToRun>
++    <PublishSingleFile Condition="'$(TargetArchitecture)' == 'riscv64'">false</PublishSingleFile>
+     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+   </PropertyGroup>
+ 
+--- a/src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj
++++ b/src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj
+@@ -19,6 +19,9 @@
+     <SysRoot Condition="'$(NativeAotSupported)' == 'true' and '$(CrossBuild)' == 'true' and '$(HostOS)' != 'windows'">$(ROOTFS_DIR)</SysRoot>
+     <PublishReadyToRun Condition="'$(NativeAotSupported)' != 'true'">true</PublishReadyToRun>
+     <PublishSingleFile Condition="'$(NativeAotSupported)' != 'true'">true</PublishSingleFile>
++    <!-- crossgen is not supported on riscv64 yet -->
++    <PublishReadyToRun Condition="'$(TargetArchitecture)' == 'riscv64'">false</PublishReadyToRun>
++    <PublishSingleFile Condition="'$(TargetArchitecture)' == 'riscv64'">false</PublishSingleFile>
+     <PublishTrimmed Condition="'$(NativeAotSupported)' != 'true'">true</PublishTrimmed>
+     <SuppressGenerateILCompilerExplicitPackageReferenceWarning>true</SuppressGenerateILCompilerExplicitPackageReferenceWarning>
+     <!-- Compute host package name (taken from Microsoft.DotNet.ILCompiler.SingleEntry.targets) -->
