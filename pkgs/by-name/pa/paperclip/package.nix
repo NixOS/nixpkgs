@@ -33,8 +33,8 @@ let
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "001a8caa1a7e549a8a331b908050f4d12ec3fbfa";
-    hash = "sha256-4Y4iD4gYNUkkL+YwKFdhHc2TV9M0yLyt0NmeZztidus=";
+    rev = "ab7ab21addba77e4552044ad556d0a73bebdfd7d";
+    hash = "sha256-/nma6Hx9ygYeBkpZrL2oONoIJFQJvXCxfSjCGZ6avcU=";
   };
   runtimePath = lib.makeBinPath [
     coreutils
@@ -225,6 +225,8 @@ runCommand "paperclip-${version}"
     passthru = {
       inherit runtime unwrapped;
       runnerd = runner;
+      # The exact source implements protected POSIX credential-file reads.
+      supportsPaperclipApiKeyFile = true;
     };
   }
   ''
