@@ -307,6 +307,10 @@ in
               hello
               cowsay
             ];
+            # mksquashfs scales its memory requirement with the number of
+            # processors (all host CPUs by default). Give the build VM enough
+            # memory to cope with high core-count builders.
+            memSize = 4096;
             singularity = finalAttrs.finalPackage;
           };
         };

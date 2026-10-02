@@ -46,19 +46,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.4.1";
+        version = "4.5.1";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
-          hash = "sha256-lFnxh+cs5y6F/1f5uyQ3vA1E8uBKJOyOYbJy6081I5U=";
+          hash = "sha256-eay+hWYXMMJ9LayqacJ9WysIrYOMYqd4ibPmBvvB1zg=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-uqEzYj8JmZWi2Rceh+JMJ5kzUmJ4T3JAt0rto1NewlM=";
+        vendorHash = "sha256-Sj2KQ8SVkxQSvF2slhoDYbgnn5rNBJbJrbquENwLPuc=";
 
         extraConfigureFlags = [
           # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version
@@ -80,6 +80,13 @@ let
           "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
           "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
           "internal/pkg/util/env/clean.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
+          # Since 4.5.0, SingularityCE locates helper binaries (mksquashfs,
+          # unsquashfs, ...) via the "root search path" / "user search path"
+          # directives instead of $PATH, so the wrapped PATH is ignored.
+          # Inject the Nixpkgs binary paths into their defaults.
+          "pkg/util/singularityconf/config.go" = [
             "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ];
         };
