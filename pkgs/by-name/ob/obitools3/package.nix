@@ -43,5 +43,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.cecill20;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.all;
+    problems.broken.message = "obitools3 is obsolete and its upstream source (https://git.metabarcoding.org) is no longer available; it is superseded by obitools4.";
   };
 })
