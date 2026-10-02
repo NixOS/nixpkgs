@@ -24,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-h0qGvQfsWOCP/9XPlih94nGNp4ppplWJ+89qedYipPk=";
   };
 
+  patches = [
+    # Fixes tests after upgrading scikit-learn 1.8.0->1.9.0
+    # Remove on next release https://github.com/rasbt/mlxtend/commit/93ac19f44b8e9688ea76459bb523a964a1dab2b6
+    ./fix-sklearn-1.9-tests.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
