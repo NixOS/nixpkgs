@@ -2532,9 +2532,9 @@
   };
 
   rake = {
-    version = "0.4.0-beta";
-    url = "github:rakelang/tree-sitter-rake/0.4.0-beta";
-    hash = "sha256-z0DCU+xjrQvMIHXFA34dTDPxJY4JJxECjiDAOyuQzaw=";
+    version = "0.5.0-beta";
+    url = "github:rakelang/tree-sitter-rake/v0.5.0-beta";
+    hash = "sha256-iSxl+lZplPJKJxY79qY1cjcGgECltuLAdj+tRBGFIsE=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kaistarkk ];

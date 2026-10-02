@@ -12,15 +12,15 @@
 ocamlPackages.buildDunePackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "rakec";
-  version = "0.4.0-beta";
+  version = "0.5.0-beta";
   dunePackages = [ "rake" ];
   minimalOCamlVersion = "5.1";
 
   src = fetchFromGitHub {
     owner = "rakelang";
     repo = "rake";
-    tag = finalAttrs.version;
-    hash = "sha256-PHs3sH1WGvoeLrlKJwy1ikwwdVLu7C/ddHh3FVz7unw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VpWndmeML8YyQgv9ZBUve5hFMkqKR08UFzc9b7QP5uY=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   meta = {
     description = "Vector-first programming language for predictable SIMD";
     homepage = "https://rake-lang.org";
-    changelog = "https://github.com/rakelang/rake/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/rakelang/rake/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaistarkk ];
     mainProgram = "rakec";
