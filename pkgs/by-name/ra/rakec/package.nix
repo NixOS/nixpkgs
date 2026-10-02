@@ -10,6 +10,7 @@
 }:
 
 ocamlPackages.buildDunePackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "rakec";
   version = "0.4.0-beta";
   dunePackages = [ "rake" ];
