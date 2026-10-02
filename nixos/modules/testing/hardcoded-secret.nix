@@ -30,7 +30,7 @@ in
     example = lib.literalExpression ''
       {
         mySecret = {
-          input = {
+          request = {
             user = "me";
             mode = "0400";
           };
@@ -43,8 +43,8 @@ in
         { name, ... }:
         {
           options = {
-            input = mkOption {
-              description = "Input of the contract for file secrets.";
+            request = mkOption {
+              description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
               type = lib.types.submodule {
                 options = {
                   mode = mkOption {
@@ -74,8 +74,8 @@ in
               };
             };
 
-            output = mkOption {
-              description = "Output of the contract for file secrets.";
+            response = mkOption {
+              description = "Response of the file secrets contract: the provider states where the file is.";
               default = { };
               type = lib.types.submodule {
                 options = {
@@ -119,7 +119,7 @@ in
       let
         source = writeText "hardcodedsecret_${n}_content" cfg'.content;
 
-        inherit (cfg') input output;
+        inherit (cfg') request response;
       in
       nameValuePair "hardcodedsecret_${n}" {
         description = "Hardcoded secret ${n}";
@@ -140,8 +140,8 @@ in
           RemainAfterExit = true;
         };
         script = ''
-          install -D -m ${input.mode} -o ${input.owner} -g ${input.group} \
-            ${source} "${output.path}"
+          install -D -m ${request.mode} -o ${request.owner} -g ${request.group} \
+            ${source} "${response.path}"
         '';
       }
     ) cfg;
