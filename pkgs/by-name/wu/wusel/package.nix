@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
+  gtk4,
   nautilus,
   pkg-config,
   copyDesktopItems,
@@ -14,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wusel";
-  version = "0.4.0";
+  version = "0.5.0";
 
   __structuredAttrs = true;
 
@@ -22,16 +23,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "itbh-at";
     repo = "wusel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3o8WKCzdVLJQPmADj3Q/ML9ooqNfH33sn3FP99xCKt0=";
+    hash = "sha256-etiFid3qrBSTulOf4+v9rTpVAsNxLxL3hIHHbnIO2CA=";
   };
 
-  cargoHash = "sha256-Ul5vAw2C2OFRHcmRnBh6UbRWDg8EEBEvBh4dGrnz7OU=";
+  cargoHash = "sha256-M5mC5nKxtccEP4o2q98bDebn8wg9RfaEf9USZJfKuN4=";
 
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "fuse" ];
 
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # The Nautilus extension's Makefile pulls in gtk4's headers via pkg-config
+    # (used for the GDK clipboard in the "copy internal link" action) but
+    # deliberately does not link against it — Nautilus already has GTK loaded.
+    # nautilus propagates it transitively, but the dep is direct on our side.
+    gtk4
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
