@@ -3808,6 +3808,12 @@
     github = "bitbloxhub";
     githubId = 45184892;
   };
+  bittner = {
+    email = "peter@painless.software";
+    github = "bittner";
+    githubId = 665072;
+    name = "Peter Bittner";
+  };
   bizmyth = {
     email = "andrew.p.council@gmail.com";
     github = "bizmythy";
