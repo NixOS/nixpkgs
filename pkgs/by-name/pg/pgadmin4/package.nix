@@ -114,7 +114,7 @@ pythonPackages.buildPythonApplication rec {
       export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
       yarnBerryConfigHook
     )
-    yarn webpacker
+    NODE_ENV=production yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
     rm -rf ../pip-build/pgadmin4/node_modules
