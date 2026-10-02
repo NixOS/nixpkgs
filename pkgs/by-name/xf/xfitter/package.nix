@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
     license = lib.licenses.gpl3;
-    homepage = "https://www.xfitter.org/xFitter";
+    homepage = "https://gitlab.cern.ch/fitters/xfitter";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
