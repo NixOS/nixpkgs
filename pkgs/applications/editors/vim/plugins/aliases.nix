@@ -65,6 +65,7 @@ mapAliases (
     todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
     typescript-nvim = throw "'vimPlugins.typescript-nvim' has been removed: upstream deleted repository"; # Added 2026-06-15
     vim-csharp = throw "'vimPlugins.vim-csharp' has been removed: repository deleted"; # Added 2026-05-12
+    vim-gml = throw "'vimPlugins.vim-gml' has been removed because the author deleted their GitHub account"; # Added 2026-10-02
     vim-sourcetrail = throw "'vimPlugins.vim-sourcetrail' has been removed: abandoned by upstream"; # Added 2022-08-14
     vimacs = throw "'vimPlugins.vimacs' has been removed due to lack of maintenance"; # Added 2026-07-07
     # keep-sorted end
