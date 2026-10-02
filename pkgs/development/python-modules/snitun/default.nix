@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-l7iXTXY6Dq1LV4ju6/WlipTSeybne33tiFYiwgy+DuM=";
   };
 
+  patches = [
+    # required server_hostname for client connections
+    ./python-3.14.8-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
