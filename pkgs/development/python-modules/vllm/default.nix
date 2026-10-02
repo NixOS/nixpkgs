@@ -161,8 +161,8 @@ let
   deepgemm = fetchFromGitHub {
     owner = "deepseek-ai";
     repo = "DeepGEMM";
-    rev = "891d57b4db1071624b5c8fa0d1e51cb317fa709f";
-    hash = "sha256-sQM8SFkcDJmzyvKl1nv+nkwWaHvvo7mOGyNot2oduJg=";
+    rev = "a6b593d2826719dcf4892609af7b84ee23aaf32a";
+    hash = "sha256-Kym2OAIBsx0mxWHY32bkifgPOzpuPgOu1d79ynHQHEs=";
     fetchSubmodules = true;
   };
 
@@ -177,8 +177,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "a6ec2ba7bd0a7dff98b3f4d3e6b52b159c48d78b";
-      hash = "sha256-Oj37H0swZdxaprpaHq0XfOCagc0ypYKpS8e6JzqcDQg=";
+      rev = "a8f794d1251cbfd88a5011445dd5582289c727e4";
+      hash = "sha256-k/Mbc70U8wbP4BHnxZ/I607Dc2EnIkhWYd9iKUG740Y=";
     };
 
     dontConfigure = true;
@@ -199,8 +199,8 @@ let
   fmha-sm100 = fetchFromGitHub {
     owner = "vllm-project";
     repo = "MSA";
-    rev = "fee783153f3efe57e3e933c5cb7e267a7cebcfb5";
-    hash = "sha256-4yNoYnGK0eElgI01d+n0Hy54oVZLmETVRwnj2Q1/dEY=";
+    rev = "2e63ec37a0fc29bc20f39cd1a52e0f5affc33a73";
+    hash = "sha256-Kym2OAIBsx0mxWHY32bkifgPOzpuPgOu1d79ynHQHEs=";
     fetchSubmodules = true;
   };
 
@@ -209,8 +209,18 @@ let
   triton-kernels = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v3.6.0";
-    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
+    tag = "v3.5.1";
+    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
+  };
+
+  # grep for GIT_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/tml_fa4.cmake
+  tml-fa4 = fetchFromGitHub {
+    name = "tml-fa4-source";
+    owner = "vllm-project";
+    repo = "tml-fa4";
+    rev = "b206834606ed5b5f21f8eed6b0683f528ea9cf7d";
+    hash = "sha256-LDA5bW4Bf5+w41K9aJ5flz372hy+Ukm//RT55L7nbbU=";
   };
 
   # grep for GIT_TAG in the following file
@@ -234,8 +244,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "803020a8fa15407871341d41eba4919ade2ee1ee";
-      hash = "sha256-Ioq6C7jWvuCs3OGoQV0jeih2YGhdxLB2WAp1a2pe024=";
+      rev = "caaa4eb59845388a20b1f435ecaafb4bd9517ad8";
+      hash = "sha256-oPCjHhjRuUVarnlIn17ZqSgvDOlDZqYYZjKyAQsBMP0=";
     };
 
     patches = [
@@ -370,14 +380,14 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ArmNLA71YRNpBAMlWxwBzUroMFjhyZ2ZsjX8JNc4pH4=";
+    hash = "sha256-jFzV6vQX88FhemF98HmT5j3t6Trj5lXVlym4WD/X+Kw=";
   };
 
   cargoRoot = "rust";
@@ -388,7 +398,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-Kdp0+NzDBs9S57XUVNmV7q1fxGog1rd3lh+J5F3vQqY=";
+    hash = "sha256-/kRtossDL0xuOYEzHA6xwN3P55kn6j0+eSm7j75e2ao=";
   };
 
   patches = [
@@ -643,6 +653,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     VLLM_TARGET_DEVICE = "cuda";
     CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
     TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
+    TML_FA4_SRC_DIR = "${lib.getDev tml-fa4}";
   }
   // lib.optionalAttrs rocmSupport {
     VLLM_TARGET_DEVICE = "rocm";
@@ -710,6 +721,5 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       #   RISC-V support.
       "aarch64-darwin"
     ];
-    broken = cudaSupport;
   };
 })
