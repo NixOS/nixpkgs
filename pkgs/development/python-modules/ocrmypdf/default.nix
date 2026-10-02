@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  deprecation,
+  cyclopts,
   fetchFromGitHub,
   fpdf2,
   ghostscript_headless,
@@ -21,18 +21,22 @@
   pypdfium2,
   pytest-xdist,
   pytestCheckHook,
+  python-dotenv,
   rich,
   reportlab,
   replaceVars,
+  streamlit,
   tesseract,
   uharfbuzz,
   unpaper,
+  watchfiles,
+  xpdf,
   installShellFiles,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ocrmypdf";
-  version = "17.11.0";
+  version = "17.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,11 +49,10 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-aQshgDyJ/nsk56C4SVYU/se9aK4WFgvFydiQFtDbAfM=";
+    hash = "sha256-4gjA33EEY9v+dmXh2yMthnE9x8lJ+wU1ZVBN5fnoqdA=";
   };
 
   patches = [
-    ./use-pillow-heif.patch
     (replaceVars ./paths.patch {
       gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
@@ -67,12 +70,10 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = [
-    deprecation
     fpdf2
     img2pdf
     packaging
     pdfminer-six
-    pillow-heif
     pikepdf
     pillow
     pluggy
@@ -80,13 +81,31 @@ buildPythonPackage (finalAttrs: {
     pypdfium2
     rich
     uharfbuzz
-  ];
+  ]
+  ++ pikepdf.optional-dependencies.pdfa;
+
+  optional-dependencies = {
+    heic = [ pillow-heif ];
+    watcher = [
+      cyclopts
+      python-dotenv
+      watchfiles
+    ];
+    webservice = [ streamlit ];
+  };
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
     reportlab
+    xpdf # for pdftotext
+  ];
+
+  disabledTests = [
+    # tests set TZ=America/Los_Angeles but that doesn't seem to have an effect
+    "test_unzoned_creation_date_assumes_local_zone"
+    "test_assume_local_time_zone"
   ];
 
   pythonImportsCheck = [ "ocrmypdf" ];
