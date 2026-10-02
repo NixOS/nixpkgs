@@ -202,6 +202,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
     SOURCE_DATE_EPOCH = 1790198139;
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-darwin") {
+    # Test Node's legacy async-context implementation for the Rolldown
+    # async-hook stack corruption on Intel Darwin. Keep integrity checks enabled.
+    NODE_OPTIONS = "--no-async-context-frame";
   };
 
   preBuild = ''
