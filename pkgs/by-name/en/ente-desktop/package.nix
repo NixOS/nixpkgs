@@ -7,22 +7,27 @@
   copyDesktopItems,
   fetchFromGitHub,
   fetchNpmDeps,
+  fetchurl,
   makeDesktopItem,
   rustPlatform,
 
+  cargo,
   electron_42,
   ente-web,
   ffmpeg,
   imagemagick,
   makeWrapper,
+  rustc,
   vips,
+  vulkan-loader,
 
   wasm-bindgen-cli_0_2_125,
+  wasm-pack,
 
   nix-update-script,
 }:
 let
-  version = "1.7.27";
+  version = "1.7.29";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -35,10 +40,43 @@ let
     ];
 
     tag = "photos-desktop-v${version}";
-    hash = "sha256-H6ac1xcoQsxftREukIHpcYc8lFxnvmyxS9xNcr8H3/U=";
+    hash = "sha256-/9qsChxnRQ0KGEuLL6hxDcyYkhLs9sKG+fbE6ZMSp4I=";
   };
 
   electron = electron_42;
+
+  # ente-photos-napi needs ONNX Runtime API 28, so use the build pinned in
+  # desktop/scripts/ort.js (nixpkgs' onnxruntime is older).
+  ortVersion = "1.28.1-r1";
+  ortPlatforms = {
+    x86_64-linux = {
+      arch = "x64";
+      asset = "onnxruntime-webgpu-linux-x64-${ortVersion}.tar.gz";
+      hash = "sha256-lOVTNiFOiR6fZIkB8MgV8RPRU0zsroLs75w4KM1z1PQ=";
+    };
+    aarch64-linux = {
+      arch = "arm64";
+      asset = "onnxruntime-webgpu-linux-arm64-${ortVersion}.tar.gz";
+      hash = "sha256-Lrcc7VDha04tSrILkkJ21Q0SNBeWKn2HSgzbfwFxxj0=";
+    };
+    x86_64-darwin = {
+      arch = "x64";
+      asset = "onnxruntime-coreml-macos-x64-${ortVersion}.tar.gz";
+      hash = "sha256-jJbahWg0O1q0luk9ESpdYSbAHl3MTmcZIZqmeK1qviU=";
+    };
+    aarch64-darwin = {
+      arch = "arm64";
+      asset = "onnxruntime-coreml-macos-arm64-${ortVersion}.tar.gz";
+      hash = "sha256-EokKhx0OZY3QZL4Yf6Y9J8a2kuaflNR1BTL9j00XnB4=";
+    };
+  };
+  ortPlatform =
+    ortPlatforms.${stdenv.hostPlatform.system}
+      or (throw "ente-desktop: unsupported system ${stdenv.hostPlatform.system}");
+  onnxruntime = fetchurl {
+    url = "https://github.com/ente/ort-packaging/releases/download/ort-${ortVersion}/${ortPlatform.asset}";
+    inherit (ortPlatform) hash;
+  };
 
   resourcesDir =
     if stdenv.hostPlatform.isDarwin then
@@ -50,14 +88,14 @@ let
     inherit src;
     name = "ente-desktop-web-cargo-deps";
     sourceRoot = "${src.name}/rust";
-    hash = "sha256-RWemVZmH/NAQ+yDv2jwLhpHZpcp8BK3lZ4GjHMVLGLA=";
+    hash = "sha256-+QXvWN4RiWkcQ8tNTqwrVle+KmJ7Pol470EprqoV1Pg=";
   };
 
   webNpmDeps = fetchNpmDeps {
     inherit src;
     name = "ente-desktop-web-npm-deps";
     sourceRoot = "${src.name}/web";
-    hash = "sha256-iSqxANhb/DC/57Ltw4F9YKjTlJaAeZG3K4NrUN/+omA=";
+    hash = "sha256-VaWrXfJ3yCxyl+JSKhPnVnuLvIrstdIbllnLZ94K650=";
   };
 
   webApp =
@@ -72,6 +110,22 @@ let
         inherit version src;
         npmDeps = webNpmDeps;
         cargoDeps = webCargoDeps;
+
+        # The wasm package has been split into one workspace per app, which
+        # ente-web does not handle yet.
+        postPatch = ''
+          chmod -R u+w ../rust
+
+          substituteInPlace packages/wasm/*/package.json \
+            --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
+
+          # The cast bindings disable reference-types and rebuild std with nightly
+          # `-Z build-std` to support Chromecast browsers. Within the desktop app
+          # they only run in Electron, so build them with the stable toolchain.
+          substituteInPlace packages/wasm/cast/package.json \
+            --replace-fail " -- -Z build-std=panic_abort,std" ""
+          rm ../rust/bindings/wasm/cast/.cargo/config.toml
+        '';
       };
 in
 buildNpmPackage (finalAttrs: {
@@ -80,11 +134,17 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
 
-  npmDepsHash = "sha256-qhimZHLD6mTUomZylLCyWWwPPi/m0VgjkMXGu2Wdkis=";
+  npmDepsHash = "sha256-9ROnHGq/2q7fLo2eVghgCDqEcethtQYyC6Cffp4R0aE=";
+
+  cargoDeps = webCargoDeps;
+  cargoRoot = "../rust";
 
   nativeBuildInputs = [
+    cargo
     imagemagick
     makeWrapper
+    rustPlatform.cargoSetupHook
+    rustc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook # for onnxruntime
@@ -95,10 +155,29 @@ buildNpmPackage (finalAttrs: {
     (lib.getLib stdenv.cc.cc) # for onnxruntime
   ];
 
-  # Path to vips (otherwise it looks within the electron derivation)
+  # onnxruntime loads its execution providers from its own directory, and the
+  # WebGPU execution provider loads Vulkan at runtime
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
+    "$ORIGIN"
+    "${lib.getLib vulkan-loader}/lib"
+  ];
+
+  # Path to vips, the N-API addon and onnxruntime (otherwise it looks within
+  # the electron derivation)
   postPatch = ''
-    substituteInPlace src/main/services/image.ts src/main.ts \
+    substituteInPlace src/main/services/image.ts src/main/services/ml-native.ts src/main.ts \
       --replace-fail "process.resourcesPath" "\"${resourcesDir}\""
+
+    # The Rust workspace lives outside the `desktop` sourceRoot
+    chmod -R u+w ../rust
+
+    # The N-API addon and onnxruntime are built and staged in preBuild instead,
+    # as upstream's scripts use rustup, napi-cross and download onnxruntime.
+    substituteInPlace package.json \
+      --replace-fail '"npm run codegen:napi && tsc && electron-builder"' '"tsc && electron-builder"'
+    substituteInPlace scripts/beforeBuild.js \
+      --replace-fail "await stageONNXRuntime(platform.nodeName, arch, appDir);" "" \
+      --replace-fail "await stageNapiAddons(appDir, platform.nodeName, arch);" ""
   '';
 
   preConfigure = ''
@@ -106,6 +185,21 @@ buildNpmPackage (finalAttrs: {
 
     cp -R ${electron.dist} ./electron_dist
     chmod -R u+w ./electron_dist
+  '';
+
+  preBuild = ''
+    npm exec -- napi build \
+      --manifest-path ../rust/bindings/napi/photos/Cargo.toml \
+      --target-dir ../rust/target \
+      --release --strip --platform --no-js \
+      --dts index.d.ts \
+      --output-dir rust-bindings
+
+    mkdir -p build/napi
+    cp rust-bindings/*.node build/napi/
+
+    mkdir -p build/onnxruntime/${ortPlatform.arch}
+    tar -xf ${onnxruntime} -C build/onnxruntime/${ortPlatform.arch}
   '';
 
   npmBuildScript = "build-main";
@@ -197,6 +291,6 @@ buildNpmPackage (finalAttrs: {
       Br1ght0ne
       wrench-exile-legacy
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.attrNames ortPlatforms;
   };
 })
