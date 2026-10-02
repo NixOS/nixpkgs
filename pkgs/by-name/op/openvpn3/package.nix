@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   fetchFromGitHub,
   asio_1_32_0,
@@ -51,6 +52,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-handle-result-from-DcoKeyConfig_ParseFromString.patch
+    (fetchpatch2 {
+      # Require C++20 for abseil-cpp 202608.
+      url = "https://github.com/OpenVPN/openvpn3-linux/commit/f6b84daf83ef507a78ca4af32bf4a55470ba0043.patch?full_index=1";
+      hash = "sha256-nzlZvOOt1T84mZ9odmdIsBsioxvakzKzmRw6+nlwPzs=";
+    })
+    (fetchpatch2 {
+      # Avoid C++20 mixed-enum bitwise warnings.
+      url = "https://github.com/OpenVPN/openvpn3/commit/f3e7d10dfb787de592a3b50bbe47b8a421c8d185.patch?full_index=1";
+      hash = "sha256-17jBA3lWFklxVbu/JoH6VBlBT9BpP4wAlKncGmjLqkc=";
+      extraPrefix = "openvpn3-core/";
+      stripLen = 1;
+    })
+    (fetchpatch2 {
+      # Avoid C++20 mixed-enum arithmetic warnings.
+      url = "https://github.com/OpenVPN/openvpn3/commit/11ab894befb781a3c255e64a53571f2fd697bdfe.patch?full_index=1";
+      hash = "sha256-BNR+n0g6Xkb2iAWloZy6gobxvu/KRhRkCGZJbtZXg4A=";
+      extraPrefix = "openvpn3-core/";
+      stripLen = 1;
+    })
   ];
 
   prePatch = ''
