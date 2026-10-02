@@ -16,15 +16,6 @@
   fetchpatch,
 }:
 
-let
-  inherit (qt6)
-    qtbase
-    qtsvg
-    qttools
-    qtspeech
-    wrapQtAppsHook
-    ;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
   version = "3.2.0";
@@ -32,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bibletime";
     repo = "bibletime";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UYR+7yGe3skNsqRbZNpwnOVHvFjmViVvm40hdHZeTXk=";
   };
 
@@ -49,17 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxslt
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     perlPackages.Po4a
   ];
 
   buildInputs = [
     boost
     clucene-core_2
-    qtbase
-    qtsvg
-    qttools
-    qtspeech
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtspeech
     sword
   ];
 
