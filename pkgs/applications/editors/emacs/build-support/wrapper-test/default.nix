@@ -4,6 +4,7 @@
   hello,
   replaceVarsWith,
   lib,
+  writeShellApplication,
 }:
 
 let
@@ -65,10 +66,10 @@ let
                      (error "%s" "File indentation is wrong")))))'
       '';
     };
-in
-runCommand "test-emacs-withPackages-wrapper"
-  {
-    nativeBuildInputs = [
+
+  run-test = writeShellApplication {
+    name = "run-test";
+    runtimeInputs = [
       (emacs.pkgs.withPackages (epkgs: [
         epkgs.dash
         epkgs.flx-ido
@@ -97,23 +98,33 @@ runCommand "test-emacs-withPackages-wrapper"
         (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
     ];
-    env = {
+    runtimeEnv = {
       # emulate a default NixOS env where INFOPATH is set like this (not ending with a ":")
       INFOPATH = "/fake-info-dir1:/fake-info-dir2";
       EMACS_TEST_VERBOSE = 1; # make ERT output verbose
     };
+    text = ''
+      # Give Emacs a HOME to emulate a real user environment.
+      HOME="$PWD"
+
+      nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
+      emacs --daemon="$nonBatchEmacsSocket"
+
+      emacs --batch --load=with-packages \
+        --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
+        --eval='(setq with-packages-unwrapped-emacs-program "${lib.getExe emacs}")' \
+        --funcall=ert-run-tests-batch-and-exit
+    '';
+  };
+in
+runCommand "test-emacs-withPackages-wrapper"
+  {
+    nativeBuildInputs = [
+      run-test
+    ];
   }
   ''
-    # Give Emacs a HOME to emulate a real user environment.
-    HOME="$PWD"
-
-    nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
-    emacs --daemon="$nonBatchEmacsSocket"
-
-    emacs --batch --load=with-packages \
-      --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
-      --eval='(setq with-packages-unwrapped-emacs-program "${lib.getExe emacs}")' \
-      --funcall=ert-run-tests-batch-and-exit
+    run-test
 
     touch $out
   ''
