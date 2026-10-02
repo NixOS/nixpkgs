@@ -55,9 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
   # phase.
   dontConfigure = true;
 
+  # Compiled programs link to libchicken, which records where the runtime's
+  # repository and data are, so those go to the lib output, and programs refer
+  # to that alone. The rest refers to the C compiler, by chicken-config.h.
+  outputs = [
+    "out"
+    "lib"
+  ];
+
   makeFlags = [
     "PLATFORM=${platform}"
     "PREFIX=$(out)"
+    "LIBDIR=$(lib)/lib"
+    "DATADIR=$(lib)/share/chicken"
+    "DOCDIR=$(out)/share/chicken/doc"
     "C_COMPILER=$(CC)"
     "CXX_COMPILER=$(CXX)"
   ]
@@ -78,6 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+  # On platforms that need relinking, the install-bin target deletes
+  # libchicken.so and relinks it, racing with install-libs, which installs it.
+  enableParallelInstalling = false;
 
   # Neither release's test suite survives the Darwin sandbox, for a different
   # reason each: CHICKEN 5's runtests.sh drives the compiler through
