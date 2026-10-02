@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchpatch,
+  fetchpatch2,
   buildPackages,
   ninja,
   gn,
@@ -95,6 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # --warning-suppression-mappings is a Clang-only option.
+    (fetchpatch2 {
+      name = "signal-webrtc-pr-180.patch";
+      url = "https://github.com/signalapp/webrtc/pull/180.patch?full_index=1";
+      hash = "sha256-g7T0kauTudIOQKshqiJW3MCy1gAP6HMP34zVPTPyR2Q=";
+    })
+
     # clang++: error: unknown argument: '-fno-lifetime-dse'
     ./chromium-147-llvm-22.patch
 
