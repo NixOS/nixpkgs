@@ -13,6 +13,7 @@
   qt6,
   stdenv,
   sword,
+  fetchpatch,
 }:
 
 let
@@ -20,19 +21,27 @@ let
     qtbase
     qtsvg
     qttools
+    qtspeech
     wrapQtAppsHook
     ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "bibletime";
     repo = "bibletime";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kYQjkwfWsEijJ/umOylnfvHgv4u16xr3pkr3ALN4O8c=";
+    hash = "sha256-UYR+7yGe3skNsqRbZNpwnOVHvFjmViVvm40hdHZeTXk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "http://github.com/bibletime/bibletime/commit/378c83d1fec533a04976b055cf11f2707384f269.patch";
+      hash = "sha256-BPqPZqcJSRdCFf/vkqNjD7QvHgtIAeGdtZ+mQtIn71Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     qttools
+    qtspeech
     sword
   ];
 
