@@ -11,13 +11,12 @@
   gitMinimal,
   jq,
   nix-update,
-  pup,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.2.12";
+  version = "8.3.11";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -60,15 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-dInAJIYOsz7lAZD7o7p178pKUNlCZcSILebC0XUam4g=";
+        hash = "sha256-qKpPddwPKmarQhUpuxRSSFIixsmJCbBHqY2QmBw06r4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-hIqjImtj0sZmgoU6fLp6ASdqL97bG+6iFoB62vuUndE=";
+        hash = "sha256-UlQL+x3nrUFVJMalEX1DT82E8k8j49tW5xl36f7Sjy4=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-ixFA3XRcI6yvuBIBL6w/9VnFkwZdtjGlvsPbr6+N0cI=";
+        hash = "sha256-tYbDlyiA/N6pBpCm0iwizSYLCXLecXynEMC8d8ZLA54=";
       };
     };
     updateScript =
@@ -82,15 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
             gitMinimal
             jq
             nix-update
-            pup
           ];
 
           text = ''
-            # Get latest version string from Github
-            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.2")) | select(contains("rc") | not) | .[1:])')
-
-            # Check if the new version is available for download, if not, exit
-            curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
+            # Pick the newest production (non-RC) release within the current major version from
+            # MongoDB's official release feed. Major upgrades are left as a deliberate manual change.
+            # A version only shows up in the feed once its binaries are published, so no separate
+            # download-availability check is needed.
+            NEW_VERSION=$(curl -s https://downloads.mongodb.org/current.json \
+              | jq -r --arg major "${lib.versions.major finalAttrs.version}" \
+                '[.versions[] | select(.production_release and (.release_candidate | not)) | .version | select(startswith($major + "."))] | sort_by(split(".") | map(tonumber)) | last')
 
             if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
                 echo "The new version same as the old version."
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/${lib.versions.majorMinor finalAttrs.version}/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
     license = lib.licenses.sspl;
