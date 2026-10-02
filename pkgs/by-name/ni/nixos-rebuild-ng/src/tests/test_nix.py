@@ -957,9 +957,16 @@ def test_switch_to_configuration_without_systemd_run_env_var(
     )
 
 
+@patch(
+    get_qualified_name(n._systemd_run_supports_output_cat, n),
+    autospec=True,
+    return_value=True,
+)
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_switch_to_configuration_with_systemd_run(
-    mock_run: Mock, monkeypatch: MonkeyPatch
+    mock_run: Mock,
+    mock_supports_output_cat: Mock,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
@@ -979,6 +986,9 @@ def test_switch_to_configuration_with_systemd_run(
     mock_run.assert_called_with(
         [
             *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            "--wait",
+            "--verbose",
+            "--output=cat",
             profile_path / "bin/switch-to-configuration",
             "switch",
         ],
@@ -992,6 +1002,7 @@ def test_switch_to_configuration_with_systemd_run(
         stdout=sys.stderr,
     )
 
+    mock_supports_output_cat.return_value = False
     target_host = m.Remote("user@localhost", [], "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
@@ -1009,6 +1020,7 @@ def test_switch_to_configuration_with_systemd_run(
     mock_run.assert_called_with(
         [
             *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            "--pipe",
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
@@ -1020,6 +1032,33 @@ def test_switch_to_configuration_with_systemd_run(
         elevate=SUDO,
         remote=target_host,
         stdout=sys.stderr,
+    )
+
+
+@pytest.mark.parametrize(
+    ("version_output", "expected"),
+    [
+        ("systemd 260 (260.1)\n", False),
+        (
+            textwrap.dedent("""\
+               systemd 261 (261.2)
+               +PAM +AUDIT -SELINUX +APPARMOR +IMA +IPE +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK -BTF -XKBCOMMON +UTMP +LIBARCHIVE
+            """),
+            True,
+        ),
+        ("systemd 270 (270.2)\n", True),
+        ("unexpected output\n", False),
+    ],
+)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_systemd_run_supports_output_cat(
+    mock_run: Mock, version_output: str, expected: bool
+) -> None:
+    mock_run.return_value = CompletedProcess([], 0, stdout=version_output)
+
+    assert n._systemd_run_supports_output_cat(None) is expected
+    mock_run.assert_called_once_with(
+        ["systemd-run", "--version"], remote=None, capture_output=True
     )
 
 

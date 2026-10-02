@@ -76,11 +76,13 @@ flutter344.buildFlutterApplication {
     description = "Note taking app where your ideas come first";
     homepage = "https://github.com/LinwoodDev/Butterfly";
     mainProgram = "butterfly";
-    license = with lib.licenses; [
-      agpl3Plus
-      cc-by-sa-40
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        cc-by-sa-40
+        asl20
+      ];
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

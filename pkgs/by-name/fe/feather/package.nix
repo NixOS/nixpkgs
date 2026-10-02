@@ -1,9 +1,9 @@
 {
+  abseil-cpp,
   bc-ur,
-  boost186,
+  boost,
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
   hidapi,
   lib,
   libsodium,
@@ -21,7 +21,9 @@
   unbound,
   zxing-cpp,
 }:
-
+let
+  protobuf' = protobuf.override { abseil-cpp = abseil-cpp.override { cxxStandard = "17"; }; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
   version = "2.9.1";
@@ -43,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bc-ur
-    boost186
+    boost
     hidapi
     libsodium
     libusb1
     openssl
-    protobuf
+    protobuf'
     qrencode
     unbound
     zxing-cpp
@@ -63,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   cmakeFlags = [
-    "-DProtobuf_INCLUDE_DIR=${lib.getDev protobuf}/include"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe protobuf}"
     "-DReadline_INCLUDE_DIR=${lib.getDev readline}/include/readline"
     "-DReadline_LIBRARY=${lib.getLib readline}/lib/libreadline.so"
     "-DReadline_ROOT_DIR=${lib.getDev readline}"

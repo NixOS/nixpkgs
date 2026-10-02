@@ -18,6 +18,7 @@
   libx11,
   libxcursor,
   libxext,
+  libxkbcommon,
   libxrandr,
   libxxf86vm,
   openal,
@@ -107,6 +108,7 @@ symlinkJoin {
         libxxf86vm
         wayland
         libdecor
+        libxkbcommon
 
         udev # oshi
 

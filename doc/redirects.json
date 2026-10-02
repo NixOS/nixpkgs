@@ -128,9 +128,6 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
-  "ex-pnpm-build-hook": [
-    "index.html#ex-pnpm-build-hook"
-  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -405,33 +402,6 @@
   ],
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
-  ],
-  "pnpm-build-hook": [
-    "index.html#pnpm-build-hook"
-  ],
-  "pnpm-build-hook-build-flags": [
-    "index.html#pnpm-build-hook-build-flags"
-  ],
-  "pnpm-build-hook-code-snippet": [
-    "index.html#pnpm-build-hook-code-snippet"
-  ],
-  "pnpm-build-hook-dont": [
-    "index.html#pnpm-build-hook-dont"
-  ],
-  "pnpm-build-hook-exclusive-variables": [
-    "index.html#pnpm-build-hook-exclusive-variables"
-  ],
-  "pnpm-build-hook-flags": [
-    "index.html#pnpm-build-hook-flags"
-  ],
-  "pnpm-build-hook-script": [
-    "index.html#pnpm-build-hook-script"
-  ],
-  "pnpm-build-hook-variables": [
-    "index.html#pnpm-build-hook-variables"
-  ],
-  "pnpm-build-hook-honored-variables": [
-    "index.html#pnpm-build-hook-honored-variables"
   ],
   "preface": [
     "index.html#preface",
@@ -1710,6 +1680,9 @@
   ],
   "var-meta-mainProgram": [
     "index.html#var-meta-mainProgram"
+  ],
+  "var-meta-mainDarwinApp": [
+    "index.html#var-meta-mainDarwinApp"
   ],
   "var-meta-priority": [
     "index.html#var-meta-priority"
@@ -3883,7 +3856,23 @@
     "index.html#javascript-corepack"
   ],
   "javascript-pnpm": [
-    "index.html#javascript-pnpm"
+    "index.html#javascript-pnpm",
+    "index.html#ex-pnpm-build-hook"
+  ],
+  "javascript-pnpm-pnpmBuildHook": [
+    "index.html#javascript-pnpm-pnpmBuildHook",
+    "index.html#pnpm-build-hook",
+    "index.html#pnpm-build-hook-build-flags",
+    "index.html#pnpm-build-hook-code-snippet",
+    "index.html#pnpm-build-hook-dont",
+    "index.html#pnpm-build-hook-exclusive-variables",
+    "index.html#pnpm-build-hook-flags",
+    "index.html#pnpm-build-hook-script",
+    "index.html#pnpm-build-hook-variables",
+    "index.html#pnpm-build-hook-honored-variables"
+  ],
+  "javascript-pnpm-pnpmConfigHook": [
+    "index.html#javascript-pnpm-pnpmConfigHook"
   ],
   "javascript-pnpm-sourceRoot": [
     "index.html#javascript-pnpm-sourceRoot"

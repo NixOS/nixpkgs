@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reknife";
-  version = "1.8.0";
+  version = "1.8.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bl4ckr0ss3";
     repo = "knife";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oloigIVxFpi3DEK4FaAEOzNeho/xWb/NU44Zez/eMmQ=";
+    hash = "sha256-uHYSNKe8CsOBJUO55dNzFJ986h3SdYN/a7K9XOnzfcY=";
   };
 
-  cargoHash = "sha256-eIK4PyzdGV8TSvKa1XUVbtHWU7ZlPMiba/N0DYu7ps8=";
+  cargoHash = "sha256-NbIv7WtWvyeZ0ZwFGPvS57AgBE+7z0mdFu4+NK/+lQE=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

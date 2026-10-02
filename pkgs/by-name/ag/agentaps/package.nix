@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   git,
   pkg-config,
   makeWrapper,
@@ -18,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agentaps";
-  version = "0.3.1";
+  version = "0.4.0";
 
   __structuredAttrs = true;
 
@@ -26,19 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "domenkozar";
     repo = "agentaps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pHESE5ML5zeDylz07t8k1jJop/IGyIhTTffPN4dWrY0=";
+    hash = "sha256-/DIcohzFT0Rm6alPhBnuvJuKh6lAHwDkZJ3jwUCyDZA=";
   };
 
-  cargoHash = "sha256-ko+ytnpQGLIA41+aurIcY5Rp0Aemf7Z4PFC5GdLFLvw=";
-
-  patches = [
-    # Add --version support until the next release.
-    (fetchpatch {
-      url = "https://github.com/domenkozar/agentaps/commit/1665c2792929226d675d427e0eef42cd3ede7a71.patch";
-      hash = "sha256-+wL5G6Ln9uuWxt2fRW2QPbD54Zif51hGxcNAC3Q3f84=";
-      includes = [ "src/main.rs" ];
-    })
-  ];
+  cargoHash = "sha256-R2VPjxwElvLPbikwuxILwV7ShSOy3mJjqinaK8dNipk=";
 
   nativeBuildInputs = [
     makeWrapper

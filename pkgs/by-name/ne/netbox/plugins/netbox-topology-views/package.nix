@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-topology-views";
-  version = "4.5.1";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "netbox-community";
     repo = "netbox-topology-views";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uKxIu8IPeEwBdRbtQaLWGwLnxvFyJ5FrScsU/ufyTuM=";
+    hash = "sha256-V91L58tZVcIR7ml/RohmJ2QogsbabceskwGLZjS/W+U=";
   };
 
   build-system = [ setuptools ];

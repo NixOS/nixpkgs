@@ -38,7 +38,7 @@ let
   # unconditionally FetchContent-downloads a prebuilt tarball from S3.
   # Point FetchContent at our own libavif instead, which it expects to find as `include/` and
   # `lib/libavif.so.16` under a single root.
-  # https://github.com/meta-pytorch/torchcodec/blob/v0.16.0/src/torchcodec/_core/fetch_avif_from_s3.cmake
+  # https://github.com/meta-pytorch/torchcodec/blob/v0.17.0/src/torchcodec/_core/fetch_avif_from_s3.cmake
   libavif-root = symlinkJoin {
     name = "libavif-root";
     paths = [
@@ -49,7 +49,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -57,7 +57,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eXe86DQqXWePWn9UcMVLdJTaO0YQZIQaQ4o1ao/5dH8=";
+    hash = "sha256-IvxVtbH43RpJ4HZ8r/g6/+Ab5xBRk9uQUSIi1Af78O0=";
   };
 
   postPatch = ''
@@ -77,6 +77,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
         'ffmpeg_cli = "${lib.getExe ffmpeg-headless}"'
+
+    substituteInPlace test/test_decoders.py \
+      --replace-fail \
+        '"ffmpeg", "-' \
+        '"${lib.getExe ffmpeg-headless}", "-'
   '';
 
   nativeBuildInputs = [
@@ -151,6 +156,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     torchvision
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTestPaths = [
     # Shells out to `pip install` to set up a plugin package
     "test/plugin/test_plugins.py"
@@ -168,62 +175,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Fails in the sandbox:
     # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
     "test_python_logger"
-
-    # AssertionError: index 0
-    "test_get_frames_played_at"
-
-    # AssertionError: Tensor-likes are not equal!
-    "test_against_cli"
-    "test_against_ref"
-    "test_color_conversion_library"
-    "test_color_conversion_library_with_dimension_order"
-    "test_compile"
-    "test_compile_seek_and_next"
-    "test_create_decoder"
-    "test_crop_transform"
-    "test_custom_frame_mappings_json_and_bytes"
-    "test_file_like_decoding"
-    "test_get_frame_at"
-    "test_get_frame_at_av1"
-    "test_get_frame_at_index"
-    "test_get_frame_at_pts"
-    "test_get_frame_played_at"
-    "test_get_frame_played_at_h265"
-    "test_get_frame_with_info_at_index"
-    "test_get_frames_at"
-    "test_get_frames_at_indices"
-    "test_get_frames_at_indices_negative_indices"
-    "test_get_frames_by_pts_in_range"
-    "test_get_frames_in_range"
-    "test_get_frames_in_range_slice_indices_syntax"
-    "test_get_frames_with_missing_num_frames_metadata"
-    "test_getitem_int"
-    "test_getitem_numpy_int"
-    "test_getitem_slice"
-    "test_iteration"
-    "test_seek_and_next"
-    "test_seek_mode_custom_frame_mappings"
-    "test_seek_to_negative_pts"
-    "test_throws_exception_at_eof"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # RuntimeError: Invalid AVIO context holder
-    "test_1d_samples"
-    "test_against_cli"
-    "test_against_to_file"
-    "test_against_to_file"
-    "test_contiguit"
-    "test_crf_valid_value"
-    "test_encode_to_tensor_long_outpu"
-    "test_num_channels"
-    "test_round_trip"
-    "test_video_encoder_against_ffmpeg_cli"
-    "test_video_encoder_round_trip"
-
-    # RuntimeError: Requested next frame while there are no more frames left to decode
-    "test_next"
-    "test_throws_exception_at_eof"
-    "test_throws_exception_if_seek_too_far"
   ];
 
   meta = {

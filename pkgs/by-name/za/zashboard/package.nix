@@ -54,6 +54,9 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/Zephyruso/zashboard";
     changelog = "https://github.com/Zephyruso/zashboard/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chillcicada ];
+    maintainers = with lib.maintainers; [
+      chillcicada
+      levihuayuzhang
+    ];
   };
 })
