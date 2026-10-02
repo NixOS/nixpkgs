@@ -50,6 +50,7 @@
 
   # runtime
   gitMinimal,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -125,10 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
       --zsh <($out/bin/noctalia completions zsh)
   '';
 
-  # plugins are installed by cloning their repos
+  # plugins are installed by cloning their repos; the icon theme is read and
+  # color-scheme written through the org.gnome.desktop.interface GSettings schema
   postFixup = ''
     wrapProgram $out/bin/noctalia \
-      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]}
+      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]} \
+      --suffix XDG_DATA_DIRS : ${glib.getSchemaDataDirPath gsettings-desktop-schemas}
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
