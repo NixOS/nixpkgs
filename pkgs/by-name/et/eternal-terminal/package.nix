@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
-    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jshort
