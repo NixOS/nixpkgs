@@ -71,7 +71,7 @@ function runChecklist({
         pull_request.head.ref.startsWith('backport-'),
       'Opened by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
         committers.has(pull_request.user.id),
-      'Opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).':
+      'Opened by [@r-ryantm](https://nixos.github.io/nixpkgs-update/r-ryantm/).':
         pull_request.user.login === 'r-ryantm',
     },
     'PR is not a draft': !pull_request.draft,

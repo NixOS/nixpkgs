@@ -1,12 +1,26 @@
-// @ts-nocheck
 import { dismissReviews, postReview } from './reviews.ts'
-import { classify } from './supportedBranches.ts'
+import { type BranchClassification, classify } from './supportedBranches.ts'
 import supportedSystems from './supportedSystems.ts'
 
 const reviewKey = 'prepare'
 
-export default async ({ github, context, core, dry }) => {
-  const pull_number = context.payload.pull_request.number
+type GitHub = InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+type Context = typeof import('@actions/github').context
+type Core = typeof import('@actions/core')
+
+export default async ({
+  github,
+  context,
+  core,
+  dry,
+}: {
+  github: GitHub
+  context: Context
+  core: Core
+  dry: boolean
+}) => {
+  const pull_number = context.payload.pull_request?.number
+  if (!pull_number) throw new Error('Not a pull request')
 
   for (const retryInterval of [5, 10, 20, 40, 80]) {
     core.info('Checking whether the pull request can be merged...')
@@ -89,7 +103,11 @@ export default async ({ github, context, core, dry }) => {
         .filter(({ stable, type }) => type.includes('primary') && stable)
         .sort((a, b) => b.version.localeCompare(a.version))
 
-      async function mergeBase({ branch, order, version }) {
+      async function mergeBase({
+        branch,
+        order,
+        version,
+      }: Pick<BranchClassification, 'branch' | 'order' | 'version'>) {
         const { data } = await github.rest.repos.compareCommitsWithBasehead({
           ...context.repo,
           basehead: `${branch}...${head.sha}`,
@@ -152,7 +170,7 @@ export default async ({ github, context, core, dry }) => {
         )
         .sort((a, b) => a.order - b.order)
 
-      const best = candidates.at(0)
+      const best = candidates[0]
 
       core.info('The base branches for this PR are:')
       core.info(`github: ${base.ref}`)
@@ -188,9 +206,9 @@ export default async ({ github, context, core, dry }) => {
       }
     }
 
-    let mergedSha, targetSha
+    let mergedSha: string, targetSha: string
 
-    if (prInfo.mergeable) {
+    if (prInfo.mergeable && prInfo.merge_commit_sha != null) {
       core.info('The PR can be merged.')
 
       mergedSha = prInfo.merge_commit_sha
@@ -224,7 +242,7 @@ export default async ({ github, context, core, dry }) => {
     const files = (
       await github.paginate(github.rest.pulls.listFiles, {
         ...context.repo,
-        pull_number: context.payload.pull_request.number,
+        pull_number,
         per_page: 100,
       })
     ).map((file) => file.filename)
