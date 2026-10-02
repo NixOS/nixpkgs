@@ -29084,6 +29084,14 @@
     github = "thenonameguy";
     githubId = 2217181;
   };
+  TheOneWithTheBraid = {
+     name = "The one with the braid";
+     github = "TheOneWithTheBraid";
+     githubId = 29313398;
+     email = "info@braid.business";
+     matrix = "@braid:alsace.hair";
+     keys = [ { fingerprint = "A09B 408A 7864 577B 0126  6D7C 79D2 235B C19F F56A"; } ];
+  };
   theobori = {
     name = "Théo Bori";
     email = "theobori@disroot.org";
