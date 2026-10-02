@@ -233,6 +233,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix R_LIBS_SITE : ${lib.makeSearchPath "library" rWrapper.recommendedPackages}
   '';
 
+  # run engine tests only
+  checkFlags = [
+    "-C"
+    "Macaulay2/e"
+  ];
+
+  doCheck = true;
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/M2 --check 1
