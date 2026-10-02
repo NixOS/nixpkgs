@@ -75,6 +75,7 @@
   libxrender,
   libxkbcommon,
   pango,
+  pciutils,
   pipewire,
   libappindicator,
   libdbusmenu,
@@ -132,6 +133,7 @@ let
         libxcb
         libxkbcommon
         pango
+        pciutils
         pipewire
         libxscrnsaver
         libappindicator
