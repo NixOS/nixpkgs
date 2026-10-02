@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   buildPackages,
   installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "circleci-cli";
   version = "1.0.48571";
 

@@ -263,6 +263,7 @@ let
       # These keys are documented
       description = str;
       mainProgram = str;
+      mainDarwinApp = str;
       longDescription = str;
       branch = str;
       homepage = either str (listOf str);

@@ -12,7 +12,7 @@ in
   };
 
   nodes.fireflySqlite =
-    { config, ... }:
+    { ... }:
     {
       environment.etc = {
         "firefly-iii-appkey".text = app-key;
@@ -29,7 +29,7 @@ in
     };
 
   nodes.fireflyPostgresql =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       environment.etc = {
         "firefly-iii-appkey".text = app-key;
@@ -67,7 +67,7 @@ in
     };
 
   nodes.fireflyMysql =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       environment.etc = {
         "firefly-iii-appkey".text = app-key;
@@ -100,21 +100,40 @@ in
       };
     };
 
-  testScript = ''
-    fireflySqlite.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflySqlite.wait_for_unit("nginx.service")
-    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/v1/js/app.js")
-    fireflySqlite.succeed("systemctl start firefly-iii-cron.service")
-    fireflyPostgresql.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflyPostgresql.wait_for_unit("nginx.service")
-    fireflyPostgresql.wait_for_unit("postgresql.target")
-    fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflyPostgresql.succeed("systemctl start firefly-iii-cron.service")
-    fireflyMysql.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflyMysql.wait_for_unit("nginx.service")
-    fireflyMysql.wait_for_unit("mysql.service")
-    fireflyMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflyMysql.succeed("systemctl start firefly-iii-cron.service")
-  '';
+  testScript =
+    let
+      checkCron = node: ''
+        ${node}.succeed(
+            "curl -fsS -c /tmp/jar -b /tmp/jar -o /tmp/register.html http://localhost/register",
+            "grep -oP 'name=\"_token\" value=\"\\K[^\"]+' /tmp/register.html | tr -d '\\n' > /tmp/token",
+        )
+        redirect = ${node}.succeed(
+            "curl -fsS -c /tmp/jar -b /tmp/jar -o /dev/null -w '%{redirect_url}' http://localhost/register"
+            + " --data-urlencode _token@/tmp/token"
+            + " --data-urlencode email=test@example.com"
+            + " --data-urlencode password=TestTestTestTest1"
+            + " --data-urlencode password_confirmation=TestTestTestTest1"
+        )
+        # A failed registration redirects back to the form.
+        assert "register" not in redirect, f"registration failed, redirected to {redirect}"
+        ${node}.succeed("systemctl start firefly-iii-cron.service")
+      '';
+    in
+    ''
+      fireflySqlite.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflySqlite.wait_for_unit("nginx.service")
+      fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      fireflySqlite.succeed("curl -fvvv -Ls http://localhost/build/manifest.json")
+      ${checkCron "fireflySqlite"}
+      fireflyPostgresql.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflyPostgresql.wait_for_unit("nginx.service")
+      fireflyPostgresql.wait_for_unit("postgresql.target")
+      fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      ${checkCron "fireflyPostgresql"}
+      fireflyMysql.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflyMysql.wait_for_unit("nginx.service")
+      fireflyMysql.wait_for_unit("mysql.service")
+      fireflyMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      ${checkCron "fireflyMysql"}
+    '';
 }

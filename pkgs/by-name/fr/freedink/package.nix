@@ -122,5 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.all;
     mainProgram = "freedink";
+    teams = [ lib.teams.gaming ];
   };
 })

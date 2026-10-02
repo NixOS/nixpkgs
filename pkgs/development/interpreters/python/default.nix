@@ -35,10 +35,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "16";
+        patch = "17";
         suffix = "";
       };
-      hash = "sha256-kbzev93iOaADrpNzin/OD5Iw/uXEvCuG9uboxvmKq+g=";
+      hash = "sha256-v7dK05764nzaUQ8TSrQI4A+ZksVoUc/Asc21ZG2hFZk==";
       inherit passthruFun;
     };
 
@@ -47,10 +47,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "14";
+        patch = "15";
         suffix = "";
       };
-      hash = "sha256-XIRir1eQuvQ6MhoVWdvg2wbRvkMA+4X7U8QAYGaOVIo=";
+      hash = "sha256-wsQyGWH6sPuZnWbgzs9SHCqzmUx5koc+qZ4wbBCU/Vo=";
       inherit passthruFun;
     };
 
