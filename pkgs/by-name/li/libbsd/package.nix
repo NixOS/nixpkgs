@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     # `strtonum(3)` is not available on our default SDK version.
     # https://gitlab.freedesktop.org/libbsd/libbsd/-/issues/30
     ./darwin-enable-strtonum.patch
+    # musl's fixed SIGSTKSZ can be smaller than the kernel's runtime minimum.
+    ./use-runtime-signal-stack-size.patch
   ];
 
   passthru.updateScript = gitUpdater {
