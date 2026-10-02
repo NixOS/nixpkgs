@@ -13,6 +13,7 @@
   librsvg,
   libsecret,
   openssl,
+  openvfs,
   pcre2,
   pkg-config,
   sphinx,
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "34.0.4";
+  version = "35.0.0-rc3";
 
   outputs = [
     "out"
@@ -34,8 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5qHhhMpgmdfNCO88ZtEtE+HcqeTOgxPUXYb8cgC6YiA=";
+    hash = "sha256-3Ew5c4FDhtx9+Fik48gU+yT99gtnDUwI7q/lLTU4GS4=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
@@ -68,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libp11
     libsecret
     openssl
+    openvfs
     pcre2
     qt6Packages.qt5compat
     qt6Packages.qtbase
@@ -81,9 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ libsecret ]}"
     # make xdg-open overridable at runtime
-    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    "--suffix" "PATH" ":" "${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [
