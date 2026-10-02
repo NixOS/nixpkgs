@@ -5,7 +5,6 @@
   makeWrapper,
   runCommand,
   stdenv,
-  writableTmpDirAsHomeHook,
 
   _4ti2,
   autoreconfHook,
@@ -255,23 +254,21 @@ stdenv.mkDerivation (finalAttrs: {
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 2 && touch $out
+          M2 -q --check 2 && touch $out
         '';
 
     all-packages =
-      runCommand "macaulay2-all-packages-test"
+      runCommand "macaulay2-all-package-tests"
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 3 && touch $out
+          M2 -q --check 3 && touch $out
         '';
   };
 
