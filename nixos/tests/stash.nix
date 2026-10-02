@@ -69,15 +69,15 @@ import ./make-test-python.nix (
         };
         testing.hardcoded-secret.fileSecrets."stash-password" = {
           request = config.services.stash.passwordFile.request;
-          content = "MyPassword";
+          providerOptions.content = "MyPassword";
         };
         testing.hardcoded-secret.fileSecrets."jwt_secret_key" = {
           request = config.services.stash.jwtSecretKey.request;
-          content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+          providerOptions.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         };
         testing.hardcoded-secret.fileSecrets."session_store_key" = {
           request = config.services.stash.sessionStoreKey.request;
-          content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+          providerOptions.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
         };
       };
 
