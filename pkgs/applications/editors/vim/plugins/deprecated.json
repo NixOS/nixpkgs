@@ -259,6 +259,10 @@
         "date": "2026-02-04",
         "new": "vim-hier"
     },
+    "himalaya-vim": {
+        "date": "2026-10-01",
+        "new": "himalaya-vim9"
+    },
     "hlint-refactor": {
         "date": "2026-02-04",
         "new": "hlint-refactor-vim"

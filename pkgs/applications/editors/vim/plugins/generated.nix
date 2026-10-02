@@ -7549,16 +7549,16 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  himalaya-vim = buildVimPlugin {
-    pname = "himalaya-vim";
-    version = "0-unstable-2026-02-24";
+  himalaya-vim9 = buildVimPlugin {
+    pname = "himalaya-vim9";
+    version = "0-unstable-2026-09-28";
     src = fetchFromGitHub {
       owner = "pimalaya";
-      repo = "himalaya-vim";
-      rev = "978f2b463c4ece28f5e1457029d399638e439704";
-      hash = "sha256-mm7fU/xnKzUfIvJN7tQfIRswWood7HPAmuD9PZUEN6I=";
+      repo = "himalaya-vim9";
+      rev = "c85636dcebbb8060599ff1f94ba18c99f6a3a677";
+      hash = "sha256-DJ8rsMHBPG8gvq/88kEWm/iQ5khyenoh4MwGq48/s08=";
     };
-    meta.homepage = "https://github.com/pimalaya/himalaya-vim/";
+    meta.homepage = "https://github.com/pimalaya/himalaya-vim9/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
