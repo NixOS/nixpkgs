@@ -3,16 +3,57 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
+
   gflags,
   libsodium,
   openssl,
   protobuf,
   zlib,
-  catch2,
-  versionCheckHook,
-  nix-update-script,
+  httplib,
+  nlohmann_json,
+  libutempter,
+  libunwind,
+  cxxopts,
+  simpleini,
+  platform-folders,
+  catch2_3,
+
+  withSelinux ? stdenv.hostPlatform.isLinux,
+  libselinux,
+  libsepol,
+  pcre2,
 }:
 
+let
+  keepVendored = [
+    # https://github.com/abumq/easyloggingpp
+    "easyloggingpp"
+    # https://github.com/progschj/ThreadPool
+    "ThreadPool"
+    # https://github.com/arsenm/sanitizers-cmake
+    "sanitizers-cmake"
+    # https://github.com/MisterTea/UniversalStacktrace
+    "UniversalStacktrace"
+    # https://github.com/r-lyeh-archived/sole
+    "sole"
+    # https://github.com/tkislan/base64
+    "base64"
+  ];
+
+  deleteVendoredDependencies = rootDir: ''
+    echo "removing vendored dependencies..."
+    find "${rootDir}/external_imported" \
+      -type d \
+      -mindepth 1 -maxdepth 1 \
+      \! \( ${lib.concatMapStringsSep " -o " (n: "-name \"${n}\"") keepVendored} \) \
+      -print \
+      -exec rm -r {} +
+    rm -rfv "${rootDir}"/external_imported/easyloggingpp/{doc,samples,test,tools}
+    rm -rfv "${rootDir}/external_imported/UniversalStacktrace/external"
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
   version = "7.0.0";
@@ -31,7 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./cmake-cxx-version.patch
     ./thread-pool-c++20-result-of.patch
+
+    # Upstream allows either using vcpkg (and discovery using find_package) or using vendored dependencies
+    # Instead, use discovery of our packages via find_package while disabling vcpkg
+    ./cmake-disable-vcpkg.patch
+
+    # Allow using platform-folders and simpleini from nixpkgs
+    ./cmake-unvendor-simpleini.patch
+    ./cmake-unvendor-platform-folders.patch
   ];
+
+  postPatch = deleteVendoredDependencies ".";
 
   nativeBuildInputs = [
     cmake
@@ -43,17 +94,33 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     protobuf
     zlib
+    httplib
+    nlohmann_json
+    libunwind
+    cxxopts
+    platform-folders
+    simpleini
+    libutempter
+  ]
+  ++ lib.optionals withSelinux [
+    libselinux
+    libsepol
+    pcre2
   ];
 
-  preBuild = ''
-    mkdir -p ../external_imported/Catch2/single_include/catch2
-    cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
-  '';
+  checkInputs = [
+    catch2_3
+  ];
 
   cmakeFlags = [
-    "-DDISABLE_VCPKG=TRUE"
-    "-DDISABLE_SENTRY=TRUE"
-    "-DDISABLE_CRASH_LOG=TRUE"
+    (lib.cmakeBool "DISABLE_VCPKG" false)
+    (lib.cmakeBool "DISABLE_SENTRY" true)
+    (lib.cmakeBool "DISABLE_CRASH_LOG" true)
+
+    (lib.cmakeOptionType "PATH" "BASH_COMPLETION_COMPLETIONSDIR"
+      "${placeholder "out"}/share/bash-completion/completions"
+    )
+    (lib.cmakeOptionType "PATH" "ZSH_COMPLETIONS_DIR" "${placeholder "out"}/share/zsh/site-functions")
   ];
 
   doCheck = true;
