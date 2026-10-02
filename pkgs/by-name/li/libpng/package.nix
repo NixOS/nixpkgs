@@ -46,6 +46,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ zlib ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru = {
