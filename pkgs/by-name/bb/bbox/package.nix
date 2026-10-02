@@ -9,24 +9,9 @@
   sqlite,
   zstd,
 }:
-
-let
-  # separate components of bbox
-  # https://www.bbox.earth/#components
-  components = [
-    "asset"
-    "feature"
-    "map"
-    "processes"
-    "routing"
-    "tile"
-  ];
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bbox";
   version = "0.6.2";
-
-  outputs = [ "out" ] ++ components;
 
   src = fetchFromGitHub {
     owner = "bbox-services";
@@ -58,15 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     # server including all features
     "--package bbox-server"
-  ]
-  ++ builtins.map (c: "--package bbox-${c}-server") components;
+  ];
 
   cargoTestFlags = [ "--workspace" ];
-
-  postInstall = lib.concatMapStringsSep "\n" (c: ''
-    mkdir -p "${placeholder c}/bin"
-    mv "$out/bin/bbox-${c}-server" "${placeholder c}/bin/"
-  '') components;
 
   meta = {
     description = "Composable spatial services";
