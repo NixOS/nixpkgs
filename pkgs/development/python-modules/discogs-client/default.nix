@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.9";
+  version = "2.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
     tag = "v${version}";
-    hash = "sha256-UWiop9hg6KSpSq4SnTtvFbRHYTnLe/Ed/o65sf78MYo=";
+    hash = "sha256-1Dx0KSYP15+izEfNSGfEw8lpjqSQPuhQkGntRA4srmo=";
   };
 
   propagatedBuildInputs = [
