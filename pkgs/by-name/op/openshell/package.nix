@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openshell";
-  version = "0.0.116";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "OpenShell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9YOAkBPFBOhvc3s/0jl0yphjwblONB6rTZXosIydCIg=";
+    hash = "sha256-mBciX4fPWUtaszWhV8gCpYjQmuAJxKxkhwT6oVKq6jY=";
   };
 
-  cargoHash = "sha256-WVoB7tf1ZxjCo/4sRvKRy8yA0M+R+EjZVkbxr3LHGwQ=";
+  cargoHash = "sha256-4v3SuKRrEi97s4B1IDb0OCwo07/Ld4eKjgwYlXzYT+M=";
 
   nativeBuildInputs = [
     pkg-config
