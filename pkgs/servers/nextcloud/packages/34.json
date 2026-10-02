@@ -1,4 +1,14 @@
 {
+  "bbb": {
+    "hash": "sha256-EKmoxRj0Ctua51PnYQUKC04Z40S7bdzBUBgY3bYJ4iM=",
+    "url": "https://github.com/littleredbutton/cloud_bbb/releases/download/v2.9.4/bbb-v2.9.4.tar.gz",
+    "version": "2.9.4",
+    "description": "This app allows to create meetings with an external installation of [BigBlueButton](https://bigbluebutton.org).\n\n* **Room setup** Create multiple room configurations with name, welcome message …\n* **Share guest link** Share the room link with all your guests\n* **Share moderator link** Invite moderators to the room\n* **Share rooms** Share rooms with members, groups or circles\n* **Custom presentation** Start a room with a selected presentation from your file browser\n* **Manage recordings** View, share and delete recordings for your rooms\n* **Restrictions** Restrict room creation to certain groups\n* **Activities** Get an overview of your room activities\n\nQuick start guide and further information in our [readme](https://github.com/littleredbutton/cloud_bbb).\nDo you like this application? Give something back to the open source community and checkout our\n[ways to contribute](https://github.com/littleredbutton/cloud_bbb/blob/master/.github/contributing.md).\n\nContributors are welcome! If you have time it would be awesome if you could help to enhance this application.\n\n*This app integrates BigBlueButton and is not endorsed or certified by BigBlueButton Inc. BigBlueButton and the BigBlueButton Logo are trademarks of BigBlueButton Inc.*",
+    "homepage": "https://github.com/littleredbutton/cloud_bbb/",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "bookmarks": {
     "hash": "sha256-Oirgd5ffDvvWG4yoZB/3r7+npLqNqe8joZfJBTxqFXE=",
     "url": "https://github.com/nextcloud/bookmarks/releases/download/v16.2.7/bookmarks-16.2.7.tar.gz",
