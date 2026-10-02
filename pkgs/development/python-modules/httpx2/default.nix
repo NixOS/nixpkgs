@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.12.0";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mEJHlG6skKkV90SfjTg+MHGkL7gnf3QLKLbWlTtEb9Q=";
+    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
   };
 
   postPatch = ''
@@ -108,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    "test_h2_timeout_during_request"
     # uvicorn access logging mismatch
     "test_logging_request"
     "test_logging_redirect_chain"
