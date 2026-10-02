@@ -688,6 +688,18 @@ stdenv.mkDerivation (finalAttrs: {
       find $out/lib -name '_sysconfig_vars*.json*' -print -exec nuke-refs ${keep-references} '{}' +
       ln -s "$out/lib/${libPrefix}/"_sysconfig_vars*.json "$out/${sitePackages}/"
     ''
+    + optionalString (enableLTO && stdenv.cc.isClang) ''
+      # With clang, --with-lto turns the static libpython in config-* into an
+      # archive of LLVM bitcode. Its string tables hold store paths without the
+      # leading "${builtins.storeDir}/", which nuke-refs above does not match,
+      # so references to the compiler wrapper and the SDK survived and pulled
+      # the whole toolchain into python's runtime closure. Rewrite the
+      # remaining hashes in place; the replacement keeps the length, so the
+      # bitcode stays valid.
+      LC_ALL=C sed -i -E \
+        's#${baseNameOf builtins.storeDir}/[a-z0-9]{32}-#${baseNameOf builtins.storeDir}/${lib.strings.replicate 32 "e"}-#g' \
+        $out/lib/python*/config-*/libpython*.a
+    ''
     + optionalString stripConfig ''
       rm -R $out/bin/python*-config $out/lib/python*/config-*
     ''
