@@ -354,7 +354,8 @@ in
           your configured kernel.
 
           For custom versions, you can use `nvidiaPackages.mkDriver`; see
-          `pkgs/os-specific/linux/nvidia-x11/default.nix` for examples.
+          `pkgs/os-specific/linux/nvidia-x11/README.md` for an example and how
+          to obtain the hashes.
         '';
       };
 
