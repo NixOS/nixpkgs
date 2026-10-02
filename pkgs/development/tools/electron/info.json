@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-bnjzowPqh0+lbuAxxm3nFCzQ6gQtG7Qzuq03u58hs90=",
+                    "hash": "sha256-QhabuiCpDFMfcAiZN9c5MSwdGfc7/3orLVW9O7bwJ1A=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v42.11.3"
+                    "tag": "v42.11.10"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1367,7 +1367,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-3djOSYb8lSTWbtclB23O1I/Aw3n6auInUAtzOYrMth4=",
+            "hash": "sha256-EIdGb0MAZeYelJujwLvjFIRjvuayq5qBu8eAfCQSG0Q=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -1388,30 +1388,56 @@
                 "@oxfmt/binding-win32-arm64-msvc@npm:0.42.0": "04bd529ea236c23d8dc73d95acd365612ab489b0e6a4bdd976302b933b92dcc11d4d1629e2294036f16c1e1f5120140547f65060a9e2dc8adbb21f790e2eca39",
                 "@oxfmt/binding-win32-ia32-msvc@npm:0.42.0": "9775afa164de049416abf481f062b8c670cd27a70d82a0868fa61749f741e777a76eb0a57a9ef276f158a35741d90a856a492777a0a9f17c9ac01ead32935fe3",
                 "@oxfmt/binding-win32-x64-msvc@npm:0.42.0": "5c38197ac6f874c2622b68a531b9fc9a221de05aa09c40717bba775f658680ebf964db7aa41c12271f90261bf50713cd4ebb2c10f12bf33cf2103fb9d67a88bb",
-                "@oxlint/binding-android-arm-eabi@npm:1.61.0": "64a0e4e724ec776f7bf88926b9544484ac4b8b7c906539073683281d0de4d887494aabad654807336f8c306cbc2bbd2cbf218c780fa02ce7b8cd2c9c280a886c",
-                "@oxlint/binding-android-arm64@npm:1.61.0": "fcbef757ed0eecbddb90e3818315614dbd4bdba7f9e8aa23255d39d12dd2ee5cd1bc5608f2d236b3028330bad7ba741e7dc3569d06373dabade10bcafb056de7",
-                "@oxlint/binding-darwin-arm64@npm:1.61.0": "1ff458a5cde78b3b3f7852dad86ef6e430732361b81e5ac5712f83a237725bde05d67980beced4361416abb376dc6a6384435f2a4932a62c5794a58ca01b9d73",
-                "@oxlint/binding-darwin-x64@npm:1.61.0": "3e09d59d46985c2652ee3fa3560215df05eebf470f2acd3fb502d303f661e3d75861a8908a1b215e3912e5da23673cc517862e06be21be6c95770fc5848778ef",
-                "@oxlint/binding-freebsd-x64@npm:1.61.0": "8f7141e3a7a0334836ea9f333d76fb6a12e145533cda2f485fff536b725193595a172c154b402d0eff3b14e13a36b3a0a14629987bcbf8faa444d9213c5e78d8",
-                "@oxlint/binding-linux-arm-gnueabihf@npm:1.61.0": "2bf2eb6e1e6a3339822464e7f66f52824348ea5b4b0a2f87ed5fdfe6b7b993bb2ea0346e59dc68ec78030a3c4b8784810a2bb88edb69de99aacdda03606a35cf",
-                "@oxlint/binding-linux-arm-musleabihf@npm:1.61.0": "53d57e4693087ddd6e9104651f3200d11276aa8bf261ffe07c91908b7ba6dee0aaa58d74f3b58ad256b8dfb4689fee0e205d9479550b87a898644396afb1de55",
-                "@oxlint/binding-linux-arm64-gnu@npm:1.61.0": "b19d95033889b7a22e29b6b38a84c913f5e087015354de8ea52e60e8d067ecdbcedcecd49df2d3338e1ce5d579e079efaa43ee67ca626e92b619d41aa18277ae",
-                "@oxlint/binding-linux-arm64-musl@npm:1.61.0": "b61ede290d57073065e20161ae54d36d4700a814e6e62abc63e8e4f18558598e22695fcb9b14c67ce8aec50de2b733d6183f873d65de491936fbf7e1b9fbb59e",
-                "@oxlint/binding-linux-ppc64-gnu@npm:1.61.0": "7d0cb33713ce1716a0ddbc100b79eb888ad20af74c0c924db01b0b27c33677717f3f7a0f6d341ec0637ab0ec2dbc5033fea4154cf88b6c9513b1796b6a53ddf3",
-                "@oxlint/binding-linux-riscv64-gnu@npm:1.61.0": "a6c8ad8419110bbfc35f12256058fb0c31816f328a089bd6424ba03d582ebaed71f39ce673f77767dd17e2a4ed021789106a580d99e5f0a1f097ab3cf916f7a8",
-                "@oxlint/binding-linux-riscv64-musl@npm:1.61.0": "64e6073f588b995f509dccb6b66060a1cfeb5cea08613edf1a3f7819992ccce3a3f9539cd2b1962231a472f12c4ffa325600bbcc9279ada400b993488989470e",
-                "@oxlint/binding-linux-s390x-gnu@npm:1.61.0": "93b84e9694a451b023a2fbf2ca3cad533b5ea947bd89f6a8b95433cf12b6bb86bdbceb51188a5a5914a51a9e0ecca02abc6b0d656ce9616d8904eb8ebbaf84a8",
-                "@oxlint/binding-linux-x64-gnu@npm:1.61.0": "49d0ba0286946d633d933e2ae575a38dfef9f6570380d141f2bcdf10b09cba192a87767e5fd6cbeb115c23eae9c7241830c022180ada5bc96131badcc65c3d31",
-                "@oxlint/binding-linux-x64-musl@npm:1.61.0": "54567fcd74360d287a85ff18ce82c2691c0fea7f87e720f0390a621acf2422f64cafd135deebf329831fcac7cfe66389c8e6a5dcb8f8427ea6d4b3446ddeeab0",
-                "@oxlint/binding-openharmony-arm64@npm:1.61.0": "011ffbfde581da50b130705d59e0a043b4e6858dea1fc6fd100c7a2aa511179726769197a6868809a7040a28f454c0481a832c667b44b10820c0300b74a0b6f7",
-                "@oxlint/binding-win32-arm64-msvc@npm:1.61.0": "d5f962f94acfb6a882b04eb9ba33e05e2896b96cb6ab7b44c70aff55be93c633c6c88884d4f3f65f82ab88b6535c6034f4e9a7141bcfff23ad24efd0cb7bab78",
-                "@oxlint/binding-win32-ia32-msvc@npm:1.61.0": "f2902478c85eb95665cf3c4021cc4cdd3ea98f8863d9a311a6f2532059d1c8cc3c36c9e0eac7b459827cd03c4c7e6803bb96939d7476f3289df9362aaadd4710",
-                "@oxlint/binding-win32-x64-msvc@npm:1.61.0": "e4a5cf6c8db10fdf1cda748ab368357260e1fcab8df5819587b940613f55e57a729e99641119ff074d5aea59de16f4563322e01be5ac27d1349c9ca14d60302d"
+                "@oxlint/binding-android-arm-eabi@npm:1.80.0": "6690105857699fc8033aea03e715367cbe9a09bf5b0a32d5d5861f4ba464b0e6c1d3ef6aa773536b55b4076330eca29ce84585647c0986ac6721004ca1b3e14a",
+                "@oxlint/binding-android-arm64@npm:1.80.0": "27dde08264c5009c0d18cb796a81b9e9799f5d6419431d886775afb542dfe2e713f1640d6480d87e15835c0a4e93596cc799d1e57dd751c5dffdba4f546ea6a9",
+                "@oxlint/binding-darwin-arm64@npm:1.80.0": "343de7feb3a6fd0075c2d5c42b45657f5f303050028256aa1844069e746d0e10153e8b400e5c4f5198efd50cd4d9fa061239e05a75ca2c7906d213e418b3f2ce",
+                "@oxlint/binding-darwin-x64@npm:1.80.0": "f0cc2dd50265e6fd72fa56cc1df681c059db86945b372583667228eaa4edafb253e7c5b1f2357068f8b4587821120ee455fa9b05110fe2b1316468d226be5d94",
+                "@oxlint/binding-freebsd-x64@npm:1.80.0": "e7760e89718a9ab68329197b1f069aef1777a519c29a34ebbe9cb18bf53b87298ccbd7862952044bf1a4f208831b20286b3155fdf832adbb96394a91eec52f72",
+                "@oxlint/binding-linux-arm-gnueabihf@npm:1.80.0": "841422193752bd08fa1fde471737d47c6fcbfd8a1156df250df11e6f2305a08f932bc3760b556588bf62dfe96f536e254c336c095fd6a9693b24e8bc2510d855",
+                "@oxlint/binding-linux-arm-musleabihf@npm:1.80.0": "d39330ec7a16425f91e45fc5cbf1a9d700bb49fe2357d55f62e6beb268dc083f6ec10a19b51f2b00f0c91ad7a8a208a08080f419c00ab08086b051a0fa89d222",
+                "@oxlint/binding-linux-arm64-gnu@npm:1.80.0": "f5a741fd67343395b708d356f13c2465c7a23aeb68560e464059c0042c6dc44e35d760917991dc6ad20388ea2a8acb27b841dd76a1597cdfb9c5fa6e412120d8",
+                "@oxlint/binding-linux-arm64-musl@npm:1.80.0": "d389e4b7941dda900740bacb5801b45396ccaef3c6663b771510ab34fbb25257c792cbddcbeedb6b448e282b850154d61d5d461e4e5aebc80441225de249da8b",
+                "@oxlint/binding-linux-ppc64-gnu@npm:1.80.0": "0d977dd5ab49dd6f0c16e97a03fad5a0e8cdd71958d9002a048af865be889164f210c17f5eaa027e2ee37fa88c2813024d321fe1813d3da030067ac9e399a0b9",
+                "@oxlint/binding-linux-riscv64-gnu@npm:1.80.0": "32b244b36684228bcd05ce2bba13f9aa664737d3cbded21c730cbf96ef009f671b5a4bb2e094602dee132817645e2bda707b360ce860a70f86091cade07a7000",
+                "@oxlint/binding-linux-riscv64-musl@npm:1.80.0": "ef69cb63cba96eb8e8e8b5e3d69b40b7844d8aa02da1ade86d0e8539ba97674bf06f823407cdfa374d080a7e203f7241335de6b8f7b71da8e2665beb00f55d70",
+                "@oxlint/binding-linux-s390x-gnu@npm:1.80.0": "48f534815cc223bcd05f3137e03e7c468a630d3e97e5117de49f6a076933cac1cf4c7257651bddd9d51a1b4e6c561ed9e7e2e83f1f2616729fe8af7d15f0561b",
+                "@oxlint/binding-linux-x64-gnu@npm:1.80.0": "a447c6bdd20455f32d523a3ae65056b2e12bbee00513e24c271848b424c7d6674e02308a3693f9eb2ad908d2488e4e7204526316d268b6b3596169ab7a66ed74",
+                "@oxlint/binding-linux-x64-musl@npm:1.80.0": "91be32c8805673effe38c10a01d2b9ba47d60829518e36e52598b9844d3fc7a113aefc693c89b14b3677f3b6362ec0972432bc3ca6d76f2eb41e2b1ffdf2af03",
+                "@oxlint/binding-openharmony-arm64@npm:1.80.0": "bb0ff9049618975e88527e5555c6280a4a8019f1ee55e3612f78abcd8ab4129387bd0418c31cfa23885ed2c2338338eb0ef20b3957784340f6d0da73abda2be3",
+                "@oxlint/binding-win32-arm64-msvc@npm:1.80.0": "2a6b5c45c3acd571fff66ae27f445acef72f0c7c6227fe73f85977822403cd02b068ccc53e66b5c5723e4be523ec7ebcfcaee02a83aef514eb9a8d61ea9d4053",
+                "@oxlint/binding-win32-ia32-msvc@npm:1.80.0": "1c68fbcb8f1d34c51458c84b03266b8f1f54fc923a805442657b433a10828625bdd0e04678aafec985396bc1431ce02fb607a1f502831aa184a16d714a75443b",
+                "@oxlint/binding-win32-x64-msvc@npm:1.80.0": "d5ffb6399f5b654105b74a1adbc13d820cba5a631813cba85f2c14e8da4b72b13d518aef261a6a81b99fc4430520d3ad1b48e5ebcdb7d0eb652cc94f5a5b8da4",
+                "@rolldown/binding-android-arm-eabi@npm:1.2.9": "1ce723761c6f6909e9f7657f3d0c157d11ab0397662679cecc46f87a5493754b05a5eacbbff8c0f21ca9f6bf6f18afb7914999e85dad926852ff6e63f98985ba",
+                "@rolldown/binding-android-arm64@npm:1.2.9": "1d597c83de815f2cb2375b8c6bb291ba34fdb6cc4fbbe7ad109f0b6a41d7434f5072655b143349ec81c9bd765f130475b0895d6d0fbf5addb51a0016aa8de015",
+                "@rolldown/binding-darwin-arm64@npm:1.2.9": "9be017bac93b93c0d4211cc87180a6cc00cca2e68b3857677f030fb37ba3cd9530b33f706a523c85625cfcf1121613353d392bb11ca5e841c72f7baec04ab1b7",
+                "@rolldown/binding-darwin-x64@npm:1.2.9": "2c6af58173c4177145db94fc210e56c32f20255ebe6df782647e39fc4811071d03e7a25b52412ffa24bc67178c800af53fbadce92f3dfd62da901672e46c9c19",
+                "@rolldown/binding-freebsd-x64@npm:1.2.9": "d6c2a208797defebe61e56b1a462a6bef90200253950f9b24f970b93cf91f7b3b0d591f5cf5f4426079cf5c9a6e5051a20d789ae2b837b1c680c2c47260aec4a",
+                "@rolldown/binding-linux-arm-gnueabihf@npm:1.2.9": "99a39c7958ef1a7ba6764b288f2d9295a682d38d280ceb401165643c83c659db766ce1185d86646c84396a9acfad25b48c7e11302adc8cd53bf629c106b45a26",
+                "@rolldown/binding-linux-arm64-gnu@npm:1.2.9": "9e84c6c18dde65e53fa4e8aba5d4855806b423df2453b28bc8dd15f0e48c46b7b1cd3c9992a9b88e173efca5f12283f1650468a327fe5dee968d2b1187ea66aa",
+                "@rolldown/binding-linux-arm64-musl@npm:1.2.9": "7fedfcaaac962bec943e7b4da51b176aadd02631d1fcaf4880ae72365d4d868f409799cbe3f7025672bb2007a0004dd33729d986404ac1c7cc8b88215716adc2",
+                "@rolldown/binding-linux-ppc64-gnu@npm:1.2.9": "dcd54975afc4f736e2b736a37158bb8eeadc58801fb40c0f3bf177d504fcea455209dd527151da7ffc818ae83327017cbd8549aee5d1eb07286049a652d79503",
+                "@rolldown/binding-linux-s390x-gnu@npm:1.2.9": "a3187e4309c9a3765f83e92e099baaf978581351d9e14f9ba6cd087ceb71010c9d807c08649ddfdffc0d93ac4530abdcbfa2611cb00198fa49a1fe16ba706d7e",
+                "@rolldown/binding-linux-x64-gnu@npm:1.2.9": "9fed0b83539a4e7d9ddc84d2a43194f4d3f697649a0856f342f947291ba21e7730f89f333960f0229e559f75cf752a4ea4632060b448f7a405602dd216d5035d",
+                "@rolldown/binding-linux-x64-musl@npm:1.2.9": "f8fa1d238157f5c397a8426696d2907f846e3c38e9dc4eadd2d841f84cda5966c3975864cd460c3ce3a0564ab212e329cfe923d911177efe14aef612a8174c26",
+                "@rolldown/binding-openharmony-arm64@npm:1.2.9": "13ac71327a28246eb9c38b458617d01ed93835ff8e17122606e718fc06e99fba4805e051b8d3786f0674ed95c0a98ec79431144e72d7452942dc17d8af4a14fc",
+                "@rolldown/binding-win32-arm64-msvc@npm:1.2.9": "a2f65e085ab4c6859361b97120a8298d2edeed0650ea6f3f70cb2a1e81f0b7f4ae7a0cb002af68d68c24f0706a9a3d55fdd8d4d96d4e8f7d5b73711abdf6e5d9",
+                "@rolldown/binding-win32-x64-msvc@npm:1.2.9": "6a8c186b5b9b9031bb870470f5da7fd4c9272c0e8602ceb77b6a0da78c46f82b4be6e9c34fc3723211d229e13f92d7bb30523f8195715299cee23fcf5dbd18e2",
+                "lightningcss-android-arm64@npm:1.33.0": "46c40a0474a7a9ddcdc33e0ea634912894a9360b6ba6f2bc42f1a817d16992784d2fe6f421d293a90ea94fb481503e27fdc54f0540de0b41d7028fe9e9c9e56a",
+                "lightningcss-darwin-arm64@npm:1.33.0": "398b770e33f66db9e4c14e4a45d0e93fa59644bd29ce5082de79ee9560a5946321ac55e896aa7fb3f177d218bef3f2dca530e209a857f0f066bf3296f5dc0742",
+                "lightningcss-darwin-x64@npm:1.33.0": "132bdab8f7b66dc99730f1ccfcb882880e411420e3f9ca764c348c686112d75962d5d7e928f3bbce7088c1be168d00ea8d722fd909033b807eef191b5a2832c0",
+                "lightningcss-freebsd-x64@npm:1.33.0": "05001395776e994ea1254dcc2613f06b44458ba33769e3a1679a0f577e43632af378cc1582f3bd1cb36e480d237066a371bc04233d6c84f8e2fe9979ab4a4032",
+                "lightningcss-linux-arm-gnueabihf@npm:1.33.0": "d0f6d993846992cf6db80f2992d0b89ffddd65a8260bbe6a1534bde28510bcfa214e8831df9ccfef5ede006a6368de1649e1d96a3e122169286647b704e08f5f",
+                "lightningcss-linux-arm64-gnu@npm:1.33.0": "278a5c553e15ed7645d3e83a3b1515060e98a8742b7008af28d610d6495a09368e73ed8b90bcb537b37249bfc2446ef5b9614b3626222f25153c538909488548",
+                "lightningcss-linux-arm64-musl@npm:1.33.0": "7aa2a2ef42e8c713e6e8eb947bf64d5272c6fdbfca7b4eb3adde555357652be27cc0d84d6fef6266543c2d303943a4c4472679d1e258458119b159f0ca868ffe",
+                "lightningcss-linux-x64-gnu@npm:1.33.0": "fa57a09af3340dc5f11fdbff820fbb7b08e306e69350a500b523c88f54c1e3a40b3785fed6043d69e2e18bacd4b72410518c9b817ee987c704a80851d9201e45",
+                "lightningcss-linux-x64-musl@npm:1.33.0": "4b0cad846f8fbe4ec321a45ef9c0d02cf4277980ac34dcfc7b422b34381e7cb11512819401b01bf029d10aa0fb8a35906ce850ba38d9f43605917ccc9b0b5d4a",
+                "lightningcss-win32-arm64-msvc@npm:1.33.0": "5e4b58d7a41fe3c37ce2af7b1a95c3722a6064a84fb6286ba2cf1106651223403b5a5863ecd3eb8fb9732480e612e30d786b859329391b0197dffc88ca18c953",
+                "lightningcss-win32-x64-msvc@npm:1.33.0": "7beb4c8580f9ea45fea6d92a8de42f706c4935b2ca68f4f5163a2bd9f6ed1574f7e53686e4927883078b07a4063a9fffdc4b41968568354259066c7a70c156a4"
             }
         },
         "modules": "146",
         "node": "24.19.0",
-        "version": "42.11.3"
+        "version": "42.11.10"
     },
     "43": {
         "chrome": "150.0.7871.250",
@@ -1478,10 +1504,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-SLK6HCWzRGZRSkENI2lacq04E1yBxtthChsDAmAOgXg=",
+                    "hash": "sha256-miOYOZYPTE1iB7aPPBiE3TvvhDBCPAp8wteSVS+EuF4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.6.0"
+                    "tag": "v43.7.7"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1823,10 +1849,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-X7aZh0QOm79anmh77QRiHGRSi8TERuWnWXrcPqDYPjY=",
+                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.20.0"
+                    "tag": "v24.21.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2797,7 +2823,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-D3Tmxc2tzpUfKlWq4RXy6hYpqJ0Dsw7J4aQPp1rSZVs=",
+            "hash": "sha256-HiwgiBW34bvgpajmz1qCrPQVd1mO5vkNVzaimloWe5Q=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2818,33 +2844,59 @@
                 "@oxfmt/binding-win32-arm64-msvc@npm:0.42.0": "04bd529ea236c23d8dc73d95acd365612ab489b0e6a4bdd976302b933b92dcc11d4d1629e2294036f16c1e1f5120140547f65060a9e2dc8adbb21f790e2eca39",
                 "@oxfmt/binding-win32-ia32-msvc@npm:0.42.0": "9775afa164de049416abf481f062b8c670cd27a70d82a0868fa61749f741e777a76eb0a57a9ef276f158a35741d90a856a492777a0a9f17c9ac01ead32935fe3",
                 "@oxfmt/binding-win32-x64-msvc@npm:0.42.0": "5c38197ac6f874c2622b68a531b9fc9a221de05aa09c40717bba775f658680ebf964db7aa41c12271f90261bf50713cd4ebb2c10f12bf33cf2103fb9d67a88bb",
-                "@oxlint/binding-android-arm-eabi@npm:1.57.0": "3860b1c5a2096817da9c18cbbc24f8b56f4b6b0cefdea19e0cc0f278055aac85d891fa9d70e02f551532bf45f6a79bb3ebc63d1c2e1dff724134a9bc398f8060",
-                "@oxlint/binding-android-arm64@npm:1.57.0": "fb40a768d5608e9b41c35f16cac2e57571cbcbf1b872bc145f60a7e1fd7a478c3806e3a330579e167f8877411fe362561a103976e41cbd1e46fb02d7d0d97611",
-                "@oxlint/binding-darwin-arm64@npm:1.57.0": "fd75b91d3db274782afec0b1dee319a01b864f11e0a4af1808de23762403000d13f7921c7889302c75d945b09005a44cdf17e3ad345c1ef2842403ac28f0dfb0",
-                "@oxlint/binding-darwin-x64@npm:1.57.0": "75e2e5423ccc82f61def946317c774f951e0a1443cd9c4c1550e0941da9a645a7acd3ed344c65b50288d4842a3a523a6cd9838a28d452d20c7a041fd1b15fe3a",
-                "@oxlint/binding-freebsd-x64@npm:1.57.0": "ad0f737171b8d60a1bcfeeb1736f0ecb751ebbfd915ad7e27d5ad25a858419be541a0854fc573be01752def42b9a3864d0aa11176b574571bb44350307ad2f59",
-                "@oxlint/binding-linux-arm-gnueabihf@npm:1.57.0": "a912a546bab5831bb5ae6e697e67b33f86fc48caaf1615df9ff3234818299845cf27dacecbe17ec679a757eb6354e5e15002c632ba43f76fc890060bebd45d1b",
-                "@oxlint/binding-linux-arm-musleabihf@npm:1.57.0": "e15e5c951193afd936f155db38b9dd48f9cf0e7de8eaf07acf957c4b5b47e79c2f668d4c47310bf28efb2af5640a5a7d3d6700c723c748efefa7e72c8660b1a3",
-                "@oxlint/binding-linux-arm64-gnu@npm:1.57.0": "c167c4bcfe4067703c626264b973dd2195192615aa4bb1ef07d918c8cd128cb1d3504ba991dbd78daee29e6bf5997704c87004e93a379231377c7f7b5c505e55",
-                "@oxlint/binding-linux-arm64-musl@npm:1.57.0": "d0a60e2aa7d491baf85450fb9c0053598da5cc884b9b4e0ed557baa813bcead8e9470259c5f390e412ba173932a0b2703f0b17b06b494ce480fc25ded8074461",
-                "@oxlint/binding-linux-ppc64-gnu@npm:1.57.0": "7798e0a7e8c71f6f3e2f495fdf1109f08d4c2a7357fa19c7f9111b9510f1417175afb00845e39692e5fa4b510cc56d3e8f76bf3f0372f651d19d587b623cdab8",
-                "@oxlint/binding-linux-riscv64-gnu@npm:1.57.0": "8cc0cb3eaf2ff0716e52ce8743e5cc7e952b25150a5e75fcb9b5d7a4f82a99295ce7a3ca9a0bf6694e917c629621e01e465d816379acb264c5f2f4e860d44e24",
-                "@oxlint/binding-linux-riscv64-musl@npm:1.57.0": "1de23e270049060ef5cc1824de2aafbd7129d07c13052c109bd7de62f8bf29ab91bbcf8c15cbbc6ba6aa382b90e1bae456d5160bc8518adb7973cdcd99625127",
-                "@oxlint/binding-linux-s390x-gnu@npm:1.57.0": "35791cd14a661de5605587c81b5f4d9715de92a2f888b4e5fb1ea85626b59c1b53306feadd9020652598e0ff7db8ec31d0d43f8e647a8e1c38361d1bfdc5f288",
-                "@oxlint/binding-linux-x64-gnu@npm:1.57.0": "a55364f9d86efa12f38c54f01b02d1310600245a10cdd27a1ec9b0bfc98522a686feb6b15b1a2ef70c7676eb7b3dc7efa5e2e252313496fc910be368d4c05ee3",
-                "@oxlint/binding-linux-x64-musl@npm:1.57.0": "f6862ffcbd14261528f9a3237d8f52752b745822b54d1c4c6c937830e3712e7b2b8d00aa07838bfc7024f2648d9f3b85c3fa05f6a78c40b5f259e618dbfbeb68",
-                "@oxlint/binding-openharmony-arm64@npm:1.57.0": "1420c753028b583ce4ea00edb14f47def68d675492ef8611e98ffe0cf0a0749cc368b8619d4760d38e02c15b06bda32eafce907f6bcefa997db4fbff3a900be7",
-                "@oxlint/binding-win32-arm64-msvc@npm:1.57.0": "2bb5a9f09e1f95e7bf4a9f76af29ba7623d3a83f35e9201cd2f45375ae891c77ddb87a09dcbf2f2416fd3d6e24f34582618da307ed65f8435b943672cb8be5aa",
-                "@oxlint/binding-win32-ia32-msvc@npm:1.57.0": "a2f8f3387866a6d371c50ec4d3aa2043e420bfe1cd523053083f68a33ee651fc9948485060b4e8827d603695b04d492cfa5ef8cdd1fb760cc34dd7674fe13a0b",
-                "@oxlint/binding-win32-x64-msvc@npm:1.57.0": "380591b6937dc483e2db3edf5ace4aa48a06d1d17d419ded224df8465b20840fea8f9d1b1aef38dfa89622eb9d7991592d80b15ceb871b5c09ef9b85197c0de4"
+                "@oxlint/binding-android-arm-eabi@npm:1.80.0": "6690105857699fc8033aea03e715367cbe9a09bf5b0a32d5d5861f4ba464b0e6c1d3ef6aa773536b55b4076330eca29ce84585647c0986ac6721004ca1b3e14a",
+                "@oxlint/binding-android-arm64@npm:1.80.0": "27dde08264c5009c0d18cb796a81b9e9799f5d6419431d886775afb542dfe2e713f1640d6480d87e15835c0a4e93596cc799d1e57dd751c5dffdba4f546ea6a9",
+                "@oxlint/binding-darwin-arm64@npm:1.80.0": "343de7feb3a6fd0075c2d5c42b45657f5f303050028256aa1844069e746d0e10153e8b400e5c4f5198efd50cd4d9fa061239e05a75ca2c7906d213e418b3f2ce",
+                "@oxlint/binding-darwin-x64@npm:1.80.0": "f0cc2dd50265e6fd72fa56cc1df681c059db86945b372583667228eaa4edafb253e7c5b1f2357068f8b4587821120ee455fa9b05110fe2b1316468d226be5d94",
+                "@oxlint/binding-freebsd-x64@npm:1.80.0": "e7760e89718a9ab68329197b1f069aef1777a519c29a34ebbe9cb18bf53b87298ccbd7862952044bf1a4f208831b20286b3155fdf832adbb96394a91eec52f72",
+                "@oxlint/binding-linux-arm-gnueabihf@npm:1.80.0": "841422193752bd08fa1fde471737d47c6fcbfd8a1156df250df11e6f2305a08f932bc3760b556588bf62dfe96f536e254c336c095fd6a9693b24e8bc2510d855",
+                "@oxlint/binding-linux-arm-musleabihf@npm:1.80.0": "d39330ec7a16425f91e45fc5cbf1a9d700bb49fe2357d55f62e6beb268dc083f6ec10a19b51f2b00f0c91ad7a8a208a08080f419c00ab08086b051a0fa89d222",
+                "@oxlint/binding-linux-arm64-gnu@npm:1.80.0": "f5a741fd67343395b708d356f13c2465c7a23aeb68560e464059c0042c6dc44e35d760917991dc6ad20388ea2a8acb27b841dd76a1597cdfb9c5fa6e412120d8",
+                "@oxlint/binding-linux-arm64-musl@npm:1.80.0": "d389e4b7941dda900740bacb5801b45396ccaef3c6663b771510ab34fbb25257c792cbddcbeedb6b448e282b850154d61d5d461e4e5aebc80441225de249da8b",
+                "@oxlint/binding-linux-ppc64-gnu@npm:1.80.0": "0d977dd5ab49dd6f0c16e97a03fad5a0e8cdd71958d9002a048af865be889164f210c17f5eaa027e2ee37fa88c2813024d321fe1813d3da030067ac9e399a0b9",
+                "@oxlint/binding-linux-riscv64-gnu@npm:1.80.0": "32b244b36684228bcd05ce2bba13f9aa664737d3cbded21c730cbf96ef009f671b5a4bb2e094602dee132817645e2bda707b360ce860a70f86091cade07a7000",
+                "@oxlint/binding-linux-riscv64-musl@npm:1.80.0": "ef69cb63cba96eb8e8e8b5e3d69b40b7844d8aa02da1ade86d0e8539ba97674bf06f823407cdfa374d080a7e203f7241335de6b8f7b71da8e2665beb00f55d70",
+                "@oxlint/binding-linux-s390x-gnu@npm:1.80.0": "48f534815cc223bcd05f3137e03e7c468a630d3e97e5117de49f6a076933cac1cf4c7257651bddd9d51a1b4e6c561ed9e7e2e83f1f2616729fe8af7d15f0561b",
+                "@oxlint/binding-linux-x64-gnu@npm:1.80.0": "a447c6bdd20455f32d523a3ae65056b2e12bbee00513e24c271848b424c7d6674e02308a3693f9eb2ad908d2488e4e7204526316d268b6b3596169ab7a66ed74",
+                "@oxlint/binding-linux-x64-musl@npm:1.80.0": "91be32c8805673effe38c10a01d2b9ba47d60829518e36e52598b9844d3fc7a113aefc693c89b14b3677f3b6362ec0972432bc3ca6d76f2eb41e2b1ffdf2af03",
+                "@oxlint/binding-openharmony-arm64@npm:1.80.0": "bb0ff9049618975e88527e5555c6280a4a8019f1ee55e3612f78abcd8ab4129387bd0418c31cfa23885ed2c2338338eb0ef20b3957784340f6d0da73abda2be3",
+                "@oxlint/binding-win32-arm64-msvc@npm:1.80.0": "2a6b5c45c3acd571fff66ae27f445acef72f0c7c6227fe73f85977822403cd02b068ccc53e66b5c5723e4be523ec7ebcfcaee02a83aef514eb9a8d61ea9d4053",
+                "@oxlint/binding-win32-ia32-msvc@npm:1.80.0": "1c68fbcb8f1d34c51458c84b03266b8f1f54fc923a805442657b433a10828625bdd0e04678aafec985396bc1431ce02fb607a1f502831aa184a16d714a75443b",
+                "@oxlint/binding-win32-x64-msvc@npm:1.80.0": "d5ffb6399f5b654105b74a1adbc13d820cba5a631813cba85f2c14e8da4b72b13d518aef261a6a81b99fc4430520d3ad1b48e5ebcdb7d0eb652cc94f5a5b8da4",
+                "@rolldown/binding-android-arm-eabi@npm:1.2.9": "1ce723761c6f6909e9f7657f3d0c157d11ab0397662679cecc46f87a5493754b05a5eacbbff8c0f21ca9f6bf6f18afb7914999e85dad926852ff6e63f98985ba",
+                "@rolldown/binding-android-arm64@npm:1.2.9": "1d597c83de815f2cb2375b8c6bb291ba34fdb6cc4fbbe7ad109f0b6a41d7434f5072655b143349ec81c9bd765f130475b0895d6d0fbf5addb51a0016aa8de015",
+                "@rolldown/binding-darwin-arm64@npm:1.2.9": "9be017bac93b93c0d4211cc87180a6cc00cca2e68b3857677f030fb37ba3cd9530b33f706a523c85625cfcf1121613353d392bb11ca5e841c72f7baec04ab1b7",
+                "@rolldown/binding-darwin-x64@npm:1.2.9": "2c6af58173c4177145db94fc210e56c32f20255ebe6df782647e39fc4811071d03e7a25b52412ffa24bc67178c800af53fbadce92f3dfd62da901672e46c9c19",
+                "@rolldown/binding-freebsd-x64@npm:1.2.9": "d6c2a208797defebe61e56b1a462a6bef90200253950f9b24f970b93cf91f7b3b0d591f5cf5f4426079cf5c9a6e5051a20d789ae2b837b1c680c2c47260aec4a",
+                "@rolldown/binding-linux-arm-gnueabihf@npm:1.2.9": "99a39c7958ef1a7ba6764b288f2d9295a682d38d280ceb401165643c83c659db766ce1185d86646c84396a9acfad25b48c7e11302adc8cd53bf629c106b45a26",
+                "@rolldown/binding-linux-arm64-gnu@npm:1.2.9": "9e84c6c18dde65e53fa4e8aba5d4855806b423df2453b28bc8dd15f0e48c46b7b1cd3c9992a9b88e173efca5f12283f1650468a327fe5dee968d2b1187ea66aa",
+                "@rolldown/binding-linux-arm64-musl@npm:1.2.9": "7fedfcaaac962bec943e7b4da51b176aadd02631d1fcaf4880ae72365d4d868f409799cbe3f7025672bb2007a0004dd33729d986404ac1c7cc8b88215716adc2",
+                "@rolldown/binding-linux-ppc64-gnu@npm:1.2.9": "dcd54975afc4f736e2b736a37158bb8eeadc58801fb40c0f3bf177d504fcea455209dd527151da7ffc818ae83327017cbd8549aee5d1eb07286049a652d79503",
+                "@rolldown/binding-linux-s390x-gnu@npm:1.2.9": "a3187e4309c9a3765f83e92e099baaf978581351d9e14f9ba6cd087ceb71010c9d807c08649ddfdffc0d93ac4530abdcbfa2611cb00198fa49a1fe16ba706d7e",
+                "@rolldown/binding-linux-x64-gnu@npm:1.2.9": "9fed0b83539a4e7d9ddc84d2a43194f4d3f697649a0856f342f947291ba21e7730f89f333960f0229e559f75cf752a4ea4632060b448f7a405602dd216d5035d",
+                "@rolldown/binding-linux-x64-musl@npm:1.2.9": "f8fa1d238157f5c397a8426696d2907f846e3c38e9dc4eadd2d841f84cda5966c3975864cd460c3ce3a0564ab212e329cfe923d911177efe14aef612a8174c26",
+                "@rolldown/binding-openharmony-arm64@npm:1.2.9": "13ac71327a28246eb9c38b458617d01ed93835ff8e17122606e718fc06e99fba4805e051b8d3786f0674ed95c0a98ec79431144e72d7452942dc17d8af4a14fc",
+                "@rolldown/binding-win32-arm64-msvc@npm:1.2.9": "a2f65e085ab4c6859361b97120a8298d2edeed0650ea6f3f70cb2a1e81f0b7f4ae7a0cb002af68d68c24f0706a9a3d55fdd8d4d96d4e8f7d5b73711abdf6e5d9",
+                "@rolldown/binding-win32-x64-msvc@npm:1.2.9": "6a8c186b5b9b9031bb870470f5da7fd4c9272c0e8602ceb77b6a0da78c46f82b4be6e9c34fc3723211d229e13f92d7bb30523f8195715299cee23fcf5dbd18e2",
+                "lightningcss-android-arm64@npm:1.33.0": "46c40a0474a7a9ddcdc33e0ea634912894a9360b6ba6f2bc42f1a817d16992784d2fe6f421d293a90ea94fb481503e27fdc54f0540de0b41d7028fe9e9c9e56a",
+                "lightningcss-darwin-arm64@npm:1.33.0": "398b770e33f66db9e4c14e4a45d0e93fa59644bd29ce5082de79ee9560a5946321ac55e896aa7fb3f177d218bef3f2dca530e209a857f0f066bf3296f5dc0742",
+                "lightningcss-darwin-x64@npm:1.33.0": "132bdab8f7b66dc99730f1ccfcb882880e411420e3f9ca764c348c686112d75962d5d7e928f3bbce7088c1be168d00ea8d722fd909033b807eef191b5a2832c0",
+                "lightningcss-freebsd-x64@npm:1.33.0": "05001395776e994ea1254dcc2613f06b44458ba33769e3a1679a0f577e43632af378cc1582f3bd1cb36e480d237066a371bc04233d6c84f8e2fe9979ab4a4032",
+                "lightningcss-linux-arm-gnueabihf@npm:1.33.0": "d0f6d993846992cf6db80f2992d0b89ffddd65a8260bbe6a1534bde28510bcfa214e8831df9ccfef5ede006a6368de1649e1d96a3e122169286647b704e08f5f",
+                "lightningcss-linux-arm64-gnu@npm:1.33.0": "278a5c553e15ed7645d3e83a3b1515060e98a8742b7008af28d610d6495a09368e73ed8b90bcb537b37249bfc2446ef5b9614b3626222f25153c538909488548",
+                "lightningcss-linux-arm64-musl@npm:1.33.0": "7aa2a2ef42e8c713e6e8eb947bf64d5272c6fdbfca7b4eb3adde555357652be27cc0d84d6fef6266543c2d303943a4c4472679d1e258458119b159f0ca868ffe",
+                "lightningcss-linux-x64-gnu@npm:1.33.0": "fa57a09af3340dc5f11fdbff820fbb7b08e306e69350a500b523c88f54c1e3a40b3785fed6043d69e2e18bacd4b72410518c9b817ee987c704a80851d9201e45",
+                "lightningcss-linux-x64-musl@npm:1.33.0": "4b0cad846f8fbe4ec321a45ef9c0d02cf4277980ac34dcfc7b422b34381e7cb11512819401b01bf029d10aa0fb8a35906ce850ba38d9f43605917ccc9b0b5d4a",
+                "lightningcss-win32-arm64-msvc@npm:1.33.0": "5e4b58d7a41fe3c37ce2af7b1a95c3722a6064a84fb6286ba2cf1106651223403b5a5863ecd3eb8fb9732480e612e30d786b859329391b0197dffc88ca18c953",
+                "lightningcss-win32-x64-msvc@npm:1.33.0": "7beb4c8580f9ea45fea6d92a8de42f706c4935b2ca68f4f5163a2bd9f6ed1574f7e53686e4927883078b07a4063a9fffdc4b41968568354259066c7a70c156a4"
             }
         },
         "modules": "148",
-        "node": "24.20.0",
-        "version": "43.6.0"
+        "node": "24.21.0",
+        "version": "43.7.7"
     },
     "44": {
-        "chrome": "152.0.7977.78",
+        "chrome": "152.0.7977.130",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2853,15 +2905,15 @@
                     "version": "0-unstable-2026-07-23"
                 }
             },
-            "version": "152.0.7977.78"
+            "version": "152.0.7977.130"
         },
         "chromium_npm_hash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-+++z44EqfZH44EKiaqChyFAwRtkJaS/fdydjE+Hktco=",
+                    "hash": "sha256-I0LvCx4iUpbruXGa8kbyOEgQq4sInyyF+ozfDbAp5UQ=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "152.0.7977.78",
+                    "tag": "152.0.7977.130",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2908,10 +2960,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-Gu54g5p/RZGZXsMSK8yKGoT5xYTK5zvBrM69AEQjwb0=",
+                    "hash": "sha256-qipLsjTjdjS/NYWXMnFGz2RI7yzFuIdtqJuX6mC2QPY=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.3.0"
+                    "tag": "v44.5.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2941,8 +2993,8 @@
             },
             "src/third_party/angle": {
                 "args": {
-                    "hash": "sha256-3ZCIFT7j944HWPOiADQa88TQZctLej5vbrBFA/FwyHw=",
-                    "rev": "736ed80c7552a4b267bd54a282b971aa4555cb3e",
+                    "hash": "sha256-rEp5z7bjis6rBrS4vWJgjZj1+/sKu8ver/1BzaZy7eA=",
+                    "rev": "616f6f041eac83bc09e107dc9af7230e0c10cf52",
                     "url": "https://chromium.googlesource.com/angle/angle.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3261,10 +3313,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-X7aZh0QOm79anmh77QRiHGRSi8TERuWnWXrcPqDYPjY=",
+                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.20.0"
+                    "tag": "v24.21.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3840,8 +3892,8 @@
             },
             "src/third_party/pthreadpool/src": {
                 "args": {
-                    "hash": "sha256-4EHJzZT+Gbhs8SkOhjSvDIPEqIQU93oJmtF3c/T+qjw=",
-                    "rev": "02460584c6092e527c8b89f7df4de143d70e801f",
+                    "hash": "sha256-YJD9n8cxoqTrTQJHKuZFW2qnlNcNmh5rQlBpnlF46to=",
+                    "rev": "15a6644ba1c45f1acc16ac1e883efc3e56c6bed2",
                     "url": "https://chromium.googlesource.com/external/github.com/google/pthreadpool.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3920,8 +3972,8 @@
             },
             "src/third_party/skia": {
                 "args": {
-                    "hash": "sha256-sun/P/JVhTKfRwmVK5dgnz8UZEFnQoyXZZS6PN5z9us=",
-                    "rev": "b6d106297ff9ef2ff8094033695d045e87775581",
+                    "hash": "sha256-n++JuZJUJgALhCXjYNXcqHIKjDnHz+m5t3y8ghU9P4U=",
+                    "rev": "e8efd15f214a4d59b427f55f7769b6dbbb09bbcc",
                     "url": "https://skia.googlesource.com/skia.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4243,15 +4295,15 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-ZHEmeSe8r226gjazm91GYqlfbM9a5yi8KnFv4iAWFKE=",
-                    "rev": "3de6ffffbfdcf265e9f11a5c9d1cfb4d486d7550",
+                    "hash": "sha256-HtR74oqywVwpqDAw6U6wLj0Q8t8WlRhcuEeEwoiPfX4=",
+                    "rev": "fedd021b538607860f9c56e5c193ad8dcd4f2bb1",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-/Se92a1Gw8vT3J1IkAcQmd4wYb3zwh+2LdrA5MwWHy8=",
+            "hash": "sha256-Qhuv4eunoVjXQks72J4+bw/y7VoYvegUDziJkHDOnfM=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -4272,29 +4324,55 @@
                 "@oxfmt/binding-win32-arm64-msvc@npm:0.42.0": "04bd529ea236c23d8dc73d95acd365612ab489b0e6a4bdd976302b933b92dcc11d4d1629e2294036f16c1e1f5120140547f65060a9e2dc8adbb21f790e2eca39",
                 "@oxfmt/binding-win32-ia32-msvc@npm:0.42.0": "9775afa164de049416abf481f062b8c670cd27a70d82a0868fa61749f741e777a76eb0a57a9ef276f158a35741d90a856a492777a0a9f17c9ac01ead32935fe3",
                 "@oxfmt/binding-win32-x64-msvc@npm:0.42.0": "5c38197ac6f874c2622b68a531b9fc9a221de05aa09c40717bba775f658680ebf964db7aa41c12271f90261bf50713cd4ebb2c10f12bf33cf2103fb9d67a88bb",
-                "@oxlint/binding-android-arm-eabi@npm:1.57.0": "3860b1c5a2096817da9c18cbbc24f8b56f4b6b0cefdea19e0cc0f278055aac85d891fa9d70e02f551532bf45f6a79bb3ebc63d1c2e1dff724134a9bc398f8060",
-                "@oxlint/binding-android-arm64@npm:1.57.0": "fb40a768d5608e9b41c35f16cac2e57571cbcbf1b872bc145f60a7e1fd7a478c3806e3a330579e167f8877411fe362561a103976e41cbd1e46fb02d7d0d97611",
-                "@oxlint/binding-darwin-arm64@npm:1.57.0": "fd75b91d3db274782afec0b1dee319a01b864f11e0a4af1808de23762403000d13f7921c7889302c75d945b09005a44cdf17e3ad345c1ef2842403ac28f0dfb0",
-                "@oxlint/binding-darwin-x64@npm:1.57.0": "75e2e5423ccc82f61def946317c774f951e0a1443cd9c4c1550e0941da9a645a7acd3ed344c65b50288d4842a3a523a6cd9838a28d452d20c7a041fd1b15fe3a",
-                "@oxlint/binding-freebsd-x64@npm:1.57.0": "ad0f737171b8d60a1bcfeeb1736f0ecb751ebbfd915ad7e27d5ad25a858419be541a0854fc573be01752def42b9a3864d0aa11176b574571bb44350307ad2f59",
-                "@oxlint/binding-linux-arm-gnueabihf@npm:1.57.0": "a912a546bab5831bb5ae6e697e67b33f86fc48caaf1615df9ff3234818299845cf27dacecbe17ec679a757eb6354e5e15002c632ba43f76fc890060bebd45d1b",
-                "@oxlint/binding-linux-arm-musleabihf@npm:1.57.0": "e15e5c951193afd936f155db38b9dd48f9cf0e7de8eaf07acf957c4b5b47e79c2f668d4c47310bf28efb2af5640a5a7d3d6700c723c748efefa7e72c8660b1a3",
-                "@oxlint/binding-linux-arm64-gnu@npm:1.57.0": "c167c4bcfe4067703c626264b973dd2195192615aa4bb1ef07d918c8cd128cb1d3504ba991dbd78daee29e6bf5997704c87004e93a379231377c7f7b5c505e55",
-                "@oxlint/binding-linux-arm64-musl@npm:1.57.0": "d0a60e2aa7d491baf85450fb9c0053598da5cc884b9b4e0ed557baa813bcead8e9470259c5f390e412ba173932a0b2703f0b17b06b494ce480fc25ded8074461",
-                "@oxlint/binding-linux-ppc64-gnu@npm:1.57.0": "7798e0a7e8c71f6f3e2f495fdf1109f08d4c2a7357fa19c7f9111b9510f1417175afb00845e39692e5fa4b510cc56d3e8f76bf3f0372f651d19d587b623cdab8",
-                "@oxlint/binding-linux-riscv64-gnu@npm:1.57.0": "8cc0cb3eaf2ff0716e52ce8743e5cc7e952b25150a5e75fcb9b5d7a4f82a99295ce7a3ca9a0bf6694e917c629621e01e465d816379acb264c5f2f4e860d44e24",
-                "@oxlint/binding-linux-riscv64-musl@npm:1.57.0": "1de23e270049060ef5cc1824de2aafbd7129d07c13052c109bd7de62f8bf29ab91bbcf8c15cbbc6ba6aa382b90e1bae456d5160bc8518adb7973cdcd99625127",
-                "@oxlint/binding-linux-s390x-gnu@npm:1.57.0": "35791cd14a661de5605587c81b5f4d9715de92a2f888b4e5fb1ea85626b59c1b53306feadd9020652598e0ff7db8ec31d0d43f8e647a8e1c38361d1bfdc5f288",
-                "@oxlint/binding-linux-x64-gnu@npm:1.57.0": "a55364f9d86efa12f38c54f01b02d1310600245a10cdd27a1ec9b0bfc98522a686feb6b15b1a2ef70c7676eb7b3dc7efa5e2e252313496fc910be368d4c05ee3",
-                "@oxlint/binding-linux-x64-musl@npm:1.57.0": "f6862ffcbd14261528f9a3237d8f52752b745822b54d1c4c6c937830e3712e7b2b8d00aa07838bfc7024f2648d9f3b85c3fa05f6a78c40b5f259e618dbfbeb68",
-                "@oxlint/binding-openharmony-arm64@npm:1.57.0": "1420c753028b583ce4ea00edb14f47def68d675492ef8611e98ffe0cf0a0749cc368b8619d4760d38e02c15b06bda32eafce907f6bcefa997db4fbff3a900be7",
-                "@oxlint/binding-win32-arm64-msvc@npm:1.57.0": "2bb5a9f09e1f95e7bf4a9f76af29ba7623d3a83f35e9201cd2f45375ae891c77ddb87a09dcbf2f2416fd3d6e24f34582618da307ed65f8435b943672cb8be5aa",
-                "@oxlint/binding-win32-ia32-msvc@npm:1.57.0": "a2f8f3387866a6d371c50ec4d3aa2043e420bfe1cd523053083f68a33ee651fc9948485060b4e8827d603695b04d492cfa5ef8cdd1fb760cc34dd7674fe13a0b",
-                "@oxlint/binding-win32-x64-msvc@npm:1.57.0": "380591b6937dc483e2db3edf5ace4aa48a06d1d17d419ded224df8465b20840fea8f9d1b1aef38dfa89622eb9d7991592d80b15ceb871b5c09ef9b85197c0de4"
+                "@oxlint/binding-android-arm-eabi@npm:1.80.0": "6690105857699fc8033aea03e715367cbe9a09bf5b0a32d5d5861f4ba464b0e6c1d3ef6aa773536b55b4076330eca29ce84585647c0986ac6721004ca1b3e14a",
+                "@oxlint/binding-android-arm64@npm:1.80.0": "27dde08264c5009c0d18cb796a81b9e9799f5d6419431d886775afb542dfe2e713f1640d6480d87e15835c0a4e93596cc799d1e57dd751c5dffdba4f546ea6a9",
+                "@oxlint/binding-darwin-arm64@npm:1.80.0": "343de7feb3a6fd0075c2d5c42b45657f5f303050028256aa1844069e746d0e10153e8b400e5c4f5198efd50cd4d9fa061239e05a75ca2c7906d213e418b3f2ce",
+                "@oxlint/binding-darwin-x64@npm:1.80.0": "f0cc2dd50265e6fd72fa56cc1df681c059db86945b372583667228eaa4edafb253e7c5b1f2357068f8b4587821120ee455fa9b05110fe2b1316468d226be5d94",
+                "@oxlint/binding-freebsd-x64@npm:1.80.0": "e7760e89718a9ab68329197b1f069aef1777a519c29a34ebbe9cb18bf53b87298ccbd7862952044bf1a4f208831b20286b3155fdf832adbb96394a91eec52f72",
+                "@oxlint/binding-linux-arm-gnueabihf@npm:1.80.0": "841422193752bd08fa1fde471737d47c6fcbfd8a1156df250df11e6f2305a08f932bc3760b556588bf62dfe96f536e254c336c095fd6a9693b24e8bc2510d855",
+                "@oxlint/binding-linux-arm-musleabihf@npm:1.80.0": "d39330ec7a16425f91e45fc5cbf1a9d700bb49fe2357d55f62e6beb268dc083f6ec10a19b51f2b00f0c91ad7a8a208a08080f419c00ab08086b051a0fa89d222",
+                "@oxlint/binding-linux-arm64-gnu@npm:1.80.0": "f5a741fd67343395b708d356f13c2465c7a23aeb68560e464059c0042c6dc44e35d760917991dc6ad20388ea2a8acb27b841dd76a1597cdfb9c5fa6e412120d8",
+                "@oxlint/binding-linux-arm64-musl@npm:1.80.0": "d389e4b7941dda900740bacb5801b45396ccaef3c6663b771510ab34fbb25257c792cbddcbeedb6b448e282b850154d61d5d461e4e5aebc80441225de249da8b",
+                "@oxlint/binding-linux-ppc64-gnu@npm:1.80.0": "0d977dd5ab49dd6f0c16e97a03fad5a0e8cdd71958d9002a048af865be889164f210c17f5eaa027e2ee37fa88c2813024d321fe1813d3da030067ac9e399a0b9",
+                "@oxlint/binding-linux-riscv64-gnu@npm:1.80.0": "32b244b36684228bcd05ce2bba13f9aa664737d3cbded21c730cbf96ef009f671b5a4bb2e094602dee132817645e2bda707b360ce860a70f86091cade07a7000",
+                "@oxlint/binding-linux-riscv64-musl@npm:1.80.0": "ef69cb63cba96eb8e8e8b5e3d69b40b7844d8aa02da1ade86d0e8539ba97674bf06f823407cdfa374d080a7e203f7241335de6b8f7b71da8e2665beb00f55d70",
+                "@oxlint/binding-linux-s390x-gnu@npm:1.80.0": "48f534815cc223bcd05f3137e03e7c468a630d3e97e5117de49f6a076933cac1cf4c7257651bddd9d51a1b4e6c561ed9e7e2e83f1f2616729fe8af7d15f0561b",
+                "@oxlint/binding-linux-x64-gnu@npm:1.80.0": "a447c6bdd20455f32d523a3ae65056b2e12bbee00513e24c271848b424c7d6674e02308a3693f9eb2ad908d2488e4e7204526316d268b6b3596169ab7a66ed74",
+                "@oxlint/binding-linux-x64-musl@npm:1.80.0": "91be32c8805673effe38c10a01d2b9ba47d60829518e36e52598b9844d3fc7a113aefc693c89b14b3677f3b6362ec0972432bc3ca6d76f2eb41e2b1ffdf2af03",
+                "@oxlint/binding-openharmony-arm64@npm:1.80.0": "bb0ff9049618975e88527e5555c6280a4a8019f1ee55e3612f78abcd8ab4129387bd0418c31cfa23885ed2c2338338eb0ef20b3957784340f6d0da73abda2be3",
+                "@oxlint/binding-win32-arm64-msvc@npm:1.80.0": "2a6b5c45c3acd571fff66ae27f445acef72f0c7c6227fe73f85977822403cd02b068ccc53e66b5c5723e4be523ec7ebcfcaee02a83aef514eb9a8d61ea9d4053",
+                "@oxlint/binding-win32-ia32-msvc@npm:1.80.0": "1c68fbcb8f1d34c51458c84b03266b8f1f54fc923a805442657b433a10828625bdd0e04678aafec985396bc1431ce02fb607a1f502831aa184a16d714a75443b",
+                "@oxlint/binding-win32-x64-msvc@npm:1.80.0": "d5ffb6399f5b654105b74a1adbc13d820cba5a631813cba85f2c14e8da4b72b13d518aef261a6a81b99fc4430520d3ad1b48e5ebcdb7d0eb652cc94f5a5b8da4",
+                "@rolldown/binding-android-arm-eabi@npm:1.2.9": "1ce723761c6f6909e9f7657f3d0c157d11ab0397662679cecc46f87a5493754b05a5eacbbff8c0f21ca9f6bf6f18afb7914999e85dad926852ff6e63f98985ba",
+                "@rolldown/binding-android-arm64@npm:1.2.9": "1d597c83de815f2cb2375b8c6bb291ba34fdb6cc4fbbe7ad109f0b6a41d7434f5072655b143349ec81c9bd765f130475b0895d6d0fbf5addb51a0016aa8de015",
+                "@rolldown/binding-darwin-arm64@npm:1.2.9": "9be017bac93b93c0d4211cc87180a6cc00cca2e68b3857677f030fb37ba3cd9530b33f706a523c85625cfcf1121613353d392bb11ca5e841c72f7baec04ab1b7",
+                "@rolldown/binding-darwin-x64@npm:1.2.9": "2c6af58173c4177145db94fc210e56c32f20255ebe6df782647e39fc4811071d03e7a25b52412ffa24bc67178c800af53fbadce92f3dfd62da901672e46c9c19",
+                "@rolldown/binding-freebsd-x64@npm:1.2.9": "d6c2a208797defebe61e56b1a462a6bef90200253950f9b24f970b93cf91f7b3b0d591f5cf5f4426079cf5c9a6e5051a20d789ae2b837b1c680c2c47260aec4a",
+                "@rolldown/binding-linux-arm-gnueabihf@npm:1.2.9": "99a39c7958ef1a7ba6764b288f2d9295a682d38d280ceb401165643c83c659db766ce1185d86646c84396a9acfad25b48c7e11302adc8cd53bf629c106b45a26",
+                "@rolldown/binding-linux-arm64-gnu@npm:1.2.9": "9e84c6c18dde65e53fa4e8aba5d4855806b423df2453b28bc8dd15f0e48c46b7b1cd3c9992a9b88e173efca5f12283f1650468a327fe5dee968d2b1187ea66aa",
+                "@rolldown/binding-linux-arm64-musl@npm:1.2.9": "7fedfcaaac962bec943e7b4da51b176aadd02631d1fcaf4880ae72365d4d868f409799cbe3f7025672bb2007a0004dd33729d986404ac1c7cc8b88215716adc2",
+                "@rolldown/binding-linux-ppc64-gnu@npm:1.2.9": "dcd54975afc4f736e2b736a37158bb8eeadc58801fb40c0f3bf177d504fcea455209dd527151da7ffc818ae83327017cbd8549aee5d1eb07286049a652d79503",
+                "@rolldown/binding-linux-s390x-gnu@npm:1.2.9": "a3187e4309c9a3765f83e92e099baaf978581351d9e14f9ba6cd087ceb71010c9d807c08649ddfdffc0d93ac4530abdcbfa2611cb00198fa49a1fe16ba706d7e",
+                "@rolldown/binding-linux-x64-gnu@npm:1.2.9": "9fed0b83539a4e7d9ddc84d2a43194f4d3f697649a0856f342f947291ba21e7730f89f333960f0229e559f75cf752a4ea4632060b448f7a405602dd216d5035d",
+                "@rolldown/binding-linux-x64-musl@npm:1.2.9": "f8fa1d238157f5c397a8426696d2907f846e3c38e9dc4eadd2d841f84cda5966c3975864cd460c3ce3a0564ab212e329cfe923d911177efe14aef612a8174c26",
+                "@rolldown/binding-openharmony-arm64@npm:1.2.9": "13ac71327a28246eb9c38b458617d01ed93835ff8e17122606e718fc06e99fba4805e051b8d3786f0674ed95c0a98ec79431144e72d7452942dc17d8af4a14fc",
+                "@rolldown/binding-win32-arm64-msvc@npm:1.2.9": "a2f65e085ab4c6859361b97120a8298d2edeed0650ea6f3f70cb2a1e81f0b7f4ae7a0cb002af68d68c24f0706a9a3d55fdd8d4d96d4e8f7d5b73711abdf6e5d9",
+                "@rolldown/binding-win32-x64-msvc@npm:1.2.9": "6a8c186b5b9b9031bb870470f5da7fd4c9272c0e8602ceb77b6a0da78c46f82b4be6e9c34fc3723211d229e13f92d7bb30523f8195715299cee23fcf5dbd18e2",
+                "lightningcss-android-arm64@npm:1.33.0": "46c40a0474a7a9ddcdc33e0ea634912894a9360b6ba6f2bc42f1a817d16992784d2fe6f421d293a90ea94fb481503e27fdc54f0540de0b41d7028fe9e9c9e56a",
+                "lightningcss-darwin-arm64@npm:1.33.0": "398b770e33f66db9e4c14e4a45d0e93fa59644bd29ce5082de79ee9560a5946321ac55e896aa7fb3f177d218bef3f2dca530e209a857f0f066bf3296f5dc0742",
+                "lightningcss-darwin-x64@npm:1.33.0": "132bdab8f7b66dc99730f1ccfcb882880e411420e3f9ca764c348c686112d75962d5d7e928f3bbce7088c1be168d00ea8d722fd909033b807eef191b5a2832c0",
+                "lightningcss-freebsd-x64@npm:1.33.0": "05001395776e994ea1254dcc2613f06b44458ba33769e3a1679a0f577e43632af378cc1582f3bd1cb36e480d237066a371bc04233d6c84f8e2fe9979ab4a4032",
+                "lightningcss-linux-arm-gnueabihf@npm:1.33.0": "d0f6d993846992cf6db80f2992d0b89ffddd65a8260bbe6a1534bde28510bcfa214e8831df9ccfef5ede006a6368de1649e1d96a3e122169286647b704e08f5f",
+                "lightningcss-linux-arm64-gnu@npm:1.33.0": "278a5c553e15ed7645d3e83a3b1515060e98a8742b7008af28d610d6495a09368e73ed8b90bcb537b37249bfc2446ef5b9614b3626222f25153c538909488548",
+                "lightningcss-linux-arm64-musl@npm:1.33.0": "7aa2a2ef42e8c713e6e8eb947bf64d5272c6fdbfca7b4eb3adde555357652be27cc0d84d6fef6266543c2d303943a4c4472679d1e258458119b159f0ca868ffe",
+                "lightningcss-linux-x64-gnu@npm:1.33.0": "fa57a09af3340dc5f11fdbff820fbb7b08e306e69350a500b523c88f54c1e3a40b3785fed6043d69e2e18bacd4b72410518c9b817ee987c704a80851d9201e45",
+                "lightningcss-linux-x64-musl@npm:1.33.0": "4b0cad846f8fbe4ec321a45ef9c0d02cf4277980ac34dcfc7b422b34381e7cb11512819401b01bf029d10aa0fb8a35906ce850ba38d9f43605917ccc9b0b5d4a",
+                "lightningcss-win32-arm64-msvc@npm:1.33.0": "5e4b58d7a41fe3c37ce2af7b1a95c3722a6064a84fb6286ba2cf1106651223403b5a5863ecd3eb8fb9732480e612e30d786b859329391b0197dffc88ca18c953",
+                "lightningcss-win32-x64-msvc@npm:1.33.0": "7beb4c8580f9ea45fea6d92a8de42f706c4935b2ca68f4f5163a2bd9f6ed1574f7e53686e4927883078b07a4063a9fffdc4b41968568354259066c7a70c156a4"
             }
         },
         "modules": "149",
-        "node": "24.20.0",
-        "version": "44.3.0"
+        "node": "24.21.0",
+        "version": "44.5.1"
     }
 }
