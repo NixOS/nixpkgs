@@ -181,7 +181,7 @@ let
       pkgs.pipewire
       pkgs.qt6.qtbase
       pkgs.qt6.qtdeclarative
-      pkgs.stdenv.cc.cc
+      pkgs.stdenv.cc.cc.lib # only libstdc++, libatomic and libgomp are needed at runtime
       pkgs.udev
       pkgs.util-linux.lib # provides libuuid.so.1, which Zoom 7.2 links against
       pkgs.wayland
