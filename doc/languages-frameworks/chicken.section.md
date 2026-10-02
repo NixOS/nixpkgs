@@ -48,6 +48,13 @@ might write:
 Both `chicken` and its eggs have a setup hook which configures the environment
 variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
 
+What compiled programs use at run time is kept apart from what is only used to
+build them, so that they can be deployed without the rest:
+
+* `chicken` puts `libchicken` and the repository of its core modules in its
+  `lib` output, which is all that programs refer to. Its tools and headers,
+  which refer to the C compiler, are in `out`.
+
 ## Updating Eggs {#sec-chicken-updating-eggs}
 
 For CHICKEN 5 and 6, the egg set is generated from upstream's list of latest
