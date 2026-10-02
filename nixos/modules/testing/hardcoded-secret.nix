@@ -30,7 +30,7 @@ in
     example = lib.literalExpression ''
       {
         mySecret = {
-          input = {
+          request = {
             user = "me";
             mode = "0400";
           };
@@ -43,8 +43,8 @@ in
         { name, ... }:
         {
           options = {
-            input = mkOption {
-              description = "Input of the contract for file secrets.";
+            request = mkOption {
+              description = "Request of the file secrets contract: the consumer states the file permissions it needs.";
               type = lib.types.submodule {
                 options = {
                   mode = mkOption {
@@ -74,8 +74,8 @@ in
               };
             };
 
-            output = mkOption {
-              description = "Output of the contract for file secrets.";
+            response = mkOption {
+              description = "Response of the file secrets contract: the provider states where the file is.";
               default = { };
               type = lib.types.submodule {
                 options = {
@@ -113,14 +113,14 @@ in
       let
         source = writeText "hardcodedsecret_${n}_content" cfg'.content;
 
-        inherit (cfg') input output;
+        inherit (cfg') request response;
       in
       nameValuePair "hardcodedsecret_${n}" ''
-        mkdir -p "$(dirname "${output.path}")"
-        touch "${output.path}"
-        chmod ${input.mode} "${output.path}"
-        chown ${input.owner}:${input.group} "${output.path}"
-        cp ${source} "${output.path}"
+        mkdir -p "$(dirname "${response.path}")"
+        touch "${response.path}"
+        chmod ${request.mode} "${response.path}"
+        chown ${request.owner}:${request.group} "${response.path}"
+        cp ${source} "${response.path}"
       ''
     ) cfg;
   };
