@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   python3,
   nodejs,
   node-gyp,
@@ -37,7 +37,7 @@
   buildPackages,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -45,12 +45,12 @@ let
       buildPackages.buildGoModule (
         args
         // rec {
-          version = "0.25.5";
+          version = "0.28.1";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             tag = "v${version}";
-            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+            hash = "sha256-V+HKaWGAIs24ynFFIS9fQ0EAJJdNmlAMeL1sgDEAqWM=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -115,20 +115,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.7.5";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EC1IXM7KObAWfwG5KEao5VDp79d8WGNEI7E89lLOJ44=";
+    hash = "sha256-Z18SEjUdFP2/grQtHFI6J7CVcAMalshPt3Sd4tGXsDw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-FEesjbhxP7ydFfNshF3iFIk9N3Z53jrEZ9DRBjgEfs0=";
+    fetcherVersion = 4;
+    hash = "sha256-kCMFAPWcv2/qqVUoR5pbRxmkGg3mLPrpm8ce7R+9VYM=";
   };
 
   postPatch = ''
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
-    pnpm --filter immich build
+    pnpm --filter immich... build
 
     runHook postBuild
   '';
@@ -196,8 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
       -o -name '*.target.mk' \
     \) -exec rm -r {} +
 
-    mkdir -p "$packageOut/build"
-    ln -s '${finalAttrs.passthru.plugins}' "$packageOut/build/corePlugin"
+    mkdir -p "$packageOut/build/plugins"
+    ln -s '${finalAttrs.passthru.plugin-core}' "$packageOut/build/plugins/immich-plugin-core"
     ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
@@ -231,8 +231,8 @@ stdenv.mkDerivation (finalAttrs: {
       immich = finalAttrs.finalPackage;
     };
 
-    plugins = stdenv.mkDerivation {
-      pname = "immich-plugins";
+    plugin-core = stdenv.mkDerivation {
+      pname = "immich-plugin-core";
       inherit (finalAttrs) version src pnpmDeps;
 
       nativeBuildInputs = [
@@ -246,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
       buildPhase = ''
         runHook preBuild
 
-        pnpm --filter plugins build
+        pnpm --filter @immich/plugin-core... build
 
         runHook postBuild
       '';
@@ -254,7 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
       installPhase = ''
         runHook preInstall
 
-        cd plugins
+        cd packages/plugin-core
         mkdir $out
         cp -r dist manifest.json $out
 
@@ -275,8 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
       buildPhase = ''
         runHook preBuild
 
-        pnpm --filter @immich/sdk build
-        pnpm --filter immich-web build
+        pnpm --filter immich-web... build
 
         runHook postBuild
       '';
