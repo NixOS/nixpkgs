@@ -7,7 +7,7 @@
   name = "lk-jwt-service";
   meta.maintainers = [ lib.maintainers.quadradical ];
 
-  nodes.machine = {
+  nodes.machine = { config, ... }: {
     services.lk-jwt-service = {
       enable = true;
       keyFile = pkgs.writers.writeYAML "keys.yaml" {
@@ -17,11 +17,13 @@
       port = 8000;
     };
     systemd.services.lk-jwt-service.environment.LIVEKIT_FULL_ACCESS_HOMESERVERS = "*";
+
+    environment.systemPackages = [ config.services.lk-jwt-service.package ];
   };
 
   testScript = ''
     machine.wait_for_unit("lk-jwt-service.service")
     machine.wait_for_open_port(8000)
-    machine.succeed('curl 127.0.0.1:8000/sfu/get -sLX POST -o /dev/null -w "%{http_code}" | grep -q "^400"')
+    machine.succeed('env LIVEKIT_JWT_BIND=:8000 healthcheck')
   '';
 }
