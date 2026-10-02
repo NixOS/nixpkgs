@@ -65,6 +65,9 @@ jobs:
           path: untrusted
           sparse-checkout: |
             ci/pinned.json
+          # ci/pinned.json is only read as data by trusted/ci/supportedVersions.nix,
+          # so checking out the fork PR's merge commit is safe here.
+          allow-unsafe-pr-checkout: true
 
       - name: Find commit that touched ci/pinned.json
         id: find-pinned-commit
