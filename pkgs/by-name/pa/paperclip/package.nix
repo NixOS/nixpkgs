@@ -28,13 +28,13 @@
   wget,
 }:
 let
-  version = "0.3.1-unstable-2026-09-30";
+  version = "0.3.1-unstable-2026-10-02";
   # Draft packaging source. Replace with a paperclipai release before merging.
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "1d156b4624dfba80e6f3275f7ea55ab0e7aa24bd";
-    hash = "sha256-42T3K78bY4kAulBC/C09nFhr+Mab9GhWPTFKfyci6EE=";
+    rev = "24f90e874754eb2f23692c0f161a6ba2d98848ed";
+    hash = "sha256-UyebY2qfy6vhT1B9msonvYweu7seXaG3b6eSDfzjuNM=";
   };
   runtimePath = lib.makeBinPath [
     coreutils
@@ -107,8 +107,8 @@ let
       pnpm config set fetch-retry-mintimeout 20000
       pnpm config set fetch-retry-maxtimeout 120000
       pnpm config set fetch-timeout 600000
-      # Upstream's bot owns the source lock and does not update it on PRs.
-      # Pin the qualified resolution here, with pnpm 10's SHA-256 patch hashes.
+      # Preserve the source dependency resolution; normalize only pnpm 10's
+      # SHA-256 patch hashes and lockfile serialization.
       # Both dependency fetching and the offline build consume the same bytes.
       cp ${./pnpm-lock.yaml} pnpm-lock.yaml
     '';
