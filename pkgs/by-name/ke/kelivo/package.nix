@@ -13,7 +13,7 @@
 
 flutter344.buildFlutterApplication (finalAttrs: {
   pname = "kelivo";
-  version = "1.2.3";
+  version = "1.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ flutter344.buildFlutterApplication (finalAttrs: {
     owner = "Chevey339";
     repo = "kelivo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wTlHFJizR4aNm/TJbewKZPKwe01PYOGkXkM/Qsax71o=";
+    hash = "sha256-sQZPgIS6ZPnG1KLIgKCKJzWFnhpvURb+ZQcdsMvNXOk=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
