@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "STATIC" stdenv.hostPlatform.isStatic)
   ];
 
+  env.NIX_CFLAGS_COMPILE = ''
+    -Wno-stringop-overread
+    -Wno-unused-but-set-variable
+  '';
+
   postPatch = ''
     substituteInPlace src/version.c.in \
       --replace-fail "@GIT_VERSION@" "v${finalAttrs.version}" \
