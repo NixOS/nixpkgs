@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./cmake-cxx-version.patch
+    ./thread-pool-c++20-result-of.patch
   ];
 
   nativeBuildInputs = [
