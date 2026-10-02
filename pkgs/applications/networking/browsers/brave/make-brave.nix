@@ -62,13 +62,16 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   snappy,
+  speechd-minimal,
   udev,
   wayland,
   xdg-utils,
   coreutils,
   libxcb,
+  vulkan-loader,
   zlib,
   # Darwin dependencies
   undmg,
@@ -150,13 +153,16 @@ let
     nspr
     nss
     pango
+    pciutils # ANGLE dlopens libpci to identify GPUs, including for VA-API device selection.
     pipewire
     udev
     wayland
     libxcb
     zlib
     snappy
+    speechd-minimal # Text-to-speech through speech-dispatcher (--enable-speech-dispatcher).
     libkrb5
+    vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
   ]
   ++ optional pulseSupport libpulseaudio
@@ -262,6 +268,11 @@ stdenv.mkDerivation {
           mkdir -p $out/share/icons/hicolor/''${icon}x''${icon}/apps
           ln -s $out/opt/brave.com/${optName}/product_logo_''${icon}.png $out/share/icons/hicolor/''${icon}x''${icon}/apps/${fileBase}.png
       done
+
+      # ANGLE loads this copy by absolute path; the NixOS-patched loader finds ICDs
+      # under /run/opengl-driver, the bundled one does not.
+      rm $out/opt/brave.com/${optName}/libvulkan.so.1
+      ln -s ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 $out/opt/brave.com/${optName}/libvulkan.so.1
 
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/${optName}/xdg-settings
