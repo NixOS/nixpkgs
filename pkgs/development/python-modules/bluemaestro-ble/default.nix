@@ -10,7 +10,7 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bluemaestro-ble";
   version = "1.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluemaestro-ble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uz4JE7ALfHxmdi7OesdJZqp4JhQdQGNwoiDxZyk8g9c=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for bluemaestro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bluemaestro-ble";
-    changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
