@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
+
   patches = [
     ./cmake-cxx-version.patch
     ./thread-pool-c++20-result-of.patch
