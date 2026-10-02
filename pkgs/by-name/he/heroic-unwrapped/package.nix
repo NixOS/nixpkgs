@@ -59,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  patches = [
+    # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
+    ./fix-non-steam-shortcuts.patch
+  ];
+
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   buildPhase = ''
