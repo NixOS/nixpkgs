@@ -149,5 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "et";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    identifiers.cpeParts = {
+      vendor = "eternal_terminal_project";
+      product = "eternal_terminal";
+      version = finalAttrs.version;
+      update = "*";
+    };
   };
 })
