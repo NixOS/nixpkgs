@@ -6,19 +6,20 @@
   dateparser,
   orjson,
   pydantic,
+  pydantic-extra-types,
   ua-parser,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lookyloo-models";
-  version = "0.3.1";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "lookyloo-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x0F9N6S6yHaOcppfZNRu0r1sgijtvqJEcBs0IAcoG6E=";
+    hash = "sha256-G1XwOj/+9Nirv+UhcmEH2jkttaXV9hyC1756eoD6dGw=";
   };
 
   postPatch = ''
@@ -34,6 +35,7 @@ buildPythonPackage (finalAttrs: {
     dateparser
     orjson
     pydantic
+    pydantic-extra-types
     ua-parser
   ];
 
