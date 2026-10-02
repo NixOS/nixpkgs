@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Powerful cross platform Bible study tool";
     license = lib.licenses.gpl2Plus;
     mainProgram = "bibletime";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.skohtv ];
     platforms = lib.platforms.linux;
   };
 })
