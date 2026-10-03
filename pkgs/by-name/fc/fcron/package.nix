@@ -12,6 +12,7 @@
   sendmailProgram ?
     if lib.meta.availableOn stdenv.hostPlatform busybox then "${busybox}/sbin/sendmail" else null,
   editorProgram ? if lib.meta.availableOn stdenv.hostPlatform vim then "${vim}/bin/vi" else null,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     # also don't use chown or chgrp for documentation (or whatever) when installing
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
+
+  passthru.tests.nixos = nixosTests.fcron;
 
   meta = {
     description = "Command scheduler with extended capabilities over cron and anacron";
