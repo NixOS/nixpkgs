@@ -6,7 +6,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "subsFilter";
-  version = "0.6.4-unstable-2022-01-24";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "yaoweibin";
