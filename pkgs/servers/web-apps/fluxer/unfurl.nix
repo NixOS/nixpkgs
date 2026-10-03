@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "A free and open source instant messaging and VoIP chat app";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
     mainProgram = "fluxer-unfurl";

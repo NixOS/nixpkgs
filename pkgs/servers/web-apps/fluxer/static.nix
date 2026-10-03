@@ -24,7 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A free and open source instant messaging and VoIP chat app";
-    license = lib.licenses.agpl3Only;
+    license =
+      with lib.licenses;
+      AND [
+        cc-by-sa-40 # fluxer assets
+        cc-by-40 # Twemoji redist
+        # TODO spellcheck licenses - fluxer_static/desktop/spellcheck/dictionaries/NOTICE.md
+      ];
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
   };

@@ -139,7 +139,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "A free and open source instant messaging and VoIP chat app";
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      agpl3Plus # fluxer
+      cc-by-40 # fluxer_app/src/media/images/i-like-food.svg
+      mit # fluxer_app/src/media/images/neko.png, fluxer_app/src/features/accessibility/components/NekoSprite.tsx
+      asl20 # fluxer_app/src/features/ui/components/icons/InboxIcon.tsx
+    ];
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
     # Execution note:
