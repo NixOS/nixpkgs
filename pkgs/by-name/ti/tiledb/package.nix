@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiledb";
-  version = "2.30.0";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     tag = finalAttrs.version;
-    hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
+    hash = "sha256-LWFugQLdEvPfNPgbrpEsf1zR5Zed9Gm+BpipfGRg+vA=";
   };
 
   patches = [ ./0001-fix-cross-compilation-with-capnproto.patch ];
