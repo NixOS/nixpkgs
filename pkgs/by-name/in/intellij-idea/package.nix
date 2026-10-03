@@ -1,7 +1,9 @@
 {
   # keep-sorted start
+  autoPatchelfHook,
   fetchurl,
   fsnotifier,
+  jdk25_headless,
   jetbrains,
   jetbrains-libdbm,
   lib,
@@ -30,8 +32,13 @@ let
     };
   };
   # update-script-end: urls
+
+  profilerBinaryDirNames = {
+    x86_64-linux = "linux";
+    aarch64-linux = "linux-aarch64";
+  };
 in
-jetbrains.mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct (finalAttrs: {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "intellij-idea";
@@ -60,12 +67,36 @@ jetbrains.mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    jdk25_headless
+    autoPatchelfHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # keep-sorted start
     lldb
     musl
     # keep-sorted end
   ];
+
+  profilerBinaryDirName = profilerBinaryDirNames.${stdenv.hostPlatform.system} or "";
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    if [[ -n "$profilerBinaryDirName" ]]; then
+      echo "Unpacking intellij.profiler.asyncOne.jar"
+      echo "exec jar --extract --file $out/${finalAttrs.pname}/lib/intellij.profiler.asyncOne.jar -C profilerJarContents"
+      jar --extract --file $out/${finalAttrs.pname}/lib/intellij.profiler.asyncOne.jar -C profilerJarContents
+
+      pushd profilerJarContents
+
+      echo "Patching jattach"
+      autoPatchelf binaries/$profilerBinaryDirName/jattach
+      echo "Repacking jar"
+      jar --create --file $out/${finalAttrs.pname}/lib/intellij.profiler.asyncOne.jar *
+
+      popd
+
+      rm -r profilerJarContents
+    fi
+  '';
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
@@ -87,4 +118,4 @@ jetbrains.mkJetBrainsProduct {
       else
         [ lib.sourceTypes.binaryBytecode ];
   };
-}
+})
