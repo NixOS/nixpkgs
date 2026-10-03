@@ -41,6 +41,9 @@
   # Whether this should be an efi-bootable El-Torito CD.
   efiBootable ? false,
 
+  # Whether this should be a CHRP-compatible CD.
+  chrpBootable ? false,
+
   # Whether this should be an hybrid CD (bootable from USB as well as CD).
   usbBootable ? false,
 
@@ -49,6 +52,12 @@
 
   # The path (in the ISO file system) of the efi boot image.
   efiBootImage ? "",
+
+  # The path (in the ISO file system) to bless for booting on New World ROM PowerMacs (path that "\\" in Open Firmware will resolve to)
+  tbxiBlessDir ? "",
+
+  # The file in tbxiBlessDir to bless as type tbxi
+  tbxiBlessFile ? "",
 
   # The path (outside the ISO file system) of the isohybrid-mbr image.
   isohybridMbrImage ? "",
@@ -63,6 +72,9 @@
 
 assert bootable -> bootImage != "";
 assert efiBootable -> efiBootImage != "";
+assert
+  (tbxiBlessDir != "" || tbxiBlessFile != "")
+  -> (chrpBootable && tbxiBlessDir != "" && tbxiBlessFile != "");
 assert usbBootable -> isohybridMbrImage != "";
 
 let
@@ -97,6 +109,9 @@ stdenv.mkDerivation {
     volumeID
     efiBootImage
     efiBootable
+    chrpBootable
+    tbxiBlessDir
+    tbxiBlessFile
     isohybridMbrImage
     usbBootable
     ;
