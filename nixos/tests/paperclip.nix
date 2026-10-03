@@ -15,6 +15,7 @@ let
   fakeGateway = pkgs.writeText "paperclip-fake-hermes.py" ''
     import json
     import re
+    import threading
     import urllib.error
     import urllib.request
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -22,6 +23,9 @@ let
 
     root = Path("/var/lib/hermes-fixture")
     runs = {}
+    admissions = {}
+    payloads = {}
+    admission_lock = threading.Lock()
 
     def call_controller(base, company_id, token):
         callback = urllib.request.Request(
@@ -55,8 +59,42 @@ let
         def do_POST(self):
             if not self.authorized():
                 return
-            if self.path == "/v1/runs":
+            with admission_lock:
+                self.handle_post()
+
+        def handle_post(self):
+            if self.path in ("/v1/runs", "/v1/runs/stop"):
+                key = self.headers.get("Idempotency-Key")
+                if not key:
+                    self.send_json(400, {"error": "idempotency key required"})
+                    return
                 request = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+                context = request.get("execution_context", {})
+                if (context.get("version") != 1 or context.get("backend") != "local"
+                        or context.get("lifetime") != "wait_for_jobs"
+                        or not isinstance(context.get("cwd"), str) or not context["cwd"].startswith("/")):
+                    self.send_json(422, {"error": "unsupported execution context"})
+                    return
+                if key in admissions:
+                    if request != payloads[key]:
+                        self.send_json(409, {"error": "admission binding changed"})
+                        return
+                    run_id = admissions[key]
+                    if self.path == "/v1/runs/stop" and not (root / "stop-blocked").exists():
+                        if runs[run_id]["status"] == "running":
+                            runs[run_id]["status"] = "cancelled"
+                            runs[run_id]["stops"] += 1
+                    self.send_json(200, {"run_id": run_id, "status": runs[run_id]["status"]})
+                    return
+                if self.path == "/v1/runs/stop":
+                    # Fence missing admission without starting any provider work.
+                    run_id = "fixture-" + str(len(runs) + 1)
+                    admissions[key] = run_id
+                    payloads[key] = request
+                    runs[run_id] = {"status": "cancelled", "stops": 0}
+                    self.send_json(200, {"run_id": run_id, "status": "cancelled"})
+                    return
+            if self.path == "/v1/runs":
                 text = request.get("input", "")
                 company = re.search(r"^- Company ID: ([0-9a-f-]+)$", text, re.M)
                 base = re.search(r"^- Paperclip API URL: (http://[^\s]+)$", text, re.M)
@@ -72,15 +110,18 @@ let
                 status = "running" if held.exists() else "completed"
                 held.unlink(missing_ok=True)
                 runs[run_id] = {"status": status, "stops": 0, "callbackStatus": callback_status, "crossCompanyStatus": cross_company_status}
+                admissions[key] = run_id
+                payloads[key] = request
                 self.send_json(200, {"run_id": run_id, "status": "started"})
             elif self.path.endswith("/stop"):
                 run_id = self.path.split("/")[3]
                 if run_id not in runs:
                     self.send_json(404, {"error": "missing"})
                     return
-                runs[run_id]["status"] = "cancelled"
-                runs[run_id]["stops"] += 1
-                self.send_json(200, {"status": "cancelled"})
+                if not (root / "stop-blocked").exists() and runs[run_id]["status"] == "running":
+                    runs[run_id]["status"] = "cancelled"
+                    runs[run_id]["stops"] += 1
+                self.send_json(200, {"run_id": run_id, "status": runs[run_id]["status"]})
             else:
                 self.send_json(404, {"error": "missing"})
 
@@ -89,6 +130,12 @@ let
                 self.send_json(200, {"runs": runs})
                 return
             if not self.authorized():
+                return
+            if self.path == "/v1/capabilities":
+                self.send_json(200, {"features": {"runs_execution_context": {
+                    "version": 1, "mode": "precondition", "backends": ["local"],
+                    "lifetimes": ["wait_for_jobs"], "stop_admission": True,
+                }}})
                 return
             run_id = self.path.split("/")[3] if self.path.startswith("/v1/runs/") else ""
             run = runs.get(run_id)
@@ -106,7 +153,7 @@ let
                 self.end_headers()
                 self.wfile.write(body)
             else:
-                self.send_json(200, {"status": run["status"], "output": "fixture completed"})
+                self.send_json(200, {"run_id": run_id, "status": run["status"], "output": "fixture completed"})
 
     ThreadingHTTPServer(("0.0.0.0", 8642), Gateway).serve_forever()
   '';
@@ -202,6 +249,7 @@ in
                   apiBaseUrl = "http://worker:8642";
                   paperclipApiUrl = "http://controller:3115";
                   dangerouslyAllowInsecureRemoteHttp = true;
+                  waitForJobs = true;
                 };
               };
               credentials.apiKey = "gateway";
@@ -209,6 +257,9 @@ in
           };
         };
         systemd.services.paperclip-control.serviceConfig.Restart = lib.mkForce "no";
+        # Startup recovery and explicit Stop own this deterministic journey.
+        # Keep a periodic sweep from racing the final verified-stop assertion.
+        systemd.services.paperclip-control.environment.HEARTBEAT_SCHEDULER_INTERVAL_MS = "3600000";
         environment.etc."paperclip-fixture-config.json".source =
           (shared.render "control" config.services.paperclip.instances.control).configFile;
         systemd.services.paperclip-fixture-credentials = {
@@ -241,6 +292,7 @@ in
   };
   testScript = ''
     import json
+    import shlex
     from uuid import UUID
     board_url = "http://localhost:3115"
     worker.start()
@@ -312,6 +364,19 @@ in
     worker.wait_until_succeeds("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\"'", timeout=120)
     controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/crash-successor.json")
     successor_id = str(UUID(json.loads(controller.succeed("cat /run/crash-successor.json"))["id"]))
+    company_id = str(UUID(bindings["company/example"]))
+
+    def owned_lease():
+        # Read only bounded public state and ciphertext presence, never material.
+        query = f"SELECT json_build_object('id', id, 'status', status, 'releasedAt', released_at, 'state', metadata->'adapterExecution'->>'state', 'sealed', metadata->'adapterExecution' ? 'material') FROM environment_leases WHERE heartbeat_run_id = '{crash_id}' AND company_id = '{company_id}'"
+        return json.loads(controller.succeed("runuser -u postgres -- psql -At -v ON_ERROR_STOP=1 -d paperclip_control -c " + shlex.quote(query)))
+
+    crash_lease = owned_lease()
+    assert crash_lease["status"] == "active" and crash_lease["releasedAt"] is None
+    assert crash_lease["state"] == "pending" and crash_lease["sealed"] is True
+    old_controller_boot_id = controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -er .controllerBootId").strip()
+    UUID(old_controller_boot_id)
+    worker.succeed("install -m 0600 -o hermes-fixture -g hermes-fixture /dev/null /var/lib/hermes-fixture/stop-blocked")
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
     controller.succeed("systemctl kill -s SIGKILL paperclip-control.service")
     controller.wait_until_succeeds("systemctl is-failed paperclip-control.service", timeout=30)
@@ -320,13 +385,19 @@ in
     controller.succeed("systemctl reset-failed paperclip-control.service")
     controller.succeed("systemctl start paperclip-control.service")
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
-    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\" and .errorCode == \"remote_owner_unverified\"'", timeout=120)
+    try:
+        # Expiry grants cleanup authority, never permission to infer settlement.
+        # A changed boot identity proves the new controller attempted recovery.
+        controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\" and .controllerBootId != \"{old_controller_boot_id}\"'", timeout=120)
+        assert owned_lease() == crash_lease
+    finally:
+        print(controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq '{{id,status,errorCode,controllerBootId,executionStage,finishedAt}}'"))
+        print(json.dumps(owned_lease()))
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
-    controller.fail(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel | jq -e '.status == \"running\" and .errorCode == \"adapter_execution_settlement_pending\"'")
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\"'")
-    worker.succeed("printf 'header = \"Authorization: Bearer %s\"\\n' \"$(cat /var/lib/hermes-fixture/gateway-key)\" | curl -fsS --config - -X POST http://localhost:8642/v1/runs/fixture-6/stop > /dev/null")
-    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"cancelled\" and .runs[\"fixture-6\"].stops == 1 and (.runs | length) == 6'")
+    assert owned_lease() == crash_lease
     controller.succeed("systemctl stop paperclip-control.service")
     controller.succeed("runuser -u postgres -- pg_dump -Fc -f /var/lib/postgresql/paperclip-control.dump paperclip_control")
     controller.succeed("runuser -u postgres -- dropdb --force paperclip_control")
@@ -336,9 +407,18 @@ in
     controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=120)
     assert json.loads(controller.succeed("cat /var/lib/paperclip-control/instances/control/deployment-bindings.json"))["bindings"] == bindings
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/auth/get-session | jq -e '.user.email == \"operator@example.test\"'")
-    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\" and .errorCode == \"remote_owner_unverified\"'")
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\"'")
+    assert owned_lease() == crash_lease
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '(.runs | length) == 6'")
+    # Only a verified parent-terminal response releases the restored checkpoint.
+    worker.succeed("rm /var/lib/hermes-fixture/stop-blocked")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'")
+    settled_lease = owned_lease()
+    assert settled_lease["id"] == crash_lease["id"] and settled_lease["releasedAt"] is not None
+    assert settled_lease["state"] == "settled" and settled_lease["sealed"] is False
+    controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"succeeded\"'", timeout=120)
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"cancelled\" and .runs[\"fixture-6\"].stops == 1 and .runs[\"fixture-7\"].status == \"completed\" and .runs[\"fixture-7\"].callbackStatus == 401 and (.runs | length) == 7'")
     controller.succeed("pid=$(systemctl show paperclip-control -p MainPID --value); ! tr '\\0' '\\n' < /proc/$pid/environ | grep -E '^(BETTER_AUTH_SECRET|DATABASE_URL|DATABASE_MIGRATION_URL)='")
   '';
 }
