@@ -70,7 +70,7 @@ let
       # paths from the source it was built from.
       dontFixup = true;
 
-      outputHash = "sha256-cDZ7Ad87n/IlVqOqRTrZjaPUMilHiP7g4M0/K5tRoyM=";
+      outputHash = "sha256-vHd1Uh5JUa+LgPyToRfWkpfgz+Y3JFWNvlHYEEQF2Dc=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
@@ -83,7 +83,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cline";
-  version = "3.0.65";
+  version = "3.0.68";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "cline";
     repo = "cline";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-9Mw9hFPVaAE833vfwqYDIHDa8bjIu+xUwQ5p7l7Fdm8=";
+    hash = "sha256-Codwrt9ByARSal/A7UrtUG0edyHl9ePDzVYMALyf+1s=";
   };
 
   node_modules = nodeModules finalAttrs;
@@ -162,6 +162,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # Bun-compiled executables do not survive stripping.
   dontStrip = true;
 
+  # darwin tests require network
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -173,9 +176,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      # CLI releases are tagged with `cli-v` prefix, e.g. `cli-v1.2.3`
+      # CLI releases are tagged with `cli-v` prefix, e.g. `cli-v1.2.3`.
       "--version-regex"
-      "^cli-v"
+      "^cli-v(.*)"
       # Recompute FOD hash of the node_modules derivation as well
       "--subpackage"
       "node_modules"
