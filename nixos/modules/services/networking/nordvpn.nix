@@ -163,7 +163,7 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = [ "default.target" ];
       wants = [ "network-online.target" ];
     };
 
