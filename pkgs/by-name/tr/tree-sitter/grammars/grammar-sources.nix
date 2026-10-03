@@ -3323,7 +3323,7 @@
   };
 
   uxntal = {
-    version = "0-unstable-2024-05-05";
+    version = "stable-unstable-2024-05-05";
     url = "github:tree-sitter-grammars/tree-sitter-uxntal";
     rev = "ad9b638b914095320de85d59c49ab271603af048";
     hash = "sha256-hR0EaYv1++MJ0pdBl3ZtyEljitnp5hgFWQa9F6b1KE4=";
