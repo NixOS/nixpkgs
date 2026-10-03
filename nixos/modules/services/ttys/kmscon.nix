@@ -110,7 +110,6 @@ in
             ]);
           options = {
             hwaccel = mkEnableOption "use hardware acceleration for rendering";
-            libseat = mkEnableOption "use libseat for seat management";
           };
         };
       };
@@ -160,8 +159,6 @@ in
 
     systemd.services."kmsconvt@" = {
       serviceConfig = {
-        User = lib.mkIf (!cfg.config.libseat) "";
-        PAMName = lib.mkIf (!cfg.config.libseat) "";
         Environment = [ "XKB_CONFIG_ROOT=${config.services.xserver.xkb.dir}" ];
         ExecStart = [
           "" # override upstream default with an empty ExecStart
@@ -195,51 +192,6 @@ in
     ];
 
     systemd.suppressedSystemUnits = [ "getty@.service" ];
-
-    security.pam.services.kmscon = lib.mkIf cfg.config.libseat {
-      useDefaultRules = false;
-      rules = {
-        auth = utils.pam.autoOrderRules [
-          {
-            name = "permit";
-            control = "required";
-            modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
-          }
-        ];
-        account = utils.pam.autoOrderRules [
-          {
-            name = "unix";
-            control = "required";
-            modulePath = config.security.pam.pam_unixModulePath;
-          }
-        ];
-        session = utils.pam.autoOrderRules [
-          {
-            name = "env";
-            control = "required";
-            modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
-            settings = {
-              conffile = "/etc/pam/environment";
-              readenv = 0;
-            };
-          }
-          {
-            name = "unix";
-            control = "required";
-            modulePath = config.security.pam.pam_unixModulePath;
-          }
-          {
-            name = "systemd";
-            control = "optional";
-            modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
-            settings = {
-              type = "tty";
-              class = "greeter";
-            };
-          }
-        ];
-      };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [
