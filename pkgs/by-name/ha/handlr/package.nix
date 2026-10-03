@@ -32,6 +32,12 @@ rustPlatform.buildRustPackage {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
+  # shared-mime-info 2.5 aliased application/x-shellscript to text/x-shellscript
+  postPatch = ''
+    substituteInPlace src/common/mime_types.rs \
+      --replace-fail '"application/x-shellscript"' '"text/x-shellscript"'
+  '';
+
   postInstall = ''
     installShellCompletion \
       --zsh  completions/_handlr \
