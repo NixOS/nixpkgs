@@ -1,0 +1,98 @@
+From 1030b333d2a2036de2907a84fbfb9196fd620fa3 Mon Sep 17 00:00:00 2001
+From: Lucas Ransan <lucas@ransan.fr>
+Date: Wed, 22 Apr 2026 17:36:27 +0200
+Subject: [PATCH] patch-out jbb
+
+---
+ mcurl/gen.py   | 42 ++++--------------------------------------
+ pyproject.toml |  2 +-
+ 2 files changed, 5 insertions(+), 39 deletions(-)
+
+diff --git a/mcurl/gen.py b/mcurl/gen.py
+index 6812491..4c857f2 100644
+--- a/mcurl/gen.py
++++ b/mcurl/gen.py
+@@ -7,7 +7,6 @@ import sys
+ import tempfile
+ 
+ import cffi
+-import jbb
+ 
+ # Platform specific additions
+ if sys.platform == "linux":
+@@ -25,7 +24,7 @@ typedef long time_t;
+ typedef struct {
+     long %s int fds_bits[%d];
+ } fd_set;
+-""" % ("unsigned" if jbb.get_libc() == "musl" else "", 16 if sys.maxsize > 2**32 else 32)
++""" % ("", 16 if sys.maxsize > 2**32 else 32)
+ 
+     HEADER = """
+ #include <sys/socket.h>
+@@ -350,48 +349,15 @@ def cffi_prep(cdef, inc, libs):
+ 
+ def source_prep():
+     # Download libcurl from JBB for Linux and Windows
+-    key = jbb.get_key()
++    key = "x86_64-linux-glibc";
+     outdir = os.path.join(os.environ.get("TMP", tempfile.gettempdir()), "mcurl", key)
+     version = get_libcurl_version()
+-    libs = []
+-    if sys.platform != "darwin":
+-        libs.extend(jbb.jbb(f"LibCURL-v{version}", outdir=outdir, project="genotrance", quiet=False))
+-
+-        # On Windows, jbb returns bin/ dirs but mingw32 linker needs lib/ dirs
+-        # for import libraries (.dll.a / .a). Add lib/ equivalents.
+-        if sys.platform == "win32":
+-            lib_dirs = []
+-            for d in libs:
+-                lib_dirs.append(d)
+-                lib_dir = d.replace(os.sep + "bin", os.sep + "lib")
+-                if lib_dir != d and os.path.isdir(lib_dir):
+-                    lib_dirs.append(lib_dir)
+-            libs = lib_dirs
+-
+-        # Header file location
+-        curlh = f"{outdir}{os.sep}LibCURL{os.sep}include{os.sep}curl{os.sep}curl.h"
+-    else:
+-        prefix = subprocess.check_output("brew --prefix", shell=True, text=True).strip()
+-        deps = ["curl"] + subprocess.check_output("brew deps -n --installed curl", shell=True, text=True).splitlines()
+-        for dep in deps:
+-            if dep == "ca-certificates":
+-                continue
+-            libs.append(prefix + "/opt/" + dep + "/lib")
+-
+-        curlh = prefix + "/opt/curl/include/curl/curl.h"
++    libs = ["@curl-libdir@"]
++    curlh = "@curl-header@";
+ 
+     # Include directory
+     inc = os.path.dirname(curlh)
+ 
+-    # Download CAcerts
+-    pemdst = "mcurl/cacert.pem"
+-    jbb.jbb("mozillaCACerts", outdir=outdir, quiet=False)
+-    pemsrc = glob.glob(f"{outdir}/**/cacert.pem", recursive=True)[0]
+-    try:
+-        shutil.copy(pemsrc, pemdst)
+-    except shutil.SameFileError:
+-        pass
+-
+     # Preprocess and clean code
+     cdef = get_preprocessor(curlh, recurse=True)
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 5a94ec4..141dcde 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+ build-backend = "setuptools.build_meta"
+-requires = ["cffi", "jbb", "setuptools"]
++requires = ["cffi", "setuptools"]
+ 
+ [project]
+ name = "pymcurl"
+-- 
+2.43.0
+
