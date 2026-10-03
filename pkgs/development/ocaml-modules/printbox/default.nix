@@ -20,7 +20,7 @@ buildDunePackage (finalAttrs: {
     sha256 = "sha256-PQbr2sjASoWz0OHAMV6buAJERpnUJxVpLAigIVnADIc=";
   };
 
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   # mdx is not available for OCaml < 4.08
   doCheck = lib.versionAtLeast ocaml.version "4.08";
