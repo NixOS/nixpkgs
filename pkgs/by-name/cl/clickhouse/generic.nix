@@ -201,6 +201,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
 
   env = {
     CARGO_HOME = "$PWD/../.cargo/";
+    # ClickHouse's toolchain files pass an explicit `--target` (e.g. x86_64-linux-gnu) together
+    # with its bundled sysroot; cc-wrapper would print a warning for every compiler invocation.
+    NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
     NIX_CFLAGS_COMPILE =
       # undefined reference to '__sync_val_compare_and_swap_16'
       lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16"
