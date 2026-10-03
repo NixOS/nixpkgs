@@ -4,12 +4,13 @@
   makeWrapper,
   writeShellScriptBin,
   ghostscriptX,
-  ocamlPackages,
+  ocaml-ng,
   texliveMedium,
   which,
 }:
 
 let
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   # simplified fake-opam edited from tweag's opam-nix
   fake-opam = writeShellScriptBin "opam" ''
     case "$1 $2" in

@@ -39,12 +39,27 @@ stdenv.mkDerivation (
             strictDeps = true;
             __structuredAttrs = true;
           }
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/clang "$out"
-            ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
-          ''
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/clang "$out"
+              ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # AddSphinxBuild.cmake sets PYTHONPATH to this roughly $out/clang/../llvm/../utils/docs
+              # The directory has to exist for PYTHONPATH's traversal
+              mkdir -p "$out/llvm"
+
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
+          )
       else
         src;
 

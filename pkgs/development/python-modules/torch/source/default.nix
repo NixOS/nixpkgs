@@ -391,6 +391,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   + lib.optionalString rocmSupport ''
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
+    patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
   ''
   # When possible, composable kernel as dependency, rather than built-in third-party
   + lib.optionalString (rocmSupport && !vendorComposableKernel) ''

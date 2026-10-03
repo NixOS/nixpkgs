@@ -2,8 +2,7 @@
   lib,
   callPackage,
   buildFHSEnv,
-  config,
-  cudaSupport ? config.cudaSupport,
+  extraPkgs ? pkgs: [ ], # extra packages to add to targetPkgs
 
   # Provide support for built-in self-updates and plugin management
   #
@@ -37,7 +36,8 @@ buildFHSEnv {
 
   targetPkgs =
     pkgs:
-    (with pkgs; [
+    with pkgs;
+    [
       expat
       glib
       zlib
@@ -49,6 +49,7 @@ buildFHSEnv {
 
       alsa-lib
       libxkbcommon
+      wayland
 
       libGL
       libdrm
@@ -56,6 +57,7 @@ buildFHSEnv {
       qt6Packages.qtbase
       gtk3
       fontconfig
+      freetype
       libjpeg8
       gd
 
@@ -91,13 +93,8 @@ buildFHSEnv {
       libxcb-render-util
       libxcb-wm
       # libxcb-cursor # Bundled by PixInsight
-    ])
-    ++ lib.optionals cudaSupport (
-      with pkgs.cudaPackages;
-      [
-        cudatoolkit
-      ]
-    );
+    ]
+    ++ extraPkgs pkgs;
 
   extraInstallCommands = ''
     # Provide second binary matching upstream CLI command (`PixInsight`)

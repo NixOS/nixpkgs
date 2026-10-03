@@ -6,11 +6,13 @@
   cmake,
   cctools,
   fetchFromGitHub,
+  fetchpatch,
   git,
   gmp,
   cadical,
   cadical' ? cadical.override { version = "2.1.3"; },
   leangz,
+  openssl,
   pkg-config,
   libuv,
   perl,
@@ -22,20 +24,20 @@
 let
   lean4 = stdenv.mkDerivation (finalAttrs: {
     pname = "lean4";
-    version = "4.30.0";
+    version = "4.34.1";
 
     mimalloc-src = fetchFromGitHub {
       owner = "microsoft";
       repo = "mimalloc";
-      tag = "v2.2.3";
-      hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
+      tag = "v3.4.5";
+      hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
     };
 
     src = fetchFromGitHub {
       owner = "leanprover";
       repo = "lean4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
+      hash = "sha256-JO1pCqWeotC4zjiIQZccEPXfVHnuDQC0DugyuJvIMRs=";
     };
 
     # Vendor mimalloc. Upstream has since partially adopted FetchContent:
@@ -48,15 +50,6 @@ let
         pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
       in
       ''
-        substituteInPlace src/CMakeLists.txt \
-          --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
-
-        rm -rf src/lake/examples/git/
-
-        substituteInPlace CMakeLists.txt \
-          --replace-fail 'GIT_REPOSITORY https://github.com/microsoft/mimalloc' \
-                         'SOURCE_DIR "${finalAttrs.mimalloc-src}"' \
-          --replace-fail 'GIT_TAG ${finalAttrs.mimalloc-src.tag}' ""
         for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
           substituteInPlace "$file" \
             --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
@@ -83,6 +76,7 @@ let
       gmp
       libuv
       cadical'
+      openssl
     ];
 
     nativeCheckInputs = [
@@ -95,8 +89,8 @@ let
       "-DINSTALL_LICENSE=OFF"
       "-DINSTALL_CADICAL=OFF"
       "-DINSTALL_LEANTAR=OFF"
-      "-DSTAGE1_CMAKE_INSTALL_PREFIX=${placeholder "out"}"
       "-DUSE_MIMALLOC=ON"
+      "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src}"
     ];
 
     passthru.tests = {

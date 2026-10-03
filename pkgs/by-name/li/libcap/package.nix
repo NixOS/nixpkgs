@@ -133,7 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
+    license = lib.licenses.OR [
+      lib.licenses.bsd3
+      lib.licenses.gpl2Only
+    ];
     pkgConfigModules = [
       "libcap"
       "libpsx"
