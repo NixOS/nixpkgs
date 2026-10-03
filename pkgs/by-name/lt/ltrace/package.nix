@@ -58,6 +58,12 @@ stdenv.mkDerivation {
       url = "https://gitlab.com/cespedes/ltrace/-/commit/d888b448740abd4d5846535ef1dc5ba1c74a134a.patch";
       hash = "sha256-9XAeulMUUvLh6Q9ppSL6d5kA2UPPyzCjwibcXH260Bo=";
     })
+    # fix demangle test with GCC 16
+    # https://gitlab.com/cespedes/ltrace/-/merge_requests/112
+    (fetchurl {
+      url = "https://gitlab.com/cespedes/ltrace/-/commit/4dd63658b42db7f13119019c230056f1b1d0efbe.patch";
+      hash = "sha256-qlqbrSPrY/G8ro1L8Fn6bGpbtN/3RLQuleeJT54IlbI=";
+    })
   ];
 
   doCheck = true;
