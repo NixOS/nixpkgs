@@ -247,6 +247,10 @@ mapAliases {
   clang18Stdenv = lib.lowPrio llvmPackages_18.stdenv;
   clang19Stdenv = lib.lowPrio llvmPackages_19.stdenv;
 
+  lua = lua5; # Added 2026-10-03 preserve, reason: convenience
+  lua5 = lua5_2_compat; # Added 2026-10-03 preserve, reason: convenience
+  luaPackages = lua52Packages; # Added 2026-10-03 preserve, reason: convenience
+
   # Various to preserve
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
   elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
