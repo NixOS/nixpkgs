@@ -12,7 +12,7 @@
   python3,
   lib,
   stdenv,
-  systemd,
+  systemdLibs,
   xkeyboard_config,
   libxrandr,
   libxext,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gdk-pixbuf
     isocodes
-    systemd
+    systemdLibs
     xkeyboard_config
     libxkbfile
     libxext
