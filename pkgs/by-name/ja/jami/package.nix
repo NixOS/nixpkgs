@@ -33,6 +33,7 @@
   udev,
   webrtc-audio-processing_0_3,
   yaml-cpp,
+  yffi,
   zlib,
 
   # for dhtnet
@@ -63,14 +64,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20260811.0";
+  version = "20260819.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-6MywBm2kT1VJmgHEGKifcrHxG08s53fqfPYSfsFxgFk=";
+    hash = "sha256-xjVLUoS4EN0HJA4IVZa80vz2cXoSgvJF+YkagwLnKuQ=";
     fetchSubmodules = true;
   };
 
@@ -204,6 +205,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
+    rm -rf daemon/contrib
   '';
 
   dontWrapGApps = true;
@@ -254,6 +256,7 @@ stdenv.mkDerivation rec {
     udev
     webrtc-audio-processing_0_3
     yaml-cpp
+    yffi
     zlib
     zxing-cpp
   ]
@@ -274,15 +277,12 @@ stdenv.mkDerivation rec {
   );
 
   cmakeFlags = [
+    "-DYRS_INCLUDE_DIR=${yffi}/include"
+    "-DYRS_LIBRARY=${yffi}/lib"
     (lib.cmakeBool "DWITH_WEBENGINE" withWebengine)
   ];
 
   env.NIX_LDFLAGS = "-lz";
-
-  qtWrapperArgs = [
-    # With wayland the titlebar is not themed and the wmclass is wrong.
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
