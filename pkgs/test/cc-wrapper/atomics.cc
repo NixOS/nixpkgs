@@ -1,8 +1,7 @@
-#include <atomic>
-#include <cstdint>
-
-int main()
+int main(int argc, char **)
 {
-  std::atomic_int x = {0};
-  return !std::atomic_is_lock_free(&x);
+  // A runtime size requires a libatomic call instead of a constant result.
+  volatile bool lock_free = __atomic_is_lock_free(argc, nullptr);
+  (void) lock_free;
+  return 0;
 }

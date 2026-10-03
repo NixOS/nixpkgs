@@ -23,15 +23,13 @@ for var in "${var_templates_bool[@]}"; do
 done
 
 if [ -e @out@/nix-support/libc-ldflags ]; then
-    NIX_LDFLAGS_@suffixSalt@+=" $(< @out@/nix-support/libc-ldflags)"
+    wrapper_NIX_LDFLAGS+=" $(< @out@/nix-support/libc-ldflags)"
 fi
 
-if [ -z "$NIX_DYNAMIC_LINKER_@suffixSalt@" ] && [ -e @out@/nix-support/ld-set-dynamic-linker ]; then
-    NIX_DYNAMIC_LINKER_@suffixSalt@="$(< @out@/nix-support/dynamic-linker)"
+if [ -z "$wrapper_NIX_DYNAMIC_LINKER" ] && [ -e @out@/nix-support/ld-set-dynamic-linker ]; then
+    wrapper_NIX_DYNAMIC_LINKER="$(< @out@/nix-support/dynamic-linker)"
 fi
 
 if [ -e @out@/nix-support/libc-ldflags-before ]; then
-    NIX_LDFLAGS_BEFORE_@suffixSalt@="$(< @out@/nix-support/libc-ldflags-before) $NIX_LDFLAGS_BEFORE_@suffixSalt@"
+    wrapper_NIX_LDFLAGS_BEFORE="$(< @out@/nix-support/libc-ldflags-before) $wrapper_NIX_LDFLAGS_BEFORE"
 fi
-
-export NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@=1

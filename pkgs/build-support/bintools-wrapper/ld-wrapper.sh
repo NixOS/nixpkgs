@@ -16,27 +16,35 @@ fi
 
 source @out@/nix-support/utils.bash
 
-source @out@/nix-support/darwin-sdk-setup.bash
-
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+expandResponseParams "$@"
+wrapperLinker=@prog@
+if [[ @wrapperMode@ == prepared ]]; then
+    wrapperImport toolchain
+    wrapperLinker=${params[0]:?missing linker executable}
+    params=("${params[@]:1}")
+    set -- "${params[@]}"
+elif [[ ${NIX_WRAPPER_OPERATION:-} == link ]]; then
+    wrapperImport link
+else
+    wrapperClear
+    source @out@/nix-support/darwin-sdk-setup.bash
     source @out@/nix-support/add-flags.sh
+    if [[ "@darwinMinVersion@" ]]; then
+        mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
+    fi
 fi
 
-
-# Optionally filter out paths not refering to the store.
-expandResponseParams "$@"
-
-# NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
+# A link continuation records the mode selected by the compiler. We take
 # advantage of this to avoid both recalculating it, and also repeating other
 # processing cc wrapper has already done.
-if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
-    linkType=$NIX_LINK_TYPE_@suffixSalt@
+if [[ -n "${wrapper_NIX_LINK_TYPE:-}" ]]; then
+    linkType=$wrapper_NIX_LINK_TYPE
 else
     linkType=$(checkLinkType "${params[@]}")
 fi
 
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
-        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ) ]]; then
+        && ( -z "$wrapper_NIX_IGNORE_LD_THROUGH_GCC" || -z "${wrapper_NIX_LINK_TYPE:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
@@ -81,22 +89,22 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
-if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
-    extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
+if [ -z "${wrapper_NIX_LINK_TYPE:-}" ]; then
+    extraAfter+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS))
+    extraBefore+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS_BEFORE))
 
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
-    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
-        extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    if [[ "$linkType" == dynamic && -n "$wrapper_NIX_DYNAMIC_LINKER" ]]; then
+        extraBefore+=("-dynamic-linker" "$wrapper_NIX_DYNAMIC_LINKER")
     fi
 fi
 
-extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_AFTER_@suffixSalt@))
+extraAfter+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS_AFTER))
 
 # These flags *must not* be pulled up to -Wl, flags, so they can't go in
 # add-flags.sh. They must always be set, so must not be disabled by
-# NIX_LDFLAGS_SET.
+# the compiler having already emitted the main linker flags.
 if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
     source @out@/nix-support/add-local-ldflags-before.sh
 fi
@@ -116,8 +124,8 @@ declare -i relocatable=0 link32=0
 linkerOutput="a.out"
 
 if
-    [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ] \
-        || [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] \
+    [ "$wrapper_NIX_DONT_SET_RPATH" != 1 ] \
+        || [ "$wrapper_NIX_SET_BUILD_ID" = 1 ] \
         || [ -e @out@/nix-support/dynamic-linker-m32 ]
 then
     prev=
@@ -194,7 +202,7 @@ if [[ "$link32" == "1" && "$linkType" == dynamic && -e "@out@/nix-support/dynami
 fi
 
 # Add all used dynamic libraries to the rpath.
-if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; then
+if [[ "$wrapper_NIX_DONT_SET_RPATH" != 1 && "$linkType" != static-pie ]]; then
     # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
@@ -252,28 +260,28 @@ fi
 #
 # Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
 # to SHA1.
-if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
+if [ "$wrapper_NIX_SET_BUILD_ID" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 # if a ld-wrapper-hook exists, run it.
 if [[ -e @out@/nix-support/ld-wrapper-hook ]]; then
-    linker=@prog@
+    linker=$wrapperLinker
     source @out@/nix-support/ld-wrapper-hook
 fi
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see above.
-    echo "extra flags before to @prog@:" >&2
+    echo "extra flags before to $wrapperLinker:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
-    echo "original flags to @prog@:" >&2
+    echo "original flags to $wrapperLinker:" >&2
     printf "  %q\n" ${params+"${params[@]}"} >&2
-    echo "extra flags after to @prog@:" >&2
+    echo "extra flags after to $wrapperLinker:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-PATH="$path_backup"
+export PATH="$path_backup"
 # Old bash workaround, see above.
 
 if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
@@ -283,12 +291,12 @@ if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); the
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
-    @prog@ "@$responseFile"
+    (wrapperRun "" "$wrapperLinker" "@$responseFile")
 else
-    @prog@ \
+    (wrapperRun "" "$wrapperLinker" \
         ${extraBefore+"${extraBefore[@]}"} \
         ${params+"${params[@]}"} \
-        ${extraAfter+"${extraAfter[@]}"}
+        ${extraAfter+"${extraAfter[@]}"})
 fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then

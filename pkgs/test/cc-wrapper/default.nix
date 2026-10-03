@@ -18,11 +18,10 @@ let
     );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
   emulator = stdenv.hostPlatform.emulator buildPackages;
-  isCxx = stdenv.cc.libcxx != null;
+  isCxx = stdenv.cc.libcxx.isLLVM or false;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
   CXX = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}c++"}";
-  READELF = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}readelf"}";
 in
 stdenv.mkDerivation {
   pname = "cc-wrapper-test-${stdenv.cc.cc.pname}${libcxxStdenvSuffix}";
@@ -44,6 +43,12 @@ stdenv.mkDerivation {
     ${CXX} -o cxx-check ${./cxx-main.cc}
     ${emulator} ./cxx-check
 
+    # A compiler used outside stdenv must also locate its C++ runtime without
+    # the dependency flags and wrapper caches populated by setup hooks.
+    echo "checking whether compiler builds C++ binaries in a clean environment... " >&2
+    env -i TMPDIR="$TMPDIR" ${CXX} -o cxx-standalone ${./cxx-main.cc}
+    ${emulator} ./cxx-standalone
+
     # test for https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1431745905
     # .../include/cxxabi.h:20:10: fatal error: '__cxxabi_config.h' file not found
     # in libcxxStdenv
@@ -51,14 +56,14 @@ stdenv.mkDerivation {
     ${CXX} -o include-cxxabi ${./include-cxxabi.cc}
     ${emulator} ./include-cxxabi
 
-    # cxx doesn't have libatomic.so
+    # libc++ does not provide libatomic.
     ${lib.optionalString (!isCxx) ''
       # https://github.com/NixOS/nixpkgs/issues/91285
-      echo "checking whether libatomic.so can be linked... " >&2
-      ${CXX} -shared -o atomics.so ${./atomics.cc} -latomic ${
+      echo "checking whether libatomic can be linked and called... " >&2
+      ${CXX} -o atomics-check ${./atomics.cc} -latomic ${
         lib.optionalString (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "6.0.0") "-std=c++17"
       }
-      ${READELF} -d ./atomics.so | grep libatomic.so && echo "ok" >&2 || echo "failed" >&2
+      ${emulator} ./atomics-check
     ''}
 
     # Test that linking libc++ works, and statically.
@@ -119,10 +124,10 @@ stdenv.mkDerivation {
     ${
       # Check whether fuse-ld=gold works on our GNU toolchain
       # Regression test for https://github.com/NixOS/nixpkgs/issues/49071
-      lib.optionalString stdenv.cc.isGNU ''
-        echo "checking whether compiler builds valid C binaries... " >&2
-        CFLAGS="-fuse-ld=gold" ${CC} -o cc-check ${./cc-main.c}
-        ${emulator} ./cc-check
+      lib.optionalString (stdenv.cc.isGNU && (stdenv.cc.bintools.bintools.hasGold or false)) ''
+        echo "checking whether compiler links valid C binaries with gold... " >&2
+        ${CC} -fuse-ld=gold -o cc-gold ${./cc-main.c}
+        ${emulator} ./cc-gold
       ''
     }
 
@@ -152,13 +157,23 @@ stdenv.mkDerivation {
     ${emulator} ./nostdinc-main++
 
     ${lib.optionalString sanitizersWorking ''
-      echo "checking whether sanitizers are fully functional... ">&2
+      echo "checking whether sanitizer headers, linking and startup work... ">&2
       ${CC} -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
       ASAN_OPTIONS=use_sigaltstack=0 ${emulator} ./sanitizers
     ''}
 
     echo "Check whether CC and LD with NIX_X_USE_RESPONSE_FILE hardcodes all required binaries..." >&2
     NIX_CC_USE_RESPONSE_FILE=1 NIX_LD_USE_RESPONSE_FILE=1 ${CC} -v
+
+    ${import ./operations.nix {
+      inherit
+        lib
+        stdenv
+        CC
+        emulator
+        staticLibc
+        ;
+    }}
 
     touch $out
   '';

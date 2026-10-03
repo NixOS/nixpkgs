@@ -1,3 +1,65 @@
+# A policy is an environment record in the private wrapper_ namespace. Select
+# it once from caller inputs; render it separately for each delegated operation.
+wrapperInput() {
+    local input="${1}_@suffixSalt@" value="wrapper_$1"
+    unset "$value"
+    if [[ -v $input ]]; then printf -v "$value" %s "${!input}"; fi
+}
+
+# Render compiler flags without changing selected policy. The C++ headers follow
+# dependency -isystem flags (see NixOS/nixpkgs#185569); libc defaults retain
+# crt1 -> libc -> cc ordering (see NixOS/nixpkgs#158042).
+# Keeping the suppressible component separate lets a delegated compiler honor
+# its own -nostdinc without discarding an identical caller-provided option.
+wrapperCompileFlags() {
+    declare -g +x wrapperCFlags wrapperCFlagsLink
+    wrapperCFlags=$wrapper_NIX_CFLAGS_COMPILE
+    wrapperCFlagsLink=$wrapper_NIX_CFLAGS_LINK
+    if [[ $cInclude == 1 ]]; then
+        wrapperCFlags="$wrapper_CC_LIBC_FLAGS $wrapperCFlags"
+    fi
+    wrapperCFlags="$wrapper_CC_CRT_FLAGS $wrapperCFlags"
+    if [[ $isCxx == 1 && $cxxInclude == 1 ]]; then
+        wrapperCFlags+=" $wrapper_NIX_CXXSTDLIB_COMPILE"
+    fi
+    if [[ $isCxx == 1 && $cxxLibrary == 1 ]]; then
+        wrapperCFlagsLink+=" $wrapper_NIX_CXXSTDLIB_LINK"
+    fi
+}
+
+wrapperClear() {
+    local name
+    for name in "${!wrapper_@}"; do unset "$name"; done
+    unset NIX_WRAPPER_VERSION NIX_WRAPPER_OPERATION
+}
+
+wrapperImport() {
+    if [[ ${NIX_WRAPPER_VERSION:-} != 2 || ${NIX_WRAPPER_OPERATION:-} != "$1" ]]; then
+        echo "expected a prepared $1 invocation" >&2
+        return 1
+    fi
+    # A hook's independent subprocess must not inherit this request. Export it
+    # again only when explicitly delegating; absence and empty remain distinct.
+    local name
+    for name in "${!wrapper_@}"; do export -n "$name"; done
+    unset NIX_WRAPPER_VERSION NIX_WRAPPER_OPERATION
+}
+
+# This is an exec, so response-file users that need cleanup call it in a
+# subshell. Hooks run before this boundary and still see the caller flag inputs.
+wrapperRun() {
+    local operation=$1 name
+    shift
+    if [[ -n $operation ]]; then
+        export NIX_WRAPPER_VERSION=2 NIX_WRAPPER_OPERATION=$operation
+        wrapper_NIX_LINK_TYPE=${linkType:-}
+        for name in "${!wrapper_@}"; do export "$name"; done
+    else
+        wrapperClear
+    fi
+    exec "$@"
+}
+
 # Accumulate suffixes for taking in the right input parameters with the `mangle*`
 # functions below. See setup-hook for details.
 accumulateRoles() {
@@ -20,14 +82,15 @@ mangleVarListGeneric() {
     shift
     local -a role_suffixes=("$@")
 
-    local outputVar="${var}_@suffixSalt@"
-    declare -gx "$outputVar"+=''
+    wrapperInput "$var"
+    local outputVar="wrapper_$var"
+    declare -g "$outputVar"+=''
     # For each role we serve, we accumulate the input parameters into our own
-    # cc-wrapper-derivation-specific environment variables.
+    # private selected-policy variables.
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export "${outputVar}+=${!outputVar:+$sep}${!inputVar}"
+            declare -g "${outputVar}+=${!outputVar:+$sep}${!inputVar}"
         fi
     done
 }
@@ -41,8 +104,9 @@ mangleVarBool() {
     shift
     local -a role_suffixes=("$@")
 
-    local outputVar="${var}_@suffixSalt@"
-    declare -gxi "${outputVar}+=0"
+    wrapperInput "$var"
+    local outputVar="wrapper_$var"
+    declare -gi "${outputVar}+=0"
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
@@ -63,14 +127,15 @@ mangleVarSingle() {
     shift
     local -a role_suffixes=("$@")
 
-    local outputVar="${var}_@suffixSalt@"
+    wrapperInput "$var"
+    local outputVar="wrapper_$var"
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
             if [ -v "$outputVar" ]; then
                 if [ "${!outputVar}" != "${!inputVar}" ]; then
                     {
-                        echo "Multiple conflicting values defined for $outputVar"
+                        echo "Multiple conflicting values defined for ${var}_@suffixSalt@"
                         echo "Existing value is ${!outputVar}"
                         echo "Attempting to set to ${!inputVar} via $inputVar"
                     } >&2
@@ -78,10 +143,36 @@ mangleVarSingle() {
                     exit 1
                 fi
             else
-                declare -gx ${outputVar}="${!inputVar}"
+                declare -g ${outputVar}="${!inputVar}"
             fi
         fi
     done
+}
+
+# Prepare a public variable for another projection of its original inputs.
+# Preserve intervening value changes, including an empty or unset value.
+restoreProjectedVar() {
+    local variable=$1 prefix=${2:-NIX_WRAPPER_$1}
+    local original="${prefix}_ORIGINAL" projected="${prefix}_PROJECTED"
+    if [[ -v $projected && -v $variable && ${!variable} == "${!projected}" ]]; then
+        if [[ -v $original ]]; then
+            export "$variable=${!original}"
+        else
+            unset "$variable"
+        fi
+    fi
+    if [[ -v $variable ]]; then
+        export "$original=${!variable}"
+    else
+        unset "$original"
+    fi
+    unset "$projected"
+}
+
+# Publish a result after restoreProjectedVar saved the original input.
+exportProjectedVar() {
+    local variable=$1 value=$2 prefix=${3:-NIX_WRAPPER_$1}
+    export "$variable=$value" "${prefix}_PROJECTED=$value"
 }
 
 skip() {
@@ -125,7 +216,7 @@ badPath() {
 badPathWithDarwinSdk() {
     path=$1
     if [[ "@darwinMinVersion@" ]]; then
-        sdkPath=$SDKROOT/$path
+        sdkPath=$wrapper_SDKROOT/$path
         if [[ -e $sdkPath ]]; then
             path=$sdkPath
         fi
