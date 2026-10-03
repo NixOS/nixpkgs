@@ -72,7 +72,6 @@ in
 
         To use these these features, you will still need to call `sudo tailscale up` with the relevant flags like `--advertise-exit-node` and `--exit-node`.
 
-        When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
     };
@@ -255,10 +254,6 @@ in
     };
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
-    networking.firewall.checkReversePath = mkIf (
-      cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
-    ) "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 
