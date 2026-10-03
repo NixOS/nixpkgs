@@ -13222,7 +13222,11 @@ self: super: with self; {
 
   parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
 
-  paramiko = callPackage ../development/python-modules/paramiko { };
+  inherit (callPackage ../development/python-modules/paramiko { })
+    paramiko_3
+    paramiko_5
+    paramiko
+    ;
 
   parfive = callPackage ../development/python-modules/parfive { };
 
