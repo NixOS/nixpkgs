@@ -100,6 +100,17 @@ let
 
       inherit _pkgsVariant;
 
+      # Keep the family names independent of the scope's fixed point.
+      inherit (finalCudaPackages.callPackages ./nvpl.nix { })
+        nvpl_blas
+        nvpl_fft
+        nvpl_lapack
+        nvpl_rand
+        nvpl_scalapack
+        nvpl_sparse
+        nvpl_tensor
+        ;
+
       # Core
       # Resolve through callPackage so grouped packages receive the same
       # spliced arguments and scope overrides as individual packages.
