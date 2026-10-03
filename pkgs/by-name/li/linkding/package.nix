@@ -28,6 +28,8 @@ let
     python3 = python;
   };
 
+  icuExtensionSuffix = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
+
   # Compile the SQLite ICU extension for case-insensitive search and ordering.
   # This mirrors the compile-icu stage in the upstream Dockerfile.
   icuExtension = stdenv.mkDerivation {
@@ -56,14 +58,14 @@ let
       runHook preBuild
       gcc -fPIC -shared $src \
         -I${sqlite.dev}/include \
-        $(pkg-config --libs --cflags icu-uc icu-io) \
-        -o libicu.so
+        $(pkg-config --libs --cflags icu-uc icu-io icu-i18n) \
+        -o libicu.${icuExtensionSuffix}
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
-      install -Dm755 libicu.so $out/lib/libicu.so
+      install -Dm755 libicu.${icuExtensionSuffix} $out/lib/libicu.${icuExtensionSuffix}
       runHook postInstall
     '';
   };
@@ -139,7 +141,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace bookmarks/settings/base.py \
       --replace-fail \
         'SQLITE_ICU_EXTENSION_PATH = "./libicu.so"' \
-        'SQLITE_ICU_EXTENSION_PATH = "${icuExtension}/lib/libicu.so"'
+        'SQLITE_ICU_EXTENSION_PATH = "${icuExtension}/lib/libicu.${icuExtensionSuffix}"'
 
     # Allow overriding the data directory via an internal environment variable
     # so that the NixOS module can point it at the mutable state directory
@@ -224,6 +226,14 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # so that it can be installed by setuptools alongside the package
     # in the Nix store.
     mv version.txt bookmarks/version.txt
+
+    # sqlite3.Connection.load_extension() expects the complete library path
+    # Do not strip the extension suffix: Linux uses .so while Darwin uses .dylib
+    substituteInPlace bookmarks/signals.py \
+      --replace-fail \
+        'settings.SQLITE_ICU_EXTENSION_PATH.rstrip(".so")' \
+        'settings.SQLITE_ICU_EXTENSION_PATH'
+
   '';
 
   preBuild = ''
@@ -297,6 +307,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       iedame
       squat
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
