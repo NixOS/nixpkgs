@@ -1,0 +1,20 @@
+From 2db7a8af9367390df3e6efa2bd1ea22ad8c3a264 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:41 -0700
+Subject: [PATCH] [LLVM] Initialize CountCopyAndMove test state
+
+Default-constructed test values are copied and moved before callers
+necessarily assign val. Give that state a defined initial value.
+---
+ unittests/ADT/CountCopyAndMove.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/unittests/ADT/CountCopyAndMove.h b/unittests/ADT/CountCopyAndMove.h
+index c91d34b..5497af5 100644
+--- a/unittests/ADT/CountCopyAndMove.h
++++ b/unittests/ADT/CountCopyAndMove.h
+@@ -21,3 +21,3 @@ struct CountCopyAndMove {
+   static int Destructions;
+-  int val;
++  int val = 0;
+ 
