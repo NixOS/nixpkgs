@@ -45,6 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.darwin;
     mainProgram = "kitty";
+    mainDarwinApp = "kitty.app";
     maintainers = with lib.maintainers; [ carlossless ];
   };
 })
