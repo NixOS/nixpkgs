@@ -5,6 +5,23 @@
       {
         "basedOn": null,
         "packageRef": {
+          "identity": "asynchttpnetworkservice",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/XcodesOrg/AsyncHTTPNetworkService",
+          "name": "AsyncHTTPNetworkService"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "12e225af8b5dc25afcfabfcf582a165b0581ab19"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "AsyncHTTPNetworkService"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
           "identity": "big-num",
           "kind": "remoteSourceControl",
           "location": "https://github.com/adam-fowler/big-num",
@@ -12,8 +29,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "5c5511ad06aeb2b97d0868f7394e14a624bfb1c7",
-            "version": "2.0.2"
+            "revision": "9059dcab8dd001b8143bc512b4477d079e97957f",
+            "version": "2.0.3"
           },
           "name": "sourceControlCheckout"
         },
@@ -25,7 +42,7 @@
           "identity": "data",
           "kind": "remoteSourceControl",
           "location": "https://github.com/xcodereleases/data",
-          "name": "XcodeReleases"
+          "name": "data"
         },
         "state": {
           "checkoutState": {
@@ -34,23 +51,6 @@
           "name": "sourceControlCheckout"
         },
         "subpath": "data"
-      },
-      {
-        "basedOn": null,
-        "packageRef": {
-          "identity": "foundation",
-          "kind": "remoteSourceControl",
-          "location": "https://github.com/PromiseKit/Foundation.git",
-          "name": "PMKFoundation"
-        },
-        "state": {
-          "checkoutState": {
-            "revision": "985f17fa69ee0e5b7eb3ff9be87ffc4e05fc0927",
-            "version": "3.4.0"
-          },
-          "name": "sourceControlCheckout"
-        },
-        "subpath": "Foundation"
       },
       {
         "basedOn": null,
@@ -89,6 +89,23 @@
       {
         "basedOn": null,
         "packageRef": {
+          "identity": "libfido2swift",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/kinoroy/LibFido2Swift",
+          "name": "LibFido2Swift"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "ac8596a852e2b008c5902a521cf4d9c7f0f05fba",
+            "version": "0.1.6"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "LibFido2Swift"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
           "identity": "path.swift",
           "kind": "remoteSourceControl",
           "location": "https://github.com/mxcl/Path.swift.git",
@@ -96,29 +113,12 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "dac007e907a4f4c565cfdc55a9ce148a761a11d5",
-            "version": "0.16.3"
+            "revision": "74ec90bbe50a3376e399286fed48b60db9b91bb1",
+            "version": "1.6.0"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "Path.swift"
-      },
-      {
-        "basedOn": null,
-        "packageRef": {
-          "identity": "promisekit",
-          "kind": "remoteSourceControl",
-          "location": "https://github.com/mxcl/PromiseKit.git",
-          "name": "PromiseKit"
-        },
-        "state": {
-          "checkoutState": {
-            "revision": "8a98e31a47854d3180882c8068cc4d9381bf382d",
-            "version": "6.22.1"
-          },
-          "name": "sourceControlCheckout"
-        },
-        "subpath": "PromiseKit"
       },
       {
         "basedOn": null,
@@ -176,7 +176,7 @@
         "packageRef": {
           "identity": "swift-srp",
           "kind": "remoteSourceControl",
-          "location": "https://github.com/xcodesOrg/swift-srp",
+          "location": "https://github.com/xcodesorg/swift-srp",
           "name": "swift-srp"
         },
         "state": {
@@ -225,6 +225,40 @@
       {
         "basedOn": null,
         "packageRef": {
+          "identity": "xcodeskit",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/XcodesOrg/XcodesKit.git",
+          "name": "XcodesKit"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "4d3c6093980978b74c3fa42fc1b90cd1c34ac911",
+            "version": "1.1.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "XcodesKit"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "xcodesloginkit",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/XcodesOrg/XcodesLoginKit.git",
+          "name": "XcodesLoginKit"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "929f9aac3140caf7b64cbb5385f4f645c5f9913d"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "XcodesLoginKit"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
           "identity": "yams",
           "kind": "remoteSourceControl",
           "location": "https://github.com/jpsim/Yams",
@@ -232,14 +266,15 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "01835dc202670b5bb90d07f3eae41867e9ed29f6",
-            "version": "5.0.1"
+            "revision": "0d9ee7ea8c4ebd4a489ad7a73d5c6cad55d6fed3",
+            "version": "5.0.6"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "Yams"
       }
-    ]
+    ],
+    "prebuilts": []
   },
-  "version": 6
+  "version": 7
 }

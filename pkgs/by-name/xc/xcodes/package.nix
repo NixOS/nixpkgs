@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.6.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
     rev = finalAttrs.version;
-    hash = "sha256-eH6AdboJsGQ0iWoRllOMzhjM/1t43DB1U0bOu6J/uo4=";
+    hash = "sha256-BUFcK+r7fDN7KC9PBikRGl355VouZ85ngcmVh7gj6tE=";
   };
 
   nativeBuildInputs = [
