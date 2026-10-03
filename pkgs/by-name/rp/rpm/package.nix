@@ -23,7 +23,7 @@
   #, libselinux
   rpm-sequoia,
   gettext,
-  systemd,
+  systemdLibs,
   gnupg,
   scdoc,
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     audit
-    systemd
+    systemdLibs
     libcap_ng
   ];
 

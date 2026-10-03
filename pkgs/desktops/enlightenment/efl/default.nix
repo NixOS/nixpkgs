@@ -46,7 +46,7 @@
   openjpeg,
   openssl,
   poppler,
-  systemd,
+  systemdLibs,
   udev,
   util-linux,
   wayland,
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     mesa-gl-headers
     openssl
-    systemd
+    systemdLibs
     udev
     wayland-protocols
     libx11

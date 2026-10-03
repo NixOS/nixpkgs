@@ -34,7 +34,7 @@
   pango,
   python3,
   stdenv,
-  systemd,
+  systemdLibs,
   xdg-utils,
   libxtst,
   libxscrnsaver,
@@ -80,7 +80,7 @@ let
     openssl
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libx11
     libxscrnsaver
     libxcomposite

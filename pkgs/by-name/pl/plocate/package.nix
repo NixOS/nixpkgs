@@ -5,8 +5,8 @@
   pkg-config,
   meson,
   ninja,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   liburing,
   zstd,
   # Absolute path of the database that updatedb writes and plocate reads by default.
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     liburing
     zstd
   ]
-  ++ lib.optionals systemdSupport [ systemd ];
+  ++ lib.optionals systemdSupport [ systemdLibs ];
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"

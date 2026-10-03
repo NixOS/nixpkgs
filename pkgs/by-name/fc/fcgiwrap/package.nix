@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   fcgi,
   autoreconfHook,
   pkg-config,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
   ];
-  buildInputs = lib.optionals systemdSupport [ systemd ] ++ [
+  buildInputs = lib.optionals systemdSupport [ systemdLibs ] ++ [
     fcgi
   ];
 
