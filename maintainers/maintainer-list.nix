@@ -7329,6 +7329,12 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
+  dimitrijer = {
+    email = "me@dimitrije.website";
+    github = "dimitrijer";
+    githubId = 7676546;
+    name = "Dimitrije Radojević";
+  };
   dinckelman = {
     name = "Ivan Sosnov";
     email = "ivanmsosnov@gmail.com";
