@@ -1,8 +1,8 @@
 {
   lib,
-  callPackage,
   cudaPackages_13,
   common-updater-scripts,
+  extraPackages ? (ps: [ ]),
   fetchFromGitHub,
   gnutar,
   gzip,
@@ -10,7 +10,6 @@
   makeBinaryWrapper,
   python3,
   stdenvNoCC,
-  withManager ? false,
   writeShellApplication,
   yq-go,
 }:
@@ -72,9 +71,7 @@ let
       transformers
       yarl
     ]
-    ++ lib.optionals withManager [
-      ps.comfyui-manager
-    ];
+    ++ (extraPackages ps);
 
   pythonEnv = python.withPackages appDependencies;
 in
@@ -165,11 +162,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
-  }
-  // lib.optionalAttrs (!withManager) {
-    tests.withManager = callPackage ./package.nix {
-      withManager = true;
-    };
   };
 
   meta = {
@@ -180,6 +172,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "comfyui";
     maintainers = with lib.maintainers; [
       caniko
+      knightfemale
       SuperSandro2000
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

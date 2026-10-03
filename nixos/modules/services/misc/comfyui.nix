@@ -10,6 +10,10 @@ let
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 
+  package = cfg.package.override (oldArgs: {
+    extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ (cfg.extraPackages ps);
+  });
+
   modelDrvs = map (m: {
     inherit m;
     drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
@@ -41,6 +45,16 @@ in
 
           Existing state is not migrated, you need to move it yourself.
         '';
+      };
+
+      # The package with all module overrides applied (extraPackages).
+      # Used for ExecStart; tests may inspect the resulting Python environment.
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        internal = true;
+        readOnly = true;
+        default = package;
+        description = "The comfyui package with module overrides applied.";
       };
 
       listen = lib.mkOption {
@@ -138,6 +152,19 @@ in
           Files placed manually in the `models` directory are left untouched.
         '';
       };
+
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
+        default = _: [ ];
+        defaultText = lib.literalExpression "python3Packages: with python3Packages; [ ]";
+        example = lib.literalExpression ''
+          python3Packages: with python3Packages; [ flask ]
+        '';
+        description = ''
+          Extra packages to add to ComfyUI's Python environment,
+          typically to satisfy custom node runtime dependencies.
+        '';
+      };
     };
   };
 
@@ -166,7 +193,7 @@ in
       preStart = ''
         for d in custom_nodes input output models; do
           if [[ ! -d "${cfg.dataDir}/$d" ]]; then
-            cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
+            cp --no-preserve=all -r ${cfg.finalPackage}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
 
@@ -183,7 +210,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${lib.getExe cfg.finalPackage} ${lib.escapeShellArgs cfg.extraArgs}";
         Group = "comfyui";
         Restart = "always";
         RestartSec = "5sec"; # don't crash loop immediately
