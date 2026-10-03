@@ -8,7 +8,7 @@
   wrapGAppsNoGuiHook,
   gobject-introspection,
   glib,
-  systemd,
+  systemdLibs,
   udev,
   libevdev,
   gitMinimal,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
     udev
     libevdev
     json-glib

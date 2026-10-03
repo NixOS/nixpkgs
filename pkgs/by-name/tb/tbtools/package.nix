@@ -5,7 +5,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  systemd,
+  systemdLibs,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
   ];
 
   passthru = {

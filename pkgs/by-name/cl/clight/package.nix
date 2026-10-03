@@ -9,7 +9,7 @@
   gsl,
   popt,
   clightd,
-  systemd,
+  systemdLibs,
   libconfig,
   libmodule,
   withGeoclue ? true,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     popt
     upower
     clightd
-    systemd
+    systemdLibs
     geoclue2
     libconfig
     libmodule

@@ -7,7 +7,7 @@
   copyDesktopItems,
   iconConvTools,
   hidapi,
-  systemd,
+  systemdLibs,
   libxcb,
   libxkbcommon,
   xkeyboard-config,
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     hidapi
-    systemd
+    systemdLibs
     libxcb
     libxkbcommon
     openssl

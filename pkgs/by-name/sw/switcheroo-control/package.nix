@@ -3,7 +3,7 @@
   ninja,
   meson,
   fetchFromGitLab,
-  systemd,
+  systemdLibs,
   libdrm,
   libgudev,
   pkg-config,
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     libdrm
     libgudev
     glib
