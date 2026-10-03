@@ -1,8 +1,8 @@
 diff --git a/libmalcontent/tests/meson.build b/libmalcontent/tests/meson.build
-index 610bc35..13e0713 100644
+index f8526de..54b9576 100644
 --- a/libmalcontent/tests/meson.build
 +++ b/libmalcontent/tests/meson.build
-@@ -72,9 +72,9 @@ test_programs = [
+@@ -81,9 +81,9 @@ test_programs = [
    ], deps],
  ]
  
@@ -14,15 +14,8 @@ index 610bc35..13e0713 100644
                                       'libmalcontent-' + libmalcontent_api_version)
  
  foreach program: test_programs
-@@ -105,4 +105,4 @@ foreach program: test_programs
-     env: envs,
-     args: ['--tap'],
-   )
--endforeach
-\ No newline at end of file
-+endforeach
 diff --git a/meson_options.txt b/meson_options.txt
-index d516c70..583cb94 100644
+index d77b8ea..dc351f3 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -4,6 +4,12 @@ option(
@@ -38,11 +31,27 @@ index d516c70..583cb94 100644
  option(
    'pamlibdir',
    type: 'string',
+@@ -36,7 +42,7 @@ option(
+ option(
+   'timer_extension_agent_user',
+   type: 'string',
+-  # NOTE: Ideally this would be `malcontent-timer-extension-agent` to match
++  # NOTE: Ideally this would be malcontent-timer-extension-agent to match
+   # the binary, but various systems cap username length at 31 characters
+   value: 'malcontent-timer-ext-agent',
+   description: 'username to run the timer extension agent as',
+@@ -46,4 +52,4 @@ option(
+   type: 'string',
+   value: 'malcontent-webd',
+   description: 'username to run the web filtering daemon as',
+-)
+\ No newline at end of file
++)
 diff --git a/pam/tests/meson.build b/pam/tests/meson.build
-index 0560dcb..a74dab2 100644
+index c3d286e..1fbb1e4 100644
 --- a/pam/tests/meson.build
 +++ b/pam/tests/meson.build
-@@ -12,9 +12,9 @@ test_programs = [
+@@ -14,9 +14,9 @@ test_programs = [
    ['pam_malcontent', [], deps],
  ]
  
@@ -54,3 +63,16 @@ index 0560dcb..a74dab2 100644
                                       'libmalcontent-' + libmalcontent_api_version)
  
  foreach program: test_programs
+diff --git a/tests/lib/meson.build b/tests/lib/meson.build
+index af79e07..049ac3d 100644
+--- a/tests/lib/meson.build
++++ b/tests/lib/meson.build
+@@ -1,5 +1,8 @@
+ # Copyright 2025 GNOME Foundation, Inc.
+ # SPDX-License-Identifier: LGPL-2.1-or-later
++if enable_installed_tests
++  installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', 'libmalcontent-0')
++endif
+ 
+ if enable_installed_tests
+   install_data(
