@@ -173,9 +173,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      # CLI releases are tagged with `cli-v` prefix, e.g. `cli-v1.2.3`
+      # CLI releases are tagged with `cli-v` prefix, e.g. `cli-v1.2.3`.
       "--version-regex"
-      "^cli-v"
+      "^cli-v(.*)"
       # Recompute FOD hash of the node_modules derivation as well
       "--subpackage"
       "node_modules"
