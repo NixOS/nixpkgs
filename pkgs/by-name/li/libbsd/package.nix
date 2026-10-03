@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) [ "LDFLAGS=-Wl,--undefined-version" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Common functions found on BSD systems";
     homepage = "https://libbsd.freedesktop.org/";
