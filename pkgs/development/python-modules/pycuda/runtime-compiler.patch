@@ -1,0 +1,29 @@
+From 1dce799f3207f71d280afdd8a6e0eade6130b660 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:49 -0700
+Subject: [PATCH] compiler: configure the static CUDA runtime library directory
+
+DynamicModule invokes the installed compiler at runtime. The CUDA
+static runtime need not share its installation prefix with NVCC;
+provide its library directory separately at package build time.
+
+Generated against PyCUDA 2026.1.
+---
+ pycuda/compiler.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/pycuda/compiler.py b/pycuda/compiler.py
+index 5715462..df84a39 100644
+--- a/pycuda/compiler.py
++++ b/pycuda/compiler.py
+@@ -487,9 +487,7 @@ class DynamicModule(CudaModule):
+                 libdir = "/usr/lib/x86_64-linux-gnu"
+ 
+             if libdir is None:
+-                nvcc_path = _find_nvcc_on_path()
+-                if nvcc_path is not None:
+-                    libdir = join(os.path.dirname(nvcc_path), "..", "lib64")
++                libdir = "@cudaLibraryDir@"
+ 
+             libptn = "lib%s.a"
+         if libdir is None:
