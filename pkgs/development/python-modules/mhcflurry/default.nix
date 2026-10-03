@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.8";
+  version = "2.3.13";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-W9tNI1MC1SJ5RUT/Ahc/NOycU7p04+MeKazt+G8e3qg=";
+    hash = "sha256-G0lgTdeBVE1+ZTAJyP8XpYLkTZoKQGs2h/pVVkxsGOA=";
   };
 
   build-system = [
@@ -117,6 +117,10 @@ buildPythonPackage (finalAttrs: {
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/pytest-.../fake_mhctools.py'
     # (`#!/usr/bin/env python3` shebang)
     "test_eval_paper_figures_external_predictors_adds_columns"
+
+    # Flaky: relies on `os.utime(path, None)` producing a strictly newer mtime than a file
+    # written just before, which fails with coarse filesystem timestamps (seen on aarch64-linux)
+    "test_interrupted_dual_format_calibration_loads_the_newer_file"
 
     # Release tooling: requires the source tree to be a git checkout
     "test_brev_postprocess_archive_includes_release_holdout"
