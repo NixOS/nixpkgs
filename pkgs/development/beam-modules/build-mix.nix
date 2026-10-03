@@ -3,6 +3,7 @@
   erlang,
   hex,
   beamCopySourceHook,
+  beamCopySourceToSourceRootHook,
   beamModuleInstallHook,
   mixBuildDirHook,
   mixCompileHook,
@@ -33,7 +34,12 @@ lib.extendMkDerivation {
       # Deterministic Erlang builds remove full system paths from debug information
       # among other things to keep builds more reproducible. See their docs for more:
       # https://www.erlang.org/doc/man/compile
-      erlangDeterministicBuilds ? true,
+      #
+      # Default to `true` to reduce the closure size
+      # and prevent `mix` to leave artifacts in `$out/src`
+      # but be aware that it breaks some apps (eg. those using Surface)
+      # see https://github.com/surface-ui/surface/issues/762#issuecomment-3577960256
+      erlangDeterministicBuilds ? finalAttrs.erlangDeterministicBuilds or true,
       ...
     }@args:
     {
@@ -78,7 +84,7 @@ lib.extendMkDerivation {
         elixir
         hex
 
-        beamCopySourceHook
+        (if erlangDeterministicBuilds then beamCopySourceHook else beamCopySourceToSourceRootHook)
         beamModuleInstallHook
         mixBuildDirHook
         mixCompileHook
