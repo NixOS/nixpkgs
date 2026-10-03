@@ -1,0 +1,25 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -17,6 +17,21 @@ import pytest
+ from tests._skip_helpers import external_model_skip_reason
+ 
+ 
++@pytest.fixture(autouse=True)
++def _restore_cli_main_command() -> None:
++    """Keep the package export aligned with the real CLI command.
++
++    A CLI test replaces ``headroom.cli.main`` in ``sys.modules`` and restores
++    it afterwards.  Python 3.14 can leave the package attribute pointing at
++    that module, so later ``from headroom.cli import main`` imports a module
++    rather than Click's command object.
++    """
++    import headroom.cli as cli
++    from headroom.cli.main import main
++
++    cli.main = main
++
++
+ @pytest.fixture(autouse=True)
+ def _undo_process_trust_injection():
+     """Undo ``truststore.inject_into_ssl()`` after any test that triggered it.
