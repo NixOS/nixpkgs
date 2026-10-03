@@ -1,14 +1,14 @@
 {
     "26.3": {
-        "hash": "sha256-6rHZeCJttanCfWk0DcVKN9sCLYuEVlLv8jGwCKzvU/w=",
-        "version": "26.3-11",
-        "url": "https://fill-data.papermc.io/v1/objects/eab1d978226db5a9c27d69340dc54a37db022d8b845652eff231b008acef53fc/paper-26.3-11.jar",
+        "hash": "sha256-Ms9Kk1ReIYUlvEU2sBfGtdUIXSfUSdZCZqayO6TQy7k=",
+        "version": "26.3-143",
+        "url": "https://fill-data.papermc.io/v1/objects/32cf4a93545e218525bc4536b017c6b5d5085d27d449d64266a6b23ba4d0cbb9/paper-26.3-143.jar",
         "javaVersion": 25
     },
     "26.2": {
-        "hash": "sha256-J0u8uYB615pHlhfOaVp8BobmUqjRyr/Q4ojZKj6ilZM=",
-        "version": "26.2-124",
-        "url": "https://fill-data.papermc.io/v1/objects/274bbcb9807ad79a479617ce695a7c0686e652a8d1cabfd0e288d92a3ea29593/paper-26.2-124.jar",
+        "hash": "sha256-sdj2v6G2EB+o6Ue1MEHLO99VQOe4O2VHyhm6ft7+sIM=",
+        "version": "26.2-129",
+        "url": "https://fill-data.papermc.io/v1/objects/b1d8f6bfa1b6101fa8e947b53041cb3bdf5540e7b83b6547ca19ba7edefeb083/paper-26.2-129.jar",
         "javaVersion": 25
     },
     "26.1.2": {
