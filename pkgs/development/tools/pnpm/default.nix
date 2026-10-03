@@ -91,9 +91,9 @@ let
       hash = "sha256-QKMlFaJVB/jyJt+74lOA4vBTlEwuzGTAwcuYtBy7ke8=";
     };
     "12" = {
-      version = "12.3.4";
-      srcHash = "sha256-EAF5ZeABBX4Wdn08OVria9zKcTIJ8i9EIjb9gsaCAo4=";
-      cargoHash = "sha256-I54W1Ig6mn3/BsBiL5qc8aUZmSY2IGEY2QSXG0V1W1w=";
+      version = "12.9.0";
+      srcHash = "sha256-lcs9nh9GIKfy5QYabUCj/pIpePAjLeeKBlu4UKm8zgM=";
+      cargoHash = "sha256-NGefDu4dGMC2RGrTPeYBuRrG+Gb8jnx9+SbyK8WPd9E=";
     };
   };
 
