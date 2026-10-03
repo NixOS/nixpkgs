@@ -98,10 +98,21 @@ stdenv.mkDerivation rec {
     ./disable_updates.patch
   ];
 
-  # Fix use of old OpenAL header path
   postPatch = ''
+    # Fix use of old OpenAL header path
     substituteInPlace src/sound/backends/gates/openal_api.h \
-      --replace "#include <OpenAL/" "#include <AL/"
+      --replace-fail \
+        "#include <OpenAL/" \
+        "#include <AL/"
+    # Fix build for gcc16 - https://hydra.nixos.org/build/347457913
+    substituteInPlace src/strings/encoding.h \
+     --replace-fail \
+       '#include "string_view.h"' \
+       $'#include "string_view.h"\n#include <cstdint>'
+    substituteInPlace src/strings/conversion.h \
+     --replace-fail \
+       '#include <charconv>' \
+       $'#include <charconv>\n#include <cstdint>'
   '';
 
   buildPhase =
