@@ -43,10 +43,6 @@ in
       [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ]
     )
     (mkRenamedOptionModule
-      [ "services" "gitea" "domain" ]
-      [ "services" "gitea" "settings" "server" "DOMAIN" ]
-    )
-    (mkRenamedOptionModule
       [ "services" "gitea" "httpAddress" ]
       [ "services" "gitea" "settings" "server" "HTTP_ADDR" ]
     )
@@ -510,16 +506,9 @@ in
                   description = "Listen port. Ignored when using a unix socket.";
                 };
 
-                DOMAIN = mkOption {
-                  type = types.str;
-                  default = "localhost";
-                  description = "Domain name of your server.";
-                };
-
                 ROOT_URL = mkOption {
-                  type = types.str;
-                  default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                  defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                  type = types.nullOr types.str;
+                  default = null;
                   description = "Full public URL of gitea server.";
                 };
 
@@ -550,13 +539,15 @@ in
               };
 
               service = {
-                DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
+                DISABLE_REGISTRATION = mkOption {
+                  type = types.bool;
+                  default = true;
                   description = ''
-                    By default any user can create an account on this `gitea` instance.
-                    This can be disabled by using this option.
+                    By default registration is disabled. It can be enabled by setting this option to `false`.
 
-                    *Note:* please keep in mind that this should be added after the initial
-                    deploy as the first registered user will be the administrator.
+                    ::: {.note}
+                    This option is required to be set to `false` for the initial installation and the first registered user will be admin.
+                    :::
                   '';
                 };
               };
@@ -586,6 +577,20 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
+      {
+        assertion = cfg.settings.server.ROOT_URL != null;
+        message = ''
+          services.gitea.settings.server.ROOT_URL must be set to the full public URL of the gitea server (e.g. "http://gitea.example.com/").
+        '';
+      }
+      {
+        # I wanted to use mkRemovedOptionModule for this, but I could not get it to work.
+        assertion = !(cfg.settings ? server) || !(cfg.settings.server ? DOMAIN);
+        message = ''
+          `services.gitea.settings.server.DOMAIN` was removed upstream and replaced by `services.gitea.settings.server.ROOT_URL`.
+          Remove the DOMAIN setting and set ROOT_URL to the full public URL (e.g. "http://gitea.example.com/").
+        '';
+      }
       {
         assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
