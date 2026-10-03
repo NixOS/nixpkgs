@@ -39,6 +39,12 @@ let
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
   version = "2.13.0";
+  # cuda-bindings arrives from the python package set, where it is bound to the
+  # default cudaPackages, so overriding this package's cudaPackages alone left
+  # it behind and the version check below stayed unsatisfiable, even though it
+  # tells the user to do exactly that. Derive it from the cudaPackages actually
+  # passed in instead; with the default cudaPackages this is the same package.
+  cudaBindings = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
   inherit version;
@@ -112,7 +118,7 @@ buildPythonPackage {
     typing-extensions
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    cuda-bindings
+    cudaBindings
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
@@ -181,11 +187,12 @@ buildPythonPackage {
       junjihashimoto
     ];
     # cuda-bindings<14,>=13.0.3 not satisfied by version 12.9.7
-    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings.version "13.0.3") {
+    problems = lib.optionalAttrs (lib.versionOlder cudaBindings.version "13.0.3") {
       unsupported-cuda-version = {
         message = ''
-          cudaPackages is too old (${cudaPackages.cudaMajorMinorVersion}).
-          PyTorch expects cuda-bindings>=13.0.3, current is ${cuda-bindings.version}.
+          cudaPackages is too old (${cudaPackages.cudaMajorMinorVersion}),
+          which gives cuda-bindings ${cudaBindings.version}.
+          PyTorch expects cuda-bindings>=13.0.3.
           Please override cudaPackages with a more recent version.
         '';
         kind = "broken";
