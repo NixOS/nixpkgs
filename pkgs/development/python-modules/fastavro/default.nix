@@ -8,10 +8,11 @@
   pandas,
   pytestCheckHook,
   python-dateutil,
+  pythonOlder,
+  backports-zstd,
   cramjam,
   setuptools,
   zlib-ng,
-  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -39,10 +40,12 @@ buildPythonPackage rec {
     codecs = [
       cramjam
       lz4
-      zstandard
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
     ];
     snappy = [ cramjam ];
-    zstandard = [ zstandard ];
+    zstandard = lib.optionals (pythonOlder "3.,14") [ backports-zstd ];
     lz4 = [ lz4 ];
   };
 
