@@ -29,6 +29,26 @@ let
   architectures = import ./architectures.nix { inherit lib; };
   rustc-target-env = import ./rustc-target-env.nix;
 
+  # Nix and Rust use different canonical names for this target.
+  rustcTargetNamingMismatches = {
+    "x86_64-solaris"."x86_64-unknown-solaris" = "x86_64-pc-solaris";
+  };
+
+  # These Nix system doubles omit an ABI or ISA. Pick a supported default;
+  # callers can set rust.rustcTarget when they need a different target.
+  rustcTargetDefaults = {
+    "armv6l-netbsd"."arm-unknown-netbsd" = "armv6-unknown-netbsd-eabihf";
+    "armv7l-netbsd"."armv7-unknown-netbsd" = "armv7-unknown-netbsd-eabihf";
+    "mips64-linux"."mips64-unknown-linux-gnu" = "mips64-unknown-linux-gnuabi64";
+    "mips64el-linux"."mips64el-unknown-linux-gnu" = "mips64el-unknown-linux-gnuabi64";
+    "riscv32-none" = {
+      "riscv32gc-unknown-none" = "riscv32imac-unknown-none-elf";
+      "riscv32gc-unknown-none-elf" = "riscv32imac-unknown-none-elf";
+    };
+  };
+
+  rustcTargetOverrides = lib.recursiveUpdate rustcTargetNamingMismatches rustcTargetDefaults;
+
   /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
@@ -551,14 +571,15 @@ let
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
+              canonical = rustcTargetOverrides.${final.system}.${inferred} or inferred;
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
             args.rust.rustcTargetSpec or args.rustc.config or (
               if rust ? platform then
                 # TODO: This breaks cc-rs and thus std support, so maybe remove support?
-                builtins.toFile (rust.rustcTarget or inferred + ".json") (toJSON rust.platform)
+                builtins.toFile (rust.rustcTarget or canonical + ".json") (toJSON rust.platform)
               else
-                args.rust.rustcTarget or inferred
+                args.rust.rustcTarget or canonical
             );
 
           # Do not use rustcTarget. Use rustcTargetSpec or cargoShortTarget.

@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[features]
+no-std-test = []
+
+[[bin]]
+name = "no_std"
+path = "src/bin/no_std.rs"
+required-features = [ "no-std-test" ]
