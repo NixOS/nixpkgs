@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/rhboot/efibootmgr/commit/3eac27c5fccf93d2d6e634d6fe2a76d06708ec6e.diff?full_index=1";
       hash = "sha256-zXkmfW+BYv8jc/dibu0LEni06KyydVjfW/Lug0i+jUw=";
     })
+    (fetchpatch2 {
+      # https://github.com/rhboot/efibootmgr/pull/228
+      name = "efibootmgr_downgrade-missing-boot-entry-in-order-to-warning.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/rhboot/efibootmgr/pull/228.diff?full_index=1";
+      hash = "sha256-7et0GuUNBx+hcQXi2sInosfx4tvrSrtRRrU38zBuflY=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
