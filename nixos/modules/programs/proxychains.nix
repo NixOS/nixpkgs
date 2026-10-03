@@ -10,7 +10,7 @@ let
 
   configFile = ''
     ${cfg.chain.type}_chain
-    ${lib.optionalString (cfg.chain.type == "random") "chain_len = ${toString cfg.chain.length}"}
+    ${lib.optionalString (cfg.chain.length != null) "chain_len = ${toString cfg.chain.length}"}
     ${lib.optionalString cfg.proxyDNS "proxy_dns"}
     ${lib.optionalString cfg.quietMode "quiet_mode"}
     remote_dns_subnet ${toString cfg.remoteDNSSubnet}
@@ -163,7 +163,7 @@ in
   config = lib.mkIf cfg.enable {
 
     assertions = lib.singleton {
-      assertion = cfg.chain.type != "random" && cfg.chain.length == null;
+      assertion = cfg.chain.type == "random" || cfg.chain.length == null;
       message = ''
         Option `programs.proxychains.chain.length`
         only makes sense with `programs.proxychains.chain.type` = "random".
