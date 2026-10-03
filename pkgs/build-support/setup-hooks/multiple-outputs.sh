@@ -193,13 +193,15 @@ _multioutPropagateDev() {
     fi
 
     local outputsToPropagate=()
-    if declare -p propagatedBuildOutputs &>/dev/null; then
+    # An unassigned scalar uses defaults; a declared empty array disables propagation.
+    if [[ -n "${propagatedBuildOutputs+1}" ]] ||
+        [[ $(declare -p propagatedBuildOutputs 2>/dev/null) == "declare -"[aA]* ]]; then
         concatTo outputsToPropagate propagatedBuildOutputs
     else
         local po_dirty="$outputBin $outputInclude $outputLib"
         set +o pipefail
         readarray -t outputsToPropagate < <(echo "$po_dirty" \
-            | tr -s ' ' '\n' | grep -v -F "$propagaterOutput" \
+            | tr -s ' ' '\n' | grep -v -Fx "$propagaterOutput" \
             | sort -u )
         set -o pipefail
     fi
@@ -210,7 +212,9 @@ _multioutPropagateDev() {
     fi
 
     mkdir -p "${!propagaterOutput}"/nix-support
+    local output
     for output in "${outputsToPropagate[@]}"; do
+        [[ $output != "$propagaterOutput" ]] || continue
         echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
