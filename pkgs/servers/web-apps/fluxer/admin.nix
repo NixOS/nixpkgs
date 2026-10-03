@@ -19,8 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    cacert
     tailwindcss_4
+  ];
+
+  nativeCheckInputs = [
+    cacert
   ];
 
   cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
@@ -41,6 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
-    mainProgram = "fluxer-admin";
+    mainProgram = "fluxer_admin";
   };
 })
