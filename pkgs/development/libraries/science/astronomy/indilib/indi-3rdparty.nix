@@ -30,7 +30,7 @@
   ninja,
   nut,
   glib,
-  systemd,
+  systemdLibs,
   urjtag,
   gpsd,
   ffmpeg-headless,
@@ -211,7 +211,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
       libdc1394
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
@@ -409,7 +409,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     meta = {
