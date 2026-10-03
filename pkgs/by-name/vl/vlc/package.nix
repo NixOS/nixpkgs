@@ -62,7 +62,7 @@
   libvorbis,
   libxml2,
   live555,
-  lua5,
+  lua5_2_compat,
   ncurses,
   nix-update-script,
   perl,
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     bison
     flex
-    lua5
+    lua5_2_compat
     perl
     pkg-config
     removeReferencesTo
@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
     libvorbis
     libxml2
-    lua5
+    lua5_2_compat
     ncurses
     samba
     schroedinger

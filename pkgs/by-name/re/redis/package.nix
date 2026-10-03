@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   apple-sdk,
-  lua,
+  lua5_2_compat,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -24,6 +24,9 @@
   # their custom patched version of jemalloc.
   useSystemJemalloc ? true,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";

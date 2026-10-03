@@ -13,7 +13,7 @@
   systemd,
   mariadb-connector-c,
   libpq,
-  lua,
+  lua5_2_compat,
   openldap,
   geoip,
   curl,
@@ -21,6 +21,9 @@
   lmdb,
   tinycdb,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";

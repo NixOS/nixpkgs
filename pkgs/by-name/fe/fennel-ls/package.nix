@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua,
-  luaPackages,
+  lua5_2_compat,
+  lua52Packages,
   pandoc,
 }:
+let
+  lua = lua5_2_compat;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
   version = "0.2.4";
@@ -18,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   buildInputs = [
     lua
-    luaPackages.fennel
+    lua52Packages.fennel
   ];
   nativeBuildInputs = [ pandoc ];
   makeFlags = [ "PREFIX=$(out)" ];

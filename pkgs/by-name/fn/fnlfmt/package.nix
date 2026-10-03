@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua,
-  luaPackages,
+  lua5_2_compat,
+  lua52Packages,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnlfmt";
@@ -17,13 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
   };
 
-  nativeBuildInputs = [ luaPackages.fennel ];
+  nativeBuildInputs = [ lua52Packages.fennel ];
 
   buildInputs = [ lua ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "FENNEL=${luaPackages.fennel}/bin/fennel"
+    "FENNEL=${lua52Packages.fennel}/bin/fennel"
   ];
 
   doInstallCheck = true;

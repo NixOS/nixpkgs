@@ -11,13 +11,13 @@
   aprutil,
   libxml2,
   luaSupport ? false,
-  lua5,
+  lua5_2_compat,
   perl,
   versionCheckHook,
 }:
 
 let
-  luaValue = if luaSupport then lua5 else "no";
+  luaValue = if luaSupport then lua5_2_compat else "no";
   optional = lib.optional;
 in
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     aprutil
     libxml2
   ]
-  ++ optional luaSupport lua5;
+  ++ optional luaSupport lua5_2_compat;
 
   configureFlags = [
     "--enable-standalone-module"

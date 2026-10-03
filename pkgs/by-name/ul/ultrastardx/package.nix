@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   pkg-config,
-  lua,
+  lua5_2_compat,
   fpc,
   portaudio,
   freetype,
@@ -24,6 +24,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   sharedLibs = [
     portaudio
     freetype

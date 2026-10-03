@@ -23,7 +23,7 @@
   libsigrok,
   libvirt,
   libxml2,
-  lua,
+  lua5_2_compat,
   lvm2,
   lm_sensors,
   mongoc,
@@ -48,6 +48,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   # Plugins that have dependencies.
   # Please help to extend these!
   plugins = {

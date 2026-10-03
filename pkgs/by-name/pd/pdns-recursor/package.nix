@@ -7,7 +7,7 @@
   nixosTests,
   openssl,
   systemd,
-  lua,
+  lua5_2_compat,
   luajit,
   protobuf,
   libsodium,
@@ -18,6 +18,9 @@
   python3,
   enableProtoBuf ? false,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
