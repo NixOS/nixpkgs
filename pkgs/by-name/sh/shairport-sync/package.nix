@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   pkg-config,
   openssl,
@@ -46,6 +47,9 @@
   enableConvolution ? true,
   enableLibdaemon ? false,
   enableTinySVCmDNS ? true,
+
+  # Enabling session bus support disables system bus support
+  enableSessionBus ? true,
 }:
 
 let
@@ -63,15 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mSPuvUzfvm/kZS0LDJhve7SAB35jSH7hhOcOxPXuLww=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "decode-classic-l16-uncompressed-pcm-in-ffmpeg-builds.patch";
+      url = "https://github.com/mikebrady/shairport-sync/commit/be30b6b2cc08fb679bbe9a1bff3f76068736952d.patch";
+      hash = "sha256-1mLRp4tH7DZQ3HFDXI7Rm99g2jJp+aIkY1tsov9Yi38=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    # For glib we want the `dev` output for the same library we are
-    # also linking against, since pkgsHostTarget.glib.dev exposes
-    # some extra tools that are built for build->host execution.
-    # To achieve this, we coerce the output to a string to prevent
-    # mkDerivation's splicing logic from kicking in.
-    "${glib.dev}"
   ]
   ++ optionals enableAirplay2 [
     libplist.bin
@@ -102,14 +108,18 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     ffmpeg
   ]
-  ++ optional stdenv.hostPlatform.isLinux glib;
+  ++ optional (enableDbus || enableMpris) glib;
 
-  postPatch = ''
+  postPatch = lib.optionalString enableSessionBus ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' mpris-service.c
   '';
 
   enableParallelBuilding = true;
+
+  preConfigure = lib.optionalString (enableDbus || enableMpris) ''
+    export PATH=${glib.dev}/bin:$PATH
+  '';
 
   configureFlags = [
     "--without-configfiles"
@@ -137,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableAirplay2 "--with-airplay-2";
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   passthru.updateScript = nix-update-script {
     # ignore -dev tagged releases
