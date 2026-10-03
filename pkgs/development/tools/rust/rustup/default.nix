@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-flags.sh} $out/nix-support/add-flags.sh
     substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-hardening.sh} $out/nix-support/add-hardening.sh
     export prog='$PROG'
+    export wrapperMode=fresh
     export use_response_file_by_default=0
     substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/ld-wrapper.sh} $out/nix-support/ld-wrapper.sh
     chmod +x $out/nix-support/ld-wrapper.sh

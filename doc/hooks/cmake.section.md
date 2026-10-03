@@ -5,7 +5,8 @@ Overrides the default configure phase to run the CMake command.
 By default, we use the Make generator of CMake.
 But when Ninja is also available as a `nativeBuildInput`, this setup hook will detect that and use the ninja generator.
 
-Dependencies are added automatically to `CMAKE_PREFIX_PATH` so that packages are correctly detected by CMake.
+Dependencies are added automatically to `NIXPKGS_CMAKE_PREFIX_PATH` for package, header, and library discovery.
+Nixpkgs patches CMake to exclude this variable from program searches, keeping library discovery separate from BUILD tools found through `PATH`.
 Some additional flags are passed in to give similar behavior to configure-based packages.
 
 By default, parallel building is enabled as CMake supports parallel building almost everywhere.

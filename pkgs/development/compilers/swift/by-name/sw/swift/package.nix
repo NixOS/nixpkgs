@@ -225,10 +225,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit swiftc swift-driver;
-    tests = lib.packagesFromDirectoryRecursive {
-      inherit callPackage;
-      directory = ./tests;
-    };
+    tests =
+      lib.packagesFromDirectoryRecursive {
+        inherit callPackage;
+        directory = ./tests;
+      }
+      // lib.optionalAttrs (swift-driver != null && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        driverJobs = callPackage ./driver-jobs.nix { swift = finalAttrs.finalPackage; };
+      };
 
     # Swift libraries are installed in `lib` to make it easier to use Nixpkgs tooling with them.
     swiftLibSubdir = "lib";

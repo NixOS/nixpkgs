@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0003-Search-PATH-for-subcommands.patch
     # The stdlib is located at the top-level `lib` folder in the toolchain in Nixpkgs. Help `swift repl` find it there.
     ./patches/0004-Help-the-repl-find-the-stdlib-in-Nixpkgs.patch
+    # Preserve the actual compiler job's selected C++ runtime policy.
+    ./patches/0005-Preserve-Cxx-interop-driver-selection.patch
   ];
 
   strictDeps = true;

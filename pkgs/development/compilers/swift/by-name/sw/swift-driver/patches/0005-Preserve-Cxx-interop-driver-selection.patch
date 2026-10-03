@@ -1,0 +1,50 @@
+From 51f2e3a327b40ce5a3daffbf21d66a93502fe741 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Wed, 7 Oct 2026 05:48:08 -0700
+Subject: [PATCH] [Swift] Preserve C++ interoperability in compiler-driver jobs
+
+Let the final interoperability mode override the legacy switch. On Darwin, declare C++ driver mode while retaining the chosen Clang executable, so its wrapper can apply the selected C++ runtime policy. No parent wrapper state is required.
+---
+ .../SwiftDriver/Jobs/DarwinToolchain+LinkerSupport.swift  | 8 ++++----
+ .../Jobs/GenericUnixToolchain+LinkerSupport.swift         | 4 +---
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/Sources/SwiftDriver/Jobs/DarwinToolchain+LinkerSupport.swift b/Sources/SwiftDriver/Jobs/DarwinToolchain+LinkerSupport.swift
+index 27f4c61..98fa128 100644
+--- a/Sources/SwiftDriver/Jobs/DarwinToolchain+LinkerSupport.swift
++++ b/Sources/SwiftDriver/Jobs/DarwinToolchain+LinkerSupport.swift
+@@ -242,12 +242,12 @@ extension DarwinToolchain {
+     // On Darwin, we only support libc++.
+     var cxxCompatEnabled = parsedOptions.hasArgument(.enableExperimentalCxxInterop)
+     if let cxxInteropMode = parsedOptions.getLastArgument(.cxxInteroperabilityMode) {
+-      if cxxInteropMode.asSingle != "off" {
+-        cxxCompatEnabled = true
+-      }
++      cxxCompatEnabled = cxxInteropMode.asSingle != "off"
+     }
+     if cxxCompatEnabled {
+-      commandLine.appendFlag("-lc++")
++      // Declare the actual compiler job's language so the Nixpkgs Clang
++      // wrapper selects its C++ runtime flags as well as the platform default.
++      commandLine.appendFlag("--driver-mode=g++")
+     }
+ 
+     try addArgsToLinkStdlib(
+diff --git a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
+index fa2bd81..180563d 100644
+--- a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
++++ b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
+@@ -81,9 +81,7 @@ extension GenericUnixToolchain {
+       // just using `clang` and avoid a dependency on the C++ runtime.
+       var cxxCompatEnabled = parsedOptions.hasArgument(.enableExperimentalCxxInterop)
+       if let cxxInteropMode = parsedOptions.getLastArgument(.cxxInteroperabilityMode) {
+-        if cxxInteropMode.asSingle != "off" {
+-          cxxCompatEnabled = true
+-        }
++        cxxCompatEnabled = cxxInteropMode.asSingle != "off"
+       }
+ 
+       let staticStdlib = parsedOptions.hasFlag(positive: .staticStdlib,
+-- 
+2.43.0
+

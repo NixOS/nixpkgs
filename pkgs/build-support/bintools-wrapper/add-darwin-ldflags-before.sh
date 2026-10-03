@@ -21,17 +21,6 @@ havePlatformVersionFlag=
 haveDarwinSDKVersion=
 haveDarwinPlatformVersion=
 
-# Roles will set by add-flags.sh, but add-flags.sh can be skipped when the
-# cc-wrapper has added the linker flags. Both the cc-wrapper and the binutils
-# wrapper mangle the same variable (MACOSX_DEPLOYMENT_TARGET), so if roles are
-# empty due to being run through the cc-wrapper then the mangle here is a no-op
-# and we still do the right thing.
-#
-# To be robust, make sure we always have the correct set of roles.
-accumulateRoles
-
-mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
-
 n=0
 nParams=${#params[@]}
 while (( n < nParams )); do
@@ -70,12 +59,12 @@ done
 if [ ! "$havePlatformVersionFlag" ]; then
     if [ ! "$haveDarwinSDKVersion" ] && [ ! "$haveDarwinPlatformVersion" ]; then
         # Nothing provided. Use the modern "-platform_version" to set both.
-        extraBefore+=(-platform_version @darwinPlatform@ "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}" @darwinSdkVersion@)
+        extraBefore+=(-platform_version @darwinPlatform@ "${wrapper_@darwinMinVersionVariable@:-@darwinMinVersion@}" @darwinSdkVersion@)
     elif [ ! "$haveDarwinSDKVersion" ]; then
         # Add missing sdk version
         extraBefore+=(-sdk_version @darwinSdkVersion@)
     elif [ ! "$haveDarwinPlatformVersion" ]; then
         # Add missing platform version
-        extraBefore+=(-@darwinPlatform@_version_min "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}")
+        extraBefore+=(-@darwinPlatform@_version_min "${wrapper_@darwinMinVersionVariable@:-@darwinMinVersion@}")
     fi
 fi
