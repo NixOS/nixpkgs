@@ -12,6 +12,7 @@
   gzip,
   nix-update,
   makeBinaryWrapper,
+  nixosTests,
   python3,
   stdenvNoCC,
   # Deliberately not named `cudaPackages`: callPackage supplies any argument
@@ -200,6 +201,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
+
+    tests.comfyui = nixosTests.comfyui;
   };
 
   meta = {

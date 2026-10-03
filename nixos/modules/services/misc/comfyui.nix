@@ -295,5 +295,8 @@ in
     };
   };
 
-  meta.maintainers = pkgs.comfyui.meta.maintainers;
+  meta = {
+    doc = ./comfyui.md;
+    maintainers = pkgs.comfyui.meta.maintainers;
+  };
 }
