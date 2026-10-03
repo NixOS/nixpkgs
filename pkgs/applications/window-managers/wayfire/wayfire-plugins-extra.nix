@@ -18,19 +18,20 @@
   gtkmm3,
   withFiltersPlugin ? true,
   withFocusRequestPlugin ? true,
-  withPixdecorPlugin ? true,
+  # Pixdecor is broken here. Use pixdecor.
+  withPixdecorPlugin ? false,
   withWayfireShadowsPlugin ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.10.0";
+  version = "0.11.0-unstable-2026-07-17";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-C5dgs81R4XuPjIm7sj1Mtu4IMIRBEYU6izg2olymeVI=";
+    rev = "4290ddf13bfadb344d45cb25c47f7825bbdc8a30";
+    hash = "sha256-HhCGB4ZslglB4o+xZ1gUmeUKWTR1VPnYS2Maqi++OaY=";
     fetchSubmodules = true;
   };
 
@@ -71,5 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wineee ];
     inherit (wayfire.meta) platforms;
+
+    problems = lib.optionalAttrs withPixdecorPlugin {
+      broken.message = "Pixdecor is broken in wayfire-plugins-extra. Use `wayfirePlugins.pixdecor` instead if you want it.";
+    };
   };
 })

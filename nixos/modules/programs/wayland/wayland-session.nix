@@ -10,6 +10,7 @@
   security = {
     polkit.enable = true;
     pam.services.swaylock = { };
+    pam.services.wf-locker = { };
   };
 
   programs = {
