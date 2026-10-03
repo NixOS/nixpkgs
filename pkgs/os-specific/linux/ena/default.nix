@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   gitUpdater,
   kernel,
   kernelModuleMakeFlags,
@@ -11,7 +10,7 @@ let
   rev-prefix = "ena_linux_";
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.17.2";
+  version = "2.17.3";
   pname = "ena";
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
 
@@ -19,19 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "${rev-prefix}${finalAttrs.version}";
-    hash = "sha256-v/b4P5twRFaqjkeuXy6UhjnRCxVZ6+Muk80653uXnsY=";
+    hash = "sha256-I1RSPfJ5szEtFuZZYlvp40P5hG6Zo1sOcHEexNldbFQ=";
   };
 
   hardeningDisable = [ "pic" ];
-
-  patches = [
-    # Linux 7.2 signature change
-    # https://github.com/amzn/amzn-drivers/pull/384
-    (fetchpatch2 {
-      url = "https://github.com/amzn/amzn-drivers/commit/907a1686e35458b8e3bc5b406609473bee7da39a.patch";
-      hash = "sha256-KG85r4m868mc6+QlBdoE06FQcSG2JiDPFHjfRgxfkHY=";
-    })
-  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   makeFlags = kernelModuleMakeFlags;
