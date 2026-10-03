@@ -17453,6 +17453,16 @@
       }
     ];
   };
+  lylythechosenone = {
+    name = "Lysander Prieto-Mealy";
+    github = "lylythechosenone";
+    githubId = 19551513;
+    keys = [
+      {
+        fingerprint = "865F A492 A4E4 0CE7 1391  9288 1002 0604 1679 33D4";
+      }
+    ];
+  };
   lyn = {
     name = "Lyn";
     matrix = "@lynatic:catgirl.cloud";
