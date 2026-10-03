@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onepassword-sdk";
-  version = "0.4.0";
+  version = "0.4.1b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "1Password";
     repo = "onepassword-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mMmHC5zBY1w+Y+NAZJkP7m1CqErwCv2bMNAo1TTNm6E=";
+    hash = "sha256-LY3+A0kmZm/FsthpY0A6pexVs9VekKqTKHs1iDa8R74=";
   };
 
   build-system = [
