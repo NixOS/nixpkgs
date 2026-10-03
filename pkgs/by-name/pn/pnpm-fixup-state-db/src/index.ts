@@ -41,6 +41,15 @@ const main = () => {
             checkedAt: 0,
         });
     }
+    // pnpm 12.15 introduced pinning packages using other hashes? This
+    // breaks reproducibility across versions, so let's drop it for
+    // now. See
+    // https://github.com/pnpm/pnpm/commit/7b0d6873a68ff10862e1f0fa03c728af4bc7b56a
+    // TODO: Next time we introduce a new fetcher version, this should
+    // probably be skipped?
+    if ("tarIntegrity" in data) {
+      delete data["tarIntegrity"];
+    }
     newEntries.push({
         key,
         buffer: packToShared({
