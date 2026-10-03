@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
     homepage = "https://www.freetds.org";
     changelog = "https://github.com/FreeTDS/freetds/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.all;
   };

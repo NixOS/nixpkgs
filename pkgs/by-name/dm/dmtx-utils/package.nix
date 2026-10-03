@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Data matrix command-line utilities";
     homepage = "https://github.com/dmtx/dmtx-utils";
     changelog = "https://github.com/dmtx/dmtx-utils/blob/v${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
