@@ -24,7 +24,8 @@ buildGo127Module (finalAttrs: {
   };
 
   vendorHash = null;
-  env.CGO_ENABLED = 0;
+  # cgo enabled to work around https://github.com/VictoriaMetrics/VictoriaMetrics/issues/11683
+  env.CGO_ENABLED = 1;
 
   subPackages =
     lib.optionals withServer [
