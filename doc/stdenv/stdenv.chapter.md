@@ -789,6 +789,9 @@ If this is undesirable, set this variable to true.  It is automatically set to t
 
 By default, when cross compiling, the configure script has `--build=...` and `--host=...` passed. Packages can instead pass `[ "build" "host" "target" ]` or a subset to control exactly which platform flags are passed. Compilers and other tools can use this to also pass the target platform. [^footnote-stdenv-build-time-guessing-impurity]
 
+The Meson adapter also uses `"target"` to request distinct `target_machine` metadata.
+Otherwise Meson's target machine defaults to HOST; an ordinary BUILD tool does not enter cross mode merely because its enclosing stage has a different TARGET.
+
 ##### `preConfigure` {#var-stdenv-preConfigure}
 
 Hook executed at the start of the configure phase.
@@ -1536,12 +1539,55 @@ Caller-facing flag variables, including salted inputs, are not overwritten with 
 The shared functions in `pkgs/build-support/wrapper-common/utils.bash` represent policy as scalar variables in a reserved `wrapper_` namespace.
 Preparation selects inputs and adds defaults; interpreting a continuation never selects inputs again, including Darwin deployment targets.
 Delegation exports that record directly, and the receiving wrapper removes its export attributes before running hooks.
-Thus transport preserves every present field, including empty values, without a second encoding or a field registry; an absent field remains absent.
+After recording the delegated link mode, transport preserves every present field, including empty values, without a second encoding or a field registry; an absent field remains absent.
 A fresh invocation clears the record and selects its own policy from the unchanged caller inputs.
 Lists retain their order, boolean inputs combine by disjunction, and singular inputs must agree across active roles, including the distinction between unset and explicitly empty values.
 Selections that a later operation can still change must remain separate: libc include defaults are retained independently so a delegated compiler can honor its own `-nostdinc` without deleting a caller-provided include option.
 GNAT deliberately selects no C include defaults for its compiler jobs.
 C++ header and runtime flags are likewise added when interpreting the individual compiler invocation.
+The current C-family interpreter still summarizes language selection with one invocation-wide C++ flag.
+It can therefore apply C++ policy after `-x c++ -x c` selects only C, or to the C job of a mixed C/C++ invocation; GCC's [per-input language selection](https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html) requires finer distinctions.
+Preserving the selected policy across wrappers does not establish correctness of this operation classification.
+Role-indexed contributions combine pointwise; selecting one use preserves ordered combination and is a monoid homomorphism.
+Specifically, `(P <> Q)(r) = P(r) ++ Q(r)`, so evaluation at `r` preserves both concatenation and the empty contribution.
+This characterizes selection only together with its singleton meaning: retain precisely the contribution for the requested use; the constant-empty function is also a homomorphism.
+Full preparation additionally incorporates salted inputs and toolchain defaults, which must be applied once, not once per independently selected fragment.
+Appending contributions to an initial policy is a monoid action: `(s ++ x) ++ y = s ++ (x ++ y)`; fixing a nonempty `s` does not make `x -> s ++ x` a homomorphism.
+These laws concern contribution sequences, not arbitrary rendered environment strings: the separator insertion in `mangleVarListGeneric` is not associative when an explicitly empty input follows a nonempty one.
+Concatenating several selected roles does not have that property: selecting BUILD and HOST from `a` and then `b` yields `aB aH bB bH`, whereas combining first yields `aB bB aH bH`.
+The current wrapper uses the latter, role-major order; moving that union before collection can change header or library resolution.
+Retain the role-indexed contributions through composition, and perform any compatibility union at the final boundary.
+Package selection and invocation binding must agree on an explicit context; this does not replace construction of a coherent transitive package graph.
+A context must distinguish resource uses within one invocation: CMake needs executable programs for BUILD and packages for the configured platform.
+Nixpkgs' existing `NIXPKGS_CMAKE_PREFIX_PATH` interface excludes program lookup for this reason.
+Likewise, a CUDA device job can need the CPU host's C++ headers: Clang's [CUDA toolchain delegates header lookup to its host toolchain](https://github.com/llvm/llvm-project/blob/llvmorg-21.1.8/clang/lib/Driver/ToolChains/Cuda.cpp), so the job's output target alone does not identify its resource uses.
+
+Resource bindings must preserve native lookup semantics, including where options take effect.
+[GCC's `register_include_chains`](https://github.com/gcc-mirror/gcc/blob/releases/gcc-13.3.0/gcc/incpath.cc) applies default-header suppression in the frontend; a driver spec guarded by `nostdinc` therefore misses forwarded `-Wp,-nostdinc`.
+On non-Android Linux, the GCC 14+ wrapper binds bundled or separately packaged GNU C++ headers and the selected target's libc headers through `-fdefault-include-map`.
+GCC replaces those two default families in its configured include table, retaining compiler-private, tool, and platform entries in their native order; it then preserves per-input language choice, frontend suppression, system-header status, and `#include_next` on the original providers.
+The selected providers use absolute store paths without relocation, sysroot rewriting, or multilib suffixes; a mapped provider cannot change when GCC is invoked with `-iprefix` or relocates its driver.
+Fortify's wrapper headers retain their position before other system include inputs through `-idefaultsystem`, which the frontend also removes for `-nostdinc`.
+GFortran interprets that option in its preprocessor's bracket include chain, matching its existing treatment of `-isystem` while honoring `-nostdinc`.
+The binding lives in the compiler wrapper and therefore applies to a JIT compiler invocation even when no stdenv setup hook ran.
+Clang's GNU toolchain instead selects C++ defaults in the driver: `-Xpreprocessor -nostdinc++` does not remove those already supplied paths, unlike GCC.
+A common frontend filter would change that behavior.
+Nixpkgs' Clang `-nostdlibinc` also suppresses host-system discovery before selected headers are supplied; replacing discovery and suppressing selected defaults are different operations.
+Clang's [`-stdlib++-isystem`](https://github.com/llvm/llvm-project/blob/llvmorg-21.1.8/clang/lib/Driver/ToolChain.cpp) deliberately survives `-nostdinc` and `-nostdlibinc`, so it is not an equivalent default-header binding.
+On non-Android Linux, the Clang 19–21 wrapper supplies the same selected C++ and libc providers to a driver table keyed by normalized target triple, where missing target/library pairs mean empty providers rather than ambient fallback.
+The driver retains Clang's per-job standard-library choice and `-nostdinc`/`-nostdlibinc`/`-nostdinc++` semantics; the wrapper omits its automatic `-nostdlibinc` because the binding itself removes ambient libc discovery.
+For a selected libc++, the wrapper supplies one `-stdlib=libc++` default before caller arguments, so an explicit `-stdlib` selects the requested map family.
+Clang renders `-idefaultsystem` in place among system include options and omits it when the caller supplies `-nostdinc` or `-nostdlibinc`.
+
+Toolchain defaults, explicit paths, and opaque driver arguments must remain distinguishable.
+`NIX_CXXSTDLIB_COMPILE` is not a directory list: `libedgetpu` supplies `-std=c++17`, while generated `libcxx-cxxflags` can also contain macro-prefix maps; arbitrary driver options cannot simply be forwarded to `cc1plus`.
+Clang's [header-option parser](https://github.com/llvm/llvm-project/blob/llvmorg-21.1.8/clang/lib/Frontend/CompilerInvocation.cpp) represents `-isystem p` and `-internal-isystem p` with identical entry fields; that representation alone cannot recover their origin.
+
+Header lookup observes the selected file, pathname after prefix mapping, native header classification, and the remaining `#include_next` chain.
+Retain search groups through composition: `-I a -I b -isystem a` searches `b` first because native resolution removes `a` from the ordinary include group.
+Flattening directories before that resolution loses this behavior.
+A synthetic directory of header symlinks can visit the original provider again through `#include_next`, change `__FILE__`, and bypass prefix maps.
+Binding original providers must preserve these observations; passing compilation tests or finding a native configuration option does not establish equivalence.
 
 The compiler and linker have different argument interfaces.
 The compiler emits its main linker flags in their existing positions and binds a **link continuation** around the raw driver.
