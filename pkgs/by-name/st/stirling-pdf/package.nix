@@ -8,11 +8,12 @@
   cargo,
   cargo-tauri,
   go-task,
-  gradle_8,
+  gradle_9,
   makeBinaryWrapper,
   nodejs,
   npmHooks,
   pkg-config,
+  python3,
   wrapGAppsHook3,
 
   glib-networking,
@@ -23,6 +24,7 @@
 
   nix-update-script,
   nixosTests,
+  stirling-pdf,
 
   isDesktopVariant ? false,
   withAdditionalFeatures ? !isDesktopVariant,
@@ -33,31 +35,53 @@
 assert isDesktopVariant -> !buildWithFrontend;
 
 let
-  gradle = gradle_8;
+  gradle = gradle_9;
   jre = jdk25;
+  python = python3.withPackages (ps: [ ps.fonttools ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
+  strictDeps = true;
 
-  pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.14.3";
+  pname =
+    "stirling-pdf"
+    + lib.optionalString isDesktopVariant "-desktop"
+    + lib.optionalString (!isDesktopVariant && !withAdditionalFeatures) "-free";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jh7F3e7Zho3BlaBZD8xfXSCjwXyF5qQk4VSm8DIwIBY=";
+    hash =
+      if withAdditionalFeatures || isDesktopVariant then
+        "sha256-YhXyEFGWL3Z6vJadxK5asZe30OTQpRU6htTvd+/NYdA="
+      else
+        "sha256-T+3PbRluwjjQi+RoISciG/pWLgu56ld5ATa93UkgKLc=";
+    # The public cache must not distribute directories under the upstream
+    # User License when building the MIT-only server.
+    postFetch = lib.optionalString (!withAdditionalFeatures && !isDesktopVariant) ''
+      rm -rf "$out/app/proprietary" "$out/app/saas" "$out/engine"
+      rm -rf "$out/frontend/editor/src/"{proprietary,desktop,saas,cloud,prototypes,portal,portal-saas}
+    '';
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
 
+    # JPDFium declares Linux x64 as a transitive runtime dependency on every host.
+    ./select-host-jpdfium-native.patch
+
     # tests require network facilities intentionally unavailable in the Nix sandbox
     ./skip-sandbox-incompatible-tests.patch
-
-    ./skip-tests-with-expired-certs.patch
-  ];
+  ]
+  ++ lib.optionals (withAdditionalFeatures || isDesktopVariant) [
+    ./skip-proprietary-network-test.patch
+    # Upstream corpus tests filter /build from absolute paths, hiding every fixture in Nix builds.
+    ./fix-corpus-tests-in-build-directory.patch
+  ]
+  ++ lib.optionals (!withAdditionalFeatures && !isDesktopVariant) [ ./free-source.patch ];
 
   postPatch = lib.optionalString isDesktopVariant ''
     # Nixpkgs does not produce artifacts for Stirling-PDF's upstream updater
@@ -69,10 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
   npmRoot = "frontend";
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "stirling-pdf-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-3JYcOtX0pBMIgUtcK6LoejIhoSR2jpnQRzhePdCfJzI=";
+    hash = "sha256-UQfkdERCa2Bl+E+yXJCzW98wL01+f6IE5A+QQ/iQtLk=";
   };
 
   cargoRoot = "frontend/editor/src-tauri";
@@ -86,11 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-YhDFSmx6XK7x5wzQaPslyuaRbiX8W/X8y/Z0fxjbGwk=";
+    hash = "sha256-dSk5zpMvY5qZ82TxRPOk/siicaPSTUyHm6Z6FuJzSqw=";
   };
 
   mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
+    # The shared lock is generated from the full source so it covers both
+    # server variants without adding the restricted source to the free output.
+    pkg = if withAdditionalFeatures || isDesktopVariant then finalAttrs.finalPackage else stirling-pdf;
     data = ./deps.json;
   };
 
@@ -105,6 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
     "-PnoSpotless" # disable spotless because it tries to fetch files not in deps.json and also because it slows down the build process
   ]
   ++ lib.optionals buildWithFrontend [ "-PbuildWithFrontend=true" ];
+
+  gradleUpdateScript = ''
+    runHook preBuild
+    runHook preGradleUpdate
+
+    # The build selects one JPDFium native jar for its host. Cache every
+    # upstream platform and both feature variants in the same lockfile.
+    DISABLE_ADDITIONAL_FEATURES=false gradle nixDownloadDeps -PjpdfiumPlatforms=all
+    DISABLE_ADDITIONAL_FEATURES=true gradle nixDownloadDeps -PjpdfiumPlatforms=all
+
+    runHook postGradleUpdate
+  '';
 
   doCheck = true;
 
@@ -157,22 +195,39 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
+    install -Dm644 ./scripts/convert_cff_to_ttf.py $out/share/stirling-pdf/scripts/convert_cff_to_ttf.py
     makeWrapper ${lib.getExe jre} $out/bin/Stirling-PDF \
-      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
+      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar" \
+      --set-default PDFEDITOR_CFFCONVERTER_PYTHONCOMMAND ${lib.getExe python} \
+      --set-default PDFEDITOR_CFFCONVERTER_PYTHONSCRIPT $out/share/stirling-pdf/scripts/convert_cff_to_ttf.py
 
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
+  postInstall = ''
+    install -Dm644 LICENSE $out/share/licenses/stirling-pdf/LICENSE
+  ''
+  + lib.optionalString withAdditionalFeatures ''
+    install -Dm644 app/proprietary/LICENSE $out/share/licenses/stirling-pdf/app-proprietary-LICENSE
+    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+  ''
+  + lib.optionalString isDesktopVariant ''
+    install -Dm644 frontend/editor/src/desktop/LICENSE $out/share/licenses/stirling-pdf/frontend-desktop-LICENSE
+    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+  ''
+  + lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
     makeWrapper "$out/Applications/Stirling PDF.app/Contents/MacOS/Stirling-PDF" "$out/bin/stirling-pdf"
   '';
 
   passthru = {
     tests = {
       inherit (nixosTests) stirling-pdf-desktop; # TODO: fix or remove
+    }
+    // lib.optionalAttrs (!isDesktopVariant) {
+      inherit (nixosTests) stirling-pdf;
     };
   }
-  // lib.optionalAttrs (!isDesktopVariant) {
+  // lib.optionalAttrs (!isDesktopVariant && withAdditionalFeatures) {
     # this being optional makes the auto-update PRs always put stirling-pdf in the title
     updateScript = nix-update-script { };
   };
@@ -180,16 +235,27 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description =
-      "Powerful, open-source PDF editing platform "
+      "PDF editing platform "
       + (if isDesktopVariant then "runnable as a desktop app" else "hostable as a web app");
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.mit; # TODO: figure out what proper licensing should be
-    mainProgram = "Stirling-PDF";
+    license =
+      if withAdditionalFeatures || isDesktopVariant then
+        [
+          lib.licenses.mit
+          lib.licenses.unfree
+        ]
+      else
+        lib.licenses.mit;
+    mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
     maintainers = with lib.maintainers; [
       tomasajt
       staticdev
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # java deps
