@@ -29,6 +29,7 @@
   makeWrapper,
   libiconv,
   libiconvReal,
+  runtimeShellPackage,
   svnSupport ? false,
   subversionClient,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
@@ -63,7 +64,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.55.0";
+  version = "2.56.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-RX/bBNyHKOAH1GiGleaRLm9oByeSDypAvxHqzBdQU1c=";
+    hash = "sha256-JsVsKWs4wGlbJvqV9HXx0BcE0tOOc0ZcowsLL13HidM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -138,12 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
       hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
     })
-    # Fix fortify darwin crashes when dealing with unicode filenames.
-    (fetchurl {
-      name = "darwin-unicode-filename-fix.patch";
-      url = "https://lore.kernel.org/git/20260704233724.16928-1-ihar.hrachyshka@gmail.com/raw";
-      hash = "sha256-lpGz3nFKQvFDtW2TtQLx/684ECJVBLGPGqip0XEtOdU=";
-    })
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -157,10 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
         --subst-var-by gettext ${gettext}
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
-  ''
-  + lib.optionalString finalAttrs.doInstallCheck ''
-    # ensure we are using the correct shell when executing the test scripts
-    patchShebangs t/*.sh
   ''
   + lib.optionalString withSsh ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
@@ -180,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     makeWrapper
     pkg-config
+    (lib.getDev curl)
   ]
   ++ lib.optionals withManual [
     asciidoc
@@ -232,10 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
   };
 
-  configureFlags = [
-    "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
@@ -250,8 +239,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLIB_NG=1"
   ]
   # Git does not allow setting a shell separately for building and run-time.
-  # Therefore lets leave it at the default /bin/sh when cross-compiling
-  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
+  # Therefore lets leave it at the default /bin/sh when cross-compiling.  When
+  # compiling natively, use `sh`, not `bash`, as Git sometimes relies on
+  # POSIX-compliant behaviour that Bash only offers when invoked with that
+  # name.
+  ++ lib.optional (
+    stdenv.buildPlatform == stdenv.hostPlatform
+  ) "SHELL_PATH=${lib.getExe' runtimeShellPackage "sh"}"
   ++ (if perlSupport then [ "PERL_PATH=${perlPackages.perl}/bin/perl" ] else [ "NO_PERL=1" ])
   ++ (if pythonSupport then [ "PYTHON_PATH=${python3}/bin/python" ] else [ "NO_PYTHON=1" ])
   ++ lib.optionals stdenv.hostPlatform.isSunOS [
