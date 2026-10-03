@@ -102,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # A busy wait can finish before the timeout callback runs on loaded builders.
     ./fix-flaky-job-timeout-test.patch
+
+    # Avoid a 280 MiB temporary char array in the oversized-input test.
+    ./avoid-oversize-test-oom.patch
   ]
   ++ lib.optionals (withAdditionalFeatures || isDesktopVariant) [
     ./skip-proprietary-network-test.patch
