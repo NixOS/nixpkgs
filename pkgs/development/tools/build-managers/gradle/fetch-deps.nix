@@ -22,6 +22,8 @@ in
   # redirect stdout to stderr to allow the update script to be used with update script combinators
   silent ? true,
   useBwrap ? stdenv.hostPlatform.isLinux,
+  # function to override the decompressed dependency map before fetching
+  overrideDeps ? lib.id,
 }@attrs:
 
 let
@@ -254,7 +256,7 @@ let
             };
       };
 
-  finalData = visitAttrs { } [ ] data';
+  finalData = overrideDeps (visitAttrs { } [ ] data');
 in
 mitm-cache.fetch {
   name = "${pkg.pname or pkg.name}-deps";
