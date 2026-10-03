@@ -1013,7 +1013,7 @@ There are two community maintained approaches to Rust toolchain management:
 
 Despite their names, both projects provides a similar set of packages and overlays under different APIs.
 
-Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
+Oxalica's overlay selects a particular Rust version without you providing a hash or a flake input,
 but comes with a larger git repository than fenix.
 
 Fenix also provides `rust-analyzer` nightly in addition to the Rust toolchains.
