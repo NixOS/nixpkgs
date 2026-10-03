@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "agru";
-  version = "0.1.19";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "agru";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K48f4wDGH7SYy69CYsTjM0WnwUxzWctV1NFR8IB/bYY=";
+    hash = "sha256-Bdk5nD1V91fJtLKPHCrxriKb9ROTroKkQAEZFapn9eo=";
   };
 
   vendorHash = null;
