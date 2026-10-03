@@ -17306,21 +17306,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  tabnine-vim = buildVimPlugin {
-    pname = "tabnine-vim";
-    version = "2.10.0-unstable-2023-01-01";
-    src = fetchFromGitHub {
-      owner = "codota";
-      repo = "tabnine-vim";
-      rev = "9944f213fe47a7d2ff269cda334ba28c14a4df79";
-      hash = "sha256-ZywyhMdYJl505J61aIBDoC17f7qRlvgcIAOqC7QZxug=";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/codota/tabnine-vim/";
-    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
-    meta.hydraPlatforms = [ ];
-  };
-
   taboo-vim = buildVimPlugin {
     pname = "taboo.vim";
     version = "0-unstable-2024-10-17";

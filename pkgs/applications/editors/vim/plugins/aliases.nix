@@ -62,6 +62,7 @@ mapAliases (
     spacevim = throw "'vimPlugins.spacevim' was unmaintained for the last 6 years, please use top-level 'spacevim'"; # Added 2024-11-27
     sparkup = throw "'vimPlugins.sparkup' was removed: the upstream repository got deleted"; # Added 2025-08-06
     syntax-tree-surfer = throw "'vimPlugins.syntax-tree-surfer' has been archived"; # Added 2025-12-18
+    tabnine-vim = throw "'vimPlugins.tabnine-vim' has been archived"; # Added 2026-10-03
     todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
     typescript-nvim = throw "'vimPlugins.typescript-nvim' has been removed: upstream deleted repository"; # Added 2026-06-15
     vim-csharp = throw "'vimPlugins.vim-csharp' has been removed: repository deleted"; # Added 2026-05-12
