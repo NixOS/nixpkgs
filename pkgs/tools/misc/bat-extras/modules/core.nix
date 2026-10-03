@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation {
   pname = "bat-extras";
-  version = "2024.08.24-unstable-2025-02-22";
+  version = "0-unstable-2025-02-22";
 
   src = fetchFromGitHub {
     owner = "eth-p";
