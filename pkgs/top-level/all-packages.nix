@@ -8397,6 +8397,8 @@ with pkgs;
     emacs31-pgtk
 
     emacs30-macport
+
+    emacs31-macport
     ;
 
   emacs-macport = emacs30-macport;
