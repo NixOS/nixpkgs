@@ -383,6 +383,7 @@ stdenv.mkDerivation (
         reckenrode
       ];
       inherit mainProgram;
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "winehq" version;
     };
   }
 )

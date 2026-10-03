@@ -119,6 +119,12 @@ mkDerivation (
         bkchr
       ];
       platforms = platforms.unix;
+      identifiers.cpeParts = {
+        vendor = "qt";
+        product = "qt";
+        inherit version;
+        update = "*";
+      };
     }
     // (args.meta or { });
   }

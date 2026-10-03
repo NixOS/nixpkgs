@@ -201,5 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.systems.inspect.platformPatterns.isStatic
     ];
     teams = [ lib.teams.freedesktop ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "polkit_project" finalAttrs.version;
   };
 })

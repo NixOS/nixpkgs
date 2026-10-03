@@ -130,5 +130,11 @@ rustPlatform.buildRustPackage.override
       platforms = lib.platforms.unix;
       # https://github.com/alexcrichton/nghttp2-rs/issues/2
       broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
+      identifiers.cpeParts = {
+        vendor = "rust-lang";
+        product = "cargo";
+        inherit (rustc.unwrapped) version;
+        update = "*";
+      };
     };
   }

@@ -333,5 +333,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
     broken = broken && brokenOpen;
+    identifiers.cpeParts = {
+      vendor = "nvidia";
+      product = "gpu_display_driver";
+      inherit version;
+      target_sw = "linux";
+      update = "*";
+    };
   };
 })

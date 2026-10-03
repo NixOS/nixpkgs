@@ -320,6 +320,12 @@ stdenv.mkDerivation {
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     broken =
       enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
+    identifiers.cpeParts = {
+      vendor = "boost";
+      product = "boost";
+      inherit version;
+      update = "*";
+    };
   };
 
   passthru = {

@@ -50,5 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
       dottybot
       turebentzin
     ];
+    identifiers.cpeParts = {
+      vendor = "scala-lang";
+      product = "scala";
+      version = finalAttrs.version;
+      update = "*";
+    };
   };
 })

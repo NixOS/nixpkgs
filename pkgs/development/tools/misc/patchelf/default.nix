@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "patchelf";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "patchelf_project" finalAttrs.version;
   };
 })

@@ -245,5 +245,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     maintainers = with lib.maintainers; [ jbedo ];
     teams = [ lib.teams.sage ];
+
+    identifiers.cpeParts = {
+      vendor = "r_project";
+      product = "r";
+      version = finalAttrs.version;
+      update = "*";
+    };
   };
 })

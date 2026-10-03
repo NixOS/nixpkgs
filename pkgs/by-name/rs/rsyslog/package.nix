@@ -209,5 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "rsyslog" finalAttrs.version;
   };
 })

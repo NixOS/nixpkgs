@@ -41,5 +41,6 @@ buildRubyGem rec {
       guylamar2006
     ];
     mainProgram = "bundler";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "bundler" version;
   };
 }

@@ -483,5 +483,11 @@ stdenv.mkDerivation (finalAttrs: {
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
+    identifiers.cpeParts = {
+      vendor = "rust-lang";
+      product = "rust";
+      inherit version;
+      update = "*";
+    };
   };
 })

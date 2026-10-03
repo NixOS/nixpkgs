@@ -142,5 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals x11Support [
       "pangoxft"
     ];
+
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pango" finalAttrs.version;
   };
 })
