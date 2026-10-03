@@ -1,6 +1,7 @@
 {
   lib,
-  tmux,
+  zellij,
+  ncurses,
   hexdump,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "5.4.0";
+  version = "5.7.3";
   __structuredAttrs = true;
 
   outputs = [
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-inNBe4Qzn6QjmIL8VMnJ/RuSUIrZ0tCbUV63vP/61Y4=";
+    hash = "sha256-sG7nfBfsJWQFo/uS6nJ5VPBG7q3YBF4+5T8E9UmurME=";
   };
 
   postPatch = ''
@@ -32,11 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-7nV/PxTpPLeblmjnzsYpAFM6u50AQ+OAaUWf/2JHGzQ=";
+  cargoHash = "sha256-QyqAAJhEqJnajwras4/ipsf93B04NXq98j+9T5LTibY=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [
-    tmux
+    zellij
+    ncurses
     hexdump
   ];
 
