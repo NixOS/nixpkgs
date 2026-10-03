@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pam,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     pam
-    systemd
+    systemdLibs
   ];
 
   preConfigure = ''

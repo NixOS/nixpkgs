@@ -8,7 +8,7 @@
   pkg-config,
   ronn,
   alsa-lib,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     espeak-ng
     alsa-lib
-    systemd
+    systemdLibs
   ];
 
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";

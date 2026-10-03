@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   libusb1,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libusb1
-    systemd
+    systemdLibs
   ];
 
   doInstallCheck = true;

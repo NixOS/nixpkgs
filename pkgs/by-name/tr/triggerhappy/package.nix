@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   perl,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
   ];
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   makeFlags = [
     "PREFIX=$(out)"

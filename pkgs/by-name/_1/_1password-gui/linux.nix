@@ -34,7 +34,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   udev,
   xdg-utils,
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
           nspr
           nss
           pango
-          systemd
+          systemdLibs
         ]
         + ":${lib.getLib stdenv.cc.cc}/lib64";
     in

@@ -8,7 +8,7 @@
   glib,
   dbus,
   pkg-config,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation {
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     libx11
     libxscrnsaver
     libxext
-    systemd
+    systemdLibs
   ];
 
   patchPhase = ''
