@@ -1,6 +1,7 @@
 {
   _cuda,
   buildRedist,
+  callPackage,
   cuda_cudart,
   lib,
   libcublas,
@@ -21,9 +22,25 @@ buildRedist (finalAttrs: {
 
   buildInputs = [
     (lib.getLib libcublas)
-  ]
-  # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
-  ++ lib.optionals (lib.hasPrefix "1.4" finalAttrs.version) [ (lib.getLib cuda_cudart) ];
+  ];
+
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [
+      "cutensor.h"
+      "cutensorMg.h"
+    ];
+    libraries = [
+      "cutensor"
+      "cutensorMg"
+    ];
+    symbols = [
+      "cutensorGetVersion"
+      "cutensorMgCreate"
+    ];
+  };
 
   meta = {
     description = "GPU-accelerated tensor linear algebra library for tensor contraction, reduction, and elementwise operations";

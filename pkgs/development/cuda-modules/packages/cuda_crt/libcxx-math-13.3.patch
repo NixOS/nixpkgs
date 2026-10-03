@@ -1,0 +1,92 @@
+From a060b065b253f47890648904cb7a9b4580e92721 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Sat, 3 Oct 2026 07:36:44 -0700
+Subject: [PATCH] math: select modern libc++ interfaces independently of
+ platform
+
+The libc++ __math namespace and current overload signatures are library
+interfaces, not properties of Android or Horizon. Reuse the existing
+modern-libc++ classification definitions and pow declaration on Linux.
+
+Redeclare the existing double pow template as host/device too: the mixed
+argument pow template calls that overload after promotion. Annotating only
+the outer template lets NVCC 13.3.33 compile ::pow(float,double) while
+silently omitting the kernel output store. A GPU-executed sentinel test
+exposes this failure; annotating the selected overload repairs it.
+
+This preserves NVIDIA's existing global math bridge and host libc++ math
+semantics. It does not promise arbitrary std-qualified device calls or
+change the optional relaxed-constexpr policy.
+
+Tested on AArch64 GB10 with NVCC 13.3.33, Clang 21.1.8/libc++ 21.1.8 and
+Clang 21/libstdc++ 15 and GCC 15 controls in C++17 and C++20: host promotions/classification; GPU
+mixed pow, elementary math, signed zero, infinities and NaNs; 126 global
+math expressions over six finite input pairs. Removing each of the six
+changes reproduces a parse, overload, noexcept, or GPU-output failure.
+The version threshold follows the existing __math namespace boundary;
+older libc++ headers were source-inspected, not executed.
+---
+ include/crt/math_functions.h   | 11 +++++++----
+ include/crt/math_functions.hpp |  2 +-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/include/crt/math_functions.h b/include/crt/math_functions.h
+index c8f5df6..a0cb7c2 100644
+--- a/include/crt/math_functions.h
++++ b/include/crt/math_functions.h
+@@ -4782,7 +4782,7 @@ inline _LIBCPP_INLINE_VISIBILITY __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bo
+ #else /* !((defined(__ANDROID__)  || defined(__HORIZON__)) && _LIBCPP_VERSION >= 8000) */
+ __forceinline__ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__  NV_INT_OR_BOOL isnan(float x) NV_MATH_NOEXCEPT;
+ #endif /* (defined(__ANDROID__)  || defined(__HORIZON__)) && _LIBCPP_VERSION >= 8000 */
+-#if defined(__ANDROID__) || defined(__HORIZON__)
++#if defined(__ANDROID__) || defined(__HORIZON__) || (_LIBCPP_VERSION >= 180000)
+ #if !defined(_LIBCPP_VERSION)
+ __forceinline__
+ #endif  /* !defined(_LIBCPP_VERSION) */
+@@ -4796,7 +4796,7 @@ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__  NV_INT_OR_BOOL isnan(double x)  NV
+ #else /* !(__ANDROID__ || __HORIZON__) */
+ __forceinline__ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ int isnan(double x) throw();
+ #endif /* __ANDROID__ */
+-#if (defined(__ANDROID__) || defined(__HORIZON__)) && _LIBCPP_VERSION >= 8000
++#if (defined(__ANDROID__) || defined(__HORIZON__) || (_LIBCPP_VERSION >= 180000)) && _LIBCPP_VERSION >= 8000
+ inline _LIBCPP_INLINE_VISIBILITY  __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isnan(long double x) _NOEXCEPT;
+ #else /* !( (defined(__ANDROID__) || defined(__HORIZON__)) && _LIBCPP_VERSION >= 8000) */
+ __forceinline__ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__  NV_INT_OR_BOOL isnan(long double x);
+@@ -4812,7 +4812,7 @@ inline _LIBCPP_INLINE_VISIBILITY __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bo
+ __forceinline__ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__  NV_INT_OR_BOOL isinf(float x) NV_MATH_NOEXCEPT;
+ #endif /* (defined(__ANDROID__) || defined(__HORIZON__)) && _LIBCPP_VERSION >= 8000 */
+ 
+-#if defined(__ANDROID__) || defined(__HORIZON__)
++#if defined(__ANDROID__) || defined(__HORIZON__) || (_LIBCPP_VERSION >= 180000)
+ #if !defined(_LIBCPP_VERSION)
+ __forceinline__
+ #endif  /* !defined(_LIBCPP_VERSION) */
+@@ -5394,8 +5394,11 @@ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl ceil(float)
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl floor(float) NV_MATH_NOEXCEPT_OR_THROW;
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl sqrt(float) NV_MATH_NOEXCEPT_OR_THROW;
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl pow(float, float) NV_MATH_NOEXCEPT_OR_THROW;
++#if _LIBCPP_VERSION >= 180000
++template <class> extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ double pow(double, double) NV_MATH_NOEXCEPT;
++#endif
+ #if defined(_LIBCPP_VERSION)
+-#if (defined (__ANDROID__) || defined(__HORIZON__)) && (_LIBCPP_VERSION >= 9000)
++#if (defined (__ANDROID__) || defined(__HORIZON__) || (_LIBCPP_VERSION >= 180000)) && (_LIBCPP_VERSION >= 9000)
+ #if _LIBCPP_VERSION > 210000 || (_LIBCPP_VERSION == 210000 && !defined(__ANDROID__))
+ template <class _A1, class _A2,
+ 	  std::__enable_if_t<std::is_arithmetic<_A1>::value && std::is_arithmetic<_A2>::value, int>>
+diff --git a/include/crt/math_functions.hpp b/include/crt/math_functions.hpp
+index c2333cb..b22a573 100644
+--- a/include/crt/math_functions.hpp
++++ b/include/crt/math_functions.hpp
+@@ -305,7 +305,7 @@ static __inline__ __host__ __device__ __cudart_builtin__ bool isinf(const float
+ #endif /* defined(__CUDA_ARCH__) */
+ }
+ 
+-#elif ( (defined(__ANDROID__) || defined(__HORIZON__)) && defined(_LIBCPP_VERSION))
++#elif ( (defined(__ANDROID__) || defined(__HORIZON__) || (_LIBCPP_VERSION >= 180000)) && defined(_LIBCPP_VERSION))
+ #if defined(__CUDA_ARCH__)
+ __forceinline__ __host__ __device__ __cudart_builtin__ int signbit(const float x) NV_MATH_NOEXCEPT { return __signbitf(x); }
+ __forceinline__ __host__ __device__ __cudart_builtin__ int signbit(const double x) NV_MATH_NOEXCEPT { return __signbit(x); }
+-- 
+2.43.0
+

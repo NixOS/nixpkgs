@@ -1,5 +1,5 @@
 {
-  backendStdenv,
+  cudaConfig,
   buildRedist,
   cudaOlder,
   lib,
@@ -27,7 +27,7 @@ buildRedist {
   platformAssertions = [
     {
       message = "Only Xavier (7.2) and Orin (8.7) Jetson devices are supported";
-      assertion = lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ];
+      assertion = lib.subtractLists [ "7.2" "8.7" ] cudaConfig.cudaCapabilities == [ ];
     }
   ];
 }

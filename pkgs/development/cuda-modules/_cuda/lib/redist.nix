@@ -142,7 +142,7 @@
     such, we need to handle unsupported systems gracefully.
 
     NOTE: This function does not check whether the provided CUDA capabilities are valid for the given CUDA version.
-    The heavy validation work to ensure consistency of CUDA capabilities is performed by backendStdenv.
+    The heavy validation work to ensure consistency of CUDA capabilities is performed by cudaConfig.
 
     # Type
 

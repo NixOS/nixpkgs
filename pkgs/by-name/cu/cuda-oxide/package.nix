@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   cargo-oxide: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
     CUDA_HOME = (lib.getLib cudaPackages.cuda_cudart).outPath;
 
-    NIX_LDFLAGS = "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"; # fixes -lcuda not found
+    NIX_LDFLAGS = "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"; # fixes -lcuda not found
   };
 
   cargoBuildFlags = [

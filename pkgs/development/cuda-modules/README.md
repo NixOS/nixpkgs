@@ -52,45 +52,30 @@ not straightforward to include. These packages are:
 ### CUDA Compatibility
 
 [CUDA Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/),
-available as `cudaPackages.cuda_compat`, is a component which makes it possible
-to run applications built against a newer CUDA toolkit (for example CUDA 12) on
-a machine with an older CUDA driver (for example CUDA 11), which isn't possible
-out of the box. At the time of writing, CUDA Compatibility is only available on
-the Nvidia Jetson architecture, but Nvidia might release support for more
-architectures in the future.
+available as `cudaPackages.cuda_compat`, provides user-mode driver components
+for running newer CUDA applications with an older host driver, subject to
+NVIDIA's hardware and driver compatibility requirements. Availability depends
+on the selected release and platform: the CUDA 13.3 manifests include x86_64
+Linux and AArch64 SBSA archives, while CUDA 12.9 provides a Jetson archive.
 
-As CUDA Compatibility strictly increases the range of supported applications, we
-try our best to enable it by default on supported platforms.
-
-#### Functioning
-
-`cuda_compat` simply provides a new `libcuda.so` (and associated variants) that
-needs to be used in place of the default CUDA driver's `libcuda.so`. However,
-the other shared libraries of the default driver must still be accessible:
-`cuda_compat` isn't a complete drop-in replacement for the driver (and that's
-the point, otherwise, it would just be a newer driver).
-
-Nvidia's recommendation is to set `LD_LIBRARY_PATH` to point to `cuda_compat`'s
-driver. This is fine for a manual, one-shot usage, but in general setting
-`LD_LIBRARY_PATH` is a red flag. This is global state which short-circuits most
-of other dynamic library resolution mechanisms and can break things in
-non-obvious ways, especially with other Nix-built software.
+The package is disabled by default. Set `config.enableCudaDriverCompat = true`
+when the host driver is older than the compatibility driver for the selected
+CUDA release. This does not make an unavailable archive supported, and it is
+independent of `config.cudaForwardCompat`, which controls embedded PTX for
+future GPUs. The compatibility libraries still require the installed kernel
+driver and may need other libraries from the host's driver installation.
 
 #### CUDA Compat with Nix
 
-Since `cuda_compat` is a known derivation, the easy way to do this in Nix would
-be to add `cuda_compat` as a dependency of CUDA libraries and applications and
-let Nix do its magic by filling the `DT_RUNPATH` fields. However,
-`cuda_compat` itself depends on `libnvrm_mem` and `libnvrm_gpu` which are loaded
-dynamically at runtime from `/run/opengl-driver`. This doesn't please the Nix
-sandbox when building, which can't find those (a second minor issue is that
-`addOpenGLRunpathHook` prepends the `/run/opengl-driver` path, so that would
-still take precedence).
+When `cuda_compat.meta.available` is true, `buildRedist` adds
+`autoAddCudaCompatRunpath` after `autoAddDriverRunpath`. Both hooks prepend
+runtime paths, so the compatibility driver takes precedence over the host
+driver search path. The compatibility package itself is excluded to avoid a
+dependency cycle. Null, disabled, and unavailable compatibility packages leave
+only the host driver search path.
 
-The current solution is to do something similar to `addOpenGLRunpathHook`: the
-`addCudaCompatRunpathHook` prepends the path to `cuda_compat`'s `libcuda.so`
-to the `DT_RUNPATH` of whichever package includes the hook as a dependency, and
-we include the hook by default for packages in `cudaPackages` (by adding it as an
-input in `genericManifestBuilder`). We also make sure it's included after
-`addOpenGLRunpathHook`, so that it appears _before_ in the `DT_RUNPATH` and
-takes precedence.
+CUDART publishes the same ordered paths in `driverRunpath`. Its pkg-config
+files and packaged NVCC use that value for links outside stdenv, keeping the
+runtime driver ahead of the link-time stub. The review fixture accepts
+`enableCudaDriverCompat = true` to exercise the existing `nvcc-runtime` tests
+with this optional dependency enabled.

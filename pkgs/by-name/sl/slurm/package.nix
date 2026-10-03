@@ -114,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableNVML [
     (runCommand "collect-nvml" { } ''
       mkdir $out
-      ln -s ${lib.getOutput "include" cudaPackages.cuda_nvml_dev}/include $out/include
-      ln -s ${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs $out/lib
+      ln -s ${lib.getOutput cudaPackages.cuda_nvml_dev.outputInclude cudaPackages.cuda_nvml_dev}/include $out/include
+      ln -s ${lib.getOutput cudaPackages.cuda_nvml_dev.outputStubs cudaPackages.cuda_nvml_dev}/lib/stubs $out/lib
     '')
   ];
 

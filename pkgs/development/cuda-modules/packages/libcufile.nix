@@ -1,5 +1,7 @@
 {
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cudaOlder,
   lib,
   liburcu,
@@ -42,6 +44,15 @@ buildRedist {
     "libcuda.so.1"
   ]
   ++ lib.optionals (cudaOlder "11.7") [ "libcufile.so.0" ];
+
+  # cufile.h includes cuda.h, provided by the driver module in cuda_cudart.
+  # Export that dependency for pkg-config consumers as well as stdenv.
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cufile-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cuda-${cudaMajorMinorVersion}\nCflags:'
+  '';
 
   meta = {
     description = "Library to leverage GDS technology";

@@ -1,5 +1,7 @@
 {
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cudaAtLeast,
   lib,
   libcublas,
@@ -26,6 +28,19 @@ buildRedist {
     ++ lib.optionals (cudaAtLeast "12.0") [ libnvjitlink ]
     # Dependency from 12.1 and on
     ++ lib.optionals (cudaAtLeast "12.1") [ (lib.getLib libcusparse) ];
+
+  # Public headers include CUDA types; publish the same dependencies to
+  # stdenv and to pkg-config consumers.
+  propagatedBuildInputs = [
+    cuda_cudart
+    libcublas
+    libcusparse
+  ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cusolver-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion} cublas-${cudaMajorMinorVersion} cusparse-${cudaMajorMinorVersion}\nCflags:'
+  '';
 
   meta = {
     description = "Collection of dense and sparse direct linear solvers and Eigen solvers";

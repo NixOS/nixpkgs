@@ -1,9 +1,8 @@
 {
   _cuda,
   backendStdenv,
-  cudaAtLeast,
+  cudaConfig,
   cudaNamePrefix,
-  cudaOlder,
   lib,
 
   # nativeBuildInputs
@@ -13,18 +12,19 @@
 
   # buildInputs
   cccl,
-  cuda_crt ? null, # only exists in cudaPackages with CUDA >= 13.0
   cuda_cudart,
   nccl,
 }:
 
 let
+  # Compiler paths embedded in strings bypass nativeBuildInputs splicing.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
   epFlags = _cuda.lib.formatCapabilities {
     inherit (_cuda.db) cudaCapabilityToInfo;
-    inherit (backendStdenv) cudaForwardCompat;
+    inherit (cudaConfig) cudaForwardCompat;
     cudaCapabilities = lib.filter (
       cudaCapability: lib.versionAtLeast cudaCapability "9.0"
-    ) backendStdenv.cudaCapabilities;
+    ) cudaConfig.cudaCapabilities;
   };
 in
 
@@ -47,16 +47,13 @@ backendStdenv.mkDerivation (finalAttrs: {
     cccl
     cuda_cudart
     (lib.getLib nccl)
-  ]
-
-  ++ lib.optionals (cudaOlder "13.0") [ (lib.getInclude cuda_nvcc) ]
-  ++ lib.optionals (cudaAtLeast "13.0") [ cuda_crt ];
+  ];
 
   makeFlags = [
-    "CUDA_HOME=${lib.getBin cuda_nvcc}"
+    "CUDA_HOME=${lib.getBin buildNvcc}"
     "CUDA_INC=${lib.getInclude cuda_cudart}/include"
     "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-    "LDFLAGS=-L${lib.getLib cuda_cudart}/lib/stubs"
+    "LDFLAGS=-L${lib.getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs"
     "NCCL_INCDIR=${lib.getInclude nccl}/include"
     "NCCL_LIBDIR=${lib.getLib nccl}/lib"
     "NCCL_EP_BUILDDIR=${placeholder "out"}"

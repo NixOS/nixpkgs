@@ -27,11 +27,8 @@ buildRedistHookRegistration() {
   postFixupHooks+=(fixupCudaPropagatedBuildOutputsToOut)
   nixLog "added fixupCudaPropagatedBuildOutputsToOut to postFixupHooks"
 
-  # NOTE: We need to do this in postFixup since we don't write the dependency on removeStubsFromRunpathHook until
-  # postFixup -- recall recordPropagatedDependencies happens during fixupPhase.
-  # NOTE: Iff is shorthand for "if and only if" -- the logical biconditional.
-  postFixupHooks+=(checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook)
-  nixLog "added checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook to postFixupHooks"
+  # recordPropagatedDependencies replaces these files during fixupPhase.
+  postFixupHooks+=(fixupCudaStubOutputs)
 }
 
 buildRedistHookRegistration
@@ -145,70 +142,33 @@ checkCudaNonEmptyOutputs() {
   return 0
 }
 
-checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
-  local outputName
-  local -i hasStubs
-  local -i hasRemoveStubsFromRunpathHook
-  local -a outputNamesWronglyExcludingHook=()
-  local -a outputNamesWronglyIncludingHook=()
-
+# Stub libraries are link-time providers. Keep the conventional stub-only
+# output as well as archive stub directories in collapsed or renamed outputs.
+fixupCudaStubOutputs() {
+  local outputName stubDirectory
   for outputName in $(getAllOutputNames); do
-    hasStubs=0
-    if [[ $outputName == "stubs" ]] ||
-      find "${!outputName:?}" -mindepth 1 -type d -name stubs -print -quit | grep --silent .; then
-      hasStubs=1
-    fi
-
-    hasRemoveStubsFromRunpathHook=0
-    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-build-inputs"; then
-      hasRemoveStubsFromRunpathHook=1
-    fi
-
-    if ((hasStubs && !hasRemoveStubsFromRunpathHook)); then
-      outputNamesWronglyExcludingHook+=("${outputName:?}")
-    elif ((!hasStubs && hasRemoveStubsFromRunpathHook)); then
-      outputNamesWronglyIncludingHook+=("${outputName:?}")
-    fi
+    stubDirectory=$(find "${!outputName:?}" -type d -name stubs -print -quit) || return
+    [[ $outputName == stubs || -n $stubDirectory ]] || continue
+    mkdir -p "${!outputName:?}/nix-support"
+    printWords "${cudaStubRunpathHook:?}" >> "${!outputName:?}/nix-support/propagated-native-build-inputs"
   done
-
-  if ((${#outputNamesWronglyExcludingHook[@]})); then
-    nixErrorLog "we detected outputs containing a stubs directory without a dependency on" \
-      "removeStubsFromRunpathHook: ${outputNamesWronglyExcludingHook[*]}"
-    nixErrorLog "ensure redistributables providing stubs set includeRemoveStubsFromRunpathHook to true"
-  fi
-
-  if ((${#outputNamesWronglyIncludingHook[@]})); then
-    nixErrorLog "we detected outputs without a stubs directory with a dependency on" \
-      "removeStubsFromRunpathHook: ${outputNamesWronglyIncludingHook[*]}"
-    nixErrorLog "ensure redistributables without stubs do not set includeRemoveStubsFromRunpathHook to true"
-  fi
-
-  if ((${#outputNamesWronglyExcludingHook[@]} || ${#outputNamesWronglyIncludingHook[@]})); then
-    exit 1
-  fi
-
-  return 0
 }
 
-# The multiple outputs setup hook only propagates build outputs to dev.
-# We want to propagate them to out as well, in case the user interpolates
-# the package into a string -- in such a case, the dev output is not selected
-# and no propagation occurs.
-# NOTE: This must run in postFixup because fixupPhase nukes the propagated dependency files.
+# Preserve the aggregate out interface as well as the standard development
+# output. The standard hook owns both the array/string handling and file writes.
+# This must run after recordPropagatedDependencies, which replaces those files.
 fixupCudaPropagatedBuildOutputsToOut() {
-  local output
-
-  # The `out` output should largely be empty save for nix-support/propagated-build-inputs.
-  # In effect, this allows us to make `out` depend on all the other components.
-  # NOTE: It may have been deleted if it was empty, which is why we must recreate it.
+  [[ $outputDev != out ]] || return 0
   mkdir -p "${out:?}/nix-support"
-
-  # NOTE: We must use printWords to ensure the output is a single line.
-  for output in "${propagatedBuildOutputs[@]}"; do
-    # Propagate the other components to the out output
-    nixLog "adding ${!output:?} to propagatedBuildInputs of ${out:?}"
-    printWords "${!output:?}" >>"${out:?}/nix-support/propagated-build-inputs"
+  local devOutput="$outputDev" output
+  local -a requiredOutputs=()
+  concatTo requiredOutputs propagatedBuildOutputs
+  local -a propagatedBuildOutputs=()
+  for output in "${requiredOutputs[@]}"; do
+    # If dev already depends on an out payload, omit the reverse edge.
+    [[ $output != "$devOutput" || " ${requiredOutputs[*]} " != *" out "* ]] || continue
+    propagatedBuildOutputs+=("$output")
   done
-
-  return 0
+  local outputDev=out
+  _multioutPropagateDev
 }

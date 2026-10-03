@@ -18,14 +18,16 @@ buildRedist {
     openssl
   ];
 
+  # As in nvidia-x11, keep the OpenSSL 3 PKCS#11 module and discard the unused
+  # alternative linked against OpenSSL 1.1.
+  postPatch = ''
+    rm -f compat/libnvidia-pkcs11.so*
+  '';
+
   autoPatchelfIgnoreMissingDeps = [
     "libnvdla_runtime.so"
     "libnvrm_gpu.so"
     "libnvrm_mem.so"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    # Used by libnvidia-pkcs11.so but openssl_1_1 has been removed from nixpkgs (EoL)
-    "libcrypto.so.1.1"
   ];
 
   meta = {
