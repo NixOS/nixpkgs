@@ -4,14 +4,16 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const process = require('process')
-const https = require('https')
 const child_process = require('child_process')
-const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
+const { EnvHttpProxyAgent, install, setGlobalDispatcher, getGlobalDispatcher, interceptors, request } = require('./undici')
 const { promisify } = require('util')
-const url = require('url')
-const { URL } = url;
 const { urlToName } = require('./common.js')
+const { pipeline } = require('stream/promises')
+const { parse: urlParse } = require("url")
+
+install();
+setGlobalDispatcher(new EnvHttpProxyAgent());
 
 const execFile = promisify(child_process.execFile)
 
@@ -27,40 +29,37 @@ function ensureTrailingSlash(str) {
   return str.endsWith('/') ? str : str + '/';
 }
 
-const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha1', mirrorRegistryUrl = null) => {
-
+const downloadFileHttps = async (fileName, url, expectedHash, verbose, hashType = 'sha1', mirrorRegistryUrl = null) => {
   const registryUrl =
     mirrorRegistryUrl && url.startsWith(yarnRegistryUrl)
       ? url.replace(yarnRegistryUrl, ensureTrailingSlash(mirrorRegistryUrl))
       : url;
 
-  return new Promise((resolve, reject) => {
-    const get = (registryUrl, redirects = 0) => https.get(registryUrl, (res) => {
-      if(redirects > 10) {
-        reject('Too many redirects!');
-        return;
-      }
-      if(res.statusCode === 301 || res.statusCode === 302) {
-        const location = new URL(res.headers.location, registryUrl);
-        if (verbose) console.log('following redirect to ' + location);
-        return get(location, redirects + 1);
-      }
-      const file = fs.createWriteStream(fileName)
-      const hash = crypto.createHash(hashType)
-      res.pipe(file)
-      res.pipe(hash).setEncoding('hex')
-      res.on('end', () => {
-        file.close()
-        const h = hash.read()
-        if (expectedHash === undefined){
-          console.log(`Warning: lockfile url ${registryUrl} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
-        } else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${registryUrl}`))
-        resolve()
-      })
-      res.on('error', e => reject(e))
-    })
-    get(registryUrl)
+  const agent = getGlobalDispatcher().compose([
+    interceptors.redirect({ maxRedirections: 10 })
+  ]);
+
+  const res = await request(registryUrl, {
+    dispatcher: agent,
   })
+
+  const file = fs.createWriteStream(fileName)
+  const hash = crypto.createHash(hashType)
+
+  // defer writing file so we can deal with the hash first
+  const fileWrite = pipeline(res.body, file);
+  await pipeline(res.body, hash);
+
+  hash.setEncoding('hex');
+  const h = hash.read();
+
+  if (expectedHash === undefined) {
+    console.log(`Warning: lockfile url ${registryUrl} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
+  } else if (h != expectedHash) {
+    throw new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${registryUrl}`)
+  }
+
+  await fileWrite;
 }
 
 const downloadGit = async (fileName, url, rev) => {
@@ -92,7 +91,7 @@ const isGitUrl = pattern => {
 
   for (const matcher of GIT_PATTERN_MATCHERS) if (matcher.test(pattern)) return true
 
-  const {hostname, path} = url.parse(pattern)
+  const {hostname, path} = urlParse(pattern)
   if (hostname && path && GIT_HOSTS.indexOf(hostname) >= 0
     // only if dependency is pointing to a git repo,
     // e.g. facebook/flow and not file in a git repo facebook/flow/archive/v1.0.0.tar.gz
