@@ -154,7 +154,10 @@ let
 in
 {
   name = "syncthing-folders";
-  meta.maintainers = with pkgs.lib.maintainers; [ zarelit ];
+  meta.maintainers = with lib.maintainers; [
+    zarelit
+    me-and
+  ];
 
   # Run from the root of the nixpkgs repository with
   #
@@ -184,7 +187,7 @@ in
     '';
   };
 
-  nodes = lib.genAttrs nodeNames (n: {
+  containers = lib.genAttrs nodeNames (n: {
     imports = [
       commonNodeConfigModule
       nodeConfigModules."${n}"

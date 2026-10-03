@@ -1,10 +1,13 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing";
-  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
+  meta.maintainers = with lib.maintainers; [
+    chkno
+    me-and
+  ];
 
-  nodes = rec {
-    a = {
+  containers = rec {
+    a = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         curl
         libxml2
