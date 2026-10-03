@@ -25,6 +25,8 @@
 }:
 
 let
+  # Format7zF is a shared library and cannot be built by static Linux toolchains.
+  buildFormat7zF = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic);
   makefile = "../../cmpl_${
     if stdenv.hostPlatform.isDarwin then
       "mac"
@@ -138,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
-  postBuild = ''
+  postBuild = lib.optionalString buildFormat7zF ''
     make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ${makefile}
   '';
 
@@ -149,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
 
     mkdir -p $lib/lib
-    install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*
+    ${lib.optionalString buildFormat7zF "install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*"}
 
     runHook postInstall
   '';
