@@ -3,16 +3,16 @@
   python3Packages,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   appstream-glib,
-  desktop-file-utils,
   gettext,
   glib,
   gobject-introspection,
   gtk3,
-  hicolor-icon-theme,
   libappindicator,
   libhandy,
   meson,
+  ninja,
   pkg-config,
   wrapGAppsHook3,
 }:
@@ -43,34 +43,37 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/vagnum08/cpupower-gui/commit/22ea668aa4ecf848149ea4c150aa840a25dc6ff8.patch";
       sha256 = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
     })
+    # Fixes Python 3.14 compatibility
+    (fetchpatch2 {
+      url = "https://github.com/vagnum08/cpupower-gui/commit/08b076b731a5106e9e72bf02dceb7ed96649ea98.patch";
+      includes = [ "cpupower_gui/cpupower-gui.in" ];
+      hash = "sha256-XjlnK5dOd0fBut5lARjyNuaHEzircTUHfGpwA4xjjHM=";
+    })
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     appstream-glib
-    desktop-file-utils # needed for update-desktop-database
     gettext
     glib # needed for glib-compile-schemas
     gobject-introspection # need for gtk namespace to be available
-    hicolor-icon-theme # needed for postinstall script
     meson
-    python3Packages.ninja # TODO: maybe swap out for the non-python package
+    ninja
     pkg-config
     wrapGAppsHook3
-    python3Packages.dbus-python
-    libappindicator
-    python3Packages.pygobject3
-    python3Packages.pyxdg
   ];
 
   buildInputs = [
     glib
     gtk3
+    libappindicator
     libhandy
   ];
 
   propagatedBuildInputs = [
     python3Packages.dbus-python
-    libappindicator
     python3Packages.pygobject3
     python3Packages.pyxdg
   ];
@@ -79,17 +82,25 @@ python3Packages.buildPythonApplication rec {
     "-Dsystemddir=${placeholder "out"}/lib/systemd"
   ];
 
-  preConfigure = ''
-    patchShebangs build-aux/meson/postinstall.py
+  # Drop the post-install script; NixOS updates desktop database and icon cache itself
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "meson.add_install_script('build-aux/meson/postinstall.py')" ""
   '';
 
-  strictDeps = false;
+  # glib's setup hook only relocates the schemas, it does not compile them
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
+    wrapPythonProgramsIn $out/lib "$out"
   '';
 
   meta = {
