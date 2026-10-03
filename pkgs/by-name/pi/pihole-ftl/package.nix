@@ -67,14 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "execv" "execvp"
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D pihole-FTL $out/bin/${finalAttrs.meta.mainProgram}
-
-    runHook postInstall
-  '';
-
   passthru = {
     settingsTemplate = ./pihole.toml;
     tests = nixosTests.pihole-ftl;
