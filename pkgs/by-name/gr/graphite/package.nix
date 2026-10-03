@@ -185,12 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
     # which are licensed under the separate Graphite Branding License.
     license = with lib.licenses; [
       asl20
-      {
+      (mkLicense {
+        shortName = "graphite";
         fullName = "Graphite Branding License";
         url = "https://graphite.art/license/#branding";
         free = false;
         redistributable = true;
-      }
+      })
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ timon ];

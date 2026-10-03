@@ -72,7 +72,8 @@ if enableEnterprise then
     meta = commonMeta // {
       homepage = "https://openobserve.ai/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = {
+      license = lib.licenses.mkLicense {
+        shortName = "openObserveEE";
         fullName = "OpenObserve Enterprise Edition License Agreement";
         url = "https://openobserve.ai/legal/enterprise-license/";
         free = false;

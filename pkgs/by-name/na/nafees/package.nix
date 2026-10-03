@@ -61,7 +61,8 @@ stdenv.mkDerivation {
     # Used to be GPLv2.  The license distributed with the fonts looks
     # more like a modified BSD, but still contains the GPLv2 embedded
     # font exception, and some not-for-resale language.
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "nafees";
       fullName = "Nafees License Agreement";
       url = "https://www.cle.org.pk/software/license/Nafees_Pakistani_Naskh_License.html";
     };
