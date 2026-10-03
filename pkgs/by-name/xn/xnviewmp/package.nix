@@ -25,11 +25,11 @@ let
 in
 appimageTools.wrapType2 rec {
   pname = "xnviewmp";
-  version = "1.11.7";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://download.xnview.com/old_versions/XnView_MP/XnView_MP-${version}.glibc2.34-x86_64.AppImage";
-    hash = "sha256-evKMV4K0tBW8mrE3TFBpkj5lao6y/i9cWF2uPV4zeBw=";
+    hash = "sha256-3iAi6/+GEaFiobk1n1aciHidOmdyDkmGKAgXvbqddQc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ appimageTools.wrapType2 rec {
   ];
 
   extraPkgs = pkgs: [
-    pkgs.qt5.qtbase
+    pkgs.qt6.qtbase
   ];
 
   extraInstallCommands = ''
