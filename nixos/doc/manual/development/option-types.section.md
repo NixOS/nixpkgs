@@ -4,6 +4,10 @@ Option types are a way to put constraints on the values a module option
 can take. Types are also responsible of how values are merged in case of
 multiple value definitions.
 
+::: {.note}
+Type documentation is moving to the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/#sec-functions-library-types).
+:::
+
 ## Basic types {#sec-option-types-basic}
 
 Basic types are the simplest available types in the module system. Basic
@@ -12,8 +16,7 @@ merging is handled.
 
 `types.bool`
 
-:   A boolean, its values can be `true` or `false`.
-    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+:   Moved to [`lib.types.bool`](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.types.bool) in the Nixpkgs manual.
 
 `types.boolByOr`
 
