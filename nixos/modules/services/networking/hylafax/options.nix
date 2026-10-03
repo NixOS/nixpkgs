@@ -199,13 +199,15 @@ in
       type = path;
       default = "/etc/hosts.hfaxd";
       description = ''
-        The {file}`hosts.hfaxd`
-        file entry in the spooling area
+        The {file}`hosts.hfaxd` file entry in the spooling area
         will be symlinked to the location given here.
-        This file must exist and be
-        readable only by the `uucp` user.
+        This file must exist and be readable only by the `uucp` user.
         See {manpage}`hosts.hfaxd(5)` for details.
-        This configuration permits access for all users:
+        Example shown below permits access for all users.
+        Note that host-based access can be controlled with
+        {option}`config.systemd.sockets.hylafax-hfaxd.listenStreams`;
+        by default, only `127.0.0.1` is permitted to connect.
+
         ```
           environment.etc."hosts.hfaxd" = {
             mode = "0600";
@@ -213,9 +215,6 @@ in
             text = ".*";
           };
         ```
-        Note that host-based access can be controlled with
-        {option}`config.systemd.sockets.hylafax-hfaxd.listenStreams`;
-        by default, only 127.0.0.1 is permitted to connect.
       '';
     };
 
@@ -306,7 +305,7 @@ in
       default = null;
       example = "daily";
       description = ''
-        purging old files from the spooling area with
+        Purges old files from the spooling area with
         {file}`faxcron` with the given frequency
         (see {manpage}`systemd.time(7)`)
       '';
@@ -346,7 +345,7 @@ in
       default = null;
       example = "daily";
       description = ''
-        Purge old files from the spooling area with
+        Purges old files from the spooling area with
         {file}`faxcron` with the given frequency
         (see {manpage}`systemd.time(7)`).
       '';
