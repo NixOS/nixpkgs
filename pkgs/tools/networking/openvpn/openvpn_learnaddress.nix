@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     homepage = "https://gist.github.com/offlinehacker/4058733/";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
   };
 }
