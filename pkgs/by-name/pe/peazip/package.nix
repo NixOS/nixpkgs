@@ -84,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/lib/peazip/pea $out/bin/pea \
       ''${qtWrapperArgs[@]} # putting this here as to not have double wrapping
 
-    mkdir -p $out/share/peazip $out/lib/peazip/res
+    mkdir -p $out/share/peazip $out/lib/peazip/res/bin/7z
+    ln -s ${_7z}/bin/7z $out/lib/peazip/res/bin/7z/7z
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
     # Install desktop entries
