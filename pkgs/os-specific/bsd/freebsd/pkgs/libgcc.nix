@@ -38,12 +38,14 @@ mkDerivation {
     export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
   '';
 
+  # libcompiler_rt before libgcc_s: since 16.0, libgcc_s has
+  # LIBADD+=compiler_rt and links against the freshly built library.
   postBuild = ''
-    mkdir $BSDSRCDIR/lib/libgcc_s/i386 $BSDSRCDIR/lib/libgcc_s/cpu_model
-    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
-
     mkdir $BSDSRCDIR/lib/libcompiler_rt/i386 $BSDSRCDIR/lib/libcompiler_rt/cpu_model
     make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags
+
+    mkdir $BSDSRCDIR/lib/libgcc_s/i386 $BSDSRCDIR/lib/libgcc_s/cpu_model
+    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
   '';
 
   postInstall = ''
