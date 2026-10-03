@@ -1,0 +1,17 @@
+diff --git a/cutekit/shell.py b/cutekit/shell.py
+index 215fb33..a58e8bf 100644
+--- a/cutekit/shell.py
++++ b/cutekit/shell.py
+@@ -42,7 +42,11 @@ def uname() -> Uname:
+     un = platform.uname()
+ 
+     if un.system == "Linux" and hasattr(platform, "freedesktop_os_release"):
+-        distrib = platform.freedesktop_os_release()
++        # The sandbox may lack /etc/os-release; assume NixOS then.
++        try:
++            distrib = platform.freedesktop_os_release()
++        except OSError:
++            distrib = {"NAME": "NixOS"}
+     else:
+         distrib = {"NAME": "Unknown"}
+ 
