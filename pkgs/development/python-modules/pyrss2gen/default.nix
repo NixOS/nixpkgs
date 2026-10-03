@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://www.dalkescientific.om/Python/PyRSS2Gen.html";
+    homepage = "http://dalkescientific.com/Python/PyRSS2Gen.html";
     description = "Library for generating RSS 2.0 feeds";
     license = lib.licenses.bsd2;
     maintainers = [ ];

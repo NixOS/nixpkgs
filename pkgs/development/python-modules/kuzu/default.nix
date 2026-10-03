@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for Kuzu, an embeddable property graph database management system";
-    homepage = "https://kuzudb.com/";
+    homepage = "https://github.com/kuzudb/kuzu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sdht0 ];
   };

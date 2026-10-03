@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Development library for quickly writing configurable applications and daemons";
-    homepage = "https://helper.readthedocs.org/";
+    homepage = "https://github.com/gmr/helper";
     license = lib.licenses.bsd3;
   };
 }
