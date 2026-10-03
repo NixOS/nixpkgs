@@ -1351,11 +1351,25 @@ class QemuMachine(BaseMachine):
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
-    def start(self, allow_reboot: bool = False) -> None:
+    def start(self, allow_reboot: bool | None = None) -> None:
         """
         Start the virtual machine. This method is asynchronous --- it does
         not wait for the machine to finish booting.
         """
+        # `allow_reboot` should not be documented,
+        # should be already the case because the doc-gen does not see args of functions
+        # which are only defined on overriding methods but not defined on their base
+        if allow_reboot is not None:
+            # see https://github.com/NixOS/nixpkgs/issues/554658#issuecomment-5456079171
+            warnings.warn(
+                "start(): The 'allow_reboot' argument is deprecated. "
+                "Use 'start_and_allow_reboot()' instead.",
+                DeprecationWarning,
+            )
+
+        self.__start(allow_reboot or False)
+
+    def __start(self, allow_reboot: bool) -> None:
         if self.booted:
             return
 
@@ -1435,6 +1449,14 @@ class QemuMachine(BaseMachine):
         self.booted = True
 
         self.log(f"QEMU running (pid {self.pid})")
+
+    def start_and_allow_reboot(self) -> None:
+        """
+        Start the virtual machine with rebooting enabled.
+        This allows the machine to be rebooted via `reboot()`.
+        This method is asynchronous --- it does not wait for the machine to finish booting.
+        """
+        self.__start(True)
 
     def shutdown(self) -> None:
         """
