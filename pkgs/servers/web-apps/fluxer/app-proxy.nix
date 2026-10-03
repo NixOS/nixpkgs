@@ -144,6 +144,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ lib.maintainers.strangeglyph ];
     # Execution note:
     # set FLUXER_STATIC_DIR=$out/share/fluxer-app-proxy
-    mainProgram = "fluxer-app-proxy";
+    mainProgram = "fluxer_app_proxy";
   };
 })
