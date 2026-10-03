@@ -30,6 +30,7 @@
   marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
   marcusolsson-json-datasource = callPackage ./marcusolsson-json-datasource { };
   mesak-imagesave-panel = callPackage ./mesak-imagesave-panel { };
+  prometheus = callPackage ./prometheus { };
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
