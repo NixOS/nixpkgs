@@ -13,16 +13,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "ghq";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-SmcgBwd5k/lAv9bwYRpkIM0fil2ajSlT8zznP7bgpDk=";
+    sha256 = "sha256-Ro/PbI9UZ0l0OsfIQOlmX8GZBWBvAeKDgHpz8DrsQPM=";
   };
 
-  vendorHash = "sha256-8aC1J/mM7ZTEQBdZwstvHxMKDPqgzjzYztC7shuwu/Q=";
+  vendorHash = "sha256-YToIkJozCyI1k5xqs4w6brVERJ2edR2PRob2tXWb9Ms=";
 
   nativeCheckInputs = [
     gitMinimal
