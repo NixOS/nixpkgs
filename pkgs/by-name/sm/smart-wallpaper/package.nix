@@ -7,7 +7,7 @@
   killall,
   xwinwrap,
   swaybg,
-  redshift,
+  gammastep,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -23,6 +23,10 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  postPatch = ''
+    substituteInPlace smart-wallpaper --replace-fail redshift gammastep
+  '';
+
   installPhase = ''
     install -Dm755 -t $out/bin smart-wallpaper
     wrapProgram $out/bin/smart-wallpaper \
@@ -32,7 +36,7 @@ stdenvNoCC.mkDerivation {
           killall
           xwinwrap
           swaybg
-          redshift
+          gammastep
         ]
       }
   '';
