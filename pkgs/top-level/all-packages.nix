@@ -5799,6 +5799,7 @@ with pkgs;
 
   icu-versions = callPackages ../development/libraries/icu { };
   inherit (icu-versions)
+    icu56
     icu60
     icu63
     icu64
