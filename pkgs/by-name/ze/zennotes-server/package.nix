@@ -7,19 +7,19 @@
   webUI ? true,
 }:
 let
-  version = "2.60.0";
+  version = "2.60.1";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "znserver";
     tag = "v${version}";
-    hash = "sha256-Q83wloWu/H1tfWVxwWdjUN+2dQI41/t+h8agoBDG8a0=";
+    hash = "sha256-jvztjDczsZYvyr5eSWGZdyU8Ihh4X9lhKlair9scCeE=";
   };
 
   # Download archive with webui
   webArchive = fetchurl {
-    url = "https://github.com/ZenNotes/zennotes/releases/download/web-2.60.0-web.h5a4dd1242cf8c2c0/zennotes-self-hosted-web-2.60.0-web.h5a4dd1242cf8c2c0.tgz";
-    sha256 = "c34e81c32c46709a225332e1f19fc10135566fecb85088e844f361dfb31d8084";
+    url = "https://github.com/ZenNotes/zennotes/releases/download/web-2.60.4-web.ha0258ecc7b3c0133/zennotes-self-hosted-web-2.60.4-web.ha0258ecc7b3c0133.tgz";
+    sha256 = "11b9702b184feaa099b15c6488acfaa6b20095309ce590585ae7ae9eb0dd6a77";
   };
 in
 buildGoModule (finalAttrs: {
