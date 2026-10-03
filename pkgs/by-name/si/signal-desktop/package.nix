@@ -12,6 +12,7 @@
   electron_44,
   python3,
   makeWrapper,
+  libunity,
   callPackage,
   fetchFromGitHub,
   fetchurl,
@@ -310,6 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libunity ]} \
       --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + ''
