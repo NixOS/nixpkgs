@@ -325,6 +325,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./cpp-extension-dependency-paths.patch
     ./wheel-tensorpipe-metadata.patch
     ./nnpack-psimd-array-contracts.patch
+    # Unmerged upstream fix, followed by the remaining reduction repairs below.
+    # https://github.com/pytorch/pytorch/pull/196216
+    ./sparse-csr-empty-values.patch
+    # Resolve reduction dtype before dispatch and keep wider accumulators
+    # separate from explicit result dtypes on both CPU and CUDA.
+    ./sparse-csr-reduction-dtypes.patch
   ]
   ++ lib.optionals (!(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) [
     ./cross-blas-dot.patch
@@ -367,6 +373,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   postPatch = ''
+    cp ${../tests/csr-reductions.py} test/csr_reductions.py
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=77.0.0,<82" "setuptools"
   ''
@@ -826,7 +833,15 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           torch = finalAttrs.finalPackage;
         };
       }
-;
+      // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        tester-csrReductions =
+          (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; })
+            {
+              name = "torch-csr-reductions";
+              libraries = [ finalAttrs.finalPackage ];
+            }
+            (builtins.readFile ../tests/csr-reductions.py);
+      };
   };
 
   meta = {
