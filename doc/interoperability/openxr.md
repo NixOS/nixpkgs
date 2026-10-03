@@ -1,4 +1,4 @@
-# OpenXR in NixOS
+# OpenXR {#chap-interop-openxr}
 
 OpenXR is a standard for eXtended Reality (XR) applications and drivers (providers).
 

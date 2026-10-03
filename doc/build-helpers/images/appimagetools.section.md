@@ -1,4 +1,5 @@
 # pkgs.appimageTools {#sec-pkgs-appimageTools}
+[]{#chap-images} <!-- legacy anchor -->
 
 `pkgs.appimageTools` is a set of functions for extracting and wrapping [AppImage](https://appimage.org/) files.
 They are meant to be used if traditional packaging from source is infeasible, or if it would take too long.
