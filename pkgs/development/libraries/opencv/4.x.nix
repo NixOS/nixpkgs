@@ -315,6 +315,13 @@ effectiveStdenv.mkDerivation {
         extraPrefix = "opencv_contrib/";
         hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
       })
+      # Backport https://github.com/opencv/opencv_contrib/pull/4130
+      (fetchpatch {
+        url = "https://github.com/opencv/opencv_contrib/commit/054007b78c8288ef2fd040e77dc0cf2e45f70c15.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-vDW6kfDmwPB/tTurkDXuvViXrzXYV4njjDN6kLoIvJ4=";
+      })
     ]
   );
 
