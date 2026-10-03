@@ -12,6 +12,7 @@ let
       anthonyroussel
       delafthi
       rapiteanu
+      staticdev
     ];
   };
 in
