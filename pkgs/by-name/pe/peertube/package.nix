@@ -145,6 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
       --exec gzip -9 -n -c {} > {}.gz \;\
       --exec brotli --best -f {} -o {}.br
 
+    mkdir -p $out/share
+    cp $src/config/config-schema.json $out/share/config-schema.json
+
     runHook postInstall
   '';
 
