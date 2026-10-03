@@ -11202,6 +11202,12 @@
     github = "HarisDotParis";
     githubId = 67912527;
   };
+  harry-kp = {
+    email = "chaudharyharshit9@gmail.com";
+    github = "Harry-kp";
+    githubId = 55315065;
+    name = "Harshit Chaudhary";
+  };
   harryposner = {
     email = "nixpkgs@harryposner.com";
     github = "harryposner";
