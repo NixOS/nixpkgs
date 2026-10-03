@@ -287,6 +287,13 @@ stdenv.mkDerivation (
         # a new arm64 subtype that gives more pointer authentication machinery.
         # Vendored backport of the patch for LLVM 23
         (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
+      ]
+      ++ [ ./initialize-iterator-and-resource-state.patch ]
+      ++ lib.optionals (lib.versionAtLeast release_version "19") [
+        ./initialize-count-copy-and-move.patch
+      ]
+      ++ lib.optionals (lib.versionAtLeast release_version "22") [
+        ./initialize-sframe-cache.patch
       ];
 
     nativeBuildInputs = [
