@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.52.1";
+  version = "0.53.0";
   pname = "xcpc";
 
   src = fetchFromGitHub {
     owner = "ponceto";
     repo = "xcpc-emulator";
     rev = "xcpc-${finalAttrs.version}";
-    hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
+    hash = "sha256-v4ReecpOynlGFNax+Z0Vng5wqvT92fdPr2fSZfbDeRU=";
   };
 
   nativeBuildInputs = [
