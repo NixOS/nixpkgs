@@ -587,6 +587,7 @@ mapAliases {
   cmtk = throw "'cmtk' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
   coc-cmake = throw "'coc-cmake' has been removed, as it required pnpm 8 (EOL) and its upstream lockfile is incompatible with newer pnpm"; # Added 2026-06-10
   coc-sumneko-lua = throw "'coc-sumneko-lua' has been removed due to unmaintained and broken package. 'lua_ls' can be used as a replacement"; # Added 2026-02-04
+  coc-tabnine = throw "'coc-tabnine' has been removed as it is archived upstream"; # Added 2026-10-03
   cockroachdb-bin = throw "'cockroachdb-bin' has been renamed to/replaced by 'cockroachdb'"; # Converted to throw 2025-10-27
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-gtk = throw "'code-browser-gtk' has been removed, as it was broken since 22.11"; # Added 2025-08-22
