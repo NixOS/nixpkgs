@@ -85,11 +85,31 @@ buildGoModule (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    go test ./cli
-    # skip tests that require network access
-    go test ./daemon -skip \
-        'TestTransports|TestH1Transport_RoundTrip|Test.*FileList_RealURL'
-    go test ./norduser
+    go test ./cli/...
+    go test ./fileshare/...
+    go test ./norduser/...
+
+    # skip tests requiring network access, root/CAP_NET_ADMIN,
+    # or network state the sandbox doesn't provide
+    # skip libtelio tests as the package lacks meshnet support
+    go test $(go list ./daemon/... | grep -v /daemon/vpn/nordlynx/libtelio) -skip \
+      'Test.*FileList_RealURL|'\
+      'TestAddAllowlistRules|'\
+      'TestAddDevice|'\
+      'TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState|'\
+      'TestCustomTable|'\
+      'TestDiscoverNameserverIp|'\
+      'TestFwmarkRule|'\
+      'TestH1Transport_RoundTrip|'\
+      'TestMeshnetRuleset|'\
+      'TestMultiFwmarkRule|'\
+      'TestNetlinkManager_SetUnset|'\
+      'TestRouter_Add|'\
+      'TestSetMTU|'\
+      'TestSuppressRule|'\
+      'TestTransports|'\
+      'TestUpWGInterface|'\
+      'TestVPNRuleset'
 
     runHook postCheck
   '';
