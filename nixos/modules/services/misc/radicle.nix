@@ -203,7 +203,7 @@ in
               ln -s $out config.json
               install -D -m 644 /dev/stdin keys/radicle.pub <<<"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBgFMhajUng+Rjj/sCFXI9PzG8BQjru2n7JgUVF1Kbv5 snakeoil"
               export RAD_HOME=$PWD
-              ${lib.getExe' pkgs.buildPackages.radicle-node "rad"} config >/dev/null || {
+              ${lib.getExe' cfg.package "rad"} config >/dev/null || {
                 cat -n config.json
                 echo "Invalid config.json according to rad."
                 echo "Please double-check your services.radicle.settings (producing the config.json above),"
