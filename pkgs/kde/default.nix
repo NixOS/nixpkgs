@@ -87,6 +87,7 @@ let
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
         plasma-pass = self.callPackage ./misc/plasma-pass { };
+        plasma-remotecontrollers = self.callPackage ./misc/plasma-remotecontrollers { };
         plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
