@@ -1,0 +1,51 @@
+From 07defb13fef3690a5096dd838a3dde8c35f36eeb Mon Sep 17 00:00:00 2001
+From: ThinkChaos <ThinkChaos@users.noreply.github.com>
+Date: Tue, 12 Aug 2025 20:04:00 -0400
+Subject: [PATCH] dovecot: auto-detect sockets in `/run/dovecot2`
+
+NixOS uses this path, and it seems generic enough to be worth adding
+here.
+
+The `/var/run` paths should probably also be updated to `/run`, but I'm
+not going to risk breaking anything :)
+---
+ docs/dovecot.md             | 4 ++--
+ internal/dovecot/dovecot.go | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/docs/dovecot.md b/docs/dovecot.md
+index 853e7cc7..660c9de6 100644
+--- a/docs/dovecot.md
++++ b/docs/dovecot.md
+@@ -45,8 +45,8 @@ dovecot_auth: true
+ ```
+ 
+ That should be it, because chasquid will "autodetect" the full path to the
+-dovecot sockets, by looking in the usual places (tested in Debian, Ubuntu, and
+-CentOS).
++dovecot sockets, by looking in the usual places (tested in Debian, Ubuntu,
++CentOS, and NixOS).
+ 
+ If chasquid can't find them, the paths can be set with the
+ `dovecot_userdb_path` and `dovecot_client_path` options.
+diff --git a/internal/dovecot/dovecot.go b/internal/dovecot/dovecot.go
+index 711cd233..e230680e 100644
+--- a/internal/dovecot/dovecot.go
++++ b/internal/dovecot/dovecot.go
+@@ -34,11 +34,15 @@ var (
+ )
+ 
+ var defaultUserdbPaths = []string{
++	"/run/dovecot2/auth-chasquid-userdb",
++	"/run/dovecot2/auth-userdb",
+ 	"/var/run/dovecot/auth-chasquid-userdb",
+ 	"/var/run/dovecot/auth-userdb",
+ }
+ 
+ var defaultClientPaths = []string{
++	"/run/dovecot2/auth-chasquid-client",
++	"/run/dovecot2/auth-client",
+ 	"/var/run/dovecot/auth-chasquid-client",
+ 	"/var/run/dovecot/auth-client",
+ }
+
