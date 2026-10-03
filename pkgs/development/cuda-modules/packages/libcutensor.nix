@@ -1,7 +1,8 @@
 {
   _cuda,
-  backendStdenv,
   buildRedist,
+  callPackage,
+  cudaConfig,
   cuda_cudart,
   lib,
   libcublas,
@@ -24,12 +25,12 @@ buildRedist (finalAttrs: {
   buildInputs = [
     (lib.getLib libcublas)
   ]
-  # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
-  ++ lib.optionals (lib.hasPrefix "1.4" finalAttrs.version) [ (lib.getLib cuda_cudart) ]
-  # libcutensorMp (beta since 2.4.0) links against libcudart and libnccl.
-  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "2.4") (
-    [ (lib.getLib cuda_cudart) ] ++ lib.optionals nccl.meta.available [ (lib.getLib nccl) ]
-  );
+  # libcutensorMp (beta since 2.4.0) also links against libnccl; libcudart is propagated below.
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "2.4" && nccl.meta.available) [
+    (lib.getLib nccl)
+  ];
+
+  propagatedBuildInputs = [ cuda_cudart ];
 
   # NCCL is not available on all platforms (e.g., Jetson Orin); libcutensorMp is unusable without it.
   autoPatchelfIgnoreMissingDeps = lib.optionals (!nccl.meta.available) [ "libnccl.so.2" ];
@@ -38,7 +39,7 @@ buildRedist (finalAttrs: {
   # NOTE: Support for Turing (7.5) is deprecated as of 2.8.0.
   platformAssertions =
     let
-      inherit (backendStdenv) cudaCapabilities;
+      inherit (cudaConfig) cudaCapabilities;
       cutensorAtLeast23 = lib.versionAtLeast finalAttrs.version "2.3";
       allCCNewerThan75 = lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities;
     in
@@ -50,6 +51,22 @@ buildRedist (finalAttrs: {
         assertion = cutensorAtLeast23 -> allCCNewerThan75;
       }
     ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [
+      "cutensor.h"
+      "cutensorMg.h"
+    ];
+    libraries = [
+      "cutensor"
+      "cutensorMg"
+    ];
+    symbols = [
+      "cutensorGetVersion"
+      "cutensorMgCreate"
+    ];
+  };
 
   meta = {
     description = "GPU-accelerated tensor linear algebra library for tensor contraction, reduction, and elementwise operations";

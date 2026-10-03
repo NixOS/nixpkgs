@@ -1,6 +1,6 @@
 {
-  backendStdenv,
   buildRedist,
+  cudaConfig,
   lib,
   libcublas,
   mpi,
@@ -41,8 +41,8 @@ buildRedist {
     {
       message =
         "cuDSS supports CUDA compute capabilities 6.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities;
+        + " (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "6.0") cudaConfig.cudaCapabilities;
     }
   ];
 

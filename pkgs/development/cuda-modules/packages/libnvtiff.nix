@@ -1,6 +1,6 @@
 {
-  backendStdenv,
   buildRedist,
+  cudaConfig,
   lib,
 }:
 buildRedist {
@@ -20,8 +20,8 @@ buildRedist {
     {
       message =
         "nvTIFF supports CUDA compute capabilities 7.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
+        + " (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") cudaConfig.cudaCapabilities;
     }
   ];
 

@@ -8,6 +8,7 @@
   cuda_nvcc,
   cuda_nvrtc,
   cudaAtLeast,
+  cudaConfig,
   cudaMajorVersion,
   flags,
   lib,
@@ -42,7 +43,7 @@ let
         ]
         ++ lib.optionals (
           cudaAtLeast "13.2"
-          || !lib.any (cap: lib.hasSuffix "a" cap || lib.hasSuffix "f" cap) backendStdenv.cudaCapabilities
+          || !lib.any (cap: lib.hasSuffix "a" cap || lib.hasSuffix "f" cap) cudaConfig.cudaCapabilities
         ) [ "trsm_block" ];
         cufftdx = [ "introduction_example" ];
         curanddx = [ "philox_thread_api" ];

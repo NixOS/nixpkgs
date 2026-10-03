@@ -1,7 +1,9 @@
 {
-  backendStdenv,
   buildRedist,
+  callPackage,
+  cudaConfig,
   cuda_cudart,
+  cuda_nvml_dev,
   lib,
   libcublas,
   libcurand,
@@ -13,7 +15,7 @@
 buildRedist (
   finalAttrs:
   let
-    inherit (backendStdenv) cudaCapabilities;
+    inherit (cudaConfig) cudaCapabilities;
     cuquantumAtLeast = lib.versionAtLeast finalAttrs.version;
   in
   {
@@ -29,12 +31,35 @@ buildRedist (
     ];
 
     buildInputs = [
-      cuda_cudart
       libcublas
       libcurand
       libcusolver
       libcutensor
     ];
+
+    propagatedBuildInputs = [ cuda_cudart ];
+
+    passthru.tests.headers = callPackage ./tests/public-headers.nix {
+      package = finalAttrs.finalPackage;
+      headers = [
+        "custatevec.h"
+        "cutensornet.h"
+        "cudensitymat.h"
+      ];
+      libraries = [
+        "custatevec"
+        "cutensornet"
+        "cudensitymat"
+      ];
+      symbols = [
+        "custatevecGetVersion"
+        "cutensornetGetVersion"
+        "cudensitymatGetVersion"
+      ];
+      driverLibraries = [
+        "${lib.getOutput cuda_nvml_dev.outputStubs cuda_nvml_dev}/lib/stubs/libnvidia-ml.so"
+      ];
+    };
 
     # libcutensornet dlopens libcusolverMp and libnccl for its (experimental) distributed tensor decompositions; the
     # libcutensorMp it also dlopens is found through libcutensor's entry in the runpath.
