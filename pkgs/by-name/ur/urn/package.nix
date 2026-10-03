@@ -4,7 +4,7 @@
   fetchFromGitLab,
   buildEnv,
   makeWrapper,
-  lua,
+  lua5_2_compat,
   luajit,
   readline,
   useLuaJit ? false,
@@ -12,6 +12,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   version = "0.7.2";
   # Build a sort of "union package" with all the native dependencies we
   # have: Lua (or LuaJIT), readline, etc. Then, we can depend on this

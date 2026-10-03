@@ -9,9 +9,12 @@
   lazarus,
   libx11,
   libsForQt5,
-  lua,
+  lua5_2_compat,
   writableTmpDirAsHomeHook,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";

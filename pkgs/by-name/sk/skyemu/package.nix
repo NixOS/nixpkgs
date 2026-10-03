@@ -14,10 +14,13 @@
   libx11,
   libxi,
   libxcursor,
-  lua,
+  lua5_2_compat,
   makeDesktopItem,
   copyDesktopItems,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skyemu";

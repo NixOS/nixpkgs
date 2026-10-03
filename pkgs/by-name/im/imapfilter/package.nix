@@ -3,9 +3,12 @@
   stdenv,
   fetchFromGitHub,
   openssl,
-  lua,
+  lua5_2_compat,
   pcre2,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imapfilter";

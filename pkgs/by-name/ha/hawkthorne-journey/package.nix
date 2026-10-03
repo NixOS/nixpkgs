@@ -3,13 +3,16 @@
   stdenv,
   fetchFromGitHub,
   love,
-  lua,
+  lua5_2_compat,
   zip,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   tmx2lua,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hawkthorne-journey";

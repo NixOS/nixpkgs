@@ -6,9 +6,12 @@
   pkg-config,
   glib,
   gtk3,
-  lua,
+  lua5_2_compat,
   libwnck,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "devilspie2";

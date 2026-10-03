@@ -12,7 +12,7 @@
   libjpeg,
   libpng,
   libspiro,
-  lua5,
+  lua5_2_compat,
   qt6Packages,
   texliveSmall,
   qhull,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libspiro
-    lua5
+    lua5_2_compat
   ]
   ++ (with qt6Packages; [
     qtbase

@@ -10,11 +10,14 @@
   glib,
   gtk3,
   ibus,
-  lua,
+  lua5_2_compat,
   pyzy,
   sqlite,
   nix-update-script,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "ibus-pinyin";

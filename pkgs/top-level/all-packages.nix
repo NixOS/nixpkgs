@@ -4383,9 +4383,6 @@ with pkgs;
     luajit_openresty
     ;
 
-  lua5 = lua5_2_compat;
-  lua = lua5;
-
   lua51Packages = recurseIntoAttrs lua5_1.pkgs;
   lua52Packages = recurseIntoAttrs lua5_2.pkgs;
   lua53Packages = recurseIntoAttrs lua5_3.pkgs;
@@ -4393,12 +4390,10 @@ with pkgs;
   lua55Packages = recurseIntoAttrs lua5_5.pkgs;
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
-  luaPackages = lua52Packages;
-
   luajit = if stdenv.hostPlatform.isRiscV64 then luajit_openresty else luajit_2_1;
 
-  luarocks = luaPackages.luarocks;
-  luarocks-nix = luaPackages.luarocks-nix;
+  luarocks = lua52Packages.luarocks;
+  luarocks-nix = lua52Packages.luarocks-nix;
 
   ### END OF LUA
 
@@ -5207,7 +5202,7 @@ with pkgs;
 
   radare2 = callPackage ../development/tools/analysis/radare2 (
     {
-      lua = lua5;
+      lua = lua5_2_compat;
     }
     // (config.radare or { })
   );

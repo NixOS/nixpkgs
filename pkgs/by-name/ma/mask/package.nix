@@ -7,13 +7,16 @@
   nix-update-script,
 
   # tests
-  lua,
+  lua5_2_compat,
   nodejs,
   php,
   python3,
   ruby,
   swift,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mask";

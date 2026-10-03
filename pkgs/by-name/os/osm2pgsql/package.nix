@@ -13,7 +13,7 @@
   libpq,
   python3,
   withLuaJIT ? false,
-  lua,
+  lua5_2_compat,
   luajit,
   libosmium,
   nlohmann_json,
@@ -22,6 +22,9 @@
   protozero,
   testers,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";

@@ -10,13 +10,16 @@
   libao,
   libpulseaudio,
   libzip,
-  lua,
+  lua5_2_compat,
   miniupnpc,
   SDL2,
   systemdLibs,
   vulkan-loader,
   moltenvk,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flycast";

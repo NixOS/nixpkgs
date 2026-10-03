@@ -13,12 +13,15 @@
   curl,
   ftgl,
   glew,
-  lua,
+  lua5_2_compat,
   mpg123,
   wrapGAppsHook3,
   unstableGitUpdater,
   libwebp,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation {
   pname = "slade";

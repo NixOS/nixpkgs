@@ -8,7 +8,7 @@
   libcap,
   libedit,
   libsodium,
-  lua,
+  lua5_2_compat,
   net-snmp,
   nghttp2,
   nixosTests,
@@ -23,6 +23,9 @@
   xdp-tools,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";

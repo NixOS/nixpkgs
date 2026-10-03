@@ -36,7 +36,7 @@
   libva,
   libvdpau,
   libxkbcommon,
-  lua,
+  lua5_2_compat,
   makeBinaryWrapper,
   libgbm,
   meson,
@@ -90,6 +90,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in
 stdenv.mkDerivation (finalAttrs: {

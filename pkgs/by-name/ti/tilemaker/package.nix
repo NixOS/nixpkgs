@@ -5,7 +5,7 @@
   buildPackages,
   cmake,
   boost,
-  lua,
+  lua5_2_compat,
   protobuf_21,
   rapidjson,
   shapelib,
@@ -13,6 +13,9 @@
   zlib,
   versionCheckHook,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilemaker";
