@@ -127,6 +127,6 @@ beamPackages.rebar3Relx {
     # The following env vars are required for the program to start with a non-arcane error:
     # - RELX_OUT_FILE_PATH, some writeable directory
     # - FLUXER_ERLANG_NODE_NAME, name@fqdn or name@ip
-    mainProgram = "fluxer-gateway";
+    mainProgram = "fluxer_gateway";
   };
 }
