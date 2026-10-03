@@ -99,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # tests require network facilities intentionally unavailable in the Nix sandbox
     ./skip-sandbox-incompatible-tests.patch
+
+    # A busy wait can finish before the timeout callback runs on loaded builders.
+    ./fix-flaky-job-timeout-test.patch
   ]
   ++ lib.optionals (withAdditionalFeatures || isDesktopVariant) [
     ./skip-proprietary-network-test.patch
