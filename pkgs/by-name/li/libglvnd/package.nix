@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
+    hash = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
   patches = [

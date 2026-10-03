@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "libraries";
     repo = "kquickimageeditor";
     rev = "v${version}";
-    sha256 = "sha256-MluY8nkMtg1uLAStDZFDxyJoeDrcp3smZ4U5IG5sXMk=";
+    hash = "sha256-MluY8nkMtg1uLAStDZFDxyJoeDrcp3smZ4U5IG5sXMk=";
   };
 
   nativeBuildInputs = [

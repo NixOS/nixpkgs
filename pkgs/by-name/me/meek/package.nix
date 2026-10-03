@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "anti-censorship/pluggable-transports";
     repo = "meek";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zmIRXrHWrEzR+RcX/gkuqw2oBmyGoXDQ45ZjA4vwGSs=";
+    hash = "sha256-zmIRXrHWrEzR+RcX/gkuqw2oBmyGoXDQ45ZjA4vwGSs=";
   };
 
   vendorHash = "sha256-eAO6vEPKqWWZkmJXmOCeTa7TE8opynYvvxzPDSe9p+I=";

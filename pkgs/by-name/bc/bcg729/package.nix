@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     group = "BC";
     repo = "bcg729";
     tag = finalAttrs.version;
-    sha256 = "1hal6b3w6f8y5r1wa0xzj8sj2jjndypaxyw62q50p63garp2h739";
+    hash = "sha256-aRwoblZvmAsKFob7rq5vVkohNZK/A8VDLh45w8cyVME=";
   };
 
   nativeBuildInputs = [ cmake ];

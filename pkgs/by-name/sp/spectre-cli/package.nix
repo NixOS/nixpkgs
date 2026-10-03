@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "spectre.app";
     repo = "cli";
     rev = "a5e7aab28f44b90e5bd1204126339a81f64942d2";
-    sha256 = "1hp4l1rhg7bzgx0hcai08rvcy6l9645sfngy2cr96l1bpypcld5i";
+    hash = "sha256-sTTKrr8rUJMyE/5ZpwsxiRrPdkYgKgZBf3+dB3Og5MI=";
     fetchSubmodules = true;
   };
 
