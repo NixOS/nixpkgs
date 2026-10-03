@@ -1,13 +1,20 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    wayback_machine_downloader (2.3.1)
+    concurrent-ruby (1.3.6)
+    wayback_machine_downloader_straw (2.4.6)
+      concurrent-ruby (~> 1.3, >= 1.3.4)
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
-  wayback_machine_downloader
+  wayback_machine_downloader_straw
+
+CHECKSUMS
+  concurrent-ruby (1.3.6) sha256=6b56837e1e7e5292f9864f34b69c5a2cbc75c0cf5338f1ce9903d10fa762d5ab
+  wayback_machine_downloader_straw (2.4.6) sha256=99fe45c4f702dc658a2f2f310171627730636c179160630cc5620a39dd8d004c
 
 BUNDLED WITH
-   2.6.9
+  4.0.3
