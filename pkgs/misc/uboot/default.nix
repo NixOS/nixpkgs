@@ -3,15 +3,11 @@
   lib,
   bc,
   bison,
-  dtc,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   flex,
   gnutls,
   installShellFiles,
   libuuid,
-  meson-tools,
   ncurses,
   openssl,
   rkbin,
@@ -34,10 +30,12 @@
 }@pkgs:
 
 let
-  defaultVersion = "2026.07";
-  defaultSrc = fetchurl {
-    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-eOi/w4L+OI+bVaodr4xWNSKgN3ebXUw0nRQV44HxJD4=";
+  defaultVersion = "2026.10-rc4";
+  defaultSrc = fetchFromGitHub {
+    owner = "u-boot";
+    repo = "u-boot";
+    tag = "v${defaultVersion}";
+    hash = "sha256-RGLGsZv12vmwt+1eXmm7p3lXThxlR6uztR/rJYs7DF8=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
