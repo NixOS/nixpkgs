@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "argp-standalone";
     repo = "argp-standalone";
     tag = finalAttrs.version;
-    sha256 = "jWnoWVnUVDQlsC9ru7oB9PdtZuyCCNqGnMqF/f2m0ZY=";
+    hash = "sha256-jWnoWVnUVDQlsC9ru7oB9PdtZuyCCNqGnMqF/f2m0ZY=";
   };
 
   nativeBuildInputs = [

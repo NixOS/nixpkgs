@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "kubie-org";
     repo = "kubie";
-    sha256 = "sha256-WVmr/P+7gr1efTruoRfRRFIAxH2TnG8xun7PaApXYOo=";
+    hash = "sha256-WVmr/P+7gr1efTruoRfRRFIAxH2TnG8xun7PaApXYOo=";
   };
 
   buildNoDefaultFeatures = true;

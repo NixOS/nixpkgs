@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "psi4";
     repo = "dkh";
     rev = "v${finalAttrs.version}";
-    sha256 = "1wb4qmb9f8rnrwnnw1gdhzx1fmhy628bxfrg56khxy3j5ljxkhck";
+    hash = "sha256-k8HZJS1y+A6nKS+7vpAwHlYX+oftBW4tzzYjl1bFZPE=";
   };
 
   postPatch = ''

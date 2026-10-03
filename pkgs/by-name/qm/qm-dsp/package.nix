@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "c4dm";
     repo = "qm-dsp";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
+    hash = "sha256-e1PtCIzp7zIz+KKRxEGlAXTNqZ35vPgQ4opJKHIPa+4=";
   };
 
   patches = [

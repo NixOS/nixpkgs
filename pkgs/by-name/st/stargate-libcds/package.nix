@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "d3v-t00Lz";
     repo = "libcds";
     rev = finalAttrs.version;
-    sha256 = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
+    hash = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
   };
 
   # Fix 'error: unrecognized command line option' in platforms other than x86

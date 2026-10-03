@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "blais";
     repo = "xannotate";
     rev = "66821cce888e0067f77470ddac19da1670103d1d";
-    sha256 = "sha256-BDRg29ojBOFfwD4hx3XbcabwrJn2nfgI9Ld27FaQoRw=";
+    hash = "sha256-BDRg29ojBOFfwD4hx3XbcabwrJn2nfgI9Ld27FaQoRw=";
   };
 
   buildInputs = [ libx11 ];

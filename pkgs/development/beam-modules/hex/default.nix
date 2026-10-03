@@ -24,7 +24,7 @@ let
         owner = "hexpm";
         repo = "hex";
         rev = "v${version}";
-        sha256 = "sha256-1xiv8FWX8fk9WBoJXCUfgFN9lo7ClMVUBYb1mmr6u9U=";
+        hash = "sha256-1xiv8FWX8fk9WBoJXCUfgFN9lo7ClMVUBYb1mmr6u9U=";
       };
 
       setupHook = writeText "setupHook.sh" ''

@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Tautulli";
     repo = "Tautulli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-mfQwuLRbMBxp0RWzNCNL38BWtVGos0wYK5UKOEwe88c=";
+    hash = "sha256-mfQwuLRbMBxp0RWzNCNL38BWtVGos0wYK5UKOEwe88c=";
   };
 
   postPatch = ''

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pete-gordon";
     repo = "hivelytracker";
     rev = "V${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "148p320sd8phcpmj4m85ns5zly2dawbp8kgx9ryjfdk24pa88xg6";
+    hash = "sha256-5nWE1CViNid9Tv1NdBdXTXj6i7YFVSLrZfCipoEYF5E=";
   };
 
   nativeBuildInputs = [

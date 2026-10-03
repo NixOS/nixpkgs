@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jangler";
     repo = "readlike";
     rev = version;
-    sha256 = "1mw8j8ads8hqdbz42siwpffi4wi5s33z9g14a5c2i7vxp8m68qc1";
+    hash = "sha256-gWFkKrp9nyhYUSS89MfQJXISnbs8akH+ahgi3RSSiNc=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];

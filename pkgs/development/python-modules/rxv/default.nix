@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "wuub";
     repo = "rxv";
     rev = "v${version}";
-    sha256 = "0jldnlzbfg5jm1nbgv91mlvcqkswd9f2n3qj9aqlbmj1cxq19yz8";
+    hash = "sha256-6PsUcGdB1kWxShIPK1xqXE/MNq0h7bdsqLI8tz61jUo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "corna";
     repo = "me_cleaner";
     rev = "v${version}";
-    sha256 = "1bdj2clm13ir441vn7sv860xsc5gh71ja5lc2wn0gggnff0adxj4";
+    hash = "sha256-RPamgHP2vQcsF4wWJcOBrzDdgUFbH7sDITmOUCkTsq0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

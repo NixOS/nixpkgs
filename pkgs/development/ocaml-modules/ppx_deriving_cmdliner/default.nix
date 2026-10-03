@@ -21,7 +21,7 @@ buildDunePackage (finalAttrs: {
     owner = "hammerlab";
     repo = "ppx_deriving_cmdliner";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
+    hash = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8=";
   };
 
   patches = [

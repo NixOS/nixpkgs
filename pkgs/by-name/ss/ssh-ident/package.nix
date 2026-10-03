@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "ccontavalli";
     repo = "ssh-ident";
     rev = "ebf8282728211dc4448d50f7e16e546ed03c22d2";
-    sha256 = "1jf19lz1gwn7cyp57j8d4zs5bq13iw3kw31m8nvr8h6sib2pf815";
+    hash = "sha256-JSB3xYraQJS3RTUMPgePI+BV9CcNyVOuZ8fyFz5Nwck=";
   };
 
   postPatch = ''

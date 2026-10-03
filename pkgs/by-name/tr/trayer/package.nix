@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "sargon";
     repo = "trayer-srg";
     rev = "${pname}-${version}";
-    sha256 = "1mvhwaqa9bng9wh3jg3b7y8gl7nprbydmhg963xg0r076jyzv0cg";
+    hash = "sha256-j4H9vTQHZPD6MOnB2vzK1x76kD9rPDkgT8+upLDicNc=";
   };
 
   postPatch = ''

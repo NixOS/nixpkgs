@@ -141,7 +141,7 @@ rec {
       owner = "sharpbracket";
       repo = "redshift";
       rev = "v${version}";
-      sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
+      hash = "sha256-5q8jRdpC5zs5AT6KDHkV+Ud0RlUXaTvnInf5idUji4k=";
     };
 
     meta = {

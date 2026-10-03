@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner = "vzaliva";
     repo = "simpleproxy";
-    sha256 = "sha256-O4PncEm8LZaJDN28kwsSvCEewr+k0EAyHMu3U+JYyQQ=";
+    hash = "sha256-O4PncEm8LZaJDN28kwsSvCEewr+k0EAyHMu3U+JYyQQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

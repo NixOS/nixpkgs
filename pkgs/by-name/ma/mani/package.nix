@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "alajmo";
     repo = "mani";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-895ofhRhsdDYcDHWZ4WZjgfG3pPQD6dY6KspO2rVwLk=";
+    hash = "sha256-895ofhRhsdDYcDHWZ4WZjgfG3pPQD6dY6KspO2rVwLk=";
   };
 
   vendorHash = "sha256-EtXy+OtKRlHqNb9VqP9bI+Giv5+9yI1fj6olCcQ6xDw=";

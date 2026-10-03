@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRTX";
     repo = "dmrconfig";
     rev = finalAttrs.version;
-    sha256 = "1qwix75z749628w583fwp7m7kxbj0k3g159sxb7vgqxbadqqz1ab";
+    hash = "sha256-S4WPcVOr47fP6jqV8MYEcvV56rncDVQ4EiaR88vpkeM=";
   };
 
   patches = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner = "neurobin";
     repo = "shc";
-    sha256 = "0bfn404plsssa14q89k9l3s5lxq3df0sny5lis4j2w75qrkqx694";
+    hash = "sha256-JJmOZ8blcCGJjrR4q4FrA3da9KBpJoRJUFpregkg1i0=";
   };
 
   meta = {

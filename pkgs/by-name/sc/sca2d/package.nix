@@ -14,7 +14,7 @@ let
           owner = "lark-parser";
           repo = "lark";
           tag = version;
-          sha256 = "sha256-ctdPPKPSD4weidyhyj7RCV89baIhmuxucF3/Ojx1Efo=";
+          hash = "sha256-ctdPPKPSD4weidyhyj7RCV89baIhmuxucF3/Ojx1Efo=";
         };
 
         patches = [ ];

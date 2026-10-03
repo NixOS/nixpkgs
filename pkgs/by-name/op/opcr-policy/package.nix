@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "opcr-io";
     repo = "policy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I086Dj8N+L95beQ5oIXcTwd8ZnD8pvA+dL9576a+wAQ=";
+    hash = "sha256-I086Dj8N+L95beQ5oIXcTwd8ZnD8pvA+dL9576a+wAQ=";
   };
   vendorHash = "sha256-S0lTfc09KW8psuZb0flxBMwHsvzsR1XSyObA8jACD+w=";
 

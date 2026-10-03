@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "Attempto";
     repo = "APE";
     rev = "113b81621262d7a395779465cb09397183e6f74c";
-    sha256 = "0xyvna2fbr18hi5yvm0zwh77q02dfna1g4g53z9mn2rmlfn2mhjh";
+    hash = "sha256-UMIqrKM1C1vTH+WRF5R1TQB8DuQf1O1LhCjk5YSy23c=";
   };
 
   patchPhase = ''

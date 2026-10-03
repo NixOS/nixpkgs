@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pali";
     repo = "igmpproxy";
     rev = finalAttrs.version;
-    sha256 = "sha256-kv8XtZ/z8zPHYSZ4k4arn2Y+L2xegr2DwhvlguJV820=";
+    hash = "sha256-kv8XtZ/z8zPHYSZ4k4arn2Y+L2xegr2DwhvlguJV820=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

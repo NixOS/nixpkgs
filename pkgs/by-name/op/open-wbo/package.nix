@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "sat-group";
     repo = "open-wbo";
     rev = "f193a3bd802551b13d6424bc1baba6ad35ec6ba6";
-    sha256 = "1742i15qfsbf49c4r837wz35c1p7yafvz7ar6vmgcj6cmfwr8jb4";
+    hash = "sha256-ZEmUuavMSPbqNlmdv53y5wZWxudnoExYIm5ph0uIgpw=";
   };
 
   buildInputs = [

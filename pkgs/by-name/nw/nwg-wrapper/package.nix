@@ -18,7 +18,7 @@ python3Packages.buildPythonPackage rec {
     owner = "nwg-piotr";
     repo = "nwg-wrapper";
     tag = "v${version}";
-    sha256 = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
+    hash = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
   };
 
   nativeBuildInputs = [

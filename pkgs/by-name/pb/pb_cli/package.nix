@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "ptpb";
     repo = "pb_cli";
     rev = "6b9ce1ee45fe651d06d7c479a20026a173dd328b";
-    sha256 = "0w6a789zffvz4ixsb92q45n5s4xyx7s2l2f07972i3dajaaai8z7";
+    hash = "sha256-56OolJKqjShOOsAJKvTpvhNdbCFYpKV7JH879xM6ynA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

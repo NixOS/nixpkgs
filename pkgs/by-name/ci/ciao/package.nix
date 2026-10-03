@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jsHz50+R/bs19ees3kKYalYk72ET9eSAAUY7QogI0go=";
+    hash = "sha256-jsHz50+R/bs19ees3kKYalYk72ET9eSAAUY7QogI0go=";
   };
 
   postPatch = ''

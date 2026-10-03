@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "magefile";
     repo = "mage";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-QYvgKq7I+YGoDbECFGtQHPPP/z8oo5n3BT4LoShrEPc=";
+    hash = "sha256-QYvgKq7I+YGoDbECFGtQHPPP/z8oo5n3BT4LoShrEPc=";
   };
 
   vendorHash = null;

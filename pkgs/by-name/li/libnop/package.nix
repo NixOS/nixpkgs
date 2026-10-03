@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "luxonis";
     repo = "libnop";
     rev = "ab842f51dc2eb13916dc98417c2186b78320ed10";
-    sha256 = "sha256-d2z/lDI9pe5TR82MxGkR9bBMNXPvzqb9Gsd5jOv6x1A=";
+    hash = "sha256-d2z/lDI9pe5TR82MxGkR9bBMNXPvzqb9Gsd5jOv6x1A=";
   };
 
   patches = [

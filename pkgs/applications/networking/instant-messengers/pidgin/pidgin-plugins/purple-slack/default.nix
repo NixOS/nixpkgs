@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "dylex";
     repo = "slack-libpurple";
     rev = "2e9fa028224b02e29473b1b998fc1e5f487e79ec";
-    sha256 = "1sksqshiwldd32k8jmiflp2pcax31ym6rypr4qa4v5vdn907g80m";
+    hash = "sha256-FaB3QLJtl00UJvn6bKoPoyt2xaUuVommGK1RHqHGeuo=";
   };
 
   nativeBuildInputs = [ pkg-config ];

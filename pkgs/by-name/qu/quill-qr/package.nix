@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "colonelpanic8";
     repo = "quill-qr";
     rev = "v${version}";
-    sha256 = "1kdsq6csmxfvs2wy31bc9r92l5pkmzlzkyqrangvrf4pbk3sk0r6";
+    hash = "sha256-JoOpx1yXuLyfVRn7+emv8xYqUk5sheG50Nv1qpnBus0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

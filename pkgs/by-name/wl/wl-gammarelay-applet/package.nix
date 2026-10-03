@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "lgbishop";
     repo = "wl-gammarelay-applet";
     rev = "8a0d9e6364d7445fc69c59b2f168cfec91c2fe87";
-    sha256 = "sha256-t6bycmaquZ0IMs/WnAzkz5FnIWKIq0BTbeeoUFLeuYg=";
+    hash = "sha256-t6bycmaquZ0IMs/WnAzkz5FnIWKIq0BTbeeoUFLeuYg=";
   };
 
   cargoHash = "sha256-XrU519ibku7OMKxt51gzVOZVOiqgdrBrxAJuBIcAtgc=";

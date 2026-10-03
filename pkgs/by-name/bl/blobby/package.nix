@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "danielknobe";
     repo = "blobbyvolley2";
     rev = "9bc797f0fade4766f2d98f8cf4db0a8a7b82a950";
-    sha256 = "sha256-0e1YOwHX2x/snkyH1qeQowJr1YGdExstUoCBOhG1kBU=";
+    hash = "sha256-0e1YOwHX2x/snkyH1qeQowJr1YGdExstUoCBOhG1kBU=";
   };
 
   nativeBuildInputs = [

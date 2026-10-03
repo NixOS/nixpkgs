@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "keyleds";
     repo = "keyleds";
     rev = "171361654a64b570d747c2d196acb2da4b8dc293";
-    sha256 = "sha256-mojgHMT0gni0Po0hiZqQ8eMzqfwUipXue1uqpionihw=";
+    hash = "sha256-mojgHMT0gni0Po0hiZqQ8eMzqfwUipXue1uqpionihw=";
   };
 
   # This commit corresponds to the following open PR:

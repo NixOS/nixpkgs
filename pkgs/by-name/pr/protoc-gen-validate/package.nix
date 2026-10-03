@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "bufbuild";
     repo = "protoc-gen-validate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YujY2XNNtrVw7+kUxSwF9gbD2AzPV6zKV0zSun89VEY=";
+    hash = "sha256-YujY2XNNtrVw7+kUxSwF9gbD2AzPV6zKV0zSun89VEY=";
   };
 
   vendorHash = "sha256-r4oT4Jd21hQccvGEqOXpEKqUy6lvMKN+vF8e2KxY6oQ=";

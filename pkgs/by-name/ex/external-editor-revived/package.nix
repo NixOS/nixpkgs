@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Frederick888";
     repo = "external-editor-revived";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-K5agRpFJ8iqvPnx3IIMTvrkObT/GB962EtdvWf7Eq4w=";
+    hash = "sha256-K5agRpFJ8iqvPnx3IIMTvrkObT/GB962EtdvWf7Eq4w=";
   };
 
   cargoHash = "sha256-QYSsdEBNwjpR7lppyOcsc0F8ombBY+dlFRY1GO/D8so=";

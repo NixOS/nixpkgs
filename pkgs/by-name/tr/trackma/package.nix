@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "z411";
     repo = "trackma";
     tag = "v${finalAttrs.version}";
-    sha256 = "HiHeq8mLNT54BWXXwOfeY+c+wGHWnlN5rA2WgXdrRY8=";
+    hash = "sha256-HiHeq8mLNT54BWXXwOfeY+c+wGHWnlN5rA2WgXdrRY8=";
     fetchSubmodules = true; # for anime-relations submodule
   };
 

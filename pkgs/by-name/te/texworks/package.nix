@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-JygsOTryLXpFodwPGbPH3Baawl8k1Qkx2StZ1naInCc=";
+    hash = "sha256-JygsOTryLXpFodwPGbPH3Baawl8k1Qkx2StZ1naInCc=";
   };
 
   nativeBuildInputs = [

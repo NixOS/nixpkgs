@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     owner = "aclements";
     repo = "latexrun";
     rev = "38ff6ec2815654513c91f64bdf2a5760c85da26e";
-    sha256 = "0xdl94kn0dbp6r7jk82cwxybglm9wp5qwrjqjxmvadrqix11a48w";
+    hash = "sha256-HBEVQo84N7Vrl1hmjsvlqdK3fOdMoClPNnc1YCdJtHU=";
   };
 
   buildInputs = [ python3 ];

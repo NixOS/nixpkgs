@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "blechschmidt";
     repo = "freebind";
     rev = "9a13d6f9c12aeea4f6d3513ba2461d34f841f278";
-    sha256 = "1iv2xiz9w8hbz684caw50fn4a9vc8ninfgaqafkh9sa8mzpfzcqr";
+    hash = "sha256-GbPv7q9I6QSnU1g9Z6NFbCdFrAOFK0aQ+Qsinn7sYsc=";
   };
 
   buildInputs = [

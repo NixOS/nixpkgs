@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Djaler";
     repo = "Formatter";
     rev = finalAttrs.version;
-    sha256 = "sha256-8lZ0jUwHuc3Kntz73Btj6dJvkW2bvShu2KWTSQszbJo=";
+    hash = "sha256-8lZ0jUwHuc3Kntz73Btj6dJvkW2bvShu2KWTSQszbJo=";
   };
 
   patches = [

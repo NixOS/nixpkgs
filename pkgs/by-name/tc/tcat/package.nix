@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "rsc";
     repo = "tcat";
     rev = "v${finalAttrs.version}";
-    sha256 = "1szzfz5xsx9l8gjikfncgp86hydzpvsi0y5zvikd621xkp7g7l21";
+    hash = "sha256-QdDzzp09CNNm3L94EPW+v3lo0H3MuhnlQzR13ct3/+s=";
   };
   vendorHash = null;
   subPackages = ".";

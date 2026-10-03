@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "docopt";
     repo = "docopt.cpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
+    hash = "sha256-h64ReJ4A0E3s5FsN+Qi6uOxpWl0ID8ewXs7q8s7e4zM=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "emersion";
     repo = "hydroxide";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3cSJkNTD5+L3VXO5I/1xo1tp9+H4/Z/tc2f8B63lGrc=";
+    hash = "sha256-3cSJkNTD5+L3VXO5I/1xo1tp9+H4/Z/tc2f8B63lGrc=";
   };
 
   vendorHash = "sha256-BIHvURCgqEzhl4NsVB7vBwLqMPxkM3CQgHmIcSTdOE4=";

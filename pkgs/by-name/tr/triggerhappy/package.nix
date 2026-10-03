@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wertarbyte";
     repo = "triggerhappy";
     rev = "release/${finalAttrs.version}";
-    sha256 = "0gb1qhrxwq7i5abd408d01a2dpf28nr1fph1fg7w7n0i5i1nnk90";
+    hash = "sha256-IE1rQywR2MPPcwFeF7JFwt0mVAANAdKWKvFg3jPEYT0=";
   };
 
   nativeBuildInputs = [

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     repo = "weechat-otr";
     owner = "mmb";
     rev = "v${version}";
-    sha256 = "1lngv98y6883vk8z2628cl4d5y8jxy39w8245gjdvshl8g18k5s2";
+    hash = "sha256-QpeJwkMU6t3kK0QgnobvEvnSCGVIGPHR3AMh41Haz9I=";
   };
 
   patches = [

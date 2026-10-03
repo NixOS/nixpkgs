@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kanjitalk755";
     repo = "macemu";
     rev = "51b5255eead47203ae78636796a6e6d5713e6705";
-    sha256 = "sha256-/8k5NNnfl3PZWFXECtiNdLi2CwACp2b5uiIpSOmWcDI=";
+    hash = "sha256-/8k5NNnfl3PZWFXECtiNdLi2CwACp2b5uiIpSOmWcDI=";
   };
   sourceRoot = "${finalAttrs.src.name}/BasiliskII/src/Unix";
   patches = [ ./remove-redhat-6-workaround-for-scsi-sg.h.patch ];

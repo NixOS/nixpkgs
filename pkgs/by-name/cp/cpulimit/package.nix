@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "opsengine";
     repo = "cpulimit";
     rev = "v${finalAttrs.version}";
-    sha256 = "1dz045yhcsw1rdamzpz4bk8mw888in7fyqk1q1b3m1yk4pd1ahkh";
+    hash = "sha256-cEIV2iXThzpWwGFi746NCCFe0Vzk319Vy4FrBn0h4Lc=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";

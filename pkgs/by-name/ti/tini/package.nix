@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "krallin";
     repo = "tini";
     rev = "v${finalAttrs.version}";
-    sha256 = "1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
+    hash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
   # Note: These patches can be removed with the next release

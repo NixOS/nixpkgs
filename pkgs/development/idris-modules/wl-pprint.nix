@@ -11,7 +11,7 @@ build-idris-package {
     owner = "shayan-najd";
     repo = "wl-pprint";
     rev = "97590d1679b3db07bb430783988b4cba539e9947";
-    sha256 = "0ifp76cqg340jkkzanx69vg76qivv53vh1lzv9zkp5f49prkwl5d";
+    hash = "sha256-rVA+803ElTt/2p8GuEfZO2Jz3k6mW/XnlICMh5k510U=";
   };
 
   meta = {

@@ -345,7 +345,7 @@ in
       owner = "justincormack";
       repo = "ljsyscall";
       rev = "e587f8c55aad3955dddab3a4fa6c1968037b5c6e";
-      sha256 = "06v52agqyziwnbp2my3r7liv245ddmb217zmyqakh0ldjdsr8lz4";
+      hash = "sha256-5FOUdZONAjgV9vWfIFZtrRCxIz15+Crusjx+j58SZRs=";
     };
     knownRockspec = "rockspec/ljsyscall-scm-1.rockspec";
     # actually library works fine with lua 5.2
@@ -651,7 +651,7 @@ in
       owner = "facebook";
       repo = "luaffifb";
       rev = "532c757e51c86f546a85730b71c9fef15ffa633d";
-      sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
+      hash = "sha256-L6Ic6mkuce2BtbNXcX5SxkmTBIBXH81ySth9U6A2nds=";
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
     meta = (old.meta or { }) // {

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cr-marcstevens";
     repo = "sha1collisiondetection";
     rev = "stable-v${finalAttrs.version}";
-    sha256 = "0xn31hkkqs0kj9203rzx6w4nr0lq8fnrlm5i76g0px3q4v2dzw1s";
+    hash = "sha256-OvDfxCZ49AueObFUmq1DmIJsCTf95wFEkhNoPCcMw3Y=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

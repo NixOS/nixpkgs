@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rbenv";
     repo = "rbenv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vkwYl+cV5laDfevAHfju5G+STA3Y+wcMBtW1NWzJ4po=";
+    hash = "sha256-vkwYl+cV5laDfevAHfju5G+STA3Y+wcMBtW1NWzJ4po=";
   };
 
   postPatch = ''

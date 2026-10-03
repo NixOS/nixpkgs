@@ -42,7 +42,7 @@ let
       owner = "itszor";
       repo = "binutils-vc4";
       rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
-      sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+      hash = "sha256-wzBTzLDmzOq/UC1qp+gH/mLryLFVcZ5LqLSUOJ35uc0=";
     };
   };
 

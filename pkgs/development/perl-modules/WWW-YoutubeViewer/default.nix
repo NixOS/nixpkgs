@@ -18,7 +18,7 @@ buildPerlPackage rec {
     owner = "trizen";
     repo = "youtube-viewer";
     rev = version;
-    sha256 = "9Z4fv2B0AnwtYsp7h9phnRMmHtBOMObIJvK8DmKQRxs=";
+    hash = "sha256-9Z4fv2B0AnwtYsp7h9phnRMmHtBOMObIJvK8DmKQRxs=";
   };
 
   propagatedBuildInputs = [

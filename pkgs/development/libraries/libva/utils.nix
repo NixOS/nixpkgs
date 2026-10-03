@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "libva-utils";
     rev = version;
-    sha256 = "sha256-ezYoJ9hyG0pAficudoS4oiXbdrw4oCUU8C6qmJrNQRc=";
+    hash = "sha256-ezYoJ9hyG0pAficudoS4oiXbdrw4oCUU8C6qmJrNQRc=";
   };
 
   nativeBuildInputs = [

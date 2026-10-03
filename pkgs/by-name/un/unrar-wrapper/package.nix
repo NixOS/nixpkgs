@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "openSUSE";
     repo = "unrar_wrapper";
     tag = "unrar_wrapper-${finalAttrs.version}";
-    sha256 = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
+    hash = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
   };
 
   build-system = [

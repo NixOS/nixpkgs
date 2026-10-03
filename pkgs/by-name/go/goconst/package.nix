@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "jgautheron";
     repo = "goconst";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rtf5xC83nOO9oRtBFxDqWD/qKtYfTYHDS4YGW7omVYs=";
+    hash = "sha256-rtf5xC83nOO9oRtBFxDqWD/qKtYfTYHDS4YGW7omVYs=";
   };
 
   vendorHash = null;

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "prikhi";
     repo = "lightdm-mini-greeter";
     rev = finalAttrs.version;
-    sha256 = "sha256-Pm7ExfusFIPktX2C4UE07qgOVhcWhVxnaD3QARpmu7Y=";
+    hash = "sha256-Pm7ExfusFIPktX2C4UE07qgOVhcWhVxnaD3QARpmu7Y=";
   };
 
   nativeBuildInputs = [

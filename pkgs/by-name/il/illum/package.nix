@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "codyps";
     repo = "illum";
     tag = "v${finalAttrs.version}";
-    sha256 = "S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
+    hash = "sha256-S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
     fetchSubmodules = true;
   };
 

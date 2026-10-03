@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Microsoft";
     repo = "ProcDump-for-Linux";
     rev = finalAttrs.version;
-    sha256 = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
+    hash = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
   };
 
   patches = [

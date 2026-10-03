@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "raboof";
     repo = "nethogs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ojbsCoJ8fOaHgm1tWyM59siTDYmCllXOUNqNQJwRhws=";
+    hash = "sha256-ojbsCoJ8fOaHgm1tWyM59siTDYmCllXOUNqNQJwRhws=";
   };
 
   buildInputs = [

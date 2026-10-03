@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tpm2-software";
     repo = "tpm2-abrmd";
     rev = finalAttrs.version;
-    sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
+    hash = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
   };
 
   nativeBuildInputs = [

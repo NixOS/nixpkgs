@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KikyTokamuro";
     repo = "fetch.scm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WdYi8EVxQ6xPtld8JyZlUmgpxroevBehtkRANovMh2E=";
+    hash = "sha256-WdYi8EVxQ6xPtld8JyZlUmgpxroevBehtkRANovMh2E=";
   };
 
   dontBuild = true;

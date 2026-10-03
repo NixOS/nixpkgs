@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "freebayes";
     repo = "freebayes";
     tag = "v${finalAttrs.version}";
-    sha256 = "035nriknjqq8gvil81vvsmvqwi35v80q8h1cw24vd1gdyn1x7bys";
+    hash = "sha256-2q/Tg/XthbaJ4CxAhAHaZUSOd9V7B0TjfghjaWfMtgw=";
     fetchSubmodules = true;
   };
 

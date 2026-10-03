@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ldn-softdev";
     repo = "jtc";
     rev = finalAttrs.version;
-    sha256 = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
+    hash = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
   };
 
   patches = [

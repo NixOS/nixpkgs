@@ -13,7 +13,7 @@ mkDerivation rec {
     owner = "flupe";
     repo = "generics";
     rev = "v${version}";
-    sha256 = "sha256-B1eT6F0Dp2zto50ulf+K/KYMlMp8Pgc/tO9qkcqn+O8=";
+    hash = "sha256-B1eT6F0Dp2zto50ulf+K/KYMlMp8Pgc/tO9qkcqn+O8=";
   };
 
   buildInputs = [

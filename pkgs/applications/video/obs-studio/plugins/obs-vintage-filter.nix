@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "cg2121";
     repo = "obs-vintage-filter";
     rev = version;
-    sha256 = "sha256-K7AxvwVLe4G+75aY430lygSRB7rMtsGi17pGzdygEac=";
+    hash = "sha256-K7AxvwVLe4G+75aY430lygSRB7rMtsGi17pGzdygEac=";
   };
 
   nativeBuildInputs = [ cmake ];

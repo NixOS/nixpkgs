@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eraserhd";
     repo = "rep";
     rev = "v${finalAttrs.version}";
-    sha256 = "pqmISVm3rYGxRuwKieVpRwXE8ufWnBHEA6h2hrob51s=";
+    hash = "sha256-pqmISVm3rYGxRuwKieVpRwXE8ufWnBHEA6h2hrob51s=";
   };
 
   nativeBuildInputs = [

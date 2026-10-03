@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     owner = "cmaion";
     repo = "polar";
     rev = "be15f5f897f8a919dd639009873147dca2a9cea0";
-    sha256 = "0gqkqfrqnrsy6avg372xwqj22yz8g6r2hnzbw6197b1rf7zr1il7";
+    hash = "sha256-h8aQ/3E5rJOC4etbKLJ56HshJOZdnPG2Ml5ni7PDEz8=";
   };
 
   prePatch = ''

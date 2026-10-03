@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bear";
     repo = "python-twitter";
     rev = "v${version}";
-    sha256 = "08ydmf6dcd416cvw6xq1wxsz6b9s21f2mf9fh3y4qz9swj6n9h8z";
+    hash = "sha256-H8FkjeQ6fUz8gC65KlwQOi3zdecBd8M3M4E01oyrzSM=";
   };
 
   patches = [

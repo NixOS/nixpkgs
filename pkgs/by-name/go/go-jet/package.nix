@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "go-jet";
     repo = "jet";
     rev = "v${version}";
-    sha256 = "sha256-mp+sweZTF+4/Hs9vRx6W7M3rlBz8ubSXHmrwC1QwsuE=";
+    hash = "sha256-mp+sweZTF+4/Hs9vRx6W7M3rlBz8ubSXHmrwC1QwsuE=";
   };
 
   vendorHash = "sha256-g7YIZ6o+a5N2gZCNu7j1FV+JiAp9t1ffLuIslGUehuA=";

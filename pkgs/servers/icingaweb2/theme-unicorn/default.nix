@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       owner = "Mikesch-mp";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1qmcajdf0g70vp2avqa50lfrfigq22k91kggbgn5ablwyg9dki05";
+      hash = "sha256-BcTZ0vOcLlXsW+/NkKYQ+EWXHQVF4a3E3eA84JpUrOI=";
     })
     (fetchurl {
       url = "http://i.imgur.com/SCfMd.png";

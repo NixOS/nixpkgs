@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mbucc";
     repo = "shmig";
     rev = "v${finalAttrs.version}";
-    sha256 = "15ry1d51d6dlzzzhck2x57wrq48vs4n9pp20bv2sz6nk92fva5l5";
+    hash = "sha256-hRa1nUjTmq/FXkDcmyzRGxGc+SldTAb//7SZFkoLPpc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -27,7 +27,7 @@
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
+    hash = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rocasa";
     repo = "ttylog";
     rev = finalAttrs.version;
-    sha256 = "0c746bpjpa77vsr88fxk8h1803p5np1di1mpjf4jy5bv5x3zwm07";
+    hash = "sha256-B1T+Ry97FS+Jk7eG2MK15Q6AAkSzO4Sy3ueoK+8y5DA=";
   };
 
   nativeBuildInputs = [ cmake ];

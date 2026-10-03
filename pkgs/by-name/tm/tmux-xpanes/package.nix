@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "greymd";
     repo = "tmux-xpanes";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PF2K2A49c5djQqSO7ZLFyBwPZaJRK58qZTFpY7n+Z0w=";
+    hash = "sha256-PF2K2A49c5djQqSO7ZLFyBwPZaJRK58qZTFpY7n+Z0w=";
   };
 
   buildInputs = [

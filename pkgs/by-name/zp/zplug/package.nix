@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zplug";
     repo = "zplug";
     rev = finalAttrs.version;
-    sha256 = "0hci1pbs3k5icwfyfw5pzcgigbh9vavprxxvakg1xm19n8zb61b3";
+    hash = "sha256-YwWzPrIp1B7eVLv3fLfaCa4XH/u3cOcdZ7HModcNkUE=";
   };
 
   strictDeps = true;

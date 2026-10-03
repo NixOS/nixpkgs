@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "stanford-rc";
     repo = "sasutils";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-rx4IxS5q1c3z617F4DBWxuxxSPHKFrw2bTW6b6/qkds=";
+    hash = "sha256-rx4IxS5q1c3z617F4DBWxuxxSPHKFrw2bTW6b6/qkds=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

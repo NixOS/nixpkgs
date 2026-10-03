@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "gammons";
     repo = "ultralist";
     rev = finalAttrs.version;
-    sha256 = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
+    hash = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
   };
 
   vendorHash = null;

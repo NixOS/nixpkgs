@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bestouff";
     repo = "genext2fs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
+    hash = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

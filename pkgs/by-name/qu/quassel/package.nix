@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "quassel";
     repo = "quassel";
     rev = version;
-    sha256 = "sha256-eulhNcyCmy9ryietOhT2yVJeJH+MMZRbTUo2XuTy9qU=";
+    hash = "sha256-eulhNcyCmy9ryietOhT2yVJeJH+MMZRbTUo2XuTy9qU=";
   };
 
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check

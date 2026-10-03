@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nanomsg";
     repo = "nanomsg";
     rev = finalAttrs.version;
-    sha256 = "01ddfzjlkf2dgijrmm3j3j8irccsnbgfvjcnwslsfaxnrmrq5s64";
+    hash = "sha256-xOiCc822K6ep5pbJ7d6ymrEckRxy1JplfE24SeV3rQU=";
   };
 
   patches = [

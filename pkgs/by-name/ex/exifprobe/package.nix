@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "hfiguiere";
     repo = "exifprobe";
     rev = "ce1ea2bc3dbbe8092b26f41cd89831cafe633d69";
-    sha256 = "1c1fhc0v1m452lgnfcijnvrc0by06qfbhn3zkliqi60kv8l2isbp";
+    hash = "sha256-d+koKNoTmIgjnX9YuBw2wC/A8rYyMmcfFYXUsAGDLrA=";
   };
 
   env.CFLAGS = toString [ "-O2" ];

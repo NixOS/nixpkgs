@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "unittest-cpp";
     repo = "unittest-cpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
+    hash = "sha256-EfCvgh7cd6tcQBkQIMmJuP62uEvFhQNsl8FTWwYaq2s=";
   };
 
   patches = [

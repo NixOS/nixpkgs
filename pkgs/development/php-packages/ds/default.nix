@@ -17,7 +17,7 @@ buildPecl {
     owner = "php-ds";
     repo = "ext-ds";
     rev = "v${version}";
-    sha256 = "sha256-QWBxjt3rzD3m3y2ScbYvtZnjPUYsd3uMMQOFY/RQ3Io=";
+    hash = "sha256-QWBxjt3rzD3m3y2ScbYvtZnjPUYsd3uMMQOFY/RQ3Io=";
   };
 
   buildInputs = [ pcre2 ];

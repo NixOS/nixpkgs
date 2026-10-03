@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gillesdegottex";
     repo = "fmit";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ydX5Yic0GZkOYyC4EHhf4XPPsdZJDEACssHkLlZrgkY=";
+    hash = "sha256-ydX5Yic0GZkOYyC4EHhf4XPPsdZJDEACssHkLlZrgkY=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "Shopify";
     repo = "ejson";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Tkr/o2hjbUiaoTBPesQ+ZIPeJteS/rsqGJBo2dvfqEc=";
+    hash = "sha256-Tkr/o2hjbUiaoTBPesQ+ZIPeJteS/rsqGJBo2dvfqEc=";
   };
 
   vendorHash = "sha256-vT9A4d+e+iOie5TNbu5EyPi5OZJ/m8Not3tCQc7Xwn8=";

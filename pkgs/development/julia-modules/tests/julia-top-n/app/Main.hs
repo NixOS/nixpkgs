@@ -88,7 +88,7 @@ miscTests args@(Args {..}) = describe "Misc tests" $ do
                                           owner = "codedownio";
                                           repo = "HelloWorld.jl";
                                           rev = "9b41c55df76eb87830dd3bd0b5601ee2582a37c6";
-                                          sha256 = "sha256-G+xpMRb0RopW/xWA8KCFF/S8wuHTQbpj0qwm9CihfSc=";
+                                          hash = "sha256-G+xpMRb0RopW/xWA8KCFF/S8wuHTQbpj0qwm9CihfSc=";
                                         };
                                       };
                                     }) [ "HelloWorld" ]|]

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "irungentoo";
     repo = "filter_audio";
     rev = "v${finalAttrs.version}";
-    sha256 = "1dv4pram317c1w97cjsv9f6r8cdxhgri7ib0v364z08pk7r2avfn";
+    hash = "sha256-1m0l8pkXgU/M2GDFE/ODvTGUjUtbS3YSD+yEUVW+ZLc=";
   };
 
   doCheck = false;

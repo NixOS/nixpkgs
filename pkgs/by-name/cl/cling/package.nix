@@ -39,7 +39,7 @@ let
     owner = "root-project";
     repo = "cling";
     rev = "v${version}";
-    sha256 = "sha256-/qCHd9KfPW4dMjktaSdnJG+VDD1lLSI4ZFllTcxWsmc=";
+    hash = "sha256-/qCHd9KfPW4dMjktaSdnJG+VDD1lLSI4ZFllTcxWsmc=";
   };
 
   unwrapped = stdenv.mkDerivation {
@@ -50,7 +50,7 @@ let
       owner = "root-project";
       repo = "llvm-project";
       rev = "cling-llvm20-20260119-01";
-      sha256 = "sha256-fv7nrpZ5Dhbf+nW0ED0pkc8NDBXeaBs9MV2TW6o7FGU=";
+      hash = "sha256-fv7nrpZ5Dhbf+nW0ED0pkc8NDBXeaBs9MV2TW6o7FGU=";
     };
 
     preConfigure = ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "twifty";
     repo = "amd-gpu-i2c";
     rev = "06ca41fd12fb90f970d3ebd4785cc26cc0a3f3b0";
-    sha256 = "sha256-GVyrwnwNSBW4OCNDqQMU6e31C4bG14arC0MPkRWfiJQ=";
+    hash = "sha256-GVyrwnwNSBW4OCNDqQMU6e31C4bG14arC0MPkRWfiJQ=";
   };
 
   hardeningDisable = [ "pic" ];

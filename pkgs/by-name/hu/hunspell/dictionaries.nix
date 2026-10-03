@@ -62,7 +62,7 @@ let
         owner = "sbosio";
         repo = "rla-es";
         rev = "v${version}";
-        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
+        hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = {
         description = "Hunspell dictionary for ${shortDescription} from rla";
@@ -350,7 +350,7 @@ let
         owner = "LibreOffice";
         repo = "dictionaries";
         rev = "libreoffice-${version}";
-        sha256 = "14z4b0grn7cw8l9s7sl6cgapbpwhn1b3gwc3kn6b0k4zl3dq7y63";
+        hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
       };
       buildPhase = ''
         cp -a ${sourceRoot}/* .
@@ -958,7 +958,7 @@ rec {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
       rev = version;
-      sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
+      hash = "sha256-/rYufNGkXWH7UQDa8ZI55JtP9LM+0j7Pad8zm2tFqko=";
     };
 
     preInstall = ''
@@ -1003,7 +1003,7 @@ rec {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
       rev = "a23b0521438f2735dc73efaee61391c6106ae196";
-      sha256 = "sha256-fRHtglTVoUgeQ8v/+pBWxfk+EgZv/uAt9Ka6tK1GJgA=";
+      hash = "sha256-fRHtglTVoUgeQ8v/+pBWxfk+EgZv/uAt9Ka6tK1GJgA=";
     };
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";

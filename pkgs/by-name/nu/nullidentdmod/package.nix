@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Ranthrall";
     repo = "nullidentdmod";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ahwm5pyidc6m07rh5ls2lc25kafrj233nnbcybprgl7bqdq1b0k";
+    hash = "sha256-E6yAG16HvnyXZ8vaMYTMTs0iGBWaFpgPqIa16G+pHKo=";
   };
 
   installPhase = ''

@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "shutter-project";
     repo = "shutter";
     tag = finalAttrs.version;
-    sha256 = "sha256-iri4yj2DujsEfpa6u4f5bpaOhWL0h/XbSlolkSJgKgE=";
+    hash = "sha256-iri4yj2DujsEfpa6u4f5bpaOhWL0h/XbSlolkSJgKgE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];

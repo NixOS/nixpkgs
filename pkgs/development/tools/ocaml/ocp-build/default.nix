@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "OCamlPro";
     repo = "ocp-build";
     rev = "v${version}";
-    sha256 = "1641xzik98c7xnjwxpacijd6d9jzx340fmdn6i372z8h554jjlg9";
+    hash = "sha256-6VEpSSkQfXFGNLZVB8joX6ZmmoxM3c6l7YehNOPvgZg=";
   };
 
   patches = [

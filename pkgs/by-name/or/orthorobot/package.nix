@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Stabyourself";
     repo = "orthorobot";
     tag = "v${finalAttrs.version}";
-    sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
+    hash = "sha256-t2ijgtG6vqWmWRLGScna+tkS+MfR6aqrqn2ChNqGRrE=";
   };
 
   desktopItems = [

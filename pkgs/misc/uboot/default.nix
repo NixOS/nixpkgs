@@ -329,7 +329,7 @@ in
         owner = "LibreELEC";
         repo = "amlogic-boot-fip";
         rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
-        sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
+        hash = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
@@ -430,7 +430,7 @@ in
         owner = "armbian";
         repo = "odroidc2-blobs";
         rev = "47c5aac4bcac6f067cebe76e41fb9924d45b429c";
-        sha256 = "1ns0a130yxnxysia8c3q2fgyjp9k0nkr689dxk88qh2vnibgchnp";
+        hash = "sha256-10L2VrRbQIzQ7C0hk6cFM13pnxN4MKSi9t12D0ZQQNs=";
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in

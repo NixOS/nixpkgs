@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "editline";
     rev = "f735e4d1d566cac3caa4a5e248179d07f0babefd";
-    sha256 = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
+    hash = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
   };
 
   configureFlags = [

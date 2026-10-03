@@ -10,7 +10,7 @@ buildRebar3 rec {
     owner = "erlang-nix";
     repo = name;
     rev = "v${version}";
-    sha256 = "10ijc06qvv5hqv0qy3w7mbv9pshdb8bvy0f3phr1vd5hksbk731y";
+    hash = "sha256-Powzl56wtB0yvMMBvxdaDeqb9qqHD4/BxrDsjQ1gMoI=";
   };
 
   meta = {

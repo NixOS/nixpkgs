@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "love2d";
     repo = "love";
     rev = version;
-    sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
+    hash = "sha256-1SeFFf3fjiRYA/4W3tc51m6dKYqWltosiR5x0xmtzqc=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mina86";
     repo = "urxvt-tabbedex";
     rev = "v${version}";
-    sha256 = "sha256-e/t7AnP7nXkkazK6Oe6mw2Adf5wxR31/nFKeSaCpy/4";
+    hash = "sha256-e/t7AnP7nXkkazK6Oe6mw2Adf5wxR31/nFKeSaCpy/4=";
   };
 
   nativeBuildInputs = [ perl ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "kati";
     rev = "985493689b70e28970952bde44ac2a8433257b5e";
-    sha256 = "sha256-fn+eA/TBmiyQYeUQvviL/zc9qxUYfW1BaeqNCILsk+w=";
+    hash = "sha256-fn+eA/TBmiyQYeUQvviL/zc9qxUYfW1BaeqNCILsk+w=";
   };
 
   patches = [

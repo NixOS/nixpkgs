@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Matroska-Org";
     repo = "libebml";
     rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-myXqGGFfL+CuaOwwNuSZC4+fgqcQNRzhWN0jrY3k5r8=";
+    hash = "sha256-myXqGGFfL+CuaOwwNuSZC4+fgqcQNRzhWN0jrY3k5r8=";
   };
 
   nativeBuildInputs = [

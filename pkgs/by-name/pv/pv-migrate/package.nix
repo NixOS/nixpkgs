@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "utkuozdemir";
     repo = "pv-migrate";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ZAQ4jXSV8foQNptg3DOwUjkXQQR89yt/E6PjDIvmy6g=";
+    hash = "sha256-ZAQ4jXSV8foQNptg3DOwUjkXQQR89yt/E6PjDIvmy6g=";
   };
 
   subPackages = [ "cmd/pv-migrate" ];

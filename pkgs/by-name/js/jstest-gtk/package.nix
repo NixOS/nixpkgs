@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "jstest-gtk";
     rev = "92bdf8e945a6d14fdd0aa6fa961f6da34f5ac810";
-    sha256 = "sha256-ypGMxN0k+Y72Hjk5OKJMdc4mci38xg3DJYkboOpa/fs=";
+    hash = "sha256-ypGMxN0k+Y72Hjk5OKJMdc4mci38xg3DJYkboOpa/fs=";
   };
 
   nativeBuildInputs = [

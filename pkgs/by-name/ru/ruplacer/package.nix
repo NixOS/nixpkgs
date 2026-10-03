@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "your-tools";
     repo = "ruplacer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Zvbb9pQpxbJZi0qcDU6f2jEgavl9cA7gIYU7NRXZ9fc=";
+    hash = "sha256-Zvbb9pQpxbJZi0qcDU6f2jEgavl9cA7gIYU7NRXZ9fc=";
   };
 
   cargoHash = "sha256-Ko6EBASK6olMyp0kDY4wgfpH+5j9vq0dJ74l8K6HPGY=";

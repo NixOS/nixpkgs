@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "dajobe";
     repo = "raptor";
     rev = "${pname}_${underscoredVersion}";
-    sha256 = "sha256-Eic63pV2p154YkSmkqWr86fGTr+XmVGy5l5/6q14LQM=";
+    hash = "sha256-Eic63pV2p154YkSmkqWr86fGTr+XmVGy5l5/6q14LQM=";
   };
 
   cmakeFlags = [

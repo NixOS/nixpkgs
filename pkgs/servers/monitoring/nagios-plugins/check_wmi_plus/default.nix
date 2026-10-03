@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "speartail";
     repo = "checkwmiplus";
     tag = "v${version}";
-    sha256 = "1as0iyhy4flpm37mb7lvah7rnd6ax88appjm1icwhy7iq03wi8pl";
+    hash = "sha256-9KLIB8DxeMhZDFXeqxDqyjSbD1SbnlXPqJc64qGPQKs=";
   };
 
   patches = [ ./wmiplus_fix_manpage.patch ];

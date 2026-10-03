@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "graph-algorithms";
     repo = "edge-addition-planarity-suite";
     rev = "Version_${finalAttrs.version}";
-    sha256 = "sha256-uSCQSn3LRi3eQynh71fs1xhVIrPcOqVyGzdHAK9xj7E=";
+    hash = "sha256-uSCQSn3LRi3eQynh71fs1xhVIrPcOqVyGzdHAK9xj7E=";
   };
 
   nativeBuildInputs = [

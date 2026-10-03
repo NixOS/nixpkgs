@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "prometheus-community";
     repo = "json_exporter";
     rev = "v${version}";
-    sha256 = "sha256-nmpErJCp31hxjVmVGaUiuKF/ya92vs+Cqw95EOFJ0BQ=";
+    hash = "sha256-nmpErJCp31hxjVmVGaUiuKF/ya92vs+Cqw95EOFJ0BQ=";
   };
 
   vendorHash = "sha256-xyRr78fkiKI9udQHqr/CBwhBts9zNTA3mhRDjGVsyZA=";

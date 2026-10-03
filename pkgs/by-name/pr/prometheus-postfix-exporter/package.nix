@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "Hsn723";
     repo = "postfix_exporter";
     tag = "v${version}";
-    sha256 = "sha256-LCjTw5nL8xP6ODwVJxj4Zg99CiFvqbzjb931fmhtk0M=";
+    hash = "sha256-LCjTw5nL8xP6ODwVJxj4Zg99CiFvqbzjb931fmhtk0M=";
   };
 
   vendorHash = "sha256-6lqUygsV1pPGKN9SOZIouPVSZWuSOlPhqFbm16HfzGk=";

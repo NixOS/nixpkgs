@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "caryll";
     repo = "otfcc";
     rev = "v${version}";
-    sha256 = "1nrkzpqklfpqsccji4ans40rj88l80cv7dpxwx4g577xrvk13a0f";
+    hash = "sha256-DqgR5s79nPJI5/22sxlAFCGZAdFWkSgZ0/g6OvH9M9s=";
   };
 
   nativeBuildInputs = [ premake5 ];

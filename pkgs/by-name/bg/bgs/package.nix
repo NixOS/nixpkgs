@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gottox";
     repo = "bgs";
     rev = "v${finalAttrs.version}";
-    sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
+    hash = "sha256-V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
   nativeBuildInputs = [ pkg-config ];

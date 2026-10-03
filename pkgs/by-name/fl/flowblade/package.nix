@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jliljebl";
     repo = "flowblade";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Gh2fWm4N+kGem+6Xu3sE1JxQEMqtbQRfN0Ey0RoFwxI=";
+    hash = "sha256-Gh2fWm4N+kGem+6Xu3sE1JxQEMqtbQRfN0Ey0RoFwxI=";
   };
 
   buildInputs = [

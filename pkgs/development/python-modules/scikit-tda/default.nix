@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "scikit-tda";
     repo = "scikit-tda";
     tag = "v${version}";
-    sha256 = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
+    hash = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
   };
 
   propagatedBuildInputs = [

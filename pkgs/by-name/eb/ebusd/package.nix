@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "john30";
     repo = "ebusd";
     rev = version;
-    sha256 = "sha256-CmArhkJfxf8lL6FoHRQKjk/8ObfEy3Xef9DUtOVKRas=";
+    hash = "sha256-CmArhkJfxf8lL6FoHRQKjk/8ObfEy3Xef9DUtOVKRas=";
   };
 
   nativeBuildInputs = [

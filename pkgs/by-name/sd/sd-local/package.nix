@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "screwdriver-cd";
     repo = "sd-local";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-o29VwPC03JQ2JgcZIJBARl9pEDWdE86ExEM3eB7UfDI=";
+    hash = "sha256-o29VwPC03JQ2JgcZIJBARl9pEDWdE86ExEM3eB7UfDI=";
   };
 
   vendorHash = "sha256-FVT7zylL1mbwkUH01It9a/P3rC128OnMGqoqE8RMo1k=";

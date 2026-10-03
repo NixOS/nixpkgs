@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${finalAttrs.version}";
-    sha256 = "sha256-LGVjwt3jJsegBKj59AlihqL2F3t35vIrrdiopgJveJU=";
+    hash = "sha256-LGVjwt3jJsegBKj59AlihqL2F3t35vIrrdiopgJveJU=";
   };
 
   nativeBuildInputs = [

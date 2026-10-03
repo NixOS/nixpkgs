@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "Ultimaker";
     repo = "libnest2d";
     rev = "31391fd173249ad9b906390058e13b09238fadc8";
-    sha256 = "1hzqi4z55x76rss3xk7hfqhy9hcaq2jaav5jqxa1aqmbvarr2gla";
+    hash = "sha256-ij6Rs9qrYhVUx7JspaTAisHkIXbwzD60zub0Uj6J+MM=";
   };
 
   postPatch = ''

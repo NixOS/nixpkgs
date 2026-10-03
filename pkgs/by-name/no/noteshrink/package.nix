@@ -16,7 +16,7 @@ buildPythonApplication (finalAttrs: {
     owner = "mzucker";
     repo = "noteshrink";
     rev = finalAttrs.version;
-    sha256 = "0xhrvg3d8ffnbbizsrfppcd2y98znvkgxjdmvbvin458m2rwccka";
+    hash = "sha256-ajLGs6ioEBv32rXJ/ua2HyUvGrvXZf3jWtY51MbbGXY=";
   };
 
   propagatedBuildInputs = [

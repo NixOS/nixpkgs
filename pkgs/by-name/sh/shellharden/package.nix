@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "anordal";
     repo = "shellharden";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-brDqAxY36dl0xSDgzovq/mqvw3eRy+vkuLQozqPsDlc=";
+    hash = "sha256-brDqAxY36dl0xSDgzovq/mqvw3eRy+vkuLQozqPsDlc=";
   };
 
   cargoHash = "sha256-RE1k9G3xKTJ0F79bKrhgS+5O30eqVnA3iLCc+CHfS2Y=";

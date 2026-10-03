@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5mQ2FlNUyvp0acdYicuVgdjkEeLxaINtZAoCwf2njzA=";
+    hash = "sha256-5mQ2FlNUyvp0acdYicuVgdjkEeLxaINtZAoCwf2njzA=";
   };
 
   # vendor directory is part of repository

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "adsr";
     repo = "mle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xyelmIWqT4FmkFmI02XfdoIgkumQEso5Lf6oEaZP9yM=";
+    hash = "sha256-xyelmIWqT4FmkFmI02XfdoIgkumQEso5Lf6oEaZP9yM=";
   };
 
   # Fix location of Lua 5.4 header and library

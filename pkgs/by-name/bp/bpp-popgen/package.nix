@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BioPP";
     repo = "bpp-popgen";
     rev = "v${finalAttrs.version}";
-    sha256 = "0bz0fhrq3dri6a0hvfc3zlvrns8mrzzlnicw5pyfa812gc1qwfvh";
+    hash = "sha256-cDuOA3siIOX8LZxFS//PFWmbN/2DuQ2BMjG3gTN04C8=";
   };
 
   nativeBuildInputs = [ cmake ];

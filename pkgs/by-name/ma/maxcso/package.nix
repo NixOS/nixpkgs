@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "unknownbrackets";
     repo = "maxcso";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6LjR1ZMZsi6toz9swPzNmSAlrUykwvVdYi1mR8Ctq5U=";
+    hash = "sha256-6LjR1ZMZsi6toz9swPzNmSAlrUykwvVdYi1mR8Ctq5U=";
   };
 
   buildInputs = [

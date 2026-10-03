@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "deniskropp";
     repo = "DirectFB";
     rev = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
+    hash = "sha256-HsSRtYbxZG+jSUX2B6RZomVK73nMI5mbf3V4eNb3Qy8=";
   };
 
   patches = [

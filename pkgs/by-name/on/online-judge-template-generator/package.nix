@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "online-judge-tools";
     repo = "template-generator";
     rev = "v${version}";
-    sha256 = "sha256-cS1ED1a92fEFqy6ht8UFjxocWIm35IA/VuaPSLsdlqg=";
+    hash = "sha256-cS1ED1a92fEFqy6ht8UFjxocWIm35IA/VuaPSLsdlqg=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Pezmc";
     repo = "BibLatex-Check";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8oHX56+kRWWl8t22DqLAFinjPngRMo3vXxXuVXBwutM=";
+    hash = "sha256-8oHX56+kRWWl8t22DqLAFinjPngRMo3vXxXuVXBwutM=";
   };
 
   buildInputs = [ python3 ];

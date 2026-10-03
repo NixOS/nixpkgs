@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Grumbel";
     repo = "geomcpp";
     rev = "282e3710fbe6dacee630391e4af8ffe03181f8a9";
-    sha256 = "sha256-M4a6P6J/PBDklpOiR81Nah0STlXFI48+mQkNqMBicKQ=";
+    hash = "sha256-M4a6P6J/PBDklpOiR81Nah0STlXFI48+mQkNqMBicKQ=";
   };
 
   nativeBuildInputs = [ cmake ];

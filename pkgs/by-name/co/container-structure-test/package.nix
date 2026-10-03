@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "GoogleContainerTools";
     repo = "container-structure-test";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iNJH5mrDRlwS4qry0OyT/MRlGjHbKjWZbppkbTX6ksI=";
+    hash = "sha256-iNJH5mrDRlwS4qry0OyT/MRlGjHbKjWZbppkbTX6ksI=";
   };
   vendorHash = "sha256-pBq76HJ+nluOMOs9nqBKp1mr1LuX2NERXo48g8ezE9k=";
 

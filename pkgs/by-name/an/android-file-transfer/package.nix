@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/whoozle/android-file-transfer-linux/pull/360
     # TODO: Switch back when the next version releases
     rev = "88926930db41238c7b4d7237fc5849b9586cc7b8";
-    sha256 = "sha256-rk1QXq8JiLRZu+dz9HvWkOj5JyaLMXzTybByl46obE8=";
+    hash = "sha256-rk1QXq8JiLRZu+dz9HvWkOj5JyaLMXzTybByl46obE8=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];

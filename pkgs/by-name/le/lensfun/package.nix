@@ -31,7 +31,7 @@ let
           owner = "lensfun";
           repo = "lensfun";
           rev = "201da1a7433626a2a1ecd67e1f21a42fb17aa4a5";
-          sha256 = "sha256-64ZcupHA4oClPRCnG8KofGC46M/mZFermugzQ15B6k4=";
+          hash = "sha256-64ZcupHA4oClPRCnG8KofGC46M/mZFermugzQ15B6k4=";
 
           leaveDotGit = true;
           # generate timestamp based on the most recent commit
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     owner = "lensfun";
     repo = "lensfun";
     rev = "v${version}";
-    sha256 = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
+    hash = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
   };
 
   # replace database with a more recent snapshot

@@ -172,7 +172,7 @@ rec {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-+rtbaHEqKSvaba+zZwRUnUsdu3Jndi8OVGUtFC55Fts=";
+        hash = "sha256-+rtbaHEqKSvaba+zZwRUnUsdu3Jndi8OVGUtFC55Fts=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
@@ -196,7 +196,7 @@ rec {
         owner = "openresty";
         repo = "lua-resty-lrucache";
         rev = "v${version}";
-        sha256 = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
+        hash = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
       };
 
       meta = {

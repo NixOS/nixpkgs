@@ -37,7 +37,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FcEyOvt96FLwCTil4l52ug+faiRlEG+mMUvKWipMxng=";
+    hash = "sha256-FcEyOvt96FLwCTil4l52ug+faiRlEG+mMUvKWipMxng=";
   };
 
   nativeBuildInputs = [

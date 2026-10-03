@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "Klipper3d";
     repo = "klipper";
     rev = "7bc4d09465d31cd30fc0822e8d0abe02cc8c547f";
-    sha256 = "sha256-DcRYuS2pxM3clbmk93GZhWAFjwoDVF7ZqNBTq2fm8x0=";
+    hash = "sha256-DcRYuS2pxM3clbmk93GZhWAFjwoDVF7ZqNBTq2fm8x0=";
   };
 
   sourceRoot = "${src.name}/klippy";

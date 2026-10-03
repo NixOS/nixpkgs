@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     owner = "Pingus";
     repo = "pingus";
     rev = "b0ceeeeb95428c73b1b81208211535c61acfc5d0";
-    sha256 = "sha256-jQYZM7VLqbl9/+QXyswEXdGmwOq/nxRzWARvcDqNM9M=";
+    hash = "sha256-jQYZM7VLqbl9/+QXyswEXdGmwOq/nxRzWARvcDqNM9M=";
   };
 
   nativeBuildInputs = [

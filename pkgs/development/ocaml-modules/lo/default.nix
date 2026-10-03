@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-lo";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mi8h6f6syxjkxz493l5c3l270pvxx33pz0k3v5465wqjsnppar2";
+    hash = "sha256-Iqt7rZaYF0PKHhP8O0bv+4Ij6GCFjkR+n7J7bZyBKFY=";
   };
 
   patches = [

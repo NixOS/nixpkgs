@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "languitar";
     repo = "pass-git-helper";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/Brx86YRmSkSr00xj5B5J/bNBqknoXRwX9B6595dEwU=";
+    hash = "sha256-/Brx86YRmSkSr00xj5B5J/bNBqknoXRwX9B6595dEwU=";
   };
 
   build-system = with python3Packages; [ setuptools ];

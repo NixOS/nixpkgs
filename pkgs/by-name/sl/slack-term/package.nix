@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "jpbruinsslot";
     repo = "slack-term";
     tag = "v${finalAttrs.version}";
-    sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
+    hash = "sha256-poY4TTDEha5S7eO8mwrYYNqqZHs13kvnpBAcD9s6eLk=";
   };
   vendorHash = null;
 

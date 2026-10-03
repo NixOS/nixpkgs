@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "apenwarr";
     repo = "netselect";
     rev = "${pname}-${version}";
-    sha256 = "1zncyvjzllrjbdvz7c50d1xjyhs9mwqfy92ndpfc5b3mxqslw4kx";
+    hash = "sha256-fRJONe51rMLcbVYk7zCvSUMve2igsPN3WzJT+uX2zP4=";
   };
 
   postPatch = ''

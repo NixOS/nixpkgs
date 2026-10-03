@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "glue-viz";
     repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-36uT2FpOzwuNMM4GhlTuYCSo8j7waIQgWOCN6maKaiY=";
+    hash = "sha256-36uT2FpOzwuNMM4GhlTuYCSo8j7waIQgWOCN6maKaiY=";
   };
 
   build-system = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "romkatv";
     repo = "zsh-defer";
     rev = "57a6650ff262f577278275ddf11139673e01e471";
-    sha256 = "sha256-/rcIS2AbTyGw2HjsLPkHtt50c2CrtAFDnLuV5wsHcLc=";
+    hash = "sha256-/rcIS2AbTyGw2HjsLPkHtt50c2CrtAFDnLuV5wsHcLc=";
   };
 
   strictDeps = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "mypaint";
     repo = "mypaint-brushes";
     rev = "v${version}";
-    sha256 = "0kcqz13vzpy24dhmrx9hbs6s7hqb8y305vciznm15h277sabpmw9";
+    hash = "sha256-ide7lD5HwBKq/ZHtAoZHC8OjjV4w9VxhI8Lfv0f4mE0=";
   };
 
   nativeBuildInputs = [

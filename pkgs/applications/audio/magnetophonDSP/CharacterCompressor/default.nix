@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "CharacterCompressor";
     rev = "V${finalAttrs.version}";
-    sha256 = "1h0bhjhx023476gbijq842b6f8z71zcyn4c9mddwyb18w9cdamp5";
+    hash = "sha256-5VbVWOIoLM9bq4kR69kP5yNnliAIy7ieOWQI0KGEC8A=";
   };
 
   buildInputs = [

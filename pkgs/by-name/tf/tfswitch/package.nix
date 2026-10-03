@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
     owner = "warrensbox";
     repo = "terraform-switcher";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-L6k3Hf9A9hL6+rlAvqCEIypSNSkAFUcDUlzvUKsby84=";
+    hash = "sha256-L6k3Hf9A9hL6+rlAvqCEIypSNSkAFUcDUlzvUKsby84=";
   };
 
   vendorHash = "sha256-KEFg4sncUvNBhjEnuj/FG3jyGQvEZq4eucl5aGuwYOk=";

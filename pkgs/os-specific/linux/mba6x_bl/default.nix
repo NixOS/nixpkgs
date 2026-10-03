@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "patjak";
     repo = "mba6x_bl";
     rev = "639719f516b664051929c2c0c1140ea4bf30ce81";
-    sha256 = "sha256-QwxBpNa5FitKO+2ne54IIcRgwVYeNSQWI4f2hPPB8ls=";
+    hash = "sha256-QwxBpNa5FitKO+2ne54IIcRgwVYeNSQWI4f2hPPB8ls=";
   };
 
   enableParallelBuilding = true;

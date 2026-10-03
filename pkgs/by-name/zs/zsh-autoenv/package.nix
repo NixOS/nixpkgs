@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "Tarrasch";
     repo = "zsh-autoenv";
     rev = "2c8cfbcea8e7286649840d7ec98d7e9d5e1d45a0";
-    sha256 = "004svkfzhc3ab6q2qvwzgj36wvicg5bs8d2gcibx6adq042di7zj";
+    hash = "sha256-8p/YBAG4KdNXZE80pFd5LG5uhnyfbyywWWow+N3cmgA=";
   };
 
   dontBuild = true;

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danfis";
     repo = "libccd";
     rev = "v${finalAttrs.version}";
-    sha256 = "0sfmn5pd7k5kyhbxnd689xmsa5v843r7sska96dlysqpljd691jc";
+    hash = "sha256-TIZkmqQXa0+bSWpqffIgaBela0/INNsX9LPM026x1Wk=";
   };
 
   patches = [

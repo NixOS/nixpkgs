@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-1Qqbfw6NZ+2K1w+abMBfWo0RAmIRbNyIErEmalmWJ0s=";
+    hash = "sha256-1Qqbfw6NZ+2K1w+abMBfWo0RAmIRbNyIErEmalmWJ0s=";
   };
 
   build-system = [

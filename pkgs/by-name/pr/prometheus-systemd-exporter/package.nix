@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "prometheus-community";
     repo = "systemd_exporter";
     rev = "v${version}";
-    sha256 = "sha256-wWXtAyQ48fsh/9BBo2tHXf4QS3Pbsmj6rha28TdBRWI=";
+    hash = "sha256-wWXtAyQ48fsh/9BBo2tHXf4QS3Pbsmj6rha28TdBRWI=";
   };
 
   ldflags = [

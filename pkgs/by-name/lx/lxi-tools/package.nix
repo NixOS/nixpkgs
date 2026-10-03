@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "lxi-tools";
     repo = "lxi-tools";
     rev = "v${version}";
-    sha256 = "sha256-lmWZpKI3TXwF76LDFfZcOGUtPeBmBu+0Lu/3eCMMb3Y=";
+    hash = "sha256-lmWZpKI3TXwF76LDFfZcOGUtPeBmBu+0Lu/3eCMMb3Y=";
   };
 
   nativeBuildInputs = [

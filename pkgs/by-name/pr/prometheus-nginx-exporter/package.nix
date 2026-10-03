@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "nginx";
     repo = "nginx-prometheus-exporter";
     rev = "v${version}";
-    sha256 = "sha256-TrLgMYzlvTWgGfFkpGziflx6t7k0zee7IlpTraBEinw=";
+    hash = "sha256-TrLgMYzlvTWgGfFkpGziflx6t7k0zee7IlpTraBEinw=";
   };
 
   vendorHash = "sha256-56jLUx/0kJIa+rk0k/ZBuV18Egy00AmzHZnvKXWHjf0=";

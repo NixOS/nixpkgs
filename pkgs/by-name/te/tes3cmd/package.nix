@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "john-moonsugar";
     repo = "tes3cmd";
     rev = "f72e9ed9dd18e8545dd0dc2a4056c250cf505790";
-    sha256 = "01zqplp8yb0xnl54963n0zkz66rf3hn2x3i255jlhdhx1c43jba7";
+    hash = "sha256-Ry05CAsdNkhlKSKOLiwcLhvz5wd2mEQKtR0sjy69+Ac=";
   };
 
   buildInputs = [ perlPackages.perl ];

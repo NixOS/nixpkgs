@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "argoproj";
     repo = "argo-rollouts";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-DEpMNK/NDXykfYDWUCvLm+zoNaQ4YRGExznJoW3l5F0=";
+    hash = "sha256-DEpMNK/NDXykfYDWUCvLm+zoNaQ4YRGExznJoW3l5F0=";
   };
 
   vendorHash = "sha256-UccmVVb640CnhmByMc/pB+RyYoDdgBX88U3zhcQ/jpg=";

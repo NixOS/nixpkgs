@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
     owner = "BinaryAnalysisPlatform";
     repo = "FrontC";
     rev = "v${finalAttrs.version}";
-    sha256 = "1mi1vh4qgscnb470qwidccaqd068j1bqlz6pf6wddk21paliwnqb";
+    hash = "sha256-C1seqbpBzNa4cdd8ileQyICGFWMtcgwOWZbphwncIdY=";
   };
 
   minimalOCamlVersion = "4.08";

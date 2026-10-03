@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "anthraxx";
     repo = "dfrs";
     rev = finalAttrs.version;
-    sha256 = "01h00328kbw83q11yrsvcly69p0hql3kw49b4jx6gwkrdm8c2amk";
+    hash = "sha256-syrBUG158me6JCsRPgfFENxkPGVbZx8CHoivicQAAAY=";
   };
 
   cargoHash = "sha256-U6z0YMHRmjGobLYdyBaMWJam9mDrHUQEOv5MjOpNfHU=";

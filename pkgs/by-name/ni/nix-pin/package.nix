@@ -17,7 +17,7 @@ let
       owner = "timbertson";
       repo = "nix-pin";
       rev = "version-${version}";
-      sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
+      hash = "sha256-fiPDyB5X6zrXmYmWLITphPTmyksA5hbn0fUqHAHbjN0=";
     };
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ python3 ];

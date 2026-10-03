@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "gapan";
     repo = "xdgmenumaker";
     rev = finalAttrs.version;
-    sha256 = "12YPt1yNbzPnFhT/2rkmbuWkAuIOwsH4J1uQBwmu+yA=";
+    hash = "sha256-12YPt1yNbzPnFhT/2rkmbuWkAuIOwsH4J1uQBwmu+yA=";
   };
 
   pyproject = false;

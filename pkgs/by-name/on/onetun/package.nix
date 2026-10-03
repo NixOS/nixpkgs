@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "aramperes";
     repo = "onetun";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bggBBl2YQUncfOYIDsPgrHPwznCJQOlIOY3bbiZz7Rw=";
+    hash = "sha256-bggBBl2YQUncfOYIDsPgrHPwznCJQOlIOY3bbiZz7Rw=";
   };
 
   cargoHash = "sha256-VC7q2ZTdbBmvZ9l70uQz59paFIi8HXp5CPxfQC6cVmk=";

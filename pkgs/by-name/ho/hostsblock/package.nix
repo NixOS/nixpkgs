@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     owner = "gaenserich";
     repo = "hostsblock";
     rev = "91cacbdfbfb5e7ae9ba3babf8de41e135270c310";
-    sha256 = "1w91fbgf8v2nn0a6m8l6kd455km2j1lvpvqil4yxhrg018aigax0";
+    hash = "sha256-oKsXFQrgZdg9oRHvu2mQos5SSJuGomoUsFZs5N5yIfE=";
   };
 
   installPhase = ''

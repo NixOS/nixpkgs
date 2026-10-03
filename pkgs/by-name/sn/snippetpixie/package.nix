@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ianmjones";
     repo = "snippetpixie";
     rev = finalAttrs.version;
-    sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";
+    hash = "sha256-v+K2fh6VBX7J437fnvhzVGHpnmIOk7sc2+Rx32BqQz8=";
   };
 
   nativeBuildInputs = [

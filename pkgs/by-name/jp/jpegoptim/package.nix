@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tjko";
     repo = "jpegoptim";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Nw9mz5zefkRwqkTIyBQyDlANHEx4dztiIiTuXUnuCKM=";
+    hash = "sha256-Nw9mz5zefkRwqkTIyBQyDlANHEx4dztiIiTuXUnuCKM=";
   };
 
   # There are no checks, it seems.

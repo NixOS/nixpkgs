@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ajLecAgE74Et7XRGtpGoA9DAcSzBEtRzLm47nHn1Amo=";
+    hash = "sha256-ajLecAgE74Et7XRGtpGoA9DAcSzBEtRzLm47nHn1Amo=";
   };
 
   vendorHash = null;

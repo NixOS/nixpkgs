@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kupferlauncher";
     repo = "keybinder";
     rev = "keybinder-3.0-v${finalAttrs.version}";
-    sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
+    hash = "sha256-OcFPZTTV5g2EdSloeuAm9XmeYkLQP84d944UaZBd0aQ=";
   };
 
   strictDeps = true;

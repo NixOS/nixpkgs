@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "zolrath";
     repo = "wemux";
     rev = "01c6541f8deceff372711241db2a13f21c4b210c";
-    sha256 = "1y962nzvs7sf720pl3wa582l6irxc8vavd0gp4ag4243b2gs4qvm";
+    hash = "sha256-dWOin1iDCPIUuQ+0rTZiPUdDBSqKD3qBOE4fvb8VJvk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

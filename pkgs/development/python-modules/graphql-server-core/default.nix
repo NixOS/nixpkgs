@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphql-server-core";
     rev = "v${version}";
-    sha256 = "1w3biv2za2m1brwjy0z049c2m94gm1zfwxzgc6lwrsci724jv9fr";
+    hash = "sha256-2aUtiTiR6cypYe937n6oj6QqWCLgAy95XqEK9cWOa/A=";
   };
 
   patches = [

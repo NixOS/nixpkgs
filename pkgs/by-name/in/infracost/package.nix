@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "infracost";
     rev = "v${finalAttrs.version}";
     repo = "infracost";
-    sha256 = "sha256-ionW8XChMCQxekKqbiNc6wSu5pxdG59WX2CxlCqStXk=";
+    hash = "sha256-ionW8XChMCQxekKqbiNc6wSu5pxdG59WX2CxlCqStXk=";
   };
   vendorHash = "sha256-fwMVYzbCHENra1ySNMQnWF/JnYngO/oHgxZvMZ2+3TQ=";
 

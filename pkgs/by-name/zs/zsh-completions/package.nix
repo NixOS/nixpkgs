@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zsh-users";
     repo = "zsh-completions";
     rev = finalAttrs.version;
-    sha256 = "sha256-XCSC7DyhfnxzKjtbdsu7/pyw8eoVLPdthEoFZ8rBAyo=";
+    hash = "sha256-XCSC7DyhfnxzKjtbdsu7/pyw8eoVLPdthEoFZ8rBAyo=";
   };
 
   strictDeps = true;

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dimo414";
     repo = "bkt";
     tag = finalAttrs.version;
-    sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
+    hash = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
   cargoHash = "sha256-4CY2A6mPTfGhqUh+nNg6eaTIVwA9ZtgH5jHQDGHnK4c=";

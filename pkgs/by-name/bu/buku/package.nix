@@ -33,7 +33,7 @@ buildPythonApplication (finalAttrs: {
     owner = "jarun";
     repo = "buku";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=";
+    hash = "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=";
   };
 
   nativeBuildInputs = [

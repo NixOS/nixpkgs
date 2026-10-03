@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tweag";
     repo = "opam2json";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rBGN9TERADPXiehNe1/9emO6QqYPrTwSoMdB+BVEWpM=";
+    hash = "sha256-rBGN9TERADPXiehNe1/9emO6QqYPrTwSoMdB+BVEWpM=";
   };
 
   buildInputs = with ocamlPackages; [

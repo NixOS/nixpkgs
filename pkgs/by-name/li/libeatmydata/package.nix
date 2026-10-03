@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stewartsmith";
     repo = "libeatmydata";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
+    hash = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
   };
 
   patches = [

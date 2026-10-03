@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "logtop-${finalAttrs.version}";
     owner = "JulienPalard";
     repo = "logtop";
-    sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";
+    hash = "sha256-IkQ817YEuI+6vlQ7uvWziv/Na5dofD4B273R5V+aG7k=";
   };
 
   nativeBuildInputs = [ pkg-config ];

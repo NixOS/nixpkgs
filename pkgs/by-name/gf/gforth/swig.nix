@@ -13,7 +13,7 @@
     owner = "GeraldWodni";
     repo = "swig";
     rev = "d9a1e4f88bdc6f8829438902aebeeea2ce5d2eee";
-    sha256 = "sha256-ell63rIfnmFsUhyQl7OzP3kiVYUfPCDhrTFaw2KIEPQ=";
+    hash = "sha256-ell63rIfnmFsUhyQl7OzP3kiVYUfPCDhrTFaw2KIEPQ=";
   };
 
   configureFlags = old.configureFlags ++ [ "--with-forth=yes" ];

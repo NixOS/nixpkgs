@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "Notify-ctrl";
     repo = "Plasma-Overdose";
     rev = "d8bf078b4819885d590db27cd1d25d8f4f08fe4c";
-    sha256 = "187f6rlvb2wf5sj3mgr69mfwh9fpqchw4yg6nzv54l98msmxc4h0";
+    hash = "sha256-ABLWq64oUVL2t+Z5wiHD1yXIXU0mvzqkLo6LtWk27qA=";
   };
 
   installPhase = ''

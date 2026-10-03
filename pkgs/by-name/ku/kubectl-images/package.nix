@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "chenjiandongx";
     repo = "kubectl-images";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WExe0RNLHd9W7Xmzsw8CHJAgjgWpO5Guobg5OxOzQqo=";
+    hash = "sha256-WExe0RNLHd9W7Xmzsw8CHJAgjgWpO5Guobg5OxOzQqo=";
   };
 
   vendorHash = "sha256-8zV2iZ10H5X6fkRqElfc7lOf3FhmDzR2lb3Jgyhjyio=";

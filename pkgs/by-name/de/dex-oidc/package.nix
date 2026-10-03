@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "dexidp";
     repo = "dex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-A6PHuo3cr9m7/u/o8agOL+BiKdOKuLDvlS62O7zt/Jk=";
+    hash = "sha256-A6PHuo3cr9m7/u/o8agOL+BiKdOKuLDvlS62O7zt/Jk=";
   };
 
   vendorHash = "sha256-1D20aZhNUi7MUPfRTmSV4CZjLr0lUzbX4TI2LFcPY3U=";

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "maruel";
     repo = "panicparse";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vVCPfuLAKPTt5IWI4aNSocZXf9Mct9GoF3Cvgq6lAow=";
+    hash = "sha256-vVCPfuLAKPTt5IWI4aNSocZXf9Mct9GoF3Cvgq6lAow=";
   };
 
   vendorHash = "sha256-eCojW2t8n+xhah5UCshGprj7cZ1Kmh0Z+B2V8Y+wW1w=";

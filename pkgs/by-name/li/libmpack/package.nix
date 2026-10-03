@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libmpack";
     repo = "libmpack";
     rev = finalAttrs.version;
-    sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
+    hash = "sha256-Iqs4RVlGW0w+WPEG/lRVIR8bEyJlFgGsXufL2WQrUWU=";
   };
 
   preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''

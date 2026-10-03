@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "hound-search";
     repo = "hound";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Qdk57zLjTXLdDEmB6K+sZAym5s0BekJJa/CpYeOBOcY=";
+    hash = "sha256-Qdk57zLjTXLdDEmB6K+sZAym5s0BekJJa/CpYeOBOcY=";
   };
 
   patches = [

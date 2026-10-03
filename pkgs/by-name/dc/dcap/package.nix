@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dCache";
     repo = "dcap";
     rev = finalAttrs.version;
-    sha256 = "sha256-hn4nkFTIbSUUhvf9UfsEqVhphAdNWmATaCrv8jOuC0Y=";
+    hash = "sha256-hn4nkFTIbSUUhvf9UfsEqVhphAdNWmATaCrv8jOuC0Y=";
   };
 
   nativeBuildInputs = [

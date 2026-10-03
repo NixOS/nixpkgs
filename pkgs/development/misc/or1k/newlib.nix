@@ -13,7 +13,7 @@ stdenvNoLibc.mkDerivation {
     owner = "openrisc";
     repo = "newlib";
     rev = "8ac94ca7bbe4ceddafe6583ee4766d3c15b18ac8";
-    sha256 = "0hzhijmry5slpp6x12pgng8v7jil3mn18ahrhnw431lqrs1cma0s";
+    hash = "sha256-GqjKgs6YhkG4hRkqFGwdNMqz0bPvitDNvVQXn6uM8EM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

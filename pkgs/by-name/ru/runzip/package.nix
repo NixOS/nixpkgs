@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vlm";
     repo = "zip-fix-filename-encoding";
     rev = "v${finalAttrs.version}";
-    sha256 = "0l5zbb5hswxczigvyal877j0aiq3fc01j3gv88bvy7ikyvw3lc07";
+    hash = "sha256-BzA6+PYzHr8XQvsNGQBzA0cF5DmIKr9f/KxzDctav1A=";
   };
 
   postPatch = ''

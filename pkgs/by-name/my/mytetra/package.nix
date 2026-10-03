@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "xintrea";
     repo = "mytetra_dev";
     rev = "v.${version}";
-    sha256 = "sha256-eku8bwFcQd0Hjffzg/GyiMzJ4S19PtviR0RIjQ+Ysdc=";
+    hash = "sha256-eku8bwFcQd0Hjffzg/GyiMzJ4S19PtviR0RIjQ+Ysdc=";
   };
 
   nativeBuildInputs = [

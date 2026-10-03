@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "jlhonora";
     repo = "lsusb";
     rev = "8a6bd7084a55a58ade6584af5075c1db16afadd1";
-    sha256 = "0p8pkcgvsx44dd56wgipa8pzi3298qk9h4rl9pwsw1939hjx6h0g";
+    hash = "sha256-D0DTJUwjBa75TTQTmCZGSYz4L1I3Pm5Ka4R0vR+bF10=";
   };
 
   installPhase = ''

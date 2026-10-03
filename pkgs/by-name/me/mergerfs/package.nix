@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "trapexit";
     repo = "mergerfs";
     rev = finalAttrs.version;
-    sha256 = "sha256-FTkJpZkrU9ALMnmeqh1w9r46x4Waq30lA8yAHg3Y54s=";
+    hash = "sha256-FTkJpZkrU9ALMnmeqh1w9r46x4Waq30lA8yAHg3Y54s=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [

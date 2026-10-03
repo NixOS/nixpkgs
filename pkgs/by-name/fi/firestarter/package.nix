@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
     tag = "v${version}";
-    sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
+    hash = "sha256-Q1jIvcuiAUzyF0v32beIqZLyMPeZUjoikY3awmmQZsY=";
     fetchSubmodules = true;
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     owner = "sm00th";
     repo = "bitlbee-discord";
-    sha256 = "00qgdvrp7hv02n0ns685igp810zxmv3adsama8601122al6x041n";
+    hash = "sha256-NhDQDVVChAAMUlXppsau/YOA7osFGW2BFWDDc/NuDwM=";
   };
 
   nativeBuildInputs = [

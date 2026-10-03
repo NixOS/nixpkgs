@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
     owner = "slingamn";
     repo = pname;
     rev = "a3fa42b2d8645272cbeb6856e26a7ea9547cb7d1";
-    sha256 = "+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=";
+    hash = "sha256-+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=";
   };
 
   buildInputs = [

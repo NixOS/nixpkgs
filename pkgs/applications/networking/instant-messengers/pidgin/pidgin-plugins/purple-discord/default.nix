@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "EionRobb";
     repo = "purple-discord";
     rev = "b7ac72399218d2ce011ac84bb171b572560aa2d2";
-    sha256 = "0xvj9rdvgsvcr55sk9m40y07rchg699l1yr98xqwx7sc2sba3814";
+    hash = "sha256-JKChlhZMn85xRyn7QFMyD7J8gAekpqlLyWzrt1tOcnc=";
   };
 
   nativeBuildInputs = [

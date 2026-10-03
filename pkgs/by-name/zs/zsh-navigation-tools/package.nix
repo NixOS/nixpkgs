@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "psprint";
     repo = "zsh-navigation-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "0c4kb19aprb868xnlyq8h1nd2d32r0zkrqblsrzvg7m9gx8vqps8";
+    hash = "sha256-SF+8UX+pnrd/1nThPD/IYjTRbIAIe2o7Mmjlq1JYkzA=";
   };
 
   dontBuild = true;

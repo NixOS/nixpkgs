@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fullstorydev";
     repo = "grpcurl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Id3F5EEO5qf5kUKKeULX8u7aDIZEw5c1MkP4JMrwc6I=";
+    hash = "sha256-Id3F5EEO5qf5kUKKeULX8u7aDIZEw5c1MkP4JMrwc6I=";
   };
 
   subPackages = [ "cmd/grpcurl" ];

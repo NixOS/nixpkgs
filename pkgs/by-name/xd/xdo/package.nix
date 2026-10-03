@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "baskerville";
     repo = "xdo";
     rev = finalAttrs.version;
-    sha256 = "1h3jrygcjjbavdbkpx2hscsf0yf97gk487lzjdlvymd7dxdv9hy9";
+    hash = "sha256-ycO0W2+nVb9pk58eROY7yXngNNNQ9DtX22pJyZ7PcsA=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

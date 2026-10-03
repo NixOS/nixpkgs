@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "avih";
     repo = "dejsonlz4";
     rev = "v${finalAttrs.version}";
-    sha256 = "0ggs69qamaama5mid07mhp95m1x42wljdb953lrwfr7p8p6f8czh";
+    hash = "sha256-8DPkzEX3ZMczHSWtJikXpIda0oX1gBZrUVWpqnAy+j0=";
   };
 
   buildPhase = ''

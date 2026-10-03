@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apenwarr";
     repo = "redo";
     rev = "${repo}-${finalAttrs.version}";
-    sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
+    hash = "sha256-/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
   postPatch = ''

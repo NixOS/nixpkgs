@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "thangngoc89";
     repo = "ocaml-slug";
     rev = version;
-    sha256 = "sha256-pIk/0asSyibXbwmBSBuLwl2SS9aw6dNDDvwO+1VJGf8=";
+    hash = "sha256-pIk/0asSyibXbwmBSBuLwl2SS9aw6dNDDvwO+1VJGf8=";
   };
 
   propagatedBuildInputs = [

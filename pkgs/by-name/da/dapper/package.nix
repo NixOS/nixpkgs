@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "rancher-archives";
     repo = "dapper";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
+    hash = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
   vendorHash = null;
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "faustCompressors";
     rev = "v${finalAttrs.version}";
-    sha256 = "144f6g17q4m50kxzdncsfzdyycdfprnpwdaxcwgxj4jky1xsha1d";
+    hash = "sha256-LSioe/BTEtkfZ101fm2+rjHv23ea2fb7BKUSfMIzjpA=";
   };
 
   buildInputs = [

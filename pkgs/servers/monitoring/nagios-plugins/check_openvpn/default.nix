@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "liquidat";
     repo = "nagios-icinga-openvpn";
     rev = version;
-    sha256 = "1vz3p7nckc5k5f06nm1xfzpykhyndh2dzyagmifrzg5k478p1lpm";
+    hash = "sha256-9dJw0SGzvJ9drE/53wRs1sPp73c9VGuAK7Owyey54+8=";
   };
 
   # no tests

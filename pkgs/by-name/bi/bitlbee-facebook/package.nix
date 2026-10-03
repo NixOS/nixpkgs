@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "bitlbee";
     repo = "bitlbee-facebook";
-    sha256 = "1qiiiq17ybylbhwgbwsvmshb517589r8yy5rsh1rfaylmlcxyy7z";
+    hash = "sha256-/3jfGa3UK5cD1Ll4j3JC5YSyoK5b8/U4XNQvfwKOMeI=";
   };
 
   nativeBuildInputs = [

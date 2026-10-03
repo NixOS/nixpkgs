@@ -21,7 +21,7 @@ stdenv'.mkDerivation {
     owner = "libcxxrt";
     repo = "libcxxrt";
     rev = "a6f71cbc3a1e1b8b9df241e081fa0ffdcde96249";
-    sha256 = "+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
+    hash = "sha256-+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
   };
 
   postPatch = ''

@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "v-byte-cpu";
     repo = "sx";
     rev = "v${version}";
-    sha256 = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
+    hash = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
   };
 
   vendorHash = "sha256-TWRMNt6x8zuvhP1nz4R6IVCX+9HityvVpzxRhDiMyO4=";

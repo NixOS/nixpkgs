@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "getting-things-gnome";
     repo = "gtg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Qojw9mJlPU234ijsCN92Gu/j2CyMVDvFFwzbYSYvMdU=";
+    hash = "sha256-Qojw9mJlPU234ijsCN92Gu/j2CyMVDvFFwzbYSYvMdU=";
   };
 
   patches = [

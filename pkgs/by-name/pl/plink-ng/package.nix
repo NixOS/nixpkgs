@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chrchang";
     repo = "plink-ng";
     rev = "v${finalAttrs.version}";
-    sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
+    hash = "sha256-mG3VhnwZiXhkYVwROs7n0ibfc9h2McZ9b6C0y5d0Dv4=";
   };
 
   buildInputs = [

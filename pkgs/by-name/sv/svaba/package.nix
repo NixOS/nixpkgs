@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "walaj";
     repo = "svaba";
     tag = finalAttrs.version;
-    sha256 = "1vv5mc9z5d22kgdy7mm27ya5aahnqgkcrskdr2405058ikk9g8kp";
+    hash = "sha256-d6KX5oyogAKIyG3qzObDFipVlD+i1uPbm0K08hOrZe8=";
     fetchSubmodules = true;
   };
 

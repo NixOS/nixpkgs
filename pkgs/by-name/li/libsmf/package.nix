@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stump";
     repo = "libsmf";
     rev = "libsmf-${finalAttrs.version}";
-    sha256 = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
+    hash = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
   };
 
   nativeBuildInputs = [

@@ -10,7 +10,7 @@ mkShell {
     owner = "hlolli";
     repo = "clj2nix";
     rev = "b9a28d4a920d5d680439b1b0d18a1b2c56d52b04";
-    sha256 = "0d8xlja62igwg757lab9ablz1nji8cp9p9x3j0ihqvp1y48w2as3";
+    hash = "sha256-QyvBEfHhbgwjkKOnmy5DUdrw6VJpKXrKefxFYZSkHTU=";
   }) {})];
 }
 '

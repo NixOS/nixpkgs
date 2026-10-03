@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "lapce";
     repo = "lapce";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-D5DEmMkCAkMiMMzYP8FoVIUeT2CDOepUWUlUqWSaUnM=";
+    hash = "sha256-D5DEmMkCAkMiMMzYP8FoVIUeT2CDOepUWUlUqWSaUnM=";
   };
 
   cargoHash = "sha256-BFaR8jWdET2nInBkKZhnoqLCB1dnXH3pywkD1Cv5SuE=";

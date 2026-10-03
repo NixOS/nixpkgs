@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "iovisor";
     repo = "ply";
     tag = finalAttrs.version;
-    sha256 = "sha256-PJaCEiM1BRUEtInd93bK+xZNJzO9EZy+JXkp9cdPrgs=";
+    hash = "sha256-PJaCEiM1BRUEtInd93bK+xZNJzO9EZy+JXkp9cdPrgs=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "z-shell";
     repo = "F-Sy-H";
     rev = "v${version}";
-    sha256 = "0bcsc4kgda577fs3bnvymmxdz3z5mf19pn8ngfqsklabnf79f5nf";
+    hash = "sha256-zhaXjrNL0amxexbZm4Kr5Y/feq1+2zW0O6eo9iZhmi0=";
   };
 
   strictDeps = true;

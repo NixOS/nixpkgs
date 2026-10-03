@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alexandervdm";
     repo = "gummi";
     rev = finalAttrs.version;
-    sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
+    hash = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
 
   patches = [

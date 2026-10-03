@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "guetzli";
     rev = "v${version}";
-    sha256 = "1wy9wfvyradp0aigfv8yijvj0dgb5kpq2yf2xki15f605jc1r5dm";
+    hash = "sha256-tZUcmCzAuBLi7MJ5ge8s6zUgt4webfeiArep7LfjyfM=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng ];

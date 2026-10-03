@@ -11,7 +11,7 @@ build-idris-package {
     owner = "joom";
     repo = "hezarfen";
     rev = "079884d85619cd187ae67230480a1f37327f8d78";
-    sha256 = "0z4150gavpx64m3l0xbjjz9dcir7zij9hvd69k98zvhw7i27b1xp";
+    hash = "sha256-t4d1RDwc7o/STKZtmGT8J0fW0pdydUBHJabfrR4ogXw=";
   };
 
   meta = {

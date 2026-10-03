@@ -15,7 +15,7 @@ build-idris-package {
     owner = "ostera";
     repo = "tap-idris";
     rev = "0d019333e1883c1d60e151af1acb02e2b531e72f";
-    sha256 = "0fhlmmivq9xv89r7plrnhmvay1j7bapz3wh7y8lygwvcrllh9zxs";
+    hash = "sha256-uv8EKc1s8+cp8gfy8a9aRwavdoU203tyQrsnvGOtFDo=";
   };
 
   meta = {

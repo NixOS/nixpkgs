@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "skywind3000";
     repo = "z.lua";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-S07YFyh6jKKQn8tpeTNReKLmpVxXzIF3jXCmst6B3+I=";
+    hash = "sha256-S07YFyh6jKKQn8tpeTNReKLmpVxXzIF3jXCmst6B3+I=";
   };
 
   dontBuild = true;

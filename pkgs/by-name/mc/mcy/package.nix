@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "YosysHQ";
     repo = "mcy";
     rev = "62048e69df13f8e03670424626755ae8ef4c36ff";
-    sha256 = "15xxgzx1zxzx5kshqyrxnfx33cz6cjzxcdcn6z98jhs9bwyvf96f";
+    hash = "sha256-ziS3PV9JQ4nSN5Y11r9k5rMxurM9ewz1LP33H/p/vZc=";
   };
 
   buildInputs = [ python ];

@@ -23,7 +23,7 @@ let
         owner = "semiocast";
         repo = "pgsql";
         rev = "14f632bc89e464d82ce3ef12a67ed8c2adb5b60c";
-        sha256 = "17dcahiwlw61zhy8aq9rn46lwb35fb9q3372s4wmz01czm8c348w";
+        hash = "sha256-HJHBUP0sgF850eKMgdNyZSxODbE5YYU8/MFwyiNUrJ0=";
       };
 
       dontStrip = true;

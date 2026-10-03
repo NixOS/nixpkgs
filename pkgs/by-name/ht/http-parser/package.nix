@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nodejs";
     repo = "http-parser";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vda4dp75pjf5fcph73sy0ifm3xrssrmf927qd1x8g3q46z0cv6c";
+    hash = "sha256-zGwGviF4PNRDw0ckV7PWuY/qIvB6HHiZK07ecm4jqu0=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

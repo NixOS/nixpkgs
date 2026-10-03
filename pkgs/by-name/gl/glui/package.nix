@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libglui";
     repo = "glui";
     rev = finalAttrs.version;
-    sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
+    hash = "sha256-EZixuhYCgl5x0Dmfymei5tHe8UUaaxy8+gPokjjy4mE=";
   };
 
   buildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "edanaher";
     repo = "pidgin-osd";
     rev = "${pname}-${version}";
-    sha256 = "07wa9anz99hnv6kffpcph3fbq8mjbyq17ij977ggwgw37zb9fzb5";
+    hash = "sha256-ZX2X1j+DP/7eOUnGE7BfsiK83ICXXeem2Ram9K1Kih8=";
   };
 
   # autoreconf is run such that it *really* wants all the files, and there's no

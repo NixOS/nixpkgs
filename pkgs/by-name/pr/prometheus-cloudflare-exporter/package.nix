@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "lablabs";
     repo = "cloudflare-exporter";
     tag = "cloudflare-exporter-${version}";
-    sha256 = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
+    hash = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
   };
 
   vendorHash = "sha256-v8qw4Cofw0vOrEg5oo9YtRabXMrjpQ+tI4l+A43JllA=";

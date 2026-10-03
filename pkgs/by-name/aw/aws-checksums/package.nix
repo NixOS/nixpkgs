@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "awslabs";
     repo = "aws-checksums";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dYDTDWZJJ0JlvkMfLS376uUt5QzSmbV0UNRC4aq35TY=";
+    hash = "sha256-dYDTDWZJJ0JlvkMfLS376uUt5QzSmbV0UNRC4aq35TY=";
   };
 
   nativeBuildInputs = [ cmake ];

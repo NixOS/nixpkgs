@@ -12,7 +12,7 @@ perlPackages.buildPerlPackage rec {
     owner = "pstray";
     repo = "rename";
     rev = "v${version}";
-    sha256 = "KQsBO94fsa4CbTHNyJxOD96AwUfKNLa9p44odlNgQao=";
+    hash = "sha256-KQsBO94fsa4CbTHNyJxOD96AwUfKNLa9p44odlNgQao=";
   };
   meta = {
     description = "Rename files according to a Perl rewrite expression";

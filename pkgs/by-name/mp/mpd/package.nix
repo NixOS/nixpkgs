@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MusicPlayerDaemon";
     repo = "MPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-52fns2SyMacJcXO8aoFseSHuGp6zYGuzSlYEXAtrJFo=";
+    hash = "sha256-52fns2SyMacJcXO8aoFseSHuGp6zYGuzSlYEXAtrJFo=";
   };
 
   buildInputs = [

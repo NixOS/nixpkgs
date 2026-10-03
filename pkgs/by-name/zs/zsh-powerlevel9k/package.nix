@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "Powerlevel9k";
     repo = "powerlevel9k";
     rev = "87acc51acab3ed4fd33cda2386abed6f98c80720";
-    sha256 = "0v1dqg9hvycdkcvklg2njff97xwr8rah0nyldv4xm39r77f4yfvq";
+    hash = "sha256-eDtP3Dk5jdrJbtRbAFVGmfeTnJNWPDo3m435DdPDLWw=";
   };
 
   strictDeps = true;

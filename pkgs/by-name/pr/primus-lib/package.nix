@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "amonakov";
     repo = "primus";
     rev = "d1afbf6fce2778c0751eddf19db9882e04f18bfd";
-    sha256 = "118jm57ccawskb8vjq3a9dpa2gh72nxzvx2zk7zknpy0arrdznj1";
+    hash = "sha256-QdrfclbAXzv/mV/0/bsVBz6hbktqYLnRmporxk6pEoU=";
   };
 
   patches = [

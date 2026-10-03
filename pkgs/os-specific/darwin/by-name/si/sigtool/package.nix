@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "thefloweringash";
     repo = "sigtool";
     rev = "v${version}";
-    sha256 = "sha256-K3VSFaqcZEomF7kROJz+AwxdW1MmxxEFDaRnWnzcw54=";
+    hash = "sha256-K3VSFaqcZEomF7kROJz+AwxdW1MmxxEFDaRnWnzcw54=";
   };
 
   patches = [

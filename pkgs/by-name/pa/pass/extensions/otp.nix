@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "tadfisher";
     repo = "pass-otp";
     rev = "v${version}";
-    sha256 = "0cpqrf3939hcvwg7sd8055ghc8x964ilimlri16czzx188a9jx9v";
+    hash = "sha256-O3WZFEKh/89MiJnWSCMxqSMGXykANX0e3wymkYbL+DI=";
   };
 
   buildInputs = [ oath-toolkit ];

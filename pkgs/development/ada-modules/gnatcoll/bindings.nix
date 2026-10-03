@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "AdaCore";
     repo = "gnatcoll-bindings";
     rev = "v${version}";
-    sha256 = "0ayc7zvv8w90v0xzhrjk2x88zrsk62xxcm27ya9crlp6affn5idk";
+    hash = "sha256-s8VinVPm0syS8kdU1rswU+ePUBdTZvg72CBxtPc/zCs=";
   };
 
   nativeBuildInputs = [

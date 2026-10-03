@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "LexiFi";
     repo = "gen_js_api";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-baK+/y0s08hHC8/+P7RKOboFnALQpndxBMuhI1WKf2o=";
+    hash = "sha256-baK+/y0s08hHC8/+P7RKOboFnALQpndxBMuhI1WKf2o=";
   };
 
   minimalOCamlVersion = "4.11";

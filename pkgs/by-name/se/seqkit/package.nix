@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "shenwei356";
     repo = "seqkit";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yKgkzhwUMD37AY3VvX+jShWosI7Eda8TRCJEi0Wz748=";
+    hash = "sha256-yKgkzhwUMD37AY3VvX+jShWosI7Eda8TRCJEi0Wz748=";
   };
 
   vendorHash = "sha256-w2FKHUkxvkQwMDmiVVyKItPCwmVURTERIgrvvjX97CI=";

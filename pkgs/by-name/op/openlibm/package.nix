@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "JuliaMath";
     repo = "openlibm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vBy7VhYPmmaIbDN6SAXkbbM2xDh1XiIqEnYpnzop+Zg=";
+    hash = "sha256-vBy7VhYPmmaIbDN6SAXkbbM2xDh1XiIqEnYpnzop+Zg=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "themoken";
     repo = "canto-curses";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
+    hash = "sha256-WaOVyKC+0ZnaV54C703NeX2ajqWkGEPpf7E/IoNN6+8=";
   };
 
   # Fixes the issue found here https://github.com/themoken/canto-curses/issues/59

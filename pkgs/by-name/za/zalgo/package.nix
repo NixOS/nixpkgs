@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "lunasorcery";
     repo = "zalgo";
     rev = "6aa1f66cfe183f8164a666730dfeaf39133cf01a";
-    sha256 = "00q56yvfcj2f89wllrckvizihivqmd6l77nihb52ffqd99rdd24w";
+    hash = "sha256-nIjWckoNOyfKgtGeQ02reEcYf9yTZUp5Qk5I5rY3BQM=";
   };
 
   installPhase = ''

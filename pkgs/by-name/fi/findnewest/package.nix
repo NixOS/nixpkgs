@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "0-wiz-0";
     repo = "findnewest";
     rev = "findnewest-${finalAttrs.version}";
-    sha256 = "1x1cbn2b27h5r0ah5xc06fkalfdci2ngrgd4wibxjw0h88h0nvgq";
+    hash = "sha256-+G0LIEIQcNlX5KS9/KyIrDmqpjOA9QIVyAUesYRdLPQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

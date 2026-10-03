@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mellowcandle";
     repo = "bitwise";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UJHgW89VXMNuqxSncI7Di0GzrMShBLWGx2mDOVZkIxc=";
+    hash = "sha256-UJHgW89VXMNuqxSncI7Di0GzrMShBLWGx2mDOVZkIxc=";
   };
 
   buildInputs = [

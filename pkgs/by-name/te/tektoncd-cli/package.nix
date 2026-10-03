@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     owner = "tektoncd";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YZN6Oprt9Rjg5EBRmaQR/N5wc4oVaK4Tr9Tx4d+UemY=";
+    hash = "sha256-YZN6Oprt9Rjg5EBRmaQR/N5wc4oVaK4Tr9Tx4d+UemY=";
   };
 
   vendorHash = null;

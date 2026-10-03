@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-88cCQm3eViy0OwSyCTlnW7uuiFwz2/6Wz45QzxCgXxg=";
+    hash = "sha256-88cCQm3eViy0OwSyCTlnW7uuiFwz2/6Wz45QzxCgXxg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

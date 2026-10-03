@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nmap";
     repo = "ncrack";
     rev = finalAttrs.version;
-    sha256 = "1gnv5xdd7n04glcpy7q1mkb6f8gdhdrhlrh8z6k4g2pjdhxlz26g";
+    hash = "sha256-z4hPO2zyikem+QhmCnOD7SFn1qwBH38ZfQTY01ov274=";
   };
 
   patches = [

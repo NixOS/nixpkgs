@@ -23,7 +23,7 @@ let
           owner = "garrigue";
           repo = "lablgtk";
           rev = version;
-          sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
+          hash = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
         };
         env = { };
         buildInputs = [ camlp-streams ];

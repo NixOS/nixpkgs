@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pbiering";
     repo = "ipv6calc";
     rev = finalAttrs.version;
-    sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
+    hash = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
   };
 
   buildInputs = [

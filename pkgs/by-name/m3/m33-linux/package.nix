@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "donovan6000";
     repo = "M33-Linux";
     rev = "5c1b90c13d260771dac970b49fdc9f840fee5f4a";
-    sha256 = "1bvbclkyfcv23vxb4s1zssvygklks1nhp4iwi4v90c1fvyz0356f";
+    hash = "sha256-zpQBvt8uMJA2iTySC23Qk87nt9Y/aLL6HmIz5ydla68=";
   };
 
   patches = [

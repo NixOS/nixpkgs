@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "TimothyYe";
     repo = "ydict";
     rev = "v${version}";
-    sha256 = "sha256-FcrkfWE1m5OveK4YPgVmUbL/jkh2NEs9bfeCHm2H9P8=";
+    hash = "sha256-FcrkfWE1m5OveK4YPgVmUbL/jkh2NEs9bfeCHm2H9P8=";
   };
 
   vendorHash = "sha256-c5nQVQd4n978kFAAKcx5mX2Jz16ZOhS8iL/oxS1o5xs=";

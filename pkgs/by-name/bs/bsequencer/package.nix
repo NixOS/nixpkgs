@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sjaehn";
     repo = "BSEQuencer";
     tag = finalAttrs.version;
-    sha256 = "sha256-1PSICm5mw37nO3gkHA9MNUH+CFULeOZURjimYEA/dXA=";
+    hash = "sha256-1PSICm5mw37nO3gkHA9MNUH+CFULeOZURjimYEA/dXA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

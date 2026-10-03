@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fullstorydev";
     repo = "grpcui";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qamroFdchUtpZE5/6nanfLWXEUR/mXD+O89rdJL1wm4=";
+    hash = "sha256-qamroFdchUtpZE5/6nanfLWXEUR/mXD+O89rdJL1wm4=";
   };
 
   vendorHash = "sha256-rj7Ha5zsulosy0CEqDSwax3bCf21PpOTELVzw1hXceo=";

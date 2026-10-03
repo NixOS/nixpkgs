@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "mdk97";
     repo = "aitrack-linux";
     rev = "00bcca9b685abf3a19e4eab653198ca2b1895ae4";
-    sha256 = "sha256-pPvYVLUPYdjtJKdxqZI+JN7OZ4xw9gZ3baYTnJUSTGE=";
+    hash = "sha256-pPvYVLUPYdjtJKdxqZI+JN7OZ4xw9gZ3baYTnJUSTGE=";
   };
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "qarkai";
     repo = "xautoclick";
     rev = "v${finalAttrs.version}";
-    sha256 = "GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
+    hash = "sha256-GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
   };
 
   patches = [

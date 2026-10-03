@@ -37,7 +37,7 @@ let
     owner = "pinnacle-comp";
     repo = "pinnacle";
     tag = "v${version}";
-    sha256 = "sha256-T8wZjgOTzYKfYUV1ShLBIi2xoCdVn9I7sux/pDH+8ic=";
+    hash = "sha256-T8wZjgOTzYKfYUV1ShLBIi2xoCdVn9I7sux/pDH+8ic=";
   };
   buildRustConfig = callPackage ./pinnacle-config.nix { inherit pinnacle-src; };
 

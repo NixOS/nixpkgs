@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kosua20";
     repo = "MIDIVisualizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
+    hash = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
   };
 
   nativeBuildInputs = [

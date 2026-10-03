@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "slaypni";
     repo = "fastdtw";
     rev = "v${version}";
-    sha256 = "0irc5x4ahfp7f7q4ic97qa898s2awi0vdjznahxrfjirn8b157dw";
+    hash = "sha256-vJ0SFrI5Spc7VPbLtkHkSmiUkMInsUjwcec6qEgvLEc=";
   };
 
   patches = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "leanprover";
     repo = "lean2";
     rev = "8072fdf9a0b31abb9d43ab894d7a858639e20ed7";
-    sha256 = "12bscgihdgvaq5xi0hqf5r4w386zxm3nkx1n150lv5smhg8ga3gg";
+    hash = "sha256-7w310INVl01BCTb0aUft36DBSS4OQxB7wWq/BuNjeok=";
   };
 
   patches = [

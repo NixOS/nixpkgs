@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "snyk";
     repo = "driftctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IDKfW0NCEsgKXpHA7SwkHjMeoGAIYITlDVR/vI/b9hk=";
+    hash = "sha256-IDKfW0NCEsgKXpHA7SwkHjMeoGAIYITlDVR/vI/b9hk=";
   };
 
   vendorHash = "sha256-JFvC9PReziktHSXbltGkGHjVR8hTM1hPJ0OqrZQXRQM=";

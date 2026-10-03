@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds";
     rev = finalAttrs.version;
-    sha256 = "sha256-MQVUZ7PkxauoPpfxlhhAtsKztMe9tcZOpOzshuz/eb8=";
+    hash = "sha256-MQVUZ7PkxauoPpfxlhhAtsKztMe9tcZOpOzshuz/eb8=";
   };
 
   patches = [

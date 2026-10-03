@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cddlib";
     repo = "cddlib";
     rev = finalAttrs.version;
-    sha256 = "sha256-j4gXrxsWWiJH5gZc2ZzfYGsBCMJ7G7SQ1xEgurRWZrQ=";
+    hash = "sha256-j4gXrxsWWiJH5gZc2ZzfYGsBCMJ7G7SQ1xEgurRWZrQ=";
   };
   buildInputs = [ gmp ];
   nativeBuildInputs = [

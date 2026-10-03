@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "dim13";
     repo = "otpauth";
     rev = "v${version}";
-    sha256 = "sha256-9N13rXnUFimOTBEw2yDhbp2rUDt850SkVvVoOphhxbc=";
+    hash = "sha256-9N13rXnUFimOTBEw2yDhbp2rUDt850SkVvVoOphhxbc=";
   };
 
   vendorHash = "sha256-FZ5nWw9BYzQKWTDX1jRreaOaMkhWf/VeQx9vHdGYuKc=";

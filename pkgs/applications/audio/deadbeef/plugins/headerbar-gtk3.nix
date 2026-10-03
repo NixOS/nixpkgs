@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "saivert";
     repo = "ddb_misc_headerbar_GTK3";
     rev = "v${finalAttrs.version}";
-    sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
+    hash = "sha256-wPKUcYBCVE+jO5+rDNcTGfFCFDkRL/awvP7oazdkOuw=";
   };
 
   nativeBuildInputs = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vCWI+gcMLNmk7rC90+ovFe7t1ZRTDbBrHp4dZO8Ss3Q=";
+    hash = "sha256-vCWI+gcMLNmk7rC90+ovFe7t1ZRTDbBrHp4dZO8Ss3Q=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];

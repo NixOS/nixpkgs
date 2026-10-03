@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocaml-ppx";
     repo = "ocaml-migrate-parsetree";
     rev = "v${finalAttrs.version}";
-    sha256 = "16x8sxc4ygxrr1868qpzfqyrvjf3hfxvjzmxmf6ibgglq7ixa2nq";
+    hash = "sha256-2ArV48H0vRWNq71+ubuDw8mdPXb/YmRQyLk/T1jXqJs=";
   };
 
   propagatedBuildInputs = [

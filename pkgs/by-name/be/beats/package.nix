@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "j0hax";
     repo = "beats";
     rev = "v${finalAttrs.version}";
-    sha256 = "1rdvsqrjpily74y8vwch711401585xckb4p41cfwrmj6vf44jhif";
+    hash = "sha256-LkJJiNtG1swdC+SSNVkvqARAQjiQ8Y08OZ7GKzPWu+U=";
   };
 
   makeFlags = [

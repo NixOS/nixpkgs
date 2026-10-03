@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xiph";
     repo = "libao";
     rev = finalAttrs.version;
-    sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
+    hash = "sha256-BfdNouhjJ8IzdZHm8k12erx1d6lvr+2dZrDNxDSZb2s=";
   };
 
   patches = [

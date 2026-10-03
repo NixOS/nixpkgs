@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "altdesktop";
     repo = "playerctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
+    hash = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
   # macOS's ld64 has no --version-script, so translate the data/playerctl.syms

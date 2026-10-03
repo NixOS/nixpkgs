@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wting";
     repo = "autojump";
     rev = "release-v${finalAttrs.version}";
-    sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
+    hash = "sha256-mrPMgwVkqOlKjvy1106MUKF7OlEtKdt8E9mqCg7U9+U=";
   };
 
   buildInputs = [ python3 ];

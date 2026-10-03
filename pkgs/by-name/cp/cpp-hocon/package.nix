@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    sha256 = "0b24anpwkmvbsn5klnr58vxksw00ci9pjhwzx7a61kplyhsaiydw";
+    hash = "sha256-vPmoNPT0zmDU6Z9DeVNkAHA9+0YlWzqL1WvXya9VRCw=";
     rev = finalAttrs.version;
     repo = "cpp-hocon";
     owner = "puppetlabs";

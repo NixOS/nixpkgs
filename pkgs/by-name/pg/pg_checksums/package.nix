@@ -15,7 +15,7 @@ clangStdenv.mkDerivation rec {
     owner = "credativ";
     repo = "pg_checksums";
     rev = version;
-    sha256 = "sha256-CXWJroUkp6g1g0T5skx8P5rZyv1Pvzb/DQ7ezuDNi7s=";
+    hash = "sha256-CXWJroUkp6g1g0T5skx8P5rZyv1Pvzb/DQ7ezuDNi7s=";
   };
 
   nativeBuildInputs = [

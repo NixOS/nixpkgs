@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swh";
     repo = "LRDF";
     rev = "v${finalAttrs.version}";
-    sha256 = "00wzkfb8y0aqd519ypz067cq099dpc89w69zw8ln39vl6f9x2pd4";
+    hash = "sha256-pF3RkzN0p2Ep4j8ZnhC7LSWA2THgX59CaVgBj5abnwM=";
   };
 
   postPatch = lib.optionalString doCheck ''

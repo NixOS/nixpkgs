@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "CxxTest";
     repo = "cxxtest";
     rev = version;
-    sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
+    hash = "sha256-J9DGnHJmcmt49yHNuevSifRhV7wY0EP05uVCd+MUiac=";
   };
 
   sourceRoot = "${src.name}/python";

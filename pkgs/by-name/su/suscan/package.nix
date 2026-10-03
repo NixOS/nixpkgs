@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BatchDrake";
     repo = "suscan";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-h1ogtYjkqiHb1/NAJfJ0HQIvGnZM2K/PSP5nqLXUf9M=";
+    hash = "sha256-h1ogtYjkqiHb1/NAJfJ0HQIvGnZM2K/PSP5nqLXUf9M=";
   };
 
   postPatch = ''

@@ -20,14 +20,14 @@ python3.pkgs.buildPythonApplication rec {
     owner = "obfusk";
     repo = "jiten";
     rev = "v${version}";
-    sha256 = "13bdx136sirbhxdhvpq5kf0r6q1xvm5zyzp454z51gy0v6rn0qrp";
+    hash = "sha256-N2Ngs9nAv1A+KeR+/0vdPWCTgZsF3w1bhytHbUbobY0=";
   };
 
   nonFreeData = fetchFromGitHub {
     owner = "obfusk";
     repo = "jiten-nonfree-data";
     rev = "v${version}";
-    sha256 = "16sz8i0sw7ggy6kijcx4qyl2zr6xj789x4iav0yyllx12dfgp5b1";
+    hash = "sha256-YZX7XBOhU+o92CqSntCR3eQvqMekMxmn8e8drkFEX5s=";
   };
 
   patches = [

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "hyperion-project";
     repo = "hyperion-obs-plugin";
     rev = version;
-    sha256 = "sha256-UAfjafoZhhhHRSo+eUBLhHaCmn2GYFcYyRb9wHIp/9I=";
+    hash = "sha256-UAfjafoZhhhHRSo+eUBLhHaCmn2GYFcYyRb9wHIp/9I=";
   };
 
   nativeBuildInputs = [

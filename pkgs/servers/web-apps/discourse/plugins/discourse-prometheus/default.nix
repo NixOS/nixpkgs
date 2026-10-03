@@ -11,7 +11,7 @@ mkDiscoursePlugin {
     owner = "discourse";
     repo = "discourse-prometheus";
     rev = "8850b2ee1acb69266f8697c3741f34cca80cad61";
-    sha256 = "sha256-7koWRb0ifMwHdtpjV6X4yTiKmK7zVCdIJlewkY5Vgzs=";
+    hash = "sha256-7koWRb0ifMwHdtpjV6X4yTiKmK7zVCdIJlewkY5Vgzs=";
   };
 
   patches = [

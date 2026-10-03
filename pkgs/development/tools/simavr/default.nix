@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "buserror";
     repo = "simavr";
     rev = "v${version}";
-    sha256 = "0njz03lkw5374x1lxrq08irz4b86lzj2hibx46ssp7zv712pq55q";
+    hash = "sha256-uBR8RTj7n6u1IX1FKOSnBi3yc0QA505DJ2cUPukAX1o=";
   };
 
   makeFlags = [

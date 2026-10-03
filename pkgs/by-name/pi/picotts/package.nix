@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ihuguet";
     repo = "picotts";
     rev = "21089d223e177ba3cb7e385db8613a093dff74b5";
-    sha256 = "sha256-NmmYa3mVUSMsLC1blFAET3zLY66anGY2ff6ZQ424h1s=";
+    hash = "sha256-NmmYa3mVUSMsLC1blFAET3zLY66anGY2ff6ZQ424h1s=";
   };
 
   patches = [

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "aslafy-z";
     repo = "helm-git";
     rev = "v${version}";
-    sha256 = "sha256-JSy6bI6XHW4JkXwffbfSFJj46BUqJvRG83sfOi8AcHM=";
+    hash = "sha256-JSy6bI6XHW4JkXwffbfSFJj46BUqJvRG83sfOi8AcHM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

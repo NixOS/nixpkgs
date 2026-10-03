@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MycroftAI";
     repo = "mimic1";
     rev = finalAttrs.version;
-    sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
+    hash = "sha256-LQ5nkbJpW7XHp3iOeMlrjPh0++gvh5ZLHxlRnPx6/Kk=";
   };
 
   patches = [

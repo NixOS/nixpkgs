@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "marciogranzotto";
     repo = "py-nightscout";
     rev = "v${version}";
-    sha256 = "0kslmm3wrxhm307nqmjmq8i8vy1x6mjaqlgba0hgvisj6b4hx65k";
+    hash = "sha256-s5gOyTJSx/0gUOtRrGQ1PfiNIsJVVmwPGBX2zEetVE8=";
   };
 
   propagatedBuildInputs = [

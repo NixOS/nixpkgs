@@ -14,7 +14,7 @@ let
     owner = "Tinkerforge";
     repo = "daemonlib";
     rev = "brickd-${version}";
-    sha256 = "sha256-0HhuC4r1S4NJa2FSJa7+fNCfcoRTBckikYbGSE+2FbE=";
+    hash = "sha256-0HhuC4r1S4NJa2FSJa7+fNCfcoRTBckikYbGSE+2FbE=";
   };
 in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     owner = "Tinkerforge";
     repo = "brickd";
     rev = "v${version}";
-    sha256 = "sha256-6w2Ew+dLMmdRf9CF3TdKHa0d5ZgmX5lKIR+5t3QAWFQ=";
+    hash = "sha256-6w2Ew+dLMmdRf9CF3TdKHa0d5ZgmX5lKIR+5t3QAWFQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

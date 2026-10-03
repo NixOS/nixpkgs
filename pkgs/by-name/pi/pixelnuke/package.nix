@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "defnull";
     repo = "pixelflut";
     rev = "3458157a242ba1789de7ce308480f4e1cbacc916";
-    sha256 = "03dp0p00chy00njl4w02ahxqiwqpjsrvwg8j4yi4dgckkc3gbh40";
+    hash = "sha256-gMD1BpuTvUaiJxI9vrOWF/OIO1QCcEKlBcBDBsAFtw0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pixelnuke";

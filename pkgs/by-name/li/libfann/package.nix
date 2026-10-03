@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "libfann";
     repo = "fann";
     rev = "3907e1b37f94ed606b627c55dd2238956046a19b";
-    sha256 = "sha256-UdEpUD7ASrqygwFgW4CdCDGIJtUTKeJbHZDnnQI5jSI=";
+    hash = "sha256-UdEpUD7ASrqygwFgW4CdCDGIJtUTKeJbHZDnnQI5jSI=";
   };
 
   nativeBuildInputs = [ cmake ];

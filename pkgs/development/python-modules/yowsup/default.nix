@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "tgalal";
     repo = "yowsup";
     tag = "v${version}";
-    sha256 = "1pz0r1gif15lhzdsam8gg3jm6zsskiv2yiwlhaif5rl7lv3p0v7q";
+    hash = "sha256-+Gxwx6aH5uKigpRHL3acWn9T5XgPVaXbh7QEF1/I4N8=";
   };
 
   pythonRelaxDeps = true;

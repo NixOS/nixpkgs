@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "marlonrichert";
     repo = "zsh-edit";
     rev = "4a8fa599792b6d52eadbb3921880a40872013d28";
-    sha256 = "PI4nvzB/F0mHlc0UZJdD49vjzB6pXhhJYNTSmBhY8iU=";
+    hash = "sha256-PI4nvzB/F0mHlc0UZJdD49vjzB6pXhhJYNTSmBhY8iU=";
   };
 
   strictDeps = true;

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "DanielOgorchock";
     repo = "joycond";
     rev = "0df025ac5dc284b1f31172b6b252321ba788c4de";
-    sha256 = "sha256-2rHSQFQvpNZWZJQenZxPEVkbUFQvhRz1Om1AnnIio4M=";
+    hash = "sha256-2rHSQFQvpNZWZJQenZxPEVkbUFQvhRz1Om1AnnIio4M=";
   };
 
   nativeBuildInputs = [

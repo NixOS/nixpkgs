@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "shellspec";
     repo = "shellspec";
     rev = finalAttrs.version;
-    sha256 = "1ib5qp29f2fmivwnv6hq35qhvdxz42xgjlkvy0i3qn758riyqf46";
+    hash = "sha256-hjjsY0blWDwi8HtS+bogv7cNcRkYmm35jtUJl8TFZcU=";
   };
 
   strictDeps = true;

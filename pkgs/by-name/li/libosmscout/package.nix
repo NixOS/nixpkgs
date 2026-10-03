@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "Framstag";
     repo = "libosmscout";
     rev = "4c3b28472864b8e9cdda80a05ec73ef22cb39323";
-    sha256 = "sha256-Qe5TkF4BwlsEI7emC0gdc7SmS4QrSGLiO0QdjuJA09g=";
+    hash = "sha256-Qe5TkF4BwlsEI7emC0gdc7SmS4QrSGLiO0QdjuJA09g=";
   };
 
   patches = [

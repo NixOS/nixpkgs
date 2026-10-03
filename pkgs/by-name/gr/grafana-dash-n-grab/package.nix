@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "esnet";
     repo = "gdg";
-    sha256 = "sha256-K8/NhTFfYk9oL2wpRxFLobEx3aW6fx7PzLxf5wFNbFY=";
+    hash = "sha256-K8/NhTFfYk9oL2wpRxFLobEx3aW6fx7PzLxf5wFNbFY=";
   };
 
   vendorHash = "sha256-8ZIu9U6OFRD4pu8K/AUBesX/SRyMkOKi8cdScHBdKnk=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "sundermann";
     repo = "appindicator-sharp";
     rev = "5a79cde93da6d68a4b1373f1ce5796c3c5fe1b37";
-    sha256 = "sha256:1i0vqbp05l29f5v9ygp7flm4s05pcnn5ivl578mxmhb51s7ncw6l";
+    hash = "sha256-1HBmjw5lwdorOoXuWKxltwBNKnXnPp92cUnQAu7CG8Q=";
   };
 
   nativeBuildInputs = [

@@ -158,7 +158,7 @@ lib.makeScope pkgs.newScope (
         owner = "ids1024";
         repo = "gimp-farbfeld";
         rev = "5feacebf61448bd3c550dda03cd08130fddc5af4";
-        sha256 = "1vmw7k773vrndmfffj0m503digdjmkpcqy2r3p3i5x0qw9vkkkc6";
+        hash = "sha256-hs05d+IY9BLHHVl4zO6ssr3YBigVSOdcbTbvcc48vO4=";
       };
 
       installPhase = ''
@@ -254,7 +254,7 @@ lib.makeScope pkgs.newScope (
         owner = "lmanul";
         repo = "gimp-texturize";
         rev = "9ceff0d411cda018108e5477320669b8d00d811e";
-        sha256 = "haYS0K3oAPlHtHB8phOCX5/gtWq9uiVQhG5ZhAFX0t0=";
+        hash = "sha256-haYS0K3oAPlHtHB8phOCX5/gtWq9uiVQhG5ZhAFX0t0=";
       };
       nativeBuildInputs = with pkgs; [
         meson
@@ -308,7 +308,7 @@ lib.makeScope pkgs.newScope (
         owner = "carlobaldassi";
         repo = "gimp-lqr-plugin";
         rev = "v${version}";
-        sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
+        hash = "sha256-81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
       };
       patches = [
         # Pull upstream fix for -fno-common toolchain support:
@@ -339,7 +339,7 @@ lib.makeScope pkgs.newScope (
         owner = "seebk";
         repo = "GIMP-Lensfun";
         rev = "1c5a5c1534b5faf098b7441f8840d22835592f17";
-        sha256 = "1jj3n7spkjc63aipwdqsvq9gi07w13bb1v8iqzvxwzld2kxa3c8w";
+        hash = "sha256-HLGh+hSNft73xxHtsNYI/ID4Et4aN36jGobJefWxQ8o=";
       };
 
       buildInputs = (

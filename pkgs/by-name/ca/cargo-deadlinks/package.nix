@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "deadlinks";
     repo = "cargo-deadlinks";
     tag = finalAttrs.version;
-    sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
+    hash = "sha256-UDLSKPyPYTUNwFlYJf3/Q9di7WPFfkUGSlMzC59KuGg=";
   };
 
   cargoHash = "sha256-d5e5CpO/c6KrIQE8dJqXT19Qe0CRbIqgCDHNWz4TK8Q=";

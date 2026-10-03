@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wfr";
     repo = "unshieldv3";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ScUlKuvkq4UglEVJL8NreAGDZFLVrEpEBQCZvu7XOrg=";
+    hash = "sha256-ScUlKuvkq4UglEVJL8NreAGDZFLVrEpEBQCZvu7XOrg=";
   };
 
   nativeBuildInputs = [ cmake ];

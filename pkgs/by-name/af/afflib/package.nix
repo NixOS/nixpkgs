@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sshock";
     repo = "AFFLIBv3";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-pGInhJQBhFJhft/KfB3J3S9/BVp9D8TZ+uw2CUNVC+Q=";
+    hash = "sha256-pGInhJQBhFJhft/KfB3J3S9/BVp9D8TZ+uw2CUNVC+Q=";
   };
 
   patches = [

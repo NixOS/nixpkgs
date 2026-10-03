@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "openSUSE";
     repo = "IBus-Theme-Tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "0i8vwnikwd1bfpv4xlgzc51gn6s18q58nqhvcdiyjzcmy3z344c2";
+    hash = "sha256-ghEy/vCVfeljYxtiiwpGQRv7QmH/0U72dSs0PqPlG0U=";
   };
 
   buildInputs = [ gettext ];

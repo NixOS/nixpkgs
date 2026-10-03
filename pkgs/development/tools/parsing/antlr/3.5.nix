@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "antlr";
     repo = "antlr3";
     rev = "5c2a916a10139cdb5c7c8851ee592ed9c3b3d4ff";
-    sha256 = "1i0w2v9prrmczlwkfijfp4zfqfgrss90a7yk2hg3y0gkg2s4abbk";
+    hash = "sha256-cy1FtHjzAT8eFNMfBZLW+TnsPrlORjc5/azmfNMWHMQ=";
   };
 
   patches = [

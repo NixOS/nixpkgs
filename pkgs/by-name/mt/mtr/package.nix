@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "traviscross";
     repo = "mtr";
     rev = "v${version}";
-    sha256 = "sha256-Oit0jEm1g+jYCIoTak/mcdlF14GDkDOAWKmX2mYw30M=";
+    hash = "sha256-Oit0jEm1g+jYCIoTak/mcdlF14GDkDOAWKmX2mYw30M=";
   };
 
   # we need this before autoreconfHook does its thing

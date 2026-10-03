@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "YafaRay";
     repo = "libYafaRay";
     rev = "6e8c45fb150185b3356220e5f99478f20408ee49";
-    sha256 = "sha256-UVBA1vXOuLg4RT+BdF4rhbZ6I9ySeZX0N81gh3MH84I=";
+    hash = "sha256-UVBA1vXOuLg4RT+BdF4rhbZ6I9ySeZX0N81gh3MH84I=";
   };
 
   postPatch = ''

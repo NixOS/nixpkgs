@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Dr-Noob";
     repo = "cpufetch";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
+    hash = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
   };
 
   postPatch =

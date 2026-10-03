@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GregoryFaust";
     repo = "samblaster";
     rev = "v.${finalAttrs.version}";
-    sha256 = "0g24fq5hplnfgqkh3xqpg3lgx3wmxwnh9c7m6yw7pbi40lmgl1jv";
+    hash = "sha256-Wwb6KgUkrnu4N/WwBC3vlY/+6HgX9wEnfs7SCwt2RDw=";
   };
 
   makeFlags = [ "CPP=${stdenv.cc.targetPrefix}c++" ];

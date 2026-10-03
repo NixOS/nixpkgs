@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     owner = "cfenollosa";
     repo = "bashblog";
     rev = "c3d4cc1d905560ecfefce911c319469f7a7ff8a8";
-    sha256 = "sha256-THlP/JuaZzDq9QctidwLRiUVFxRhGNhRKleWbQiqsgg=";
+    hash = "sha256-THlP/JuaZzDq9QctidwLRiUVFxRhGNhRKleWbQiqsgg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

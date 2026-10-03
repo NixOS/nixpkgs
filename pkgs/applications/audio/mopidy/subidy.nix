@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "Prior99";
     repo = "mopidy-subidy";
     tag = finalAttrs.version;
-    sha256 = "0c5ghhhrj5v3yp4zmll9ari6r5c6ha8c1izwqshvadn40b02q7xz";
+    hash = "sha256-vx8swALENrWhxvzHwJCChpVsYlaJ0vrJ9WMXmSGErzA=";
   };
 
   build-system = [

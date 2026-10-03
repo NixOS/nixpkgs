@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NIFTI-Imaging";
     repo = "nifti_clib";
     rev = "v${finalAttrs.version}";
-    sha256 = "0hamm6nvbjdjjd5md4jahzvn5559frigxaiybnjkh59ckxwb1hy4";
+    hash = "sha256-xMOweJ8sFTilXT6q/mJ2qZRi94dKklZLk7LJta2pVUE=";
   };
 
   cmakeFlags = [ "-DDOWNLOAD_TEST_DATA=OFF" ];

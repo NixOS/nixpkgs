@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ashinn";
     repo = "chibi-scheme";
     rev = finalAttrs.version;
-    sha256 = "sha256-TQT3/fZqgQP5UfCKN1ShvGgxdjfNdUWnpqdHKQMJHzY=";
+    hash = "sha256-TQT3/fZqgQP5UfCKN1ShvGgxdjfNdUWnpqdHKQMJHzY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fzipp";
     repo = "gocyclo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1IwtGUqshpLDyxH5NNkGUads1TKLs48eslNnFylGUPA=";
+    hash = "sha256-1IwtGUqshpLDyxH5NNkGUads1TKLs48eslNnFylGUPA=";
   };
 
   vendorHash = null;

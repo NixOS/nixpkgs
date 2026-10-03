@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "bbqsrc";
     repo = "cargo-ndk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1LtjBbfrHKgfqcwz40l7d4+d9C4vY/BKI2P2Oshk+a0=";
+    hash = "sha256-1LtjBbfrHKgfqcwz40l7d4+d9C4vY/BKI2P2Oshk+a0=";
   };
 
   cargoHash = "sha256-QB4s6g3QmHFPtR7utGmfhQ8iUFyw6DXGii4XTj2V874=";

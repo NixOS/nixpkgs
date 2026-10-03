@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mccdaq";
     repo = "uldaq";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+UNICbbhPk9yJIeC2w8d3q5OPrWrDFZ2cvZsbn6dNgQ=";
+    hash = "sha256-+UNICbbhPk9yJIeC2w8d3q5OPrWrDFZ2cvZsbn6dNgQ=";
   };
 
   patches = [

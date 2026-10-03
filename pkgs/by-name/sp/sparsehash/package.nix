@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sparsehash";
     repo = "sparsehash";
     rev = "sparsehash-${finalAttrs.version}";
-    sha256 = "1pf1cjvcjdmb9cd6gcazz64x0cd2ndpwh6ql2hqpypjv725xwxy7";
+    hash = "sha256-x3feizhbXn8xFBQbyG+zojHQiflfsWcaS6s2ybZkwd0=";
   };
 
   # C++20 (default with GCC 16) removed many members of std::allocator. This

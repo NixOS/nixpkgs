@@ -12,7 +12,7 @@ buildDunePackage (finalAttrs: {
     owner = "Lysxia";
     repo = "pure-splitmix";
     rev = finalAttrs.version;
-    sha256 = "RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
+    hash = "sha256-RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
   };
 
   doCheck = true;

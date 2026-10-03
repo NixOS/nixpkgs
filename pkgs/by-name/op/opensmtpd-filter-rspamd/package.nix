@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "poolpOrg";
     repo = "filter-rspamd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mOUFTYXA+cJJpFjvnv9wOtxqAuxaaVqKfhV5Zds9wIY=";
+    hash = "sha256-mOUFTYXA+cJJpFjvnv9wOtxqAuxaaVqKfhV5Zds9wIY=";
   };
 
   vendorHash = "sha256-9Vq7TdjkJv7646fr9bJ2pZN443vIObAYcI8mzFrbX18=";

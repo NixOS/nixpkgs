@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "ljanyst";
     repo = "carddav-util";
     rev = "53b181faff5f154bcd180467dd04c0ce69405564";
-    sha256 = "sha256-9iRCNDC0FJ+JD2Hk5TC0w4QMjJ9mMtct5WIA35xTGTg=";
+    hash = "sha256-9iRCNDC0FJ+JD2Hk5TC0w4QMjJ9mMtct5WIA35xTGTg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     owner = "awesomewm";
     repo = "awesome";
     rev = "v${version}";
-    sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
+    hash = "sha256-TvpUSep0Ee2/mSQogiSIuG/Uy9h+Vvvup6QrvV6V6sQ=";
   };
 
   patches = [

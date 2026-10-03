@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "taku910";
     repo = "zinnia";
     rev = "fd74d8c8680bb3df8692279151ea6339ab68e32b";
-    sha256 = "1izjy5qw6swg0rs2ym2i72zndb90mwrfbd1iv8xbpwckbm4899lg";
+    hash = "sha256-j6aESF2T8bs62jG05TKvIK1mvzhRVC90Bo9rw3Hx8sc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zinnia";

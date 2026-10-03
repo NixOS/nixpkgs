@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mackyle";
     repo = "topgit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-FMrkoJwgBkFvi3tewtqu+b9sRuNPCNCG6BrcnAbx0sk=";
+    hash = "sha256-FMrkoJwgBkFvi3tewtqu+b9sRuNPCNCG6BrcnAbx0sk=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

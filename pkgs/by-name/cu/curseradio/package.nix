@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "chronitis";
     repo = "curseradio";
     rev = "1bd4bd0faeec675e0647bac9a100b526cba19f8d";
-    sha256 = "11bf0jnj8h2fxhpdp498189r4s6b47vy4wripv0z4nx7lxajl88i";
+    hash = "sha256-ESEqVaenW/LBvjFz4vchy2iSEwookdsu7E5AJK0EboU=";
   };
 
   build-system = with python3Packages; [

@@ -17,7 +17,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "octave-dicom";
     tag = "release-${version}";
-    sha256 = "sha256-jvqnL9b4o5SQdqlk04LAL/U898R8B+NxC8xyV144hx4=";
+    hash = "sha256-jvqnL9b4o5SQdqlk04LAL/U898R8B+NxC8xyV144hx4=";
   };
 
   nativeBuildInputs = [

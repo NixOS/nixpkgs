@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "Tarrasch";
     repo = "zsh-bd";
     rev = "d4a55e661b4c9ef6ae4568c6abeff48bdf1b1af7";
-    sha256 = "020f8nq86g96cps64hwrskppbh2dapfw2m9np1qbs5pgh16z4fcb";
+    hash = "sha256-iznyTYDvFr1wuDZVwd1VTcB179SZQ2L0ZSY9g7BFDgg=";
   };
 
   strictDeps = true;

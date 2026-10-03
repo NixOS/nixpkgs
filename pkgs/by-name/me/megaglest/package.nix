@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     repo = "megaglest-source";
     tag = version;
     fetchSubmodules = true;
-    sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
+    hash = "sha256-mrML1ZXb5bc303DzlnTxPLYN74v5J6Q1CSxaA45CZTk=";
   };
 
   patches = [

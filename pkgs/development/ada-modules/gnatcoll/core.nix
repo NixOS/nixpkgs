@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "AdaCore";
     repo = "gnatcoll-core";
     rev = "v${version}";
-    sha256 = "1srnh7vhs46c2zy4hcy4pg0a0prghfzlpv7c82k0jan384yz1g6g";
+    hash = "sha256-z7zwPUHDKgmmQOzsS7+DL1+gwLvEM0j8F8wQDfeBNus=";
   };
 
   patches = [

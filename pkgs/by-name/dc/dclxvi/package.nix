@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "agl";
     repo = "dclxvi";
     rev = "74009d58f2305be3b95d88717619bde8ecbdd9a2";
-    sha256 = "1kx4h8iv7yb30c6zjmj8zs9x12vxhi0jwkiwxsxj9swf6bww6p1g";
+    hash = "sha256-L1zD+TKO6yS77jxOLkGEfYvQk/5IVvkNA2P5syOCpM8=";
   };
 
   buildFlags = [ "libdclxvipairing.so" ];

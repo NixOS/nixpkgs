@@ -21,7 +21,7 @@ let
       owner = "NVIDIA";
       repo = "CUDALibrarySamples";
       rev = "e57b9c483c5384b7b97b7d129457e5a9bdcdb5e1";
-      sha256 = "0g17afsmb8am0darxchqgjz1lmkaihmnn7k1x4ahg5gllcmw8k3l";
+      hash = "sha256-dEzEK6P0lQcV6WEeayuMalYavnwYsp5VA1WhVbVTJzw=";
     };
     version =
       lib.strings.substring 0 7 finalAttrs.src.rev + "-" + lib.versions.majorMinor cudatoolkit.version;

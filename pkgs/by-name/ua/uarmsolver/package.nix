@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "firefly-cpp";
     repo = "uARMSolver";
     rev = finalAttrs.version;
-    sha256 = "sha256-fJtGZ1Y1mL/JjuaDbLfXb+AjTESEGjoh3ZEmhBZKotA=";
+    hash = "sha256-fJtGZ1Y1mL/JjuaDbLfXb+AjTESEGjoh3ZEmhBZKotA=";
   };
 
   nativeBuildInputs = [ cmake ];

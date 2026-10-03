@@ -13,7 +13,7 @@ buildNpmPackage rec {
     owner = "Doist";
     repo = "todoist-cli";
     rev = "v${version}";
-    sha256 = "sha256-1WoWzIrZQT8bQTUQl55e8E7oCqLKmjSbm6aJB7GWga8=";
+    hash = "sha256-1WoWzIrZQT8bQTUQl55e8E7oCqLKmjSbm6aJB7GWga8=";
   };
 
   npmDepsHash = "sha256-0GOgPDvNC/oaPA3ZV3SfFziyDLh/6aiw50k+ztJsvxw=";

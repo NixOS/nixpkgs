@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "C0rn3j";
     repo = "deadbeef-lyricbar";
     rev = "8f99b92ef827c451c43fc7dff38ae4f15c355e8e";
-    sha256 = "108hx5530f4xm8p9m2bk79nq7jkhcj39ad3vmxb2y6h6l2zv5kwl";
+    hash = "sha256-lM+yv6AGGi9Wr3s0lYZkcMqDbTpziZouqp04MErpEIE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

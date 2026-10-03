@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "hashicorp";
     repo = "nomad-driver-podman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZUZr992bK4e08bh6peYN5B35N7PEVTOSySUWwQ132iA=";
+    hash = "sha256-ZUZr992bK4e08bh6peYN5B35N7PEVTOSySUWwQ132iA=";
   };
 
   vendorHash = "sha256-AmG4YQNW20wRfNHl9l8RkByrTIfmAjBxnWvndf1jqYU=";

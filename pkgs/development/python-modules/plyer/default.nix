@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "kivy";
     repo = "plyer";
     tag = version;
-    sha256 = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
+    hash = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "solusipse";
     repo = "fiche";
     rev = finalAttrs.version;
-    sha256 = "1102r39xw17kip7mjp987jy8na333gw9vxv31f7v8q05cr7d7kfb";
+    hash = "sha256-y83TTmYFYLSPC2P3nfgbYyiLvDwoXVnPjfME3tPIAoQ=";
   };
 
   installPhase = ''

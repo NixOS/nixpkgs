@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AGWA";
     repo = "git-crypt";
     rev = finalAttrs.version;
-    sha256 = "sha256-d5nMDFQkJY+obYkhvr8yT9mjlGEBWFLN5xGizJ9kwHw=";
+    hash = "sha256-d5nMDFQkJY+obYkhvr8yT9mjlGEBWFLN5xGizJ9kwHw=";
   };
 
   strictDeps = true;

@@ -15,7 +15,7 @@ build-idris-package {
     owner = "palladin";
     repo = "idris-snippets";
     rev = "c26d6f5ffc1cc0456279f5ac74fec5af8c09025e";
-    sha256 = "1vwyzck6yan3wifsyj02ji9l6x9rs2r02aybm90gl676s2x4mhjn";
+    hash = "sha256-VsJKutDmGPpAqssrAbLQOXVDU5QCSK9d5MMqbyb7nu8=";
   };
 
   meta = {

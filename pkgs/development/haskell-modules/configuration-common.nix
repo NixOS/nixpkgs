@@ -2984,7 +2984,7 @@ with haskellLib;
         owner = "portnov";
         repo = "libssh2-hs";
         rev = "d35fa047cd872a73cd4db83aa3185463ac88a1d7";
-        sha256 = "sha256-m3VVx9mgI3OqtWHC8qY63/Wns808q5iITD5regdMILo=";
+        hash = "sha256-m3VVx9mgI3OqtWHC8qY63/Wns808q5iITD5regdMILo=";
       }
       + "/libssh2";
   } super.libssh2;
@@ -3028,7 +3028,7 @@ with haskellLib;
       owner = "brendanhay";
       repo = "amazonka";
       rev = "7645bd335f008912b9e5257486f622b674de7afa";
-      sha256 = "sha256-ObamDnJdcLA2BlX9iGIxkaknUeL3Po3madKO4JA/em0=";
+      hash = "sha256-ObamDnJdcLA2BlX9iGIxkaknUeL3Po3madKO4JA/em0=";
     };
     setAmazonkaSourceRoot =
       dir: drv:

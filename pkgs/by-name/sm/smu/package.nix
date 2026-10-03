@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gottox";
     repo = "smu";
     rev = "v${finalAttrs.version}";
-    sha256 = "1jm7lhnzjx4q7gcwlkvsbffcy0zppywyh50d71ami6dnq182vvcc";
+    hash = "sha256-jO0tUMC2mVhVOA0U6Lm/9wPPnFt6T8rZO5h0+S2kp8o=";
   };
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)

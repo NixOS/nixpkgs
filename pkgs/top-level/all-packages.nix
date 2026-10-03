@@ -6244,7 +6244,7 @@ with pkgs;
       owner = "Open-Cascade-SAS";
       repo = "OCCT";
       rev = "V7_6_1";
-      sha256 = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
+      hash = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
     };
   };
 

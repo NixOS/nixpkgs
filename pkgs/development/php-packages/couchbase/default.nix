@@ -18,7 +18,7 @@ buildPecl {
     owner = "couchbase";
     repo = "php-couchbase";
     rev = "v${version}";
-    sha256 = "sha256-JpzLR4NcyShl2VTivj+15iAsTTsZmdMIdZYc3dLCbIA=";
+    hash = "sha256-JpzLR4NcyShl2VTivj+15iAsTTsZmdMIdZYc3dLCbIA=";
   };
 
   configureFlags = [ "--with-couchbase" ];

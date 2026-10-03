@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "torhve";
     repo = "weechat-matrix-protocol-script";
     rev = "8d32e90d864a8f3f09ecc2857cd5dd6e39a8c3f7";
-    sha256 = "0qqd6qmkrdc0r3rnl53c3yp93fbcz7d3mdw3vq5gmdqxyym4s9lj";
+    hash = "sha256-kiZNqvcdt/oK3oO3Otr5bLmRrh9sFGrzyIC1PCs2DWM=";
   };
 
   patches = [

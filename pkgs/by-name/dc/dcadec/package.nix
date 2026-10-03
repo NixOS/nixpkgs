@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "foo86";
     repo = "dcadec";
     rev = "v" + finalAttrs.version;
-    sha256 = "07nd0ajizrp1w02bsyfcv18431r8m8rq8gjfmz9wmckpg7cxj2hs";
+    hash = "sha256-GgrZ2Xl3ssrTr04+hDOqKIdBUNjMeb0E4OHmH6UCzR4=";
   };
 
   installPhase = "make PREFIX=/ DESTDIR=$out install";

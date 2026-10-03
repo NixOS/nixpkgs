@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mlin";
     repo = "twt";
     rev = "v${version}";
-    sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
+    hash = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
   };
 
   nativeBuildInputs = [

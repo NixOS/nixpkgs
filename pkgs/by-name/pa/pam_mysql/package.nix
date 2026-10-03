@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NigelCunningham";
     repo = "pam-MySQL";
     rev = finalAttrs.version;
-    sha256 = "07acf0hbhkd0kg49gnj4nb5ilnv3v4xx3dsggvzvjg8gi3cjmsap";
+    hash = "sha256-V+kq2YgPPbn/fk+30TvZY1say7JE2pfIm6BNuCBwTB0=";
   };
 
   nativeBuildInputs = [

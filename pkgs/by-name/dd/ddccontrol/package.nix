@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ddccontrol";
     repo = "ddccontrol";
     tag = finalAttrs.version;
-    sha256 = "sha256-1rCO99n89N2dbUU5vfTFyCrLC18iBF3ShcCjVjTz2to=";
+    hash = "sha256-1rCO99n89N2dbUU5vfTFyCrLC18iBF3ShcCjVjTz2to=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -11,7 +11,7 @@ buildGoModule {
     owner = "ferdinandyb";
     repo = "caeml";
     rev = "25dbe10e99aac9b0ce3b80787c162628104f5cd2";
-    sha256 = "UIQCNkUyrtMF0IiAfkDvE8siqxNvfFc9TZdlZiTxCVc=";
+    hash = "sha256-UIQCNkUyrtMF0IiAfkDvE8siqxNvfFc9TZdlZiTxCVc=";
   };
 
   vendorHash = "sha256-SDJsRLIGlLv/6NUctCrn6z1IDEmum1Wn5I8RFuwcOe8=";

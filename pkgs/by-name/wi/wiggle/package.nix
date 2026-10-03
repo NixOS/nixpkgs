@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neilbrown";
     repo = "wiggle";
     rev = "v${finalAttrs.version}";
-    sha256 = "18ilzr9sbal1j8p1d94ilm1j5blac5cngvcvjpdmgmpw6diy2ldf";
+    hash = "sha256-rlHhYzP81lfblZvtZ1lhiq4iQ6WRpBYukoGqpVP+NKI=";
   };
 
   buildInputs = [

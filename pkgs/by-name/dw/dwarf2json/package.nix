@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "volatilityfoundation";
     repo = "dwarf2json";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-M5KKtn5kly23TwbjD5MVLzIum58exXqCFs6jxsg6oGM=";
+    hash = "sha256-M5KKtn5kly23TwbjD5MVLzIum58exXqCFs6jxsg6oGM=";
   };
 
   vendorHash = "sha256-3PnXB8AfZtgmYEPJuh0fwvG38dtngoS/lxyx3H+rvFs=";

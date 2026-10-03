@@ -16,7 +16,7 @@ mkDerivation {
     owner = "qt";
     repo = "qtstyleplugins";
     rev = "335dbece103e2cbf6c7cf819ab6672c2956b17b3";
-    sha256 = "085wyn85nrmzr8nv5zv7fi2kqf8rp1gnd30h72s30j55xvhmxvmy";
+    hash = "sha256-vu5e4e6lSDC0OBCMZl+4GTk8RXRn/7Ityr9mW5D1vCA=";
   };
 
   patches = [

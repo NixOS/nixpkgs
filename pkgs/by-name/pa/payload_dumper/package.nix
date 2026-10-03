@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vm03";
     repo = "payload_dumper";
     rev = "c1eb5dbbc7bd88ac94635ae90ec22ccf92f89881";
-    sha256 = "1j1hbh5vqq33wq2b9gqvm1qs9nl0bmqklbnyyyhwkcha7zxn0aki";
+    hash = "sha256-cSpg+z8Kssmh994uOnFdgNqkcagbv7QE5mNgvAtcMMg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "opentyrian";
     repo = "opentyrian";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
+    hash = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
   };
 
   data = fetchzip {

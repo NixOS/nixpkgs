@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "DRuggeri";
     repo = "nut_exporter";
     rev = "v${version}";
-    sha256 = "sha256-et1XCKpjyhr7yY24t8xBSRzh9nAmIG6bdjgbI1LuJaE=";
+    hash = "sha256-et1XCKpjyhr7yY24t8xBSRzh9nAmIG6bdjgbI1LuJaE=";
   };
 
   vendorHash = "sha256-cMZ4GSal03LIZi7ESr/sQx8zLHNepOTZGEEsdvsNhec=";

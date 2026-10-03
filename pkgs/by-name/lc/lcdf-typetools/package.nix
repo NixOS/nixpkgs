@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kohler";
     repo = "lcdf-typetools";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hoILYYCef2R1v6aN9V+FoYnXYaKsnGN2jlpb/QFAN/w=";
+    hash = "sha256-hoILYYCef2R1v6aN9V+FoYnXYaKsnGN2jlpb/QFAN/w=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

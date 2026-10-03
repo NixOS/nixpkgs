@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "baskerville";
     repo = "txtw";
     rev = finalAttrs.version;
-    sha256 = "17yjdgdd080fsf5r1wzgk6vvzwsa15gcwc9z64v7x588jm1ryy3k";
+    hash = "sha256-c3ifQ5UIlX42MT8xzl4JSvO/t5nv85CL0w4g0Npr0p8=";
   };
 
   buildInputs = [ cairo ];

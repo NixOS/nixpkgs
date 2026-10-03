@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vtjnash";
     repo = "libwhich";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Or436P5O7k/KGhEyDMjag+s9uxstq7k780Cl7sZYFjs=";
+    hash = "sha256-Or436P5O7k/KGhEyDMjag+s9uxstq7k780Cl7sZYFjs=";
   };
 
   installPhase = ''

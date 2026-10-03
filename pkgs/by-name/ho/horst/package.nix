@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "br101";
     repo = "horst";
     rev = "v${finalAttrs.version}";
-    sha256 = "140pyv6rlsh4c745w4b59pz3hrarr39qq3mz9z1lsd3avc12nx1a";
+    hash = "sha256-KnQrAttqNE3DT78OjNPIWWU4/k1lEV7IYQRqms32F5A=";
   };
 
   patches = [

@@ -26,7 +26,7 @@ buildDunePackage (finalAttrs: {
     owner = "BinaryAnalysisPlatform";
     repo = "ppx_bap";
     rev = "v${finalAttrs.version}";
-    sha256 = "1c6rcdp8bicdiwqc2mb59cl9l2vxlp3y8hmnr9x924fq7acly248";
+    hash = "sha256-iAhPmTrYEZF6yrZC5MelfQuaKEtlVcEwj43FhW5j2bA=";
   };
 
   # Support ppx_expect

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "teleshoes";
     repo = "tpacpi-bat";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
+    hash = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
   };
 
   buildInputs = [ perl ];

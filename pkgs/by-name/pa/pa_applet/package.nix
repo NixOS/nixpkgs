@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "fernandotcl";
     repo = "pa-applet";
     rev = "005f192df9ba6d2e6491f9aac650be42906b135a";
-    sha256 = "sha256-ihvZFXHgr5YeqMKmVY/GB86segUkQ9BYqJYfE3PTgog=";
+    hash = "sha256-ihvZFXHgr5YeqMKmVY/GB86segUkQ9BYqJYfE3PTgog=";
   };
 
   nativeBuildInputs = [

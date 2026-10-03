@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "apngasm";
     repo = "apngasm";
     rev = "f105b2d6024ef3113bb407d68e27e476a17fa998";
-    sha256 = "sha256-lTk2sTllKHRUaWPPEkC4qU5K10oRaLrdWBgN4MUGKeo=";
+    hash = "sha256-lTk2sTllKHRUaWPPEkC4qU5K10oRaLrdWBgN4MUGKeo=";
   };
 
   patches = [

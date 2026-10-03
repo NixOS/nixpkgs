@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "webern";
     repo = "cargo-readme";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-v158zqrbnrOVTHlOgLuq7fnTDUxrjeY0MskFbB3re90=";
+    hash = "sha256-v158zqrbnrOVTHlOgLuq7fnTDUxrjeY0MskFbB3re90=";
   };
 
   cargoHash = "sha256-SJw/gKUhJ4lgMqj0eOx2LMhoSAcEAVjFMA2TzFoEnd0=";

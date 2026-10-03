@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bfgroup";
     repo = "lyra";
     rev = finalAttrs.version;
-    sha256 = "sha256-h2IO5cUYY5Xn3nmy2pXmRYqRRWHyOwPCrZgKnJf9gU8=";
+    hash = "sha256-h2IO5cUYY5Xn3nmy2pXmRYqRRWHyOwPCrZgKnJf9gU8=";
   };
 
   nativeBuildInputs = [

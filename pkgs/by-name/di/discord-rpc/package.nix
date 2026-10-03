@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "discord";
     repo = "discord-rpc";
     rev = "v${finalAttrs.version}";
-    sha256 = "04cxhqdv5r92lrpnhxf8702a8iackdf3sfk1050z7pijbijiql2a";
+    hash = "sha256-SlAcZVwy3vNBAWE6PVybTEWkBDjIdWhvpiLlshuGnRE=";
   };
 
   nativeBuildInputs = [

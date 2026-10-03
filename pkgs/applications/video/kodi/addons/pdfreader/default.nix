@@ -12,7 +12,7 @@ buildKodiAddon rec {
     owner = "i96751414";
     repo = "plugin.image.pdfreader";
     rev = "v${version}";
-    sha256 = "sha256-J93poR5VO9fAgNCEGftJVYnpXOsJSxnhHI6TAJZ2LeI=";
+    hash = "sha256-J93poR5VO9fAgNCEGftJVYnpXOsJSxnhHI6TAJZ2LeI=";
   };
 
   passthru.pythonPath = "lib/api";

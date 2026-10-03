@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "svanderburg";
     repo = "libnixxml";
     rev = "54c04a5fdbc8661b2445a7527f499e0a77753a1a";
-    sha256 = "sha256-HKQnCkO1TDs1e0MDil0Roq4YRembqRHQvb7lK3GAftQ=";
+    hash = "sha256-HKQnCkO1TDs1e0MDil0Roq4YRembqRHQvb7lK3GAftQ=";
   };
 
   prePatch = ''

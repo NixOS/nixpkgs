@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OSGeo";
     repo = "proj-datumgrid";
     rev = finalAttrs.version;
-    sha256 = "132wp77fszx33wann0fjkmi1isxvsb0v9iw0gd9sxapa9h6hf3am";
+    hash = "sha256-VQ0HDUzqqq5Te4DHtMHSu+sYYp3SAWsVH6N/7c65XIw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/scripts";

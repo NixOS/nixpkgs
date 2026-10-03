@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mustache";
     repo = "mustache";
     rev = "v${finalAttrs.version}";
-    sha256 = "03xrfyjzm5ss6zkdlpl9ypwzcglspcdcnr3f94vj1rjfqm2rxcjw";
+    hash = "sha256-XLKeRcVO5iA3SW5kyxq7mj72+fWJXtrmN1qX+qV3uQ8=";
   };
 
   configurePhase = "";

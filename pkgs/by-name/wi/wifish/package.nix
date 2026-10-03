@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bougyman";
     repo = "wifish";
     rev = finalAttrs.version;
-    sha256 = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
+    hash = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -13,7 +13,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "arut";
     repo = "nginx-dav-ext-module";
     tag = "v${finalAttrs.version}";
-    sha256 = "000dm5zk0m1hm1iq60aff5r6y8xmqd7djrwhgnz9ig01xyhnjv9w";
+    hash = "sha256-PG1poe8BvJi+fZBn2U7DtSNvcnFOAYNjqDBUMH+pDQA=";
   };
 
   buildInputs = [ expat ];

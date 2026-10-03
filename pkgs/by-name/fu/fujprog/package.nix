@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kost";
     repo = "fujprog";
     rev = "v${finalAttrs.version}";
-    sha256 = "08kzkzd5a1wfd1aycywdynxh3qy6n7z9i8lihkahmb4xac3chmz5";
+    hash = "sha256-5VfIBlOdrArVhJGimP6xxuMBu/WNe+ZVaI4HVdqffyI=";
   };
 
   nativeBuildInputs = [

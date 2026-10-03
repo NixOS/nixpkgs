@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication {
     owner = "ricardomv";
     repo = "snapper-gui";
     rev = "191575084a4e951802c32a4177dc704cf435883a";
-    sha256 = "sha256-uy1oLJx4ERGc8OHzmPpnJX81jPB9ztrA0qbmm1UcmTY=";
+    hash = "sha256-uy1oLJx4ERGc8OHzmPpnJX81jPB9ztrA0qbmm1UcmTY=";
   };
 
   nativeBuildInputs = [

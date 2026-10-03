@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dmedvinsky";
     repo = "gsimplecal";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ev7cSs1DUmJ2RKMokMP87YDqrqtWhmq0zIpLerSCI+0=";
+    hash = "sha256-Ev7cSs1DUmJ2RKMokMP87YDqrqtWhmq0zIpLerSCI+0=";
   };
 
   postPatch = ''

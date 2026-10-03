@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ros";
     repo = "console_bridge";
     tag = finalAttrs.version;
-    sha256 = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
+    hash = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
   };
 
   patches = [

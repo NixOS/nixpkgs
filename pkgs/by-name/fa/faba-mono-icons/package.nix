@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
     owner = "snwh";
     repo = "faba-mono-icons";
     rev = "2006c5281eb988c799068734f289a85443800cda";
-    sha256 = "0nisfl92y6hrbakp9qxi0ygayl6avkzrhwirg6854bwqjy2dvjv9";
+    hash = "sha256-acvdhJeYL1KQeTlymP/cylCvngex43SnWhkaLxJ1Olo=";
   };
 
   nativeBuildInputs = [

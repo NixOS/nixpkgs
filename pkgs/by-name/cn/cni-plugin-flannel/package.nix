@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "flannel-io";
     repo = "cni-plugin";
     rev = "v${version}";
-    sha256 = "sha256-lYn9qDmUn8g3nnD4wQqyzKjd/lPXqoER5nZuY0sVK0s=";
+    hash = "sha256-lYn9qDmUn8g3nnD4wQqyzKjd/lPXqoER5nZuY0sVK0s=";
   };
 
   vendorHash = "sha256-JTy9MsTyWvnqtRH0hzezYwgB23mfG7KtI9OmynpcESM=";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "MtnViewJohn";
     repo = "context-free";
     rev = "Version${version}";
-    sha256 = "sha256-a/HmB2AkhcibCxzHfiNjnUiYmz5hrfZVs7aZZu5IBIw=";
+    hash = "sha256-a/HmB2AkhcibCxzHfiNjnUiYmz5hrfZVs7aZZu5IBIw=";
   };
 
   nativeBuildInputs = [

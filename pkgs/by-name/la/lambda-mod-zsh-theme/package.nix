@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "halfo";
     repo = "lambda-mod-zsh-theme";
     rev = "78347ea9709935f265e558b6345919d12323fbff";
-    sha256 = "0fvxnvgbcvwii7ghvpj5l43frllq71wwjvfg7cqfmic727z001dh";
+    hash = "sha256-sAUA/hGHxeowO89tyXk4mNLsBqFF3g3fiZFvtt62fTs=";
   };
 
   strictDeps = true;

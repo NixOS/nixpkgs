@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "buzz";
     repo = "volctl";
     rev = "v${version}";
-    sha256 = "sha256-zL1m/DeSOrNkjt9B+8pdy2jUgjSp7tt81UpAueGsIwQ=";
+    hash = "sha256-zL1m/DeSOrNkjt9B+8pdy2jUgjSp7tt81UpAueGsIwQ=";
   };
 
   postPatch = ''

@@ -16,7 +16,7 @@ let
     owner = "AdaCore";
     repo = "gprconfig_kb";
     rev = "v${version}";
-    sha256 = "09x1njq0i0z7fbwg0mg39r5ghy7369avbqvdycfj67lpmw17gb1r";
+    hash = "sha256-Oax3Aq+XHiMd823jtVUy43j4Sk7jVfD4cueDCLC0oSc=";
   };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     owner = "AdaCore";
     repo = "gprbuild";
     rev = "v${version}";
-    sha256 = "1mqsmc0q5bzg8223ls18kbvaz6mhzjz7ik8d3sqhhn24c0j6wjaw";
+    hash = "sha256-XEluJGBEWAixHg3NeL78sJqv9pooaDqEQO+vggGrGtc=";
   };
 
   nativeBuildInputs = [

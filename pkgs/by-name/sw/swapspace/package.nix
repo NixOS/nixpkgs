@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Tookmund";
     repo = "Swapspace";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-KrPdmF1H7WFI78ZJlLqDyfxbs7fymSUQpXL+7XjN9bI=";
+    hash = "sha256-KrPdmF1H7WFI78ZJlLqDyfxbs7fymSUQpXL+7XjN9bI=";
   };
 
   nativeBuildInputs = [

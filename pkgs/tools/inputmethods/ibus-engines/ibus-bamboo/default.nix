@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "BambooEngine";
     repo = pname;
     rev = "v" + lib.toUpper version;
-    sha256 = "sha256-1qj1Fx8RDdA1qEGWn+/nQCAu4HCei+YbF7SHDzuFw2I=";
+    hash = "sha256-1qj1Fx8RDdA1qEGWn+/nQCAu4HCei+YbF7SHDzuFw2I=";
   };
 
   nativeBuildInputs = [

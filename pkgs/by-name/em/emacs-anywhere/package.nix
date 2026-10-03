@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "nohzafk";
     repo = "emacs-anywhere";
     rev = "58fcdd5565a41555092c0801029d46f5f48b7814";
-    sha256 = "sha256-ZHzJfABFnpquIsP6UknusPeYmx20p090JyvVMhJ/OOs=";
+    hash = "sha256-ZHzJfABFnpquIsP6UknusPeYmx20p090JyvVMhJ/OOs=";
   };
 
   installPhase = ''

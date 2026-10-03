@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "schachmat";
     repo = "wego";
     rev = finalAttrs.version;
-    sha256 = "sha256-RKVVOgM6eEWTHYb++AVTTjPLm/4R9SHFly4boRw9Ktw=";
+    hash = "sha256-RKVVOgM6eEWTHYb++AVTTjPLm/4R9SHFly4boRw9Ktw=";
   };
 
   vendorHash = "sha256-PSl0bGzyG9XBZPi8+YzLNq3JEm7QtmfX0272xOgtbek=";

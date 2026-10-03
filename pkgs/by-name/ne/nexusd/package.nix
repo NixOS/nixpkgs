@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "gammazero";
     repo = "nexus";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-c9y1NplODCIz+IZlZAyzm3G75D1wawTwbB6SZXZqjXc=";
+    hash = "sha256-c9y1NplODCIz+IZlZAyzm3G75D1wawTwbB6SZXZqjXc=";
   };
 
   vendorHash = "sha256-1sZDoDcX/9upTZ8bL7l+ldsouBZVT+61RFSRaeB6Dm8=";

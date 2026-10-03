@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocaml-community";
     repo = "calendar";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+VQzi6pEMqzV1ZR84Yjdu4jsJEWtx+7bd6PQGX7TiEs=";
+    hash = "sha256-+VQzi6pEMqzV1ZR84Yjdu4jsJEWtx+7bd6PQGX7TiEs=";
   };
 
   propagatedBuildInputs = [ re ];

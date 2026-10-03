@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wgois";
     repo = "OIS";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ir6p+Tzf8L5VOW/rsG4yelsth7INbhABO2T7pfMHcFo=";
+    hash = "sha256-ir6p+Tzf8L5VOW/rsG4yelsth7INbhABO2T7pfMHcFo=";
   };
 
   nativeBuildInputs = [ cmake ];

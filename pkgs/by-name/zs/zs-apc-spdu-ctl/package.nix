@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fogti";
     repo = "zs-apc-spdu-ctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
+    hash = "sha256-TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
   };
 
   nativeBuildInputs = [ cmake ];

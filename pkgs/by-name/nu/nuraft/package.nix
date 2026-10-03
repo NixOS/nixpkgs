@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eBay";
     repo = "NuRaft";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-puO8E7tSLqB0oq/NlzEZqQgIZKm7ZUb4HhR0XuI9dco=";
+    hash = "sha256-puO8E7tSLqB0oq/NlzEZqQgIZKm7ZUb4HhR0XuI9dco=";
   };
 
   patches = [

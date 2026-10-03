@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "minimap2";
     owner = "lh3";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-RH9IvpmcDEnuFEXucORpzeWc+yJlAvW4r6RnaUT+//c=";
+    hash = "sha256-RH9IvpmcDEnuFEXucORpzeWc+yJlAvW4r6RnaUT+//c=";
   };
 
   buildInputs = [ zlib ];

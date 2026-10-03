@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "fabianishere";
     repo = "pam_reattach";
     rev = "v${version}";
-    sha256 = "1k77kxqszdwgrb50w7algj22pb4fy5b9649cjb08zq9fqrzxcbz7";
+    hash = "sha256-5y/Wf8Yu4Y/AkiwRk1bxjqwrhHxUHQ7Kyo+3r3Gf58w=";
   };
 
   cmakeFlags = [

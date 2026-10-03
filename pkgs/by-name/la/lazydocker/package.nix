@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-MHSZ0O8LPx1SOhrUK0sh73jDvDvu31Qsw+yjsTMQN/Y=";
+    hash = "sha256-MHSZ0O8LPx1SOhrUK0sh73jDvDvu31Qsw+yjsTMQN/Y=";
   };
 
   vendorHash = null;

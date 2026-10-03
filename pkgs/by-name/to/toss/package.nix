@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "zerotier";
     repo = "toss";
     rev = version;
-    sha256 = "05ql0d8wbdhnmh3dw8ch5bi6clfb9h8v21lq2a74iy02slya2y0r";
+    hash = "sha256-GXihPNUC+EiOEpgGsRFMy1Fm4iqQId4GrBa2xVEDFBc=";
   };
   preInstall = "export DESTDIR=$out/bin";
   meta =

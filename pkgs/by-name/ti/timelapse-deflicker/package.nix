@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cyberang3l";
     repo = "timelapse-deflicker";
     rev = "v${finalAttrs.version}";
-    sha256 = "0bbfnrdycrpyz7rqrql5ib9qszny7z5xpqp65c1mxqd2876gv960";
+    hash = "sha256-wKT9zEGi4V4DK+bi28s/3n6N04qF4ozz+f5m5lu2bi0=";
   };
 
   installPhase = ''

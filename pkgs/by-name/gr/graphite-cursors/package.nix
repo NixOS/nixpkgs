@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vinceliuice";
     repo = "graphite-cursors";
     rev = finalAttrs.version;
-    sha256 = "sha256-Kopl2NweYrq9rhw+0EUMhY/pfGo4g387927TZAhI5/A=";
+    hash = "sha256-Kopl2NweYrq9rhw+0EUMhY/pfGo4g387927TZAhI5/A=";
   };
 
   installPhase = ''

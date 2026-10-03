@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication {
     owner = "mothsart";
     repo = "fluxboxlauncher";
     rev = "0.2.1";
-    sha256 = "024h1dk0bhc5s4dldr6pqabrgcqih9p8cys5lqgkgz406y4vyzvf";
+    hash = "sha256-bn+/iTeA/DcfpkV7hm6CEbOXl8LX5EYb0YXBBWYLkAg=";
   };
 
   nativeBuildInputs = [

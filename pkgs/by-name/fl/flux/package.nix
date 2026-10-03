@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "deniskropp";
     repo = "flux";
     rev = "e45758aa9384b9740ff021ea952399fd113eb0e9";
-    sha256 = "11f3ypg0sdq5kj69zgz6kih1yrzgm48r16spyvzwvlswng147410";
+    hash = "sha256-IJBDwrNc083/9lebkBGp72cfYJzmv5+MnAU3Dd71w4U=";
   };
 
   nativeBuildInputs = [

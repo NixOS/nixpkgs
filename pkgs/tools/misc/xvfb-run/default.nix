@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
     owner = "archlinux";
     repo = "svntogit-packages";
     rev = "87f67054c49b32511893acd22be94c47ecd44b4a";
-    sha256 = "sha256-KEg92RYgJd7naHFDKbdXEy075bt6NLcmX8VhQROHVPs=";
+    hash = "sha256-KEg92RYgJd7naHFDKbdXEy075bt6NLcmX8VhQROHVPs=";
   };
 
   nativeBuildInputs = [

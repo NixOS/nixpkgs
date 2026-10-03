@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "MestreLion";
     repo = "wavegain";
     rev = "c928eaf97aeec5732625491b64c882e08e314fee";
-    sha256 = "0wghqnsbypmr4xcrhb568bfjdnxzzp8qgnws3jslzmzf34dpk5ls";
+    hash = "sha256-mpZ5Gxnu10+1HJrbh9H9v9sm3UKmLJhZJ7lev7TF8HE=";
   };
 
   patches = [

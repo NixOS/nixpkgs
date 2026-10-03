@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "eraserhd";
     repo = "osxsnarf";
     rev = "v${version}";
-    sha256 = "1vpg39mpc5avnv1j0yfx0x2ncvv38slmm83zv6nmm7alfwfjr2ss";
+    hash = "sha256-WossHXdUnVqt2X+gWqlGY29mRQfdeSDDtlsVdmsa7+4=";
   };
 
   buildInputs = [

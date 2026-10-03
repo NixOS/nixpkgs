@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "martinber";
     repo = "noaa-apt";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-EGbUI9CPgP6Tff2kvIU7pfSlIvyF0yRLo/VlttUn3Rc=";
+    hash = "sha256-EGbUI9CPgP6Tff2kvIU7pfSlIvyF0yRLo/VlttUn3Rc=";
   };
 
   cargoPatches = [

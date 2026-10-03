@@ -11,7 +11,7 @@ buildDotnetModule (finalAttrs: {
     owner = "j-brooke";
     repo = "FracturedJson";
     tag = "cli-v${finalAttrs.version}";
-    sha256 = "sha256-JdCDL6kTGUT2bgKLXw9aHThuSNxeSOtFm2besvFw814=";
+    hash = "sha256-JdCDL6kTGUT2bgKLXw9aHThuSNxeSOtFm2besvFw814=";
   };
 
   projectFile = "Cli/Cli.csproj";

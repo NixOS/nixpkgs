@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "mothsart";
     repo = "gSpeech";
     rev = finalAttrs.version;
-    sha256 = "sha256-IR7acxstJXueIrtBqVBqznEG3Avke7m1qfv7058u59g=";
+    hash = "sha256-IR7acxstJXueIrtBqVBqznEG3Avke7m1qfv7058u59g=";
   };
 
   nativeBuildInputs = [

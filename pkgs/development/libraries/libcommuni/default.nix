@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "communi";
     repo = "libcommuni";
     rev = "v${version}";
-    sha256 = "sha256-9eYJpmjW1J48RD6wVJOHmsAgTbauNeeCrXe076ufq1I=";
+    hash = "sha256-9eYJpmjW1J48RD6wVJOHmsAgTbauNeeCrXe076ufq1I=";
   };
 
   buildInputs = [

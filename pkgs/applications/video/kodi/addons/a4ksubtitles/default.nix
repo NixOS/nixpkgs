@@ -15,7 +15,7 @@ buildKodiAddon rec {
     owner = "a4k-openproject";
     repo = "a4kSubtitles";
     rev = "${namespace}/${namespace}-${version}";
-    sha256 = "sha256-t6oclFAOsUC+hFtw6wjRh1zl2vQfc7RKblVJpBPfE9w=";
+    hash = "sha256-t6oclFAOsUC+hFtw6wjRh1zl2vQfc7RKblVJpBPfE9w=";
   };
 
   propagatedBuildInputs = [

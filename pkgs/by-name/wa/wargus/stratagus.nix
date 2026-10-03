@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "wargus";
     repo = "stratagus";
     tag = "v${version}";
-    sha256 = "sha256-VzTBd+59tGDdgp1ykdqXuBpT2pVHTnR71bb9/EVyW5Q=";
+    hash = "sha256-VzTBd+59tGDdgp1ykdqXuBpT2pVHTnR71bb9/EVyW5Q=";
   };
   postPatch = ''
     substituteInPlace CMakeLists.txt \

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     repo = "tty-clock";
     # Use unreleased version to pull in fix for ncurses-6.3
     rev = "9e00c32098524c30dac4dab701f7e33f8bc7c880";
-    sha256 = "14jrzz06jr29887bxgad1x6kd26c2fnqrc26864wqm3838fpcqw0";
+    hash = "sha256-gGN2HRpoVMyJQUawjK0TzIg2TQ9Nvb4OQklkacD/WZI=";
   };
 
   patches = [

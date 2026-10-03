@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "postmodern";
     repo = "chruby";
     rev = "v${version}";
-    sha256 = "1894g6fymr8kra9vwhbmnrcr58l022mcd7g9ans4zd3izla2j3gx";
+    hash = "sha256-/Q0pFP1xtE+0VemdxqoQgKKSWbZ1Qb6TyhPl6p15JKE=";
   };
 
   patches = lib.optionalString (rubies != null) [

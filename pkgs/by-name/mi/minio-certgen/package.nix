@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "minio";
     repo = "certgen";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Fuuq48+/ry6h9iA4WBXnahJp6EP640St84Tu6B86weI=";
+    hash = "sha256-Fuuq48+/ry6h9iA4WBXnahJp6EP640St84Tu6B86weI=";
   };
 
   vendorHash = null;

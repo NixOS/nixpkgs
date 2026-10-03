@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "inhabitedtype";
     repo = "ocaml-dispatch";
     rev = finalAttrs.version;
-    sha256 = "12r39ylbxc297cbwjadhd1ghxnwwcdzfjk68r97wim8hcgzxyxv4";
+    hash = "sha256-ZHff/2MQ1chPyshM6X5jnNsOX2iwKckXO0mwvqhPI4s=";
   };
 
   propagatedBuildInputs = [ result ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "justinmeza";
     repo = "lci";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VMBW3/sw+1kI6iuOckSPU1TIeY6QORcSfFLFkRYw3Gs=";
+    hash = "sha256-VMBW3/sw+1kI6iuOckSPU1TIeY6QORcSfFLFkRYw3Gs=";
   };
 
   patches = [

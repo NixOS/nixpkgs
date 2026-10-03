@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     owner = "graysky2";
     repo = "pulseaudio-ctl";
     rev = "v${version}";
-    sha256 = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
+    hash = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
   };
 
   postPatch = ''

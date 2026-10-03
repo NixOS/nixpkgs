@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dasm-assembler";
     repo = "dasm";
     rev = finalAttrs.version;
-    sha256 = "1bna0bj503xyn5inwzzsrsgi9qg8p20by4dfk7azj91ynw56pl41";
+    hash = "sha256-gdBrCrc+JPnVma4Rv4C46OEUn876f25jsb4PUOQCyq4=";
   };
 
   patches = [

@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "groupoid";
     repo = "anders";
     tag = version;
-    sha256 = "sha256-8T/+faVsmgghjxC4SkXQ5B6KDuhVO9NdwMvu7UDlk/0=";
+    hash = "sha256-8T/+faVsmgghjxC4SkXQ5B6KDuhVO9NdwMvu7UDlk/0=";
   };
 
   strictDeps = true;

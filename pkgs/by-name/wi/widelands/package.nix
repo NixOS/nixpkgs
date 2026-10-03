@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "widelands";
     repo = "widelands";
     rev = "v${version}";
-    sha256 = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
+    hash = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
   };
 
   postPatch = ''

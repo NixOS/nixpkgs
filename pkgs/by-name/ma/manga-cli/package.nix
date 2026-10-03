@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation {
     owner = "7USTIN";
     repo = "manga-cli";
     rev = "a69fe935341eaf96618a6b2064d4dcb36c8690b5";
-    sha256 = "sha256-AnpOEgOBt2a9jtPNvfBnETGtc5Q1WBmSRFDvQB7uBE4=";
+    hash = "sha256-AnpOEgOBt2a9jtPNvfBnETGtc5Q1WBmSRFDvQB7uBE4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

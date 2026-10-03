@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "ncabatoff";
     repo = "process-exporter";
     rev = "v${version}";
-    sha256 = "sha256-dxXBhrZdYM+mH73K/cdaSmfzbzZaPJYCTzcfXGYMlyY=";
+    hash = "sha256-dxXBhrZdYM+mH73K/cdaSmfzbzZaPJYCTzcfXGYMlyY=";
   };
 
   vendorHash = "sha256-3uhwP8WgZ+zmP6Ex1xcQIj/qGoAot/YC3Vu+leMqEQ4=";

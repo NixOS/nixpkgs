@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nu774";
     repo = "m4acut";
     rev = "v${finalAttrs.version}";
-    sha256 = "1hzf9f1fzmlpnxjaxhs2w22wzb28vd87ycaddnix1mmhvh3nvzkd";
+    hash = "sha256-bf5tB9yw1tCjbU0xf1DbSKzPheBCw65kt5fW74JL7sM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

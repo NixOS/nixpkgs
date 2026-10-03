@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "camelot-dev";
     repo = "camelot";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-msf49Vt0IlwUNTvLIqTWKlMfcFB0LnvGGf7vReqhJec=";
+    hash = "sha256-msf49Vt0IlwUNTvLIqTWKlMfcFB0LnvGGf7vReqhJec=";
   };
 
   patches = [ ./ghostscript.patch ];

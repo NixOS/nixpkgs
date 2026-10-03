@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leetronics";
     repo = "infnoise";
     rev = "19bb69894724d87b32b7b9b86022bb4b26c919f8";
-    sha256 = "sha256-O2P4uOwO7wKLYLufdW3KQeyuFBoQPdSepnTUeq0CSJY=";
+    hash = "sha256-O2P4uOwO7wKLYLufdW3KQeyuFBoQPdSepnTUeq0CSJY=";
   };
 
   patches = [

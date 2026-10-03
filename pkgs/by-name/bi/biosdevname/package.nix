@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dell";
     repo = "biosdevname";
     rev = "v${finalAttrs.version}";
-    sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
+    hash = "sha256-vwXVZ47VbR504stOFZXbGcLVNvWNtKdLmenA1NNZi6c=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

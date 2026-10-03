@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "weclaw1";
     repo = "image-roll";
     rev = finalAttrs.version;
-    sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
+    hash = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
   cargoHash = "sha256-oKJknLKkoutPU85gbgi+369fczLghDuvT+t7R0nHwOI=";

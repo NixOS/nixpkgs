@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "oxij";
     repo = "libcardiacarrest";
     rev = "d89639f5b2d298cf74af26880f5ebf50e645166d";
-    sha256 = "0vrigwcw3g8zknqyznv6y3437ahn1w00gv3d303smmygr0p8bd94";
+    hash = "sha256-JLWFLsjP16oHGG3sBwAPFqozyPBm2++xnR+9wRl/MW8=";
   };
 
   outputs = [

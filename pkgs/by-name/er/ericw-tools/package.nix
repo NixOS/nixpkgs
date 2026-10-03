@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "ericwa";
     repo = "ericw-tools";
     rev = "v${version}";
-    sha256 = "11sap7qv0rlhw8q25azvhgjcwiql3zam09q0gim3i04cg6fkh0vp";
+    hash = "sha256-dwM4nXmMgDhqfAAnUNUfFEfO5IP7qyIw4pBmsPG5Soc=";
   };
   postUnpack = ''
     pushd source/3rdparty

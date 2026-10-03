@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "sandsmark";
     repo = "selectdefaultapplication";
     rev = "c752df6ba8caceeef54bcf6527f1bccc2ca8202a";
-    sha256 = "C/70xpt6RoQNIlAjSJhOCyheolK4Xp6RiSZmeqMP4fw=";
+    hash = "sha256-C/70xpt6RoQNIlAjSJhOCyheolK4Xp6RiSZmeqMP4fw=";
   };
 
   nativeBuildInputs = [

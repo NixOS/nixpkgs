@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "highfive-devs";
     repo = "highfive";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-BuDvoQgMdZIDHYwXqigM78DQ+WtT+K0FdXERMUjmXc0=";
+    hash = "sha256-BuDvoQgMdZIDHYwXqigM78DQ+WtT+K0FdXERMUjmXc0=";
   };
 
   nativeBuildInputs = [ cmake ];

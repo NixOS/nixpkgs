@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "g0tmi1k";
     repo = "msfpc";
     rev = "v${finalAttrs.version}";
-    sha256 = "UIdE0oSaNu16pf+M96x8AnNju88hdzokv86wm8uBYDQ=";
+    hash = "sha256-UIdE0oSaNu16pf+M96x8AnNju88hdzokv86wm8uBYDQ=";
   };
 
   nativeBuildInputs = [

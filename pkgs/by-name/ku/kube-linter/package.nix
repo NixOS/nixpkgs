@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "stackrox";
     repo = "kube-linter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JpabvLiYnDglf6rLr7HLGPafs9HHV/GZBErXr7CBQbo=";
+    hash = "sha256-JpabvLiYnDglf6rLr7HLGPafs9HHV/GZBErXr7CBQbo=";
   };
 
   vendorHash = "sha256-xG4RsgPOoCWFhMEMFyGKQB05O44Pm1jFo2YC8zal1Q0=";

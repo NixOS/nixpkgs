@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
     rev = "OpenSceneGraph-${finalAttrs.version}";
-    sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
+    hash = "sha256-wRYQkUvML1DoIB/8yqMaflWbVeYCXNQ8+308LBAkIQI=";
   };
 
   nativeBuildInputs = [

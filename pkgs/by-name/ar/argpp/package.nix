@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "argpp";
     rev = "9e1d54f8ed20af0aa5857e6653ab605b2ab63d5c";
-    sha256 = "sha256-unfAFxgvv1BOUEqrYYMFfouGe2xIcKJ3ithCel1P9sc=";
+    hash = "sha256-unfAFxgvv1BOUEqrYYMFfouGe2xIcKJ3ithCel1P9sc=";
   };
 
   nativeBuildInputs = [ cmake ];

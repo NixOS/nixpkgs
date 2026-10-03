@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jamielinux";
     repo = "bashmount";
     tag = finalAttrs.version;
-    sha256 = "1irw47s6i1qwxd20cymzlfw5sv579cw877l27j3p66qfhgadwxrl";
+    hash = "sha256-NHfe1IMOG3OHPIKegzhLp2xduKO/egZE6xyHaPQhPMc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

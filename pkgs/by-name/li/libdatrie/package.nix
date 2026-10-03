@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "tlwg";
     repo = "libdatrie";
     rev = "d1db08ac1c76f54ba23d63665437473788c999f3";
-    sha256 = "03dc363259iyiidrgadzc7i03mmfdj8h78j82vk6z53w6fxq5zxc";
+    hash = "sha256-rP+CuzN8lG/mFkiiA5FsrtYB4mG/qZdbjD6mIoYZrA0=";
   };
 
   nativeBuildInputs = [

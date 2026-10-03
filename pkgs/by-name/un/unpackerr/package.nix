@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "Unpackerr";
     repo = "unpackerr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";
+    hash = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";
   };
 
   vendorHash = "sha256-v0ml1dTIhf79mhlyTrPNhIfg1Yhao27eP0pnI95OvaU=";

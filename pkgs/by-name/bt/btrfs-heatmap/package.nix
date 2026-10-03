@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "knorrie";
     repo = "btrfs-heatmap";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-yCkuZqWwxrs2eS7EXY6pAOVVVSq7dAMxJtf581gX8vg=";
+    hash = "sha256-yCkuZqWwxrs2eS7EXY6pAOVVVSq7dAMxJtf581gX8vg=";
   };
 
   buildInputs = [ python3 ];

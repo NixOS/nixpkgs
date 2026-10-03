@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "adapta-project";
     repo = "adapta-backgrounds";
     tag = finalAttrs.version;
-    sha256 = "04hmbmzf97rsii8gpwy3wkljy5xhxmlsl34d63s6hfy05knclydj";
+    hash = "sha256-snnK7CzAO2j0MI0MqmntsBcv6eTD8/tQjDqf5H5dFRI=";
   };
 
   strictDeps = true;

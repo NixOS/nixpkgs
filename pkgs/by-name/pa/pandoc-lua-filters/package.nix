@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pandoc";
     repo = "lua-filters";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Y962kdwg2bS3ZoPfsktv4Fy34HUTRhIIuSxPi5ODwWg=";
+    hash = "sha256-Y962kdwg2bS3ZoPfsktv4Fy34HUTRhIIuSxPi5ODwWg=";
   };
 
   dontBuild = true;

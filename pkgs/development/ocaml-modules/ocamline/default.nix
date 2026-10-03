@@ -12,7 +12,7 @@ buildDunePackage (finalAttrs: {
     owner = "chrisnevers";
     repo = "ocamline";
     rev = finalAttrs.version;
-    sha256 = "Sljm/Bfr2Eo0d75tmJRuWUkkfHUYQ0g27+FzXBePnVg=";
+    hash = "sha256-Sljm/Bfr2Eo0d75tmJRuWUkkfHUYQ0g27+FzXBePnVg=";
   };
 
   propagatedBuildInputs = [ linenoise ];

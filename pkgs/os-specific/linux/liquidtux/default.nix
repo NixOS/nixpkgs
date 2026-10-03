@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "liquidctl";
     repo = "liquidtux";
     rev = "4613127ac6a7f1f0a98009045ea8c16f6b960533";
-    sha256 = "sha256-68W7n3QWoAO07FDW45ualpOo5Cty6vcQt/9cLtlnDX0=";
+    hash = "sha256-68W7n3QWoAO07FDW45ualpOo5Cty6vcQt/9cLtlnDX0=";
   };
 
   hardeningDisable = [ "pic" ];

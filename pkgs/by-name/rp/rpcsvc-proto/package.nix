@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thkukuk";
     repo = "rpcsvc-proto";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
+    hash = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
   };
 
   patches = [

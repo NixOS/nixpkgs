@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xiaoyjy";
     repo = "cconv";
     rev = "v${finalAttrs.version}";
-    sha256 = "RAFl/+I+usUfeG/l17F3ltThK7G4+TekyQGwzQIgeH8=";
+    hash = "sha256-RAFl/+I+usUfeG/l17F3ltThK7G4+TekyQGwzQIgeH8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

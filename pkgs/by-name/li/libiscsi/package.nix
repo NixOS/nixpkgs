@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sahlberg";
     repo = "libiscsi";
     rev = finalAttrs.version;
-    sha256 = "sha256-ARajWZ5/LIfFNCdp3HvQiyhR455+sJNzUPbBrz/pZ7E=";
+    hash = "sha256-ARajWZ5/LIfFNCdp3HvQiyhR455+sJNzUPbBrz/pZ7E=";
   };
 
   postPatch = ''

@@ -150,7 +150,7 @@ in
         owner = "HaxeFoundation";
         repo = "hxnodejs";
         rev = "cf80c6a077e705d39f752418e95555b346f4d9b2";
-        sha256 = "0mdiacr5b2m8jrlgyd2d3vp1fha69lcfb67x4ix7l7zfi8g460gs";
+        hash = "sha256-+gFDHoruH3p6JP2Y5RhNRkEX7h5NNP9olqiKVTJTsVU=";
       };
       installPhase = installLibHaxe { inherit libname version; };
       meta = {

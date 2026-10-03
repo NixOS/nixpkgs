@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "Stabyourself";
     repo = "mari0";
     rev = "57829fd23e783d1a2993b9d64a7f7e6b131e572f";
-    sha256 = "sha256-rmsj6gMTleeWx911j5/sfpfQG54HDtsfsTyPDbEkLhE=";
+    hash = "sha256-rmsj6gMTleeWx911j5/sfpfQG54HDtsfsTyPDbEkLhE=";
   };
 
   nativeBuildInputs = [

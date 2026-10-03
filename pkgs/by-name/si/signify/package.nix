@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
+    hash = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
   doCheck = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "kimg";
     rev = finalAttrs.version;
-    sha256 = "040782k3rh2a5mhbfgr9gnbfis0wgxvi27vhfn7l35vrr12sw1l3";
+    hash = "sha256-gwauRch5l0GPdXAfEXd/HOjoln0pP7dgLUrAPKZABxA=";
   };
 
   strictDeps = true;

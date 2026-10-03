@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "easymodo";
     repo = "qimgv";
     rev = "3127a2d211b124ad4fcf853d01e6df9323bdfdc3";
-    sha256 = "sha256-avn02kdMyA5PZUSykxgIk1I78zHQ/WKd26tQO8lMOow=";
+    hash = "sha256-avn02kdMyA5PZUSykxgIk1I78zHQ/WKd26tQO8lMOow=";
   };
 
   nativeBuildInputs = [

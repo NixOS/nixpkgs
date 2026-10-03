@@ -31,7 +31,7 @@ buildGoModule rec {
     owner = "SuperQ";
     repo = "smokeping_prober";
     rev = "v${version}";
-    sha256 = "sha256-bFKJkqeuVS4z4jylJ67UgL6OPyi/JbowMKn5/Feu6lM=";
+    hash = "sha256-bFKJkqeuVS4z4jylJ67UgL6OPyi/JbowMKn5/Feu6lM=";
   };
   vendorHash = "sha256-rNk9mCVpc2N+lLAarDenmOLy00swS1rkTNxMy62wR+k=";
 

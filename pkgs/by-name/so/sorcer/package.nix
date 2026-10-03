@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openAVproductions";
     repo = "openAV-Sorcer";
     rev = "release-${finalAttrs.version}";
-    sha256 = "1x7pi77nal10717l02qpnhrx6d7w5nqrljkn9zx5w7gpb8fpb3vp";
+    hash = "sha256-d491HVr3HV76T3ZKmrEt/DTTM7QXC0BPOCBQZc+J9/Q=";
   };
 
   nativeBuildInputs = [

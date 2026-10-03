@@ -14,7 +14,7 @@ build-idris-package {
     owner = "mcgordonite";
     repo = "idris-binary-rationals";
     rev = "0d7010b267662d89e76e2cc8b27fd95ecca009b8";
-    sha256 = "0fc93n4pyqyrjxrspnr3vjzc09m78ni1ardq1vx9g40vmvl0n49s";
+    hash = "sha256-OhEL6K4bkJf6DrhlFaJFpybAvtwj26tzl9ljf4kdiTk=";
   };
 
   meta = {

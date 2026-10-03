@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "niols";
     repo = "ppx_monad";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cbguAddSlUxBK7pmT7vNmtJW9TrVZZjdSJRMT3lqxOA=";
+    hash = "sha256-cbguAddSlUxBK7pmT7vNmtJW9TrVZZjdSJRMT3lqxOA=";
   };
 
   propagatedBuildInputs = [

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "duncanthrax";
     repo = "scream";
     rev = finalAttrs.version;
-    sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
+    hash = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
   buildInputs =

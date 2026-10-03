@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "fxfactorial";
     repo = "ocaml-linenoise";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
+    hash = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
   };
 
   propagatedBuildInputs = [ result ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bitsed";
     repo = "qosmic";
     rev = "v${finalAttrs.version}";
-    sha256 = "13nw1mkdib14430r21mj352v62vi546vf184vyhxm7yjjygyra1w";
+    hash = "sha256-PKjsn5fSn9qh3wQFtw0pcQuzRRmyBpHBICSs2GYN3I4=";
   };
 
   patches = [

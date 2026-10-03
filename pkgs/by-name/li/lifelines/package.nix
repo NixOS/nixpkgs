@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "lifelines";
     repo = "lifelines";
     rev = "fbc92b6585e5f642c59a5317a0f4d4573f51b2d6";
-    sha256 = "sha256-G/Sj3E8K4QDR4fJcipCKTXpQU19LOfOeLBp5k7uPwk4=";
+    hash = "sha256-G/Sj3E8K4QDR4fJcipCKTXpQU19LOfOeLBp5k7uPwk4=";
   };
 
   buildInputs = [

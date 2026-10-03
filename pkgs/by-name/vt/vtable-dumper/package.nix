@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lvc";
     repo = "vtable-dumper";
     rev = finalAttrs.version;
-    sha256 = "0sl7lnjr2l4c2f7qaazvpwpzsp4gckkvccfam88wcq9f7j9xxbyp";
+    hash = "sha256-16/ekzwuYcYRqsoxtudkj1z9L7/7K4WPE4xQkaWlh2o=";
   };
 
   buildInputs = [ libelf ];

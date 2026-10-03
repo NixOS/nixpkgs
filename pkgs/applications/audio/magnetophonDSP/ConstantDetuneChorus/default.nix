@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "constant-detune-chorus";
     rev = "V${finalAttrs.version}";
-    sha256 = "1sipmc25fr7w7xqx1r0y6i2zwfkgszzwvhk1v15mnsb3cqvk8ybn";
+    hash = "sha256-dnk0N2ZjaVtL2GHCzf/Xbzr+RTQe5NBxP/xkVwSrN+o=";
   };
 
   buildInputs = [

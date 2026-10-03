@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "cykerway";
     repo = "complete-alias";
     tag = version;
-    sha256 = "18lmdb3inphxyjv08ing5wckqnjq0m5zfl0f15mqzlvf2ypar63x";
+    hash = "sha256-fZisrhdu049rCQ5Q90sFWFo8GS/PRgS29B1eG8dqlaI=";
   };
 
   buildPhase = ''

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes-sigs";
     repo = "controller-tools";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-sqlvOSZ2sZZFYVq4nWqr9e8c1eaypdrYgGE/2un5Dsw=";
+    hash = "sha256-sqlvOSZ2sZZFYVq4nWqr9e8c1eaypdrYgGE/2un5Dsw=";
   };
 
   vendorHash = "sha256-WBuqq1fyUBSJ9IPgoiiiJAghRgTnaXp6IhjkdEBFbOQ=";

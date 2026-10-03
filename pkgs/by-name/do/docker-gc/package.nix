@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "spotify";
     repo = "docker-gc";
     rev = "b0cc52aa3da2e2ac0080794e0be6e674b1f063fc";
-    sha256 = "07wf9yn0f771xkm3x12946x5rp83hxjkd70xgfgy35zvj27wskzm";
+    hash = "sha256-9U/Nj5D7l+Gfex2cNmWHA91cuiFJhD7q7OEcB6xPjh8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

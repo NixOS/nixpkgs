@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lcdproc";
     repo = "lcdproc";
     rev = "v${finalAttrs.version}";
-    sha256 = "1r885zv1gsh88j43x6fvzbdgfkh712a227d369h4fdcbnnfd0kpm";
+    hash = "sha256-9U7QnLWLNUdgMqMdIZQIB0732vrbmT6IRAjqF/YvCOU=";
   };
 
   patches = [

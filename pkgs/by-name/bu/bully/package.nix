@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "kimocoder";
     repo = "bully";
     tag = version;
-    sha256 = "1n2754a5z44g414a0hj3cmi9q5lwnzyvmvzskrj2nci8c8m2kgnf";
+    hash = "sha256-zr4pKmIoMitknvrvuv23nBacYmVDQqBIII+QXxQpR9g=";
   };
 
   buildInputs = [ libpcap ];

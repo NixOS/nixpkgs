@@ -16,7 +16,7 @@ swift.stdenv.mkDerivation (finalAttrs: {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = finalAttrs.version;
-    sha256 = "sha256-fFvF52MIX3cl1+LVbdUjASQ/kw77d48vOewAfu4VgNA=";
+    hash = "sha256-fFvF52MIX3cl1+LVbdUjASQ/kw77d48vOewAfu4VgNA=";
   };
 
   nativeBuildInputs = [

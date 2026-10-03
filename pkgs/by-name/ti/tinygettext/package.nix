@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "tinygettext";
     repo = "tinygettext";
     rev = "ef4164639004d7de5bf8ab28ed0e85ea521b7c5e";
-    sha256 = "sha256-if+uiVzDA3J+0HM6bVcXvm4lk82TmQmFHG4MtaxIFCk=";
+    hash = "sha256-if+uiVzDA3J+0HM6bVcXvm4lk82TmQmFHG4MtaxIFCk=";
   };
 
   nativeBuildInputs = [ cmake ];
