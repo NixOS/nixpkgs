@@ -25,14 +25,14 @@ in
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kibot";
-  version = "1.9.1";
+  version = "2_k10_1_9_0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "INTI-CMNB";
     repo = "KiBot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aXlo2Mv9X6pxYo2gmI3zfHVDddeDLBISeo+bu4moBts=";
+    hash = "sha256-8nQLkpFYH69iOLsO+IIrXrk6WB4K4CKO5qt510DsG3w=";
   };
 
   build-system = with python3Packages; [ setuptools ];
