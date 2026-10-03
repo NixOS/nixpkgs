@@ -18,7 +18,7 @@
   libGL,
   nss,
   libxdamage,
-  systemd,
+  systemdLibs,
   stdenv,
   undmg,
   at-spi2-core,
@@ -116,7 +116,7 @@ else
     dontWrapGApps = true;
 
     runtimeDependencies = map lib.getLib [
-      systemd
+      systemdLibs
       libkrb5
     ];
 

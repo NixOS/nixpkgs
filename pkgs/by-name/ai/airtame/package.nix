@@ -31,7 +31,7 @@
   lib,
   libnotify,
   libappindicator,
-  systemd,
+  systemdLibs,
   pciutils,
 }:
 let
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = deps;
   runtimeDependencies = [
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
     libnotify
     libappindicator
     pulseaudio

@@ -32,7 +32,7 @@
   libxkbcommon,
   libgbm,
   vulkan-loader,
-  systemd,
+  systemdLibs,
   libGL,
   krb5,
   unixodbc,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     unixodbc
   ];
 
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemdLibs);
 
   installPhase = ''
     runHook preInstall

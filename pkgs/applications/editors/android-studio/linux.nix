@@ -64,7 +64,7 @@
   setxkbmap,
   lib,
   stdenv,
-  systemd,
+  systemdLibs,
   unzip,
   usbutils,
   which,
@@ -190,7 +190,7 @@ let
             libpng
             nspr
             nss_latest
-            systemd
+            systemdLibs
 
             # For GTKLookAndFeel
             gtk3

@@ -35,7 +35,7 @@
   libsecret,
   libxkbcommon,
   pango,
-  systemd,
+  systemdLibs,
   hunspellDicts,
   useHunspell ? true,
   languages ? [ "en_US" ],
@@ -75,7 +75,7 @@ let
     libxkbfile
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
   ];
 
   # Hunspell

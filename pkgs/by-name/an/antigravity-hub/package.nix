@@ -35,7 +35,7 @@
   nss,
   pango,
   pipewire,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     nss
     pango
-    systemd
+    systemdLibs
   ];
 
   # Loaded with dlopen() by the main binary, so autoPatchelfHook cannot discover them.

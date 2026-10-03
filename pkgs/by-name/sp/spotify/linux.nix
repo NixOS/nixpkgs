@@ -35,7 +35,7 @@
   libpng,
   libnotify,
   libgcrypt,
-  systemd,
+  systemdLibs,
   fontconfig,
   dbus,
   expat,
@@ -96,7 +96,7 @@ let
     nss_latest
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libice
     libsm
     libx11
