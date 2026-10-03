@@ -463,6 +463,19 @@ stdenv.mkDerivation (
         --replace-fail \
           'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff420p12 ffvhuff422p10left ffvhuff444p16' \
           'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff422p10left ffvhuff444p16'
+    ''
+    # upstream ffmpeg builds some tests/tools unconditionally
+    # while their dependencies are behind config flags
+    + lib.optionalString (lib.versionAtLeast version "9.0") ''
+      sed -i -E '/^[[:space:]]+pixelutils[[:space:]]+\\$/d' libavutil/Makefile
+      sed -i -E 's|^(TESTPROGS-\$\(HAVE_THREADS\))|TESTPROGS-$(CONFIG_PIXELUTILS)        += pixelutils\n\1|' libavutil/Makefile
+
+      substituteInPlace tools/Makefile \
+        --replace-fail \
+          'TOOLS = enc_recon_frame_test enum_options qt-faststart scale_slice_test trasher uncoded_frame' \
+          'TOOLS = enum_options qt-faststart trasher
+      TOOLS-$(CONFIG_SWSCALE) += enc_recon_frame_test scale_slice_test
+      TOOLS-$(CONFIG_AVDEVICE:yes=$(CONFIG_AVFILTER)) += uncoded_frame'
     '';
 
     patches =
