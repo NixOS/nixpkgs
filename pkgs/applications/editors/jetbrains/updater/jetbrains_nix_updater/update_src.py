@@ -151,6 +151,9 @@ def generate_jps_hash(config: UpdaterConfig, root_path: Path) -> str:
 
 def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     variant = ide.name.removesuffix("-oss")
+    if variant.endswith("idea"):
+        variant = variant.removeprefix("intellij-")
+
     try:
         intellij_hash, intellij_outpath = prefetch_intellij_community(
             variant, info.version
