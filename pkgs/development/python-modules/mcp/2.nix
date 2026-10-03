@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,15 +9,17 @@
 
   # dependencies
   anyio,
-  httpx,
-  httpx-sse,
+  httpx2,
   jsonschema,
+  mcp-types,
+  opentelemetry-api,
   pydantic,
-  pydantic-settings,
   pyjwt,
   python-multipart,
   sse-starlette,
   starlette,
+  typing-extensions,
+  typing-inspection,
   uvicorn,
 
   # optional-dependencies
@@ -27,17 +28,21 @@
   typer,
   # rich
   rich,
-  # ws
-  websockets,
 
   # tests
+  coverage,
   dirty-equals,
+  griffelib,
   inline-snapshot,
+  logfire,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-examples,
   pytest-xdist,
   pytestCheckHook,
-  requests,
+  pyyaml,
+  trio,
+  zensical,
 }:
 
 let
@@ -45,7 +50,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mcp";
-  version = "1.29.0";
+  version = "2.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -53,38 +58,30 @@ buildPythonPackage (finalAttrs: {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lRlj5RT/R5zrYL5XpdQR2l9t99G94WTsubN0gSQekMc=";
+    hash = "sha256-nnpNXnQiFSGx5KQBDXHCOH0wE3cznlmI6s7vtchcj3A=";
   };
-
-  # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
-  # testing this on macOS under load.
-  postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
-    substituteInPlace tests/client/test_stdio.py \
-      --replace-fail "time.sleep(0.1)" "time.sleep(1)"
-  '';
 
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "pydantic-settings"
-  ];
-
   dependencies = [
     anyio
-    httpx
-    httpx-sse
+    httpx2
     jsonschema
+    mcp-types
+    opentelemetry-api
     pydantic
-    pydantic-settings
     pyjwt
     python-multipart
     sse-starlette
     starlette
+    typing-extensions
+    typing-inspection
     uvicorn
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   optional-dependencies = {
     cli = [
@@ -94,52 +91,37 @@ buildPythonPackage (finalAttrs: {
     rich = [
       rich
     ];
-    ws = [
-      websockets
-    ];
   };
 
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
+    coverage
     dirty-equals
+    griffelib
     inline-snapshot
+    logfire
+    opentelemetry-sdk
     pytest-asyncio
     pytest-examples
     pytest-xdist
     pytestCheckHook
-    requests
+    pyyaml
+    trio
+    zensical
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
-  pytestFlags = [
-    "-Wignore::pytest.PytestRemovedIn10Warning"
-  ];
+  # tests import examples/stories
+  preCheck = ''
+    export PYTHONPATH="$PWD/examples:$PYTHONPATH"
+  '';
 
   disabledTests = [
-    # attempts to run the package manager uv
-    "test_command_execution"
-
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_lifespan_cleanup_executed"
-
-    # AssertionError: Child process should be writing
-    "test_basic_child_process_cleanup"
-
-    # AssertionError: parent process should be writing
-    "test_nested_process_tree"
-
-    # AssertionError: Child should be writing
-    "test_early_parent_exit"
-
-    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <_io.FileIO ...
-    "test_list_tools_returns_all_tools"
-
-    # AssertionError: Server startup marker not created
-    "test_stdin_close_triggers_cleanup"
-
-    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function St..
-    "test_resource_template_client_interaction"
+    # spawned server doesn't inherit PYTHONPATH
+    "test_client_with_stdio_parameters_launches_the_server_as_a_subprocess"
+    "test_tool_call_and_notification_round_trip_over_a_stdio_subprocess"
+    "test_a_tool_spawned_childs_stdout_writes_never_reach_the_wire"
 
     # Flaky: https://github.com/modelcontextprotocol/python-sdk/pull/1171
     "test_notification_validation_error"
@@ -153,9 +135,6 @@ buildPythonPackage (finalAttrs: {
     #     	assert duration < 3 * _sleep_time_seconds
     # AssertionError: assert 0.0733884589999434 < (3 * 0.01)
     "test_messages_are_executed_concurrently"
-
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_tool_progress"
   ];
 
   __darwinAllowLocalNetworking = true;

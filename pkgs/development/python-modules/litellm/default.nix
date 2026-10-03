@@ -20,10 +20,12 @@
   fetchFromGitHub,
   google-cloud-iam,
   google-cloud-kms,
+  google-cloud-speech,
   google-genai,
   grpcio,
   gunicorn,
   httpx,
+  httpx2,
   importlib-metadata,
   inquirerpy,
   jinja2,
@@ -67,14 +69,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.102.1";
+  version = "1.103.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-Mb5K0AmvS8N+Bya+i3BZTQtu4BWYcdgk3UieJ8xET7w=";
+    hash = "sha256-kkBi+2m+aPBLy4iyJQPK0niq2xXFU7Ywdm4rNCyJZYY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -91,7 +93,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-zbDWVIg0ly+VP9t9eA/md0CxUKCKBJWHLgG13EUZ4rY=";
+    hash = "sha256-wwCgUg667gyJzWKXSW9mBRHi2uTPtJz5ed6vq+1q9jk=";
   };
 
   postPatch = ''
@@ -114,7 +116,8 @@ buildPythonPackage rec {
     python-dotenv
     tiktoken
     tokenizers
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   optional-dependencies = {
     proxy = [
@@ -127,6 +130,7 @@ buildPythonPackage rec {
       fastapi
       fastapi-sso
       gunicorn
+      httpx2
       inquirerpy
       # FIXME package litellm-enterprise
       # FIXME package litellm-proxy-extras
@@ -166,6 +170,7 @@ buildPythonPackage rec {
       # FIXME package ddtrace
       # FIXME package detect-secrets
       # FIXME package google-cloud-aiplatform
+      google-cloud-speech
       google-genai
       grpcio
       langfuse

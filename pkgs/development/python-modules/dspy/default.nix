@@ -113,6 +113,10 @@ buildPythonPackage (finalAttrs: {
     "test_streamify_yields_expected_response_chunks"
     "test_streaming_response_yields_expected_response_chunks"
     "test_text_lms_can_be_queried"
+
+    # mocked response has no content
+    "test_retry_made_on_system_errors"
+    "test_exponential_backoff_retry"
   ];
 
   meta = {
