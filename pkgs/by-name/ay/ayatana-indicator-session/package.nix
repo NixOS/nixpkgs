@@ -16,7 +16,7 @@
   lomiri-qt6,
   mate-settings-daemon,
   pkg-config,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     libayatana-common
     librda
-    systemd
+    systemdLibs
 
     # TODO these bloat the closure size alot, just so the indicator doesn't have the potential to crash.
     # is there a better way to give it access to DE-specific schemas as needed?
