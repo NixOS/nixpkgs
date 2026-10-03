@@ -2556,6 +2556,8 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
+  open62541_1_4 = callPackage ../by-name/op/open62541/1_4.nix { };
+
   openbaoPlugins = callPackage ../by-name/op/openbao/plugins.nix { };
 
   openntpd_nixos = openntpd.override {
