@@ -348,7 +348,7 @@ In some instances, it may be necessary to disable testing altogether (with `doCh
   unnecessary build steps to speed up the build.
 * If tests are highly impure (e.g. due to network usage).
 
-There will obviously be some corner-cases not listed above where it's sensible to disable tests.
+There will be some corner-cases not listed above where it's sensible to disable tests.
 The above are just guidelines, and exceptions may be granted on a case-by-case basis.
 
 However, please check if it's possible to disable a problematic subset of the
