@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libraw"
       "libraw_r"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libraw" finalAttrs.version;
   };
 })
