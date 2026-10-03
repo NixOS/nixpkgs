@@ -48,14 +48,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.27.2.3";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = finalAttrs.version;
-    hash = "sha256-KeddkzRkJ/tcINftYrx/BY0Z3WUaTU9iBqL5UorvclU=";
+    hash = "sha256-9225yygNkVNzSpucvxG1T6/0Z4lxhyaGpxJcMBZ9mSc=";
   };
 
   patches = [
