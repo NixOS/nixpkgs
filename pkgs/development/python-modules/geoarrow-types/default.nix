@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-types";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
     tag = "geoarrow-types-${version}";
-    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
+    hash = "sha256-b9nFl866x7PGPYihiYYJoIO8dJ+DgI7gxDbsaJTN6Lc=";
   };
 
   sourceRoot = "${src.name}/geoarrow-types";
