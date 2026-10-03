@@ -35,13 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  pnpmWorkspaces = [ "fluxer_api..." ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-B4V0odz6wbmjspaxQ+1Af3TvXR9b6lvwo5LtNs31M8I=";
-
-    pnpmWorkspaces = [ "fluxer_api" ];
+    hash = versioning.apiPnpmHash;
   };
 
   buildPhase = ''
