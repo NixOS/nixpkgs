@@ -14163,6 +14163,8 @@ self: super: with self; {
 
   psnawp = callPackage ../development/python-modules/psnawp { };
 
+  psptool = callPackage ../development/python-modules/psptool { };
+
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   psutil = callPackage ../development/python-modules/psutil { };
