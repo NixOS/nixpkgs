@@ -634,13 +634,13 @@
     "vendorHash": "sha256-GyuSdDpsOqd1ntwAm09AKCoxeFOLhXo0jPTTxYZC+vg="
   },
   "hashicorp_local": {
-    "hash": "sha256-qntV0gfxEVV24gqiVOvUai+pai4vvU+KtLmLBqOBQbY=",
+    "hash": "sha256-oq1Nc03xfoDajrj0CVAO41embDGQ5cKJ8QbUZfaJv/M=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/local",
     "owner": "hashicorp",
     "repo": "terraform-provider-local",
-    "rev": "v2.9.0",
+    "rev": "v2.9.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-qvJSzqGUHw1/Lu4XO7LWssA+TN8pCyTbzh6t1bz+y1g="
+    "vendorHash": "sha256-CukYk/fYz/7NSo4B92ZM04Wkbtiobq7kETMXPvgs4mg="
   },
   "hashicorp_nomad": {
     "hash": "sha256-O3dtOB+irsUeDq1yXxfqDSyz2jfPXS1UgiL+B4RFsW4=",
