@@ -60,7 +60,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "sdk-v0.0.5-unstable-2026-09-22";
+  version = "sdk-v0.0.5-unstable-2026-10-02";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -68,8 +68,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "d0a0af81e26a783730ba502b6fbaf7b9ec52714b";
-    hash = "sha256-crR+erCZFBe2pUIHcoT6MWJfJSd7hXWCj1sJ8a1YDJo=";
+    rev = "e752025f46d6ab6357e7df98e169e7357b033293";
+    hash = "sha256-A4iXr7hJo+0TTfNntx5f197XiSKPTIkiejjrBKzYTUQ=";
   };
 
   nativeBuildInputs = [ bun ];

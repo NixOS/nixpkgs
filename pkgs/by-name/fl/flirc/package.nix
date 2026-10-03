@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation {
   pname = "flirc";
-  version = "3.27.15";
+  version = "3.27.19";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240626115121/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
-    hash = "sha256-8bUsOsp5obJJdZU9QHfJnZKNAXJwi0nrHkSeDTE1Xa4=";
+    url = "https://web.archive.org/web/20260826023719if_/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
+    hash = "sha256-oQCplncTkcpxnclyh0wqe2veoWEtIeSnEeDgN8Qi9fY=";
   };
 
   nativeBuildInputs = [

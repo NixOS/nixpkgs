@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.3.1";
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "md-weber";
     repo = "ldash";
     tag = "v${finalAttrs.version}";

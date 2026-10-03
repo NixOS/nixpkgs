@@ -748,6 +748,15 @@ with haskellLib;
             # TODO(@sternenseemann): submit upstreamable patch resolving this
             # (this should be possible by also taking PREFIX into account).
             ./patches/git-annex-no-usr-prefix.patch
+            (fetchpatch {
+              name = "support-bup-0.34.patch";
+              url = "http://source.git-annex.branchable.com/?p=source.git;a=patch;h=0b0bd012976b20b3857d532f00a1fc7a9bab12a3";
+              excludes = [
+                "CHANGELOG"
+                "doc/bugs/support_new_bup_version.mdwn"
+              ];
+              hash = "sha256-d/PII/daPkevjqqx73iPUFnN+FyeCtzk2+QaAZi4FLo=";
+            })
             # Allow building with crypton >= 1.1 until upstream adds support
             ./patches/git-annex-crypton-1.1.patch
           ];

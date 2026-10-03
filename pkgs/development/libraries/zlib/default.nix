@@ -103,13 +103,21 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    # As zlib takes part in the stdenv building, we don't want references
-    # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-    NIX_CFLAGS_COMPILE = toString (
-      [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
-    );
-  };
+  env =
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      # As zlib takes part in the stdenv building, we don't want references
+      # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+      NIX_CFLAGS_COMPILE = toString (
+        [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
+      );
+    }
+    //
+      lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+        {
+          # https://reviews.llvm.org/D135402
+          # Without this flag configure decides that it cannot build shared libraries and does not make a libz.so
+          NIX_LDFLAGS = "--undefined-version";
+        };
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.

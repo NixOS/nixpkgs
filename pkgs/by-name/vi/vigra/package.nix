@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     mainProgram = "vigra-config";
-    homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
+    homepage = "https://ukoethe.github.io/vigra/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ShamrockLee

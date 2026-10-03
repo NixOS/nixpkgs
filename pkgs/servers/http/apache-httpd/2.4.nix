@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.68";
+  version = "2.4.69";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    hash = "sha256-aMdNTfOMJr7U372487rx61MvOHI1e+zBu6XRNva2PAY=";
+    hash = "sha256-xebrxm40m4fX/GkWrnzCqAjtNIAD3hNM+enYnT4sxz0=";
   };
 
   patches = [

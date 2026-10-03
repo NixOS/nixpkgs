@@ -1112,8 +1112,6 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  svn-all-fast-export = callPackage ../applications/version-management/svn-all-fast-export { };
-
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
@@ -1377,8 +1375,6 @@ with pkgs;
 
   hwi = with python3Packages; toPythonApplication hwi;
 
-  pass = callPackage ../tools/security/pass { };
-
   pass-nodmenu = pass.override {
     dmenuSupport = false;
     pass = pass-nodmenu;
@@ -1562,10 +1558,6 @@ with pkgs;
 
   ### TOOLS/TYPESETTING/TEX
 
-  advi = callPackage ../tools/typesetting/tex/advi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   latex2mathml = with python3Packages; toPythonApplication latex2mathml;
@@ -1621,8 +1613,6 @@ with pkgs;
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
   klaus = with python3Packages; toPythonApplication klaus;
-
-  klipper = callPackage ../servers/klipper { };
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
@@ -3128,7 +3118,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_9_0) compcert;
+  inherit (coqPackages_9_2) compcert;
 
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
@@ -5050,8 +5040,6 @@ with pkgs;
 
   doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
-  drake = callPackage ../development/tools/build-managers/drake { };
-
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
   fffuu = haskell.lib.compose.justStaticExecutables (
     haskellPackages.callPackage ../tools/misc/fffuu { }
@@ -5079,10 +5067,6 @@ with pkgs;
   iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
   iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
   iaca = iaca_3_0;
-
-  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_22;
-  };
 
   inherit (callPackage ../applications/misc/inochi2d { })
     inochi-creator
@@ -5315,8 +5299,6 @@ with pkgs;
   whisper-cpp-vulkan = whisper-cpp.override {
     vulkanSupport = true;
   };
-
-  watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
 
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
@@ -6711,12 +6693,14 @@ with pkgs;
       zig_0_14 = zigPackages."0.14";
       zig_0_15 = zigPackages."0.15";
       zig_0_16 = zigPackages."0.16";
+      zig_0_17 = zigPackages."0.17";
     })
     zigPackages
     zig_0_13
     zig_0_14
     zig_0_15
     zig_0_16
+    zig_0_17
     ;
 
   # If this is updated, the default zls version should also be updated to match the default zig version.
@@ -7266,8 +7250,6 @@ with pkgs;
       xclip
     ];
   };
-
-  moodle = callPackage ../servers/web-apps/moodle { };
 
   moodle-utils = callPackage ../servers/web-apps/moodle/moodle-utils.nix { };
 
@@ -9135,12 +9117,6 @@ with pkgs;
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
-  tabbed = callPackage ../applications/window-managers/tabbed {
-    # if you prefer a custom config, write the config.h in tabbed.config.h
-    # and enable
-    # customConfig = builtins.readFile ./tabbed.config.h;
-  };
-
   taffybar = callPackage ../applications/window-managers/taffybar {
     inherit (haskellPackages) ghcWithPackages taffybar;
   };
@@ -9313,10 +9289,6 @@ with pkgs;
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
-  virt-top = callPackage ../applications/virtualization/virt-top {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
@@ -9823,6 +9795,8 @@ with pkgs;
   ultrastar-creator = callPackage ../tools/misc/ultrastar-creator { };
 
   ultrastar-manager = callPackage ../tools/misc/ultrastar-manager { };
+
+  ut2004Packages = recurseIntoAttrs (callPackage ../by-name/ut/ut2004/packages.nix { });
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;

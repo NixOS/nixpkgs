@@ -52,7 +52,6 @@
   sshfs,
   sops,
   stylish-haskell,
-  tabnine,
   tmux,
   typescript_7,
   typescript-language-server,
@@ -802,16 +801,6 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
-  cmp-tabnine = super.cmp-tabnine.overrideAttrs {
-    checkInputs = [ self.nvim-cmp ];
-    buildInputs = [ tabnine ];
-
-    postFixup = ''
-      mkdir -p $target/binaries/${tabnine.version}
-      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
-    '';
-  };
-
   cmp-tmux = super.cmp-tmux.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ tmux ];
@@ -986,15 +975,6 @@ assertNoAdditions {
 
   completion-buffers = super.completion-buffers.overrideAttrs {
     dependencies = [ self.completion-nvim ];
-  };
-
-  completion-tabnine = super.completion-tabnine.overrideAttrs {
-    dependencies = [ self.completion-nvim ];
-    buildInputs = [ tabnine ];
-    postFixup = ''
-      mkdir -p $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
-    '';
   };
 
   conflict-marker-vim = super.conflict-marker-vim.overrideAttrs (old: {
@@ -1841,7 +1821,7 @@ assertNoAdditions {
     runtimeDeps = [ xxd ];
   };
 
-  himalaya-vim = super.himalaya-vim.overrideAttrs {
+  himalaya-vim9 = super.himalaya-vim9.overrideAttrs {
     buildInputs = [ himalaya ];
     # Optional integrations
     checkInputs = with self; [

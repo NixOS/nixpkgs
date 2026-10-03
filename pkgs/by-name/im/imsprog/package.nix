@@ -2,26 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
   cmake,
   makeWrapper,
   pkg-config,
+
   bash,
+  libftdi1,
   libusb1,
-  qt5,
+  qt6,
   wget,
   zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "imsprog";
-  version = "1.8.6";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "bigbigmdm";
     repo = "IMSProg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wYzhOQfkuXgc3fxYlkx284gu5gIYUH5SppM02WD1YWI=";
+    hash = "sha256-K7biDYnWl4wbQ2t69x5X7/Cz/bWUvWlDeDOeNKrjCTg=";
   };
+
+  env.LC_ALL = "C.UTF-8";
 
   strictDeps = true;
 
@@ -29,15 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
-    qt5.wrapQtAppsHook
-    qt5.qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
     bash # for patching the shebang in bin/IMSProg_database_update
+    libftdi1
     libusb1
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   # change default hardcoded path for chip database file, udev rules et al

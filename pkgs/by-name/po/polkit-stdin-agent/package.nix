@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
   nixosTests,
 }:
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkit-stdin-agent";
   version = "0.3.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "r-vdp";
     repo = "polkit-stdin-agent";
     tag = "v${finalAttrs.version}";

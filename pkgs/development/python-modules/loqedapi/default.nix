@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "loqedapi";
-  version = "2.1.15";
+  version = "2.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpolhout";
     repo = "loqedAPI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i6suZdme6M1lNVsI1zd23I8JQNfVmiCooQTkQCeOJYU=";
+    hash = "sha256-tWdoXdcizSpuhp+lpM1h8w4NCUbCsn4SO0lW4FV09UU=";
   };
 
   build-system = [

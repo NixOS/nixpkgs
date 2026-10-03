@@ -31,8 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    homepage = "https://xpra.org/";
-    downloadPage = "https://xpra.org/src/";
+    homepage = "https://github.com/Xpra-org/xpra-html5";
     description = "HTML5 client for Xpra";
     changelog = "https://github.com/Xpra-org/xpra-html5/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;

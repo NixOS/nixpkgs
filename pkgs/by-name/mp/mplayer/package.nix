@@ -303,5 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

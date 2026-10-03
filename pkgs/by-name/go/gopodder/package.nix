@@ -8,17 +8,17 @@
 # Temporary until buildGoModule updates to 1.27
 buildGo127Module (finalAttrs: {
   pname = "gopodder";
-  version = "1.2.5";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cbrgm";
     repo = "gopodder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oKaAiVFQqVB7ArqrUqWg8nWkygtqDjRotfyBDe0q4pY=";
+    hash = "sha256-v9ST59H2g3pYT9xA+q8Z+2p5ROX+T1BArihfaRxMLL0=";
   };
 
-  vendorHash = "sha256-MHgh84kzztPLETf3O24lNcfVuOKntKYidczqG8qEyzE=";
+  vendorHash = "sha256-I/T/+UJpDiPqH8yd1J61NYcrybRQC4E2M6yLio0ficU=";
 
   dontPatchELF = true;
 

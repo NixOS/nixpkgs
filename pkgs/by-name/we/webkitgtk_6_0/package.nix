@@ -72,6 +72,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
+  directoryListingUpdater,
   fetchpatch,
 }:
 
@@ -82,7 +83,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.54.0";
+  version = "2.54.1";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -97,7 +98,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hG/RnM7brh2/6QTybb8taKgAozpQyvKtUiLI3LPyVoI=";
+    hash = "sha256-6gu7AtvbxZaHSk5601tmZFs+CiMr0OQIHeXtkusKOX0=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -113,15 +114,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
-    })
-
-    # Fix https://bugs.webkit.org/show_bug.cgi?id=322394
-    # Upstream PR: https://github.com/WebKit/WebKit/pull/74512
-    # Fetching the patch vendored by gnome-build-meta because the upstream
-    # patch doesn't apply.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-build-meta/-/raw/7e4afe649fa1acbe9203004ad8fe1749c26e619d/patches/webkitgtk/main-thread.patch";
-      hash = "sha256-Dm6Yytt4mQy7qxSWiudGBqfQUVJRhNAc1n+o/NMR1cg=";
     })
   ];
 
@@ -261,7 +253,10 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = {
     description = "Web content rendering engine, GTK port";

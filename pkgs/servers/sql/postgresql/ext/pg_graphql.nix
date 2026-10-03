@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_16_1,
+  cargo-pgrx_0_19_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -8,19 +8,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_16_1;
+  cargo-pgrx = cargo-pgrx_0_19_0;
 
   pname = "pg_graphql";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_graphql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DOmxdLuYlRoQRprN4tni6JyXZ3nWaEqVQU0DNSYRYTc=";
+    hash = "sha256-/qpAfou/shsLKyUmJsya/Zph9nhdtQwXOcXpqmsOnIw=";
   };
 
-  cargoHash = "sha256-pgwx8Axctd37J79nUTbCGp6g2PGiHdgt99pMqGGLmyA=";
+  cargoHash = "sha256-j22VUErDuNePK3Ut5bPDnSGpOpC+wSqqM/kJD+fASyQ=";
 
   # pgrx tests try to install the extension into postgresql nix store
   doCheck = false;

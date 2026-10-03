@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wastebin";
-  version = "3.7.2";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "matze";
     repo = "wastebin";
     rev = finalAttrs.version;
-    hash = "sha256-IzrwFiLJfvFKHdYaDmaYYwdBUlQed9WEy/7OBvlAUTQ=";
+    hash = "sha256-ybKa6ZkQek9S0Zjz/lRODzjWvzTTu+PtfMrnYu+Nzrs=";
   };
 
-  cargoHash = "sha256-tq2Hc5CAp5Cp6AYS/NGb0HEtvm+lH8qak+M8toksDF4=";
+  cargoHash = "sha256-hdu+t3xdS7KYcos6N1EkygCoAdaUOowldb0NGEOPtSQ=";
 
   nativeBuildInputs = [
     pkg-config

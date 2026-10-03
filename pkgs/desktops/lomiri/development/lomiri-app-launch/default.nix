@@ -19,7 +19,7 @@
   pkg-config,
   properties-cpp,
   python3,
-  systemd,
+  systemdLibs,
   ubports-click,
   validatePkgConfig,
   zeitgeist,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-api
     lttng-ust
     properties-cpp
-    systemd
+    systemdLibs
     ubports-click
     zeitgeist
   ];

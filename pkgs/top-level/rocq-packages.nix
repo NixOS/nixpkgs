@@ -260,6 +260,10 @@ let
               with lib.versions;
               lib.switch self.coq.version [
                 {
+                  case = range "8.19" "9.0";
+                  out = "3.17";
+                }
+                {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
                 }

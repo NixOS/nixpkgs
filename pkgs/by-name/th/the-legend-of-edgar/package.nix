@@ -2,59 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  buildPackages,
   SDL2,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
   gettext,
   libpng,
-  pkg-config,
   zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-legend-of-edgar";
-  version = "1.37";
+  version = "1.38";
 
   src = fetchFromGitHub {
     owner = "riksweeney";
     repo = "edgar";
     rev = finalAttrs.version;
-    hash = "sha256-hhzDNnoQCwHOwknABTz4a9AQ7MkU9vayi2tZvJtK1PQ=";
+    hash = "sha256-8Q2R6DrDb8ajWeewp10NlDYPPOu7HOl4LxO6DluitWQ=";
   };
 
-  patches = [
-    # Fix _FORTIFY_SOURCE startup crash:
-    #   https://github.com/riksweeney/edgar/pull/67
-    (fetchpatch {
-      url = "https://github.com/riksweeney/edgar/commit/cec80a04d765fd2f6563d1cf060ad5000f9efe0a.patch";
-      hash = "sha256-RJpIt7M3c989nXkWRTY+dIUGqqttyTTGx8s5u/iTWX4=";
-    })
-
-    (fetchpatch {
-      # https://github.com/riksweeney/edgar/pull/68
-      name = "add-cross-compilation-support.patch";
-      url = "https://github.com/riksweeney/edgar/commit/9cc071d06b97e20aee3841c2eaa8078c6ed396d7.patch";
-      hash = "sha256-+yHzLgqBI8qgD40pSCmwF68SDDnC/4QdCXEz/g7l0a4=";
-    })
-  ];
-
   strictDeps = true;
+  enableParallelBuilding = true;
+  __structuredAttrs = true;
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-    pkg-config
-  ];
   nativeBuildInputs = [
-    pkg-config
     gettext
-    zlib
+    SDL2
   ];
 
   buildInputs = [
-    SDL2
     SDL2_image
     SDL2_mixer
     SDL2_ttf
@@ -69,14 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "BIN_DIR=${placeholder "out"}/bin/"
-    "BUILD_CC=$(CC_FOR_BUILD)"
-    "BUILD_PKG_CONFIG=$(PKG_CONFIG_FOR_BUILD)"
   ];
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";
+    changelog = "https://github.com/riksweeney/edgar/releases/tag/${finalAttrs.version}";
     description = "2D platform game with a persistent world";
     longDescription = ''
       When Edgar's father fails to return home after venturing out one dark and
@@ -92,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl1Plus;
     mainProgram = "edgar";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

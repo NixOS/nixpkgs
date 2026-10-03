@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fscan";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-awg6YqZyhlt04JobZXZx/PYuw2X7gsYKWb8480ymcN8=";
+    hash = "sha256-P3zgmjlBZCmeJxYy5SRPC9Bvl9O03LUJoeAFYhp8tGA=";
   };
 
   vendorHash = "sha256-IlGHY0KbYsy/5Yz11XhkcS9yS8byY3vhPZiTwnJM6/Q=";

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://blog.neil.brown.name/category/wiggle/";
+    homepage = "https://github.com/neilbrown/wiggle";
     description = "Tool for applying patches with conflicts";
     mainProgram = "wiggle";
     longDescription = ''
