@@ -148,6 +148,14 @@ let
   withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
   withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
+
+  databasePath = toString cfg.settings.database.path;
+  # Locations hidden by ProtectHome
+  databaseInHome = any (prefix: hasPrefix prefix databasePath) [
+    "/home/"
+    "/root/"
+    "/run/user/"
+  ];
 in
 
 {
@@ -279,6 +287,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optionals databaseInHome [
+      ''
+        services.frigate.settings.database.path is located below a home directory (${databasePath}).
+        This requires disabling the ProtectHome hardening option for the frigate service.
+        Consider moving the database to a location outside of /home, /root and /run/user.
+      ''
+    ];
+
     services.nginx = {
       enable = true;
       additionalModules = with pkgs.nginxModules; [
@@ -780,6 +796,11 @@ in
         StateDirectory = "frigate";
         StateDirectoryMode = "0750";
 
+        # SQLite needs write access to the database directory for its journal/WAL files
+        ReadWritePaths = optionals (!hasPrefix "/var/lib/frigate/" databasePath) [
+          (dirOf databasePath)
+        ];
+
         # Caches
         PrivateTmp = true;
         TemporaryFileSystem = "/dev/shm:mode=1777,nosuid,nodev";
@@ -802,7 +823,8 @@ in
 
         # Protect various system locations/interfaces
         ProtectControlGroups = true;
-        ProtectHome = true;
+        # Required when the database lives in a home directory
+        ProtectHome = !databaseInHome;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
