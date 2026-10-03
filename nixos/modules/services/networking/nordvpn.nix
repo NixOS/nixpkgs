@@ -148,7 +148,7 @@ in
         DirectoryMode = "0750";
         NoDelay = true;
         SocketGroup = cfg.group;
-        SocketMode = "0770";
+        SocketMode = "0660";
         SocketUser = cfg.user;
       };
       wantedBy = [ "sockets.target" ];
