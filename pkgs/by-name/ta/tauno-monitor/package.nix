@@ -14,7 +14,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauno-monitor";
-  version = "0.2.25";
+  version = "0.3.0";
   pyproject = false;
 
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "taunoe";
     repo = "tauno-monitor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OLIA/PMlbjlKU9JOzSbE2eFayJbOcev0Txr/qQjaOGo=";
+    hash = "sha256-FCwIxto/VBAzyJ0P9CJcJTt5BZQFOlQ/RINi8P0iOjo=";
   };
 
   nativeBuildInputs = [
