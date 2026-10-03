@@ -28776,6 +28776,12 @@
     githubId = 4541968;
     name = "Nova King";
   };
+  techouse = {
+    name = "Klemen Tusar";
+    email = "techouse@gmail.com";
+    github = "techouse";
+    githubId = 1174328;
+  };
   teczito = {
     name = "Ruben";
     email = "ruben@teczito.com";
