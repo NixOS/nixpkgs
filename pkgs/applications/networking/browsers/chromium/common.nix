@@ -294,6 +294,7 @@ let
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
+          "riscv64" = "riscv64";
         }
         .${platform.parsed.cpu.name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
       );
@@ -950,6 +951,12 @@ let
         mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
+      ''
+      + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+        substituteInPlace third_party/node/node.py --replace-fail 'cmd = [GetBinaryPath()] + cmd_parts' 'cmd = [GetBinaryPath(), "--no-liftoff", "--wasm-num-compilation-tasks=0"] + cmd_parts'
+        substituteInPlace third_party/swiftshader/src/Reactor/BUILD.gn --replace-fail 'llvm_dir = "../../third_party/llvm-10.0"' 'llvm_dir = "../../third_party/llvm-16.0"'
+      ''
+      + ''
 
         # Allow building against system libraries in official builds
         sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -1138,6 +1145,9 @@ let
       // lib.optionalAttrs (chromiumVersionAtLeast "153") {
         use_typescript_go = false;
         devtools_use_typescript_go = false;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isRiscV64 {
+        enable_swiftshader = false;
       }
       // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
       // (extraAttrs.gnFlags or { })
