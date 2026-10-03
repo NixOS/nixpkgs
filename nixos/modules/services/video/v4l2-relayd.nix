@@ -52,6 +52,16 @@ let
           '';
         };
 
+        bufferCount = mkOption {
+          type = types.ints.positive;
+          default = 8;
+          description = ''
+            How many buffers to allocate for the v4l2loopback device. The
+            module default of 2 is too few for GStreamer to keep writing
+            while a consumer holds one.
+          '';
+        };
+
         cardLabel = mkOption {
           type = types.str;
           description = ''
@@ -159,10 +169,14 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "always";
+          RestartSec = "1s";
           PrivateNetwork = true;
           PrivateTmp = true;
           LimitNPROC = 1;
         };
+
+        # the relay exits whenever its last consumer goes, so restarts are routine
+        startLimitIntervalSec = 0;
 
         environment = {
           GST_PLUGIN_PATH = makeSearchPathOutput "lib" "lib/gstreamer-1.0" (gst ++ instance.extraPackages);
@@ -195,7 +209,7 @@ in
 
         preStart = ''
           mkdir -p $(dirname $V4L2_DEVICE_FILE)
-          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -n "${instance.cardLabel}" > $V4L2_DEVICE_FILE
+          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -b ${toString instance.bufferCount} -n "${instance.cardLabel}" > $V4L2_DEVICE_FILE
         '';
 
         postStop = ''
