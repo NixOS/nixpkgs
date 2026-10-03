@@ -22,10 +22,6 @@ let
     in
     {
       inherit lib;
-      rocqPackages = self // {
-        __attrsFailEvaluation = true;
-        recurseForDerivations = false;
-      };
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
@@ -35,7 +31,7 @@ let
           fetchurl
           ;
       };
-      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { rocqPackages = self; });
 
       coq = callPackage ../applications/science/logic/coq {
         ocamlPackages_4_09 = null;

@@ -28,12 +28,9 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-      rocqPackages = self // {
-        recurseForDerivations = false;
-      };
     in
     {
-      inherit rocqPackages lib;
+      inherit lib;
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
@@ -43,7 +40,7 @@ let
           fetchurl
           ;
       };
-      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { rocqPackages = self; });
       mkCoqDerivation =
         args:
         self.mkRocqDerivation (
