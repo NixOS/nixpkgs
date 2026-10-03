@@ -1,0 +1,32 @@
+From 21d731964dca1658b9e9a1cb1de2a854ccd60af6 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Validate symmetric-memory Unix socket path capacity
+
+Avoid overflowing sockaddr_un when the temporary directory has a long name.
+Validate the shared name before constructing the socket or copying its address.
+
+Based on PyTorch v2.13.0.
+---
+ .../c10d/symm_mem/CUDASymmetricMemoryUtils.cpp            | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/torch/csrc/distributed/c10d/symm_mem/CUDASymmetricMemoryUtils.cpp b/torch/csrc/distributed/c10d/symm_mem/CUDASymmetricMemoryUtils.cpp
+index 6443d11..c8d4fa3 100644
+--- a/torch/csrc/distributed/c10d/symm_mem/CUDASymmetricMemoryUtils.cpp
++++ b/torch/csrc/distributed/c10d/symm_mem/CUDASymmetricMemoryUtils.cpp
+@@ -259,7 +259,13 @@ std::string IpcChannel::get_socket_name(int pid) {
+   }
+   std::ostringstream oss;
+   oss << tmp_dir << "/symm_mem-" << pid;
+-  return oss.str();
++  auto socket_name = oss.str();
++  TORCH_CHECK(
++      socket_name.size() < sizeof(sockaddr_un::sun_path),
++      "Symmetric memory socket path is too long (",
++      socket_name.size(),
++      " bytes). Set TMPDIR to a shorter directory.");
++  return socket_name;
+ }
+ 
+ void map_block(
