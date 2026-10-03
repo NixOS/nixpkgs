@@ -1,0 +1,79 @@
+diff --git a/app/controllers/api/v1/auth/registrations_controller.rb b/app/controllers/api/v1/auth/registrations_controller.rb
+index 5e08be92f..377c23ada 100644
+--- a/app/controllers/api/v1/auth/registrations_controller.rb
++++ b/app/controllers/api/v1/auth/registrations_controller.rb
+@@ -1,6 +1,8 @@
+ # frozen_string_literal: true
+ 
+ class Api::V1::Auth::RegistrationsController < Api::V1::Auth::BaseController
++  before_action :check_registration_allowed, only: :create
++
+   def create
+     user = User.new(new_user_attrs)
+ 
+@@ -16,6 +18,39 @@ class Api::V1::Auth::RegistrationsController < Api::V1::Auth::BaseController
+ 
+   private
+ 
++  def check_registration_allowed
++    return unless self_hosted_mode?
++
++    # When OIDC is enabled and email/password registration is disabled,
++    # block all email/password registration including family invitations
++    if oidc_only_mode?
++      render json: {
++        error: 'registration_disabled',
++        message: 'Email/password registration is disabled. Please use OIDC to sign in.'
++      }, status: :forbidden
++      return
++    end
++
++    return if email_password_registration_allowed?
++
++    render json: {
++      error: 'registration_disabled',
++      message: 'Registration is not available. Please contact your administrator for access.'
++    }, status: :forbidden
++  end
++
++  def self_hosted_mode?
++    DawarichSettings.self_hosted?
++  end
++
++  def email_password_registration_allowed?
++    DawarichSettings.registration_enabled?
++  end
++
++  def oidc_only_mode?
++    DawarichSettings.oidc_enabled? && !email_password_registration_allowed?
++  end
++
+   def new_user_attrs
+     base = {
+       email: params[:email]&.to_s&.downcase&.strip,
+diff --git a/swagger/v1/swagger.yaml b/swagger/v1/swagger.yaml
+index 5ef17e6d8..f97a0edd3 100644
+--- a/swagger/v1/swagger.yaml
++++ b/swagger/v1/swagger.yaml
+@@ -523,6 +523,21 @@ paths:
+                   details:
+                     type: object
+                     additionalProperties: true
++        '403':
++          description: registration disabled on this instance
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  error:
++                    type: string
++                    example: registration_disabled
++                  message:
++                    type: string
++                required:
++                - error
++                - message
+       requestBody:
+         content:
+           application/json:
