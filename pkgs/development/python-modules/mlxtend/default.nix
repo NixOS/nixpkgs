@@ -65,7 +65,10 @@ buildPythonPackage rec {
     description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ evax ];
+    maintainers = with lib.maintainers; [
+      evax
+      jadewilk
+    ];
     platforms = lib.platforms.unix;
   };
 }
