@@ -1,0 +1,52 @@
+diff --git a/lute/crypto/src/crypto.cpp b/lute/crypto/src/crypto.cpp
+index c82114f1..6de72822 100644
+--- a/lute/crypto/src/crypto.cpp
++++ b/lute/crypto/src/crypto.cpp
+@@ -4,7 +4,7 @@
+ #include "lua.h"
+ #include "lualib.h"
+ 
+-#include "openssl/digest.h"
++#include "openssl/evp.h"
+ #include "sodium/crypto_pwhash.h"
+ #include "sodium/crypto_secretbox.h"
+ #include "sodium/randombytes.h"
+@@ -34,7 +34,7 @@ static const char kVerifyPasswordHashName[] = "verify";
+ struct HashFunction
+ {
+     std::string name;
+-    const env_md_st* md;
++    const evp_md_st* md;
+ };
+ 
+ static const HashFunction hashFunctions[] = {
+@@ -42,7 +42,7 @@ static const HashFunction hashFunctions[] = {
+     {"sha1", EVP_sha1()},
+     {"sha256", EVP_sha256()},
+     {"sha512", EVP_sha512()},
+-    {"blake2b256", EVP_blake2b256()},
++    {"blake2b256", EVP_blake2s256()},
+ };
+ 
+ int makeHashFunctionMap(lua_State* L)
+@@ -58,9 +58,9 @@ int makeHashFunctionMap(lua_State* L)
+     return 1;
+ }
+ 
+-const env_md_st* getHashFunction(lua_State* L, int idx)
++const evp_md_st* getHashFunction(lua_State* L, int idx)
+ {
+-    if (auto typ = static_cast<const env_md_st*>(lua_tolightuserdatatagged(L, idx, kHashFunctionTag)))
++    if (auto typ = static_cast<const evp_md_st*>(lua_tolightuserdatatagged(L, idx, kHashFunctionTag)))
+         return typ;
+ 
+     luaL_typeerrorL(L, idx, "hash function");
+@@ -104,7 +104,7 @@ int lua_digest(lua_State* L)
+     if (argumentCount != 2)
+         luaL_error(L, "%s: expected 2 arguments, but got %d", kDigestName, argumentCount);
+ 
+-    const env_md_st* hashFunction = getHashFunction(L, 1);
++    const evp_md_st* hashFunction = getHashFunction(L, 1);
+     BinaryData message = extractData(L, 2);
+ 
+     uint8_t* buffer = static_cast<uint8_t*>(lua_newbuffer(L, EVP_MD_size(hashFunction)));
