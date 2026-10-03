@@ -23,11 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
     "man"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.hadrons.org/software/libmd/";
