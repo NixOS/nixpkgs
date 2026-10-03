@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.24";
+  version = "0.6.27";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X0j5cWAIMdpLSUSDAUx7oSJ42xvRLL1PY8JK9i4wGhA=";
+    hash = "sha256-aeO0whwJA6nDO6Sf+11YfuYNTDc1Cd8ET5r/WWfnENo=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
+    hash = "sha256-K9FWV3fR71dkF0NII67k6sRiC1plwH6M6Tzvd3AsUbU=";
   };
 
   patches = [
@@ -45,15 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-dwGJKLO+3i5FUgv+Huu1ZD/hFg/KdyWofApwkIDFD1I=";
+  cargoHash = "sha256-kDMNKpEmp1qGibDhQh2jE1FNsJsI2QOemBC5CLZ+dKI=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-
-  checkFlags = [
-    # test fails to find correct function
-    "--skip=utils::string_utils::safe_truncate"
-  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -73,17 +68,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     desktop-file-edit \
-    --set-name "NoRiskClient Launcher" \
-    --set-comment "Launcher for NoRiskClient" \
-    --set-key="Categories" --set-value="Game" \
-    --set-key="Keywords" --set-value="nrc;minecraft;mc;" \
-    $out/share/applications/NoRisk\ Launcher.desktop
+      --set-name "NoRiskClient Launcher" \
+      --set-comment "Launcher for NoRiskClient" \
+      --set-key="Categories" --set-value="Game" \
+      --set-key="Keywords" --set-value="nrc;minecraft;mc;" \
+        $out/share/applications/NoRisk\ Launcher.desktop
   '';
+
+  # Fails to link
+  doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.txt";
+    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.md";
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
     license = lib.licenses.gpl3Only;
