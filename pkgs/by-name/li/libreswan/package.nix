@@ -4,7 +4,7 @@
   fetchurl,
   nixosTests,
   pkg-config,
-  systemd,
+  systemdLibs,
   gmp,
   unbound,
   bison,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     coreutils
     gnused
     gawk
