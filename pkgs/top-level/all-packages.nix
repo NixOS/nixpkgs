@@ -899,6 +899,11 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
+  roleHook = makeSetupHook {
+    name = "role-hook";
+    meta.license = lib.licenses.mit;
+  } ../build-support/setup-hooks/role.bash;
+
   separateDebugInfo = makeSetupHook {
     name = "separate-debug-info-hook";
     meta.license = lib.licenses.mit;
