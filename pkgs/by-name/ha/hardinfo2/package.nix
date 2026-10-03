@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   cmake,
+  coreutils,
   glslang,
   pkg-config,
   libsForQt5,
@@ -36,6 +37,9 @@
   # runtime
   dmidecode,
   gawk,
+  gnugrep,
+  kmod,
+  shadow,
   iperf,
   mesa-demos,
   sysbench,
@@ -141,6 +145,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/hardinfo2 \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.runtimeLibs}
+    wrapProgram $out/bin/hwinfo2_fetch_sysdata \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          dmidecode
+          gawk
+          gnugrep
+          kmod
+          shadow
+        ]
+      }
 
       substituteInPlace $out/lib/systemd/system/hardinfo2.service \
         --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/bin/hwinfo2_fetch_sysdata"
