@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.16.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QHLVkQJkgTSB9a/QLgl4SKrWje0OhtBpa56zGQK8m+o=";
+    hash = "sha256-r8ilfAozDbhyB8WkPFxcbmHqGlK93yGiYd637ygEaIA=";
   };
 
   vendorHash = null;
