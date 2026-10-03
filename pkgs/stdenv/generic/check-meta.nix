@@ -103,7 +103,7 @@ let
     attrs ? meta.license
     && (
       if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
+        any (l: if l ? licenseType then containsListLicenses l else elem l list) attrs.meta.license
       else if attrs.meta.license ? "licenseType" then
         containsListLicenses attrs.meta.license
       else
@@ -132,7 +132,7 @@ let
       false
     else
       # on a list, check if any of the licenses weren't free (boolean AND)
-      any (l: !l.free or false) licenses;
+      any (l: if l ? licenseType then isUnfree l else !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 

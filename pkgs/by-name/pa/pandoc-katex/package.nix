@@ -20,10 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Pandoc filter to render math equations using KaTeX";
     homepage = "https://github.com/xu-cheng/pandoc-katex";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       euxane
     ];

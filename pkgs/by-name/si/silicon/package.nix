@@ -61,10 +61,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       evanjs
       _0x4A6F

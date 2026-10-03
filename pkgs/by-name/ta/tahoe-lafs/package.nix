@@ -144,8 +144,8 @@ python3Packages.buildPythonApplication rec {
       are unavailable, malfunctioning, or malicious.
     '';
     homepage = "https://tahoe-lafs.org/";
-    license = [
-      lib.licenses.gpl2Plus # or
+    license = lib.licenses.OR [
+      lib.licenses.gpl2Plus
       {
         fullName = "Transitive Grace Period Public Licence version 1.0";
         url = "https://github.com/tahoe-lafs/tahoe-lafs/blob/master/COPYING.TGPPL.rst";

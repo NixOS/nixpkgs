@@ -38,10 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "dotslash";
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };

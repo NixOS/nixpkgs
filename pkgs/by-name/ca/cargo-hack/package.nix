@@ -34,10 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-hack";
     homepage = "https://github.com/taiki-e/cargo-hack";
     changelog = "https://github.com/taiki-e/cargo-hack/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ defelo ];
   };
 })

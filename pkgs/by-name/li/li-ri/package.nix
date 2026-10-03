@@ -46,9 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux;
     license = with lib.licenses; [
       # Code
-      gpl2Only
-      # or
-      gpl3Only
+      (OR [
+        gpl2Only
+        gpl3Only
+      ])
 
       # Metadata
       cc0

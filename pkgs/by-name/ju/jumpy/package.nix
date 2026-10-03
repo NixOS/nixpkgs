@@ -90,8 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://fishfolk.org/games/jumpy";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
-      mit # or
-      asl20
+      (OR [
+        mit
+        asl20
+      ])
       # Assets
       cc-by-nc-40
     ];

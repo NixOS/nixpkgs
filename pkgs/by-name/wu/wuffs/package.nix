@@ -76,10 +76,12 @@ buildGoModule (finalAttrs: {
     description = "memory-safe programming language and standard library for wrangling untrusted data";
     mainProgram = "wuffs";
     pkgConfigModules = [ "wuffs" ];
-    license = with lib.licenses; [
-      mit
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [
     ];
   };
