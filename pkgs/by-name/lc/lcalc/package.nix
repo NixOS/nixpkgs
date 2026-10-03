@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.1";
+  version = "2.2.2";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "lcalc";
     tag = finalAttrs.version;
-    hash = "sha256-L9502+lwSPLk63C14Pxa8OZWhnY4OqKv9WudZO2vP7E=";
+    hash = "sha256-tG6iTIXaNGaf1bi44JKWLy8aeizwOstpi/49ovKp/fY=";
   };
 
   # upstream ships a patched ltmain.sh from libtool 2.5.4. the patch
