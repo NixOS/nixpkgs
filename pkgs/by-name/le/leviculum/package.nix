@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   udev,
   versionCheckHook,
@@ -13,8 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.9.0";
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Lew_Palm";
     repo = "leviculum";
     tag = "v${finalAttrs.version}";

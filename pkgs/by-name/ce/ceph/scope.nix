@@ -5,7 +5,7 @@ lib.makeScope pkgs.newScope (self: {
   ceph-rocksdb = self.callPackage ./rocksdb.nix { };
 
   # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
-  ceph-python = self.callPackage ({ python312 }: python312) { };
+  ceph-python = self.callPackage ({ python314 }: python314) { };
   ceph-python-common = self.callPackage ./python-common.nix { };
   ceph-python-env = self.callPackage ./python-env.nix { };
 

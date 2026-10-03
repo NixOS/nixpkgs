@@ -143,10 +143,6 @@
         "date": "2024-11-19",
         "new": "cmp-latex-symbols"
     },
-    "compe-tabnine": {
-        "date": "2024-11-19",
-        "new": "cmp-tabnine"
-    },
     "compe-zsh": {
         "date": "2024-11-19",
         "new": "cmp-zsh"
