@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
 
   modRoot = "veans";
 
-  vendorHash = "sha256-ac2M7wNlOn6ku8sn/rZmPCSGPodw88ufR8tr1lh54II=";
+  vendorHash = "sha256-cCRPfJDZXIlufMg3SkqtI7Hb5Dphu2Eofxuls3eSS+Q=";
 
   env.CGO_ENABLED = 0;
 
