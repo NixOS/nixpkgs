@@ -1,21 +1,21 @@
-{ lib }:
+{
+  lib ? import ../default.nix,
+}:
 let
-  inherit (lib)
-    lists
-    splitString
-    ;
-  inherit (lib.systems) parse;
-  inherit (parse)
-    mkSystemFromSkeleton
-    mkSkeletonFromList
-    doubleFromSystem
-    ;
-  inherit (lib.systems.inspect) predicates;
-  inherit (lib.attrsets) matchAttrs;
+  /*
+    We pregenerate the lib.platforms lists for performance reasons.
 
+    To add a new system to nixpkgs:
+
+    1. Add it to this list of all the doubles we support
+
+    2. Modify `lib/systems/parse.nix` to properly handle the new system
+
+    3. Execute the `lib/platforms/generate.sh` script to regenerate the platforms data
+    ```
+  */
   all = [
-    # our primary systems. at the top of the list for fastest matching
-    # inside check-meta
+    # primary systems at the top for fastest check-meta matching
     "x86_64-linux"
     "aarch64-darwin"
     "aarch64-linux"
@@ -125,18 +125,20 @@ let
     "x86_64-uefi"
   ];
 
-  uncheckedSystemFromString =
-    let
-      systemType = {
-        _type = "system";
-      };
-    in
-    s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)) // systemType;
+  inherit (lib)
+    lists
+    ;
+  inherit (lib.systems) parse;
+  inherit (parse)
+    mkSystemFromString
+    doubleFromSystem
+    ;
+  inherit (lib.systems.inspect) predicates;
+  inherit (lib.attrsets) matchAttrs;
 
-  allParsed = map uncheckedSystemFromString all;
+  allParsed = map mkSystemFromString all;
 
   filterDoubles = f: map doubleFromSystem (lists.filter f allParsed);
-
 in
 {
   inherit all;
