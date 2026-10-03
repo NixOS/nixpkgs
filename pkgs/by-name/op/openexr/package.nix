@@ -12,14 +12,14 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openexr";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a+OWifnXplV9SLicOnVOpaSD8+lwBx6j1/I40O26p/s=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # tests are determined to use /var/tmp on unix
   postPatch = ''
     cat <(find . -name tmpDir.h) <(echo src/test/OpenEXRCoreTest/main.cpp) | while read -r f ; do
-      substituteInPlace $f --replace '/var/tmp' "$TMPDIR"
+      substituteInPlace $f --replace-fail '/var/tmp' "$TMPDIR"
     done
   '';
 
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     ctestCheckHook
   ];
+
+  strictDeps = true;
 
   # Without 'sse' enforcement tests fail on i686 as due to excessive precision as:
   #   error reading back channel B pixel 21,-76 got -nan expected -nan
@@ -92,12 +94,14 @@ stdenv.mkDerivation rec {
     python = python3Packages.openexr;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
-    changelog = "https://github.com/AcademySoftwareFoundation/OpenEXR/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/AcademySoftwareFoundation/OpenEXR/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ paperdigits ];
     platforms = lib.platforms.all;
   };
-}
+})
