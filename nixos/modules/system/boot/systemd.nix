@@ -645,7 +645,7 @@ in
                   ln -s $hook $out/
                 done
               done
-              ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
+              ${concatStrings (mapAttrsToList (exec: target: "ln -fs ${target} $out/${exec};\n") links)}
             '';
 
         enabledUpstreamSystemUnits = filter (n: !elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
