@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
-    homepage = "http://bulletphysics.org";
+    homepage = "https://github.com/bulletphysics/bullet3";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ aforemny ];
     platforms = lib.platforms.unix;

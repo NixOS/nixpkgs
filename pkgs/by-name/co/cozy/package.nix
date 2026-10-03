@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Modern audio book player for Linux";
-    homepage = "https://cozy.geigi.de/";
+    homepage = "https://github.com/geigi/cozy";
     maintainers = with lib.maintainers; [
       makefu
       aleksana
