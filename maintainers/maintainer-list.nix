@@ -28486,6 +28486,11 @@
     githubId = 92754843;
     name = "Kieran Klukas";
   };
+  TadeasDitte = {
+    github = "TadeasDitte";
+    githubId = 128937317;
+    name = "TadeasDitte";
+  };
   tadfisher = {
     email = "tadfisher@gmail.com";
     github = "tadfisher";
