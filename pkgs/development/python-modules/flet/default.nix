@@ -2,98 +2,85 @@
   lib,
   buildPythonPackage,
   flet-client-flutter,
+  writeText,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
 
   # dependencies
-  fastapi,
   httpx,
   msgpack,
   oauthlib,
-  packaging,
-  qrcode,
   repath,
-  cookiecutter,
-  uvicorn,
-  watchdog,
-  websocket-client,
-  websockets,
 
   # tests
-  numpy,
-  pillow,
   pytest-asyncio,
   pytestCheckHook,
-  scikit-image,
 }:
 
-buildPythonPackage rec {
+let
+  # Appended to upstream pip.py so the last definition of install_flet_package wins.
+  disableInstallFletPackage = writeText "flet-disable-pip.py" ''
+    def install_flet_package(name: str):
+        import warnings
+
+        warnings.warn(
+            f'install_flet_package({name!r}) is disabled in the nixpkgs build; '
+            f'install python3Packages."{name}" instead',
+            stacklevel=2,
+        )
+  '';
+in
+buildPythonPackage (finalAttrs: {
   pname = "flet";
   inherit (flet-client-flutter) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/sdk/python/packages/flet";
+  __structuredAttrs = true;
+
+  sourceRoot = "${finalAttrs.src.name}/sdk/python/packages/flet";
+
+  postPatch = ''
+    # Flutter SDK version used by packaging; set by CI on releases.
+    substituteInPlace src/flet/version.py \
+      --replace-fail 'flutter_version = ""' 'flutter_version = "3.41.7"'
+
+    # Do not attempt pip/uv installs of companion packages under Nix.
+    cat ${disableInstallFletPackage} >> src/flet/utils/pip.py
+  '';
+
+  # pyproject.toml is version = "0.1.0"; hook rewrites it to match the derivation.
+  # Runtime flet.version falls back to git / "0.1.0" unless CI-style version.py pins exist.
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
-  makeWrapperArgs = [
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "$PYTHONPATH"
-  ];
-
-  _flet_version = ''
-    flet_version = "${version}"
-    def update_version():
-      pass
-  '';
-  _flet_utils_pip = ''
-    def install_flet_package(name: str):
-      pass
-  '';
-
-  postPatch = ''
-     # nerf out nagging about pip
-    echo "$_flet_version" > src/flet/version.py
-    echo "$_flet_utils_pip" >> src/flet/utils/pip.py
-  '';
-
   dependencies = [
-    cookiecutter
-    fastapi
     httpx
     msgpack
     oauthlib
-    packaging
-    qrcode
     repath
-    uvicorn
-    watchdog
-    websocket-client
-    websockets
   ];
 
   nativeCheckInputs = [
-    numpy
-    pillow
     pytest-asyncio
     pytestCheckHook
-    scikit-image
   ];
+
+  # Unit tests only; integration_tests need the full monorepo + examples tree.
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "flet" ];
 
   meta = {
-    broken = true;
     description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
-    changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
+    changelog = "https://github.com/flet-dev/flet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
     ];
     mainProgram = "flet";
   };
-}
+})
