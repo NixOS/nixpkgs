@@ -21,7 +21,6 @@
   torchcodec,
   torchvision,
   transformers,
-  triton,
 
   # native packages
   ffmpeg,
@@ -86,7 +85,7 @@ buildPythonPackage (finalAttrs: {
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    triton
+    torch.triton
   ];
 
   # No python tests in repository
