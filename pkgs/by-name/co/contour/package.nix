@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -28,22 +29,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.6.3.8249";
+  version = "0.7.0.8982";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+rr1bn4O5v9rXyoIx+ejL+qe5Kf2bFpgWA3DkWRcDYk=";
+    hash = "sha256-sY3qNaYsoYY6Ox5W7F2WHFHId89WbeGJ4fWs2PFQmNk=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./dont-fix-app-bundle.diff
-    ./remove-deep-flag-from-codesign.diff
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-L${lib.getLib llvmPackages.libcxx}/lib";
+  };
 
   # Dependencies are already managed by nix
-  cmakeFlags = [ "-DCONTOUR_USE_CPM=OFF" ];
+  cmakeFlags = [
+    "-DCONTOUR_USE_CPM=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCONTOUR_MACOS_DEPLOY=OFF"
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./link-qtquick.patch
+    ./macos-deploy-toggle.patch
+  ];
 
   outputs = [
     "out"
@@ -97,6 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + ''
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    /usr/bin/codesign --force --sign - $out/Applications/contour.app
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
