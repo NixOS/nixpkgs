@@ -19,6 +19,6 @@
   testScript = ''
     start_all()
     machine.wait_for_unit("phpfpm-moodle.service", timeout=1800)
-    machine.wait_until_succeeds("curl http://localhost/ | grep 'You are not logged in'")
+    machine.wait_until_succeeds("curl -f http://localhost/ | grep 'You are not logged in'")
   '';
 }
