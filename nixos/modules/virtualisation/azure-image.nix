@@ -12,6 +12,7 @@ in
 {
   imports = [
     ./azure-common.nix
+    ../image/config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -80,6 +81,8 @@ in
   };
 
   config = {
+    virtualisation.configFile = lib.mkDefault ./azure-config-user.nix;
+
     image.extension = "vhd";
     system.nixos.tags = [ "azure" ];
     system.build.image = config.system.build.azureImage;
@@ -98,7 +101,7 @@ in
         truncate -s +${cfg.additionalSpace} "$out/${config.image.fileName}"
         ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
-      configFile = ./azure-config-user.nix;
+      configFile = config.virtualisation.configFile;
 
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
