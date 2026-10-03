@@ -1,22 +1,29 @@
 {
   lib,
-  buildGoModule,
+  rustPlatform,
   fetchFromGitHub,
   nixosTests,
+  cacert,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.4.4";
+  version = "0.7.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BwFcknSXC3uZfSlS0a420/WpUn/ji2m9x65zKi3bumE=";
+    hash = "sha256-uygFVEr0abUux04ShDitYpQJIy4vm0ysDvDtKQiMG1E=";
   };
 
-  vendorHash = "sha256-1D04GhXhGrOcRn8G+xY+3XEdgUBSWHis4DiKQ4gGNDw=";
+  cargoHash = "sha256-fWaeKuE9nr+yKT8ZInR79LDwwg1VsA2jdN/wdhtgln8=";
+
+  checkInputs = [
+    cacert
+  ];
 
   passthru.tests = nixosTests.lk-jwt-service;
 
