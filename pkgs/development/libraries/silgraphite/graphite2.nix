@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  buildPackages,
   llvmPackages,
-  python3,
   fetchurl,
   pkg-config,
   freetype,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    (python3.withPackages (ps: [ ps.fonttools ]))
+    (buildPackages.python3.withPackages (ps: [ ps.fonttools ]))
     cmake
   ];
   buildInputs = [
