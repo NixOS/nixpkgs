@@ -49,16 +49,16 @@ let
       ${lib.join "\n" (lib.map copyVendorDeps extra-dep-list)}
     '';
 
+  versioning = lib.importJSON ./versioning.json;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-app-proxy";
-  version = "2026.1001.150203";
+  inherit (versioning) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}-self-hosted@${finalAttrs.version}";
-    hash = "sha256-zs3T9gWmX7RzzpmumZ4OoNFYIKJc16r0yTujC5t8hY4=";
+    inherit (versioning) rev hash;
   };
 
   env.npm_config_nodedir = nodejs;
@@ -85,17 +85,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRootDep = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-oePyyvGyAPl4v5DVnsFtAl+Eu4I2Q6uOu6uOFHbO1dk=";
+    hash = versioning.cargoHash;
   };
   cargoExtraDeps = [
     (rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) src;
-      hash = "sha256-Z9N2jQtXkLPqJP2Fbu6xsNGN25XAE58CbHRm/f0uEIQ=";
+      hash = versioning.libfluxcoreHash;
       sourceRoot = "${finalAttrs.src.name}/fluxer_app/rust/libfluxcore";
     })
     (rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) src;
-      hash = "sha256-zz5JD3jiNCx8FOReZmCm4O2F20s7UbMsfZIM2sIcSS0=";
+      hash = versioning.libfluxwebpHash;
       sourceRoot = "${finalAttrs.src.name}/fluxer_app/rust/libfluxwebp";
     })
   ];
@@ -114,7 +114,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-PpuHVRJEO5B+D5m+BmIQErHyDmjiwwfVCSqntOs/ank=";
+    hash = versioning.appproxyPnpmHash;
   };
 
   postPatch = ''
