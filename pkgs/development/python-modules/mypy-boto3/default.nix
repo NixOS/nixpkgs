@@ -311,8 +311,8 @@ in
       "sha256-CavBKgp+dEMR2poR+bG2PgZb+wX1zlNmuOyJsV3LfVM=";
 
   mypy-boto3-cognito-idp =
-    buildMypyBoto3Package "cognito-idp" "1.43.83"
-      "sha256-M48OOjCyaCfwjFOIkxhae9E7ZOVf+1MeikfNqsxtuOY=";
+    buildMypyBoto3Package "cognito-idp" "1.43.108"
+      "sha256-eHDyQQSd8cgHsQrAbWL9dRSDgCFyQ14pejbIl7fe4d4=";
 
   mypy-boto3-cognito-sync =
     buildMypyBoto3Package "cognito-sync" "1.43.0"
@@ -571,8 +571,8 @@ in
       "sha256-wf3aeGNU4zu7+6Y3ajm2y8gqRcVaWkZHk/QVK2/1TW0=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.106"
-      "sha256-pp5S3LCMmBwXzr2Gqj7cPlVTT4bD5U1w4LvmwTckzIA=";
+    buildMypyBoto3Package "glue" "1.43.108"
+      "sha256-U3Q3+vxDO30yAzQuKypqcXuCl0UKEilMm0ZCUweU3+M=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
@@ -874,8 +874,8 @@ in
       "sha256-5AqWiNGz9jemWb8dZkuGQXxPXIruMdDWcoRzbT+ZGro=";
 
   mypy-boto3-mediapackagev2 =
-    buildMypyBoto3Package "mediapackagev2" "1.43.101"
-      "sha256-s7g2wMW/bOBSKKe7q0S7cSgWnHWNVYO46PQREUAqkZc=";
+    buildMypyBoto3Package "mediapackagev2" "1.43.108"
+      "sha256-Hb05g605ESaacKl15tTze8j8r9pDgMu5+e5xI7/qLHI=";
 
   mypy-boto3-mediastore =
     buildMypyBoto3Package "mediastore" "1.43.0"
@@ -1038,8 +1038,8 @@ in
       "sha256-A8/WYxFn06rUXtcIHsKfs7HxvOBges0wDGskm31NIyw=";
 
   mypy-boto3-pinpoint-sms-voice-v2 =
-    buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.43.90"
-      "sha256-5Rakqq71ubU/k3/AhzIjCh6o9pkBAdzTT//33Xe6o94=";
+    buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.43.108"
+      "sha256-5oAvQe+OTzfBAMyP3Mp/hFcF5rAuy2hXdhX+s43FtuU=";
 
   mypy-boto3-pipes =
     buildMypyBoto3Package "pipes" "1.43.0"
