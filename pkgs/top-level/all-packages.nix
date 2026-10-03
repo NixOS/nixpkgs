@@ -2224,11 +2224,13 @@ with pkgs;
       isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
       isl_0_23 = callPackage ../development/libraries/isl/0.23.0.nix { };
       isl_0_27 = callPackage ../development/libraries/isl/0.27.0.nix { };
+      isl_0_28 = callPackage ../development/libraries/isl/0.28.0.nix { };
     })
     isl
     isl_0_20
     isl_0_23
     isl_0_27
+    isl_0_28
     ;
 
   jamesdsp-pulse = callPackage ../by-name/ja/jamesdsp/package.nix {
