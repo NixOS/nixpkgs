@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "entt";
-  version = "3.16.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "skypjack";
     repo = "entt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-i4K7NigYPYAOsVLhtjQJFmm9LoWiTg39F8SIBRuv4Vg=";
+    hash = "sha256-+sIe2zn2uY/BHB+KIuJ5+1fa8qDjDnsnLBWk14WuUT0=";
   };
 
   nativeBuildInputs = [ cmake ];
