@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "av";
-  version = "18.1.0";
+  version = "19.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RZdGDTIIPNptT8KKU1o4WXZfbGTPM6MpQ5wuvZzm+O4=";
+    hash = "sha256-QH/cHXR6Vo/Bg5tiwq2Avjb0ITTBWodgpAgqJGpvzh4=";
   };
 
   build-system = [
