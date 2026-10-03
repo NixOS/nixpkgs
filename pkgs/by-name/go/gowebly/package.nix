@@ -60,7 +60,7 @@ buildGoModule rec {
       with Go on the backend, using htmx, hyperscript or Alpine.js,
       and the most popular CSS frameworks on the frontend.
     '';
-    homepage = "https://gowebly.org";
+    homepage = "https://github.com/gowebly/gowebly";
     changelog = "https://github.com/gowebly/gowebly/releases/tag/v${version}";
     license = lib.licenses.asl20;
     mainProgram = "gowebly";
