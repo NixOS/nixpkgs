@@ -20944,6 +20944,8 @@ self: super: with self; {
 
   tonewinner-rs232 = callPackage ../development/python-modules/tonewinner-rs232 { };
 
+  toolrack = callPackage ../development/python-modules/toolrack { };
+
   toolz = callPackage ../development/python-modules/toolz { };
 
   toonapi = callPackage ../development/python-modules/toonapi { };
