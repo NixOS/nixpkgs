@@ -1,9 +1,10 @@
 # This file defines the structure of the `config` nixpkgs option.
 
-# This file is tested in `pkgs/test/config.nix`.
+# This file is tested in `pkgs/test/config/*`.
 # Run tests with:
 #
 #     nix-build -A tests.config
+#     nix-unit pkgs/test/config/nix-unit.nix
 #
 
 { config, lib, ... }:
