@@ -1,0 +1,30 @@
+--- a/src/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/CMakeLists.txt	2023-04-03 16:32:16.994922955 +0200
+@@ -433,6 +435,7 @@
+     find_package(CoinUtils REQUIRED)
+     find_package(Clp REQUIRED)
+     find_package(Osi REQUIRED)
++    find_package(OsiClp REQUIRED)
+ endif()
+ 
+ # ==============================================================================
+--- a/src/aliceVision/linearProgramming/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/aliceVision/linearProgramming/CMakeLists.txt	2023-04-03 16:33:09.883053876 +0200
+@@ -13,6 +13,7 @@
+     Coin::Clp        # clp + solver wrapper
+     Coin::CoinUtils  # container tools
+     Coin::Osi        # generic LP
++    Coin::OsiClp
+ )
+ 
+ if (NOT MOSEK_FOUND)
+--- a/src/cmake/AliceVisionConfig.cmake.in	1970-01-01 01:00:01.000000000 +0100
++++ b/src/cmake/AliceVisionConfig.cmake.in	2026-03-14 17:05:38.355276557 +0100
+@@ -101,6 +101,7 @@
+ 
+ set(ALICEVISION_BUILD_SFM @ALICEVISION_BUILD_SFM@)
+ if(ALICEVISION_BUILD_SFM)
++  list(APPEND CMAKE_MODULE_PATH @FIND_COIN_MODULE_PATH@)
+   find_dependency(CoinUtils REQUIRED)
+   find_dependency(Clp REQUIRED)
+   find_dependency(Osi REQUIRED)
