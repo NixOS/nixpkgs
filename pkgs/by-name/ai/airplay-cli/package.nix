@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "airplay-cli";
   # nixpkgs-update: no auto update
   # updated together with music-assistant
-  version = "0.5.3";
+  version = "0.5.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/music-assistant/server/blob/stable/Dockerfile#L7
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gd9s+TW6UH2o5z2mYt60WvRkXJP3PsrcexzEMdEmxkw=";
+    hash = "sha256-aWZ1BfqUA3ddqql+kE0oZQhU3o8edJcfkqhMTiWssbc=";
   };
 
   postPatch = ''

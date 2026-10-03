@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.10.3";
+  version = "2.11.0b3";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -213,8 +213,10 @@
       ];
     orf_radiothek = ps: [
     ];
-    overcast = ps: [
-    ];
+    overcast =
+      ps: with ps; [
+        segno
+      ];
     pandora = ps: [
     ];
     party = ps: [
@@ -256,6 +258,8 @@
     ];
     rain_mood = ps: [
     ];
+    raumfeld = ps: [
+    ]; # missing hassfeld
     recommendations = ps: [
     ];
     roku_media_assistant =
@@ -278,7 +282,7 @@
         soxr
       ];
     siriusxm = ps: [
-    ]; # missing sxm
+    ]; # missing aiosxm
     smart_fades =
       ps: with ps; [
         beat-this
@@ -360,6 +364,8 @@
       ps: with ps; [
         aiovban
       ];
+    vrt_max = ps: [
+    ];
     webdav = ps: [
     ];
     wiim =
@@ -382,6 +388,11 @@
       ps: with ps; [
         segno
       ]; # missing ya-passport-auth
+    yoto =
+      ps: with ps; [
+        pkce
+        yoto-api
+      ];
     yousee = ps: [
     ];
     ytmusic =
