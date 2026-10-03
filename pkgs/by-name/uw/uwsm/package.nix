@@ -14,7 +14,7 @@
   libnotify,
   newt,
   python3Packages,
-  systemd,
+  systemdLibs,
   util-linux,
   fumonSupport ? true,
   uuctlSupport ? true,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     newt # whiptail
     libnotify # notify-send
     bash # sh
-    systemd
+    systemdLibs
     python
   ]
   ++ lib.optionals uuctlSupport [ dmenu ];
