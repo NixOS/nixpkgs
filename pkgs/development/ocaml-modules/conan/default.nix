@@ -13,11 +13,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "conan";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchurl {
     url = "https://github.com/mirage/conan/releases/download/v${finalAttrs.version}/conan-${finalAttrs.version}.tbz";
-    hash = "sha256-4ZbyGLnPRImRQ8vO71i+jlEWYB/FJCSelY7uBuH4dBU=";
+    hash = "sha256-R4xt2sT7PD9D6ffHG+GqMJ0Y8JtH4Jf8mz5dzQR1N8U=";
   };
 
   propagatedBuildInputs = [
