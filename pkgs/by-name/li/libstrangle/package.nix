@@ -9,7 +9,7 @@
 
 stdenv_32bit.mkDerivation {
   pname = "libstrangle";
-  version = "unstable-202202022";
+  version = "0.1.1-unstable-2022-02-22";
 
   buildInputs = [
     libGL
