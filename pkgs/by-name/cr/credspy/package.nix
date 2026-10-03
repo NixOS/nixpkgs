@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "credspy";
-  version = "1.0.0-unstable-2026-06-22";
+  version = "1.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
