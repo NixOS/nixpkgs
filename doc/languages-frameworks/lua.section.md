@@ -5,17 +5,19 @@
 ### Overview of Lua {#lua-overview}
 
 Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
-The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua5_2` refers to Lua 5.2.
-
+Each interpreter is specified with a versioned identifier, e.g. `lua5_2` refers
+to Lua 5.2.
 Lua libraries are in separate sets, with one set per interpreter version.
 
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Lua libraries for this specific
-interpreter. E.g., the `busted` package corresponding to the default interpreter
-is `lua.pkgs.busted`, and the lua 5.2 version is `lua5_2.pkgs.busted`.
-The main package set contains aliases to these package sets, e.g.
-`luaPackages` refers to `lua5_1.pkgs` and `lua52Packages` to
-`lua5_2.pkgs`.
+interpreter. E.g., the `busted` package corresponding to Lua 5.2 is
+is `lua5_2.pkgs.busted`, and the Lua 5.5 version is `lua5_5.pkgs.busted`.
+The main package set contains attributes for these package sets, e.g.
+`lua52Packages` refers to `lua5_2.pkgs` and `lua55Packages` to
+`lua5_5.pkgs`.
+
+`lua`, `lua5` and `luaPackages` are convenience aliases for use outside of nixpkgs.
 
 Note that nixpkgs patches the non-luajit interpreters to avoid referring to
 `/usr` and have `;;` (a [placeholder](https://www.lua.org/manual/5.1/manual.html#pdf-package.path) replaced with the default LUA_PATH) work correctly.
@@ -298,3 +300,4 @@ Now, `ps` is set to `lua5_1.pkgs`, matching the version of the interpreter.
 Following rules should be respected:
 
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
+* Packages in Nixpkgs must not depend on the `lua`, `lua5` or `luaPackages` aliases. Depend on an explicit version instead, e.g. `lua5_4` or `lua54Packages`.
