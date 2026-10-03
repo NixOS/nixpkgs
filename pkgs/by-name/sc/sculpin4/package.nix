@@ -9,18 +9,18 @@ php.buildComposerProject2 rec {
   __structuredAttrs = true;
 
   pname = "sculpin4";
-  version = "4.0.0-alpha2";
+  version = "4.0.0-alpha3";
 
   src = fetchFromGitHub {
     owner = "sculpin";
     repo = "sculpin";
     tag = version;
-    hash = "sha256-2ZyV889Sk0xrBjjPUtVS06kDSN+AgLz+dqFDKk3hEH0=";
+    hash = "sha256-4qydUKqi5sPrYKXScND7XwdFItLlud8/VvMla4UOdm0=";
   };
 
   php = php85;
 
-  vendorHash = "sha256-WbvXS5ZJg9V0UGglkMiOS5pnztDE3gUxpkflMpSUbi4=";
+  vendorHash = "sha256-LO8UBz1+LWoLd13bjL26Mq0zsxzhaanhES/OrM419iA=";
 
   meta = {
     description = "PHP static site generator";
