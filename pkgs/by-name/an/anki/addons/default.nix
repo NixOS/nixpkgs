@@ -16,6 +16,8 @@
 
   image-occlusion-enhanced = callPackage ./image-occlusion-enhanced { };
 
+  jisho-kanji-stroke-order = callPackage ./jisho-kanji-stroke-order { };
+
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
   passfail2 = callPackage ./passfail2 { };
