@@ -21,6 +21,12 @@ let
     privateKeyPassphrase = "dev.radicle.node.passphrase";
   };
 
+  buildPackage =
+    if pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform then
+      cfg.package
+    else
+      pkgs.buildPackages.radicle-node;
+
   # Convenient wrapper to run `rad` in the namespaces of `radicle-node.service`
   rad-system = pkgs.writeShellScriptBin "rad-system" ''
     set -o allexport
@@ -203,7 +209,7 @@ in
               ln -s $out config.json
               install -D -m 644 /dev/stdin keys/radicle.pub <<<"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBgFMhajUng+Rjj/sCFXI9PzG8BQjru2n7JgUVF1Kbv5 snakeoil"
               export RAD_HOME=$PWD
-              ${lib.getExe' pkgs.buildPackages.radicle-node "rad"} config >/dev/null || {
+              ${lib.getExe' buildPackage "rad"} config >/dev/null || {
                 cat -n config.json
                 echo "Invalid config.json according to rad."
                 echo "Please double-check your services.radicle.settings (producing the config.json above),"
