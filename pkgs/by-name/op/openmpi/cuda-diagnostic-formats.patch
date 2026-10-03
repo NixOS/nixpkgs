@@ -1,0 +1,72 @@
+From be0c3c79457d064753661779ace34f2fc3c81832 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:46 -0700
+Subject: [PATCH] Match CUDA registration diagnostics to their arguments
+
+Match byte-count and allocation field formats to the callers and retain the
+registration-cache argument only at the call that supplies it. The focused
+format control compiles extracted calls with strict format diagnostics and
+runs them under ASan/UBSan.
+
+Upstream-Status: Pending
+---
+ opal/mca/accelerator/cuda/accelerator_cuda.c        | 4 ++--
+ opal/mca/accelerator/cuda/help-accelerator-cuda.txt | 9 ++++-----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/opal/mca/accelerator/cuda/accelerator_cuda.c b/opal/mca/accelerator/cuda/accelerator_cuda.c
+index 89056e0..cf3a53c 100644
+--- a/opal/mca/accelerator/cuda/accelerator_cuda.c
++++ b/opal/mca/accelerator/cuda/accelerator_cuda.c
+@@ -662,13 +662,13 @@ static int accelerator_cuda_memmove(int dest_dev_id, int src_dev_id, void *dest,
+     }
+     result = cuMemcpyAsync(tmp, (CUdeviceptr) src, size, opal_accelerator_cuda_memcpy_stream);
+     if (OPAL_UNLIKELY(CUDA_SUCCESS != result)) {
+-        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, tmp, src, size,
++        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, (void *) (uintptr_t) tmp, src, size,
+                        result);
+         return OPAL_ERROR;
+     }
+     result = cuMemcpyAsync((CUdeviceptr) dest, tmp, size, opal_accelerator_cuda_memcpy_stream);
+     if (OPAL_UNLIKELY(CUDA_SUCCESS != result)) {
+-        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, dest, tmp,
++        opal_show_help("help-accelerator-cuda.txt", "cuMemcpyAsync failed", true, dest, (void *) (uintptr_t) tmp,
+                        size, result);
+         return OPAL_ERROR;
+     }
+diff --git a/opal/mca/accelerator/cuda/help-accelerator-cuda.txt b/opal/mca/accelerator/cuda/help-accelerator-cuda.txt
+index 5637d5e..edbb98e 100644
+--- a/opal/mca/accelerator/cuda/help-accelerator-cuda.txt
++++ b/opal/mca/accelerator/cuda/help-accelerator-cuda.txt
+@@ -47,19 +47,18 @@ NOTE: You can turn off this warning by setting the MCA parameter
+       mpi_common_cuda_warning to 0.
+ #
+ [cuMemHostRegister during init failed]
+-The call to cuMemHostRegister(%p, %d, 0) failed.
++The call to cuMemHostRegister(%p, %zu, 0) failed.
+   Host:  %s
+   cuMemHostRegister return value:  %d
+   Registration cache:  %s
+ #
+ [cuMemHostRegister failed]
+-The call to cuMemHostRegister(%p, %d, 0) failed.
++The call to cuMemHostRegister(%p, %zu, 0) failed.
+   Host:  %s
+   cuMemHostRegister return value:  %d
+-  Registration cache:  %s
+ #
+ [cuMemHostUnregister failed]
+-The call to cuMemHostRegister(%p) failed.
++The call to cuMemHostUnregister(%p) failed.
+   Host:  %s
+   cuMemHostUnregister return value:  %d
+ #
+@@ -115,7 +114,7 @@ of the node will clear the problem.
+ [cuMemcpyAsync failed]
+ The call to cuMemcpyAsync failed. This is a unrecoverable error and will
+ cause the program to abort.
+-  cuMemcpyAsync(%p, %p, %d) returned value %d
++  cuMemcpyAsync(%p, %p, %zu) returned value %d
+ Check the cuda.h file for what the return value means.
+ #
+ [cuEventCreate failed]
