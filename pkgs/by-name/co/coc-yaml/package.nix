@@ -6,20 +6,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-yaml";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-yaml";
     tag = finalAttrs.version;
-    hash = "sha256-JzIajdgVOVJupxmHrw9GuGDZS863YaUa5FomT2tqBpc=";
+    hash = "sha256-PNNhDOIhN4uk505jabKoPeXfZHHLLhEy75wnRyRVeLA=";
   };
 
   patches = [
     ./package-lock-fix.patch
   ];
 
-  npmDepsHash = "sha256-2XFXeF2ork6cPrYU2avpXSoAvLa7If6AtYtBGoxL/2g=";
+  npmDepsHash = "sha256-A+GgdQOF6vPO2mKV668iopXoZos1V7SawMtnig/8mYg=";
 
   npmBuildScript = "prepare";
 
