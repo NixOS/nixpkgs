@@ -1521,6 +1521,57 @@ The CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes. Specif
 
 Dependency finding is undoubtedly the main task of the CC Wrapper. This works just like the Bintools Wrapper, except that any `include` subdirectory of any relevant dependency is added to `NIX_CFLAGS_COMPILE`. The setup hook itself contains elaborate comments describing the exact mechanism by which this is accomplished.
 
+Dependency roles describe uses, not distinct machine architectures.
+The same wrapper can be activated for several roles, even when their platforms are equal.
+It combines the flag inputs for its active roles; invoking the same executable through `CC_FOR_BUILD` instead of `CC` does not select a different role.
+Build-system adapters that require separate per-use environments must preserve that distinction explicitly.
+Without `strictDeps`, setup applies dependency hooks across role boundaries for compatibility; selecting a role later cannot undo flags already collected into that role's inputs.
+
+A wrapper invocation combines caller inputs, selected toolchain policy, and an operation on ordered arguments and an execution environment.
+A **fresh invocation** selects the invoked wrapper's defaults and active role inputs.
+A **continuation** retains the selected policy and interprets the actual child operation; it does not select the child wrapper's defaults again.
+This distinction concerns the operation, not whether the parent and child have the same architecture or executable name.
+
+Caller-facing flag variables, including salted inputs, are not overwritten with computed policy.
+The shared functions in `pkgs/build-support/wrapper-common/utils.bash` represent policy as scalar variables in a reserved `wrapper_` namespace.
+Preparation selects inputs and adds defaults; interpreting a continuation never selects inputs again, including Darwin deployment targets.
+Delegation exports that record directly, and the receiving wrapper removes its export attributes before running hooks.
+Thus transport preserves every present field, including empty values, without a second encoding or a field registry; an absent field remains absent.
+A fresh invocation clears the record and selects its own policy from the unchanged caller inputs.
+Lists retain their order, boolean inputs combine by disjunction, and singular inputs must agree across active roles, including the distinction between unset and explicitly empty values.
+Selections that a later operation can still change must remain separate: libc include defaults are retained independently so a delegated compiler can honor its own `-nostdinc` without deleting a caller-provided include option.
+GNAT deliberately selects no C include defaults for its compiler jobs.
+C++ header and runtime flags are likewise added when interpreting the individual compiler invocation.
+
+The compiler and linker have different argument interfaces.
+The compiler emits its main linker flags in their existing positions and binds a **link continuation** around the raw driver.
+The linker wrapper retains that policy and performs the remaining work: capability-specific hardening, trailing flags, emulation, RPATH discovery, build IDs, and Darwin version handling.
+Moving main flags after compiler-generated arguments would change library resolution; skipping all linker processing would lose the remaining policy.
+An unwrapped linker can still be selected because the binding adds no private command-line option.
+
+Multi-job drivers bind a **toolchain request** and choose an interpreter at each actual job boundary.
+The `nix-support/compiler` and `nix-support/linker` entries accept that request, a raw executable, and its arguments; they expand response files before interpreting the job when the response-file helper is available (it can be omitted during bootstrapping).
+GNAT uses program-bound entries to preserve each tool's own operation: selecting `gnatlink` does not suppress that child's subsequent compiler selection.
+Swift delegates generated compiler-driver link jobs to its adjacent public Clang wrapper.
+The native Swift driver has not selected Nix compiler or linker policy, so these jobs start fresh; their generated arguments and response files determine the operation.
+Swift's Clang importer reads the adjacent compiler's header support files directly.
+
+The callee's interface is part of the contract.
+A prepared entry accepts selected policy; an opaque executable receives materialized arguments and environment values.
+An executable pathname or `orig-cc` package path does not establish a prepared interface.
+In particular, an arbitrary wrapped executable selected through a vendor tool override may itself apply additional policy; it is not interchangeable with the raw executable accepted by a prepared entry.
+Known Nixpkgs producers supply the raw executable and prepared entry together.
+A public compiler entry starts fresh and clears inherited bindings before running [wrapper hooks](#compiler-linker-wrapper-hooks), including for compile-only calls; a hook's independent compiler invocation must select its own inputs.
+
+These rules apply outside stdenv activation as well as during builds.
+Tools that directly consume environment variables receive their effective values at execution, such as `PKG_CONFIG_PATH` for pkg-config and `SDKROOT` for Darwin tools.
+Projections of caller inputs such as `PKG_CONFIG_PATH` and `DEVELOPER_DIR` retain the original values separately so a later fresh invocation can select different roles, while preserving intervening caller edits.
+A value equal to the last projection is treated as unchanged: an environment cannot distinguish that from a caller assigning the same value again.
+Salted inputs remain separate from these published values and can express an override without this ambiguity.
+`SDKROOT` is derived from the selected Darwin SDK; it is not itself the SDK selection input.
+The SDK environment is installed before hooks and is not overwritten afterward, so hook edits reach the tool and post-link hooks observe the effective environment.
+The prepared-state encoding is private to the wrapper family; it does not reconstruct caller inputs from the older exported `FLAGS_SET` caches.
+
 Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard environment variables with the names of the tools it wraps, for the same reasons described above. Importantly, while it includes a `cc` symlink to the c compiler for portability, the `CC` will be defined using the compiler’s “real name” (i.e. `gcc` or `clang`). This helps lousy build systems that inspect on the name of the compiler rather than run it.
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.

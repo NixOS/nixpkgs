@@ -131,6 +131,27 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 
 * If `g++` itself linked against `libgccjit.so` (for example, to allow compile-time-evaluated C++ expressions), then the `libgccjit` package used to provide this functionality would be a "host→ host" dependency of `g++`: it is code which runs on the `host` and emits code for execution on the `host`.
 
+Build-system integration must preserve these distinctions for each use of a tool.
+A single build can compile and execute a BUILD generator, then compile a HOST library using its generated files.
+The platform on which `make`, CMake, or Meson executes does not determine the platform of every artifact it builds.
+Likewise, a `pkg-config` executable can run on BUILD while describing HOST libraries; its execution platform does not determine which dependencies it should query.
+
+The build system or project must express those uses before an adapter can select their tools and dependencies.
+Meson cross configurations provide separate BUILD and HOST compiler/dependency contexts through `native: true` and `native: false`; native configurations combine them.
+Machine files express those contexts even when their platforms are equal. Distinct TARGET machine metadata requires a declared `target_machine`; it does not provide a third compiler/dependency context.
+CMake fixes one compiler per language for a build tree; native generators must be supplied separately or built through a project-supported native build, as LLVM does with its BUILD TableGen dependency.
+`CMAKE_<LANG>_COMPILER_TARGET` describes the code being compiled for that project (Nix HOST), not the future target of a compiler produced by the project.
+GNU make and bmake execute project-defined rules: `CC_FOR_BUILD`, `BUILD_CC`, and `HOST_CC` are not interchangeable conventions.
+For example, libgrapheme uses `BUILD_CC` for its generators, whereas QEmacs calls its generator compiler `HOST_CC`.
+An adapter must follow that project's contract, including its override precedence, rather than project one compiler role over the entire build process.
+Existing configuration choices determine the available contexts; inherited `*_FOR_BUILD` variables alone do not request a different configuration mode.
+An adapter cannot promise independent contexts when the selected build-system configuration combines them.
+Selecting distinct build-system contexts does not by itself isolate an executable's inherited flags; see the [CC Wrapper](#cc-wrapper) for its handling of multiple roles.
+
+Execution of generated programs is a separate requirement from selecting their compiler.
+Providing an emulator only enables commands that actually use it; arbitrary recipe commands do not acquire an execution wrapper automatically.
+Keep BUILD tools available independently of HOST library search paths, and supply headers and libraries through their declared interfaces rather than requiring a common filesystem prefix.
+
 ### Cross packaging cookbook {#ssec-cross-cookbook}
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
@@ -202,6 +223,11 @@ Add the following to your `mkDerivation` invocation.
 ```nix
 { depsBuildBuild = [ buildPackages.stdenv.cc ]; }
 ```
+
+This makes a BUILD compiler available through `CC_FOR_BUILD` and `CXX_FOR_BUILD`.
+The project must use it for the generator, including when linking that generator.
+For a Makefile following libgrapheme's convention, pass `makeFlags = [ "BUILD_CC=$(CC_FOR_BUILD)" ];`.
+Meson projects instead declare such executables with `native: true`.
 
 #### My package’s testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
 

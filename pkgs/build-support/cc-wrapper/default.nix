@@ -126,6 +126,9 @@ let
   ccName = removePrefix targetPrefix (getName cc);
 
   libc_bin = optionalString (libc != null) (getBin libc);
+  # libc's tools run on TARGET, while this wrapper runs on HOST. Keep the
+  # unfiltered libc_bin metadata for consumers that install TARGET paths.
+  libc_bin_for_host = optionalString (hostPlatform.canExecute targetPlatform) libc_bin;
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib =
@@ -449,6 +452,8 @@ stdenvNoCC.mkDerivation {
       cc
       libc
       libcxx
+      gccForLibs
+      useCcForLibs
       nativeTools
       nativeLibc
       nativePrefix
@@ -511,10 +516,13 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin $out/nix-support
 
+    substituteAll ${./add-env-hooks.sh} "$out/nix-support/add-env-hooks.sh"
+
     wrap() {
       local dst="$1"
       local wrapper="$2"
       export prog="$3"
+      export wrapperMode=fresh
       export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
       substituteAll "$wrapper" "$out/bin/$dst"
       chmod +x "$out/bin/$dst"
@@ -592,9 +600,21 @@ stdenvNoCC.mkDerivation {
 
   # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
   + optionalString cc.langAda or false ''
+    mkdir -p $out/nix-support/bin
+    export targetPrefix=${targetPrefix}
     for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
       wrap ${targetPrefix}$cmd ${./gnat-wrapper.sh} $ccPath/${targetPrefix}$cmd
+      export wrapperMode=prepared
+      substituteAll ${./gnat-wrapper.sh} $out/nix-support/bin/$cmd
+      chmod +x $out/nix-support/bin/$cmd
     done
+
+    # GNAT's compiler option accepts one executable, while the shared prepared
+    # compiler entry also takes the selected raw compiler as its first argument.
+    printf '#! %s\nexec %q %q "$@"\n' "$shell" \
+      "$out/nix-support/compiler" "$ccPath/${targetPrefix}gcc${exeSuffix}" \
+      > $out/nix-support/bin/gcc
+    chmod +x $out/nix-support/bin/gcc
 
     for cmd in gnat gnatkr gnatname gnatprep; do
       ln -s $ccPath/${targetPrefix}$cmd $out/bin/${targetPrefix}$cmd
@@ -720,7 +740,7 @@ stdenvNoCC.mkDerivation {
             # 'cc.lib'. But it's a gcc package bug.
             # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
             echo "-L${gccForLibs}/${
-              optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"
+              optionalString ((gccForLibs.targetConfig or null) != null) "/${gccForLibs.targetConfig}"
             }/lib" >> $out/nix-support/cc-ldflags
           ''
           # this ensures that when clang passes -lgcc_s to lld (as it does
@@ -858,7 +878,8 @@ stdenvNoCC.mkDerivation {
       echo "''${ccLDFlags[*]}" >> $out/nix-support/cc-ldflags
       echo "''${ccCFlags[*]}" >> $out/nix-support/cc-cflags
     ''
-    + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
+    # Standalone invocations do not get this runtime's library path from stdenv.
+    + optionalString ((libcxx != null) && (cc.isClang or false)) ''
       echo "-L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
@@ -985,6 +1006,11 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
       substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+      (
+        export wrapperMode=prepared prog=unused
+        substituteAll ${./cc-wrapper.sh} $out/nix-support/compiler
+        chmod +x $out/nix-support/compiler
+      )
     ''
 
     + optionalString cc.langAda or false ''
@@ -1041,7 +1067,12 @@ stdenvNoCC.mkDerivation {
     cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
-    inherit libc_bin libc_dev libc_lib;
+    inherit
+      libc_bin
+      libc_bin_for_host
+      libc_dev
+      libc_lib
+      ;
     inherit darwinPlatformForCC;
     default_hardening_flags_str = toString defaultHardeningFlags;
     inherit useMacroPrefixMap;
