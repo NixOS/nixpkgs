@@ -119,15 +119,20 @@ beamPackages.rebar3Relx {
       cp ${zstdStatic.out}/lib/libzstd.a _checkouts/ezstd/_build/deps/zstd/lib
     '';
 
+  postInstall = ''
+    mv $out/fluxer_gateway $out/fluxer_gateway-unwrapped
+    makeWrapper \
+      $out/fluxer_gateway-unwrapped \
+      $out/fluxer_gateway \
+      --set-default RELX_OUT_FILE_PATH '$(mktemp -d)' \
+      --set-default FLUXER_ERLANG_NODE_NAME fluxer-gateway@127.0.0.1
+  '';
+
   meta = {
     description = "A free and open source instant messaging and VoIP chat app";
     license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
-    # Execution notes:
-    # The following env vars are required for the program to start with a non-arcane error:
-    # - RELX_OUT_FILE_PATH, some writeable directory
-    # - FLUXER_ERLANG_NODE_NAME, name@fqdn or name@ip
     mainProgram = "fluxer_gateway";
   };
 }
