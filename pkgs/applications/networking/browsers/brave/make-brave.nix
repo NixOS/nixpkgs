@@ -89,7 +89,6 @@
   enableVideoAcceleration ? libvaSupport,
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
-  addDriverRunpath,
   enableVulkan ? vulkanSupport,
 }:
 
@@ -311,9 +310,6 @@ stdenv.mkDerivation {
         --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
-      ${optionalString vulkanSupport ''
-        --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
-      ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
