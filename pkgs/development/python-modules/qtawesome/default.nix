@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "qtawesome";
     tag = "v${version}";
-    hash = "sha256-CdELoMML7j9m1HrAY8MhKcYx5Q4xuEMZIBeyzQnRQtk=";
+    hash = "sha256-wnroQ4PuF/UIUHzwYAmhAKOHEHszCgbuqlXC8p61cps=";
   };
 
   propagatedBuildInputs = [
