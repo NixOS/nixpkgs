@@ -43,7 +43,6 @@ let
     -DTrilinos_ENABLE_Sacado=ON
     -DTrilinos_ENABLE_Stokhos=ON
     -DTrilinos_ENABLE_Kokkos=ON
-    -DTrilinos_ENABLE_ShyLU_NodeTacho=ON
     -DTrilinos_ENABLE_ALL_OPTIONAL_PACKAGES=OFF
     -DTrilinos_ENABLE_CXX11=ON
     -DTPL_ENABLE_AMD=ON
@@ -61,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "trilinos";
-  version = "17.2.0";
+  version = "16.1.0";
 
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
     tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-S05iv5f4BiQ4P5tlJcOSSDYiWyKsRy0Q15SGncuZDCw=";
+    hash = "sha256-9Yn79kt7JHS30lc+qImSbLOU3Cdb87S3xmlm3v9G1uo=";
   };
 
   strictDeps = true;

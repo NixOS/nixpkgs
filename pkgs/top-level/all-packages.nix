@@ -10042,6 +10042,8 @@ with pkgs;
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 
+  trilinos_16-mpi = trilinos_16.override { withMPI = true; };
+
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
@@ -10241,7 +10243,7 @@ with pkgs;
 
   xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;
-    trilinos = trilinos-mpi;
+    trilinos_16 = trilinos_16-mpi;
   };
 
   ### SCIENCE / MISC
