@@ -1,0 +1,119 @@
+From db5b05e401fd8eba84ce51596699779e2cdc3317 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:04 -0700
+Subject: [PATCH] tests: close unused alert-test sockets and bound peer
+ rejection
+
+Close unused socket ends after fork so peer closure becomes observable.
+Treat EPIPE and ECONNRESET as expected after the server rejects excess
+alerts, ignore SIGPIPE, and bound blocking I/O and process waits.
+
+Generated against GnuTLS 3.8.13 after nix-ssl-cert-file.patch.
+---
+ tests/multi-alerts.c | 17 +++++++++++++++--
+ tests/naked-alerts.c | 15 +++++++++++++--
+ 2 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/tests/multi-alerts.c b/tests/multi-alerts.c
+index cb6e440..729d9d7 100644
+--- a/tests/multi-alerts.c
++++ b/tests/multi-alerts.c
+@@ -49,6 +49,8 @@ int main(int argc, char **argv)
+ #endif
+ #include <unistd.h>
+ #include <assert.h>
++#include <errno.h>
++#include <signal.h>
+ #include <gnutls/gnutls.h>
+ 
+ #include "utils.h"
+@@ -123,8 +125,12 @@ static void client(int sd)
+ 
+ 	for (i = 0; i < 128; i++) {
+ 		ret = send(sd, tls_alert, sizeof(tls_alert) - 1, 0);
+-		if (ret < 0)
+-			fail("error sending hello\n");
++		if (ret < 0) {
++			/* The server closes after rejecting the excess alerts. */
++			if (errno == EPIPE || errno == ECONNRESET)
++				break;
++			fail("error sending alert\n");
++		}
+ 	}
+ 
+ 	close(sd);
+@@ -212,6 +218,8 @@ void doit(void)
+ 		return;
+ 	}
+ 
++	/* A closed peer is expected once the server rejects the alerts. */
++	signal(SIGPIPE, SIG_IGN);
+ 	child = fork();
+ 	if (child < 0) {
+ 		perror("fork");
+@@ -219,13 +227,18 @@ void doit(void)
+ 		return;
+ 	}
+ 
++	/* Bound both processes, including blocking socket I/O and wait(). */
++	alarm(get_timeout() / 1000 + 1);
++
+ 	if (child) {
+ 		int status;
+ 
++		close(sockets[1]);
+ 		server(sockets[0]);
+ 		wait(&status);
+ 		check_wait_status(status);
+ 	} else {
++		close(sockets[0]);
+ 		client(sockets[1]);
+ 		exit(0);
+ 	}
+diff --git a/tests/naked-alerts.c b/tests/naked-alerts.c
+index f9a0b9f..cec36e9 100644
+--- a/tests/naked-alerts.c
++++ b/tests/naked-alerts.c
+@@ -48,6 +48,8 @@ int main(int argc, char **argv)
+ #endif
+ #include <unistd.h>
+ #include <assert.h>
++#include <errno.h>
++#include <signal.h>
+ #include <gnutls/gnutls.h>
+ 
+ #include "utils.h"
+@@ -72,8 +74,12 @@ static void client(int sd)
+ 
+ 	for (i = 0; i < 128; i++) {
+ 		ret = send(sd, tls_alert, sizeof(tls_alert) - 1, 0);
+-		if (ret < 0)
+-			fail("error sending hello\n");
++		if (ret < 0) {
++			/* The server closes after rejecting the unexpected alert. */
++			if (errno == EPIPE || errno == ECONNRESET)
++				break;
++			fail("error sending alert\n");
++		}
+ 	}
+ 
+ 	close(sd);
+@@ -154,6 +160,8 @@ void doit(void)
+ 		return;
+ 	}
+ 
++	/* A closed peer is expected once the server rejects the alerts. */
++	signal(SIGPIPE, SIG_IGN);
+ 	child = fork();
+ 	if (child < 0) {
+ 		perror("fork");
+@@ -161,6 +169,9 @@ void doit(void)
+ 		return;
+ 	}
+ 
++	/* Bound both processes, including blocking socket I/O and wait(). */
++	alarm(get_timeout() / 1000 + 1);
++
+ 	if (child) {
+ 		int status;
+ 
