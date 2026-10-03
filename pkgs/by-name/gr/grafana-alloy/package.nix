@@ -5,7 +5,7 @@
   fetchNpmDeps,
   buildGoModule,
   buildNpmPackage,
-  systemd,
+  systemdLibs,
   installShellFiles,
   versionCheckHook,
   nixosTests,
@@ -96,7 +96,7 @@ buildGoModule (finalAttrs: {
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       # Uses go-systemd, which uses libsystemd headers.
       # https://github.com/coreos/go-systemd/issues/351
-      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemdLibs}/include";
     };
 
   nativeBuildInputs = [
@@ -123,7 +123,7 @@ buildGoModule (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${
-        lib.makeLibraryPath [ (lib.getLib systemd) ]
+        lib.makeLibraryPath [ (lib.getLib systemdLibs) ]
       }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';

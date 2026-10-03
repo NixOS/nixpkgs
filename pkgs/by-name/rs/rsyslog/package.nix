@@ -15,8 +15,8 @@
   libyaml,
   withKrb5 ? true,
   libkrb5,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withJemalloc ? true,
   jemalloc,
   withMysql ? true,
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withHiredis hiredis
   ++ lib.optional withMaxminddb libmaxminddb
   ++ lib.optional withMysql libmysqlclient
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   configureFlags = [
     "--sysconfdir=/etc"
