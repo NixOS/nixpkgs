@@ -33,6 +33,7 @@ mapAliases (
   {
     # keep-sorted start case=no
     blueballs-neovim = throw "'vimPlugins.blueballs-neovim' has been removed"; # Added 2025-06-17
+    cmp-tabnine = throw "'vimPlugins.cmp-tabnine' has been removed, as tabnine has been dropped"; # Added 2026-10-03
     coc-go = throw "'vimPlugins.coc-go' was removed, as it was unmaintained"; # Added 2026-02-12
     coc-rls = throw "'vimPlugins.coc-rls' has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # Added 2025-10-01
     coc-sumneko-lua = throw "'vimPlugins.coc-sumneko-lua' was removed, as it is unmaintained and broken. You should switch to lua_ls"; # Added 2026-02-04
