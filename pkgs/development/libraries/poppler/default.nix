@@ -11,12 +11,14 @@
   fontconfig,
   freetype,
   glib,
+  harfbuzz,
   lcms,
   libiconv,
   libintl,
   libjpeg,
   libtiff,
   ninja,
+  noto-fonts-cjk-sans,
   openjpeg,
   pkg-config,
   python3,
@@ -39,6 +41,7 @@
   cups-filters,
   gdal,
   gegl,
+  gtk3,
   inkscape,
   scribus,
   vips,
@@ -56,13 +59,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "f0068e9c530017ad811d1f28b95f9b7f59264e37";
-    hash = "sha256-Xf8duSh0r1o09b5BKB7mBvzrMfXYlzTuTOuK2ZCeItc=";
+    rev = "48b6219b84fc0a708040cb279d51095cc4e1c603";
+    hash = "sha256-2eH4dZs2J0CeTWrXOYEHb0Xnpfa7tX8mi7AX2E9D41U=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.06.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "26.09.0";
 
   outputs = [
     "out"
@@ -71,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
+    hash = "sha256-gFnq22gFNAdo8TjEZbV/gWTJK0oHc8N+8DHqbA2Yey4=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    harfbuzz
     libiconv
     libintl
   ]
@@ -123,6 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals gpgmeSupport [
     gpgme
+  ];
+
+  # Test `fontsubsetting-basic-test` needs a font that supports cjk.
+  nativeCheckInputs = [
+    noto-fonts-cjk-sans
   ];
 
   cmakeFlags = [
@@ -184,9 +193,17 @@ stdenv.mkDerivation (finalAttrs: {
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
 
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
+      pkg-config =
+        testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs (!minimal) {
+          # Poppler skips tests unless GTK3 is detected; add to closure
+          poppler-with-gtk-tests = finalAttrs.finalPackage.overrideAttrs (old: {
+            pname = "${old.pname}-gtk-tests";
+            buildInputs = old.buildInputs ++ [ gtk3 ];
+          });
+        };
     };
   };
 
