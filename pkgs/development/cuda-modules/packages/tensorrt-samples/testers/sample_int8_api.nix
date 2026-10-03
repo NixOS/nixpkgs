@@ -1,5 +1,5 @@
 {
-  backendStdenv,
+  cudaConfig,
   lib,
   mkTester,
   older,
@@ -16,7 +16,7 @@ lib.optionalAttrs (older "11.0") (
     ];
   }
   # Only Xavier and Orin have a DLA
-  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ]) {
+  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] cudaConfig.cudaCapabilities == [ ]) {
     dla = mkTester "sample_int8_api-dla" [
       "sample_int8_api"
       "--model=${sample-data.outPath + "/resnet50/ResNet50.onnx"}"

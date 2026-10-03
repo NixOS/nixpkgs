@@ -1,5 +1,4 @@
 {
-  backendStdenv,
   boost178,
   boost186,
   buildRedist,
@@ -13,6 +12,7 @@
   qt5 ? null,
   qt6 ? null,
   rdma-core,
+  stdenv,
   ucx,
   wayland,
   libxtst,
@@ -27,15 +27,13 @@ let
       aarch64-linux = "host-linux-armv8";
       x86_64-linux = "host-linux-x64";
     }
-    .${backendStdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   targetDir =
     {
       aarch64-linux = "target-linux-sbsa-armv8";
       x86_64-linux = "target-linux-x64";
     }
-    .${backendStdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 buildRedist (
   finalAttrs:
@@ -130,7 +128,7 @@ buildRedist (
       libxtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
-    ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [
       gst_all_1.gst-plugins-bad
     ];
 

@@ -13,6 +13,8 @@
   gitUpdater,
 }:
 let
+  # Compiler paths embedded in strings bypass nativeBuildInputs splicing.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
   inherit (_cuda.lib) _mkMetaBadPlatforms;
   inherit (lib) licenses maintainers teams;
 in
@@ -40,8 +42,14 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    nixLog "patching shebang in $PWD/config_arch"
-    patchShebangs "$PWD/config_arch"
+    # The upstream probe compiles and executes a program. Preprocessing its
+    # own architecture header asks the HOST compiler without running HOST code.
+    cat > config_arch <<'SH'
+    #!${backendStdenv.shell}
+    set -euo pipefail
+    "$CC" -dM -E -include "$(dirname "$0")/include/gdrconfig.h" - </dev/null |
+      sed -n 's/^#define GDRAPI_\(.*\) .*/\1/p'
+    SH
 
     nixLog "patching awk expression in $PWD/Makefile"
     substituteInPlace "$PWD/Makefile" \
@@ -56,7 +64,10 @@ backendStdenv.mkDerivation (finalAttrs: {
     substituteInPlace "$PWD/src/Makefile" \
       --replace-fail \
         "/\#" \
-        "/#"
+        "/#" \
+      --replace-fail \
+        'PATH=/sbin:/usr/sbin:$$PATH; ldconfig -n $(PWD)' \
+        ""
 
     nixLog "patching $PWD/tests/Makefile"
     substituteInPlace "$PWD/tests/Makefile" \
@@ -77,12 +88,12 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_cudart
   ];
 
-  buildFlags = [
-    # Makefile variables which must be set explicitly
+  makeFlags = [
     "CUDA=${lib.getLib cuda_cudart}"
-    "NVCC=${lib.getExe cuda_nvcc}" # TODO: shoud be using cuda_nvcc from pkgsBuildHost
+    "NVCC=${lib.getExe buildNvcc}"
+  ];
 
-    # Make targets
+  buildFlags = [
     # NOTE: We cannot use `all` because it includes the driver, which needs the driver source code.
     "lib"
     "exes"
@@ -94,14 +105,14 @@ backendStdenv.mkDerivation (finalAttrs: {
   # from the driver. Same leak as nccl's; see https://github.com/NixOS/nixpkgs/pull/457803
   postFixup = ''
     remove-references-to \
-      -t "${lib.getBin cuda_nvcc}" \
+      -t "${lib.getBin buildNvcc}" \
       -t "${lib.getLib cuda_cudart}" \
       "$out"/bin/*
   '';
 
   # C.f. remove-references-to above. Ensure *all* such references are removed.
   disallowedRequisites = [
-    (lib.getBin cuda_nvcc)
+    (lib.getBin buildNvcc)
     (lib.getLib cuda_cudart)
   ];
 

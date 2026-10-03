@@ -107,6 +107,26 @@ let
 
   version = "4.13.0";
 
+  cudaInputs =
+    optionals enableCuda [
+      cudaPackages.cuda_cudart
+      cudaPackages.cccl # <thrust/*>
+      cudaPackages.libnpp # npp.h
+      nvidia-optical-flow-sdk
+    ]
+    ++ optionals enableCublas [
+      # May start using the default $out instead once
+      # https://github.com/NixOS/nixpkgs/issues/271792
+      # has been addressed
+      cudaPackages.libcublas # cublas_v2.h
+    ]
+    ++ optionals enableCudnn [
+      cudaPackages.cudnn # cudnn.h
+    ]
+    ++ optionals enableCufft [
+      cudaPackages.libcufft # cufft.h
+    ];
+
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
   stdenv = throw "Use effectiveStdenv instead";
@@ -291,7 +311,10 @@ effectiveStdenv.mkDerivation {
   ++ optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
-  cudaPropagateToOutput = "cxxdev";
+  propagatedCxxBuildInputs = map (p: lib.getDev (p.__spliced.hostTarget or p)) cudaInputs;
+  propagatedCxxNativeBuildInputs = optionals enableCuda [
+    (lib.getDev (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
+  ];
 
   postUnpack = optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
@@ -443,24 +466,7 @@ effectiveStdenv.mkDerivation {
     doxygen
     graphviz-nox
   ]
-  ++ optionals enableCuda [
-    cudaPackages.cuda_cudart
-    cudaPackages.cccl # <thrust/*>
-    cudaPackages.libnpp # npp.h
-    nvidia-optical-flow-sdk
-  ]
-  ++ optionals enableCublas [
-    # May start using the default $out instead once
-    # https://github.com/NixOS/nixpkgs/issues/271792
-    # has been addressed
-    cudaPackages.libcublas # cublas_v2.h
-  ]
-  ++ optionals enableCudnn [
-    cudaPackages.cudnn # cudnn.h
-  ]
-  ++ optionals enableCufft [
-    cudaPackages.libcufft # cufft.h
-  ];
+  ++ cudaInputs;
 
   propagatedBuildInputs = optionals enablePython [ pythonPackages.numpy ];
 
@@ -606,11 +612,10 @@ effectiveStdenv.mkDerivation {
       "$out/lib/pkgconfig/opencv4.pc"
     mkdir "$cxxdev"
   ''
-  # fix deps not propagating from opencv4.cxxdev if cuda is disabled
-  # see https://github.com/NixOS/nixpkgs/issues/276691
-  + optionalString (!enableCuda) ''
+  + ''
     mkdir -p "$cxxdev/nix-support"
-    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${!outputDev}" "''${propagatedCxxBuildInputs[@]}" > "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${propagatedCxxNativeBuildInputs[@]}" > "$cxxdev/nix-support/propagated-native-build-inputs"
   ''
   # remove the requirement that the exact same version of CUDA is used in packages
   # consuming OpenCV's CMakes files
