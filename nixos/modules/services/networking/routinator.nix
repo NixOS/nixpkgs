@@ -137,19 +137,23 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    environment.etc."routinator/routinator.conf".source = settingsFormat.generate "routinator.conf" (
+      filterAttrsRecursive (n: v: v != null) cfg.settings
+    );
+
     systemd.services.routinator = {
       description = "Routinator 3000 is free, open-source RPKI Relying Party software made by NLnet Labs.";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      reloadTriggers = [ config.environment.etc."routinator/routinator.conf".source ];
       path = with pkgs; [ rsync ];
       serviceConfig = {
         Type = "exec";
         ExecStart = escapeSystemdExecArgs (
           [
             (getExe cfg.package)
-            "--config=${
-              settingsFormat.generate "routinator.conf" (filterAttrsRecursive (n: v: v != null) cfg.settings)
-            }"
+            "--config=/etc/routinator/routinator.conf"
           ]
           ++ cfg.extraArgs
           ++ [
@@ -157,6 +161,7 @@ in
           ]
           ++ cfg.extraServerArgs
         );
+        ExecReload = "${pkgs.coreutils}/bin/kill -s USR1 $MAINPID";
         Restart = "on-failure";
         CapabilityBoundingSet = [ "" ];
         DynamicUser = true;
