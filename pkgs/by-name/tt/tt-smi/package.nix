@@ -48,6 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Tenstorrent console based hardware information program";
     homepage = "https://github.com/tenstorrent/tt-smi";
     changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };

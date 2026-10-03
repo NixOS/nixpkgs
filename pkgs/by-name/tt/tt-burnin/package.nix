@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Command line utility to run a high power consumption workload on TT devices";
     homepage = "https://github.com/tenstorrent/tt-burnin";
     changelog = "https://github.com/tenstorrent/tt-burnin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };
