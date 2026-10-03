@@ -3495,10 +3495,10 @@
   };
 
   wesl = {
-    version = "0-unstable-2025-09-26";
+    version = "0.1.0-unstable-2026-10-02";
     url = "github:wgsl-tooling-wg/tree-sitter-wesl";
-    rev = "3fa2b96bf5c217dae9bf663e2051fcdad0762c19";
-    hash = "sha256-O3n65StgGhxfdwYF/QPBTdkXEGjY2ajHeLpF5JWuTc8=";
+    rev = "b600a65818e4dd7f4d32407d1427643c27f3c389";
+    hash = "sha256-hf/dSdWkvmEICrHRNq6HNz2RqOWt5bMEhd+1RUOs/W4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
