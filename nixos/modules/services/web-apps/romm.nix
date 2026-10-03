@@ -40,9 +40,7 @@ let
     DB_PORT = toString cfg.database.port;
     REDIS_HOST = redisHost;
     REDIS_PORT = toString cfg.redis.port;
-    # The rq and rqscheduler CLIs do not read RomM's REDIS_* variables.
-    RQ_REDIS_HOST = redisHost;
-    RQ_REDIS_PORT = toString cfg.redis.port;
+    # The rq CLI does not read RomM's REDIS_* variables.
     RQ_REDIS_URL = "redis://${redisHost}:${toString cfg.redis.port}/0";
   }
   // lib.optionalAttrs cfg.watcher.enable {
@@ -361,8 +359,19 @@ in
       };
     };
 
+    systemd.services.romm-scan-worker = {
+      description = "RomM RQ scan worker";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "romm.service" ];
+      requires = [ "romm.service" ];
+      environment = commonEnv;
+      serviceConfig = commonServiceConfig // {
+        ExecStart = "${cfg.package}/bin/romm-scan-worker";
+      };
+    };
+
     systemd.services.romm-scheduler = {
-      description = "RomM RQ scheduler";
+      description = "RomM RQ cron scheduler";
       wantedBy = [ "multi-user.target" ];
       after = [ "romm.service" ];
       requires = [ "romm.service" ];
@@ -394,16 +403,17 @@ in
       appendHttpConfig = ''
         js_import romm_decode from ${cfg.package}/share/romm/decode.js;
 
-        # Cross-origin isolation is required on the emulator player paths for
-        # SharedArrayBuffer, which multi-threaded EmulatorJS cores rely on.
+        # Cross-origin isolation is required on the EmulatorJS and js-dos player
+        # paths for SharedArrayBuffer. $request_uri rather than $uri, which
+        # try_files has already rewritten to /index.html.
         map $request_uri $romm_coep_header {
           default "";
-          "~^/rom/.*/ejs$" "require-corp";
+          "~^/rom/.*/(ejs|jsdos)(\?|$)" "require-corp";
           "~^/console/rom/[0-9]+/play" "require-corp";
         }
         map $request_uri $romm_coop_header {
           default "";
-          "~^/rom/.*/ejs$" "same-origin";
+          "~^/rom/.*/(ejs|jsdos)(\?|$)" "same-origin";
           "~^/console/rom/[0-9]+/play" "same-origin";
         }
       '';
@@ -416,6 +426,8 @@ in
           "/" = {
             tryFiles = "$uri $uri/ /index.html";
             extraConfig = ''
+              # the frontend build ships precompressed .gz siblings
+              gzip_static on;
               # never cache index.html: store paths have epoch mtimes, and
               # heuristic caching would keep serving it across upgrades
               add_header Cache-Control "no-cache";

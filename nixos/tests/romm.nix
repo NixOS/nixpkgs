@@ -8,6 +8,7 @@
     services.romm = {
       enable = true;
       nginx.virtualHost = "localhost";
+      extraEnvironment.RESCAN_ON_FILESYSTEM_CHANGE_DELAY = "0";
     };
 
     virtualisation.memorySize = 2048;
@@ -34,6 +35,7 @@
         machine.wait_for_unit("romm.service")
         machine.wait_for_open_port(8080)
         machine.wait_for_unit("romm-worker.service")
+        machine.wait_for_unit("romm-scan-worker.service")
         machine.wait_for_unit("romm-scheduler.service")
         machine.wait_for_unit("romm-watcher.service")
         machine.wait_for_unit("nginx.service")
@@ -69,6 +71,11 @@
         machine.succeed("touch '/var/lib/romm/library/roms/gba/test.gba'")
         machine.wait_until_succeeds(
             "journalctl -u romm-watcher | grep -iq rescan", timeout=60
+        )
+
+    with subtest("the scan worker picks up the rescan"):
+        machine.wait_until_succeeds(
+            "journalctl -u romm-scan-worker | grep -q 'scans: '", timeout=120
         )
 
     with subtest("auth secret is generated and persisted"):
