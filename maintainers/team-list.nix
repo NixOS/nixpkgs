@@ -596,8 +596,11 @@ with lib.maintainers;
   };
 
   node = {
-    members = [ winter ];
-    scope = "Maintain Node.js runtimes and build tooling.";
+    members = [
+      Scrumplex
+      winter
+    ];
+    scope = "Maintain Node.js runtimes and related build tooling.";
     shortName = "Node.js";
     enableFeatureFreezePing = true;
   };
