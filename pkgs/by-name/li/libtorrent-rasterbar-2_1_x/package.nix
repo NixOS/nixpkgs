@@ -17,14 +17,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  version = "2.0.15";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-5ntJQmNj+2cQJXbsJwdeT4styMYU6jT5PwtlpaDNw6w=";
+    hash = "sha256-z2G4T+eJQjFspOIyOo8pz+CgNYJT2MByegoSjok/FeM=";
   };
 
   nativeBuildInputs = [
@@ -38,23 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     ./python-destdir.patch
   ];
 
-  # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
       --replace-fail \
         'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
         'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
-         set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
-  ''
-  # a: libdir=''${prefix}//nix/store/...
-  # b: libdir=/nix/store/...
-  # https://github.com/NixOS/nixpkgs/issues/144170
-  + ''
+         set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")' \
+      --replace-fail \
+        'set(_INSTALL_INCLUDEDIR "@CMAKE_INSTALL_INCLUDEDIR@")' \
+        'set(_INSTALL_INCLUDEDIR "@CMAKE_INSTALL_FULL_INCLUDEDIR@")'
+
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
       --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
   '';
@@ -62,17 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "include" "$dev"
     moveToOutput "lib/${python3.libPrefix}" "$python"
+
+    pc="$(find "$out" -type f -name 'libtorrent-rasterbar.pc' -print -quit)"
+
+    substituteInPlace "$pc" \
+      --replace-fail "$out/$dev" "$dev"
+
+    mkdir -p "$dev/lib/pkgconfig"
+    mv "$pc" "$dev/lib/pkgconfig/libtorrent-rasterbar.pc"
   '';
 
   postFixup = ''
     substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
       --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
-  ''
-  # a: Cflags: ... -I/nix/store/x//nix/store/x-dev/include ...
-  # b: Cflags: ... -I/nix/store/x-dev/include ...
-  + ''
-    substituteInPlace $dev/lib/pkgconfig/libtorrent-rasterbar.pc \
-      --replace-fail "$out/$dev" "$dev"
   '';
 
   outputs = [

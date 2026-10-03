@@ -6020,7 +6020,7 @@ with pkgs;
 
   libsigcxx_2_0 = callPackage ../by-name/li/libsigcxx_3_0/2.0.nix { };
 
-  libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
+  libtorrent-rasterbar = libtorrent-rasterbar-2_1_x;
 
   libubox-nossl = libubox.override { with_ustream_ssl = false; };
 

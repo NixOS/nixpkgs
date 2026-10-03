@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   intltool,
-  libtorrent-rasterbar,
+  libtorrent-rasterbar-2_0_x,
   python3Packages,
   gtk3,
   libappindicator,
