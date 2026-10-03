@@ -4,17 +4,21 @@
   bun,
   darwin,
   fetchFromGitHub,
+  installShellFiles,
   makeWrapper,
   models-dev,
   nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
-  installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 let
+  platform = stdenv.hostPlatform;
+  bunCpu = if platform.isAarch64 then "arm64" else "x64";
+  bunOs = if platform.isLinux then "linux" else "darwin";
+
   node_modules =
     finalAttrs:
     stdenv.mkDerivation {
@@ -41,16 +45,15 @@ let
 
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
         bun install \
-          --cpu="*" \
+          --cpu="${bunCpu}" \
+          --os="${bunOs}" \
+          --filter '!./' \
+          --filter './packages/cli' \
+          --filter './packages/desktop' \
+          --filter './packages/app' \
           --frozen-lockfile \
-          --filter ./ \
-          --filter ./packages/app \
-          --filter ./packages/desktop \
-          --filter ./packages/opencode \
-          --filter ./packages/shared \
           --ignore-scripts \
-          --no-progress \
-          --os="*"
+          --no-progress
 
         bun --bun ./nix/scripts/canonicalize-node-modules.ts
         bun --bun ./nix/scripts/normalize-bun-binaries.ts
@@ -64,27 +67,26 @@ let
         mkdir -p $out
         find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
-        # opencode targets only Linux and Darwin (see meta.platforms), so the
-        # Windows executables that "bun install --os=*" fetches are never
-        # executed. Dropping them keeps the output reproducible on hosts whose
-        # security endpoint agents scan the store, and removes the vulnerable
-        # bundled 7za.exe that will be quarantined.
-        find $out -type f -name '*.exe' -delete
-
         runHook postInstall
       '';
 
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-3QJzASZSJfWqbFpbxzIQ/ZRRaFX8KAF4Jd2BI6v9e+s=";
+      outputHash =
+        {
+          x86_64-linux = "sha256-g3k0cAFGqzmRYlcIkg1NDvlx1WxHYhnYPL0/a8E+qTg=";
+          aarch64-linux = "sha256-a+3ymqdxOONGe2Tpq4GUccl1b+Dwzxlb9LFXgE1gZ+0=";
+          aarch64-darwin = "sha256-h8xIzuMmaWfJqjHCO74xUDCWNKQLFrIGoKYZ+2TauYc=";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.34";
+  version = "2.0.22";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ygTBG79utH0A1Dmg+tjEeTA633bLO0OfDdi6AwwQnZw=";
+    hash = "sha256-oKmEStkAGxprPdQCQ8TM4449+FpaV+FnbH6D55137qY=";
   };
 
   postPatch =
@@ -103,24 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail \
         'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
         'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-    ''
-    # Skip smoke test
-    + ''
-      substituteInPlace packages/opencode/script/build.ts \
-        --replace-fail \
-        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
-        'if (false)'
-    ''
-    # Bun 1.4.x regressed compiled executable code splitting.
-    + ''
-      substituteInPlace packages/opencode/script/build.ts \
-        --replace-fail 'splitting: true,' 'splitting: false,'
     '';
 
   nativeBuildInputs = [
     bun
-    nodejs
     installShellFiles
+    nodejs
     makeWrapper
     writableTmpDirAsHomeHook
   ]
@@ -142,16 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
   env.OPENCODE_DISABLE_MODELS_FETCH = true;
   env.OPENCODE_VERSION = finalAttrs.version;
   env.OPENCODE_CHANNEL = "prod";
+  env.NODE_OPTIONS = "--max-old-space-size=4096";
 
   buildPhase = ''
     runHook preBuild
 
-    cd ./packages/opencode
+    cd ./packages/cli
     bun --bun ./script/build.ts --single --skip-install
-    bun --bun ./script/schema.ts config.json tui.json
-    substituteInPlace config.json \
-      --replace-fail "https://models.dev/model-schema.json" \
-                     "file://$out/share/model-schema.json"
 
     runHook postBuild
   '';
@@ -159,56 +146,48 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    install -Dm755 dist/cli-*/bin/opencode $out/bin/opencode
     wrapProgram $out/bin/opencode \
-     --prefix PATH : ${
-       lib.makeBinPath (
-         [
-           ripgrep
-         ]
-         ++ lib.optionals stdenv.hostPlatform.isDarwin [
-           sysctl
-         ]
-       )
-     } \
-    --set OPENCODE_DISABLE_AUTOUPDATE true \
-    --run '
-      # NOTE: Once this workaround is removed we should switch back to using
-      # makeBinaryWrapper here.
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            ripgrep
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            sysctl
+          ]
+        )
+      } \
+      --set OPENCODE_DISABLE_AUTOUPDATE true \
+      --run '
+        # nixpkgs previously built OpenCode with OPENCODE_CHANNEL=stable. "stable"
+        # is no longer an upstream channel, so it caused OpenCode to store its database
+        # as opencode-stable.db. After switching to the upstream production channel,
+        # OpenCode would normally use opencode.db instead, making existing sessions
+        # appear to be lost. Keep using the legacy database until the user migrates
+        # it, unless they explicitly configured OPENCODE_DB or disabled this workaround.
 
-      # nixpkgs previously built OpenCode with OPENCODE_CHANNEL=stable. "stable"
-      # is no longer an upstream channel, so it caused OpenCode to store its database
-      # as opencode-stable.db. After switching to the upstream production channel,
-      # OpenCode would normally use opencode.db instead, making existing sessions
-      # appear to be lost. Keep using the legacy database until the user migrates
-      # it, unless they explicitly configured OPENCODE_DB or disabled this workaround.
+        data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
+        legacy="$data_home/opencode/opencode-stable.db"
+        canonical="$data_home/opencode/opencode.db"
 
-      data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
-      legacy="$data_home/opencode/opencode-stable.db"
-      canonical="$data_home/opencode/opencode.db"
+        if [ -z "''${OPENCODE_DB:-}" ] \
+          && [ -z "''${NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND:-}" ] \
+          && [ -e "$legacy" ] \
+          && [ ! -e "$canonical" ]; then
+          export OPENCODE_DB="opencode-stable.db"
 
-      if [ -z "''${OPENCODE_DB:-}" ] \
-        && [ -z "''${NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND:-}" ] \
-        && [ -e "$legacy" ] \
-        && [ ! -e "$canonical" ]; then
-        export OPENCODE_DB="opencode-stable.db"
-
-        # Only show migration guidance when stderr is attached to a terminal.
-        # Non-interactive uses such as `opencode web`, services, or scripts
-        # should continue starting normally with the legacy database selected.
-        if [ -t 2 ]; then
-          echo "Detected legacy nixpkgs OpenCode database at $legacy." >&2
-          echo "Continuing to use it for compatibility." >&2
-          echo "See https://github.com/NixOS/nixpkgs/pull/558549 for migration instructions." >&2
-          echo "Set NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND=1 to disable this workaround." >&2
+          # Only show migration guidance when stderr is attached to a terminal.
+          # Non-interactive uses such as `opencode web`, services, or scripts
+          # should continue starting normally with the legacy database selected.
+          if [ -t 2 ]; then
+            echo "Detected legacy nixpkgs OpenCode database at $legacy." >&2
+            echo "Continuing to use it for compatibility." >&2
+            echo "See https://github.com/NixOS/nixpkgs/pull/558549 for migration instructions." >&2
+            echo "Set NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND=1 to disable this workaround." >&2
+          fi
         fi
-      fi
-    '
-
-    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
-    install -Dm644 config.json $out/share/config.json
-    install -Dm644 tui.json $out/share/tui.json
-    install -Dm644 ../web/public/theme.json $out/share/theme.json
+      '
 
     runHook postInstall
   '';
@@ -219,8 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd opencode \
-        --bash <($out/bin/opencode completion) \
-        --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+        --bash <($out/bin/opencode --completions bash) \
+        --zsh <($out/bin/opencode --completions zsh) \
+        --fish <($out/bin/opencode --completions fish)
     '';
 
   dontStrip = true;
@@ -237,11 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    jsonschema = {
-      config = "${finalAttrs.finalPackage}/share/config.json";
-      theme = "${finalAttrs.finalPackage}/share/theme.json";
-      tui = "${finalAttrs.finalPackage}/share/tui.json";
-    };
     node_modules = node_modules finalAttrs;
     updateScript = nix-update-script {
       extraArgs = [
