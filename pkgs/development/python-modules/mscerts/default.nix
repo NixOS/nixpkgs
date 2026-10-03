@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mscerts";
-  version = "2026.7.1";
+  version = "2026.8.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "mscerts";
     tag = finalAttrs.version;
-    hash = "sha256-fJ/+s0z3zIxHNfCxjDIuSlpQ6lBeT1xAVyveS0pjrR8=";
+    hash = "sha256-1ibwzs44ps0bTylG+32W1+3hx121oGpdsZnv8OV6bZs=";
   };
 
   build-system = [ setuptools ];
