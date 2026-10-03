@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "winetricks";
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/Winetricks/winetricks";
+    maintainers = with lib.maintainers; [ ferris-qq ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
