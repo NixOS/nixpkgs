@@ -98,6 +98,10 @@ in
     ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
