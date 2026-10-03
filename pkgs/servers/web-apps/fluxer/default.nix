@@ -6,4 +6,5 @@
   gateway = callPackage ./gateway.nix { };
   media-proxy = callPackage ./media-proxy.nix { };
   push = callPackage ./push.nix { };
+  static = callPackage ./static.nix { };
 }
