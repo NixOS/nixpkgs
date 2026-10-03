@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -40,7 +40,7 @@ buildGoModule {
   pnpmDeps = fetchPnpmDeps {
     inherit pname version;
     src = "${src}/frontend";
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-oHS2uMWyuqpiK7yWznmZ2mgxPJpWsyOZL2wz6zBu0cc=";
   };
@@ -61,7 +61,7 @@ buildGoModule {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs
   ];
 

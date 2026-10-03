@@ -7,10 +7,10 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildPythonPackage rec {
   pname = "yt-dlp-ejs";

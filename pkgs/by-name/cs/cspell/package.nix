@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-eQ9KiRSwWmfhCinYVP4ulQdAG6SOd9yyyOUWSwc5TV8=";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   buildInputs = [

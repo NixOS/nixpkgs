@@ -9,13 +9,13 @@
   pkg-config,
   openssl,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   python3,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
