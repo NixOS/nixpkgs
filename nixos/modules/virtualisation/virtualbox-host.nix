@@ -12,7 +12,6 @@ let
       enableHardening
       headless
       enableWebService
-      enableKvm
       ;
     extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
@@ -24,6 +23,12 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "virtualbox" "host" "enableKvm" ] ''
+      Support for the VirtualBox KVM patch has been removed because there is no current version available.
+    '')
+  ];
+
   options.virtualisation.virtualbox.host = {
     enable = lib.mkEnableOption "VirtualBox" // {
       description = ''
@@ -88,19 +93,6 @@ in
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };
-
-    enableKvm = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Enable KVM support for VirtualBox. This increases compatibility with Linux kernel versions, because the VirtualBox kernel modules
-        are not required.
-
-        This option is incompatible with `addNetworkInterface`.
-
-        Note: This is experimental. Please check <https://github.com/cyberus-technology/virtualbox-kvm/issues>.
-      '';
-    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -147,17 +139,11 @@ in
           SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh $major $minor $attr{bDeviceClass}"
           SUBSYSTEM=="usb_device", ACTION=="remove", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
           SUBSYSTEM=="usb", ACTION=="remove", ENV{DEVTYPE}=="usb_device", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
+          KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
+          KERNEL=="vboxdrvu",   OWNER="root", GROUP="root",      MODE="0666", TAG+="systemd"
+          KERNEL=="vboxnetctl", OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
         '';
-      }
-      (lib.mkIf cfg.enableKvm {
-        assertions = [
-          {
-            assertion = !cfg.addNetworkInterface;
-            message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
-          }
-        ];
-      })
-      (lib.mkIf (!cfg.enableKvm) {
+
         boot.kernelModules = [
           "vboxdrv"
           "vboxnetadp"
@@ -175,14 +161,8 @@ in
               "kvm.enable_virt_at_load=0"
             ];
 
-        services.udev.extraRules = ''
-          KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
-          KERNEL=="vboxdrvu",   OWNER="root", GROUP="root",      MODE="0666", TAG+="systemd"
-          KERNEL=="vboxnetctl", OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
-        '';
-
         # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
-      })
+      }
       (lib.mkIf cfg.addNetworkInterface {
         systemd.services.vboxnet0 = {
           description = "VirtualBox vboxnet0 Interface";
