@@ -98,6 +98,10 @@ stdenv.mkDerivation {
     chmod -R +w ../../../eigen ../tensorflow
 
     sed -e '1i #include <cstdint>' -i alphabet.cc ../tensorflow/tensorflow/lite/kernels/internal/spectrogram.cc
+
+    # Remove tflite's C++ pin, as abseil-cpp requires at least 17
+    substituteInPlace ../tensorflow/tensorflow/lite/CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 14)' 'set(CMAKE_CXX_STANDARD 17)'
   '';
 
   nativeBuildInputs = [ cmake ];
