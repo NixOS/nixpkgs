@@ -5,26 +5,24 @@
   meson,
   ninja,
   pkg-config,
-  gtk3,
-  zathura_core,
-  girara,
-  djvulibre,
-  gettext,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  girara,
+  cairo,
+  djvulibre, # ddjvuapi
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-djvu";
-  version = "2026.05.10";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-djvu";
     tag = finalAttrs.version;
-    hash = "sha256-LW5gQhqV4vwXj1BRlNK1ZfTdQcqt4rJtHckFLvUvPI8=";
+    hash = "sha256-NKINOR4lptZsXncvra7rGHd+825vLlxF/PEP+q48OH8=";
   };
 
   nativeBuildInputs = [
@@ -33,15 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    djvulibre
-    gettext
     zathura_core
-    gtk3
     girara
+    cairo
+    djvulibre
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";

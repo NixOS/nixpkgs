@@ -1,45 +1,45 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
-  zathura_core,
-  girara,
-  libspectre,
-  gettext,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  girara,
+  glib,
+  cairo,
+  libspectre,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
-  version = "2026.02.03";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-ps";
     tag = finalAttrs.version;
-    hash = "sha256-5i3LvdjcAdofc0oZCBSm2qn/29UR1Yiia3OmVjFC4ZI=";
+    hash = "sha256-GAndVfiWsM2pYVH2uWQoDl5iAFJ2HNt2q7BLFkzsASg=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    gettext
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    libspectre
     zathura_core
     girara
+    glib
+    cairo
+    libspectre
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
