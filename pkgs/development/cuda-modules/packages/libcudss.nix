@@ -1,12 +1,14 @@
 {
   buildRedist,
+  callPackage,
   cudaConfig,
+  cuda_cudart,
   lib,
   libcublas,
   mpi,
   nccl,
 }:
-buildRedist {
+buildRedist (finalAttrs: {
   redistName = "cudss";
   pname = "libcudss";
 
@@ -28,6 +30,9 @@ buildRedist {
     mpi
     nccl
   ];
+
+  # cudss.h exposes CUDA runtime types to consumers.
+  propagatedBuildInputs = [ cuda_cudart ];
 
   # NCCL is not available on all platforms (e.g., Jetson Orin), and we only provide MPI and NCCL together; the
   # communication layers which require them are loaded at runtime only when requested.
@@ -57,7 +62,24 @@ buildRedist {
         "" \
       --replace-fail \
         'file(REAL_PATH "../../" _cudss_search_prefix BASE_DIRECTORY "''${_cudss_cmake_config_realpath}")' \
-        "set(_cudss_search_prefix \"''${!outputDev:?}/lib;''${!outputLib:?}/lib;''${!outputInclude:?}/include\")"
+        "set(_cudss_search_prefix \"''${!outputDev:?}/lib;''${!outputLib:?}/lib;''${!outputInclude:?}/include\")" \
+      --replace-fail '## Targets' 'include(CMakeFindDependencyMacro)
+    find_dependency(CUDAToolkit)
+
+    ## Targets'
+
+    # Keep standalone CMake consumers on the same public header interface.
+    substituteInPlace "$PWD/cudss-targets.cmake" \
+      --replace-fail \
+        'INTERFACE_INCLUDE_DIRECTORIES "''${cudss_INCLUDE_DIR}"' \
+        'INTERFACE_INCLUDE_DIRECTORIES "''${cudss_INCLUDE_DIR}"
+      INTERFACE_LINK_LIBRARIES "CUDA::toolkit"'
+    # The archive leaves CUDA runtime calls unresolved. Match NVCC's default
+    # static runtime and retain CMake's platform-specific system dependencies.
+    substituteInPlace "$PWD/cudss-static-targets.cmake" \
+      --replace-fail \
+        'INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:cublas>"' \
+        'INTERFACE_LINK_LIBRARIES "CUDA::toolkit;\$<LINK_ONLY:cublas>;\$<LINK_ONLY:CUDA::cudart_static>"'
 
     nixLog "patching $PWD/cudss-static-targets.cmake to fix INTERFACE_LINK_DIRECTORIES for cublas"
     sed -Ei \
@@ -77,6 +99,10 @@ buildRedist {
     popd >/dev/null
   '';
 
+  passthru.tests.cmake = callPackage ./tests/libcudss-cmake.nix {
+    libcudss = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Library of GPU-accelerated linear solvers with sparse matrices";
     longDescription = ''
@@ -85,4 +111,4 @@ buildRedist {
     homepage = "https://developer.nvidia.com/cudss";
     changelog = "https://docs.nvidia.com/cuda/cudss/release_notes.html";
   };
-}
+})
