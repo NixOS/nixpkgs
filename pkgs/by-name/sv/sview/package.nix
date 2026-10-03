@@ -92,11 +92,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Viewer for 3D stereoscopic videos and images";
     homepage = "https://www.sview.ru/en/";
-    license = with lib.licenses; [
-      cc-by-40
-      gpl3Only
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        cc-by-40
+        mit
+        gpl3Only
+        asl20
+      ];
     maintainers = with lib.maintainers; [ mx2uller ];
     mainProgram = "sView";
     platforms = lib.platforms.linux;
