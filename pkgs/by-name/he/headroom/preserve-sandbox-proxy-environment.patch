@@ -1,0 +1,27 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 6cbec0ec..48a08e7c 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -95,9 +95,20 @@ def _skip_proxy_port_preflight_unless_exercised(
+ 
+ 
+ @pytest.fixture(autouse=True)
+-def _scrub_developer_headroom_env(monkeypatch, tmp_path, tmp_path_factory):
++def _scrub_developer_headroom_env(request, monkeypatch, tmp_path, tmp_path_factory):
++    sandbox_proxy_tests = (
++        "tests/test_hermes_passthrough_compression.py",
++        "tests/test_proxy/test_anthropic_upstream_header.py",
++        "tests/test_proxy/test_copilot_nes_routing.py",
++        "tests/test_proxy/test_openai_transport_path_prefix.py",
++        "tests/test_proxy_ccr.py",
++    )
++    preserve_sandbox_proxy_env = str(request.node.path).endswith(sandbox_proxy_tests)
+     for key in list(os.environ):
+-        if key.startswith("HEADROOM_"):
++        if key.startswith("HEADROOM_") and not (
++            preserve_sandbox_proxy_env
++            and key in {"HEADROOM_ALLOWED_BASE_URLS", "HEADROOM_SKIP_UPSTREAM_CHECK"}
++        ):
+             monkeypatch.delenv(key, raising=False)
+     monkeypatch.delenv("ANTHROPIC_CUSTOM_HEADERS", raising=False)
+     # Clearing HEADROOM_* alone leaves file-backed settings active. Give every
