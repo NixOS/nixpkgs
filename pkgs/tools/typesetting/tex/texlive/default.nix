@@ -6,7 +6,7 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   fetchurl,
   runCommand,
   writeShellScript,
@@ -47,6 +47,7 @@
   luajit,
   texinfo,
   # for bin.nix
+  fetchpatch,
   gnum4,
   jdk_headless,
   perlPackages,
@@ -102,7 +103,7 @@ let
         inherit
           stdenv
           lib
-          fetchpatch
+          fetchpatch2
           bin
           tlpdb
           tlpdbxz
@@ -128,6 +129,7 @@ let
           zip
           luajit
           texinfo
+          unzip
           ;
       };
     in
