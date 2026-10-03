@@ -1,0 +1,29 @@
+--- a/build-logic/convention/src/main/kotlin/CmpApplicationConventionPlugin.kt
++++ b/build-logic/convention/src/main/kotlin/CmpApplicationConventionPlugin.kt
+@@ -1,26 +1,17 @@
+ import org.gradle.api.Plugin
+ import org.gradle.api.Project
+-import org.gradle.kotlin.dsl.dependencies
+-import zed.rainxch.githubstore.convention.configureAndroidTarget
+ import zed.rainxch.githubstore.convention.configureJvmTarget
+-import zed.rainxch.githubstore.convention.libs
+ 
+ class CmpApplicationConventionPlugin : Plugin<Project> {
+     override fun apply(target: Project) {
+         with(target) {
+             with(pluginManager) {
+-                apply("zed.rainxch.convention.android.application.compose")
+                 apply("org.jetbrains.kotlin.multiplatform")
+                 apply("org.jetbrains.compose")
+                 apply("org.jetbrains.kotlin.plugin.compose")
+             }
+ 
+-            configureAndroidTarget()
+             configureJvmTarget()
+-
+-            dependencies {
+-                "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
+-            }
+         }
+     }
+ }
