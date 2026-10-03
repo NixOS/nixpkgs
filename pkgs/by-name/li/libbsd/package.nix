@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libmd ];
 
+  strictDeps = true;
+
   patches = [
     # `strtonum(3)` is not available on our default SDK version.
     # https://gitlab.freedesktop.org/libbsd/libbsd/-/issues/30
