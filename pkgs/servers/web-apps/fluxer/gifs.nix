@@ -4,18 +4,19 @@
   rustPlatform,
   lib,
 }:
+let
+  versioning = lib.importJSON ./versioning.json;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-gifs";
-  version = "2026.1002.153934";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-gIV2AU3uWiP3h31awue6h8A+P38rb5ixqoSUefCJr2k=";
+    inherit (versioning) rev hash;
   };
 
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
   buildAndTestSubdir = "fluxer_gifs";
 
   nativeCheckInputs = [

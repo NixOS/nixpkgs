@@ -4,18 +4,19 @@
   rustPlatform,
   lib,
 }:
+let
+  versioning = lib.importJSON ./versioning.json;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-unfurl";
-  version = "2026.1001.150204";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-zs3T9gWmX7RzzpmumZ4OoNFYIKJc16r0yTujC5t8hY4=";
+    inherit (versioning) rev hash;
   };
 
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
   buildAndTestSubdir = "fluxer_unfurl";
 
   nativeCheckInputs = [
