@@ -160,5 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "stoat-desktop";
+    # Never built on darwin since first introduction in nixpkgs
+    # see https://hydra.nixos.org/build/345421674
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
