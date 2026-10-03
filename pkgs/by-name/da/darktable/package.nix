@@ -54,6 +54,7 @@
   libtiff,
   libwebp,
   libxml2,
+  libxslt,
   lua5_4,
   onnxruntime,
   util-linux,
@@ -97,6 +98,7 @@ stdenv.mkDerivation rec {
     cmake
     desktop-file-utils
     intltool
+    libxslt # xsltproc, used by tools/generate_styles_string.sh
     llvmPackages.llvm
     ninja
     perl
@@ -173,7 +175,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
+    # Prevents -march=native.
+    "-DBINARY_PACKAGE_BUILD=1"
     "-DBUILD_USERMANUAL=False"
+    "-DRAWSPEED_MARCH=-mtune=generic"
   ]
   ++ lib.optionals withAi [
     (lib.cmakeBool "USE_AI" true)
