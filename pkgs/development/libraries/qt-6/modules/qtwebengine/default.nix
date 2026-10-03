@@ -53,7 +53,6 @@
   pulseaudio,
   libcap,
   pciutils,
-  systemd,
   pipewire,
   gn,
   ffmpeg,
@@ -153,13 +152,6 @@ qtModule {
     # Disable metal shader compilation, Xcode only
     substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
       --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
-
-    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
@@ -296,6 +288,16 @@ qtModule {
 
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
+
+  # Add dlopen-only dependencies after shrink-rpath, which would remove them.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        pipewire
+        pciutils
+      ]
+    }" "$out/lib/libQt6WebEngineCore.so"
+  '';
 
   meta = {
     description = "Web engine based on the Chromium web browser";
