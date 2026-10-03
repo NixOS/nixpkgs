@@ -1,0 +1,109 @@
+diff --git a/decompiler/crates/kuna-cli/tests/common/process.rs b/decompiler/crates/kuna-cli/tests/common/process.rs
+--- a/decompiler/crates/kuna-cli/tests/common/process.rs
++++ b/decompiler/crates/kuna-cli/tests/common/process.rs
+@@ -1,6 +1,7 @@
+ //! Process handling shared by CLI integration tests.
+
+ use std::io::{ErrorKind, Read};
++use std::path::Path;
+ use std::process::{Command, Output, Stdio};
+ use std::thread;
+ use std::time::{Duration, Instant};
+@@ -8,6 +9,16 @@
+ /// A required command must exist and exit successfully.
+ pub fn required_output(command: &mut Command) -> Output {
+     optional_output(command).unwrap_or_else(|| panic!("required command not found: {command:?}"))
++}
++
++/// Run a fixture through an explicitly configured ELF loader, if supplied.
++pub fn fixture_output(path: impl AsRef<Path>) -> Output {
++    let path = path.as_ref();
++    if let Some(loader) = std::env::var_os("KUNA_TEST_LD_SO") {
++        required_output(Command::new(loader).arg(path))
++    } else {
++        required_output(&mut Command::new(path))
++    }
+ }
+
+ /// Treat a spawn NotFound as optional; require successful execution otherwise.
+diff --git a/decompiler/crates/kuna-cli/tests/decompile_all_cli.rs b/decompiler/crates/kuna-cli/tests/decompile_all_cli.rs
+--- a/decompiler/crates/kuna-cli/tests/decompile_all_cli.rs
++++ b/decompiler/crates/kuna-cli/tests/decompile_all_cli.rs
+@@ -2452,6 +2452,7 @@
+     )
+     .unwrap();
+     let cc = Command::new("cc")
++        .arg("-Wno-error=incompatible-pointer-types")
+         .args(["-std=gnu11", "-w", "-fno-pie", "-no-pie", "-o", exe.to_str().unwrap(), src.to_str().unwrap()])
+         .output()
+         .expect("spawn cc");
+@@ -4550,6 +4551,7 @@
+                     )
+                     .unwrap();
+                     let out = Command::new(cc)
++                        .arg("-Wno-error=incompatible-pointer-types")
+                         .args([
+                             "-std=gnu11", level, "-w", "-fno-strict-aliasing", "-fwrapv", "-Wno-error=int-conversion",
+                             "-o", exe.to_str().unwrap(), src.to_str().unwrap(),
+@@ -5024,6 +5026,7 @@
+                     )
+                     .unwrap();
+                     let out = Command::new(cc)
++                        .arg("-Wno-error=incompatible-pointer-types")
+                         .args(["-std=gnu11", "-w", "-Wno-error=int-conversion", level])
+                         .args(["-o", exe.to_str().unwrap(), src.to_str().unwrap()])
+                         .output()
+@@ -5231,7 +5234,7 @@
+                 eprintln!("castarith round trip: no x86-64 host or no `cc`, spelling checked only");
+                 continue;
+             }
+-            let expected = process::required_output(&mut Command::new(bin));
++            let expected = process::fixture_output(bin);
+             let dir = std::env::temp_dir()
+                 .join(format!("kuna-castarith-rt-{}-{build}-{arm}", std::process::id()));
+             std::fs::create_dir_all(&dir).unwrap();
+@@ -5356,7 +5359,7 @@
+                 eprintln!("castindex round trip: no x86-64 host or no `cc`, spelling checked only");
+                 continue;
+             }
+-            let expected = process::required_output(&mut Command::new(bin));
++            let expected = process::fixture_output(bin);
+             let dir = std::env::temp_dir()
+                 .join(format!("kuna-castindex-rt-{}-{build}-{elem}-{arm}", std::process::id()));
+             std::fs::create_dir_all(&dir).unwrap();
+@@ -5479,7 +5482,7 @@
+                 eprintln!("castarith enum round trip: no x86-64 host or no `cc`, spelling checked only");
+                 continue;
+             }
+-            let expected = process::required_output(&mut Command::new(bin));
++            let expected = process::fixture_output(bin);
+             let dir = std::env::temp_dir()
+                 .join(format!("kuna-castarith-enum-rt-{}-{build}-{arm}", std::process::id()));
+             std::fs::create_dir_all(&dir).unwrap();
+@@ -5568,7 +5571,7 @@
+         ),
+     ];
+     let expected = run_native.then(|| {
+-        let output = process::required_output(&mut Command::new(&bin));
++        let output = process::fixture_output(&bin);
+         let text = String::from_utf8_lossy(&output.stdout).trim().to_string();
+         assert_eq!(text, "210 21 27 121 1 0 4 229 1 -8608764254683430263 2", "the fixture itself");
+         text
+@@ -6457,7 +6460,7 @@
+         let bin = fixtures.join(&stem);
+         let rev_broken = build == "gcc_O2";
+         let expected = run_native.then(|| {
+-            let output = process::required_output(&mut Command::new(&bin));
++            let output = process::fixture_output(&bin);
+             let mut text = String::from_utf8_lossy(&output.stdout).trim().to_string();
+             if rev_broken {
+                 let mut fields: Vec<&str> = text.split(' ').collect();
+@@ -6683,7 +6686,7 @@
+     for build in ["gcc_O0", "clang_O0", "gcc_O2", "clang_O2"] {
+         let stem = format!("{fixture}_{build}_x86_64");
+         let bin = fx.join(&stem);
+-        let expected = run_native.then(|| process::required_output(&mut Command::new(&bin)));
++        let expected = run_native.then(|| process::fixture_output(&bin));
+         for elem in ["on", "off"] {
+             let out = dir.join(format!("{build}-{elem}"));
+             let (_, stderr, ok) = run_kuna(&[
