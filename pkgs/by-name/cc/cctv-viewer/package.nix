@@ -10,14 +10,14 @@
   libva,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cctv-viewer";
-  version = "0.1.9-unstable-2025-06-13";
+  version = "0.1.9-dev";
 
   src = fetchFromGitHub {
     owner = "iEvgeny";
     repo = "cctv-viewer";
-    rev = "8a8fff2612ae2123b8be156c954a29706383b480";
+    rev = "v${version}";
     hash = "sha256-Euw9S+iONAEENkFwo169x/+pcyeTXLe8wb70KKjv3bE=";
     fetchSubmodules = true;
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Viewer and mounter for video streams";
+    description = "A simple Qt application for simultaneously viewing multiple video streams. Designed for high performance and low latency. Based on ffmpeg.";
     homepage = "https://cctv-viewer.org";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ teohz ];
