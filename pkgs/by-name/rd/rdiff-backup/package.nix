@@ -26,7 +26,12 @@ pypkgs.buildPythonApplication (finalAttrs: {
 
   buildInputs = [ librsync ];
 
-  dependencies = with pypkgs; [ pyyaml ];
+  dependencies = with pypkgs; [
+    psutil
+    pylibacl
+    pyxattr
+    pyyaml
+  ];
 
   # no tests from pypi
   doCheck = false;
