@@ -19,9 +19,27 @@ in
     services.opencloud = {
       enable = lib.mkEnableOption "OpenCloud";
 
-      package = lib.mkPackageOption pkgs "opencloud" { };
-      webPackage = lib.mkPackageOption pkgs [ "opencloud" "web" ] { };
-      idpWebPackage = lib.mkPackageOption pkgs [ "opencloud" "idp-web" ] { };
+      package = lib.mkPackageOption pkgs "opencloud" {
+        default = null;
+        extraDescription = ''
+          OpenCloud has 2 release cycles, explained on https://docs.opencloud.eu/docs/admin/resources/lifecycle.
+
+          Use `pkgs.opencloud` package for the rolling release.
+          Use `pkgs.opencloud-production` package for the production release.
+        '';
+      };
+      webPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.services.opencloud.package.web;
+        defaultText = "config.services.opencloud.package.web";
+        description = "The web package to use.";
+      };
+      idpWebPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.services.opencloud.package.idp-web;
+        defaultText = "config.services.opencloud.package.idp-web";
+        description = "The idp-web package to use.";
+      };
 
       user = lib.mkOption {
         type = types.str;
