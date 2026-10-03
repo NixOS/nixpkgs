@@ -135,6 +135,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/fluxer-app-proxy
     cp -r fluxer_app/dist/* $out/share/fluxer-app-proxy
+
+    mv $out/share/fluxer_app_proxy $out/share/fluxer_app_proxy-unwrapped
+    makeWrapper \
+      $out/share/fluxer_app_proxy-unwrapped \
+      $out/share/fluxer_app_proxy \
+      --set-default FLUXER_STATIC_DIR $out/share/fluxer-app-proxy
   '';
 
   meta = {
@@ -147,8 +153,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
-    # Execution note:
-    # set FLUXER_STATIC_DIR=$out/share/fluxer-app-proxy
     mainProgram = "fluxer_app_proxy";
   };
 })
