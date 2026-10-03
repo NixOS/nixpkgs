@@ -1478,6 +1478,11 @@
     "LGPL-2.0-or-later",
     "ODbL-1.0"
   ],
+  "kitinerary-workbench": [
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "LGPL-2.0-or-later"
+  ],
   "kjobwidgets": [
     "BSD-2-Clause",
     "CC0-1.0",
