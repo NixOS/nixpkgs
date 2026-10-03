@@ -3273,20 +3273,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  cmp-tabnine = buildVimPlugin {
-    pname = "cmp-tabnine";
-    version = "0-unstable-2024-09-12";
-    src = fetchFromGitHub {
-      owner = "tzachar";
-      repo = "cmp-tabnine";
-      rev = "c0167cdc86c15e782c5461ee62aebee89231c2ed";
-      hash = "sha256-g7H6dO+SfYSVjSs24+RcngtecuxsgntaAXb6aodFF3w=";
-    };
-    meta.homepage = "https://github.com/tzachar/cmp-tabnine/";
-    meta.license = getLicenseFromSpdxId "MIT";
-    meta.hydraPlatforms = [ ];
-  };
-
   cmp-tmux = buildVimPlugin {
     pname = "cmp-tmux";
     version = "0-unstable-2026-07-23";
@@ -3956,20 +3942,6 @@ final: prev: {
     };
     meta.homepage = "https://github.com/nvim-lua/completion-nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
-    meta.hydraPlatforms = [ ];
-  };
-
-  completion-tabnine = buildVimPlugin {
-    pname = "completion-tabnine";
-    version = "0-unstable-2021-09-27";
-    src = fetchFromGitHub {
-      owner = "aca";
-      repo = "completion-tabnine";
-      rev = "5d2c49aee5b5443d58cceb0c8411429d5fae1b6f";
-      hash = "sha256-0/LsJnPOIjEH/hD1Mb2+OWHuVGW0uOA6imMDv2jgbbE=";
-    };
-    meta.homepage = "https://github.com/aca/completion-tabnine/";
-    meta.license = unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17303,21 +17275,6 @@ final: prev: {
     };
     meta.homepage = "https://github.com/vim-scripts/tabmerge/";
     meta.license = unfree;
-    meta.hydraPlatforms = [ ];
-  };
-
-  tabnine-vim = buildVimPlugin {
-    pname = "tabnine-vim";
-    version = "2.10.0-unstable-2023-01-01";
-    src = fetchFromGitHub {
-      owner = "codota";
-      repo = "tabnine-vim";
-      rev = "9944f213fe47a7d2ff269cda334ba28c14a4df79";
-      hash = "sha256-ZywyhMdYJl505J61aIBDoC17f7qRlvgcIAOqC7QZxug=";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/codota/tabnine-vim/";
-    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 

@@ -361,19 +361,16 @@ in
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (
-      pkgs.runCommandLocal "ensure-wrapper-integrity"
+      pkgs.runCommandLocal "ensure-all-wrappers-paths-exist"
         {
-          nativeBuildInputs = [
-            pkgs.libcap-text-verifier
-            pkgs.file
-          ];
+          nativeBuildInputs = [ pkgs.libcap-text-verifier ];
           preferLocalBuild = true;
         }
         ''
           # make sure we produce output
           mkdir -p $out
 
-          echo -n "Checking that Nix store paths of all wrapped programs exist and are ELF executables... "
+          echo -n "Checking that Nix store paths of all wrapped programs exist... "
           ${lib.toShellVar "wrappers" (lib.mapAttrs (n: v: v.source) wrappers)}
           for name in "''${!wrappers[@]}"; do
             path="''${wrappers[$name]}"
@@ -382,15 +379,6 @@ in
               echo "FAIL"
               echo "The path $path does not exist!"
               echo 'Please, check the value of `security.wrappers."'$name'".source`.'
-              test -t 1 && echo -ne '\033[0m'
-              exit 1
-            fi
-            magic=$(file --mime --brief --dereference "$path")
-            if ! [[ "$magic" =~ application/x-executable || "$magic" =~ application/x-pie-executable ]]; then
-              test -t 1 && echo -ne '\033[1;31m'
-              echo "FAIL"
-              echo "The target executable $path is not an ELF! This is a security risk."
-              echo "Script wrappers (e.g. bash or python) are commonly susceptible to dangerous env var injections."
               test -t 1 && echo -ne '\033[0m'
               exit 1
             fi

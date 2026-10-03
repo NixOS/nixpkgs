@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "20.0";
+  version = "20.1.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-xFz4F7Gh8H3qxe6axjDHg0lg9aDbmLjNpzRHqdJyXUs=";
+    hash = "sha256-C9N0l8wdPduHGHDWtHiTFc634r/6Qz3fT+G963V6iso=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       Scrumplex
       sirseruju
+      emp
     ];
     mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };

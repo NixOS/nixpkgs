@@ -11,7 +11,7 @@
   intltool,
   lomiri,
   pkg-config,
-  systemd,
+  systemdLibs,
   vala,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.cmake-extras
     glib
     lomiri.lomiri-url-dispatcher
-    systemd
+    systemdLibs
   ];
 
   checkInputs = [

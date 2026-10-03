@@ -237,7 +237,7 @@ stdenv.mkDerivation (
         spreadsheets.
       '';
       homepage = "https://github.com/gristlabs/grist-core";
-      license = if enterpriseEdition then lib.unfree else lib.licenses.asl20;
+      license = if enterpriseEdition then lib.licenses.unfree else lib.licenses.asl20;
       platforms = lib.platforms.linux;
     };
   }

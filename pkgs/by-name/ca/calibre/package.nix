@@ -23,7 +23,7 @@
   optipng,
   piper-tts,
   pkg-config,
-  podofo0,
+  podofo,
   poppler-utils,
   python314Packages,
   qt6,
@@ -41,19 +41,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.14.0";
+  version = "9.15.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0bwkAksJQkKcYn6cXQsl1R35wa8eHY3KPlcvA7GUxWE=";
+    hash = "sha256-nwLTbeyvRrF2ob73Q0kjJQi8wrSwbRZiu9H9QmxX1Vk=";
   };
 
   patches =
     let
-      debian-source = "ds+_0.10.6-1";
+      debian-source = "ds+_1.1.2-1";
       debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     onnxruntime
-    podofo0
+    podofo
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -188,8 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     MAGICK_LIB = "${lib.getLib imagemagick}/lib";
     FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
     FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
-    PODOFO_INC_DIR = "${lib.getDev podofo0}/include/podofo";
-    PODOFO_LIB_DIR = "${lib.getLib podofo0}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo}/lib";
     XDG_DATA_HOME = "${placeholder "out"}/share";
     XDG_UTILS_INSTALL_MODE = "user";
   }
@@ -264,6 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
         "test_7z" # we don't include 7z support
         "test_zstd" # we don't include zstd support
         "test_qt" # we don't include svg or webp support
+        "test_cyoa_epub_images" # we don't include webp support
         "test_import_of_all_python_modules" # explores actual file paths, gets confused
         "test_websocket_basic" # flaky
 
