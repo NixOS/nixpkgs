@@ -66,6 +66,23 @@ foreach my $attr (sort keys %{$info->{item}}) {
         @maintainers = map { $_->{value} } @{$x->{string}};
     } elsif (defined $x->{value}) {
         @maintainers = ($x->{value});
+    } elsif (defined $x->{list}) {
+        my $list = $x->{list}[0];
+        if (defined $list->{string}) {
+            @maintainers = map { $_->{value} } @{$list->{string}};
+        } elsif (defined $list->{attrs}) {
+            foreach my $maintainerAttrs (@{$list->{attrs}}) {
+                my $maintainerLabel = "";
+                if (defined $maintainerAttrs->{attr}) {
+                    foreach my $maintainerField (@{$maintainerAttrs->{attr}}) {
+                        if (defined $maintainerField->{string}) {
+                            $maintainerLabel .= $maintainerField->{string}[0]->{value} . " ";
+                        }
+                    }
+                }
+                push @maintainers, $maintainerLabel || "present";
+            }
+        }
     }
 
     if (defined $maintainer && scalar(grep { $_ =~ /$maintainer/i } @maintainers) == 0) {
