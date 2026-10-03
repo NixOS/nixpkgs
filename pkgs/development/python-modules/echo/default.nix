@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.12.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-36uT2FpOzwuNMM4GhlTuYCSo8j7waIQgWOCN6maKaiY=";
+    sha256 = "sha256-ET8KZH6ggsU2XJnHFGx78Ypdv3SF4kESiXWBRUttuLY=";
   };
 
   build-system = [
