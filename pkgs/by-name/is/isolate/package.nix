@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isolate";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "ioi";
     repo = "isolate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a6FQxyClE9cXB0wHV0Z4kjYY6S1+mUE4ReroOifNjKg=";
+    hash = "sha256-ySs9AEsOzuoJxTv+bbcy7lYCuVU1lUN5aXYC2aZFhss=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "isolate";
     homepage = "https://github.com/ioi/isolate";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ virchau13 ];
+    maintainers = with lib.maintainers; [
+      virchau13
+      hey2022
+    ];
   };
 })
