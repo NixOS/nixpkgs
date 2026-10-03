@@ -317,6 +317,10 @@ in
     (mkRemovedOptionModule [ "services" "nixseparatedebuginfod" ]
       "Use `services.nixseparatedebuginfod2.enable = true;` instead. If you only use the official binary cache, no additional configuration should be needed."
     )
+    (mkRemovedOptionModule [ "services" "ocis" ] ''
+      The ownCloud Infinite Scale module has been removed because the OCIS
+      package is outdated and no longer maintained in Nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
