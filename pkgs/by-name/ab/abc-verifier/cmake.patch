@@ -1,0 +1,42 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbb153e64..4d5a3093c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,14 +117,13 @@ set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
+ 
+ if(NOT DEFINED ABC_SKIP_TESTS)
+     enable_testing()
+-    include(FetchContent)
+-    FetchContent_Declare(
+-    googletest
+-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+-    # Specify the commit you depend on and update it regularly.
+-    URL "https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip"
+-    )
+-    FetchContent_MakeAvailable(googletest)
++    find_package(GTest REQUIRED)
+     include(GoogleTest)
+     add_subdirectory(test)
+-endif()
+\ No newline at end of file
++endif()
++
++include(GNUInstallDirs)
++install(TARGETS abc libabc
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
+\ No newline at end of file
+diff --git a/test/gia/CMakeLists.txt b/test/gia/CMakeLists.txt
+index e4dffd475..dd8bcb9bd 100644
+--- a/test/gia/CMakeLists.txt
++++ b/test/gia/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ add_executable(gia_test gia_test.cc)
+ 
+ target_link_libraries(gia_test
+-    gtest_main
++    GTest::gtest_main
+     libabc
+ )
+ 
