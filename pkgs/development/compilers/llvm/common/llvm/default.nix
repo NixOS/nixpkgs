@@ -221,6 +221,29 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      ++
+        lib.optionals (lib.versionAtLeast release_version "19" && lib.versionOlder release_version "23")
+          (
+            [
+              # Bound LBR sampling and test-discovery probes on hybrid x86 CPUs.
+              (fetchpatch (
+                {
+                  url = "https://github.com/llvm/llvm-project/commit/48d00593530dbfd90c4fdb027ae260868f39925f.patch";
+                  stripLen = 1;
+                  hash =
+                    if lib.versionOlder release_version "21" then
+                      "sha256-qT7llvGZq2EPr7UUtys1Gc8GxICYLqT3Vd+bXg2sWtA="
+                    else
+                      "sha256-y63Ei7fSe4HTbHN5GDq7fUWKH8K6UCVIUuvdh62CKs8=";
+                }
+                // lib.optionalAttrs (lib.versionOlder release_version "21") {
+                  # LLVM 19/20 use a different probe invocation; adapt that hunk below.
+                  excludes = [ "test/tools/llvm-exegesis/lit.local.cfg" ];
+                }
+              ))
+            ]
+            ++ lib.optional (lib.versionOlder release_version "21") ./bound-exegesis-probe.patch
+          )
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
@@ -639,8 +662,7 @@ stdenv.mkDerivation (
         !stdenv.hostPlatform.isx86_32 # TODO: why
       )
       && (!stdenv.hostPlatform.isMusl)
-      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-      && (stdenv.hostPlatform == stdenv.buildPlatform);
+      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian);
 
     checkTarget = "check-all";
 
