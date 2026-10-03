@@ -13253,6 +13253,12 @@
     github = "JeanCASPAR";
     githubId = 55629512;
   };
+  jeanralphaviles = {
+    name = "Jean-Ralph Aviles";
+    email = "jeanralph.aviles+nixpkgs@gmail.com";
+    github = "jeanralphaviles";
+    githubId = 5875882;
+  };
   jecaro = {
     email = "jeancharles.quillet@gmail.com";
     github = "jecaro";
