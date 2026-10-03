@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tlslite-ng";
-  version = "0.8.2";
+  version = "0.9.0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlsfuzzer";
     repo = "tlslite-ng";
     tag = "v${version}";
-    hash = "sha256-lKSFPJ4Dm8o1zUgvXjUUpStV5M+xf7s6wOg2ceYbpbw=";
+    hash = "sha256-Z0nVC6XcnA3I4H8s0KkKd5gkJ1kfWd4d/2/2eJyo7lQ=";
   };
 
   build-system = [ setuptools ];
