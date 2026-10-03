@@ -67,6 +67,25 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    security.polkit = lib.mkIf (cfg.tunMode && config.services.resolved.enable) {
+      enable = lib.mkDefault true;
+      extraConfig = ''
+        // systemd-resolved access for Mihomo TUN DNS setup
+        polkit.addRule(function(action, subject) {
+          var actions = [
+            "org.freedesktop.resolve1.revert",
+            "org.freedesktop.resolve1.set-default-route",
+            "org.freedesktop.resolve1.set-dns-servers",
+            "org.freedesktop.resolve1.set-domains",
+          ];
+
+          if (actions.indexOf(action.id) >= 0 && subject.user == "mihomo") {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
+
     ### systemd service
     systemd.services."mihomo" = {
       description = "Mihomo daemon, A rule-based proxy in Go.";
@@ -118,7 +137,7 @@ in
       // lib.optionalAttrs cfg.tunMode {
         PrivateDevices = false;
         PrivateUsers = false;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
       };
     };
   };
