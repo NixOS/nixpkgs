@@ -7,6 +7,12 @@
   npmHooks,
   pkg-config,
   libheif,
+
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  nix,
+  jq,
 }:
 
 buildGoModule (finalAttrs: {
@@ -76,14 +82,51 @@ buildGoModule (finalAttrs: {
     mv $out/bin/gomuks $out/bin/gomuks-web
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    ./update.sh
+
+    # Update gomuks-desktop
+    (lib.getExe (writeShellApplication {
+      name = "gomuks-desktop-electron-updater";
+      runtimeInputs = [
+        nix
+        jq
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname; # we actually don't care as `-desktop` inherits the source
+        PKG_DIR = toString ./.; # nixpkgs-vet complains if we refer to a file outside this dir
+      };
+      text = ''
+        set -euo pipefail
+
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)/desktop"
+        new_electron_major="$(jq -r '.devDependencies.electron' "$new_src/package.json" | cut -d. -f1)"
+
+        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_DIR/../gomuks-desktop/package.nix"
+      '';
+    }))
+    (nix-update-script {
+      # Updates npmDepsHash
+      attrPath = "gomuks-desktop";
+      extraArgs = [
+        "--no-src"
+        "--version=skip"
+      ];
+    })
+  ];
 
   meta = {
     mainProgram = "gomuks-web";
     description = "Matrix client written in Go";
     homepage = "https://github.com/tulir/gomuks";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.zaphyra ];
+    maintainers = with lib.maintainers; [
+      zaphyra
+
+      # For the gomuks-desktop update script
+      logn
+      xaltsc
+    ];
     platforms = lib.platforms.unix;
   };
 })
