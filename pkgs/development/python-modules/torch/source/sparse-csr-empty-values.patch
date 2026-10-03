@@ -1,0 +1,83 @@
+From 8c0646d47562b5558f2a3fe3270499b696c2f19c Mon Sep 17 00:00:00 2001
+From: MaxXSoft <xingqizheng.xqz@alibaba-inc.com>
+Date: Mon, 7 Sep 2026 19:28:58 +0800
+Subject: [PATCH] Fix empty CSR full-reduction values shape on CPU and CUDA
+
+Fixes #196214
+
+`_sparse_csr_sum` and `_sparse_csr_prod` create an invalid CSR tensor when a 2-D empty/zero-nnz CSR is reduced over both sparse dimensions on CPU and CUDA. The result has `nnz == 0` and empty column indices, but its `values` is created with `at::empty({})`, which is a scalar containing one element rather than a 1-D empty tensor.
+
+This patch fixes these issues by using `at::empty({nnz})` to allocate a 1-D tensor with nnz elements, and add a test to cover this case.
+---
+ .../native/sparse/SparseCsrTensorMath.cpp     |  2 +-
+ .../native/sparse/cuda/SparseCsrTensorMath.cu |  2 +-
+ test/test_sparse_csr.py                       | 30 +++++++++++++++++++
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp b/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
+index 5ed0044..c766ab6 100644
+--- a/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
++++ b/aten/src/ATen/native/sparse/SparseCsrTensorMath.cpp
+@@ -1283,7 +1283,7 @@ In [4]: %timeit torch.sum(t.values())
+     new_values = at::empty({1}, values.options().dtype(result_dtype));
+     new_values.fill_(value);
+   } else {
+-    new_values = at::empty({}, values.options().dtype(result_dtype));
++    new_values = at::empty({nnz}, values.options().dtype(result_dtype));
+   }
+   return at::native::_sparse_csr_tensor_unsafe(new_crow_indices, new_col_indices, new_values,
+                                                {1, std::min<int64_t>(1, sparse.size(1))},
+diff --git a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+index 5331db6..baa616b 100644
+--- a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
++++ b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+@@ -640,7 +640,7 @@ Tensor reduce_sparse_csr_dim01_cuda_template(const Tensor& sparse, ReductionOp r
+     gpu_reduce_kernel<scalar_t, scalar_t>(iter, func_wrapper<scalar_t>(rop), rop.identity_cpu());
+     new_values.copy_(new_values_acc);
+   } else {
+-    new_values = at::empty({}, values.options().dtype(result_dtype));
++    new_values = at::empty({nnz}, values.options().dtype(result_dtype));
+   }
+   Tensor new_col_indices = at::zeros({nnz}, ioptions);
+   Tensor new_crow_indices = at::tensor(ArrayRef<int64_t>{0, nnz}, ioptions);
+diff --git a/test/test_sparse_csr.py b/test/test_sparse_csr.py
+index b9bb6ba..94188f2 100644
+--- a/test/test_sparse_csr.py
++++ b/test/test_sparse_csr.py
+@@ -2960,6 +2960,36 @@ class TestSparseCSR(TestCase):
+             run_test(shape, max(shape), index_dtype)
+             run_test(shape, shape[0] * shape[1], index_dtype)
+ 
++    @skipMeta
++    @dtypes(torch.float32, torch.int32, torch.complex64)
++    @parametrize("op", [subtest(torch.sum, name="sum"),
++                        subtest(torch.ops.aten._sparse_csr_prod.dim_dtype, name="prod")])
++    @parametrize("dim", [(0, 1), (1, 0), ()])
++    @parametrize("index_dtype", [torch.int32, torch.int64])
++    def test_empty_csr_full_reduction(self, device, dtype, op, dim, index_dtype):
++        source = torch.sparse_csr_tensor(
++            torch.zeros(4, dtype=index_dtype, device=device),
++            torch.empty(0, dtype=index_dtype, device=device),
++            torch.empty(0, dtype=dtype, device=device),
++            size=(3, 4), check_invariants=True)
++        result = op(source, dim=dim, keepdim=True)
++
++        self.assertEqual(result.layout, torch.sparse_csr)
++        self.assertEqual(result.shape, (1, 1))
++        self.assertEqual(result._nnz(), 0)
++        self.assertEqual(result.values().shape, (0,))
++        self.assertEqual(result.values().numel(), 0)
++        self.assertEqual(result.dense_dim(), 0)
++        self.assertEqual(result.crow_indices(), torch.zeros(2, dtype=index_dtype, device=device))
++        self.assertEqual(result.col_indices(), source.col_indices())
++        torch._validate_sparse_compressed_tensor_args(
++            result.crow_indices(), result.col_indices(), result.values(), result.shape, result.layout)
++
++        result_dtype = torch.int64 if dtype == torch.int32 else dtype
++        expected = torch.zeros((1, 1), dtype=result_dtype, device=device)
++        self.assertEqual(result.to_dense(), expected)
++        self.assertEqual(result.to_sparse_coo(), expected.to_sparse())
++
+     @skipIfTorchDynamo()
+     @skipMeta
+     @dtypes(*all_types_and_complex_and(torch.half, torch.bool, torch.bfloat16))
