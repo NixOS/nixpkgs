@@ -77,6 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
       # it. See <https://gcc.gnu.org/PR111527>.
       ./mangle-NIX_STORE-in-__FILE__.patch
 
+      # Let cc-wrapper bind target headers as compiler defaults.  The
+      # -idefaultsystem option also keeps fortify's position among dependency paths
+      # while allowing the frontend to honor forwarded -nostdinc.
+      ../../../common/native-default-includes.patch
+
       # `rs6000/sysv4.h` builds its own `INCLUDE_DEFAULTS` for musl, testing
       # `LOCAL_INCLUDE_DIR` before the `#undef` above is reached, so
       # `/usr/local/include` survives there without this.
@@ -499,6 +504,7 @@ stdenv.mkDerivation (finalAttrs: {
       langGo
       ;
     isGNU = true;
+    nativeDefaultIncludeBinding = "external";
   };
 
   meta = gcc_meta // {
