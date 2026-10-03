@@ -30141,6 +30141,12 @@
     githubId = 9413924;
     name = "Thorsten Weber";
   };
+  twenty-finger-squared = {
+    github = "20Finger-Squared";
+    githubId = 180748508;
+    email = "orhylie+nixpkgs@gmail.com";
+    name = "Rhylie Orton";
+  };
   twesterhout = {
     name = "Tom Westerhout";
     matrix = "@twesterhout:matrix.org";
