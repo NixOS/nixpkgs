@@ -28,7 +28,7 @@
   sdbus-cpp_2,
   sphinx,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   toml11,
   zchunk,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     rpm
     sdbus-cpp_2
     sqlite
-    systemd
+    systemdLibs
     toml11
     zchunk
   ];
