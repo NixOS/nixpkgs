@@ -8,6 +8,9 @@ let
   cfg = config.services.adguardhome;
   settingsFormat = pkgs.formats.yaml { };
 
+  defaultHost = "0.0.0.0";
+  defaultPort = 3000;
+
   args = lib.concatStringsSep " " (
     [
       "--no-check-update"
@@ -33,6 +36,18 @@ let
             };
           }
       )
+    else if cfg.host != defaultHost || cfg.port != defaultPort then
+      if cfg.package.schema_version < 23 then
+        {
+          schema_version = cfg.package.schema_version;
+          bind_host = cfg.host;
+          bind_port = cfg.port;
+        }
+      else
+        {
+          schema_version = cfg.package.schema_version;
+          http.address = "${cfg.host}:${toString cfg.port}";
+        }
     else
       null;
 
@@ -86,7 +101,7 @@ in
     };
 
     host = lib.mkOption {
-      default = "0.0.0.0";
+      default = defaultHost;
       type = str;
       description = ''
         Host address to bind HTTP server to.
@@ -94,7 +109,7 @@ in
     };
 
     port = lib.mkOption {
-      default = 3000;
+      default = defaultPort;
       type = port;
       description = ''
         Port to serve HTTP pages on.
